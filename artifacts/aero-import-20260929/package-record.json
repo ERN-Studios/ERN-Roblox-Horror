@@ -1,0 +1,106 @@
+{
+  "asset": "Aero House",
+  "date": "2026-09-29",
+  "files": [
+    {
+      "path": "AeroHouse.blend",
+      "bytes": 596099,
+      "sha256": "0bfba9bc2b2709d7678ed9369741cd551e04f99227a9a969ab3fac489a90877f"
+    },
+    {
+      "path": "AeroHouse.glb",
+      "bytes": 3138400,
+      "sha256": "85e697592f650f6912d7b8193bec8add3e741bac80ae51c07106ff4d9d44c3d0"
+    },
+    {
+      "path": "AeroHouse.fbx",
+      "bytes": 1507628,
+      "sha256": "88ab8173c8014a7b75ed1d65369e7a8947ee0fea4af704695e0bf9555692168f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8248,
+      "sha256": "cc9b734fcf7cbaebcf7fde6a9aca12bb0950df41592ee10e546ea247eb650067"
+    },
+    {
+      "path": "SetupAeroHouse.luau",
+      "bytes": 43676,
+      "sha256": "0fe85fb86aee5cc6087110b218089c92bc23f0b902ad32f477ca48b7aa240a43"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 62661,
+      "sha256": "74d3c7c63de81e9d40490f3a839af336d7df87d55abf95f4ed9930489570ecfa"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 87855,
+      "sha256": "3155c0dc36e5482344206d3ca1031d1e4641be1588e975c8378c815373aad42c"
+    },
+    {
+      "path": "textures/Aero_Color.png",
+      "bytes": 2038,
+      "sha256": "f14b8cc526c6a4724adaa6be4f7a605017927391cccfe91fd043d5611431cbaf"
+    },
+    {
+      "path": "textures/Aero_Roughness.png",
+      "bytes": 2014,
+      "sha256": "ea15b278103fd15eda1c4314f5f4eb7c769bf1d54d48eb1037d113e1b691b443"
+    },
+    {
+      "path": "textures/Aero_Metallic.png",
+      "bytes": 1548,
+      "sha256": "020e30f8e42e00380665954d999ab71f0c949cda1ec411ecb5245d3b4e04c7a9"
+    },
+    {
+      "path": "previews/studio-exterior.jpg",
+      "bytes": 250536,
+      "sha256": "47f9ffd9cd67eb80eebbda5a2f444c88a65b9012a93a1dcf5a3f6d880353b013"
+    },
+    {
+      "path": "previews/studio-lounge.jpg",
+      "bytes": 242577,
+      "sha256": "b0e4624e2be751e5e11df2f712b8fd24d0eab2bf4cfd40a33cb2935bbbc74fad"
+    }
+  ],
+  "archive": {
+    "path": "assets/models/AeroHouse_Roblox_Import.zip",
+    "bytes": 2780571,
+    "sha256": "d9695073b05b39f8a3160128ffcfcd5bd51ec6711a341f71c1f5fddc6a982cd2"
+  },
+  "setup_luau_compile": {
+    "passed": true,
+    "executed": true,
+    "studio_place_id": 121672571539226
+  },
+  "studio_import": {
+    "succeeded": true,
+    "place_id": 121672571539226,
+    "universe_id": 10768500985,
+    "visual_meshes": 88,
+    "colliders": 192,
+    "lights": 4,
+    "verified_state_record": "artifacts/aero-import-20260929/verified-studio-manifest.json",
+    "cathedral_archive": "ServerStorage.AeroReplacementArchive.Vesper Cathedral",
+    "before_place_backup": "artifacts/aero-import-20260929/BeforeAeroReplacement.rbxl"
+  },
+  "walkthrough": {
+    "forward_passed": true,
+    "forward_points": 73,
+    "forward_seconds": 38.8057074999997,
+    "reverse_passed": true,
+    "reverse_legs": 72,
+    "evidence": [
+      "artifacts/aero-import-20260929/walk-result.json",
+      "artifacts/aero-import-20260929/return-walk-result.json"
+    ]
+  },
+  "runtime_performance": {
+    "local_client_sample_completed": true,
+    "evidence": "artifacts/aero-import-20260929/client-performance.json",
+    "scope": "One local Studio client sample; whole-process memory, no house-only baseline.",
+    "mobile_verified": false,
+    "multiplayer_verified": false
+  },
+  "publication": "Not claimed by this package record."
+}

@@ -206,6 +206,58 @@ def build_furniture(api):
     collision("UpperReading__Table", (31, -22, 19.4), (6.4, 3.4, 2.8))
     side_table("UpperReading", "SideTable", 38.5, -21.3, 18, "Cyan")
 
+    # Slim wardrobes stay at bedroom edges, leaving the door-to-bed routes open.
+    # Broad sliding panels provide the Aero color without modeled drawer hardware.
+    for room, x, y, floor, accent in (
+            ("GuestBedroom", -47.4, 26.8, 1, "Cyan"),
+            ("UpperCyanBedroom", -47.4, 28.0, 18, "Aqua"),
+            ("UpperLimeBedroom", 47.4, 28.0, 18, "Lime")):
+        stem = room + "__Wardrobe"
+        front = 1 if x < 0 else -1
+        box(stem + "Body", (x, y, floor + 4.7), (3.5, 8.0, 9.4), "White", .28, 1)
+        box(stem + "ShadowFoot", (x, y, floor + .22), (3.2, 7.7, .44), "Navy", .12, 1)
+        for i, offset in enumerate((-1.93, 1.93)):
+            px = x + front * (1.78 + i * .045)
+            box(stem + "SlidingPanel" + str(i), (px, y + offset, floor + 4.82),
+                (.12, 3.72, 8.63), accent if i == 0 else "Pearl", .05, 1)
+            box(stem + "RecessedPull" + str(i),
+                (px + front * .078, y + offset + .92, floor + 4.55),
+                (.06, .10, 1.12), "Chrome", .02, 1)
+        collision(stem, (x, y, floor + 4.7), (3.8, 8.0, 9.4))
+
+    # A low console faces the existing lounge sofa; the entrance remains clear.
+    box("Lounge__MediaShadowFoot", (-29.5, -35.8, 1.23), (13.4, 2.55, .44), "Navy", .10, 1)
+    box("Lounge__MediaConsole", (-29.5, -35.8, 2.44), (14, 2.95, 2.45), "White", .30, 2)
+    for i, dx in enumerate((-4.55, 0, 4.55)):
+        box("Lounge__MediaPanel" + str(i), (-29.5 + dx, -34.28, 2.45),
+            (4.35, .12, 1.83), "Aqua" if i == 1 else "Pearl", .055, 1)
+    box("Lounge__TVFoot", (-29.5, -35.7, 3.79), (3.6, 1.5, .25), "Cyan", .12, 1)
+    box("Lounge__TVStem", (-29.5, -35.75, 4.28), (.7, .58, 1.0), "White", .15, 1)
+    box("Lounge__TVShell", (-29.5, -35.7, 6.55), (8.4, .86, 4.7), "White", .36, 2)
+    box("Lounge__TVScreen", (-29.5, -35.243, 6.58), (7.55, .075, 3.86), "Navy", .033, 1)
+    box("Lounge__TVScreenReflection", (-29.5, -35.197, 7.87), (6.8, .025, .15), "Aqua", .01, 1)
+    collision("Lounge__MediaConsole", (-29.5, -35.8, 2.44), (14, 2.95, 2.9))
+    collision("Lounge__TV", (-29.5, -35.7, 6.55), (8.4, .86, 4.7))
+
+    # Small open shelf beside the study desk, with a few simple book spines.
+    box("Study__ShelfBack", (44.5, 26.0, 5.0), (.30, 6.5, 8.0), "Aqua", .12, 1)
+    for i, y in enumerate((22.75, 29.25)):
+        box("Study__ShelfSide" + str(i), (43.6, y, 5.0), (2.1, .30, 8.0), "White", .12, 1)
+    for i, z in enumerate((1.20, 3.72, 6.23, 8.80)):
+        box("Study__ShelfBoard" + str(i), (43.6, 26.0, z), (2.1, 6.5, .30), "White", .12, 1)
+    for i, (y, h, color) in enumerate(((23.45, 1.64, "Lime"), (24.0, 1.85, "Cyan"),
+                                      (24.54, 1.47, "Pearl"), (27.76, 1.67, "Cyan"))):
+        box("Study__Book" + str(i), (43.50, y, 3.87 + h / 2),
+            (1.30, .38, h), color, .035, 1)
+    collision("Study__Shelf", (43.6, 26.0, 5.0), (2.3, 6.8, 8.0))
+
+    # A quiet two-chair terrace group sits to the east of the balcony doorway.
+    chair("TerraceFurniture", "ChairWest", 37.4, -49.4, 18,
+          "FabricCyan", facing=2, width=3.6)
+    chair("TerraceFurniture", "ChairEast", 45.0, -49.4, 18,
+          "FabricLime", facing=-2, width=3.6)
+    side_table("TerraceFurniture", "RoundTable", 41.2, -49.4, 18, "White")
+
     # Three thin accent pendants.  Root builder may extend these suspension rods.
     for room, x, y, z, radius, finish in (
             ("Lounge", -29.5, -14.3, 14.5, 5.2, "Cyan"),

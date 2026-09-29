@@ -1,3 +1,10 @@
+assert(game.PlaceId==121672571539226)
+local baseline=_G.AeroReplaceBaseline
+assert(baseline and baseline.house.Parent==workspace and baseline.cathedral.Parent==baseline.cathedralParent)
+assert(baseline.house:GetPivot()==baseline.housePivot and #baseline.house:GetDescendants()==baseline.houseCount)
+assert(baseline.cathedral:GetPivot()==baseline.cathedralPivot and #baseline.cathedral:GetDescendants()==baseline.cathedralCount)
+baseline.house:PivotTo(CFrame.new(0,1,0)*CFrame.Angles(0,math.pi,0))
+game:GetService("Selection"):Set({baseline.house})
 -- Aero House: select the complete imported Model in Studio Edit mode, then run
 -- the packaged SetupAeroHouse.luau in the Command Bar. This template is filled
 -- during export. The three named decorative anchors must remain in the import.
@@ -178,8 +185,7 @@ local function assertFreshBaseline()
 	assert(#currentSelection == 1 and currentSelection[1] == model, "Selection changed during setup.")
 end
 
-local recording = ChangeHistoryService:TryBeginRecording("AeroHouseSetup", "Set up Aero House collisions and lights")
-assert(recording, "Could not start an undo recording. Finish the current Studio edit and retry.")
+-- Studio MCP owns this undo recording.
 local runtime
 local changedVisuals = {}
 local metadataWritten = false
@@ -268,12 +274,10 @@ if not ok then
 			model:SetAttribute("AeroAuthoredFrame", previousAuthoredFrame)
 		end
 	end)
-	ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
 	assert(restored, tostring(problem) .. "\nRollback needs attention: " .. tostring(restoreProblem))
 	error(problem)
 end
 
-ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)
 print(string.format("Aero House ready: %d anchored visual meshes, %d simple colliders, %d local lights. Gravity unchanged (%g).",
 	#visuals, #colliderSpecs, ENABLE_LOCAL_LIGHTS and #lightSpecs or 0, workspace.Gravity))
 print("Test the house in Play mode after adding your normal player spawn. Undo once to remove this setup.")

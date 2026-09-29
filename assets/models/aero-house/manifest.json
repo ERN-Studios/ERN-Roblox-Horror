@@ -3302,6 +3302,168 @@
         0.0,
         0
       ]
+    },
+    {
+      "name": "GuestBedroom__Wardrobe_184",
+      "position": [
+        -47.4,
+        5.7,
+        -26.8
+      ],
+      "size": [
+        3.8,
+        9.4,
+        8.0
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "UpperCyanBedroom__Wardrobe_185",
+      "position": [
+        -47.4,
+        22.7,
+        -28.0
+      ],
+      "size": [
+        3.8,
+        9.4,
+        8.0
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "UpperLimeBedroom__Wardrobe_186",
+      "position": [
+        47.4,
+        22.7,
+        -28.0
+      ],
+      "size": [
+        3.8,
+        9.4,
+        8.0
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "Lounge__MediaConsole_187",
+      "position": [
+        -29.5,
+        2.44,
+        35.8
+      ],
+      "size": [
+        14,
+        2.9,
+        2.95
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "Lounge__TV_188",
+      "position": [
+        -29.5,
+        6.55,
+        35.7
+      ],
+      "size": [
+        8.4,
+        4.7,
+        0.86
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "Study__Shelf_189",
+      "position": [
+        43.6,
+        5.0,
+        -26.0
+      ],
+      "size": [
+        2.3,
+        8.0,
+        6.8
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "TerraceFurniture__ChairWest_190",
+      "position": [
+        37.4,
+        20.4,
+        49.4
+      ],
+      "size": [
+        3.3,
+        4.8,
+        3.6
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "TerraceFurniture__ChairEast_191",
+      "position": [
+        45.0,
+        20.4,
+        49.4
+      ],
+      "size": [
+        3.3,
+        4.8,
+        3.6
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "name": "TerraceFurniture__RoundTable_192",
+      "position": [
+        41.2,
+        19.5,
+        49.4
+      ],
+      "size": [
+        2.2,
+        3,
+        2.2
+      ],
+      "rotation": [
+        0,
+        0.0,
+        0
+      ]
     }
   ],
   "lights": [
@@ -3801,8 +3963,8 @@
     },
     {
       "name": "Aero_Lounge_Palette",
-      "triangles": 3716,
-      "vertices": 1944,
+      "triangles": 4284,
+      "vertices": 2248,
       "material": "Aero_Palette"
     },
     {
@@ -3819,20 +3981,20 @@
     },
     {
       "name": "Aero_GuestBedroom_Palette",
-      "triangles": 1440,
-      "vertices": 744,
+      "triangles": 1704,
+      "vertices": 888,
       "material": "Aero_Palette"
     },
     {
       "name": "Aero_UpperCyanBedroom_Palette",
-      "triangles": 1996,
-      "vertices": 1056,
+      "triangles": 2260,
+      "vertices": 1200,
       "material": "Aero_Palette"
     },
     {
       "name": "Aero_UpperLimeBedroom_Palette",
-      "triangles": 1440,
-      "vertices": 744,
+      "triangles": 1704,
+      "vertices": 888,
       "material": "Aero_Palette"
     },
     {
@@ -3843,14 +4005,20 @@
     },
     {
       "name": "Aero_Study_Palette",
-      "triangles": 2292,
-      "vertices": 1214,
+      "triangles": 2776,
+      "vertices": 1478,
       "material": "Aero_Palette"
     },
     {
       "name": "Aero_UpperReading_Palette",
       "triangles": 2444,
       "vertices": 1256,
+      "material": "Aero_Palette"
+    },
+    {
+      "name": "Aero_TerraceFurniture_Palette",
+      "triangles": 836,
+      "vertices": 440,
       "material": "Aero_Palette"
     },
     {
@@ -3890,8 +4058,8 @@
       "material": "Aero_Palette"
     }
   ],
-  "triangleCount": 50448,
-  "meshCount": 87,
+  "triangleCount": 53128,
+  "meshCount": 88,
   "expectedBoundsRoblox": {
     "size": [
       124.0,

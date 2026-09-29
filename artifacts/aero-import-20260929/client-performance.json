@@ -1,0 +1,161 @@
+{
+  "recordedAt": "2026-09-29",
+  "studioId": "73a1ce63-6043-4836-8ed9-f946086e46ea",
+  "result": {
+    "passed": true,
+    "seconds": 30.09086962499714,
+    "movement": {
+      "samples": 60,
+      "movingSamples": 10,
+      "pathDistanceStuds": 65.47140127420425
+    },
+    "startPosition": [
+      -28.48839569091797,
+      21.998023986816406,
+      -22.261430740356445
+    ],
+    "scope": "Local Studio client while server directs the regular avatar walk; not a mobile or multiplayer benchmark",
+    "done": true,
+    "averageRenderEventsPerSecond": 41.033401768853125,
+    "finalPosition": [
+      28.210065841674805,
+      21.997947692871094,
+      -11.010454177856445
+    ],
+    "metricErrors": [],
+    "placeId": 121672571539226,
+    "durationRequestedSeconds": 30,
+    "metrics": {
+      "SceneTriangleCount": {
+        "min": 18984,
+        "mean": 20512.066666666666,
+        "p99": 32096,
+        "max": 32096,
+        "samples": 60,
+        "p95": 28448,
+        "p50": 18984
+      },
+      "FrameTime": {
+        "min": 0.013757333159446716,
+        "mean": 0.02451530269657572,
+        "p99": 0.0407877080142498,
+        "max": 0.0407877080142498,
+        "samples": 60,
+        "p95": 0.03324858471751213,
+        "p50": 0.02355758287012577
+      },
+      "PhysicsStepTime": {
+        "min": 0.0002639806771185249,
+        "mean": 0.00034492160484660416,
+        "p99": 0.0005030669854022563,
+        "max": 0.0005030669854022563,
+        "samples": 60,
+        "p95": 0.0004282248846720904,
+        "p50": 0.0003360855916980654
+      },
+      "RenderCPUFrameTime": {
+        "min": 0.0026615418028086424,
+        "mean": 0.023262735607568176,
+        "p99": 0.03781512379646301,
+        "max": 0.03781512379646301,
+        "samples": 60,
+        "p95": 0.032423585653305054,
+        "p50": 0.02233695797622204
+      },
+      "RenderGPUFrameTime": {
+        "min": 0.024951457977294922,
+        "mean": 0.041232864713917176,
+        "p99": 0.06228150054812431,
+        "max": 0.06228150054812431,
+        "samples": 60,
+        "p95": 0.05465487763285637,
+        "p50": 0.04056287556886673
+      },
+      "SceneDrawcallCount": {
+        "min": 32,
+        "mean": 33.166666666666664,
+        "p99": 41,
+        "max": 41,
+        "samples": 60,
+        "p95": 40,
+        "p50": 32
+      },
+      "ProcessMemoryMb": {
+        "min": 3401.05712890625,
+        "mean": 3403.10791015625,
+        "p99": 3406.29150390625,
+        "max": 3406.29150390625,
+        "samples": 60,
+        "p95": 3406.07275390625,
+        "p50": 3402.13525390625
+      },
+      "InstanceCount": {
+        "min": 46877,
+        "mean": 46877,
+        "p99": 46877,
+        "max": 46877,
+        "samples": 60,
+        "p95": 46877,
+        "p50": 46877
+      }
+    },
+    "connectionsDisconnected": 2,
+    "renderIntervalSeconds": {
+      "min": 0.008360874839127064,
+      "mean": 0.024370389899261567,
+      "p99": 0.03896979242563248,
+      "max": 0.05225645750761032,
+      "samples": 1235,
+      "p95": 0.03393062576651573,
+      "p50": 0.023797666653990746
+    },
+    "context": "Play Client",
+    "limitations": [
+      "RenderStepped intervals are not CPU utilization.",
+      "Memory is the process total reported by Stats, not a house-only allocation.",
+      "Named Stats timings are retained as raw API values; no unverified unit conversion is applied.",
+      "Observed Studio quality, viewport, background apps and sampling overhead influence results."
+    ]
+  },
+  "observedClientConfigurationAfterSample": {
+    "Rendering.EditQualityLevel": "Enum.QualityLevel.Automatic",
+    "cameraFieldOfView": 70,
+    "cameraType": "Enum.CameraType.Custom",
+    "viewportPixels": [
+      2173,
+      1023
+    ],
+    "Rendering.QualityLevel": "Enum.QualityLevel.Level21",
+    "Rendering.GraphicsMode": "Enum.GraphicsMode.Automatic",
+    "savedQualityLevel": "Enum.SavedQualitySetting.QualityLevel10",
+    "Rendering.EnableFRM": "true"
+  },
+  "metricDocumentation": {
+    "sources": [
+      "https://create.roblox.com/docs/reference/engine/classes/Stats",
+      "https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/reference/engine/classes/Stats.yaml"
+    ],
+    "units": {
+      "renderIntervalSeconds": "seconds between RenderStepped callbacks",
+      "FrameTime": "seconds (explicitly documented)",
+      "ProcessMemoryMb": "megabytes as reported by the OS for the current game session/process",
+      "SceneDrawcallCount": "scene draw calls",
+      "SceneTriangleCount": "scene rendered triangles",
+      "InstanceCount": "instances in memory",
+      "RenderCPUFrameTime": "raw Stats timing value; docs identify render CPU frame workload but omit the unit",
+      "RenderGPUFrameTime": "raw Stats timing value; docs identify render GPU frame workload but omit the unit",
+      "PhysicsStepTime": "raw Stats timing value; docs describe physics update duration but omit the unit"
+    }
+  },
+  "interpretation": {
+    "sampleCompleted": true,
+    "performanceGatePassed": null,
+    "note": "result.passed means the bounded sampler completed and collected enough render events; it is not a universal performance pass or 60 FPS guarantee.",
+    "meanObservedRenderRate": 41.033401768853125,
+    "p95ObservedRenderIntervalMilliseconds": 33.93062576651573,
+    "measuredMovement": "10 of 60 metric intervals recorded more than 0.1 stud avatar travel; sample includes movement and stationary periods.",
+    "noBaseline": "No matched empty-house/device baseline was collected; process memory and frame cost cannot be attributed exclusively to this asset.",
+    "persistentEdits": "None. No Script instances, player movement, camera edits, quality changes, or Studio mode changes."
+  },
+  "samplerSource": "local RS=game:GetService(\"RunService\")\nlocal Stats=game:GetService(\"Stats\")\nlocal HS=game:GetService(\"HttpService\")\nlocal player=game:GetService(\"Players\").LocalPlayer\nassert(game.PlaceId==121672571539226 and RS:IsRunning() and RS:IsClient(),\"Expected Aero Play Client\")\nassert(not _G.AeroPerfQA or _G.AeroPerfQA.done,\"Sampler already running\")\nlocal character=player.Character\nlocal root=character and character:FindFirstChild(\"HumanoidRootPart\")\nassert(root,\"Avatar not ready\")\nlocal metricNames={\"FrameTime\",\"RenderCPUFrameTime\",\"RenderGPUFrameTime\",\"SceneDrawcallCount\",\"SceneTriangleCount\",\"InstanceCount\",\"PhysicsStepTime\"}\nlocal samples={}\nfor _,name in ipairs(metricNames) do samples[name]={} end\nsamples.ProcessMemoryMb={}\nlocal intervals={}\nlocal out={done=false,placeId=game.PlaceId,context=\"Play Client\",durationRequestedSeconds=30,scope=\"Local Studio client while server directs the regular avatar walk; not a mobile or multiplayer benchmark\",metrics={},metricErrors={},movement={samples=0,movingSamples=0,pathDistanceStuds=0},limitations={\"RenderStepped intervals are not CPU utilization.\",\"Memory is the process total reported by Stats, not a house-only allocation.\",\"Named Stats timings are retained as raw API values; no unverified unit conversion is applied.\",\"Observed Studio quality, viewport, background apps and sampling overhead influence results.\"}}\n_G.AeroPerfQA=out\nlocal started=os.clock()\nlocal previousPosition=root.Position\nout.startPosition={root.Position.X,root.Position.Y,root.Position.Z}\nlocal renderConnection,resetConnection\nlocal cancelled=false\nlocal lastMetrics=-math.huge\nlocal function sampleMetrics()\n for _,name in ipairs(metricNames) do\n  local ok,value=pcall(function() return Stats[name] end)\n  if ok and type(value)==\"number\" and value==value then table.insert(samples[name],value)\n  elseif not out.metricErrors[name] then out.metricErrors[name]=tostring(value) end\n end\n local ok,value=pcall(function() return Stats:GetTotalMemoryUsageMb() end)\n if ok and type(value)==\"number\" and value==value then table.insert(samples.ProcessMemoryMb,value)\n elseif not out.metricErrors.ProcessMemoryMb then out.metricErrors.ProcessMemoryMb=tostring(value) end\n if root.Parent then\n  local distance=(root.Position-previousPosition).Magnitude\n  out.movement.samples+=1\n  if distance>.1 then out.movement.movingSamples+=1 end\n  out.movement.pathDistanceStuds+=distance\n  previousPosition=root.Position\n end\nend\nlocal function summary(values)\n if #values==0 then return {samples=0} end\n table.sort(values)\n local total=0\n for _,v in ipairs(values) do total+=v end\n return {samples=#values,min=values[1],max=values[#values],mean=total/#values,p50=values[math.max(1,math.ceil(#values*.5))],p95=values[math.max(1,math.ceil(#values*.95))],p99=values[math.max(1,math.ceil(#values*.99))]}\nend\ntask.spawn(function()\n local ok,problem=xpcall(function()\n  renderConnection=RS.RenderStepped:Connect(function(dt)\n   if dt>0 and #intervals<15000 then intervals[#intervals+1]=dt end\n   if os.clock()-lastMetrics>=.5 then lastMetrics=os.clock();sampleMetrics() end\n  end)\n  resetConnection=player.CharacterRemoving:Connect(function(c) if c==character then cancelled=true end end)\n  repeat\n   task.wait(.1)\n   assert(not cancelled and player.Character==character and root.Parent,\"Character reset during sample\")\n  until os.clock()-started>=30\n end,debug.traceback)\n if renderConnection then renderConnection:Disconnect() end\n if resetConnection then resetConnection:Disconnect() end\n sampleMetrics()\n out.seconds=os.clock()-started\n out.renderIntervalSeconds=summary(intervals)\n if out.renderIntervalSeconds.mean then out.averageRenderEventsPerSecond=1/out.renderIntervalSeconds.mean end\n for name,values in pairs(samples) do out.metrics[name]=summary(values) end\n out.finalPosition=root.Parent and {root.Position.X,root.Position.Y,root.Position.Z} or {}\n out.connectionsDisconnected=2\n out.passed=ok and #intervals>=100\n if not ok then out.error=tostring(problem) end\n out.done=true\nend)\nreturn HS:JSONEncode({started=true,duration=30,context=\"Play Client\"})"
+}

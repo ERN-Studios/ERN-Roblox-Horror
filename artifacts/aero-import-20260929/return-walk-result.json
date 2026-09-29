@@ -1,0 +1,6 @@
+{
+  "done": true,
+  "passed": true,
+  "completedLegs": 72,
+  "method": "Humanoid MoveTo in reverse order of verified walk route; no jumps or teleports. Network ownership restored on completion."
+}

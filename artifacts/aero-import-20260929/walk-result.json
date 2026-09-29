@@ -1,0 +1,2030 @@
+{
+  "current": {
+    "index": 73,
+    "label": "gallery and cyan bedroom 6"
+  },
+  "rootFloorOffset": 2.998025417327881,
+  "placeId": 121672571539226,
+  "passed": true,
+  "cancelRequested": false,
+  "overallTimeoutSeconds": 180,
+  "observedJumpStates": 0,
+  "finalPosition": [
+    -28.64873695373535,
+    21.998008728027344,
+    -22.80551528930664
+  ],
+  "walkSpeed": 16,
+  "finalHealth": 100,
+  "seconds": 38.8057074999997,
+  "initialHealth": 100,
+  "route": [
+    {
+      "seconds": 0.05072279166779481,
+      "index": 1,
+      "label": "front approach",
+      "verticalError": 0.000030040740966796875,
+      "horizontalError": 0.9997711181640625,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000008496752343489788,
+        4.178025245666504,
+        48
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.Entry__path_007",
+      "authored": [
+        0,
+        -48,
+        0.18
+      ],
+      "actual": [
+        0,
+        4.177995204925537,
+        48.99977111816406
+      ]
+    },
+    {
+      "seconds": 0.11761308333370835,
+      "index": 2,
+      "label": "entry first step",
+      "verticalError": 9.5367431640625e-7,
+      "horizontalError": 1.23236083984375,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000008115282071230467,
+        4.178025245666504,
+        46
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.Entry__path_007",
+      "authored": [
+        0,
+        -46,
+        0.18
+      ],
+      "actual": [
+        0.000004780933522852138,
+        4.1780242919921875,
+        47.23236083984375
+      ]
+    },
+    {
+      "seconds": 0.06421904166927561,
+      "index": 3,
+      "label": "entry middle step",
+      "verticalError": 0.18000125885009766,
+      "horizontalError": 0.6990165710449219,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000008038988198677544,
+        4.358025550842285,
+        45.599998474121094
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.Entry__step_008",
+      "authored": [
+        0,
+        -45.6,
+        0.36
+      ],
+      "actual": [
+        0.000006653899617958814,
+        4.1780242919921875,
+        46.299015045166016
+      ]
+    },
+    {
+      "seconds": 0.07338375000108499,
+      "index": 4,
+      "label": "entry upper step",
+      "verticalError": 0.44058799743652344,
+      "horizontalError": 0.3989982604980469,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000007867327440180816,
+        4.818025588989258,
+        44.70000076293945
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.Entry__step_009",
+      "authored": [
+        0,
+        -44.7,
+        0.82
+      ],
+      "actual": [
+        0.000007573988114017993,
+        4.377437591552734,
+        45.0989990234375
+      ]
+    },
+    {
+      "seconds": 0.06049962500037509,
+      "index": 5,
+      "label": "entry and lounge 1",
+      "verticalError": 0.2749452590942383,
+      "horizontalError": 1.032318115234375,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.0000075430780270835385,
+        4.998025417327881,
+        43
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.FrontPorch_003",
+      "authored": [
+        0,
+        -43,
+        1
+      ],
+      "actual": [
+        0.0000075692405516747385,
+        4.723080158233643,
+        44.032318115234375
+      ]
+    },
+    {
+      "seconds": 0.16528912500143633,
+      "index": 6,
+      "label": "entry and lounge 2",
+      "verticalError": 0.0028510093688964844,
+      "horizontalError": 1.4323577880859375,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000006970873073441908,
+        4.998025417327881,
+        40
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        -40,
+        1
+      ],
+      "actual": [
+        0.000007184820788097568,
+        4.995174407958984,
+        41.43235778808594
+      ]
+    },
+    {
+      "seconds": 0.6020426249997399,
+      "index": 7,
+      "label": "entry and lounge 3",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.6989421844482422,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000005063524440629408,
+        4.998025417327881,
+        30
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        -30,
+        1
+      ],
+      "actual": [
+        0.000005378915375331417,
+        4.998024940490723,
+        31.698942184448242
+      ]
+    },
+    {
+      "seconds": 0.6659064999985276,
+      "index": 8,
+      "label": "entry and lounge 4",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.5831135511398315,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -11.999995231628418,
+        4.998025417327881,
+        30.000001907348633
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -12,
+        -30,
+        1
+      ],
+      "actual": [
+        -10.429906845092773,
+        4.998024940490723,
+        30.202661514282227
+      ]
+    },
+    {
+      "seconds": 1.0666538333316566,
+      "index": 9,
+      "label": "entry and lounge 5",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.5046859979629517,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -28.9999942779541,
+        4.998025417327881,
+        30.0000057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -29,
+        -30,
+        1
+      ],
+      "actual": [
+        -27.49539566040039,
+        4.998024940490723,
+        30.01622200012207
+      ]
+    },
+    {
+      "seconds": 0.9042145000021264,
+      "index": 10,
+      "label": "guest bedroom 1",
+      "verticalError": 0,
+      "horizontalError": 1.5987743139266968,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -11.999995231628418,
+        4.998025417327881,
+        30.000001907348633
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -12,
+        -30,
+        1
+      ],
+      "actual": [
+        -13.59876823425293,
+        4.998025417327881,
+        30.002084732055664
+      ]
+    },
+    {
+      "seconds": 2.5837949166671024,
+      "index": 11,
+      "label": "guest bedroom 2",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 0.852608859539032,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -12.00000286102295,
+        4.998025417327881,
+        -11.999998092651367
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -12,
+        12,
+        1
+      ],
+      "actual": [
+        -12.02922248840332,
+        4.998024940490723,
+        -11.147890090942383
+      ]
+    },
+    {
+      "seconds": 0.9452615416666958,
+      "index": 12,
+      "label": "guest bedroom 3",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.9530154466629028,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -29.000001907348633,
+        4.998025417327881,
+        -11.999994277954102
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -29,
+        12,
+        1
+      ],
+      "actual": [
+        -27.04859733581543,
+        4.998024940490723,
+        -11.920687675476074
+      ]
+    },
+    {
+      "seconds": 0.47561129166570026,
+      "index": 13,
+      "label": "guest bedroom 4",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 0.8102752566337585,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -29.000003814697266,
+        4.998025417327881,
+        -19.9999942779541
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -29,
+        20,
+        1
+      ],
+      "actual": [
+        -28.822145462036133,
+        4.998024940490723,
+        -19.20948028564453
+      ]
+    },
+    {
+      "seconds": 0.3908352083308273,
+      "index": 14,
+      "label": "guest bedroom 5",
+      "verticalError": 0,
+      "horizontalError": 1.4377905130386353,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -29.000001907348633,
+        4.998025417327881,
+        -11.999994277954102
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -29,
+        12,
+        1
+      ],
+      "actual": [
+        -28.97684097290039,
+        4.998025417327881,
+        -13.43759822845459
+      ]
+    },
+    {
+      "seconds": 0.9838287083330215,
+      "index": 15,
+      "label": "guest bedroom 6",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.450913906097412,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -12.00000286102295,
+        4.998025417327881,
+        -11.999998092651367
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -12,
+        12,
+        1
+      ],
+      "actual": [
+        -13.446802139282227,
+        4.998024940490723,
+        -12.109190940856934
+      ]
+    },
+    {
+      "seconds": 0.35499924999749055,
+      "index": 16,
+      "label": "dry bathroom 1",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.0817606449127197,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -12.000004768371582,
+        4.998025417327881,
+        -18.499998092651367
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        -12,
+        18.5,
+        1
+      ],
+      "actual": [
+        -12.214698791503906,
+        4.998024940490723,
+        -17.439756393432617
+      ]
+    },
+    {
+      "seconds": 0.6949965416679333,
+      "index": 17,
+      "label": "dry bathroom 2",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.1570765972137451,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -0.000004187116246612277,
+        4.998025417327881,
+        -18.5
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        18.5,
+        1
+      ],
+      "actual": [
+        -1.1537315845489502,
+        4.998024940490723,
+        -18.41202735900879
+      ]
+    },
+    {
+      "seconds": 0.29178745833269204,
+      "index": 18,
+      "label": "dry bathroom 3",
+      "verticalError": 0.000002384185791015625,
+      "horizontalError": 1.137952446937561,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -0.000005236158358457033,
+        4.998025417327881,
+        -24
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        24,
+        1
+      ],
+      "actual": [
+        -0.20425289869308472,
+        4.99802303314209,
+        -22.88052749633789
+      ]
+    },
+    {
+      "seconds": 0.11307512499843142,
+      "index": 19,
+      "label": "dry bathroom 4",
+      "verticalError": 9.5367431640625e-7,
+      "horizontalError": 1.3929353952407837,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -0.000005617628175969003,
+        4.998025417327881,
+        -26
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        26,
+        1
+      ],
+      "actual": [
+        -0.08989710360765457,
+        4.998026371002197,
+        -24.609968185424805
+      ]
+    },
+    {
+      "seconds": 0.3134180833330902,
+      "index": 20,
+      "label": "dry bathroom 5",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.6144682168960571,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -0.000004187116246612277,
+        4.998025417327881,
+        -18.5
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        0,
+        18.5,
+        1
+      ],
+      "actual": [
+        -0.019597318023443222,
+        4.998024940490723,
+        -20.114349365234375
+      ]
+    },
+    {
+      "seconds": 0.7287591249987599,
+      "index": 21,
+      "label": "study 1",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.650797724723816,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        12.999995231628418,
+        4.998025417327881,
+        -18.500001907348633
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        13,
+        18.5,
+        1
+      ],
+      "actual": [
+        11.35953140258789,
+        4.998024940490723,
+        -18.684423446655273
+      ]
+    },
+    {
+      "seconds": 0.32463570833351696,
+      "index": 22,
+      "label": "study 2",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.765683889389038,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        12.99999713897705,
+        4.998025417327881,
+        -12.00000286102295
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        13,
+        12,
+        1
+      ],
+      "actual": [
+        12.608963966369629,
+        4.998024940490723,
+        -13.721842765808105
+      ]
+    },
+    {
+      "seconds": 0.9140178749985353,
+      "index": 23,
+      "label": "study 3",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.9018923044204712,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999998092651367,
+        4.998025417327881,
+        -12.000005722045898
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        29,
+        12,
+        1
+      ],
+      "actual": [
+        27.10708999633789,
+        4.998024940490723,
+        -12.184649467468262
+      ]
+    },
+    {
+      "seconds": 0.40888437499961583,
+      "index": 24,
+      "label": "study 4",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.6384896039962769,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999996185302734,
+        4.998025417327881,
+        -20.0000057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        29,
+        20,
+        1
+      ],
+      "actual": [
+        28.644033432006836,
+        4.998024940490723,
+        -18.400650024414062
+      ]
+    },
+    {
+      "seconds": 0.3571654583320196,
+      "index": 25,
+      "label": "study 5",
+      "verticalError": 0,
+      "horizontalError": 1.2340224981307983,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999998092651367,
+        4.998025417327881,
+        -12.000005722045898
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        29,
+        12,
+        1
+      ],
+      "actual": [
+        28.944753646850586,
+        4.998025417327881,
+        -13.23279094696045
+      ]
+    },
+    {
+      "seconds": 0.8136939166688535,
+      "index": 26,
+      "label": "study 6",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.0852657556533813,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        14.99999713897705,
+        4.998025417327881,
+        -12.00000286102295
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        15,
+        12,
+        1
+      ],
+      "actual": [
+        16.082059860229492,
+        4.998024940490723,
+        -12.083322525024414
+      ]
+    },
+    {
+      "seconds": 1.031902374998026,
+      "index": 27,
+      "label": "kitchen and dining circulation 1",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.8461720943450928,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        15,
+        4.998025417327881,
+        5.999997138977051
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        15,
+        -6,
+        1
+      ],
+      "actual": [
+        15.095149040222168,
+        4.998024940490723,
+        4.156278610229492
+      ]
+    },
+    {
+      "seconds": 0.5938672500014945,
+      "index": 28,
+      "label": "kitchen and dining circulation 2",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.5953751802444458,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        26.000001907348633,
+        4.998025417327881,
+        5.999995231628418
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        26,
+        -6,
+        1
+      ],
+      "actual": [
+        24.42342185974121,
+        4.998024940490723,
+        5.755828857421875
+      ]
+    },
+    {
+      "seconds": 0.9982739583356306,
+      "index": 29,
+      "label": "kitchen and dining circulation 3",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.578525185585022,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        42,
+        4.998025417327881,
+        5.9999918937683105
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        42,
+        -6,
+        1
+      ],
+      "actual": [
+        40.42162322998047,
+        4.998024940490723,
+        5.978339195251465
+      ]
+    },
+    {
+      "seconds": 1.293570958332566,
+      "index": 30,
+      "label": "kitchen and dining circulation 4",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.5541658401489258,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        42.000003814697266,
+        4.998025417327881,
+        27.99999237060547
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        42,
+        -28,
+        1
+      ],
+      "actual": [
+        41.89970779418945,
+        4.998024940490723,
+        26.449066162109375
+      ]
+    },
+    {
+      "seconds": 0.2705515416673734,
+      "index": 31,
+      "label": "kitchen and dining circulation 5",
+      "verticalError": 0.000006198883056640625,
+      "horizontalError": 1.8293458223342896,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        37.00000762939453,
+        4.998025417327881,
+        29.99999237060547
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        37,
+        -30,
+        1
+      ],
+      "actual": [
+        38.495811462402344,
+        4.998019218444824,
+        28.94686508178711
+      ]
+    },
+    {
+      "seconds": 1.3600274166674353,
+      "index": 32,
+      "label": "kitchen and dining circulation 6",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.7917999029159546,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        15.000004768371582,
+        4.998025417327881,
+        29.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        15,
+        -30,
+        1
+      ],
+      "actual": [
+        16.790075302124023,
+        4.998024940490723,
+        29.921293258666992
+      ]
+    },
+    {
+      "seconds": 0.5501557083334774,
+      "index": 33,
+      "label": "stair approach 1",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.490393042564392,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.50000524520874,
+        4.998025417327881,
+        29.999998092651367
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        6.5,
+        -30,
+        1
+      ],
+      "actual": [
+        7.990355491638184,
+        4.998024940490723,
+        29.98871612548828
+      ]
+    },
+    {
+      "seconds": 0.7000646666674584,
+      "index": 34,
+      "label": "stair approach 2",
+      "verticalError": 4.76837158203125e-7,
+      "horizontalError": 1.016751766204834,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.500002861022949,
+        4.998025417327881,
+        17.999998092651367
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.GroundFloor_002",
+      "authored": [
+        6.5,
+        -18,
+        1
+      ],
+      "actual": [
+        6.612753391265869,
+        4.998024940490723,
+        19.010478973388672
+      ]
+    },
+    {
+      "seconds": 0.19950408333534142,
+      "index": 35,
+      "label": "first stair flight",
+      "verticalError": 0.35204029083251953,
+      "horizontalError": 1.1786425113677979,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.500002384185791,
+        5.498025417327881,
+        14.499999046325684
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_106",
+      "authored": [
+        6.5,
+        -14.5,
+        1.5
+      ],
+      "actual": [
+        6.528931140899658,
+        5.145985126495361,
+        15.6782865524292
+      ]
+    },
+    {
+      "seconds": 0.19127104166545905,
+      "index": 36,
+      "label": "first stair flight",
+      "verticalError": 0.4002232551574707,
+      "horizontalError": 1.1783798933029175,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.500001907348633,
+        6.498025417327881,
+        11.499999046325684
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_108",
+      "authored": [
+        6.5,
+        -11.5,
+        2.5
+      ],
+      "actual": [
+        6.508057117462158,
+        6.09780216217041,
+        12.678351402282715
+      ]
+    },
+    {
+      "seconds": 0.15828341666565393,
+      "index": 37,
+      "label": "first stair flight",
+      "verticalError": 0.6651911735534668,
+      "horizontalError": 1.5783605575561523,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.500000953674316,
+        7.498025417327881,
+        8.499999046325684
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_110",
+      "authored": [
+        6.5,
+        -8.5,
+        3.5
+      ],
+      "actual": [
+        6.502966403961182,
+        6.832834243774414,
+        10.078356742858887
+      ]
+    },
+    {
+      "seconds": 0.21456254166696453,
+      "index": 38,
+      "label": "first stair flight",
+      "verticalError": 0.6805028915405273,
+      "horizontalError": 1.2450282573699951,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.500000476837158,
+        8.498025894165039,
+        5.499998569488525
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_112",
+      "authored": [
+        6.5,
+        -5.5,
+        4.5
+      ],
+      "actual": [
+        6.500801086425781,
+        7.817523002624512,
+        6.745026588439941
+      ]
+    },
+    {
+      "seconds": 0.169507666669233,
+      "index": 39,
+      "label": "first stair flight",
+      "verticalError": 0.7725839614868164,
+      "horizontalError": 1.4450302124023438,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.5,
+        9.498025894165039,
+        2.4999988079071045
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_114",
+      "authored": [
+        6.5,
+        -2.5,
+        5.5
+      ],
+      "actual": [
+        6.500267028808594,
+        8.725441932678223,
+        3.9450290203094482
+      ]
+    },
+    {
+      "seconds": 0.18438841666647932,
+      "index": 40,
+      "label": "first stair flight",
+      "verticalError": 0.8687152862548828,
+      "horizontalError": 1.5783655643463135,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.499999523162842,
+        10.498025894165039,
+        -0.5000012516975403
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_116",
+      "authored": [
+        6.5,
+        0.5,
+        6.5
+      ],
+      "actual": [
+        6.500094413757324,
+        9.629310607910156,
+        1.0783642530441284
+      ]
+    },
+    {
+      "seconds": 0.24057549999997718,
+      "index": 41,
+      "label": "first stair flight",
+      "verticalError": 0.6570377349853516,
+      "horizontalError": 0.6450331211090088,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.499999046325684,
+        11.498025894165039,
+        -3.5000011920928955
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightA_118",
+      "authored": [
+        6.5,
+        3.5,
+        7.5
+      ],
+      "actual": [
+        6.500010967254639,
+        10.840988159179688,
+        -2.8549680709838867
+      ]
+    },
+    {
+      "seconds": 0.052071791666094214,
+      "index": 42,
+      "label": "first stair flight",
+      "verticalError": 0.8776931762695312,
+      "horizontalError": 0.778367280960083,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.499999046325684,
+        11.998025894165039,
+        -4.500001430511475
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_120",
+      "authored": [
+        6.5,
+        4.5,
+        7.5
+      ],
+      "actual": [
+        6.500004291534424,
+        11.120332717895508,
+        -3.7216341495513916
+      ]
+    },
+    {
+      "seconds": 0.07149645833487739,
+      "index": 43,
+      "label": "curved stair turn 1",
+      "verticalError": 0.41782474517822266,
+      "horizontalError": 1.2204478979110718,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        6.394317626953125,
+        11.998025894165039,
+        -6.072998046875
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_119",
+      "authored": [
+        6.394319042217767,
+        6.072996771088706,
+        8
+      ],
+      "actual": [
+        6.450254440307617,
+        11.580201148986816,
+        -4.853832721710205
+      ]
+    },
+    {
+      "seconds": 0.12401787499766215,
+      "index": 44,
+      "label": "curved stair turn 2",
+      "verticalError": 0.4749269485473633,
+      "horizontalError": 1.3207846879959106,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        5.573081016540527,
+        12.498025894165039,
+        -8.05563735961914
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_121",
+      "authored": [
+        5.573082867663999,
+        8.055636281607812,
+        8.5
+      ],
+      "actual": [
+        5.9258713722229,
+        12.023098945617676,
+        -6.782840728759766
+      ]
+    },
+    {
+      "seconds": 0.15195983333251206,
+      "index": 45,
+      "label": "curved stair turn 3",
+      "verticalError": 0.37691211700439453,
+      "horizontalError": 0.8943541049957275,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        4.055634021759033,
+        12.998025894165039,
+        -9.573083877563477
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_123",
+      "authored": [
+        4.055636281607812,
+        9.573082867663999,
+        9
+      ],
+      "actual": [
+        4.556697845458984,
+        12.621113777160645,
+        -8.832270622253418
+      ]
+    },
+    {
+      "seconds": 0.07211204166742391,
+      "index": 46,
+      "label": "curved stair turn 4",
+      "verticalError": 0.5874948501586914,
+      "horizontalError": 1.869924545288086,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        2.0729942321777344,
+        13.498025894165039,
+        -10.394318580627441
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_125",
+      "authored": [
+        2.0729967710887056,
+        10.394319042217766,
+        9.5
+      ],
+      "actual": [
+        3.660287380218506,
+        12.910531044006348,
+        -9.4058256149292
+      ]
+    },
+    {
+      "seconds": 0.13097449999986566,
+      "index": 47,
+      "label": "curved stair turn 5",
+      "verticalError": 0.5616865158081055,
+      "horizontalError": 1.729309320449829,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -0.07299938797950745,
+        13.998025894165039,
+        -10.394318580627441
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_127",
+      "authored": [
+        -0.07299677108870517,
+        10.394319042217766,
+        10
+      ],
+      "actual": [
+        1.5994614362716675,
+        13.436339378356934,
+        -9.954562187194824
+      ]
+    },
+    {
+      "seconds": 0.15707658333485597,
+      "index": 48,
+      "label": "curved stair turn 6",
+      "verticalError": 0.40334415435791016,
+      "horizontalError": 1.143093466758728,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -2.0556387901306152,
+        14.498025894165039,
+        -9.57308292388916
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_129",
+      "authored": [
+        -2.0556362816078106,
+        9.573082867663999,
+        10.5
+      ],
+      "actual": [
+        -0.9190324544906616,
+        14.094681739807129,
+        -9.69469165802002
+      ]
+    },
+    {
+      "seconds": 0.11266779166908236,
+      "index": 49,
+      "label": "curved stair turn 7",
+      "verticalError": 0.4805746078491211,
+      "horizontalError": 1.3249006271362305,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -3.573085069656372,
+        14.998025894165039,
+        -8.055635452270508
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_131",
+      "authored": [
+        -3.5730828676639996,
+        8.055636281607812,
+        11
+      ],
+      "actual": [
+        -2.452232837677002,
+        14.517451286315918,
+        -8.76207160949707
+      ]
+    },
+    {
+      "seconds": 0.1275616250022722,
+      "index": 50,
+      "label": "curved stair turn 8",
+      "verticalError": 0.47625255584716797,
+      "horizontalError": 1.2536169290542603,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.394320487976074,
+        15.498025894165039,
+        -6.072995662689209
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairTurn_133",
+      "authored": [
+        -4.394319042217767,
+        6.072996771088707,
+        11.5
+      ],
+      "actual": [
+        -3.6663639545440674,
+        15.021773338317871,
+        -7.093600749969482
+      ]
+    },
+    {
+      "seconds": 0.06191404166747816,
+      "index": 51,
+      "label": "second stair flight",
+      "verticalError": 0.6847105026245117,
+      "horizontalError": 1.7253302335739136,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.500001430511475,
+        15.998025894165039,
+        -4.499999046325684
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_135",
+      "authored": [
+        -4.5,
+        4.5,
+        12
+      ],
+      "actual": [
+        -3.977210760116577,
+        15.313315391540527,
+        -6.144217491149902
+      ]
+    },
+    {
+      "seconds": 0.27048470833324245,
+      "index": 52,
+      "label": "second stair flight",
+      "verticalError": 0.6182441711425781,
+      "horizontalError": 0.3408064842224121,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.500000953674316,
+        17.49802589416504,
+        -1.4999991655349731
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_138",
+      "authored": [
+        -4.5,
+        1.5,
+        13.5
+      ],
+      "actual": [
+        -4.462414264678955,
+        16.87978172302246,
+        -1.8387266397476196
+      ]
+    },
+    {
+      "seconds": 0.18816066666840925,
+      "index": 53,
+      "label": "second stair flight",
+      "verticalError": 0.8098812103271484,
+      "horizontalError": 0.33909574151039124,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.5,
+        18.99802589416504,
+        1.5000008344650269
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_141",
+      "authored": [
+        -4.5,
+        -1.5,
+        15
+      ],
+      "actual": [
+        -4.496549606323242,
+        18.18814468383789,
+        1.160922646522522
+      ]
+    },
+    {
+      "seconds": 0.12550841666961787,
+      "index": 54,
+      "label": "second stair flight",
+      "verticalError": 0.7975139617919922,
+      "horizontalError": 1.3390804529190063,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.499999523162842,
+        19.99802589416504,
+        4.500000953674316
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_143",
+      "authored": [
+        -4.5,
+        -4.5,
+        16
+      ],
+      "actual": [
+        -4.498766899108887,
+        19.200511932373047,
+        3.160921096801758
+      ]
+    },
+    {
+      "seconds": 0.19085620833357098,
+      "index": 55,
+      "label": "second stair flight",
+      "verticalError": 0.8619098663330078,
+      "horizontalError": 1.2724151611328125,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.499999046325684,
+        21.49802589416504,
+        7.500000953674316
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_146",
+      "authored": [
+        -4.5,
+        -7.5,
+        17.5
+      ],
+      "actual": [
+        -4.499633312225342,
+        20.63611602783203,
+        6.227585792541504
+      ]
+    },
+    {
+      "seconds": 0.13375074999930803,
+      "index": 56,
+      "label": "second stair flight",
+      "verticalError": 0.40352439880371094,
+      "horizontalError": 0.3390836715698242,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.499999046325684,
+        21.99802589416504,
+        8.700000762939453
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.StairFlightB_147",
+      "authored": [
+        -4.5,
+        -8.7,
+        18
+      ],
+      "actual": [
+        -4.499949932098389,
+        21.594501495361328,
+        8.360917091369629
+      ]
+    },
+    {
+      "seconds": 0.050834041667258134,
+      "index": 57,
+      "label": "upper landing and terrace 1",
+      "verticalError": 0.10950279235839844,
+      "horizontalError": 1.7724180221557617,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -4.499998569488525,
+        21.99802589416504,
+        11.000000953674316
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperBridge_071",
+      "authored": [
+        -4.5,
+        -11,
+        18
+      ],
+      "actual": [
+        -4.499969482421875,
+        21.88852310180664,
+        9.227582931518555
+      ]
+    },
+    {
+      "seconds": 1.2548150833317777,
+      "index": 58,
+      "label": "upper landing and terrace 2",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.1885271072387695,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        0.000005063524440629408,
+        21.99802589416504,
+        30
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperBridge_071",
+      "authored": [
+        0,
+        -30,
+        18
+      ],
+      "actual": [
+        -0.25209909677505493,
+        21.998023986816406,
+        28.838518142700195
+      ]
+    },
+    {
+      "seconds": 1.7046349583324627,
+      "index": 59,
+      "label": "upper landing and terrace 3",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.9530138969421387,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.5000057220459,
+        21.99802589416504,
+        33.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        28.5,
+        -34,
+        18
+      ],
+      "actual": [
+        26.5764102935791,
+        21.998023986816406,
+        33.66229248046875
+      ]
+    },
+    {
+      "seconds": 0.8002384166647971,
+      "index": 60,
+      "label": "upper landing and terrace 4",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.7576104402542114,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.500009536743164,
+        21.99802589416504,
+        47.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.Terrace_101",
+      "authored": [
+        28.5,
+        -48,
+        18
+      ],
+      "actual": [
+        28.281423568725586,
+        21.998023986816406,
+        46.25603103637695
+      ]
+    },
+    {
+      "seconds": 0.6968026666654623,
+      "index": 61,
+      "label": "reading room and lime bedroom 1",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.6914435625076294,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.5000057220459,
+        21.99802589416504,
+        33.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        28.5,
+        -34,
+        18
+      ],
+      "actual": [
+        28.474403381347656,
+        21.998023986816406,
+        35.691246032714844
+      ]
+    },
+    {
+      "seconds": 0.4703316250015632,
+      "index": 62,
+      "label": "reading room and lime bedroom 2",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.1619117259979248,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        20.0000057220459,
+        21.99802589416504,
+        33.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        20,
+        -34,
+        18
+      ],
+      "actual": [
+        21.14318084716797,
+        21.998023986816406,
+        34.20781707763672
+      ]
+    },
+    {
+      "seconds": 1.7869777083324152,
+      "index": 63,
+      "label": "reading room and lime bedroom 3",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 0.8078468441963196,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        20,
+        21.99802589416504,
+        4.999996185302734
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        20,
+        -5,
+        18
+      ],
+      "actual": [
+        20.027788162231445,
+        21.998023986816406,
+        5.8073649406433105
+      ]
+    },
+    {
+      "seconds": 0.4545950416686537,
+      "index": 64,
+      "label": "reading room and lime bedroom 4",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.8257914781570435,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        29,
+        21.99802589416504,
+        4.999994277954102
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        -5,
+        18
+      ],
+      "actual": [
+        27.17893409729004,
+        21.998023986816406,
+        5.1312713623046875
+      ]
+    },
+    {
+      "seconds": 0.7504885833332082,
+      "index": 65,
+      "label": "reading room and lime bedroom 5",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.3706330060958862,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999998092651367,
+        21.99802589416504,
+        -8.000005722045898
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        8,
+        18
+      ],
+      "actual": [
+        28.826040267944336,
+        21.998023986816406,
+        -6.640456676483154
+      ]
+    },
+    {
+      "seconds": 0.6662799583318701,
+      "index": 66,
+      "label": "reading room and lime bedroom 6",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.6942510604858398,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999996185302734,
+        21.99802589416504,
+        -19.0000057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        19,
+        18
+      ],
+      "actual": [
+        28.976491928100586,
+        21.998023986816406,
+        -17.305917739868164
+      ]
+    },
+    {
+      "seconds": 0.35992016666568816,
+      "index": 67,
+      "label": "reading room and lime bedroom 7",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 0.9607697129249573,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999996185302734,
+        21.99802589416504,
+        -24.0000057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        24,
+        18
+      ],
+      "actual": [
+        28.99665641784668,
+        21.998023986816406,
+        -23.039241790771484
+      ]
+    },
+    {
+      "seconds": 0.2245773750000808,
+      "index": 68,
+      "label": "gallery and cyan bedroom 1",
+      "verticalError": 0.0000133514404296875,
+      "horizontalError": 1.0095255374908447,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999996185302734,
+        21.99802589416504,
+        -19.0000057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        19,
+        18
+      ],
+      "actual": [
+        28.99793243408203,
+        21.99801254272461,
+        -20.00952911376953
+      ]
+    },
+    {
+      "seconds": 0.633796166664979,
+      "index": 69,
+      "label": "gallery and cyan bedroom 2",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.8758888244628906,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        28.999998092651367,
+        21.99802589416504,
+        -8.000005722045898
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        29,
+        8,
+        18
+      ],
+      "actual": [
+        28.9995174407959,
+        21.998023986816406,
+        -9.875894546508789
+      ]
+    },
+    {
+      "seconds": 0.6147983750015555,
+      "index": 70,
+      "label": "gallery and cyan bedroom 3",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.4148930311203003,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        17.999998092651367,
+        21.99802589416504,
+        -8.000004768371582
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        18,
+        8,
+        18
+      ],
+      "actual": [
+        19.397794723510742,
+        21.998023986816406,
+        -8.219291687011719
+      ]
+    },
+    {
+      "seconds": 0.6354380833327014,
+      "index": 71,
+      "label": "gallery and cyan bedroom 4",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.1598347425460815,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        17.999996185302734,
+        21.99802589416504,
+        -19.2500057220459
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorEast_069",
+      "authored": [
+        18,
+        19.25,
+        18
+      ],
+      "actual": [
+        18.12828826904297,
+        21.998023986816406,
+        -18.097288131713867
+      ]
+    },
+    {
+      "seconds": 2.8562040833348874,
+      "index": 72,
+      "label": "gallery and cyan bedroom 5",
+      "verticalError": 0.0000019073486328125,
+      "horizontalError": 1.5394940376281738,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -29.000003814697266,
+        21.99802589416504,
+        -19.2499942779541
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorRear_070",
+      "authored": [
+        -29,
+        19.25,
+        18
+      ],
+      "actual": [
+        -27.460859298706055,
+        21.998023986816406,
+        -19.217191696166992
+      ]
+    },
+    {
+      "seconds": 0.24143987500065123,
+      "index": 73,
+      "label": "gallery and cyan bedroom 6",
+      "verticalError": 0.0000171661376953125,
+      "horizontalError": 1.2450575828552246,
+      "state": "Enum.HumanoidStateType.Running",
+      "floor": "Enum.Material.Plastic",
+      "reached": true,
+      "health": 100,
+      "target": [
+        -29.000003814697266,
+        21.99802589416504,
+        -23.9999942779541
+      ],
+      "support": "Workspace.Aero House.AeroRuntime.UpperFloorRear_070",
+      "authored": [
+        -29,
+        24,
+        18
+      ],
+      "actual": [
+        -28.64873695373535,
+        21.998008728027344,
+        -22.80551528930664
+      ]
+    }
+  ],
+  "connectionsDisconnected": 4,
+  "performance": {
+    "clientRendering": "Unverified by this server-context sampler",
+    "heartbeatEventsPerSecond": 44.78182719747985,
+    "cpu": "Unverified: Heartbeat event intervals are not server CPU time or CPU utilization",
+    "heartbeatIntervalSeconds": {
+      "minimum": 0.0035063750110566616,
+      "p95": 0.03242325037717819,
+      "maximum": 0.04348287358880043,
+      "samples": 1737,
+      "average": 0.022330486775141597
+    },
+    "processMemoryMb": {
+      "minimum": 3393.60400390625,
+      "p95": 3401.15087890625,
+      "maximum": 3401.41650390625,
+      "samples": 40,
+      "average": 3399.03251953125
+    },
+    "scope": "Local Studio Play Server during an actual avatar walk; not a device or multiplayer benchmark"
+  },
+  "done": true,
+  "legTimeoutSeconds": 7,
+  "teleports": 0,
+  "rigType": "Enum.HumanoidRigType.R15",
+  "arrivalRadius": 2,
+  "userId": 11374988579,
+  "waypoints": 73,
+  "start": [
+    0,
+    4.177798271179199,
+    48.99977111816406
+  ],
+  "gravity": 196.1999969482422,
+  "character": "ZenMeister02",
+  "requestedJumps": 0
+}

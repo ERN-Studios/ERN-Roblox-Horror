@@ -1,11 +1,11 @@
 {
   "asset": "Aero House",
   "scope": "Offline geometry and analytic collision only",
-  "source_sha256": "2851201f313245396f9979675460c66dac8de046ac84d0e08e3ac8bfbc229b32",
+  "source_sha256": "0bfba9bc2b2709d7678ed9369741cd551e04f99227a9a969ab3fac489a90877f",
   "blender_version": "5.2.0 LTS",
-  "meshes": 87,
-  "triangles": 50448,
-  "maximum_mesh_triangles": 3716,
+  "meshes": 88,
+  "triangles": 53128,
+  "maximum_mesh_triangles": 4284,
   "bounds_blender": {
     "min": [
       -62.0,
@@ -1020,29 +1020,29 @@
     },
     {
       "name": "Aero_GuestBedroom_Palette",
-      "vertices": 744,
-      "triangles": 1440,
+      "vertices": 888,
+      "triangles": 1704,
       "material_slots": 1,
       "uv_layers": 1,
       "invalid_uv_loops": 0,
       "zero_area_uv_triangles": 0,
       "invalid_normals": 0,
       "zero_area_triangles": 0,
-      "surface_area": 884.2893371627669,
+      "surface_area": 1330.2049532996577,
       "bounds_blender": {
         "min": [
-          -38.79999923706055,
+          -49.150001525878906,
           22.625,
-          1.0450000762939453
+          1.0
         ],
         "max": [
           -23.19999885559082,
           30.975000381469727,
-          5.944999694824219
+          10.399999618530273
         ]
       },
       "topology": {
-        "components": 12,
+        "components": 18,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -1180,19 +1180,19 @@
     },
     {
       "name": "Aero_Lounge_Palette",
-      "vertices": 1944,
-      "triangles": 3716,
+      "vertices": 2248,
+      "triangles": 4284,
       "material_slots": 1,
       "uv_layers": 1,
       "invalid_uv_loops": 0,
       "zero_area_uv_triangles": 0,
       "invalid_normals": 0,
       "zero_area_triangles": 0,
-      "surface_area": 1271.5315006284584,
+      "surface_area": 1721.9853399867181,
       "bounds_blender": {
         "min": [
           -39.70000076293945,
-          -25.21782875061035,
+          -37.27499771118164,
           0.9999999403953552
         ],
         "max": [
@@ -1202,7 +1202,7 @@
         ]
       },
       "topology": {
-        "components": 44,
+        "components": 54,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -2204,15 +2204,15 @@
     },
     {
       "name": "Aero_Study_Palette",
-      "vertices": 1214,
-      "triangles": 2292,
+      "vertices": 1478,
+      "triangles": 2776,
       "material_slots": 1,
       "uv_layers": 1,
       "invalid_uv_loops": 0,
       "zero_area_uv_triangles": 0,
       "invalid_normals": 0,
       "zero_area_triangles": 0,
-      "surface_area": 390.3807103957926,
+      "surface_area": 717.0364323238604,
       "bounds_blender": {
         "min": [
           25.020000457763672,
@@ -2220,13 +2220,13 @@
           1.0
         ],
         "max": [
-          37.900001525878906,
+          44.650001525878906,
           30.650001525878906,
           9.399999618530273
         ]
       },
       "topology": {
-        "components": 34,
+        "components": 45,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -2259,6 +2259,38 @@
       },
       "topology": {
         "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_TerraceFurniture_Palette",
+      "vertices": 440,
+      "triangles": 836,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 141.06506346620628,
+      "bounds_blender": {
+        "min": [
+          35.845001220703125,
+          -51.20000076293945,
+          18.020000457763672
+        ],
+        "max": [
+          46.55500030517578,
+          -47.60000228881836,
+          22.55499839782715
+        ]
+      },
+      "topology": {
+        "components": 11,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -2396,29 +2428,29 @@
     },
     {
       "name": "Aero_UpperCyanBedroom_Palette",
-      "vertices": 1056,
-      "triangles": 1996,
+      "vertices": 1200,
+      "triangles": 2260,
       "material_slots": 1,
       "uv_layers": 1,
       "invalid_uv_loops": 0,
       "zero_area_uv_triangles": 0,
       "invalid_normals": 0,
       "zero_area_triangles": 0,
-      "surface_area": 934.6984756488094,
+      "surface_area": 1380.6141304761463,
       "bounds_blender": {
         "min": [
-          -38.79999923706055,
+          -49.150001525878906,
           22.882171630859375,
           18.0
         ],
         "max": [
           -20.143770217895508,
           35.17499923706055,
-          23.81999969482422
+          27.400001525878906
         ]
       },
       "topology": {
-        "components": 29,
+        "components": 35,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -2556,29 +2588,29 @@
     },
     {
       "name": "Aero_UpperLimeBedroom_Palette",
-      "vertices": 744,
-      "triangles": 1440,
+      "vertices": 888,
+      "triangles": 1704,
       "material_slots": 1,
       "uv_layers": 1,
       "invalid_uv_loops": 0,
       "zero_area_uv_triangles": 0,
       "invalid_normals": 0,
       "zero_area_triangles": 0,
-      "surface_area": 829.3222776811414,
+      "surface_area": 1275.2379325084783,
       "bounds_blender": {
         "min": [
           23.549999237060547,
-          26.825000762939453,
-          18.045000076293945
+          24.0,
+          18.0
         ],
         "max": [
-          38.44999694824219,
+          49.150001525878906,
           35.17499923706055,
-          22.94499969482422
+          27.400001525878906
         ]
       },
       "topology": {
-        "components": 12,
+        "components": 18,
         "nonmanifold_edges": 0,
         "inconsistent_winding_edges": 0,
         "inward_components": 0,
@@ -2878,7 +2910,7 @@
   "runtime_performance": "unverified",
   "glb_roundtrip": {
     "pass": true,
-    "sha256": "365fe355b672de1d2aacea79ecfed59bcea79b388aafb8ee50bee13e1a23622a",
+    "sha256": "85e697592f650f6912d7b8193bec8add3e741bac80ae51c07106ff4d9d44c3d0",
     "meshes": [
       {
         "name": "Aero_Anchor_Entry",
@@ -3434,6 +3466,14 @@
       },
       {
         "name": "Aero_TerraceDoorHeader_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_TerraceFurniture_Palette",
         "pass": true,
         "triangles_equal": true,
         "bounds_delta": 0.0,

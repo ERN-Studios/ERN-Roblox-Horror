@@ -87,7 +87,8 @@ local originalParent, originalName = model.Parent, model.Name
 local originalPivot, originalPrimaryPart = model:GetPivot(), model.PrimaryPart
 local previousVersion = model:GetAttribute("AeroSetupVersion")
 local previousManifest = model:GetAttribute("AeroSetupManifest")
-assert(previousVersion == nil and previousManifest == nil,
+local previousAuthoredFrame = model:GetAttribute("AeroAuthoredFrame")
+assert(previousVersion == nil and previousManifest == nil and previousAuthoredFrame == nil,
 	"This house already has setup metadata. Undo the previous setup before rerunning.")
 
 for _, instance in ipairs(model:GetDescendants()) do
@@ -158,7 +159,8 @@ local function assertFreshBaseline()
 		and model:GetPivot() == originalPivot and model.PrimaryPart == originalPrimaryPart,
 		"The selected model changed during setup. Rerun against its current state.")
 	assert(model:GetAttribute("AeroSetupVersion") == previousVersion
-		and model:GetAttribute("AeroSetupManifest") == previousManifest,
+		and model:GetAttribute("AeroSetupManifest") == previousManifest
+		and model:GetAttribute("AeroAuthoredFrame") == previousAuthoredFrame,
 		"Setup metadata changed during preparation. Rerun against the current model.")
 	local count = 0
 	for _, instance in ipairs(model:GetDescendants()) do
@@ -246,6 +248,7 @@ local ok, problem = xpcall(function()
 	metadataWritten = true
 	model:SetAttribute("AeroSetupVersion", tostring(DATA.version))
 	model:SetAttribute("AeroSetupManifest", MANIFEST_JSON)
+	model:SetAttribute("AeroAuthoredFrame", frame)
 end, debug.traceback)
 
 if not ok then
@@ -262,6 +265,7 @@ if not ok then
 		if metadataWritten then
 			model:SetAttribute("AeroSetupVersion", previousVersion)
 			model:SetAttribute("AeroSetupManifest", previousManifest)
+			model:SetAttribute("AeroAuthoredFrame", previousAuthoredFrame)
 		end
 	end)
 	ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Cancel)
