@@ -1,0 +1,89 @@
+{
+  "verified": true,
+  "method": "Node vm with mock DOM; actual inline script executed",
+  "source": "topology-sample.json sample.firstLayouts",
+  "primaryInteraction": "select change redraws correct distinct rooms, links, CD positions and hash for seeds 1,2,3",
+  "state": "initial load does not save; selection saves; host state restores; invalid seed falls back; state event does not save",
+  "responsiveGeometry": "node bounds and viewBox tested at 320,360,736 pixels",
+  "checks": [
+    {
+      "width": 320,
+      "seed": 1,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-b9cad3e8"
+    },
+    {
+      "width": 320,
+      "seed": 2,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-3b464c3a"
+    },
+    {
+      "width": 320,
+      "seed": 3,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-64d30e6b"
+    },
+    {
+      "width": 360,
+      "seed": 1,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-b9cad3e8"
+    },
+    {
+      "width": 360,
+      "seed": 2,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-3b464c3a"
+    },
+    {
+      "width": 360,
+      "seed": 3,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-64d30e6b"
+    },
+    {
+      "width": 736,
+      "seed": 1,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-b9cad3e8"
+    },
+    {
+      "width": 736,
+      "seed": 2,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-3b464c3a"
+    },
+    {
+      "width": 736,
+      "seed": 3,
+      "rooms": 26,
+      "links": 31,
+      "cdRooms": 5,
+      "hash": "L3-2-64d30e6b"
+    }
+  ],
+  "bytes": 13638,
+  "notVerified": [
+    "Browser pixel rendering",
+    "Native select interaction in actual conversation host",
+    "Light/dark appearance visually"
+  ],
+  "gameplayTest": false
+}

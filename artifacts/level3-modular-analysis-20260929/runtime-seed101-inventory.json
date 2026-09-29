@@ -1,0 +1,589 @@
+{
+  "lights": 110,
+  "rooms": [
+    {
+      "attributes": {
+        "Level3_RoomId": "Arrival",
+        "Level3_DecorArchetype": "SparseWelcome",
+        "Level3_CeilingHeight": 30,
+        "Level3_District": 0,
+        "Level3_ThemeId": "ArrivalTransition",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6200,
+        38.75,
+        90
+      ],
+      "name": "01 Level 3 Arrival",
+      "size": [
+        65.5,
+        31.5,
+        55.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R01",
+        "Level3_DecorArchetype": "WhiteClassroom",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6307.5,
+        29.25,
+        -90
+      ],
+      "name": "02 Beige City Party Rooms 01",
+      "size": [
+        70.5,
+        12.5,
+        67.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R02",
+        "Level3_DecorArchetype": "WhiteAtrium",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6409,
+        29.75,
+        -90
+      ],
+      "name": "03 Beige City Party Rooms 02",
+      "size": [
+        66.5,
+        13.5,
+        67.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R03",
+        "Level3_DecorArchetype": "SparseGallery",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6515.5,
+        29.75,
+        -90
+      ],
+      "name": "04 Beige City Party Rooms 03",
+      "size": [
+        66.5,
+        13.5,
+        67.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R04",
+        "Level3_DecorArchetype": "ForgottenPair",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6619.5,
+        29.75,
+        -90
+      ],
+      "name": "05 Beige City Party Rooms 04",
+      "size": [
+        73.5,
+        13.5,
+        67.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R05",
+        "Level3_DecorArchetype": "KidsCafeteria",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6307.5,
+        29.75,
+        90
+      ],
+      "name": "06 Beige City Party Rooms 05",
+      "size": [
+        70.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R06",
+        "Level3_DecorArchetype": "CityCafe",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6409,
+        29.75,
+        90
+      ],
+      "name": "07 Beige City Party Rooms 06",
+      "size": [
+        66.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R07",
+        "Level3_DecorArchetype": "KidsCluster",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6515.5,
+        29.75,
+        90
+      ],
+      "name": "08 Beige City Party Rooms 07",
+      "size": [
+        66.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S1_R08",
+        "Level3_DecorArchetype": "SparseWelcome",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 1,
+        "Level3_ThemeId": "City",
+        "Level3_RoomKind": "City"
+      },
+      "center": [
+        6619.5,
+        29.25,
+        90
+      ],
+      "name": "09 Beige City Party Rooms 08",
+      "size": [
+        73.5,
+        12.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R01",
+        "Level3_DecorArchetype": "SparseWelcome",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6307.5,
+        30.25,
+        201
+      ],
+      "name": "10 Orange and Black Party Rooms 01",
+      "size": [
+        73.5,
+        14.5,
+        65.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R02",
+        "Level3_DecorArchetype": "AbandonedCelebration",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6409,
+        29.25,
+        201
+      ],
+      "name": "11 Orange and Black Party Rooms 02",
+      "size": [
+        67.5,
+        12.5,
+        65.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R03",
+        "Level3_DecorArchetype": "DanceFloor",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6515.5,
+        29.25,
+        201
+      ],
+      "name": "12 Orange and Black Party Rooms 03",
+      "size": [
+        78.5,
+        12.5,
+        65.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R04",
+        "Level3_DecorArchetype": "BirthdayCenter",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6619.5,
+        29.25,
+        201
+      ],
+      "name": "13 Orange and Black Party Rooms 04",
+      "size": [
+        74.5,
+        12.5,
+        65.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R05",
+        "Level3_DecorArchetype": "GrandBanquet",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6307.5,
+        29.25,
+        381
+      ],
+      "name": "14 Orange and Black Party Rooms 05",
+      "size": [
+        73.5,
+        12.5,
+        64.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R06",
+        "Level3_DecorArchetype": "AfterParty",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6409,
+        30.25,
+        381
+      ],
+      "name": "15 Orange and Black Party Rooms 06",
+      "size": [
+        67.5,
+        14.5,
+        64.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R07",
+        "Level3_DecorArchetype": "SparseGallery",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6515.5,
+        30.25,
+        381
+      ],
+      "name": "16 Orange and Black Party Rooms 07",
+      "size": [
+        78.5,
+        14.5,
+        64.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S2_R08",
+        "Level3_DecorArchetype": "BanquetRows",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 2,
+        "Level3_ThemeId": "OrangeBlackParty",
+        "Level3_RoomKind": "PartyHall"
+      },
+      "center": [
+        6619.5,
+        30.25,
+        381
+      ],
+      "name": "17 Orange and Black Party Rooms 08",
+      "size": [
+        74.5,
+        14.5,
+        64.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R01",
+        "Level3_DecorArchetype": "BanquetRows",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6307.5,
+        29.25,
+        488
+      ],
+      "name": "18 Red Carpet Party Rooms 01",
+      "size": [
+        74.5,
+        12.5,
+        66.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R02",
+        "Level3_DecorArchetype": "BirthdayCenter",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6409,
+        29.25,
+        488
+      ],
+      "name": "19 Red Carpet Party Rooms 02",
+      "size": [
+        69.5,
+        12.5,
+        66.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R03",
+        "Level3_DecorArchetype": "GrandBanquet",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6515.5,
+        30.25,
+        488
+      ],
+      "name": "20 Red Carpet Party Rooms 03",
+      "size": [
+        71.5,
+        14.5,
+        66.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R04",
+        "Level3_DecorArchetype": "SparseGallery",
+        "Level3_CeilingHeight": 13,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6619.5,
+        30.25,
+        488
+      ],
+      "name": "21 Red Carpet Party Rooms 04",
+      "size": [
+        70.5,
+        14.5,
+        66.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R05",
+        "Level3_DecorArchetype": "SparseWelcome",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6307.5,
+        29.75,
+        668
+      ],
+      "name": "22 Red Carpet Party Rooms 05",
+      "size": [
+        74.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R06",
+        "Level3_DecorArchetype": "AfterParty",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6409,
+        29.75,
+        668
+      ],
+      "name": "23 Red Carpet Party Rooms 06",
+      "size": [
+        69.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "L3_S3_R07",
+        "Level3_DecorArchetype": "AbandonedCelebration",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6515.5,
+        29.75,
+        668
+      ],
+      "name": "24 Red Carpet Party Rooms 07",
+      "size": [
+        71.5,
+        13.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "SignalHall",
+        "Level3_DecorArchetype": "DanceFloor",
+        "Level3_CeilingHeight": 11,
+        "Level3_District": 3,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Party"
+      },
+      "center": [
+        6619.5,
+        29.25,
+        668
+      ],
+      "name": "25 Signal Hall",
+      "size": [
+        70.5,
+        12.5,
+        73.5
+      ]
+    },
+    {
+      "attributes": {
+        "Level3_RoomId": "Exit",
+        "Level3_DecorArchetype": "EmptyTransition",
+        "Level3_CeilingHeight": 12,
+        "Level3_District": 4,
+        "Level3_ThemeId": "RedParty",
+        "Level3_RoomKind": "Exit"
+      },
+      "center": [
+        7243,
+        29.75,
+        668
+      ],
+      "name": "26 Level 3 Exit",
+      "size": [
+        59.5,
+        13.5,
+        53.5
+      ]
+    }
+  ],
+  "collidableParts": 1162,
+  "classes": {
+    "ProximityPrompt": 30,
+    "Part": 2676,
+    "MeshPart": 162,
+    "SurfaceGui": 32,
+    "Folder": 8,
+    "Attachment": 62,
+    "Sound": 34,
+    "Texture": 402,
+    "WedgePart": 20,
+    "SurfaceLight": 101,
+    "PointLight": 9,
+    "EqualizerSoundEffect": 33,
+    "PathfindingModifier": 37,
+    "TouchTransmitter": 1,
+    "TextLabel": 4,
+    "ImageLabel": 31,
+    "Model": 99
+  },
+  "meshIds": [
+    "rbxassetid://135253309610935",
+    "rbxassetid://135921646304432"
+  ],
+  "shadowLights": 0,
+  "transparentParts": 882,
+  "canQueryParts": 1230,
+  "textures": [
+    "rbxassetid://120063024460642",
+    "rbxassetid://110230144446272",
+    "rbxassetid://75635502248205",
+    "rbxassetid://128270554927663",
+    "rbxassetid://103412925025303",
+    "rbxassetid://92830391726737",
+    "rbxassetid://108064770913201",
+    "rbxassetid://92795890253148",
+    "rbxassetid://96252806287644"
+  ]
+}

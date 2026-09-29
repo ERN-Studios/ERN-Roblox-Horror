@@ -1,0 +1,70 @@
+{
+  "liveStudioVerified": false,
+  "remoteHead": "254f04f576f3e85a0fc17e61513df215c6a0a062",
+  "files": [
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+      "sha256": "4c7ee39a3f60f32dab269394a0ced2a5813f4a909ae347fefffbf26092a22b88",
+      "evidence": "local source; not Studio verified",
+      "ranges": [
+        [
+          1,
+          205
+        ]
+      ]
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+      "sha256": "234a5ccbc96702570f6cc8b08134ecf2fe633bf4bf83576624c3de75d3bdf1b0",
+      "evidence": "local source; not Studio verified",
+      "ranges": [
+        [
+          1,
+          1085
+        ]
+      ]
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "sha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "evidence": "local source; not Studio verified",
+      "ranges": [
+        [
+          320,
+          440
+        ],
+        [
+          812,
+          950
+        ],
+        [
+          957,
+          980
+        ],
+        [
+          1368,
+          1532
+        ],
+        [
+          2091,
+          2255
+        ]
+      ]
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+      "sha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "evidence": "local source; not Studio verified",
+      "ranges": [
+        [
+          298,
+          390
+        ],
+        [
+          575,
+          656
+        ]
+      ]
+    }
+  ]
+}
