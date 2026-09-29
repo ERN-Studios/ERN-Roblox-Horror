@@ -1,0 +1,97 @@
+{
+  "title": "Level 3 — 90'er-mall: 12 sektionskoncepter",
+  "date": "2026-09-29",
+  "method": "Built-in image_gen.imagegen; one separate generation per image.",
+  "status": "Concept images only. No Blender geometry or Roblox game changes.",
+  "baseline": {
+    "placeId": 131311258779917,
+    "placeVersion": 2403,
+    "gitHubHead": "254f04f576f3e85a0fc17e61513df215c6a0a062",
+    "sourceCheck": "Live Configuration, Layout Generator and World Builder unchanged from authoritative audit; Source/editor source equal."
+  },
+  "artDirection": "Coherent late-1990s shopping mall after closing. Cream/beige and mint service palette, orange party district, burgundy banquet/finale, tactile restrained wear, composed clear routes, no water or characters.",
+  "limitations": [
+    "Concept lighting and shapes are aspirational, not proof of Roblox rendering performance.",
+    "Actual room dimensions, portal clearances, collisions, CD/hide anchors and navigation remain to be modeled and tested.",
+    "Incidental generated signage is placeholder art."
+  ],
+  "images": [
+    {
+      "file": "01-arrival-atrium.png",
+      "title": "Ankomst / information",
+      "type": "public",
+      "visualReview": "Clear warm cream/teal arrival with rounded information kiosk, broad branching circulation, dry terrazzo; coherent mall architecture."
+    },
+    {
+      "file": "02-beige-lounge.png",
+      "title": "Beige lounge / food court",
+      "type": "public",
+      "visualReview": "Low-ceilinged lounge, mint banquette planter island and closed food counter; strong open side circulation; matches arrival materials."
+    },
+    {
+      "file": "03-orange-party-arcade.png",
+      "title": "Orange fest- og arkadeområde",
+      "type": "public",
+      "visualReview": "Orange/charcoal arcade-party room, CRT cabinets and jukebox, broad central path and cool mint service transition; dry lowpile carpet."
+    },
+    {
+      "file": "04-red-banquet.png",
+      "title": "Rød banketsal",
+      "type": "public",
+      "visualReview": "Burgundy carpet and cream modular banquet architecture, table groups to sides and a central route, stage/curtain landmark; distinct from orange arcade."
+    },
+    {
+      "file": "05-service-gallery.png",
+      "title": "Servicegang / overgang",
+      "type": "transition",
+      "visualReview": "Distinct corner transition, beige/mint service shell, paired service doors and utility equipment; readable clear paths."
+    },
+    {
+      "file": "06-signal-hall.png",
+      "title": "Signal Hall / finale",
+      "type": "finale",
+      "visualReview": "Burgundy signal room with CD console and CRTs, long repeated-light finale corridor; desk larger than compact brief, actual implementation clearance not measured."
+    },
+    {
+      "file": "07-janitor-depot.png",
+      "title": "Rengøringsdepot",
+      "type": "maintenance",
+      "visualReview": "Compact depot with cleaning trolley, paper shelves, mop rack and floor buffer; clear center and warm light behind brown utility door, no water."
+    },
+    {
+      "file": "08-electrical-room.png",
+      "title": "El-tavlerum",
+      "type": "maintenance",
+      "visualReview": "Analog electrical cabinets, overhead cable trays, rubber runner and aligned doorway; readable grey/mint maintenance room, no sparks."
+    },
+    {
+      "file": "09-hvac-service.png",
+      "title": "Ventilationsrum",
+      "type": "maintenance",
+      "visualReview": "Compact machinery room, galvanized HVAC, mint lower walls, clear dry floor, visible exit; recognizable technical theme."
+    },
+    {
+      "file": "10-maintenance-workshop.png",
+      "title": "Pedelværksted",
+      "type": "maintenance",
+      "visualReview": "Warm workbench with restrained pegboard, darkmint cupboards and large spare motor as landmark; dry but glossier concrete/linoleum floor, visible doorway."
+    },
+    {
+      "file": "11-signage-storage.png",
+      "title": "Skilte- og festlager",
+      "type": "maintenance",
+      "visualReview": "Distinct signage storage with pastel mall panels, chairs, boxes and seasonal props; two visible doorways and clear dry central route."
+    },
+    {
+      "file": "12-pa-cctv-room.png",
+      "title": "PA- og overvågningsrum",
+      "type": "maintenance",
+      "visualReview": "Compact analog CCTV/PA room with CRT monitors and cassette/VHS hardware, warm task lamp against cyan screenlight; incidental fictional posters are conceptual only."
+    }
+  ],
+  "promptFiles": [
+    "public-prompts.json",
+    "transition-prompts.json",
+    "service-prompts.json"
+  ]
+}

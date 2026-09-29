@@ -1,0 +1,114 @@
+{
+  "method": "PNG header/dimensions, SHA-256, byte comparison to original generated images; root visually inspected all12.",
+  "conceptOnly": true,
+  "images": [
+    {
+      "file": "01-arrival-atrium.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2457828,
+      "sha256": "9b8a24ccbc3b49a90444632af0435c27994148b1b17d336d876e184c629b2d31",
+      "originalByteMatch": true,
+      "promptRecord": "public-prompts.json"
+    },
+    {
+      "file": "02-beige-lounge.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2366251,
+      "sha256": "1a8eeced54fdbbc2c6ec290a568afae055ee635516777ada28cff5688fcaed9b",
+      "originalByteMatch": true,
+      "promptRecord": "public-prompts.json"
+    },
+    {
+      "file": "03-orange-party-arcade.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2209822,
+      "sha256": "41cdbe3638648b8efc2cafa84a3af2d8c667e243745bae5c60da385df17999e6",
+      "originalByteMatch": true,
+      "promptRecord": "public-prompts.json"
+    },
+    {
+      "file": "04-red-banquet.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2323083,
+      "sha256": "624beac82b6374beb9b64d98840ce42b082cc525d9565703efee13272976f33a",
+      "originalByteMatch": true,
+      "promptRecord": "public-prompts.json"
+    },
+    {
+      "file": "05-service-gallery.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2466212,
+      "sha256": "58c038892396b08a5fa89e3f2bbc2e631935192f4dfc449cb46de5c9cf7e432f",
+      "originalByteMatch": true,
+      "promptRecord": "transition-prompts.json"
+    },
+    {
+      "file": "06-signal-hall.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2216189,
+      "sha256": "6c3c5f6bbd54b50dc36f4afd011f0712e04bcc51dc0590474175d20d456073b4",
+      "originalByteMatch": true,
+      "promptRecord": "transition-prompts.json"
+    },
+    {
+      "file": "07-janitor-depot.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2187816,
+      "sha256": "277f469b82865841b9057b0b4e16be286a97fae1c5bb8a151673c5042a7d76b2",
+      "originalByteMatch": true,
+      "promptRecord": "transition-prompts.json"
+    },
+    {
+      "file": "08-electrical-room.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2408009,
+      "sha256": "a60f24033372f0c9b9baddd491d45e4bdc046d74beb3634ff86cfa7894f7fe79",
+      "originalByteMatch": true,
+      "promptRecord": "transition-prompts.json"
+    },
+    {
+      "file": "09-hvac-service.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2629947,
+      "sha256": "20477b1e168cddf8f05a8ec6f42d4711f7a9958a6fed261a037dd8471bee9ae6",
+      "originalByteMatch": true,
+      "promptRecord": "service-prompts.json"
+    },
+    {
+      "file": "10-maintenance-workshop.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2524865,
+      "sha256": "60023d595c2ebfcc72442acafce660dcb2b7f7c8861e29eef81b83e998032030",
+      "originalByteMatch": true,
+      "promptRecord": "service-prompts.json"
+    },
+    {
+      "file": "11-signage-storage.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2516892,
+      "sha256": "9f8d18932218a3e1941b3833f2c70243ca3c8ce6a21ba971cb77e591bdf34f0e",
+      "originalByteMatch": true,
+      "promptRecord": "service-prompts.json"
+    },
+    {
+      "file": "12-pa-cctv-room.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2313985,
+      "sha256": "2764212373a6a8f6c4a9f9b442f73bb65745c44d65722d949ed86c54c1e72d6f",
+      "originalByteMatch": true,
+      "promptRecord": "service-prompts.json"
+    }
+  ]
+}
