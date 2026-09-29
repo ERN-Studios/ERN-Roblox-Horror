@@ -1,0 +1,1634 @@
+{
+  "date": "2026-09-27",
+  "status": "manual-upload-ready; no Roblox assets uploaded or installed",
+  "top_level_upload_count": 16,
+  "optional_disabled_count": 4,
+  "total_wavs": 20,
+  "new_generation_flow": "https://elevenlabs.io/app/flows/6B2UMQj1yZKRKiBLhKYd",
+  "new_generation_count": 32,
+  "new_selected_count": 8,
+  "original_cleaned_count": 12,
+  "subjective_listening_performed": false,
+  "sound_engineering": "Measured spectral attenuation, cue-specific band limits, smooth downward expansion for one-shots, 25ms exact silent tails, 100ms cyclic loop joins. Original cue gain is not raised. New cue gain capped at +6dB (+12dB for quiet queue bell).",
+  "cues": [
+    {
+      "cue": "room_hum",
+      "file": "L5_room_hum.wav",
+      "sha256": "4bfc6219c030fa462d807af4b9f1f3465cd906ab19eb1ecce7ca911406963397",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "OhLHQV9g3h8PHZ0qFQK5",
+      "take": 4,
+      "purpose": "A\u2013H normal room ambience; attenuate in A\u2013G outage, retain H.",
+      "loop": true,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "room_hum",
+        "origin": "existing",
+        "file": "processed/L5_room_hum_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_room_hum.wav",
+        "source_sha256": "04c6886a2db2c4126c71175848d4420d32dd4386045da6278e83f82fdeb81e22",
+        "output_sha256": "4bfc6219c030fa462d807af4b9f1f3465cd906ab19eb1ecce7ca911406963397",
+        "original_generation_id": "OhLHQV9g3h8PHZ0qFQK5",
+        "original_take": 4,
+        "loop": true,
+        "purpose": "A\u2013H normal room ambience; attenuate in A\u2013G outage, retain H.",
+        "settings": {
+          "highpass_hz": 40,
+          "lowpass_hz": 2400,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {},
+          "tail": "100ms cyclic linear overlap; boundary correction over 1ms",
+          "noise_profile_rms_dbfs": -28.959311011252456
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 11.94,
+          "rms_dbfs": -22.353,
+          "peak_dbfs": -11.003,
+          "true_peak_4x_dbtp": -10.986,
+          "quiet_decile_rms_dbfs": -25.274,
+          "tail_100ms_rms_dbfs": -27.932,
+          "dc": -0.00018303899187942381,
+          "clipped_samples": 0,
+          "digital_zero_samples": 69,
+          "seam_step": 0.0042724609375
+        },
+        "after": {
+          "duration_s": 11.84,
+          "rms_dbfs": -22.507,
+          "peak_dbfs": -11.357,
+          "true_peak_4x_dbtp": -11.352,
+          "quiet_decile_rms_dbfs": -25.475,
+          "tail_100ms_rms_dbfs": -26.415,
+          "dc": -1.5156507389783756e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 71,
+          "seam_step": 0.0
+        }
+      }
+    },
+    {
+      "cue": "blackout_roomtone",
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_blackout_roomtone.wav",
+      "sha256": "5ccd9be544bff7e3349d35d4d5343da175ccac2de6a77713d59960bdf159bbd0",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "G8Cchz1cgpdHNWCBWv13",
+      "take": 1,
+      "purpose": "A\u2013G blackout only; bounded quiet ambience.",
+      "loop": true,
+      "upload_now": false,
+      "roblox_asset_id": "",
+      "integration": "Disabled / alternative; do not upload now.",
+      "processing_record": {
+        "key": "blackout_roomtone",
+        "origin": "existing",
+        "file": "processed/L5_blackout_roomtone_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_blackout_roomtone.wav",
+        "source_sha256": "d805492a2a07ac362c5337ca59f02c0c0a42b5e34bb2877b8a3c90350c6b93b6",
+        "output_sha256": "5ccd9be544bff7e3349d35d4d5343da175ccac2de6a77713d59960bdf159bbd0",
+        "original_generation_id": "G8Cchz1cgpdHNWCBWv13",
+        "original_take": 1,
+        "loop": true,
+        "purpose": "A\u2013G blackout only; bounded quiet ambience.",
+        "settings": {
+          "highpass_hz": 40,
+          "lowpass_hz": 2000,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {},
+          "tail": "100ms cyclic linear overlap; boundary correction over 1ms",
+          "noise_profile_rms_dbfs": -35.17234855432581
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 11.94,
+          "rms_dbfs": -14.32,
+          "peak_dbfs": -2.3,
+          "true_peak_4x_dbtp": -2.295,
+          "quiet_decile_rms_dbfs": -20.319,
+          "tail_100ms_rms_dbfs": -21.721,
+          "dc": 0.0022135422578297703,
+          "clipped_samples": 0,
+          "digital_zero_samples": 34,
+          "seam_step": 0.000457763671875
+        },
+        "after": {
+          "duration_s": 11.84,
+          "rms_dbfs": -23.075,
+          "peak_dbfs": -7.283,
+          "true_peak_4x_dbtp": -7.277,
+          "quiet_decile_rms_dbfs": -30.776,
+          "tail_100ms_rms_dbfs": -26.566,
+          "dc": -1.5687904514547234e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 119,
+          "seam_step": 0.0
+        }
+      }
+    },
+    {
+      "cue": "watcher_heartbeat",
+      "file": "L5_watcher_heartbeat.wav",
+      "sha256": "6e424e56fc3c3e66aa0059c4308ed5a4263fc66ac67798e652e3bc44f4beac44",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "h6CtKIk3jxS94jbvIyhP",
+      "take": 2,
+      "purpose": "Local gaze intensity drives volume and playback speed; silence behind walls/hidden.",
+      "loop": true,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "watcher_heartbeat",
+        "origin": "existing",
+        "file": "processed/L5_watcher_heartbeat_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_watcher_heartbeat.wav",
+        "source_sha256": "33846c184f605991215d3d2e59b927cc3d0cffd32892ade1d6fc47db509a0dc5",
+        "output_sha256": "6e424e56fc3c3e66aa0059c4308ed5a4263fc66ac67798e652e3bc44f4beac44",
+        "original_generation_id": "h6CtKIk3jxS94jbvIyhP",
+        "original_take": 2,
+        "loop": true,
+        "purpose": "Local gaze intensity drives volume and playback speed; silence behind walls/hidden.",
+        "settings": {
+          "highpass_hz": 28,
+          "lowpass_hz": 700,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {},
+          "tail": "100ms cyclic linear overlap; boundary correction over 1ms",
+          "noise_profile_rms_dbfs": -59.67316810394454
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 3.94,
+          "rms_dbfs": -22.494,
+          "peak_dbfs": -3.527,
+          "true_peak_4x_dbtp": -3.521,
+          "quiet_decile_rms_dbfs": -55.194,
+          "tail_100ms_rms_dbfs": -51.745,
+          "dc": 3.054005962182885e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 462,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 3.84,
+          "rms_dbfs": -22.909,
+          "peak_dbfs": -3.09,
+          "true_peak_4x_dbtp": -3.084,
+          "quiet_decile_rms_dbfs": -60.726,
+          "tail_100ms_rms_dbfs": -53.057,
+          "dc": -1.3762680941788609e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 846,
+          "seam_step": 0.0
+        }
+      }
+    },
+    {
+      "cue": "puzzle_click",
+      "file": "L5_puzzle_click.wav",
+      "sha256": "3373677ec3c707e50d04d9dbe4e812a58762072646757943a81354baf68d307c",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "PJg7d2gh0Gj9Cray7zH3",
+      "take": 2,
+      "purpose": "Local input wheel/button press.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "puzzle_click",
+        "origin": "existing",
+        "file": "processed/L5_puzzle_click_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_puzzle_click.wav",
+        "source_sha256": "a3ff657313d92e2c9d9a78e4ef76c19b052388d463b54208678d35834026a120",
+        "output_sha256": "3373677ec3c707e50d04d9dbe4e812a58762072646757943a81354baf68d307c",
+        "original_generation_id": "PJg7d2gh0Gj9Cray7zH3",
+        "original_take": 2,
+        "loop": false,
+        "purpose": "Local input wheel/button press.",
+        "settings": {
+          "highpass_hz": 90,
+          "lowpass_hz": 8000,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -72.86998481673913,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -88.2878406911634
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 0.52,
+          "rms_dbfs": -34.969,
+          "peak_dbfs": -2.271,
+          "true_peak_4x_dbtp": -2.265,
+          "quiet_decile_rms_dbfs": -70.657,
+          "tail_100ms_rms_dbfs": -72.318,
+          "dc": 2.0933259371456917e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 772,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 0.52,
+          "rms_dbfs": -42.305,
+          "peak_dbfs": -9.232,
+          "true_peak_4x_dbtp": -9.227,
+          "quiet_decile_rms_dbfs": -92.973,
+          "tail_100ms_rms_dbfs": -94.316,
+          "dc": -1.434720084448042e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 4871,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -73.97977855682032,
+          "output_same_regions_rms_dbfs": -94.91182057086748,
+          "reduction_db": 20.932042014047155
+        }
+      }
+    },
+    {
+      "cue": "puzzle_reject",
+      "file": "L5_puzzle_reject.wav",
+      "sha256": "82103989d7218c33c1b09783ded2937a4e5cab2fd6e6a789dba0b626e558870b",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "lH78UxAIjPBbOl4wyZKq",
+      "take": 4,
+      "purpose": "Wrong submitted answer.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "puzzle_reject",
+        "origin": "existing",
+        "file": "processed/L5_puzzle_reject_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_puzzle_reject.wav",
+        "source_sha256": "03e69e406636b891066867fe69d99ab18f67bf16efdc72ba6649e2c9ca666a77",
+        "output_sha256": "82103989d7218c33c1b09783ded2937a4e5cab2fd6e6a789dba0b626e558870b",
+        "original_generation_id": "lH78UxAIjPBbOl4wyZKq",
+        "original_take": 4,
+        "loop": false,
+        "purpose": "Wrong submitted answer.",
+        "settings": {
+          "highpass_hz": 65,
+          "lowpass_hz": 5500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -59.46476196160367,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -81.67442046963201
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 0.88,
+          "rms_dbfs": -24.521,
+          "peak_dbfs": -2.422,
+          "true_peak_4x_dbtp": -2.295,
+          "quiet_decile_rms_dbfs": -78.086,
+          "tail_100ms_rms_dbfs": -79.969,
+          "dc": -6.154393982675931e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 1375,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 0.88,
+          "rms_dbfs": -25.301,
+          "peak_dbfs": -4.306,
+          "true_peak_4x_dbtp": -4.281,
+          "quiet_decile_rms_dbfs": -91.346,
+          "tail_100ms_rms_dbfs": -94.058,
+          "dc": -3.34051411757885e-06,
+          "clipped_samples": 0,
+          "digital_zero_samples": 3634,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -79.17961849309279,
+          "output_same_regions_rms_dbfs": -92.61692065817145,
+          "reduction_db": 13.437302165078663
+        }
+      }
+    },
+    {
+      "cue": "puzzle_unlock",
+      "file": "L5_puzzle_unlock.wav",
+      "sha256": "532036a6a655351dd6fff183f6feb2aec0d53370e70a056e19e7645004cd6594",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "tH1PncjMHamFw02xUPgE",
+      "take": 3,
+      "purpose": "Correct answer/gate unlock feedback.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "puzzle_unlock",
+        "origin": "existing",
+        "file": "processed/L5_puzzle_unlock_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_puzzle_unlock.wav",
+        "source_sha256": "7da9da24e629c6b6ed1070739b9f47adcb22d5dcbb3ffd11dede6c59933b4bf9",
+        "output_sha256": "532036a6a655351dd6fff183f6feb2aec0d53370e70a056e19e7645004cd6594",
+        "original_generation_id": "tH1PncjMHamFw02xUPgE",
+        "original_take": 3,
+        "loop": false,
+        "purpose": "Correct answer/gate unlock feedback.",
+        "settings": {
+          "highpass_hz": 70,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -65.51314196983448,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -88.10077485002563
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 1.48,
+          "rms_dbfs": -28.424,
+          "peak_dbfs": -2.598,
+          "true_peak_4x_dbtp": -2.25,
+          "quiet_decile_rms_dbfs": -79.08,
+          "tail_100ms_rms_dbfs": -83.693,
+          "dc": -0.0001116013449474666,
+          "clipped_samples": 0,
+          "digital_zero_samples": 3361,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 1.48,
+          "rms_dbfs": -37.878,
+          "peak_dbfs": -9.753,
+          "true_peak_4x_dbtp": -9.748,
+          "quiet_decile_rms_dbfs": -93.252,
+          "tail_100ms_rms_dbfs": -94.338,
+          "dc": -1.5159195936609441e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 13413,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -80.96187941028793,
+          "output_same_regions_rms_dbfs": -93.67646685180344,
+          "reduction_db": 12.714587441515505
+        }
+      }
+    },
+    {
+      "cue": "sliding_gate",
+      "file": "DO_NOT_UPLOAD_NOW/Legacy_Gate_Alternative/L5_sliding_gate_legacy_4s.wav",
+      "sha256": "d1ea4a840fc9a464386495640e94097cb0aa020327e391833921e548cd467f8c",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "Eq42khvko2kQLZ7ErM9j",
+      "take": 3,
+      "purpose": "3D gate opening at all seven boundaries.",
+      "loop": false,
+      "upload_now": false,
+      "roblox_asset_id": "",
+      "integration": "Disabled / alternative; do not upload now.",
+      "processing_record": {
+        "key": "sliding_gate",
+        "origin": "existing",
+        "file": "processed/L5_sliding_gate_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_sliding_gate.wav",
+        "source_sha256": "fbaced6edc7c704c377f367723a368e98123f7cd99324b30dc31a8b4f92af9bc",
+        "output_sha256": "d1ea4a840fc9a464386495640e94097cb0aa020327e391833921e548cd467f8c",
+        "original_generation_id": "Eq42khvko2kQLZ7ErM9j",
+        "original_take": 3,
+        "loop": false,
+        "purpose": "3D gate opening at all seven boundaries.",
+        "settings": {
+          "highpass_hz": 55,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -58.473179444281115,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -80.65396639028523
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 4.0,
+          "rms_dbfs": -26.33,
+          "peak_dbfs": -2.331,
+          "true_peak_4x_dbtp": -2.318,
+          "quiet_decile_rms_dbfs": -64.366,
+          "tail_100ms_rms_dbfs": -81.486,
+          "dc": -3.449022634770054e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 1752,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 4.0,
+          "rms_dbfs": -26.954,
+          "peak_dbfs": -4.022,
+          "true_peak_4x_dbtp": -4.016,
+          "quiet_decile_rms_dbfs": -83.927,
+          "tail_100ms_rms_dbfs": -94.368,
+          "dc": -1.5251349970326672e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 10042,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -64.31883935923597,
+          "output_same_regions_rms_dbfs": -73.6668868920589,
+          "reduction_db": 9.348047532822932
+        }
+      }
+    },
+    {
+      "cue": "power_fall",
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_fall.wav",
+      "sha256": "b79dda401169fda23a0ac2e47dc05e96a2976d2b3b56e11a6cdeefb34e07a66b",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "KgdSSdN1nFns3JicmVTM",
+      "take": 4,
+      "purpose": "A\u2013G five-second staggered power collapse only.",
+      "loop": false,
+      "upload_now": false,
+      "roblox_asset_id": "",
+      "integration": "Disabled / alternative; do not upload now.",
+      "processing_record": {
+        "key": "power_fall",
+        "origin": "existing",
+        "file": "processed/L5_power_fall_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_power_fall.wav",
+        "source_sha256": "ee1ee65a1a87d368dd9ca71066e444422764055c8cbe7c44b4a6bf0be3d01571",
+        "output_sha256": "b79dda401169fda23a0ac2e47dc05e96a2976d2b3b56e11a6cdeefb34e07a66b",
+        "original_generation_id": "KgdSSdN1nFns3JicmVTM",
+        "original_take": 4,
+        "loop": false,
+        "purpose": "A\u2013G five-second staggered power collapse only.",
+        "settings": {
+          "highpass_hz": 45,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -48.332946596220154,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -62.4086648190874
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 5.0,
+          "rms_dbfs": -19.783,
+          "peak_dbfs": -2.316,
+          "true_peak_4x_dbtp": -2.294,
+          "quiet_decile_rms_dbfs": -37.576,
+          "tail_100ms_rms_dbfs": -56.831,
+          "dc": 5.254988551410147e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 256,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 5.0,
+          "rms_dbfs": -21.181,
+          "peak_dbfs": -3.262,
+          "true_peak_4x_dbtp": -3.248,
+          "quiet_decile_rms_dbfs": -63.046,
+          "tail_100ms_rms_dbfs": -94.563,
+          "dc": -1.5804783827593536e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 6407,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -39.85295919728585,
+          "output_same_regions_rms_dbfs": -50.8586456042591,
+          "reduction_db": 11.005686406973254
+        }
+      }
+    },
+    {
+      "cue": "power_restart",
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_restart.wav",
+      "sha256": "2f5acdf23404857e3322379908f3ac4277f2476c345644f39896bf0ee7e8d0ed",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "sugjMizVWPV3aYGczvm3",
+      "take": 4,
+      "purpose": "A\u2013G recovery start only.",
+      "loop": false,
+      "upload_now": false,
+      "roblox_asset_id": "",
+      "integration": "Disabled / alternative; do not upload now.",
+      "processing_record": {
+        "key": "power_restart",
+        "origin": "existing",
+        "file": "processed/L5_power_restart_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_power_restart.wav",
+        "source_sha256": "023ceb33e171100475289cef799256aed83ec6ecccc7331493e9f2473b2bef6b",
+        "output_sha256": "2f5acdf23404857e3322379908f3ac4277f2476c345644f39896bf0ee7e8d0ed",
+        "original_generation_id": "sugjMizVWPV3aYGczvm3",
+        "original_take": 4,
+        "loop": false,
+        "purpose": "A\u2013G recovery start only.",
+        "settings": {
+          "highpass_hz": 45,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -68.06793494746859,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -71.27732500558511
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 3.0,
+          "rms_dbfs": -38.615,
+          "peak_dbfs": -2.43,
+          "true_peak_4x_dbtp": -2.315,
+          "quiet_decile_rms_dbfs": -66.519,
+          "tail_100ms_rms_dbfs": -78.784,
+          "dc": -0.00048127604720273526,
+          "clipped_samples": 0,
+          "digital_zero_samples": 2432,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 3.0,
+          "rms_dbfs": -44.77,
+          "peak_dbfs": -9.967,
+          "true_peak_4x_dbtp": -9.943,
+          "quiet_decile_rms_dbfs": -75.693,
+          "tail_100ms_rms_dbfs": -94.141,
+          "dc": -1.5580573049532312e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 5641,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -67.71660883597055,
+          "output_same_regions_rms_dbfs": -74.81259092249476,
+          "reduction_db": 7.0959820865242165
+        }
+      }
+    },
+    {
+      "cue": "watcher_glass",
+      "file": "L5_watcher_glass.wav",
+      "sha256": "30f8070000a5182f66c79b122adbbac69fff4fe9ac1ec4c166346e257c3f4fc6",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "jDkqOmU5xC4NI9N7YKRZ",
+      "take": 4,
+      "purpose": "Sparse localized visible Window Watcher apparition cue, max once/appearance.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "watcher_glass",
+        "origin": "existing",
+        "file": "processed/L5_watcher_glass_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_watcher_glass.wav",
+        "source_sha256": "be8954e8b9e5f32b75fc78856509bb01f9fef13afe65266e645415004f95f6a0",
+        "output_sha256": "30f8070000a5182f66c79b122adbbac69fff4fe9ac1ec4c166346e257c3f4fc6",
+        "original_generation_id": "jDkqOmU5xC4NI9N7YKRZ",
+        "original_take": 4,
+        "loop": false,
+        "purpose": "Sparse localized visible Window Watcher apparition cue, max once/appearance.",
+        "settings": {
+          "highpass_hz": 100,
+          "lowpass_hz": 7000,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -56.23233395097184,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -78.95179937444574
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 2.0,
+          "rms_dbfs": -22.851,
+          "peak_dbfs": -7.04,
+          "true_peak_4x_dbtp": -6.947,
+          "quiet_decile_rms_dbfs": -60.637,
+          "tail_100ms_rms_dbfs": -57.757,
+          "dc": 0.00020641716159119897,
+          "clipped_samples": 0,
+          "digital_zero_samples": 635,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 2.0,
+          "rms_dbfs": -22.907,
+          "peak_dbfs": -7.568,
+          "true_peak_4x_dbtp": -7.555,
+          "quiet_decile_rms_dbfs": -92.516,
+          "tail_100ms_rms_dbfs": -94.293,
+          "dc": -1.512211736908305e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 15094,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -62.747766981315536,
+          "output_same_regions_rms_dbfs": -88.23000814047214,
+          "reduction_db": 25.4822411591566
+        }
+      }
+    },
+    {
+      "cue": "watcher_breath",
+      "file": "L5_watcher_breath.wav",
+      "sha256": "e164f1349057c88ad266112c31fe1a80360970c91985bbda98439bd93ff4e05d",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "F7cXub8GmqdyHMTOtZ5J",
+      "take": 2,
+      "purpose": "Very low localized tension cue only near visible Watcher.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "watcher_breath",
+        "origin": "existing",
+        "file": "processed/L5_watcher_breath_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_watcher_breath.wav",
+        "source_sha256": "5cb1b445beef76b1cd536d8f584965bf138133875a54145e8affd5e9b25a1281",
+        "output_sha256": "e164f1349057c88ad266112c31fe1a80360970c91985bbda98439bd93ff4e05d",
+        "original_generation_id": "F7cXub8GmqdyHMTOtZ5J",
+        "original_take": 2,
+        "loop": false,
+        "purpose": "Very low localized tension cue only near visible Watcher.",
+        "settings": {
+          "highpass_hz": 90,
+          "lowpass_hz": 4800,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -9.89700043360188,
+          "expander": {
+            "threshold_dbfs": -43.69397908786866,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -50.54171908878246
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 4.0,
+          "rms_dbfs": -14.635,
+          "peak_dbfs": -2.311,
+          "true_peak_4x_dbtp": -2.303,
+          "quiet_decile_rms_dbfs": -44.357,
+          "tail_100ms_rms_dbfs": -48.55,
+          "dc": 0.0017836629992980266,
+          "clipped_samples": 0,
+          "digital_zero_samples": 154,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 4.0,
+          "rms_dbfs": -37.544,
+          "peak_dbfs": -20.128,
+          "true_peak_4x_dbtp": -20.122,
+          "quiet_decile_rms_dbfs": -56.723,
+          "tail_100ms_rms_dbfs": -70.902,
+          "dc": -1.5243564873866213e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 2002,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -45.71784438907622,
+          "output_same_regions_rms_dbfs": -55.56149804055173,
+          "reduction_db": 9.843653651475513
+        }
+      }
+    },
+    {
+      "cue": "watcher_recede",
+      "file": "L5_watcher_recede.wav",
+      "sha256": "73abea92e3e1a2a8774934cb77aec571b4159e3360f0b6a59f736e761625ed23",
+      "origin": "cleaned existing ElevenLabs cue",
+      "generation_id": "2jaEMkkY4yafwF33d76C",
+      "take": 1,
+      "purpose": "Local disappearance after gaze threshold, once/appearance.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "watcher_recede",
+        "origin": "existing",
+        "file": "processed/L5_watcher_recede_clean.wav",
+        "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-audio-qa-20260927/audio/ready/L5_watcher_recede.wav",
+        "source_sha256": "38936dcfae137b6ab2de52aa1030715c0d18dd936074df6028799ac1a7c63fd3",
+        "output_sha256": "73abea92e3e1a2a8774934cb77aec571b4159e3360f0b6a59f736e761625ed23",
+        "original_generation_id": "2jaEMkkY4yafwF33d76C",
+        "original_take": 1,
+        "loop": false,
+        "purpose": "Local disappearance after gaze threshold, once/appearance.",
+        "settings": {
+          "highpass_hz": 65,
+          "lowpass_hz": 4500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -44.356907608052516,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -58.999749441251275
+        },
+        "applied_gain_db": 0.0,
+        "before": {
+          "duration_s": 2.48,
+          "rms_dbfs": -26.765,
+          "peak_dbfs": -8.153,
+          "true_peak_4x_dbtp": -7.965,
+          "quiet_decile_rms_dbfs": -45.628,
+          "tail_100ms_rms_dbfs": -66.273,
+          "dc": 0.00097325229930787,
+          "clipped_samples": 0,
+          "digital_zero_samples": 325,
+          "seam_step": 0.0
+        },
+        "after": {
+          "duration_s": 2.48,
+          "rms_dbfs": -29.216,
+          "peak_dbfs": -10.313,
+          "true_peak_4x_dbtp": -10.308,
+          "quiet_decile_rms_dbfs": -62.774,
+          "tail_100ms_rms_dbfs": -93.327,
+          "dc": -1.5392447170190322e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 3547,
+          "seam_step": 0.0
+        },
+        "same_quiet_regions": {
+          "input_quiet_15pct_rms_dbfs": -46.49295185002587,
+          "output_same_regions_rms_dbfs": -54.87862107002022,
+          "reduction_db": 8.385669219994355
+        }
+      }
+    },
+    {
+      "cue": "sliding_gate",
+      "file": "L5_sliding_gate.wav",
+      "sha256": "4897900bc6fe6a131e0b22207e6206b281737167a086fdabf2234fdb8643ebb8",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "aSKNXS6U87h2gfy6Tmez",
+      "take": 1,
+      "purpose": "Replacement for 1.6-second section gate movement; 0.6-second settling tail.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Prepared gate draft hook; not installed. No Roblox asset ID.",
+      "processing_record": {
+        "key": "sliding_gate_v2",
+        "take": 1,
+        "node_id": "KcU60Xliz3MIWuhMDxzC",
+        "session_id": "4ejrayR1w0JpkLj5jLIx",
+        "generation_id": "aSKNXS6U87h2gfy6Tmez",
+        "prompt": "Heavy mechanical door slides on rollers for exactly 1.6 seconds, then a soft stop and short settling tail; close dry foley, isolated in silence, no hiss or ambience.",
+        "file": "raw/sliding_gate_v2__take01.mp3",
+        "sha256": "017b5f09e587f5437c4d9e64ecaa3402890319ded3e5c0f0505039eadc9cd412",
+        "bytes": 53242,
+        "output_file": "processed/L5_sliding_gate_v2__take01_clean.wav",
+        "output_sha256": "4897900bc6fe6a131e0b22207e6206b281737167a086fdabf2234fdb8643ebb8",
+        "settings": {
+          "highpass_hz": 55,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -52.53860431577645,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -78.87591345510934,
+          "motion_envelope": "unchanged through 1.6s, raised-cosine settling decay through 2.175s, silence to 2.2s"
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": -8.525457162488028,
+        "before": {
+          "duration_s": 2.2,
+          "rms_dbfs": -17.604,
+          "peak_dbfs": 2.753,
+          "true_peak_4x_dbtp": 2.932,
+          "quiet_decile_rms_dbfs": -61.524,
+          "tail_100ms_rms_dbfs": -80.168,
+          "dc": 0.0006490533271398515,
+          "clipped_samples": 16,
+          "digital_zero_samples": 0,
+          "seam_step": 0.027524230361450464
+        },
+        "after": {
+          "duration_s": 2.2,
+          "rms_dbfs": -26.489,
+          "peak_dbfs": -5.176,
+          "true_peak_4x_dbtp": -5.0,
+          "quiet_decile_rms_dbfs": -92.915,
+          "tail_100ms_rms_dbfs": -95.757,
+          "dc": -1.6204009865072923e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 8602,
+          "seam_step": 0.0
+        },
+        "selection_score": -5.209236356021394,
+        "quiet_to_active_contrast_db": 69.21888682797554,
+        "timing": {
+          "segment_rms_dbfs": [
+            -26.51,
+            -23.03,
+            -24.85,
+            -27.32,
+            -60.91
+          ],
+          "motion_coverage_min_to_max": 0.6104161220634022
+        },
+        "purpose": "Replacement for 1.6-second section gate movement; 0.6-second settling tail.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 1,
+            "score": -5.209236356021394
+          },
+          {
+            "take": 4,
+            "score": -5.031115236282692
+          },
+          {
+            "take": 3,
+            "score": -4.02270408887745
+          },
+          {
+            "take": 2,
+            "score": -3.8312387497466687
+          }
+        ]
+      }
+    },
+    {
+      "cue": "wooden_door_open",
+      "file": "L5_wooden_door_open.wav",
+      "sha256": "16693048e1451f597680e474b5751e39ff3bc3b1ece1450ab7963515807f641b",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "FswDzVnniRBjjTOGYpgd",
+      "take": 2,
+      "purpose": "Single hinged wooden door opening.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "wooden_door_open",
+        "take": 2,
+        "node_id": "PEM4t9gmm8gVAjYP6OOH",
+        "session_id": "kMiLgKHWK5Diw761u5nK",
+        "generation_id": "FswDzVnniRBjjTOGYpgd",
+        "prompt": "An old wooden interior door opens once, latch releases then a short low hinge creak; close dry isolated foley, silence before and after, no ambience or hiss.",
+        "file": "raw/wooden_door_open__take02.mp3",
+        "sha256": "7b6b4d766e0b95df4181410d45662a591c9b276aecf938b90866fa500c0a887e",
+        "bytes": 57422,
+        "output_file": "processed/L5_wooden_door_open__take02_clean.wav",
+        "output_sha256": "16693048e1451f597680e474b5751e39ff3bc3b1ece1450ab7963515807f641b",
+        "settings": {
+          "highpass_hz": 65,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -58.61240213345664,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -86.05998670998098
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": -2.838887103869018,
+        "before": {
+          "duration_s": 2.48,
+          "rms_dbfs": -30.545,
+          "peak_dbfs": -2.897,
+          "true_peak_4x_dbtp": -2.614,
+          "quiet_decile_rms_dbfs": -83.18,
+          "tail_100ms_rms_dbfs": -81.135,
+          "dc": 7.882295464305184e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 0,
+          "seam_step": 0.050573728047311306
+        },
+        "after": {
+          "duration_s": 2.48,
+          "rms_dbfs": -33.868,
+          "peak_dbfs": -7.005,
+          "true_peak_4x_dbtp": -7.0,
+          "quiet_decile_rms_dbfs": -93.342,
+          "tail_100ms_rms_dbfs": -94.363,
+          "dc": -2.199666448295548e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 23492,
+          "seam_step": 0.0
+        },
+        "selection_score": -2.429167959310134,
+        "quiet_to_active_contrast_db": 61.023268737206905,
+        "timing": {},
+        "purpose": "Single hinged wooden door opening.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 2,
+            "score": -2.429167959310134
+          },
+          {
+            "take": 1,
+            "score": -2.318890997612564
+          },
+          {
+            "take": 4,
+            "score": -2.1870338211093583
+          },
+          {
+            "take": 3,
+            "score": -1.8701105511428087
+          }
+        ]
+      }
+    },
+    {
+      "cue": "wooden_door_close",
+      "file": "L5_wooden_door_close.wav",
+      "sha256": "cd67748d852ee8b56764402e25b0c14929b503f9673603319747d4cc5bf75230",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "bJ2GRUC8Z7Ci3R9PRkht",
+      "take": 1,
+      "purpose": "Single hinged wooden door closing.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "wooden_door_close",
+        "take": 1,
+        "node_id": "magiiKMNuJT4l72aZmgc",
+        "session_id": "I44WL09WKUQv0dGtOaXQ",
+        "generation_id": "bJ2GRUC8Z7Ci3R9PRkht",
+        "prompt": "An old wooden interior door closes gently once, soft solid wood thud and latch click; close dry isolated foley, silence before and after, no ambience or hiss.",
+        "file": "raw/wooden_door_close__take01.mp3",
+        "sha256": "656460fffa9e06748b9c38416108b1f2dedb34f7f808b7c45d1fa278ffd4805e",
+        "bytes": 41539,
+        "output_file": "processed/L5_wooden_door_close__take01_clean.wav",
+        "output_sha256": "cd67748d852ee8b56764402e25b0c14929b503f9673603319747d4cc5bf75230",
+        "settings": {
+          "highpass_hz": 55,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -57.24539350412266,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -86.83959500482993
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": -2.8366149508574736,
+        "before": {
+          "duration_s": 1.48,
+          "rms_dbfs": -20.494,
+          "peak_dbfs": 0.908,
+          "true_peak_4x_dbtp": 0.913,
+          "quiet_decile_rms_dbfs": -83.575,
+          "tail_100ms_rms_dbfs": -78.92,
+          "dc": -0.00013058530964799183,
+          "clipped_samples": 10,
+          "digital_zero_samples": 0,
+          "seam_step": 0.0008834751788526773
+        },
+        "after": {
+          "duration_s": 1.48,
+          "rms_dbfs": -30.0,
+          "peak_dbfs": -7.015,
+          "true_peak_4x_dbtp": -7.0,
+          "quiet_decile_rms_dbfs": -93.803,
+          "tail_100ms_rms_dbfs": -94.77,
+          "dc": -1.5753949251786865e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 17412,
+          "seam_step": 0.0
+        },
+        "selection_score": -1.954723519633833,
+        "quiet_to_active_contrast_db": 48.88339410788127,
+        "timing": {},
+        "purpose": "Single hinged wooden door closing.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 1,
+            "score": -1.954723519633833
+          },
+          {
+            "take": 2,
+            "score": -1.9176460660096282
+          },
+          {
+            "take": 3,
+            "score": -1.773280252745662
+          },
+          {
+            "take": 4,
+            "score": -1.3255126071952628
+          }
+        ]
+      }
+    },
+    {
+      "cue": "house_wood_creak",
+      "file": "L5_house_wood_creak.wav",
+      "sha256": "c270bb745ad7f954c1f473b1e1cdf27b5e8019d5fcd6c8351d5a921baf4476b6",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "oF4JrD08S3alMBeKjT48",
+      "take": 1,
+      "purpose": "Sparse positional house settling sound.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "house_wood_creak",
+        "take": 1,
+        "node_id": "q2hHoy1Ex9KgUZOGTviz",
+        "session_id": "8RMT4PBbaGY36jb8aIq4",
+        "generation_id": "oF4JrD08S3alMBeKjT48",
+        "prompt": "One low wooden wall beam settles with a short natural creak and gentle knock; close dry isolated foley in silence, no wind, hiss, voices or background atmosphere.",
+        "file": "raw/house_wood_creak__take01.mp3",
+        "sha256": "2aa24fbdf575b204f81f46b59331c4f932db01dcec11603df1c869426c171190",
+        "bytes": 57422,
+        "output_file": "processed/L5_house_wood_creak__take01_clean.wav",
+        "output_sha256": "c270bb745ad7f954c1f473b1e1cdf27b5e8019d5fcd6c8351d5a921baf4476b6",
+        "settings": {
+          "highpass_hz": 65,
+          "lowpass_hz": 5500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -52.78075780134919,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -83.56415901219178
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": -13.477977108416571,
+        "before": {
+          "duration_s": 2.48,
+          "rms_dbfs": -15.381,
+          "peak_dbfs": 2.673,
+          "true_peak_4x_dbtp": 2.679,
+          "quiet_decile_rms_dbfs": -50.555,
+          "tail_100ms_rms_dbfs": -63.916,
+          "dc": -0.02142929465749736,
+          "clipped_samples": 239,
+          "digital_zero_samples": 0,
+          "seam_step": 0.12982170761097223
+        },
+        "after": {
+          "duration_s": 2.48,
+          "rms_dbfs": -34.485,
+          "peak_dbfs": -10.006,
+          "true_peak_4x_dbtp": -10.0,
+          "quiet_decile_rms_dbfs": -93.819,
+          "tail_100ms_rms_dbfs": -94.693,
+          "dc": -6.260166275641641e-06,
+          "clipped_samples": 0,
+          "digital_zero_samples": 28526,
+          "seam_step": 0.0
+        },
+        "selection_score": -2.3508302493173128,
+        "quiet_to_active_contrast_db": 58.770770349449116,
+        "timing": {},
+        "purpose": "Sparse positional house settling sound.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 1,
+            "score": -2.3508302493173128
+          },
+          {
+            "take": 2,
+            "score": -2.3018100175157734
+          },
+          {
+            "take": 4,
+            "score": -1.9377913518949115
+          },
+          {
+            "take": 3,
+            "score": -0.11665446413277415
+          }
+        ]
+      }
+    },
+    {
+      "cue": "window_frame_creak",
+      "file": "L5_window_frame_creak.wav",
+      "sha256": "7cdb704d2671e317f840b4bdef36fa1184681ca4a8f9aac1ab01a1dd757ad87d",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "gScu9Eb7dcJUMUOTK7D3",
+      "take": 3,
+      "purpose": "Sparse positional window-frame tension cue.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "window_frame_creak",
+        "take": 3,
+        "node_id": "zjNgMVvocmWBgG9K5kLl",
+        "session_id": "F2CowaPOxA5v5Im5hkiP",
+        "generation_id": "gScu9Eb7dcJUMUOTK7D3",
+        "prompt": "An old wooden window frame creaks softly once under slight pressure; close dry isolated foley with a short decay into silence, no wind, hiss or background atmosphere.",
+        "file": "raw/window_frame_creak__take03.mp3",
+        "sha256": "74d0a7baa198424bc4eb2d8016ad733e4f2c1687aa8a2db7f7b5404a91e5e7ef",
+        "bytes": 46137,
+        "output_file": "processed/L5_window_frame_creak__take03_clean.wav",
+        "output_sha256": "7cdb704d2671e317f840b4bdef36fa1184681ca4a8f9aac1ab01a1dd757ad87d",
+        "settings": {
+          "highpass_hz": 100,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -60.44597692531233,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -85.53293765949158
+        },
+        "leading_silence_removed_s": 0.05140589569160998,
+        "constant_gain_db": 0.27827019110572593,
+        "before": {
+          "duration_s": 1.76,
+          "rms_dbfs": -25.329,
+          "peak_dbfs": -5.61,
+          "true_peak_4x_dbtp": -5.605,
+          "quiet_decile_rms_dbfs": -80.612,
+          "tail_100ms_rms_dbfs": -83.108,
+          "dc": 0.0001541303776871592,
+          "clipped_samples": 0,
+          "digital_zero_samples": 0,
+          "seam_step": 0.0015505445735470857
+        },
+        "after": {
+          "duration_s": 1.76,
+          "rms_dbfs": -28.573,
+          "peak_dbfs": -10.005,
+          "true_peak_4x_dbtp": -10.0,
+          "quiet_decile_rms_dbfs": -93.092,
+          "tail_100ms_rms_dbfs": -100.032,
+          "dc": -1.4616322011167156e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 11601,
+          "seam_step": 0.0
+        },
+        "selection_score": -2.2666628275963316,
+        "quiet_to_active_contrast_db": 58.95253104887509,
+        "timing": {},
+        "purpose": "Sparse positional window-frame tension cue.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 3,
+            "score": -2.2666628275963316
+          },
+          {
+            "take": 1,
+            "score": -1.849925789368047
+          },
+          {
+            "take": 4,
+            "score": -1.7919428058190032
+          },
+          {
+            "take": 2,
+            "score": -1.2558292604875736
+          }
+        ]
+      }
+    },
+    {
+      "cue": "curtain_movement",
+      "file": "L5_curtain_movement.wav",
+      "sha256": "1a17a917fffcbacc28437efdb8e953e6d0d0d7a00b425bf3ce2be68bbf6d6038",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "U3XjBA37YKrvUChWyoG6",
+      "take": 2,
+      "purpose": "One short localized curtain movement.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "curtain_movement",
+        "take": 2,
+        "node_id": "kGLnnMHAxBdjA7LwRj9V",
+        "session_id": "WET03k5bYzezXIXgSRxG",
+        "generation_id": "U3XjBA37YKrvUChWyoG6",
+        "prompt": "One soft heavy cotton curtain brushes gently across a wooden sill, short dry cloth rustle fading to complete silence, isolated close foley, no wind or background hiss.",
+        "file": "raw/curtain_movement__take02.mp3",
+        "sha256": "21d4c07efdf00072ef7bf55bfb08c5d6770d29ed451616f407fcfa1198cddfb8",
+        "bytes": 46137,
+        "output_file": "processed/L5_curtain_movement__take02_clean.wav",
+        "output_sha256": "1a17a917fffcbacc28437efdb8e953e6d0d0d7a00b425bf3ce2be68bbf6d6038",
+        "settings": {
+          "highpass_hz": 150,
+          "lowpass_hz": 6500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -9.89700043360188,
+          "expander": {
+            "threshold_dbfs": -67.58734706232812,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -81.43924293520051
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": 6.0,
+        "before": {
+          "duration_s": 1.76,
+          "rms_dbfs": -35.344,
+          "peak_dbfs": -18.964,
+          "true_peak_4x_dbtp": -18.733,
+          "quiet_decile_rms_dbfs": -73.195,
+          "tail_100ms_rms_dbfs": -80.797,
+          "dc": -2.3744373104537698e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 0,
+          "seam_step": 0.0015973646040947642
+        },
+        "after": {
+          "duration_s": 1.76,
+          "rms_dbfs": -30.879,
+          "peak_dbfs": -14.921,
+          "true_peak_4x_dbtp": -14.862,
+          "quiet_decile_rms_dbfs": -75.173,
+          "tail_100ms_rms_dbfs": -94.033,
+          "dc": -1.5570979294298212e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 3580,
+          "seam_step": 0.0
+        },
+        "selection_score": -1.5282614935602086,
+        "quiet_to_active_contrast_db": 40.94607670531414,
+        "timing": {},
+        "purpose": "One short localized curtain movement.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 2,
+            "score": -1.5282614935602086
+          },
+          {
+            "take": 3,
+            "score": -1.4703054328069733
+          },
+          {
+            "take": 1,
+            "score": -1.2394980218370883
+          },
+          {
+            "take": 4,
+            "score": -0.7424921721586604
+          }
+        ]
+      }
+    },
+    {
+      "cue": "ceiling_relay_tick",
+      "file": "L5_ceiling_relay_tick.wav",
+      "sha256": "9fec577df15254a1616793dae4c5cef8ebc2e2884d5a36d6156b742d4cf445e4",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "tNrx9hiDgSs0ShWFn1jU",
+      "take": 3,
+      "purpose": "Sparse ceiling/lighting relay click without a power outage.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "ceiling_relay_tick",
+        "take": 3,
+        "node_id": "FOHGlui4O2l0LjSNarZa",
+        "session_id": "U3mHXI3kCFCaD2IWYFsS",
+        "generation_id": "tNrx9hiDgSs0ShWFn1jU",
+        "prompt": "One tiny dry electromechanical ceiling relay tick, a crisp restrained plastic and metal click followed by complete silence, isolated close foley, no buzz or hiss.",
+        "file": "raw/ceiling_relay_tick__take03.mp3",
+        "sha256": "be9246b27f35975ed8cb3c4c3d77e851685416ad7d9f10a51e533940e0ed9920",
+        "bytes": 28164,
+        "output_file": "processed/L5_ceiling_relay_tick__take03_clean.wav",
+        "output_sha256": "9fec577df15254a1616793dae4c5cef8ebc2e2884d5a36d6156b742d4cf445e4",
+        "settings": {
+          "highpass_hz": 180,
+          "lowpass_hz": 8500,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -73.06175504196932,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -85.73810665208397
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": 2.3646355825793073,
+        "before": {
+          "duration_s": 0.64,
+          "rms_dbfs": -26.194,
+          "peak_dbfs": -1.36,
+          "true_peak_4x_dbtp": -0.464,
+          "quiet_decile_rms_dbfs": -70.664,
+          "tail_100ms_rms_dbfs": -70.717,
+          "dc": -0.0012148114070027803,
+          "clipped_samples": 0,
+          "digital_zero_samples": 0,
+          "seam_step": 0.0012860914575867355
+        },
+        "after": {
+          "duration_s": 0.64,
+          "rms_dbfs": -35.295,
+          "peak_dbfs": -11.352,
+          "true_peak_4x_dbtp": -10.0,
+          "quiet_decile_rms_dbfs": -93.531,
+          "tail_100ms_rms_dbfs": -94.573,
+          "dc": -1.4714913573665143e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 6181,
+          "seam_step": 0.0
+        },
+        "selection_score": 1.279274813307604,
+        "quiet_to_active_contrast_db": 61.466488229004014,
+        "timing": {
+          "energy_5_to_95_percent_seconds": 0.2200907029478458
+        },
+        "purpose": "Sparse ceiling/lighting relay click without a power outage.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 3,
+            "score": 1.279274813307604
+          },
+          {
+            "take": 1,
+            "score": 2.0032325694520914
+          },
+          {
+            "take": 2,
+            "score": 2.2271568116454654
+          },
+          {
+            "take": 4,
+            "score": 3.0143539289817145
+          }
+        ]
+      }
+    },
+    {
+      "cue": "queue_arrival",
+      "file": "L5_queue_arrival.wav",
+      "sha256": "485c9d6753f281530ed8f77c6c101d89ebe7a541b89207985984f823150280f8",
+      "origin": "new ElevenLabs cue, cleaned",
+      "generation_id": "4rHhiyZ72xGYujopsUwo",
+      "take": 4,
+      "purpose": "One subtle Level 5 queue arrival/transition cue.",
+      "loop": false,
+      "upload_now": true,
+      "roblox_asset_id": "",
+      "integration": "Asset only; event playback not wired. No Roblox asset ID.",
+      "processing_record": {
+        "key": "queue_arrival",
+        "take": 4,
+        "node_id": "ZEV66urKKjGkTTTsK83A",
+        "session_id": "HRlrYjhadmlWOrC1AuwX",
+        "generation_id": "4rHhiyZ72xGYujopsUwo",
+        "prompt": "A single subdued old mechanical hotel desk bell strikes softly, warm low metallic resonance with a short decay into silence, close dry foley, no music, voices or hiss.",
+        "file": "raw/queue_arrival__take04.mp3",
+        "sha256": "d36efcdf17f2e511f5c6fdbcb616963a40b0d264706495bfce37caf888c243ff",
+        "bytes": 49898,
+        "output_file": "processed/L5_queue_arrival__take04_clean.wav",
+        "output_sha256": "485c9d6753f281530ed8f77c6c101d89ebe7a541b89207985984f823150280f8",
+        "settings": {
+          "highpass_hz": 100,
+          "lowpass_hz": 7000,
+          "filter": "3rd order Butterworth zero phase",
+          "denoise": "STFT smoothed Wiener-style soft attenuation",
+          "fft": 1024,
+          "hop": 256,
+          "noise_profile": "median spectrum of quietest 15 percent interior frames",
+          "spectral_min_gain_db": -15.917600346881503,
+          "expander": {
+            "threshold_dbfs": -66.9425115041267,
+            "ratio": 2.25,
+            "max_reduction_db": 24,
+            "attack_ms": 8,
+            "release_ms": 120
+          },
+          "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+          "noise_profile_rms_dbfs": -71.12315721866128
+        },
+        "leading_silence_removed_s": 0.0,
+        "constant_gain_db": 12.0,
+        "before": {
+          "duration_s": 2.0,
+          "rms_dbfs": -47.263,
+          "peak_dbfs": -27.926,
+          "true_peak_4x_dbtp": -27.545,
+          "quiet_decile_rms_dbfs": -62.458,
+          "tail_100ms_rms_dbfs": -72.583,
+          "dc": -0.0008080924476217717,
+          "clipped_samples": 0,
+          "digital_zero_samples": 0,
+          "seam_step": 0.015000690007582307
+        },
+        "after": {
+          "duration_s": 2.0,
+          "rms_dbfs": -38.129,
+          "peak_dbfs": -18.011,
+          "true_peak_4x_dbtp": -17.899,
+          "quiet_decile_rms_dbfs": -68.219,
+          "tail_100ms_rms_dbfs": -85.533,
+          "dc": -1.2859595335530045e-05,
+          "clipped_samples": 0,
+          "digital_zero_samples": 2737,
+          "seam_step": 0.0
+        },
+        "selection_score": 1.474022913048179,
+        "quiet_to_active_contrast_db": 27.877100186645833,
+        "timing": {},
+        "purpose": "One subtle Level 5 queue arrival/transition cue.",
+        "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+        "alternative_scores": [
+          {
+            "take": 4,
+            "score": 1.474022913048179
+          },
+          {
+            "take": 3,
+            "score": 2.7049698632158092
+          },
+          {
+            "take": 2,
+            "score": 3.7639744671570825
+          },
+          {
+            "take": 1,
+            "score": 5.1440519815604295
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "sourceModelSha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+  "sourceBlendSha256": "134e485ba1e8479d668a9460e87e18a9c87083f52ff4ae1a89dc4bbe0ac2f0ad",
+  "units": "meters unless suffixed studs",
+  "heightMeters": 2.4,
+  "actorHeightStuds": 8,
+  "studsPerMeter": 3.3333333333333335,
+  "actorBasis": "X=-BlenderX, Y=BlenderZ, Z=BlenderY; forward=-Z",
+  "selectionMethod": "Visually selected iris centers in orthographic front render (1000x1000, scale0.45m, center[0,0,2.23]); raycast actual rest mesh at X/Z to measure its Y surface. Emitter offset toward viewer -Y by 0.002m avoids surface occlusion.",
+  "headRestBlenderArmatureMatrix": [
+    [
+      0.9999483,
+      0.0090861,
+      0.0045511,
+      -0.0
+    ],
+    [
+      0.0090861,
+      -0.5988284,
+      -0.8008258,
+      0.0219511
+    ],
+    [
+      -0.004551,
+      0.800826,
+      -0.5988801,
+      2.1632743
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "headRestSerializedGltfWorldMatrix": [
+    [
+      0.9999483,
+      0.0090861,
+      0.0045511,
+      -0.0
+    ],
+    [
+      -0.0045511,
+      0.800826,
+      -0.5988801,
+      2.163274
+    ],
+    [
+      -0.0090861,
+      0.5988284,
+      0.8008258,
+      -0.0219511
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "headRestCanonicalActorMetersMatrix": [
+    [
+      -0.9999483,
+      -0.0090861,
+      -0.0045511,
+      0.0
+    ],
+    [
+      -0.004551,
+      0.800826,
+      -0.5988801,
+      2.1632743
+    ],
+    [
+      0.0090861,
+      -0.5988284,
+      -0.8008258,
+      0.0219511
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "attachmentRule": "If native bone bases preserve serialized GLB local bases, use headLocalSerializedGltfMeters * studsPerMeter directly as Attachment.Position under Head; do NOT rotate/conjugate this local vector by actor/world basis. Otherwise native rest Head CFrame:PointToObjectSpace(actorFrame:PointToWorldSpace(canonicalActorStuds)) gives the matching local offset.",
+  "billboardRecommendation": {
+    "AlwaysOnTop": false,
+    "LightInfluence": 0,
+    "colorRGB": [
+      255,
+      255,
+      255
+    ],
+    "diameterStuds": 0.067,
+    "maxSuggestedDiameterStuds": 0.075,
+    "worldOcclusion": "Retain wall/window occlusion; do not force rendering through architecture. White core plus a subtle halo, not a PointLight."
+  },
+  "eyes": [
+    {
+      "name": "RightEye",
+      "referenceIrisPixel": [
+        413,
+        458
+      ],
+      "surfaceMeshLocalMeters": [
+        -0.03914999961853027,
+        -0.1082029938697815,
+        2.2488999366760254
+      ],
+      "surfaceNormalMeshLocal": [
+        -0.47785454988479614,
+        -0.876716136932373,
+        -0.05498986318707466
+      ],
+      "surfaceFaceIndex": 1746,
+      "emitterBlenderArmatureMeters": [
+        -0.03914999961853027,
+        -0.11020299047231674,
+        2.2488999366760254
+      ],
+      "headLocalBlenderMeters": [
+        -0.04073842614889145,
+        0.1473531275987625,
+        0.054374758154153824
+      ],
+      "headLocalSerializedGltfMeters": [
+        -0.04073842614889145,
+        0.14735324680805206,
+        0.05437465384602547
+      ],
+      "headLocalAttachmentStuds": [
+        -0.1357947438955307,
+        0.4911774694919586,
+        0.18124884366989136
+      ],
+      "canonicalActorMeters": [
+        0.03914999961853027,
+        2.2488999366760254,
+        -0.11020299047231674
+      ],
+      "canonicalActorStuds": [
+        0.13049998879432678,
+        7.496333122253418,
+        -0.36734330654144287
+      ],
+      "localBasisDifferenceMeters": 1.5840151626966372e-07,
+      "nearbyVertexWeights": [
+        {
+          "vertex": 2976,
+          "distanceMeters": 0.0036645691342028462,
+          "weights": {
+            "Head": 1.0
+          }
+        },
+        {
+          "vertex": 2977,
+          "distanceMeters": 0.0036645691342028462,
+          "weights": {
+            "Head": 1.0
+          }
+        },
+        {
+          "vertex": 2028,
+          "distanceMeters": 0.003674722674693684,
+          "weights": {
+            "Head": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "name": "LeftEye",
+      "referenceIrisPixel": [
+        582,
+        458
+      ],
+      "surfaceMeshLocalMeters": [
+        0.03689999878406525,
+        -0.10866659879684448,
+        2.2488999366760254
+      ],
+      "surfaceNormalMeshLocal": [
+        -0.23233510553836823,
+        -0.9283175468444824,
+        0.29025307297706604
+      ],
+      "surfaceFaceIndex": 4646,
+      "emitterBlenderArmatureMeters": [
+        0.03689999878406525,
+        -0.11066659539937973,
+        2.2488999366760254
+      ],
+      "headLocalBlenderMeters": [
+        0.03530343621969223,
+        0.14832176268100739,
+        0.05509214103221893
+      ],
+      "headLocalSerializedGltfMeters": [
+        0.03530344367027283,
+        0.14832188189029694,
+        0.05509202927350998
+      ],
+      "headLocalAttachmentStuds": [
+        0.11767814308404922,
+        0.49440625309944153,
+        0.18364009261131287
+      ],
+      "canonicalActorMeters": [
+        -0.03689999878406525,
+        2.2488999366760254,
+        -0.11066659539937973
+      ],
+      "canonicalActorStuds": [
+        -0.12299999594688416,
+        7.496333122253418,
+        -0.36888864636421204
+      ],
+      "localBasisDifferenceMeters": 1.635737597949814e-07,
+      "nearbyVertexWeights": [
+        {
+          "vertex": 6463,
+          "distanceMeters": 0.002467757742452678,
+          "weights": {
+            "Head": 1.0
+          }
+        },
+        {
+          "vertex": 6464,
+          "distanceMeters": 0.002467757742452678,
+          "weights": {
+            "Head": 1.0
+          }
+        },
+        {
+          "vertex": 6465,
+          "distanceMeters": 0.002467757742452678,
+          "weights": {
+            "Head": 1.0
+          }
+        }
+      ]
+    }
+  ],
+  "qa": {
+    "nativeRobloxPlaybackVerified": false,
+    "frozenModelModified": false,
+    "frontRestRenderVisuallyInspected": true,
+    "leanThreeQuarterRenderVisuallyInspected": true,
+    "result": "Both white markers centered on the actual black irises, with head-follow preserved in SlowWindowLean frame76; nearest sampled iris vertices are 100 percent Head weighted. Native Roblox test remains required.",
+    "maxBlenderVsSerializedGltfLocalDifferenceMeters": 1.635737597949814e-07
+  },
+  "renderMethod": "Temporary white emissive ellipsoids at attachment centers. Not a Roblox BillboardGui simulation.",
+  "artifacts": [
+    {
+      "path": "eyes-white-lean-three-quarter.png",
+      "bytes": 1302673,
+      "sha256": "f14e771850b5b6cba700bf23f15ca5e69cf0cf5b5cce8ac1b87f1355400d22d1"
+    },
+    {
+      "path": "eyes-white-rest-front.png",
+      "bytes": 1272353,
+      "sha256": "7cb1e46ba33beb100c5300fc3564b1ab1e1cc2f22d6974d2baf37204027f1cdc"
+    },
+    {
+      "path": "eyes-white-rest-three-quarter.png",
+      "bytes": 1267121,
+      "sha256": "98c9fb62eab066a2b20f1124474bb913ee17d37a8a49faa35894ac656cf56e92"
+    },
+    {
+      "path": "inspect_eyes.py",
+      "bytes": 1729,
+      "sha256": "e69cccaffd475fe7d59032cc5af84994662e062e17ee205156f1758828290636"
+    },
+    {
+      "path": "place_eyes.py",
+      "bytes": 6313,
+      "sha256": "a01aa110b5282b7a2182d8144ff23d4c75b979f9b06d3fdf65f2a12fb2c33261"
+    },
+    {
+      "path": "rest-face-front.png",
+      "bytes": 1273275,
+      "sha256": "83a7c221b22b6ed94e0fd01bd18ad6788fa765ad2625367226ea66ba7a8f6afc"
+    }
+  ],
+  "currentRenderingApproach": {
+    "method": "SurfaceAppearance with geometry-baked UV emission mask",
+    "documentation": "EMISSION_README.md",
+    "historicalBillboardRecommendationSuperseded": true,
+    "reason": "Parent native QA found AlwaysOnTop=false billboards invisible behind the .2-transparency tinted Glass.",
+    "nativeSurfaceEmissionVerified": false
+  }
+}

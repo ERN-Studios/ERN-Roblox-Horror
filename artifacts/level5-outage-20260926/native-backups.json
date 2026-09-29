@@ -1,0 +1,14 @@
+{
+  "before": {
+    "file": "artifacts/level5-expansion-20260926/after.rbxl",
+    "bytes": 9771701,
+    "sha256": "5dcf3faf4ec3d9fdfd6e7d5a3c10cdd833a57014632d375365e435bafdd6c0d4",
+    "purpose": "Native v2128 backup already verified; fresh pretask 189-script export matched it/repository baseline; task changes scripts only."
+  },
+  "after": {
+    "file": "artifacts/level5-outage-20260926/after.rbxl",
+    "bytes": 9776013,
+    "sha256": "ff28e430f8a879890112e48924e6efe5c5357dbc2233bbf7dcd42c67f3bbeabd",
+    "purpose": "Full native Edit backup after final outage play QA and 191-script parity, before verified v2129 publication."
+  }
+}

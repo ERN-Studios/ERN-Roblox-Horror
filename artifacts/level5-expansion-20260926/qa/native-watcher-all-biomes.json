@@ -1,0 +1,149 @@
+{
+  "method": "Eight separate staged real-player viewpoints; restart owned encounter system at each, using production delays and official animations. One actual player, no synthetic viewers. Not a connected-route or two-account test.",
+  "cases": [
+    {
+      "visibleSamples": 15,
+      "trackMin": 0.3333333134651184,
+      "trackMax": 1.879166603088379,
+      "samples": 53,
+      "fovMax": 70.44755554199219,
+      "clips": {
+        "rbxassetid://85635358459792": true
+      },
+      "observedDistricts": {
+        "A_BalconyAtrium": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 15,
+      "status": "COMPLETE",
+      "fovMin": 68.52333068847656,
+      "district": "A_BalconyAtrium"
+    },
+    {
+      "visibleSamples": 18,
+      "trackMin": 0.31666672229766846,
+      "trackMax": 2.1833319664001465,
+      "samples": 55,
+      "fovMax": 70.68170166015625,
+      "clips": {
+        "rbxassetid://85635358459792": true
+      },
+      "observedDistricts": {
+        "B_LowEavesArcade": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 18,
+      "status": "COMPLETE",
+      "fovMin": 68.56180572509766,
+      "district": "B_LowEavesArcade"
+    },
+    {
+      "visibleSamples": 20,
+      "trackMin": 0.28333336114883423,
+      "trackMax": 2.383331775665283,
+      "samples": 55,
+      "fovMax": 70.64151000976562,
+      "clips": {
+        "rbxassetid://85635358459792": true
+      },
+      "observedDistricts": {
+        "C_PastelVillage": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 20,
+      "status": "COMPLETE",
+      "fovMin": 68.73487091064453,
+      "district": "C_PastelVillage"
+    },
+    {
+      "visibleSamples": 19,
+      "trackMin": 0.31666669249534607,
+      "trackMax": 2.2666659355163574,
+      "samples": 54,
+      "fovMax": 70.58588409423828,
+      "clips": {
+        "rbxassetid://123386867650430": true
+      },
+      "observedDistricts": {
+        "D_FloralTerraces": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 19,
+      "status": "COMPLETE",
+      "fovMin": 68.67073059082031,
+      "district": "D_FloralTerraces"
+    },
+    {
+      "visibleSamples": 18,
+      "trackMin": 0.32083335518836975,
+      "trackMax": 2.16666579246521,
+      "samples": 55,
+      "fovMax": 70.64564514160156,
+      "clips": {
+        "rbxassetid://123386867650430": true
+      },
+      "observedDistricts": {
+        "E_DomesticLabyrinth": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 18,
+      "status": "COMPLETE",
+      "fovMin": 68.55924224853516,
+      "district": "E_DomesticLabyrinth"
+    },
+    {
+      "visibleSamples": 15,
+      "trackMin": 0.2958333194255829,
+      "trackMax": 1.8291665315628052,
+      "samples": 55,
+      "fovMax": 70.39153289794922,
+      "clips": {
+        "rbxassetid://85948818863545": true
+      },
+      "observedDistricts": {
+        "F_BayWindowCanyon": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 15,
+      "status": "COMPLETE",
+      "fovMin": 69.37483215332031,
+      "district": "F_BayWindowCanyon"
+    },
+    {
+      "visibleSamples": 22,
+      "trackMin": 0.30416667461395264,
+      "trackMax": 2.6541662216186523,
+      "samples": 55,
+      "fovMax": 70.6013412475586,
+      "clips": {
+        "rbxassetid://85948818863545": true
+      },
+      "observedDistricts": {
+        "G_TiltedSubdivision": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 22,
+      "status": "COMPLETE",
+      "fovMin": 69.03052520751953,
+      "district": "G_TiltedSubdivision"
+    },
+    {
+      "visibleSamples": 14,
+      "trackMin": 0.3666667342185974,
+      "trackMax": 1.8041671514511108,
+      "samples": 54,
+      "fovMax": 70.4175796508789,
+      "clips": {
+        "rbxassetid://85948818863545": true
+      },
+      "observedDistricts": {
+        "H_LastHouse": true
+      },
+      "gazeHiddenSamples": 0,
+      "renderedSamples": 14,
+      "status": "COMPLETE",
+      "fovMin": 68.9161605834961,
+      "district": "H_LastHouse"
+    }
+  ]
+}

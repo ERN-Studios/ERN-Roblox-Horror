@@ -1,0 +1,27 @@
+[
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "compileO0": true,
+    "detail": "Compiled 3 KLOC into 109 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "compileO0": true,
+    "detail": "Compiled 0 KLOC into 17 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "compileO0": true,
+    "detail": "Compiled 0 KLOC into 24 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)"
+  },
+  {
+    "test": "extracted production access policy + original routing",
+    "passed": true,
+    "detail": "Access policy: 256 behavioral assertions passed"
+  },
+  {
+    "test": "scope and preview boundary",
+    "passed": true,
+    "detail": "MapOnly identity retained; no Escaped/PuzzleWon writer; H slide geometry untouched; existing Back to Lobby control retained."
+  }
+]

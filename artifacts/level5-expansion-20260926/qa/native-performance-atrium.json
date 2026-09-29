@@ -1,0 +1,68 @@
+{
+  "framesOver50Ms": 0,
+  "framesOver33_3Ms": 0,
+  "quality": "Enum.SavedQualitySetting.QualityLevel10",
+  "p99FrameMs": 20.51,
+  "worldCountsEnd": {
+    "lights": 19,
+    "instances": 8068,
+    "meshParts": 1,
+    "baseParts": 7196,
+    "enabledLights": 19,
+    "decals": 220,
+    "surfaceGuis": 25
+  },
+  "frames": 901,
+  "reason": "Scheduled sampling interval ended",
+  "maxFrameMs": 22.98,
+  "percentOver33_3Ms": 0,
+  "p95FrameMs": 18.93,
+  "memoryMbEnd": 5424.47,
+  "status": "COMPLETE_MEASUREMENT",
+  "p50FrameMs": 16.65,
+  "context": "Studio native client",
+  "secondsSoFar": 15.01,
+  "scope": "Observed RenderStepped intervals on this client/view; timing includes Studio/OS load and is not a GPU profiler or physical-mobile benchmark",
+  "worldCountsStart": {
+    "lights": 19,
+    "instances": 8068,
+    "meshParts": 1,
+    "baseParts": 7196,
+    "enabledLights": 19,
+    "decals": 220,
+    "surfaceGuis": 25
+  },
+  "framesSoFar": 901,
+  "startPosition": {
+    "1": 17002,
+    "2": 27.604768753051758,
+    "3": 5
+  },
+  "meanFrameMs": 16.67,
+  "requestedSeconds": 15,
+  "framesOver100Ms": 0,
+  "fps": 59.99406744603439,
+  "endViewport": {
+    "1": 1053,
+    "2": 678
+  },
+  "wallSeconds": 15.01,
+  "version": "2026-09-26.client-render.1",
+  "memoryMbStart": 5425.3,
+  "viewport": {
+    "1": 1053,
+    "2": 678
+  },
+  "renderIntervalSeconds": 15.02,
+  "unverified": {
+    "1": "physical mobile/tablet",
+    "2": "multiplayer server load",
+    "3": "unvisited views",
+    "4": "published-server asset permissions"
+  },
+  "endPosition": {
+    "1": 17002,
+    "2": 27.604768753051758,
+    "3": 5
+  }
+}

@@ -1,0 +1,2 @@
+Studio native compile: 186/186; no failures; no staging failures.
+Pure helper: 11297 deterministic assertions passed; also executed against installed module in native client.

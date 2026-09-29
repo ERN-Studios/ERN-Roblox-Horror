@@ -1,0 +1,11 @@
+exact      193
+permitted  0
+drift      0
+class      0
+missing    0
+extra      4
+  extra: ServerScriptService.Level6Expansion
+  extra: ServerScriptService.Level6Generator
+  extra: ServerScriptService.Level6PreviewAccess
+  extra: StarterPlayer.StarterPlayerScripts.Level6PreviewPrompt
+PARITY FAILED

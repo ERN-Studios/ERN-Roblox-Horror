@@ -1,0 +1,23 @@
+{
+  "createdUtc": "2026-09-25T13:45:50.838815+00:00",
+  "concept": "06-shifting-house",
+  "title": "THE SHIFTING HOUSE",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in generation",
+  "generationCalls": 1,
+  "inputImages": [],
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe4-74ed-7262-a527-95459bf25d57/exec-d23a6e80-e6e8-46d2-83d9-14731a96d0a8.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-entity-concepts-20260925/06-shifting-house.png",
+  "format": "PNG",
+  "modeOfImage": "RGB",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2360749,
+  "sha256": "2972c627463c3acf1e57d75082886fb1b96d3ef57b3b2af54486a9d46a4d8ab1",
+  "exactPromptFile": "06-shifting-house.prompt.txt",
+  "exactPrompt": "Use case: stylized-concept.\nAsset type: a premium, practical 3D environment/mechanic concept board for a Roblox Backrooms horror game, landscape 1536x1024, not gameplay HUD.\nShared art direction: uncanny domestic suburb architecture entirely INSIDE one endless building. Cream and warm beige plaster houses, muted sage and dusty pink fa\u00e7ades, white wood trim, uniformly dark tinted glass in every window, beige and green carpet where outdoor streets would normally be, sparse 1980s domestic furniture. Office suspended false ceilings clearly visible above the houses, fluorescent ceiling panels with mixed warm/cool, dim and switched-off states. Modular, buildable forms and appealing realistic materials with restrained Roblox-realizable geometry; high-end architectural game concept render, not photoreal humans, not Minecraft, not toy block art.\nReadable soft interior illumination, eerie liminal stillness, no sunlight or sky, no exterior landscape. No lamps or lights mounted on any house, no glowing windows, no light emitted from furniture. No laboratory or Zyntra branding, no suggestion anyone built the Backrooms. No gore, no HUD, no UI arrows, no logo/watermark. Restrained presentation on a warm charcoal/cream board with thin dividers, ample scene area. The only typography is the requested exact uppercase title in a small clean header; no other words or captions.\nPrimary request: an ordinary cream house subtly changes its internal layout between visits: one doorway disappears, the corridor lengthens, and sparse furniture swaps to mirror positions, while a clearly readable escape passage remains.\nComposition: TWO equal, wide, paired 3D interior story panels, same eye-level camera lens, same viewing position, same cream room identity. Small third inset if useful, but the paired room comparison must dominate. Header text exactly \"THE SHIFTING HOUSE\". No BEFORE/AFTER labels or any other text; use matched composition to explain.\nLEFT panel: a mostly empty, unfurnished-feeling domestic interior with warm cream plaster, white wood skirting and doorframes, beige carpet, a visibly low office-tile ceiling with mixed fluorescent panels and dark tinted interior window. A short central corridor leads through an open white frame into another empty room; a second open doorway on the left branches aside. Only two sparse domestic props: a small dark-wood chair and a low plain sideboard positioned on opposite side walls, leaving a generous clear central passage.\nRIGHT panel: the exact same house and camera after the uncanny change. The left side doorway is now seamlessly cream plaster with no door or frame, the central open passage is still clearly navigable but extends much farther than physically seems possible, repeating white trim and carpet depth to a softly illuminated empty room. The chair and the sideboard have subtly swapped to corresponding mirror positions. All trim and collision geometry remain plausible, no objects clipping into walls or floating. Slightly altered spacing of the fluorescent ceiling panels reinforces the corridor's impossible new length. One subtle misaligned doorframe deep down the extension is enough; no giant surreal portals or rotating rooms.\nBoth images must keep the same wall color, material quality, viewing angle and identifiable scuff marks, with ordinary architecture doing the horror. No characters or entity needed, no animated effect, no dramatic glowing portal.",
+  "nativeBytesPreserved": true,
+  "pixelEdits": false,
+  "visualInspection": "Matched two-panel interior: left-side doorway disappears, central corridor becomes substantially longer, chair and sideboard swap sides. Both maintain a clear passage, beige carpet, dark window, white trim and low fluorescent false ceiling. No material issues.",
+  "implementationStatus": "Concept only; no Studio, Git or Trello modifications."
+}

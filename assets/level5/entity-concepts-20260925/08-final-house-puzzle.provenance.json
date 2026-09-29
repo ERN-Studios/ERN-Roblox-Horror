@@ -1,0 +1,24 @@
+{
+  "createdUtc": "2026-09-25T13:45:06.038696+00:00",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in generation",
+  "generationCallsForConcept": 1,
+  "inputReferences": [],
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-933e88dd-6419-4f7b-8687-1bc77eefee24.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-entity-concepts-20260925/08-final-house-puzzle.png",
+  "exactPromptFile": "08-final-house-puzzle.prompt.txt",
+  "promptSha256": "b9a6aa347fe7086b844d7c15c8f9fdf496667576e9b453b9ca6be0907ca6f780",
+  "bytes": 2477526,
+  "width": 1536,
+  "height": 1024,
+  "imageMode": "RGB",
+  "format": "PNG",
+  "sha256": "4fa99822a8a0be2393ee1a3bfcde2d796fc5703471608f7252090eae2201d1c4",
+  "originalBytesPreserved": true,
+  "pixelManipulation": false,
+  "visualInspection": [
+    "Exact title and 8-3-6 digits read correctly in the framed photo and physical plaque mechanism; rear offset door and red arrows connect to dark enclosed descent; no creature.",
+    "Minor brief deviations: hero includes more furniture than the requested sparse cabinet/chair (cropped sofa/coffee table and a peripheral table lamp). Lower-right is a corridor perspective rather than a true external cutaway, and the slope has some step-like surface breaks. Treat it as mood/puzzle concept, not construction geometry."
+  ],
+  "scope": "Concept board only. No gameplay implementation, Studio edit, Git/Trello mutation, asset upload, or claims of in-engine rendering."
+}

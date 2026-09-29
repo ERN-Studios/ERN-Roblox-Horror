@@ -1,0 +1,10 @@
+{
+  "scope": "Native Studio client at A spawn; whole game and editor resident; not physical mobile performance",
+  "frames": 643,
+  "seconds": 15.0088059583,
+  "meanFPS": 42.8415159597,
+  "p95FrameMs": 29.9602914602,
+  "totalClientMemoryMB": 5164.6084,
+  "worldDescendants": 12271,
+  "buildSeconds": 0.7
+}

@@ -1,0 +1,21 @@
+{
+  "createdAtUTC": "2026-09-27T07:23:59.184353+00:00",
+  "placeId": 131311258779917,
+  "version": 2149,
+  "scriptCount": 197,
+  "sourceEditorConflicts": [],
+  "oldBaseline": {
+    "changed": [],
+    "added": [],
+    "missing": []
+  },
+  "repository": {
+    "changed": [],
+    "missing": [
+      "ServerScriptService/Level6Expansion.ModuleScript.lua",
+      "ServerScriptService/Level6Generator.ModuleScript.lua",
+      "ServerScriptService/Level6PreviewAccess.Script.lua",
+      "StarterPlayer/StarterPlayerScripts/Level6PreviewPrompt.LocalScript.lua"
+    ]
+  }
+}

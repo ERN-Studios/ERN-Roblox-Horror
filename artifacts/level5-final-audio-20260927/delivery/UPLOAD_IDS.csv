@@ -1,0 +1,17 @@
+cue,file,roblox_asset_id,loop,purpose,integration
+room_hum,L5_room_hum.wav,,True,"A–H normal room ambience; attenuate in A–G outage, retain H.",Prepared draft hook; not installed. No Roblox asset ID.
+watcher_heartbeat,L5_watcher_heartbeat.wav,,True,Local gaze intensity drives volume and playback speed; silence behind walls/hidden.,Prepared draft hook; not installed. No Roblox asset ID.
+puzzle_click,L5_puzzle_click.wav,,False,Local input wheel/button press.,Prepared draft hook; not installed. No Roblox asset ID.
+puzzle_reject,L5_puzzle_reject.wav,,False,Wrong submitted answer.,Prepared draft hook; not installed. No Roblox asset ID.
+puzzle_unlock,L5_puzzle_unlock.wav,,False,Correct answer/gate unlock feedback.,Prepared draft hook; not installed. No Roblox asset ID.
+watcher_glass,L5_watcher_glass.wav,,False,"Sparse localized visible Window Watcher apparition cue, max once/appearance.",Prepared draft hook; not installed. No Roblox asset ID.
+watcher_breath,L5_watcher_breath.wav,,False,Very low localized tension cue only near visible Watcher.,Prepared draft hook; not installed. No Roblox asset ID.
+watcher_recede,L5_watcher_recede.wav,,False,"Local disappearance after gaze threshold, once/appearance.",Prepared draft hook; not installed. No Roblox asset ID.
+sliding_gate,L5_sliding_gate.wav,,False,Replacement for 1.6-second section gate movement; 0.6-second settling tail.,Prepared gate draft hook; not installed. No Roblox asset ID.
+wooden_door_open,L5_wooden_door_open.wav,,False,Single hinged wooden door opening.,Asset only; event playback not wired. No Roblox asset ID.
+wooden_door_close,L5_wooden_door_close.wav,,False,Single hinged wooden door closing.,Asset only; event playback not wired. No Roblox asset ID.
+house_wood_creak,L5_house_wood_creak.wav,,False,Sparse positional house settling sound.,Asset only; event playback not wired. No Roblox asset ID.
+window_frame_creak,L5_window_frame_creak.wav,,False,Sparse positional window-frame tension cue.,Asset only; event playback not wired. No Roblox asset ID.
+curtain_movement,L5_curtain_movement.wav,,False,One short localized curtain movement.,Asset only; event playback not wired. No Roblox asset ID.
+ceiling_relay_tick,L5_ceiling_relay_tick.wav,,False,Sparse ceiling/lighting relay click without a power outage.,Asset only; event playback not wired. No Roblox asset ID.
+queue_arrival,L5_queue_arrival.wav,,False,One subtle Level 5 queue arrival/transition cue.,Asset only; event playback not wired. No Roblox asset ID.

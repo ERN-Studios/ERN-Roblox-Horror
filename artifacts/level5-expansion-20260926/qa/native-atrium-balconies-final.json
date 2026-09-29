@@ -1,0 +1,661 @@
+{
+  "elapsed": 37.1753287082538,
+  "reason": "All supplied targets reached with normal MoveTo",
+  "segments": {
+    "1": {
+      "arrived": {
+        "1": 16934.994,
+        "2": 27.473,
+        "3": 14.904
+      },
+      "index": 1,
+      "heightError": 3.4733104705810547,
+      "elapsed": 0.1779718748293817,
+      "target": {
+        "1": 16935,
+        "2": 24,
+        "3": 15
+      },
+      "horizontalError": 0.09665622562170029
+    },
+    "2": {
+      "arrived": {
+        "1": 16934.994,
+        "2": 34.122,
+        "3": 32.046
+      },
+      "index": 2,
+      "heightError": 3.12158203125,
+      "elapsed": 1.0833297916688025,
+      "target": {
+        "1": 16935,
+        "2": 31,
+        "3": 33
+      },
+      "horizontalError": 0.9541119337081909
+    },
+    "3": {
+      "arrived": {
+        "1": 16934.994,
+        "2": 41.291,
+        "3": 47.512
+      },
+      "index": 3,
+      "heightError": 3.2911224365234375,
+      "elapsed": 0.9663048749789596,
+      "target": {
+        "1": 16935,
+        "2": 38,
+        "3": 49
+      },
+      "horizontalError": 1.4876748323440552
+    },
+    "4": {
+      "arrived": {
+        "1": 16909.434,
+        "2": 41.605,
+        "3": 52.723
+      },
+      "index": 4,
+      "heightError": 3.6047630310058594,
+      "elapsed": 1.6327522918581963,
+      "target": {
+        "1": 16908,
+        "2": 38,
+        "3": 53
+      },
+      "horizontalError": 1.460069179534912
+    },
+    "5": {
+      "arrived": {
+        "1": 16908.014,
+        "2": 41.605,
+        "3": 97.847
+      },
+      "index": 5,
+      "heightError": 3.6047630310058594,
+      "elapsed": 2.8338309582322836,
+      "target": {
+        "1": 16908,
+        "2": 38,
+        "3": 99
+      },
+      "horizontalError": 1.1529817581176758
+    },
+    "6": {
+      "arrived": {
+        "1": 16999.104,
+        "2": 41.605,
+        "3": 98.992
+      },
+      "index": 6,
+      "heightError": 3.6047630310058594,
+      "elapsed": 5.732419541571289,
+      "target": {
+        "1": 17000,
+        "2": 38,
+        "3": 99
+      },
+      "horizontalError": 0.8965243101119995
+    },
+    "7": {
+      "arrived": {
+        "1": 17090.744,
+        "2": 41.605,
+        "3": 99
+      },
+      "index": 7,
+      "heightError": 3.6047630310058594,
+      "elapsed": 5.750794166699052,
+      "target": {
+        "1": 17092,
+        "2": 38,
+        "3": 99
+      },
+      "horizontalError": 1.255859375
+    },
+    "8": {
+      "arrived": {
+        "1": 17094.549,
+        "2": 41.605,
+        "3": 102.564
+      },
+      "index": 8,
+      "heightError": 3.6047630310058594,
+      "elapsed": 0.3502604167442769,
+      "target": {
+        "1": 17095,
+        "2": 38,
+        "3": 103
+      },
+      "horizontalError": 0.6271763443946838
+    },
+    "9": {
+      "arrived": {
+        "1": 17066.584,
+        "2": 41.605,
+        "3": 102.977
+      },
+      "index": 9,
+      "heightError": 3.6047630310058594,
+      "elapsed": 1.7642332499381155,
+      "target": {
+        "1": 17065,
+        "2": 38,
+        "3": 103
+      },
+      "horizontalError": 1.5841529369354248
+    },
+    "10": {
+      "arrived": {
+        "1": 17065.123,
+        "2": 47.821,
+        "3": 121.335
+      },
+      "index": 10,
+      "heightError": 2.820697784423828,
+      "elapsed": 1.1673801667056978,
+      "target": {
+        "1": 17065,
+        "2": 45,
+        "3": 123
+      },
+      "horizontalError": 1.670013189315796
+    },
+    "11": {
+      "arrived": {
+        "1": 17065.018,
+        "2": 55.567,
+        "3": 138.667
+      },
+      "index": 11,
+      "heightError": 3.5672645568847656,
+      "elapsed": 1.0842807916924357,
+      "target": {
+        "1": 17065,
+        "2": 52,
+        "3": 140
+      },
+      "horizontalError": 1.332635521888733
+    },
+    "12": {
+      "arrived": {
+        "1": 17092.639,
+        "2": 55.605,
+        "3": 142.805
+      },
+      "index": 12,
+      "heightError": 3.6047630310058594,
+      "elapsed": 1.7509405000600964,
+      "target": {
+        "1": 17094,
+        "2": 52,
+        "3": 143
+      },
+      "horizontalError": 1.375198483467102
+    },
+    "13": {
+      "arrived": {
+        "1": 17093.902,
+        "2": 55.605,
+        "3": 160.164
+      },
+      "index": 13,
+      "heightError": 3.6047630310058594,
+      "elapsed": 1.0986844999715686,
+      "target": {
+        "1": 17094,
+        "2": 52,
+        "3": 162
+      },
+      "horizontalError": 1.8382891416549683
+    },
+    "14": {
+      "arrived": {
+        "1": 17001.23,
+        "2": 55.605,
+        "3": 161.98
+      },
+      "index": 14,
+      "heightError": 3.6047630310058594,
+      "elapsed": 5.833047041669488,
+      "target": {
+        "1": 17000,
+        "2": 52,
+        "3": 162
+      },
+      "horizontalError": 1.2306338548660278
+    },
+    "15": {
+      "arrived": {
+        "1": 16906.744,
+        "2": 55.605,
+        "3": 162
+      },
+      "index": 15,
+      "heightError": 3.6047630310058594,
+      "elapsed": 5.949031374882907,
+      "target": {
+        "1": 16906,
+        "2": 52,
+        "3": 162
+      },
+      "horizontalError": 0.744140625
+    }
+  },
+  "waypointCount": 15,
+  "distanceTravelled": 597.8197351694107,
+  "worldGeneration": 1,
+  "method": "Humanoid MoveTo through supplied world-coordinate waypoints, without teleport/Jump/WalkSpeed/gate changes",
+  "activeWaypoint": 15,
+  "distanceToTarget": 0.744140625,
+  "samples": {
+    "1": {
+      "state": "Enum.HumanoidStateType.Freefall",
+      "remaining": 0.1,
+      "point": 1,
+      "position": {
+        "1": 16934.994,
+        "2": 29.703,
+        "3": 14.904
+      },
+      "t": 0.08
+    },
+    "2": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 2.82,
+      "point": 2,
+      "position": {
+        "1": 16934.994,
+        "2": 33.233,
+        "3": 30.179
+      },
+      "t": 1.14
+    },
+    "3": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 1.49,
+      "point": 3,
+      "position": {
+        "1": 16934.994,
+        "2": 41.291,
+        "3": 47.512
+      },
+      "t": 2.23
+    },
+    "4": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 11.73,
+      "point": 4,
+      "position": {
+        "1": 16919.527,
+        "2": 41.605,
+        "3": 50.84
+      },
+      "t": 3.23
+    },
+    "5": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 39.56,
+      "point": 5,
+      "position": {
+        "1": 16908.992,
+        "2": 41.605,
+        "3": 59.455
+      },
+      "t": 4.3
+    },
+    "6": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 21.95,
+      "point": 5,
+      "position": {
+        "1": 16908.477,
+        "2": 41.605,
+        "3": 77.05
+      },
+      "t": 5.39
+    },
+    "7": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 4.62,
+      "point": 5,
+      "position": {
+        "1": 16908.068,
+        "2": 41.605,
+        "3": 94.381
+      },
+      "t": 6.48
+    },
+    "8": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 78.2,
+      "point": 6,
+      "position": {
+        "1": 16921.807,
+        "2": 41.605,
+        "3": 98.261
+      },
+      "t": 7.58
+    },
+    "9": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 60.66,
+      "point": 6,
+      "position": {
+        "1": 16939.338,
+        "2": 41.605,
+        "3": 98.427
+      },
+      "t": 8.68
+    },
+    "10": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 44.73,
+      "point": 6,
+      "position": {
+        "1": 16955.275,
+        "2": 41.605,
+        "3": 98.578
+      },
+      "t": 9.68
+    },
+    "11": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 27.19,
+      "point": 6,
+      "position": {
+        "1": 16972.807,
+        "2": 41.605,
+        "3": 98.743
+      },
+      "t": 10.78
+    },
+    "12": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 9.66,
+      "point": 6,
+      "position": {
+        "1": 16990.338,
+        "2": 41.605,
+        "3": 98.909
+      },
+      "t": 11.88
+    },
+    "13": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 84.4,
+      "point": 7,
+      "position": {
+        "1": 17007.604,
+        "2": 41.605,
+        "3": 98.993
+      },
+      "t": 12.96
+    },
+    "14": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 67.4,
+      "point": 7,
+      "position": {
+        "1": 17024.604,
+        "2": 41.605,
+        "3": 98.995
+      },
+      "t": 14.03
+    },
+    "15": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 50.13,
+      "point": 7,
+      "position": {
+        "1": 17041.869,
+        "2": 41.605,
+        "3": 98.997
+      },
+      "t": 15.11
+    },
+    "16": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 33.13,
+      "point": 7,
+      "position": {
+        "1": 17058.869,
+        "2": 41.605,
+        "3": 98.998
+      },
+      "t": 16.18
+    },
+    "17": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 15.6,
+      "point": 7,
+      "position": {
+        "1": 17076.4,
+        "2": 41.605,
+        "3": 98.999
+      },
+      "t": 17.28
+    },
+    "18": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 4.02,
+      "point": 8,
+      "position": {
+        "1": 17092.115,
+        "2": 41.605,
+        "3": 100.203
+      },
+      "t": 18.29
+    },
+    "19": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 17.52,
+      "point": 9,
+      "position": {
+        "1": 17082.521,
+        "2": 41.605,
+        "3": 102.743
+      },
+      "t": 19.29
+    },
+    "20": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 18.46,
+      "point": 10,
+      "position": {
+        "1": 17066.217,
+        "2": 41.605,
+        "3": 104.576
+      },
+      "t": 20.41
+    },
+    "21": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 1.67,
+      "point": 10,
+      "position": {
+        "1": 17065.123,
+        "2": 47.821,
+        "3": 121.335
+      },
+      "t": 21.46
+    },
+    "22": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 1.33,
+      "point": 11,
+      "position": {
+        "1": 17065.018,
+        "2": 55.567,
+        "3": 138.667
+      },
+      "t": 22.54
+    },
+    "23": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 11.84,
+      "point": 12,
+      "position": {
+        "1": 17082.279,
+        "2": 55.605,
+        "3": 141.346
+      },
+      "t": 23.64
+    },
+    "24": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 12.51,
+      "point": 13,
+      "position": {
+        "1": 17093.277,
+        "2": 55.605,
+        "3": 149.515
+      },
+      "t": 24.72
+    },
+    "25": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 88.9,
+      "point": 14,
+      "position": {
+        "1": 17088.887,
+        "2": 55.605,
+        "3": 160.534
+      },
+      "t": 25.73
+    },
+    "26": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 71.37,
+      "point": 14,
+      "position": {
+        "1": 17071.355,
+        "2": 55.605,
+        "3": 160.824
+      },
+      "t": 26.83
+    },
+    "27": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 54.1,
+      "point": 14,
+      "position": {
+        "1": 17054.09,
+        "2": 55.605,
+        "3": 161.11
+      },
+      "t": 27.91
+    },
+    "28": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 36.56,
+      "point": 14,
+      "position": {
+        "1": 17036.559,
+        "2": 55.605,
+        "3": 161.4
+      },
+      "t": 29.01
+    },
+    "29": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 20.62,
+      "point": 14,
+      "position": {
+        "1": 17020.621,
+        "2": 55.605,
+        "3": 161.662
+      },
+      "t": 30.01
+    },
+    "30": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 3.16,
+      "point": 14,
+      "position": {
+        "1": 17003.156,
+        "2": 55.605,
+        "3": 161.948
+      },
+      "t": 31.11
+    },
+    "31": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 80.09,
+      "point": 15,
+      "position": {
+        "1": 16986.09,
+        "2": 55.605,
+        "3": 161.984
+      },
+      "t": 32.18
+    },
+    "32": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 62.82,
+      "point": 15,
+      "position": {
+        "1": 16968.824,
+        "2": 55.605,
+        "3": 161.988
+      },
+      "t": 33.26
+    },
+    "33": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 45.56,
+      "point": 15,
+      "position": {
+        "1": 16951.559,
+        "2": 55.605,
+        "3": 161.992
+      },
+      "t": 34.34
+    },
+    "34": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 29.62,
+      "point": 15,
+      "position": {
+        "1": 16935.621,
+        "2": 55.605,
+        "3": 161.996
+      },
+      "t": 35.34
+    },
+    "35": {
+      "state": "Enum.HumanoidStateType.Running",
+      "remaining": 12.36,
+      "point": 15,
+      "position": {
+        "1": 16918.355,
+        "2": 55.605,
+        "3": 161.999
+      },
+      "t": 36.43
+    }
+  },
+  "arrivalRadius": 2,
+  "samplesOmitted": 0,
+  "playerUserId": 9488575949,
+  "heightTolerance": 5,
+  "version": "2026-09-26.native-waypoints.1",
+  "completedWaypoints": 15,
+  "start": {
+    "1": 16934.994,
+    "2": 31.086,
+    "3": 14.904
+  },
+  "status": "PASS_WAYPOINT_TRAVERSAL",
+  "unverified": {
+    "1": "paths outside supplied segments",
+    "2": "another account/device",
+    "3": "full-volume coverage of every interior"
+  },
+  "finalPosition": {
+    "1": 16906.744,
+    "2": 55.605,
+    "3": 162
+  }
+}

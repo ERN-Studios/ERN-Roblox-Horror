@@ -1,0 +1,95 @@
+{
+  "generator": "built-in image_gen",
+  "date": "2026-09-26",
+  "prompts": {
+    "plaster": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture, square 1024x1024. Orthographic flat scan of aged warm ivory painted domestic plaster in an uncanny Backrooms suburban house. Finely resolved roller stipple, tiny hairline crazing, soft irregular warm-grey wear and faint old damp mottling. Elegant restrained realism, most area clean enough for a house. Neutral diffuse illumination, no baked shadows, no directional light, no perspective, no vignette, no objects or text. Entire canvas one continuous seamless repeating material, edges matching. No border.",
+    "wallpaper": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture, square 1024x1024. Straight-on scanned vintage faded floral wallpaper from an abandoned 1990s suburban living room. Small rambling rose and sage botanical bouquets on aged pale cream paper, dusty blush flowers, muted green leaves, delicately cracked paper fibres and very subtle wear. Real tactile detail, tasteful domestic not graphic/cartoon, desaturated calm palette. Uniform unlit diffuse lighting. Entire canvas seamless repeating floral material with left/right and top/bottom matching. No borders, furniture, writing, perspective or baked shadows.",
+    "siding": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture, square 1024x1024. Orthographic front-on scan of whitewashed weathered timber clapboard siding, horizontal narrow boards, ivory-grey paint with fine visible wood grain beneath and subtle chipped paint along joins. Six evenly spaced horizontal boards fill canvas; delicate recessed seams, realistic detailed surface, restrained contrast and neutral bright grayscale suitable for tinting pastel colours in a game. Seamless repeat left/right and top/bottom. Flat diffuse neutral light, no perspective, no vignette, no objects, text, border, or cast shadows.",
+    "grass": "Use case: photorealistic-natural. Asset type: seamless tileable game ground albedo texture, square 1024x1024. Orthographic directly overhead close scan of dense short natural lawn grass. Real individual fine blades in muted olive and forest green, subtle dried straw flecks and sparse dark earth barely glimpsed. Moderately maintained suburban turf, varied blade directions, natural nonuniform detail without large patches. Entire frame filled with grass, not carpet, not fabric, no grid. Neutral diffuse overcast illumination, no directional shadow, no perspective or vignette. Seamless edges on all sides, no objects, flowers, labels or borders.",
+    "wood": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture square. Orthographic scan of old warm medium oak wood veneer, beautiful fine narrow grain, subtle pores and occasional small knots, worn satin finish, muted honey brown and grey-brown, restrained tactile domestic furniture realism. Entire frame one continuous fine-grained wood surface, grain vertical, not planks, no joins, not an object. Neutral flat diffuse illumination without reflections/shadows, no vignette/perspective/writing/borders. All edges seamlessly repeat.",
+    "roof": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture square. Straight-on orthographic scan of aged grey slate-blue asphalt roof shingles on a suburban house. Small staggered rectangular tabs, realistic fine crushed stone granules, mild weathering, subtle grey tonal variation. Neutral grayscale slate not saturated, correct compact domestic scale. Uniform flat diffuse illumination, no perspective, no roof silhouette, no sky, no writing, no border, no strong baked shadows. Whole canvas repeating roof material with seamless edges.",
+    "carpet": "Use case: photorealistic-natural. Asset type: seamless tileable game material albedo texture square. Orthographic macro scan of beige worn domestic loop pile carpet from an uncanny empty suburban interior. Dense clearly resolved tiny interwoven short fibres, warm oatmeal and taupe, slight uneven wear, faint dull compressed footprints blended into microtexture without identifiable foot shapes. Detailed tactile old carpet, gently desaturated, low contrast suitable for repeated large floors. Entire canvas carpet, flat neutral diffuse lighting, no perspective, vignette, shadows, objects, borders or words; seamless all edges."
+  },
+  "variants": [
+    {
+      "colorMap": "rbxassetid://108985650994325",
+      "studsPerTile": 12,
+      "name": "Level5AgedPlaster",
+      "baseMaterial": "Plaster"
+    },
+    {
+      "colorMap": "rbxassetid://102299936573476",
+      "studsPerTile": 8,
+      "name": "Level5FloralWallpaper",
+      "baseMaterial": "Plaster"
+    },
+    {
+      "colorMap": "rbxassetid://115748401620318",
+      "studsPerTile": 12,
+      "name": "Level5PaintedSiding",
+      "baseMaterial": "WoodPlanks"
+    },
+    {
+      "colorMap": "rbxassetid://126776492995543",
+      "studsPerTile": 6,
+      "name": "Level5LawnGrass",
+      "baseMaterial": "Grass"
+    },
+    {
+      "colorMap": "rbxassetid://118880038763227",
+      "studsPerTile": 4,
+      "name": "Level5VeneerWood",
+      "baseMaterial": "Wood"
+    },
+    {
+      "colorMap": "rbxassetid://118077370167392",
+      "studsPerTile": 8,
+      "name": "Level5RoofShingles",
+      "baseMaterial": "Slate"
+    },
+    {
+      "colorMap": "rbxassetid://113909496202267",
+      "studsPerTile": 6,
+      "name": "Level5LoopCarpet",
+      "baseMaterial": "Fabric"
+    }
+  ],
+  "assets": [
+    {
+      "file": "carpet.png",
+      "bytes": 3323236,
+      "sha256": "6bd957f8fffd044b7f310c0aa56130829b87ba2fd6d62040e4c0c81af9bb8359"
+    },
+    {
+      "file": "grass.png",
+      "bytes": 3826631,
+      "sha256": "7c56ffcec8f484dd886993f13bcfdcd715dc09fc192f54a52da76872d11ab8c8"
+    },
+    {
+      "file": "plaster.png",
+      "bytes": 2996236,
+      "sha256": "d37c03d5c475364f8d06c33a15cc40147b4b821fe6542a0540b3d42adf1afa31"
+    },
+    {
+      "file": "roof.png",
+      "bytes": 3845294,
+      "sha256": "0a9388b36c89a7d9a4c66c2279724f82030c6c3c271502b39b5fdf7e66c3da3b"
+    },
+    {
+      "file": "siding.png",
+      "bytes": 2765122,
+      "sha256": "481614e62ceef5b87eb72064d9ce29179814d15928ea4c20406c80d55e83c671"
+    },
+    {
+      "file": "wallpaper.png",
+      "bytes": 2959880,
+      "sha256": "e0edc9f517155d9ca00805a9911622ed062ca418ff94637fea8bb9ec2a0f8a94"
+    },
+    {
+      "file": "wood.png",
+      "bytes": 2626840,
+      "sha256": "2e0aae9e90a914d0170db109dce2305756502957be2c122acbdd4bc77df6dd05"
+    }
+  ],
+  "scope": "Seven Level5-owned MaterialVariants; no global material overrides. Imported through Roblox Studio upload_image. Unedited generated PNGs retained."
+}

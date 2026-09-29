@@ -1,0 +1,147 @@
+[
+  {
+    "path": "ServerScriptService.GameManager",
+    "class": "Script",
+    "names": [
+      "ServerScriptService",
+      "GameManager"
+    ],
+    "editorFnv1a": 1515612148,
+    "sourceDjb2": 951332234,
+    "sourceFnv1a": 1515612148,
+    "equal": true,
+    "editorDjb2": 951332234,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "sourceLength": 166063,
+    "editorLength": 166063,
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "sha256": "6809d69fee8c15c4039d586a1ddde5bb7b20f2c5a6412fa4f031e40e5571b7ae",
+    "editorSha256": "6809d69fee8c15c4039d586a1ddde5bb7b20f2c5a6412fa4f031e40e5571b7ae",
+    "draftMatch": true
+  },
+  {
+    "path": "ServerScriptService.Level 5 Systems.Level 5 Power Outage",
+    "class": "ModuleScript",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Power Outage"
+    ],
+    "editorFnv1a": 930692109,
+    "sourceDjb2": 3854323309,
+    "sourceFnv1a": 930692109,
+    "equal": true,
+    "editorDjb2": 3854323309,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceLength": 8818,
+    "editorLength": 8818,
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "sha256": "bf3e38ccdddfbbf07fb6cac2685489a20a2e4d21565dc8bb63a3f6aa0fcea40b",
+    "editorSha256": "bf3e38ccdddfbbf07fb6cac2685489a20a2e4d21565dc8bb63a3f6aa0fcea40b",
+    "draftMatch": true
+  },
+  {
+    "path": "ServerScriptService.Level 5 Systems.Level 5 Round Adapter",
+    "class": "ModuleScript",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Round Adapter"
+    ],
+    "editorFnv1a": 2036167387,
+    "sourceDjb2": 3055794701,
+    "sourceFnv1a": 2036167387,
+    "equal": true,
+    "editorDjb2": 3055794701,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceLength": 17720,
+    "editorLength": 17720,
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "sha256": "2acd7dc20a27eea96989dea6bfd4eb6fdc7bb63f344b7dd2883654acb8e3239f",
+    "editorSha256": "2acd7dc20a27eea96989dea6bfd4eb6fdc7bb63f344b7dd2883654acb8e3239f",
+    "draftMatch": true
+  },
+  {
+    "path": "ServerScriptService.Level 5 Systems.Level 5 Section Progression",
+    "class": "ModuleScript",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Section Progression"
+    ],
+    "editorFnv1a": 3689872434,
+    "sourceDjb2": 3047997768,
+    "sourceFnv1a": 3689872434,
+    "equal": true,
+    "editorDjb2": 3047997768,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceLength": 27031,
+    "editorLength": 27031,
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "sha256": "e5690e2411b5f4da87f084801f5e2c33ff092bf4b6cde6897ec2f0492fbc5dda",
+    "editorSha256": "e5690e2411b5f4da87f084801f5e2c33ff092bf4b6cde6897ec2f0492fbc5dda",
+    "draftMatch": true
+  },
+  {
+    "path": "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
+    "class": "ModuleScript",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Window Watcher Encounters"
+    ],
+    "editorFnv1a": 3522004075,
+    "sourceDjb2": 4257775843,
+    "sourceFnv1a": 3522004075,
+    "equal": true,
+    "editorDjb2": 4257775843,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceLength": 23818,
+    "editorLength": 23818,
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "sha256": "46120fc6e0379138094e9cac08a73dd21e650c732309833627847d4fd40d87da",
+    "editorSha256": "46120fc6e0379138094e9cac08a73dd21e650c732309833627847d4fd40d87da",
+    "draftMatch": true
+  },
+  {
+    "path": "ServerScriptService.TunnelLobbyBuilder",
+    "class": "ModuleScript",
+    "names": [
+      "ServerScriptService",
+      "TunnelLobbyBuilder"
+    ],
+    "editorFnv1a": 3861787729,
+    "sourceDjb2": 3492273471,
+    "sourceFnv1a": 3861787729,
+    "equal": true,
+    "editorDjb2": 3492273471,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceLength": 116631,
+    "editorLength": 116631,
+    "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+    "sha256": "e98ae3de991fb6a12a8b5f358eb6e61d5dbc395f30b89f3d8d0f36f90cb89b75",
+    "editorSha256": "e98ae3de991fb6a12a8b5f358eb6e61d5dbc395f30b89f3d8d0f36f90cb89b75",
+    "draftMatch": true
+  }
+]

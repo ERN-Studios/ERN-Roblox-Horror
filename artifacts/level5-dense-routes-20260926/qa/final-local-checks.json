@@ -1,0 +1,80 @@
+[
+  {
+    "check": "Level 5 Architecture.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Colour Lock Logic.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Furniture.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Landmark Districts.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Lighting Controller.LocalScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Neighbourhood Districts.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Power Outage.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Puzzle Catalog.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Round Adapter.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Section Progression.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "Level5ColourLockClient.LocalScript.lua",
+    "exitCode": 0,
+    "stderr": ""
+  },
+  {
+    "check": "test_level5_puzzle_catalog.luau",
+    "exitCode": 0,
+    "output": "PASS Puzzle Catalog: 6910 assertions; 2185 exhaustive combinations across 7 gates; pure logic only\n",
+    "stderr": ""
+  },
+  {
+    "check": "test_puzzle_layout_math.luau",
+    "exitCode": 0,
+    "output": "PASS: 2737 arithmetic assertions across 7 puzzles \u00d7 9 modeled viewport/safe-area pairs.\nKnown edge: hard minimum 248px height exceeds a 244px usable frame (example 320\u00d7280 viewport with 36px top inset). Not a native device or text-fit result.\n",
+    "stderr": ""
+  },
+  {
+    "check": "test_mirror_guards.py",
+    "exitCode": 0,
+    "output": "PASS mirror guards: 13 assertions on temporary synthetic exports; real repository and Studio untouched\n",
+    "stderr": ""
+  }
+]

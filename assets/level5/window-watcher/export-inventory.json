@@ -1,0 +1,1409 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "blend_file": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-20260925/blender/exports/model.blend",
+  "fps": 30,
+  "armatures": [
+    {
+      "name": "WindowWatcherRig",
+      "bones": [
+        {
+          "name": "Root",
+          "parent": null,
+          "deform": false,
+          "head": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "tail": [
+            0.0,
+            0.0,
+            0.15000000596046448
+          ],
+          "rest_matrix": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Hips",
+          "parent": "Root",
+          "deform": true,
+          "head": [
+            -0.005702914670109749,
+            -0.010232054628431797,
+            1.3741647005081177
+          ],
+          "tail": [
+            -0.027226747944951057,
+            -0.013446930795907974,
+            1.5400103330612183
+          ],
+          "rest_matrix": [
+            [
+              0.9831171,
+              -0.1286792,
+              0.130086,
+              -0.0057029
+            ],
+            [
+              0.1286796,
+              -0.01922,
+              -0.9915,
+              -0.0102321
+            ],
+            [
+              0.1300856,
+              0.9915,
+              -0.0023371,
+              1.3741647
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftUpLeg",
+          "parent": "Hips",
+          "deform": true,
+          "head": [
+            0.10061650723218918,
+            -0.013062946498394012,
+            1.236627221107483
+          ],
+          "tail": [
+            0.14293457567691803,
+            -0.02438642457127571,
+            0.6864790916442871
+          ],
+          "rest_matrix": [
+            [
+              0.9942424,
+              0.0766785,
+              -0.0748999,
+              0.1006165
+            ],
+            [
+              0.0766748,
+              -0.0205177,
+              0.996846,
+              -0.0130629
+            ],
+            [
+              0.0748999,
+              -0.9968449,
+              -0.0262789,
+              1.2366273
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftLeg",
+          "parent": "LeftUpLeg",
+          "deform": true,
+          "head": [
+            0.14293454587459564,
+            -0.024386418983340263,
+            0.6864790916442871
+          ],
+          "tail": [
+            0.18274211883544922,
+            0.02822142280638218,
+            0.11235594749450684
+          ],
+          "rest_matrix": [
+            [
+              0.9947837,
+              0.068883,
+              -0.075286,
+              0.1429346
+            ],
+            [
+              0.068879,
+              0.0910326,
+              0.9934639,
+              -0.0243864
+            ],
+            [
+              0.0752863,
+              -0.9934629,
+              0.0858126,
+              0.6864792
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftFoot",
+          "parent": "LeftLeg",
+          "deform": true,
+          "head": [
+            0.18274204432964325,
+            0.028221413493156433,
+            0.11235591769218445
+          ],
+          "tail": [
+            0.2276698648929596,
+            -0.09645044803619385,
+            0.04200039803981781
+          ],
+          "rest_matrix": [
+            [
+              0.9510307,
+              0.2994429,
+              -0.0766935,
+              0.1827421
+            ],
+            [
+              0.2994404,
+              -0.8309353,
+              0.4689177,
+              0.0282214
+            ],
+            [
+              0.0766867,
+              -0.468918,
+              -0.8799065,
+              0.112356
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftToeBase",
+          "parent": "LeftFoot",
+          "deform": true,
+          "head": [
+            0.22766999900341034,
+            -0.09645043313503265,
+            0.04200045391917229
+          ],
+          "tail": [
+            0.2547922134399414,
+            -0.17171254754066467,
+            0.04200045391917229
+          ],
+          "rest_matrix": [
+            [
+              0.94078,
+              0.3390285,
+              3e-07,
+              0.22767
+            ],
+            [
+              0.3390242,
+              -0.9407787,
+              4e-07,
+              -0.0964504
+            ],
+            [
+              7e-07,
+              -1e-07,
+              -1.0000002,
+              0.0420005
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightUpLeg",
+          "parent": "Hips",
+          "deform": true,
+          "head": [
+            -0.10057073086500168,
+            -0.013058134354650974,
+            1.2364312410354614
+          ],
+          "tail": [
+            -0.13854971528053284,
+            -0.024362530559301376,
+            0.6854983568191528
+          ],
+          "rest_matrix": [
+            [
+              0.9953647,
+              -0.0687582,
+              0.0672033,
+              -0.1005707
+            ],
+            [
+              -0.0687554,
+              -0.0204658,
+              0.9974236,
+              -0.0130581
+            ],
+            [
+              -0.067205,
+              -0.9974231,
+              -0.0250985,
+              1.2364312
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightLeg",
+          "parent": "RightUpLeg",
+          "deform": true,
+          "head": [
+            -0.1385495960712433,
+            -0.024362415075302124,
+            0.6854983568191528
+          ],
+          "tail": [
+            -0.18103067576885223,
+            0.03362993150949478,
+            0.12663137912750244
+          ],
+          "rest_matrix": [
+            [
+              0.9936616,
+              -0.0753917,
+              0.0833523,
+              -0.1385496
+            ],
+            [
+              -0.075389,
+              0.1029197,
+              0.9918286,
+              -0.0243624
+            ],
+            [
+              -0.0833536,
+              -0.9918281,
+              0.0965838,
+              0.6854985
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightFoot",
+          "parent": "RightLeg",
+          "deform": true,
+          "head": [
+            -0.18103046715259552,
+            0.033629920333623886,
+            0.12663139402866364
+          ],
+          "tail": [
+            -0.21725080907344818,
+            -0.09998899698257446,
+            0.040891505777835846
+          ],
+          "rest_matrix": [
+            [
+              0.9728224,
+              -0.2224274,
+              0.0643257,
+              -0.1810305
+            ],
+            [
+              -0.2224256,
+              -0.8205473,
+              0.5265253,
+              0.0336299
+            ],
+            [
+              -0.0643307,
+              -0.5265244,
+              -0.8477221,
+              0.1266316
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightToeBase",
+          "parent": "RightFoot",
+          "deform": true,
+          "head": [
+            -0.21725083887577057,
+            -0.09998901188373566,
+            0.04089154303073883
+          ],
+          "tail": [
+            -0.23818117380142212,
+            -0.1772024929523468,
+            0.04089154303073883
+          ],
+          "rest_matrix": [
+            [
+              0.9651659,
+              -0.2616292,
+              -3.6e-06,
+              -0.2172508
+            ],
+            [
+              -0.2616291,
+              -0.9651684,
+              1e-06,
+              -0.099989
+            ],
+            [
+              -2.9e-06,
+              -1e-07,
+              -0.9999995,
+              0.0408918
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Spine02",
+          "parent": "Hips",
+          "deform": true,
+          "head": [
+            -0.00475241569802165,
+            -0.002722662640735507,
+            1.5538749694824219
+          ],
+          "tail": [
+            -0.003801933955401182,
+            0.004786710254848003,
+            1.7335854768753052
+          ],
+          "rest_matrix": [
+            [
+              0.9999709,
+              0.0052843,
+              0.0055095,
+              -0.0047524
+            ],
+            [
+              0.0052842,
+              0.0417489,
+              -0.9991142,
+              -0.0027227
+            ],
+            [
+              -0.0055096,
+              0.9991142,
+              0.0417198,
+              1.553875
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Spine01",
+          "parent": "Spine02",
+          "deform": true,
+          "head": [
+            -0.0038019423373043537,
+            0.004786734469234943,
+            1.7335854768753052
+          ],
+          "tail": [
+            -0.002851461060345173,
+            0.012296099215745926,
+            1.913295865058899
+          ],
+          "rest_matrix": [
+            [
+              0.9999709,
+              0.0052843,
+              0.0055096,
+              -0.0038019
+            ],
+            [
+              0.0052843,
+              0.0417489,
+              -0.9991142,
+              0.0047867
+            ],
+            [
+              -0.0055096,
+              0.9991142,
+              0.0417198,
+              1.7335855
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Spine",
+          "parent": "Spine01",
+          "deform": true,
+          "head": [
+            -0.0028514566365629435,
+            0.012296175584197044,
+            1.913295865058899
+          ],
+          "tail": [
+            -0.0020293504931032658,
+            0.01984957605600357,
+            1.9562036991119385
+          ],
+          "rest_matrix": [
+            [
+              0.9995694,
+              0.0188663,
+              0.0224726,
+              -0.0028515
+            ],
+            [
+              0.0188662,
+              0.1733411,
+              -0.9846811,
+              0.0122962
+            ],
+            [
+              -0.0224727,
+              0.9846812,
+              0.1729106,
+              1.9132959
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftShoulder",
+          "parent": "Spine",
+          "deform": true,
+          "head": [
+            0.031781330704689026,
+            0.023404210805892944,
+            1.9372957944869995
+          ],
+          "tail": [
+            0.17031258344650269,
+            0.034512296319007874,
+            1.9372957944869995
+          ],
+          "rest_matrix": [
+            [
+              -0.0799282,
+              0.9968005,
+              0.0,
+              0.0317813
+            ],
+            [
+              0.9968005,
+              0.0799282,
+              -4e-07,
+              0.0234042
+            ],
+            [
+              -3e-07,
+              0.0,
+              -1.0000001,
+              1.9372958
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftArm",
+          "parent": "LeftShoulder",
+          "deform": true,
+          "head": [
+            0.17031259834766388,
+            0.03451231122016907,
+            1.93729567527771
+          ],
+          "tail": [
+            0.43155378103256226,
+            0.06382189691066742,
+            1.7004717588424683
+          ],
+          "rest_matrix": [
+            [
+              0.4056242,
+              0.738336,
+              -0.5388216,
+              0.1703126
+            ],
+            [
+              0.7383354,
+              0.0828366,
+              0.669327,
+              0.0345123
+            ],
+            [
+              0.5388227,
+              -0.6693265,
+              -0.5115392,
+              1.9372957
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftForeArm",
+          "parent": "LeftArm",
+          "deform": true,
+          "head": [
+            0.4315541088581085,
+            0.06382203847169876,
+            1.700472116470337
+          ],
+          "tail": [
+            0.7092729210853577,
+            0.03534599393606186,
+            1.4813458919525146
+          ],
+          "rest_matrix": [
+            [
+              0.4331383,
+              0.7825241,
+              -0.4472661,
+              0.431554
+            ],
+            [
+              0.7825246,
+              -0.0802365,
+              0.6174276,
+              0.063822
+            ],
+            [
+              0.4472651,
+              -0.6174285,
+              -0.6470981,
+              1.7004721
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "LeftHand",
+          "parent": "LeftForeArm",
+          "deform": true,
+          "head": [
+            0.7092735767364502,
+            0.035346098244190216,
+            1.4813467264175415
+          ],
+          "tail": [
+            0.7597234845161438,
+            0.026152832433581352,
+            1.4199440479278564
+          ],
+          "rest_matrix": [
+            [
+              0.6433063,
+              0.6306239,
+              -0.4341316,
+              0.7092736
+            ],
+            [
+              0.6306187,
+              -0.1149159,
+              0.7675375,
+              0.0353461
+            ],
+            [
+              0.4341391,
+              -0.7675336,
+              -0.4716095,
+              1.4813467
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightShoulder",
+          "parent": "Spine",
+          "deform": true,
+          "head": [
+            -0.035732563585042953,
+            0.02345491200685501,
+            1.942981243133545
+          ],
+          "tail": [
+            -0.16725710034370422,
+            0.034613706171512604,
+            1.942981243133545
+          ],
+          "rest_matrix": [
+            [
+              -0.0845381,
+              -0.9964201,
+              0.0,
+              -0.0357326
+            ],
+            [
+              -0.9964201,
+              0.0845382,
+              1e-07,
+              0.0234549
+            ],
+            [
+              -1e-07,
+              0.0,
+              -1.0,
+              1.9429812
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightArm",
+          "parent": "RightShoulder",
+          "deform": true,
+          "head": [
+            -0.16725710034370422,
+            0.034613754600286484,
+            1.9429811239242554
+          ],
+          "tail": [
+            -0.4299415349960327,
+            0.06415995955467224,
+            1.7097020149230957
+          ],
+          "rest_matrix": [
+            [
+              0.3940652,
+              -0.7450871,
+              0.5381054,
+              -0.1672571
+            ],
+            [
+              -0.7450857,
+              0.0838058,
+              0.6616825,
+              0.0346138
+            ],
+            [
+              -0.5381077,
+              -0.6616809,
+              -0.5221289,
+              1.9429811
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightForeArm",
+          "parent": "RightArm",
+          "deform": true,
+          "head": [
+            -0.4299415946006775,
+            0.06416003406047821,
+            1.7097021341323853
+          ],
+          "tail": [
+            -0.7112122774124146,
+            0.03368597477674484,
+            1.4865977764129639
+          ],
+          "rest_matrix": [
+            [
+              0.4381072,
+              -0.7806529,
+              0.4456936,
+              -0.4299415
+            ],
+            [
+              -0.7806504,
+              -0.0845792,
+              0.6192181,
+              0.06416
+            ],
+            [
+              -0.4456982,
+              -0.6192151,
+              -0.646472,
+              1.7097021
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "RightHand",
+          "parent": "RightForeArm",
+          "deform": true,
+          "head": [
+            -0.7112120389938354,
+            0.033685971051454544,
+            1.4865974187850952
+          ],
+          "tail": [
+            -0.7633353471755981,
+            0.023519456386566162,
+            1.4267659187316895
+          ],
+          "rest_matrix": [
+            [
+              0.623357,
+              -0.6515411,
+              0.4323425,
+              -0.711212
+            ],
+            [
+              -0.6515433,
+              -0.1270814,
+              0.7478913,
+              0.033686
+            ],
+            [
+              -0.4323394,
+              -0.7478935,
+              -0.5037243,
+              1.4865974
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "neck",
+          "parent": "Spine",
+          "deform": true,
+          "head": [
+            -0.0017875870689749718,
+            0.01589840278029442,
+            2.006563425064087
+          ],
+          "tail": [
+            -2.0838342607021332e-08,
+            0.021951042115688324,
+            2.1632742881774902
+          ],
+          "rest_matrix": [
+            [
+              0.9998648,
+              0.0113975,
+              0.0118455,
+              -0.0017876
+            ],
+            [
+              0.0113976,
+              0.0385917,
+              -0.9991901,
+              0.0158984
+            ],
+            [
+              -0.0118454,
+              0.9991902,
+              0.0384566,
+              2.0065634
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Head",
+          "parent": "neck",
+          "deform": true,
+          "head": [
+            -1.264580262727577e-08,
+            0.02195107564330101,
+            2.1632742881774902
+          ],
+          "tail": [
+            0.0014333004364743829,
+            -0.07251274585723877,
+            2.289602756500244
+          ],
+          "rest_matrix": [
+            [
+              0.9999483,
+              0.0090861,
+              0.0045511,
+              -0.0
+            ],
+            [
+              0.0090861,
+              -0.5988284,
+              -0.8008258,
+              0.0219511
+            ],
+            [
+              -0.004551,
+              0.800826,
+              -0.5988801,
+              2.1632743
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "head_end",
+          "parent": "Head",
+          "deform": true,
+          "head": [
+            0.0028394886758178473,
+            -0.007441445253789425,
+            2.4135403633117676
+          ],
+          "tail": [
+            0.00374090438708663,
+            -0.016772277653217316,
+            2.4929893016815186
+          ],
+          "rest_matrix": [
+            [
+              0.9998863,
+              0.0112677,
+              0.0100213,
+              0.0028395
+            ],
+            [
+              0.0112678,
+              -0.1166354,
+              -0.9931109,
+              -0.0074414
+            ],
+            [
+              -0.0100212,
+              0.993111,
+              -0.116749,
+              2.4135404
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "headfront",
+          "parent": "Head",
+          "deform": true,
+          "head": [
+            -8.212707847121692e-09,
+            -0.13579656183719635,
+            2.1632747650146484
+          ],
+          "tail": [
+            -5.6795110836560525e-09,
+            -0.215796560049057,
+            2.1632747650146484
+          ],
+          "rest_matrix": [
+            [
+              0.9999999,
+              0.0,
+              2e-07,
+              -0.0
+            ],
+            [
+              0.0,
+              -1.0,
+              1e-07,
+              -0.1357966
+            ],
+            [
+              2e-07,
+              1e-07,
+              -1.0000001,
+              2.1632748
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "bone_contract_sha256": "0e1d06b2f05dbe3d59e9f2730e4ebed1fa2ace8387debe08782ad0a13840faff"
+    }
+  ],
+  "meshes": [
+    {
+      "name": "WindowWatcher",
+      "armature": "WindowWatcherRig",
+      "vertices": 8968,
+      "faces": 11862,
+      "triangles": 11862,
+      "dimensions": [
+        0.8123824596405029,
+        0.45815160870552063,
+        2.4016687870025635
+      ],
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "Material_1"
+      ],
+      "influence_histogram": {
+        "2": 2694,
+        "1": 3389,
+        "4": 1866,
+        "3": 1019
+      },
+      "unweighted_count": 0,
+      "more_than_four_count": 0,
+      "root_weighted_count": 0,
+      "weight_sum_min": 0.999999888241291,
+      "weight_sum_max": 1.0000001137668733,
+      "non_normalized_count": 0,
+      "problem_samples": {
+        "unweighted": [],
+        "more_than_four": [],
+        "root_weighted": []
+      }
+    }
+  ],
+  "actions": [
+    {
+      "name": "GlassTap",
+      "frame_range": [
+        1.0,
+        121.0
+      ],
+      "fcurves": 250,
+      "keyframes": 30250,
+      "paths": [
+        "pose.bones[\"Head\"].location",
+        "pose.bones[\"Head\"].rotation_quaternion",
+        "pose.bones[\"Head\"].scale",
+        "pose.bones[\"Hips\"].location",
+        "pose.bones[\"Hips\"].rotation_quaternion",
+        "pose.bones[\"Hips\"].scale",
+        "pose.bones[\"LeftArm\"].location",
+        "pose.bones[\"LeftArm\"].rotation_quaternion",
+        "pose.bones[\"LeftArm\"].scale",
+        "pose.bones[\"LeftFoot\"].location",
+        "pose.bones[\"LeftFoot\"].rotation_quaternion",
+        "pose.bones[\"LeftFoot\"].scale",
+        "pose.bones[\"LeftForeArm\"].location",
+        "pose.bones[\"LeftForeArm\"].rotation_quaternion",
+        "pose.bones[\"LeftForeArm\"].scale",
+        "pose.bones[\"LeftHand\"].location",
+        "pose.bones[\"LeftHand\"].rotation_quaternion",
+        "pose.bones[\"LeftHand\"].scale",
+        "pose.bones[\"LeftLeg\"].location",
+        "pose.bones[\"LeftLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftLeg\"].scale",
+        "pose.bones[\"LeftShoulder\"].location",
+        "pose.bones[\"LeftShoulder\"].rotation_quaternion",
+        "pose.bones[\"LeftShoulder\"].scale",
+        "pose.bones[\"LeftToeBase\"].location",
+        "pose.bones[\"LeftToeBase\"].rotation_quaternion",
+        "pose.bones[\"LeftToeBase\"].scale",
+        "pose.bones[\"LeftUpLeg\"].location",
+        "pose.bones[\"LeftUpLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftUpLeg\"].scale",
+        "pose.bones[\"RightArm\"].location",
+        "pose.bones[\"RightArm\"].rotation_quaternion",
+        "pose.bones[\"RightArm\"].scale",
+        "pose.bones[\"RightFoot\"].location",
+        "pose.bones[\"RightFoot\"].rotation_quaternion",
+        "pose.bones[\"RightFoot\"].scale",
+        "pose.bones[\"RightForeArm\"].location",
+        "pose.bones[\"RightForeArm\"].rotation_quaternion",
+        "pose.bones[\"RightForeArm\"].scale",
+        "pose.bones[\"RightHand\"].location",
+        "pose.bones[\"RightHand\"].rotation_quaternion",
+        "pose.bones[\"RightHand\"].scale",
+        "pose.bones[\"RightLeg\"].location",
+        "pose.bones[\"RightLeg\"].rotation_quaternion",
+        "pose.bones[\"RightLeg\"].scale",
+        "pose.bones[\"RightShoulder\"].location",
+        "pose.bones[\"RightShoulder\"].rotation_quaternion",
+        "pose.bones[\"RightShoulder\"].scale",
+        "pose.bones[\"RightToeBase\"].location",
+        "pose.bones[\"RightToeBase\"].rotation_quaternion",
+        "pose.bones[\"RightToeBase\"].scale",
+        "pose.bones[\"RightUpLeg\"].location",
+        "pose.bones[\"RightUpLeg\"].rotation_quaternion",
+        "pose.bones[\"RightUpLeg\"].scale",
+        "pose.bones[\"Root\"].location",
+        "pose.bones[\"Root\"].rotation_quaternion",
+        "pose.bones[\"Root\"].scale",
+        "pose.bones[\"Spine\"].location",
+        "pose.bones[\"Spine\"].rotation_quaternion",
+        "pose.bones[\"Spine\"].scale",
+        "pose.bones[\"Spine01\"].location",
+        "pose.bones[\"Spine01\"].rotation_quaternion",
+        "pose.bones[\"Spine01\"].scale",
+        "pose.bones[\"Spine02\"].location",
+        "pose.bones[\"Spine02\"].rotation_quaternion",
+        "pose.bones[\"Spine02\"].scale",
+        "pose.bones[\"head_end\"].location",
+        "pose.bones[\"head_end\"].rotation_quaternion",
+        "pose.bones[\"head_end\"].scale",
+        "pose.bones[\"headfront\"].location",
+        "pose.bones[\"headfront\"].rotation_quaternion",
+        "pose.bones[\"headfront\"].scale",
+        "pose.bones[\"neck\"].location",
+        "pose.bones[\"neck\"].rotation_quaternion",
+        "pose.bones[\"neck\"].scale"
+      ],
+      "slots": [
+        "OBArmature"
+      ]
+    },
+    {
+      "name": "SlowWindowLean",
+      "frame_range": [
+        1.0,
+        151.0
+      ],
+      "fcurves": 250,
+      "keyframes": 37750,
+      "paths": [
+        "pose.bones[\"Head\"].location",
+        "pose.bones[\"Head\"].rotation_quaternion",
+        "pose.bones[\"Head\"].scale",
+        "pose.bones[\"Hips\"].location",
+        "pose.bones[\"Hips\"].rotation_quaternion",
+        "pose.bones[\"Hips\"].scale",
+        "pose.bones[\"LeftArm\"].location",
+        "pose.bones[\"LeftArm\"].rotation_quaternion",
+        "pose.bones[\"LeftArm\"].scale",
+        "pose.bones[\"LeftFoot\"].location",
+        "pose.bones[\"LeftFoot\"].rotation_quaternion",
+        "pose.bones[\"LeftFoot\"].scale",
+        "pose.bones[\"LeftForeArm\"].location",
+        "pose.bones[\"LeftForeArm\"].rotation_quaternion",
+        "pose.bones[\"LeftForeArm\"].scale",
+        "pose.bones[\"LeftHand\"].location",
+        "pose.bones[\"LeftHand\"].rotation_quaternion",
+        "pose.bones[\"LeftHand\"].scale",
+        "pose.bones[\"LeftLeg\"].location",
+        "pose.bones[\"LeftLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftLeg\"].scale",
+        "pose.bones[\"LeftShoulder\"].location",
+        "pose.bones[\"LeftShoulder\"].rotation_quaternion",
+        "pose.bones[\"LeftShoulder\"].scale",
+        "pose.bones[\"LeftToeBase\"].location",
+        "pose.bones[\"LeftToeBase\"].rotation_quaternion",
+        "pose.bones[\"LeftToeBase\"].scale",
+        "pose.bones[\"LeftUpLeg\"].location",
+        "pose.bones[\"LeftUpLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftUpLeg\"].scale",
+        "pose.bones[\"RightArm\"].location",
+        "pose.bones[\"RightArm\"].rotation_quaternion",
+        "pose.bones[\"RightArm\"].scale",
+        "pose.bones[\"RightFoot\"].location",
+        "pose.bones[\"RightFoot\"].rotation_quaternion",
+        "pose.bones[\"RightFoot\"].scale",
+        "pose.bones[\"RightForeArm\"].location",
+        "pose.bones[\"RightForeArm\"].rotation_quaternion",
+        "pose.bones[\"RightForeArm\"].scale",
+        "pose.bones[\"RightHand\"].location",
+        "pose.bones[\"RightHand\"].rotation_quaternion",
+        "pose.bones[\"RightHand\"].scale",
+        "pose.bones[\"RightLeg\"].location",
+        "pose.bones[\"RightLeg\"].rotation_quaternion",
+        "pose.bones[\"RightLeg\"].scale",
+        "pose.bones[\"RightShoulder\"].location",
+        "pose.bones[\"RightShoulder\"].rotation_quaternion",
+        "pose.bones[\"RightShoulder\"].scale",
+        "pose.bones[\"RightToeBase\"].location",
+        "pose.bones[\"RightToeBase\"].rotation_quaternion",
+        "pose.bones[\"RightToeBase\"].scale",
+        "pose.bones[\"RightUpLeg\"].location",
+        "pose.bones[\"RightUpLeg\"].rotation_quaternion",
+        "pose.bones[\"RightUpLeg\"].scale",
+        "pose.bones[\"Root\"].location",
+        "pose.bones[\"Root\"].rotation_quaternion",
+        "pose.bones[\"Root\"].scale",
+        "pose.bones[\"Spine\"].location",
+        "pose.bones[\"Spine\"].rotation_quaternion",
+        "pose.bones[\"Spine\"].scale",
+        "pose.bones[\"Spine01\"].location",
+        "pose.bones[\"Spine01\"].rotation_quaternion",
+        "pose.bones[\"Spine01\"].scale",
+        "pose.bones[\"Spine02\"].location",
+        "pose.bones[\"Spine02\"].rotation_quaternion",
+        "pose.bones[\"Spine02\"].scale",
+        "pose.bones[\"head_end\"].location",
+        "pose.bones[\"head_end\"].rotation_quaternion",
+        "pose.bones[\"head_end\"].scale",
+        "pose.bones[\"headfront\"].location",
+        "pose.bones[\"headfront\"].rotation_quaternion",
+        "pose.bones[\"headfront\"].scale",
+        "pose.bones[\"neck\"].location",
+        "pose.bones[\"neck\"].rotation_quaternion",
+        "pose.bones[\"neck\"].scale"
+      ],
+      "slots": [
+        "OBArmature"
+      ]
+    },
+    {
+      "name": "WatchingIdle",
+      "frame_range": [
+        1.0,
+        181.0
+      ],
+      "fcurves": 250,
+      "keyframes": 45250,
+      "paths": [
+        "pose.bones[\"Head\"].location",
+        "pose.bones[\"Head\"].rotation_quaternion",
+        "pose.bones[\"Head\"].scale",
+        "pose.bones[\"Hips\"].location",
+        "pose.bones[\"Hips\"].rotation_quaternion",
+        "pose.bones[\"Hips\"].scale",
+        "pose.bones[\"LeftArm\"].location",
+        "pose.bones[\"LeftArm\"].rotation_quaternion",
+        "pose.bones[\"LeftArm\"].scale",
+        "pose.bones[\"LeftFoot\"].location",
+        "pose.bones[\"LeftFoot\"].rotation_quaternion",
+        "pose.bones[\"LeftFoot\"].scale",
+        "pose.bones[\"LeftForeArm\"].location",
+        "pose.bones[\"LeftForeArm\"].rotation_quaternion",
+        "pose.bones[\"LeftForeArm\"].scale",
+        "pose.bones[\"LeftHand\"].location",
+        "pose.bones[\"LeftHand\"].rotation_quaternion",
+        "pose.bones[\"LeftHand\"].scale",
+        "pose.bones[\"LeftLeg\"].location",
+        "pose.bones[\"LeftLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftLeg\"].scale",
+        "pose.bones[\"LeftShoulder\"].location",
+        "pose.bones[\"LeftShoulder\"].rotation_quaternion",
+        "pose.bones[\"LeftShoulder\"].scale",
+        "pose.bones[\"LeftToeBase\"].location",
+        "pose.bones[\"LeftToeBase\"].rotation_quaternion",
+        "pose.bones[\"LeftToeBase\"].scale",
+        "pose.bones[\"LeftUpLeg\"].location",
+        "pose.bones[\"LeftUpLeg\"].rotation_quaternion",
+        "pose.bones[\"LeftUpLeg\"].scale",
+        "pose.bones[\"RightArm\"].location",
+        "pose.bones[\"RightArm\"].rotation_quaternion",
+        "pose.bones[\"RightArm\"].scale",
+        "pose.bones[\"RightFoot\"].location",
+        "pose.bones[\"RightFoot\"].rotation_quaternion",
+        "pose.bones[\"RightFoot\"].scale",
+        "pose.bones[\"RightForeArm\"].location",
+        "pose.bones[\"RightForeArm\"].rotation_quaternion",
+        "pose.bones[\"RightForeArm\"].scale",
+        "pose.bones[\"RightHand\"].location",
+        "pose.bones[\"RightHand\"].rotation_quaternion",
+        "pose.bones[\"RightHand\"].scale",
+        "pose.bones[\"RightLeg\"].location",
+        "pose.bones[\"RightLeg\"].rotation_quaternion",
+        "pose.bones[\"RightLeg\"].scale",
+        "pose.bones[\"RightShoulder\"].location",
+        "pose.bones[\"RightShoulder\"].rotation_quaternion",
+        "pose.bones[\"RightShoulder\"].scale",
+        "pose.bones[\"RightToeBase\"].location",
+        "pose.bones[\"RightToeBase\"].rotation_quaternion",
+        "pose.bones[\"RightToeBase\"].scale",
+        "pose.bones[\"RightUpLeg\"].location",
+        "pose.bones[\"RightUpLeg\"].rotation_quaternion",
+        "pose.bones[\"RightUpLeg\"].scale",
+        "pose.bones[\"Root\"].location",
+        "pose.bones[\"Root\"].rotation_quaternion",
+        "pose.bones[\"Root\"].scale",
+        "pose.bones[\"Spine\"].location",
+        "pose.bones[\"Spine\"].rotation_quaternion",
+        "pose.bones[\"Spine\"].scale",
+        "pose.bones[\"Spine01\"].location",
+        "pose.bones[\"Spine01\"].rotation_quaternion",
+        "pose.bones[\"Spine01\"].scale",
+        "pose.bones[\"Spine02\"].location",
+        "pose.bones[\"Spine02\"].rotation_quaternion",
+        "pose.bones[\"Spine02\"].scale",
+        "pose.bones[\"head_end\"].location",
+        "pose.bones[\"head_end\"].rotation_quaternion",
+        "pose.bones[\"head_end\"].scale",
+        "pose.bones[\"headfront\"].location",
+        "pose.bones[\"headfront\"].rotation_quaternion",
+        "pose.bones[\"headfront\"].scale",
+        "pose.bones[\"neck\"].location",
+        "pose.bones[\"neck\"].rotation_quaternion",
+        "pose.bones[\"neck\"].scale"
+      ],
+      "slots": [
+        "OBArmature"
+      ]
+    }
+  ],
+  "issues": [],
+  "warnings": [],
+  "images": [
+    {
+      "name": "texture_0",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "filepath": ""
+    }
+  ]
+}

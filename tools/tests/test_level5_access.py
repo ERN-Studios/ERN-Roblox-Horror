@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the proposed REAL Routing and GameManager access functions in Luau.
+"""Run the current Routing and GameManager access functions in Luau.
 
 This checks authority/transport combinations, not Roblox physics or teleport.
 """
@@ -12,11 +12,13 @@ import tempfile
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--sources", type=Path, required=True)
-    parser.add_argument("--luau", type=Path, required=True)
+    runner = parser.add_mutually_exclusive_group(required=True)
+    runner.add_argument("--luau", type=Path)
+    runner.add_argument("--emit", action="store_true", help="Print the generated Luau for a Studio runner")
     args = parser.parse_args()
     routing = (args.sources / "ServerScriptService/Round Completion Routing.ModuleScript.lua").read_text()
     manager = (args.sources / "ServerScriptService/GameManager.Script.lua").read_text()
-    begin = manager.index("-- LEVEL5_MAP_PREVIEW_20260923. A ceiling")
+    begin = manager.index("local function devCeiling(group)")
     end = manager.index("-- Always-on server authority", begin)
     access = manager[begin:end]
     code = "local Routing = (function()\n" + routing + "\nend)()\n" + r'''
@@ -38,23 +40,29 @@ check(Routing.DevCeiling(true, true), 4, "legacy developer ceiling unchanged")
 check(Routing.NextLevel(3), nil, "no Level 3 continuation")
 check(Routing.NextLevel(4), nil, "no Level 4 continuation")
 check(Routing.NextLevel(5), nil, "no Level 5 continuation")
-for _, four in ipairs({false, true}) do
- for _, five in ipairs({false, true}) do
-  flags.Level4DevEnabled, flags.Level5DevEnabled = four, five
-  for _, developers in ipairs({false, true}) do
-   local group = developers and {true, true} or {true, false}
-   local expectedCeiling = developers and (five and 5 or four and 4 or 3) or 3
-   check(devCeiling(group), expectedCeiling, "derived ceiling")
-   for level = 1, 6 do
-    local expected = level <= 3 or developers and ((level == 4 and four) or (level == 5 and five))
-    check(canAccessLevel(level, group), expected == true, "exact requested level " .. level)
+for _, public in ipairs({false, true}) do
+ flags.Level5PublicPreviewEnabled = public
+ for _, four in ipairs({false, true}) do
+  for _, five in ipairs({false, true}) do
+   flags.Level4DevEnabled, flags.Level5DevEnabled = four, five
+   for _, developers in ipairs({false, true}) do
+    local group = developers and {true, true} or {true, false}
+    local expectedCeiling = developers and (five and 5 or four and 4 or 3) or 3
+    check(devCeiling(group), expectedCeiling, "developer ceiling independent of obsolete public flag")
+    for level = 1, 6 do
+     local expected = level <= 3 or developers and ((level == 4 and four) or (level == 5 and five))
+     check(canAccessLevel(level, group), expected == true, "exact requested level " .. level)
+    end
    end
   end
  end
 end
 flags.Level4DevEnabled, flags.Level5DevEnabled = false, true
+flags.Level5PublicPreviewEnabled = true
 check(canAccessLevel(4, {true}), false, "5 enabled never bypasses 4 off")
 check(canAccessLevel(5, {true}), true, "5 independent of 4 off")
+check(canAccessLevel(5, {false}), false, "obsolete public flag cannot admit ordinary player")
+check(canAccessLevel(5, {true, false}), false, "obsolete public flag cannot admit mixed party")
 check(canAccessLevel(5, {}), false, "empty group refused")
 check(canAccessLevel(5, nil), false, "missing group refused")
 check(canAccessLevel(4.5, {true}), false, "fractional development level refused")
@@ -67,8 +75,11 @@ local parsed = Routing.SelectArrivalSession({{Member="dev1",Data=packet},{Member
 check(parsed.Level, 5, "destination parser keeps level 5")
 check(canAccessLevel(parsed.Level, {true,false}), false, "forged mixed roster cannot use packet")
 check(Routing.ArrivalPacket({Level=5,Ceiling=3,SessionId="ordinary",Expected=1}).Level, 3, "ordinary transport ceiling remains 3")
-print("PASS: " .. checks .. " access/transport assertions against proposed production source")
+print("PASS: " .. checks .. " access/transport assertions against current source")
 '''
+    if args.emit:
+        print(code)
+        return
     with tempfile.TemporaryDirectory(prefix="level5-access-") as tmp:
         path = Path(tmp) / "checks.luau"
         path.write_text(code)

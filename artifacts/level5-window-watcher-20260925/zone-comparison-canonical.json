@@ -1,0 +1,302 @@
+{
+  "checkedUtc": "2026-09-25T14:16:46.511774+00:00",
+  "method": "Parse each encoded JSON row; recursively normalize signed zero, canonicalize object keys, sort the complete multiset (duplicates retained). Verify contiguous 400-row chunk offsets and declared counts. Compare exact exported values without rounding.",
+  "scope": "Read-only native exported zone signatures. No source or Studio mutations. Exported properties, not every Roblox instance property/attribute.",
+  "zones": [
+    {
+      "zone": "A_BalconyAtrium",
+      "baselineRows": 1259,
+      "finalRows": 1259,
+      "equal": true,
+      "baselineSha256": "09b52ead3b48d1f249b95aef5acc79a55feb1da914aaea3916a7c354b6f91ef3",
+      "finalSha256": "09b52ead3b48d1f249b95aef5acc79a55feb1da914aaea3916a7c354b6f91ef3",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "B_LowEavesArcade",
+      "baselineRows": 584,
+      "finalRows": 584,
+      "equal": true,
+      "baselineSha256": "114b24ec7dd15d3f0d83df9cda54163573e67bab34e2e73f374f7cd65337a387",
+      "finalSha256": "114b24ec7dd15d3f0d83df9cda54163573e67bab34e2e73f374f7cd65337a387",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "C_PastelVillage",
+      "baselineRows": 1671,
+      "finalRows": 1671,
+      "equal": true,
+      "baselineSha256": "035d852448c96df54d7351b484eec4e841d6c2f4b85f6a01d75b8dce834763bc",
+      "finalSha256": "035d852448c96df54d7351b484eec4e841d6c2f4b85f6a01d75b8dce834763bc",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "D_FloralTerraces",
+      "baselineRows": 1452,
+      "finalRows": 1452,
+      "equal": true,
+      "baselineSha256": "ea42009749b1036c2d697899bdf92302b522179ed4def818d6305478cacd296e",
+      "finalSha256": "ea42009749b1036c2d697899bdf92302b522179ed4def818d6305478cacd296e",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "E_DomesticLabyrinth",
+      "baselineRows": 708,
+      "finalRows": 708,
+      "equal": true,
+      "baselineSha256": "59528f73a1961907aaa40d29d06391231c480bf6479e640907c4f1aa13fa6f31",
+      "finalSha256": "59528f73a1961907aaa40d29d06391231c480bf6479e640907c4f1aa13fa6f31",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "F_BayWindowCanyon",
+      "baselineRows": 5334,
+      "finalRows": 4708,
+      "equal": false,
+      "baselineSha256": "4c964c384f264fb96a95eb4588ed43c251d4b6862fe8afe70b38bf137bfa8e52",
+      "finalSha256": "6cd516b29d95b2de99e1c7e37a0c778096516d606aa453e00bf5f5607043de0a",
+      "removedRows": 5214,
+      "addedRows": 4588
+    },
+    {
+      "zone": "G_TiltedSubdivision",
+      "baselineRows": 1566,
+      "finalRows": 1566,
+      "equal": true,
+      "baselineSha256": "37353788eb13f45061969e1dff5ae35133ae1e1fd3515508d579a5d01725b8e5",
+      "finalSha256": "37353788eb13f45061969e1dff5ae35133ae1e1fd3515508d579a5d01725b8e5",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "H_LastHouse",
+      "baselineRows": 266,
+      "finalRows": 266,
+      "equal": true,
+      "baselineSha256": "96b2e36261d2cd4a0674f8a63da7504c3af1cafcf9cd882efab79d056f2244b9",
+      "finalSha256": "96b2e36261d2cd4a0674f8a63da7504c3af1cafcf9cd882efab79d056f2244b9",
+      "removedRows": 0,
+      "addedRows": 0
+    },
+    {
+      "zone": "MyceliumWallGrowth",
+      "baselineRows": 16,
+      "finalRows": 16,
+      "equal": false,
+      "baselineSha256": "6dcb276b4c38161898abfdb3441e8ee372a58c72ae880cd398a581f20245842c",
+      "finalSha256": "764ee46ad02a51bdc93f9637f78e54818f74fc7f123d019f7d27a8828097e243",
+      "removedRows": 3,
+      "addedRows": 3,
+      "changedBaselineRows": [
+        {
+          "cf": [
+            16850.6796875,
+            69.05000305175781,
+            902,
+            0,
+            0,
+            -1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonWestRising",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            67.5,
+            90,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        },
+        {
+          "cf": [
+            17055,
+            72.05000305175781,
+            1015.3099975585938,
+            1,
+            0,
+            0,
+            0,
+            0.9999999403953552,
+            0,
+            0,
+            0,
+            0.9999999403953552
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonRearRising",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            72,
+            96,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        },
+        {
+          "cf": [
+            17149.3203125,
+            99,
+            866,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            -1,
+            0,
+            0
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonUpperSeam",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            52,
+            52,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        }
+      ],
+      "changedFinalRows": [
+        {
+          "cf": [
+            16850.6796875,
+            50.04999923706055,
+            902,
+            0,
+            0,
+            -1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonWestRising",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            39,
+            52,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        },
+        {
+          "cf": [
+            17055,
+            51.04999923706055,
+            1015.3099975585938,
+            1,
+            0,
+            0,
+            0,
+            0.9999999403953552,
+            0,
+            0,
+            0,
+            0.9999999403953552
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonRearRising",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            40.5,
+            54,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        },
+        {
+          "cf": [
+            17149.3203125,
+            66,
+            866,
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            -1,
+            0,
+            0
+          ],
+          "class": "Part",
+          "collide": 0,
+          "color": [
+            0.9098039269447327,
+            0.8823529481887817,
+            0.8039215803146362
+          ],
+          "material": "SmoothPlastic",
+          "name": "CanyonUpperSeam",
+          "query": 0,
+          "shadow": 0,
+          "size": [
+            28,
+            28,
+            0.014999999664723873
+          ],
+          "transparency": 1
+        }
+      ]
+    }
+  ],
+  "unaffectedZonesExact": true,
+  "unaffectedZoneCount": 7,
+  "moldOnlyFColoniesChanged": true
+}

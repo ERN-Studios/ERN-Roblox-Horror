@@ -1,0 +1,492 @@
+{
+  "date": "2026-09-27",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 6885,
+      "sha256": "a29fd07a2884ab09a3beb430db86d8a461ac10b60699436e6f5e0a9b106ab5be"
+    },
+    {
+      "file": "access-drafts/README.md",
+      "bytes": 3365,
+      "sha256": "c06157a92f62cb2fac3d626bdf10fc04a92f555b1cf05faf1476a670cf3513fa"
+    },
+    {
+      "file": "access-drafts/access.patch",
+      "bytes": 9767,
+      "sha256": "9308d76e5ac50a641db8dbb61f31e915c20c6282be1101f78254c19528b27f3f"
+    },
+    {
+      "file": "access-drafts/build_drafts.py",
+      "bytes": 8010,
+      "sha256": "afe2eef3dd3e509b7969f2377c8bb8da3defb22848b2526ae199101dcb0786ec"
+    },
+    {
+      "file": "access-drafts/manifest.json",
+      "bytes": 808,
+      "sha256": "11940b19db194d5b1c90c66d6db0e7a3bc4d4273b4dad5d0811735ec939429d9"
+    },
+    {
+      "file": "access-drafts/validation.json",
+      "bytes": 1003,
+      "sha256": "cf3fbfe31e8082d29f020fa60a854c93fd3fc85df04e4cd9c9452cc1b6db659a"
+    },
+    {
+      "file": "access-drafts/verify_drafts.py",
+      "bytes": 7278,
+      "sha256": "7de57efae9c634d25d6ad09973de4d8462128c31b1eb3b96a74cda3d12baddce"
+    },
+    {
+      "file": "cas-payloads/01-game-manager.apply.luau",
+      "bytes": 8952,
+      "sha256": "929f1b3b4a5a76e3f1b3406af75a019dc398f526e432d350b20bf65a2ca9475a"
+    },
+    {
+      "file": "cas-payloads/01-game-manager.verify.luau",
+      "bytes": 1066,
+      "sha256": "33a65cbc5e11477c66ba7e48388e34415dab050d38b5d9f5729005b44d1f7614"
+    },
+    {
+      "file": "cas-payloads/02-level5-adapter.apply.luau",
+      "bytes": 9372,
+      "sha256": "cd232341adf99740673822baa32db59cbc44e56c8b42dfd02287e16005aec89a"
+    },
+    {
+      "file": "cas-payloads/02-level5-adapter.verify.luau",
+      "bytes": 1100,
+      "sha256": "616c5b3ab0721744e3056e7ccfe23bfa5d51563ff1c0bcc8b7283129b9f8cb6e"
+    },
+    {
+      "file": "cas-payloads/03-window-watcher.apply.luau",
+      "bytes": 7597,
+      "sha256": "3efe6d514515c224fd0cebe6c2094a8a924453ffbfe6973fd555f15110ff17dc"
+    },
+    {
+      "file": "cas-payloads/03-window-watcher.verify.luau",
+      "bytes": 1112,
+      "sha256": "b627f07ec180fabf2549fecdebc2047d6651fa3ac2451a116b5d2040708179af"
+    },
+    {
+      "file": "cas-payloads/04-lobby-builder.apply.luau",
+      "bytes": 20532,
+      "sha256": "11684ccc47c708ab0b4ee3610dd176ae8ec88f69742eca2790f1c2eef7fdc6cf"
+    },
+    {
+      "file": "cas-payloads/04-lobby-builder.verify.luau",
+      "bytes": 1081,
+      "sha256": "595bde0b56e62c432a80e3e0c61315f21949512bf88b1c0d36c6c4fb1918085c"
+    },
+    {
+      "file": "cas-payloads/05-outage.apply.luau",
+      "bytes": 5498,
+      "sha256": "87e668ba98572df403fb31df04ed8feb20684d8f565f6deadbabe9a6c9500663"
+    },
+    {
+      "file": "cas-payloads/05-outage.verify.luau",
+      "bytes": 1097,
+      "sha256": "a2d11c9e30f406a4455175b31e67c469e65c41039f25da5a5f6b5c1f967b8924"
+    },
+    {
+      "file": "cas-payloads/06-b-clue.apply.luau",
+      "bytes": 5527,
+      "sha256": "10a0f2d699af36fff062b7eb3c63aef6055efb8f763b1ebecef9a28128e90c5e"
+    },
+    {
+      "file": "cas-payloads/06-b-clue.verify.luau",
+      "bytes": 1106,
+      "sha256": "4c853620283255a8eb781afad068de711fd55424290e1548258290148026d002"
+    },
+    {
+      "file": "cas-payloads/FINGERPRINTS.md",
+      "bytes": 1614,
+      "sha256": "51421e5100533d134be211666601fc5633d5f8267e1fcae3ae7933862da404e4"
+    },
+    {
+      "file": "cas-payloads/README.md",
+      "bytes": 3818,
+      "sha256": "10bffc391713514c0583987a57059d129f90afb79bfa9811e1cff63ee638eb43"
+    },
+    {
+      "file": "cas-payloads/build_payloads.py",
+      "bytes": 10867,
+      "sha256": "7715cea6600691959c0b4afe13b727b59506465b7370deb28fe26fbc1588fa7d"
+    },
+    {
+      "file": "cas-payloads/manifest.json",
+      "bytes": 9592,
+      "sha256": "21196cda543648191c3fbaddf7ba56dd271745a073c453988d74d3e7381f080e"
+    },
+    {
+      "file": "cas-payloads/test_payloads.py",
+      "bytes": 5912,
+      "sha256": "23911afb87b89d9dfc3d7c0a09d088f190e73992d79d00c2d883a5446fc9ef93"
+    },
+    {
+      "file": "cas-payloads/validation.json",
+      "bytes": 1067,
+      "sha256": "abc32ccca82bcd53006c3b296fc6b873f58065cb6a9f2150ce0f5861ed5c720d"
+    },
+    {
+      "file": "closure/GameManager.Script.closure.diff",
+      "bytes": 784,
+      "sha256": "c53a89ebfd14f4f2cc60f6327ac64d02ac970ba62b741e13ed6fb0d0843d38c3"
+    },
+    {
+      "file": "closure/SOURCE_MIRROR_AUDIT.md",
+      "bytes": 2188,
+      "sha256": "3d6002d70ccf153dd5e7158f4f2b9ca8302a0b52f21ac21418107ec50def4b9e"
+    },
+    {
+      "file": "closure/TunnelLobbyBuilder.ModuleScript.closure.diff",
+      "bytes": 862,
+      "sha256": "b415ef10ddca9863b38603e62ffd48b6509f2723ddc1522f54ed682f7c3d2dc9"
+    },
+    {
+      "file": "closure/close_level5_access.luau",
+      "bytes": 3104,
+      "sha256": "d37b18054e8623cb17b647eb04aac14eeada498b358021ff912ebdeef196e6a7"
+    },
+    {
+      "file": "closure/close_station_registration.luau",
+      "bytes": 883,
+      "sha256": "12820b2aa8bcca6b19d5de5606846289e0953b7b1d86886a47796e7d0873c889"
+    },
+    {
+      "file": "closure/install-receipt.json",
+      "bytes": 394,
+      "sha256": "5b248c47e2357aaa1faac2fcf28bb91f0ab17cc98e31813c7d297c79e90b7a91"
+    },
+    {
+      "file": "closure/mirror-verification.json",
+      "bytes": 709,
+      "sha256": "5e303a34b1630942a90a717644841b20218a4a75e664b532792b08cf7a65b220"
+    },
+    {
+      "file": "closure/native-closed-lobby.json",
+      "bytes": 369,
+      "sha256": "1f2865f16e14bd91053648eda6485c197a37a90201e05ae5553bbfe436de9d7c"
+    },
+    {
+      "file": "closure/native-lobby-final-properties.json",
+      "bytes": 130846,
+      "sha256": "bc7cef651fd3524a11779aece3ed8e4823bf43e1e88cefd7d30c44557cf58225"
+    },
+    {
+      "file": "closure/offline-verification.json",
+      "bytes": 549,
+      "sha256": "1f49ed9d1d25d85537573df0b157c8e2972847f7e39b8f4ffb33f89b12e096ce"
+    },
+    {
+      "file": "closure/run_offline_verification.py",
+      "bytes": 4850,
+      "sha256": "088b671a6530ca4494b911153e82655c1382ffcb403b78d17efc6c06978ca6c4"
+    },
+    {
+      "file": "closure/source-transitions.json",
+      "bytes": 1782,
+      "sha256": "2d3420aa3b5a0f11acd38006aba199e17a77d88df31db298dc684df5d3c45cb3"
+    },
+    {
+      "file": "closure/station-registration-receipt.json",
+      "bytes": 176,
+      "sha256": "6126ba398f68ba4c338a9920a5f44ceb94012ca9c855cb92c96f6df8fe3f66e4"
+    },
+    {
+      "file": "closure/studio-closure-fingerprints.txt",
+      "bytes": 141,
+      "sha256": "3b28cd61ce9aadbb95ac56f60a255b01615834df452a64cb422cfa5bc925d608"
+    },
+    {
+      "file": "closure/verified-source-receipt.json",
+      "bytes": 1560,
+      "sha256": "e59521095a7dd7bce5c0e316fa3f1053f685ce732bf77f35b1140d7a66799af0"
+    },
+    {
+      "file": "clue-drafts/README.md",
+      "bytes": 750,
+      "sha256": "1a38fe331ff1025969907272d01f92801f703156bd9cf90e8eb49b88e3b866e3"
+    },
+    {
+      "file": "clue-drafts/clue.patch",
+      "bytes": 841,
+      "sha256": "bf3d7638f59b57f5ba3edb7b006a06ba5961002d2001a0cae959514902f041ed"
+    },
+    {
+      "file": "clue-drafts/manifest.json",
+      "bytes": 294,
+      "sha256": "84e2a45905dcf890997391a79a17cf147bb85003386b2eaf68d8a1f002121de5"
+    },
+    {
+      "file": "final-native-audit/audit_final_native.py",
+      "bytes": 8306,
+      "sha256": "ca71367664d126386e82675c257756b1a6a17375d4a249fa5869a0f2e9b2e04a"
+    },
+    {
+      "file": "final-native-audit/expected-native-script-index.json",
+      "bytes": 155552,
+      "sha256": "22fed2acd19663f6e9deaa6bdfcdf5fb9a38dd6c6b90b6e3c5234704ac958c23"
+    },
+    {
+      "file": "final-native-audit/post-install-expected-script-index.json",
+      "bytes": 154680,
+      "sha256": "d63af318996911b9cf9d0a71bf6b361569f0b67a8ea47d90f8748096f366060b"
+    },
+    {
+      "file": "final-native-audit/prechange-rejection-against-reopened.json",
+      "bytes": 77561,
+      "sha256": "0b09f0eebd2685f26b5a015fc1ec28cb8e9739e16fa49f459b07387d96f8155c"
+    },
+    {
+      "file": "final-native-audit/stale-autosave-audit.json",
+      "bytes": 77200,
+      "sha256": "503c82a8faca684033a8b4c00694d069b62605b7760bb6134f96516962392c19"
+    },
+    {
+      "file": "lobby-drafts/README.md",
+      "bytes": 5219,
+      "sha256": "194eea911b01da73bf6c20673ed1621cf3984b15620a53cd84ae067a54ffe7b0"
+    },
+    {
+      "file": "lobby-drafts/TunnelLobbyBuilder.diff",
+      "bytes": 14884,
+      "sha256": "2b2b83a80372142b85b5aaad8a28957321ffbe461a42e1bbc3f67b79225d7a4d"
+    },
+    {
+      "file": "lobby-drafts/draft-manifest.json",
+      "bytes": 681,
+      "sha256": "bd7b74a9d3013963f77255b961e04004130fb076722de9a8a1ade641b0788c80"
+    },
+    {
+      "file": "lobby-drafts/geometry-checks.txt",
+      "bytes": 229,
+      "sha256": "8daf9f4d3d6dd3e3966e085cd15f068394b381532c45c2b98b129b1f6a86e2a5"
+    },
+    {
+      "file": "lobby-drafts/mock_prefix.luau",
+      "bytes": 3885,
+      "sha256": "f3b905c047abf8f58f7af3d9edd7b65cb00918625bb2d76908a1a6cfda80dab0"
+    },
+    {
+      "file": "lobby-drafts/mock_suffix.luau",
+      "bytes": 6105,
+      "sha256": "a2e9ce074fc6b6e3361a0c0b70aa2f0a6f750099a1cf799c258553a4e0e453ad"
+    },
+    {
+      "file": "lobby-drafts/run_geometry_checks.py",
+      "bytes": 597,
+      "sha256": "cc0c725f5b746f6728d0d2fb454fa5cb6236d91c824757c0288c7f8be37abb7c"
+    },
+    {
+      "file": "lobby-drafts/styleLevelFiveRoom.luau",
+      "bytes": 13186,
+      "sha256": "5115f8bb8cdfb8389f6381b0bc4e5a9cbabab4fbc09e525c25243fccaca64cf2"
+    },
+    {
+      "file": "outage-drafts/README.md",
+      "bytes": 1325,
+      "sha256": "39bee68e0d538361a01db2d6b23bce6564a7e63114cecd78050517cc91126219"
+    },
+    {
+      "file": "outage-drafts/build_and_verify.py",
+      "bytes": 8635,
+      "sha256": "8bd4e95f6f6cd46480ecd9bd9c474987341832622d218e2be676d2e9f4102c96"
+    },
+    {
+      "file": "outage-drafts/manifest.json",
+      "bytes": 440,
+      "sha256": "6c296429edaec7e1c0a30229fe9b6672cf8e5702c94bb311eb848e8d1634a4d5"
+    },
+    {
+      "file": "outage-drafts/outage.patch",
+      "bytes": 892,
+      "sha256": "119171fa17a75c962b968a5617085ad0fef334152d292895ca43dff956f48027"
+    },
+    {
+      "file": "outage-drafts/validation.json",
+      "bytes": 511,
+      "sha256": "32e8b4ff58c78889c282edca9a9ea79428312db4ed60b016c69ed7f0502c136a"
+    },
+    {
+      "file": "package-copy-validation.json",
+      "bytes": 28114,
+      "sha256": "c88af819767d830a4842d1660a39f62215e05bb1ed86364d6f7c3867987bb3b2"
+    },
+    {
+      "file": "package-repo-validation.json",
+      "bytes": 550,
+      "sha256": "545b27eeecce9bddcdc19ce65ddccc4d18b10923d1021cd7af67f6633269c766"
+    },
+    {
+      "file": "post-install/README.md",
+      "bytes": 1226,
+      "sha256": "0f0fe29281ac089cb5c3dccb5ba79a82ce3dc979c1790cf19103c2b60b34be3a"
+    },
+    {
+      "file": "post-install/comparison.json",
+      "bytes": 888,
+      "sha256": "d61c832704d504eeb4362931b01f9448c6f6ca37ca79b6919504fc4b9e10d236"
+    },
+    {
+      "file": "post-install/live-index.json",
+      "bytes": 111432,
+      "sha256": "b9f38f019308fd2eda71a73e3a15a259d38b01bcddceadbcf304b1104b7cadc6"
+    },
+    {
+      "file": "post-install/repo-parity.txt",
+      "bytes": 297,
+      "sha256": "842eb95803298c838f0749cb6096f34c3faa2132ecdf1c1e075aba865849a0aa"
+    },
+    {
+      "file": "post-install/source-index.json",
+      "bytes": 4619,
+      "sha256": "8fb83d08c9f99f6ee27f657aa75c01f284e13b9693d611db08db9d695d7a2716"
+    },
+    {
+      "file": "post-install/studio-source-fingerprints.txt",
+      "bytes": 18362,
+      "sha256": "4aaaf85ccacdac11a6a243e32c09d62daa06821f40045e28b56a541a45ff14ba"
+    },
+    {
+      "file": "post-reopen-concurrent/editor-sources/ServerScriptService/Level6Renovation.ModuleScript.lua",
+      "bytes": 28679,
+      "sha256": "d0853a3f7c4d80ad6718c5a54147afc0b943e12ba8c9d04c63558a5782aa7cd2"
+    },
+    {
+      "file": "post-reopen-concurrent/receipt.json",
+      "bytes": 1058,
+      "sha256": "c5d52c2db815ecca0f98c1e051f36a90808d5e47e288164f35b17646c532cdcf"
+    },
+    {
+      "file": "post-reopen-concurrent/sources/ServerScriptService/Level6Renovation.ModuleScript.lua",
+      "bytes": 28679,
+      "sha256": "d0853a3f7c4d80ad6718c5a54147afc0b943e12ba8c9d04c63558a5782aa7cd2"
+    },
+    {
+      "file": "puzzle-review/REVIEW.md",
+      "bytes": 6442,
+      "sha256": "7b37d67b8498a2ce7f84367b75111b65b086958c50ddf54f8ff455524b2c7e61"
+    },
+    {
+      "file": "puzzle-review/ROUND_EXIT_DIAGNOSIS.md",
+      "bytes": 2185,
+      "sha256": "d633db60f6fd9cf513cba8bbb45d0bfc883ab029cdc4532170057b12af857494"
+    },
+    {
+      "file": "puzzle-review/inspect_clues_readonly.luau",
+      "bytes": 3849,
+      "sha256": "b0d71eddb2404ca507cbbc2b17f016dac65c0326dde6a3e20164fbcb70db0a8c"
+    },
+    {
+      "file": "puzzle-review/inspect_household_puzzle_ui_v2150.luau",
+      "bytes": 5809,
+      "sha256": "78e1ba2bdbd9b19619bee4eb49cef47ce41eef38c20174de5c1df9ebca4bfdbb"
+    },
+    {
+      "file": "puzzle-review/test_level5_puzzle_catalog.luau",
+      "bytes": 4648,
+      "sha256": "8ffcea8e2e0a7657aaf9b76ff317c1542219577ba4447b3fa9c6e8971490bf42"
+    },
+    {
+      "file": "puzzle-review/test_puzzle_layout_math.luau",
+      "bytes": 2512,
+      "sha256": "a8c2dbd1e7b2a9709b9f904631cd343916094c547cc48f5d189ec6ea039bf89b"
+    },
+    {
+      "file": "puzzle-review/verification.json",
+      "bytes": 3444,
+      "sha256": "9e0a9c24da46da9086eea6afbca2d88d9aebe9b4e0c355e0ff59151fdbea83e3"
+    },
+    {
+      "file": "qa/closure-final-publication.txt",
+      "bytes": 509,
+      "sha256": "ad6726ee14c568064b83e7363cd711902ebac54c163ea892f04eff02f2578c81"
+    },
+    {
+      "file": "qa/closure-publication.txt",
+      "bytes": 509,
+      "sha256": "3660bce25a82593ce1eb07c5a73bd7725ebee7a251d9e4bed1aaa46cad43513d"
+    },
+    {
+      "file": "qa/clues-fresh.json",
+      "bytes": 20392,
+      "sha256": "46c3e13a766081dce9e98d294a0cf663f473dcbc20aee512d570c90e23abedee"
+    },
+    {
+      "file": "qa/native-lobby-after-reopen.json",
+      "bytes": 645,
+      "sha256": "ada89834bc7dc48aaae9727e3ed8ec755fb2f29ae19bc0d6fbe5fdb958a13b59"
+    },
+    {
+      "file": "qa/native-lobby-before.json",
+      "bytes": 86124,
+      "sha256": "00464cd09424f4cbac262818d2a888b22517b351b587340bb5cb8c1f93c79b34"
+    },
+    {
+      "file": "qa/native-session-notes.md",
+      "bytes": 2279,
+      "sha256": "da9eaae89f46ef254e4e881cf2eb87512b7c499c1728b73c5bf716b2d17976d6"
+    },
+    {
+      "file": "qa/native-session2-receipts.json",
+      "bytes": 41217,
+      "sha256": "0cd764ce4d07e240c9ad57755ea4f7fa0c22ce5df6fd85cc2f50459df5899b89"
+    },
+    {
+      "file": "qa/publish-v2153.txt",
+      "bytes": 513,
+      "sha256": "65f2ff93ed86455ac0efb14fdece96c5457cb25824216e227f6d69483d55c973"
+    },
+    {
+      "file": "qa/readiness-fresh.json",
+      "bytes": 3253,
+      "sha256": "1e79bc2a54231ff898ee5faa9ecab489e7d5392bb8069a29e1ee2a6d01e3ce34"
+    },
+    {
+      "file": "qa/reopened-fingerprint-audit.luau",
+      "bytes": 2365,
+      "sha256": "5313dd1298a6c58242d85b3eb74c2cdbd0cc50a06a7ac74a5b4d4f95568509b6"
+    },
+    {
+      "file": "qa/reopened-script-audit-20260927T105952Z.json",
+      "bytes": 1289,
+      "sha256": "8363c9142500e9904805e80f597a0aca058f46d15623263f6e2b2a5fa6e5984d"
+    },
+    {
+      "file": "qa/reopened-script-index-20260927T105952Z.json",
+      "bytes": 121660,
+      "sha256": "ad34866d0531f48ba11bf3c3e6e1f0bf7099eaa0d5954989c4cbe653a21cdae3"
+    },
+    {
+      "file": "qa/scoped-install-receipts.json",
+      "bytes": 2574,
+      "sha256": "54c01fe1cc1848cb3c0a979f37525a5834774090f896f3811482d6308401daf6"
+    },
+    {
+      "file": "recovery/Studio-AutoRecovery-20260927-121430.rbxl",
+      "bytes": 17362339,
+      "sha256": "13710246d8b2f634631418080f7cfe3eda6110791e88517bda7a5219910acc92"
+    },
+    {
+      "file": "recovery/audit_rbxl.py",
+      "bytes": 7599,
+      "sha256": "3841f3444f95cf190f2ea07cc383f85728180509059a65e91e51b344b0418b6b"
+    },
+    {
+      "file": "recovery/offline-rbxl-audit.json",
+      "bytes": 77190,
+      "sha256": "fd5281e684caf717f2c54c05e199b4256c64aef897161b059afc2fae728360b5"
+    },
+    {
+      "file": "replay-validation.json",
+      "bytes": 8795,
+      "sha256": "2ae7ad4f82b621d1d01342ef8db67cb5703cceef1c15f8f4ba876282c794b8d5"
+    },
+    {
+      "file": "replay_checks.py",
+      "bytes": 6525,
+      "sha256": "b6ca42063fee41e2ec49cc25eceb65abf60b75e88e27f492c6a77659befe28df"
+    }
+  ],
+  "count": 97,
+  "totalBytes": 18813566
+}

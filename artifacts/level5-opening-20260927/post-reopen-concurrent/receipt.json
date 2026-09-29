@@ -1,0 +1,31 @@
+{
+  "universeId": 10559217407,
+  "placeId": 131311258779917,
+  "names": [
+    "ServerScriptService",
+    "Level6Renovation"
+  ],
+  "observedAtUtc": "2026-09-27T11:01:28Z",
+  "editorDjb2": 152901484,
+  "path": "ServerScriptService.Level6Renovation",
+  "properties": {
+    "Archivable": true,
+    "LinkedSource": ""
+  },
+  "editorFnv1a": 4187561088,
+  "sourceFnv1a": 4187561088,
+  "sourceDjb2": 152901484,
+  "version": 2150,
+  "equal": true,
+  "editorLength": 28679,
+  "class": "ModuleScript",
+  "sourceLength": 28679,
+  "stableDuringRead": true,
+  "sourceSha256": "d0853a3f7c4d80ad6718c5a54147afc0b943e12ba8c9d04c63558a5782aa7cd2",
+  "sourceFile": "sources/ServerScriptService/Level6Renovation.ModuleScript.lua",
+  "editorSha256": "d0853a3f7c4d80ad6718c5a54147afc0b943e12ba8c9d04c63558a5782aa7cd2",
+  "editorFile": "editor-sources/ServerScriptService/Level6Renovation.ModuleScript.lua",
+  "matches105952Audit": true,
+  "readOnly": true,
+  "scope": "Concurrent developer script preserved separately; not installed or mirrored into runtime repository paths."
+}

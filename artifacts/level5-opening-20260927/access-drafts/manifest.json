@@ -1,0 +1,17 @@
+[
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "baselineSha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+    "draftSha256": "6809d69fee8c15c4039d586a1ddde5bb7b20f2c5a6412fa4f031e40e5571b7ae"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "baselineSha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
+    "draftSha256": "2acd7dc20a27eea96989dea6bfd4eb6fdc7bb63f344b7dd2883654acb8e3239f"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "baselineSha256": "a69ca35ac4ace9bbe462801ca7397ab12be7dbeceab74e7b15ce9c81f2483f59",
+    "draftSha256": "46120fc6e0379138094e9cac08a73dd21e650c732309833627847d4fd40d87da"
+  }
+]

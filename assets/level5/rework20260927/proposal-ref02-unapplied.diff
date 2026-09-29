@@ -1,0 +1,141 @@
+diff --git a/ServerScriptService/Level 5 Systems/Level 5 Reference Facades.ModuleScript.lua b/ServerScriptService/Level 5 Systems/Level 5 Reference Facades.ModuleScript.lua
+index 6816ca0..32a95ed 100644
+--- a/ServerScriptService/Level 5 Systems/Level 5 Reference Facades.ModuleScript.lua	
++++ b/ServerScriptService/Level 5 Systems/Level 5 Reference Facades.ModuleScript.lua	
+@@ -36,7 +36,7 @@ local COLORS = {
+ 	ceilingDark = Color3.fromRGB(120, 118, 112), -- uneven/dark tile bays
+ 	tBar = Color3.fromRGB(225, 225, 220),
+ 	fluorescent = Color3.fromRGB(228, 236, 236), -- Neon panel only, no light object
+-	corridorWall = Color3.fromRGB(226, 218, 198), -- plain cream right wall
++	corridorWall = Color3.fromRGB(224, 207, 177), -- warm cream right wall
+ 	corridorBacking = Color3.fromRGB(214, 206, 188),
+ 	corridorEnd = Color3.fromRGB(200, 192, 172),
+ 	opening = Color3.fromRGB(34, 34, 36),
+@@ -81,8 +81,8 @@ local COLORS = {
+ -- Estimated reference cameras, each in its builder's local space.
+ -- View 1: origin = ground level at the center of the cottage front wall; cottage faces local -Z.
+ local VIEW1_CAMERA = { offset = Vector3.new(-8, 5.5, -58), target = Vector3.new(2, 55, 78), fov = 70 }
+--- View 2: origin = floor at the corridor centerline, near end; the hall runs toward local -Z.
+-local VIEW2_CAMERA = { offset = Vector3.new(1, 5.5, -2), target = Vector3.new(0, 5, -120), fov = 70 }
++-- View 2: camera sits by the near left frontage and looks obliquely down local -Z.
++local VIEW2_CAMERA = { offset = Vector3.new(-3.5, 5.5, -0.5), target = Vector3.new(-29.5, 5, -120), fov = 70 }
+ -- View 3: origin = ground at the center of the cottage front wall; cottage faces local -Z.
+ local VIEW3_CAMERA = { offset = Vector3.new(-8, 5.5, -50), target = Vector3.new(8, 58, 42), fov = 74 }
+ -- View 4: same convention; low camera tilted up to stress tower height.
+@@ -560,7 +560,9 @@ function Facades.BuildCorridor(K, parent, frame)
+ 
+ 	-- Three tile columns and thirty rows, with the transverse bars kept visible
+ 	-- from the low camera. The light panels sit inside the central tile column.
+-	piece(shell, "Ceiling", V(CW, 0.5, CL), CF(0, CH + 0.25, -CL / 2), COLORS.ceilingTile)
++	-- The first open doorway is seen obliquely; extend the ceiling over its
++	-- recessed room so the upper-left edge cannot reveal the outdoor sky.
++	piece(shell, "Ceiling", V(CW + 7, 0.5, CL + 4), CF(-2.5, CH + 0.25, -CL / 2 + 2), COLORS.ceilingTile)
+ 	for _, x in ipairs({ -2, 2 }) do
+ 		piece(shell, "CeilingTBar", V(0.25, 0.1, CL), CF(x, CH - 0.05, -CL / 2), COLORS.tBar)
+ 	end
+@@ -601,28 +603,26 @@ function Facades.BuildCorridor(K, parent, frame)
+ 	piece(shell, "ExitSignEnd", V(2.6, 1, 0.3), CF(0, 8.6, -CL + 0.15), COLORS.exitHousing)
+ 	piece(shell, "ExitSignEndFace", V(2.2, 0.6, 0.06), CF(0, 8.6, -CL + 0.33), COLORS.exitRed, Enum.Material.Neon)
+ 
+-	-- Right-hand cream wall: solid piers and lintels surround three holes. The
+-	-- dark back walls are 2+ studs beyond the opening, never flush facade plates.
++	-- Right-hand cream wall: five narrower openings recede at a regular pace.
++	-- White side returns lead to dark back walls, rather than flush dark plates.
+ 	local RIGHT_X = CW / 2 + 0.3
+-	local OPEN_H, OPEN_W = 7.5, 4.5
++	local OPEN_H, OPEN_W = 7.5, 3.8
+ 	local function rightPier(z0, z1)
+ 		local span = z1 - z0
+ 		piece(right, "CreamWallPier", V(0.6, CH, span), CF(RIGHT_X, CH / 2, (z0 + z1) / 2), COLORS.corridorWall)
+ 		piece(right, "Baseboard", V(0.22, 0.6, span), CF(CW / 2 - 0.1, FLOOR_TOP + 0.3, (z0 + z1) / 2), COLORS.trim)
+ 	end
+ 	local cursor = -CL
+-	for _, z in ipairs({ -88, -56, -24 }) do
++	for _, z in ipairs({ -108, -84, -60, -36, -12 }) do
+ 		local z0, z1 = z - OPEN_W / 2, z + OPEN_W / 2
+ 		rightPier(cursor, z0)
+ 		local top = FLOOR_TOP + OPEN_H
+ 		piece(right, "CreamWallLintel", V(0.6, CH - top, OPEN_W), CF(RIGHT_X, (top + CH) / 2, z), COLORS.corridorWall)
+ 		for _, side in ipairs({ -1, 1 }) do
+-			piece(right, "OpeningJamb", V(0.3, OPEN_H, 0.28), CF(CW / 2 - 0.22, FLOOR_TOP + OPEN_H / 2, z + side * (OPEN_W / 2 + 0.12)), COLORS.trim)
+-			piece(right, "OpeningReturn", V(1.6, OPEN_H, 0.12), CF(CW / 2 + 0.8, FLOOR_TOP + OPEN_H / 2, z + side * OPEN_W / 2), COLORS.trim)
++			piece(right, "OpeningReturn", V(2.3, OPEN_H, 0.2), CF(CW / 2 + 1.15, FLOOR_TOP + OPEN_H / 2, z + side * OPEN_W / 2), COLORS.trim)
+ 		end
+ 		piece(right, "OpeningHead", V(0.3, 0.28, OPEN_W + 0.5), CF(CW / 2 - 0.22, top, z), COLORS.trim)
+-		piece(right, "OpeningCeilingReturn", V(1.6, 0.12, OPEN_W), CF(CW / 2 + 0.8, top, z), COLORS.trim)
+-		piece(right, "RecessedRoomShadow", V(0.1, OPEN_H, OPEN_W), CF(CW / 2 + 2.5, FLOOR_TOP + OPEN_H / 2, z), COLORS.opening)
++		piece(right, "RecessedRoomShadow", V(0.1, CH, OPEN_W + 8), CF(CW / 2 + 3.3, CH / 2, z), COLORS.towerRecess)
+ 		cursor = z1
+ 	end
+ 	rightPier(cursor, 0)
+@@ -646,7 +646,8 @@ function Facades.BuildCorridor(K, parent, frame)
+ 		local cz = -BAY / 2 - k * BAY
+ 		local color = bayColors[k % 3 + 1]
+ 		local wz, wy, ww, wh = cz - 4, 5.6, 4, 4.4
+-		local dz, dw, doorTop = cz + 5, 3.2, 7.2
++		local dz, dw = cz + 5, 3.2
++		local doorTop = k == 0 and 8.4 or 7.2
+ 		local bay0, bay1 = cz - BAY / 2, cz + BAY / 2
+ 		local w0, w1 = wz - ww / 2, wz + ww / 2
+ 		local d0, d1 = dz - dw / 2, dz + dw / 2
+@@ -668,6 +669,17 @@ function Facades.BuildCorridor(K, parent, frame)
+ 			sidingCourse(span[1], span[2], 4.6, color)
+ 		end
+ 		sidingCourse(bay0, bay1, 9.4, color)
++		if k <= 1 then
++			-- Extra close-range courses where the reference camera sees the siding.
++			for _, y in ipairs({ 1.2, 3.1 }) do
++				sidingCourse(bay0, d0, y, color)
++				sidingCourse(d1, bay1, y, color)
++			end
++			sidingCourse(bay0, bay1, 8.8, color)
++			if k == 0 then
++				sidingCourse(bay0, bay1, 10.3, color)
++			end
++		end
+ 		piece(left, "CornerBoard", V(0.3, CH, 0.45), CF(-CW / 2 + 0.22, CH / 2, bay1), COLORS.trim)
+ 
+ 		-- The dark six-pane window is recessed behind the wall's actual hole.
+@@ -688,23 +700,36 @@ function Facades.BuildCorridor(K, parent, frame)
+ 		-- fourth doors stay dark and open; other panels sit well behind the trim.
+ 		for _, side in ipairs({ -1, 1 }) do
+ 			piece(left, "DoorJamb", V(0.28, doorTop - FLOOR_TOP, 0.32), CF(-CW / 2 + 0.22, (FLOOR_TOP + doorTop) / 2, dz + side * (dw / 2 + 0.12)), COLORS.trim)
+-			piece(left, "DoorReturn", V(1.45, doorTop - FLOOR_TOP, 0.12), CF(-CW / 2 - 0.7, (FLOOR_TOP + doorTop) / 2, dz + side * dw / 2), COLORS.trim)
++			local returnDepth = k == 0 and 0.65 or 1.45
++			local returnX = k == 0 and -CW / 2 - 0.3 or -CW / 2 - 0.7
++			piece(left, "DoorReturn", V(returnDepth, doorTop - FLOOR_TOP, 0.12), CF(returnX, (FLOOR_TOP + doorTop) / 2, dz + side * dw / 2), COLORS.trim)
+ 		end
+ 		piece(left, "DoorHead", V(0.28, 0.32, dw + 0.6), CF(-CW / 2 + 0.22, doorTop, dz), COLORS.trim)
+-		if k % 3 ~= 0 then
++		if k == 0 then
++			-- A whole recessed room back wall covers side rays through the near
++			-- doorway, while the opening and its white returns remain in front.
++			piece(left, "OpenDoorInteriorShadow", V(0.1, CH, BAY + 12), CF(-CW / 2 - 2.7, CH / 2, cz), COLORS.opening)
++		elseif k % 3 ~= 0 then
+ 			piece(left, "RecessedDoorPanel", V(0.14, doorTop - FLOOR_TOP, dw), CF(-CW / 2 - 1.5, (FLOOR_TOP + doorTop) / 2, dz), COLORS.corridorDoor)
+ 		end
+ 
+-		-- Small projecting gabled awning over the door: two dark slabs, ridge perpendicular to the wall.
+-		for _, side in ipairs({ -1, 1 }) do
+-			piece(left, "AwningSlab", V(AWNING_P, 0.25, awningSlope + 0.2), CF(-CW / 2 + AWNING_P / 2, 8.1 + AWNING_RISE / 2, dz + side * AWNING_HALF / 2) * CFrame.Angles(side * awningPitch, 0, 0), COLORS.roof, Enum.Material.Slate)
++		-- The tall open foreground door is flush; later doors have dark gabled canopies.
++		if k > 0 then
++			for _, side in ipairs({ -1, 1 }) do
++				piece(left, "AwningSlab", V(AWNING_P, 0.25, awningSlope + 0.2), CF(-CW / 2 + AWNING_P / 2, 8.1 + AWNING_RISE / 2, dz + side * AWNING_HALF / 2) * CFrame.Angles(side * awningPitch, 0, 0), COLORS.roof, Enum.Material.Slate)
++			end
+ 		end
+ 
+ 		-- Warm shaded sconce between the window and the doorway.
+ 		local lampZ = cz + 0.8
+ 		piece(left, "SconceStem", V(0.4, 0.45, 0.18), CF(-CW / 2 + 0.55, 6.2, lampZ), COLORS.lampMetal)
+ 		local bulb = piece(left, "SconceGlow", V(0.42, 0.3, 0.42), CF(-CW / 2 + 0.75, 6.4, lampZ), COLORS.lamp, Enum.Material.Neon)
+-		piece(left, "SconceShade", V(0.7, 0.6, 0.8), CF(-CW / 2 + 0.76, 6.65, lampZ), COLORS.trim)
++		local shade = piece(left, "SconceShade", V(0.55, 0.84, 0.84), CF(-CW / 2 + 0.76, 6.65, lampZ) * CFrame.Angles(0, 0, math.rad(90)), Color3.fromRGB(245, 223, 187), FABRIC)
++		if shade and shade:IsA("Part") then
++			shade.Shape = Enum.PartType.Cylinder
++			shade.Transparency = 0.16
++			shade.CastShadow = false
++		end
+ 		if bulb then
+ 			local light = Instance.new("PointLight")
+ 			light.Name = "WarmSconceLight"

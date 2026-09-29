@@ -1,0 +1,14 @@
+{
+  "ServerScriptService/TunnelLobbyBuilder": {
+    "class": "ModuleScript",
+    "beforeSha256": "f5ff4bd648f76f0d69e4608c9d74e576e45993e3d586576e55726d351d0c81f6",
+    "afterSha256": "c74923a4985dcc7e5b2f19f36c1af8361a15857cdd524c85d6e448694ce4f874",
+    "beforeBytes": 103365,
+    "afterBytes": 103305,
+    "diffFile": "qa/concurrent-preserved/TunnelLobbyBuilder.diff",
+    "diffSha256": "35ef79d399bef1282af22813a75ab5773fe6b7c0f57fa706312d68832672b4ba",
+    "provenance": "Preserved concurrent authoritative Studio change; not implemented by the Level 5 exit-eyes/outage task.",
+    "review": "Only development progress estimates for sealed Level 4/5/6 gates changed from 60/10/5 to 90/70/30, plus explanatory comment. No other source changes.",
+    "acceptance": "Explicitly accepted by root for downstream preservation after fresh Source/editor parity export; baseline remains unchanged."
+  }
+}

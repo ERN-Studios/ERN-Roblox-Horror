@@ -1,0 +1,13 @@
+{
+  "baseline_commit": "208ca1d",
+  "patch_version": "2026-09-26.mapwide.1",
+  "luau_compile": "passed",
+  "schedule": {"assertions": 1031, "complete_appearances": 200, "passed": true},
+  "selection": {"assertions": 31, "deterministic_choices": 1000, "passed": true},
+  "mocked_lifecycle": {"assertions": 42, "passed": true},
+  "native_geometry_probe": {"passed": true, "observed_at_utc": "2026-09-26T13:55:06Z", "anchors": 18, "districts": 8, "rays": 402, "supported_viewpoints": 54, "failures": 0, "report": "expansion-final-watcher-geometry.json"},
+  "native_playback_or_multiplayer_claimed": false,
+  "studio_modified_by_this_agent": false,
+  "repository_product_files_modified_by_this_agent": false,
+  "authorized_bridge_qa_report_saved_in_repository": true
+}

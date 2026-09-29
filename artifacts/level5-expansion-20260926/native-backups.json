@@ -1,0 +1,14 @@
+{
+  "before": {
+    "file": "artifacts/level5-window-watcher-20260926/after-gaze.rbxl",
+    "bytes": 9767008,
+    "sha256": "8b0074fd9b92a8fb87f6fb2563b3b888bcc961dbcc94f72769ce58e2100b1841",
+    "freshCopyMatches": true
+  },
+  "after": {
+    "file": "artifacts/level5-expansion-20260926/after.rbxl",
+    "bytes": 9771701,
+    "sha256": "5dcf3faf4ec3d9fdfd6e7d5a3c10cdd833a57014632d375365e435bafdd6c0d4",
+    "purpose": "Full native place backup after final 189-script compile and source/editor parity, before verified v2128 publish."
+  }
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "gate": 2,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"DOMESTIC SYMBOLS\",\"textBounds\":{\"y\":21,\"x\":195},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Read the three symbols in the house, from left to right.\",\"textBounds\":{\"y\":16,\"x\":375},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a symbol to change it.\",\"textBounds\":{\"y\":14,\"x\":155.5},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":2,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"symbols\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Read the house symbols from left to right."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17088, 24, 456\"},\"GateIndex\":2,\"PuzzleMode\":\"symbols\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "gate": 3,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"MISSING ADDRESSES\",\"textBounds\":{\"y\":21,\"x\":199},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Find red, blue and yellow house numbers, in that order.\",\"textBounds\":{\"y\":16,\"x\":377.5},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a digit to change the house number.\",\"textBounds\":{\"y\":14,\"x\":243.5},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":3,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"address\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Use the red number, then blue, then yellow."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16880, 24, 936\"},\"GateIndex\":3,\"PuzzleMode\":\"address\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "gate": 4,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"QUIET SWITCHES\",\"textBounds\":{\"y\":21,\"x\":162.5},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Match the three switch positions shown inside the house.\",\"textBounds\":{\"y\":16,\"x\":393},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a switch to flip it.\",\"textBounds\":{\"y\":14,\"x\":124.5},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":4,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"switches\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Check which switches point up and which point down."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17120, 24, 1296\"},\"GateIndex\":4,\"PuzzleMode\":\"switches\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "gate": 5,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"STOPPED CLOCKS\",\"textBounds\":{\"y\":21,\"x\":169},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Match the three stopped clocks, from left to right.\",\"textBounds\":{\"y\":16,\"x\":340},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a clock to set its hour.\",\"textBounds\":{\"y\":14,\"x\":154},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":5,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"clocks\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Read the stopped clocks from left to right."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16880, 24, 1596\"},\"GateIndex\":5,\"PuzzleMode\":\"clocks\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "gate": 6,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"EMPTY CHANNELS\",\"textBounds\":{\"y\":21,\"x\":173},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Enter the three channel numbers shown inside the house.\",\"textBounds\":{\"y\":16,\"x\":398},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a TV to change its channel.\",\"textBounds\":{\"y\":14,\"x\":184.5},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":6,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"television\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Check the three channel numbers and their order."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17178, 24, 2076\"},\"GateIndex\":6,\"PuzzleMode\":\"television\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true},\"outage\":\"{\\\"startedAt\\\":1790443482.890248,\\\"gate\\\":6,\\\"restoreAt\\\":1790443547.890248,\\\"serial\\\":6,\\\"blackoutAt\\\":1790443487.890248}\"}"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "gate": 7,
+    "ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":145,\"x\":226.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":242.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":434.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":234,\"x\":626.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":157,\"x\":242.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"LAST DIRECTIONS\",\"textBounds\":{\"y\":21,\"x\":167.5},\"textFits\":true},{\"bounds\":{\"y\":201,\"x\":242.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Follow the three house arrows, from left to right.\",\"textBounds\":{\"y\":16,\"x\":332},\"textFits\":true},{\"bounds\":{\"y\":344,\"x\":242.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a house to rotate it.\",\"textBounds\":{\"y\":14,\"x\":139.5},\"textFits\":true},{\"bounds\":{\"y\":153,\"x\":774.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":415,\"x\":242.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":68.5},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":1053,\"h\":620},\"gate\":7,\"viewport\":{\"y\":678,\"x\":1053},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"arrows\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Read the three arrow directions from left to right."
+        }
+      ],
+      "isError": false
+    },
+    "solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16935, 24, 2456\"},\"GateIndex\":7,\"PuzzleMode\":\"arrows\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true},\"outage\":\"{\\\"startedAt\\\":1790443482.890248,\\\"gate\\\":6,\\\"restoreAt\\\":1790443551.05083,\\\"serial\\\":7,\\\"blackoutAt\\\":1790443487.890248}\"}"
+        }
+      ],
+      "isError": false
+    }
+  }
+]

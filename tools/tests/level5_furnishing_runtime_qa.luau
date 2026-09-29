@@ -2,7 +2,7 @@
 -- No services are mutated, no modules are required, and no yields are performed.
 local HttpService = game:GetService("HttpService")
 local report = {
-	qa="Level5MoldRuntime",version="2026-09-24.mold.1",pass=false,
+	qa="Level5MoldRuntime",version="2026-09-25.window-watcher.1",pass=false,
 	failureCount=0,failures={},counts={},rooms={},
 }
 local MAX_DESCENDANTS, MAX_FAILURES, EPS = 60000, 50, .015
@@ -59,7 +59,7 @@ for _,object in ipairs(objects) do
 		if object.Name=="DomesticFurniture" then table.insert(groups,object) end
 	end
 	if object:GetAttribute("Level5TintedWindow")==true then table.insert(windows,object) end
-	if object.Name=="WindowGlass" then
+	if object:IsA("BasePart") and object.Name=="WindowGlass" then
 		check(object:GetAttribute("Level5TintedWindow")==true,"UNTAGGED_WINDOW",object)
 	end
 	if object:GetAttribute("Level5WallDrawing")~=nil then table.insert(murals,object) end
@@ -181,7 +181,8 @@ for _,object in ipairs(objects) do
 end
 report.counts.houseNeon=houseNeon;report.counts.houseLights=houseLights
 report.counts.tintedWindows=#windows
-check(#windows==356,"TINTED_WINDOW_COUNT",root,tostring(#windows))
+-- F's 2026-09-25 Window Watcher court rebuild changes the total to 202 panes.
+check(#windows==202,"TINTED_WINDOW_COUNT",root,tostring(#windows))
 check(root:GetAttribute("TintedWindowCount")==#windows,"WINDOW_COUNT_ATTRIBUTE",root)
 local tint=Color3.fromRGB(87,102,102)
 for _,window in ipairs(windows) do

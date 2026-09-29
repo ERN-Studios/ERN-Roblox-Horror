@@ -1,0 +1,12 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2129,
+  "publishedAtUtc": "2026-09-26T15:01:45.050Z",
+  "success": true,
+  "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+  "evidenceFile": "artifacts/level5-outage-20260926/publication-log.txt",
+  "evidenceSha256": "af3f13baad8b5aefff300bcb2bd61f568986a698cd3256240be26a0146792d58",
+  "publishedBy": "Codex through native File > Publish to Roblox",
+  "scope": "Level5 gate-triggered five-second cascade / sixty-second blackout; existing place, no active server restart."
+}

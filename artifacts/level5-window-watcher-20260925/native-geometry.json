@@ -1,0 +1,26 @@
+{
+  "budget": {
+    "lights": 44,
+    "descendants": 12240,
+    "limit": 18000,
+    "windows": 202,
+    "parts": 11372
+  },
+  "houses": {
+    "rays": 462,
+    "foreignHits": 0,
+    "inspected": 77,
+    "embeddedSamples": 0,
+    "candidates": []
+  },
+  "chute": {
+    "gaps": [],
+    "samples": 42,
+    "rays": 98
+  },
+  "waypoints": {
+    "warning": "No active adapter manifest",
+    "inspected": 0,
+    "candidates": []
+  }
+}

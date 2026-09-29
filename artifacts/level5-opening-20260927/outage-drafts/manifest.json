@@ -1,0 +1,8 @@
+{
+  "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+  "baselineSha256": "ce645e6063424ff8e4fb806826bdbf8cee5be7683860c7b2812ae98e51999c1f",
+  "draftSha256": "bf3e38ccdddfbbf07fb6cac2685489a20a2e4d21565dc8bb63a3f6aa0fcea40b",
+  "change": "Two-line reversible module-local switch and first-statement Trigger guard",
+  "liveApplied": false,
+  "disabledReason": "Level 5 outages are temporarily disabled"
+}

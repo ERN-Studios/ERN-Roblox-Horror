@@ -1,0 +1,19 @@
+{
+  "reportedVersion": 2150,
+  "universeId": 10559217407,
+  "roomAttributes": {
+    "CircularVisibleWallCount": 57,
+    "LevelNumber": 5,
+    "LevelEnabled": true,
+    "Level5ResidentialPreview": true,
+    "LobbyBayStyleVersion": 1,
+    "CircularWallSegments": 64,
+    "LobbyBayTheme": "IndoorSuburbs",
+    "BayPlanShape": "Circle",
+    "CircularDoorwayDotCutoff": 0.955,
+    "CircularBayDiameter": 56
+  },
+  "placeId": 131311258779917,
+  "public5": true,
+  "limitation": "Compact room metadata only; nested instance fields were collapsed by the MCP serializer. Full final closed properties are in closure/native-lobby-final-properties.json."
+}

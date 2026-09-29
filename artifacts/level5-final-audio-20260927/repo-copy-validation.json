@@ -1,0 +1,319 @@
+{
+  "source": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-final-audio-20260927/export_for_repo",
+  "destination": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-final-audio-20260927",
+  "copiedFiles": 76,
+  "copiedBytes": 7684942,
+  "sourceDestinationHashParity": true,
+  "deliveryWavHashesVerified": 20,
+  "activeWavs": 16,
+  "deferredWavs": 4,
+  "rawNewTakes": 32,
+  "environmentDirectoriesPresent": false,
+  "signedMediaUrlsPresent": false,
+  "files": [
+    {
+      "file": "package.py",
+      "sha256": "f6b8a4f35241e935756eb33bbca76c299eeb5daaee7fd9bd421b4bd73ea66e6e"
+    },
+    {
+      "file": "engineer.py",
+      "sha256": "6d8c1c90bb81926bdee67f5ce718c32eef0adfd9d53cf350cb8d0f6e0daa2aa2"
+    },
+    {
+      "file": "README.md",
+      "sha256": "6e712f6f5e26baa0019cee297fc995b7b7cb6320bdfde3f3aba956448d157c43"
+    },
+    {
+      "file": "prepare_new.py",
+      "sha256": "40c1291481d6a2bf8d2abb2f044d49ecdb7da15ab879a6547195a93b88d87f04"
+    },
+    {
+      "file": "download_new.py",
+      "sha256": "a31e2ca2428df01a2b684cda2d37e6a29a8a5da42d41e032906c101e3022ffff"
+    },
+    {
+      "file": "export_record.py",
+      "sha256": "647630f70b543e02182f4db8a4e57844564083f2aebb8cdc449b8d712ab4d816"
+    },
+    {
+      "file": "receipts/dispatch.json",
+      "sha256": "c4a594765d64600f5e6e17f2d0cbe1f6048e74dddc316e3abbc35d7a9a3b6f13"
+    },
+    {
+      "file": "receipts/estimate.json",
+      "sha256": "587310553b625fcecb868698084d8baecd3f5e0993358a197344c54d49e104e5"
+    },
+    {
+      "file": "receipts/generation-page-0.json",
+      "sha256": "1c94af1f479a5f4d1b06210efea0a036792c9b6c905726349aec9f25d287e61c"
+    },
+    {
+      "file": "receipts/generation-page-1.json",
+      "sha256": "8f7bcb6c889569717174dc8746773645cf89d2b8d6fa3a8844ba0aabe47fcbbc"
+    },
+    {
+      "file": "receipts/nodes.json",
+      "sha256": "a6c651bde2fc6f867142312c33ca83aa2b57f7ac2cf4837c7a2d7414b99aa575"
+    },
+    {
+      "file": "analysis/delivery-manifest.json",
+      "sha256": "7693a3bb6d2efac9e9afbad1be578b535e7aa159eb919b5b3cf1b2a7a777418b"
+    },
+    {
+      "file": "analysis/new-take-analysis.json",
+      "sha256": "c06232f1f4555acbfd7fc35b0cb2e872ebf2eede7fb56d1b12734eb0d13169b8"
+    },
+    {
+      "file": "analysis/new-raw-manifest.json",
+      "sha256": "b8f5ff65e84c87c5630274e296bfaebc5516d6a589b00db11eb3edb0bbe4f85a"
+    },
+    {
+      "file": "analysis/delivery-path.txt",
+      "sha256": "27f99dd17c0e76f7fb560b002d2a8cdc388ee49dc12428a2b2f067e7067c06be"
+    },
+    {
+      "file": "analysis/new-selected.json",
+      "sha256": "60f2ad6f373231295082dbe2c295d8b92a5018a4daa4ce1d2d6621f9723c050c"
+    },
+    {
+      "file": "analysis/processing-new.log",
+      "sha256": "ca6234b67e6ab6c1549f34e69aff07940300f8a49aa20cdd6f1c228a15a4d276"
+    },
+    {
+      "file": "analysis/delivery-validation.json",
+      "sha256": "a6fb62ffdaa8319d18e129c174dd453ca27f048b24d460a6b86ed2c399793ee0"
+    },
+    {
+      "file": "analysis/environment.json",
+      "sha256": "bc77c780c2d0087c92fd3a13c237a2440585e197eea6fe659cc470fba995ffd6"
+    },
+    {
+      "file": "analysis/existing-cleanup.json",
+      "sha256": "f45d6a2b1098224ca16457f6ef46f501add61c7287cf29b381edc62756cbd91e"
+    },
+    {
+      "file": "delivery/L5_queue_arrival.wav",
+      "sha256": "485c9d6753f281530ed8f77c6c101d89ebe7a541b89207985984f823150280f8"
+    },
+    {
+      "file": "delivery/UPLOAD_IDS.csv",
+      "sha256": "b44c4d8a8b6477f352095912db8a65e55c6d2cf1697bdabe3f43567ea6ed4b4c"
+    },
+    {
+      "file": "delivery/L5_wooden_door_close.wav",
+      "sha256": "cd67748d852ee8b56764402e25b0c14929b503f9673603319747d4cc5bf75230"
+    },
+    {
+      "file": "delivery/L5_house_wood_creak.wav",
+      "sha256": "c270bb745ad7f954c1f473b1e1cdf27b5e8019d5fcd6c8351d5a921baf4476b6"
+    },
+    {
+      "file": "delivery/L5_ceiling_relay_tick.wav",
+      "sha256": "9fec577df15254a1616793dae4c5cef8ebc2e2884d5a36d6156b742d4cf445e4"
+    },
+    {
+      "file": "delivery/L5_puzzle_click.wav",
+      "sha256": "3373677ec3c707e50d04d9dbe4e812a58762072646757943a81354baf68d307c"
+    },
+    {
+      "file": "delivery/L5_curtain_movement.wav",
+      "sha256": "1a17a917fffcbacc28437efdb8e953e6d0d0d7a00b425bf3ce2be68bbf6d6038"
+    },
+    {
+      "file": "delivery/L5_room_hum.wav",
+      "sha256": "4bfc6219c030fa462d807af4b9f1f3465cd906ab19eb1ecce7ca911406963397"
+    },
+    {
+      "file": "delivery/L5_watcher_recede.wav",
+      "sha256": "73abea92e3e1a2a8774934cb77aec571b4159e3360f0b6a59f736e761625ed23"
+    },
+    {
+      "file": "delivery/L5_puzzle_reject.wav",
+      "sha256": "82103989d7218c33c1b09783ded2937a4e5cab2fd6e6a789dba0b626e558870b"
+    },
+    {
+      "file": "delivery/L5_sliding_gate.wav",
+      "sha256": "4897900bc6fe6a131e0b22207e6206b281737167a086fdabf2234fdb8643ebb8"
+    },
+    {
+      "file": "delivery/VALIDATION.json",
+      "sha256": "a6fb62ffdaa8319d18e129c174dd453ca27f048b24d460a6b86ed2c399793ee0"
+    },
+    {
+      "file": "delivery/MANIFEST.json",
+      "sha256": "7693a3bb6d2efac9e9afbad1be578b535e7aa159eb919b5b3cf1b2a7a777418b"
+    },
+    {
+      "file": "delivery/README.txt",
+      "sha256": "89aba71227fb5a1a4caecb963dd5dcc15bfed465289c84aa73e6ffd481cc6c79"
+    },
+    {
+      "file": "delivery/L5_watcher_breath.wav",
+      "sha256": "e164f1349057c88ad266112c31fe1a80360970c91985bbda98439bd93ff4e05d"
+    },
+    {
+      "file": "delivery/L5_window_frame_creak.wav",
+      "sha256": "7cdb704d2671e317f840b4bdef36fa1184681ca4a8f9aac1ab01a1dd757ad87d"
+    },
+    {
+      "file": "delivery/L5_puzzle_unlock.wav",
+      "sha256": "532036a6a655351dd6fff183f6feb2aec0d53370e70a056e19e7645004cd6594"
+    },
+    {
+      "file": "delivery/L5_watcher_heartbeat.wav",
+      "sha256": "6e424e56fc3c3e66aa0059c4308ed5a4263fc66ac67798e652e3bc44f4beac44"
+    },
+    {
+      "file": "delivery/L5_wooden_door_open.wav",
+      "sha256": "16693048e1451f597680e474b5751e39ff3bc3b1ece1450ab7963515807f641b"
+    },
+    {
+      "file": "delivery/L5_watcher_glass.wav",
+      "sha256": "30f8070000a5182f66c79b122adbbac69fff4fe9ac1ec4c166346e257c3f4fc6"
+    },
+    {
+      "file": "raw/wooden_door_open__take03.mp3",
+      "sha256": "e8046f7e3e4ee032b171b919b1c67149d87c8257749cd5b9638b6376ae7c38a1"
+    },
+    {
+      "file": "raw/wooden_door_open__take02.mp3",
+      "sha256": "7b6b4d766e0b95df4181410d45662a591c9b276aecf938b90866fa500c0a887e"
+    },
+    {
+      "file": "raw/wooden_door_open__take01.mp3",
+      "sha256": "5e647b3c42fc2aa50705b75355d5c9190a19aec554adbc199b8a492c35ad5f4f"
+    },
+    {
+      "file": "raw/wooden_door_open__take04.mp3",
+      "sha256": "af4270a88525ef523beb0c09fe2f9715a76e5114f2bf4411fba998d523575ae4"
+    },
+    {
+      "file": "raw/queue_arrival__take04.mp3",
+      "sha256": "d36efcdf17f2e511f5c6fdbcb616963a40b0d264706495bfce37caf888c243ff"
+    },
+    {
+      "file": "raw/house_wood_creak__take01.mp3",
+      "sha256": "2aa24fbdf575b204f81f46b59331c4f932db01dcec11603df1c869426c171190"
+    },
+    {
+      "file": "raw/house_wood_creak__take02.mp3",
+      "sha256": "654d73f8be63a4931b815bcd238828ccebe3f910afdd73e813d1aae52af8d9b3"
+    },
+    {
+      "file": "raw/house_wood_creak__take03.mp3",
+      "sha256": "788b54a776210f10ea1374b90f76ec48e1af145ea35dba6be7f64af0c1e17961"
+    },
+    {
+      "file": "raw/queue_arrival__take02.mp3",
+      "sha256": "788165166d9e96193ae76f306773d4f360cea906821ea3b19cc2064fc2d5629d"
+    },
+    {
+      "file": "raw/queue_arrival__take03.mp3",
+      "sha256": "c5f571b9aa6923f40a84b65db5040779caf3f2a8f2abdfe32871f423f9ed500a"
+    },
+    {
+      "file": "raw/queue_arrival__take01.mp3",
+      "sha256": "7d2e22becd1c52246f4b5a9caa749363c7ce1b1b8c18d8a90d29eb8dfa6f4f51"
+    },
+    {
+      "file": "raw/house_wood_creak__take04.mp3",
+      "sha256": "e78c2f70ea04224669ab2edde5020abd588cb6b29068a3caf8ffb30087c16e9b"
+    },
+    {
+      "file": "raw/wooden_door_close__take03.mp3",
+      "sha256": "a224cb83208d8dd9ec76b906504b20ac61be6cd2d37bc8b7e154514c9bb271e0"
+    },
+    {
+      "file": "raw/window_frame_creak__take03.mp3",
+      "sha256": "74d0a7baa198424bc4eb2d8016ad733e4f2c1687aa8a2db7f7b5404a91e5e7ef"
+    },
+    {
+      "file": "raw/window_frame_creak__take02.mp3",
+      "sha256": "6d8b5127609750160f8a7084e35e5857380dacf9519e59eae1ebecfce8c691a7"
+    },
+    {
+      "file": "raw/wooden_door_close__take02.mp3",
+      "sha256": "8c7b241993c531491adcd44f1838e5707dce1e3d8dfe75f9fdd4bb3168d1d1d7"
+    },
+    {
+      "file": "raw/ceiling_relay_tick__take04.mp3",
+      "sha256": "a2029fe79fa750491f3127243b9c9656008ce8cce95f4792007182ddf2da9ba2"
+    },
+    {
+      "file": "raw/window_frame_creak__take01.mp3",
+      "sha256": "22a4cc09937563d8108c85f1f863a24a1d591568bffc5c40d10094a8a4de0631"
+    },
+    {
+      "file": "raw/wooden_door_close__take01.mp3",
+      "sha256": "656460fffa9e06748b9c38416108b1f2dedb34f7f808b7c45d1fa278ffd4805e"
+    },
+    {
+      "file": "raw/ceiling_relay_tick__take01.mp3",
+      "sha256": "e85ca218c8390f433edc2f0cb96c2626efac65e16c9b8cafdd1e6d2c8c413a3b"
+    },
+    {
+      "file": "raw/window_frame_creak__take04.mp3",
+      "sha256": "292ab636208c868f4da95f1712d1c5bc79009b979748d282187573f1212e9d9a"
+    },
+    {
+      "file": "raw/wooden_door_close__take04.mp3",
+      "sha256": "d7349632435b3c07468d37e6bb35ccf136821ff95d8107fb614c261680e2b8ed"
+    },
+    {
+      "file": "raw/ceiling_relay_tick__take03.mp3",
+      "sha256": "be9246b27f35975ed8cb3c4c3d77e851685416ad7d9f10a51e533940e0ed9920"
+    },
+    {
+      "file": "raw/ceiling_relay_tick__take02.mp3",
+      "sha256": "1f050fd2d2e73fba25caab577536f1984a6875be1c8bcce946b221d60aeac0a4"
+    },
+    {
+      "file": "raw/sliding_gate_v2__take02.mp3",
+      "sha256": "0b84b84f089a1303dd74e3a84625d8aacfe5b60d995ff5e7087fac02eaa085e1"
+    },
+    {
+      "file": "raw/curtain_movement__take04.mp3",
+      "sha256": "6715d31765879446c0f9d06f335d0e01f1cb0c5becccdb226a0d2e6168943444"
+    },
+    {
+      "file": "raw/sliding_gate_v2__take03.mp3",
+      "sha256": "84e4a51414a23711d24aa97719c7f1478cb0b8831b03f3ffdc3fc89ea63e7b6f"
+    },
+    {
+      "file": "raw/sliding_gate_v2__take01.mp3",
+      "sha256": "017b5f09e587f5437c4d9e64ecaa3402890319ded3e5c0f0505039eadc9cd412"
+    },
+    {
+      "file": "raw/curtain_movement__take02.mp3",
+      "sha256": "21d4c07efdf00072ef7bf55bfb08c5d6770d29ed451616f407fcfa1198cddfb8"
+    },
+    {
+      "file": "raw/sliding_gate_v2__take04.mp3",
+      "sha256": "3c5b784000c8c3e8c2939e4fa2e807a9f8683bc4df0ff649b53409d0090691b2"
+    },
+    {
+      "file": "raw/curtain_movement__take03.mp3",
+      "sha256": "61cd440fa6a02ba00ff83e4e4b1a71f38b400485bbc8c11d03a9ed38b5d62774"
+    },
+    {
+      "file": "raw/curtain_movement__take01.mp3",
+      "sha256": "f46aa88f2c1b3b787ea46cbd9afe82834e3e86a23100dcdbedf1e40a9f18a365"
+    },
+    {
+      "file": "delivery/DO_NOT_UPLOAD_NOW/Legacy_Gate_Alternative/L5_sliding_gate_legacy_4s.wav",
+      "sha256": "d1ea4a840fc9a464386495640e94097cb0aa020327e391833921e548cd467f8c"
+    },
+    {
+      "file": "delivery/DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_fall.wav",
+      "sha256": "b79dda401169fda23a0ac2e47dc05e96a2976d2b3b56e11a6cdeefb34e07a66b"
+    },
+    {
+      "file": "delivery/DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_blackout_roomtone.wav",
+      "sha256": "5ccd9be544bff7e3349d35d4d5343da175ccac2de6a77713d59960bdf159bbd0"
+    },
+    {
+      "file": "delivery/DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_restart.wav",
+      "sha256": "2f5acdf23404857e3322379908f3ac4277f2476c345644f39896bf0ee7e8d0ed"
+    }
+  ]
+}

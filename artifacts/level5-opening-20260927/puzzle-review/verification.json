@@ -1,0 +1,73 @@
+{
+  "baseline": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/baseline/sources",
+  "files": [
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+      "sha256": "c9a6865e45dc5fb6be78efa79e7e69318c4ba2cbae3824a0a32194fd86535b43",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
+      "sha256": "ca4d44eeb68ce45d360b1f759971cc3abc88bbf4c56b4461575a1c81e31371be",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Colour Lock Logic.ModuleScript.lua",
+      "sha256": "54d63131b5a2e9ec7896dcb5509fd74f48843403155449a5ba787eb792bd3fb0",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua",
+      "sha256": "354c81776e6cd7f79bfa91b1e9a2f2dad443d4774b8931f685c2817ac03729b7",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+      "sha256": "03135a0aee7f46b218b4a8328c769843d0738a635c24efd905b06993c8ec0e3c",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+      "sha256": "00a6f0457c9c4edbccb280784aab20d62cc6129aa460256ff85a8440bacf6f5d",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    },
+    {
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+      "sha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
+      "sourceEditorMatch": true,
+      "matchesPreviousMirror": true
+    }
+  ],
+  "tests": [
+    {
+      "test": "test_level5_puzzle_catalog.luau",
+      "sourceTest": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-dense-routes-20260926/tests/test_level5_puzzle_catalog.luau",
+      "exitCode": 0,
+      "stdout": "PASS Puzzle Catalog: 6910 assertions; 2185 exhaustive combinations across 7 gates; pure logic only\n",
+      "stderr": ""
+    },
+    {
+      "test": "test_puzzle_layout_math.luau",
+      "sourceTest": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-repository/artifacts/level5-dense-routes-20260926/tests/test_puzzle_layout_math.luau",
+      "exitCode": 0,
+      "stdout": "PASS: 2737 arithmetic assertions across 7 puzzles \u00d7 9 modeled viewport/safe-area pairs.\nKnown edge: hard minimum 248px height exceeds a 244px usable frame (example 320\u00d7280 viewport with 36px top inset). Not a native device or text-fit result.\n",
+      "stderr": ""
+    },
+    {
+      "test": "compile seven reviewed scripts",
+      "exitCode": 0,
+      "stdout": "Compiled 2 KLOC into 163 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)\n",
+      "stderr": ""
+    }
+  ],
+  "limitations": [
+    "Pure logic and arithmetic only; no native gameplay, rendering, movement, or device validation.",
+    "Baseline exported by root from v2150; this reviewer performed no Studio calls or writes."
+  ]
+}

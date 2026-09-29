@@ -1,0 +1,191 @@
+[
+  {
+    "file": "ReplicatedStorage/Level5OutageLogic.ModuleScript.lua",
+    "sha256": "1b18dd5b6c782f614b55a00b82f770ac13b0ecdc6e2a12455b0de70503ca3c65",
+    "sourceLength": 5618,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ReplicatedStorage/WindowWatcherGazeLogic.ModuleScript.lua",
+    "sha256": "b5884ffea2085662507fa4f029999e9e73458a8a962b00b6a9c64f12b85a5bd5",
+    "sourceLength": 4468,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+    "sha256": "03135a0aee7f46b218b4a8328c769843d0738a635c24efd905b06993c8ec0e3c",
+    "sourceLength": 54124,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Colour Lock Logic.ModuleScript.lua",
+    "sha256": "54d63131b5a2e9ec7896dcb5509fd74f48843403155449a5ba787eb792bd3fb0",
+    "sourceLength": 1182,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+    "sha256": "00a6f0457c9c4edbccb280784aab20d62cc6129aa460256ff85a8440bacf6f5d",
+    "sourceLength": 18159,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+    "sha256": "8b0f2a636fd6294cfd87cd10729134c5f4b5acccffa924935454da25869a0466",
+    "sourceLength": 28127,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+    "sha256": "f36c23b01b1b6b03132007b7f5c2384fbbf787b4e5c255356a29a043250ca12d",
+    "sourceLength": 9788,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "sha256": "ce645e6063424ff8e4fb806826bdbf8cee5be7683860c7b2812ae98e51999c1f",
+    "sourceLength": 8618,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
+    "sha256": "ca4d44eeb68ce45d360b1f759971cc3abc88bbf4c56b4461575a1c81e31371be",
+    "sourceLength": 5473,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "sha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
+    "sourceLength": 15482,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "sha256": "c9a6865e45dc5fb6be78efa79e7e69318c4ba2cbae3824a0a32194fd86535b43",
+    "sourceLength": 26930,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "sha256": "a69ca35ac4ace9bbe462801ca7397ab12be7dbeceab74e7b15ce9c81f2483f59",
+    "sourceLength": 23722,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "ServerScriptService/Level5GateAccess.Script.lua",
+    "sha256": "df130f811195e8d88bc64f7b8ffd68077ba0a846fa03753d5fa584a34612c740",
+    "sourceLength": 3416,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  },
+  {
+    "file": "ServerScriptService/Level5Generator.ModuleScript.lua",
+    "sha256": "8917a82da5adaa114fff5051d9637aadf206ea5c0c757f2605969fe18d4cb54e",
+    "sourceLength": 406,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    }
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
+    "sha256": "85a9e6d4396b3852380648d2a32aef94e492bef84ab807241ff2ffb00977bc34",
+    "sourceLength": 11445,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level5CeilingEyesClient.LocalScript.lua",
+    "sha256": "c988e6f6adb04b43cb0809df7871f844f0655a74e8184abe23f69a180b72115a",
+    "sourceLength": 10280,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua",
+    "sha256": "354c81776e6cd7f79bfa91b1e9a2f2dad443d4774b8931f685c2817ac03729b7",
+    "sourceLength": 19527,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/WindowWatcherGazeClient.LocalScript.lua",
+    "sha256": "df78f4794b518e7fed0ab9e7e4baac3e238783cbf73666bf7c3223939d4f328f",
+    "sourceLength": 8057,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/WindowWatcherVisualClient.LocalScript.lua",
+    "sha256": "71b993e0e37a45cbddd7741f7951f91013005b677b5ab935214650a07b6be7c5",
+    "sourceLength": 9063,
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    }
+  }
+]

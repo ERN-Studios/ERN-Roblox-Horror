@@ -1,0 +1,11 @@
+# Original Level 5 ElevenLabs audio — ready for import
+
+All 12 configured cues generated successfully through connected ElevenLabs MCP, one batch with four variations each, 48 distinct completed takes. The raw MP3 files are retained in audio/raw. The selected mono 44.1 kHz 16-bit PCM WAV assets are in audio/ready. No assets were imported or Studio scripts changed by this subtask.
+
+Selection used objective signal checks only: duration, clipping, DC offset, event tails, seam steps and a four-pulse envelope check for the heartbeat. Subjective listening and in-game mix checks remain with root/user; do not describe this as an audition or declare that a generated cue contains no speech solely from its prompt.
+
+Mastering preserves dynamics with constant gain and a true-peak ceiling of -2.3 dBTP. Ambient loops measure -24, -24 and -22 LUFS; some short/high-crest events remain below target loudness to preserve headroom. Exact measured loudness is recorded, rather than claiming every event reached -18 LUFS. Nonloop events receive 5 ms/35 ms edge fades. Loops use an explicit 60 ms cyclic tail/head blend at full floating-point precision before final 16-bit export; total loop durations become 11.94,11.94,3.94 seconds. Final seams are within each clip's normal sample-to-sample slope, with zero seam step for heartbeat. All12 final format/hash/duration/peak/seam checks pass.
+
+An initial ffmpeg short-segment acrossfade omitted its seam output; final validation caught the120 ms versus60 ms duration error. That intermediate was replaced before hand-off. The current ready-audio-manifest.json hashes are the authoritative final assets. The final processing script renders to unique temporary paths to avoid ffmpeg overwriting failures on this host, then replaces the task-owned outputs after render.
+
+Use the current12 files, not earlier copies. Import to ERN Roblox Studios group1039373905 and verify moderation and usage in universe10559217407. Keep local loop/SFX gains restrained, especially transient glass and lock clicks. Respect the game's audio volume controls, local participant/visibility gating and clean up sounds on reset. H must keep normal ambience; it must not hear A–G outage transitions as global effects. Watcher gaze pulse must cease when hidden, blocked, dead/spectating or leaving the round.

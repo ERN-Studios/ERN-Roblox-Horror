@@ -1,0 +1,137 @@
+{
+  "publication": {
+    "success": true,
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "publishedVersion": 2143,
+    "publishedAtUtc": "2026-09-26T21:09:18.148Z",
+    "method": "Native File > Publish to Roblox",
+    "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+    "evidenceFile": "artifacts/level5-exit-eyes-20260926/publication-log.txt",
+    "evidenceSha256": "b2c5faa06fc7315f312ec698f8f9e8d385872e6142f7e783b90d0c592160ce7d",
+    "scope": "Level 5 exit ceiling eyes and A-G-only outage. Concurrent lobby progress percentages preserved. No active server restart."
+  },
+  "nativePlaceBackup": {
+    "file": "artifacts/level5-exit-eyes-20260926/after.rbxl",
+    "bytes": 9821563,
+    "sha256": "0a1bab9bc1510b952ef85c335e8df4f2bf953edbb447fa107da3da29bc59b7f1",
+    "purpose": "Full native Edit backup after verified ceiling-eye and exit outage changes, before v2143 publication. Includes preserved concurrent lobby progress estimates."
+  },
+  "files": [
+    {
+      "path": "after.rbxl",
+      "bytes": 9821563,
+      "sha256": "0a1bab9bc1510b952ef85c335e8df4f2bf953edbb447fa107da3da29bc59b7f1"
+    },
+    {
+      "path": "publication-log.txt",
+      "bytes": 369,
+      "sha256": "b2c5faa06fc7315f312ec698f8f9e8d385872e6142f7e783b90d0c592160ce7d"
+    },
+    {
+      "path": "publication-v2143.json",
+      "bytes": 579,
+      "sha256": "6e7f10994469d3c9ca8e6a524e95b5a820503e534e93fec140c9f826f673b633"
+    },
+    {
+      "path": "qa/concurrent-preserved/README.md",
+      "bytes": 653,
+      "sha256": "e2cbdefbc594dd9ab7f01f43225a53142541e06e1b5dbb9ab067499b388c6836"
+    },
+    {
+      "path": "qa/concurrent-preserved/TunnelLobbyBuilder.diff",
+      "bytes": 764,
+      "sha256": "35ef79d399bef1282af22813a75ab5773fe6b7c0f57fa706312d68832672b4ba"
+    },
+    {
+      "path": "qa/concurrent-preserved-sources.json",
+      "bytes": 901,
+      "sha256": "0fedb8c0d73c1f70580caa4fa272b0a3f8c37977d269b8729ed35f2dd57654f9"
+    },
+    {
+      "path": "qa/exit-eyes-native.png",
+      "bytes": 557343,
+      "sha256": "81827db066de46bc9951ec4130f1090aa10316d14905b62dd12a93890f2b9041"
+    },
+    {
+      "path": "qa/final-eyes-east.json",
+      "bytes": 19699,
+      "sha256": "30a253e934cbd75032e705187c88e748ad1758e74661f7af842543b92b84898b"
+    },
+    {
+      "path": "qa/final-eyes-rest-G.json",
+      "bytes": 14255,
+      "sha256": "ad6c0ce7722ddfe97d26a234a263fb04204e28e81c994b6ea5f5e63e327a0ebb"
+    },
+    {
+      "path": "qa/final-eyes-west.json",
+      "bytes": 19791,
+      "sha256": "567eb9312a0e6c93584c71daa5a652a7c667de41892aeac2e02fcbb52c1d4fd2"
+    },
+    {
+      "path": "qa/final-source-mirror-report.json",
+      "bytes": 55596,
+      "sha256": "f8f0deadf5c78cb2b425fbbcf550a4c2bf97fdf389ebbdff4254a0b60c4515de"
+    },
+    {
+      "path": "qa/inspect_ceiling_eyes.luau",
+      "bytes": 4901,
+      "sha256": "f0956792fa9d7e99e41ec4699d6486c67761572f648fcce30733b80669e774e0"
+    },
+    {
+      "path": "qa/install_exit_qa.luau",
+      "bytes": 4139,
+      "sha256": "e61e008df70342fa018caf939d09c7e58d26b3cc4d828473043f5c5589c683ef"
+    },
+    {
+      "path": "qa/mirror-scope.json",
+      "bytes": 747,
+      "sha256": "825a0612c2ec5cb81f969b1d6eb0f9f7f9afc1b04dd053cbd0f4e7193f1f4cdd"
+    },
+    {
+      "path": "qa/native-boundary-Chute.json",
+      "bytes": 376,
+      "sha256": "9eeb9150429d0a00574359e197714b9212c7c3fb4549560ec70149513bbbb7cd"
+    },
+    {
+      "path": "qa/native-boundary-G.json",
+      "bytes": 363,
+      "sha256": "e25d1d63c57ad74cac27cc14e3b0a49a9a218ba431b0f747c40890d7cd9d42b8"
+    },
+    {
+      "path": "qa/native-boundary-H.json",
+      "bytes": 372,
+      "sha256": "506a886d1193e1c226fdd868b8059b2c141793a3a24f97f72a8f6a9ffae0fb14"
+    },
+    {
+      "path": "qa/native-gates.json",
+      "bytes": 1235,
+      "sha256": "40ea5a180934e4dea05f4fe4e00390d9e84b55b3bb3e2cb2eeee8eead7ade5ca"
+    },
+    {
+      "path": "qa/observe_exit_outage.luau",
+      "bytes": 10708,
+      "sha256": "354f7ffc4b322460daabe0b94c61fb6529d666dc56a256a42fe7667c2ad4d851"
+    },
+    {
+      "path": "qa/outage-final.json",
+      "bytes": 16978,
+      "sha256": "be1a5dd4663ff0e56c8bab76f5ad3f9223e4148e0b666ec09e7ca734eb535890"
+    },
+    {
+      "path": "tests/run_outage_lifecycle.py",
+      "bytes": 8816,
+      "sha256": "239e246cbf2d925183d2acfc7af489293ad58bd1fa8fe03b2f741e4d20c7d8cc"
+    },
+    {
+      "path": "tests/test_ceiling_eye_selection.luau",
+      "bytes": 2267,
+      "sha256": "bb6a744c0c0fb05b4191c3bd4ae90a2305f3078bdcc8e5554b45814ef40d8207"
+    },
+    {
+      "path": "tests/test_level5_outage_logic.luau",
+      "bytes": 9468,
+      "sha256": "3422949b5a9e4c945e0c16cab822db2a8b52687f466b473323ef7e70d8d919e9"
+    }
+  ]
+}

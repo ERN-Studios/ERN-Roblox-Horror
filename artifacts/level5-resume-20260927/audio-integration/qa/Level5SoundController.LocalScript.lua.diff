@@ -1,0 +1,5 @@
+--- before/patches/Level5SoundController.LocalScript.lua
++++ after/patches/Level5SoundController.LocalScript.lua
+@@ -41 +41 @@
+-	diagnostic("AudioVoiceCount",0)
++	diagnostic("AudioVoiceCount",0);diagnostic("AudioLoadedCount",0)

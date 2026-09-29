@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-27",
+  "publishedVersion": 2157,
+  "lobbyAccess": "Closed in the published build; running server restarts unverified",
+  "copiedArtifactHashesVerified": 83,
+  "runtimeMirrorHashesVerified": 6,
+  "latestExpectedNativeScripts": 198,
+  "prechangeBackupCorrectlyRejectedAsCurrent": true,
+  "textSecretPatternScanPassed": true,
+  "openingManifestReferencesVerified": 10,
+  "stagedFiles": [],
+  "gitDiffWhitespacePassed": true,
+  "replayChecksPassed": 25,
+  "trackedChangesConfinedToExpectedSixMirrorsManifestAndThreeRootDocs": true
+}

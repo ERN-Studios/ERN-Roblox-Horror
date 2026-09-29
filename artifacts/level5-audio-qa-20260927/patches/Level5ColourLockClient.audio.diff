@@ -1,0 +1,8 @@
+--- a/StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua
++++ b/StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua
+@@ -88,0 +89 @@
++local audioCue=Instance.new("BindableEvent");audioCue.Name="Level5AudioCue";audioCue.Parent=gui
+@@ -157,0 +159 @@
++		audioCue:Fire("puzzle_click")
+@@ -259,0 +262 @@
++			audioCue:Fire("puzzle_reject")

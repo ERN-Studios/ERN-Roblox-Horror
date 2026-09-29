@@ -1,0 +1,10 @@
+{
+  "ServerScriptService/Level 5 Systems/Level 5 Architecture": {
+    "class": "ModuleScript",
+    "patch": "Level 5 Architecture.ModuleScript.lua"
+  },
+  "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts": {
+    "class": "ModuleScript",
+    "patch": "Level 5 Landmark Districts.ModuleScript.lua"
+  }
+}

@@ -1,0 +1,258 @@
+[
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "studioPath": "ServerScriptService.GameManager",
+    "names": [
+      "ServerScriptService",
+      "GameManager"
+    ],
+    "class": "Script",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/access-drafts/sources/ServerScriptService/GameManager.Script.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/01-game-manager.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/01-game-manager.verify.luau",
+    "baselineLength": 165648,
+    "baselineDjb2": 3634059721,
+    "baselineSha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+    "expectedLength": 166063,
+    "expectedDjb2": 951332234,
+    "expectedSha256": "6809d69fee8c15c4039d586a1ddde5bb7b20f2c5a6412fa4f031e40e5571b7ae",
+    "fragmentCount": 4,
+    "contextLines": 3,
+    "payloadBytes": 8952,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 157,
+        "end": 169,
+        "oldBytes": 563,
+        "newBytes": 933
+      },
+      {
+        "start": 173,
+        "end": 180,
+        "oldBytes": 384,
+        "newBytes": 552
+      },
+      {
+        "start": 1503,
+        "end": 1511,
+        "oldBytes": 537,
+        "newBytes": 485
+      },
+      {
+        "start": 3708,
+        "end": 3716,
+        "oldBytes": 581,
+        "newBytes": 510
+      }
+    ]
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Round Adapter",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Round Adapter"
+    ],
+    "class": "ModuleScript",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/access-drafts/sources/ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/02-level5-adapter.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/02-level5-adapter.verify.luau",
+    "baselineLength": 15482,
+    "baselineDjb2": 2781571066,
+    "baselineSha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
+    "expectedLength": 17720,
+    "expectedDjb2": 3055794701,
+    "expectedSha256": "2acd7dc20a27eea96989dea6bfd4eb6fdc7bb63f344b7dd2883654acb8e3239f",
+    "fragmentCount": 3,
+    "contextLines": 3,
+    "payloadBytes": 9372,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 1,
+        "end": 5,
+        "oldBytes": 301,
+        "newBytes": 308
+      },
+      {
+        "start": 258,
+        "end": 271,
+        "oldBytes": 599,
+        "newBytes": 2793
+      },
+      {
+        "start": 300,
+        "end": 305,
+        "oldBytes": 367,
+        "newBytes": 404
+      }
+    ]
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Window Watcher Encounters"
+    ],
+    "class": "ModuleScript",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/access-drafts/sources/ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/03-window-watcher.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/03-window-watcher.verify.luau",
+    "baselineLength": 23722,
+    "baselineDjb2": 2001089542,
+    "baselineSha256": "a69ca35ac4ace9bbe462801ca7397ab12be7dbeceab74e7b15ce9c81f2483f59",
+    "expectedLength": 23818,
+    "expectedDjb2": 4257775843,
+    "expectedSha256": "46120fc6e0379138094e9cac08a73dd21e650c732309833627847d4fd40d87da",
+    "fragmentCount": 4,
+    "contextLines": 3,
+    "payloadBytes": 7597,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 1,
+        "end": 6,
+        "oldBytes": 491,
+        "newBytes": 500
+      },
+      {
+        "start": 21,
+        "end": 26,
+        "oldBytes": 188,
+        "newBytes": 346
+      },
+      {
+        "start": 134,
+        "end": 141,
+        "oldBytes": 508,
+        "newBytes": 465
+      },
+      {
+        "start": 380,
+        "end": 386,
+        "oldBytes": 304,
+        "newBytes": 276
+      }
+    ]
+  },
+  {
+    "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+    "studioPath": "ServerScriptService.TunnelLobbyBuilder",
+    "names": [
+      "ServerScriptService",
+      "TunnelLobbyBuilder"
+    ],
+    "class": "ModuleScript",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/lobby-drafts/TunnelLobbyBuilder.ModuleScript.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/04-lobby-builder.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/04-lobby-builder.verify.luau",
+    "baselineLength": 103305,
+    "baselineDjb2": 3458785195,
+    "baselineSha256": "c74923a4985dcc7e5b2f19f36c1af8361a15857cdd524c85d6e448694ce4f874",
+    "expectedLength": 116631,
+    "expectedDjb2": 3492273471,
+    "expectedSha256": "e98ae3de991fb6a12a8b5f358eb6e61d5dbc395f30b89f3d8d0f36f90cb89b75",
+    "fragmentCount": 4,
+    "contextLines": 3,
+    "payloadBytes": 20532,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 1849,
+        "end": 1854,
+        "oldBytes": 226,
+        "newBytes": 13414
+      },
+      {
+        "start": 2020,
+        "end": 2025,
+        "oldBytes": 222,
+        "newBytes": 320
+      },
+      {
+        "start": 2067,
+        "end": 2074,
+        "oldBytes": 195,
+        "newBytes": 236
+      },
+      {
+        "start": 2678,
+        "end": 2684,
+        "oldBytes": 283,
+        "newBytes": 282
+      }
+    ]
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Power Outage",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Power Outage"
+    ],
+    "class": "ModuleScript",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/outage-drafts/sources/ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/05-outage.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/05-outage.verify.luau",
+    "baselineLength": 8618,
+    "baselineDjb2": 398132620,
+    "baselineSha256": "ce645e6063424ff8e4fb806826bdbf8cee5be7683860c7b2812ae98e51999c1f",
+    "expectedLength": 8818,
+    "expectedDjb2": 3854323309,
+    "expectedSha256": "bf3e38ccdddfbbf07fb6cac2685489a20a2e4d21565dc8bb63a3f6aa0fcea40b",
+    "fragmentCount": 2,
+    "contextLines": 3,
+    "payloadBytes": 5498,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 4,
+        "end": 9,
+        "oldBytes": 262,
+        "newBytes": 373
+      },
+      {
+        "start": 142,
+        "end": 147,
+        "oldBytes": 209,
+        "newBytes": 298
+      }
+    ]
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Section Progression",
+    "names": [
+      "ServerScriptService",
+      "Level 5 Systems",
+      "Level 5 Section Progression"
+    ],
+    "class": "ModuleScript",
+    "draftFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/clue-drafts/sources/ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "payloadFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/06-b-clue.apply.luau",
+    "verifyFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/cas-payloads/06-b-clue.verify.luau",
+    "baselineLength": 26930,
+    "baselineDjb2": 1904696397,
+    "baselineSha256": "c9a6865e45dc5fb6be78efa79e7e69318c4ba2cbae3824a0a32194fd86535b43",
+    "expectedLength": 27031,
+    "expectedDjb2": 3047997768,
+    "expectedSha256": "e5690e2411b5f4da87f084801f5e2c33ff092bf4b6cde6897ec2f0492fbc5dda",
+    "fragmentCount": 1,
+    "contextLines": 3,
+    "payloadBytes": 5527,
+    "compileO0": true,
+    "fragments": [
+      {
+        "start": 330,
+        "end": 335,
+        "oldBytes": 528,
+        "newBytes": 629
+      }
+    ]
+  }
+]

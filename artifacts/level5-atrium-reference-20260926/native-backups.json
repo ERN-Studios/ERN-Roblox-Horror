@@ -1,0 +1,14 @@
+{
+  "before": {
+    "file": "artifacts/level5-dense-routes-20260926/after.rbxl",
+    "bytes": 9787627,
+    "sha256": "12f375d5016ade4e73ae06a635f2c880c57f9a6eb0c5554a8c466200eef9d9e3",
+    "purpose": "Full native Edit backup with seven MaterialVariants and 192 verified scripts, after native QA, before confirmed v2133 publication."
+  },
+  "after": {
+    "file": "artifacts/level5-atrium-reference-20260926/after.rbxl",
+    "bytes": 9790056,
+    "sha256": "b117548bc9d4a4f4ed999f32871e6ffc10755548df7bf28ac3a90b8609b250e3",
+    "purpose": "Full native Edit backup after F residential-atrium QA; 192 scripts and seven MaterialVariants, before verified v2136 publication."
+  }
+}

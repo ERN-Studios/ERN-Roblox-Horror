@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "intent": "concept art / brainstorming, not implemented",
+  "source": "/Users/zeanjuul4/.codex/generated_images/01a0a070-b708-7232-9329-1b8fa741047d/exec-a0e16347-acc7-4087-b3fb-5a78f5cd6a21.png",
+  "file": "03-the-folded-one.png",
+  "sha256": "d548ea3de8e3ae278d32751da13a4ed6b473b7ec1f57444e910f2a58533c7335",
+  "promptFile": "03-the-folded-one.prompt.txt"
+}

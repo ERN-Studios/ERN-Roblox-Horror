@@ -1,0 +1,22 @@
+{
+  "capturedAtUTC": "2026-09-27T10:35:46.726527+00:00",
+  "studioId": "7d1118c4-270f-4296-9034-08394bd4329c",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "version": 2150,
+  "scriptCount": 197,
+  "sourceEditorConflicts": [],
+  "changedScripts": [
+    "ServerScriptService.GameManager",
+    "ServerScriptService.Level 5 Systems.Level 5 Power Outage",
+    "ServerScriptService.Level 5 Systems.Level 5 Round Adapter",
+    "ServerScriptService.Level 5 Systems.Level 5 Section Progression",
+    "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
+    "ServerScriptService.TunnelLobbyBuilder"
+  ],
+  "unchangedCount": 191,
+  "added": [],
+  "missing": [],
+  "exportedSourcesMatchDraftSha256": true,
+  "baselineComparisonMethod": "Exact source byte lengths plus independent djb2 and FNV-1a for all197; full source SHA-256 comparison for6 changed exports."
+}

@@ -1,0 +1,23 @@
+{
+  "createdUtc": "2026-09-25T13:45:50.825678+00:00",
+  "concept": "05-reactive-mold",
+  "title": "REACTIVE MOLD",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in generation",
+  "generationCalls": 1,
+  "inputImages": [],
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe4-74ed-7262-a527-95459bf25d57/exec-296c809e-259f-45ef-b4e4-b64d79bb1e6f.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-entity-concepts-20260925/05-reactive-mold.png",
+  "format": "PNG",
+  "modeOfImage": "RGB",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2684161,
+  "sha256": "a8a25891621aeb5e1d8946bb396a9111bd520262a5b97a42804145413bc92ff5",
+  "exactPromptFile": "05-reactive-mold.prompt.txt",
+  "exactPrompt": "Use case: stylized-concept.\nAsset type: a premium, practical 3D environment/mechanic concept board for a Roblox Backrooms horror game, landscape 1536x1024, not gameplay HUD.\nShared art direction: uncanny domestic suburb architecture entirely INSIDE one endless building. Cream and warm beige plaster houses, muted sage and dusty pink fa\u00e7ades, white wood trim, uniformly dark tinted glass in every window, beige and green carpet where outdoor streets would normally be, sparse 1980s domestic furniture. Office suspended false ceilings clearly visible above the houses, fluorescent ceiling panels with mixed warm/cool, dim and switched-off states. Modular, buildable forms and appealing realistic materials with restrained Roblox-realizable geometry; high-end architectural game concept render, not photoreal humans, not Minecraft, not toy block art.\nReadable soft interior illumination, eerie liminal stillness, no sunlight or sky, no exterior landscape. No lamps or lights mounted on any house, no glowing windows, no light emitted from furniture. No laboratory or Zyntra branding, no suggestion anyone built the Backrooms. No gore, no HUD, no UI arrows, no logo/watermark. Restrained presentation on a warm charcoal/cream board with thin dividers, ample scene area. The only typography is the requested exact uppercase title in a small clean header; no other words or captions.\nPrimary request: the existing huge dark mycelium wall colonies become a local reactive noise hazard when disturbed by running.\nComposition: THREE clean cinematic story panels arranged left-to-right, the same recognisable indoor cream-house wall and low ceiling in each. Header text exactly \"REACTIVE MOLD\".\nPanel 1: establish a giant realistic charcoal-black fungal colony growing from a damp wall seam, spreading as irregular dense mycelium and tangled branching capillary fibers across the plaster and reaching down onto a small patch of carpet. Not a tree mural, not a printed picture, not mushrooms, not glowing fungus. The middle of the wall remains textured with natural patchy mold, and there is a clearly visible walkable strip of clean beige carpet along its outside border. Show one small Roblox-proportioned researcher silhouette slow-walking on that clean border, enough floor visible to understand it is avoidable.\nPanel 2: close, dynamic view of the same explorer running across the brittle floor fibers; their foot breaks dry filaments, and a contained fine grey spore/dust puff rises at ankle and chest level. They cover their mouth/cough, without grossness, injury or gore. The gray puff is small and readable, not an explosion, not magic or luminous vapor. Fibers physically connect to the existing wall colony.\nPanel 3: a wider corridor view: explorer by the gray disturbed puff, with a distant solitary unnaturally still Neighbor silhouette just beginning to turn at the far cream-house doorway, attention drawn toward the cough. Keep the Neighbor vague and restrained, no red/glowing eyes, no defined redesign; the subject is the mold mechanic. The clean slow-walking border stays visible in all relevant views.",
+  "nativeBytesPreserved": true,
+  "pixelEdits": false,
+  "visualInspection": "Three panels show the clean carpet border, disturbed floor-connected dark mycelium and grey spore/cough effect, then a distant Neighbor silhouette. Dark glass and suspended ceiling retained. Neighbor is intentionally an indistinct placeholder, not a finalized entity model.",
+  "implementationStatus": "Concept only; no Studio, Git or Trello modifications."
+}

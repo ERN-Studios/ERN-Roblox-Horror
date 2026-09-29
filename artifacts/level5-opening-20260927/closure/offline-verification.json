@@ -1,0 +1,14 @@
+[
+  {
+    "name": "compile mirrored closure scripts",
+    "exitCode": 0,
+    "stdout": "Compiled 6 KLOC into 205 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)\n",
+    "stderr": ""
+  },
+  {
+    "name": "exact access/default/builder tests",
+    "exitCode": 0,
+    "stdout": "PASS: 120 assertions; exact extracted access defaults deny Level 5 to normal/developer/mixed rosters; actual builder room/door expressions keep Level 5 closed.\nOffline source execution only; does not claim native queue or teleport behavior.\n",
+    "stderr": ""
+  }
+]

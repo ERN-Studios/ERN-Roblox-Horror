@@ -1,0 +1,1220 @@
+{
+  "sourceFiles": {
+    "blender/exports/model.blend": "134e485ba1e8479d668a9460e87e18a9c87083f52ff4ae1a89dc4bbe0ac2f0ad",
+    "blender/exports/model.glb": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+    "blender/exports/WindowWatcher-basecolor.png": "3229b3bc4eec4498379348bcfabb74dfac136dc1ab51d8a18cb073c34bb01133"
+  },
+  "maskPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-20260925/eye-placement/window-watcher-eye-emission-mask.png",
+  "maskSha256": "91cfc17625f5a01eea75a6591557c9f260057a1f0fa910129049ad76c8ae5d4b",
+  "resolution": [
+    2048,
+    2048
+  ],
+  "method": "Blender Cycles EMIT bake from world-position distance to actual raycast iris surfaces. New black/white technical mask; original albedo not edited. Exact original UVMap. No bake margin.",
+  "whiteCoreDiameterMeters": 0.0201,
+  "whiteCoreDiameterStudsAtEightStudHeight": 0.067,
+  "outerSoftEdgeDiameterStuds": 0.075,
+  "nonBlackPixels": 34280,
+  "mappedNonBlackPixels": 34280,
+  "unmappedNonBlackPixels": 0,
+  "triangleMaskCoverage": [
+    {
+      "triangle": 205,
+      "whiteTexelFragments": 61,
+      "maxDistanceToIrisMeters": 0.011145023283413017,
+      "minVertexHeadWeight": 0.9997186064720154
+    },
+    {
+      "triangle": 206,
+      "whiteTexelFragments": 132,
+      "maxDistanceToIrisMeters": 0.011101406481869113,
+      "minVertexHeadWeight": 0.9997389316558838
+    },
+    {
+      "triangle": 207,
+      "whiteTexelFragments": 58,
+      "maxDistanceToIrisMeters": 0.011083660026103009,
+      "minVertexHeadWeight": 0.9998695850372314
+    },
+    {
+      "triangle": 208,
+      "whiteTexelFragments": 59,
+      "maxDistanceToIrisMeters": 0.01112920641675244,
+      "minVertexHeadWeight": 0.9997186064720154
+    },
+    {
+      "triangle": 209,
+      "whiteTexelFragments": 23,
+      "maxDistanceToIrisMeters": 0.011136848175795107,
+      "minVertexHeadWeight": 0.9998695850372314
+    },
+    {
+      "triangle": 210,
+      "whiteTexelFragments": 96,
+      "maxDistanceToIrisMeters": 0.009039361696615586,
+      "minVertexHeadWeight": 0.9998378753662109
+    },
+    {
+      "triangle": 677,
+      "whiteTexelFragments": 698,
+      "maxDistanceToIrisMeters": 0.011097257527259102,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 679,
+      "whiteTexelFragments": 323,
+      "maxDistanceToIrisMeters": 0.011086338723899376,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 680,
+      "whiteTexelFragments": 71,
+      "maxDistanceToIrisMeters": 0.011129165759927057,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 681,
+      "whiteTexelFragments": 316,
+      "maxDistanceToIrisMeters": 0.011144159968890477,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 740,
+      "whiteTexelFragments": 52,
+      "maxDistanceToIrisMeters": 0.011133944443974203,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 741,
+      "whiteTexelFragments": 571,
+      "maxDistanceToIrisMeters": 0.011137957101465286,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 742,
+      "whiteTexelFragments": 27,
+      "maxDistanceToIrisMeters": 0.011131970705588632,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 868,
+      "whiteTexelFragments": 135,
+      "maxDistanceToIrisMeters": 0.01114006437584398,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 869,
+      "whiteTexelFragments": 132,
+      "maxDistanceToIrisMeters": 0.008315948858213369,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 870,
+      "whiteTexelFragments": 192,
+      "maxDistanceToIrisMeters": 0.011112331142600598,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 871,
+      "whiteTexelFragments": 86,
+      "maxDistanceToIrisMeters": 0.011136054314993779,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 872,
+      "whiteTexelFragments": 105,
+      "maxDistanceToIrisMeters": 0.010957239602363897,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1143,
+      "whiteTexelFragments": 265,
+      "maxDistanceToIrisMeters": 0.01114309268153152,
+      "minVertexHeadWeight": 0.9997617602348328
+    },
+    {
+      "triangle": 1144,
+      "whiteTexelFragments": 75,
+      "maxDistanceToIrisMeters": 0.01113268754271289,
+      "minVertexHeadWeight": 0.9997617602348328
+    },
+    {
+      "triangle": 1145,
+      "whiteTexelFragments": 401,
+      "maxDistanceToIrisMeters": 0.011142470314884488,
+      "minVertexHeadWeight": 0.9997617602348328
+    },
+    {
+      "triangle": 1146,
+      "whiteTexelFragments": 474,
+      "maxDistanceToIrisMeters": 0.011139611641249755,
+      "minVertexHeadWeight": 0.9997617602348328
+    },
+    {
+      "triangle": 1460,
+      "whiteTexelFragments": 40,
+      "maxDistanceToIrisMeters": 0.011106362517387572,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1463,
+      "whiteTexelFragments": 111,
+      "maxDistanceToIrisMeters": 0.011139525904812417,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1665,
+      "whiteTexelFragments": 169,
+      "maxDistanceToIrisMeters": 0.008753156518564205,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1666,
+      "whiteTexelFragments": 52,
+      "maxDistanceToIrisMeters": 0.01111595701685579,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1667,
+      "whiteTexelFragments": 155,
+      "maxDistanceToIrisMeters": 0.011097713590727549,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 1745,
+      "whiteTexelFragments": 53,
+      "maxDistanceToIrisMeters": 0.008793077774810443,
+      "minVertexHeadWeight": 0.9998026490211487
+    },
+    {
+      "triangle": 1746,
+      "whiteTexelFragments": 123,
+      "maxDistanceToIrisMeters": 0.004620495083990626,
+      "minVertexHeadWeight": 0.9998923540115356
+    },
+    {
+      "triangle": 1747,
+      "whiteTexelFragments": 178,
+      "maxDistanceToIrisMeters": 0.005588064824967904,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2028,
+      "whiteTexelFragments": 16,
+      "maxDistanceToIrisMeters": 0.011098280304649499,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2209,
+      "whiteTexelFragments": 3,
+      "maxDistanceToIrisMeters": 0.011122026452914893,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2211,
+      "whiteTexelFragments": 11,
+      "maxDistanceToIrisMeters": 0.01113259979801806,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2298,
+      "whiteTexelFragments": 9,
+      "maxDistanceToIrisMeters": 0.011102753482266007,
+      "minVertexHeadWeight": 0.9994078278541565
+    },
+    {
+      "triangle": 2299,
+      "whiteTexelFragments": 5,
+      "maxDistanceToIrisMeters": 0.01107487065669891,
+      "minVertexHeadWeight": 0.9994078278541565
+    },
+    {
+      "triangle": 2491,
+      "whiteTexelFragments": 84,
+      "maxDistanceToIrisMeters": 0.011142373715027224,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2800,
+      "whiteTexelFragments": 648,
+      "maxDistanceToIrisMeters": 0.011140904909654933,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2801,
+      "whiteTexelFragments": 261,
+      "maxDistanceToIrisMeters": 0.01079855802898417,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 2802,
+      "whiteTexelFragments": 339,
+      "maxDistanceToIrisMeters": 0.011143905984499118,
+      "minVertexHeadWeight": 0.9998013377189636
+    },
+    {
+      "triangle": 2803,
+      "whiteTexelFragments": 336,
+      "maxDistanceToIrisMeters": 0.010256526997253606,
+      "minVertexHeadWeight": 0.9998267292976379
+    },
+    {
+      "triangle": 2804,
+      "whiteTexelFragments": 506,
+      "maxDistanceToIrisMeters": 0.010850496447423976,
+      "minVertexHeadWeight": 0.9998449087142944
+    },
+    {
+      "triangle": 2805,
+      "whiteTexelFragments": 743,
+      "maxDistanceToIrisMeters": 0.01110885042244183,
+      "minVertexHeadWeight": 0.9998903274536133
+    },
+    {
+      "triangle": 2806,
+      "whiteTexelFragments": 389,
+      "maxDistanceToIrisMeters": 0.01113836611683797,
+      "minVertexHeadWeight": 0.9998013377189636
+    },
+    {
+      "triangle": 3013,
+      "whiteTexelFragments": 267,
+      "maxDistanceToIrisMeters": 0.01114274383357959,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3015,
+      "whiteTexelFragments": 418,
+      "maxDistanceToIrisMeters": 0.011137937506104105,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3016,
+      "whiteTexelFragments": 510,
+      "maxDistanceToIrisMeters": 0.011143052583976878,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3201,
+      "whiteTexelFragments": 128,
+      "maxDistanceToIrisMeters": 0.011132917453388048,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3373,
+      "whiteTexelFragments": 784,
+      "maxDistanceToIrisMeters": 0.011098066995950291,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3374,
+      "whiteTexelFragments": 304,
+      "maxDistanceToIrisMeters": 0.00852127419596555,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3375,
+      "whiteTexelFragments": 1182,
+      "maxDistanceToIrisMeters": 0.011140431999577805,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3376,
+      "whiteTexelFragments": 554,
+      "maxDistanceToIrisMeters": 0.01090250738503682,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3663,
+      "whiteTexelFragments": 14,
+      "maxDistanceToIrisMeters": 0.01112501631466919,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3664,
+      "whiteTexelFragments": 55,
+      "maxDistanceToIrisMeters": 0.01113559641638198,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3665,
+      "whiteTexelFragments": 70,
+      "maxDistanceToIrisMeters": 0.011132775713161552,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3727,
+      "whiteTexelFragments": 80,
+      "maxDistanceToIrisMeters": 0.006759891719433086,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3728,
+      "whiteTexelFragments": 150,
+      "maxDistanceToIrisMeters": 0.008538668611027892,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 3939,
+      "whiteTexelFragments": 48,
+      "maxDistanceToIrisMeters": 0.011127008896404104,
+      "minVertexHeadWeight": 0.9996830821037292
+    },
+    {
+      "triangle": 3940,
+      "whiteTexelFragments": 1,
+      "maxDistanceToIrisMeters": 0.010938837113753343,
+      "minVertexHeadWeight": 0.9991714358329773
+    },
+    {
+      "triangle": 3942,
+      "whiteTexelFragments": 19,
+      "maxDistanceToIrisMeters": 0.011121731483194744,
+      "minVertexHeadWeight": 0.9996830821037292
+    },
+    {
+      "triangle": 4006,
+      "whiteTexelFragments": 820,
+      "maxDistanceToIrisMeters": 0.011123025067399867,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4007,
+      "whiteTexelFragments": 99,
+      "maxDistanceToIrisMeters": 0.01113830958928794,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4008,
+      "whiteTexelFragments": 249,
+      "maxDistanceToIrisMeters": 0.011109524364236411,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4158,
+      "whiteTexelFragments": 302,
+      "maxDistanceToIrisMeters": 0.011136092308095103,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4161,
+      "whiteTexelFragments": 63,
+      "maxDistanceToIrisMeters": 0.01111940261995699,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4258,
+      "whiteTexelFragments": 258,
+      "maxDistanceToIrisMeters": 0.008513506303713442,
+      "minVertexHeadWeight": 0.999851644039154
+    },
+    {
+      "triangle": 4259,
+      "whiteTexelFragments": 378,
+      "maxDistanceToIrisMeters": 0.010438188457998149,
+      "minVertexHeadWeight": 0.999760091304779
+    },
+    {
+      "triangle": 4260,
+      "whiteTexelFragments": 370,
+      "maxDistanceToIrisMeters": 0.011137879005642132,
+      "minVertexHeadWeight": 0.9997287392616272
+    },
+    {
+      "triangle": 4477,
+      "whiteTexelFragments": 89,
+      "maxDistanceToIrisMeters": 0.01113258819345219,
+      "minVertexHeadWeight": 0.9997389316558838
+    },
+    {
+      "triangle": 4478,
+      "whiteTexelFragments": 183,
+      "maxDistanceToIrisMeters": 0.010986433455011114,
+      "minVertexHeadWeight": 0.9997537136077881
+    },
+    {
+      "triangle": 4479,
+      "whiteTexelFragments": 20,
+      "maxDistanceToIrisMeters": 0.008934552239901604,
+      "minVertexHeadWeight": 0.9998026490211487
+    },
+    {
+      "triangle": 4480,
+      "whiteTexelFragments": 84,
+      "maxDistanceToIrisMeters": 0.00893482384472983,
+      "minVertexHeadWeight": 0.9998026490211487
+    },
+    {
+      "triangle": 4481,
+      "whiteTexelFragments": 113,
+      "maxDistanceToIrisMeters": 0.008879676395883336,
+      "minVertexHeadWeight": 0.9998378753662109
+    },
+    {
+      "triangle": 4587,
+      "whiteTexelFragments": 93,
+      "maxDistanceToIrisMeters": 0.011015080022875908,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4589,
+      "whiteTexelFragments": 71,
+      "maxDistanceToIrisMeters": 0.011092833077379894,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4590,
+      "whiteTexelFragments": 14,
+      "maxDistanceToIrisMeters": 0.011118242942092198,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4646,
+      "whiteTexelFragments": 139,
+      "maxDistanceToIrisMeters": 0.005709424474045404,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4647,
+      "whiteTexelFragments": 92,
+      "maxDistanceToIrisMeters": 0.005795580323048625,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4648,
+      "whiteTexelFragments": 138,
+      "maxDistanceToIrisMeters": 0.003541086520529663,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4649,
+      "whiteTexelFragments": 143,
+      "maxDistanceToIrisMeters": 0.005976926440885184,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4827,
+      "whiteTexelFragments": 33,
+      "maxDistanceToIrisMeters": 0.011107456361310074,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4828,
+      "whiteTexelFragments": 189,
+      "maxDistanceToIrisMeters": 0.011102958183475557,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4829,
+      "whiteTexelFragments": 96,
+      "maxDistanceToIrisMeters": 0.01113751318343883,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4853,
+      "whiteTexelFragments": 22,
+      "maxDistanceToIrisMeters": 0.011131933120661876,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 4855,
+      "whiteTexelFragments": 8,
+      "maxDistanceToIrisMeters": 0.011124722224694435,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5046,
+      "whiteTexelFragments": 168,
+      "maxDistanceToIrisMeters": 0.008850654505322386,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5047,
+      "whiteTexelFragments": 68,
+      "maxDistanceToIrisMeters": 0.011135282350364928,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5048,
+      "whiteTexelFragments": 74,
+      "maxDistanceToIrisMeters": 0.011117497022318294,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5049,
+      "whiteTexelFragments": 34,
+      "maxDistanceToIrisMeters": 0.011145395982832708,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5050,
+      "whiteTexelFragments": 179,
+      "maxDistanceToIrisMeters": 0.011032419780078752,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5131,
+      "whiteTexelFragments": 6,
+      "maxDistanceToIrisMeters": 0.011133760606634601,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5132,
+      "whiteTexelFragments": 4,
+      "maxDistanceToIrisMeters": 0.0111142953861009,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5312,
+      "whiteTexelFragments": 125,
+      "maxDistanceToIrisMeters": 0.008021366772241339,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5330,
+      "whiteTexelFragments": 4,
+      "maxDistanceToIrisMeters": 0.011113288228850271,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5334,
+      "whiteTexelFragments": 2,
+      "maxDistanceToIrisMeters": 0.010931825345479549,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 5664,
+      "whiteTexelFragments": 31,
+      "maxDistanceToIrisMeters": 0.011122278591752717,
+      "minVertexHeadWeight": 0.9998048543930054
+    },
+    {
+      "triangle": 5665,
+      "whiteTexelFragments": 118,
+      "maxDistanceToIrisMeters": 0.011132112183500327,
+      "minVertexHeadWeight": 0.9997287392616272
+    },
+    {
+      "triangle": 5813,
+      "whiteTexelFragments": 87,
+      "maxDistanceToIrisMeters": 0.01033254903754479,
+      "minVertexHeadWeight": 0.999760091304779
+    },
+    {
+      "triangle": 5814,
+      "whiteTexelFragments": 170,
+      "maxDistanceToIrisMeters": 0.011139441187507497,
+      "minVertexHeadWeight": 0.999734103679657
+    },
+    {
+      "triangle": 6034,
+      "whiteTexelFragments": 1391,
+      "maxDistanceToIrisMeters": 0.01114402853083699,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6035,
+      "whiteTexelFragments": 522,
+      "maxDistanceToIrisMeters": 0.011134043334812443,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6036,
+      "whiteTexelFragments": 276,
+      "maxDistanceToIrisMeters": 0.008252427224731617,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6211,
+      "whiteTexelFragments": 30,
+      "maxDistanceToIrisMeters": 0.01110633477942879,
+      "minVertexHeadWeight": 0.9998571872711182
+    },
+    {
+      "triangle": 6213,
+      "whiteTexelFragments": 138,
+      "maxDistanceToIrisMeters": 0.011127094251957048,
+      "minVertexHeadWeight": 0.9998903274536133
+    },
+    {
+      "triangle": 6252,
+      "whiteTexelFragments": 218,
+      "maxDistanceToIrisMeters": 0.011118105340929588,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6293,
+      "whiteTexelFragments": 126,
+      "maxDistanceToIrisMeters": 0.011121619097630818,
+      "minVertexHeadWeight": 0.9997323155403137
+    },
+    {
+      "triangle": 6295,
+      "whiteTexelFragments": 9,
+      "maxDistanceToIrisMeters": 0.011143472616118998,
+      "minVertexHeadWeight": 0.9996863603591919
+    },
+    {
+      "triangle": 6296,
+      "whiteTexelFragments": 22,
+      "maxDistanceToIrisMeters": 0.011142226433557062,
+      "minVertexHeadWeight": 0.9997323155403137
+    },
+    {
+      "triangle": 6358,
+      "whiteTexelFragments": 252,
+      "maxDistanceToIrisMeters": 0.010962599400210073,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6360,
+      "whiteTexelFragments": 13,
+      "maxDistanceToIrisMeters": 0.011142714783910773,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6361,
+      "whiteTexelFragments": 63,
+      "maxDistanceToIrisMeters": 0.011141725169516692,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 6565,
+      "whiteTexelFragments": 156,
+      "maxDistanceToIrisMeters": 0.011144497654540736,
+      "minVertexHeadWeight": 0.999788761138916
+    },
+    {
+      "triangle": 6566,
+      "whiteTexelFragments": 194,
+      "maxDistanceToIrisMeters": 0.011035909797856845,
+      "minVertexHeadWeight": 0.999788761138916
+    },
+    {
+      "triangle": 7006,
+      "whiteTexelFragments": 35,
+      "maxDistanceToIrisMeters": 0.01107676081550365,
+      "minVertexHeadWeight": 0.9998243451118469
+    },
+    {
+      "triangle": 7136,
+      "whiteTexelFragments": 296,
+      "maxDistanceToIrisMeters": 0.010380615068101524,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7137,
+      "whiteTexelFragments": 272,
+      "maxDistanceToIrisMeters": 0.010703208508382528,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7138,
+      "whiteTexelFragments": 465,
+      "maxDistanceToIrisMeters": 0.01113952659635883,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7375,
+      "whiteTexelFragments": 41,
+      "maxDistanceToIrisMeters": 0.011139936472428854,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7377,
+      "whiteTexelFragments": 30,
+      "maxDistanceToIrisMeters": 0.011076305187708704,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7448,
+      "whiteTexelFragments": 127,
+      "maxDistanceToIrisMeters": 0.006221634923489531,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7574,
+      "whiteTexelFragments": 125,
+      "maxDistanceToIrisMeters": 0.010247315906582411,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7575,
+      "whiteTexelFragments": 98,
+      "maxDistanceToIrisMeters": 0.010752058412735426,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7576,
+      "whiteTexelFragments": 94,
+      "maxDistanceToIrisMeters": 0.009996044010788931,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7596,
+      "whiteTexelFragments": 3,
+      "maxDistanceToIrisMeters": 0.011117709210872455,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7704,
+      "whiteTexelFragments": 52,
+      "maxDistanceToIrisMeters": 0.011144526277070483,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7705,
+      "whiteTexelFragments": 231,
+      "maxDistanceToIrisMeters": 0.011124933177667256,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7706,
+      "whiteTexelFragments": 16,
+      "maxDistanceToIrisMeters": 0.011135948735008895,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 7854,
+      "whiteTexelFragments": 12,
+      "maxDistanceToIrisMeters": 0.011130755921573213,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8134,
+      "whiteTexelFragments": 144,
+      "maxDistanceToIrisMeters": 0.005867202807146441,
+      "minVertexHeadWeight": 0.9998923540115356
+    },
+    {
+      "triangle": 8305,
+      "whiteTexelFragments": 21,
+      "maxDistanceToIrisMeters": 0.011076147560152192,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8321,
+      "whiteTexelFragments": 413,
+      "maxDistanceToIrisMeters": 0.011011614400851258,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8322,
+      "whiteTexelFragments": 528,
+      "maxDistanceToIrisMeters": 0.010974145191278466,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8505,
+      "whiteTexelFragments": 13,
+      "maxDistanceToIrisMeters": 0.011011833336123373,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8661,
+      "whiteTexelFragments": 335,
+      "maxDistanceToIrisMeters": 0.010032608159647786,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8662,
+      "whiteTexelFragments": 266,
+      "maxDistanceToIrisMeters": 0.011128229465867969,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8663,
+      "whiteTexelFragments": 387,
+      "maxDistanceToIrisMeters": 0.011142294630991078,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8664,
+      "whiteTexelFragments": 343,
+      "maxDistanceToIrisMeters": 0.008488511927159678,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8761,
+      "whiteTexelFragments": 130,
+      "maxDistanceToIrisMeters": 0.011139701890030398,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8762,
+      "whiteTexelFragments": 182,
+      "maxDistanceToIrisMeters": 0.011125512963385781,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8862,
+      "whiteTexelFragments": 202,
+      "maxDistanceToIrisMeters": 0.011132531032802867,
+      "minVertexHeadWeight": 0.9998243451118469
+    },
+    {
+      "triangle": 8863,
+      "whiteTexelFragments": 53,
+      "maxDistanceToIrisMeters": 0.011136197833854451,
+      "minVertexHeadWeight": 0.9997287392616272
+    },
+    {
+      "triangle": 8885,
+      "whiteTexelFragments": 34,
+      "maxDistanceToIrisMeters": 0.011122967587891207,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8944,
+      "whiteTexelFragments": 101,
+      "maxDistanceToIrisMeters": 0.011075604596529828,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8993,
+      "whiteTexelFragments": 474,
+      "maxDistanceToIrisMeters": 0.010367360590118174,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 8994,
+      "whiteTexelFragments": 241,
+      "maxDistanceToIrisMeters": 0.010370999962009698,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9038,
+      "whiteTexelFragments": 124,
+      "maxDistanceToIrisMeters": 0.0111285589823149,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9077,
+      "whiteTexelFragments": 3,
+      "maxDistanceToIrisMeters": 0.011095740018140747,
+      "minVertexHeadWeight": 0.9991714358329773
+    },
+    {
+      "triangle": 9296,
+      "whiteTexelFragments": 99,
+      "maxDistanceToIrisMeters": 0.011091301078790942,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9446,
+      "whiteTexelFragments": 365,
+      "maxDistanceToIrisMeters": 0.010519409706049039,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9543,
+      "whiteTexelFragments": 3,
+      "maxDistanceToIrisMeters": 0.011097150461000987,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9744,
+      "whiteTexelFragments": 114,
+      "maxDistanceToIrisMeters": 0.006130539501088458,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9856,
+      "whiteTexelFragments": 24,
+      "maxDistanceToIrisMeters": 0.0111021198403013,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 9885,
+      "whiteTexelFragments": 93,
+      "maxDistanceToIrisMeters": 0.011142556980313143,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10122,
+      "whiteTexelFragments": 76,
+      "maxDistanceToIrisMeters": 0.01102628116255478,
+      "minVertexHeadWeight": 0.9998449087142944
+    },
+    {
+      "triangle": 10123,
+      "whiteTexelFragments": 223,
+      "maxDistanceToIrisMeters": 0.01114165855024611,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10124,
+      "whiteTexelFragments": 186,
+      "maxDistanceToIrisMeters": 0.011079809845985313,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10199,
+      "whiteTexelFragments": 57,
+      "maxDistanceToIrisMeters": 0.010940435459590206,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10200,
+      "whiteTexelFragments": 26,
+      "maxDistanceToIrisMeters": 0.011142407395804795,
+      "minVertexHeadWeight": 0.9998342990875244
+    },
+    {
+      "triangle": 10201,
+      "whiteTexelFragments": 113,
+      "maxDistanceToIrisMeters": 0.008855375592565277,
+      "minVertexHeadWeight": 0.9998695850372314
+    },
+    {
+      "triangle": 10202,
+      "whiteTexelFragments": 24,
+      "maxDistanceToIrisMeters": 0.01103280859605132,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10385,
+      "whiteTexelFragments": 125,
+      "maxDistanceToIrisMeters": 0.011119332258910973,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10386,
+      "whiteTexelFragments": 87,
+      "maxDistanceToIrisMeters": 0.011128539519903594,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10570,
+      "whiteTexelFragments": 30,
+      "maxDistanceToIrisMeters": 0.011139255921613802,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10587,
+      "whiteTexelFragments": 35,
+      "maxDistanceToIrisMeters": 0.01113546650911704,
+      "minVertexHeadWeight": 0.9997685551643372
+    },
+    {
+      "triangle": 10588,
+      "whiteTexelFragments": 1,
+      "maxDistanceToIrisMeters": 0.010941364136789082,
+      "minVertexHeadWeight": 0.9997287392616272
+    },
+    {
+      "triangle": 10691,
+      "whiteTexelFragments": 397,
+      "maxDistanceToIrisMeters": 0.01073534518350857,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10692,
+      "whiteTexelFragments": 168,
+      "maxDistanceToIrisMeters": 0.011062658735926854,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10693,
+      "whiteTexelFragments": 220,
+      "maxDistanceToIrisMeters": 0.010565386132610419,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10725,
+      "whiteTexelFragments": 84,
+      "maxDistanceToIrisMeters": 0.011131018042928275,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10741,
+      "whiteTexelFragments": 29,
+      "maxDistanceToIrisMeters": 0.011047564532616039,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10742,
+      "whiteTexelFragments": 99,
+      "maxDistanceToIrisMeters": 0.010349105032305274,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10743,
+      "whiteTexelFragments": 139,
+      "maxDistanceToIrisMeters": 0.00844646421808606,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10777,
+      "whiteTexelFragments": 50,
+      "maxDistanceToIrisMeters": 0.01114466108012908,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10778,
+      "whiteTexelFragments": 557,
+      "maxDistanceToIrisMeters": 0.011139999117668152,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10779,
+      "whiteTexelFragments": 818,
+      "maxDistanceToIrisMeters": 0.011134990539977352,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 10813,
+      "whiteTexelFragments": 3,
+      "maxDistanceToIrisMeters": 0.011125180712792823,
+      "minVertexHeadWeight": 0.9997287392616272
+    },
+    {
+      "triangle": 10879,
+      "whiteTexelFragments": 12,
+      "maxDistanceToIrisMeters": 0.011131486622910445,
+      "minVertexHeadWeight": 0.9996863603591919
+    },
+    {
+      "triangle": 10880,
+      "whiteTexelFragments": 91,
+      "maxDistanceToIrisMeters": 0.011114195788148921,
+      "minVertexHeadWeight": 0.999734103679657
+    },
+    {
+      "triangle": 10951,
+      "whiteTexelFragments": 174,
+      "maxDistanceToIrisMeters": 0.010454432709228391,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11018,
+      "whiteTexelFragments": 310,
+      "maxDistanceToIrisMeters": 0.010580445563954951,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11137,
+      "whiteTexelFragments": 79,
+      "maxDistanceToIrisMeters": 0.00844299209488322,
+      "minVertexHeadWeight": 0.9998695850372314
+    },
+    {
+      "triangle": 11138,
+      "whiteTexelFragments": 63,
+      "maxDistanceToIrisMeters": 0.006256211665516105,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11311,
+      "whiteTexelFragments": 20,
+      "maxDistanceToIrisMeters": 0.011111617771210603,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11383,
+      "whiteTexelFragments": 159,
+      "maxDistanceToIrisMeters": 0.011133860061744152,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11384,
+      "whiteTexelFragments": 164,
+      "maxDistanceToIrisMeters": 0.010855826540660717,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11404,
+      "whiteTexelFragments": 470,
+      "maxDistanceToIrisMeters": 0.011104678982167835,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11432,
+      "whiteTexelFragments": 336,
+      "maxDistanceToIrisMeters": 0.010638513081254061,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11563,
+      "whiteTexelFragments": 8,
+      "maxDistanceToIrisMeters": 0.011143165983167932,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11650,
+      "whiteTexelFragments": 17,
+      "maxDistanceToIrisMeters": 0.01111965056340904,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11656,
+      "whiteTexelFragments": 102,
+      "maxDistanceToIrisMeters": 0.008687265668409744,
+      "minVertexHeadWeight": 1.0
+    },
+    {
+      "triangle": 11691,
+      "whiteTexelFragments": 89,
+      "maxDistanceToIrisMeters": 0.0111247389331283,
+      "minVertexHeadWeight": 0.999851644039154
+    },
+    {
+      "triangle": 11692,
+      "whiteTexelFragments": 186,
+      "maxDistanceToIrisMeters": 0.010678486135038412,
+      "minVertexHeadWeight": 0.999851644039154
+    },
+    {
+      "triangle": 11712,
+      "whiteTexelFragments": 151,
+      "maxDistanceToIrisMeters": 0.011109091488347904,
+      "minVertexHeadWeight": 1.0
+    }
+  ],
+  "maxNonBlackFragmentDistanceToNearestIrisMeters": 0.011145395982832708,
+  "leakTriangles": [],
+  "geometryUvLeakCheckPass": true,
+  "frozenInputsUnchanged": true,
+  "nativeRobloxEmissionVerified": false,
+  "nativeNote": "SurfaceAppearance.EmissiveMaskContent should use this mask, EmissiveTint white, EmissiveStrength start15. Native albedo multiplication/Glass visibility require native QA; Blender preview white emission is a placement proof.",
+  "visualQa": {
+    "restFaceInspected": true,
+    "wholeBodyInspected": true,
+    "emissionOnlyMappingProofInspected": true,
+    "result": "Two white iris patches only; no visible emission elsewhere on hair or body. Native Glass/SurfaceAppearance response still requires Roblox QA."
+  },
+  "installer": {
+    "path": "../tools/install_watcher_eyes.luau",
+    "api": "Apply(rig, uploadedMaskAssetId, optionalStrength)",
+    "defaultStrength": 15,
+    "strengthRange": [
+      5,
+      30
+    ],
+    "luauCompileO0": "passed",
+    "rigAttributeGuards": [
+      "SourceGlbSha256",
+      "ActorHeightStuds"
+    ],
+    "physicalLights": 0,
+    "billboardGuisCreated": 0
+  },
+  "renderFiles": [
+    {
+      "path": "emission-mask-lean-face.png",
+      "sha256": "45b5ea957df0d1924329afd51d08e708de0fc889a706bb70b47c87e69d5796cb"
+    },
+    {
+      "path": "emission-mask-rest-face.png",
+      "sha256": "7870051f514de116d8b4de9decd93e3a35345c6c47eee8cc4d96e81e883605d0"
+    },
+    {
+      "path": "emission-mask-uv-mapping-proof.png",
+      "sha256": "ea651f53a810c2dd00ba832f516dcdf1aab9770a5f6fca1c097d6ee4a8a03259"
+    },
+    {
+      "path": "emission-mask-whole-body.png",
+      "sha256": "888074ebebf044dd0d87b940623384baa6e0e7f4ad43570216260782a43d8045"
+    }
+  ]
+}

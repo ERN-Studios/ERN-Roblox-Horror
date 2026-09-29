@@ -1,7 +1,8 @@
 --!strict
--- Level 5 map-only preview lifecycle. Independent of Level 4 and its gameplay.
+-- Level 5 playable preview lifecycle. Independent of Level 4 and campaign completion.
 -- GameManager owns entry, Back to Lobby and round cleanup. This module never
--- sets Escaped/PuzzleWon, loads an entity or grants completion/rewards.
+-- sets Escaped/PuzzleWon or grants completion/rewards. The passive window
+-- encounter has no chase, damage or completion behavior.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -257,14 +258,49 @@ function Adapter.Cleanup()
 	end
 end
 
+-- The ending sign describes the current preview boundary. It does not
+-- complete the round, award a clear, or invoke any transfer; the existing
+-- BACK TO LOBBY control remains the player's way out. Keep the arrival view
+-- clear so the residential facade is visible as soon as the player spawns.
+local function addPreviewNotices(world: Model, built: any)
+	local notices = Instance.new("Folder")
+	notices.Name = "Level5PreviewNotices"
+	notices:SetAttribute(OWNED, true)
+	notices.Parent = world
+	local function sign(name: string, frame: CFrame, text: string)
+		local board = Instance.new("Part")
+		board.Name, board.Size, board.CFrame = name, Vector3.new(6.6, 3.6, 0.1), frame
+		board.Anchored, board.CanCollide, board.CanTouch, board.CanQuery = true, false, false, false
+		board.CastShadow = false
+		board.Color, board.Material = Color3.fromRGB(49, 44, 35), Enum.Material.Wood
+		board:SetAttribute(OWNED, true)
+		board.Parent = notices
+		local gui = Instance.new("SurfaceGui")
+		gui.Name, gui.Face = "PreviewInformation", Enum.NormalId.Front
+		gui.CanvasSize, gui.LightInfluence, gui.AlwaysOnTop = Vector2.new(880, 480), 0, false
+		gui.MaxDistance = 55
+		gui.Parent = board
+		local label = Instance.new("TextLabel")
+		label.Position, label.Size = UDim2.fromScale(.06, .06), UDim2.fromScale(.88, .88)
+		label.BackgroundTransparency = 1
+		label.Font, label.TextColor3 = Enum.Font.GothamMedium, Color3.fromRGB(236, 226, 194)
+		label.TextSize, label.TextWrapped, label.Text = 35, true, text
+		label.Parent = gui
+	end
+	assert(typeof(built.ChuteEnd) == "CFrame", "Preview ending needs the authored descent endpoint")
+	local ending = built.ChuteEnd.Position
+	sign("PreviewEnding", CFrame.lookAt(ending + Vector3.new(0, 4.5, 8.45), ending + Vector3.new(0, 4.5, 0)),
+		"END OF THE CURRENT PREVIEW\n\nThe final slide and ending are still in development.\n\nUse the lobby control to return.")
+end
+
 function Adapter.Build()
-	assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 map preview is developer-only")
+	assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 preview is currently closed")
 	for _, player in ipairs(Players:GetPlayers()) do
-		assert(DevAccess.IsAllowed(player), "Level 5 preview refuses a non-developer roster")
+		assert(DevAccess.IsAllowed(player), "Level 5 private preview requires a developer roster")
 	end
 	for _, level in ipairs({2, 3, 4}) do
 		assert(workspace:FindFirstChild("Level " .. level .. " Generated World") == nil,
-			"End the existing level before starting the Level 5 map preview")
+			"End the existing level before starting the Level 5 preview")
 	end
 	Adapter.Cleanup()
 	assert(workspace:FindFirstChild(WORLD_NAME) == nil, "Level 5 world name is occupied by unowned content")
@@ -299,12 +335,29 @@ function Adapter.Build()
 		})
 		assert(type(manifest) == "table" and typeof(manifest.SpawnCFrame) == "CFrame", "Architecture needs an arrival SpawnCFrame")
 		manifest.World, manifest.Origin = world, ORIGIN
+		addPreviewNotices(world, manifest)
+		if RunService:IsRunning() then
+			local progression = require(script.Parent:WaitForChild("Level 5 Section Progression"))
+			local progressResult = progression.Start(world, manifest, {
+				ClueTextures = {"rbxassetid://129034114315469", "rbxassetid://82053429341504", "rbxassetid://98028147005436", "rbxassetid://73277763916471"},
+				AllowDeveloperBypass = true,
+			})
+			assert(progressResult.ok, progressResult.error)
+			manifest.SectionProgression = progressResult
+			local encounters = require(script.Parent:FindFirstChild("Level 5 Window Watcher Encounters") :: ModuleScript)
+			local result = encounters.Start(world, {
+				Origin = ORIGIN,
+				GetParticipants = function() return Players:GetPlayers() end,
+			})
+			assert(result.ok, result.error)
+			manifest.WindowWatcher = result
+		end
 		-- Architecture supplies a HumanoidRootPart-height pose, three studs
 		-- above its entry carpet. GameManager's compatibility pad is the FLOOR.
 		manifest.ArrivalFloorCFrame = manifest.SpawnCFrame * CFrame.new(0, -3, 0)
 		manifest.Elevator, manifest.ElevatorSpawn, manifest.MazeStart = buildCompatibility(manifest.ArrivalFloorCFrame)
 		local descendants = #world:GetDescendants()
-		assert(descendants <= 18000, "Level 5 exceeds the 18,000-instance map preview budget")
+		assert(descendants <= 30000, "Level 5 exceeds the 30,000-instance dense-neighbourhood budget")
 		currentState:SetAttribute("Level5_WorldDescendants", descendants)
 		currentState:SetAttribute("Level5_BuildSeconds", math.round((os.clock() - started) * 100) / 100)
 		currentState:SetAttribute("Level5_SpawnCFrame", manifest.SpawnCFrame)

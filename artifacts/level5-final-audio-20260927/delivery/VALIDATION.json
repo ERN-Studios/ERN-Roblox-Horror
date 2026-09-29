@@ -1,0 +1,385 @@
+{
+  "all_checks_passed": true,
+  "checks": [
+    {
+      "file": "L5_room_hum.wav",
+      "sha256": "4bfc6219c030fa462d807af4b9f1f3465cd906ab19eb1ecce7ca911406963397",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 11.84,
+        "rms_dbfs": -22.507,
+        "peak_dbfs": -11.357,
+        "true_peak_4x_dbtp": -11.352,
+        "quiet_decile_rms_dbfs": -25.475,
+        "tail_100ms_rms_dbfs": -26.415,
+        "dc": -1.5156507389783756e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 71,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_blackout_roomtone.wav",
+      "sha256": "5ccd9be544bff7e3349d35d4d5343da175ccac2de6a77713d59960bdf159bbd0",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 11.84,
+        "rms_dbfs": -23.075,
+        "peak_dbfs": -7.283,
+        "true_peak_4x_dbtp": -7.277,
+        "quiet_decile_rms_dbfs": -30.776,
+        "tail_100ms_rms_dbfs": -26.566,
+        "dc": -1.5687904514547234e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 119,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_watcher_heartbeat.wav",
+      "sha256": "6e424e56fc3c3e66aa0059c4308ed5a4263fc66ac67798e652e3bc44f4beac44",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 3.84,
+        "rms_dbfs": -22.909,
+        "peak_dbfs": -3.09,
+        "true_peak_4x_dbtp": -3.084,
+        "quiet_decile_rms_dbfs": -60.726,
+        "tail_100ms_rms_dbfs": -53.057,
+        "dc": -1.3762680941788609e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 846,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_puzzle_click.wav",
+      "sha256": "3373677ec3c707e50d04d9dbe4e812a58762072646757943a81354baf68d307c",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 0.52,
+        "rms_dbfs": -42.305,
+        "peak_dbfs": -9.232,
+        "true_peak_4x_dbtp": -9.227,
+        "quiet_decile_rms_dbfs": -92.973,
+        "tail_100ms_rms_dbfs": -94.316,
+        "dc": -1.434720084448042e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 4871,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_puzzle_reject.wav",
+      "sha256": "82103989d7218c33c1b09783ded2937a4e5cab2fd6e6a789dba0b626e558870b",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 0.88,
+        "rms_dbfs": -25.301,
+        "peak_dbfs": -4.306,
+        "true_peak_4x_dbtp": -4.281,
+        "quiet_decile_rms_dbfs": -91.346,
+        "tail_100ms_rms_dbfs": -94.058,
+        "dc": -3.34051411757885e-06,
+        "clipped_samples": 0,
+        "digital_zero_samples": 3634,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_puzzle_unlock.wav",
+      "sha256": "532036a6a655351dd6fff183f6feb2aec0d53370e70a056e19e7645004cd6594",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 1.48,
+        "rms_dbfs": -37.878,
+        "peak_dbfs": -9.753,
+        "true_peak_4x_dbtp": -9.748,
+        "quiet_decile_rms_dbfs": -93.252,
+        "tail_100ms_rms_dbfs": -94.338,
+        "dc": -1.5159195936609441e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 13413,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "DO_NOT_UPLOAD_NOW/Legacy_Gate_Alternative/L5_sliding_gate_legacy_4s.wav",
+      "sha256": "d1ea4a840fc9a464386495640e94097cb0aa020327e391833921e548cd467f8c",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 4.0,
+        "rms_dbfs": -26.954,
+        "peak_dbfs": -4.022,
+        "true_peak_4x_dbtp": -4.016,
+        "quiet_decile_rms_dbfs": -83.927,
+        "tail_100ms_rms_dbfs": -94.368,
+        "dc": -1.5251349970326672e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 10042,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_fall.wav",
+      "sha256": "b79dda401169fda23a0ac2e47dc05e96a2976d2b3b56e11a6cdeefb34e07a66b",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 5.0,
+        "rms_dbfs": -21.181,
+        "peak_dbfs": -3.262,
+        "true_peak_4x_dbtp": -3.248,
+        "quiet_decile_rms_dbfs": -63.046,
+        "tail_100ms_rms_dbfs": -94.563,
+        "dc": -1.5804783827593536e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 6407,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "DO_NOT_UPLOAD_NOW/Outage_Disabled/L5_power_restart.wav",
+      "sha256": "2f5acdf23404857e3322379908f3ac4277f2476c345644f39896bf0ee7e8d0ed",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 3.0,
+        "rms_dbfs": -44.77,
+        "peak_dbfs": -9.967,
+        "true_peak_4x_dbtp": -9.943,
+        "quiet_decile_rms_dbfs": -75.693,
+        "tail_100ms_rms_dbfs": -94.141,
+        "dc": -1.5580573049532312e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 5641,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_watcher_glass.wav",
+      "sha256": "30f8070000a5182f66c79b122adbbac69fff4fe9ac1ec4c166346e257c3f4fc6",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.0,
+        "rms_dbfs": -22.907,
+        "peak_dbfs": -7.568,
+        "true_peak_4x_dbtp": -7.555,
+        "quiet_decile_rms_dbfs": -92.516,
+        "tail_100ms_rms_dbfs": -94.293,
+        "dc": -1.512211736908305e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 15094,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_watcher_breath.wav",
+      "sha256": "e164f1349057c88ad266112c31fe1a80360970c91985bbda98439bd93ff4e05d",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 4.0,
+        "rms_dbfs": -37.544,
+        "peak_dbfs": -20.128,
+        "true_peak_4x_dbtp": -20.122,
+        "quiet_decile_rms_dbfs": -56.723,
+        "tail_100ms_rms_dbfs": -70.902,
+        "dc": -1.5243564873866213e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 2002,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_watcher_recede.wav",
+      "sha256": "73abea92e3e1a2a8774934cb77aec571b4159e3360f0b6a59f736e761625ed23",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.48,
+        "rms_dbfs": -29.216,
+        "peak_dbfs": -10.313,
+        "true_peak_4x_dbtp": -10.308,
+        "quiet_decile_rms_dbfs": -62.774,
+        "tail_100ms_rms_dbfs": -93.327,
+        "dc": -1.5392447170190322e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 3547,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_sliding_gate.wav",
+      "sha256": "4897900bc6fe6a131e0b22207e6206b281737167a086fdabf2234fdb8643ebb8",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.2,
+        "rms_dbfs": -26.489,
+        "peak_dbfs": -5.176,
+        "true_peak_4x_dbtp": -5.0,
+        "quiet_decile_rms_dbfs": -92.915,
+        "tail_100ms_rms_dbfs": -95.757,
+        "dc": -1.6204009865072923e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 8602,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_wooden_door_open.wav",
+      "sha256": "16693048e1451f597680e474b5751e39ff3bc3b1ece1450ab7963515807f641b",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.48,
+        "rms_dbfs": -33.868,
+        "peak_dbfs": -7.005,
+        "true_peak_4x_dbtp": -7.0,
+        "quiet_decile_rms_dbfs": -93.342,
+        "tail_100ms_rms_dbfs": -94.363,
+        "dc": -2.199666448295548e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 23492,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_wooden_door_close.wav",
+      "sha256": "cd67748d852ee8b56764402e25b0c14929b503f9673603319747d4cc5bf75230",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 1.48,
+        "rms_dbfs": -30.0,
+        "peak_dbfs": -7.015,
+        "true_peak_4x_dbtp": -7.0,
+        "quiet_decile_rms_dbfs": -93.803,
+        "tail_100ms_rms_dbfs": -94.77,
+        "dc": -1.5753949251786865e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 17412,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_house_wood_creak.wav",
+      "sha256": "c270bb745ad7f954c1f473b1e1cdf27b5e8019d5fcd6c8351d5a921baf4476b6",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.48,
+        "rms_dbfs": -34.485,
+        "peak_dbfs": -10.006,
+        "true_peak_4x_dbtp": -10.0,
+        "quiet_decile_rms_dbfs": -93.819,
+        "tail_100ms_rms_dbfs": -94.693,
+        "dc": -6.260166275641641e-06,
+        "clipped_samples": 0,
+        "digital_zero_samples": 28526,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_window_frame_creak.wav",
+      "sha256": "7cdb704d2671e317f840b4bdef36fa1184681ca4a8f9aac1ab01a1dd757ad87d",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 1.76,
+        "rms_dbfs": -28.573,
+        "peak_dbfs": -10.005,
+        "true_peak_4x_dbtp": -10.0,
+        "quiet_decile_rms_dbfs": -93.092,
+        "tail_100ms_rms_dbfs": -100.032,
+        "dc": -1.4616322011167156e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 11601,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_curtain_movement.wav",
+      "sha256": "1a17a917fffcbacc28437efdb8e953e6d0d0d7a00b425bf3ce2be68bbf6d6038",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 1.76,
+        "rms_dbfs": -30.879,
+        "peak_dbfs": -14.921,
+        "true_peak_4x_dbtp": -14.862,
+        "quiet_decile_rms_dbfs": -75.173,
+        "tail_100ms_rms_dbfs": -94.033,
+        "dc": -1.5570979294298212e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 3580,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_ceiling_relay_tick.wav",
+      "sha256": "9fec577df15254a1616793dae4c5cef8ebc2e2884d5a36d6156b742d4cf445e4",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 0.64,
+        "rms_dbfs": -35.295,
+        "peak_dbfs": -11.352,
+        "true_peak_4x_dbtp": -10.0,
+        "quiet_decile_rms_dbfs": -93.531,
+        "tail_100ms_rms_dbfs": -94.573,
+        "dc": -1.4714913573665143e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 6181,
+        "seam_step": 0.0
+      }
+    },
+    {
+      "file": "L5_queue_arrival.wav",
+      "sha256": "485c9d6753f281530ed8f77c6c101d89ebe7a541b89207985984f823150280f8",
+      "format": "PCM_16",
+      "sample_rate": 44100,
+      "channels": 1,
+      "metrics": {
+        "duration_s": 2.0,
+        "rms_dbfs": -38.129,
+        "peak_dbfs": -18.011,
+        "true_peak_4x_dbtp": -17.899,
+        "quiet_decile_rms_dbfs": -68.219,
+        "tail_100ms_rms_dbfs": -85.533,
+        "dc": -1.2859595335530045e-05,
+        "clipped_samples": 0,
+        "digital_zero_samples": 2737,
+        "seam_step": 0.0
+      }
+    }
+  ]
+}

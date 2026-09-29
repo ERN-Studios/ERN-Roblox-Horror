@@ -1,0 +1,32 @@
+[
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  },
+  {
+    "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  },
+  {
+    "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "passed": true,
+    "detail": "CAS payload: 15 scenarios, 60 assertions passed"
+  }
+]

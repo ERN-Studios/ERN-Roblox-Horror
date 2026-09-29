@@ -1,0 +1,146 @@
+{
+  "scope": "Compact QA reports/screenshots plus verified native place backup; no giant per-part geometry/source exports",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 2106,
+      "sha256": "ca5db66c6d78ef28889cc2f61b4ef9a283d1cb1a569e5de3aaa1eb45b4995497"
+    },
+    {
+      "file": "SURFACE_AUDIT_SUMMARY.md",
+      "bytes": 1538,
+      "sha256": "c3accdb2e6e688b04c51acdee513b37df56f5a6f363f1933d67db57283d2bae3"
+    },
+    {
+      "file": "after.rbxl",
+      "bytes": 9793957,
+      "sha256": "014d75e52f27a296b84a2df0a12a7cfa21617d7988ce37eddc47b8aece0915f8"
+    },
+    {
+      "file": "audit_surface_faces.py",
+      "bytes": 14040,
+      "sha256": "8691001922aec9a592cd8b01e765e1af65756d1523746227823d279c6ff023ea"
+    },
+    {
+      "file": "delivery-receipt.json",
+      "bytes": 824,
+      "sha256": "c5e85ff3da8787af5c49f07ded88db52e201391eb5e6df0983730dd6546089ed"
+    },
+    {
+      "file": "final-interior.jpg",
+      "bytes": 490012,
+      "sha256": "ae46f2664d5e0c9fc288177b9ece8e3b2ebe7255094304c9ce24fa01838fa971"
+    },
+    {
+      "file": "final-map-audit.json",
+      "bytes": 37174,
+      "sha256": "450e69c28c06fe094190a7bea661113f908c976df55185db0ae780fb1b444d33"
+    },
+    {
+      "file": "final-source-mirror-report.json",
+      "bytes": 47494,
+      "sha256": "2541f03a34dcc04733d7bd9fb037984539b9ff5b4ef46daab17a181db9c7d0c7"
+    },
+    {
+      "file": "final-surface-audit.json",
+      "bytes": 497801,
+      "sha256": "6ac866b00910ff02cb778be915ad2f2c4e70fcba1a0e59028c6cdcf40f6f7282"
+    },
+    {
+      "file": "materials-final.json",
+      "bytes": 1766,
+      "sha256": "7f84bd45ff4ba6d132f08657bc3aad68a68a927f1096b9f51f6cfca4d98f8c09"
+    },
+    {
+      "file": "native-cursor-result.json",
+      "bytes": 2376,
+      "sha256": "abc575302833b9017e3dc8894fc74ac153e092be834b662897f3dd76fd8d1018"
+    },
+    {
+      "file": "native-walk-B.json",
+      "bytes": 2080,
+      "sha256": "4b19c4849c6e675a838a68a701ff3a0185f49e7e4ed001285491425608d6f043"
+    },
+    {
+      "file": "native-walk-F.json",
+      "bytes": 2298,
+      "sha256": "238d5da34260197d2218d4cc9398b06ae19bfe9252573810e82a51affd6a2995"
+    },
+    {
+      "file": "observe_padlock_cursor.luau",
+      "bytes": 4621,
+      "sha256": "f99c3e4eb7a9cd10bb5cede88f88b9a78d86135f7c36e9e63f1a8362f44a27eb"
+    },
+    {
+      "file": "padlock-before.json",
+      "bytes": 138,
+      "sha256": "70024edbd0e141afbea8b6a4b0be671aeaee59672f51e303e506e6410881e6e1"
+    },
+    {
+      "file": "padlock-open.jpg",
+      "bytes": 486366,
+      "sha256": "37d7c1de6e467b8cc07a02d5984b1dbcd7f5a9dbdf8878125dad43b734b42b69"
+    },
+    {
+      "file": "publication-log.txt",
+      "bytes": 369,
+      "sha256": "cbf016108f234c9e20c22e67228d8fb36862252d5d60ef34d9e721a4a83a7e24"
+    },
+    {
+      "file": "publication-v2139.json",
+      "bytes": 593,
+      "sha256": "636a9ee3acc1f6c3e025fb2499cde63761e53d3fcb7f8d9d7ac62a817ee73588"
+    },
+    {
+      "file": "server_map_audit.luau",
+      "bytes": 26417,
+      "sha256": "5ae575cf7b902510d0f8aa460e39c93042b747c23d158b508b14d9e285d0e160"
+    },
+    {
+      "file": "test_padlock_cursor_policy.luau",
+      "bytes": 4514,
+      "sha256": "057e7f6b36a59d5c706bd85411c2f677fe54d36733e2a1d2f97b6ee0ad7d7e3a"
+    },
+    {
+      "file": "test_surface_face_audit.py",
+      "bytes": 3720,
+      "sha256": "a4d7f95ee3c58654a55f211ed2cad487afcd36cb83a90715907991c75513b3f3"
+    },
+    {
+      "file": "test_watcher_surface_lift.luau",
+      "bytes": 879,
+      "sha256": "2ae22d07332348baadeb02a15c47e47f91b083c3bd0c97ce6514e382967a1549"
+    },
+    {
+      "file": "walk_surface_case.luau",
+      "bytes": 8967,
+      "sha256": "5a3f6d50b9817ab28d62a2b7373c35339cc5a66cdbc6dd5705a5ac47daa8a552"
+    },
+    {
+      "file": "wall-angle.jpg",
+      "bytes": 631375,
+      "sha256": "8d9013abbbd515a98277067ac2c1073b1e0a07e2be706413bc473f6047e99632"
+    }
+  ],
+  "publication": {
+    "verified": true,
+    "version": 2139,
+    "publishedAtUtc": "2026-09-26T20:01:51.250Z",
+    "evidence": "Parent verified successful native Studio publish log"
+  },
+  "backup": {
+    "file": "after.rbxl",
+    "bytes": 9793957,
+    "sha256": "014d75e52f27a296b84a2df0a12a7cfa21617d7988ce37eddc47b8aece0915f8",
+    "verified": true
+  },
+  "finalSourceParity": {
+    "scripts": 192,
+    "sourceEditorRepositoryEqual": true,
+    "changedScripts": 5,
+    "unchangedScripts": 187,
+    "level4Unchanged": 12,
+    "evidence": "final-source-mirror-report.json; parent verified final Source/Editor parity"
+  },
+  "git": "Containing commit on codex/level5-window-watcher; PR #10"
+}

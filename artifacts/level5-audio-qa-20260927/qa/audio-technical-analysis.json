@@ -1,0 +1,1922 @@
+[
+  {
+    "cue": "room_hum",
+    "take": 1,
+    "generationId": "QTrWFCoaWxZ2rvkZt4Du",
+    "file": "audio/raw/room_hum__take01.mp3",
+    "sha256": "8035869cbc84aef6aacc55a31cd292a21876ec8a8a5911d55d7d6b461046ebd5",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -35.16107812333387,
+      "rmsDbfs": -47.210900748089614,
+      "dcOffset": -5.899635950724284e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.17149479166666667,
+      "edgeJumpDbfs": -70.30899869919436,
+      "headRmsDbfs": -46.00333586925412,
+      "tailRmsDbfs": -48.88891615187269,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.14589868899340508
+  },
+  {
+    "cue": "room_hum",
+    "take": 2,
+    "generationId": "HWjv4GP9abdmRvnBZL3X",
+    "file": "audio/raw/room_hum__take02.mp3",
+    "sha256": "2d5dab647ba8e3000116499c10d4851dc6dbd587a861647790d0419a432de1d9",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -33.46930260739208,
+      "rmsDbfs": -44.13429975896523,
+      "dcOffset": -0.0001442990303039551,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.11552083333333334,
+      "edgeJumpDbfs": -69.48114499602985,
+      "headRmsDbfs": -50.80227296462621,
+      "tailRmsDbfs": -50.78894663231825,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.12249556890105225
+  },
+  {
+    "cue": "room_hum",
+    "take": 3,
+    "generationId": "3RGTpNokMKu4qbF6OkKt",
+    "file": "audio/raw/room_hum__take03.mp3",
+    "sha256": "48ff968ea921f6b1b4e50873013d17af08560d2dcc08e51b1172aa0c4febf34b",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -31.128170852772485,
+      "rmsDbfs": -41.76424055517038,
+      "dcOffset": -0.00010670820871988932,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.07948958333333334,
+      "edgeJumpDbfs": -56.32959861247399,
+      "headRmsDbfs": -45.43220749106935,
+      "tailRmsDbfs": -45.635347727224385,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.3845765268970962
+  },
+  {
+    "cue": "room_hum",
+    "take": 4,
+    "generationId": "OhLHQV9g3h8PHZ0qFQK5",
+    "file": "audio/raw/room_hum__take04.mp3",
+    "sha256": "488cc0f21eac15b0e1fa8ee605d2b679456d0c26674615e957f242c38b3cd413",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -31.340739383622342,
+      "rmsDbfs": -42.554145365233495,
+      "dcOffset": -1.794147491455078e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.09080729166666666,
+      "edgeJumpDbfs": -69.48114499602985,
+      "headRmsDbfs": -48.25060503380843,
+      "tailRmsDbfs": -47.66416674005655,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.09188485843339976
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 1,
+    "generationId": "G8Cchz1cgpdHNWCBWv13",
+    "file": "audio/raw/blackout_roomtone__take01.mp3",
+    "sha256": "bd4a4b8ac223a29b3c98b553f0a84bf9da775f1fecfcbf9519fb91168947ea22",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -43.342901438231145,
+      "rmsDbfs": -55.349023620095664,
+      "dcOffset": 2.1306514739990234e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.40708333333333335,
+      "edgeJumpDbfs": -90.30899869919436,
+      "headRmsDbfs": -57.40274074080606,
+      "tailRmsDbfs": -61.38646611690103,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.14494383881763628
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 2,
+    "generationId": "KOZAtCMye8JXaAvnckWA",
+    "file": "audio/raw/blackout_roomtone__take02.mp3",
+    "sha256": "04f00220f945bf4116e94df2ede5d18e65cc3e56096948faa242aa0ccb6bfeb1",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -43.94773199993913,
+      "rmsDbfs": -57.300167709300965,
+      "dcOffset": 1.6486644744873048e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.5368489583333333,
+      "edgeJumpDbfs": -90.30899869919436,
+      "headRmsDbfs": -63.96158803169193,
+      "tailRmsDbfs": -65.28522259596477,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.28322654632054445
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 3,
+    "generationId": "dS4Eae8sikdamFlVC7Xs",
+    "file": "audio/raw/blackout_roomtone__take03.mp3",
+    "sha256": "edb849146853ad6d44711a8cab8505253e73cd708e0c386d6aa483589de2acc5",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -48.87135855307185,
+      "rmsDbfs": -64.8216029460797,
+      "dcOffset": -4.7739346822102865e-06,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.9150885416666666,
+      "edgeJumpDbfs": -240.0,
+      "headRmsDbfs": -65.90057668059731,
+      "tailRmsDbfs": -65.5527135058202,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.6155659351348878
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 4,
+    "generationId": "8Uz0O1sgaamkRFXjRbxm",
+    "file": "audio/raw/blackout_roomtone__take04.mp3",
+    "sha256": "cebbcb7d1824ba5ecc9c4e9e420bbf3bda1de0fc446cf1504c8a2985cc045d47",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 12.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -43.741406630419604,
+      "rmsDbfs": -58.65465890595235,
+      "dcOffset": 1.6416549682617186e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.626296875,
+      "edgeJumpDbfs": -240.0,
+      "headRmsDbfs": -61.387990034114075,
+      "tailRmsDbfs": -61.77450734181292,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.3279385299682617
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 1,
+    "generationId": "BPRFreTjMnvUqgqdNjFy",
+    "file": "audio/raw/watcher_heartbeat__take01.mp3",
+    "sha256": "c733ed07b9fc64fee484caf4ac2d931c2d85d48c24e0833e7e327b17c4821eae",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -0.9805442505185196,
+      "rmsDbfs": -20.74343139123468,
+      "dcOffset": 0.0005247621536254883,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.157890625,
+      "edgeJumpDbfs": -60.76657360480111,
+      "headRmsDbfs": -36.530229781893595,
+      "tailRmsDbfs": -23.12236102580444,
+      "heartbeatEnvelopePeaks": 4
+    },
+    "selectionScore": 0.07242299937095424
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 2,
+    "generationId": "h6CtKIk3jxS94jbvIyhP",
+    "file": "audio/raw/watcher_heartbeat__take02.mp3",
+    "sha256": "485421367b9adec3608a7f442464dca652fabfc12ff9feaedc4274c24b55993e",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -0.44736964450579647,
+      "rmsDbfs": -19.479797076513552,
+      "dcOffset": 4.2600154876708984e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.12775,
+      "edgeJumpDbfs": -76.32959861247399,
+      "headRmsDbfs": -20.719631145770563,
+      "tailRmsDbfs": -48.685989874396725,
+      "heartbeatEnvelopePeaks": 4
+    },
+    "selectionScore": 0.007134367269745957
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 3,
+    "generationId": "iuD7vPbcgnemBLBfpHZV",
+    "file": "audio/raw/watcher_heartbeat__take03.mp3",
+    "sha256": "468abc9fc3bc738db92da103fd90ad67bc8fdf3b526b0b1e0ae8f7e7b2a1e2cd",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -0.44095311394450076,
+      "rmsDbfs": -19.542219611416193,
+      "dcOffset": -0.0002529134750366211,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.063421875,
+      "edgeJumpDbfs": -52.46710664538475,
+      "headRmsDbfs": -17.08343586692462,
+      "tailRmsDbfs": -40.911239758117475,
+      "heartbeatEnvelopePeaks": 3
+    },
+    "selectionScore": 1.0704546450543448
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 4,
+    "generationId": "rKt5G99nqrI4mtrBoWME",
+    "file": "audio/raw/watcher_heartbeat__take04.mp3",
+    "sha256": "f3f40f3db6e2e6ded66b398b215f2a4c321221cf841b30d168255cf1b677198d",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -1.9695352471336323,
+      "rmsDbfs": -21.447246942751793,
+      "dcOffset": -1.9334316253662108e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.084609375,
+      "edgeJumpDbfs": -73.40703789890922,
+      "headRmsDbfs": -20.057353434905917,
+      "tailRmsDbfs": -41.50578741681887,
+      "heartbeatEnvelopePeaks": 5
+    },
+    "selectionScore": 1.0069805146373243
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 1,
+    "generationId": "2KqK4XXewTV6ufZ5zzvx",
+    "file": "audio/raw/puzzle_click__take01.mp3",
+    "sha256": "d526088a8b491879e45213c0267870e1b698410e1f64dec1158c65122b780235",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.52,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -12.345469029240828,
+      "rmsDbfs": -40.86735709765747,
+      "dcOffset": -1.0270338792067308e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.9030048076923077,
+      "edgeJumpDbfs": -84.28839878591474,
+      "headRmsDbfs": -50.04164494071021,
+      "tailRmsDbfs": -82.13417136547119,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.6530058009395604
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 2,
+    "generationId": "PJg7d2gh0Gj9Cray7zH3",
+    "file": "audio/raw/puzzle_click__take02.mp3",
+    "sha256": "902618e157a6ee0043e7296ed6a3a6dddd759e94ddf2e0d85ea79cae65ae5c09",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.52,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -15.151971825482761,
+      "rmsDbfs": -45.5478287039259,
+      "dcOffset": 1.4972686767578124e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.7931490384615385,
+      "edgeJumpDbfs": -67.3864379856296,
+      "headRmsDbfs": -57.246270061326186,
+      "tailRmsDbfs": -74.90156010616718,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.3620424766542138
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 3,
+    "generationId": "PpLtTdLj4U2HozfO8n2a",
+    "file": "audio/raw/puzzle_click__take03.mp3",
+    "sha256": "45fce5b0421ea6a87c1ffff18968287eba6718aded4969942dd2c0c81cfe3364",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.52,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -5.877062984389099,
+      "rmsDbfs": -36.681746058292156,
+      "dcOffset": -0.00014780117915226863,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.8381009615384616,
+      "edgeJumpDbfs": -61.061038741215235,
+      "headRmsDbfs": -60.8091250940378,
+      "tailRmsDbfs": -78.25357191330903,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.47159999428978594
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 4,
+    "generationId": "hHz1UcP1aUAghquSAY8r",
+    "file": "audio/raw/puzzle_click__take04.mp3",
+    "sha256": "035a2997a1ce3db3d3a0a9102ed4eabd86f4dd683d4a65340bc6d60d2e723885",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.52,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -9.071659256423096,
+      "rmsDbfs": -34.89181708787877,
+      "dcOffset": 4.0622857900766226e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.8632211538461538,
+      "edgeJumpDbfs": -76.32959861247399,
+      "headRmsDbfs": -82.38464402941995,
+      "tailRmsDbfs": -83.39376347751282,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.5293620452337036
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 1,
+    "generationId": "Lh8aXMmwJE0WjW6NwQew",
+    "file": "audio/raw/puzzle_reject__take01.mp3",
+    "sha256": "5a7720314359085bbe5914e97671b12b8baf089d327311cceaabdec10dca2757",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.88,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -12.349862499055321,
+      "rmsDbfs": -36.249190462028615,
+      "dcOffset": -1.4261765913529829e-06,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.5779829545454546,
+      "edgeJumpDbfs": -37.053842065562876,
+      "headRmsDbfs": -27.36503241580372,
+      "tailRmsDbfs": -79.20646952566032,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.030814162801955612
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 2,
+    "generationId": "oVQSwls2ezeoNL2pV0KV",
+    "file": "audio/raw/puzzle_reject__take02.mp3",
+    "sha256": "4df3c55ab28cd30457b34194d7eaf46aa66f6c2851c6a62482c0d8bd3a81c566",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.88,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -5.01736411443281,
+      "rmsDbfs": -29.89402893786995,
+      "dcOffset": -3.659291700883345e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.39857954545454544,
+      "edgeJumpDbfs": -45.70002027162887,
+      "headRmsDbfs": -38.507195786851696,
+      "tailRmsDbfs": -85.04560592529592,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.02628056563965865
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 3,
+    "generationId": "zBvjhM3WvOlEbifjTtXM",
+    "file": "audio/raw/puzzle_reject__take03.mp3",
+    "sha256": "606866bdac12217d22fe1c519536486110289400f8523396df00f53ca8c13856",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.88,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -4.665169573683234,
+      "rmsDbfs": -30.198615170267416,
+      "dcOffset": 0.0004487774588844993,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.5256392045454545,
+      "edgeJumpDbfs": -43.265348336967115,
+      "headRmsDbfs": -22.55353668392938,
+      "tailRmsDbfs": -83.43984437260049,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.06814384830477244
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 4,
+    "generationId": "lH78UxAIjPBbOl4wyZKq",
+    "file": "audio/raw/puzzle_reject__take04.mp3",
+    "sha256": "de882e2360fc688f219d612fd4b0f5aa7170598c9f9db0fe940c39126a5d9bde",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 0.88,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -11.173148291784461,
+      "rmsDbfs": -33.44639164960819,
+      "dcOffset": -1.3665719465775924e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.4323863636363636,
+      "edgeJumpDbfs": -35.69335318586658,
+      "headRmsDbfs": -37.327786941397406,
+      "tailRmsDbfs": -85.53055393580678,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.025098069358547498
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 1,
+    "generationId": "eE5teiWHRgLRDBFPk9Kc",
+    "file": "audio/raw/puzzle_unlock__take01.mp3",
+    "sha256": "5b9b165e14278ce9733174aeee0aaecb31a7d9808ec8cf05611c358f68593246",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 1.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -11.471816168686889,
+      "rmsDbfs": -41.334689435451224,
+      "dcOffset": -4.25261420172614e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.9010135135135136,
+      "edgeJumpDbfs": -63.46054508275024,
+      "headRmsDbfs": -57.333390489111444,
+      "tailRmsDbfs": -84.96715059501255,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.6371665881431936
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 2,
+    "generationId": "yudYT54B5w63yVqWNsMo",
+    "file": "audio/raw/puzzle_unlock__take02.mp3",
+    "sha256": "73708d57ab2966021829e640254af6414704dcd8a566085e04f41aea336d42b8",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 1.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -4.182214048944403,
+      "rmsDbfs": -31.137006078329655,
+      "dcOffset": -5.917549133300781e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.878589527027027,
+      "edgeJumpDbfs": -72.24719895935549,
+      "headRmsDbfs": -19.467821040464248,
+      "tailRmsDbfs": -85.82870247173707,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.5644499291127376
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 3,
+    "generationId": "tH1PncjMHamFw02xUPgE",
+    "file": "audio/raw/puzzle_unlock__take03.mp3",
+    "sha256": "27cd95be7116e4feb125aa30be7a2b4faed2f4f60b9d8b51a1f8fe897eb30e9f",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 1.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -10.555673400668868,
+      "rmsDbfs": -37.277386961135285,
+      "dcOffset": -7.091728416649071e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.8358952702702702,
+      "edgeJumpDbfs": -65.20354859712823,
+      "headRmsDbfs": -65.84207403547909,
+      "tailRmsDbfs": -86.0622236700865,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.44023322594224173
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 4,
+    "generationId": "MFMb3cV5oeMngGANtIZG",
+    "file": "audio/raw/puzzle_unlock__take04.mp3",
+    "sha256": "f670858e5ba36ac7d83eadd3b9f428a7ca633f91b23863159ece8cac06cd7040",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 1.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -2.196266903061022,
+      "rmsDbfs": -33.63190500065948,
+      "dcOffset": -5.9172913834855364e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.863133445945946,
+      "edgeJumpDbfs": -49.24742982952597,
+      "headRmsDbfs": -27.85131556874974,
+      "tailRmsDbfs": -84.20173183970897,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.5197598477281171
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 1,
+    "generationId": "fYPot7MqJXsWOuSnvx6p",
+    "file": "audio/raw/sliding_gate__take01.mp3",
+    "sha256": "d39b8eb66e4bef11a71c4f28a8d1df3adb07ddfe840f67a75eb3e696dd3b2653",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -1.4215439742286204,
+      "rmsDbfs": -26.83710520104475,
+      "dcOffset": 0.00015682697296142577,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.149765625,
+      "edgeJumpDbfs": -48.945281464271126,
+      "headRmsDbfs": -38.46461734311218,
+      "tailRmsDbfs": -83.00672925837105,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.018014061136205572
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 2,
+    "generationId": "1F8MlU0522wdZtcS52zr",
+    "file": "audio/raw/sliding_gate__take02.mp3",
+    "sha256": "452e60336f341b42d460a4e5c9f4500d34c83c0b756951adc4b9778b9a42a504",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -1.8476874325924624,
+      "rmsDbfs": -25.828475333366875,
+      "dcOffset": 8.835935592651367e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.137546875,
+      "edgeJumpDbfs": -50.39629480724336,
+      "headRmsDbfs": -48.52555302852325,
+      "tailRmsDbfs": -83.89797746146346,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.010709273635486459
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 3,
+    "generationId": "Eq42khvko2kQLZ7ErM9j",
+    "file": "audio/raw/sliding_gate__take03.mp3",
+    "sha256": "7f5cd4803ceda38e4573c14b835e9dd5fdfcfcf8ea8e25a821e69c12f8190ca3",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -3.838181777234124,
+      "rmsDbfs": -26.34023120721388,
+      "dcOffset": -3.4186840057373044e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.191109375,
+      "edgeJumpDbfs": -90.30899869919436,
+      "headRmsDbfs": -43.08121396826561,
+      "tailRmsDbfs": -80.39479956026042,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.0063928338222468024
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 4,
+    "generationId": "mm59yjZ41YeFZ56SXd3G",
+    "file": "audio/raw/sliding_gate__take04.mp3",
+    "sha256": "c8a03ac67cc6bcba7f915f55499240221ec1fe1726325f604dd02f3d0bf57610",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -2.9753109156154824,
+      "rmsDbfs": -26.242244349365528,
+      "dcOffset": -9.162092208862305e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.164390625,
+      "edgeJumpDbfs": -41.459403317905384,
+      "headRmsDbfs": -42.39785148034684,
+      "tailRmsDbfs": -80.65081043633546,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.012017465906653094
+  },
+  {
+    "cue": "power_fall",
+    "take": 1,
+    "generationId": "ACiAsVNQP6MycQOzieXY",
+    "file": "audio/raw/power_fall__take01.mp3",
+    "sha256": "a589bfe785374e1a5a84b68e35921e4f23afb86219d3582ec7fffaa3637c3439",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 5.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -5.995718786225406,
+      "rmsDbfs": -21.830334678149327,
+      "dcOffset": 0.0018928524017333985,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.4213625,
+      "edgeJumpDbfs": -28.57468542029671,
+      "headRmsDbfs": -23.160601121520735,
+      "tailRmsDbfs": -83.42257617959544,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.19053400076258958
+  },
+  {
+    "cue": "power_fall",
+    "take": 2,
+    "generationId": "GUilV7qRjD0Eszjne70F",
+    "file": "audio/raw/power_fall__take02.mp3",
+    "sha256": "0ce97ed5fa760625916f1fb5dbb0ca71dc3df8a14c3b45d412b4262c25ce77f4",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 5.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -7.76560642719644,
+      "rmsDbfs": -23.58422312721022,
+      "dcOffset": 0.00040515518188476564,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.3172375,
+      "edgeJumpDbfs": -48.3015877968431,
+      "headRmsDbfs": -27.427428270957535,
+      "tailRmsDbfs": -82.95300970221255,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.042128583419692896
+  },
+  {
+    "cue": "power_fall",
+    "take": 3,
+    "generationId": "YpcI3uzVimq8fc8Ujh7B",
+    "file": "audio/raw/power_fall__take03.mp3",
+    "sha256": "967e9bc9b0480de777d1932ce16bf091d9e20892ba2b09c8f120d21bfd1c9380",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 5.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -10.401560578631111,
+      "rmsDbfs": -26.374351909068036,
+      "dcOffset": -0.0026453205108642576,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.1434625,
+      "edgeJumpDbfs": -26.21032825211146,
+      "headRmsDbfs": -22.645601626874978,
+      "tailRmsDbfs": -77.61197255153942,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.2686455390127925
+  },
+  {
+    "cue": "power_fall",
+    "take": 4,
+    "generationId": "KgdSSdN1nFns3JicmVTM",
+    "file": "audio/raw/power_fall__take04.mp3",
+    "sha256": "01597a5370a13c0398bf08509f9585a1ac3ddaba7a094694cc7092b8a8fbfac4",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 5.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -7.335095113493059,
+      "rmsDbfs": -24.59613482977659,
+      "dcOffset": 3.1243896484375e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.0366625,
+      "edgeJumpDbfs": -30.609456170884492,
+      "headRmsDbfs": -29.108917023470468,
+      "tailRmsDbfs": -61.54901542112455,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.024427706630507567
+  },
+  {
+    "cue": "power_restart",
+    "take": 1,
+    "generationId": "HaOcnz2ERXHlmhKVkSIT",
+    "file": "audio/raw/power_restart__take01.mp3",
+    "sha256": "d4ce9ba26c14c8957979c3119f3df12be600c5a7ec559639cc7d05cc72cb9b39",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 3.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -16.01905052619824,
+      "rmsDbfs": -47.544813973035936,
+      "dcOffset": -7.573509216308594e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.36233333333333334,
+      "edgeJumpDbfs": -35.533387529506975,
+      "headRmsDbfs": -46.555088955927495,
+      "tailRmsDbfs": -73.33425324660364,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.08459630796630649
+  },
+  {
+    "cue": "power_restart",
+    "take": 2,
+    "generationId": "y0BtRFE3J6CJhX5M2XJ6",
+    "file": "audio/raw/power_restart__take02.mp3",
+    "sha256": "00ce4ec4e592b8c9e233eaaac12dd21bc216dc536e3742b10eda8a9d0ad24796",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 3.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -15.260346513964878,
+      "rmsDbfs": -48.45940488636516,
+      "dcOffset": -4.4252395629882813e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.39620833333333333,
+      "edgeJumpDbfs": -42.280987883563476,
+      "headRmsDbfs": -49.67549010040952,
+      "tailRmsDbfs": -71.01937832323824,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.11613537727952584
+  },
+  {
+    "cue": "power_restart",
+    "take": 3,
+    "generationId": "KrL5tf1JlsipNgYyD5gq",
+    "file": "audio/raw/power_restart__take03.mp3",
+    "sha256": "219183d30ac73b3188281132af82be3d9d51b2b96812674b7033c066981f0205",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 3.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -28.232924280075224,
+      "rmsDbfs": -51.86438141725385,
+      "dcOffset": 3.766377766927083e-06,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.4344375,
+      "edgeJumpDbfs": -76.32959861247399,
+      "headRmsDbfs": -41.38629218774955,
+      "tailRmsDbfs": -76.99421959275693,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.08347631756106556
+  },
+  {
+    "cue": "power_restart",
+    "take": 4,
+    "generationId": "sugjMizVWPV3aYGczvm3",
+    "file": "audio/raw/power_restart__take04.mp3",
+    "sha256": "910a27d99daa5a4ccf3f6c51d66574d6b628c0c95fc23d04877869a26beddfb0",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 3.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -8.524324071886392,
+      "rmsDbfs": -40.64331584511994,
+      "dcOffset": -0.0005834032694498698,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.502625,
+      "edgeJumpDbfs": -58.48770655866438,
+      "headRmsDbfs": -56.60483707086304,
+      "tailRmsDbfs": -76.92007806198325,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.08136816402579738
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 1,
+    "generationId": "vxtLU20dofaN8qJ1I1n6",
+    "file": "audio/raw/watcher_glass__take01.mp3",
+    "sha256": "de61c4c6f9bd65603fc55f63fd2b3361bdde7ff6265140053748ec6b6d149373",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -19.949254638692796,
+      "rmsDbfs": -33.48448366009233,
+      "dcOffset": 0.0003019676208496094,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.2454375,
+      "edgeJumpDbfs": -29.802881393898954,
+      "headRmsDbfs": -33.42394027972273,
+      "tailRmsDbfs": -54.66945516145232,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.1610675400173104
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 2,
+    "generationId": "p6a6BYcOiyoXLwNyInLj",
+    "file": "audio/raw/watcher_glass__take02.mp3",
+    "sha256": "3e810b19f39d1d73b7509698b6638b1b1f5ba62b618311be26d17f8927c608df",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -20.170784188164,
+      "rmsDbfs": -34.01211944571547,
+      "dcOffset": -0.000619537353515625,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.171,
+      "edgeJumpDbfs": -35.47021714461038,
+      "headRmsDbfs": -29.660454265897293,
+      "tailRmsDbfs": -55.133119308931825,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.19379193564508707
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 3,
+    "generationId": "Z4vB4jNocVpBZBSbdKcE",
+    "file": "audio/raw/watcher_glass__take03.mp3",
+    "sha256": "cbf8cacf02a37f552f7a0f66eb4a8f1bfd9feea5346bb806cacbf6a0e7ba3e63",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -12.295103210146399,
+      "rmsDbfs": -29.351736571562167,
+      "dcOffset": -0.00010528087615966796,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.5075625,
+      "edgeJumpDbfs": -52.03272165152002,
+      "headRmsDbfs": -49.20395448785851,
+      "tailRmsDbfs": -62.08520499481359,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.045155324494875776
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 4,
+    "generationId": "jDkqOmU5xC4NI9N7YKRZ",
+    "file": "audio/raw/watcher_glass__take04.mp3",
+    "sha256": "2b1d3200a4ad1b65426eb1f180a232766e0438077a6894c158ecbc0401895859",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -13.367421457880049,
+      "rmsDbfs": -28.544185336087043,
+      "dcOffset": 0.00010799694061279296,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.39353125,
+      "edgeJumpDbfs": -70.30899869919436,
+      "headRmsDbfs": -61.36811677726898,
+      "tailRmsDbfs": -62.95952601189108,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.03933116913875482
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 1,
+    "generationId": "s33zBDNclL91t33v4okv",
+    "file": "audio/raw/watcher_breath__take01.mp3",
+    "sha256": "c70785a0e9d3d7fcec411ff6d8c1fb57882feb334addfb1cb23a1541c02ae41d",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -32.94787146273353,
+      "rmsDbfs": -46.3478903324184,
+      "dcOffset": -0.00023161554336547852,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.407015625,
+      "edgeJumpDbfs": -80.76657360480111,
+      "headRmsDbfs": -81.44691245751937,
+      "tailRmsDbfs": -86.07244477346057,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.03864485463482906
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 2,
+    "generationId": "F7cXub8GmqdyHMTOtZ5J",
+    "file": "audio/raw/watcher_breath__take02.mp3",
+    "sha256": "9022b85363fbb244ef3a689ab24f4319fbaf760d42a8f3fbab7a3dfb76a9d1d8",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -41.33487230109276,
+      "rmsDbfs": -53.6657399944354,
+      "dcOffset": 1.9930362701416014e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.650796875,
+      "edgeJumpDbfs": -80.76657360480111,
+      "headRmsDbfs": -86.44066617387375,
+      "tailRmsDbfs": -86.24679141123204,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.037233262536438154
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 3,
+    "generationId": "e8SVpzxv6ytCsn7DTBHh",
+    "file": "audio/raw/watcher_breath__take03.mp3",
+    "sha256": "7d14a49db9f05a2674ee1dbe164f1c9a2afa4cebd80a1fbb5ea0275e1a7462a7",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -36.904081637711876,
+      "rmsDbfs": -49.70358888353857,
+      "dcOffset": -3.1695842742919924e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.517828125,
+      "edgeJumpDbfs": -240.0,
+      "headRmsDbfs": -80.2070595515096,
+      "tailRmsDbfs": -82.16111408259033,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.0389145593933045
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 4,
+    "generationId": "0T1Yi8bpbxnIPDwgSnhq",
+    "file": "audio/raw/watcher_breath__take04.mp3",
+    "sha256": "4f6e8fbdb00de3a78ed0a68a079d2954fc8b24ef9f56d1e701c4e44091bf37c8",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 4.0,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -23.802791264973138,
+      "rmsDbfs": -38.26280893452952,
+      "dcOffset": 0.0003716626167297363,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.34875,
+      "edgeJumpDbfs": -78.26779887263511,
+      "headRmsDbfs": -74.68993878292514,
+      "tailRmsDbfs": -85.90187523749725,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.04339124143597417
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 1,
+    "generationId": "2jaEMkkY4yafwF33d76C",
+    "file": "audio/raw/watcher_recede__take01.mp3",
+    "sha256": "e74421855d2c8ecc4c55e66e81d1cfb0640a4355affd65aeb33730e21e12bf6e",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -31.538604195664522,
+      "rmsDbfs": -49.091315456581654,
+      "dcOffset": 8.027399739911479e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.4662046370967742,
+      "edgeJumpDbfs": -62.35019852575361,
+      "headRmsDbfs": -60.961988372559546,
+      "tailRmsDbfs": -85.25325982847569,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.05136166015973619
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 2,
+    "generationId": "1Tu9x0skKsMe2AEOpv2K",
+    "file": "audio/raw/watcher_recede__take02.mp3",
+    "sha256": "069e7021594b9bd49093624d8f25b3abae6ba0ee309c0e338e209323df16bc78",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -32.8658732442285,
+      "rmsDbfs": -49.45026519111104,
+      "dcOffset": -0.00010853890449770035,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.37295866935483873,
+      "edgeJumpDbfs": -69.48114499602985,
+      "headRmsDbfs": -53.70255032569042,
+      "tailRmsDbfs": -68.65854108958212,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.1951689861646854
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 3,
+    "generationId": "DAmrvUrnsSB5uhJ27mWU",
+    "file": "audio/raw/watcher_recede__take03.mp3",
+    "sha256": "2bbb23f74b8d999a7a389314c86d5f1794d771d09fdce0726d575d18b054e18d",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -27.530319894055886,
+      "rmsDbfs": -41.554508166874754,
+      "dcOffset": -0.0005826134835520098,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.24798387096774194,
+      "edgeJumpDbfs": -78.26779887263511,
+      "headRmsDbfs": -57.30153343896927,
+      "tailRmsDbfs": -84.77471999106116,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.08861469292104816
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 4,
+    "generationId": "t7iO4I5tqSm2DKidbq6Q",
+    "file": "audio/raw/watcher_recede__take04.mp3",
+    "sha256": "44cc830eb97ed4d628fdef72dd09d0cae3adbcc386dce8f81dfdf6cb605a4c09",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ],
+    "analysis": {
+      "duration": 2.48,
+      "channels": 2,
+      "sampleRate": 44100,
+      "peakDbfs": -29.584407817468467,
+      "rmsDbfs": -43.360684652144855,
+      "dcOffset": 4.9068850855673514e-05,
+      "clippedFraction": 0.0,
+      "silenceFractionBelowMinus60": 0.2006048387096774,
+      "edgeJumpDbfs": -80.76657360480111,
+      "headRmsDbfs": -64.92799204141792,
+      "tailRmsDbfs": -68.72846621122763,
+      "heartbeatEnvelopePeaks": 0
+    },
+    "selectionScore": 0.10576101000041643
+  }
+]

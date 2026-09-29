@@ -1,0 +1,50 @@
+[
+  {
+    "file": "1-red-circle.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGBA",
+    "alpha_zero": 1324757,
+    "alpha_opaque": 201,
+    "alpha_partial": 248086,
+    "sha256": "eecfa3bc3ebc97a9df9bb2863d7e6c6fc4db22b82ab84d5fc6d4cc8fbb1173c4"
+  },
+  {
+    "file": "2-yellow-triangle.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGBA",
+    "alpha_zero": 1205817,
+    "alpha_opaque": 105,
+    "alpha_partial": 367122,
+    "sha256": "d769556c752cb12774ecc8edab8d84f54805cf9ca41bea761dc179bc29a9cc37"
+  },
+  {
+    "file": "3-blue-square.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGBA",
+    "alpha_zero": 1249735,
+    "alpha_opaque": 83,
+    "alpha_partial": 323226,
+    "sha256": "ec5f6056e51151a0ca3528db4a6124f9899b4bf0b4c43cc589b895212b618bb8"
+  },
+  {
+    "file": "4-green-diamond.png",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGBA",
+    "alpha_zero": 1303864,
+    "alpha_opaque": 32,
+    "alpha_partial": 269148,
+    "sha256": "8c3791e1f55a0def5c0be9e20754cc64f63f1179e619c42a35a62c8da4dbcbb1"
+  }
+]

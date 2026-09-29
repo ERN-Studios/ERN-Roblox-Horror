@@ -1,0 +1,58 @@
+[
+  {
+    "key": "sliding_gate_v2",
+    "duration": 2.2,
+    "prompt": "Heavy mechanical door slides on rollers for exactly 1.6 seconds, then a soft stop and short settling tail; close dry foley, isolated in silence, no hiss or ambience.",
+    "use": "Replacement for 1.6-second section gate movement; 0.6-second settling tail.",
+    "node_id": "KcU60Xliz3MIWuhMDxzC"
+  },
+  {
+    "key": "wooden_door_open",
+    "duration": 2.5,
+    "prompt": "An old wooden interior door opens once, latch releases then a short low hinge creak; close dry isolated foley, silence before and after, no ambience or hiss.",
+    "use": "Single hinged wooden door opening.",
+    "node_id": "PEM4t9gmm8gVAjYP6OOH"
+  },
+  {
+    "key": "wooden_door_close",
+    "duration": 1.5,
+    "prompt": "An old wooden interior door closes gently once, soft solid wood thud and latch click; close dry isolated foley, silence before and after, no ambience or hiss.",
+    "use": "Single hinged wooden door closing.",
+    "node_id": "magiiKMNuJT4l72aZmgc"
+  },
+  {
+    "key": "house_wood_creak",
+    "duration": 2.5,
+    "prompt": "One low wooden wall beam settles with a short natural creak and gentle knock; close dry isolated foley in silence, no wind, hiss, voices or background atmosphere.",
+    "use": "Sparse positional house settling sound.",
+    "node_id": "q2hHoy1Ex9KgUZOGTviz"
+  },
+  {
+    "key": "window_frame_creak",
+    "duration": 1.8,
+    "prompt": "An old wooden window frame creaks softly once under slight pressure; close dry isolated foley with a short decay into silence, no wind, hiss or background atmosphere.",
+    "use": "Sparse positional window-frame tension cue.",
+    "node_id": "zjNgMVvocmWBgG9K5kLl"
+  },
+  {
+    "key": "curtain_movement",
+    "duration": 1.8,
+    "prompt": "One soft heavy cotton curtain brushes gently across a wooden sill, short dry cloth rustle fading to complete silence, isolated close foley, no wind or background hiss.",
+    "use": "One short localized curtain movement.",
+    "node_id": "kGLnnMHAxBdjA7LwRj9V"
+  },
+  {
+    "key": "ceiling_relay_tick",
+    "duration": 0.65,
+    "prompt": "One tiny dry electromechanical ceiling relay tick, a crisp restrained plastic and metal click followed by complete silence, isolated close foley, no buzz or hiss.",
+    "use": "Sparse ceiling/lighting relay click without a power outage.",
+    "node_id": "FOHGlui4O2l0LjSNarZa"
+  },
+  {
+    "key": "queue_arrival",
+    "duration": 2,
+    "prompt": "A single subdued old mechanical hotel desk bell strikes softly, warm low metallic resonance with a short decay into silence, close dry foley, no music, voices or hiss.",
+    "use": "One subtle Level 5 queue arrival/transition cue.",
+    "node_id": "ZEV66urKKjGkTTTsK83A"
+  }
+]

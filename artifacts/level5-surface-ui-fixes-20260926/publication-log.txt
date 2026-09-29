@@ -1,0 +1,3 @@
+2026-09-26T20:01:51.169Z,30198.169922,704e7000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-26T20:01:51.250Z,30198.250000,f0fa20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-26T20:01:51.250Z,30198.250000,f0fa20c0,6,Info [FLog::CreatorOutput] → Add publish notes to v2139

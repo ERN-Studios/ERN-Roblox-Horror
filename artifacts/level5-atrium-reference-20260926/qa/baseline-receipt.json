@@ -1,0 +1,11 @@
+{
+  "sourceScripts": 192,
+  "sourceEditorRepoMatch": true,
+  "gitHead": "b583d0c56d066bf5f5b4838453be5abe3f824989",
+  "previousFullNativeBackup": {
+    "file": "artifacts/level5-dense-routes-20260926/after.rbxl",
+    "bytes": 9787627,
+    "sha256": "12f375d5016ade4e73ae06a635f2c880c57f9a6eb0c5554a8c466200eef9d9e3"
+  },
+  "scope": "Current change is script-built F district geometry; seven existing MaterialVariants reused. No new native asset mutation planned."
+}

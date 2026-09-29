@@ -1,0 +1,3290 @@
+{
+  "publishedMaskUnchangedSha256": "91cfc17625f5a01eea75a6591557c9f260057a1f0fa910129049ad76c8ae5d4b",
+  "candidatePath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-window-watcher-20260925/eye-placement/window-watcher-eye-emission-mask-v5.png",
+  "candidateSha256": "99315f05889bbc4c9f1122f502913bef7bf3fd5d7742b2a5a30ded79fee45738",
+  "candidateTreatment": "2x2 area downsample to1024; retain internal iris UV seams, remove only pixels within8px of the two upper-right brow triangles5787/5789 that sample distant iris UV islands under8px filtering. Technical mask only.",
+  "cases": [
+    {
+      "name": "targetedGuard1024",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "nonBlackTexels": 8983,
+      "mappedFragments": 8767,
+      "maxDistanceMeters": 0.011928907885290151,
+      "outsideIrisFragments": 0,
+      "maxPotentialLeakFraction": 0,
+      "offendingTriangles": []
+    },
+    {
+      "name": "targetedGuard1024-eightPixelSupport",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "nonBlackTexels": 24106,
+      "mappedFragments": 18620,
+      "maxDistanceMeters": 1.2658038604161683,
+      "outsideIrisFragments": 7465,
+      "maxPotentialLeakFraction": 1.0,
+      "offendingTriangles": [
+        {
+          "triangle": 205,
+          "samples": 64,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016747399443719453,
+          "brightestLeakWorld": [
+            -0.03105568290108555,
+            -0.10794270539894527,
+            2.236980239372974
+          ]
+        },
+        {
+          "triangle": 206,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012996943311155279,
+          "brightestLeakWorld": [
+            -0.04215144009985743,
+            -0.10781091097100919,
+            2.2362603891575845
+          ]
+        },
+        {
+          "triangle": 207,
+          "samples": 11,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01671371276941572,
+          "brightestLeakWorld": [
+            -0.02807086924812336,
+            -0.11006250687366982,
+            2.236524829558815
+          ]
+        },
+        {
+          "triangle": 208,
+          "samples": 54,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017303457323495842,
+          "brightestLeakWorld": [
+            -0.03732838866117308,
+            -0.10725559885355712,
+            2.233882634297638
+          ]
+        },
+        {
+          "triangle": 209,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01715296840517952,
+          "brightestLeakWorld": [
+            -0.02835145420341112,
+            -0.10837639918743805,
+            2.240195178116235
+          ]
+        },
+        {
+          "triangle": 461,
+          "samples": 14,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.07671095734822557,
+          "brightestLeakWorld": [
+            -0.021931764467553606,
+            -0.09250523735204386,
+            2.1783347120838124
+          ]
+        },
+        {
+          "triangle": 541,
+          "samples": 45,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017074283351065662,
+          "brightestLeakWorld": [
+            -0.03405202474669312,
+            -0.107324864466587,
+            2.233190135575723
+          ]
+        },
+        {
+          "triangle": 678,
+          "samples": 90,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01529366153194172,
+          "brightestLeakWorld": [
+            0.024767104470353574,
+            -0.10465597584020432,
+            2.243736529107024
+          ]
+        },
+        {
+          "triangle": 680,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014269152047118872,
+          "brightestLeakWorld": [
+            0.02515224064072368,
+            -0.11039471283662626,
+            2.241321770394351
+          ]
+        },
+        {
+          "triangle": 681,
+          "samples": 129,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01544506408198023,
+          "brightestLeakWorld": [
+            0.025949470132700173,
+            -0.10224762588419946,
+            2.242822204533001
+          ]
+        },
+        {
+          "triangle": 740,
+          "samples": 28,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01417285772322204,
+          "brightestLeakWorld": [
+            0.03942871697949697,
+            -0.1039598823454143,
+            2.23716154867146
+          ]
+        },
+        {
+          "triangle": 741,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014124142355743802,
+          "brightestLeakWorld": [
+            0.040795305234709665,
+            -0.10251871241670431,
+            2.238571448642255
+          ]
+        },
+        {
+          "triangle": 742,
+          "samples": 36,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014427616884595129,
+          "brightestLeakWorld": [
+            0.04084700824437046,
+            -0.10225556189984061,
+            2.238814274755183
+          ]
+        },
+        {
+          "triangle": 868,
+          "samples": 7,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013324520652068043,
+          "brightestLeakWorld": [
+            0.047861114495487585,
+            -0.10588571646057676,
+            2.254408842515501
+          ]
+        },
+        {
+          "triangle": 871,
+          "samples": 4,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013117729964959902,
+          "brightestLeakWorld": [
+            0.04822239322269394,
+            -0.10439473060939326,
+            2.2539624820633537
+          ]
+        },
+        {
+          "triangle": 1141,
+          "samples": 104,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016523473346461752,
+          "brightestLeakWorld": [
+            -0.034785695528019155,
+            -0.09749638599136148,
+            2.2408472961585706
+          ]
+        },
+        {
+          "triangle": 1143,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012711169951344874,
+          "brightestLeakWorld": [
+            -0.043835021973334914,
+            -0.09699494313767472,
+            2.2451577440228507
+          ]
+        },
+        {
+          "triangle": 1144,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013814549212499866,
+          "brightestLeakWorld": [
+            -0.04372889675483185,
+            -0.09618462102091237,
+            2.245368284289894
+          ]
+        },
+        {
+          "triangle": 1145,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01287302102008026,
+          "brightestLeakWorld": [
+            -0.04348961284487013,
+            -0.09665939063824107,
+            2.2452083717420206
+          ]
+        },
+        {
+          "triangle": 1146,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013389114807817562,
+          "brightestLeakWorld": [
+            -0.03511929874975577,
+            -0.09821571999156858,
+            2.2409453024088233
+          ]
+        },
+        {
+          "triangle": 1460,
+          "samples": 64,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016342147177154112,
+          "brightestLeakWorld": [
+            0.04377049757581525,
+            -0.1143995678244841,
+            2.2607052991757346
+          ]
+        },
+        {
+          "triangle": 1462,
+          "samples": 41,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0158928290639866,
+          "brightestLeakWorld": [
+            0.04697095297802717,
+            -0.10967951216802499,
+            2.2577399090008745
+          ]
+        },
+        {
+          "triangle": 1463,
+          "samples": 40,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01495460465773849,
+          "brightestLeakWorld": [
+            0.044655498905680636,
+            -0.11142746951800124,
+            2.259674521022474
+          ]
+        },
+        {
+          "triangle": 1527,
+          "samples": 73,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017736403265033538,
+          "brightestLeakWorld": [
+            -0.029592772705896747,
+            -0.11268821422552622,
+            2.2561307321758894
+          ]
+        },
+        {
+          "triangle": 1666,
+          "samples": 5,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013685799423826273,
+          "brightestLeakWorld": [
+            0.028330838649214322,
+            -0.10660861628931108,
+            2.2593706247360896
+          ]
+        },
+        {
+          "triangle": 1957,
+          "samples": 29,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016535163893755752,
+          "brightestLeakWorld": [
+            0.024300608675557972,
+            -0.11186255060953836,
+            2.2559359413966082
+          ]
+        },
+        {
+          "triangle": 1995,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1500941220729848,
+          "brightestLeakWorld": [
+            0.7866872583077703,
+            -0.0019301935423765364,
+            1.3833695242258817
+          ]
+        },
+        {
+          "triangle": 1998,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1546139483481097,
+          "brightestLeakWorld": [
+            0.7889145364940874,
+            -0.001211960645194194,
+            1.3833969454947428
+          ]
+        },
+        {
+          "triangle": 2026,
+          "samples": 49,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017008632557286747,
+          "brightestLeakWorld": [
+            0.028233189546042665,
+            -0.10630382641465451,
+            2.259888334600262
+          ]
+        },
+        {
+          "triangle": 2027,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017169539520932853,
+          "brightestLeakWorld": [
+            0.026391175483332776,
+            -0.10629668721853228,
+            2.2599262893619234
+          ]
+        },
+        {
+          "triangle": 2028,
+          "samples": 18,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015334857381454719,
+          "brightestLeakWorld": [
+            0.026080055054109135,
+            -0.10665793433868805,
+            2.2593090256848134
+          ]
+        },
+        {
+          "triangle": 2061,
+          "samples": 24,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.2658038604161683,
+          "brightestLeakWorld": [
+            -0.8625003099441527,
+            0.01400921135027816,
+            1.2952659102138684
+          ]
+        },
+        {
+          "triangle": 2211,
+          "samples": 75,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015885429082619657,
+          "brightestLeakWorld": [
+            0.04286195820275045,
+            -0.09960765659599415,
+            2.242321797044415
+          ]
+        },
+        {
+          "triangle": 2402,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01681256956882684,
+          "brightestLeakWorld": [
+            -0.02369503961700337,
+            -0.10775551601983752,
+            2.254840296849284
+          ]
+        },
+        {
+          "triangle": 2403,
+          "samples": 5,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017902946959252816,
+          "brightestLeakWorld": [
+            -0.0233695379808297,
+            -0.10674710690087187,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 2490,
+          "samples": 53,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016534867463172304,
+          "brightestLeakWorld": [
+            0.04863033537518078,
+            -0.1041478447301861,
+            2.2544718789080505
+          ]
+        },
+        {
+          "triangle": 2802,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013161799637013258,
+          "brightestLeakWorld": [
+            -0.044685787365797355,
+            -0.09744562034771444,
+            2.2540832694464368
+          ]
+        },
+        {
+          "triangle": 2806,
+          "samples": 6,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013257332777792877,
+          "brightestLeakWorld": [
+            -0.044232797489008074,
+            -0.09734450634798131,
+            2.2544101278818243
+          ]
+        },
+        {
+          "triangle": 3011,
+          "samples": 52,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014875858308079587,
+          "brightestLeakWorld": [
+            0.03903604899884873,
+            -0.09597442547152672,
+            2.253523825365862
+          ]
+        },
+        {
+          "triangle": 3012,
+          "samples": 83,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014174617969588691,
+          "brightestLeakWorld": [
+            0.033277909974338035,
+            -0.09747522692767843,
+            2.2534126109133847
+          ]
+        },
+        {
+          "triangle": 3013,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0132687319917173,
+          "brightestLeakWorld": [
+            0.04156220421573506,
+            -0.0982507591235971,
+            2.254540867220951
+          ]
+        },
+        {
+          "triangle": 3014,
+          "samples": 75,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014762496410788764,
+          "brightestLeakWorld": [
+            0.041811250583134646,
+            -0.09732874225296166,
+            2.2541706371386887
+          ]
+        },
+        {
+          "triangle": 3015,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013025015367447393,
+          "brightestLeakWorld": [
+            0.04078763002756946,
+            -0.09815342372601453,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 3016,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013243964797178908,
+          "brightestLeakWorld": [
+            0.04053739475608691,
+            -0.09776638157490947,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 3136,
+          "samples": 4,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.02929011056348381,
+          "brightestLeakWorld": [
+            0.049056670562668166,
+            -0.1101983112808535,
+            2.2704433077405275
+          ]
+        },
+        {
+          "triangle": 3139,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0359827420214753,
+          "brightestLeakWorld": [
+            0.05703738927438188,
+            -0.10271194835764119,
+            2.276648548958649
+          ]
+        },
+        {
+          "triangle": 3201,
+          "samples": 29,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015023277085563934,
+          "brightestLeakWorld": [
+            0.04392367828232143,
+            -0.10186365250832886,
+            2.257769249150247
+          ]
+        },
+        {
+          "triangle": 3202,
+          "samples": 71,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015480377108448818,
+          "brightestLeakWorld": [
+            0.044860408276011676,
+            -0.10015817222071585,
+            2.2579104048116614
+          ]
+        },
+        {
+          "triangle": 3375,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013065896735474956,
+          "brightestLeakWorld": [
+            0.04002527574044999,
+            -0.0970117373000285,
+            2.245312452316284
+          ]
+        },
+        {
+          "triangle": 3402,
+          "samples": 41,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017239520297383487,
+          "brightestLeakWorld": [
+            -0.02542383030677498,
+            -0.10758437626111858,
+            2.2406251430511475
+          ]
+        },
+        {
+          "triangle": 3624,
+          "samples": 69,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.163903256060317,
+          "brightestLeakWorld": [
+            0.8004673510136039,
+            0.016722945928913394,
+            1.3836549318721998
+          ]
+        },
+        {
+          "triangle": 3625,
+          "samples": 28,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1606552113120117,
+          "brightestLeakWorld": [
+            0.7945724164137018,
+            0.013710410115605063,
+            1.386318567183621
+          ]
+        },
+        {
+          "triangle": 3627,
+          "samples": 57,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1604433893621355,
+          "brightestLeakWorld": [
+            0.7883927943756598,
+            0.0007117485764376044,
+            1.3839418966654404
+          ]
+        },
+        {
+          "triangle": 3939,
+          "samples": 4,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01390188888875323,
+          "brightestLeakWorld": [
+            -0.042119888037979974,
+            -0.10222814350652451,
+            2.2367038946710163
+          ]
+        },
+        {
+          "triangle": 3942,
+          "samples": 9,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014090933973370186,
+          "brightestLeakWorld": [
+            -0.04154663275963462,
+            -0.10266885638406392,
+            2.236164792698904
+          ]
+        },
+        {
+          "triangle": 3944,
+          "samples": 26,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017344879539075066,
+          "brightestLeakWorld": [
+            -0.041768741080891666,
+            -0.10210458526717983,
+            2.235924763085767
+          ]
+        },
+        {
+          "triangle": 4005,
+          "samples": 130,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015903397859732684,
+          "brightestLeakWorld": [
+            0.047636112333488356,
+            -0.1026523346708835,
+            2.2463216461556157
+          ]
+        },
+        {
+          "triangle": 4006,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014187485357516199,
+          "brightestLeakWorld": [
+            0.04326284465210794,
+            -0.10720727527427627,
+            2.2381622918643536
+          ]
+        },
+        {
+          "triangle": 4007,
+          "samples": 171,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015400906398618035,
+          "brightestLeakWorld": [
+            0.043976753660274176,
+            -0.10683682283886141,
+            2.237038265111787
+          ]
+        },
+        {
+          "triangle": 4157,
+          "samples": 99,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01657303825670813,
+          "brightestLeakWorld": [
+            0.028131335377807862,
+            -0.10000816671841303,
+            2.258397623540964
+          ]
+        },
+        {
+          "triangle": 4158,
+          "samples": 37,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016168701187358022,
+          "brightestLeakWorld": [
+            0.02751937402545929,
+            -0.10333310656511019,
+            2.256064947650735
+          ]
+        },
+        {
+          "triangle": 4159,
+          "samples": 58,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0166168268133825,
+          "brightestLeakWorld": [
+            0.0229691156286553,
+            -0.10773536155078264,
+            2.254873501213707
+          ]
+        },
+        {
+          "triangle": 4161,
+          "samples": 48,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01680143726437219,
+          "brightestLeakWorld": [
+            0.023211368200029465,
+            -0.10810085459927188,
+            2.254710958681908
+          ]
+        },
+        {
+          "triangle": 4260,
+          "samples": 7,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013673939006237364,
+          "brightestLeakWorld": [
+            -0.04798518940045681,
+            -0.09923305367029155,
+            2.244532686786941
+          ]
+        },
+        {
+          "triangle": 4338,
+          "samples": 76,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.2292517965503087,
+          "brightestLeakWorld": [
+            -0.8423796070952462,
+            0.06760898226661907,
+            1.335584413123797
+          ]
+        },
+        {
+          "triangle": 4341,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.2284503456207934,
+          "brightestLeakWorld": [
+            -0.8418924496099247,
+            0.06866624567055882,
+            1.335985875692144
+          ]
+        },
+        {
+          "triangle": 4343,
+          "samples": 19,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.2285406451447474,
+          "brightestLeakWorld": [
+            -0.8411911912517602,
+            0.06390280684025174,
+            1.3362183597433783
+          ]
+        },
+        {
+          "triangle": 4477,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012740774459360659,
+          "brightestLeakWorld": [
+            -0.042666380091425704,
+            -0.10776665751136418,
+            2.2366617990408924
+          ]
+        },
+        {
+          "triangle": 4497,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01716756786481751,
+          "brightestLeakWorld": [
+            -0.031415350033906345,
+            -0.09825898008781012,
+            2.2406676580602007
+          ]
+        },
+        {
+          "triangle": 4500,
+          "samples": 73,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014463487039153275,
+          "brightestLeakWorld": [
+            -0.0432585374229433,
+            -0.09595243558608664,
+            2.2537013634752117
+          ]
+        },
+        {
+          "triangle": 4501,
+          "samples": 14,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014784328867674508,
+          "brightestLeakWorld": [
+            -0.04427318044509681,
+            -0.09623526198089799,
+            2.254263251687406
+          ]
+        },
+        {
+          "triangle": 4502,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014135306071475185,
+          "brightestLeakWorld": [
+            -0.03528268422528709,
+            -0.09584307702201335,
+            2.2515493897672623
+          ]
+        },
+        {
+          "triangle": 4588,
+          "samples": 20,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01546543239156528,
+          "brightestLeakWorld": [
+            -0.03541584453950457,
+            -0.10758892481965357,
+            2.260934376258856
+          ]
+        },
+        {
+          "triangle": 4590,
+          "samples": 9,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015038769903474362,
+          "brightestLeakWorld": [
+            -0.03716312836216655,
+            -0.10669746219444737,
+            2.261691600562674
+          ]
+        },
+        {
+          "triangle": 4704,
+          "samples": 40,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.26532961423321644,
+          "brightestLeakWorld": [
+            -0.0966844363367978,
+            0.024860773873114354,
+            2.0295884992905706
+          ]
+        },
+        {
+          "triangle": 4707,
+          "samples": 56,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.2649868764178947,
+          "brightestLeakWorld": [
+            -0.08296778086617614,
+            0.0370314250068811,
+            2.0377026678695636
+          ]
+        },
+        {
+          "triangle": 4708,
+          "samples": 18,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.25976843060272004,
+          "brightestLeakWorld": [
+            -0.08014155881008998,
+            0.03473193835240936,
+            2.0404301941236787
+          ]
+        },
+        {
+          "triangle": 4827,
+          "samples": 36,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016065181583823192,
+          "brightestLeakWorld": [
+            0.04162391032952162,
+            -0.10218147801514728,
+            2.2611078905269277
+          ]
+        },
+        {
+          "triangle": 4829,
+          "samples": 26,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015976575588013367,
+          "brightestLeakWorld": [
+            0.03878435516295177,
+            -0.10358889025398152,
+            2.2602731213334684
+          ]
+        },
+        {
+          "triangle": 5047,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014281423888961331,
+          "brightestLeakWorld": [
+            0.022657645050392933,
+            -0.10846549845347024,
+            2.249936270151814
+          ]
+        },
+        {
+          "triangle": 5048,
+          "samples": 6,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01491090981959592,
+          "brightestLeakWorld": [
+            0.023136041496807938,
+            -0.10839525595631776,
+            2.2546283818844195
+          ]
+        },
+        {
+          "triangle": 5049,
+          "samples": 34,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014942083345245646,
+          "brightestLeakWorld": [
+            0.02235683897536705,
+            -0.10840646160453922,
+            2.250406196570501
+          ]
+        },
+        {
+          "triangle": 5130,
+          "samples": 34,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016079730083948605,
+          "brightestLeakWorld": [
+            0.04231959866316031,
+            -0.09652817836949104,
+            2.24561913345033
+          ]
+        },
+        {
+          "triangle": 5131,
+          "samples": 69,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015929867545530024,
+          "brightestLeakWorld": [
+            0.04150581123622222,
+            -0.096969999053888,
+            2.245312452316284
+          ]
+        },
+        {
+          "triangle": 5132,
+          "samples": 67,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01568210297395091,
+          "brightestLeakWorld": [
+            0.044620428470760434,
+            -0.0994336555617792,
+            2.245327873168219
+          ]
+        },
+        {
+          "triangle": 5283,
+          "samples": 62,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01670591671089159,
+          "brightestLeakWorld": [
+            -0.04869391662257368,
+            -0.0981630549530121,
+            2.246266222687819
+          ]
+        },
+        {
+          "triangle": 5330,
+          "samples": 22,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015280542819702739,
+          "brightestLeakWorld": [
+            -0.029051979385939692,
+            -0.1078127920627594,
+            2.2564923977190725
+          ]
+        },
+        {
+          "triangle": 5331,
+          "samples": 24,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016509507393565333,
+          "brightestLeakWorld": [
+            -0.031134025344348153,
+            -0.10770282021262899,
+            2.259550412082532
+          ]
+        },
+        {
+          "triangle": 5332,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01612689344923049,
+          "brightestLeakWorld": [
+            -0.027365039115641233,
+            -0.1078127920627594,
+            2.2551872683354723
+          ]
+        },
+        {
+          "triangle": 5334,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014944242931379501,
+          "brightestLeakWorld": [
+            -0.028207925190980813,
+            -0.1078127920627594,
+            2.2550272211835996
+          ]
+        },
+        {
+          "triangle": 5399,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1640569183594065,
+          "brightestLeakWorld": [
+            0.8008263586411866,
+            0.03436701882555761,
+            1.3823052158718339
+          ]
+        },
+        {
+          "triangle": 5592,
+          "samples": 40,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017318192262663488,
+          "brightestLeakWorld": [
+            0.049467435556704416,
+            -0.10437484320497202,
+            2.2567017188896186
+          ]
+        },
+        {
+          "triangle": 5593,
+          "samples": 76,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01659526483864808,
+          "brightestLeakWorld": [
+            0.04738417363639247,
+            -0.1088102128098063,
+            2.255977330431667
+          ]
+        },
+        {
+          "triangle": 5664,
+          "samples": 75,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017625060058017155,
+          "brightestLeakWorld": [
+            -0.04568563266753641,
+            -0.10041353191882203,
+            2.2572085657372987
+          ]
+        },
+        {
+          "triangle": 5665,
+          "samples": 73,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017309034214196627,
+          "brightestLeakWorld": [
+            -0.048817847922858426,
+            -0.09846826074884396,
+            2.2457832196462544
+          ]
+        },
+        {
+          "triangle": 5676,
+          "samples": 9,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.040768785852555,
+          "brightestLeakWorld": [
+            0.7404819477001298,
+            0.0059639251203785415,
+            1.4927979136178915
+          ]
+        },
+        {
+          "triangle": 5814,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013157177553561463,
+          "brightestLeakWorld": [
+            -0.03961154391333656,
+            -0.10496627904162334,
+            2.2361554486454667
+          ]
+        },
+        {
+          "triangle": 5970,
+          "samples": 16,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017867312862686186,
+          "brightestLeakWorld": [
+            -0.02290348344704715,
+            -0.10570252897368518,
+            2.2505092002952116
+          ]
+        },
+        {
+          "triangle": 5972,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.018290320754415366,
+          "brightestLeakWorld": [
+            -0.02329089601393589,
+            -0.10739686272246819,
+            2.2544883004497236
+          ]
+        },
+        {
+          "triangle": 6034,
+          "samples": 9,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013526647382011954,
+          "brightestLeakWorld": [
+            0.045180587374331435,
+            -0.10166318786932427,
+            2.241398765215176
+          ]
+        },
+        {
+          "triangle": 6035,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01344034144540921,
+          "brightestLeakWorld": [
+            0.045680431572440346,
+            -0.10114523616036653,
+            2.244071970066208
+          ]
+        },
+        {
+          "triangle": 6175,
+          "samples": 9,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.1333472530740789,
+          "brightestLeakWorld": [
+            0.10543150587466961,
+            -0.008026249480246942,
+            2.194526758290666
+          ]
+        },
+        {
+          "triangle": 6177,
+          "samples": 21,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.09584494681758846,
+          "brightestLeakWorld": [
+            0.09890676217715978,
+            -0.03720616675820814,
+            2.233576041060661
+          ]
+        },
+        {
+          "triangle": 6211,
+          "samples": 34,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015382285816201475,
+          "brightestLeakWorld": [
+            -0.05149381048784532,
+            -0.10693108166654883,
+            2.2536108216763466
+          ]
+        },
+        {
+          "triangle": 6213,
+          "samples": 27,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015163295717025262,
+          "brightestLeakWorld": [
+            -0.0495016064444117,
+            -0.10920920370048623,
+            2.256173251146462
+          ]
+        },
+        {
+          "triangle": 6214,
+          "samples": 35,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017196608920938227,
+          "brightestLeakWorld": [
+            -0.05266985548007662,
+            -0.1068387138575465,
+            2.2550679629268324
+          ]
+        },
+        {
+          "triangle": 6215,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015666635839890787,
+          "brightestLeakWorld": [
+            -0.04661676255446221,
+            -0.11059285451115851,
+            2.2593743801116943
+          ]
+        },
+        {
+          "triangle": 6293,
+          "samples": 21,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.018125184690748582,
+          "brightestLeakWorld": [
+            -0.03481334503233489,
+            -0.10497404425770865,
+            2.2335081826459846
+          ]
+        },
+        {
+          "triangle": 6295,
+          "samples": 32,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.018064373677979056,
+          "brightestLeakWorld": [
+            -0.037600808857475514,
+            -0.10485764881129633,
+            2.2330449305972544
+          ]
+        },
+        {
+          "triangle": 6296,
+          "samples": 53,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01958407265662924,
+          "brightestLeakWorld": [
+            -0.03372968239875951,
+            -0.10457119853683086,
+            2.2331155275944226
+          ]
+        },
+        {
+          "triangle": 6359,
+          "samples": 60,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01666978820403022,
+          "brightestLeakWorld": [
+            -0.037045106679129636,
+            -0.11293707450812525,
+            2.2604139327484196
+          ]
+        },
+        {
+          "triangle": 6361,
+          "samples": 60,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01739920206419546,
+          "brightestLeakWorld": [
+            -0.030754492587031508,
+            -0.11310394817413066,
+            2.25727089100212
+          ]
+        },
+        {
+          "triangle": 6564,
+          "samples": 73,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01707445493313456,
+          "brightestLeakWorld": [
+            -0.027280898375771197,
+            -0.10767210419038135,
+            2.240625143051147
+          ]
+        },
+        {
+          "triangle": 6565,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014181633806110112,
+          "brightestLeakWorld": [
+            -0.027425933192622688,
+            -0.1083474134163709,
+            2.2409222085002805
+          ]
+        },
+        {
+          "triangle": 6566,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013119478094525431,
+          "brightestLeakWorld": [
+            -0.03498176015563909,
+            -0.09862123257261017,
+            2.240966694230672
+          ]
+        },
+        {
+          "triangle": 6634,
+          "samples": 14,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.27634343216365187,
+          "brightestLeakWorld": [
+            -0.017094045693039607,
+            0.06816198353193302,
+            2.0501095812953656
+          ]
+        },
+        {
+          "triangle": 6868,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01546602177602734,
+          "brightestLeakWorld": [
+            -0.031715671054640515,
+            -0.10761129605614397,
+            2.2596050651470523
+          ]
+        },
+        {
+          "triangle": 6872,
+          "samples": 22,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01504180204270391,
+          "brightestLeakWorld": [
+            -0.03308331955557847,
+            -0.10726149144876782,
+            2.2607336165980643
+          ]
+        },
+        {
+          "triangle": 7006,
+          "samples": 11,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014069822557944487,
+          "brightestLeakWorld": [
+            -0.050969884371184014,
+            -0.1046957138903494,
+            2.2517470277853424
+          ]
+        },
+        {
+          "triangle": 7007,
+          "samples": 42,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016007605138362656,
+          "brightestLeakWorld": [
+            -0.050950552922574006,
+            -0.10278285045410299,
+            2.2501060965112734
+          ]
+        },
+        {
+          "triangle": 7008,
+          "samples": 14,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017675498657148344,
+          "brightestLeakWorld": [
+            -0.05308687159763364,
+            -0.10645942652530818,
+            2.2549844280610087
+          ]
+        },
+        {
+          "triangle": 7052,
+          "samples": 5,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015901568750899306,
+          "brightestLeakWorld": [
+            0.0445282422717465,
+            -0.10001687487192312,
+            2.2593282069375284
+          ]
+        },
+        {
+          "triangle": 7077,
+          "samples": 24,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.203695634326984,
+          "brightestLeakWorld": [
+            0.11383068917047705,
+            0.06720530302760623,
+            2.1862591324748184
+          ]
+        },
+        {
+          "triangle": 7080,
+          "samples": 55,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.19305621777747772,
+          "brightestLeakWorld": [
+            0.1181999769905546,
+            0.05279715040978771,
+            2.18114689646153
+          ]
+        },
+        {
+          "triangle": 7093,
+          "samples": 64,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015355721792860667,
+          "brightestLeakWorld": [
+            0.03045762461339061,
+            -0.0975415577312641,
+            2.243950495834845
+          ]
+        },
+        {
+          "triangle": 7096,
+          "samples": 150,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015394758208394643,
+          "brightestLeakWorld": [
+            0.03283920689962154,
+            -0.09503648342908791,
+            2.247739849716699
+          ]
+        },
+        {
+          "triangle": 7138,
+          "samples": 4,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012872587181479832,
+          "brightestLeakWorld": [
+            0.04094829226099557,
+            -0.09724750273592431,
+            2.2450744482774065
+          ]
+        },
+        {
+          "triangle": 7195,
+          "samples": 24,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.7877311541880799,
+          "brightestLeakWorld": [
+            0.46233264096374693,
+            0.025070205854343885,
+            1.6140904815338208
+          ]
+        },
+        {
+          "triangle": 7324,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.037696715757588574,
+          "brightestLeakWorld": [
+            0.05985116370774288,
+            -0.09936009994922256,
+            2.277319568741796
+          ]
+        },
+        {
+          "triangle": 7374,
+          "samples": 16,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01628160479697777,
+          "brightestLeakWorld": [
+            -0.024079309900504785,
+            -0.10717624858581687,
+            2.2478704790562087
+          ]
+        },
+        {
+          "triangle": 7375,
+          "samples": 11,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013707667576945538,
+          "brightestLeakWorld": [
+            -0.026637480143356578,
+            -0.10834282078730353,
+            2.245819369788536
+          ]
+        },
+        {
+          "triangle": 7376,
+          "samples": 18,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01599042423074935,
+          "brightestLeakWorld": [
+            -0.024948223763833686,
+            -0.1078127920627594,
+            2.250922229570859
+          ]
+        },
+        {
+          "triangle": 7377,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013881349892021699,
+          "brightestLeakWorld": [
+            -0.026545230702525506,
+            -0.10806930818485551,
+            2.2506634689069953
+          ]
+        },
+        {
+          "triangle": 7378,
+          "samples": 16,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016373541474700715,
+          "brightestLeakWorld": [
+            -0.02478806904092101,
+            -0.10769423437966606,
+            2.2500367735530125
+          ]
+        },
+        {
+          "triangle": 7379,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015656299738660867,
+          "brightestLeakWorld": [
+            -0.02617269575333778,
+            -0.10809478107080842,
+            2.245476719547061
+          ]
+        },
+        {
+          "triangle": 7515,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.149593716952706,
+          "brightestLeakWorld": [
+            0.7865807709812979,
+            -0.0006418074285555313,
+            1.3841022156425244
+          ]
+        },
+        {
+          "triangle": 7519,
+          "samples": 20,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.2591359260009228,
+          "brightestLeakWorld": [
+            -0.05923105429355302,
+            0.04388194120864181,
+            2.05333452465616
+          ]
+        },
+        {
+          "triangle": 7520,
+          "samples": 63,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.26123528717529154,
+          "brightestLeakWorld": [
+            -0.05890503348307011,
+            0.05239902968460254,
+            2.043813116200391
+          ]
+        },
+        {
+          "triangle": 7596,
+          "samples": 53,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015166744931926887,
+          "brightestLeakWorld": [
+            0.045642560471033274,
+            -0.10052380322382515,
+            2.2416228665204847
+          ]
+        },
+        {
+          "triangle": 7597,
+          "samples": 112,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015350740763285626,
+          "brightestLeakWorld": [
+            0.0463774866248311,
+            -0.10036750256055309,
+            2.2482623882210295
+          ]
+        },
+        {
+          "triangle": 7704,
+          "samples": 38,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01624717782714315,
+          "brightestLeakWorld": [
+            0.027419330891237742,
+            -0.11461047245868576,
+            2.258999544324272
+          ]
+        },
+        {
+          "triangle": 7706,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012558551496302542,
+          "brightestLeakWorld": [
+            0.03360167163814616,
+            -0.1147595692084539,
+            2.2593743801116943
+          ]
+        },
+        {
+          "triangle": 7707,
+          "samples": 57,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016528421848025644,
+          "brightestLeakWorld": [
+            0.03420386671749999,
+            -0.11622117048840992,
+            2.2619037210246464
+          ]
+        },
+        {
+          "triangle": 7719,
+          "samples": 14,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015569176642036393,
+          "brightestLeakWorld": [
+            -0.02680459466106935,
+            -0.10834395323481244,
+            2.244535719604805
+          ]
+        },
+        {
+          "triangle": 7720,
+          "samples": 33,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01642135736423601,
+          "brightestLeakWorld": [
+            -0.02726464687197913,
+            -0.10643035810772043,
+            2.2398008370746054
+          ]
+        },
+        {
+          "triangle": 7934,
+          "samples": 16,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.8162419809056513,
+          "brightestLeakWorld": [
+            0.4770035122633679,
+            0.04794782868583187,
+            1.591216371801697
+          ]
+        },
+        {
+          "triangle": 8305,
+          "samples": 30,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017662064461626673,
+          "brightestLeakWorld": [
+            -0.027541943670435883,
+            -0.10997086561929997,
+            2.236744975344431
+          ]
+        },
+        {
+          "triangle": 8307,
+          "samples": 21,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.017592756485457998,
+          "brightestLeakWorld": [
+            -0.026944626500961112,
+            -0.10973898914733986,
+            2.2370468411256517
+          ]
+        },
+        {
+          "triangle": 8424,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016386582111438692,
+          "brightestLeakWorld": [
+            0.022147544234894317,
+            -0.10794624455452688,
+            2.253132546263484
+          ]
+        },
+        {
+          "triangle": 8425,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014846740594385649,
+          "brightestLeakWorld": [
+            0.02233584287251542,
+            -0.10839840769767761,
+            2.249335883458438
+          ]
+        },
+        {
+          "triangle": 8505,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01398045059919107,
+          "brightestLeakWorld": [
+            0.033355161713223336,
+            -0.10539523354257603,
+            2.2372894375069783
+          ]
+        },
+        {
+          "triangle": 8662,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013108600545934585,
+          "brightestLeakWorld": [
+            0.03686205662652873,
+            -0.10516336952169553,
+            2.2366510636299592
+          ]
+        },
+        {
+          "triangle": 8663,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013620305742753969,
+          "brightestLeakWorld": [
+            0.04522782766462145,
+            -0.10133464721788764,
+            2.241000412595038
+          ]
+        },
+        {
+          "triangle": 8777,
+          "samples": 40,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.17709901299595243,
+          "brightestLeakWorld": [
+            0.11723137670774661,
+            0.03948131559417962,
+            2.19446533750773
+          ]
+        },
+        {
+          "triangle": 8778,
+          "samples": 75,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.17024475984646004,
+          "brightestLeakWorld": [
+            0.12039284551756216,
+            0.02158810904113228,
+            2.1778651995007605
+          ]
+        },
+        {
+          "triangle": 8863,
+          "samples": 27,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01391275815334982,
+          "brightestLeakWorld": [
+            -0.04887274594821232,
+            -0.09878214550482242,
+            2.245693589950123
+          ]
+        },
+        {
+          "triangle": 8885,
+          "samples": 47,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016145151068740028,
+          "brightestLeakWorld": [
+            0.02651301534402685,
+            -0.11351065117933555,
+            2.2573877467952888
+          ]
+        },
+        {
+          "triangle": 8944,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01312419296484301,
+          "brightestLeakWorld": [
+            -0.02970727213343326,
+            -0.10893910197789765,
+            2.2406307709832234
+          ]
+        },
+        {
+          "triangle": 9037,
+          "samples": 56,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016746494768663172,
+          "brightestLeakWorld": [
+            0.04014129040605657,
+            -0.11534563841859323,
+            2.2618089631770317
+          ]
+        },
+        {
+          "triangle": 9038,
+          "samples": 59,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01649050197258817,
+          "brightestLeakWorld": [
+            0.04157093006966823,
+            -0.11506187983059768,
+            2.261597670604505
+          ]
+        },
+        {
+          "triangle": 9168,
+          "samples": 56,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.22590711058398,
+          "brightestLeakWorld": [
+            -0.838650007294173,
+            0.07032016675347609,
+            1.3376842615803224
+          ]
+        },
+        {
+          "triangle": 9274,
+          "samples": 11,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.2567417149445358,
+          "brightestLeakWorld": [
+            -0.005265372119653908,
+            0.06300037783999124,
+            2.064932256236147
+          ]
+        },
+        {
+          "triangle": 9294,
+          "samples": 32,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016944745114229068,
+          "brightestLeakWorld": [
+            0.03090802346486759,
+            -0.10445201320323927,
+            2.2619810083177065
+          ]
+        },
+        {
+          "triangle": 9295,
+          "samples": 26,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014787273545032556,
+          "brightestLeakWorld": [
+            0.03247193297912308,
+            -0.10471988045305448,
+            2.260420962034426
+          ]
+        },
+        {
+          "triangle": 9440,
+          "samples": 28,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.2507437624192405,
+          "brightestLeakWorld": [
+            -0.01121782862307139,
+            0.06221197056687125,
+            2.067937527007895
+          ]
+        },
+        {
+          "triangle": 9543,
+          "samples": 41,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016606736139301106,
+          "brightestLeakWorld": [
+            -0.03981385056754443,
+            -0.10512786699724747,
+            2.2612237462227034
+          ]
+        },
+        {
+          "triangle": 9545,
+          "samples": 84,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.040958387496253,
+          "brightestLeakWorld": [
+            0.7235626271754003,
+            0.00856482742094517,
+            1.4794221197522008
+          ]
+        },
+        {
+          "triangle": 9723,
+          "samples": 23,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014682003103745388,
+          "brightestLeakWorld": [
+            0.03502415980679124,
+            -0.10350098819624677,
+            2.2610287769913833
+          ]
+        },
+        {
+          "triangle": 9724,
+          "samples": 31,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015826986716116095,
+          "brightestLeakWorld": [
+            0.03694728054581467,
+            -0.10285211907288853,
+            2.2610307947883426
+          ]
+        },
+        {
+          "triangle": 9855,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015959259452047368,
+          "brightestLeakWorld": [
+            0.024182562714244144,
+            -0.1105499688200338,
+            2.254686832427979
+          ]
+        },
+        {
+          "triangle": 9856,
+          "samples": 21,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014970098275496786,
+          "brightestLeakWorld": [
+            0.024828313357708062,
+            -0.11043817456122455,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 9885,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012568432242049598,
+          "brightestLeakWorld": [
+            -0.03167859290987229,
+            -0.10781561309982163,
+            2.2589991201556874
+          ]
+        },
+        {
+          "triangle": 9982,
+          "samples": 18,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.04390498608531313,
+          "brightestLeakWorld": [
+            0.06583109913798499,
+            -0.0984604314616603,
+            2.2781184859923695
+          ]
+        },
+        {
+          "triangle": 9983,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.039553019162337194,
+          "brightestLeakWorld": [
+            0.06389121557780024,
+            -0.09917671466802766,
+            2.274397403248102
+          ]
+        },
+        {
+          "triangle": 10005,
+          "samples": 19,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015442784713285107,
+          "brightestLeakWorld": [
+            -0.026776911037513253,
+            -0.1083350861814048,
+            2.242176353626474
+          ]
+        },
+        {
+          "triangle": 10123,
+          "samples": 3,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013394099666723782,
+          "brightestLeakWorld": [
+            -0.02927529650536484,
+            -0.1012456968468711,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 10200,
+          "samples": 27,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.018511816419911214,
+          "brightestLeakWorld": [
+            -0.028791914678193593,
+            -0.10502819393711722,
+            2.2364792556507016
+          ]
+        },
+        {
+          "triangle": 10244,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.13875200240686558,
+          "brightestLeakWorld": [
+            0.10907746919727045,
+            0.0002413642183195683,
+            2.202192479792211
+          ]
+        },
+        {
+          "triangle": 10386,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012769304735019221,
+          "brightestLeakWorld": [
+            -0.02695233803388995,
+            -0.1084479095375738,
+            2.245130027977125
+          ]
+        },
+        {
+          "triangle": 10447,
+          "samples": 63,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.23724079611217827,
+          "brightestLeakWorld": [
+            -0.011310025506437888,
+            0.05594570101358365,
+            2.08458431843947
+          ]
+        },
+        {
+          "triangle": 10570,
+          "samples": 19,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013833164779169745,
+          "brightestLeakWorld": [
+            0.03596297233905664,
+            -0.10515854150631777,
+            2.2365082380038936
+          ]
+        },
+        {
+          "triangle": 10587,
+          "samples": 45,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013891956490866907,
+          "brightestLeakWorld": [
+            -0.047288823065758885,
+            -0.09702900031099847,
+            2.250273936671388
+          ]
+        },
+        {
+          "triangle": 10618,
+          "samples": 26,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014955949166726684,
+          "brightestLeakWorld": [
+            -0.04714793009351792,
+            -0.09667052683706337,
+            2.2504545041399115
+          ]
+        },
+        {
+          "triangle": 10725,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013248865994428868,
+          "brightestLeakWorld": [
+            0.025183660693400008,
+            -0.11085102307788224,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 10777,
+          "samples": 113,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015398444271814641,
+          "brightestLeakWorld": [
+            0.03009865916366466,
+            -0.11000135774948305,
+            2.2367054073009003
+          ]
+        },
+        {
+          "triangle": 10778,
+          "samples": 44,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014301557696598273,
+          "brightestLeakWorld": [
+            0.03738030133515887,
+            -0.1083581378579398,
+            2.2360941494606608
+          ]
+        },
+        {
+          "triangle": 10779,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01283461833934454,
+          "brightestLeakWorld": [
+            0.036589979757957386,
+            -0.10857666503928949,
+            2.2363558087360618
+          ]
+        },
+        {
+          "triangle": 10865,
+          "samples": 31,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.016225119820590887,
+          "brightestLeakWorld": [
+            0.02366224700657935,
+            -0.10757342396256023,
+            2.2563731924326196
+          ]
+        },
+        {
+          "triangle": 10879,
+          "samples": 17,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01683582117549963,
+          "brightestLeakWorld": [
+            -0.03869622428317444,
+            -0.10461474355112368,
+            2.2335186080465683
+          ]
+        },
+        {
+          "triangle": 10880,
+          "samples": 1,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.012577411840858636,
+          "brightestLeakWorld": [
+            -0.03922828787172149,
+            -0.10520803676129199,
+            2.236684561467613
+          ]
+        },
+        {
+          "triangle": 11040,
+          "samples": 5,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 1.1484219846481343,
+          "brightestLeakWorld": [
+            0.7857665380107101,
+            0.0005914494604360014,
+            1.385180466914337
+          ]
+        },
+        {
+          "triangle": 11256,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.25724614584882305,
+          "brightestLeakWorld": [
+            -0.07618759252909932,
+            0.034797198593821056,
+            2.046524302832669
+          ]
+        },
+        {
+          "triangle": 11311,
+          "samples": 13,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0160258194287879,
+          "brightestLeakWorld": [
+            -0.041817356483891656,
+            -0.10426046312077841,
+            2.2611936453873382
+          ]
+        },
+        {
+          "triangle": 11341,
+          "samples": 12,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.013164122644840478,
+          "brightestLeakWorld": [
+            -0.04435641450883367,
+            -0.11263095782656536,
+            2.2593743801116943
+          ]
+        },
+        {
+          "triangle": 11404,
+          "samples": 6,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.014444432834728505,
+          "brightestLeakWorld": [
+            0.04283499682213866,
+            -0.10742557224003647,
+            2.237648757762837
+          ]
+        },
+        {
+          "triangle": 11563,
+          "samples": 97,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.015299521351591554,
+          "brightestLeakWorld": [
+            0.025697513604655928,
+            -0.11072915183693631,
+            2.2405502090335596
+          ]
+        },
+        {
+          "triangle": 11579,
+          "samples": 15,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.24597218568881674,
+          "brightestLeakWorld": [
+            0.001329989308578227,
+            0.060246383057398205,
+            2.0788808045499776
+          ]
+        },
+        {
+          "triangle": 11580,
+          "samples": 2,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.23835771405869563,
+          "brightestLeakWorld": [
+            0.008171662696044848,
+            0.05831509201726286,
+            2.0812509059906006
+          ]
+        },
+        {
+          "triangle": 11650,
+          "samples": 21,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.0151958891424354,
+          "brightestLeakWorld": [
+            0.02400475333481429,
+            -0.10766049916504175,
+            2.2566291643784635
+          ]
+        },
+        {
+          "triangle": 11691,
+          "samples": 22,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.01629780408867922,
+          "brightestLeakWorld": [
+            -0.04369216779552741,
+            -0.1027136185453636,
+            2.2598058115734414
+          ]
+        },
+        {
+          "triangle": 11789,
+          "samples": 10,
+          "maxStrengthFraction": 1.0,
+          "maxDistanceMeters": 0.24046196911125525,
+          "brightestLeakWorld": [
+            -0.010986254286841513,
+            0.057755783016887496,
+            2.08542763280581
+          ]
+        },
+        {
+          "triangle": 6360,
+          "samples": 1,
+          "maxStrengthFraction": 0.9931373000144958,
+          "maxDistanceMeters": 0.012610641500247885,
+          "brightestLeakWorld": [
+            -0.039062732994911836,
+            -0.11522486671804272,
+            2.2593743801116943
+          ]
+        },
+        {
+          "triangle": 6633,
+          "samples": 4,
+          "maxStrengthFraction": 0.9911764860153198,
+          "maxDistanceMeters": 0.2609606046258844,
+          "brightestLeakWorld": [
+            -0.05715395435197457,
+            0.05312600963163187,
+            2.0445736108883183
+          ]
+        },
+        {
+          "triangle": 6636,
+          "samples": 6,
+          "maxStrengthFraction": 0.9911764860153198,
+          "maxDistanceMeters": 0.26734088307527654,
+          "brightestLeakWorld": [
+            -0.05716801955129842,
+            0.05495892991471203,
+            2.043079429642463
+          ]
+        },
+        {
+          "triangle": 7518,
+          "samples": 12,
+          "maxStrengthFraction": 0.9911764860153198,
+          "maxDistanceMeters": 0.25893695905285774,
+          "brightestLeakWorld": [
+            -0.05754266345639323,
+            0.05061768923454299,
+            2.047920711579958
+          ]
+        },
+        {
+          "triangle": 9544,
+          "samples": 12,
+          "maxStrengthFraction": 0.9911764860153198,
+          "maxDistanceMeters": 0.016970541858349394,
+          "brightestLeakWorld": [
+            -0.036625286572990204,
+            -0.10568078468499978,
+            2.2640612125396733
+          ]
+        },
+        {
+          "triangle": 8306,
+          "samples": 13,
+          "maxStrengthFraction": 0.9901961088180542,
+          "maxDistanceMeters": 0.018881738288458436,
+          "brightestLeakWorld": [
+            -0.026855357816758015,
+            -0.10918150270161303,
+            2.2384267131902633
+          ]
+        },
+        {
+          "triangle": 7594,
+          "samples": 20,
+          "maxStrengthFraction": 0.9892157316207886,
+          "maxDistanceMeters": 0.015001790296320386,
+          "brightestLeakWorld": [
+            0.04660647492156207,
+            -0.09980918542664943,
+            2.250206555801313
+          ]
+        },
+        {
+          "triangle": 1959,
+          "samples": 6,
+          "maxStrengthFraction": 0.9794118404388428,
+          "maxDistanceMeters": 0.01608128946960403,
+          "brightestLeakWorld": [
+            0.02345916092723608,
+            -0.11050563421599678,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 2209,
+          "samples": 71,
+          "maxStrengthFraction": 0.9764706492424011,
+          "maxDistanceMeters": 0.015896965467849737,
+          "brightestLeakWorld": [
+            0.044121309234696066,
+            -0.09941175601275531,
+            2.2443828691623855
+          ]
+        },
+        {
+          "triangle": 7053,
+          "samples": 9,
+          "maxStrengthFraction": 0.9735294580459595,
+          "maxDistanceMeters": 0.016208141005832934,
+          "brightestLeakWorld": [
+            0.044015992429706136,
+            -0.10012216642558872,
+            2.260016663123941
+          ]
+        },
+        {
+          "triangle": 5333,
+          "samples": 8,
+          "maxStrengthFraction": 0.9666666984558105,
+          "maxDistanceMeters": 0.01665815892279847,
+          "brightestLeakWorld": [
+            -0.027213418089994394,
+            -0.1073986724942714,
+            2.259874415136801
+          ]
+        },
+        {
+          "triangle": 9284,
+          "samples": 9,
+          "maxStrengthFraction": 0.9637255668640137,
+          "maxDistanceMeters": 0.014020690018185362,
+          "brightestLeakWorld": [
+            0.03707391271221963,
+            -0.10833538074565968,
+            2.2357033405871256
+          ]
+        },
+        {
+          "triangle": 9285,
+          "samples": 39,
+          "maxStrengthFraction": 0.9637255668640137,
+          "maxDistanceMeters": 0.015200425537632938,
+          "brightestLeakWorld": [
+            0.03744792761929482,
+            -0.10825793952294331,
+            2.235713535113398
+          ]
+        },
+        {
+          "triangle": 9925,
+          "samples": 9,
+          "maxStrengthFraction": 0.9637255668640137,
+          "maxDistanceMeters": 0.014333751232621046,
+          "brightestLeakWorld": [
+            0.03669838777226973,
+            -0.10840667390336232,
+            2.235644654435744
+          ]
+        },
+        {
+          "triangle": 3664,
+          "samples": 3,
+          "maxStrengthFraction": 0.9500000476837158,
+          "maxDistanceMeters": 0.013512540780466178,
+          "brightestLeakWorld": [
+            0.027310690528997723,
+            -0.1079275717075626,
+            2.2406251430511475
+          ]
+        },
+        {
+          "triangle": 3665,
+          "samples": 6,
+          "maxStrengthFraction": 0.9500000476837158,
+          "maxDistanceMeters": 0.013093367978292811,
+          "brightestLeakWorld": [
+            0.027087252353920677,
+            -0.10800171493951748,
+            2.2408940393500894
+          ]
+        },
+        {
+          "triangle": 6871,
+          "samples": 11,
+          "maxStrengthFraction": 0.9117647409439087,
+          "maxDistanceMeters": 0.01562064750094726,
+          "brightestLeakWorld": [
+            -0.035521970136558924,
+            -0.10554333339436232,
+            2.2628518181116695
+          ]
+        },
+        {
+          "triangle": 4741,
+          "samples": 5,
+          "maxStrengthFraction": 0.8754901885986328,
+          "maxDistanceMeters": 0.015942230339268823,
+          "brightestLeakWorld": [
+            -0.0261634871847277,
+            -0.10799058127128001,
+            2.241411815227845
+          ]
+        },
+        {
+          "triangle": 9103,
+          "samples": 3,
+          "maxStrengthFraction": 0.8725491166114807,
+          "maxDistanceMeters": 0.016866330185086167,
+          "brightestLeakWorld": [
+            -0.022789605511857547,
+            -0.10555659611189525,
+            2.2495982206103706
+          ]
+        },
+        {
+          "triangle": 11342,
+          "samples": 24,
+          "maxStrengthFraction": 0.8725490570068359,
+          "maxDistanceMeters": 0.014080415796775225,
+          "brightestLeakWorld": [
+            -0.03973026429127016,
+            -0.11533818086327959,
+            2.2594482063404686
+          ]
+        },
+        {
+          "triangle": 11262,
+          "samples": 15,
+          "maxStrengthFraction": 0.8343138098716736,
+          "maxDistanceMeters": 0.013983375553379763,
+          "brightestLeakWorld": [
+            0.03560592655444019,
+            -0.10446265583003007,
+            2.23593807220459
+          ]
+        },
+        {
+          "triangle": 3662,
+          "samples": 25,
+          "maxStrengthFraction": 0.8068628311157227,
+          "maxDistanceMeters": 0.014240260652635539,
+          "brightestLeakWorld": [
+            0.026150488059575254,
+            -0.10744197217493631,
+            2.2409769078158313
+          ]
+        },
+        {
+          "triangle": 3663,
+          "samples": 40,
+          "maxStrengthFraction": 0.8068628311157227,
+          "maxDistanceMeters": 0.014466273771086783,
+          "brightestLeakWorld": [
+            0.028357167866861644,
+            -0.10707107562706128,
+            2.239851102463022
+          ]
+        },
+        {
+          "triangle": 3666,
+          "samples": 8,
+          "maxStrengthFraction": 0.8068628311157227,
+          "maxDistanceMeters": 0.014694681110268821,
+          "brightestLeakWorld": [
+            0.0263739862403516,
+            -0.107009714495051,
+            2.2401899628023885
+          ]
+        },
+        {
+          "triangle": 7854,
+          "samples": 42,
+          "maxStrengthFraction": 0.8068628311157227,
+          "maxDistanceMeters": 0.014671617958151225,
+          "brightestLeakWorld": [
+            0.0313661566668259,
+            -0.10633476977145058,
+            2.2377824315188786
+          ]
+        },
+        {
+          "triangle": 5401,
+          "samples": 3,
+          "maxStrengthFraction": 0.7970588207244873,
+          "maxDistanceMeters": 1.1642562610606746,
+          "brightestLeakWorld": [
+            0.8005822080067198,
+            0.03574198154193266,
+            1.3821759684440356
+          ]
+        },
+        {
+          "triangle": 3353,
+          "samples": 6,
+          "maxStrengthFraction": 0.75,
+          "maxDistanceMeters": 1.0390739019862671,
+          "brightestLeakWorld": [
+            0.7348183711850919,
+            0.011430222917937985,
+            1.4902917445339494
+          ]
+        },
+        {
+          "triangle": 11296,
+          "samples": 12,
+          "maxStrengthFraction": 0.6813725829124451,
+          "maxDistanceMeters": 0.01571683324948079,
+          "brightestLeakWorld": [
+            -0.0375104266403111,
+            -0.11536794024503087,
+            2.260278532391779
+          ]
+        },
+        {
+          "triangle": 2491,
+          "samples": 1,
+          "maxStrengthFraction": 0.638235330581665,
+          "maxDistanceMeters": 0.012589450823264885,
+          "brightestLeakWorld": [
+            0.046615482469719575,
+            -0.10072471133096257,
+            2.249914861434053
+          ]
+        },
+        {
+          "triangle": 8208,
+          "samples": 7,
+          "maxStrengthFraction": 0.563725471496582,
+          "maxDistanceMeters": 0.766781498035887,
+          "brightestLeakWorld": [
+            0.4557650496017367,
+            0.024198049024133625,
+            1.621501123806831
+          ]
+        },
+        {
+          "triangle": 743,
+          "samples": 7,
+          "maxStrengthFraction": 0.5029411911964417,
+          "maxDistanceMeters": 0.01452490831440714,
+          "brightestLeakWorld": [
+            0.03972664446615523,
+            -0.10306240783616558,
+            2.23593807220459
+          ]
+        },
+        {
+          "triangle": 1395,
+          "samples": 9,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.01878059284824714,
+          "brightestLeakWorld": [
+            -0.04238359353501082,
+            -0.10766552839328598,
+            2.235057491354712
+          ]
+        },
+        {
+          "triangle": 2297,
+          "samples": 18,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.020948776409876857,
+          "brightestLeakWorld": [
+            -0.053736157114003244,
+            -0.09907039606028331,
+            2.239092976526979
+          ]
+        },
+        {
+          "triangle": 2298,
+          "samples": 3,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.014836491356427187,
+          "brightestLeakWorld": [
+            -0.048555632241292015,
+            -0.10341058863453959,
+            2.2412041557271136
+          ]
+        },
+        {
+          "triangle": 2299,
+          "samples": 6,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.014777709271315857,
+          "brightestLeakWorld": [
+            -0.050053938774370886,
+            -0.10120601696446406,
+            2.2420154831631116
+          ]
+        },
+        {
+          "triangle": 2300,
+          "samples": 24,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.02277852993878605,
+          "brightestLeakWorld": [
+            -0.05114777162775971,
+            -0.10236514396744219,
+            2.2319867346225974
+          ]
+        },
+        {
+          "triangle": 2301,
+          "samples": 16,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.020794378827018272,
+          "brightestLeakWorld": [
+            -0.050263669610552814,
+            -0.10313808989708223,
+            2.2320702225412785
+          ]
+        },
+        {
+          "triangle": 2302,
+          "samples": 14,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.018556090230040467,
+          "brightestLeakWorld": [
+            -0.05094928970624942,
+            -0.10077966824469829,
+            2.24139312214425
+          ]
+        },
+        {
+          "triangle": 6601,
+          "samples": 18,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.021923992420806435,
+          "brightestLeakWorld": [
+            -0.04816602860707634,
+            -0.10448199982270799,
+            2.2306964795618924
+          ]
+        },
+        {
+          "triangle": 8861,
+          "samples": 10,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.01565334163790086,
+          "brightestLeakWorld": [
+            -0.04900002264017277,
+            -0.09851296032620785,
+            2.245413102696298
+          ]
+        },
+        {
+          "triangle": 9271,
+          "samples": 21,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.018307548263361628,
+          "brightestLeakWorld": [
+            -0.05174931197042469,
+            -0.09750294603384702,
+            2.2453783741602757
+          ]
+        },
+        {
+          "triangle": 9498,
+          "samples": 15,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.019561341461951827,
+          "brightestLeakWorld": [
+            -0.0454157563882124,
+            -0.10607472562093133,
+            2.2343179786898637
+          ]
+        },
+        {
+          "triangle": 10588,
+          "samples": 1,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.01378299218271448,
+          "brightestLeakWorld": [
+            -0.04776321500088344,
+            -0.09744455435220668,
+            2.24909836407496
+          ]
+        },
+        {
+          "triangle": 10813,
+          "samples": 2,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.013610925000008283,
+          "brightestLeakWorld": [
+            -0.047847005589515754,
+            -0.09907433856270258,
+            2.246973725088436
+          ]
+        },
+        {
+          "triangle": 11280,
+          "samples": 19,
+          "maxStrengthFraction": 0.49803924560546875,
+          "maxDistanceMeters": 0.02852574339133346,
+          "brightestLeakWorld": [
+            -0.055591273601408135,
+            -0.09977174680297941,
+            2.2290799872167386
+          ]
+        },
+        {
+          "triangle": 5666,
+          "samples": 12,
+          "maxStrengthFraction": 0.4970588684082031,
+          "maxDistanceMeters": 0.017476764758968064,
+          "brightestLeakWorld": [
+            -0.044534440870419106,
+            -0.09904970932951514,
+            2.262000782774381
+          ]
+        },
+        {
+          "triangle": 8762,
+          "samples": 1,
+          "maxStrengthFraction": 0.4941176772117615,
+          "maxDistanceMeters": 0.012689594505828902,
+          "brightestLeakWorld": [
+            0.046455230336922324,
+            -0.10035508269147472,
+            2.249701222345326
+          ]
+        },
+        {
+          "triangle": 9272,
+          "samples": 8,
+          "maxStrengthFraction": 0.4882352948188782,
+          "maxDistanceMeters": 0.019313306363987714,
+          "brightestLeakWorld": [
+            -0.05434338759710261,
+            -0.09839905004415704,
+            2.247582048975142
+          ]
+        },
+        {
+          "triangle": 2065,
+          "samples": 6,
+          "maxStrengthFraction": 0.4862745404243469,
+          "maxDistanceMeters": 1.2602844652287037,
+          "brightestLeakWorld": [
+            -0.8624027857565719,
+            0.019670212396311497,
+            1.3044817854389532
+          ]
+        },
+        {
+          "triangle": 5129,
+          "samples": 26,
+          "maxStrengthFraction": 0.4745098352432251,
+          "maxDistanceMeters": 0.016046281109113946,
+          "brightestLeakWorld": [
+            0.04665124177803064,
+            -0.09923892359577963,
+            2.248980497690335
+          ]
+        },
+        {
+          "triangle": 7499,
+          "samples": 1,
+          "maxStrengthFraction": 0.4480392336845398,
+          "maxDistanceMeters": 0.01969915162027369,
+          "brightestLeakWorld": [
+            -0.05436492698635073,
+            -0.09643042044084642,
+            2.2446609421477426
+          ]
+        },
+        {
+          "triangle": 8504,
+          "samples": 10,
+          "maxStrengthFraction": 0.40980392694473267,
+          "maxDistanceMeters": 0.014149628203320802,
+          "brightestLeakWorld": [
+            0.034089174414390286,
+            -0.10451457530501528,
+            2.23593807220459
+          ]
+        },
+        {
+          "triangle": 11264,
+          "samples": 5,
+          "maxStrengthFraction": 0.3794117867946625,
+          "maxDistanceMeters": 0.014106592640012563,
+          "brightestLeakWorld": [
+            0.03490039180612866,
+            -0.10400715224403727,
+            2.23593807220459
+          ]
+        },
+        {
+          "triangle": 6212,
+          "samples": 25,
+          "maxStrengthFraction": 0.3539215922355652,
+          "maxDistanceMeters": 0.01675461559011226,
+          "brightestLeakWorld": [
+            -0.051195415662124474,
+            -0.1100502674644123,
+            2.259837535441807
+          ]
+        },
+        {
+          "triangle": 5973,
+          "samples": 2,
+          "maxStrengthFraction": 0.25882354378700256,
+          "maxDistanceMeters": 0.017378406550961435,
+          "brightestLeakWorld": [
+            -0.022162168296323462,
+            -0.10554345823478602,
+            2.24916547337287
+          ]
+        },
+        {
+          "triangle": 10295,
+          "samples": 4,
+          "maxStrengthFraction": 0.2549019753932953,
+          "maxDistanceMeters": 0.01653743504146666,
+          "brightestLeakWorld": [
+            0.02548719555003369,
+            -0.10605921492418277,
+            2.2600575401160783
+          ]
+        },
+        {
+          "triangle": 9170,
+          "samples": 4,
+          "maxStrengthFraction": 0.250980406999588,
+          "maxDistanceMeters": 1.2229056728810552,
+          "brightestLeakWorld": [
+            -0.8361906466829991,
+            0.07039980949837844,
+            1.3387760273533695
+          ]
+        },
+        {
+          "triangle": 5673,
+          "samples": 1,
+          "maxStrengthFraction": 0.25,
+          "maxDistanceMeters": 1.0384101339852196,
+          "brightestLeakWorld": [
+            0.7410323035509409,
+            0.006409756540222512,
+            1.4944128684043243
+          ]
+        },
+        {
+          "triangle": 987,
+          "samples": 13,
+          "maxStrengthFraction": 0.24803921580314636,
+          "maxDistanceMeters": 0.017770917998252173,
+          "brightestLeakWorld": [
+            -0.023903519628539545,
+            -0.10922487434569385,
+            2.256047916273383
+          ]
+        },
+        {
+          "triangle": 1528,
+          "samples": 55,
+          "maxStrengthFraction": 0.24803921580314636,
+          "maxDistanceMeters": 0.01759377795959008,
+          "brightestLeakWorld": [
+            -0.024357664007470994,
+            -0.10953076259142172,
+            2.256154140921801
+          ]
+        },
+        {
+          "triangle": 4853,
+          "samples": 22,
+          "maxStrengthFraction": 0.24803921580314636,
+          "maxDistanceMeters": 0.016028487174064188,
+          "brightestLeakWorld": [
+            -0.02465266841731542,
+            -0.10819344014066941,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 4855,
+          "samples": 50,
+          "maxStrengthFraction": 0.24803921580314636,
+          "maxDistanceMeters": 0.0160883538569338,
+          "brightestLeakWorld": [
+            -0.025073224222940615,
+            -0.10772603524974758,
+            2.2546868324279785
+          ]
+        },
+        {
+          "triangle": 9599,
+          "samples": 2,
+          "maxStrengthFraction": 0.19509804248809814,
+          "maxDistanceMeters": 0.7481966090240323,
+          "brightestLeakWorld": [
+            0.4622346129260896,
+            0.010285613997965319,
+            1.6459649181135503
+          ]
+        },
+        {
+          "triangle": 7208,
+          "samples": 2,
+          "maxStrengthFraction": 0.1666666716337204,
+          "maxDistanceMeters": 0.018685053112459746,
+          "brightestLeakWorld": [
+            -0.02646666315714117,
+            -0.10994412196819466,
+            2.2359686210286474
+          ]
+        },
+        {
+          "triangle": 4740,
+          "samples": 1,
+          "maxStrengthFraction": 0.1558823585510254,
+          "maxDistanceMeters": 0.015333603618376022,
+          "brightestLeakWorld": [
+            -0.026248141016181333,
+            -0.10776798238010743,
+            2.2406251430511475
+          ]
+        },
+        {
+          "triangle": 9283,
+          "samples": 3,
+          "maxStrengthFraction": 0.14509804546833038,
+          "maxDistanceMeters": 0.015136936946722336,
+          "brightestLeakWorld": [
+            0.043873986511780046,
+            -0.10700538696876993,
+            2.235799904525231
+          ]
+        },
+        {
+          "triangle": 7933,
+          "samples": 1,
+          "maxStrengthFraction": 0.13431373238563538,
+          "maxDistanceMeters": 0.7723076746968677,
+          "brightestLeakWorld": [
+            0.4539993384680811,
+            0.032339914200475724,
+            1.614388748025126
+          ]
+        },
+        {
+          "triangle": 4854,
+          "samples": 13,
+          "maxStrengthFraction": 0.10882353782653809,
+          "maxDistanceMeters": 0.016432623390880273,
+          "brightestLeakWorld": [
+            -0.023769952174059507,
+            -0.10752340061898853,
+            2.2546465361161996
+          ]
+        },
+        {
+          "triangle": 5279,
+          "samples": 4,
+          "maxStrengthFraction": 0.06470588594675064,
+          "maxDistanceMeters": 0.01750419933032844,
+          "brightestLeakWorld": [
+            -0.04709387400842831,
+            -0.09621606530770457,
+            2.256269552550026
+          ]
+        },
+        {
+          "triangle": 2406,
+          "samples": 5,
+          "maxStrengthFraction": 0.05980392545461655,
+          "maxDistanceMeters": 0.016268961994203173,
+          "brightestLeakWorld": [
+            -0.026686047298763435,
+            -0.10748111829350933,
+            2.259074467417986
+          ]
+        },
+        {
+          "triangle": 3940,
+          "samples": 10,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.016788261347834066,
+          "brightestLeakWorld": [
+            -0.045077681111092095,
+            -0.09866392371386253,
+            2.236421376992858
+          ]
+        },
+        {
+          "triangle": 3941,
+          "samples": 17,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.019817829922448012,
+          "brightestLeakWorld": [
+            -0.04312239878467408,
+            -0.09544000123863838,
+            2.2358044532341945
+          ]
+        },
+        {
+          "triangle": 3943,
+          "samples": 10,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.018881588638832675,
+          "brightestLeakWorld": [
+            -0.0442094465665633,
+            -0.09543927204438628,
+            2.235938309028617
+          ]
+        },
+        {
+          "triangle": 3945,
+          "samples": 17,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.019278252793968016,
+          "brightestLeakWorld": [
+            -0.03970162704827751,
+            -0.0990752309505556,
+            2.2330171142492827
+          ]
+        },
+        {
+          "triangle": 5280,
+          "samples": 33,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.017996024638237518,
+          "brightestLeakWorld": [
+            -0.04698847479479158,
+            -0.094387370134212,
+            2.247037328620831
+          ]
+        },
+        {
+          "triangle": 5281,
+          "samples": 15,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.017893042349734923,
+          "brightestLeakWorld": [
+            -0.046840796914433734,
+            -0.09684884182865529,
+            2.2374066415475724
+          ]
+        },
+        {
+          "triangle": 5282,
+          "samples": 12,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.01696927457727473,
+          "brightestLeakWorld": [
+            -0.047546096502909786,
+            -0.09397419150466611,
+            2.249700659003366
+          ]
+        },
+        {
+          "triangle": 7434,
+          "samples": 3,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.018854058387284583,
+          "brightestLeakWorld": [
+            -0.04620217807128342,
+            -0.09600251701924091,
+            2.236881802474406
+          ]
+        },
+        {
+          "triangle": 8871,
+          "samples": 3,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.02128317396942237,
+          "brightestLeakWorld": [
+            -0.040289265249443866,
+            -0.09634593513679575,
+            2.233058686577461
+          ]
+        },
+        {
+          "triangle": 9077,
+          "samples": 19,
+          "maxStrengthFraction": 0.05098039656877518,
+          "maxDistanceMeters": 0.017817578844685333,
+          "brightestLeakWorld": [
+            -0.04618008213367626,
+            -0.09748513164785885,
+            2.236523689865756
+          ]
+        },
+        {
+          "triangle": 7855,
+          "samples": 3,
+          "maxStrengthFraction": 0.04803922027349472,
+          "maxDistanceMeters": 0.014846946809172031,
+          "brightestLeakWorld": [
+            0.03154649495784107,
+            -0.10526293495969212,
+            2.2358416803283405
+          ]
+        },
+        {
+          "triangle": 988,
+          "samples": 1,
+          "maxStrengthFraction": 0.045098040252923965,
+          "maxDistanceMeters": 0.016771190027454183,
+          "brightestLeakWorld": [
+            -0.023222016811311343,
+            -0.10779255748326019,
+            2.2541347929875717
+          ]
+        },
+        {
+          "triangle": 4852,
+          "samples": 1,
+          "maxStrengthFraction": 0.045098040252923965,
+          "maxDistanceMeters": 0.01656233160084636,
+          "brightestLeakWorld": [
+            -0.02344751640933596,
+            -0.10724918982279057,
+            2.2540800049150844
+          ]
+        },
+        {
+          "triangle": 7210,
+          "samples": 1,
+          "maxStrengthFraction": 0.04313725605607033,
+          "maxDistanceMeters": 0.01775302429292009,
+          "brightestLeakWorld": [
+            -0.026346193378461363,
+            -0.10976094546795796,
+            2.236701362819647
+          ]
+        },
+        {
+          "triangle": 9565,
+          "samples": 1,
+          "maxStrengthFraction": 0.028431374579668045,
+          "maxDistanceMeters": 0.020954416267582883,
+          "brightestLeakWorld": [
+            -0.03813719567690457,
+            -0.0969527291747951,
+            2.231250762939453
+          ]
+        },
+        {
+          "triangle": 9171,
+          "samples": 1,
+          "maxStrengthFraction": 0.026470590382814407,
+          "maxDistanceMeters": 0.015485269067362415,
+          "brightestLeakWorld": [
+            0.022621284449691203,
+            -0.10807463751876648,
+            2.2548632794375316
+          ]
+        },
+        {
+          "triangle": 3120,
+          "samples": 6,
+          "maxStrengthFraction": 0.011764707043766975,
+          "maxDistanceMeters": 1.2238941019035172,
+          "brightestLeakWorld": [
+            0.8528324072258767,
+            0.006972374907356453,
+            1.3440249700153264
+          ]
+        },
+        {
+          "triangle": 4084,
+          "samples": 1,
+          "maxStrengthFraction": 0.005882353521883488,
+          "maxDistanceMeters": 0.014047213645589043,
+          "brightestLeakWorld": [
+            -0.04483405904369676,
+            -0.11457434293448933,
+            2.2600543793224173
+          ]
+        },
+        {
+          "triangle": 4086,
+          "samples": 3,
+          "maxStrengthFraction": 0.005882353521883488,
+          "maxDistanceMeters": 0.01422911049195953,
+          "brightestLeakWorld": [
+            -0.0443148733312569,
+            -0.11484127233688347,
+            2.2601990498657423
+          ]
+        },
+        {
+          "triangle": 10263,
+          "samples": 1,
+          "maxStrengthFraction": 0.005882353521883488,
+          "maxDistanceMeters": 0.01403310262960013,
+          "brightestLeakWorld": [
+            -0.04536609438605271,
+            -0.11422428715219249,
+            2.2599467535234825
+          ]
+        },
+        {
+          "triangle": 9598,
+          "samples": 1,
+          "maxStrengthFraction": 0.003921568859368563,
+          "maxDistanceMeters": 0.749015149647332,
+          "brightestLeakWorld": [
+            0.454701760186763,
+            0.012819204392278544,
+            1.639222495570065
+          ]
+        },
+        {
+          "triangle": 1524,
+          "samples": 1,
+          "maxStrengthFraction": 0.0009803922148421407,
+          "maxDistanceMeters": 0.017847019451610872,
+          "brightestLeakWorld": [
+            -0.02837913221966784,
+            -0.11382039892956147,
+            2.2619746940036647
+          ]
+        },
+        {
+          "triangle": 6294,
+          "samples": 1,
+          "maxStrengthFraction": 0.0009803922148421407,
+          "maxDistanceMeters": 0.018368158723508225,
+          "brightestLeakWorld": [
+            -0.036055915030574905,
+            -0.10416287482811254,
+            2.231250762939453
+          ]
+        }
+      ]
+    }
+  ],
+  "unsafeUvTriangles": [
+    {
+      "triangle": 5787,
+      "samples": 52,
+      "maxDistanceMeters": 0.051314523506237865
+    },
+    {
+      "triangle": 5789,
+      "samples": 70,
+      "maxDistanceMeters": 0.058158410808669105
+    }
+  ],
+  "originalNonBlack": 9126,
+  "remainingNonBlack": 8983,
+  "energyRetained": 0.9834108352661133,
+  "qualification": "Eight-pixel support bound is deliberately pessimistic. It does not reproduce proprietary Roblox compression; native visual QA required.",
+  "visualQa": {
+    "renderInspected": true,
+    "result": "Substantial round cores retained; small lower notch on viewer-left iris. No broad fragmentation.",
+    "nativeVerified": false
+  }
+}
