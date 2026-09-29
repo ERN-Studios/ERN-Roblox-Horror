@@ -423,6 +423,19 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   including the three independent timeouts that stop the cover ever trapping a
   player.
 
+### Changed 2026-09-29 — levels renumbered (supersedes the Level 4/5 notes above)
+
+- The old Level 4 (Neighbour suburb) and the old Level 5 (Indoor Suburbs) are **deleted** from Studio and
+  the repo, code and data. Rounds stop at `Routing.MaxLevel` 3 for everyone; `DevCeiling`,
+  `HighestDevLevel`, `Level4DevStart`/`Level5DevStart` and the `Level4/5DevEnabled` flags are gone.
+- **Level 4 is the cinema** (formerly Level 6): every `Level6*`/"Level 6" name, attribute, tag and string
+  was renamed to Level 4. `Level4V4PreviewAccess` hooks the lobby's `Level4SealedDoor`.
+- **Level 5 is `Workspace."Level 5 Quiet Suburbs"`**, imported from the Blender scene
+  (`tools/level5_import/`), ~12.5k MeshParts at x=40000. `Level5PreviewAccess` gives it the cinema's
+  dev-only door -> `Level5Exit` -> RETURN TO LOBBY method; `Level4PreviewPrompt` hides both levels'
+  prompts from non-developers. Neither level is a round.
+- The lobby was deliberately not touched (its Level 5 queue room still carries the old residential decor).
+
 ## House rules
 
 - Do not remove or move in-game objects (walls, props, world geometry) unless

@@ -72,7 +72,8 @@ local ALLOWED = {
 -- The shop's product keys are the catalogue's own keys, so the client can name
 -- a product without being trusted to name anything else.
 local PRODUCTS = {}
-for _, catalog in ipairs({Config.Passes, Config.Products, Config.Donations, Config.Items}) do
+for _, catalog in ipairs({Config.Passes, Config.Products, Config.Donations, Config.Items,
+	Config.TokenEarner and Config.TokenEarner.Passes}) do
 	for key in pairs(catalog or {}) do
 		PRODUCTS[key] = true
 		ALLOWED[key] = true

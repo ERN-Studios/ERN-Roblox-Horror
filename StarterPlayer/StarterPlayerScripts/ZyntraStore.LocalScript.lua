@@ -639,8 +639,8 @@ end
 -- MOUNTED PAGE MODULES: a tab named here is built only when its module is
 -- actually in ReplicatedStorage (FindFirstChild, never WaitForChild -- this runs
 -- at build time). NOTES left with Field Notes (FIELD_NOTES_REMOVED_20260922);
--- RECORDS (CHALLENGES_20260923, Trello FnF49TWk) is the one mounted page now,
--- read-only, and sits before SETTINGS so SETTINGS stays last before DEV.
+-- RECORDS (CHALLENGES_20260923, Trello FnF49TWk) is read-only. SKINS is a
+-- mounted shop page; both sit before SETTINGS so SETTINGS stays last before DEV.
 -- UIRegression's expectedTabs derives it from the same module's presence.
 --
 -- REWARDS IS NO LONGER A TAB. Card #104 gave Daily Rewards its own standalone
@@ -650,9 +650,9 @@ end
 -- unchanged and is now mounted by StarterPlayerScripts."Daily Rewards Client";
 -- everything that used to ask for the Rewards tab (the kiosk plaque prompt and
 -- PlayerScripts.ZyntraOpenTerminal "Rewards") fires PlayerScripts.OpenDailyRewards.
-local TERMINAL_PAGE_MODULES = {Records = "ZyntraRecordsPage"}
+local TERMINAL_PAGE_MODULES = {Records = "ZyntraRecordsPage", Skins = "ZyntraSkinsPage"}
 local tabNames = {}
-for _, name in ipairs({"Upgrades", "Shop", "Donate", "Colors", "Records", "Settings"}) do
+for _, name in ipairs({"Upgrades", "Shop", "Skins", "Donate", "Colors", "Records", "Settings"}) do
 	local moduleName = TERMINAL_PAGE_MODULES[name]
 	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
 		table.insert(tabNames, name)
@@ -1352,7 +1352,7 @@ end
 
 local upgradeIntro = label(
 	pages.Upgrades,
-	"Permanent upgrades have no cap. Entity Shield is a consumable.",
+	"Each level costs one token more than the last. Entity Shield is a consumable.",
 	UDim2.new(1, 0, 0, 42),
 	UDim2.fromOffset(4, 0),
 	15,
@@ -1879,6 +1879,48 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("ExpeditionPack", Config.Products.ExpeditionPack, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
+-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). One card per tier. refreshUI points
+-- each card at the pass the resolved tier makes eligible -- the direct pass, or
+-- the upgrade from the tier already held -- and marks reached tiers OWNED. Id
+-- stays 0 until the first profile, so no stale price fetch can land on a card.
+shopDetail.TokenEarner = {}
+for _, tier in ipairs({2, 3, 5}) do
+	local direct = Config.TokenEarner.Passes["TokenEarner" .. tier .. "x"]
+	local item = {Id = 0, Price = direct.Price, IconId = direct.IconId,
+		Name = ("TOKEN EARNER %dx"):format(tier),
+		Description = ("Permanently earn %dx Research Tokens from clears, daily rewards and the wheel. Upgrading costs less."):format(tier)}
+	makeProductCard("TokenEarner" .. tier .. "x", item, "Pass")
+	shopDetail.TokenEarner[tier] = item
+end
+-- Sale state is Roblox's: a pass that is off sale (all six are until QA) or not
+-- at its approved price shows COMING SOON, never a BUY that cannot complete.
+shopDetail.EarnerForSale = {}
+function shopDetail.renderEarner()
+	local earner = Config.TokenEarner
+	local owns = {}
+	for key in pairs(earner.Passes) do owns[key] = player:GetAttribute("ZyntraOwns" .. key) == true end
+	for tier, item in pairs(shopDetail.TokenEarner) do
+		local key = "TokenEarner" .. tier .. "x"
+		local itemButton = productButtons[key]
+		local offer = earner.Offer(earner.Passes, earner.Tier, owns, tier)
+		local pass = offer and earner.Passes[offer]
+		local onSale = pass ~= nil and shopDetail.EarnerForSale[pass.Id] == true
+		item.Id = onSale and pass.Id or 0
+		if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end
+		itemButton.Text = not pass and "OWNED" or onSale and (tostring(pass.Price) .. " R$") or "COMING SOON"
+		itemButton.TextColor3 = not pass and COLORS.accent or onSale and COLORS.accent2 or COLORS.muted
+		UIDevice.SetEnabled(itemButton, onSale)
+		if shopDetail.priceChanged then shopDetail.priceChanged(key) end
+	end
+end
+task.spawn(function()
+	for _, pass in pairs(Config.TokenEarner.Passes) do
+		local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, pass.Id, Enum.InfoType.GamePass)
+		shopDetail.EarnerForSale[pass.Id] = ok and type(info) == "table" and info.IsForSale == true
+			and info.PriceInRobux == pass.Price
+	end
+	shopDetail.renderEarner()
+end)
 
 -- ── THE SHOP DETAIL PANE (card 102) ─────────────────────────────────────────
 -- Roblox's monetization guidance asks for a shop a player can "linger and
@@ -2070,11 +2112,13 @@ do
 		name.Text = tostring(item.Name or selected)
 		local row = productButtons[selected]
 		local owned = row ~= nil and row.Active ~= true and tostring(row.Text) == "OWNED"
+		-- A card that is not on sale says so here too (Token Earner, 2026-09-24).
+		local soon = row ~= nil and row.Active ~= true and tostring(row.Text) == "COMING SOON"
 		local robux = math.max(0, math.floor(tonumber(displayedProductPrices[selected]) or 0))
 		price.Text = owned and "IN YOUR ACCOUNT" or (tostring(robux) .. " R$")
-		buy.Text = owned and "OWNED" or ("BUY  //  " .. tostring(robux) .. " R$")
-		buy.TextColor3 = owned and COLORS.accent or COLORS.accent2
-		UIDevice.SetEnabled(buy, not owned)
+		buy.Text = owned and "OWNED" or soon and "COMING SOON" or ("BUY  //  " .. tostring(robux) .. " R$")
+		buy.TextColor3 = owned and COLORS.accent or soon and COLORS.muted or COLORS.accent2
+		UIDevice.SetEnabled(buy, not owned and not soon)
 		for _, old in ipairs(bullets:GetChildren()) do
 			if old:IsA("TextLabel") then old:Destroy() end
 		end
@@ -3210,6 +3254,12 @@ local function refreshUI()
 		"RECORDED SUPPORT  %d R$\nDonations %d R$ / Products %d R$ / Passes %d R$\nPurchases made before 2 Sep 2026 are not recorded.",
 		profile.RecordedSupportRobux or profile.DonationRobux or 0,
 		profile.DonationRobux or 0, profile.UtilityRobux or 0, profile.PassRobux or 0)
+	-- UPGRADE_COST_20260924: written BEFORE the layout pass, which measures
+	-- Spend.Text to choose one or two columns.
+	for card, level in pairs({[staminaCard] = profile.StaminaLevel, [batteryCard] = profile.BatteryLevel}) do
+		local cost = Config.UpgradeCost(level)
+		card.Spend.Text = ("SPEND %d TOKEN%s  //  %s"):format(cost, cost == 1 and "" or "S", PCT)
+	end
 	if applyTerminalLayout then applyTerminalLayout() end
 	staminaCard.Current.Text = "+" .. tostring(profile.StaminaPercent) .. "%"
 	staminaCard.Level.Text = "LEVEL " .. tostring(profile.StaminaLevel)
@@ -3236,6 +3286,9 @@ local function refreshUI()
 			UIDevice.SetEnabled(itemButton, false)
 		end
 	end
+
+	-- TOKEN_EARNER_20260924: ownership is the server's, published per pass.
+	shopDetail.renderEarner()
 
 	hazmatPicker.SetLocked(not profile.OwnsAdvancedEquipment, "ADVANCED EQUIPMENT REQUIRED")
 	glowstickPicker.SetLocked(not profile.OwnsCosmeticEquipment, "GLOWSTICK CUSTOMIZER REQUIRED")

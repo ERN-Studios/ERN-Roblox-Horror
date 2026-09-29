@@ -287,41 +287,17 @@ function Routing.ClampLevel(level: any): number
 	return math.clamp(math.floor(requested), 1, Routing.MaxLevel)
 end
 
--- LEVEL4_DEV_GATE_20260921 -------------------------------------------------
--- Level 4 exists but is not part of the campaign: the lobby gate still says
--- coming soon, Routing.MaxLevel is still 3, and everything above is unchanged.
--- These two functions are the ONLY way to reach level 4, and they are pure
--- in the same way the rest of this module is: the caller supplies the two
--- facts, because this module must stay assertable without a Workspace or a
--- DevAccess whitelist.
---
---   enabled     workspace:GetAttribute(Routing.Level4DevAttribute) == true
---   isDeveloper DevAccess.IsAllowed(...) for EVERY participant, not just the
---               host -- GameManager's devCeiling() is what applies that.
-Routing.DevLevel = 4
-Routing.Level4DevAttribute = "Level4DevEnabled"
--- LEVEL5_MAP_PREVIEW_20260923: transport may describe the independently gated
--- preview. DevLevel/DevCeiling retain their existing Level 4 meaning.
-Routing.HighestDevLevel = 5
-Routing.Level5DevAttribute = "Level5DevEnabled"
-
-function Routing.DevCeiling(enabled: any, isDeveloper: any): number
-	if enabled == true and isDeveloper == true then return Routing.DevLevel end
-	return Routing.MaxLevel
-end
-
 function Routing.ClampLevelTo(level: any, ceiling: any): number
 	local requested = tonumber(level)
 	if not requested then return 1 end
 	local limit = tonumber(ceiling)
 	if not limit or limit ~= limit then limit = Routing.MaxLevel end
-	limit = math.clamp(math.floor(limit), 1, Routing.HighestDevLevel)
+	limit = math.clamp(math.floor(limit), 1, Routing.MaxLevel)
 	return math.clamp(math.floor(requested), 1, limit)
 end
 
 -- There is deliberately no dev-ceiling version of NextLevel: finishing Level 3
--- never continues into Level 4, for anyone (NO_LEVEL3_CONTINUE_20260923).
--- END LEVEL4_DEV_GATE_20260921 ---------------------------------------------
+-- never continues past Level 3, for anyone (NO_LEVEL3_CONTINUE_20260923).
 
 -- ---------------------------------------------------------------------------
 -- The session roster
@@ -533,7 +509,7 @@ function Routing.SelectArrivalSession(entries)
 					Members = {},
 					-- Transport preserves development levels but grants no access.
 					-- GameManager checks the exact level flag and every arriving player.
-					Level = Routing.ClampLevelTo(data.Level, Routing.HighestDevLevel),
+					Level = Routing.ClampLevelTo(data.Level, Routing.MaxLevel),
 					EntryMode = data.EntryMode,
 					Expected = nil,
 					Deadline = nil,

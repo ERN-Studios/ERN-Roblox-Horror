@@ -4,6 +4,11 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContentProvider = game:GetService("ContentProvider")
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+-- AUDIT_FIX_20260924: Reset Character is off while an entry is pending. Nothing
+-- respawns a placed member during entry, so one reset used to hold the whole
+-- party behind the cover until the 60 s deadline sent everyone back.
+local function allowReset(on) pcall(StarterGui.SetCore, StarterGui, "ResetButtonCallback", on) end
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local active
@@ -15,6 +20,7 @@ end
 local function cancel()
 	active = nil
 	player:SetAttribute("RoundEntryReadyToken", nil)
+	allowReset(true)
 end
 
 local function current(request)
@@ -57,13 +63,7 @@ end
 local function begin(payload)
 	if type(payload) ~= "table" or type(payload.Token) ~= "string"
 		or #payload.Token == 0 or #payload.Token > 128 or not finite(payload.Level)
-		-- LEVEL4_DEV_GATE_20260921: the bound is the highest level that exists,
-		-- not the highest a normal player can reach. Level 4 is dev-only and
-		-- gated on the SERVER; a client that refuses to acknowledge its entry
-		-- would simply hang the barrier for 60 seconds and fail the round.
-		-- Nothing else here changes, and groundReady below already resolves
-		-- "Level <n> Generated World" for any n.
-		or payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 5
+		or payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 3
 		or typeof(payload.Character) ~= "Instance" or not payload.Character:IsA("Model")
 		or payload.Character ~= player.Character or typeof(payload.Position) ~= "Vector3"
 		or not finite(payload.Position.X) or not finite(payload.Position.Y) or not finite(payload.Position.Z)
@@ -84,6 +84,7 @@ local function begin(payload)
 	request.Raycast.IgnoreWater = true
 	request.Raycast.RespectCanCollide = true
 	active = request
+	allowReset(false)
 	-- Both engine operations may yield. Neither owns the polling task or its
 	-- deadline, and their late results are useful only for this same request.
 	task.spawn(function()

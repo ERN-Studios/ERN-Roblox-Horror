@@ -67,10 +67,12 @@ end
 function RigAdapter.Attach(model, configuration)
 	assert(RunService:IsServer(), "Pool Slide NPC animations must load and start on the server")
 	assert(model:IsDescendantOf(workspace), "Animator load requires the validated positioned rig in Workspace")
-	assert(finitePositive(configuration.WalkAnimationReferenceSpeed),
-		"missing measured walk animation reference speed")
-	assert(finitePositive(configuration.RunAnimationReferenceSpeed),
-		"missing measured run animation reference speed")
+	-- POOL_SLIDE_1P20_20260924 (rXhi1SZ8): a rig may carry the reference speeds
+	-- measured for ITS clips, so swapping the template swaps them together.
+	local walkReference = model:GetAttribute("WalkAnimationReferenceSpeed") or configuration.WalkAnimationReferenceSpeed
+	local runReference = model:GetAttribute("RunAnimationReferenceSpeed") or configuration.RunAnimationReferenceSpeed
+	assert(finitePositive(walkReference), "missing measured walk animation reference speed")
+	assert(finitePositive(runReference), "missing measured run animation reference speed")
 	local controller = model:FindFirstChildOfClass("AnimationController")
 	assert(controller, "missing AnimationController on imported rig")
 	local animator = controller:FindFirstChildOfClass("Animator")
@@ -98,9 +100,9 @@ function RigAdapter.Attach(model, configuration)
 	local driver = {State = nil, Paused = false, Destroyed = false, AttackSerial = 0, Rate = 1, LastRateAt = 0, AppliedRate = nil}
 	local function rateFor(name, speed)
 		if name == "Walk" then
-			return math.clamp(speed / configuration.WalkAnimationReferenceSpeed, .05, 2.5)
+			return math.clamp(speed / walkReference, .05, 2.5)
 		elseif name == "Run" then
-			return math.clamp(speed / configuration.RunAnimationReferenceSpeed, .05, 2.5)
+			return math.clamp(speed / runReference, .05, 2.5)
 		end
 		return 1
 	end

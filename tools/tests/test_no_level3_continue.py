@@ -1,7 +1,7 @@
 """Finishing Level 3 must never continue into Level 4 -- for anyone.
 
-The owner's rule of 2026-09-23 (NO_LEVEL3_CONTINUE_20260923): Level 4 stays
-reachable only from its dev-gated lobby stations and ServerStorage.Level4DevStart.
+The owner's rule of 2026-09-23 (NO_LEVEL3_CONTINUE_20260923). Since 2026-09-29
+Levels 4 and 5 are developer walk-in previews, never rounds.
 Before this, GameManager's post-win window asked for the next level under the
 dev ceiling, so an all-developer party was offered Level 3 -> Level 4.
 
@@ -33,10 +33,9 @@ check(Routing.NextLevel(1) == 2 and Routing.NextLevel(2) == 3, "Levels 1 and 2 s
 check(Routing.NextLevel(3) == nil, "Level 3 must offer no next level")
 check(not Routing.OffersContinue(3), "Level 3 must offer no Continue")
 check(Routing.NextLevelTo == nil, "no dev-ceiling NextLevel may exist")
--- The dev gate itself is unchanged: a developer party may still be SENT to
--- Level 4 from the lobby, which is ClampLevelTo, not a continuation.
-check(Routing.ClampLevelTo(4, Routing.DevCeiling(true, true)) == 4, "the dev lobby gate still reaches Level 4")
-check(Routing.ClampLevelTo(4, Routing.DevCeiling(true, false)) == 3, "a normal party is still clamped to 3")
+-- 2026-09-29: rounds stop at Level 3 for everyone; Level 4/5 are walk-in previews.
+check(Routing.DevCeiling == nil, "no dev ceiling above the campaign may exist")
+check(Routing.ClampLevelTo(4, 5) == 3, "no round may be routed above Level 3")
 for _, message in ipairs(failures) do print("FAIL: " .. message) end
 assert(#failures == 0, #failures .. " routing checks failed")
 print("routing: Level 3 has no continuation")

@@ -231,16 +231,20 @@ do
 	-- exactly where the shield already sits on both.
 	ROWS = {
 		makeRow("ProtectionUse", "Entity Shield", "SHIELD", "Q", "D-PAD DOWN"),
-		makeRow("SpeedPotionUse", "Speed Potion", "POTION", "T", nil),
-		makeRow("RouteMarkerPlace", "Route Markers", "MARKER", "X", nil),
+		makeRow("SpeedPotionUse", "Speed Potion", "POTION", "T", "D-PAD RIGHT"),
+		makeRow("RouteMarkerPlace", "Route Markers", "MARKER", "X", "RT"),
 		makeRow("EntityDetectorScan", "Detector", "SCAN", "Z", "D-PAD LEFT"),
 	}
 end
 
+-- AUDIT_FIX_20260924: potion and marker had no pad key, so a controller
+-- player could own both and use neither (the rows are not Selectable and a
+-- gamepad Activated is filtered). D-PAD RIGHT is SpectateController's only
+-- while spectating, which contextAvailable excludes; RT is bound nowhere.
 local KEY_ROWS = {
 	[Enum.KeyCode.Q] = 1, [Enum.KeyCode.DPadDown] = 1,
-	[Enum.KeyCode.T] = 2,
-	[Enum.KeyCode.X] = 3,
+	[Enum.KeyCode.T] = 2, [Enum.KeyCode.DPadRight] = 2,
+	[Enum.KeyCode.X] = 3, [Enum.KeyCode.ButtonR2] = 3,
 	[Enum.KeyCode.Z] = 4, [Enum.KeyCode.DPadLeft] = 4,
 }
 

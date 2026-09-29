@@ -569,11 +569,14 @@ local function startDetectorDemo()
 end
 
 local function setShown(key)
+	-- AUDIT_FIX_20260924: asserted even when the key is unchanged. The Lucky
+	-- Wheel's takeover restore can switch this ScreenGui back on after the card
+	-- was hidden, and an early return here left a card whose CLOSE did nothing.
+	gui.Enabled = key ~= nil
 	if shownKey == key then return end
 	stopDemo()
 	shownKey = key
 	descriptionScroll.CanvasPosition=Vector2.zero
-	gui.Enabled = key ~= nil
 	-- Yield the dispatch caption without suppressing movement: stepping off the
 	-- pressure plate remains a way to close this nonmodal card.
 	player:SetAttribute("ZyntraShopDetailOpen", key ~= nil)
