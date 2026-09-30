@@ -20,6 +20,23 @@
 /artifacts/level3-level6-repair-20260930/live-before/
 /artifacts/level3-level6-repair-20260930/original-level3-sources/
 
+# Level 6 lighting/ESP native Studio checkpoints remain local; reviewable
+# manifests and the exact installed source candidates are versioned below.
+/artifacts/level6-light-esp-20260930/native-before/*
+!/artifacts/level6-light-esp-20260930/native-before/source-manifest.json
+!/artifacts/level6-light-esp-20260930/native-before/backup-file-hashes.json
+!/artifacts/level6-light-esp-20260930/native-before/backup-metadata-summary.json
+/artifacts/level6-light-esp-20260930/native-prewrite/*
+!/artifacts/level6-light-esp-20260930/native-prewrite/source-manifest.json
+!/artifacts/level6-light-esp-20260930/native-prewrite/backup-file-hashes.json
+!/artifacts/level6-light-esp-20260930/native-prewrite/backup-metadata-summary.json
+/artifacts/level6-light-esp-20260930/native-after/*
+!/artifacts/level6-light-esp-20260930/native-after/source-manifest.json
+!/artifacts/level6-light-esp-20260930/native-after/backup-file-hashes.json
+!/artifacts/level6-light-esp-20260930/native-after/backup-metadata-summary.json
+/artifacts/level6-light-esp-20260930/*.server.log
+/artifacts/level6-light-esp-20260930/*.server.pid
+
 # Temporary Level 3 local tooling output.
 /tools/level3_worn_party/__pycache__/
 /tools/level3_worn_party/*.pyc

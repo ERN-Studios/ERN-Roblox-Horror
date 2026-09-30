@@ -1,0 +1,54 @@
+{
+  "schema": "level6-lighting-candidate/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "sourceSnapshot": "native-before/scripts.json",
+  "placeVersionAtSnapshot": 2421,
+  "scripts": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "class": "LocalScript",
+      "candidateFile": "candidates/RoundUI.LocalScript.luau",
+      "before": {
+        "bytes": 260055,
+        "sha256": "b43173c06652d8224872dc38ab67fe4efb0070a6e2f52c098c60684814ef34b6",
+        "adler32": 1245854338
+      },
+      "after": {
+        "bytes": 260634,
+        "sha256": "de3bc8e484895163c1e62cf6eb3840630ca17049ad003925d97723e1ac692a90",
+        "adler32": 2443837796
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "candidateFile": "candidates/Level 6 Lighting Controller.LocalScript.luau",
+      "before": {
+        "bytes": 39958,
+        "sha256": "1e63d06df7a647f8e4c157da0dadc29b7ffd84ce9bdef53b4521086c77249c10",
+        "adler32": 1447080862
+      },
+      "after": {
+        "bytes": 40045,
+        "sha256": "6f82428035319565fb1ec8e1df41a66fb59ba05ff951047de4be013a10f9f351",
+        "adler32": 723834981
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "candidateFile": "candidates/Level 6 World Builder.ModuleScript.luau",
+      "before": {
+        "bytes": 90114,
+        "sha256": "36870a6791fef044d2fea376f65d6dbd0145e23d30e7da2a424dba96bef5a1fc",
+        "adler32": 2732008218
+      },
+      "after": {
+        "bytes": 90524,
+        "sha256": "1b5308b09f3901b70cb1d1616276262a3c27cdd223ce8b6361fab944c35dda22",
+        "adler32": 3252267068
+      }
+    }
+  ]
+}
