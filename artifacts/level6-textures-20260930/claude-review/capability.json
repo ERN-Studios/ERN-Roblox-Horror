@@ -1,0 +1,14 @@
+{
+  "cli_path": "/Users/zeanjuul4/.local/bin/claude",
+  "cli_version": "2.1.285",
+  "auth_logged_in": true,
+  "auth_provider": "firstParty",
+  "requested_model": "claude-opus-5-5",
+  "reported_canonical_model": "claude-opus-5-5",
+  "requested_effort": "max",
+  "tools_enabled": false,
+  "strict_empty_mcp_config": true,
+  "smoke_query_result": "Read-only review ready.",
+  "permission_denials": [],
+  "status": "available"
+}

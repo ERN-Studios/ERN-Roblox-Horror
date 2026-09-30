@@ -1,0 +1,15 @@
+--- tools/level6_build/room_dressing.luau
++++ Level 6 Room Dressing.ModuleScript.luau
+@@ -365,7 +365,11 @@
+ 			-- three-sided service room. The entire 18-stud front stays open.
+ 			local partitionPosition=point(-.15,12,0)
+ 			placed("WallService",faceCF(partitionPosition,V(p.sx,0,0)),group,true,V(3,height/12,1))
+-			placed("FloorService",CFrame.new(point(9,12,.025)),group,false,V(18/80,1,24/64))
++			-- Only the maintenance pocket overrides the party room's carpet.
++			-- Public arcade/supply alcoves retain the same reference carpet below.
++			if plan.Variant=="MaintenanceWorkshop" then
++				placed("FloorService",CFrame.new(point(9,12,.025)),group,false,V(18/80,1,24/64))
++			end
+ 			for _,entry in ipairs(SERVICE[plan.Variant]) do
+ 				local asset,u,v,y,facing,interaction=table.unpack(entry)
+ 				local front=if facing=="inward" then V(-p.sx,0,0)

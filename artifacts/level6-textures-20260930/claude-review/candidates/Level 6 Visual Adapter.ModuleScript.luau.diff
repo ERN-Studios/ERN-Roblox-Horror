@@ -1,0 +1,70 @@
+--- tools/level6_build/gameplay-candidates/Level 6 Visual Adapter.ModuleScript.luau
++++ Level 6 Visual Adapter.ModuleScript.luau
+@@ -14,10 +14,14 @@
+     return Vector3.new(a.X*b.X, a.Y*b.Y, a.Z*b.Z)
+ end
+ local function theme(room): string
+-    if room.ThemeId == "OrangeBlackParty" then return "Orange" end
+-    if room.ThemeId == "RedParty" then return "Red" end
++    -- Match the native builder: explicit wallpaper owns the wall finish.
++    -- Exit retains the authored service palette before any theme choice.
+     if room.Role == "Exit" then return "Service" end
+-    return "Beige"
++    if room.WallStyle == "PastelWallpaper" then return "Beige" end
++    if room.ThemeId == "RedParty" or room.ThemeId == "RedCelebration" then return "Red" end
++    if room.ThemeId == "OrangeBlackParty" or room.ThemeId == "OrangeParty" then return "Orange" end
++    if room.WallStyle == nil and (room.ThemeId == "City" or room.ThemeId == "CityPlay") then return "Beige" end
++    return "Orange"
+ end
+ 
+ function Adapter.Apply(manifest)
+@@ -108,6 +112,23 @@
+         end
+     end
+ 
++    -- The native floor already carries the Level 3 reference texture and its
++    -- fixed studs-per-tile repeat. Keep the Blender wall/ceiling/furniture kit,
++    -- and expose this exact floor instead of a competing stretched atlas skin.
++    -- Candidate requires fresh Studio verification of texture IDs and repeats.
++    local function revealReferenceFloor(parent, name)
++        local floor = assert(parent:FindFirstChild(name), "Missing reference floor " .. name)
++        assert(floor:IsA("Part"), "Expected native floor proxy " .. name)
++        floor.Transparency = floor:GetAttribute("Level6_LegacyTransparency") or 0
++        for _, child in ipairs(floor:GetChildren()) do
++            if child:IsA("Texture") and child.Face == Enum.NormalId.Top then
++                child.Transparency = 0
++            end
++        end
++        floor:SetAttribute("Level6_OriginalFloorVisible", true)
++        return floor
++    end
++
+     local function centered(name, targetCF, targetSize, parent, color)
+         local data = Metadata[name]
+         local size = vector(data.Size)
+@@ -142,8 +163,7 @@
+         local visuals = Instance.new("Folder")
+         visuals.Name = "Blender Architecture"
+         visuals.Parent = model
+-        helper.Place("Floor" .. palette, CFrame.new(base), visuals,
+-            {Scale=Vector3.new(room.W/80, 1, room.D/64)})
++        revealReferenceFloor(model, "Level 6 Room Floor")
+         helper.Place("Ceiling", CFrame.new(base+Vector3.new(0, room.H-.5, 0)), visuals,
+             {Scale=Vector3.new(room.W/80, 1, room.D/64)})
+         for _, part in ipairs(model:GetChildren()) do
+@@ -165,6 +185,7 @@
+         local folder = Instance.new("Folder")
+         folder.Name = "Blender Corridor"
+         folder.Parent = corridor.Model
++        revealReferenceFloor(corridor.Model, "Level 6 Corridor Floor")
+         local horizontal = math.abs(corridor.Forward.X) > .5
+         local cf = CFrame.new(corridor.Center)
+             * (if horizontal then CFrame.Angles(0, math.pi*.5, 0) else CFrame.identity)
+@@ -172,7 +193,6 @@
+         local length = corridor.Length / sections
+         for index=1,sections do
+             local panel = cf * CFrame.new(0, 0, -corridor.Length*.5 + length*(index-.5))
+-            helper.Place("Floor"..palette, panel, folder, {Scale=Vector3.new(corridor.Width/80, 1, (length+.02)/64)})
+             helper.Place("Ceiling", panel*CFrame.new(0, corridor.Height, 0), folder,
+                 {Scale=Vector3.new(corridor.Width/80, 1, length/64)})
+         end

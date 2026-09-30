@@ -1,0 +1,11 @@
+{
+  "width": 1024,
+  "height": 1024,
+  "channels": 4,
+  "format": "RGBA8",
+  "bytes": 4194304,
+  "sha256": "fe5149dac32069beb659aee3fee5d38af0c56c44a3df080b923998ad9fd42c40",
+  "originalPngSha256": "de67024e687ba1e36ab7fcacc1c9d2a84f5ff6ef45cb0ad155c8b95b9dc4937c",
+  "installedInStudio": false,
+  "atlasLayoutSha256": "d9622ea3744ffb98789f60b0d29b5fc2ad8e52dfb7538e31a77dda8a43f8f148"
+}

@@ -1,0 +1,229 @@
+{
+  "schema": "level6-offline-candidate-final-verification-v1",
+  "installedInStudio": false,
+  "liveStudioReferenceVerified": false,
+  "assetChecksPassed": true,
+  "savedBlendChecksPassed": true,
+  "rawRGBABytes": 4194304,
+  "rawRGBASha256": "fe5149dac32069beb659aee3fee5d38af0c56c44a3df080b923998ad9fd42c40",
+  "atlasLayoutByteIdentical": true,
+  "sourceBlendUnchanged": true,
+  "candidatePackedAtlasVerified": true,
+  "objectCount": 646,
+  "materialCount": 36,
+  "geometryUVMaterialKeyInstanceFingerprints": {
+    "geometrySHA256": "f4b3c3e49fd4fa8be18afe51616319574941a76f7451ac36841d2105b41e8754",
+    "uvSHA256": "d77993c35bb97c223807cd4cd0b7547b3b2b29f45154c1054aec48186c0924b4",
+    "materialKeysSHA256": "f01a266da211c646a264d1b6a3726eba66eeb5d01c6f640eea01bbdef184ed5c",
+    "instancesSHA256": "5753bad586e1776a78b0a16468c722fffb389cc0d6c9f55acd1176eb03ed53cd",
+    "objectCount": 646,
+    "materialCount": 36,
+    "meshObjectCount": 339,
+    "sceneNames": [
+      "Level 6 | Modular Asset Library",
+      "Level 6 | Reusable Kit Overview",
+      "Scene",
+      "Study 01 | Beige Party Hall",
+      "Study 02 | Orange Birthday Rooms",
+      "Study 03 | Red Party Maze",
+      "Study 04 | Budget Arcade",
+      "Study 05 | Party Supply Store",
+      "Study 06 | Maintenance Workshop"
+    ]
+  },
+  "scopedAuthoredStudyFloorRoutingChanges": [
+    {
+      "object": "Floor.003",
+      "beforeCollection": "L6K_FloorOrange",
+      "afterCollection": "L6K_FloorBeige",
+      "transformAndMembershipUnchanged": true
+    },
+    {
+      "object": "Floor.004",
+      "beforeCollection": "L6K_FloorService",
+      "afterCollection": "L6K_FloorOrange",
+      "transformAndMembershipUnchanged": true
+    }
+  ],
+  "maintenanceStudyFloorServiceUnchanged": true,
+  "neutralCellChecks": [
+    {
+      "cell": 3,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "95e774d4320c1a174ccb1377d65a9402766d778eabd2728d97c373b8cd97f521"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "7b071f0c0668ccd66e716e97837a50ae555e609f225bdbeeef3dc9eb47b77477"
+      }
+    },
+    {
+      "cell": 4,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "f298aff2faa99ea9a83e520917570f0647cdc65a1c64cd388af9058b151e93ea"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "9ccfa003d71b6da46f1a49df6558a589c105d63f6f7ef59fbb1c6b504d3586f2"
+      }
+    },
+    {
+      "cell": 8,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "968998a7de7eba24d68e090cd8303719fa25d93a3a2c27cde82eb1371eb696bd"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "ca6636ee4e136d0af55d3c0f4b89de86d34018878b20bc41d96f78390e0ccec4"
+      }
+    },
+    {
+      "cell": 9,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "fd35cfdca2936312be0678fb8101d9ef0e10109cd2d2245d018710d46e09a66d"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "df3ba86811d3f0aa76bbd49dbbe2c50bb1e654bd88048611d20fc90761400cc9"
+      }
+    },
+    {
+      "cell": 10,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "cb049b89be88662466c9429a3351fa71cab3450cd69727ae289a7ccfc308f875"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "0edbd196bef491ad3acf61b8c37d8ac012646bcc31ad0ac834cc3980a4ed91e9"
+      }
+    },
+    {
+      "cell": 11,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "cb0ec973303b7cebabd5b4230dfdfd6b28cbbab348224cc3f1580c62422597c9"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "b1e736b404b9084a91c38b18a9504506f678e7d614f4f69062e76b045d109663"
+      }
+    },
+    {
+      "cell": 12,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "7ba4fed4065be2c9c361c13e510f83c96d77847771e5bdaea264668e724bdff3"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "8194e8fea286c3d638bf7ab1f7be819fda9592c8a0cf86fcf2379db2b00c11db"
+      }
+    },
+    {
+      "cell": 13,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "680e03d24b63e0ba53f37abfb6876121aa8f7796636a276b76799e4d95e3541e"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "29666690f00f4eec5363d6ae142621cc51967bbf07c3b7f7202534c826c8c346"
+      }
+    },
+    {
+      "cell": 14,
+      "2048": {
+        "byteEquivalent": true,
+        "sha256": "13b8bc7b1163153606371a4380b9582dc82390fa6da8806759828ebdd2d499bf"
+      },
+      "1024": {
+        "byteEquivalent": true,
+        "sha256": "52d97133de7bc01ad33edc9e5ed430afb200982af0f74c7d7af7ac6468baeb52"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "atlas-pixels.json",
+      "bytes": 388,
+      "sha256": "270af9d8dbda5c49cc0018b378cafd7102aead6649de794db65fda8b0df0fb83"
+    },
+    {
+      "path": "atlas-candidate-manifest.json",
+      "bytes": 9295,
+      "sha256": "e0b8fd9e3a67e1fdfce9fc0d8e0a43e09669069526a6a86f6354156676e5dfff"
+    },
+    {
+      "path": "blend-candidate-manifest.json",
+      "bytes": 1773,
+      "sha256": "a28cde21d754fe2e67518ec5e86295de2a4065b3dea678d54f3f0b95d012aa18"
+    },
+    {
+      "path": "saved-blend-parity.json",
+      "bytes": 2895,
+      "sha256": "c09e2a105a25f2e23ff5f39ad5391f6dd4dc4cab3d760674ec6025edcdf090d6"
+    },
+    {
+      "path": "preview-records.json",
+      "bytes": 1294,
+      "sha256": "4b5a32af708de2c86ab455f6b0f902804e5c4028f1373174fe12cd757f2c1319"
+    },
+    {
+      "path": "claude-palette.json",
+      "bytes": 1594,
+      "sha256": "06876cda8933f74607339867629b685f1bb10bf0ef76311540f6f79048ad7633"
+    },
+    {
+      "path": "texture-comparison.jpg",
+      "bytes": 381739,
+      "sha256": "1b2d884a2c047b173883ab7b01b886544e59ba2a3950fa154ded10a4221d4db1"
+    },
+    {
+      "path": "blender-study-comparison.jpg",
+      "bytes": 468290,
+      "sha256": "a22d1970ebc25663dd3d8bf48145680e596156e10275a1dd42331c57c7690871"
+    },
+    {
+      "path": "textures/atlas-layout.json",
+      "bytes": 8635,
+      "sha256": "d9622ea3744ffb98789f60b0d29b5fc2ad8e52dfb7538e31a77dda8a43f8f148"
+    },
+    {
+      "path": "textures/candidate-material-colors.json",
+      "bytes": 1687,
+      "sha256": "75acd167b942f5a79443c5aefdd268f9840ad3b077d7e1995707affc7ad6325c"
+    },
+    {
+      "path": "textures/WornParty_Level3Reference_Atlas.png",
+      "bytes": 4236600,
+      "sha256": "eeafb068846f92434a4a55a92d31febd04b4ae22f3666755c7d84c359701ef89"
+    },
+    {
+      "path": "textures/WornParty_Level3Reference_Atlas1024.png",
+      "bytes": 1139686,
+      "sha256": "de67024e687ba1e36ab7fcacc1c9d2a84f5ff6ef45cb0ad155c8b95b9dc4937c"
+    },
+    {
+      "path": "Level6_WornParty_Level3Reference_candidate.blend",
+      "bytes": 4895598,
+      "sha256": "2dea68e336e0a142e938f6a1b2dd548b1f3b90cac6e7bae2dd2fcc860e19eb7a"
+    },
+    {
+      "path": "atlas-rgba.b64",
+      "bytes": 5592408,
+      "sha256": "06be8bf5614e1b8fb1a3ea066fbd28a8df74e3ec162d131b04aa3573b0734e6e"
+    }
+  ],
+  "limitations": [
+    "Historical source textures; current live Studio reference not yet verified.",
+    "Atlas geometry/UV layout preserved; Blender physical texture repeat does not match native fixed-repeat carpets.",
+    "Red wall wear is a hue-preserving art approximation requiring live native A/B.",
+    "No Studio write, publication or mesh reimport performed.",
+    "No gameplay, multiplayer, Roblox rendering or performance claim follows from these offline checks."
+  ]
+}

@@ -1,0 +1,569 @@
+{
+  "schemaVersion": 1,
+  "task": "Level 6 texture restyle reference",
+  "sourceArchiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+  "effectiveLiveTextureSlotsPending": true,
+  "retrievedOriginalImageCount": 16,
+  "originalConfigurationImageCount": 15,
+  "credentialsAccessed": false,
+  "records": [
+    {
+      "slot": "PartyCarpetTexture",
+      "assetId": 92795890253148,
+      "textureUri": "rbxassetid://92795890253148",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=92795890253148",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 28,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "party-carpet.png",
+      "bytes": 2925479,
+      "sha256": "20732f41b54c33d0e58467c3a51fa5c08058d5acc75f5b7c7d27bc6cae6460f8",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        18.93,
+        18.17,
+        19.82
+      ],
+      "medianHSVPixelSaturation": 0.1111,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/party-carpet.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "PartyCarpetNeonTexture",
+      "assetId": 110230144446272,
+      "textureUri": "rbxassetid://110230144446272",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=110230144446272",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 22,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "party-carpet-neon-v1.png",
+      "bytes": 2724128,
+      "sha256": "5e0444d16cd5905400a26a96c00b1252369f127e000879789bee788b917f710f",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        13.76,
+        17.68,
+        27.7
+      ],
+      "medianHSVPixelSaturation": 0.8182,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/party-carpet-neon-v1.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "PartyCarpetRedTexture",
+      "assetId": 108064770913201,
+      "textureUri": "rbxassetid://108064770913201",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=108064770913201",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 30,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "party-carpet-red-v1.png",
+      "bytes": 3279103,
+      "sha256": "d9ee3a4a10df49880de0ecaacf166f61b5ab55074b29c0091322c7b177cb7cf5",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        113.21,
+        26.71,
+        18.65
+      ],
+      "medianHSVPixelSaturation": 0.8641,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/party-carpet-red-v1.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "CityPlayCarpetTexture",
+      "assetId": 75635502248205,
+      "textureUri": "rbxassetid://75635502248205",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=75635502248205",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 52,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "city-play-carpet.png",
+      "bytes": 3446633,
+      "sha256": "0b54b20dc28ee0d810d6283424d9589f266aeaa63b6772ca7109c3b5ee2c7a7f",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        94.32,
+        97.47,
+        69.19
+      ],
+      "medianHSVPixelSaturation": 0.3699,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/city-play-carpet.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "PastelWallpaperTexture",
+      "assetId": 96252806287644,
+      "textureUri": "rbxassetid://96252806287644",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=96252806287644",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 18,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "pastel-wallpaper.png",
+      "bytes": 3305817,
+      "sha256": "5e1ebcc44ba53cbc0979c8dd61b0a815916edb1fba1210ad9544d2acdd776b41",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        224.65,
+        201.42,
+        156.93
+      ],
+      "medianHSVPixelSaturation": 0.3004,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/pastel-wallpaper.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "OrangeWallTexture",
+      "assetId": 128270554927663,
+      "textureUri": "rbxassetid://128270554927663",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=128270554927663",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 22,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "orange-wall-worn-v1.png",
+      "bytes": 2014133,
+      "sha256": "110d70624d145e595657c9b11f3ce3b8413bbe704ea26cf33ac699669162d323",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        216.65,
+        98.02,
+        22.92
+      ],
+      "medianHSVPixelSaturation": 0.894,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/orange-wall-worn-v1.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "ConfettiTableclothTexture",
+      "assetId": 103412925025303,
+      "textureUri": "rbxassetid://103412925025303",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=103412925025303",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": 10,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "confetti-tablecloth.png",
+      "bytes": 2566360,
+      "sha256": "9b69620f43ecef149d49ba5221bd7f096037da79fc129acac6f856b3af323860",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        234.07,
+        228.11,
+        213.8
+      ],
+      "medianHSVPixelSaturation": 0.0847,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/confetti-tablecloth.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "FinalExitDoorTexture",
+      "assetId": 120063024460642,
+      "textureUri": "rbxassetid://120063024460642",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=120063024460642",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "final-exit-blastdoor-v1.png",
+      "bytes": 3010725,
+      "sha256": "97fbd2d48de68a6284106335a19e0a7a71cc19518c49b8e5e4582969439e7c54",
+      "imageSize": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        57.41,
+        33.88,
+        24.27
+      ],
+      "medianHSVPixelSaturation": 0.4457,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/final-exit-blastdoor-v1.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "KidsDrawingsAtlasTexture",
+      "assetId": 136455642832077,
+      "textureUri": "rbxassetid://136455642832077",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=136455642832077",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "kids-drawings-atlas-transparent-v3.png",
+      "bytes": 3905597,
+      "sha256": "40bdea93848f9931b1e4b23aeda8cbfd12e4fb9bfeb8af748690a2c3ab8cf8c7",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        182.98,
+        158.19,
+        109.57
+      ],
+      "medianHSVPixelSaturation": 0.4079,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/kids-drawings-atlas-transparent-v3.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "KidsDrawingsWholesome25Texture",
+      "assetId": 128767366284181,
+      "textureUri": "rbxassetid://128767366284181",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=128767366284181",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "kids-drawings-wholesome-25.png",
+      "bytes": 1157694,
+      "sha256": "074f55034badf23fc455f1f03a1d1391d6de7c6bbedbbaf9a2021a536f7180fd",
+      "imageSize": [
+        1000,
+        1000
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        51.19,
+        45.01,
+        32.02
+      ],
+      "medianHSVPixelSaturation": 0.0,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/kids-drawings-wholesome-25.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "KidsDrawingsDisturbing25Texture",
+      "assetId": 132144680342985,
+      "textureUri": "rbxassetid://132144680342985",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=132144680342985",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "kids-drawings-disturbing-25.png",
+      "bytes": 1269124,
+      "sha256": "8ace33e4cf7e5ee5d17b4a758ed550a3ce8f0838b48fc054c45694cada54b46a",
+      "imageSize": [
+        1000,
+        1000
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        51.81,
+        41.77,
+        30.08
+      ],
+      "medianHSVPixelSaturation": 0.0,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/kids-drawings-disturbing-25.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "KidsNotesAtlasTexture",
+      "assetId": 81550568434150,
+      "textureUri": "rbxassetid://81550568434150",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=81550568434150",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "kids-notes-atlas-transparent-v2.png",
+      "bytes": 3260400,
+      "sha256": "1c40b2b45c991e5b8ec24adfcc3f916fac79a1d5c328f4ac08347734bc1917ef",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        203.27,
+        186.1,
+        162.79
+      ],
+      "medianHSVPixelSaturation": 0.1739,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/kids-notes-atlas-transparent-v2.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "CDCoversAtlasTexture",
+      "assetId": 88160214591687,
+      "textureUri": "rbxassetid://88160214591687",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=88160214591687",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "cd-covers-atlas-v1.png",
+      "bytes": 3670344,
+      "sha256": "875537d22d5ceb3a0f0928ec880ef4903b449d3ed410e320ab379616b8185dd5",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        118.29,
+        95.06,
+        116.37
+      ],
+      "medianHSVPixelSaturation": 0.7114,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/cd-covers-atlas-v1.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "DiscPlayerPanelTexture",
+      "assetId": 92830391726737,
+      "textureUri": "rbxassetid://92830391726737",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=92830391726737",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "disk-player-surface.png",
+      "bytes": 3084534,
+      "sha256": "1cda36fc49ffe57c92db0bab9b5c0f66a1d6850df0cf16243511e7ffca69df01",
+      "imageSize": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        45.89,
+        45.7,
+        45.54
+      ],
+      "medianHSVPixelSaturation": 0.0208,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/disk-player-surface.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "CRTScreenTexture",
+      "assetId": 106602270400755,
+      "textureUri": "rbxassetid://106602270400755",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=106602270400755",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "crt-screen-surface.png",
+      "bytes": 1506287,
+      "sha256": "e2e1202f668ed95e45c500f2abf3aa8660376a2941b8f720b6b0642d0ab5407e",
+      "imageSize": [
+        1448,
+        1086
+      ],
+      "mode": "RGB",
+      "meanRGB": [
+        11.4,
+        15.02,
+        11.24
+      ],
+      "medianHSVPixelSaturation": 0.2424,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/crt-screen-surface.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "MallManagerColorMap",
+      "assetId": 139917107442839,
+      "textureUri": "rbxassetid://139917107442839",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=139917107442839",
+        "httpStatus": 403,
+        "error": "{\"errors\":[{\"code\":1,\"message\":\"User is not authorized to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "verified-original-source-pack",
+      "file": "mall-manager-color.png",
+      "bytes": 5425646,
+      "sha256": "a5548f9b4b82ad4d7e00860cb199f47c4112ba7d12a62ab99070e9eb3526c30a",
+      "imageSize": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA",
+      "meanRGB": [
+        81.79,
+        51.77,
+        38.74
+      ],
+      "medianHSVPixelSaturation": 0.5,
+      "verification": {
+        "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+        "archiveMember": "textures/level3/mall-manager-color.png",
+        "memberSha256Matched": true,
+        "assetIdMapping": "assets/live-asset-manifest.json liveAssetIds.level3Images / modelsAndAnimations",
+        "limitation": "Historically verified source-to-ID mapping; anonymous delivery requires authentication and current live Studio read remains pending."
+      }
+    },
+    {
+      "slot": "FoldingTableTexture",
+      "assetId": 112282995723556,
+      "textureUri": "rbxassetid://112282995723556",
+      "anonymousAssetDelivery": {
+        "url": "https://assetdelivery.roblox.com/v1/asset/?id=112282995723556",
+        "httpStatus": 401,
+        "error": "{\"errors\":[{\"code\":0,\"message\":\"Authentication required to access Asset.\"}]}"
+      },
+      "studsPerTile": null,
+      "liveStudioVerifiedThisTask": false,
+      "status": "unavailable-local-source",
+      "note": "Source archive does not contain this image. ID comes from historical live asset manifest; current template needs fresh Studio read."
+    }
+  ]
+}

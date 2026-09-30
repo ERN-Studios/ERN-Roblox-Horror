@@ -44,3 +44,19 @@
 /tools/level3_worn_party/*.server.pid
 /artifacts/level3-rebuild-20260930/*.server.log
 /artifacts/level3-rebuild-20260930/*.server.pid
+
+# Level 6 restyle CLI responses/prompts and full future Studio checkpoints are
+# local records. Version reviewed reports, asset manifests and source diffs.
+/artifacts/level6-textures-20260930/claude-review/*-result.json
+/artifacts/level6-textures-20260930/claude-review/*-prompt.txt
+/artifacts/level6-textures-20260930/**/*.log
+/artifacts/level6-textures-20260930/**/__pycache__/
+/artifacts/level6-textures-20260930/candidate/*.blend1
+/artifacts/level6-textures-20260930/claude-review/Level 6 Visual Adapter.native-floor-proposal.ModuleScript.luau
+/artifacts/level6-textures-20260930/claude-review/native-floor-proposal.json
+/artifacts/level6-textures-20260930/native-*/*
+!/artifacts/level6-textures-20260930/native-*/source-manifest.json
+!/artifacts/level6-textures-20260930/native-*/backup-file-hashes.json
+!/artifacts/level6-textures-20260930/native-*/backup-metadata-summary.json
+/artifacts/level6-textures-20260930/live-reference-*/*
+!/artifacts/level6-textures-20260930/live-reference-*/capture-summary.json
