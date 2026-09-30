@@ -4,7 +4,7 @@
     "class": "LocalScript",
     "candidate": "StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.luau",
     "beforeSha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
-    "afterSha256": "718c799d49987698eb1d816f7dfc07c9c7ae198fbfcce38d78a380980cc7b1f8",
+    "afterSha256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a",
     "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
   },
   {
@@ -20,7 +20,7 @@
     "class": "Script",
     "candidate": "ServerScriptService__Crouch State Server.Script.luau",
     "beforeSha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
-    "afterSha256": "3cd73777c6340a8e24bc021b16cd89b5bf27242757397073ccbf033213ee982b",
+    "afterSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
     "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
   },
   {
@@ -28,7 +28,7 @@
     "class": "LocalScript",
     "candidate": "StarterPlayer__StarterPlayerScripts__Level4PreviewPrompt.LocalScript.luau",
     "beforeSha256": "6bc9ffd0d140318b53c7efe1eaf433eee866bd8746ba92ee1637452582db01d7",
-    "afterSha256": "63e54f182c3837581c6309184677d6b036452daa75b227dbe3335f00fca0e577",
+    "afterSha256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
     "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
   }
 ]

@@ -1,0 +1,155 @@
+{
+  "schema": "studio-level3-level6-repair-source-diff/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "observedPlaceVersion": 2421,
+  "nativeBeforeCapturedAt": "2026-09-30T04:51:53Z",
+  "nativeAfterCapturedAt": "2026-09-30T05:15:18Z",
+  "sourceCountBefore": 201,
+  "sourceCountAfter": 201,
+  "changedSources": [
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 990,
+      "beforeSourceSha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
+      "afterSourceBytes": 1353,
+      "afterSourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ReplicatedStorage__DevAccess.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Crouch State Server",
+      "class": "Script",
+      "beforeSourceBytes": 7249,
+      "beforeSourceSha256": "3cd73777c6340a8e24bc021b16cd89b5bf27242757397073ccbf033213ee982b",
+      "afterSourceBytes": 7262,
+      "afterSourceSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Crouch State Server.Script.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 19473,
+      "beforeSourceSha256": "72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3",
+      "afterSourceBytes": 19286,
+      "afterSourceSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 3 Systems__Level 3 Configuration.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 44335,
+      "beforeSourceSha256": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad",
+      "afterSourceBytes": 42613,
+      "afterSourceSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 3 Systems__Level 3 Layout Generator.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 70847,
+      "beforeSourceSha256": "49915b41b0494e1b6c44606708f0cc6082b3c15710bce6ca0d70674fd17ce7a2",
+      "afterSourceBytes": 70421,
+      "afterSourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 3 Systems__Level 3 Objective Controller.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 32409,
+      "beforeSourceSha256": "6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549",
+      "afterSourceBytes": 31538,
+      "afterSourceSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 3 Systems__Level 3 Round Adapter.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 203553,
+      "beforeSourceSha256": "1b07d250575bb8aaee9a187e861bdc7dadbd31641e6728c87eac4aaed3a23bc8",
+      "afterSourceBytes": 202633,
+      "afterSourceSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 3 Systems__Level 3 Test Suite.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 20960,
+      "beforeSourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88",
+      "afterSourceBytes": 20986,
+      "afterSourceSha256": "bb9da9fc451c73eac01835ed03a23de669572ab74965380108942ab536d5b99e",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 Preview Runtime.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "beforeSourceBytes": 16318,
+      "beforeSourceSha256": "26425f91b20ccc85334088d9ba6d7c2a1ef1a8784ba9fa5a783a70cc47e85732",
+      "afterSourceBytes": 16261,
+      "afterSourceSha256": "92ce1f7b4fa1b1b5c773cc79ca044bb04cef2ca1c05ae9b57ccfadfe4197bc99",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 Visual Adapter.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "beforeSourceBytes": 8109,
+      "beforeSourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead",
+      "afterSourceBytes": 8135,
+      "afterSourceSha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/ServerScriptService__Level6PreviewAccess.Script.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "class": "LocalScript",
+      "beforeSourceBytes": 1405,
+      "beforeSourceSha256": "63e54f182c3837581c6309184677d6b036452daa75b227dbe3335f00fca0e577",
+      "afterSourceBytes": 1620,
+      "afterSourceSha256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/StarterPlayer__StarterPlayerScripts__Level4PreviewPrompt.LocalScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "beforeSourceBytes": 1348,
+      "beforeSourceSha256": "7c29bea1bbdeb2cd2aeca53da8d0ce9a6b4dccbf57ce74e902abb848a62c2457",
+      "afterSourceBytes": 1361,
+      "afterSourceSha256": "3621ec9cb5adf11e955ec317e59dca226e3b3d0563f7b6587c34a92ebef9941c",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/StarterPlayer__StarterPlayerScripts__Level6PreviewTransport.LocalScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "class": "LocalScript",
+      "beforeSourceBytes": 44282,
+      "beforeSourceSha256": "718c799d49987698eb1d816f7dfc07c9c7ae198fbfcce38d78a380980cc7b1f8",
+      "afterSourceBytes": 44350,
+      "afterSourceSha256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a",
+      "editorMatchBefore": true,
+      "editorMatchAfter": true,
+      "verifiedSourceFile": "artifacts/level3-level6-repair-20260930/verified-studio-source/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.luau"
+    }
+  ]
+}

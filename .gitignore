@@ -4,6 +4,22 @@
 !/artifacts/level3-rebuild-20260930/native-backup*/source-manifest.json
 !/artifacts/level3-rebuild-20260930/native-backup*/backup-file-hashes.json
 
+# Full pre/post Level 3 repair snapshots stay local. Commit only their reviewed
+# source manifests, file hashes, and metadata summaries; source diffs live in
+# verified-studio-source/ beside the repair record.
+/artifacts/level3-level6-repair-20260930/native-before/*
+!/artifacts/level3-level6-repair-20260930/native-before/source-manifest.json
+!/artifacts/level3-level6-repair-20260930/native-before/backup-file-hashes.json
+!/artifacts/level3-level6-repair-20260930/native-before/backup-metadata-summary.json
+/artifacts/level3-level6-repair-20260930/native-after/*
+!/artifacts/level3-level6-repair-20260930/native-after/source-manifest.json
+!/artifacts/level3-level6-repair-20260930/native-after/backup-file-hashes.json
+!/artifacts/level3-level6-repair-20260930/native-after/backup-metadata-summary.json
+/artifacts/level3-level6-repair-20260930/candidate/
+/artifacts/level3-level6-repair-20260930/level6-candidate/
+/artifacts/level3-level6-repair-20260930/live-before/
+/artifacts/level3-level6-repair-20260930/original-level3-sources/
+
 # Temporary Level 3 local tooling output.
 /tools/level3_worn_party/__pycache__/
 /tools/level3_worn_party/*.pyc

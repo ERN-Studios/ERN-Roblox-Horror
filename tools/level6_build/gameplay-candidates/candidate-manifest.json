@@ -1,6 +1,6 @@
 {
-  "status": "offline-revision-pending-studio-reconciliation",
-  "scope": "Isolated Level 6 dev preview. Studio installed guarded snapshot 90b5d1e68587d4a213dea9e4666ad67d017342033561ecae7aebac4ee61220d1; this offline package revises v2 kit metadata and requires a fresh guarded Studio reconciliation before Play verification, export, or publication.",
+  "status": "studio-source-verified-2026-09-30",
+  "scope": "Isolated Level 6 Worn Party developer preview. These source bytes and hashes were reconciled from the authoritative Studio place after original Level 3 restoration and the Level 6 access repair. The historical installer is not a deployment baseline for an already edited Studio place.",
   "scripts": [
     {
       "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
@@ -69,8 +69,8 @@
       "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
       "class": "ModuleScript",
       "file": "tools/level6_build/gameplay-candidates/Level 6 Preview Runtime.ModuleScript.luau",
-      "bytes": 20960,
-      "sha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+      "bytes": 20986,
+      "sha256": "bb9da9fc451c73eac01835ed03a23de669572ab74965380108942ab536d5b99e"
     },
     {
       "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
@@ -97,8 +97,8 @@
       "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
       "class": "ModuleScript",
       "file": "tools/level6_build/gameplay-candidates/Level 6 Visual Adapter.ModuleScript.luau",
-      "bytes": 16318,
-      "sha256": "26425f91b20ccc85334088d9ba6d7c2a1ef1a8784ba9fa5a783a70cc47e85732"
+      "bytes": 16261,
+      "sha256": "92ce1f7b4fa1b1b5c773cc79ca044bb04cef2ca1c05ae9b57ccfadfe4197bc99"
     },
     {
       "targetPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
@@ -113,7 +113,8 @@
     "layoutPureSeedCount": 1000,
     "uniqueTopologyGraphs": 956,
     "layoutPassed": true,
-    "noGameplayChecksYet": true
+    "noGameplayChecksYet": false,
+    "studioPlayVerified": "ZenMeister02 entered and exited the isolated Level 6 preview; original Level 3 loaded normally afterward in Studio Play on 2026-09-30."
   },
   "isolation": {
     "workspace": [
