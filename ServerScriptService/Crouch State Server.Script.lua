@@ -5,6 +5,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local requestObject = remotes:WaitForChild("SetCrouching")
@@ -43,12 +44,14 @@ local function setCrouching(player: Player, active: boolean, responseSerial: num
 end
 
 local function characterAllowsCrouch(player: Player): boolean
+	local preview = player:GetAttribute("Level6InRound") == true and DevAccess.IsAllowed(player)
+	local participating = if preview then workspace:GetAttribute("Level6RoundActive") == true
+		else player:GetAttribute("InRound") == true and workspace:GetAttribute("RoundActive") == true
 	if player.Parent ~= Players
-		or player:GetAttribute("InRound") ~= true
-		or workspace:GetAttribute("RoundActive") ~= true
-		or player:GetAttribute("Escaped") == true
+		or not participating
+		or player:GetAttribute(if preview then "Level6Escaped" else "Escaped") == true
 		or player:GetAttribute("Spectating") == true
-		or player:GetAttribute("Level3_Hiding") == true then
+		or player:GetAttribute(if preview then "Level6_Hiding" else "Level3_Hiding") == true then
 		return false
 	end
 
@@ -125,7 +128,7 @@ local function bindPlayer(player: Player)
 			setCrouching(player, false)
 		end
 	end
-	for _, attribute in ipairs({"InRound", "Escaped", "Spectating", "Level3_Hiding"}) do
+	for _, attribute in ipairs({"InRound", "Escaped", "Spectating", "Level3_Hiding", "Level6InRound", "Level6Escaped", "Level6_Hiding"}) do
 		table.insert(connections, player:GetAttributeChangedSignal(attribute):Connect(clearIfUnavailable))
 	end
 	table.insert(connections, player.CharacterAdded:Connect(function(character)
@@ -166,7 +169,10 @@ Players.PlayerAdded:Connect(bindPlayer)
 Players.PlayerRemoving:Connect(disconnectPlayer)
 for _, player in ipairs(Players:GetPlayers()) do bindPlayer(player) end
 
-workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
-	if workspace:GetAttribute("RoundActive") == true then return end
-	for _, player in ipairs(Players:GetPlayers()) do setCrouching(player, false) end
-end)
+local function clearUnavailableCrouches()
+	for _, player in ipairs(Players:GetPlayers()) do
+		if not characterAllowsCrouch(player) then setCrouching(player, false) end
+	end
+end
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(clearUnavailableCrouches)
+workspace:GetAttributeChangedSignal("Level6RoundActive"):Connect(clearUnavailableCrouches)

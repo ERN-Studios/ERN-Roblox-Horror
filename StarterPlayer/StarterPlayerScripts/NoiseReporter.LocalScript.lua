@@ -15,7 +15,15 @@ local player = Players.LocalPlayer
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 local UIDevice = require(RS:WaitForChild("UIDevice"))
 local devAllowed = DevAccess.IsAllowed(player)
-local function inRound() return player:GetAttribute("InRound") == true end
+-- Level6 preview participates in local movement only; public progression attributes stay untouched.
+local function inPreview() return devAllowed and player:GetAttribute("Level6InRound") == true end
+local function inRound() return player:GetAttribute("InRound") == true or inPreview() end
+local function isHiding()
+	return player:GetAttribute(if inPreview() then "Level6_Hiding" else "Level3_Hiding") == true
+end
+local function isEscaped()
+	return player:GetAttribute(if inPreview() then "Level6Escaped" else "Escaped") == true
+end
 local vitalRemote = remotes:WaitForChild("RoundStatus")
 local lastVitalReport = -math.huge
 
@@ -42,7 +50,7 @@ local showSneakEngaged
 local function dropGlowstick()
 	-- ButtonX also exits a Level 3 table. Never let that one press spawn a
 	-- glowstick underneath the table while the hide controller is releasing us.
-	if not inRound() or player:GetAttribute("Level3_Hiding") == true
+	if inPreview() or not inRound() or isHiding()
 		or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
 	local char, hum = currentChar()
 	if not (char and hum and hum.Health > 0) then return end
@@ -56,6 +64,7 @@ local SPRINT_DRAIN     = 16   -- ~6s of sprint on a full bar
 local STAMINA_RECHARGE = 10   -- recovers while not sprinting
 local STAMINA_RECOVER  = 25   -- must reach this after exhaustion before sprinting again
 local function staminaMax()
+	if inPreview() then return STAMINA_BASE end
 	return STAMINA_BASE * math.max(1, tonumber(player:GetAttribute("ZyntraStaminaMultiplier")) or 1)
 end
 local stamina, exhausted = staminaMax(), false
@@ -67,6 +76,7 @@ local ADRENALINE_MUL    = 3
 local ADRENALINE_LINGER = 4   -- seconds the boost outlives the LAST active chase
 local adrenalineUntil = 0
 local function chaseActive()
+	if inPreview() then return player:GetAttribute("Level6BeingChased") == true end
 	return player:GetAttribute("BeingChased") == true
 		or (workspace:GetAttribute("SelectedLevel") == 2
 			and player:GetAttribute("Level2_PoolSlideChased") == true)
@@ -80,6 +90,8 @@ local function updateChaseAdrenaline()
 	wasChased = chased
 end
 player:GetAttributeChangedSignal("BeingChased"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level6BeingChased"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level6InRound"):Connect(updateChaseAdrenaline)
 player:GetAttributeChangedSignal("Level2_PoolSlideChased"):Connect(updateChaseAdrenaline)
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(updateChaseAdrenaline)
 local function adrenalized()
@@ -108,8 +120,8 @@ local CROUCH_BLOCKED_STATES = {
 }
 
 local function movementAvailable()
-	if not inRound() or player:GetAttribute("Escaped") == true
-		or player:GetAttribute("Level3_Hiding") == true
+	if not inRound() or isEscaped()
+		or isHiding()
 		or player:GetAttribute("Spectating") == true
 		or player:GetAttribute("ZyntraStoreOpen") == true
 		or player:GetAttribute("DevPhoneOpen") == true
@@ -122,7 +134,7 @@ local function movementAvailable()
 end
 
 local function crouchAllowed()
-	if not movementAvailable() or workspace:GetAttribute("RoundActive") ~= true then return false end
+	if not movementAvailable() or workspace:GetAttribute(if inPreview() then "Level6RoundActive" else "RoundActive") ~= true then return false end
 	local character, humanoid = currentChar()
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	return character ~= nil and humanoid ~= nil and root ~= nil
@@ -187,7 +199,7 @@ local function applySpeed()
 	-- The hide controller and the Level 2 slide own physical movement while
 	-- these locks are active. Keep their restore target current without fighting
 	-- their authoritative WalkSpeed = 0 writes.
-	if player:GetAttribute("Level3_Hiding") == true
+	if isHiding()
 		or character:GetAttribute("Level2_ForcedSliding") == true
 		or character:GetAttribute("Level2_RagdollServerActive") == true then
 		return
@@ -202,7 +214,7 @@ end
 -- Order matters: everything cheap and local is checked before the clock, so a
 -- player with no boost -- the normal case, every frame -- costs two lookups.
 function speedBoost()
-	if not inRound() then return 1 end
+	if inPreview() or not inRound() then return 1 end
 	local expires = player:GetAttribute("ZyntraSpeedBoostUntil")
 	-- NaN fails every comparison, so `expires > 0` rejects it along with 0/nil.
 	if type(expires) ~= "number" or not (expires > 0) then return 1 end
@@ -379,7 +391,7 @@ task.spawn(function()
 		-- live Pool Foam session drains it during a Level 2 one. Level 3's Mall
 		-- Manager does not listen at all, so reporting there is pure traffic.
 		local level = workspace:GetAttribute("SelectedLevel")
-		if not inRound() or (level ~= 1 and level ~= 2) then continue end
+		if inPreview() or not inRound() or (level ~= 1 and level ~= 2) then continue end
 		local char, hum = currentChar()
 		if not (char and hum and hum.Health > 0) then continue end
 
@@ -838,7 +850,7 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 
 	local frac = stamina / staminaMax()
-	if os.clock() - lastVitalReport >= .25 then
+	if not inPreview() and os.clock() - lastVitalReport >= .25 then
 		lastVitalReport = os.clock()
 		vitalRemote:FireServer("spectatevital", {Key = "Stamina", Value = math.clamp(frac, 0, 1)})
 	end
@@ -904,7 +916,7 @@ local function updateRoundState()
 	-- lobby, and applySpeed() ignores crouch out of a round anyway.
 	UIDevice.SetInteractive(touchSneakButton, usable)
 	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
-	UIDevice.SetInteractive(touchGlowButton, usable)
+	UIDevice.SetInteractive(touchGlowButton, usable and not inPreview())
 	-- Own the jump control only while in a round. In the lobby the default
 	-- touch jump comes back, because that is the only jump there is there.
 	UIDevice.SuppressDefaultJump(touchControls() and active)
@@ -914,7 +926,7 @@ local function updateRoundState()
 	-- escaped or spectating, the bar is stale information sitting in the same
 	-- band as the spectate caption, so it stands down with the controls.
 	staBg.Visible = active
-		and player:GetAttribute("Escaped") ~= true
+		and not isEscaped()
 		and player:GetAttribute("Spectating") ~= true
 	if not active then
 		lastGlowstickDrop = -math.huge
@@ -932,7 +944,7 @@ local function updateRoundState()
 			showRunEnabled(false)
 		end
 		applySpeed()
-	elseif player:GetAttribute("Level3_Hiding") ~= true then
+	elseif not isHiding() then
 		-- The hiding controller restores the speed it captured on entry. Reapply
 		-- the CURRENT aggregate input state on exit so crouch -> hide -> stand
 		-- cannot leave the player stuck at the old 8-stud crouch speed.
@@ -941,7 +953,8 @@ local function updateRoundState()
 	wasRoundActive = active
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
-for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Spectating",
+player:GetAttributeChangedSignal("Level6InRound"):Connect(updateRoundState)
+for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Level6Escaped", "Level6_Hiding", "Spectating",
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(updateRoundState)
 end

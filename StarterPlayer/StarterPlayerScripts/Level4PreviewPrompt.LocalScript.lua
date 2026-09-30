@@ -1,4 +1,4 @@
--- Hides the Level 4 and Level 5 developer preview prompts from players outside DevAccess.
+-- Hides the Level 4, Level 5 and Level 6 developer preview prompts from players outside DevAccess.
 -- Cosmetic only: preview access and GameManager re-check DevAccess on every entry.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -8,6 +8,8 @@ local PROMPTS = {
 	Level4DeveloperPreviewReturnPrompt = true,
 	Level5DeveloperPreviewPrompt = true,
 	Level5DeveloperPreviewReturnPrompt = true,
+	Level6DeveloperPreviewPrompt = true,
+	Level6DeveloperPreviewReturnPrompt = true,
 }
 
 -- Fail closed: a missing or erroring allowlist hides the prompts.

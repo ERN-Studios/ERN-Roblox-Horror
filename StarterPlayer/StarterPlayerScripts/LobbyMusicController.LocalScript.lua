@@ -101,6 +101,7 @@ end
 local function hardLobbyEligible()
 	return workspace:GetAttribute("ReservedRoundServer") ~= true
 		and player:GetAttribute("InRound") ~= true
+		and player:GetAttribute("Level6InRound") ~= true
 		and workspace:FindFirstChild("ServerLobby") ~= nil
 end
 
@@ -211,6 +212,7 @@ roundStatus.OnClientEvent:Connect(setLobbyIntentFromEvent)
 
 player:GetAttributeChangedSignal("LobbyMusicEnabled"):Connect(beginMusicIfReady)
 player:GetAttributeChangedSignal("InRound"):Connect(beginMusicIfReady)
+player:GetAttributeChangedSignal("Level6InRound"):Connect(beginMusicIfReady)
 player:GetAttributeChangedSignal("LobbyBriefingActive"):Connect(beginMusicIfReady)
 player:GetAttributeChangedSignal("ZyntraDispatchClientActive"):Connect(beginMusicIfReady)
 workspace:GetAttributeChangedSignal("ReservedRoundServer"):Connect(beginMusicIfReady)

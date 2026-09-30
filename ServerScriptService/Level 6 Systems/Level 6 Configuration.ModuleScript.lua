@@ -1,18 +1,18 @@
 --!strict
--- Level 3 Configuration
+-- Level 6 Configuration
 -- Production tuning for the abandoned 1990s mall service-space level.
--- Level 3 owns one dedicated hostile: the Mall Manager. Its custom bone rig,
+-- Level 6 owns one dedicated hostile: the Mall Manager. Its custom bone rig,
 -- navigation, awareness, attacks, and lifecycle are isolated from Level 1.
 
 local Configuration = {
-	Version = 47,
-	WorldName = "Level 3 Generated World",
-	StateFolderName = "Level 3 State",
-	RemotesFolderName = "Level 3 Remotes",
+	Version = 1,
+	WorldName = "Level 6 Generated World",
+	StateFolderName = "Level 6 State",
+	RemotesFolderName = "Level 6 Remotes",
 	ClientEventName = "ClientEvent",
 	MallManagerMotionEventName = "MallManagerMotion",
-	HideRequestEventName = "Level3HideRequest",
-	WorldOrigin = Vector3.new(6200, 24, 0),
+	HideRequestEventName = "Level6HideRequest",
+	WorldOrigin = Vector3.new(20000, 24, 0),
 	RoomHeight = 14,
 	WallThickness = 1.5,
 	FloorThickness = 1,
@@ -23,7 +23,7 @@ local Configuration = {
 	CorridorWidth = 14,
 	CorridorHeight = 10.5,
 	ModuleGoal = 5,
-	-- Seeded topology is generated only when a Level 3 party launches.  The
+	-- Seeded topology is generated only when a Level 6 party launches.  The
 	-- bounded district plan is larger than the former authored graph while still
 	-- keeping each six-player reserved server within a predictable build budget.
 	Layout = {
@@ -53,8 +53,8 @@ local Configuration = {
 		RowHalfSpacing = 90,
 		ExtraLinksPerDistrict = 2,
 		MinimumModuleSeparation = 105,
-		-- Two loops per 2x5 district keep the core navigable and break long
-		-- sightlines. The scripted final hall is exempt.
+		-- With two loops per 2x4 district, one grid edge is absent. Three links
+		-- is the smallest possible straight-run cap; the scripted finale is exempt.
 		MaximumStraightRunLinks = 3,
 		MaximumVerticalRunLinks = 3,
 		BuildYieldEveryRooms = 3,
@@ -92,18 +92,12 @@ local Configuration = {
 		HVAC = "rbxassetid://9125446543",
 		-- Reserved for the replacement lights-out cue.
 		PowerDown = "",
-		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
+		-- Group-owned song uploaded specifically for the synchronized Level 6 sequence.
 		RoomListeningSong = "rbxassetid://140244948455675",
 		-- Filled with the group upload of the reversed 180-second master.
 		RoomListeningSongReversed = "rbxassetid://75285146479953",
 		CDCollected = "rbxassetid://84585027971879",
-		-- Cleaned Worn Party masters. Bind only verified group-owned Roblox audio IDs.
-		PartyHallAmbience = "",
-		BudgetArcadeAmbience = "",
-		MaintenanceWorkshopAmbience = "",
-		ArcadeCredit = "",
-		BreakerInspect = "",
-		-- Reserved Level 3 scare slots. Add group-owned IDs when the sounds are ready.
+		-- Reserved Level 6 scare slots. Add group-owned IDs when the sounds are ready.
 		ScareBalloonPop = "",
 		ScareChairScrape = "",
 		ScareChildGiggle = "",
@@ -196,12 +190,12 @@ local Configuration = {
 		StuckSeconds = 0.85,
 		MaxPathFailures = 3,
 		ObstructionRecoveryAttempts = 3,
-		-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+		-- LEVEL6_MANAGER_FURNITURE_NAV_20260821
 		-- Hold one avoidance side long enough to clear wide furniture instead of
 		-- choosing a new left/right answer every movement frame.
 		AvoidanceCommitSeconds = 1.35,
 		OverlapEscapeProbeDistance = 3.5,
-		FurniturePathLabel = "Level3ManagerFurniture",
+		FurniturePathLabel = "Level6ManagerFurniture",
 		FurniturePathPadding = 1.25,
 		ProgressResetDistance = 8,
 		MovementAcceleration = 48,
@@ -343,7 +337,7 @@ local Configuration = {
 		HideOccupantCap = 2,
 		HideOccupantLateralOffset = 2.0,
 	},
-	-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+	-- LEVEL6_MANAGER_TABLE_CHECK_20260904
 	-- The Mall Manager kneels at an occupied hiding table during a hunt, warns
 	-- whoever is under it, then flushes them out. A targeted hidden player is
 	-- pursued directly; sweep bias and cooldowns apply only to patrol checks.

@@ -1,5 +1,5 @@
 --!strict
--- Level 3 Objective Controller
+-- Level 6 Objective Controller
 --
 -- Server authority for the abandoned mall objective:
 --   * five physical party CDs with per-player ownership and death recovery;
@@ -7,7 +7,7 @@
 --   * final service-exit activation and per-player escape;
 --   * replicated progress used by the reader, audio, and HUD clients.
 --
--- World construction stays in Level 3 World Builder. This module only consumes
+-- World construction stays in Level 6 World Builder. This module only consumes
 -- its manifest, validates every reference, and owns one disposable round session.
 
 local Players = game:GetService("Players")
@@ -16,8 +16,18 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 
-local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
-local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
+local Configuration = require(script.Parent:WaitForChild("Level 6 Configuration"))
+-- Preview announcements use only the Level 6 remote; no lobby/production broadcast.
+local TeamObjectives = { Announce = function(playerName, message)
+	local remotes = ReplicatedStorage:FindFirstChild(Configuration.RemotesFolderName)
+	local event = remotes and remotes:FindFirstChild(Configuration.ClientEventName)
+	if not (event and event:IsA("RemoteEvent")) then return end
+	for _, recipient in ipairs(Players:GetPlayers()) do
+		if recipient:GetAttribute("Level6InRound") == true then
+			event:FireClient(recipient, {Type="Alert", Title=message, Subtitle=playerName, Duration=3})
+		end
+	end
+end }
 
 type AnyTable = {[any]: any}
 
@@ -101,13 +111,13 @@ local function liveSession(session: AnyTable): boolean
 		and world ~= nil
 		and world:IsA("Model")
 		and world.Parent ~= nil
-		and world:GetAttribute("Level3_Generation") == session.Generation
+		and world:GetAttribute("Level6_Generation") == session.Generation
 end
 
 local function validSession(session: AnyTable): boolean
 	return liveSession(session)
-		and workspace:GetAttribute("SelectedLevel") == 3
-		and workspace:GetAttribute("RoundActive") == true
+		and workspace:GetAttribute("Level6SelectedLevel") == 6
+		and workspace:GetAttribute("Level6RoundActive") == true
 end
 
 local function livingCharacter(player: Player): (Model?, Humanoid?, BasePart?)
@@ -124,13 +134,13 @@ end
 local function validPlayer(player: Player, session: AnyTable): boolean
 	return validSession(session)
 		and player.Parent == Players
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		and player:GetAttribute("Level6InRound") == true
+		and player:GetAttribute("Level6Escaped") ~= true
 end
 
 local function updateFinalHallChase(session: AnyTable)
 	if not session.ExitUnlocked or session.FinalHallChaseTriggered
-		or session.State:GetAttribute("Level3_RoomSongPhase") ~= "DONE" then
+		or session.State:GetAttribute("Level6_RoomSongPhase") ~= "DONE" then
 		return
 	end
 	local hall = session.Manifest.FinalHall
@@ -165,25 +175,25 @@ local function updateFinalHallChase(session: AnyTable)
 	end
 	session.FinalHallEligibleCount = eligibleCount
 	session.FinalHallCrossedCount = crossedCount
-	session.State:SetAttribute("Level3_FinalHallEligibleCount", eligibleCount)
-	session.State:SetAttribute("Level3_FinalHallCrossedCount", crossedCount)
-	session.Manifest.World:SetAttribute("Level3_FinalHallEligibleCount", eligibleCount)
-	session.Manifest.World:SetAttribute("Level3_FinalHallCrossedCount", crossedCount)
-	workspace:SetAttribute("Level3FinalHallEligibleCount", eligibleCount)
-	workspace:SetAttribute("Level3FinalHallCrossedCount", crossedCount)
+	session.State:SetAttribute("Level6_FinalHallEligibleCount", eligibleCount)
+	session.State:SetAttribute("Level6_FinalHallCrossedCount", crossedCount)
+	session.Manifest.World:SetAttribute("Level6_FinalHallEligibleCount", eligibleCount)
+	session.Manifest.World:SetAttribute("Level6_FinalHallCrossedCount", crossedCount)
+	workspace:SetAttribute("Level6FinalHallEligibleCount", eligibleCount)
+	workspace:SetAttribute("Level6FinalHallCrossedCount", crossedCount)
 	if eligibleCount == 0 or crossedCount == 0 then return end
 
 	session.FinalHallChaseTriggered = true
-	session.State:SetAttribute("Level3_FinalHallChaseTriggered", true)
-	session.State:SetAttribute("Level3_FinalHallChaseActive", true)
-	session.State:SetAttribute("Level3_MallManagerHuntActive", true)
-	session.Manifest.World:SetAttribute("Level3_FinalHallChaseTriggered", true)
-	session.Manifest.World:SetAttribute("Level3_FinalHallChaseActive", true)
-	workspace:SetAttribute("Level3FinalHallChaseTriggered", true)
+	session.State:SetAttribute("Level6_FinalHallChaseTriggered", true)
+	session.State:SetAttribute("Level6_FinalHallChaseActive", true)
+	session.State:SetAttribute("Level6_MallManagerHuntActive", true)
+	session.Manifest.World:SetAttribute("Level6_FinalHallChaseTriggered", true)
+	session.Manifest.World:SetAttribute("Level6_FinalHallChaseActive", true)
+	workspace:SetAttribute("Level6FinalHallChaseTriggered", true)
 	-- This must precede HuntActive so the Manager's synchronous Start selects the
 	-- level-entry finale spawn rather than a normal hidden random-room spawn.
-	workspace:SetAttribute("Level3FinalHallChaseActive", true)
-	workspace:SetAttribute("Level3MallManagerHuntActive", true)
+	workspace:SetAttribute("Level6FinalHallChaseActive", true)
+	workspace:SetAttribute("Level6MallManagerHuntActive", true)
 end
 
 local function promptWorldPosition(prompt: ProximityPrompt): Vector3?
@@ -222,13 +232,13 @@ local function firePayload(session: AnyTable, payload: AnyTable, target: Player?
 	if not liveSession(session) then return end
 	payload.Generation = session.Generation
 	if target then
-		if target.Parent == Players and target:GetAttribute("InRound") == true then
+		if target.Parent == Players and target:GetAttribute("Level6InRound") == true then
 			session.ClientEvent:FireClient(target, payload)
 		end
 		return
 	end
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player:GetAttribute("InRound") == true then
+		if player:GetAttribute("Level6InRound") == true then
 			session.ClientEvent:FireClient(player, payload)
 		end
 	end
@@ -261,7 +271,7 @@ local function playCDCollectedSound(session: AnyTable, position: Vector3)
 	-- Server-owned 3D emitter: every nearby player hears the same pickup from the
 	-- exact CD position, while inverse rolloff keeps it inside the surrounding room.
 	local emitter = Instance.new("Part")
-	emitter.Name = "Level 3 CD Collection Audio Emitter"
+	emitter.Name = "Level 6 CD Collection Audio Emitter"
 	emitter.Size = Vector3.new(.05, .05, .05)
 	emitter.CFrame = CFrame.new(position)
 	emitter.Transparency = 1
@@ -270,11 +280,11 @@ local function playCDCollectedSound(session: AnyTable, position: Vector3)
 	emitter.CanTouch = false
 	emitter.CanQuery = false
 	emitter.CastShadow = false
-	emitter:SetAttribute("Level3_CDCollectionEmitter", true)
+	emitter:SetAttribute("Level6_CDCollectionEmitter", true)
 	emitter.Parent = session.Manifest.World
 
 	local sound = Instance.new("Sound")
-	sound.Name = "Level 3 CD Collected"
+	sound.Name = "Level 6 CD Collected"
 	sound.SoundId = id
 	sound.Volume = .58
 	sound.PlaybackSpeed = 1
@@ -283,7 +293,7 @@ local function playCDCollectedSound(session: AnyTable, position: Vector3)
 	sound.RollOffMode = Enum.RollOffMode.InverseTapered
 	sound.RollOffMinDistance = 5
 	sound.RollOffMaxDistance = 52
-	sound:SetAttribute("Level3_CDCollectionSound", true)
+	sound:SetAttribute("Level6_CDCollectionSound", true)
 	sound.Parent = emitter
 	sound.Ended:Once(function()
 		if emitter.Parent then emitter:Destroy() end
@@ -292,23 +302,16 @@ local function playCDCollectedSound(session: AnyTable, position: Vector3)
 	sound:Play()
 end
 
-local function fireEscapeStatus(player: Player)
-	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
-	local roundStatus = remotes and remotes:FindFirstChild("RoundStatus")
-	if not roundStatus or not roundStatus:IsA("RemoteEvent") then return end
-	for _, recipient in ipairs(Players:GetPlayers()) do
-		if recipient:GetAttribute("InRound") == true then
-			roundStatus:FireClient(recipient, "escape", player.Name)
-		end
-	end
+local function fireEscapeStatus(_player: Player)
+	-- Preview Runtime observes Level6Escaped and returns only that developer to the lobby.
 end
 
--- L3_CD_BEACONS_20260921.
+-- L6_CD_BEACONS_20260921.
 --
 -- The reader has to point at a CD the client may not hold: the source model
 -- streams out at range and a disc dropped on a death across the mall may never
 -- have replicated to that client at all. So the server publishes what it
--- already knows -- state, room, position -- onto the replicated Level 3 State
+-- already knows -- state, room, position -- onto the replicated Level 6 State
 -- folder, on the objective events that change it rather than on a tick or a
 -- per-frame remote. Only a disc that can actually be picked up carries a
 -- position; CARRIED and INSERTED clear it, and that is the client's whole
@@ -348,14 +351,14 @@ local function publishCDBeacons(session: AnyTable)
 				roomId = record.Module.RoomId
 			end
 		end
-		session.State:SetAttribute(string.format("Level3_CD%dState", index), state)
-		session.State:SetAttribute(string.format("Level3_CD%dRoom", index), roomId)
-		session.State:SetAttribute(string.format("Level3_CD%dPosition", index), position)
+		session.State:SetAttribute(string.format("Level6_CD%dState", index), state)
+		session.State:SetAttribute(string.format("Level6_CD%dRoom", index), roomId)
+		session.State:SetAttribute(string.format("Level6_CD%dPosition", index), position)
 	end
 end
 
 -- The room a player is standing in, published on the player so it replicates to
--- everyone -- a spectator reads their subject's, exactly like Level3_Hiding.
+-- everyone -- a spectator reads their subject's, exactly like Level6_Hiding.
 -- Room membership is real geometry, never a distance: a CD one wall away is in
 -- the next room and must not light the indicator.
 local function updatePlayerRooms(session: AnyTable)
@@ -365,9 +368,9 @@ local function updatePlayerRooms(session: AnyTable)
 			local _, _, root = livingCharacter(player)
 			if root then roomId = roomIdAt(session, root.Position) end
 		end
-		local current = player:GetAttribute("Level3_Room")
+		local current = player:GetAttribute("Level6_Room")
 		if current ~= roomId and (roomId ~= "" or current ~= nil) then
-			player:SetAttribute("Level3_Room", roomId)
+			player:SetAttribute("Level6_Room", roomId)
 		end
 	end
 end
@@ -380,32 +383,32 @@ local function updateSharedState(session: AnyTable)
 	local heldCount = math.max(0, session.HeldCount or 0)
 	local droppedCount = math.max(0, session.DroppedCount or 0)
 	session.ModuleCount = insertedCount
-	session.State:SetAttribute("Level3_ModuleProgress", insertedCount)
-	session.State:SetAttribute("Level3_ModuleGoal", session.ModuleGoal)
-	session.State:SetAttribute("Level3_CDCollectedProgress", collectedCount)
-	session.State:SetAttribute("Level3_CDInsertedProgress", insertedCount)
-	session.State:SetAttribute("Level3_CDCarriedCount", heldCount)
-	session.State:SetAttribute("Level3_CDDroppedCount", droppedCount)
-	session.State:SetAttribute("Level3_ExitUnlocked", session.ExitUnlocked)
-	session.State:SetAttribute("Level3_ExitGuideActive", false)
-	session.State:SetAttribute("Level3_ExitGuideStartRoom", "")
-	session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
-	session.State:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
-	session.State:SetAttribute("Level3_ExitPosition", exitPosition)
-	session.State:SetAttribute("Level3_Phase", session.ExitUnlocked and "EXIT_UNLOCKED" or "SEARCH")
+	session.State:SetAttribute("Level6_ModuleProgress", insertedCount)
+	session.State:SetAttribute("Level6_ModuleGoal", session.ModuleGoal)
+	session.State:SetAttribute("Level6_CDCollectedProgress", collectedCount)
+	session.State:SetAttribute("Level6_CDInsertedProgress", insertedCount)
+	session.State:SetAttribute("Level6_CDCarriedCount", heldCount)
+	session.State:SetAttribute("Level6_CDDroppedCount", droppedCount)
+	session.State:SetAttribute("Level6_ExitUnlocked", session.ExitUnlocked)
+	session.State:SetAttribute("Level6_ExitGuideActive", false)
+	session.State:SetAttribute("Level6_ExitGuideStartRoom", "")
+	session.State:SetAttribute("Level6_ExitGuideLampCount", 0)
+	session.State:SetAttribute("Level6_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	session.State:SetAttribute("Level6_ExitPosition", exitPosition)
+	session.State:SetAttribute("Level6_Phase", session.ExitUnlocked and "EXIT_UNLOCKED" or "SEARCH")
 	local roles = session.Manifest.Layout and session.Manifest.Layout.Roles
-	session.State:SetAttribute("Level3_EntryRoomId",
+	session.State:SetAttribute("Level6_EntryRoomId",
 		if type(roles) == "table" then tostring(roles.EntryDistrictRoomId) else "")
-	session.State:SetAttribute("Level3_FirstCDRoomId",
+	session.State:SetAttribute("Level6_FirstCDRoomId",
 		if type(roles) == "table" then tostring(roles.FirstCDRoomId) else "")
 	publishCDBeacons(session)
-	workspace:SetAttribute("Level3Modules", insertedCount)
-	workspace:SetAttribute("Level3ModuleGoal", session.ModuleGoal)
-	workspace:SetAttribute("Level3CDsCollected", collectedCount)
-	workspace:SetAttribute("Level3CDsCarried", heldCount)
-	workspace:SetAttribute("Level3CDsDropped", droppedCount)
-	workspace:SetAttribute("Level3ExitUnlocked", session.ExitUnlocked)
-	workspace:SetAttribute("Level3ExitGuideActive", false)
+	workspace:SetAttribute("Level6Modules", insertedCount)
+	workspace:SetAttribute("Level6ModuleGoal", session.ModuleGoal)
+	workspace:SetAttribute("Level6CDsCollected", collectedCount)
+	workspace:SetAttribute("Level6CDsCarried", heldCount)
+	workspace:SetAttribute("Level6CDsDropped", droppedCount)
+	workspace:SetAttribute("Level6ExitUnlocked", session.ExitUnlocked)
+	workspace:SetAttribute("Level6ExitGuideActive", false)
 end
 
 local function captureModuleOriginals(module: AnyTable): AnyTable
@@ -435,10 +438,10 @@ end
 
 local function restoreModule(module: AnyTable, originals: AnyTable, enablePrompt: boolean)
 	if module.Model.Parent then
-		module.Model:SetAttribute("Level3_Collected", false)
-		module.Model:SetAttribute("Level3_CDState", "WORLD")
-		module.Model:SetAttribute("Level3_CDOwnerUserId", 0)
-		module.Model:SetAttribute("Level3_CDSource", true)
+		module.Model:SetAttribute("Level6_Collected", false)
+		module.Model:SetAttribute("Level6_CDState", "WORLD")
+		module.Model:SetAttribute("Level6_CDOwnerUserId", 0)
+		module.Model:SetAttribute("Level6_CDSource", true)
 	end
 	if module.Prompt.Parent then module.Prompt.Enabled = enablePrompt end
 	for object, values in pairs(originals.Objects) do
@@ -458,7 +461,7 @@ end
 
 local function hideCollectedModule(session: AnyTable, module: AnyTable)
 	module.Prompt.Enabled = false
-	module.Model:SetAttribute("Level3_Collected", true)
+	module.Model:SetAttribute("Level6_Collected", true)
 	-- The jewel case and illustrated cover are persistent environmental evidence.
 	-- Only the physical disc and hub leave the table when the pickup succeeds.
 	local originals = session.ModuleOriginals[module.Index].Objects
@@ -475,7 +478,7 @@ end
 
 local unlockExit: any
 
--- LEVEL3_TEAM_CD_RELAY_20260822
+-- LEVEL6_TEAM_CD_RELAY_20260822
 -- Every disc has exactly one authoritative state:
 -- WORLD -> CARRIED -> INSERTED, with DROPPED as the recoverable death fallback.
 local function heldIndices(session: AnyTable, player: Player): {number}
@@ -496,8 +499,8 @@ local function updatePlayerHeldAttributes(session: AnyTable, player: Player)
 	for _, index in ipairs(indices) do
 		mask += 2 ^ (index - 1)
 	end
-	player:SetAttribute("Level3_HeldCDCount", #indices)
-	player:SetAttribute("Level3_HeldCDMask", mask)
+	player:SetAttribute("Level6_HeldCDCount", #indices)
+	player:SetAttribute("Level6_HeldCDMask", mask)
 end
 
 local function destroyCarryVisual(record: AnyTable)
@@ -523,10 +526,10 @@ local function cloneDiscPair(record: AnyTable): (BasePart, BasePart)
 	local sourceDisc = record.Module.PickupParts[1]
 	local sourceHub = record.Module.PickupParts[2]
 	assert(sourceDisc and sourceDisc:IsA("BasePart") and sourceHub and sourceHub:IsA("BasePart"),
-		"Level 3 CD runtime clone requires the authored disc and hub")
+		"Level 6 CD runtime clone requires the authored disc and hub")
 	local disc = sourceDisc:Clone()
 	local hub = sourceHub:Clone()
-	assert(disc:IsA("BasePart") and hub:IsA("BasePart"), "Level 3 CD runtime clone produced invalid geometry")
+	assert(disc:IsA("BasePart") and hub:IsA("BasePart"), "Level 6 CD runtime clone produced invalid geometry")
 	return disc, hub
 end
 
@@ -547,10 +550,10 @@ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
 		if record and record.State == "CARRIED" and record.Owner == player then
 			local model = Instance.new("Model")
 			model.Name = string.format("Carried Birthday Music CD %02d", index)
-			model:SetAttribute("Level3_CDIndex", index)
-			model:SetAttribute("Level3_CDState", "CARRIED")
-			model:SetAttribute("Level3_CDOwnerUserId", player.UserId)
-			model:SetAttribute("Level3_CDCarryVisual", true)
+			model:SetAttribute("Level6_CDIndex", index)
+			model:SetAttribute("Level6_CDState", "CARRIED")
+			model:SetAttribute("Level6_CDOwnerUserId", player.UserId)
+			model:SetAttribute("Level6_CDCarryVisual", true)
 			local disc, hub = cloneDiscPair(record)
 			disc.Name = "Carried CD Disc"
 			hub.Name = "Carried CD Hub"
@@ -561,8 +564,8 @@ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
 			local carryCF = anchorPart.CFrame
 				* CFrame.new(spread, .05 + (slot % 2) * .08, anchorPart.Size.Z * .5 + .18 + slot * .018)
 				* CFrame.Angles(0, math.rad(90), fan)
-			disc.CFrame = carryCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-			hub.CFrame = carryCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+			disc.CFrame = carryCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+			hub.CFrame = carryCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
 			disc.Parent = model
 			hub.Parent = model
 			local torsoWeld = Instance.new("WeldConstraint")
@@ -587,8 +590,8 @@ local function setRecordState(record: AnyTable, stateName: string, owner: Player
 	record.Owner = owner
 	local sourceModel = record.Module.Model
 	if sourceModel and sourceModel.Parent then
-		sourceModel:SetAttribute("Level3_CDState", stateName)
-		sourceModel:SetAttribute("Level3_CDOwnerUserId", owner and owner.UserId or 0)
+		sourceModel:SetAttribute("Level6_CDState", stateName)
+		sourceModel:SetAttribute("Level6_CDOwnerUserId", owner and owner.UserId or 0)
 	end
 end
 
@@ -660,18 +663,18 @@ end
 local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: Vector3)
 	local model = Instance.new("Model")
 	model.Name = string.format("Dropped Birthday Music CD %02d", record.Index)
-	model:SetAttribute("Level3_CDIndex", record.Index)
-	model:SetAttribute("Level3_CDState", "DROPPED")
-	model:SetAttribute("Level3_CDOwnerUserId", 0)
-	model:SetAttribute("Level3_CDDroppedPickup", true)
+	model:SetAttribute("Level6_CDIndex", record.Index)
+	model:SetAttribute("Level6_CDState", "DROPPED")
+	model:SetAttribute("Level6_CDOwnerUserId", 0)
+	model:SetAttribute("Level6_CDDroppedPickup", true)
 	local disc, hub = cloneDiscPair(record)
 	disc.Name = "Dropped CD Disc"
 	hub.Name = "Dropped CD Hub"
 	configureRuntimeDiscPart(disc, true, true)
 	configureRuntimeDiscPart(hub, true, false)
 	local dropCF = CFrame.new(position + Vector3.new(0, .16, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	disc.CFrame = dropCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-	hub.CFrame = dropCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+	disc.CFrame = dropCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+	hub.CFrame = dropCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
 	disc.Parent = model
 	hub.Parent = model
 	model.PrimaryPart = disc
@@ -726,8 +729,8 @@ local function groundedDropPosition(session: AnyTable, _player: Player, rawPosit
 		-- waiting room below the map must never become recovery surfaces.
 		local floors: {Instance} = {}
 		for _, object in ipairs(session.Manifest.World:GetDescendants()) do
-			if object:IsA("BasePart") and (object.Name == "Level 3 Room Floor"
-				or object.Name == "Level 3 Corridor Floor") then
+			if object:IsA("BasePart") and (object.Name == "Level 6 Room Floor"
+				or object.Name == "Level 6 Corridor Floor") then
 				table.insert(floors, object)
 			end
 		end
@@ -930,22 +933,22 @@ local function updateDiscPlayerVisuals(session: AnyTable, animate: boolean)
 	local discPlayer = session.DiscPlayer
 	if not discPlayer or not discPlayer.Model or not discPlayer.Model.Parent then return end
 	local insertedCount = session.InsertedCount or 0
-	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
-	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
+	discPlayer.Model:SetAttribute("Level6_CDInsertedCount", insertedCount)
+	discPlayer.Model:SetAttribute("Level6_CDGoal", session.ModuleGoal)
 	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
-		discPlayer.StatusLabel.Text = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
+		discPlayer.StatusLabel.Text = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
 	end
 	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
 		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
-			then "EXIT SIGNAL RESTORED" else "INSERT CDS INTO VCR"
+			then "EXIT SIGNAL RESTORED" else "INSERT CARRIED CDS"
 	end
 	for slotNumber, slot in ipairs(discPlayer.Slots or {}) do
 		local active = slotNumber <= insertedCount
-		slot.Receiver:SetAttribute("Level3_CDInserted", active)
-		slot.Disc:SetAttribute("Level3_CDState", active and "INSERTED" or "EMPTY")
+		slot.Receiver:SetAttribute("Level6_CDInserted", active)
+		slot.Disc:SetAttribute("Level6_CDState", active and "INSERTED" or "EMPTY")
 		slot.Disc.Transparency = active and .08 or 1
 		slot.Hub.Transparency = active and .04 or 1
-		slot.Indicator:SetAttribute("Level3_CDIndicatorOn", active)
+		slot.Indicator:SetAttribute("Level6_CDIndicatorOn", active)
 		slot.Indicator.Material = active and Enum.Material.Neon or Enum.Material.SmoothPlastic
 		slot.Indicator.Color = active and Color3.fromRGB(56, 255, 176) or Color3.fromRGB(20, 37, 35)
 		if animate and active then
@@ -958,8 +961,8 @@ local function updateDiscPlayerVisuals(session: AnyTable, animate: boolean)
 		slot.Light.Enabled = active
 	end
 	discPlayer.Prompt.ActionText = insertedCount >= session.ModuleGoal
-		and "SIGNAL RESTORED" or "INSERT CDS INTO VCR"
-	discPlayer.Prompt.ObjectText = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
+		and "SIGNAL RESTORED" or "INSERT CARRIED CDS"
+	discPlayer.Prompt.ObjectText = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
 	discPlayer.Prompt.Enabled = insertedCount < session.ModuleGoal
 end
 
@@ -1010,7 +1013,7 @@ local function insertHeldCDs(session: AnyTable, player: Player)
 end
 
 
--- LEVEL3_COMPLETION_ESCAPE_GUIDE_DISABLED_20260824
+-- LEVEL6_COMPLETION_ESCAPE_GUIDE_DISABLED_20260824
 -- The finale is deliberately lightless. These legacy marker helpers remain only
 -- so older generated sessions can be normalized during cleanup; no active path calls them.
 local function markNearestGuideFixture(container: Instance, target: Vector3): number
@@ -1018,8 +1021,8 @@ local function markNearestGuideFixture(container: Instance, target: Vector3): nu
 	local bestLight: SurfaceLight? = nil
 	local bestDistance = math.huge
 	for _, object in ipairs(container:GetDescendants()) do
-		if object:IsA("BasePart") and object.Name == "Level 3 Fluorescent Diffuser" then
-			local candidate = object:FindFirstChild("Level 3 Fluorescent Light")
+		if object:IsA("BasePart") and object.Name == "Level 6 Fluorescent Diffuser" then
+			local candidate = object:FindFirstChild("Level 6 Fluorescent Light")
 			if candidate and candidate:IsA("SurfaceLight") then
 				local distance = (object.Position - target).Magnitude
 				if distance < bestDistance then
@@ -1031,25 +1034,25 @@ local function markNearestGuideFixture(container: Instance, target: Vector3): nu
 		end
 	end
 	if not bestPart or not bestLight then return 0 end
-	bestPart:SetAttribute("Level3_ExitGuideLamp", true)
-	bestLight:SetAttribute("Level3_ExitGuideLight", true)
+	bestPart:SetAttribute("Level6_ExitGuideLamp", true)
+	bestLight:SetAttribute("Level6_ExitGuideLight", true)
 	return 1
 end
 
 local function markGuideLight(light: Light?): number
 	if not light or not light.Parent then return 0 end
-	light:SetAttribute("Level3_ExitGuideLight", true)
+	light:SetAttribute("Level6_ExitGuideLight", true)
 	local parent = light.Parent
-	if parent:IsA("BasePart") then parent:SetAttribute("Level3_ExitGuideLamp", true) end
+	if parent:IsA("BasePart") then parent:SetAttribute("Level6_ExitGuideLamp", true) end
 	return 1
 end
 
 local function prepareExitGuide(session: AnyTable, startRoomId: string)
 	session.ExitGuideStartRoom = ""
 	session.ExitGuideCount = 0
-	session.Manifest.World:SetAttribute("Level3_ExitGuideActive", false)
-	session.Manifest.World:SetAttribute("Level3_ExitGuideStartRoom", "")
-	session.Manifest.World:SetAttribute("Level3_ExitGuideLampCount", 0)
+	session.Manifest.World:SetAttribute("Level6_ExitGuideActive", false)
+	session.Manifest.World:SetAttribute("Level6_ExitGuideStartRoom", "")
+	session.Manifest.World:SetAttribute("Level6_ExitGuideLampCount", 0)
 	if false then
 		local manifest = session.Manifest
 	local layout = manifest.Layout
@@ -1120,9 +1123,9 @@ local function prepareExitGuide(session: AnyTable, startRoomId: string)
 	end
 	session.ExitGuideStartRoom = startRoomId
 	session.ExitGuideCount = guideCount
-	manifest.World:SetAttribute("Level3_ExitGuideActive", true)
-	manifest.World:SetAttribute("Level3_ExitGuideStartRoom", startRoomId)
-	manifest.World:SetAttribute("Level3_ExitGuideLampCount", guideCount)
+	manifest.World:SetAttribute("Level6_ExitGuideActive", true)
+	manifest.World:SetAttribute("Level6_ExitGuideStartRoom", startRoomId)
+	manifest.World:SetAttribute("Level6_ExitGuideLampCount", guideCount)
 	end
 end
 
@@ -1130,20 +1133,20 @@ unlockExit = function(session: AnyTable, startRoomId: string)
 	if session.ExitUnlocked or not validSession(session) then return end
 	session.ExitUnlocked = true
 	local completionStartedAt = workspace:GetServerTimeNow()
-	session.State:SetAttribute("Level3_CompletionSongStartServerTime", completionStartedAt)
-	session.State:SetAttribute("Level3_CompletionDimStartedAtServerTime", completionStartedAt)
-	session.State:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
-	workspace:SetAttribute("Level3CompletionDimStartedAtServerTime", completionStartedAt)
-	workspace:SetAttribute("Level3CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	session.State:SetAttribute("Level6_CompletionSongStartServerTime", completionStartedAt)
+	session.State:SetAttribute("Level6_CompletionDimStartedAtServerTime", completionStartedAt)
+	session.State:SetAttribute("Level6_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	workspace:SetAttribute("Level6CompletionDimStartedAtServerTime", completionStartedAt)
+	workspace:SetAttribute("Level6CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
 	session.ExitGuideStartRoom = ""
 	session.ExitGuideCount = 0
-	session.Manifest.World:SetAttribute("Level3_ExitGuideActive", false)
-	session.Manifest.World:SetAttribute("Level3_ExitGuideStartRoom", "")
-	session.Manifest.World:SetAttribute("Level3_ExitGuideLampCount", 0)
+	session.Manifest.World:SetAttribute("Level6_ExitGuideActive", false)
+	session.Manifest.World:SetAttribute("Level6_ExitGuideStartRoom", "")
+	session.Manifest.World:SetAttribute("Level6_ExitGuideLampCount", 0)
 	updateSharedState(session)
 
 	local portal = session.Manifest.ExitPortal
-	portal.Model:SetAttribute("Level3_ExitUnlocked", true)
+	portal.Model:SetAttribute("Level6_ExitUnlocked", true)
 	if portal.Wall and portal.Wall.Parent then
 		portal.Wall.CanCollide = false
 		portal.Wall.CanTouch = false
@@ -1162,7 +1165,7 @@ unlockExit = function(session: AnyTable, startRoomId: string)
 
 	local finalExit = session.Manifest.FinalExit
 	if finalExit and finalExit.Parent then
-		finalExit:SetAttribute("Level3_ExitPowered", true)
+		finalExit:SetAttribute("Level6_ExitPowered", true)
 		for _, object in ipairs(finalExit:GetDescendants()) do
 			if object:IsA("BasePart") and (object.Name == "Final Exit Energon Rail" or object.Name == "Final Exit Lock Core") then
 				playTween(session, object, TweenInfo.new(0.65, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -1206,7 +1209,7 @@ local function escapePlayer(session: AnyTable, player: Player)
 
 	session.Escaping[player] = true
 	session.EscapeOrdinal = (session.EscapeOrdinal or 0) + 1
-	player:SetAttribute("Escaped", true)
+	player:SetAttribute("Level6Escaped", true)
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.AssemblyAngularVelocity = Vector3.zero
 	local slots = {
@@ -1220,115 +1223,115 @@ local function escapePlayer(session: AnyTable, player: Player)
 end
 
 local function validateManifest(manifest: AnyTable, generation: number)
-	assert(type(manifest) == "table", "Level 3 objective manifest must be a table")
+	assert(type(manifest) == "table", "Level 6 objective manifest must be a table")
 	assert(type(generation) == "number" and generation == generation,
-		"Level 3 objective generation must be a valid number")
+		"Level 6 objective generation must be a valid number")
 	assert(manifest.World and manifest.World:IsA("Model") and manifest.World.Parent,
-		"Level 3 objective manifest is missing its live World model")
+		"Level 6 objective manifest is missing its live World model")
 	assert(manifest.Generation == generation,
-		"Level 3 objective manifest generation does not match Start generation")
-	assert(manifest.World:GetAttribute("Level3_Generation") == generation,
-		"Level 3 world generation attribute does not match Start generation")
+		"Level 6 objective manifest generation does not match Start generation")
+	assert(manifest.World:GetAttribute("Level6_Generation") == generation,
+		"Level 6 world generation attribute does not match Start generation")
 
 	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
-		string.format("Level 3 objective manifest must contain exactly %d modules", Configuration.ModuleGoal))
+		string.format("Level 6 objective manifest must contain exactly %d modules", Configuration.ModuleGoal))
 	local moduleIndexes: {[number]: boolean} = {}
 	local moduleRooms: {[string]: boolean} = {}
 	for _, module in ipairs(manifest.Modules) do
 		assert(type(module) == "table" and type(module.Index) == "number" and module.Index % 1 == 0,
-			"Level 3 objective manifest contains an invalid module record")
-		assert(not moduleIndexes[module.Index], "Level 3 objective manifest has a duplicate module index")
+			"Level 6 objective manifest contains an invalid module record")
+		assert(not moduleIndexes[module.Index], "Level 6 objective manifest has a duplicate module index")
 		moduleIndexes[module.Index] = true
 		assert(type(module.RoomId) == "string" and module.RoomId ~= "" and not moduleRooms[module.RoomId],
-			"Level 3 objective modules must occupy unique authored rooms")
+			"Level 6 objective modules must occupy unique authored rooms")
 		moduleRooms[module.RoomId] = true
 		assert(module.Model and module.Model:IsA("Model") and module.Model:IsDescendantOf(manifest.World),
-			"Level 3 module model is missing from the generated world")
+			"Level 6 module model is missing from the generated world")
 		assert(module.Prompt and module.Prompt:IsA("ProximityPrompt") and module.Prompt:IsDescendantOf(module.Model),
-			"Level 3 module is missing its ProximityPrompt")
+			"Level 6 module is missing its ProximityPrompt")
 		assert(module.Core and module.Core:IsA("BasePart") and module.Core:IsDescendantOf(module.Model),
-			"Level 3 CD is missing its jewel case core")
+			"Level 6 CD is missing its jewel case core")
 		assert(module.Pedestal and module.Pedestal:IsA("BasePart") and module.Pedestal:IsDescendantOf(module.Model),
-			"Level 3 CD is missing its placement marker")
+			"Level 6 CD is missing its placement marker")
 		assert(type(module.PickupParts) == "table" and #module.PickupParts == 2,
-			"Level 3 CD must expose exactly the disc and hub as pickup visuals")
+			"Level 6 CD must expose exactly the disc and hub as pickup visuals")
 		for _, pickupPart in ipairs(module.PickupParts) do
 			assert(pickupPart:IsA("BasePart") and pickupPart:IsDescendantOf(module.Model)
-				and pickupPart:GetAttribute("Level3_CDPickupVisual") == true,
-				"Level 3 CD pickup visual is invalid")
+				and pickupPart:GetAttribute("Level6_CDPickupVisual") == true,
+				"Level 6 CD pickup visual is invalid")
 		end
 	end
 
 	assert(type(manifest.Doors) == "table",
-		"Level 3 objective manifest door records must be a table")
+		"Level 6 objective manifest door records must be a table")
 	assert(#manifest.Doors == 0,
-		"Level 3 Revision 3 is doorless; unexpected door records in the manifest")
+		"Level 6 Revision 3 is doorless; unexpected door records in the manifest")
 	local portal = manifest.ExitPortal
 	assert(type(portal) == "table" and portal.Model and portal.Model:IsA("Model")
 		and portal.Model:IsDescendantOf(manifest.World),
-		"Level 3 objective manifest is missing its hidden exit portal")
+		"Level 6 objective manifest is missing its hidden exit portal")
 	assert(portal.Wall and portal.Wall:IsA("BasePart") and portal.Wall:IsDescendantOf(portal.Model),
-		"Level 3 hidden exit portal is missing its wall")
+		"Level 6 hidden exit portal is missing its wall")
 	assert(portal.Wall.CanCollide == true and portal.Wall.CanQuery == true,
-		"Level 3 hidden exit wall must begin solid and ray-queryable")
+		"Level 6 hidden exit wall must begin solid and ray-queryable")
 	assert(type(portal.FrameParts) == "table" and #portal.FrameParts == 8,
-		"Level 3 hidden exit portal must contain eight reveal-frame pieces")
+		"Level 6 hidden exit portal must contain eight reveal-frame pieces")
 	for _, framePart in ipairs(portal.FrameParts) do
 		assert(framePart:IsA("BasePart") and framePart:IsDescendantOf(portal.Model)
 			and framePart.Material == Enum.Material.Neon and framePart.Transparency >= 0.99,
-			"Level 3 hidden exit reveal frame is invalid")
+			"Level 6 hidden exit reveal frame is invalid")
 	end
 	local discPlayer = manifest.DiscPlayer or portal.DiscPlayer
 	assert(type(discPlayer) == "table" and discPlayer.Model and discPlayer.Model:IsA("Model")
 		and discPlayer.Model:IsDescendantOf(manifest.World),
-		"Level 3 objective manifest is missing its Signal Hall disc player")
+		"Level 6 objective manifest is missing its Signal Hall disc player")
 	assert(discPlayer.Prompt and discPlayer.Prompt:IsA("ProximityPrompt")
 		and discPlayer.Prompt:IsDescendantOf(discPlayer.Model),
-		"Level 3 disc player is missing its insert prompt")
+		"Level 6 disc player is missing its insert prompt")
 	assert(typeof(discPlayer.Position) == "Vector3",
-		"Level 3 disc player position must be a Vector3")
+		"Level 6 disc player position must be a Vector3")
 	assert(type(discPlayer.Slots) == "table" and #discPlayer.Slots == Configuration.ModuleGoal,
-		"Level 3 disc player must expose exactly five receiver slots")
+		"Level 6 disc player must expose exactly five receiver slots")
 	for expectedIndex, slot in ipairs(discPlayer.Slots) do
 		assert(type(slot) == "table" and slot.Index == expectedIndex,
-			"Level 3 disc player slot order is invalid")
+			"Level 6 disc player slot order is invalid")
 		assert(slot.Receiver and slot.Receiver:IsA("BasePart") and slot.Receiver:IsDescendantOf(discPlayer.Model),
-			"Level 3 disc player receiver is missing")
+			"Level 6 disc player receiver is missing")
 		assert(slot.Disc and slot.Disc:IsA("BasePart") and slot.Disc:IsDescendantOf(discPlayer.Model)
 			and slot.Disc.Transparency >= .99,
-			"Level 3 disc player inserted-disc visual must begin hidden")
+			"Level 6 disc player inserted-disc visual must begin hidden")
 		assert(slot.Hub and slot.Hub:IsA("BasePart") and slot.Hub:IsDescendantOf(discPlayer.Model)
 			and slot.Hub.Transparency >= .99,
-			"Level 3 disc player inserted hub must begin hidden")
+			"Level 6 disc player inserted hub must begin hidden")
 		assert(slot.Indicator and slot.Indicator:IsA("BasePart")
 			and slot.Indicator:IsDescendantOf(discPlayer.Model),
-			"Level 3 disc player indicator is missing")
+			"Level 6 disc player indicator is missing")
 		assert(slot.Light and slot.Light:IsA("Light") and slot.Light:IsDescendantOf(slot.Indicator)
 			and not slot.Light.Enabled,
-			"Level 3 disc player indicator light must begin off")
+			"Level 6 disc player indicator light must begin off")
 	end
 	assert(manifest.EscapeTrigger and manifest.EscapeTrigger:IsA("BasePart")
 		and manifest.EscapeTrigger:IsDescendantOf(manifest.World)
 		and not manifest.EscapeTrigger.CanCollide,
-		"Level 3 final escape trigger is missing from the generated world")
+		"Level 6 final escape trigger is missing from the generated world")
 	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
 		and manifest.ExitSafeSpawn:IsDescendantOf(manifest.World),
-		"Level 3 exit safe spawn is missing from the generated world")
-	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 3 exit position must be a Vector3")
+		"Level 6 exit safe spawn is missing from the generated world")
+	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 6 exit position must be a Vector3")
 	local finalHall = manifest.FinalHall
 	assert(type(finalHall) == "table" and finalHall.Model and finalHall.Model:IsA("Model")
 		and finalHall.Model:IsDescendantOf(manifest.World),
-		"Level 3 objective manifest is missing its final hall")
+		"Level 6 objective manifest is missing its final hall")
 	assert(typeof(finalHall.StartPoint) == "Vector3" and typeof(finalHall.EndPoint) == "Vector3"
 		and typeof(finalHall.Forward) == "Vector3" and type(finalHall.Length) == "number"
 		and finalHall.Length >= Configuration.Layout.ExitCorridorLength - .1,
-		"Level 3 final hall geometry is invalid")
+		"Level 6 final hall geometry is invalid")
 	assert(finalHall.HalfwayMarker and finalHall.HalfwayMarker:IsA("BasePart")
-		and finalHall.HalfwayMarker:GetAttribute("Level3_FinalHallHalfway") == true,
-		"Level 3 final hall halfway marker is missing")
+		and finalHall.HalfwayMarker:GetAttribute("Level6_FinalHallHalfway") == true,
+		"Level 6 final hall halfway marker is missing")
 	assert(finalHall.SpawnMarker and finalHall.SpawnMarker:IsA("BasePart")
-		and finalHall.SpawnMarker:GetAttribute("Level3_MallManagerFinaleSpawn") == true,
-		"Level 3 final hall Manager spawn marker is missing")
+		and finalHall.SpawnMarker:GetAttribute("Level6_MallManagerFinaleSpawn") == true,
+		"Level 6 final hall Manager spawn marker is missing")
 end
 
 local function scheduleIntro(session: AnyTable)
@@ -1352,8 +1355,8 @@ local function scheduleIntro(session: AnyTable)
 		disconnect(levelConnection)
 		task.delay(3.0, fireIntro)
 	end
-	roundConnection = workspace:GetAttributeChangedSignal("RoundActive"):Connect(scheduleWhenReady)
-	levelConnection = workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(scheduleWhenReady)
+	roundConnection = workspace:GetAttributeChangedSignal("Level6RoundActive"):Connect(scheduleWhenReady)
+	levelConnection = workspace:GetAttributeChangedSignal("Level6SelectedLevel"):Connect(scheduleWhenReady)
 	table.insert(session.Connections, roundConnection)
 	table.insert(session.Connections, levelConnection)
 	scheduleWhenReady()
@@ -1364,8 +1367,8 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 	validateManifest(manifest, generation)
 	local stateFolder, clientEvent = getInfrastructure()
 	local runtimeFolder = Instance.new("Folder")
-	runtimeFolder.Name = "Level 3 Runtime CDs"
-	runtimeFolder:SetAttribute("Level3_RuntimeCDFolder", true)
+	runtimeFolder.Name = "Level 6 Runtime CDs"
+	runtimeFolder:SetAttribute("Level6_RuntimeCDFolder", true)
 	runtimeFolder.Parent = manifest.World
 	local session: AnyTable = {
 		Manifest = manifest,
@@ -1455,21 +1458,21 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		end
 	end))
 
-	session.State:SetAttribute("Level3_FinalHallEligibleCount", 0)
-	session.State:SetAttribute("Level3_FinalHallCrossedCount", 0)
-	session.State:SetAttribute("Level3_FinalHallChaseTriggered", false)
-	session.State:SetAttribute("Level3_FinalHallChaseActive", false)
-	manifest.World:SetAttribute("Level3_FinalHallEligibleCount", 0)
-	manifest.World:SetAttribute("Level3_FinalHallCrossedCount", 0)
-	manifest.World:SetAttribute("Level3_FinalHallChaseTriggered", false)
-	manifest.World:SetAttribute("Level3_FinalHallChaseActive", false)
-	workspace:SetAttribute("Level3FinalHallEligibleCount", 0)
-	workspace:SetAttribute("Level3FinalHallCrossedCount", 0)
-	workspace:SetAttribute("Level3FinalHallChaseTriggered", false)
-	workspace:SetAttribute("Level3FinalHallChaseActive", false)
-	workspace:SetAttribute("Level3CompletionDimStartedAtServerTime", 0)
-	workspace:SetAttribute("Level3CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
-	portal.Model:SetAttribute("Level3_ExitUnlocked", false)
+	session.State:SetAttribute("Level6_FinalHallEligibleCount", 0)
+	session.State:SetAttribute("Level6_FinalHallCrossedCount", 0)
+	session.State:SetAttribute("Level6_FinalHallChaseTriggered", false)
+	session.State:SetAttribute("Level6_FinalHallChaseActive", false)
+	manifest.World:SetAttribute("Level6_FinalHallEligibleCount", 0)
+	manifest.World:SetAttribute("Level6_FinalHallCrossedCount", 0)
+	manifest.World:SetAttribute("Level6_FinalHallChaseTriggered", false)
+	manifest.World:SetAttribute("Level6_FinalHallChaseActive", false)
+	workspace:SetAttribute("Level6FinalHallEligibleCount", 0)
+	workspace:SetAttribute("Level6FinalHallCrossedCount", 0)
+	workspace:SetAttribute("Level6FinalHallChaseTriggered", false)
+	workspace:SetAttribute("Level6FinalHallChaseActive", false)
+	workspace:SetAttribute("Level6CompletionDimStartedAtServerTime", 0)
+	workspace:SetAttribute("Level6CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	portal.Model:SetAttribute("Level6_ExitUnlocked", false)
 	portal.Wall.CanCollide = true
 	portal.Wall.CanTouch = false
 	portal.Wall.CanQuery = true
@@ -1478,7 +1481,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 
 	local finalExit = manifest.FinalExit
 	if finalExit and finalExit.Parent then
-		finalExit:SetAttribute("Level3_ExitPowered", false)
+		finalExit:SetAttribute("Level6_ExitPowered", false)
 		for _, object in ipairs(finalExit:GetDescendants()) do
 			if object:IsA("BasePart") and (object.Name == "Final Exit Energon Rail" or object.Name == "Final Exit Lock Core") then
 				object.Transparency = 1
@@ -1498,7 +1501,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 	end)
 	table.insert(session.Connections, escapeConnection)
 
-	session.State:SetAttribute("Level3_CompletionSongStartServerTime", 0)
+	session.State:SetAttribute("Level6_CompletionSongStartServerTime", 0)
 	updateSharedState(session)
 	-- RoundUI owns the full radio briefing and synchronized subtitles.
 	-- Keep the persistent CD HUD and all later objective alerts, but do not
@@ -1519,9 +1522,9 @@ function ObjectiveController.Stop()
 	end
 	if session.RuntimeFolder and session.RuntimeFolder.Parent then session.RuntimeFolder:Destroy() end
 	for _, player in ipairs(Players:GetPlayers()) do
-		player:SetAttribute("Level3_HeldCDCount", 0)
-		player:SetAttribute("Level3_HeldCDMask", 0)
-		if player:GetAttribute("Level3_Room") ~= nil then player:SetAttribute("Level3_Room", "") end
+		player:SetAttribute("Level6_HeldCDCount", 0)
+		player:SetAttribute("Level6_HeldCDMask", 0)
+		if player:GetAttribute("Level6_Room") ~= nil then player:SetAttribute("Level6_Room", "") end
 	end
 	session.InsertedCount = 0
 	session.ModuleCount = 0
@@ -1537,7 +1540,7 @@ function ObjectiveController.Stop()
 
 	local finalExit = session.Manifest.FinalExit
 	if finalExit and finalExit.Parent then
-		finalExit:SetAttribute("Level3_ExitPowered", false)
+		finalExit:SetAttribute("Level6_ExitPowered", false)
 		for _, object in ipairs(finalExit:GetDescendants()) do
 			if object:IsA("BasePart") and (object.Name == "Final Exit Energon Rail" or object.Name == "Final Exit Lock Core") then
 				object.Transparency = 1
@@ -1553,7 +1556,7 @@ function ObjectiveController.Stop()
 
 	local portal = session.Manifest.ExitPortal
 	if portal then
-		if portal.Model and portal.Model.Parent then portal.Model:SetAttribute("Level3_ExitUnlocked", false) end
+		if portal.Model and portal.Model.Parent then portal.Model:SetAttribute("Level6_ExitUnlocked", false) end
 		if portal.Wall and portal.Wall.Parent then
 			portal.Wall.CanCollide = true
 			portal.Wall.CanTouch = false
@@ -1566,64 +1569,73 @@ function ObjectiveController.Stop()
 	end
 
 	for _, object in ipairs(session.Manifest.World:GetDescendants()) do
-		if object:GetAttribute("Level3_ExitGuideLight") ~= nil then object:SetAttribute("Level3_ExitGuideLight", nil) end
-		if object:GetAttribute("Level3_ExitGuideLamp") ~= nil then object:SetAttribute("Level3_ExitGuideLamp", nil) end
+		if object:GetAttribute("Level6_ExitGuideLight") ~= nil then object:SetAttribute("Level6_ExitGuideLight", nil) end
+		if object:GetAttribute("Level6_ExitGuideLamp") ~= nil then object:SetAttribute("Level6_ExitGuideLamp", nil) end
 	end
 	if session.Manifest.World.Parent then
-		session.Manifest.World:SetAttribute("Level3_ExitGuideActive", false)
-		session.Manifest.World:SetAttribute("Level3_ExitGuideStartRoom", "")
-		session.Manifest.World:SetAttribute("Level3_ExitGuideLampCount", 0)
+		session.Manifest.World:SetAttribute("Level6_ExitGuideActive", false)
+		session.Manifest.World:SetAttribute("Level6_ExitGuideStartRoom", "")
+		session.Manifest.World:SetAttribute("Level6_ExitGuideLampCount", 0)
 	end
 
 	if session.State and session.State.Parent then
-		session.State:SetAttribute("Level3_ModuleProgress", 0)
-		session.State:SetAttribute("Level3_ModuleGoal", 0)
-		session.State:SetAttribute("Level3_CDCollectedProgress", 0)
-		session.State:SetAttribute("Level3_CDInsertedProgress", 0)
-		session.State:SetAttribute("Level3_CDCarriedCount", 0)
-		session.State:SetAttribute("Level3_CDDroppedCount", 0)
-		session.State:SetAttribute("Level3_ExitUnlocked", false)
-		session.State:SetAttribute("Level3_CompletionSongStartServerTime", 0)
-		session.State:SetAttribute("Level3_CompletionDimStartedAtServerTime", 0)
-		session.State:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
-		session.State:SetAttribute("Level3_FinalHallEligibleCount", 0)
-		session.State:SetAttribute("Level3_FinalHallCrossedCount", 0)
-		session.State:SetAttribute("Level3_FinalHallChaseTriggered", false)
-		session.State:SetAttribute("Level3_FinalHallChaseActive", false)
-		session.State:SetAttribute("Level3_MallManagerHuntActive", false)
-		session.State:SetAttribute("Level3_ExitGuideActive", false)
-		session.State:SetAttribute("Level3_ExitGuideStartRoom", "")
-		session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
-		session.State:SetAttribute("Level3_ExitPosition", nil)
-		session.State:SetAttribute("Level3_Phase", "STOPPED")
-		session.State:SetAttribute("Level3_EntryRoomId", "")
-		session.State:SetAttribute("Level3_FirstCDRoomId", "")
-		-- L3_CD_BEACONS_20260921: a stale position outlives the round otherwise,
+		session.State:SetAttribute("Level6_ModuleProgress", 0)
+		session.State:SetAttribute("Level6_ModuleGoal", 0)
+		session.State:SetAttribute("Level6_CDCollectedProgress", 0)
+		session.State:SetAttribute("Level6_CDInsertedProgress", 0)
+		session.State:SetAttribute("Level6_CDCarriedCount", 0)
+		session.State:SetAttribute("Level6_CDDroppedCount", 0)
+		session.State:SetAttribute("Level6_ExitUnlocked", false)
+		session.State:SetAttribute("Level6_CompletionSongStartServerTime", 0)
+		session.State:SetAttribute("Level6_CompletionDimStartedAtServerTime", 0)
+		session.State:SetAttribute("Level6_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+		session.State:SetAttribute("Level6_FinalHallEligibleCount", 0)
+		session.State:SetAttribute("Level6_FinalHallCrossedCount", 0)
+		session.State:SetAttribute("Level6_FinalHallChaseTriggered", false)
+		session.State:SetAttribute("Level6_FinalHallChaseActive", false)
+		session.State:SetAttribute("Level6_MallManagerHuntActive", false)
+		session.State:SetAttribute("Level6_ExitGuideActive", false)
+		session.State:SetAttribute("Level6_ExitGuideStartRoom", "")
+		session.State:SetAttribute("Level6_ExitGuideLampCount", 0)
+		session.State:SetAttribute("Level6_ExitPosition", nil)
+		session.State:SetAttribute("Level6_Phase", "STOPPED")
+		session.State:SetAttribute("Level6_EntryRoomId", "")
+		session.State:SetAttribute("Level6_FirstCDRoomId", "")
+		-- L6_CD_BEACONS_20260921: a stale position outlives the round otherwise,
 		-- and the reader would keep a needle on a disc that no longer exists.
 		for index in pairs(session.CDRecords or {}) do
-			session.State:SetAttribute(string.format("Level3_CD%dState", index), "")
-			session.State:SetAttribute(string.format("Level3_CD%dRoom", index), "")
-			session.State:SetAttribute(string.format("Level3_CD%dPosition", index), nil)
+			session.State:SetAttribute(string.format("Level6_CD%dState", index), "")
+			session.State:SetAttribute(string.format("Level6_CD%dRoom", index), "")
+			session.State:SetAttribute(string.format("Level6_CD%dPosition", index), nil)
 		end
 	end
-	workspace:SetAttribute("Level3Modules", 0)
-	workspace:SetAttribute("Level3ModuleGoal", 0)
-	workspace:SetAttribute("Level3CDsCollected", 0)
-	workspace:SetAttribute("Level3CDsCarried", 0)
-	workspace:SetAttribute("Level3CDsDropped", 0)
-	workspace:SetAttribute("Level3ExitUnlocked", false)
-	workspace:SetAttribute("Level3ExitGuideActive", false)
-	workspace:SetAttribute("Level3CompletionDimStartedAtServerTime", 0)
-	workspace:SetAttribute("Level3CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
-	workspace:SetAttribute("Level3FinalHallEligibleCount", 0)
-	workspace:SetAttribute("Level3FinalHallCrossedCount", 0)
-	workspace:SetAttribute("Level3FinalHallChaseTriggered", false)
-	workspace:SetAttribute("Level3FinalHallChaseActive", false)
-	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	workspace:SetAttribute("Level6Modules", 0)
+	workspace:SetAttribute("Level6ModuleGoal", 0)
+	workspace:SetAttribute("Level6CDsCollected", 0)
+	workspace:SetAttribute("Level6CDsCarried", 0)
+	workspace:SetAttribute("Level6CDsDropped", 0)
+	workspace:SetAttribute("Level6ExitUnlocked", false)
+	workspace:SetAttribute("Level6ExitGuideActive", false)
+	workspace:SetAttribute("Level6CompletionDimStartedAtServerTime", 0)
+	workspace:SetAttribute("Level6CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	workspace:SetAttribute("Level6FinalHallEligibleCount", 0)
+	workspace:SetAttribute("Level6FinalHallCrossedCount", 0)
+	workspace:SetAttribute("Level6FinalHallChaseTriggered", false)
+	workspace:SetAttribute("Level6FinalHallChaseActive", false)
+	workspace:SetAttribute("Level6MallManagerHuntActive", false)
 end
 
 -- Studio-only deterministic hooks keep multiplayer lifecycle regressions testable
 -- without exposing any client RemoteEvent or production bypass.
+function ObjectiveController.ReleaseParticipant(player: Player)
+	local session = activeSession
+	if not session then return end
+	dropHeldCDs(session, player, nil)
+	session.FinalHallCrossed[player] = nil
+	session.LastKnownPositions[player] = nil
+	session.LastGroundPositions[player] = nil
+end
+
 function ObjectiveController.DebugCollectCD(player: Player, index: number): boolean
 	if not RunService:IsStudio() then return false end
 	local session = activeSession

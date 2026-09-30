@@ -1,13 +1,13 @@
 --!strict
--- Level 3 Layout Generator
+-- Level 6 Layout Generator
 -- Deterministic, server-side plan generation for the Mall Backrooms Party.
 --
 -- The generator deliberately emits only straight, axis-aligned connections and
 -- reserves at most one connection on each side of every room. That contract lets
--- the current Level 3 World Builder cut one centered opening per side without
+-- the current Level 6 World Builder cut one centered opening per side without
 -- overlapping doors or producing diagonal corridors.
 
-local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local Configuration = require(script.Parent:WaitForChild("Level 6 Configuration"))
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 
 local LayoutGenerator = {}
@@ -21,7 +21,7 @@ local MODULE_GOAL = 5
 local ENTRY_AND_GATEWAY_LINKS = 4
 local MAX_SEED = 2147483646
 
--- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x5 room grid.
+-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.
 -- Configuration.Layout advertises the same numbers to the test suite and world
 -- builder, so a config edit that the generator cannot honor must fail loudly
 -- instead of silently generating the old shape.
@@ -29,7 +29,7 @@ assert(Configuration.Layout.DistrictCount == DISTRICT_COUNT
 	and Configuration.Layout.RoomsPerDistrict == ROOMS_PER_DISTRICT
 	and ROOMS_PER_DISTRICT == GRID_ROWS * GRID_COLUMNS
 	and Configuration.Layout.GeneratorVersion == VERSION,
-	"Level 3 Configuration.Layout district sizing drifted from the generator's fixed grid")
+	"Level 6 Configuration.Layout district sizing drifted from the generator's fixed grid")
 
 local DEFAULTS = {
 	GenerationAttempts = 24,
@@ -67,7 +67,7 @@ local function resolveTuning()
 	local configuredLayout = Master.Overlay(
 		if type((Configuration :: any).Layout) == "table"
 			then (Configuration :: any).Layout else {},
-		"L3Layout")
+		"L6Layout")
 
 	local function integerSetting(name, defaultValue, minimum, maximum)
 		local value = tonumber(configuredLayout[name])
@@ -331,7 +331,7 @@ local function makeHash(layout)
 	for index = 1, #text do
 		hash = (hash * 33 + string.byte(text, index)) % 4294967296
 	end
-	return string.format("L3-%d-%08x", VERSION, hash)
+	return string.format("L6-%d-%08x", VERSION, hash)
 end
 
 local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
@@ -375,7 +375,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 
 	local arrival = addRoom({
 		Id = "Arrival",
-		Name = "Level 3 Arrival",
+		Name = "Level 6 Arrival",
 		X = 0,
 		Z = rowZ[entryRow],
 		W = Tuning.ArrivalWidth,
@@ -437,7 +437,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 				local isSignal = sectionIndex == DISTRICT_COUNT
 					and column == GRID_COLUMNS and row == exitRow
 				local id = if isSignal then "SignalHall"
-					else string.format("L3_S%d_R%02d", sectionIndex, slotNumber)
+					else string.format("L6_S%d_R%02d", sectionIndex, slotNumber)
 				local room = {
 					Id = id,
 					Name = if isSignal then "Signal Hall"
@@ -501,7 +501,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	local exitGap = Tuning.ExitCorridorLength
 	local exitRoom = addRoom({
 		Id = "Exit",
-		Name = "Level 3 Exit",
+		Name = "Level 6 Exit",
 		X = signalHall.X + signalHall.W * 0.5 + exitGap + Tuning.ExitWidth * 0.5,
 		Z = signalHall.Z,
 		W = Tuning.ExitWidth,
@@ -528,7 +528,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		local side = cardinalSide(a, b)
 		if not side then return nil, "non-axis-aligned link " .. key end
 		local link = {
-			Id = string.format("Level3_Link_%02d", #layout.Links + 1),
+			Id = string.format("Level6_Link_%02d", #layout.Links + 1),
 			A = a.Id,
 			B = b.Id,
 			Door = properties.Door or "Open",
@@ -736,7 +736,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		table.insert(chosenModules, room)
 	end
 
-	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921.
+	-- L6_FIRST_CD_IN_THE_ENTRY_ROOM_20260921.
 	-- gatewaySpecs[1].B is the far side of the Entry gateway -- the room the
 	-- player physically walks into from the arrival elevator, and Arrival's only
 	-- link -- so seeding it here puts one visible CD on its first table instead
@@ -842,7 +842,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	end
 	layout.RoomFloorArea = 0
 	for _, room in ipairs(layout.Rooms) do layout.RoomFloorArea += room.W * room.D end
-	-- Room area follows the validated width/depth tuning; no hardcoded minimum blocks a live Master override.
+	assert(layout.RoomFloorArea >= 160072, "Level 6 cannot be smaller than current Level 3")
 	layout.LayoutHash = makeHash(layout)
 	return layout
 end
@@ -1076,7 +1076,7 @@ function LayoutGenerator.Validate(layout)
 	for _, room in ipairs(layout.Rooms) do
 		if room.Role == "Room" and #layout.Adjacency[room.Id] == 1 then deadEnds += 1 end
 	end
-	if deadEnds < 1 then return fail("Level 3 requires a non-finale dead end") end
+	if deadEnds < 1 then return fail("preview requires a non-finale dead end") end
 	local straight, vertical = straightRuns(layout)
 	if layout.MaximumStraightRun ~= straight or layout.MaximumVerticalRun ~= vertical then
 		return fail("straight-run diagnostics are stale")
@@ -1141,7 +1141,7 @@ function LayoutGenerator.Validate(layout)
 		or layout.Roles.MallManagerSpawnRoomId ~= "SignalHall" then
 		return fail("role metadata is incomplete")
 	end
-	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921: the guarantee, restated where a
+	-- L6_FIRST_CD_IN_THE_ENTRY_ROOM_20260921: the guarantee, restated where a
 	-- mutated or hand-built plan is rejected rather than only where it is made.
 	local firstCDRoom = layout.RoomById[tostring(layout.Roles.FirstCDRoomId)]
 	if layout.Roles.FirstCDRoomId ~= layout.Roles.EntryDistrictRoomId
@@ -1190,7 +1190,7 @@ function LayoutGenerator.Generate(requestedSeed)
 		end
 		table.insert(failures, string.format("fallback seed %d: %s", seed, tostring(generationError)))
 	end
-	error("Level 3 layout generation failed: " .. table.concat(failures, " | "))
+	error("Level 6 layout generation failed: " .. table.concat(failures, " | "))
 end
 
 LayoutGenerator.Tuning = Tuning
