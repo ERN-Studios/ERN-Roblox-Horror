@@ -483,3 +483,16 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   token 93116899475472, potion 120211340805188, shield 126728249949579); milestones and claims
   unchanged. Studio's Device Simulator still reports a mouse and keyboard, so touch tiers only
   show there with `workspace:SetAttribute("ForceTouchUI", true)`.
+
+### Added 2026-09-30 — Level 4 rebuilt in Blender
+
+- **`Workspace."Level 4 Cinema Blender"` is the Level 4 preview now** (x=29000, same layout as the
+  original +6000 X). `Level4V4PreviewAccess.MODEL_NAME` points at it; the old `"Level 4 Cinema Preview"`
+  is kept untouched. Pipeline and model structure: `tools/level4_blender/README.md`; blend:
+  `G:\Blender\Level4_Cinema\Level4_Cinema.blend`.
+- Visual MeshParts never collide; `Collision` holds the original layout's collidable parts invisibly.
+  Doors are their own Models, pushed open by `Doors.PushDoors` (street doors welded shut).
+- Owner edits applied in `layout_edits.py`: flat walls above openings, Concessions opening 8 studs taller.
+- Publishing from a session: Studio has no scriptable publish and synthetic clicks on File > Publish did
+  nothing; Codex computer use (`codex exec --enable computer_use`) published it. The public asset
+  `Updated` timestamp does not move on publish — trust Studio's "Published" toast.

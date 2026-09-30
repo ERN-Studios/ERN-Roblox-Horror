@@ -3,7 +3,8 @@
 local Players = game:GetService("Players")
 local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
 
-local MODEL_NAME = "Level 4 Cinema Preview"
+-- 2026-09-30: the Blender-built cinema; the original "Level 4 Cinema Preview" model is kept untouched.
+local MODEL_NAME = "Level 4 Cinema Blender"
 local EXIT_NAME = "Level4V4Exit"
 local ENTER_PROMPT = "Level4DeveloperPreviewPrompt"
 local RETURN_PROMPT = "Level4DeveloperPreviewReturnPrompt"
