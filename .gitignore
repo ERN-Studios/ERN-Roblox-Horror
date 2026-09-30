@@ -60,3 +60,11 @@
 !/artifacts/level6-textures-20260930/native-*/backup-metadata-summary.json
 /artifacts/level6-textures-20260930/live-reference-*/*
 !/artifacts/level6-textures-20260930/live-reference-*/capture-summary.json
+
+# Offline Level 6 PBR revision: keep assets/reviews, exclude transient outputs.
+/artifacts/level6-blender-revision-20260930/**/*.log
+/artifacts/level6-blender-revision-20260930/**/*.blend1
+/artifacts/level6-blender-revision-20260930/**/__pycache__/
+/artifacts/level6-blender-revision-20260930/review/*-result.json
+/artifacts/level6-blender-revision-20260930/review/*-prompt.txt
+/tools/level6_build/__pycache__/

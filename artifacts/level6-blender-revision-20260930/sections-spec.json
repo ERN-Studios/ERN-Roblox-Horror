@@ -1,0 +1,101 @@
+{
+  "schema": "level6-back-service-sections/1",
+  "source": "tools/level6_build/revision_sections.py",
+  "scope": "Append-only extension to the existing L6K_ worn-party asset library; no original prefab, gameplay controller, or Studio instance is modified by this module.",
+  "coordinate_contract": {
+    "units": "1 Blender unit = 1 Roblox stud",
+    "blender_up": "+Z",
+    "prefab_front": "-Y",
+    "roblox_axis_map": "(x,y,z) -> (x,z,-y)",
+    "room_origin": "center of floor at finished floor elevation",
+    "room_local_bounds_xyz": [[-9, -12, -1.02], [9, 12, 12]],
+    "room_size_xyz": [18, 24, 12],
+    "floor_collision": {"center_xyz": [0, 0, -0.5], "size_xyz": [18, 24, 1]},
+    "floor_finish": "separate 0.04-stud visual mesh above the structural collision slab",
+    "portal_clearance": {"width_studs": 8, "height_studs": 10.5, "clear_x": [-4, 4]},
+    "join_anchors": {
+      "JoinSouth": {"xyz": [0, -12, 0], "outward_normal_xyz": [0, -1, 0]},
+      "JoinNorth": {"xyz": [0, 12, 0], "outward_normal_xyz": [0, 1, 0]}
+    },
+    "straight_join_example": "With equal rotation, place the next room center 24 studs along local +Y so its JoinSouth touches this room's JoinNorth.",
+    "minimum_unobstructed_center_lane": "local X -3 to +3, floor to 6 studs, across the full room depth"
+  },
+  "materials": {
+    "RoomKitchenPrep": {"floor": "kitchen_tile", "lower_wall": "kitchen_tile", "upper_wall": "orange_wall", "kick": "grey_metal"},
+    "RoomUtilityHall": {"floor": "diamondplate", "lower_wall": "orange_wall", "upper_wall": "orange_wall", "kick": "diamondplate"},
+    "RoomStaffNook": {"floor": "carpet_city", "lower_wall": "wallpaper", "upper_wall": "wallpaper", "kick": "wood_worn", "runner": "carpet_red"},
+    "prop_palette": ["grey_metal", "black_metal", "chrome", "cardboard", "paper", "rubber", "laminate", "wood_worn", "ivory_plastic", "red_plastic"]
+  },
+  "assets": {
+    "KitchenPrepBench": {"collection": "L6K_KitchenPrepBench", "size_xyz": [5.8, 2.4, 4.2], "collision_boxes": 1, "anchors": ["Sink"], "description": "Four-leg battered steel preparation counter with an open basin, drain, lower rack, and short bent tap."},
+    "KitchenShelf": {"collection": "L6K_KitchenShelf", "size_xyz": [4.7, 1.4, 6.6], "collision_boxes": 1, "description": "Pressed metal rack with mixed cardboard cartons, cups, and worn cookware."},
+    "KitchenHood": {"collection": "L6K_KitchenHood", "collision_boxes": 0, "description": "Wall-mounted sheet-metal canopy, grease grille, and square extractor duct."},
+    "KitchenFridge": {"collection": "L6K_KitchenFridge", "size_xyz": [2.51, 2.59, 6.86], "collision_boxes": 1, "anchors": ["Handle"], "description": "Yellowed two-door refrigerator with blunt handles and base ventilation."},
+    "KitchenStove": {"collection": "L6K_KitchenStove", "size_xyz": [3.18, 2.64, 3.52], "collision_boxes": 1, "anchors": ["OvenControls"], "description": "Four-burner range with enamel top, oven window, and mechanical control knobs."},
+    "KitchenWasteBin": {"collection": "L6K_KitchenWasteBin", "size_xyz": [1.7, 1.7, 2.04], "collision_boxes": 1, "description": "Tapered institutional refuse bin with dark opening and scuffed label."},
+    "KitchenTrayStack": {"collection": "L6K_KitchenTrayStack", "collision_boxes": 0, "description": "Four bent steel catering trays, placed on the preparation surface."},
+    "StaffBreakCounter": {"collection": "L6K_StaffBreakCounter", "size_xyz": [5.5, 2.3, 4.45], "collision_boxes": 1, "anchors": ["Microwave"], "description": "Cheap laminate break counter with an old box microwave and steel coffee urn."}
+  },
+  "rooms": {
+    "RoomKitchenPrep": {
+      "collection": "L6K_RoomKitchenPrep",
+      "role": "kitchen and food preparation side pocket",
+      "collision_boxes_including_fixtures": 14,
+      "fixture_instances": [
+        ["KitchenPrepBench", [-6.25, -5.4, 0], 90],
+        ["KitchenTrayStack", [-6.1, -6.7, 3.34], 90],
+        ["KitchenStove", [-6.25, 3.15, 0], 90],
+        ["KitchenHood", [-6.25, 3.15, 0], 90],
+        ["KitchenFridge", [6.15, -7.2, 0], 0],
+        ["KitchenShelf", [6.35, 3.4, 0], -90],
+        ["KitchenWasteBin", [5.9, -1.35, 0], 0]
+      ]
+    },
+    "RoomUtilityHall": {
+      "collection": "L6K_RoomUtilityHall",
+      "role": "maintenance extension with a repair bench, shelving, electrical panel, and mop cart",
+      "collision_boxes_including_fixtures": 13,
+      "fixture_instances": [
+        ["WorkshopBench", [-6.2, -1.1, 0], 90],
+        ["Pegboard", [-7.37, -1.1, 4.4], 90],
+        ["SupplyShelf", [6.35, -4.5, 0], -90],
+        ["BreakerPanel", [7.36, 5.5, 3.1], -90],
+        ["MopBucket", [5.35, 6.6, 0], 0],
+        ["KitchenWasteBin", [-5.7, 7.8, 0], 0]
+      ]
+    },
+    "RoomStaffNook": {
+      "collection": "L6K_RoomStaffNook",
+      "role": "former staff break area retaining a little of the party venue's red trim",
+      "collision_boxes_including_fixtures": 16,
+      "fixture_instances": [
+        ["StaffBreakCounter", [-6.15, -1.7, 0], 90],
+        ["ChairRed", [4.8, -4.5, 0], -90],
+        ["ChairBlue", [4.8, 2.9, 0], -90],
+        ["KitchenFridge", [6.15, 7.25, 0], 0],
+        ["KitchenWasteBin", [-5.9, 7.4, 0], 0],
+        ["WallClock", [7.42, 0.4, 8.1], -90]
+      ]
+    }
+  },
+  "shared_fixtures_per_room": [
+    ["FluorescentFrame", [0, -4, 11.65]],
+    ["FluorescentDiffuser", [0, -4, 11.48]],
+    ["FluorescentFrame", [0, 4, 11.65]],
+    ["FluorescentDiffuser", [0, 4, 11.48]]
+  ],
+  "export_contract": {
+    "source_collections": "New prefabs and room shells are stored under L6_RevisionSections. Existing L6K_ collections are referenced, never overwritten.",
+    "fixture_instances": "Room collections hold Blender collection-instance empties. Flatten these at export or export child props separately; direct col.all_objects alone omits instance geometry.",
+    "collision": "Tagged export_collision_only proxies are already present on each room, including transformed fixture collision boxes. Do not also duplicate child prefab collision at room placement.",
+    "uv": "The caller applies its physical material UV mapping to visual meshes after authoring. No bump displacement or tessellation is generated here.",
+    "visual_lights": "Fluorescent frame and diffuser remain separate collection instances so the established blackout/flicker controller can own lighting. This module does not add Roblox Light objects."
+  },
+  "blender_smoke_measurement": {
+    "blender_version": "5.2.0 LTS",
+    "measured_unique_visual_triangles_excluding_existing_instances": 4028,
+    "new_prop_collections": 8,
+    "new_room_collections": 3,
+    "test_scope": "Fresh background Blender process with placeholder existing L6K_ collections and supplied materials; source authoring and object counts only. No game playtest or Studio validation."
+  }
+}

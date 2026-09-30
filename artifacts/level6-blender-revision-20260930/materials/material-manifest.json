@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "generator": "tools/level6_build/revision_materials.py",
+  "seed": 60930,
+  "normalConvention": "+Y OpenGL tangent space (image rows run down; green points toward increasing UV V)",
+  "heightInterpretation": "Grayscale zero=low, one=high; bumpDistanceStuds is the full physical height span in Roblox studs",
+  "seamInterpretation": "Generated data maps use periodic fields and wrapped central differences; archived color seams are inherited from their untouched source images",
+  "liveStudioParityClaim": false,
+  "materials": {
+    "carpet_default": {
+      "physicalRepeatStuds": 28,
+      "bumpDistanceStuds": 0.015,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/carpet_default/height-1024.png",
+        "roughness": "materials/carpet_default/roughness-1024.png",
+        "color": "materials/carpet_default/color-1024.png",
+        "normalOpenGL": "materials/carpet_default/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "20732f41b54c33d0e58467c3a51fa5c08058d5acc75f5b7c7d27bc6cae6460f8",
+        "height": "f07be7dec3c2b99ef6908f789bd0b3b31cd756dd20674db00dd071afbf75741f",
+        "roughness": "bd6c0174e69ae557d65011b20f6ae067b18314effdca751b040679374249aecb",
+        "color": "5167d949ce619c2f1fd3aeae9d92101e36c50bc4ea1f9e2490f6bd1853b59dc7",
+        "normalOpenGL": "2ccc73544884aba92b111d82739f5e5093681d2427f94f1e5f530c1462bed50f"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.02601,
+          "verticalWrapMeanAbs": 0.02449,
+          "interiorAdjacentMeanAbs": 0.02754,
+          "worstWrapToInteriorRatio": 0.9446
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.0023,
+          "verticalWrapMeanAbs": 0.00222,
+          "interiorAdjacentMeanAbs": 0.0026,
+          "worstWrapToInteriorRatio": 0.8844
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00274,
+          "verticalWrapMeanAbs": 0.00254,
+          "interiorAdjacentMeanAbs": 0.00286,
+          "worstWrapToInteriorRatio": 0.9575
+        }
+      },
+      "sourceColor": "materials/carpet_default/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.29877,
+      "roughnessP01ToP99": 0.0853,
+      "encodedNormalMaxUnitLengthError": 0.004128
+    },
+    "carpet_neon": {
+      "physicalRepeatStuds": 22,
+      "bumpDistanceStuds": 0.015,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/carpet_neon/height-1024.png",
+        "roughness": "materials/carpet_neon/roughness-1024.png",
+        "color": "materials/carpet_neon/color-1024.png",
+        "normalOpenGL": "materials/carpet_neon/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "5e0444d16cd5905400a26a96c00b1252369f127e000879789bee788b917f710f",
+        "height": "69d196b2d44af58309186fd679337d3d68925ee31f30100a5abcd701fdb2e06c",
+        "roughness": "4bce7aa9dd4e7185b1008c0823bbb218cd5c3fe1ab22f82e4c70b7fbbb8cf815",
+        "color": "875b9a69214d93e22fe88c6ddf69c96e356f64b53e9dd226cc8258b32e3cc40e",
+        "normalOpenGL": "df391ee9c2c5f1b1ef4e4414f3b91b8b9a7c67041a97ec973b2992725a6df86d"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.02571,
+          "verticalWrapMeanAbs": 0.02509,
+          "interiorAdjacentMeanAbs": 0.02763,
+          "worstWrapToInteriorRatio": 0.9306
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.0024,
+          "verticalWrapMeanAbs": 0.00233,
+          "interiorAdjacentMeanAbs": 0.0026,
+          "worstWrapToInteriorRatio": 0.9209
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00335,
+          "verticalWrapMeanAbs": 0.00359,
+          "interiorAdjacentMeanAbs": 0.00366,
+          "worstWrapToInteriorRatio": 0.9803
+        }
+      },
+      "sourceColor": "materials/carpet_neon/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.29681,
+      "roughnessP01ToP99": 0.0797,
+      "encodedNormalMaxUnitLengthError": 0.004312
+    },
+    "carpet_red": {
+      "physicalRepeatStuds": 30,
+      "bumpDistanceStuds": 0.015,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/carpet_red/height-1024.png",
+        "roughness": "materials/carpet_red/roughness-1024.png",
+        "color": "materials/carpet_red/color-1024.png",
+        "normalOpenGL": "materials/carpet_red/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "d9ee3a4a10df49880de0ecaacf166f61b5ab55074b29c0091322c7b177cb7cf5",
+        "height": "90d2ec8b5df78ff988e8a553b05fb255e77a6c58407adf8dcb7f8fc478201bdc",
+        "roughness": "1cbfce1957776197e700553e96387768217f6b5d15d74219eaa06b94a7d258f2",
+        "color": "4f335d3775aadd09f2ffef818c89c7b757b38f3b1fe59a48eb1764943c2d5e17",
+        "normalOpenGL": "7586f84daa0859d5135da44821dfea6f197f553e32697b05b21e19456e8609fa"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.02307,
+          "verticalWrapMeanAbs": 0.02593,
+          "interiorAdjacentMeanAbs": 0.02756,
+          "worstWrapToInteriorRatio": 0.9406
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.00204,
+          "verticalWrapMeanAbs": 0.00238,
+          "interiorAdjacentMeanAbs": 0.0026,
+          "worstWrapToInteriorRatio": 0.9151
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00242,
+          "verticalWrapMeanAbs": 0.00269,
+          "interiorAdjacentMeanAbs": 0.00267,
+          "worstWrapToInteriorRatio": 1.0088
+        }
+      },
+      "sourceColor": "materials/carpet_red/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.29954,
+      "roughnessP01ToP99": 0.08055,
+      "encodedNormalMaxUnitLengthError": 0.004067
+    },
+    "carpet_city": {
+      "physicalRepeatStuds": 52,
+      "bumpDistanceStuds": 0.015,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/carpet_city/height-1024.png",
+        "roughness": "materials/carpet_city/roughness-1024.png",
+        "color": "materials/carpet_city/color-1024.png",
+        "normalOpenGL": "materials/carpet_city/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "0b54b20dc28ee0d810d6283424d9589f266aeaa63b6772ca7109c3b5ee2c7a7f",
+        "height": "d6408a1481143092ef3042f35f6e94c171bc4b883525855cf38399b16e1e5756",
+        "roughness": "0a37b3c5337a65397c663fa435aa46e066ce95f1b35c85a8858ca2297604a9c1",
+        "color": "ab8c4709372235fd620d6cca859c20b103f7c1fbd6d06834de8960ea63968513",
+        "normalOpenGL": "8331bf8ef4096067ee519e4d4517443d58d9f87d00b460853a4eb2d113f0bd20"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.02637,
+          "verticalWrapMeanAbs": 0.02647,
+          "interiorAdjacentMeanAbs": 0.02756,
+          "worstWrapToInteriorRatio": 0.9605
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.00243,
+          "verticalWrapMeanAbs": 0.00242,
+          "interiorAdjacentMeanAbs": 0.0026,
+          "worstWrapToInteriorRatio": 0.9363
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00147,
+          "verticalWrapMeanAbs": 0.00154,
+          "interiorAdjacentMeanAbs": 0.00154,
+          "worstWrapToInteriorRatio": 1.0039
+        }
+      },
+      "sourceColor": "materials/carpet_city/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.29656,
+      "roughnessP01ToP99": 0.08083,
+      "encodedNormalMaxUnitLengthError": 0.001552
+    },
+    "wallpaper": {
+      "physicalRepeatStuds": 18,
+      "bumpDistanceStuds": 0.006,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/wallpaper/height-1024.png",
+        "roughness": "materials/wallpaper/roughness-1024.png",
+        "color": "materials/wallpaper/color-1024.png",
+        "normalOpenGL": "materials/wallpaper/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "5e1ebcc44ba53cbc0979c8dd61b0a815916edb1fba1210ad9544d2acdd776b41",
+        "height": "754c6dafe6311b12164b69775170fc6e60b819fa9b48ca656aafe333c6319be0",
+        "roughness": "f161d6c1c82d5b1862c4ba516158eaa116d190383389736cc0d293f9e753ee19",
+        "color": "ed4c4da330aba86f2b5c60ed1453019c68c460036f46d3452542fc1b5209c7f4",
+        "normalOpenGL": "9e484ebe8adf0ea1b029f62e4362fb456e7a9a7109d9e28045b9a5360b8ca109"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.00745,
+          "verticalWrapMeanAbs": 0.00775,
+          "interiorAdjacentMeanAbs": 0.00944,
+          "worstWrapToInteriorRatio": 0.8211
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.00125,
+          "verticalWrapMeanAbs": 0.00129,
+          "interiorAdjacentMeanAbs": 0.00176,
+          "worstWrapToInteriorRatio": 0.7351
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00071,
+          "verticalWrapMeanAbs": 0.00071,
+          "interiorAdjacentMeanAbs": 0.00066,
+          "worstWrapToInteriorRatio": 1.0804
+        }
+      },
+      "sourceColor": "materials/wallpaper/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.14618,
+      "roughnessP01ToP99": 0.08454,
+      "encodedNormalMaxUnitLengthError": 0.000384
+    },
+    "orange_wall": {
+      "physicalRepeatStuds": 22,
+      "bumpDistanceStuds": 0.012,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "height": "materials/orange_wall/height-1024.png",
+        "roughness": "materials/orange_wall/roughness-1024.png",
+        "color": "materials/orange_wall/color-1024.png",
+        "normalOpenGL": "materials/orange_wall/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "sourceColor": "110d70624d145e595657c9b11f3ce3b8413bbe704ea26cf33ac699669162d323",
+        "height": "43fda01ef15c26c09140e485777bad744b74bf3c5a06bd89de23ce2782f31615",
+        "roughness": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+        "color": "a9866e6be6f55abc0d47311b469da3b054a2220d2bfe2b6e52ecbdc2df6a63b4",
+        "normalOpenGL": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.00757,
+          "verticalWrapMeanAbs": 0.00798,
+          "interiorAdjacentMeanAbs": 0.00982,
+          "worstWrapToInteriorRatio": 0.8125
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 6e-05,
+          "verticalWrapMeanAbs": 6e-05,
+          "interiorAdjacentMeanAbs": 0.00078,
+          "worstWrapToInteriorRatio": 0.0773
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00123,
+          "verticalWrapMeanAbs": 0.00125,
+          "interiorAdjacentMeanAbs": 0.00112,
+          "worstWrapToInteriorRatio": 1.1165
+        }
+      },
+      "sourceColor": "materials/orange_wall/source-color-original.png",
+      "colorDerivative": "Lanczos 1024px resize of unchanged source; no recoloring",
+      "heightP01ToP99": 0.16336,
+      "roughnessP01ToP99": 0.09899,
+      "encodedNormalMaxUnitLengthError": 0.000938
+    },
+    "diamondplate": {
+      "physicalRepeatStuds": 8,
+      "bumpDistanceStuds": 0.011,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "color": "materials/diamondplate/color-1024.png",
+        "height": "materials/diamondplate/height-1024.png",
+        "roughness": "materials/diamondplate/roughness-1024.png",
+        "metalness": "materials/diamondplate/metalness-1024.png",
+        "normalOpenGL": "materials/diamondplate/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "color": "bb652c3b027bfc5b02e4de1c42d010ff15b9e97c4fee2d4042d60e50ceb2b286",
+        "height": "5b67088b94491feca95359fa2eec40bdb3d39447b8f2068e0e6ae3168dc479ef",
+        "roughness": "0098d6603e27d441e8d5c2ae26577bddb3c9b27cb5b155cd3a6d2b2e92a3ad1b",
+        "metalness": "4d3fe1bc7957d028dd7e0360294bd64289c12432aed26cc60737d245ad33e725",
+        "normalOpenGL": "481f4699aa56c25080bc51ae1789ece77387069d40ea67928a38fce638f5ad39"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.00199,
+          "verticalWrapMeanAbs": 0.00213,
+          "interiorAdjacentMeanAbs": 0.02433,
+          "worstWrapToInteriorRatio": 0.0875
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.00256,
+          "verticalWrapMeanAbs": 0.00274,
+          "interiorAdjacentMeanAbs": 0.00696,
+          "worstWrapToInteriorRatio": 0.3929
+        },
+        "metalness": {
+          "horizontalWrapMeanAbs": 0.0,
+          "verticalWrapMeanAbs": 0.0,
+          "interiorAdjacentMeanAbs": 0.01551,
+          "worstWrapToInteriorRatio": 0.0
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.00086,
+          "verticalWrapMeanAbs": 0.0009,
+          "interiorAdjacentMeanAbs": 0.01001,
+          "worstWrapToInteriorRatio": 0.09
+        }
+      },
+      "heightP01ToP99": 0.69606,
+      "roughnessP01ToP99": 0.22819,
+      "encodedNormalMaxUnitLengthError": 0.005784
+    },
+    "kitchen_tile": {
+      "physicalRepeatStuds": 8,
+      "bumpDistanceStuds": 0.018,
+      "mapResolution": [
+        1024,
+        1024
+      ],
+      "maps": {
+        "color": "materials/kitchen_tile/color-1024.png",
+        "height": "materials/kitchen_tile/height-1024.png",
+        "roughness": "materials/kitchen_tile/roughness-1024.png",
+        "normalOpenGL": "materials/kitchen_tile/normal-opengl-1024.png"
+      },
+      "sha256": {
+        "color": "7442f61902091f77efa065a93adf112b013f13861119240fe3bc6c335ff0e2a6",
+        "height": "3a86f52001f124ef8e54451dfd2eee2286a69ecfc44f9311ed3533c6464d51db",
+        "roughness": "d4fa105a4b2041d6b87cfae5824f0f572dcd281d2be8d512461d966e199aaf33",
+        "normalOpenGL": "0746acea7615acdb0becf259b20f53aa34a56f53076ac03567c6c6d6e8b62b3c"
+      },
+      "seamValidation": {
+        "height": {
+          "horizontalWrapMeanAbs": 0.0,
+          "verticalWrapMeanAbs": 0.0,
+          "interiorAdjacentMeanAbs": 0.00997,
+          "worstWrapToInteriorRatio": 0.0
+        },
+        "roughness": {
+          "horizontalWrapMeanAbs": 0.0,
+          "verticalWrapMeanAbs": 0.0,
+          "interiorAdjacentMeanAbs": 0.00604,
+          "worstWrapToInteriorRatio": 0.0
+        },
+        "normalOpenGL": {
+          "horizontalWrapMeanAbs": 0.0,
+          "verticalWrapMeanAbs": 0.0,
+          "interiorAdjacentMeanAbs": 0.00323,
+          "worstWrapToInteriorRatio": 0.0
+        }
+      },
+      "heightP01ToP99": 0.54298,
+      "roughnessP01ToP99": 0.24584,
+      "encodedNormalMaxUnitLengthError": 0.004496
+    }
+  },
+  "contactSheet": "materials/material-contact-sheet.jpg",
+  "contactSheetSha256": "fa3dc4be0c5fe6455bd389874c7add99e5ed16b57eedd4f9832d3e6d46b11c33"
+}

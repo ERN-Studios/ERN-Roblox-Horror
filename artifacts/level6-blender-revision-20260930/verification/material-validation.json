@@ -1,0 +1,929 @@
+{
+  "schemaVersion": 1,
+  "blend": "artifacts/level6-blender-revision-20260930/Level6_Revised_Full_Seed101.blend",
+  "blendSha256": "bd6d8c97e80e897a612f498c59ed582086a6dd5ea71f7e085d41b88460842c6b",
+  "passed": true,
+  "issues": [],
+  "materialCount": 9,
+  "surfaceIds": {
+    "carpet_city": [
+      "L6_carpet_beige"
+    ],
+    "carpet_default": [
+      "L6R_carpet_default"
+    ],
+    "carpet_neon": [
+      "L6_carpet_confetti"
+    ],
+    "carpet_red": [
+      "L6_carpet_red"
+    ],
+    "diamondplate": [
+      "L6_linoleum"
+    ],
+    "kitchen_tile": [
+      "L6R_kitchen_tile"
+    ],
+    "orange_wall": [
+      "L6_orange_wall",
+      "L6_red_wall"
+    ],
+    "wallpaper": [
+      "L6_beige_wall"
+    ]
+  },
+  "materials": [
+    {
+      "material": "L6_beige_wall",
+      "surface": "wallpaper",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.004",
+          "packed": true,
+          "sha256": "754c6dafe6311b12164b69775170fc6e60b819fa9b48ca656aafe333c6319be0",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.004",
+          "packed": true,
+          "sha256": "f161d6c1c82d5b1862c4ba516158eaa116d190383389736cc0d293f9e753ee19",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.003",
+          "packed": true,
+          "sha256": "5e1ebcc44ba53cbc0979c8dd61b0a815916edb1fba1210ad9544d2acdd776b41",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.004",
+          "packed": true,
+          "sha256": "9e484ebe8adf0ea1b029f62e4362fb456e7a9a7109d9e28045b9a5360b8ca109",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 18.0,
+      "bumpDistanceStuds": 0.006,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_carpet_beige",
+      "surface": "carpet_city",
+      "maps": {
+        "height": {
+          "image": "height-1024.png",
+          "packed": true,
+          "sha256": "d6408a1481143092ef3042f35f6e94c171bc4b883525855cf38399b16e1e5756",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png",
+          "packed": true,
+          "sha256": "0a37b3c5337a65397c663fa435aa46e066ce95f1b35c85a8858ca2297604a9c1",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png",
+          "packed": true,
+          "sha256": "0b54b20dc28ee0d810d6283424d9589f266aeaa63b6772ca7109c3b5ee2c7a7f",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png",
+          "packed": true,
+          "sha256": "8331bf8ef4096067ee519e4d4517443d58d9f87d00b460853a4eb2d113f0bd20",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 52.0,
+      "bumpDistanceStuds": 0.015,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_carpet_confetti",
+      "surface": "carpet_neon",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.001",
+          "packed": true,
+          "sha256": "69d196b2d44af58309186fd679337d3d68925ee31f30100a5abcd701fdb2e06c",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.001",
+          "packed": true,
+          "sha256": "4bce7aa9dd4e7185b1008c0823bbb218cd5c3fe1ab22f82e4c70b7fbbb8cf815",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.001",
+          "packed": true,
+          "sha256": "5e0444d16cd5905400a26a96c00b1252369f127e000879789bee788b917f710f",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.001",
+          "packed": true,
+          "sha256": "df391ee9c2c5f1b1ef4e4414f3b91b8b9a7c67041a97ec973b2992725a6df86d",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 22.0,
+      "bumpDistanceStuds": 0.015,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_carpet_red",
+      "surface": "carpet_red",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.002",
+          "packed": true,
+          "sha256": "90d2ec8b5df78ff988e8a553b05fb255e77a6c58407adf8dcb7f8fc478201bdc",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.002",
+          "packed": true,
+          "sha256": "1cbfce1957776197e700553e96387768217f6b5d15d74219eaa06b94a7d258f2",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.002",
+          "packed": true,
+          "sha256": "d9ee3a4a10df49880de0ecaacf166f61b5ab55074b29c0091322c7b177cb7cf5",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.002",
+          "packed": true,
+          "sha256": "7586f84daa0859d5135da44821dfea6f197f553e32697b05b21e19456e8609fa",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 30.0,
+      "bumpDistanceStuds": 0.015,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_linoleum",
+      "surface": "diamondplate",
+      "maps": {
+        "color": {
+          "image": "color-1024.png",
+          "packed": true,
+          "sha256": "bb652c3b027bfc5b02e4de1c42d010ff15b9e97c4fee2d4042d60e50ceb2b286",
+          "colorspace": "sRGB",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "height": {
+          "image": "height-1024.png.003",
+          "packed": true,
+          "sha256": "5b67088b94491feca95359fa2eec40bdb3d39447b8f2068e0e6ae3168dc479ef",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.003",
+          "packed": true,
+          "sha256": "0098d6603e27d441e8d5c2ae26577bddb3c9b27cb5b155cd3a6d2b2e92a3ad1b",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "metalness": {
+          "image": "metalness-1024.png",
+          "packed": true,
+          "sha256": "4d3fe1bc7957d028dd7e0360294bd64289c12432aed26cc60737d245ad33e725",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.003",
+          "packed": true,
+          "sha256": "481f4699aa56c25080bc51ae1789ece77387069d40ea67928a38fce638f5ad39",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 8.0,
+      "bumpDistanceStuds": 0.011,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_orange_wall",
+      "surface": "orange_wall",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.005",
+          "packed": true,
+          "sha256": "43fda01ef15c26c09140e485777bad744b74bf3c5a06bd89de23ce2782f31615",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.005",
+          "packed": true,
+          "sha256": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.004",
+          "packed": true,
+          "sha256": "110d70624d145e595657c9b11f3ce3b8413bbe704ea26cf33ac699669162d323",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.005",
+          "packed": true,
+          "sha256": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 22.0,
+      "bumpDistanceStuds": 0.012,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6_red_wall",
+      "surface": "orange_wall",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.005",
+          "packed": true,
+          "sha256": "43fda01ef15c26c09140e485777bad744b74bf3c5a06bd89de23ce2782f31615",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.005",
+          "packed": true,
+          "sha256": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.004",
+          "packed": true,
+          "sha256": "110d70624d145e595657c9b11f3ce3b8413bbe704ea26cf33ac699669162d323",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.005",
+          "packed": true,
+          "sha256": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 22.0,
+      "bumpDistanceStuds": 0.012,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6R_carpet_default",
+      "surface": "carpet_default",
+      "maps": {
+        "height": {
+          "image": "height-1024.png.006",
+          "packed": true,
+          "sha256": "f07be7dec3c2b99ef6908f789bd0b3b31cd756dd20674db00dd071afbf75741f",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.006",
+          "packed": true,
+          "sha256": "bd6c0174e69ae557d65011b20f6ae067b18314effdca751b040679374249aecb",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "color": {
+          "image": "source-color-original.png.005",
+          "packed": true,
+          "sha256": "20732f41b54c33d0e58467c3a51fa5c08058d5acc75f5b7c7d27bc6cae6460f8",
+          "colorspace": "sRGB",
+          "pixels": [
+            1254,
+            1254
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.006",
+          "packed": true,
+          "sha256": "2ccc73544884aba92b111d82739f5e5093681d2427f94f1e5f530c1462bed50f",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 28.0,
+      "bumpDistanceStuds": 0.015,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    },
+    {
+      "material": "L6R_kitchen_tile",
+      "surface": "kitchen_tile",
+      "maps": {
+        "color": {
+          "image": "color-1024.png.001",
+          "packed": true,
+          "sha256": "7442f61902091f77efa065a93adf112b013f13861119240fe3bc6c335ff0e2a6",
+          "colorspace": "sRGB",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "height": {
+          "image": "height-1024.png.007",
+          "packed": true,
+          "sha256": "3a86f52001f124ef8e54451dfd2eee2286a69ecfc44f9311ed3533c6464d51db",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "roughness": {
+          "image": "roughness-1024.png.007",
+          "packed": true,
+          "sha256": "d4fa105a4b2041d6b87cfae5824f0f572dcd281d2be8d512461d966e199aaf33",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        },
+        "normalOpenGL": {
+          "image": "normal-opengl-1024.png.007",
+          "packed": true,
+          "sha256": "0746acea7615acdb0becf259b20f53aa34a56f53076ac03567c6c6d6e8b62b3c",
+          "colorspace": "Non-Color",
+          "pixels": [
+            1024,
+            1024
+          ]
+        }
+      },
+      "issues": [],
+      "repeatStuds": 8.0,
+      "bumpDistanceStuds": 0.018,
+      "activeNormalNode": "Normal Map",
+      "heightAlternativeConnectedToBSDF": false
+    }
+  ],
+  "normalMapQuantization": {
+    "wallpaper": {
+      "xyRangeIn8BitLevels": [
+        6.0,
+        7.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        0.586,
+        0.587
+      ],
+      "maximumUnitLengthError": 0.000384
+    },
+    "carpet_city": {
+      "xyRangeIn8BitLevels": [
+        12.0,
+        13.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        1.1,
+        1.101
+      ],
+      "maximumUnitLengthError": 0.001552
+    },
+    "carpet_neon": {
+      "xyRangeIn8BitLevels": [
+        30.0,
+        29.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        2.528,
+        2.542
+      ],
+      "maximumUnitLengthError": 0.004312
+    },
+    "carpet_red": {
+      "xyRangeIn8BitLevels": [
+        22.0,
+        21.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        1.868,
+        1.862
+      ],
+      "maximumUnitLengthError": 0.004067
+    },
+    "diamondplate": {
+      "xyRangeIn8BitLevels": [
+        108.0,
+        108.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        11.237,
+        11.235
+      ],
+      "maximumUnitLengthError": 0.005784
+    },
+    "orange_wall": {
+      "xyRangeIn8BitLevels": [
+        11.0,
+        10.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        0.868,
+        0.872
+      ],
+      "maximumUnitLengthError": 0.000938
+    },
+    "carpet_default": {
+      "xyRangeIn8BitLevels": [
+        24.0,
+        24.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        1.994,
+        1.992
+      ],
+      "maximumUnitLengthError": 0.004128
+    },
+    "kitchen_tile": {
+      "xyRangeIn8BitLevels": [
+        101.0,
+        101.0
+      ],
+      "xyStandardDeviationIn8BitLevels": [
+        8.969,
+        8.967
+      ],
+      "maximumUnitLengthError": 0.004496
+    }
+  },
+  "sourceColorCopiesByteIdentical": {
+    "carpet_default": true,
+    "carpet_neon": true,
+    "carpet_red": true,
+    "carpet_city": true,
+    "wallpaper": true,
+    "orange_wall": true
+  },
+  "originalMeshes": {
+    "sourceMeshCount": 339,
+    "missing": [],
+    "changedVertexPositions": [],
+    "allOriginalKitCollectionsPresent": true
+  },
+  "scenes": {
+    "Level 6 | Revised FULL seed 101 | 35 rooms": {
+      "objectCount": 7795,
+      "pbrMeshCount": 2128
+    },
+    "Revision study 01 | Beige Party Hall": {
+      "objectCount": 59,
+      "pbrMeshCount": 8
+    },
+    "Revision study 02 | Orange Birthday Rooms": {
+      "objectCount": 58,
+      "pbrMeshCount": 8
+    },
+    "Revision study 03 | Red Party Maze": {
+      "objectCount": 59,
+      "pbrMeshCount": 8
+    },
+    "Revision study 04 | Arcade": {
+      "objectCount": 54,
+      "pbrMeshCount": 8
+    },
+    "Revision study 05 | Supply": {
+      "objectCount": 56,
+      "pbrMeshCount": 8
+    },
+    "Revision study 06 | Maintenance Workshop": {
+      "objectCount": 56,
+      "pbrMeshCount": 8
+    },
+    "Revision study 07 | RoomKitchenPrep": {
+      "objectCount": 113,
+      "pbrMeshCount": 3
+    },
+    "Revision study 08 | RoomUtilityHall": {
+      "objectCount": 124,
+      "pbrMeshCount": 3
+    },
+    "Revision study 09 | RoomStaffNook": {
+      "objectCount": 114,
+      "pbrMeshCount": 4
+    }
+  },
+  "physicalUv": {
+    "scenePbrObjectCount": 2186,
+    "validatedObjects": 2186,
+    "measuredProjectedEdgeComponents": 316268,
+    "maximumEdgeScaleResidualStuds": 2e-06,
+    "minimumUv": 0.0,
+    "maximumUv": 1.0,
+    "largestObjectsByArea": [
+      {
+        "name": "L6_S1_R05 | floor / Carpet / floor finish",
+        "surfaces": [
+          "carpet_city"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 52.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 140,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 35,
+        "worldDimensions": [
+          88.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S1_R10 | floor / Carpet / floor finish",
+        "surfaces": [
+          "carpet_city"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 52.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 140,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 35,
+        "worldDimensions": [
+          88.0,
+          64.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S2_R03 | floor / Carpet / floor finish.001",
+        "surfaces": [
+          "carpet_neon"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 22.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 252,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 63,
+        "worldDimensions": [
+          88.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S2_R05 | floor / Carpet / floor finish.001",
+        "surfaces": [
+          "carpet_neon"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 22.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 252,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 63,
+        "worldDimensions": [
+          88.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S2_R08 | floor / Carpet / floor finish.001",
+        "surfaces": [
+          "carpet_neon"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 22.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 288,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 72,
+        "worldDimensions": [
+          88.0,
+          72.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S2_R10 | floor / Carpet / floor finish.001",
+        "surfaces": [
+          "carpet_neon"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 22.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 288,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 72,
+        "worldDimensions": [
+          88.0,
+          72.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S3_R01 | floor / Carpet / floor finish.002",
+        "surfaces": [
+          "carpet_red"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 30.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 160,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 40,
+        "worldDimensions": [
+          88.0,
+          72.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S3_R03 | floor / Carpet / floor finish.002",
+        "surfaces": [
+          "carpet_red"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 30.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 160,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 40,
+        "worldDimensions": [
+          88.0,
+          72.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S3_R06 | floor / Carpet / floor finish.002",
+        "surfaces": [
+          "carpet_red"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 30.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 192,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 48,
+        "worldDimensions": [
+          88.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S3_R08 | floor / Carpet / floor finish.002",
+        "surfaces": [
+          "carpet_red"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 30.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 192,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 48,
+        "worldDimensions": [
+          88.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S1_R03 | floor / Carpet / floor finish",
+        "surfaces": [
+          "carpet_city"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 52.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 120,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 30,
+        "worldDimensions": [
+          84.0,
+          76.0,
+          0.0
+        ]
+      },
+      {
+        "name": "L6_S1_R08 | floor / Carpet / floor finish",
+        "surfaces": [
+          "carpet_city"
+        ],
+        "scenes": [
+          "Level 6 | Revised FULL seed 101 | 35 rooms"
+        ],
+        "repeatStuds": 52.0,
+        "uvRange": [
+          0.0,
+          1.0
+        ],
+        "edgesMeasured": 120,
+        "maxEdgeScaleResidualStuds": 1e-06,
+        "polygonCount": 30,
+        "worldDimensions": [
+          84.0,
+          64.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Inspection is of the offline Blender file; no live Studio parity, Roblox import, gameplay, or runtime performance claim."
+  ]
+}

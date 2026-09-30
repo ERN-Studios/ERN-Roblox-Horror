@@ -1,0 +1,56 @@
+[
+  {
+    "scene": "Revision study 01 | Beige Party Hall",
+    "file": "previews/01.png",
+    "sha256": "824a1fe253f10e7775751d51804c9e954bf24856ec4fc746c9c905cbacffa2fd",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 02 | Orange Birthday Rooms",
+    "file": "previews/02.png",
+    "sha256": "600ee1c6975bcfc8d7ec9c15ad23f2f04a6ea46a177cd45eae87aee0866d6859",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 03 | Red Party Maze",
+    "file": "previews/03.png",
+    "sha256": "52d18d5a741fbc7c1807950eb757dc43a630832d42a76c6c120cecc726990098",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 06 | Maintenance Workshop",
+    "file": "previews/06.png",
+    "sha256": "e841d7255a9d7f9f509830862a477bd8cadbabf40c91b2726e0617fac6909376",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 07 | RoomKitchenPrep",
+    "file": "previews/07.png",
+    "sha256": "7de7501a8729e05d48cae4c5e27d0b46fcd42445d85ad69a6f1871e54caf4464",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 08 | RoomUtilityHall",
+    "file": "previews/08.png",
+    "sha256": "1085b1cfd70bf02f47a41441b14655df7c123765d2564d2a8fbbc0a4eb45b4d6",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 09 | RoomStaffNook",
+    "file": "previews/09.png",
+    "sha256": "fa85792e5d1d11e13a67e4d34542e19adda7200ae9a733e1a30dbc8857de6190",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 04 | Arcade",
+    "file": "previews/04.png",
+    "sha256": "3a6a18c87c4a0b8d7d0597fabce73588f5c28f75dd55fe1e49e36af8eec54bc4",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  },
+  {
+    "scene": "Revision study 05 | Supply",
+    "file": "previews/05.png",
+    "sha256": "25d3376a400515c3935af10a80722b0f46c22e4fce385ce499aeceff8134fc63",
+    "scope": "Actual offline Blender render; no Roblox gameplay or performance test"
+  }
+]
