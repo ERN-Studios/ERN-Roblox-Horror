@@ -141,7 +141,7 @@ def check() -> dict:
     serve = runpy.run_path(str(ROOT / "tools/level6_build/import/serve_gameplay_candidates.py"))
     snapshot, payloads = serve["snapshot"]()
     assert len(snapshot["new"]) == 19 and len(snapshot["shared"]) == 4
-    assert snapshot["snapshotSha256"] == "23a305861ebff83d884b77cf504212abc3728f52a400f0e41e83ec5d60c7eae9"
+    assert snapshot["snapshotSha256"] == "a81039c226cc37dc0d1fd8b49bfd7cbce8d74534ac00ff9a1e02d4903afe8be9"
     assert all(sha256(payloads["/source/" + item["id"]]) == item["sha256"]
                for item in snapshot["new"] + snapshot["shared"])
     assert all(sha256(payloads["/baseline/" + item["id"]]) == item["baselineSha256"]
@@ -150,6 +150,11 @@ def check() -> dict:
     old_kit = next(item for item in old_snapshot["new"] if item["path"] == serve["KIT_METADATA_TARGET"])
     old_kit["bytes"] = 8761
     old_kit["sha256"] = serve["INSTALLED_KIT_METADATA_SHA256"]
+    # Preserve the historical installed snapshot while checking the new UV-fix candidate.
+    old_runtime = next(item for item in old_snapshot["new"]
+                       if item["path"] == "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake")
+    old_runtime["bytes"] = 5783
+    old_runtime["sha256"] = "d66440233bcf5fb422a4e7ec1072b836edda7e2cf588fe5c50e5d87774e015ba"
     del old_snapshot["snapshotSha256"]
     reconstructed_installed = sha256(
         json.dumps(old_snapshot, sort_keys=True, separators=(",", ":")).encode()

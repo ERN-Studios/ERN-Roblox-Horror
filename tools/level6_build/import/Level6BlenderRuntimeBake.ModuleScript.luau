@@ -34,7 +34,7 @@ local function meshFromBuffer(b)
 		for i = 1, nn do
 			n[i] = em:AddNormal(Vector3.new(buffer.readf32(b, at), buffer.readf32(b, at+4), buffer.readf32(b, at+8))); at += 12
 		end
-		for i = 1, nu do u[i] = em:AddUV(Vector2.new(buffer.readf32(b, at), buffer.readf32(b, at+4))); at += 8 end
+		for i = 1, nu do u[i] = em:AddUV(Vector2.new(buffer.readf32(b, at), 1 - buffer.readf32(b, at+4))); at += 8 end
 		for face = 1, nf do
 			local vv, nn, uu = {}, {}, {}
 			for corner = 1, 3 do

@@ -1,0 +1,11 @@
+# Runtime atlas UV orientation
+
+The Level 6 Blender build authors UVs with V measured upward (`build.py:127-143`), and the prefab exporter preserves them (`export_prefabs.py:61-64`). The runtime bake passed that V unchanged to `EditableMesh:AddUV`. Its atlas RGBA buffer is top-row first: decoding `WornParty_Atlas1024.png` produces exactly the bytes in `runtime-source/atlas-rgba.b64` (SHA-256 `99784cbd9cece6656ac55173f5114f1adcd6858b12724961d443e2b69072d67e`). Roblox's [EditableImage documentation](https://create.roblox.com/docs/reference/engine/classes/EditableImage/WritePixelsBuffer) defines its pixel origin as top-left.
+
+In the ChairRed payload, the `red_plastic` UV midpoint is approximately `(0.81324, 0.22762)`. Sampling the runtime atlas at `(u, v)` yields RGB `(27, 26, 21)` from the near-black top row; sampling at `(u, 1-v)` yields the intended red `(148, 32, 23)`. A Studio Play comparison placed a clone with a vertically flipped atlas beside the original ChairRed under the same lighting; the clone appeared vivid red and the original dark brown. This rules out lighting as the main cause. The 1024 resize and byte transport did not move or corrupt the red swatch.
+
+The candidate fix flips V once when `Level6BlenderRuntimeBake.meshFromBuffer` creates each UV. Both Level 3 (`Level 3 Round Adapter`) and the Level 6 preview (`Level 6 Preview Runtime`) call this same runtime bake module; Level 3 has no second Blender mesh loader. `upload_meshes.luau` also passes Blender V through unchanged, but it is a separate optional asset-upload helper and is not used by these runtime paths. The source chunks, Blender UVs, and atlas files remain unchanged.
+
+Validation after the live module is reconciled: start a fresh Play session so all 49 meshes bake again, then compare ChairRed, WallRed, FloorRed, and WallBeige under the same lighting. This new-bake visual check has not yet been performed on the candidate source.
+
+Offline verification: `verify_offline_bundle.py` passes for the updated candidate snapshot (`a81039c226cc37dc0d1fd8b49bfd7cbce8d74534ac00ff9a1e02d4903afe8be9`) while retaining the historical installed snapshot hash (`90b5d1e68587d4a213dea9e4666ad67d017342033561ecae7aebac4ee61220d1`).

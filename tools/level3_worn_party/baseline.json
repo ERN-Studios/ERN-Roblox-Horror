@@ -1,0 +1,24 @@
+{
+  "studioPlaceId": 131311258779917,
+  "observedPlaceVersion": 2413,
+  "source": "artifacts/level3-rebuild-20260930/native-backup/scripts.json",
+  "baseline": {
+    "ServerScriptService.Level 3 Systems.Level 3 Configuration": {
+      "class": "ModuleScript",
+      "sha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Round Adapter": {
+      "class": "ModuleScript",
+      "sha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Layout Generator": {
+      "class": "ModuleScript",
+      "sha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+    }
+  },
+  "candidates": {
+    "Level 3 Layout Generator.ModuleScript.luau": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad",
+    "Level 3 Round Adapter.ModuleScript.luau": "6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549",
+    "Level 3 Configuration.ModuleScript.luau": "72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3"
+  }
+}

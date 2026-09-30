@@ -1,0 +1,75 @@
+{
+  "schema": "level3-worn-party-studio-candidates/1",
+  "placeId": 131311258779917,
+  "observedPlaceVersion": 2413,
+  "baselineSource": "artifacts/level3-rebuild-20260930/native-backup/scripts.json",
+  "guard": "Read exact instance class, Source, and ScriptEditorService editor source immediately before write and again inside UpdateSourceAsync; abort/reconcile on drift. New module paths must be absent. Studio is authoritative.",
+  "prerequisites": [
+    "49-textured-template Level6BlenderKit bake available in ServerStorage",
+    "Level 6 Kit Metadata v2 reconciled",
+    "UV V-flip correction in Level6BlenderRuntimeBake verified in Play"
+  ],
+  "scripts": [
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Configuration.ModuleScript.luau",
+      "bytes": 19473,
+      "sha256": "72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3",
+      "action": "update",
+      "baselineSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Layout Generator.ModuleScript.luau",
+      "bytes": 44335,
+      "sha256": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad",
+      "action": "update",
+      "baselineSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Round Adapter.ModuleScript.luau",
+      "bytes": 32409,
+      "sha256": "6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549",
+      "action": "update",
+      "baselineSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Objective Controller.ModuleScript.luau",
+      "bytes": 70847,
+      "sha256": "49915b41b0494e1b6c44606708f0cc6082b3c15710bce6ca0d70674fd17ce7a2",
+      "action": "update",
+      "baselineSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Test Suite.ModuleScript.luau",
+      "bytes": 203553,
+      "sha256": "1b07d250575bb8aaee9a187e861bdc7dadbd31641e6728c87eac4aaed3a23bc8",
+      "action": "update",
+      "baselineSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Worn Party Visual Adapter.ModuleScript.luau",
+      "bytes": 19059,
+      "sha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "action": "create"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "class": "ModuleScript",
+      "file": "tools/level3_worn_party/Level 3 Worn Party Room Dressing.ModuleScript.luau",
+      "bytes": 19427,
+      "sha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "action": "create"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schema": "level3-worn-party-studio-install-v1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "items": [
+    {
+      "id": 0,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Configuration",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 19473,
+      "sha256": "72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3",
+      "baselineBytes": 19286,
+      "baselineSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+    },
+    {
+      "id": 1,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Layout Generator",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 44335,
+      "sha256": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad",
+      "baselineBytes": 42613,
+      "baselineSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+    },
+    {
+      "id": 2,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 70847,
+      "sha256": "49915b41b0494e1b6c44606708f0cc6082b3c15710bce6ca0d70674fd17ce7a2",
+      "baselineBytes": 70421,
+      "baselineSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae"
+    },
+    {
+      "id": 3,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Test Suite",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 203553,
+      "sha256": "1b07d250575bb8aaee9a187e861bdc7dadbd31641e6728c87eac4aaed3a23bc8",
+      "baselineBytes": 202633,
+      "baselineSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299"
+    },
+    {
+      "id": 4,
+      "path": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "folder": "Level 6 Systems",
+      "name": "Level6BlenderRuntimeBake",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 5787,
+      "sha256": "eeeac9797cd1a10656ceaba9b7896b8d177d8705c93839008a7d99a641004af5",
+      "baselineBytes": 5783,
+      "baselineSha256": "d66440233bcf5fb422a4e7ec1072b836edda7e2cf588fe5c50e5d87774e015ba"
+    },
+    {
+      "id": 5,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Worn Party Room Dressing",
+      "class": "ModuleScript",
+      "create": true,
+      "bytes": 19273,
+      "sha256": "8aad8f91ad1f823b2b1b1117f5e3e9e74ad9c975cb14d757ceb23acb71dc62d8",
+      "baselineBytes": null,
+      "baselineSha256": null
+    },
+    {
+      "id": 6,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Worn Party Visual Adapter",
+      "class": "ModuleScript",
+      "create": true,
+      "bytes": 18850,
+      "sha256": "df8f7739863d7db8038618e7d4bbd0a2718629961e178011516affd779cf7139",
+      "baselineBytes": null,
+      "baselineSha256": null
+    },
+    {
+      "id": 7,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "folder": "Level 3 Systems",
+      "name": "Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "create": false,
+      "bytes": 32409,
+      "sha256": "6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549",
+      "baselineBytes": 31538,
+      "baselineSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+    }
+  ],
+  "snapshotSha256": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4"
+}

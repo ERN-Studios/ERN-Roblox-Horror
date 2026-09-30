@@ -1,0 +1,13 @@
+# Level 3 Studio recovery snapshots are local-only. Keep only reviewed,
+# non-source verification records eligible for an explicit commit.
+/artifacts/level3-rebuild-20260930/native-backup*/*
+!/artifacts/level3-rebuild-20260930/native-backup*/source-manifest.json
+!/artifacts/level3-rebuild-20260930/native-backup*/backup-file-hashes.json
+
+# Temporary Level 3 local tooling output.
+/tools/level3_worn_party/__pycache__/
+/tools/level3_worn_party/*.pyc
+/tools/level3_worn_party/*.server.log
+/tools/level3_worn_party/*.server.pid
+/artifacts/level3-rebuild-20260930/*.server.log
+/artifacts/level3-rebuild-20260930/*.server.pid

@@ -11,7 +11,7 @@
       "prompt_influence": 0.75,
       "variations_per_prompt": 4
     },
-    "license_status": "Workspace subscription tier was not exposed by the connector; verify the ElevenLabs plan permits commercial use before importing into a monetized experience.",
+    "license_status": "Verified 2026-09-30 in the authenticated ElevenLabs workspace: paid Creator plan renews October 1, September 1 invoice was paid, and this same workspace opens the source flow. The selected sounds were generated September 29 within that paid period; ElevenLabs documentation grants commercial rights to paid-plan generations.",
     "license_terms_url": "https://elevenlabs.io/docs/overview/administration/billing",
     "sound_effects_terms_url": "https://elevenlabs.io/sound-effects-terms"
   },

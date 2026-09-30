@@ -1,0 +1,21 @@
+# Level 3 Studio export reconciliation — 2026-09-30
+
+This record compares read-only native/source exports of authoritative Studio place `131311258779917` (universe `10559217407`) before and after the scoped Level 3 install. Both captures reported place version `2413`, before any verified Roblox publish. The full backups remain local because they include all live scripts and may contain credentials. The commit-eligible [before](native-backup/source-manifest.json) and [after](native-backup-after/source-manifest.json) manifests contain paths, classes, SHA-256 hashes, and editor parity without source text.
+
+The before export had 197 scripts; the after export had 199. Every after script had matching Studio `Source` and ScriptEditorService editor source. Exactly two `ModuleScript` instances were created, seven existing `ModuleScript` sources changed, and no script was removed. All other script hashes were identical. The table lists the complete source delta:
+
+| Studio path (all `ModuleScript`) | Before SHA-256 | After SHA-256 |
+| --- | --- | --- |
+| `ServerScriptService.Level 3 Systems.Level 3 Configuration` | `8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28` | `72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3` |
+| `ServerScriptService.Level 3 Systems.Level 3 Layout Generator` | `2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289` | `173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad` |
+| `ServerScriptService.Level 3 Systems.Level 3 Objective Controller` | `ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae` | `49915b41b0494e1b6c44606708f0cc6082b3c15710bce6ca0d70674fd17ce7a2` |
+| `ServerScriptService.Level 3 Systems.Level 3 Round Adapter` | `d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb` | `6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549` |
+| `ServerScriptService.Level 3 Systems.Level 3 Test Suite` | `7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299` | `1b07d250575bb8aaee9a187e861bdc7dadbd31641e6728c87eac4aaed3a23bc8` |
+| `ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing` | absent | `766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d` |
+| `ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter` | absent | `badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613` |
+| `ServerScriptService.Level 6 Systems.Level 6 Kit Metadata` | `6270f72d32a197a002cd18815f203225f7f3660dd3a9c6da261eea48900870f6` | `c141f4c5246ece81288d1cefdedd8243057149d4844f8fea7c14ee428ff66f4b` |
+| `ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake` | `d66440233bcf5fb422a4e7ec1072b836edda7e2cf588fe5c50e5d87774e015ba` | `eeeac9797cd1a10656ceaba9b7896b8d177d8705c93839008a7d99a641004af5` |
+
+The native export's 169 service-child roots were unchanged by path and class. Only `ServerScriptService.Level 3 Systems` changed descendant count, from 9 to 11, matching the two new modules. The captured service properties, attributes, and tags were equal before and after; `Workspace.Gravity` remained 196.2 studs/s². `ServerStorage.Level6BlenderSource` remained a `Folder` with 130 native descendants. The local Blender source package is indexed by [exports-v2/manifest.json](../../assets/level6-worn-party/exports-v2/manifest.json), which names 49 mesh chunks and `textures/WornParty_Atlas1024.png`. In Studio Play, the runtime bake produced 49 textured templates from this source; the corrected UV orientation was checked visually. The five new ElevenLabs sounds remain unbound because Roblox has not returned verified asset IDs.
+
+The after native model `all-service-children.rbxm` assembled to 29,749,769 bytes with SHA-256 `1b5f7f4e59eb3ca3d256003132505daedc30cbddf8580476b21f1a2f4093d9fa`; the 199-script source export has SHA-256 `37db393552ae187f58bdb0596f669d85df4e737f927783838323de8f08cb0f8e`. The capture reported 372,671 native descendants, zero editor conflicts, and zero skipped roots. After Studio's successful publish, its **Download a Copy** command also saved a complete native `.rbxl` locally: 20,211,687 bytes, Roblox binary place header, SHA-256 `09f9764a10ec2974db087e6b2d1e7fa19d36d047bb2945f853429e2ddccefd19`. The full recovery files remain local; the [Play verification record](live-play-verification.md) carries the publication evidence.
