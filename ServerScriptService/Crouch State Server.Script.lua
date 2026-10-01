@@ -44,7 +44,7 @@ local function setCrouching(player: Player, active: boolean, responseSerial: num
 end
 
 local function characterAllowsCrouch(player: Player): boolean
-	local preview = player:GetAttribute("Level6InRound") == true and DevAccess.IsAllowed(player)
+	local preview = player:GetAttribute("Level6InRound") == true and DevAccess.IsLevel6PreviewAllowed(player)
 	local participating = if preview then workspace:GetAttribute("Level6RoundActive") == true
 		else player:GetAttribute("InRound") == true and workspace:GetAttribute("RoundActive") == true
 	if player.Parent ~= Players

@@ -98,6 +98,57 @@ local blackoutApplied = false
 local blackoutLights: {BlackoutLightRecord} = {}
 local blackoutParts: {BlackoutPartRecord} = {}
 local blackoutPartSeen: {[BasePart]: boolean} = {}
+-- The Blender diffuser is a tiny carrier with visible MeshPart children.
+-- Its server-side visual listeners cannot observe this script's client-local
+-- flicker, fade, or blackout writes.
+local kitFixtureSeen: {[BasePart]: boolean} = {}
+local kitFixtureConnections: {RBXScriptConnection} = {}
+local kitVisualVariants: {[MeshPart]: string} = {}
+
+local function syncKitFixtureVisuals(carrier: BasePart)
+	for _, child in ipairs(carrier:GetChildren()) do
+		if child:IsA("MeshPart") and child:GetAttribute("Level6_KitVisualChunk") == true then
+			if kitVisualVariants[child] == nil then
+				kitVisualVariants[child] = child.MaterialVariant
+			end
+			child.Material = carrier.Material
+			child.Color = carrier.Color
+			child.Transparency = carrier.Transparency
+			-- Neon and the unlit SmoothPlastic pass must not retain a PBR
+			-- variant that can make a locally darkened lamp appear emissive.
+			child.MaterialVariant = if carrier.Material == Enum.Material.Neon
+				or carrier.Material == Enum.Material.SmoothPlastic
+				then "" else kitVisualVariants[child]
+		end
+	end
+end
+
+local function tryWatchKitFixture(instance: Instance)
+	if not instance:IsA("BasePart") or kitFixtureSeen[instance]
+		or instance:GetAttribute("Level6_KitAsset") ~= "FluorescentDiffuser" then return end
+	if not instance:FindFirstChild("Level 6 Fluorescent Light") then return end
+	kitFixtureSeen[instance] = true
+	table.insert(kitFixtureConnections,
+		instance:GetPropertyChangedSignal("Material"):Connect(function()
+			syncKitFixtureVisuals(instance)
+		end))
+	table.insert(kitFixtureConnections,
+		instance:GetPropertyChangedSignal("Color"):Connect(function()
+			syncKitFixtureVisuals(instance)
+		end))
+	table.insert(kitFixtureConnections,
+		instance:GetPropertyChangedSignal("Transparency"):Connect(function()
+			syncKitFixtureVisuals(instance)
+		end))
+	syncKitFixtureVisuals(instance)
+end
+
+local function clearKitFixtureWatchers()
+	for _, connection in ipairs(kitFixtureConnections) do connection:Disconnect() end
+	table.clear(kitFixtureConnections)
+	table.clear(kitFixtureSeen)
+	table.clear(kitVisualVariants)
+end
 -- enforceBlackout used to walk the WHOLE generated mall on every throttled
 -- Heartbeat -- 12.5 times a second for the ~52 s of each blackout that is not
 -- the scream, and then continuously for the rest of the round once five CDs
@@ -256,6 +307,22 @@ local function recoveryFlickerRequested(): boolean
 	return value == true or (state and state:GetAttribute("Level6_RoomSongPhase") == "RECOVERY_FLICKER")
 end
 
+local function captureAuthoredRoomGlow(instance: Instance)
+	if not instance:IsA("MeshPart")
+		or instance:GetAttribute("Level6_KitVisualChunk") ~= true
+		or instance.Name:sub(-6) ~= "__glow" then return end
+	local carrier = instance.Parent
+	if not (carrier and carrier:IsA("BasePart")
+		and carrier:GetAttribute("Level6_BlenderGatewayRoom") == true)
+		or blackoutPartSeen[instance] then return end
+	blackoutPartSeen[instance] = true
+	table.insert(blackoutParts, {
+		Part = instance,
+		Material = instance.Material,
+		Color = instance.Color,
+	})
+end
+
 local function captureWorldLightBaseline()
 	table.clear(blackoutLights)
 	table.clear(blackoutParts)
@@ -265,6 +332,7 @@ local function captureWorldLightBaseline()
 	local world = boundWorld
 	if not world then return end
 	for _, descendant in ipairs(world:GetDescendants()) do
+		captureAuthoredRoomGlow(descendant)
 		if descendant:IsA("Light") then
 			table.insert(blackoutLights, {
 				Light = descendant,
@@ -783,16 +851,50 @@ local function bindWorld(world: Model?)
 	worldAddedConnection = nil
 	worldRemovingConnection = nil
 	clearFixtureRecords()
+	clearKitFixtureWatchers()
 	boundWorld = world
 	if not world then return end
 
-	for _, descendant in ipairs(world:GetDescendants()) do tryAddFixture(descendant) end
+	for _, descendant in ipairs(world:GetDescendants()) do
+		tryAddFixture(descendant)
+		tryWatchKitFixture(descendant)
+	end
 	worldAddedConnection = world.DescendantAdded:Connect(function(descendant)
 		-- The builder attaches the flicker attribute immediately after parenting.
 		-- Deferring one scheduler turn observes the completed fixture safely.
 		task.defer(function()
 			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
 			tryAddFixture(descendant)
+			tryWatchKitFixture(descendant)
+			if descendant:IsA("Light") then
+				local lightParent = descendant.Parent
+				if lightParent then tryWatchKitFixture(lightParent) end
+			elseif descendant:IsA("MeshPart")
+				and descendant:GetAttribute("Level6_KitVisualChunk") == true then
+				local carrier = descendant.Parent
+				if carrier and carrier:IsA("BasePart") then
+					tryWatchKitFixture(carrier)
+					if kitFixtureSeen[carrier] then syncKitFixtureVisuals(carrier) end
+				end
+			end
+			if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then
+				local oldCount = #blackoutParts
+				captureAuthoredRoomGlow(descendant)
+				if #blackoutParts > oldCount and blackoutApplied then
+					if completionFadeActive then
+						local _, duration, progress = completionTiming()
+						local remaining = duration * (1 - progress)
+						local glow = blackoutParts[#blackoutParts]
+						local dark = Color3.fromRGB(13, 14, 15)
+						glow.Part.Color = glow.Color:Lerp(dark, progress)
+						if remaining > .04 then tween(glow.Part, remaining, {Color = dark}) end
+					else
+						-- The ordinary blackout sweep also darkens a room
+						-- lamp whose glow streamed in after the baseline.
+						blackoutSweptUnlocked = nil
+					end
+				end
+			end
 			if blackoutApplied and descendant:IsA("Light") then
 				-- UNGATED, unlike the completion handling below it. A Light that
 				-- streams in during an ORDINARY blackout is exactly the case
@@ -843,16 +945,18 @@ applyLevelGrade = function(unlocked: boolean)
 	Lighting.GlobalShadows = true
 
 	local tint = if unlocked then Color3.fromRGB(216, 235, 214) else Color3.fromRGB(232, 219, 184)
-	local fog = if unlocked then Color3.fromRGB(93, 109, 101) else Color3.fromRGB(103, 99, 82)
-	local ambient = if unlocked then Color3.fromRGB(92, 98, 94) else Color3.fromRGB(98, 91, 76)
-	local outdoor = if unlocked then Color3.fromRGB(62, 69, 65) else Color3.fromRGB(66, 61, 52)
+	-- Only the ceiling fixtures should illuminate the occupied mall. This
+	-- client-owned grade keeps the exterior at night without changing the lobby
+	-- or the original Level 3 for players outside this preview.
+	local fog = if unlocked then Color3.fromRGB(25, 32, 33) else Color3.fromRGB(25, 24, 22)
+	local ambient = if unlocked then Color3.fromRGB(19, 21, 22) else Color3.fromRGB(18, 17, 16)
 
 	tween(Lighting, 0.48, {
-		Brightness = if unlocked then 1.64 else 1.54,
-		ClockTime = 1.5,
-		ExposureCompensation = if unlocked then -0.02 else -0.06,
+		Brightness = 0,
+		ClockTime = 0.5,
+		ExposureCompensation = if unlocked then 0.04 else 0,
 		Ambient = ambient,
-		OutdoorAmbient = outdoor,
+		OutdoorAmbient = Color3.new(0, 0, 0),
 		-- ColorShift is additive in Roblox; near-white values flatten and wash
 		-- out every lit surface.  Keep it near neutral and let the dedicated
 		-- color grade provide the abandoned-mall tint.
@@ -861,8 +965,8 @@ applyLevelGrade = function(unlocked: boolean)
 		FogColor = fog,
 		FogStart = 72,
 		FogEnd = if unlocked then 540 else 460,
-		EnvironmentDiffuseScale = 0.32,
-		EnvironmentSpecularScale = 0.22,
+		EnvironmentDiffuseScale = 0,
+		EnvironmentSpecularScale = 0,
 		ShadowSoftness = 0.72,
 	})
 	tween(colorGrade, 0.48, {

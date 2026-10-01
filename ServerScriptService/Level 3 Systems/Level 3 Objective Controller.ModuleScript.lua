@@ -561,8 +561,8 @@ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
 			local carryCF = anchorPart.CFrame
 				* CFrame.new(spread, .05 + (slot % 2) * .08, anchorPart.Size.Z * .5 + .18 + slot * .018)
 				* CFrame.Angles(0, math.rad(90), fan)
-			disc.CFrame = carryCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-			hub.CFrame = carryCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+			disc.CFrame = carryCF
+			hub.CFrame = carryCF
 			disc.Parent = model
 			hub.Parent = model
 			local torsoWeld = Instance.new("WeldConstraint")
@@ -670,8 +670,8 @@ local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: 
 	configureRuntimeDiscPart(disc, true, true)
 	configureRuntimeDiscPart(hub, true, false)
 	local dropCF = CFrame.new(position + Vector3.new(0, .16, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	disc.CFrame = dropCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-	hub.CFrame = dropCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+	disc.CFrame = dropCF
+	hub.CFrame = dropCF
 	disc.Parent = model
 	hub.Parent = model
 	model.PrimaryPart = disc

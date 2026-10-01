@@ -243,9 +243,9 @@ local function makeFixture(parent: Instance, position: Vector3, kind: string, in
 		-- Broad, readable fluorescent spill.  The fixtures remain artificial and
 		-- uneven, but the carpet/furniture must not collapse into black silhouettes
 		-- on mobile displays.
-		light.Brightness = (kind == "Party" or kind == "PartyHall") and 1.62 or 1.48
-		light.Range = 34
-		light.Angle = 128
+		light.Brightness = (kind == "Party" or kind == "PartyHall") and 1.95 or 1.85
+		light.Range = 42
+		light.Angle = 140
 		light.Shadows = false
 		light.Parent = diffuser
 		-- Roughly one in seven working fixtures receives independent client-side
@@ -259,21 +259,31 @@ end
 local function makeRoomLights(parent: Instance, room: {[string]: any}, roomIndex: number)
 	local p = worldPosition(room)
 	local area = room.W * room.D
-	-- Procedural rooms stay readable without allowing the larger map to multiply
-	-- dynamic lights beyond the six-player server budget.
-	local targetCount = math.clamp(math.floor(area / 2200) + 1, 1, 4)
-	local columns = math.min(3, math.max(1, math.ceil(targetCount / 2)))
-	local rows = math.min(2, math.max(1, math.ceil(targetCount / columns)))
-	local n = 0
-	for iz = 1, rows do
-		for ix = 1, columns do
-			if n >= targetCount then break end
-			n += 1
-			local x = (ix / (columns + 1) - .5) * room.W
-			local z = (iz / (rows + 1) - .5) * room.D
-			makeFixture(parent, p + Vector3.new(x, roomHeight(room) - .85, z),
-				room.Kind, roomIndex * 10 + n, (roomIndex * 7 + n * 3) % 13 == 0)
-		end
+	-- Four working lamps at quarter positions cover the large procedural rooms
+	-- even after the outdoor fill is removed. Smaller service/arrival rooms use
+	-- at most two; no room can randomly lose its only useful ceiling light.
+	local positions: {Vector3}
+	if area >= 4500 then
+		positions = {
+			Vector3.new(-room.W * .25, 0, -room.D * .25),
+			Vector3.new(room.W * .25, 0, -room.D * .25),
+			Vector3.new(-room.W * .25, 0, room.D * .25),
+			Vector3.new(room.W * .25, 0, room.D * .25),
+		}
+	elseif area >= 2800 then
+		positions = {Vector3.new(-room.W * .25, 0, 0), Vector3.new(room.W * .25, 0, 0)}
+	else
+		positions = {Vector3.zero}
+	end
+	for index, offset in ipairs(positions) do
+		makeFixture(parent, p + offset + Vector3.new(0, roomHeight(room) - .85, 0),
+			room.Kind, roomIndex * 10 + index, false)
+	end
+	-- An occasional failed ballast is still visible as abandoned-mall dressing,
+	-- but it never replaces one of the working lights above.
+	if area >= 4500 and roomIndex % 7 == 0 then
+		makeFixture(parent, p + Vector3.new(0, roomHeight(room) - .85, 0),
+			room.Kind, roomIndex * 10 + 5, true)
 	end
 end
 
@@ -1428,21 +1438,59 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	-- side walls stop just short of the room shell.
 	local corridorTheme = link.ThemeId or a.ThemeId
 	local floorColor, floorMaterial, floorTexture, studs = floorStyle("PartyHall", nil, corridorTheme)
-	local sealedLength = length + .04
-	-- Room shells own the opening jambs/lintel. Stop tunnel walls and ceiling
-	-- just before those shell volumes so no coplanar faces can shimmer.
-	local wallLength = math.max(.1, length - Configuration.WallThickness - .08)
-	local floorSize = horizontal and Vector3.new(sealedLength, 1, tunnelWidth)
-		or Vector3.new(tunnelWidth, 1, sealedLength)
-	local floorPart = part(model, "Level 6 Corridor Floor", CFrame.new(center - Vector3.new(0, .5, 0)),
-		floorSize, floorColor, floorMaterial)
-	if floorTexture then texture(floorPart, floorTexture, Enum.NormalId.Top, studs, studs) end
+	local inserted = link.BlenderRoom
+	local segments = {}
+	local function addSegment(firstDistance, lastDistance, trimAtA, trimAtB)
+		local wallTrim = Configuration.WallThickness * .5 + .04
+		local wallFirst = firstDistance + (if trimAtA then wallTrim else .04)
+		local wallLast = lastDistance - (if trimAtB then wallTrim else .04)
+		assert(wallLast > wallFirst and lastDistance > firstDistance,
+			"Level 6 corridor stub is too short for the authored room")
+		local segment = {
+			StartDistance = firstDistance, EndDistance = lastDistance,
+			Center = startPoint + forward * ((firstDistance + lastDistance) * .5),
+			Length = lastDistance - firstDistance,
+			WallCenter = startPoint + forward * ((wallFirst + wallLast) * .5),
+			WallLength = wallLast - wallFirst,
+		}
+		table.insert(segments, segment)
+	end
+	if inserted then
+		assert(inserted.StartDistance >= 6
+			and inserted.StartDistance + inserted.Length <= length - 6,
+			"Level 6 authored room must preserve both corridor mouths")
+		addSegment(0, inserted.StartDistance, true, false)
+		addSegment(inserted.StartDistance + inserted.Length, length, false, true)
+	else
+		addSegment(0, length, true, true)
+	end
+	-- Each stub stops at the authored room end face. Splitting the actual floor,
+	-- ceiling, and wall colliders keeps its two portals and taller roof clear.
+	local floorParts = {}
+	for segmentIndex, segment in ipairs(segments) do
+		local first = segment.StartDistance + (if inserted and segmentIndex == 2 then .02 else -.02)
+		local last = segment.EndDistance + (if inserted and segmentIndex == 1 then -.02 else .02)
+		local floorCenter = startPoint + forward * ((first + last) * .5)
+		local floorLength = last - first
+		local floorSize = horizontal and Vector3.new(floorLength, 1, tunnelWidth)
+			or Vector3.new(tunnelWidth, 1, floorLength)
+		local floorPart = part(model, "Level 6 Corridor Floor",
+			CFrame.new(floorCenter - Vector3.new(0, .5, 0)), floorSize, floorColor, floorMaterial)
+		if floorTexture then texture(floorPart, floorTexture, Enum.NormalId.Top, studs, studs) end
+		table.insert(floorParts, floorPart)
+		local ceilingSize = horizontal and Vector3.new(segment.WallLength, 1, tunnelWidth)
+			or Vector3.new(tunnelWidth, 1, segment.WallLength)
+		part(model, "Level 6 Corridor Ceiling",
+			CFrame.new(segment.WallCenter + Vector3.new(0, tunnelHeight + .5, 0)),
+			ceilingSize, C.AgedWhite, Enum.Material.Plaster)
+	end
 
 	-- Every physical corridor mouth owns an exact, zero-geometry audio marker.
 	-- Clients select their nearest markers during the blackout scream, preserving
 	-- spatial direction without decoding fifty simultaneous copies of one asset.
 	local screamOpenings = {}
 	for openingIndex, entry in ipairs({{Side="A", Point=startPoint}, {Side="B", Point=endPoint}}) do
+		local floorPart = floorParts[if openingIndex == 1 then 1 else #floorParts]
 		local opening = Instance.new("Attachment")
 		opening.Name = "Level 6 Corridor Opening " .. entry.Side
 		opening.CFrame = floorPart.CFrame:ToObjectSpace(CFrame.new(entry.Point + Vector3.new(0, 4.2, 0)))
@@ -1455,11 +1503,6 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 		opening.Parent = floorPart
 		table.insert(screamOpenings, opening)
 	end
-	local ceilingSize = horizontal and Vector3.new(wallLength, 1, tunnelWidth)
-		or Vector3.new(tunnelWidth, 1, wallLength)
-	part(model, "Level 6 Corridor Ceiling",
-		CFrame.new(center + Vector3.new(0, tunnelHeight + .5, 0)),
-		ceilingSize, C.AgedWhite, Enum.Material.Plaster)
 
 	local corridorStyle = {
 		Id = "Corridor", ThemeId = corridorTheme,
@@ -1475,25 +1518,29 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	-- flush with the 14-stud floor/ceiling and the matching room opening.
 	local wallCenterOffset = tunnelWidth * .5 + Configuration.WallThickness * .5
 	if horizontal then
-		for _, z in ipairs({-wallCenterOffset, wallCenterOffset}) do
-			local wall = part(model, "Level 6 Corridor Wall",
-				CFrame.new(center + Vector3.new(0, tunnelHeight * .5, z)),
-				Vector3.new(wallLength, tunnelHeight, Configuration.WallThickness),
-				wallColorValue, wallMaterial)
-			texture(wall, wallTexture, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
-				wallStuds, wallStuds, wallTransparency)
+		for _, segment in ipairs(segments) do
+			for _, z in ipairs({-wallCenterOffset, wallCenterOffset}) do
+				local wall = part(model, "Level 6 Corridor Wall",
+					CFrame.new(segment.WallCenter + Vector3.new(0, tunnelHeight * .5, z)),
+					Vector3.new(segment.WallLength, tunnelHeight, Configuration.WallThickness),
+					wallColorValue, wallMaterial)
+				texture(wall, wallTexture, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
+					wallStuds, wallStuds, wallTransparency)
+			end
 		end
 	else
-		for _, x in ipairs({-wallCenterOffset, wallCenterOffset}) do
-			local wall = part(model, "Level 6 Corridor Wall",
-				CFrame.new(center + Vector3.new(x, tunnelHeight * .5, 0)),
-				Vector3.new(Configuration.WallThickness, tunnelHeight, wallLength),
-				wallColorValue, wallMaterial)
-			texture(wall, wallTexture, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
-				wallStuds, wallStuds, wallTransparency)
+		for _, segment in ipairs(segments) do
+			for _, x in ipairs({-wallCenterOffset, wallCenterOffset}) do
+				local wall = part(model, "Level 6 Corridor Wall",
+					CFrame.new(segment.WallCenter + Vector3.new(x, tunnelHeight * .5, 0)),
+					Vector3.new(Configuration.WallThickness, tunnelHeight, segment.WallLength),
+					wallColorValue, wallMaterial)
+				texture(wall, wallTexture, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
+					wallStuds, wallStuds, wallTransparency)
+			end
 		end
 	end
-	makeCorridorWallDecor(model, startPoint, endPoint, horizontal, index)
+	if not inserted then makeCorridorWallDecor(model, startPoint, endPoint, horizontal, index) end
 	local hiddenExit = link.Door == "HiddenExit"
 	local speakerCount = if hiddenExit then Configuration.Layout.ExitCorridorSpeakerCount else 0
 	if hiddenExit then
@@ -1518,7 +1565,8 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 			makeExitCorridorSpeaker(model, speakerPoint, horizontal, side, speakerIndex)
 		end
 	end
-	local fixtureCount = if hiddenExit then Configuration.Layout.ExitCorridorFixtureCount else 1
+	local fixtureCount = if inserted then 0
+		elseif hiddenExit then Configuration.Layout.ExitCorridorFixtureCount else 1
 	for fixtureIndex = 1, fixtureCount do
 		local position = startPoint:Lerp(endPoint, fixtureIndex / (fixtureCount + 1))
 		makeFixture(model, position + Vector3.new(0, tunnelHeight - .85, 0),
@@ -1526,6 +1574,7 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	end
 	return {Model=model, Center=center, Forward=forward, Length=length, DoorType=link.Door,
 		A=a, B=b, DoorPosition=center, StartPoint=startPoint, EndPoint=endPoint,
+		Segments=segments, BlenderRoom=inserted,
 		ScreamOpenings=screamOpenings,
 		WallColor=wallColorValue, Wallpaper=corridorWallpaper, Width=tunnelWidth, Height=tunnelHeight}
 end
@@ -1821,7 +1870,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		if link.Door == "HiddenExit" then
 			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
 			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
-			local spawnProgress = Configuration.MallManager.FinalHallSpawnProgress or .40
+			local spawnProgress = Configuration.MallManager.FinalHallSpawnProgress or .97
 			local halfwayMarker = part(corridor.Model, "Level 6 Final Hall Halfway",
 				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, halfwayProgress) + Vector3.new(0, .05, 0)),
 				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)

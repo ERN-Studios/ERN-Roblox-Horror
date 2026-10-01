@@ -24,7 +24,7 @@ local function lobbyPart(name)
 	return doors and doors:FindFirstChild(name)
 end
 local function playerReady(player)
-	if player.Parent ~= Players or not DevAccess.IsAllowed(player)
+	if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)
 		or player:GetAttribute("InRound") == true
 		or workspace:GetAttribute("ReservedRoundServer") == true then return nil end
 	local character = player.Character
@@ -57,7 +57,7 @@ end
 transport.OnServerEvent:Connect(function(player, nonce, ready)
 	local token = pending[player]
 	if token and nonce == token.nonce and ready == true and os.clock() <= token.expires
-		and DevAccess.IsAllowed(player) then token.ready = true end
+		and DevAccess.IsLevel6PreviewAllowed(player) then token.ready = true end
 end)
 local function streamReady(player, target, modelName)
 	local token = {nonce = HttpService:GenerateGUID(false), expires = os.clock() + 22, ready = false}

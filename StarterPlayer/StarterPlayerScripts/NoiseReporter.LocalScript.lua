@@ -15,8 +15,9 @@ local player = Players.LocalPlayer
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 local UIDevice = require(RS:WaitForChild("UIDevice"))
 local devAllowed = DevAccess.IsAllowed(player)
+local previewAllowed = DevAccess.IsLevel6PreviewAllowed(player)
 -- Level6 preview participates in local movement only; public progression attributes stay untouched.
-local function inPreview() return devAllowed and player:GetAttribute("Level6InRound") == true end
+local function inPreview() return previewAllowed and player:GetAttribute("Level6InRound") == true end
 local function inRound() return player:GetAttribute("InRound") == true or inPreview() end
 local function isHiding()
 	return player:GetAttribute(if inPreview() then "Level6_Hiding" else "Level3_Hiding") == true

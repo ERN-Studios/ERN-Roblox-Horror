@@ -5,7 +5,7 @@
 -- navigation, awareness, attacks, and lifecycle are isolated from Level 1.
 
 local Configuration = {
-	Version = 47,
+	Version = 46,
 	WorldName = "Level 3 Generated World",
 	StateFolderName = "Level 3 State",
 	RemotesFolderName = "Level 3 Remotes",
@@ -27,16 +27,16 @@ local Configuration = {
 	-- bounded district plan is larger than the former authored graph while still
 	-- keeping each six-player reserved server within a predictable build budget.
 	Layout = {
-		GeneratorVersion = 6,
+		GeneratorVersion = 2,
 		DistrictCount = 3,
-		RoomsPerDistrict = 10,
+		RoomsPerDistrict = 8,
 		GenerationAttempts = 32,
 		RetryStride = 104729,
 		FallbackSeeds = {101, 7331, 65537, 1900813},
-		MinimumRoomWidth = 80,
-		MaximumRoomWidth = 88,
-		MinimumRoomDepth = 64,
-		MaximumRoomDepth = 76,
+		MinimumRoomWidth = 65,
+		MaximumRoomWidth = 85,
+		MinimumRoomDepth = 57,
+		MaximumRoomDepth = 74,
 		MinimumRoomHeight = 11,
 		MaximumRoomHeight = 13,
 		MinimumInternalGap = 24,
@@ -53,13 +53,13 @@ local Configuration = {
 		RowHalfSpacing = 90,
 		ExtraLinksPerDistrict = 2,
 		MinimumModuleSeparation = 105,
-		-- Two loops per 2x5 district keep the core navigable and break long
-		-- sightlines. The scripted final hall is exempt.
+		-- With two loops per 2x4 district, one grid edge is absent. Three links
+		-- is the smallest possible straight-run cap; the scripted finale is exempt.
 		MaximumStraightRunLinks = 3,
-		MaximumVerticalRunLinks = 3,
+		MaximumVerticalRunLinks = 2,
 		BuildYieldEveryRooms = 3,
 		BuildYieldEveryCorridors = 2,
-		HideTableCount = 30,
+		HideTableCount = 24,
 	},
 	TextureStuds = {
 		PartyCarpet = 28,
@@ -97,12 +97,6 @@ local Configuration = {
 		-- Filled with the group upload of the reversed 180-second master.
 		RoomListeningSongReversed = "rbxassetid://75285146479953",
 		CDCollected = "rbxassetid://84585027971879",
-		-- Cleaned Worn Party masters. Bind only verified group-owned Roblox audio IDs.
-		PartyHallAmbience = "",
-		BudgetArcadeAmbience = "",
-		MaintenanceWorkshopAmbience = "",
-		ArcadeCredit = "",
-		BreakerInspect = "",
 		-- Reserved Level 3 scare slots. Add group-owned IDs when the sounds are ready.
 		ScareBalloonPop = "",
 		ScareChairScrape = "",

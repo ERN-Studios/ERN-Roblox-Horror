@@ -157,8 +157,10 @@ local Configuration = {
 		SpawnMinimumDistance = 90,
 		SpawnPreferredDistance = 125,
 		SpawnMaximumDistance = 180,
-		FinalHallSpawnProgress = .40,
-		FinaleApproachSpeed = 360,
+		-- Reveal at the far end after the first survivor passes halfway.
+		FinalHallSpawnProgress = .97,
+		-- A fast, animated walk toward the runners, without a maze-entry sprint.
+		FinaleApproachSpeed = 28,
 		SpawnGroupRadius = 75,
 		SpawnRoomMargin = 10,
 		-- Radius 5 matches the animated root-relative body sway. The slightly

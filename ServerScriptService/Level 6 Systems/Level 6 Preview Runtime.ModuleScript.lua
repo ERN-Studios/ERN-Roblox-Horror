@@ -76,6 +76,8 @@ local function applyBaselineReplicatedState(levelState: Folder, overrides: {[str
 	levelState:SetAttribute("Level6_LayoutHash", "")
 	levelState:SetAttribute("Level6_GeneratorVersion", LayoutGenerator.Version)
 	levelState:SetAttribute("Level6_GeneratedRoomCount", 0)
+	levelState:SetAttribute("Level6_AuthoredGatewayRoomCount", 0)
+	levelState:SetAttribute("Level6_AuthoredGatewayFloorArea", 0)
 	levelState:SetAttribute("Level6_GeneratedCorridorCount", 0)
 	levelState:SetAttribute("Level6_GeneratedDistrictCount", 0)
 	if o.Generation ~= nil then
@@ -229,6 +231,7 @@ function Runtime.GetSnapshot()
         Seed=activeManifest and activeManifest.Layout.ResolvedSeed or nil,
         LayoutHash=activeManifest and activeManifest.Layout.LayoutHash or nil,
         RoomCount=activeManifest and #activeManifest.Layout.Rooms or 0,
+        AuthoredGatewayRoomCount=activeManifest and #activeManifest.Layout.BlenderRooms or 0,
         Error=buildError, Stale=stale,
     }
 end
@@ -291,7 +294,9 @@ end
 function Runtime.EnsureWorld(): (Model, BasePart)
     assert(RunService:IsRunning(), "Level 6 preview construction runs during Play")
     if building then
-        local deadline = os.clock() + 240
+        -- The revised 279-chunk bake can outlast the old four-minute wait;
+        -- concurrent preview joins must wait for the same owned build.
+        local deadline = os.clock() + 1260
         repeat task.wait(.05) until not building or os.clock() > deadline
         assert(not building, "Level 6 build is still busy")
         assert(not buildError, buildError)
@@ -350,11 +355,14 @@ function Runtime.EnsureWorld(): (Model, BasePart)
         end
         manifest.World:SetAttribute("Level6BuildOwned", true)
         manifest.World:SetAttribute("Level6_RoomFloorArea", layout.RoomFloorArea)
+        manifest.World:SetAttribute("Level6_AuthoredGatewayFloorArea", layout.BlenderRoomFloorArea)
         s:SetAttribute("Level6_BuildSeconds", os.clock() - began)
         s:SetAttribute("Level6_WorldDescendants", #manifest.World:GetDescendants())
         s:SetAttribute("Level6_ResolvedSeed", layout.ResolvedSeed)
         s:SetAttribute("Level6_LayoutHash", layout.LayoutHash)
         s:SetAttribute("Level6_GeneratedRoomCount", #layout.Rooms)
+        s:SetAttribute("Level6_AuthoredGatewayRoomCount", #layout.BlenderRooms)
+        s:SetAttribute("Level6_AuthoredGatewayFloorArea", layout.BlenderRoomFloorArea)
         s:SetAttribute("Level6_GeneratedCorridorCount", #layout.Links)
         s:SetAttribute("Level6_GeneratedDistrictCount", #layout.Districts)
         s:SetAttribute("Level6_ExitPosition", manifest.ExitPosition)
@@ -376,7 +384,7 @@ function Runtime.EnsureWorld(): (Model, BasePart)
 end
 
 function Runtime.Join(player: Player): (boolean, string?)
-    if player.Parent ~= Players or not DevAccess.IsAllowed(player)
+    if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)
         or player:GetAttribute("InRound") == true
         or workspace:GetAttribute("ReservedRoundServer") == true then
         return false, "PREVIEW_NOT_ALLOWED"
@@ -435,7 +443,7 @@ RunService.Heartbeat:Connect(function(dt)
     permissionAccumulator = 0
     local rejected = {}
     for player in pairs(participants) do
-        if not DevAccess.IsAllowed(player) then table.insert(rejected, player) end
+        if not DevAccess.IsLevel6PreviewAllowed(player) then table.insert(rejected, player) end
     end
     for _, player in ipairs(rejected) do task.spawn(returnToLobby, player) end
 end)

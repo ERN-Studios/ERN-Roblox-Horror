@@ -160,11 +160,13 @@ local function updateFinalHallChase(session: AnyTable)
 						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
 					local along = offset:Dot(horizontalForward)
 					local lateral = (offset - horizontalForward * along).Magnitude
-					-- Start the finale as the first survivor commits to the open exit hall.
-					local entryProgress = 4
+					-- The first living survivor must pass strictly beyond 50% of this hall.
+					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
+					local entryProgress = hall.Length * (hall.HalfwayProgress
+						or Configuration.Layout.FinalHallHalfwayProgress or .50)
 					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
 					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
-					if along >= entryProgress and along <= hall.Length + 2.5
+					if along > entryProgress and along <= hall.Length + 2.5
 						and insideHallWidth and insideHallHeight then
 						session.FinalHallCrossed[player] = character
 					end
@@ -191,7 +193,7 @@ local function updateFinalHallChase(session: AnyTable)
 	session.Manifest.World:SetAttribute("Level6_FinalHallChaseActive", true)
 	workspace:SetAttribute("Level6FinalHallChaseTriggered", true)
 	-- This must precede HuntActive so the Manager's synchronous Start selects the
-	-- level-entry finale spawn rather than a normal hidden random-room spawn.
+	-- far-end finale spawn rather than a normal hidden random-room spawn.
 	workspace:SetAttribute("Level6FinalHallChaseActive", true)
 	workspace:SetAttribute("Level6MallManagerHuntActive", true)
 end
@@ -518,7 +520,16 @@ local function configureRuntimeDiscPart(part: BasePart, anchored: boolean, query
 	part.CastShadow = true
 	part.Transparency = 0
 	for _, object in ipairs(part:GetDescendants()) do
-		if object:IsA("ProximityPrompt") or object:IsA("Light") then object:Destroy() end
+		if object:IsA("ProximityPrompt") or object:IsA("Light") then
+			object:Destroy()
+		elseif object:IsA("BasePart") and object:GetAttribute("Level6_KitVisualChunk") == true then
+			-- Carry/drop clones do not inherit the source carrier's fade listener.
+			-- Restore every material chunk after the world pickup has faded away.
+			object.Transparency = 0
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = false
+		end
 	end
 end
 
@@ -531,6 +542,20 @@ local function cloneDiscPair(record: AnyTable): (BasePart, BasePart)
 	local hub = sourceHub:Clone()
 	assert(disc:IsA("BasePart") and hub:IsA("BasePart"), "Level 6 CD runtime clone produced invalid geometry")
 	return disc, hub
+end
+
+local function setDiscVisualCFrame(carrier: BasePart, targetCF: CFrame)
+	-- Carry/drop clones are positioned before parenting, when their internal
+	-- welds may not yet be in a simulated assembly. Move every material chunk
+	-- from its saved local offset so it cannot remain at the table position.
+	local offsets = {}
+	for _, object in ipairs(carrier:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level6_KitVisualChunk") == true then
+			offsets[object] = carrier.CFrame:ToObjectSpace(object.CFrame)
+		end
+	end
+	carrier.CFrame = targetCF
+	for object, localCF in pairs(offsets) do object.CFrame = targetCF * localCF end
 end
 
 local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
@@ -564,8 +589,8 @@ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
 			local carryCF = anchorPart.CFrame
 				* CFrame.new(spread, .05 + (slot % 2) * .08, anchorPart.Size.Z * .5 + .18 + slot * .018)
 				* CFrame.Angles(0, math.rad(90), fan)
-			disc.CFrame = carryCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-			hub.CFrame = carryCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+			setDiscVisualCFrame(disc, carryCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+			setDiscVisualCFrame(hub, carryCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
 			disc.Parent = model
 			hub.Parent = model
 			local torsoWeld = Instance.new("WeldConstraint")
@@ -673,8 +698,8 @@ local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: 
 	configureRuntimeDiscPart(disc, true, true)
 	configureRuntimeDiscPart(hub, true, false)
 	local dropCF = CFrame.new(position + Vector3.new(0, .16, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	disc.CFrame = dropCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
-	hub.CFrame = dropCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity)
+	setDiscVisualCFrame(disc, dropCF * (if disc:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+	setDiscVisualCFrame(hub, dropCF * (if hub:GetAttribute("Level6_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
 	disc.Parent = model
 	hub.Parent = model
 	model.PrimaryPart = disc

@@ -12,16 +12,16 @@ local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("Master
 
 local LayoutGenerator = {}
 
-local VERSION = 6
+local VERSION = 2
 local DISTRICT_COUNT = 3
-local ROOMS_PER_DISTRICT = 10
+local ROOMS_PER_DISTRICT = 8
 local GRID_ROWS = 2
-local GRID_COLUMNS = 5
+local GRID_COLUMNS = 4
 local MODULE_GOAL = 5
 local ENTRY_AND_GATEWAY_LINKS = 4
 local MAX_SEED = 2147483646
 
--- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x5 room grid.
+-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.
 -- Configuration.Layout advertises the same numbers to the test suite and world
 -- builder, so a config edit that the generator cannot honor must fail loudly
 -- instead of silently generating the old shape.
@@ -51,7 +51,7 @@ local DEFAULTS = {
 	ExtraLinksPerDistrict = 2,
 	MinimumModuleSeparation = 105,
 	MaximumStraightRunLinks = 3,
-	MaximumVerticalRunLinks = 3,
+	MaximumVerticalRunLinks = 2,
 	ArrivalWidth = 64,
 	ArrivalDepth = 54,
 	ExitWidth = 58,
@@ -341,9 +341,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	-- Align the gateways but omit the middle district's direct north-south
 	-- connection at this column. Players must turn between the two bridges.
 	local gatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
-	local secondGatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
-	if secondGatewayColumn == gatewayColumn then secondGatewayColumn = (secondGatewayColumn % (GRID_COLUMNS - 1)) + 1 end
-	local gatewayColumns = {gatewayColumn, secondGatewayColumn}
+	local gatewayColumns = {gatewayColumn, gatewayColumn}
 	local exitRow = rng:NextInteger(1, GRID_ROWS)
 
 	local layout = {
@@ -403,11 +401,11 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
 		local widths = {}
 		local depths = {
-			Tuning.MinimumRoomDepth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomDepth - Tuning.MinimumRoomDepth) / 4)),
-			Tuning.MinimumRoomDepth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomDepth - Tuning.MinimumRoomDepth) / 4)),
+			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
+			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
 		}
 		for column = 1, GRID_COLUMNS do
-			widths[column] = Tuning.MinimumRoomWidth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomWidth - Tuning.MinimumRoomWidth) / 4))
+			widths[column] = rng:NextInteger(Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth)
 			sharedWidths[column] = math.max(sharedWidths[column] or 0, widths[column])
 		end
 		local gaps = {}
@@ -448,7 +446,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 					D = depths[row],
 					H = rng:NextInteger(Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight),
 					Kind = definition.Kind,
-					Decor = decors[((slotNumber - 1) % #decors) + 1],
+					Decor = decors[slotNumber],
 					Module = false,
 					ThemeId = definition.ThemeId,
 					SectionIndex = sectionIndex,
@@ -551,37 +549,28 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		return link
 	end
 
-	-- A 2x5 district has thirteen grid edges. Two different horizontal cuts
-	-- retain eleven edges (two loops), force turns, and create useful dead ends.
-	-- The distinct bridge columns prevent a single north-south route through all districts.
-	local omitted = {{}, {}, {}}
-	for sectionIndex = 1, DISTRICT_COUNT do
-		local firstCut = rng:NextInteger(1, GRID_COLUMNS - 1)
-		local secondCut = rng:NextInteger(1, GRID_COLUMNS - 2)
-		if secondCut >= firstCut then secondCut += 1 end
-		local cuts = {firstCut, secondCut}
-		if sectionIndex == 1 then
-			cuts[entryRow] = rng:NextInteger(1, GRID_COLUMNS - 2)
-			if cuts[3 - entryRow] == cuts[entryRow] then
-				cuts[3 - entryRow] = (cuts[entryRow] % (GRID_COLUMNS - 1)) + 1
-			end
-		elseif sectionIndex == 3 then
-			cuts[exitRow] = GRID_COLUMNS - 1
-			cuts[3 - exitRow] = rng:NextInteger(1, GRID_COLUMNS - 2)
-		end
-		for row = 1, GRID_ROWS do
-			local cut = cuts[row]
-			omitted[sectionIndex][pairKey(slots[sectionIndex][row][cut].Id,
-				slots[sectionIndex][row][cut + 1].Id)] = true
-		end
+	-- A 2x4 district has ten possible edges. Keeping nine gives the original
+	-- seven-edge spanning tree plus two loops. Choose the one missing edge in
+	-- each district to break the arrival, bridge and Signal Hall sightlines.
+	-- A three-loop Master override deliberately restores all ten edges.
+	local omitted = {}
+	if Tuning.ExtraLinksPerDistrict <= 2 then
+		local entryCut = rng:NextInteger(1, GRID_COLUMNS - 1)
+		omitted[1] = pairKey(slots[1][entryRow][entryCut].Id,
+			slots[1][entryRow][entryCut + 1].Id)
+		omitted[2] = pairKey(slots[2][1][gatewayColumn].Id,
+			slots[2][GRID_ROWS][gatewayColumn].Id)
+		omitted[3] = pairKey(slots[3][exitRow][GRID_COLUMNS - 1].Id,
+			slots[3][exitRow][GRID_COLUMNS].Id)
 	end
-	layout.StraightRunRelaxed = false
+	layout.StraightRunRelaxed = Tuning.ExtraLinksPerDistrict == 3
+		or Tuning.MaximumStraightRunLinks < 3 or Tuning.MaximumVerticalRunLinks < 2
 
 	local function neighbourSlots(sectionIndex, row, column)
 		local result = {}
 		local current = slots[sectionIndex][row][column]
 		local function allow(other)
-			if not omitted[sectionIndex][pairKey(current.Id, other.Id)] then
+			if pairKey(current.Id, other.Id) ~= omitted[sectionIndex] then
 				table.insert(result, other)
 			end
 		end
@@ -631,14 +620,14 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 				if column < GRID_COLUMNS then
 					local other = slots[sectionIndex][row][column + 1]
 					if not selectedPairs[pairKey(room.Id, other.Id)]
-						and not omitted[sectionIndex][pairKey(room.Id, other.Id)] then
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
 						table.insert(unused, {room, other})
 					end
 				end
 				if row < GRID_ROWS then
 					local other = slots[sectionIndex][row + 1][column]
 					if not selectedPairs[pairKey(room.Id, other.Id)]
-						and not omitted[sectionIndex][pairKey(room.Id, other.Id)] then
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
 						table.insert(unused, {room, other})
 					end
 				end
@@ -826,23 +815,6 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		end)(),
 		AmbientHVACRoomId = slots[1][3 - entryRow][GRID_COLUMNS].Id,
 	}
-	-- Three compact service pockets retain the main party room and clear center lanes.
-	layout.ServiceRooms = {}
-	for districtIndex, variant in ipairs({"BudgetArcade", "PartySupplyStore", "MaintenanceWorkshop"}) do
-		local choices = {}
-		for _, candidate in ipairs(layout.Districts[districtIndex].Rooms) do
-			if not candidate.Module and candidate.Role == "Room" then table.insert(choices, candidate) end
-		end
-		local selected = choices[rng:NextInteger(1, #choices)]
-		selected.ServiceVariant = variant
-		selected.ServicePocketWidth = 18
-		selected.ServicePocketDepth = 24
-		selected.ServicePocketSeed = rng:NextInteger(1, 2 ^ 30)
-		table.insert(layout.ServiceRooms, selected.Id)
-	end
-	layout.RoomFloorArea = 0
-	for _, room in ipairs(layout.Rooms) do layout.RoomFloorArea += room.W * room.D end
-	-- Room area follows the validated width/depth tuning; no hardcoded minimum blocks a live Master override.
 	layout.LayoutHash = makeHash(layout)
 	return layout
 end
@@ -855,7 +827,7 @@ function LayoutGenerator.Validate(layout)
 	if type(layout) ~= "table" then return fail("layout is not a table") end
 	if layout.Version ~= VERSION then return fail("layout version is stale") end
 	if type(layout.Rooms) ~= "table" or #layout.Rooms ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT + 2 then
-		return fail("layout must contain exactly 32 rooms")
+		return fail("layout must contain exactly 26 rooms")
 	end
 	local expectedLinks = DISTRICT_COUNT
 		* ((ROOMS_PER_DISTRICT - 1) + Tuning.ExtraLinksPerDistrict)
@@ -916,7 +888,7 @@ function LayoutGenerator.Validate(layout)
 	end
 	for sectionIndex = 1, DISTRICT_COUNT do
 		if sectionCounts[sectionIndex] ~= ROOMS_PER_DISTRICT then
-			return fail("every district must contain exactly ten rooms")
+			return fail("every district must contain exactly eight rooms")
 		end
 		if moduleCounts[sectionIndex] < 1 then
 			return fail("every district must contain at least one module")
@@ -927,7 +899,7 @@ function LayoutGenerator.Validate(layout)
 		return fail("layout must contain exactly five module rooms")
 	end
 	if hideSpotTotal ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT then
-		return fail("layout must request exactly 30 evenly distributed hide spots")
+		return fail("layout must request exactly 24 evenly distributed hide spots")
 	end
 
 	for index = 1, #layout.Rooms - 1 do
@@ -1072,11 +1044,6 @@ function LayoutGenerator.Validate(layout)
 	for roomId in pairs(seenRooms) do
 		if not reached[roomId] then return fail("whole graph is disconnected at " .. roomId) end
 	end
-	local deadEnds = 0
-	for _, room in ipairs(layout.Rooms) do
-		if room.Role == "Room" and #layout.Adjacency[room.Id] == 1 then deadEnds += 1 end
-	end
-	if deadEnds < 1 then return fail("Level 3 requires a non-finale dead end") end
 	local straight, vertical = straightRuns(layout)
 	if layout.MaximumStraightRun ~= straight or layout.MaximumVerticalRun ~= vertical then
 		return fail("straight-run diagnostics are stale")

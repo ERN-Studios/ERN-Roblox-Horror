@@ -18,6 +18,11 @@ local ok, allowed = pcall(function()
 	return accessModule ~= nil and require(accessModule).IsAllowed(Players.LocalPlayer)
 end)
 if ok and allowed == true then return end
+-- ZenMeister02 can see only the isolated Level 6 preview doorway.
+if Players.LocalPlayer.UserId == 11374988579 then
+	PROMPTS.Level6DeveloperPreviewPrompt = nil
+	PROMPTS.Level6DeveloperPreviewReturnPrompt = nil
+end
 
 local watching = setmetatable({}, {__mode = "k"})
 local function hide(instance)

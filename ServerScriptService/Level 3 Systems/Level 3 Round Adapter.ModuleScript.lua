@@ -19,8 +19,6 @@ local ObjectiveController = require(script.Parent:WaitForChild("Level 3 Objectiv
 local MusicSequenceController = require(script.Parent:WaitForChild("Level 3 Music Sequence Controller"))
 local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
 local MallManagerController = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
-local RuntimeBake = require(ServerScriptService:WaitForChild("Level 6 Systems"):WaitForChild("Level6BlenderRuntimeBake"))
-local VisualAdapter = require(script.Parent:WaitForChild("Level 3 Worn Party Visual Adapter"))
 
 local Adapter = {}
 
@@ -536,10 +534,6 @@ function Adapter.Cleanup()
 	local levelState = state()
 	levelState:SetAttribute("Level3_Phase", "CLEANING")
 
-	if activeManifest and activeManifest.VisualCleanup then
-		pcall(activeManifest.VisualCleanup)
-		activeManifest.VisualCleanup = nil
-	end
 	if activeManifest and activeManifest.World and activeManifest.World.Parent then
 		activeManifest.World:Destroy()
 	end
@@ -639,20 +633,12 @@ function Adapter.Build()
 		levelState:SetAttribute("Level3_GeneratedCorridorCount", #layout.Links)
 		levelState:SetAttribute("Level3_GeneratedDistrictCount", #layout.Districts)
 
-		levelState:SetAttribute("Level3_Phase", "BAKING_WORN_PARTY_KIT")
-		workspace:SetAttribute("LoadStage", "LEVEL_3_BAKING_WORN_PARTY_KIT")
-		local kit = RuntimeBake.Ensure()
-		assert(kit and kit:GetAttribute("Ready") == true and kit:GetAttribute("BakedCount") == 49,
-			"Level 3 Worn Party mesh kit is incomplete")
-		levelState:SetAttribute("Level3_KitBakedCount", kit:GetAttribute("BakedCount"))
-		levelState:SetAttribute("Level3_KitBakeSeconds", kit:GetAttribute("BakeSeconds") or 0)
 		levelState:SetAttribute("Level3_Phase", "BUILDING_WORLD")
 		workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
 		local buildBegan = os.clock()
 		local manifest = WorldBuilder.Build(layout, generation)
-		activeManifest = manifest
-		VisualAdapter.Apply(manifest)
 		validateManifest(manifest)
+		activeManifest = manifest
 		levelState:SetAttribute("Level3_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
 		-- A readback must never be able to fail a build.
 		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)

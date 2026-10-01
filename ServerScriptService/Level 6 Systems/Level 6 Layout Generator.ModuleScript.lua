@@ -8,6 +8,7 @@
 -- overlapping doors or producing diagonal corridors.
 
 local Configuration = require(script.Parent:WaitForChild("Level 6 Configuration"))
+local KitMetadata = require(script.Parent:WaitForChild("Level 6 Kit Metadata"))
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 
 local LayoutGenerator = {}
@@ -260,8 +261,9 @@ end
 
 -- Conservative footprint of the actual corridor kit: the 14-stud clear lane
 -- plus both side walls, and the .04 floor seal. Endpoint rooms own the joins.
-local function corridorBounds(a, b)
-	local halfWidth = Configuration.CorridorWidth * .5 + Configuration.WallThickness
+local function corridorBounds(a, b, insertedRoom)
+	local halfWidth = math.max(Configuration.CorridorWidth * .5,
+		insertedRoom and insertedRoom.Width * .5 or 0) + Configuration.WallThickness
 	if math.abs(a.Z - b.Z) < .001 then
 		local left, right = if a.X < b.X then a else b, if a.X < b.X then b else a
 		return {MinX=left.X + left.W * .5 - .02, MaxX=right.X - right.W * .5 + .02,
@@ -325,6 +327,11 @@ local function makeHash(layout)
 			link.Id, link.A, link.B, link.Door, link.ThemeId,
 			link.SectionIndex, if link.Gateway then 1 else 0
 		))
+		if link.BlenderRoom then
+			table.insert(pieces, string.format("B:%s:%s:%.3f:%.3f:%.3f",
+				link.Id, link.BlenderRoom.Asset, link.BlenderRoom.StartDistance,
+				link.BlenderRoom.Width, link.BlenderRoom.PortalWidth))
+		end
 	end
 	local text = table.concat(pieces, ";")
 	local hash = 5381
@@ -840,6 +847,34 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		selected.ServicePocketSeed = rng:NextInteger(1, 2 ^ 30)
 		table.insert(layout.ServiceRooms, selected.Id)
 	end
+	-- Keep the original 32-room graph and five-CD rules intact. Three authored
+	-- two-portal rooms replace the middle of the long entry/district gateways.
+	-- These gateways are at least 38 studs long, leaving at least six studs of
+	-- ordinary corridor at both ends of each 24-stud section.
+	local insertRng = Random.new((seed + 167873) % MAX_SEED)
+	local sectionAssets = shuffled(insertRng,
+		{"RoomKitchenPrep", "RoomUtilityHall", "RoomStaffNook"})
+	layout.BlenderRooms = {}
+	layout.BlenderRoomFloorArea = 0
+	for index = 1, 3 do
+		local link = layout.GatewayLinks[index]
+		local a, b = layout.RoomById[link.A], layout.RoomById[link.B]
+		local gap = if math.abs(a.X - b.X) > math.abs(a.Z - b.Z)
+			then math.abs(a.X - b.X) - (a.W + b.W) * .5
+			else math.abs(a.Z - b.Z) - (a.D + b.D) * .5
+		assert(gap >= 36, "Level 6 gateway cannot fit a two-portal Blender room")
+		local width = assert(KitMetadata[sectionAssets[index]],
+			"Missing authored gateway room metadata").Size[1]
+		local inserted = {
+			Asset = sectionAssets[index], LinkId = link.Id,
+			StartDistance = 6 + insertRng:NextInteger(0, math.floor(gap - 36)),
+			Length = 24, Width = width, Height = 12, PortalWidth = 14,
+			PortalHeight = 10.5, SectionIndex = index,
+		}
+		link.BlenderRoom = inserted
+		table.insert(layout.BlenderRooms, inserted)
+		layout.BlenderRoomFloorArea += inserted.Width * inserted.Length
+	end
 	layout.RoomFloorArea = 0
 	for _, room in ipairs(layout.Rooms) do layout.RoomFloorArea += room.W * room.D end
 	assert(layout.RoomFloorArea >= 160072, "Level 6 cannot be smaller than current Level 3")
@@ -946,6 +981,9 @@ function LayoutGenerator.Validate(layout)
 	local seenPairs = {}
 	local hiddenCount = 0
 	local gatewayCount = 0
+	local insertedCount = 0
+	local insertedAssets = {}
+	local insertedFloorArea = 0
 	local corridorFootprints = {}
 	local rebuiltAdjacency = {}
 	for roomId in pairs(seenRooms) do
@@ -974,6 +1012,27 @@ function LayoutGenerator.Validate(layout)
 		end
 		if gap < Tuning.MinimumCorridorLength - 0.001 then
 			return fail("corridor is shorter than the configured minimum: " .. key)
+		end
+		local inserted = link.BlenderRoom
+		if inserted then
+			insertedCount += 1
+			if type(inserted) ~= "table" or inserted.LinkId ~= link.Id
+				or inserted.SectionIndex ~= insertedCount
+				or not link.Gateway or link.GatewayKind == "Exit"
+				or (inserted.Asset ~= "RoomKitchenPrep" and inserted.Asset ~= "RoomUtilityHall"
+					and inserted.Asset ~= "RoomStaffNook")
+				or insertedAssets[inserted.Asset]
+				or inserted.Length ~= 24 or inserted.Width ~= KitMetadata[inserted.Asset].Size[1]
+				or inserted.Width < 18 or inserted.Width > 26 or inserted.Height ~= 12
+				or inserted.PortalWidth ~= 14 or inserted.PortalHeight ~= 10.5
+				or type(inserted.StartDistance) ~= "number"
+				or inserted.StartDistance < 6 or inserted.StartDistance + inserted.Length > gap - 6
+				or type(layout.BlenderRooms) ~= "table"
+				or layout.BlenderRooms[insertedCount] ~= inserted then
+				return fail("authored gateway section is invalid: " .. key)
+			end
+			insertedAssets[inserted.Asset] = true
+			insertedFloorArea += inserted.Width * inserted.Length
 		end
 		table.insert(rebuiltAdjacency[a.Id], b.Id)
 		table.insert(rebuiltAdjacency[b.Id], a.Id)
@@ -1011,7 +1070,12 @@ function LayoutGenerator.Validate(layout)
 				return fail("internal link theme does not match its district")
 			end
 		end
-		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b)})
+		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b, inserted)})
+	end
+	if insertedCount ~= 3 or type(layout.BlenderRooms) ~= "table"
+		or #layout.BlenderRooms ~= 3
+		or layout.BlenderRoomFloorArea ~= insertedFloorArea then
+		return fail("layout must contain three two-portal Blender gateway rooms")
 	end
 	if hiddenCount ~= 1 then return fail("layout must contain one hidden exit link") end
 	if gatewayCount ~= ENTRY_AND_GATEWAY_LINKS

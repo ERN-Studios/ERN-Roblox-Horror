@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
-if not DevAccess.IsAllowed(player) then return end
+if not DevAccess.IsLevel6PreviewAllowed(player) then return end
 local remote = ReplicatedStorage:WaitForChild("Level6PreviewTransport")
 local generation = 0
 remote.OnClientEvent:Connect(function(nonce, target, modelName)

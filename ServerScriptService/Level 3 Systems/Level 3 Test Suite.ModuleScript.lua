@@ -90,9 +90,7 @@ function TestSuite.ValidateGeneratedLayouts(seeds: {number}?, requireSquare: boo
 		-- Explicit acceptance for the standard layout. Master size overrides may
 		-- intentionally change these proportions without invalidating generation.
 		if requireSquare then
-			-- The 2x5 districts add two rooms to each row; the core remains compact,
-			-- while the authored 560-stud finale pushes full bounds to about 1.58.
-			assert(layout.Bounds.Aspect <= 1.6 and layout.CoreBounds.Aspect <= 2.1,
+			assert(layout.Bounds.Aspect <= 1.5 and layout.CoreBounds.Aspect <= 2.1,
 				"Level 3 standard layout is not square enough for seed " .. requestedSeed)
 		end
 		assert(#layout.Rooms == expectedRooms
@@ -1028,31 +1026,20 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	assert(stats.CorridorFloors == #layout.Links, "Level 3 generated corridor floor count mismatch")
 
 	local forbiddenDecor = {"Baseboard", "Shelf", "Carton", "Box", "Desk", "CRT", "Plant", "Utility Pipe"}
-	local wornPartyDressing = world:FindFirstChild("Level 3 Blender Set Dressing")
-	assert(wornPartyDressing and wornPartyDressing:IsA("Folder")
-		and wornPartyDressing:GetAttribute("Level3_DressingOwned") == true,
-		"Level 3 Worn Party dressing is missing from its generated world")
 	for _, instance in ipairs(world:GetDescendants()) do
 		local intentionalDiscPlayerAssembly = manifest.DiscPlayer and manifest.DiscPlayer.Model
 			and (instance == manifest.DiscPlayer.Model or instance:IsDescendantOf(manifest.DiscPlayer.Model))
-		local intentionalWornPartyDressing = instance == wornPartyDressing
-			or instance:IsDescendantOf(wornPartyDressing)
 		for _, fragment in ipairs(forbiddenDecor) do
-			assert(intentionalDiscPlayerAssembly or intentionalWornPartyDressing
+			assert(intentionalDiscPlayerAssembly
 				or not string.find(instance.Name, fragment, 1, true),
 				"Revision 5 contains forbidden clutter: " .. instance:GetFullName())
 		end
 	end
 
-	assert(world:GetAttribute("Level3_BlenderApplied") == true
-		and (world:GetAttribute("Level3_BlenderMeshCount") or 0) >= 49,
-		"Level 3 Worn Party kit was not applied")
-	-- These count caps guard accidental duplication. CPU and memory require a
-	-- separate active-round Play measurement before publication.
-	assert(stats.BaseParts <= 9000, "Level 3 Worn Party duplicated too many BaseParts")
-	assert(stats.Collidable <= 1700, "Level 3 Worn Party exceeded its collision cap")
-	assert(stats.Lights <= 160 and stats.ShadowLights <= 6, "Level 3 Worn Party exceeded its light cap")
-	assert(stats.Prompts <= 50, "Level 3 Worn Party duplicated interaction prompts")
+	assert(stats.BaseParts <= 3500, "Level 3 exceeded its procedural BasePart budget")
+	assert(stats.Collidable <= 1250, "Level 3 exceeded its collision budget")
+	assert(stats.Lights <= 120 and stats.ShadowLights <= 6, "Level 3 exceeded its procedural lighting budget")
+	assert(stats.Prompts <= 32, "Level 3 exceeded its procedural interaction budget")
 	return stats
 end
 
@@ -1067,8 +1054,7 @@ function TestSuite.MeasureCoreSightlines(manifest: {[string]: any}): {[string]: 
 		and type(manifest.Layout) == "table", "A live Level 3 world manifest is required")
 	local opaque = {}
 	for _, object in ipairs(manifest.World:GetDescendants()) do
-		if object:IsA("BasePart") and object.CanQuery
-			and (object.CanCollide or object.Transparency < .95) then
+		if object:IsA("BasePart") and object.CanQuery and object.Transparency < .95 then
 			table.insert(opaque, object)
 		end
 	end

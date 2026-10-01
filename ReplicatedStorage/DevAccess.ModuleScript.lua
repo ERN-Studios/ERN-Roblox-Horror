@@ -20,6 +20,15 @@ function DevAccess.IsAllowed(subject)
 	return userId ~= nil and ALLOWED_USER_IDS[userId] == true
 end
 
+-- Preview access is narrower than the general developer commands.
+function DevAccess.IsLevel6PreviewAllowed(subject)
+	if DevAccess.IsAllowed(subject) then return true end
+	if typeof(subject) == "Instance" and subject:IsA("Player") then
+		return subject.UserId == 11374988579 -- ZenMeister02
+	end
+	return type(subject) == "number" and subject == 11374988579
+end
+
 function DevAccess.IsLevel3TimelineOwner(subject)
 	local userId
 	if typeof(subject) == "Instance" and subject:IsA("Player") then
