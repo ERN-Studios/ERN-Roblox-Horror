@@ -1,0 +1,200 @@
+{
+  "verifiedFiles": 16,
+  "sourceMapsMD5Verified": 12,
+  "checks": [
+    {
+      "material": "tunnel_concrete",
+      "map": "color",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "tunnel_concrete",
+      "map": "normal",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "tunnel_concrete",
+      "map": "height",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "tunnel_concrete",
+      "map": "roughness",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "tunnel_concrete",
+      "normalConvention": "OpenGL",
+      "meanNormalLengthError": 0.00019368095672689378,
+      "normalXYStandardDeviation": [
+        2.8097939491271973,
+        2.7974178791046143
+      ]
+    },
+    {
+      "material": "tunnel_concrete",
+      "medianColor": [
+        163.0,
+        160.0,
+        152.0
+      ],
+      "height16Bit": true,
+      "heightExactSource": true,
+      "tileStuds": 12
+    },
+    {
+      "material": "asphalt_road",
+      "map": "color",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "asphalt_road",
+      "map": "normal",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "asphalt_road",
+      "map": "height",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "asphalt_road",
+      "map": "roughness",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "asphalt_road",
+      "normalConvention": "OpenGL",
+      "meanNormalLengthError": 0.0011923483107239008,
+      "normalXYStandardDeviation": [
+        4.634419918060303,
+        5.004030704498291
+      ]
+    },
+    {
+      "material": "asphalt_road",
+      "medianColor": [
+        62.0,
+        64.0,
+        63.0
+      ],
+      "height16Bit": true,
+      "heightExactSource": true,
+      "tileStuds": 14
+    },
+    {
+      "material": "sidewalk_concrete",
+      "map": "color",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "sidewalk_concrete",
+      "map": "normal",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "sidewalk_concrete",
+      "map": "height",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "sidewalk_concrete",
+      "map": "roughness",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "sidewalk_concrete",
+      "normalConvention": "OpenGL",
+      "meanNormalLengthError": 0.0019261771813035011,
+      "normalXYStandardDeviation": [
+        15.218409538269043,
+        15.296286582946777
+      ]
+    },
+    {
+      "material": "sidewalk_concrete",
+      "medianColor": [
+        158.0,
+        156.0,
+        149.0
+      ],
+      "height16Bit": true,
+      "heightExactSource": true,
+      "tileStuds": 8
+    },
+    {
+      "material": "curb_concrete",
+      "map": "color",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "curb_concrete",
+      "map": "normal",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "curb_concrete",
+      "map": "height",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "curb_concrete",
+      "map": "roughness",
+      "size1024": true,
+      "exactHash": true,
+      "nonconstant": true
+    },
+    {
+      "material": "curb_concrete",
+      "normalConvention": "OpenGL",
+      "meanNormalLengthError": 0.00011125630408059806,
+      "normalXYStandardDeviation": [
+        1.8810006380081177,
+        1.8732889890670776
+      ]
+    },
+    {
+      "material": "curb_concrete",
+      "medianColor": [
+        171.0,
+        168.0,
+        162.0
+      ],
+      "height16Bit": true,
+      "heightExactSource": true,
+      "tileStuds": 8
+    }
+  ],
+  "studioChecked": false,
+  "uploaded": false
+}

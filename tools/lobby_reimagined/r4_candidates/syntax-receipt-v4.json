@@ -1,0 +1,42 @@
+{
+  "compiler": "@lune/luau.compile",
+  "passed": true,
+  "scope": "Exact candidate syntax only; no Studio writes or gameplay claim",
+  "sources": [
+    {
+      "bytes": 18640,
+      "file": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.candidate.luau",
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "sha256": "5010de5d51db0615397d0a987d2a4e1c345c035e95e49af506271893ffc33203",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 164902,
+      "file": "ServerScriptService.GameManager.Script.candidate.luau",
+      "path": "ServerScriptService.GameManager",
+      "sha256": "8f48325ae359b6de2f8a09a599853bea01a4e2dc1de0c5462834a934c2a82c5c",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 12166,
+      "file": "ServerScriptService.Level4V4PreviewAccess.Script.candidate.luau",
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "sha256": "912ee8af83db69cc67003d3668de8d429b156df74a466ff178a35a444b115455",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 12081,
+      "file": "ServerScriptService.Level5PreviewAccess.Script.candidate.luau",
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "sha256": "4334bb71d79f4954f210884f0078b200b4377a3e7fd4c6c3cfbcaaff5589835e",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 12481,
+      "file": "ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "sha256": "1bd0744cc099119b3ab5c5df54d4f5f7ad60263f4a7797a79a39873c4cafda15",
+      "syntax": "PASS"
+    }
+  ]
+}

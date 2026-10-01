@@ -1,0 +1,42 @@
+[
+  {
+    "path": "ServerScriptService.GameManager",
+    "class": "Script",
+    "beforeSHA256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+    "bytes": 163203,
+    "beforeFile": "ServerScriptService.GameManager.Script.before.luau",
+    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+    "class": "ModuleScript",
+    "beforeSHA256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+    "bytes": 3598,
+    "beforeFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.before.luau",
+    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
+  },
+  {
+    "path": "ServerScriptService.Level4V4PreviewAccess",
+    "class": "Script",
+    "beforeSHA256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+    "bytes": 10629,
+    "beforeFile": "ServerScriptService.Level4V4PreviewAccess.Script.before.luau",
+    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
+  },
+  {
+    "path": "ServerScriptService.Level5PreviewAccess",
+    "class": "Script",
+    "beforeSHA256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+    "bytes": 10544,
+    "beforeFile": "ServerScriptService.Level5PreviewAccess.Script.before.luau",
+    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
+  },
+  {
+    "path": "ServerScriptService.Level6PreviewAccess",
+    "class": "Script",
+    "beforeSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+    "bytes": 10762,
+    "beforeFile": "ServerScriptService.Level6PreviewAccess.Script.before.luau",
+    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
+  }
+]

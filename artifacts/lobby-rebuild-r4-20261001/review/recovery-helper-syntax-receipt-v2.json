@@ -1,0 +1,17 @@
+{
+  "scope": "Local syntax only; no Studio run or fresh recovery claim",
+  "sources": [
+    {
+      "bytes": 10679,
+      "file": "artifacts/lobby-rebuild-r4-20261001/capture-r4-fresh-readonly.luau",
+      "passed": true,
+      "sha256": "c517978cb2bf9ccc8001e614a7c35a87c314acda805be064af42d75bec17464c"
+    },
+    {
+      "bytes": 6123,
+      "file": "artifacts/lobby-rebuild-r4-20261001/verify_r4_native_recovery.luau",
+      "passed": true,
+      "sha256": "0eff36b027d3019bb83a98cbca4b2a9f266738f1cdcc3c0047a905410eff3927"
+    }
+  ]
+}

@@ -1,0 +1,474 @@
+"""Blender-authored isolated lobby preview; one Blender unit is one Roblox stud.
+
+Run with Blender --background --factory-startup --python this_file. Never opens
+or overwrites the user's Blender scene or writes to Roblox. Shared prefab mesh
+format is exported with the proper X,Z,-Y rotation. Runtime text stays native.
+"""
+from pathlib import Path
+import sys, math, json, hashlib, base64, random, struct
+import bpy
+from mathutils import Vector, Matrix
+
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT / 'assets/models/lobby-reimagined-r4-20261001'
+OUT.mkdir(parents=True, exist_ok=True)
+sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(ROOT / 'tools/level6_build/import'))
+from export_prefabs import export_prefab
+
+LIB = bpy.data.collections.new('Lobby Preview | Reusable Blender Kit')
+bpy.context.scene.collection.children.link(LIB)
+FAMILIES = {}
+MATERIALS = {}
+PLACEMENTS, COLLIDERS, SIGNS, LIGHTS, PADS, BAYS = [], [], [], [], [], []
+GATE_X, GATE_BASE = 28.6, .8
+PORTAL_HALF_WIDTH, PORTAL_CUT_Z = 10.6, 20.4
+PORTAL_ANGLE = math.asin((PORTAL_CUT_Z-1)/35)
+SIDEWALK_WIDTH = 17.6
+HEADER_POSITION, HEADER_SIZE = [0,17.2,1.42], [22.8,2.68,.04]
+HEADER_FACE_CENTER = [0,17.2,1.44]
+BLADE_POSITION, BLADE_SIZE = [-15.0,17.0,5.1], [.86,2.95,9.2]
+BLADE_FACE_CENTERS = {'Left':[-15.43,17.0,5.1],'Right':[-14.57,17.0,5.1]}
+
+def material(name, rgb, rough=.72, metal=0):
+    m = bpy.data.materials.new('LRP_'+name); m.use_nodes=True
+    m.diffuse_color=tuple(rgb)+(1,)
+    sh=next(n for n in m.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    sh.inputs['Base Color'].default_value=tuple(rgb)+(1,)
+    sh.inputs['Roughness'].default_value=rough; sh.inputs['Metallic'].default_value=metal
+    MATERIALS[name]=m
+    return m
+
+CONCRETE=material('tunnel_concrete',(.35,.34,.315))
+ASPHALT=material('asphalt',(.052,.058,.059),.92)
+CURB=material('sidewalk_concrete',(.35,.32,.21),.86)
+STEEL=material('dark_steel',(.027,.032,.034),.52,.7)
+EDGE=material('rubbed_steel',(.16,.175,.18),.42,.8)
+CYAN=material('cyan_lens',(.035,.66,.63),.3)
+AMBER=material('amber_lens',(.92,.48,.1),.4)
+ORANGE=material('orange_wall',(.52,.17,.052),.86)
+CARPET=material('party_carpet',(.065,.055,.065),.96)
+PAINT=material('yellow_lane_paint',(.59,.42,.045),.9)
+SCREEN=material('screen_black',(.011,.017,.018),.4)
+for mat in (CYAN,AMBER):
+    sh=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    sh.inputs['Emission Color'].default_value=mat.diffuse_color;sh.inputs['Emission Strength'].default_value=1.4
+
+class Geometry:
+    def __init__(self,name): self.name=name; self.v=[]; self.f=[]; self.mi=[]; self.m=[]; self.corner_normals=[]; self.corner_uvs=[]
+    def face(self,points,mat,normals=None,uvs=None):
+        if mat not in self.m:self.m.append(mat)
+        start=len(self.v); self.v.extend(points); self.f.append(tuple(range(start,start+len(points))));self.mi.append(self.m.index(mat)); self.corner_normals.append(normals); self.corner_uvs.append(uvs)
+    def box(self,c,s,mat,rotation=None):
+        verts=[Vector((c[0]+a*s[0]/2,c[1]+b*s[1]/2,c[2]+d*s[2]/2)) for a,b,d in [(-1,-1,-1),(-1,-1,1),(-1,1,-1),(-1,1,1),(1,-1,-1),(1,-1,1),(1,1,-1),(1,1,1)]]
+        if rotation:
+            p=Vector(c); rot=Matrix.Rotation(rotation,3,'Z');verts=[p+rot@(v-p) for v in verts]
+        for ids in [(0,4,6,2),(1,3,7,5),(0,1,5,4),(2,6,7,3),(0,2,3,1),(4,5,7,6)]:self.face([verts[i] for i in reversed(ids)],mat)
+    def cylinder(self,c,r,h,mat,n=40):
+        lo=[(c[0]+r*math.cos(i*math.tau/n),c[1]+r*math.sin(i*math.tau/n),c[2]-h/2) for i in range(n)]
+        hi=[(x,y,c[2]+h/2) for x,y,_ in lo]
+        self.face(list(reversed(lo)),mat);self.face(hi,mat)
+        for i in range(n):j=(i+1)%n;self.face([lo[i],lo[j],hi[j],hi[i]],mat)
+    def ring(self,c,r,width,h,mat,n=64):
+        for i in range(n):
+            a=i*math.tau/n;b=(i+1)*math.tau/n
+            coords=[(c[0]+rr*math.cos(t),c[1]+rr*math.sin(t),z) for z in (c[2]-h/2,c[2]+h/2) for rr in (r-width/2,r+width/2) for t in (a,b)]
+            for ids in [(0,1,3,2),(4,6,7,5),(0,4,5,1),(2,3,7,6)]:self.face([coords[k] for k in ids],mat)
+    def arc(self,r,t0,t1,y0,y1,thickness,mat,n=128):
+        # Analytic shared circular vertices; no caps between angular panels.
+        # Normals are exact radial vectors on the shell, hard on jambs/endcaps.
+        n=max(n,math.ceil((t1-t0)/math.pi*128))
+        angles=[t0+(t1-t0)*i/n for i in range(n+1)]
+        grid={}
+        for k,yy in enumerate((y0,y1)):
+            for side,rr in enumerate((r,r+thickness)):
+                for i,t in enumerate(angles):
+                    grid[k,side,i]=len(self.v)
+                    self.v.append((rr*math.cos(t),yy,1+rr*math.sin(t)))
+        if mat not in self.m:self.m.append(mat)
+        def add(ids,normals=None,uvs=None):
+            self.f.append(tuple(ids));self.mi.append(self.m.index(mat));self.corner_normals.append(normals);self.corner_uvs.append(uvs)
+        for i in range(n):
+            for side in (0,1):
+                corners=[(0,side,i),(0,side,i+1),(1,side,i+1),(1,side,i)]
+                if side:corners.reverse()
+                sign=1 if side else -1
+                add([grid[c] for c in corners],[(sign*math.cos(angles[c[2]]),0,sign*math.sin(angles[c[2]])) for c in corners],[(r*angles[c[2]]/10,(y0,y1)[c[0]]/10) for c in corners])
+            for k in (0,1):
+                corners=[(k,0,i),(k,1,i),(k,1,i+1),(k,0,i+1)]
+                if k:corners.reverse()
+                add([grid[c] for c in corners])
+        for i in (0,n):
+            corners=[(0,0,i),(1,0,i),(1,1,i),(0,1,i)]
+            if i==n:corners.reverse()
+            add([grid[c] for c in corners])
+    def object(self):
+        mesh=bpy.data.meshes.new(self.name);mesh.from_pydata(self.v,[],self.f);mesh.update()
+        for m in self.m:mesh.materials.append(m)
+        for p,i in zip(mesh.polygons,self.mi):p.material_index=i
+        normals=[]
+        uv=mesh.uv_layers.new(name='AtlasUV')
+        for p,ns,vs in zip(mesh.polygons,self.corner_normals,self.corner_uvs):
+            p.use_smooth=ns is not None
+            normals.extend(ns if ns else [tuple(p.normal)]*p.loop_total)
+            if vs:
+                for l,v in zip(p.loop_indices,vs):uv.data[l].uv=v
+        mesh.normals_split_custom_set(normals)
+        mesh['r4_analytic_normals']=True
+        o=bpy.data.objects.new(self.name,mesh);LIB.objects.link(o);FAMILIES[self.name]=[o];return o
+
+def place(family,x,y,z=0,yaw=0,kind=None):
+    # Input in Blender coordinate frame, serialized positions in Roblox frame.
+    item={'family':family,'robloxPosition':[x,z,-y],'yaw':yaw}
+    if kind:item['runtimeKind']=kind
+    PLACEMENTS.append(item)
+
+def collider(name,c,s,yaw=0):COLLIDERS.append({'name':name,'position':[c[0],c[2],-c[1]],'size':[s[0],s[2],s[1]],'yaw':yaw})
+def light(name,c,color,bright=1.4,rng=22):LIGHTS.append({'name':name,'position':[c[0],c[2],-c[1]],'color':color,'brightness':bright,'range':rng})
+
+# Reusable plain and portal shells; portal gaps are genuinely open geometry.
+for portal in (False,True):
+    g=Geometry('PortalShell' if portal else 'PlainShell')
+    runs=[(-20,-PORTAL_HALF_WIDTH,0,math.pi),(-PORTAL_HALF_WIDTH,PORTAL_HALF_WIDTH,PORTAL_ANGLE,math.pi-PORTAL_ANGLE),(PORTAL_HALF_WIDTH,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
+    for y0,y1,a,b in runs:g.arc(35,a,b,y0,y1,1.1,CONCRETE,36)
+    for side in (-1,1):
+        for y0,y1 in ([(-20,-PORTAL_HALF_WIDTH),(PORTAL_HALF_WIDTH,20)] if portal else [(-20,20)]):g.box((side*34.5,(y0+y1)/2,4),(1.4,y1-y0,8),CONCRETE)
+    g.object()
+for i,y in enumerate(range(-120,121,40)):
+    portal=y in (-80,0,80);place('PortalShell' if portal else 'PlainShell',0,y)
+    runs=[(-20,-PORTAL_HALF_WIDTH,0,math.pi),(-PORTAL_HALF_WIDTH,PORTAL_HALF_WIDTH,PORTAL_ANGLE,math.pi-PORTAL_ANGLE),(PORTAL_HALF_WIDTH,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
+    for ya,yb,ta,tb in runs:
+        for j in range(24):
+            angle=ta+(tb-ta)*(j+.5)/24
+            collider('Arch Collision',(35.3*math.cos(angle),y+(ya+yb)/2,1+35.3*math.sin(angle)),(2*35.3*math.sin((tb-ta)/48)+.1,yb-ya,1.1))
+            COLLIDERS[-1]['rotation']=[0,0,angle+math.pi/2]
+    for side in (-1,1):
+        for ya,yb in ([(-20,-PORTAL_HALF_WIDTH),(PORTAL_HALF_WIDTH,20)] if portal else [(-20,20)]):collider('Lower Tunnel Wall',(side*34.2,y+(ya+yb)/2,4),(1.3,yb-ya,8))
+
+g=Geometry('ArchRib');g.arc(33.9,0,math.pi,-.6,.6,.75,STEEL,40)
+for side in (-1,1):
+    g.box((side*33.5,0,1.4),(2.5,2.8,2.8),STEEL)
+    for yy in (-.9,.9):
+        for zz in (.6,2.1):g.box((side*32.22,yy,zz),(.13,.22,.22),EDGE)
+for a in (.35,.65,1.05,1.5,1.95,2.5,2.8):g.box((33.85*math.cos(a),0,1+33.85*math.sin(a)),(.7,1.65,.7),EDGE)
+g.object()
+for y in range(-140,141,20):
+    if y not in (-80,0,80):place('ArchRib',0,y)
+
+g=Geometry('RoadSection');g.box((0,0,-.5),(33,40,1),ASPHALT)
+for y in (-15,-5,5,15):g.box((0,y,.015),(.28,4,.035),PAINT)
+for side in (-1,1):g.box((side*16.05,0,.01),(.12,40,.03),PAINT)
+g.object()
+g=Geometry('SidewalkSection');g.box((0,0,.4),(SIDEWALK_WIDTH,40,.8),CURB)
+for y in (-16,-8,0,8,16):g.box((0,y,.812),(17.2,.04,.025),STEEL)
+for x in (-5.4,0,5.4):g.box((x,0,.812),(.035,39.9,.025),STEEL)
+for y in range(-18,19,4):
+    g.box((-8.35,y,.84),(.65,2.7,.06),STEEL)
+    for v in (-.9,-.5,-.1,.3,.7):g.box((-8.35,y+v,.88),(.59,.06,.03),EDGE)
+    g.box((-8.75,y,.65),(.1,1.5,.16),CYAN)
+g.object()
+for y in range(-120,121,40):
+    place('RoadSection',0,y);collider('Road',(0,y,-.5),(33,40,1))
+    for side in (-1,1):place('SidewalkSection',side*25,y,yaw=0 if side==1 else math.pi);collider('Sidewalk',(side*25,y,.4),(SIDEWALK_WIDTH,40,.8))
+
+g=Geometry('CableTray');
+for x in (-1,1):g.box((x,0,0),(.16,20,.65),STEEL)
+for y in range(-10,11,2):g.box((0,y,-.32),(2.05,.11,.12),EDGE)
+for x in (-.65,-.25,.25,.65):g.box((x,0,.05),(.075,20,.1),STEEL)
+g.object()
+g=Geometry('Fluorescent');g.box((0,0,0),(3.7,1.2,.6),STEEL);g.box((0,0,-.32),(3.1,.8,.08),CYAN)
+for side in (-1,1):g.box((side*1.6,0,-.35),(.14,.95,.14),EDGE)
+g.object()
+for y in range(-130,131,20):
+    for side in (-1,1):place('CableTray',side*11,y,32.4);place('Fluorescent',side*11,y,30.6);light('Tunnel Lamp',(side*11,y,29.5),[.24,.78,.72],1.25,28)
+
+g=Geometry('ServicePanel');g.box((0,0,0),(.4,3,2.2),STEEL)
+for z in (-.8,-.5,-.2,.1,.4,.7):g.box((-.24,0,z),(.12,2.65,.12),EDGE)
+g.box((-.29,1.1,-.78),(.11,.2,.2),AMBER);g.object()
+g=Geometry('ConduitSection')
+for z in (0,.38,.76):g.box((0,0,z),(.14,20,.14),STEEL)
+for y in (-8,-2,4,9):g.box((0,y,.35),(.32,.18,1.1),EDGE)
+g.object()
+for side in (-1,1):
+    for y in range(-130,131,20):
+        if all(abs(y-gate)>20.6 for gate in (-80,0,80)):place('ConduitSection',side*32.85,y,12,yaw=0 if side<0 else math.pi)
+    for y in (-120,-40,40,120):place('ServicePanel',side*32.6,y,6,yaw=0 if side>0 else math.pi)
+
+g=Geometry('LevelGate')
+for side in (-1,1):
+    g.box((side*10.7,0,8.1),(1.5,2,16.2),STEEL)
+    g.box((side*10.7,-1.08,4.6),(.16,.13,7),CYAN)
+    g.box((side*10.7,-1.08,1.4),(1.3,.12,2.8),PAINT)
+    for z in (1,3,6,9,12,15):g.box((side*10.7,-1.08,z),(.22,.1,.22),EDGE)
+g.box((0,-.3,17.2),(24,2.0,3.2),STEEL)
+g.box((0,-1.32,17.2),(22.8,.04,2.75),SCREEN)
+g.box((0,-1.38,15.65),(21.8,.18,.14),CYAN)
+g.box((0,.55,19.0),(20.8,1.5,.55),STEEL)
+# The blade is separate from the doorway. Its broad faces look up/down the
+# tunnel; the bolted boom stays above text and connects behind the header.
+g.box((-15.0,-5.1,17.0),(.6,9.8,3.3),STEEL)
+for face in (-1,1):g.box((-15.0+face*.315,-5.1,17.0),(.03,9.2,2.95),SCREEN)
+g.box((-15.0,-5.1,15.24),(.65,8.7,.11),CYAN)
+g.box((-10.7,.25,18.65),(.7,.45,1.4),EDGE)
+g.box((-12.85,.25,19.15),(5.2,.42,.42),STEEL)
+g.box((-15.0,-3.55,19.15),(.42,8.0,.42),STEEL)
+for y in (-6.9,-1.1):g.box((-15.0,y,18.89),(.2,.2,.68),EDGE)
+for z in (18.3,18.9):g.box((-10.33,.25,z),(.10,.16,.16),EDGE)
+g.object()
+
+g=Geometry('EntryConnector')
+g.box((0,5.0,.38),(22.6,13.0,.8),CURB)
+for side in (-1,1):
+    g.box((side*10.85,5.375,10.45),(.9,12.25,20.4),CONCRETE)
+    g.box((side*10.36,5.375,1.45),(.08,12.0,.32),STEEL)
+    g.box((side*10.35,5.375,18.65),(.09,12.0,.16),CYAN)
+g.box((0,5.0,20.2),(22.6,13.0,.8),CONCRETE)
+g.box((0,3.8,19.71),(15,.8,.10),STEEL)
+g.box((0,3.8,19.64),(14.4,.55,.05),CYAN)
+g.object()
+
+# Add the independently authored, measured prop kit.
+import props
+prop_assets=props.build_library(LIB)
+aliases={'FloralSofa90s':'Sofa','OliveVinylBench':'VinylBench','LaminateOfficeDesk':'Desk','FourDrawerFilingCabinet':'FilingCabinet','BeigeCRTMonitor':'CRTMonitor','OfficePhotocopier':'Photocopier','BrownStackChair':'StackChair','WireServiceTrolley':'WireTrolley','TwinDeckDJConsole':'DJConsole','FestivalTrussSpeakerTower':'SpeakerTower','TwinSubwoofer':'Subwoofer'}
+for name,row in prop_assets.items():FAMILIES[aliases.get(name,name)]=row['objects'] if isinstance(row,dict) else row
+g=Geometry('QueuePad');g.cylinder((0,0,.37),7.41,.74,STEEL,96);g.cylinder((0,0,.77),7.15,.1,SCREEN,96);g.ring((0,0,.79),7.23,.10,.055,CYAN,96);g.ring((0,0,.8),6.90,.06,.025,EDGE,96);g.object()
+g=Geometry('DoorThreshold');g.box((0,0,.39),(20,2.4,.8),CURB);g.box((0,-1.08,.805),(19.6,.08,.025),EDGE);g.object()
+g=Geometry('HologramRing');g.ring((0,0,.04),7.18,.085,.07,CYAN);g.object()
+g=Geometry('HologramBand')
+for i in range(64):
+    a=i*math.tau/64;b=(i+1)*math.tau/64;r=7.18
+    g.face([(r*math.cos(a),r*math.sin(a),0),(r*math.cos(b),r*math.sin(b),0),(r*math.cos(b),r*math.sin(b),.6),(r*math.cos(a),r*math.sin(a),.6)],CYAN)
+g.object()
+for side in (-1,1):
+    angle=math.pi/2 if side<0 else -math.pi/2
+    for row in (-80,0,80):
+        level={(-1,-80):1,(-1,0):3,(-1,80):5,(1,-80):2,(1,0):4,(1,80):6}[(side,row)]
+        y=-row;place('LevelGate',side*GATE_X,y,GATE_BASE,yaw=angle)
+        place('EntryConnector',side*GATE_X,y,yaw=angle)
+        place('DoorThreshold',side*GATE_X,y,yaw=angle)
+        collider('Door Threshold',(side*GATE_X,y,.4),(2.4,20,.8))
+        rot=Matrix.Rotation(angle,3,'Z')
+        connector_mid=rot@Vector((0,5,0))
+        collider('Connector Floor',(side*GATE_X+connector_mid.x,y+connector_mid.y,.4),(13,22.6,.8))
+        collider('Connector Roof',(side*GATE_X+connector_mid.x,y+connector_mid.y,20.2),(13,22.6,.8))
+        for edge in (-1,1):
+            p=rot@Vector((edge*10.85,5.375,0))
+            collider('Connector Cheek',(side*GATE_X+p.x,y+p.y,10.45),(12.25,.9,20.4))
+        # Native signs match the exact Blender lintel and separate blade host.
+        SIGNS.append({'level':level,'side':side,'row':row,'gatePosition':[side*GATE_X,GATE_BASE,row],'yaw':angle,
+                      'headerLocalPosition':HEADER_POSITION,'headerLocalSize':HEADER_SIZE,'headerFace':'Back',
+                      'headerFaceCenter':HEADER_FACE_CENTER,'bladeLocalPosition':BLADE_POSITION,
+                      'bladeLocalSize':BLADE_SIZE,'bladeFaceCenters':BLADE_FACE_CENTERS,
+                      'bladeArrows':{'Left':'←','Right':'→'},'renderPlaneProudStuds':.10})
+        light('Connector Lamp',(side*(GATE_X+3.8),y,18.9),[.28,.78,.73],.8,17)
+
+from r4_bays import build_bays
+build_bays(dict(Geometry=Geometry,material=material,CONCRETE=CONCRETE,ASPHALT=ASPHALT,CURB=CURB,STEEL=STEEL,EDGE=EDGE,CYAN=CYAN,AMBER=AMBER,ORANGE=ORANGE,CARPET=CARPET,PAINT=PAINT,SCREEN=SCREEN,place=place,collider=collider,light=light,FAMILIES=FAMILIES,PADS=PADS,BAYS=BAYS,COLLIDERS=COLLIDERS))
+
+g=Geometry('StageDeck');g.box((0,0,2.25),(30,17,4.5),STEEL)
+for i in range(6):
+    z=4.5*(i+1)/6;yy=14.5-i
+    g.box((0,yy,z/2),(30,2.02 if i==5 else 1.02,z),STEEL);g.box((0,yy+.51,z+.02),(28,.06,.06),AMBER)
+g.box((0,8.5,4.52),(29.8,.06,.08),AMBER);g.object();place('StageDeck',0,-120)
+g=Geometry('StageRearRail')
+for x in (-14,-7,0,7,14):g.box((x,-8.4,6.05),(.16,.18,3.1),STEEL)
+for z in (5.65,7.55):g.box((0,-8.4,z),(28.2,.18,.16),EDGE)
+g.object();place('StageRearRail',0,-120)
+collider('Stage Rear Guard',(0,-128.4,6.05),(28.2,.18,3.1))
+collider('Stage Deck',(0,-120,2.25),(30,17,4.5))
+for i in range(6):z=4.5*(i+1)/6;collider('Stage Step',(0,-120+14.5-i,z/2),(30,2.02 if i==5 else 1.02,z))
+for x in (-10,0,10):light('Stage Fill',(x,-114,17),[1,.57,.23],1.6,22)
+for side in (-1,1):
+    for y in range(-120,121,40):light('Warm Wall Fill',(side*27,y,12),[1,.68,.3],1.0,23)
+
+place('DJConsole',0,-121,4.5,yaw=math.pi)
+for x in (-21,21):place('SpeakerTower',x,-120,.8,yaw=math.pi);place('Subwoofer',x,-114,.8,yaw=math.pi)
+dj_meta=prop_assets['TwinDeckDJConsole']['metadata']
+disc_anchors=dj_meta['anchors_xyz']
+for key,a in disc_anchors.items():
+    v=Matrix.Rotation(math.pi,3,'Z')@Vector(a)
+    place(dj_meta['record_assets'][key],v.x,-121+v.y,4.5+v.z,yaw=math.pi,kind='VinylDisc')
+
+# Large recognizable families form the near blockoff and far wings/backstop.
+rng=random.Random(61322)
+furniture=[n for n in ('Sofa','VinylBench','Desk','FilingCabinet','CRTMonitor','Photocopier','StackChair','WireTrolley') if n in FAMILIES]
+furniture_bounds={aliases.get(name,name):row['bounds_xyz'] for name,row in prop_assets.items() if aliases.get(name,name) in furniture}
+# Load-bearing furniture stacks use broad, flat cabinet/table/copier tops.
+# Bbox maxima from chair/sofa backrests are never used as support surfaces.
+for far in (False,True):
+    y=-134 if far else 132
+    for idx,x in enumerate((-27,-17,-7,7,17,27)):
+        if far and abs(x)<17:continue
+        floor=.8 if abs(x)>=16.5 else 0
+        family=('FilingCabinet','Desk','Photocopier','FilingCabinet','Desk','FilingCabinet')[idx]
+        lower,upper=furniture_bounds[family]
+        yaw=.06*(-1 if idx%2 else 1)+(math.pi if far else 0)
+        base=floor-lower[2];place(family,x,y,base,yaw=yaw)
+        collider('Furniture Base',(x,y,(floor+base+upper[2])*.5),(upper[0]-lower[0],upper[1]-lower[1],upper[2]-lower[2]),yaw)
+        top=base+upper[2]
+        if family=='FilingCabinet':
+            lower,upper=furniture_bounds['FilingCabinet'];base=top-lower[2]-.035
+            place('FilingCabinet',x,y,base,yaw=yaw);top=base+upper[2]
+        lower,upper=furniture_bounds['CRTMonitor'];base=top-lower[2]-.025
+        place('CRTMonitor',x,y,base,yaw=yaw)
+    # Recognizable abandoned seating stays grounded beside the sturdy stacks.
+    for idx,x in enumerate((-27,-17,17,27) if far else (-22,-11,11,22)):
+        family='Sofa' if idx in (0,3) else 'StackChair';lower,upper=furniture_bounds[family]
+        floor=.8 if abs(x)>=16.5 else 0
+        place(family,x,y+(3 if far else -3),floor-lower[2],yaw=math.pi if far else .14*(-1 if idx%2 else 1))
+    collider('Opaque End Cap',(0,-139 if far else 139,18.5),(73,2,39))
+g=Geometry('EndBackstop');g.box((0,0,18.5),(73,1.2,39),CONCRETE);g.object();place('EndBackstop',0,-139);place('EndBackstop',0,139)
+g=Geometry('RevisionPlaque');g.box((0,0,0),(6,.14,1.8),STEEL)
+for x in (-2.76,2.76):
+    for z in (-.65,.65):g.box((x,-.09,z),(.11,.06,.11),EDGE)
+g.object();place('RevisionPlaque',-33.72,112,7,yaw=math.pi/2)
+NOTICE={'position':[-33.55,7,-112],'size':[5.5,1.5,.04],'yaw':math.pi/2,'face':'Back','text':'LOBBY REVISION · DEV'}
+
+from r4_pbr_export import configure_pbr, project_pbr_uvs, export_material_chunks, runtime_texture_packs
+PBR_PACKS=configure_pbr(OUT, {CONCRETE:'tunnel_concrete',ASPHALT:'asphalt_road',CURB:'sidewalk_concrete'})
+project_pbr_uvs(FAMILIES,PBR_PACKS)
+
+def atlasify():
+    # A deterministic color/wear atlas, created from the authored materials.
+    # Each face stays inside its material tile; never edits a reference image.
+    mats=[]
+    for objs in FAMILIES.values():
+        for o in objs:
+            if o.type=='MESH':
+                for m in o.data.materials:
+                    if m and not m.get("r4_pbr_key") and not m.get("r4_texture_source") and m not in mats:mats.append(m)
+    assert len(mats)<=64, len(mats)
+    w=1024;raw=bytearray(w*w*4);tile=128
+    for index,m in enumerate(mats):
+        sh=next(n for n in m.node_tree.nodes if n.type=='BSDF_PRINCIPLED');rgb=list(sh.inputs['Base Color'].default_value)[:3]
+        # Blender shader colors are linear; texture's sRGB encoding is explicit.
+        rgb=[int(255*(12.92*c if c<=.0031308 else 1.055*c**(1/2.4)-.055)) for c in rgb]
+        tr=random.Random(900+index);tx=(index%8)*tile;ty=(index//8)*tile
+        for yy in range(tile):
+            for xx in range(tile):
+                noise=tr.uniform(.9,1.035);name=m.name.lower()
+                if 'concrete' in name:noise*=.7 if tr.random()<.035 else 1
+                if 'carpet' in name and ((xx%31<2 and yy%21<8) or (xx%27<8 and yy%33<2)):color=(153,71,22)
+                elif ('uphol' in name or 'sofa' in name) and (xx%25-12)**2+(yy%25-12)**2<20:color=(87,66,34)
+                elif 'wood' in name:color=tuple(max(0,min(255,int(c*(.82+.18*math.sin(xx*.6+math.sin(yy*.15)))))) for c in rgb)
+                else:color=tuple(max(0,min(255,int(c*noise))) for c in rgb)
+                off=((ty+yy)*w+tx+xx)*4;raw[off:off+4]=bytes((*color,255))
+    image=bpy.data.images.new('Lobby Preview | Color Wear Atlas',width=w,height=w,alpha=True)
+    image.pixels.foreach_set([v/255 for v in raw]);image.update();image.filepath_raw=str(OUT/'atlas.png')
+    formats=[i.identifier for i in bpy.context.scene.render.image_settings.bl_rna.properties['file_format'].enum_items]
+    assert 'PNG' in formats;image.file_format='PNG';image.save();image.pack()
+    (OUT/'atlas.rgba.b64').write_bytes(base64.b64encode(raw))
+    for m in mats:
+        sh=next(n for n in m.node_tree.nodes if n.type=='BSDF_PRINCIPLED');node=m.node_tree.nodes.new('ShaderNodeTexImage');node.image=image
+        m.node_tree.links.new(node.outputs['Color'],sh.inputs['Base Color'])
+    for objs in FAMILIES.values():
+        for o in objs:
+            if o.type!='MESH':continue
+            uv=o.data.uv_layers.get('AtlasUV') or o.data.uv_layers.new(name='AtlasUV')
+            o.data.uv_layers.active_index=list(o.data.uv_layers).index(uv)
+            uv.active_render=True
+            for p in o.data.polygons:
+                mat=o.data.materials[p.material_index];
+                if mat.get('r4_pbr_key') or mat.get('r4_texture_source'):continue
+                i=mats.index(mat);normal=p.normal;drop=max(range(3),key=lambda a:abs(normal[a]));axes=[a for a in range(3) if a!=drop]
+                coords=[o.data.vertices[o.data.loops[l].vertex_index].co for l in p.loop_indices]
+                mins=[min(v[a] for v in coords) for a in axes];maxs=[max(v[a] for v in coords) for a in axes]
+                for l,v in zip(p.loop_indices,coords):
+                    q=[.04+.92*(v[a]-mi)/max(.001,ma-mi) for a,mi,ma in zip(axes,mins,maxs)]
+                    uv.data[l].uv=((i%8+q[0])/8,(i//8+q[1])/8)
+    return raw,mats
+
+raw,mats=atlasify()
+chunks=export_material_chunks(FAMILIES,OUT,export_prefab)
+texture_packs=runtime_texture_packs(OUT,PBR_PACKS)
+
+# Full assembled scene is editable and uses linked data for repeated assets.
+scene=bpy.data.scenes.new('Lobby Reimagined | Full Preview')
+bpy.context.window.scene=scene
+for item in PLACEMENTS:
+    x,z,minusy=item['robloxPosition'];point=Vector((x,-minusy,z));rot=Matrix.Rotation(item['yaw'],4,'Z')
+    for src in FAMILIES[item['family']]:
+        o=src.copy();o.data=src.data;scene.collection.objects.link(o);o.matrix_world=Matrix.Translation(point)@rot@src.matrix_world
+for li in LIGHTS:
+    x,z,minusy=li['position'];data=bpy.data.lights.new(li['name'],'POINT');data.energy=420 if 'Bay' in li['name'] else 600;data.color=li['color'];data.shadow_soft_size=1
+    data.energy=1450 if 'Warm Wall' in li['name'] else (1200 if 'Stage' in li['name'] else (1100 if 'Bay' in li['name'] else 800))
+    o=bpy.data.objects.new(li['name'],data);o.location=(x,-minusy,z);scene.collection.objects.link(o)
+# Native font curves illustrate the exact SurfaceGui face centers in the blend.
+# Their emissive material remains independent from the mesh wear atlas.
+font_open=material('native_font_open',(.63,1,.93),.5)
+font_locked=material('native_font_locked',(.96,.64,.25),.5)
+for mat in (font_open,font_locked):
+    shader=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    shader.inputs['Emission Color'].default_value=mat.diffuse_color
+    shader.inputs['Emission Strength'].default_value=1.8
+def font_label(body,color,cf,width,height):
+    data=bpy.data.curves.new(body,'FONT');data.body=body;data.size=2;data.extrude=.012
+    data.materials.append(color)
+    obj=bpy.data.objects.new(body,data);scene.collection.objects.link(obj)
+    bpy.context.view_layer.update()
+    points=[Vector(p) for p in obj.bound_box]
+    lo=Vector(tuple(min(p[i] for p in points) for i in range(3)))
+    hi=Vector(tuple(max(p[i] for p in points) for i in range(3)))
+    factor=min(width/max(.01,hi.x-lo.x),height/max(.01,hi.y-lo.y))
+    # Center actual glyph bounds, including arrows, on the host's visible face.
+    center=Vector(((lo.x+hi.x)*.5,(lo.y+hi.y)*.5,hi.z))*factor
+    obj.matrix_world=cf@Matrix.Translation(-center)@Matrix.Scale(factor,4)
+    return obj
+header_orientation=Matrix(((1,0,0,0),(0,0,-1,0),(0,1,0,0),(0,0,0,1)))
+for s in SIGNS:
+    side,row=s['side'],s['row']
+    gate=Matrix.Translation(Vector((side*GATE_X,-row,GATE_BASE)))@Matrix.Rotation(s['yaw'],4,'Z')
+    color=font_open
+    h=s['headerFaceCenter'];point=Vector((h[0],-h[2],h[1]))
+    font_label('LEVEL '+str(s['level']),color,gate@Matrix.Translation(point)@header_orientation,21.3,2.30)
+    for face,name in ((-1,'Left'),(1,'Right')):
+        # Local -X face shows a left arrow; +X face a right arrow. Both arrows
+        # point to local -Z Roblox / +Y Blender, towards this gate's doorway.
+        f=s['bladeFaceCenters'][name];point=Vector((f[0],-f[2],f[1]))
+        orientation=Matrix(((0,0,face,0),(face,0,0,0),(0,1,0,0),(0,0,0,1)))
+        body=('LEVEL '+str(s['level'])+' →') if face>0 else ('← LEVEL '+str(s['level']))
+        font_label(body,color,gate@Matrix.Translation(point)@orientation,8.60,2.08)
+notice_point=Vector((NOTICE['position'][0],-NOTICE['position'][2],NOTICE['position'][1]))
+font_label(NOTICE['text'],font_open,Matrix.Translation(notice_point)@Matrix.Rotation(NOTICE['yaw'],4,'Z')@header_orientation,5.2,1.05)
+world=bpy.data.worlds.new('Enclosed night preview');world.use_nodes=True;scene.world=world
+bg=next(n for n in world.node_tree.nodes if n.type=='BACKGROUND');bg.inputs['Color'].default_value=(.025,.028,.03,1);bg.inputs['Strength'].default_value=.08
+camdata=bpy.data.cameras.new('Full tunnel camera');cam=bpy.data.objects.new('Full tunnel camera',camdata);scene.collection.objects.link(cam)
+cam.location=(0,118,7);target=Vector((0,-100,12));cam.rotation_euler=(target-Vector(cam.location)).to_track_quat('-Z','Y').to_euler();camdata.lens=22;scene.camera=cam
+scene.render.resolution_x=1400;scene.render.resolution_y=820;scene.render.resolution_percentage=100
+try:scene.render.engine='CYCLES';scene.cycles.samples=32
+except TypeError:pass
+bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'LobbyReimaginedPreview.blend'),compress=True)
+manifest={'schema':'lobby-reimagined-blender-v2','revision':4,'placeId':131311258779917,'groupId':1039373905,'previewCenter':[220,30,-760],'axisMapping':'X,Z,-Y','studsPerUnit':1,
+    'sourceBlendSha256':hashlib.sha256((OUT/'LobbyReimaginedPreview.blend').read_bytes()).hexdigest(),'atlas':{'width':1024,'height':1024,'file':'atlas.rgba.b64','bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()},
+    'materials':texture_packs,'chunks':chunks,'prefabs':sorted(FAMILIES),'placements':PLACEMENTS,'colliders':COLLIDERS,'signs':SIGNS,'lights':LIGHTS,'pads':PADS,'bays':BAYS,'notice':NOTICE,
+    'uniqueTriangles':sum(c['triangles'] for c in chunks),'instantiatedTriangles':sum(sum(c['triangles'] for c in chunks if c['family']==p['family']) for p in PLACEMENTS),'materialCount':len(mats),
+    'roundedShellRadialSegments':128,'vinylDiscCount':len(disc_anchors),'runtimeNotes':'Revised independent dev lobby; root Studio integration owns live server queues and level launches.',
+    'geometryContract':{'sidewalkInnerX':16.2,'roadEdgeX':16.5,'sidewalkOuterX':33.8,'wallInnerX':33.8,
+       'portalHalfWidth':PORTAL_HALF_WIDTH,'portalCutZ':PORTAL_CUT_Z,'entryGateX':GATE_X,
+       'connectorFloorTopY':.8,'connectorRoofBottomY':19.8,'connectorRoofTopY':20.6,
+       'connectorCheekFrontLocalY':-.75,'connectorCheekBackLocalY':11.5,
+       'bayEntryFriezeBottomY':20.35,'headerGlobalCenterY':18.0,'bladeGlobalCenterY':17.8,
+       'doorClearWidth':19.9,'doorClearHeight':15.6,'signFacesProudStuds':.10,
+       'physicalMountAboveGlyphs':True,'ribRowsAvoidEntry':True,'endCapTopY':38,
+       'shopSuggestedScale':.90,'shopSuggestedRowCenter':-40}}
+(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+export_scene=bpy.data.scenes.new('Roblox FBX | PBR and Color Atlas')
+for src in scene.objects:
+    if src.type!='MESH':continue
+    o=src.copy();o.data=src.data.copy();o.matrix_world=src.matrix_world;export_scene.collection.objects.link(o)
+bpy.context.window.scene=export_scene
+for o in export_scene.objects:o.select_set(True)
+bpy.context.view_layer.objects.active=next(iter(export_scene.objects))
+bpy.ops.export_scene.fbx(filepath=str(OUT/'LobbyReimaginedPreview.fbx'),use_selection=True,object_types={'MESH'},axis_forward='-Z',axis_up='Y',global_scale=1,apply_unit_scale=True,bake_anim=False,use_mesh_modifiers=True,use_tspace=True,use_triangles=True,path_mode='COPY',embed_textures=True,add_leaf_bones=False)
+bpy.context.window.scene=scene
+if '--skip-renders' not in sys.argv:
+    scene.render.filepath=str(OUT/'blender-tunnel-preview.png');bpy.ops.render.render(write_still=True)
+    for name,position,target,lens in (
+    ('blender-gate3-approach-north.png',(-13,30,5.8),(-25,-1,14),28),
+    ('blender-gate3-approach-south.png',(-13,-35,5.8),(-25,-3,14),28),
+    ('blender-gate3-connector.png',(-24,0,5.8),(-55,0,13),24),
+    ):
+        cam.location=position;cam.rotation_euler=(Vector(target)-Vector(position)).to_track_quat('-Z','Y').to_euler();camdata.lens=lens
+        scene.render.filepath=str(OUT/name);bpy.ops.render.render(write_still=True)
+print('LOBBY_PREVIEW_BUILT',json.dumps({k:v for k,v in manifest.items() if k not in ('chunks','placements','colliders','signs','lights','pads')}),flush=True)

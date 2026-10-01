@@ -1,0 +1,66 @@
+{
+  "reviewVersion": "queue-v6",
+  "scope": "Independent exact source/diff and supplied test receipt review only; no Studio writes or gameplay claim",
+  "result": "PASS for requested source checks; live Source/editor CAS and actual Play checks still required",
+  "repositoryHead": "14cde8a",
+  "remoteHistory": "No git remotes are configured; origin history could not be inspected",
+  "findings": [],
+  "verifiedChanges": [
+    "All Join calls are followed by admission/destination validation, including solo/final member",
+    "Cancelled committing launch waits for rollback task completion before station returns",
+    "Leave rollback applies only to commitAttempted entries",
+    "Context/E lock lifetime lasts through committing unwind; per-player release survives callback errors",
+    "Registration assertion is pcall-isolated; original prompt setup continues after registration failure",
+    "Revised preview idle/preparing labels are scoped through station.previewQueue",
+    "Original campaign routing and original door entry helpers are unchanged"
+  ],
+  "limitations": [
+    "r3Bridge require itself is outside the registration pcall; no arbitrary require-failure isolation claim",
+    "Committing unwind waits for trusted callback completion; an indefinitely hung Runtime.Join would keep that owned station busy",
+    "Supplied lifecycle tests use mock services/plane and do not verify actual streaming, collision, multiplayer, mobile or publication"
+  ],
+  "sources": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "beforeSHA256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+      "afterSHA256": "1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08",
+      "afterBytes": 20210
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "beforeSHA256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "afterSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+      "afterBytes": 165258
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+      "afterSHA256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
+      "afterBytes": 12317
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "afterSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "afterBytes": 12232
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+      "afterSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
+      "afterBytes": 12632
+    }
+  ],
+  "suppliedReceipts": {
+    "syntaxFile": "tools/lobby_reimagined/r4_candidates/syntax-receipt-v6.json",
+    "syntaxPassed": true,
+    "mockFile": "tools/lobby_reimagined/r4_candidates/mock-lifecycle-receipt-v6.json",
+    "mockPassed": true,
+    "testCount": 9
+  }
+}

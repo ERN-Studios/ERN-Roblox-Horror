@@ -174,3 +174,14 @@
 /artifacts/level6-tube-arrival-20261001/review/*.prompt.md
 /artifacts/lobby-rebuild-r4-20261001/**/__pycache__/
 /artifacts/lobby-rebuild-r4-20261001/**/*.log
+
+# R4 full native recovery and intermediate exports stay local. Track completed
+# Blender/PBR assets and reviewed receipts; never stage another developer's data.
+/assets/models/lobby-reimagined-r4-20261001/*.blend1
+/artifacts/lobby-rebuild-r4-20261001/review/LobbyReimaginedPreview-before-tangents.fbx
+/artifacts/lobby-rebuild-r4-20261001/native-*/*
+!/artifacts/lobby-rebuild-r4-20261001/native-*/fresh-source-manifest.json
+!/artifacts/lobby-rebuild-r4-20261001/native-*/backup-file-hashes.json
+!/artifacts/lobby-rebuild-r4-20261001/native-*/native-place-verification.json
+!/artifacts/lobby-rebuild-r4-20261001/native-*/checkpoint-install-gate.json
+/artifacts/lobby-rebuild-r4-20261001/checkpoint-fixture-*/

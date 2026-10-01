@@ -1,0 +1,44 @@
+--- ServerScriptService.Level4V4PreviewAccess.Script.before
++++ ServerScriptService.Level4V4PreviewAccess.Script.candidate
+@@ -169,6 +169,41 @@
+ 		hooked[prompt] = true
+ 		prompt.Triggered:Connect(function(player) callback(player, prompt) end)
+ 	end
++end
++
++-- R4 queue cohorts use the same existing authorized preview/floor/stream
++-- helpers as the original E entry. Original door prompts are unchanged.
++do
++ local bridge = r3Bridge()
++ if bridge and bridge.RegisterPreviewLauncher then
++  local queueLocks = {}
++  local registered, registrationProblem = pcall(bridge.RegisterPreviewLauncher, 4, script, {
++   allowed = function(player, _, station)
++    local lock = queueLocks[player]
++    return (if lock then bridge.ContextOwns(lock, player, station) else (nextUse[player] or 0) <= os.clock())
++     and readyPlayer(player) ~= nil
++   end,
++   ready = function()
++    local model, exit = readyPreview()
++    local prompt = exit and exit:FindFirstChild(RETURN_PROMPT)
++    if not model or not prompt or not prompt:IsA("ProximityPrompt") or not prompt.Enabled
++     or not hasFloor(model, exit) then return nil end
++    return model, exit
++   end,
++   launch = function(context)
++    local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)
++    if not locked then return false, reason end
++    local model, exit = readyPreview()
++    local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
++    if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
++     or not returnPrompt.Enabled or not hasFloor(model, exit) then return false, "PREVIEW_NOT_READY" end
++    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, stream)
++    if not entries then return false, problem end
++    return bridge.CommitPreviewGroup(context, entries, function() return true end)
++   end,
++  })
++  if not registered then warn("[R4 Preview Queue] registration: " .. tostring(registrationProblem)) end
++ end
+ end
+ 
+ local function hookDoor()

@@ -1,0 +1,43 @@
+{
+  "schema": "lobby-r4-tangent-fbx-and-real-detail-render-v1",
+  "atUTC": "2026-10-01T22:27:43.759951+00:00",
+  "scope": "Official background Blender file export/render only; no live Blender, Studio, source blend save, package rebuild, Play or publication",
+  "blenderVersion": "5.2.0 LTS",
+  "sourceBlend": "assets/models/lobby-reimagined-r4-20261001/LobbyReimaginedPreview.blend",
+  "sourceBlendSHA256": "165712df68a47fe4811264f3e4801d09e5a876a4a8108a1a758b53e876c02259",
+  "manifestSHA256": "5fa07c5e2f9edf53f288096e8a5853591d0e384ce81600583294a34d6d7c0c56",
+  "protectedFileCount": 124,
+  "protectedFilesUnchanged": true,
+  "previousFBXSHA256": "da5602333afb4576ddcfdad33436081e7070494a279bbf17838fd55991200c29",
+  "fbxFile": "assets/models/lobby-reimagined-r4-20261001/LobbyReimaginedPreview.fbx",
+  "fbxSHA256": "01c96f012c117b9042591f6fa3fe20b90349706306780a0072d2c66d77d6d9fa",
+  "fbxBytes": 25755548,
+  "fbxVersion": 7400,
+  "sourceMeshObjects": 300,
+  "fbxMeshGeometries": 300,
+  "sourceTriangles": 217804,
+  "fbxTriangles": 217804,
+  "useTspace": true,
+  "useTriangles": true,
+  "allFBXPolygonsTriangles": true,
+  "tangentLayers": 344,
+  "binormalLayers": 344,
+  "normalLayers": 300,
+  "uvLayers": 344,
+  "renderFile": "assets/models/lobby-reimagined-r4-20261001/blender-concrete-detail.png",
+  "renderSHA256": "999fc8fb44fa5199113f3e05e135a81c3a538cc3749ee9017d7bd9a4ff769c1e",
+  "renderCameraPosition": [
+    5,
+    -44,
+    29.6
+  ],
+  "renderCameraTarget": [
+    19,
+    -36,
+    30.1
+  ],
+  "renderLensMM": 31,
+  "renderSamples": 64,
+  "authoredMaterialsAndLightsUnchanged": true,
+  "normalReliefScope": "Actual R4 authored color+OpenGL normal shader; visual detail inspection recorded separately"
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "Missing fresh checkpoint fail-closed behavior; no fresh native or Studio claim",
+  "helperExitCode": 1,
+  "verifiedFlag": false,
+  "reason": "No fresh metadata.json export",
+  "receiverCheckpointHTTPStatus": 503,
+  "passed": true
+}

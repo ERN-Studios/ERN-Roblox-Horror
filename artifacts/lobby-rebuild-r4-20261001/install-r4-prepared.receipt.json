@@ -1,0 +1,21 @@
+{
+  "prepared": true,
+  "readyForInstaller": false,
+  "executed": false,
+  "installerSHA256": "5f06eca8dd1a356904dc54a54622f7d6c8b3a491a744d77b095cc12483843a89",
+  "sourceCount": 7,
+  "manifestSHA256": "5fa07c5e2f9edf53f288096e8a5853591d0e384ce81600583294a34d6d7c0c56",
+  "catalogSHA256": "d395bbe1c53b4b957005afb13aee362e3ca1e99e5e8327133968b757a3263627",
+  "blockers": [
+    "Missing published PBR assetId: tunnel_concrete/color",
+    "Missing published PBR assetId: tunnel_concrete/normal",
+    "Missing published PBR assetId: tunnel_concrete/roughness",
+    "Missing published PBR assetId: asphalt_road/color",
+    "Missing published PBR assetId: asphalt_road/normal",
+    "Missing published PBR assetId: asphalt_road/roughness",
+    "Missing published PBR assetId: sidewalk_concrete/color",
+    "Missing published PBR assetId: sidewalk_concrete/normal",
+    "Missing published PBR assetId: sidewalk_concrete/roughness"
+  ],
+  "scope": "Additive R4 payload and seven exact Source/editor CAS writes after fresh native recovery verification. No Studio execution by this tool."
+}

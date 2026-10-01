@@ -1,0 +1,12 @@
+{
+  "scope": "Analytic design proposal only; no Blender/Studio mutation",
+  "radiusStuds": 35,
+  "semicircleSegmentsAndSagStuds": {
+    "36": 0.03331224463497706,
+    "96": 0.004685173165336898,
+    "128": 0.0026354356299423953
+  },
+  "important": "Disconnected R3 face vertices need shared/custom normals; silhouette metric alone does not prove visual smoothness",
+  "repeatSectionStuds": 40,
+  "integerTexturePeriodSuggestionStuds": 10
+}

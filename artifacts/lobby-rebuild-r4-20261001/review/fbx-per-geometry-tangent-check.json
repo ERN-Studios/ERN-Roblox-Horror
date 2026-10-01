@@ -1,0 +1,1813 @@
+{
+  "schema": "lobby-r4-official-fbx-per-geometry-tangent-check",
+  "officialParserFile": "/Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_fbx/parse_fbx.py",
+  "fbxSHA256": "01c96f012c117b9042591f6fa3fe20b90349706306780a0072d2c66d77d6d9fa",
+  "fbxVersion": 7400,
+  "meshGeometryCount": 300,
+  "eachMeshHasTangentsAndBinormals": true,
+  "allLayerVectorsFinite": true,
+  "eachLayerMatchesPolygonCornerCount": true,
+  "rows": [
+    {
+      "name": "ArchRib.013::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.014::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.015::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.016::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.017::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.018::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.019::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.020::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.021::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.022::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.023::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ArchRib.024::Geometry",
+      "polygonCorners": 3696,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel1.002::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel2.002::Geometry",
+      "polygonCorners": 3960,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel3.002::Geometry",
+      "polygonCorners": 864,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel4.002::Geometry",
+      "polygonCorners": 3264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel5.002::Geometry",
+      "polygonCorners": 3132,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayDecorLevel6.002::Geometry",
+      "polygonCorners": 2400,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel1.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel2.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel3.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel4.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel5.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "BayShellLevel6.002::Geometry",
+      "polygonCorners": 6264,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.029::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.030::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.031::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.032::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.033::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.034::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.035::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.036::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.037::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.038::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.039::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.040::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.041::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.042::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.043::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.044::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.045::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.046::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.047::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.048::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.049::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.050::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.051::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.052::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.053::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.054::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.055::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "CableTray.056::Geometry",
+      "polygonCorners": 612,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.017::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.018::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.019::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.020::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.021::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.022::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.023::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.024::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.025::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.026::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.027::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.028::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.029::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.030::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.031::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ConduitSection.032::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.007::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.008::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.009::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.010::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.011::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "DoorThreshold.012::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EndBackstop.003::Geometry",
+      "polygonCorners": 36,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EndBackstop.004::Geometry",
+      "polygonCorners": 36,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.007::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.008::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.009::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.010::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.011::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "EntryConnector.012::Geometry",
+      "polygonCorners": 360,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.029::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.030::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.031::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.032::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.033::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.034::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.035::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.036::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.037::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.038::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.039::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.040::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.041::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.042::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.043::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.044::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.045::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.046::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.047::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.048::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.049::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.050::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.051::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.052::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.053::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.054::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.055::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "Fluorescent.056::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.011::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.012::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.013::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.014::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.015::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.016::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.017::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.018::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.019::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BeigeCRTMonitor_Mesh.020::Geometry",
+      "polygonCorners": 1692,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownOfficeChair_Mesh.003::Geometry",
+      "polygonCorners": 2244,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownOfficeChair_Mesh.004::Geometry",
+      "polygonCorners": 2244,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownStackChair_Mesh.006::Geometry",
+      "polygonCorners": 1752,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownStackChair_Mesh.007::Geometry",
+      "polygonCorners": 1752,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownStackChair_Mesh.008::Geometry",
+      "polygonCorners": 1752,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownStackChair_Mesh.009::Geometry",
+      "polygonCorners": 1752,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_BrownStackChair_Mesh.010::Geometry",
+      "polygonCorners": 1752,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FestivalTrussSpeakerTower_Mesh.003::Geometry",
+      "polygonCorners": 17460,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FestivalTrussSpeakerTower_Mesh.004::Geometry",
+      "polygonCorners": 17460,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FloralSofa90s_Mesh.005::Geometry",
+      "polygonCorners": 4368,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FloralSofa90s_Mesh.006::Geometry",
+      "polygonCorners": 4368,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FloralSofa90s_Mesh.007::Geometry",
+      "polygonCorners": 4368,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FloralSofa90s_Mesh.008::Geometry",
+      "polygonCorners": 4368,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.012::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.013::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.014::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.015::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.016::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.017::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.018::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.019::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.020::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.021::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_FourDrawerFilingCabinet_Mesh.022::Geometry",
+      "polygonCorners": 3240,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_LaminateOfficeDesk_Mesh.005::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_LaminateOfficeDesk_Mesh.006::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_LaminateOfficeDesk_Mesh.007::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_LaminateOfficeDesk_Mesh.008::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_OfficePhotocopier_Mesh.002::Geometry",
+      "polygonCorners": 4560,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_TwinDeckDJConsole_Mesh.002::Geometry",
+      "polygonCorners": 29532,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_TwinSubwoofer_Mesh.003::Geometry",
+      "polygonCorners": 3264,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_TwinSubwoofer_Mesh.004::Geometry",
+      "polygonCorners": 3264,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_VinylDiscAmber_Mesh.002::Geometry",
+      "polygonCorners": 8472,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LRP_VinylDiscCyan_Mesh.002::Geometry",
+      "polygonCorners": 8472,
+      "tangentLayers": 2,
+      "binormalLayers": 2
+    },
+    {
+      "name": "LevelGate.007::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LevelGate.008::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LevelGate.009::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LevelGate.010::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LevelGate.011::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "LevelGate.012::Geometry",
+      "polygonCorners": 1188,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PlainShell.005::Geometry",
+      "polygonCorners": 3156,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PlainShell.006::Geometry",
+      "polygonCorners": 3156,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PlainShell.007::Geometry",
+      "polygonCorners": 3156,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PlainShell.008::Geometry",
+      "polygonCorners": 3156,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PortalShell.004::Geometry",
+      "polygonCorners": 8268,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PortalShell.005::Geometry",
+      "polygonCorners": 8268,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "PortalShell.006::Geometry",
+      "polygonCorners": 8268,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.025::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.026::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.027::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.028::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.029::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.030::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.031::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.032::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.033::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.034::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.035::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.036::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.037::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.038::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.039::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.040::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.041::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.042::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.043::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.044::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.045::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.046::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.047::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "QueuePad.048::Geometry",
+      "polygonCorners": 6888,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BalloonBouquet.004::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BalloonBouquet.005::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BalloonBouquet.006::Geometry",
+      "polygonCorners": 2916,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.020::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.021::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.022::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.023::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.024::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.025::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.026::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.027::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.028::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.029::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.030::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.031::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.032::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.033::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.034::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.035::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.036::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.037::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescent.038::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4BayFluorescentDead.002::Geometry",
+      "polygonCorners": 144,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.025::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.026::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.027::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.028::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.029::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.030::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.031::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.032::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.033::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.034::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.035::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.036::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.037::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.038::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.039::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.040::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.041::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.042::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.043::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.044::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.045::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.046::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.047::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4MonitorArm.048::Geometry",
+      "polygonCorners": 1872,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PartyChair.005::Geometry",
+      "polygonCorners": 504,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PartyChair.006::Geometry",
+      "polygonCorners": 504,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PartyChair.007::Geometry",
+      "polygonCorners": 504,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PartyChair.008::Geometry",
+      "polygonCorners": 504,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PoolCeilingPanel.003::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4PoolCeilingPanel.004::Geometry",
+      "polygonCorners": 72,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.025::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.026::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.027::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.028::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.029::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.030::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.031::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.032::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.033::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.034::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.035::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.036::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.037::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.038::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.039::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.040::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.041::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.042::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.043::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.044::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.045::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.046::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.047::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "R4WallMonitor.048::Geometry",
+      "polygonCorners": 1200,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RevisionPlaque.002::Geometry",
+      "polygonCorners": 180,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.008::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.009::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.010::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.011::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.012::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.013::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "RoadSection.014::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.009::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.010::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.011::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.012::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.013::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.014::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.015::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "ServicePanel.016::Geometry",
+      "polygonCorners": 288,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.015::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.016::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.017::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.018::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.019::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.020::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.021::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.022::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.023::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.024::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.025::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.026::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.027::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "SidewalkSection.028::Geometry",
+      "polygonCorners": 2844,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "StageDeck.002::Geometry",
+      "polygonCorners": 504,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    },
+    {
+      "name": "StageRearRail.002::Geometry",
+      "polygonCorners": 252,
+      "tangentLayers": 1,
+      "binormalLayers": 1
+    }
+  ],
+  "scope": "Offline exact binary FBX parsing; not Roblox import or actual Play"
+}

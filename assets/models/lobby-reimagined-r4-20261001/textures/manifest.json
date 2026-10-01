@@ -1,0 +1,697 @@
+{
+  "schemaVersion": 1,
+  "revision": "Lobby R4 2026-10-01",
+  "runtimeResolution": 1024,
+  "sourceLicense": "CC0-1.0",
+  "sources": {
+    "concrete_wall_008": {
+      "slug": "concrete_wall_008",
+      "url": "https://polyhaven.com/a/concrete_wall_008",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Charlotte Baglioni": "Photography",
+        "Dario Barresi": "Processing"
+      },
+      "widthMeters": 2.7,
+      "maps": {
+        "color": {
+          "path": "source/concrete_wall_008/concrete_wall_008_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_diff_1k.png",
+          "upstreamMD5": "28b99bf8056aba1efc21ef09f0477820",
+          "sha256": "72686751abff9fd701cf9c419b3f84090e255ee10a865be47a89930ecfd966b3",
+          "bytes": 3913395,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/concrete_wall_008/concrete_wall_008_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_nor_gl_1k.png",
+          "upstreamMD5": "514111a547adc8b3870732f864fc46b4",
+          "sha256": "76b85b25ec9d3c0b79aaad02690b9f2a0fe5613001d5c8063e0c2a56698e0d2f",
+          "bytes": 3548968,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/concrete_wall_008/concrete_wall_008_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_disp_1k.png",
+          "upstreamMD5": "98c7c2c3cccb4f5992e09c77ee3e6706",
+          "sha256": "10352a14ce10c0b01c8be602981c3720961440247b182844515c589c5f820d28",
+          "bytes": 1108458,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/concrete_wall_008/concrete_wall_008_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_rough_1k.png",
+          "upstreamMD5": "f7fdbaef34b034e53e5fd31c64e09b71",
+          "sha256": "aa4d1d51f856d104b9e3254b0723ced26d368e626cb2fec194f6305e51edd79b",
+          "bytes": 1659465,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        }
+      }
+    },
+    "clean_asphalt": {
+      "slug": "clean_asphalt",
+      "url": "https://polyhaven.com/a/clean_asphalt",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Dimitrios Savva": "All"
+      },
+      "widthMeters": 2.1,
+      "maps": {
+        "color": {
+          "path": "source/clean_asphalt/clean_asphalt_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_diff_1k.png",
+          "upstreamMD5": "4e453946e65d04a45012ae4cb7472ce9",
+          "sha256": "57cea7a4dc688aa9764d64450997124edf188c802a94d2b773441618ec3cab19",
+          "bytes": 5618915,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/clean_asphalt/clean_asphalt_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_nor_gl_1k.png",
+          "upstreamMD5": "2609fb18d22b915d5ba6dee13fcae1c7",
+          "sha256": "5d5f512a8d90fa4c43f52f22c1904a845aefddb162b03d2547f0c60175b17125",
+          "bytes": 5632375,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/clean_asphalt/clean_asphalt_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_disp_1k.png",
+          "upstreamMD5": "bebadf4488c21b1cdbdf24301ae3eb19",
+          "sha256": "e949dc95e16cb100b3bb4ee4efd63d0930af6ebc7378e5484cab9dd1c3309b2a",
+          "bytes": 1604467,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/clean_asphalt/clean_asphalt_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_rough_1k.png",
+          "upstreamMD5": "a6b14fa39340820d707401d377b58e7d",
+          "sha256": "aff9bbdf84f878887e3b259bcb46e38135eb3416e56d83da5d02b123dade1911",
+          "bytes": 1878547,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        }
+      }
+    },
+    "concrete_pavement": {
+      "slug": "concrete_pavement",
+      "url": "https://polyhaven.com/a/concrete_pavement",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "widthMeters": 1.8,
+      "maps": {
+        "color": {
+          "path": "source/concrete_pavement/concrete_pavement_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_diff_1k.png",
+          "upstreamMD5": "17ed111caa1e92341a8eb741d91d2312",
+          "sha256": "eb1a433ffbb22ee124cc0d7e04e9344d73cb255550e091777450841ad3436c3e",
+          "bytes": 5754280,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/concrete_pavement/concrete_pavement_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_nor_gl_1k.png",
+          "upstreamMD5": "6676e0e60345c2697ff62aedeaaafe4f",
+          "sha256": "9800e6b905862cbe4c5729d60d62b1c9dbf8e9cb52a7a468489131c556ec5e7c",
+          "bytes": 5974518,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/concrete_pavement/concrete_pavement_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_disp_1k.png",
+          "upstreamMD5": "1dbcee625e4ec4dfad1db65c86396196",
+          "sha256": "ec4bdcf2210d8d836b093037b9896082e12fb1f0e80af45b9106adab031b2d17",
+          "bytes": 1900759,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/concrete_pavement/concrete_pavement_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_rough_1k.png",
+          "upstreamMD5": "f888482083833815e8aa9cf3395660aa",
+          "sha256": "ad66866f5ade952461d5bf140f0388fc87cfe7ae3519ec7931d562edad7da0f6",
+          "bytes": 2409808,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        }
+      }
+    }
+  },
+  "materials": {
+    "tunnel_concrete": {
+      "key": "tunnel_concrete",
+      "materialVariantName": "LobbyR4_tunnel_concrete",
+      "source": "concrete_wall_008",
+      "targetColor": [
+        163,
+        160,
+        152
+      ],
+      "colorContrast": 0.72,
+      "sourceChroma": 0.5,
+      "normalStrength": 0.7,
+      "roughnessMinimum": 0.71,
+      "roughnessMaximum": 0.95,
+      "tileStuds": 12,
+      "baseMaterial": "Concrete",
+      "use": "Rounded tunnel lining and concrete wall panels",
+      "metalness": 0,
+      "maps": {
+        "color": {
+          "file": "tunnel_concrete_color.png",
+          "sha256": "b23eba4560166b0deb6fa2e3d75c671ae2dc9ed93e93dd4267d5bb33f5491427",
+          "bytes": 863843,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 73,
+          "maximum": 183,
+          "standardDeviation": 6.14779,
+          "seams": {
+            "horizontalEdgeMeanDifference": 2.8314,
+            "verticalEdgeMeanDifference": 2.887,
+            "horizontalInteriorMeanDifference": 2.747,
+            "verticalInteriorMeanDifference": 2.5908
+          },
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "tunnel_concrete_normal.png",
+          "sha256": "3eb9eb90cf939583ace020ddcfe91b12de2ce374d3ad5cf2d37618301d53b1d9",
+          "bytes": 738532,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 49,
+          "maximum": 255,
+          "standardDeviation": 60.24314,
+          "seams": {
+            "horizontalEdgeMeanDifference": 1.1663,
+            "verticalEdgeMeanDifference": 1.1019,
+            "horizontalInteriorMeanDifference": 1.2,
+            "verticalInteriorMeanDifference": 1.0869
+          },
+          "colorSpace": "Non-Color",
+          "convention": "OpenGL tangent space (+Y), normalized; source GL map"
+        },
+        "height": {
+          "file": "tunnel_concrete_height.png",
+          "sha256": "fd035c67f1b2e49252a39cb442387b440505fb41032f783b7fb826aa7fe45903",
+          "bytes": 1061683,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16",
+          "minimum": 8961,
+          "maximum": 47145,
+          "standardDeviation": 602.98502,
+          "seams": {
+            "horizontalEdgeMeanDifference": 119.708,
+            "verticalEdgeMeanDifference": 100.2949,
+            "horizontalInteriorMeanDifference": 130.843,
+            "verticalInteriorMeanDifference": 101.0675
+          },
+          "colorSpace": "Non-Color",
+          "purpose": "Blender optional bump editing; Roblox consumes normal map"
+        },
+        "roughness": {
+          "file": "tunnel_concrete_roughness.png",
+          "sha256": "64a576a561f8c8134e3b20ea3ba73797344b4c0aa9be31a8b1cafdf365ed9550",
+          "bytes": 346942,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 181,
+          "maximum": 242,
+          "standardDeviation": 13.79804,
+          "seams": {
+            "horizontalEdgeMeanDifference": 11.2666,
+            "verticalEdgeMeanDifference": 11.1328,
+            "horizontalInteriorMeanDifference": 10.3946,
+            "verticalInteriorMeanDifference": 9.8875
+          },
+          "colorSpace": "Non-Color"
+        }
+      },
+      "roblox": {
+        "BaseMaterial": "Concrete",
+        "StudsPerTile": 12,
+        "MaterialPattern": "Regular",
+        "ColorMap": "tunnel_concrete_color.png",
+        "NormalMap": "tunnel_concrete_normal.png",
+        "RoughnessMap": "tunnel_concrete_roughness.png",
+        "MetalnessMap": "leave blank (dielectric)",
+        "applyScope": "R4 lobby only; no global overrides"
+      },
+      "blender": {
+        "ColorSpace": "sRGB",
+        "NormalColorSpace": "Non-Color",
+        "RoughnessColorSpace": "Non-Color",
+        "HeightColorSpace": "Non-Color",
+        "normalNodeStrength": 1.0,
+        "heightBumpOptional": true,
+        "heightBumpDistanceStuds": 0.015,
+        "avoidDoubleBump": true
+      }
+    },
+    "asphalt_road": {
+      "key": "asphalt_road",
+      "materialVariantName": "LobbyR4_asphalt_road",
+      "source": "clean_asphalt",
+      "targetColor": [
+        62,
+        64,
+        63
+      ],
+      "colorContrast": 0.66,
+      "sourceChroma": 0.18,
+      "normalStrength": 0.65,
+      "roughnessMinimum": 0.73,
+      "roughnessMaximum": 0.94,
+      "tileStuds": 14,
+      "baseMaterial": "Asphalt",
+      "use": "Central roadway, unpainted charcoal asphalt",
+      "metalness": 0,
+      "maps": {
+        "color": {
+          "file": "asphalt_road_color.png",
+          "sha256": "ffbfd2d8098355696f0d491b3544d00654c0c9f97a644e3d6ac1036b2bba1dde",
+          "bytes": 1176801,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 45,
+          "maximum": 127,
+          "standardDeviation": 3.97822,
+          "seams": {
+            "horizontalEdgeMeanDifference": 3.9235,
+            "verticalEdgeMeanDifference": 4.0514,
+            "horizontalInteriorMeanDifference": 3.9625,
+            "verticalInteriorMeanDifference": 3.9506
+          },
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "asphalt_road_normal.png",
+          "sha256": "47b9084b178bd89e6376722e37c533ce40e16f6dace5c1b4cc06109b9e061636",
+          "bytes": 1569488,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 71,
+          "maximum": 255,
+          "standardDeviation": 60.22583,
+          "seams": {
+            "horizontalEdgeMeanDifference": 3.4424,
+            "verticalEdgeMeanDifference": 3.6156,
+            "horizontalInteriorMeanDifference": 3.5017,
+            "verticalInteriorMeanDifference": 3.6474
+          },
+          "colorSpace": "Non-Color",
+          "convention": "OpenGL tangent space (+Y), normalized; source GL map"
+        },
+        "height": {
+          "file": "asphalt_road_height.png",
+          "sha256": "6132f5e21a030964022b2c53bbe336c781050701de7d4c8d7989432bb800f518",
+          "bytes": 1565859,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16",
+          "minimum": 24156,
+          "maximum": 36836,
+          "standardDeviation": 561.07462,
+          "seams": {
+            "horizontalEdgeMeanDifference": 333.9072,
+            "verticalEdgeMeanDifference": 356.6582,
+            "horizontalInteriorMeanDifference": 335.945,
+            "verticalInteriorMeanDifference": 363.4028
+          },
+          "colorSpace": "Non-Color",
+          "purpose": "Blender optional bump editing; Roblox consumes normal map"
+        },
+        "roughness": {
+          "file": "asphalt_road_roughness.png",
+          "sha256": "772bd6f0988c6fb748abdf9f5ccec8f5fa00a50188d62726a0eb0a9d272ea239",
+          "bytes": 741936,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 186,
+          "maximum": 240,
+          "standardDeviation": 12.75197,
+          "seams": {
+            "horizontalEdgeMeanDifference": 12.1436,
+            "verticalEdgeMeanDifference": 13.0439,
+            "horizontalInteriorMeanDifference": 12.192,
+            "verticalInteriorMeanDifference": 12.2024
+          },
+          "colorSpace": "Non-Color"
+        }
+      },
+      "roblox": {
+        "BaseMaterial": "Asphalt",
+        "StudsPerTile": 14,
+        "MaterialPattern": "Regular",
+        "ColorMap": "asphalt_road_color.png",
+        "NormalMap": "asphalt_road_normal.png",
+        "RoughnessMap": "asphalt_road_roughness.png",
+        "MetalnessMap": "leave blank (dielectric)",
+        "applyScope": "R4 lobby only; no global overrides"
+      },
+      "blender": {
+        "ColorSpace": "sRGB",
+        "NormalColorSpace": "Non-Color",
+        "RoughnessColorSpace": "Non-Color",
+        "HeightColorSpace": "Non-Color",
+        "normalNodeStrength": 1.0,
+        "heightBumpOptional": true,
+        "heightBumpDistanceStuds": 0.015,
+        "avoidDoubleBump": true
+      }
+    },
+    "sidewalk_concrete": {
+      "key": "sidewalk_concrete",
+      "materialVariantName": "LobbyR4_sidewalk_concrete",
+      "source": "concrete_pavement",
+      "targetColor": [
+        158,
+        156,
+        149
+      ],
+      "colorContrast": 0.78,
+      "sourceChroma": 0.45,
+      "normalStrength": 0.65,
+      "roughnessMinimum": 0.72,
+      "roughnessMaximum": 0.94,
+      "tileStuds": 8,
+      "baseMaterial": "Concrete",
+      "use": "Aged concrete sidewalk slabs and raised DJ stage steps",
+      "metalness": 0,
+      "maps": {
+        "color": {
+          "file": "sidewalk_concrete_color.png",
+          "sha256": "f49486eff7a5cb2efa60689aac3c5b93c43491c06f5e53927e72fdbe011d2289",
+          "bytes": 1844368,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 85,
+          "maximum": 215,
+          "standardDeviation": 9.74942,
+          "seams": {
+            "horizontalEdgeMeanDifference": 10.5046,
+            "verticalEdgeMeanDifference": 11.9681,
+            "horizontalInteriorMeanDifference": 6.5843,
+            "verticalInteriorMeanDifference": 6.6084
+          },
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "sidewalk_concrete_normal.png",
+          "sha256": "6a38c1a0b17d1fde94f8795469d34a664e637731795452c7331d57d7a64d0ead",
+          "bytes": 2180500,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 46,
+          "maximum": 255,
+          "standardDeviation": 60.59008,
+          "seams": {
+            "horizontalEdgeMeanDifference": 11.2686,
+            "verticalEdgeMeanDifference": 11.0348,
+            "horizontalInteriorMeanDifference": 10.7674,
+            "verticalInteriorMeanDifference": 10.6119
+          },
+          "colorSpace": "Non-Color",
+          "convention": "OpenGL tangent space (+Y), normalized; source GL map"
+        },
+        "height": {
+          "file": "sidewalk_concrete_height.png",
+          "sha256": "5fbb85867ae8b7ae3f199c1dc67f2c3e8c40cf22867be1f47f11ff38323e6906",
+          "bytes": 1891809,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16",
+          "minimum": 1518,
+          "maximum": 54530,
+          "standardDeviation": 4654.91319,
+          "seams": {
+            "horizontalEdgeMeanDifference": 2613.4756,
+            "verticalEdgeMeanDifference": 1822.8486,
+            "horizontalInteriorMeanDifference": 1924.4514,
+            "verticalInteriorMeanDifference": 1954.1368
+          },
+          "colorSpace": "Non-Color",
+          "purpose": "Blender optional bump editing; Roblox consumes normal map"
+        },
+        "roughness": {
+          "file": "sidewalk_concrete_roughness.png",
+          "sha256": "c4b9aba746b93d545b9a4e003d4ff1403ccc98fcf5f4adc3a67e6a95f16642aa",
+          "bytes": 667274,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 184,
+          "maximum": 240,
+          "standardDeviation": 11.62449,
+          "seams": {
+            "horizontalEdgeMeanDifference": 8.0127,
+            "verticalEdgeMeanDifference": 8.4834,
+            "horizontalInteriorMeanDifference": 10.3722,
+            "verticalInteriorMeanDifference": 10.4196
+          },
+          "colorSpace": "Non-Color"
+        }
+      },
+      "roblox": {
+        "BaseMaterial": "Concrete",
+        "StudsPerTile": 8,
+        "MaterialPattern": "Regular",
+        "ColorMap": "sidewalk_concrete_color.png",
+        "NormalMap": "sidewalk_concrete_normal.png",
+        "RoughnessMap": "sidewalk_concrete_roughness.png",
+        "MetalnessMap": "leave blank (dielectric)",
+        "applyScope": "R4 lobby only; no global overrides"
+      },
+      "blender": {
+        "ColorSpace": "sRGB",
+        "NormalColorSpace": "Non-Color",
+        "RoughnessColorSpace": "Non-Color",
+        "HeightColorSpace": "Non-Color",
+        "normalNodeStrength": 1.0,
+        "heightBumpOptional": true,
+        "heightBumpDistanceStuds": 0.015,
+        "avoidDoubleBump": true
+      }
+    },
+    "curb_concrete": {
+      "key": "curb_concrete",
+      "materialVariantName": "LobbyR4_curb_concrete",
+      "source": "concrete_wall_008",
+      "targetColor": [
+        171,
+        168,
+        162
+      ],
+      "colorContrast": 0.53,
+      "sourceChroma": 0.35,
+      "normalStrength": 0.45,
+      "roughnessMinimum": 0.75,
+      "roughnessMaximum": 0.96,
+      "tileStuds": 8,
+      "baseMaterial": "Concrete",
+      "use": "Sidewalk curb edges and restrained concrete trim",
+      "metalness": 0,
+      "maps": {
+        "color": {
+          "file": "curb_concrete_color.png",
+          "sha256": "aa0606367ead9002560cd1045196c2b8dd188fa859186691a6ea19063c08bfdb",
+          "bytes": 723703,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 105,
+          "maximum": 186,
+          "standardDeviation": 4.80472,
+          "seams": {
+            "horizontalEdgeMeanDifference": 2.1273,
+            "verticalEdgeMeanDifference": 2.168,
+            "horizontalInteriorMeanDifference": 2.0824,
+            "verticalInteriorMeanDifference": 1.9644
+          },
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "curb_concrete_normal.png",
+          "sha256": "6568c621f8cb5384ffa2cc59cf830436705c7f15a07e65f520c0b2d9d0705925",
+          "bytes": 606888,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 71,
+          "maximum": 255,
+          "standardDeviation": 60.18739,
+          "seams": {
+            "horizontalEdgeMeanDifference": 0.7477,
+            "verticalEdgeMeanDifference": 0.6999,
+            "horizontalInteriorMeanDifference": 0.7536,
+            "verticalInteriorMeanDifference": 0.6818
+          },
+          "colorSpace": "Non-Color",
+          "convention": "OpenGL tangent space (+Y), normalized; source GL map"
+        },
+        "height": {
+          "file": "curb_concrete_height.png",
+          "sha256": "fd035c67f1b2e49252a39cb442387b440505fb41032f783b7fb826aa7fe45903",
+          "bytes": 1061683,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16",
+          "minimum": 8961,
+          "maximum": 47145,
+          "standardDeviation": 602.98502,
+          "seams": {
+            "horizontalEdgeMeanDifference": 119.708,
+            "verticalEdgeMeanDifference": 100.2949,
+            "horizontalInteriorMeanDifference": 130.843,
+            "verticalInteriorMeanDifference": 101.0675
+          },
+          "colorSpace": "Non-Color",
+          "purpose": "Blender optional bump editing; Roblox consumes normal map"
+        },
+        "roughness": {
+          "file": "curb_concrete_roughness.png",
+          "sha256": "b9f3d545a0f72b8e4f0bfea9ecc83a5c15284f15333a5ffb40d0ecc3cbdd3778",
+          "bytes": 333922,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 191,
+          "maximum": 245,
+          "standardDeviation": 12.09013,
+          "seams": {
+            "horizontalEdgeMeanDifference": 9.8945,
+            "verticalEdgeMeanDifference": 9.793,
+            "horizontalInteriorMeanDifference": 9.1292,
+            "verticalInteriorMeanDifference": 8.6775
+          },
+          "colorSpace": "Non-Color"
+        }
+      },
+      "roblox": {
+        "BaseMaterial": "Concrete",
+        "StudsPerTile": 8,
+        "MaterialPattern": "Regular",
+        "ColorMap": "curb_concrete_color.png",
+        "NormalMap": "curb_concrete_normal.png",
+        "RoughnessMap": "curb_concrete_roughness.png",
+        "MetalnessMap": "leave blank (dielectric)",
+        "applyScope": "R4 lobby only; no global overrides"
+      },
+      "blender": {
+        "ColorSpace": "sRGB",
+        "NormalColorSpace": "Non-Color",
+        "RoughnessColorSpace": "Non-Color",
+        "HeightColorSpace": "Non-Color",
+        "normalNodeStrength": 1.0,
+        "heightBumpOptional": true,
+        "heightBumpDistanceStuds": 0.015,
+        "avoidDoubleBump": true
+      }
+    }
+  },
+  "technicalReferences": [
+    "https://create.roblox.com/docs/reference/engine/classes/MaterialVariant",
+    "https://create.roblox.com/docs/art/modeling/surface-appearance"
+  ],
+  "pipelineNotes": [
+    "Export real UVs and tangent information for MeshPart normal maps.",
+    "Split architecture chunks by material; do not reuse the prop atlas as their ColorMap.",
+    "Tunnel UV.u = circumference arclength / 12 studs; UV.v = distance along tunnel / 12 studs.",
+    "Keep tunnel UVs and tangents continuous across shell sections; smooth radial normals.",
+    "Road and sidewalk UVs follow continuous world distance, with matching tile scales.",
+    "For SurfaceAppearance, UVs set tiling; StudsPerTile belongs to MaterialVariant.",
+    "Assign scoped material variants to R4 parts only, never override global Concrete/Asphalt.",
+    "PNG files are material assets only. Upload IDs and Studio rendering must be verified separately."
+  ]
+}

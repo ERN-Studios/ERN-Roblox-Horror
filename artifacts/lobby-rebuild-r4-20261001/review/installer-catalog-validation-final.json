@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "testCount": 15,
+  "tests": [
+    {
+      "name": "Exact seven-source real catalog validates without PNG reads",
+      "passed": true
+    },
+    {
+      "name": "Reject wrong place",
+      "passed": true
+    },
+    {
+      "name": "Reject wrong universe",
+      "passed": true
+    },
+    {
+      "name": "Reject wrong creator group",
+      "passed": true
+    },
+    {
+      "name": "Reject manifest hash mismatch",
+      "passed": true
+    },
+    {
+      "name": "Reject unrelated Source path",
+      "passed": true
+    },
+    {
+      "name": "Reject wrong Source class",
+      "passed": true
+    },
+    {
+      "name": "Reject new Source",
+      "passed": true
+    },
+    {
+      "name": "Reject Source/editor baseline conflict",
+      "passed": true
+    },
+    {
+      "name": "Reject candidate hash mismatch",
+      "passed": true
+    },
+    {
+      "name": "Reject candidate byte mismatch",
+      "passed": true
+    },
+    {
+      "name": "Reject duplicate source route key",
+      "passed": true
+    },
+    {
+      "name": "Reject candidate path traversal",
+      "passed": true
+    },
+    {
+      "name": "Nine missing published asset IDs retain readyForInstaller=false",
+      "passed": true
+    },
+    {
+      "name": "Exact prepared installer SHA matches requested reviewed version",
+      "passed": true
+    }
+  ],
+  "scope": "Exact local catalog/source and blocked prepared installer only. No Studio calls, writes, Play, upload or publication. Numeric prefab validation and HTTP tests were not run because pinned PNG reads twice raised TimeoutError errno60 before test startup.",
+  "preparedInstallerSHA256": "4b27b3958bd76574e9721791af45ea76b4d4647ab2bdbf5ad7b48b260fefb6a2",
+  "sourceSHA256": "d2fa0d5e96b7d465e55846880098e5633a3d60eed1f4ce6ae29a501e5e6a049b",
+  "catalogSHA256": "d395bbe1c53b4b957005afb13aee362e3ca1e99e5e8327133968b757a3263627",
+  "manifestSHA256": "5fa07c5e2f9edf53f288096e8a5853591d0e384ce81600583294a34d6d7c0c56",
+  "environmentBlocker": {
+    "kind": "FileProvider dataless pinned texture PNG read timeout",
+    "attempts": 2,
+    "error": "TimeoutError errno60",
+    "packageAndHTTPTestsCompleted": false
+  }
+}

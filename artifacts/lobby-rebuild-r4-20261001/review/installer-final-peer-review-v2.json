@@ -1,0 +1,95 @@
+{
+  "reviewedPreparedInstallerSHA256": "5f06eca8dd1a356904dc54a54622f7d6c8b3a491a744d77b095cc12483843a89",
+  "installerAuthoringSHA256": "acb47a747cc961442cfeea8a86aa35bc162d04039784b77e118aea9456acd6b9",
+  "servingSourceSHA256": "d2fa0d5e96b7d465e55846880098e5633a3d60eed1f4ce6ae29a501e5e6a049b",
+  "result": "PASS for exact guarded installer source and native-reference fixture; intentionally blocked and not executed in Studio",
+  "readyForInstaller": false,
+  "executed": false,
+  "studioWritesByReviewer": false,
+  "findings": [],
+  "mutationsPermittedByExactCode": [
+    "Parent one new owned R4 raw-source folder to ServerStorage, containing hash-validated compressed manifest/meshes/atlas and exactly three static SurfaceAppearance templates",
+    "Update exactly seven existing Source/editor containers through fresh identity/Source/editor CAS",
+    "Set InstalledSourceSHA256 on the three owned preview Source containers only",
+    "Set shared session success/failure receipt values",
+    "Destroy only task-created unparented staging folder/children on preparation failure"
+  ],
+  "preserved": [
+    "Original Workspace.ServerLobby and all native geometry",
+    "Existing R3/R3B raw-source payloads and kits",
+    "Bootstrap Source and client queue-controller Source",
+    "Other developers' unrelated Sources, attributes, geometry, settings and access",
+    "No original object deletion, repo bulk-push, template restoration or scene replacement"
+  ],
+  "guardsVerified": [
+    "Missing IDs readyForInstaller assertion precedes staging/persistent mutations",
+    "Exact place/universe/group, Edit mode and existing HttpEnabled guards",
+    "Fresh shared native recovery identity/acknowledgement/time limit and disk checkpoint matching capture/native hash",
+    "Fresh all-captured Source/editor parity and native root identity/set checks",
+    "Exact seven live targets against byte length/hash/class/editor baselines",
+    "After-download full native serialization byte/hash comparison plus repeated fresh checks",
+    "Exact catalog, manifest, mesh, atlas and candidate SHA/byte guards",
+    "Immediate target recheck and repeated identity/Source/editor/ownership guard inside each UpdateSourceAsync callback",
+    "Post-write Source/editor parity before installed attribute",
+    "Native root checks use captured instance identity, exact service Parent, Name, full descriptive GetFullName, ClassName and Archivable; no dotted splitting of decimal names",
+    "All captured Source rows use native instance references with IsDescendantOf(game), exact full descriptive GetFullName/class/Source/editor checks; scoped seven conventional paths retain unique exact resolution",
+    "Read-only capture helper rootMappings includes exact service, name, class and descriptive path required by new guard"
+  ],
+  "failureHandlingVerified": [
+    "Off-tree staging owns each SurfaceAppearance before protected property assignments",
+    "Attempted Source writes recorded before UpdateSourceAsync",
+    "Applied Source writes recorded before installed attribute write",
+    "Failure captures fresh Source/editor hashes/installed attributes for all seven targets",
+    "Unparented staging is cleaned; parented payload and partial Source changes are preserved for fresh reconciliation",
+    "Failure explicitly says do not publish and performs no automatic rollback"
+  ],
+  "knownRuntimePrerequisites": [
+    "Nine published PBR asset IDs remain missing. Regenerate catalog/prepared code after exact asset IDs and receipts are pinned",
+    "Obtain current-session fresh verified native checkpoint and reconcile any newer live Source/editor changes",
+    "Import actual package and run Studio Play/material/queue/movement tests before publishing",
+    "Published2461 baseline has no Edit preview model. Only if fresh live inspection finds an owned Ready R3 preview model, separately preserve/retire it before building R4; this installer does not replace any scene"
+  ],
+  "validation": {
+    "preparedSyntax": {
+      "passed": true,
+      "compiler": "@lune/luau.compile",
+      "installerSHA256": "5f06eca8dd1a356904dc54a54622f7d6c8b3a491a744d77b095cc12483843a89"
+    },
+    "nativeGuard": {
+      "file": "installer-native-guard-fixture-v2.json",
+      "passed": true,
+      "completedTestCount": 17,
+      "guardSHA256": "ef2ed183d887fa2b141f0061cde5756082fc945470edbd323f698f9b154d7246",
+      "regression": {
+        "decimalRootPath": "Workspace.Bay56.0x22.0",
+        "newCapturedReferenceGuardPasses": true,
+        "oldDottedResolverFails": true
+      },
+      "nativeInstances": true,
+      "adapters": [
+        "DateTime",
+        "RunService",
+        "ScriptEditorService editor-source map"
+      ]
+    },
+    "priorCatalog": {
+      "file": "installer-catalog-validation-final.json",
+      "passed": true,
+      "completedTestCount": 15,
+      "scope": "Prior catalog/source guard validation and previously prepared 4b27 installer hash. No claim these catalog-only cases re-executed for 5f06."
+    }
+  },
+  "environmentBlocker": {
+    "kind": "FileProvider dataless pinned texture PNG read timeout",
+    "attempts": 2,
+    "error": "TimeoutError errno60",
+    "packageAndHTTPTestsCompleted": false
+  },
+  "limits": [
+    "No Studio execution, actual asset upload, template property assignment or publication was performed",
+    "Full serving/numeric-package/HTTP validation was not completed because pinned texture PNG reads twice raised FileProvider TimeoutError errno60",
+    "Partial-write handling was reviewed from exact source, not induced in live Studio",
+    "One second-run receipt overwrite through Lune returned Operation not permitted after tests; complete repeated run succeeded with a /private/tmp output, then exact receipt was copied into review. This is not a Studio failure."
+  ],
+  "schema": "lobby-r4-installer-final-peer-review-v2"
+}

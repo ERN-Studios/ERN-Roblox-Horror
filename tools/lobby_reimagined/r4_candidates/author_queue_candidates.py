@@ -1,0 +1,536 @@
+"""Create scoped R4 candidates from an exact fresh native Studio export.
+
+This writes candidate files only. It does not connect to or modify Studio.
+"""
+from pathlib import Path
+import difflib
+import hashlib
+import json
+
+HERE = Path(__file__).resolve().parent
+
+
+def read(name):
+    return (HERE / (name + ".before.luau")).read_text()
+
+
+def replace_once(source, before, after):
+    assert source.count(before) == 1, (source.count(before), before[:100])
+    return source.replace(before, after, 1)
+
+
+BRIDGE_HELPERS = '''
+-- R4 uses the existing queue engine for DEV cohorts without changing campaign
+-- routing. Only these exact active server controllers can register launchers.
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local EXPECTED_CONTROLLERS = {
+    [4] = "Level4V4PreviewAccess", [5] = "Level5PreviewAccess", [6] = "Level6PreviewAccess",
+}
+local launchers = {}
+local contexts = setmetatable({}, {__mode = "k"})
+local preparations = setmetatable({}, {__mode = "k"})
+
+function Bridge.RegisterPreviewLauncher(level, controller, callbacks)
+    assert(not RunService:IsClient(), "Preview launcher registration is server-only")
+    local expected = EXPECTED_CONTROLLERS[level]
+    assert(expected and controller == game:GetService("ServerScriptService"):FindFirstChild(expected)
+        and controller:IsA("Script"), "Wrong active preview controller")
+    assert(type(callbacks) == "table" and type(callbacks.allowed) == "function"
+        and type(callbacks.ready) == "function" and type(callbacks.launch) == "function",
+        "Incomplete preview launcher")
+    launchers[level] = {controller = controller, callbacks = callbacks}
+end
+
+local function ownedStation(station)
+    if type(station) ~= "table" or station.revisionOwned ~= true or station.revisionRetired
+        or not Bridge.IsLobby(station.lobbyOwner) then return false end
+    local zone = station.zone
+    return typeof(zone) == "Instance" and zone:IsA("BasePart")
+        and zone:IsDescendantOf(station.lobbyOwner)
+        and zone:GetAttribute("R3QueueId") == station.index
+        and zone:GetAttribute("LevelNumber") == station.level
+        and station.index >= FIRST_ID and station.index < FIRST_ID + COUNT
+        and math.floor((station.index - FIRST_ID) / 4) + 1 == station.level
+end
+
+local function liveLauncher(station)
+    if not ownedStation(station) or station.previewQueue ~= true then return nil end
+    local record = launchers[station.level]
+    return record and record.controller.Parent == game:GetService("ServerScriptService")
+        and record.controller.Name == EXPECTED_CONTROLLERS[station.level] and record.callbacks or nil
+end
+
+local function livingRoot(player, character)
+    if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players
+        or player.Character ~= character or not character:IsDescendantOf(workspace)
+        or player:GetAttribute("InRound") == true then return nil end
+    local hum = character:FindFirstChildOfClass("Humanoid")
+    local root = hum and hum.RootPart
+    if not root or root.Anchored or hum.Health <= 0 or hum.SeatPart
+        or hum:GetState() == Enum.HumanoidStateType.Dead then return nil end
+    return root, hum
+end
+
+local function insideZone(station, root)
+    local point = station.zone.CFrame:PointToObjectSpace(root.Position)
+    local radius = station.zone:GetAttribute("QueueRadius")
+    return type(radius) == "number" and radius > 0
+        and point.X * point.X + point.Z * point.Z <= radius * radius
+        and point.Y > -6 and point.Y < 12
+end
+
+function Bridge.IsPreviewPreparing(station)
+    return ownedStation(station) and preparations[station] ~= nil
+end
+
+function Bridge.AllowsPreview(station, player, context)
+    local callbacks = liveLauncher(station)
+    if not callbacks or player:GetAttribute("Level6InRound") == true then return false end
+    local previous = preparations[station]
+    if previous and not previous.active then return false end
+    local ok, allowed = pcall(callbacks.allowed, player, context, station)
+    return ok and allowed == true
+end
+
+function Bridge.ContextOwns(context, player, station)
+    local state = contexts[context]
+    return state ~= nil and state.active and state.station == station
+        and state.characters[player] ~= nil and state.characters[player] == player.Character
+end
+
+function Bridge.LockPreviewController(context, nextUse, locks, release)
+    local state = contexts[context]
+    if not state or not state.active then return false, "INVALID_PREVIEW_CONTEXT" end
+    for _, player in ipairs(state.players) do
+        if locks[player] or (nextUse[player] or 0) > os.clock()
+            or not Bridge.ValidateQueueAdmission(context, player, state.characters[player]) then
+            return false, "PREVIEW_PLAYER_BUSY"
+        end
+    end
+    for _, player in ipairs(state.players) do locks[player]=context; nextUse[player]=math.huge end
+    table.insert(state.finalizers, function()
+        for _, player in ipairs(state.players) do
+            if locks[player] == context then
+                -- Never strand math.huge when one controller cleanup errors.
+                nextUse[player] = if player.Parent == Players then os.clock()+2 else nil
+                local ok, problem = pcall(release, player)
+                locks[player] = nil
+                if not ok then warn("[R4 Preview Queue] controller release: " .. tostring(problem)) end
+            end
+        end
+    end)
+    return true
+end
+
+local function closeContext(context, state)
+    state.active = false
+    -- A yielding first Runtime.Join may still need to roll back its cohort.
+    -- Keep the shared E/cooldown lock until that commit task has unwound.
+    if state.committing and not state.finished then contexts[context]=nil; return end
+    for _, finalize in ipairs(state.finalizers) do
+        local ok, problem = pcall(finalize)
+        if not ok then warn("[R4 Preview Queue] finalizer: " .. tostring(problem)) end
+    end
+    table.clear(state.finalizers)
+    contexts[context] = nil
+end
+
+function Bridge.ValidateQueueAdmission(context, player, character, requireZone)
+    local state = contexts[context]
+    if not state or not state.active or os.clock() > state.deadline then return nil end
+    local station = state.station
+    if not station.busy or station.cancelRequested or station.admissionEpoch ~= state.epoch
+        or state.characters[player] ~= character or not ownedStation(station)
+        or liveLauncher(station) ~= state.callbacks then return nil end
+    local root, humanoid = livingRoot(player, character)
+    if not root then return nil end
+    -- Once committed, Runtime.Join sets Level6InRound. Admission was already
+    -- checked for the whole frozen cohort; the living character is still checked.
+    if requireZone ~= false then
+        if not Bridge.AllowsPreview(station, player, context) or not insideZone(station, root) then return nil end
+    else
+        local ok, allowed = pcall(state.callbacks.allowed, player, context, station)
+        if not ok or allowed ~= true then return nil end
+    end
+    return root, humanoid
+end
+
+local SLOT_OFFSETS = {
+    Vector2.new(0,0), Vector2.new(-4.5,0), Vector2.new(4.5,0),
+    Vector2.new(0,4.5), Vector2.new(-4.5,4.5), Vector2.new(4.5,4.5),
+    Vector2.new(0,-4.5), Vector2.new(-4.5,-4.5), Vector2.new(4.5,-4.5),
+    Vector2.new(0,9), Vector2.new(-4.5,9), Vector2.new(4.5,9),
+    Vector2.new(0,-9), Vector2.new(-4.5,-9), Vector2.new(4.5,-9),
+}
+
+local function reserveLandings(context, model, exit)
+    local state = contexts[context]
+    if not state or not model or model.Parent ~= workspace or not exit
+        or not exit:IsDescendantOf(model) then return nil, "PREVIEW_WORLD_CHANGED" end
+    local look = Vector3.new(exit.CFrame.LookVector.X, 0, exit.CFrame.LookVector.Z)
+    local facing = CFrame.lookAt(exit.Position, exit.Position + (if look.Magnitude > .01 then look else Vector3.zAxis))
+    local ray = RaycastParams.new()
+    ray.FilterType = Enum.RaycastFilterType.Include
+    ray.FilterDescendantsInstances = {model}; ray.RespectCanCollide = true
+    local overlap = OverlapParams.new()
+    overlap.FilterType = Enum.RaycastFilterType.Include
+    overlap.FilterDescendantsInstances = {model}; overlap.RespectCanCollide = true
+    local chosen, entries = {}, {}
+    for _, player in ipairs(state.players) do
+        local character = state.characters[player]
+        local root, hum = Bridge.ValidateQueueAdmission(context, player, character)
+        if not root then return nil, "QUEUE_COHORT_CHANGED" end
+        local selected
+        for _, offset in ipairs(SLOT_OFFSETS) do
+            local at = facing:PointToWorldSpace(Vector3.new(offset.X, 0, offset.Y))
+            local hit = workspace:Raycast(at + Vector3.new(0,1.5,0), Vector3.new(0,-14,0), ray)
+            if not hit or hit.Normal.Y < .7 or hit.Position.Y > exit.Position.Y - .75 then continue end
+            local point = hit.Position + Vector3.new(0, math.max(3.5, hum.HipHeight + root.Size.Y * .5 + .2), 0)
+            if (point - exit.Position).Magnitude > 16 then continue end
+            local clear = true
+            for _, used in ipairs(chosen) do
+                if Vector3.new(point.X-used.X,0,point.Z-used.Z).Magnitude < 4.2 then clear = false; break end
+            end
+            if not clear then continue end
+            for _, other in ipairs(Players:GetPlayers()) do
+                local otherChar = other.Character
+                local otherHum = otherChar and otherChar:FindFirstChildOfClass("Humanoid")
+                local otherRoot = otherHum and otherHum.RootPart
+                if other ~= player and otherRoot and otherHum.Health > 0
+                    and (otherRoot.Position-point).Magnitude < 4.2 then clear = false; break end
+            end
+            if not clear then continue end
+            for _, part in ipairs(workspace:GetPartBoundsInBox(CFrame.new(point), Vector3.new(3.4,5.4,3.4), overlap)) do
+                if part.CanCollide then clear = false; break end
+            end
+            if clear then selected = point; break end
+        end
+        if not selected then return nil, "NO_SAFE_GROUP_ARRIVAL" end
+        table.insert(chosen, selected)
+        table.insert(entries, {player=player, character=character, root=root,
+            previous=character:GetPivot(), frame=CFrame.lookAt(selected, selected+facing.LookVector)})
+    end
+    return entries
+end
+
+function Bridge.PreparePreviewGroup(context, model, exit, stream)
+    local state = contexts[context]
+    if not state or type(stream) ~= "function" then return nil, "INVALID_PREVIEW_CONTEXT" end
+    local entries, problem = reserveLandings(context, model, exit)
+    if not entries then return nil, problem end
+    state.destinationModel = model; state.destinationExit = exit
+    local completed, succeeded = 0, {}
+    for index, entry in ipairs(entries) do
+        task.spawn(function()
+            local ok, streamed = pcall(stream, entry.player, entry.frame.Position)
+            succeeded[index] = ok and streamed == true
+            completed += 1
+        end)
+    end
+    local deadline = os.clock() + 30
+    while completed < #entries and os.clock() < deadline do
+        if not Bridge.ValidateQueueAdmission(context, state.players[1], state.characters[state.players[1]]) then
+            return nil, "QUEUE_COHORT_CHANGED"
+        end
+        task.wait(.1)
+    end
+    if completed < #entries then return nil, "GROUP_STREAM_TIMEOUT" end
+    for index in ipairs(entries) do if not succeeded[index] then return nil, "GROUP_STREAM_FAILED" end end
+    local nowModel, nowExit = state.callbacks.ready()
+    if nowModel ~= model or nowExit ~= exit then return nil, "PREVIEW_WORLD_CHANGED" end
+    -- Recheck floor, collision clearance, living characters and zone membership
+    -- after every streaming yield, before any member is moved.
+    return reserveLandings(context, model, exit)
+end
+
+function Bridge.CommitPreviewGroup(context, entries, commit, rollback)
+    local state = contexts[context]
+    if not state or type(entries) ~= "table" or #entries ~= #state.players then return false, "INVALID_COHORT" end
+    for _, entry in ipairs(entries) do
+        if not Bridge.ValidateQueueAdmission(context, entry.player, entry.character) then return false, "QUEUE_COHORT_CHANGED" end
+    end
+    local nowModel, nowExit = state.callbacks.ready()
+    if nowModel ~= state.destinationModel or nowExit ~= state.destinationExit then return false, "PREVIEW_WORLD_CHANGED" end
+    state.committing = true
+    local moved = {}
+    local ok, problem = xpcall(function()
+        -- Freeze and validate everyone first, then release the whole cohort.
+        for _, entry in ipairs(entries) do
+            entry.root.AssemblyLinearVelocity = Vector3.zero
+            entry.root.AssemblyAngularVelocity = Vector3.zero
+            entry.character:PivotTo(entry.frame)
+            table.insert(moved, entry)
+        end
+        for _, entry in ipairs(entries) do
+            if not Bridge.ValidateQueueAdmission(context, entry.player, entry.character, false) then error("QUEUE_COHORT_CHANGED") end
+            entry.commitAttempted = true
+            local joined, reason = commit(entry)
+            if joined ~= true then error(tostring(reason or "PREVIEW_JOIN_REJECTED")) end
+            -- The final/solo Join can yield too. A revoked context must still
+            -- roll back after that call, even when no next member follows it.
+            if not Bridge.ValidateQueueAdmission(context, entry.player, entry.character, false) then error("QUEUE_COHORT_CHANGED") end
+            local readyModel, readyExit = state.callbacks.ready()
+            if readyModel ~= state.destinationModel or readyExit ~= state.destinationExit then error("PREVIEW_WORLD_CHANGED") end
+        end
+    end, debug.traceback)
+    if not ok then
+        for _, entry in ipairs(moved) do
+            if rollback and entry.commitAttempted then
+                local rollbackOK, rollbackProblem = pcall(rollback, entry)
+                if not rollbackOK then warn("[R4 Preview Queue] rollback: " .. tostring(rollbackProblem)) end
+            end
+            -- Respect an explicit cancel/return that has already moved a living
+            -- avatar away; never pull it back from a newer destination.
+            if livingRoot(entry.player, entry.character)
+                and (entry.root.Position-entry.frame.Position).Magnitude <= 24 then
+                entry.root.AssemblyLinearVelocity = Vector3.zero
+                entry.root.AssemblyAngularVelocity = Vector3.zero
+                entry.character:PivotTo(entry.previous)
+            end
+        end
+        return false, tostring(problem)
+    end
+    return true
+end
+
+function Bridge.LaunchPreviewGroup(station, players)
+    local callbacks = liveLauncher(station)
+    if not callbacks or not station.busy or type(players) ~= "table" or #players < 1 or #players > 6 then
+        return false, "PREVIEW_LAUNCHER_UNAVAILABLE"
+    end
+    -- An abandoned EnsureWorld must finish its own bounded cleanup. Never
+    -- task.cancel it or create another waiting job for this same station.
+    if preparations[station] then return false, "PREVIEW_PREPARATION_BUSY" end
+    local context = {}
+    local state = {active=true, station=station, callbacks=callbacks, epoch=station.admissionEpoch,
+        deadline=os.clock()+1400, players={}, characters={}, finalizers={}}
+    contexts[context] = state
+    for _, player in ipairs(players) do
+        local character = player.Character
+        if state.characters[player] or not character then closeContext(context,state); return false, "INVALID_COHORT" end
+        state.characters[player] = character; table.insert(state.players, player)
+        if not Bridge.ValidateQueueAdmission(context, player, character) then
+            closeContext(context,state); return false, "QUEUE_COHORT_CHANGED"
+        end
+    end
+    preparations[station] = state
+    local done, ok, joined, problem = false, false, false, nil
+    task.spawn(function()
+        ok, joined, problem = pcall(callbacks.launch, context)
+        state.finished = true
+        if not state.active then closeContext(context, state) end
+        done = true
+        if preparations[station] == state then preparations[station] = nil end
+    end)
+    while not done do
+        local valid = true
+        for _, player in ipairs(state.players) do
+            if not Bridge.ValidateQueueAdmission(context, player, state.characters[player], not state.committing) then
+                valid = false; break
+            end
+        end
+        if not valid then
+            closeContext(context,state)
+            if state.committing then
+                -- A Join already in flight owns rollback. Keep this station
+                -- busy until it finishes so no new queue can replace its epoch.
+                while not done do task.wait(.1) end
+            end
+            return false, "QUEUE_COHORT_CHANGED"
+        end
+        task.wait(.1)
+    end
+    closeContext(context,state)
+    return ok and joined == true, if ok then problem else tostring(joined)
+end
+'''
+
+
+def bridge_candidate():
+    name = "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript"
+    source = read(name)
+    source = replace_once(source, "renderOwner = owner, previewOnly = level > 3}",
+                          "renderOwner = owner, previewOnly = level > 3, previewQueue = level > 3}")
+    return name, replace_once(source, "\nreturn Bridge\n", BRIDGE_HELPERS + "\nreturn Bridge\n")
+
+
+def manager_candidate():
+    name = "ServerScriptService.GameManager.Script"
+    source = read(name)
+    source = replace_once(source,
+        'station.renderOwner:SetAttribute("QueueActive", station.host ~= nil and not station.busy and not station.revisionRetired)',
+        'station.renderOwner:SetAttribute("QueueActive", station.host ~= nil and (not station.busy or station.previewQueue == true) and not station.revisionRetired)')
+    source = replace_once(source,
+        " if not station or station.busy then return end\n if station.host ~= player or not station.awaitingConfig then return end\n",
+        ''' if not station then return end
+ local previewCancel = station.previewQueue == true and requestedPrivacy == "cancel" and station.host == player
+ if station.busy and not previewCancel then return end
+ if station.host ~= player or (not station.awaitingConfig and not previewCancel) then return end
+''')
+    helper = '''-- R4-owned preview queues share the existing station engine. Production
+-- routing and the original lobby remain untouched.
+local function revisedQueueBridge()
+ local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
+ local module = folder and folder:FindFirstChild("QueueBridge")
+ return module and module:IsA("ModuleScript") and require(module) or nil
+end
+
+local function revisedQueueIdleSubtitle(station)
+ if not station.previewQueue then return "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS" end
+ local bridge = revisedQueueBridge()
+ if bridge and bridge.IsPreviewPreparing and bridge.IsPreviewPreparing(station) then
+  return "PREPARING PREVIEW WORLD  •  PLEASE WAIT"
+ end
+ return "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+end
+
+'''
+    source = replace_once(source, "local function playerInsideZone(player, station, includeBusy)\n", helper + "local function playerInsideZone(player, station, includeBusy)\n")
+    source = replace_once(source,
+        " if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end\n",
+        ''' if station.previewQueue then
+  local bridge = revisedQueueBridge()
+  if not bridge or not bridge.AllowsPreview(station, player) then return false end
+ elseif station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
+''')
+    source = replace_once(source, "local function launchStation(station, participants)\n", '''local function launchStation(station, participants)
+ if station.previewQueue then
+  local bridge = revisedQueueBridge()
+  if not bridge or not bridge.LaunchPreviewGroup then return end
+  station.busy = true
+  setStationDisplay(station, "STARTING DEV PREVIEW", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
+  -- Preview controllers own their stream/entry UI; never announce a campaign
+  -- loadinggame or create a reserved production server for levels4-6.
+  fireGroup(participants, "queueconfigclosed")
+  local ok, joined, problem = pcall(bridge.LaunchPreviewGroup, station, participants)
+  if not ok or joined ~= true then
+   warn("[R4 Preview Queue] " .. tostring(if ok then problem else joined))
+   setStationDisplay(station, "PREVIEW ENTRY FAILED", "STEP OUT AND TRY AGAIN", Color3.fromRGB(255,105,95))
+   fireGroup(participants, "lobbycancel")
+   task.wait(2.5)
+  end
+  station.busy = false
+  return
+ end
+''')
+    source = replace_once(source,
+        "-- Only ready, explicitly owned pads 101-112 enter the registry; 4-6 stay DEV previews.",
+        "-- Ready owned pads101-124 share one engine;4-6 use guarded local DEV launchers.")
+    source = replace_once(source, "   if not station.previewOnly then\n    if station.level > Routing.MaxLevel or lobbyStations[station.index] then\n",
+        "   if station.previewQueue or not station.previewOnly then\n    if (not station.previewQueue and station.level > Routing.MaxLevel) or lobbyStations[station.index] then\n")
+    assert source.count('"ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"') == 3
+    source = source.replace('     "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS",', '     revisedQueueIdleSubtitle(station),')
+    source = source.replace('  "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS",', '  revisedQueueIdleSubtitle(station),')
+    assert source.count('"ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"') == 1
+    return name, source
+
+
+def controller_candidate(level):
+    suffix = "Level4V4PreviewAccess" if level == 4 else "Level" + str(level) + "PreviewAccess"
+    name = "ServerScriptService." + suffix + ".Script"
+    source = read(name)
+    if level in (4,5):
+        extra = '''-- R4 queue cohorts use the same existing authorized preview/floor/stream
+-- helpers as the original E entry. Original door prompts are unchanged.
+do
+ local bridge = r3Bridge()
+ if bridge and bridge.RegisterPreviewLauncher then
+  local queueLocks = {}
+  local registered, registrationProblem = pcall(bridge.RegisterPreviewLauncher, LEVEL, script, {
+   allowed = function(player, _, station)
+    local lock = queueLocks[player]
+    return (if lock then bridge.ContextOwns(lock, player, station) else (nextUse[player] or 0) <= os.clock())
+     and readyPlayer(player) ~= nil
+   end,
+   ready = function()
+    local model, exit = readyPreview()
+    local prompt = exit and exit:FindFirstChild(RETURN_PROMPT)
+    if not model or not prompt or not prompt:IsA("ProximityPrompt") or not prompt.Enabled
+     or not hasFloor(model, exit) then return nil end
+    return model, exit
+   end,
+   launch = function(context)
+    local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)
+    if not locked then return false, reason end
+    local model, exit = readyPreview()
+    local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
+    if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
+     or not returnPrompt.Enabled or not hasFloor(model, exit) then return false, "PREVIEW_NOT_READY" end
+    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, stream)
+    if not entries then return false, problem end
+    return bridge.CommitPreviewGroup(context, entries, function() return true end)
+   end,
+  })
+  if not registered then warn("[R4 Preview Queue] registration: " .. tostring(registrationProblem)) end
+ end
+end
+
+'''.replace("LEVEL", str(level))
+    else:
+        extra = '''-- R4 queue cohorts keep the existing Level6 allowlist, floor/stream
+-- confirmation and Runtime.Join path. No campaign routing is changed.
+do
+ local bridge = r3Bridge()
+ if bridge and bridge.RegisterPreviewLauncher then
+  local queueLocks = {}
+  local registered, registrationProblem = pcall(bridge.RegisterPreviewLauncher, 6, script, {
+   allowed = function(player, _, station)
+    local lock = queueLocks[player]
+    return (if lock then bridge.ContextOwns(lock, player, station) else (nextUse[player] or 0) <= os.clock())
+     and playerReady(player) ~= nil
+   end,
+   ready = function()
+    local model, exit = previewReady()
+    local prompt = exit and exit:FindFirstChild(RETURN)
+    if not model or not prompt or not prompt:IsA("ProximityPrompt") or not prompt.Enabled
+     or not floorAt(model, exit.Position) then return nil end
+    return model, exit
+   end,
+   launch = function(context)
+    local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)
+    if not locked then return false, reason end
+    local model, exit = Runtime.EnsureWorld()
+    hookExit()
+    if not model or not exit or not floorAt(model, exit.Position) then return false, "PREVIEW_NOT_READY" end
+    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, position)
+     return streamReady(player, position, MODEL_NAME)
+    end)
+    if not entries then return false, problem end
+    return bridge.CommitPreviewGroup(context, entries, function(entry)
+     local joined, reason = Runtime.Join(entry.player)
+     if joined then transport:FireClient(entry.player, "ArrivalFacing", entry.frame, MODEL_NAME) end
+     return joined, reason
+    end, function(entry) Runtime.Leave(entry.player) end)
+   end,
+  })
+  if not registered then warn("[R4 Preview Queue] registration: " .. tostring(registrationProblem)) end
+ end
+end
+
+'''
+    return name, replace_once(source, "local function hookDoor()\n", extra + "local function hookDoor()\n")
+
+
+def main():
+    records = json.loads((HERE / "baseline-manifest.json").read_text())
+    baseline = {d["path"] + "." + d["class"]: d for d in records}
+    output = []
+    for name, candidate in [bridge_candidate(), manager_candidate(), *(controller_candidate(i) for i in (4,5,6))]:
+        before = read(name)
+        entry = baseline[name]
+        assert hashlib.sha256(before.encode()).hexdigest() == entry["beforeSHA256"]
+        target = HERE / (name + ".candidate.luau")
+        target.write_text(candidate)
+        patch = ''.join(difflib.unified_diff(before.splitlines(keepends=True), candidate.splitlines(keepends=True),
+            fromfile=name + ".before", tofile=name + ".candidate"))
+        (HERE / (name + ".diff")).write_text(patch)
+        output.append({**entry, "candidateFile": target.name,
+            "afterSHA256": hashlib.sha256(candidate.encode()).hexdigest(), "afterBytes": len(candidate.encode()),
+            "diffFile": name + ".diff", "scope": "Candidate only; not installed or playtested"})
+    (HERE / "candidate-manifest.json").write_text(json.dumps(output, indent=2) + "\n")
+    print(json.dumps(output, indent=2))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,118 @@
+--- ServerScriptService.GameManager.Script.before
++++ ServerScriptService.GameManager.Script.candidate
+@@ -645,7 +645,7 @@
+ local function setStationDisplay(station, main, secondary, color)
+  -- R3 holograms mirror this engine's true host/reset/launch state only.
+  if station.revisionOwned and station.renderOwner and station.renderOwner.Parent then
+-  station.renderOwner:SetAttribute("QueueActive", station.host ~= nil and not station.busy and not station.revisionRetired)
++  station.renderOwner:SetAttribute("QueueActive", station.host ~= nil and (not station.busy or station.previewQueue == true) and not station.revisionRetired)
+  end
+  station.title.Text = main
+  station.sub.Text = secondary or ""
+@@ -1112,9 +1112,29 @@
+  return nil
+ end
+ 
++-- R4-owned preview queues share the existing station engine. Production
++-- routing and the original lobby remain untouched.
++local function revisedQueueBridge()
++ local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
++ local module = folder and folder:FindFirstChild("QueueBridge")
++ return module and module:IsA("ModuleScript") and require(module) or nil
++end
++
++local function revisedQueueIdleSubtitle(station)
++ if not station.previewQueue then return "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS" end
++ local bridge = revisedQueueBridge()
++ if bridge and bridge.IsPreviewPreparing and bridge.IsPreviewPreparing(station) then
++  return "PREPARING PREVIEW WORLD  •  PLEASE WAIT"
++ end
++ return "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
++end
++
+ local function playerInsideZone(player, station, includeBusy)
+  if station.revisionOwned and not (RunService:IsStudio() or DevAccess.IsLevel6PreviewAllowed(player)) then return false end
+- if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
++ if station.previewQueue then
++  local bridge = revisedQueueBridge()
++  if not bridge or not bridge.AllowsPreview(station, player) then return false end
++ elseif station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
+  if inRound[player] or (station.busy and not includeBusy) then return false end
+  local char = player.Character
+  local hum = char and char:FindFirstChildOfClass("Humanoid")
+@@ -1398,8 +1418,10 @@
+  if IS_RESERVED_ROUND_SERVER then return end
+  stationIndex = math.floor(tonumber(stationIndex) or 0)
+  local station = lobbyStations[stationIndex]
+- if not station or station.busy then return end
+- if station.host ~= player or not station.awaitingConfig then return end
++ if not station then return end
++ local previewCancel = station.previewQueue == true and requestedPrivacy == "cancel" and station.host == player
++ if station.busy and not previewCancel then return end
++ if station.host ~= player or (not station.awaitingConfig and not previewCancel) then return end
+ 
+  if requestedPrivacy == "cancel" then
+   -- The phone close button genuinely leaves the queue instead of only hiding UI.
+@@ -3036,6 +3058,24 @@
+ -- reserved server. Studio cannot test TeleportService, so it runs the same party
+ -- locally as a practical editor-only fallback.
+ local function launchStation(station, participants)
++ if station.previewQueue then
++  local bridge = revisedQueueBridge()
++  if not bridge or not bridge.LaunchPreviewGroup then return end
++  station.busy = true
++  setStationDisplay(station, "STARTING DEV PREVIEW", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
++  -- Preview controllers own their stream/entry UI; never announce a campaign
++  -- loadinggame or create a reserved production server for levels4-6.
++  fireGroup(participants, "queueconfigclosed")
++  local ok, joined, problem = pcall(bridge.LaunchPreviewGroup, station, participants)
++  if not ok or joined ~= true then
++   warn("[R4 Preview Queue] " .. tostring(if ok then problem else joined))
++   setStationDisplay(station, "PREVIEW ENTRY FAILED", "STEP OUT AND TRY AGAIN", Color3.fromRGB(255,105,95))
++   fireGroup(participants, "lobbycancel")
++   task.wait(2.5)
++  end
++  station.busy = false
++  return
++ end
+  if not canAccessLevel(station.level or 1, participants) then return end
+  station.busy = true
+  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
+@@ -3126,7 +3166,7 @@
+  station.feedback = {}
+  setStationDisplay(station,
+   "STATION " .. (station.displayIndex or station.index) .. "  •  0/6",
+-  "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS",
++  revisedQueueIdleSubtitle(station),
+   station.color)
+ end
+ 
+@@ -3374,7 +3414,7 @@
+    if station.host then resetStation(station, true) else
+     setStationDisplay(station,
+      "STATION " .. (station.displayIndex or station.index) .. "  •  0/6",
+-     "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS",
++     revisedQueueIdleSubtitle(station),
+      station.color)
+    end
+    task.wait(0.25)
+@@ -3480,7 +3520,7 @@
+ end
+ 
+ -- R3 parallel lobby uses the same private queue engine, never a second countdown.
+--- Only ready, explicitly owned pads 101-112 enter the registry; 4-6 stay DEV previews.
++-- Ready owned pads101-124 share one engine;4-6 use guarded local DEV launchers.
+ if not IS_RESERVED_ROUND_SERVER then
+  local r3Models = setmetatable({}, {__mode = "k"})
+  local function bindR3(model)
+@@ -3496,8 +3536,8 @@
+   if not ok then warn("[R3 Queue Bridge] " .. tostring(specs)); return end
+   local registered = {}
+   for _, station in ipairs(specs) do
+-   if not station.previewOnly then
+-    if station.level > Routing.MaxLevel or lobbyStations[station.index] then
++   if station.previewQueue or not station.previewOnly then
++    if (not station.previewQueue and station.level > Routing.MaxLevel) or lobbyStations[station.index] then
+      warn("[R3 Queue Bridge] conflicting or unavailable queue id " .. station.index); return
+     end
+     table.insert(registered, station)

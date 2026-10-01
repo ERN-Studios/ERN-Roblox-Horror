@@ -1,0 +1,8374 @@
+[
+  {
+    "name": "Level4QueueRoom",
+    "surfaces": [
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          90.86517333984375,
+          41.20000076293945,
+          -762.7445068359375,
+          -0.09801805019378662,
+          0,
+          0.995184600353241,
+          0,
+          1,
+          0,
+          -0.995184600353241,
+          0,
+          -0.09801805019378662
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          90.46199035644531,
+          41.20000076293945,
+          -765.4625244140625,
+          -0.1950904130935669,
+          0,
+          0.9807854890823364,
+          0,
+          1,
+          0,
+          -0.9807854890823364,
+          0,
+          -0.1950904130935669
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          87.69379425048828,
+          41.20000076293945,
+          -773.1990966796875,
+          -0.47139668464660645,
+          0,
+          0.8819214701652527,
+          0,
+          1,
+          0,
+          -0.8819214701652527,
+          0,
+          -0.47139668464660645
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          86.2811508178711,
+          41.20000076293945,
+          -775.5559692382812,
+          -0.5555703639984131,
+          0,
+          0.8314695954322815,
+          0,
+          1,
+          0,
+          -0.8314695954322815,
+          0,
+          -0.5555703639984131
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          89.79432678222656,
+          41.20000076293945,
+          -768.1279907226562,
+          -0.2902853488922119,
+          0,
+          0.9569401144981384,
+          0,
+          1,
+          0,
+          -0.9569401144981384,
+          0,
+          -0.2902853488922119
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          84.64429473876953,
+          41.20000076293945,
+          -777.7630004882812,
+          -0.6343929767608643,
+          0,
+          0.773010790348053,
+          0,
+          1,
+          0,
+          -0.773010790348053,
+          0,
+          -0.6343929767608643
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          88.86862182617188,
+          41.20000076293945,
+          -770.7151489257812,
+          -0.38268375396728516,
+          0,
+          0.9238793849945068,
+          0,
+          1,
+          0,
+          -0.9238793849945068,
+          0,
+          -0.38268375396728516
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          }
+        ],
+        "color": [
+          0.2862745225429535,
+          0.2666666805744171,
+          0.22745098173618317
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          29.75,
+          -760,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          }
+        ],
+        "color": [
+          0.2862745225429535,
+          0.2666666805744171,
+          0.22745098173618317
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          29.579999923706055,
+          -760,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          52.599998474121094,
+          -760,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          49.400001525878906,
+          -760,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "CircularWallSegments": 64,
+      "LevelEnabled": false,
+      "LevelNumber": 4,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  },
+  {
+    "name": "Level2QueueRoom",
+    "surfaces": [
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          76.19911193847656,
+          41.20000076293945,
+          -864.6937866210938,
+          -0.8819212913513184,
+          0,
+          0.4713970124721527,
+          0,
+          1,
+          0,
+          -0.4713970124721527,
+          0,
+          -0.8819212913513184
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          78.55596923828125,
+          41.20000076293945,
+          -863.2811279296875,
+          -0.8314696550369263,
+          0,
+          0.5555707812309265,
+          0,
+          1,
+          0,
+          -0.5555707812309265,
+          0,
+          -0.8314696550369263
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          80.76301574707031,
+          41.20000076293945,
+          -861.644287109375,
+          -0.7730106115341187,
+          0,
+          0.6343936324119568,
+          0,
+          1,
+          0,
+          -0.6343936324119568,
+          0,
+          -0.7730106115341187
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          49.8008918762207,
+          41.20000076293945,
+          -864.6937866210938,
+          -0.8819212913513184,
+          0,
+          -0.47139689326286316,
+          0,
+          1,
+          0,
+          0.47139689326286316,
+          0,
+          -0.8819212913513184
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          54.87202835083008,
+          41.20000076293945,
+          -866.7943115234375,
+          -0.9569402933120728,
+          0,
+          -0.2902848720550537,
+          0,
+          1,
+          0,
+          0.2902848720550537,
+          0,
+          -0.9569402933120728
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          65.74447631835938,
+          41.20000076293945,
+          -867.8651733398438,
+          -0.995185136795044,
+          0,
+          0.09801704436540604,
+          0,
+          1,
+          0,
+          -0.09801704436540604,
+          0,
+          -0.995185136795044
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8078431487083435,
+          0.8666666746139526,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          57.537471771240234,
+          41.20000076293945,
+          -867.4619750976562,
+          -0.9807852506637573,
+          0,
+          -0.1950903832912445,
+          0,
+          1,
+          0,
+          0.1950903832912445,
+          0,
+          -0.9807852506637573
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8941176533699036,
+          0.8784313797950745,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          49.400001525878906,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.9254902005195618,
+          0.8901960849761963,
+          0.7686274647712708
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          29.75,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.9254902005195618,
+          0.8901960849761963,
+          0.7686274647712708
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          29.579999923706055,
+          -840,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.8941176533699036,
+          0.8784313797950745,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          52.599998474121094,
+          -840,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          32.599998474121094,
+          -847.1500244140625,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rail",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.3799999952316284,
+          5.199999809265137,
+          0.3799999952316284
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          31.950000762939453,
+          -848.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rung",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.4000000059604645,
+          0.3199999928474426,
+          2.700000047683716
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.9254902005195618,
+          0.8901960849761963,
+          0.7686274647712708
+        ],
+        "class": "Part",
+        "cf": [
+          83.5,
+          30.25,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Column Flare",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          5.199999809265137,
+          0.5,
+          5.199999809265137
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.9254902005195618,
+          0.8901960849761963,
+          0.7686274647712708
+        ],
+        "class": "Part",
+        "cf": [
+          83.5,
+          38.95000076293945,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Column Flare",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          5.199999809265137,
+          0.5,
+          5.199999809265137
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          32.599998474121094,
+          -849.8499755859375,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rail",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.3799999952316284,
+          5.199999809265137,
+          0.3799999952316284
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyLevel2TileTexture",
+            "tint": [
+              0.9725490212440491,
+              0.9490196108818054,
+              0.8549019694328308
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://113211706146395",
+            "tile": [
+              7,
+              7
+            ]
+          }
+        ],
+        "color": [
+          0.9254902005195618,
+          0.8901960849761963,
+          0.7686274647712708
+        ],
+        "class": "Part",
+        "cf": [
+          83.5,
+          34.599998474121094,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Tiled Column",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          3.5999999046325684,
+          9.199999809265137,
+          3.5999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1882352977991104,
+          0.5882353186607361,
+          0.6235294342041016
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          30.299999237060547,
+          -840,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0.5799999833106995,
+        "name": "Lobby L2 Shallow Water Surface",
+        "variant": "",
+        "query": false,
+        "material": "Glass",
+        "collide": false,
+        "size": [
+          0.019999999552965164,
+          54,
+          54
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9333333373069763,
+          0.7921568751335144,
+          0.3294117748737335
+        ],
+        "class": "Part",
+        "cf": [
+          82.5,
+          31.149999618530273,
+          -853,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ball",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          2.299999952316284,
+          2.299999952316284,
+          2.299999952316284
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          30.899999618530273,
+          -848.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rung",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.4000000059604645,
+          0.3199999928474426,
+          2.700000047683716
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          33,
+          -848.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rung",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.4000000059604645,
+          0.3199999928474426,
+          2.700000047683716
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.42352941632270813,
+          0.6431372761726379,
+          0.7098039388656616
+        ],
+        "class": "Part",
+        "cf": [
+          82,
+          30.549999237060547,
+          -831,
+          -1.1920928955078125e-7,
+          0,
+          1.0000001192092896,
+          0,
+          1,
+          0,
+          -1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Sunken Lounger Seat",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          2.5999999046325684,
+          0.5,
+          6.400000095367432
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7686274647712708,
+          0.7921568751335144,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          85.30000305175781,
+          34.04999923706055,
+          -848.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Pool Ladder Rung",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.4000000059604645,
+          0.3199999928474426,
+          2.700000047683716
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.42352941632270813,
+          0.6431372761726379,
+          0.7098039388656616
+        ],
+        "class": "Part",
+        "cf": [
+          79.0999984741211,
+          31.94999885559082,
+          -831,
+          5.960464477539063e-8,
+          -0.5735764503479004,
+          0.8191521167755127,
+          2.9802322387695312e-8,
+          0.8191520571708679,
+          0.5735764503479004,
+          -1,
+          -2.9802322387695312e-8,
+          5.960464477539063e-8
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Sunken Lounger Back",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          2.5999999046325684,
+          0.4000000059604645,
+          3.4000000953674316
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3764705955982208,
+          0.7686274647712708,
+          0.5176470875740051
+        ],
+        "class": "Part",
+        "cf": [
+          91.19999694824219,
+          34.099998474121094,
+          -828,
+          0.7595475912094116,
+          -0.5723600387573242,
+          0.30901697278022766,
+          0.6018149852752686,
+          0.7986356019973755,
+          -2.2351741790771484e-8,
+          -0.24679192900657654,
+          0.18597105145454407,
+          0.9510565400123596
+        ],
+        "transparency": 0,
+        "name": "Lobby L2 Wall Glitched Pool Noodle",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          6.199999809265137,
+          0.6200000047683716,
+          0.6200000047683716
+        ]
+      }
+    ],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "LevelEnabled": true,
+      "LobbyBayStyleVersion": 1,
+      "CircularWallSegments": 64,
+      "LobbyBayTheme": "Poolrooms",
+      "LevelNumber": 2,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  },
+  {
+    "name": "Level5QueueRoom",
+    "surfaces": [
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -76.19911193847656,
+          41.20000076293945,
+          -704.6937866210938,
+          -0.8819212913513184,
+          0,
+          -0.4713970124721527,
+          0,
+          1,
+          0,
+          0.4713970124721527,
+          0,
+          -0.8819212913513184
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5FloralWallpaper",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -80.76301574707031,
+          41.20000076293945,
+          -701.644287109375,
+          -0.7730106115341187,
+          0,
+          -0.6343936324119568,
+          0,
+          1,
+          0,
+          0.6343936324119568,
+          0,
+          -0.7730106115341187
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5FloralWallpaper",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -73.71513366699219,
+          41.20000076293945,
+          -705.86865234375,
+          -0.9238796234130859,
+          0,
+          -0.38268306851387024,
+          0,
+          1,
+          0,
+          0.38268306851387024,
+          0,
+          -0.9238796234130859
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -68.46253204345703,
+          41.20000076293945,
+          -707.4619750976562,
+          -0.9807852506637573,
+          0,
+          -0.19509051740169525,
+          0,
+          1,
+          0,
+          0.19509051740169525,
+          0,
+          -0.9807852506637573
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -71.12796783447266,
+          41.20000076293945,
+          -706.7943115234375,
+          -0.9569402933120728,
+          0,
+          -0.2902847230434418,
+          0,
+          1,
+          0,
+          0.2902847230434418,
+          0,
+          -0.9569402933120728
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -60.25551986694336,
+          41.20000076293945,
+          -707.8651733398438,
+          -0.995185136795044,
+          0,
+          0.09801717102527618,
+          0,
+          1,
+          0,
+          -0.09801717102527618,
+          0,
+          -0.995185136795044
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.8039215803146362,
+          0.6823529601097107
+        ],
+        "class": "Part",
+        "cf": [
+          -52.28486633300781,
+          41.20000076293945,
+          -705.86865234375,
+          -0.9238796234130859,
+          0,
+          0.38268306851387024,
+          0,
+          1,
+          0,
+          -0.38268306851387024,
+          0,
+          -0.9238796234130859
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          52.599998474121094,
+          -680,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.6352941393852234,
+          0.5882353186607361,
+          0.4901960790157318
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          29.579999923706055,
+          -680,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "Level5LoopCarpet",
+        "query": true,
+        "material": "Fabric",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          49.400001525878906,
+          -680,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "Level5AgedPlaster",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.6352941393852234,
+          0.5882353186607361,
+          0.4901960790157318
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          29.75,
+          -680,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "Level5LoopCarpet",
+        "query": true,
+        "material": "Fabric",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [
+      {
+        "textures": [],
+        "color": [
+          0.37254902720451355,
+          0.33725491166114807,
+          0.2666666805744171
+        ],
+        "class": "Part",
+        "cf": [
+          -84.13999938964844,
+          30.479999542236328,
+          -692.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DarkDoorMat1",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          2.3499999046325684,
+          0.03999999910593033,
+          0.7799999713897705
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          41.36000061035156,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyBottomRail",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          9,
+          0.14000000059604645,
+          0.14000000059604645
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3176470696926117,
+          0.4000000059604645,
+          0.4000000059604645
+        ],
+        "class": "Part",
+        "cf": [
+          -86.04999542236328,
+          35.90999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0.20000000298023224,
+        "name": "DomesticWindow2TintedPane",
+        "variant": "",
+        "query": false,
+        "material": "Glass",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -86.08000183105469,
+          37.15999984741211,
+          -682.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "HouseNumberPlaque2",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.7200000286102295,
+          0.46000000834465027,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -84.45999908447266,
+          39.040000915527344,
+          -691.0999755859375,
+          1.1920928955078125e-7,
+          1.4901161193847656e-8,
+          -0.9999999403953552,
+          -0.27563732862472534,
+          0.9612616896629333,
+          -1.4901161193847656e-8,
+          0.9612616896629333,
+          0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy1_1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -85.01000213623047,
+          35.90999984741211,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow3DarkInterior",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          1,
+          0.7529411911964417,
+          0.4313725531101227
+        ],
+        "class": "Part",
+        "cf": [
+          -84.77999877929688,
+          37.36000061035156,
+          -670,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WarmEntrySconce3",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          0.3799999952316284,
+          0.6200000047683716,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -86.11000061035156,
+          35.90999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow2DarkInterior",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          34.459999084472656,
+          -690.47998046875,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal1",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.93999481201172,
+          42.56999969482422,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperDomesticWindowWhiteSill",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          5.650000095367432,
+          0.20000000298023224,
+          0.4300000071525574
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -682,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -681,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.97999572753906,
+          44.80999755859375,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperDomesticWindowMullion",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          4.199999809265137,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.13999938964844,
+          30.529998779296875,
+          -690,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontSkirting1",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.699999809265137,
+          0.36000001430511475,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -84.9800033569336,
+          37.15999984741211,
+          -692.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "HouseNumberPlaque1",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.7200000286102295,
+          0.46000000834465027,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.37254902720451355,
+          0.33725491166114807,
+          0.2666666805744171
+        ],
+        "class": "Part",
+        "cf": [
+          -84.13999938964844,
+          30.479999542236328,
+          -672.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DarkDoorMat3",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          2.3499999046325684,
+          0.03999999910593033,
+          0.7799999713897705
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          34.459999084472656,
+          -670.47998046875,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal3",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.26000213623047,
+          48.40999984741211,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontCrown2",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.800000190734863,
+          0.4000000059604645,
+          0.3199999928474426
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -84.9800033569336,
+          37.15999984741211,
+          -672.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "HouseNumberPlaque3",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.7200000286102295,
+          0.46000000834465027,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -84.45999908447266,
+          39.040000915527344,
+          -693.2000122070312,
+          1.1920928955078125e-7,
+          -1.4901161193847656e-8,
+          -0.9999999403953552,
+          0.27563732862472534,
+          0.9612616896629333,
+          1.4901161193847656e-8,
+          0.9612616896629333,
+          -0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy1_-1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.12999725341797,
+          35.90999984741211,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow3Recess",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.440000057220459,
+          4.539999961853027,
+          0.20000000298023224
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          1,
+          0.7529411911964417,
+          0.4313725531101227
+        ],
+        "class": "Part",
+        "cf": [
+          -84.77999877929688,
+          37.36000061035156,
+          -690,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WarmEntrySconce1",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          0.3799999952316284,
+          0.6200000047683716,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.23999786376953,
+          30.529998779296875,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontSkirting2",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.699999809265137,
+          0.36000001430511475,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8705882430076599,
+          0.7647058963775635
+        ],
+        "class": "Part",
+        "cf": [
+          -84.1500015258789,
+          30.389999389648438,
+          -692.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "PalePorchStep1",
+        "variant": "",
+        "query": false,
+        "material": "Plaster",
+        "collide": false,
+        "size": [
+          4.199999809265137,
+          0.1599999964237213,
+          1.5
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -679,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.6823529601097107,
+          0.7333333492279053,
+          0.6784313917160034
+        ],
+        "class": "Part",
+        "cf": [
+          -85.5,
+          36.0099983215332,
+          -690,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ResidentialFront1",
+        "variant": "Level5PaintedSiding",
+        "query": false,
+        "material": "WoodPlanks",
+        "collide": false,
+        "size": [
+          8.600000381469727,
+          11.399999618530273,
+          0.550000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7607843279838562,
+          0.7098039388656616,
+          0.6274510025978088
+        ],
+        "class": "Part",
+        "cf": [
+          -85.5,
+          37.5099983215332,
+          -670,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ResidentialFront3",
+        "variant": "Level5PaintedSiding",
+        "query": false,
+        "material": "WoodPlanks",
+        "collide": false,
+        "size": [
+          8.600000381469727,
+          14.399999618530273,
+          0.550000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.5372549295425415,
+          0.43921568989753723,
+          0.15294118225574493
+        ],
+        "class": "Part",
+        "cf": [
+          -84.95999908447266,
+          34.40999984741211,
+          -691.0800170898438,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "QuietBrassHandle1",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.15000000596046448,
+          0.2800000011920929,
+          0.1899999976158142
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          51.66999816894531,
+          -664,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedCeilingSeam",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          43,
+          0.03999999910593033,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.16000366210938,
+          41.61000061035156,
+          -690,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontCrown1",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.800000190734863,
+          0.4000000059604645,
+          0.3199999928474426
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.0999984741211,
+          34.459999084472656,
+          -683.8200073242188,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal2",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9372549057006836,
+          0.886274516582489,
+          0.7254902124404907
+        ],
+        "class": "Part",
+        "cf": [
+          -54,
+          51.279998779296875,
+          -672,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentDiffuser4",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          6.550000190734863,
+          0.11999999731779099,
+          1.7000000476837158
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -54,
+          51.459999084472656,
+          -672,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentFrame4",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          7,
+          0.23999999463558197,
+          2.0999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          51.66999816894531,
+          -696,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedCeilingSeam",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          43,
+          0.03999999910593033,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -684,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          43.5099983215332,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyHandrail",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          9,
+          0.1599999964237213,
+          0.1599999964237213
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          51.66999816894531,
+          -680,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedCeilingSeam",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          43,
+          0.03999999910593033,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.13999938964844,
+          30.529998779296875,
+          -670,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontSkirting3",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.699999809265137,
+          0.36000001430511475,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -85.55999755859375,
+          39.040000915527344,
+          -683.2000122070312,
+          1.1920928955078125e-7,
+          -1.4901161193847656e-8,
+          -0.9999999403953552,
+          0.27563732862472534,
+          0.9612616896629333,
+          1.4901161193847656e-8,
+          0.9612616896629333,
+          -0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy2_-1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.22999572753906,
+          35.90999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow2Recess",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.440000057220459,
+          4.539999961853027,
+          0.20000000298023224
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9372549057006836,
+          0.886274516582489,
+          0.7254902124404907
+        ],
+        "class": "Part",
+        "cf": [
+          -72,
+          51.279998779296875,
+          -688,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentDiffuser1",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          6.550000190734863,
+          0.11999999731779099,
+          1.7000000476837158
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          38.43000030517578,
+          -692.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorHeader1",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.5199999809265137,
+          0.23000000417232513,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.83999633789062,
+          33.66999816894531,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow1WhiteSill",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.549999952316284,
+          0.20000000298023224,
+          0.4300000071525574
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8705882430076599,
+          0.7647058963775635
+        ],
+        "class": "Part",
+        "cf": [
+          -85.25,
+          30.389999389648438,
+          -682.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "PalePorchStep2",
+        "variant": "",
+        "query": false,
+        "material": "Plaster",
+        "collide": false,
+        "size": [
+          4.199999809265137,
+          0.1599999964237213,
+          1.5
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          1,
+          0.7529411911964417,
+          0.4313725531101227
+        ],
+        "class": "Part",
+        "cf": [
+          -85.87999725341797,
+          37.36000061035156,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WarmEntrySconce2",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          0.3799999952316284,
+          0.6200000047683716,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.87999725341797,
+          35.90999984741211,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow3Mullion",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          4.199999809265137,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -72,
+          51.459999084472656,
+          -688,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentFrame1",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          7,
+          0.23999999463558197,
+          2.0999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.87000274658203,
+          35.90999984741211,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow3Crossbar",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          0.10000000149011612,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9372549057006836,
+          0.886274516582489,
+          0.7254902124404907
+        ],
+        "class": "Part",
+        "cf": [
+          -72,
+          51.279998779296875,
+          -672,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentDiffuser3",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          6.550000190734863,
+          0.11999999731779099,
+          1.7000000476837158
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -85.01000213623047,
+          35.90999984741211,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow1DarkInterior",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3176470696926117,
+          0.4000000059604645,
+          0.4000000059604645
+        ],
+        "class": "Part",
+        "cf": [
+          -84.94999694824219,
+          35.90999984741211,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0.20000000298023224,
+        "name": "DomesticWindow1TintedPane",
+        "variant": "",
+        "query": false,
+        "material": "Glass",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -54,
+          51.459999084472656,
+          -688,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentFrame2",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          7,
+          0.23999999463558197,
+          2.0999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.529411792755127,
+          0.5411764979362488,
+          0.4745098054409027
+        ],
+        "class": "Part",
+        "cf": [
+          -72,
+          51.459999084472656,
+          -672,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentFrame3",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          7,
+          0.23999999463558197,
+          2.0999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9372549057006836,
+          0.886274516582489,
+          0.7254902124404907
+        ],
+        "class": "Part",
+        "cf": [
+          -54,
+          51.279998779296875,
+          -688,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "SharedFluorescentDiffuser2",
+        "variant": "",
+        "query": false,
+        "material": "Neon",
+        "collide": false,
+        "size": [
+          6.550000190734863,
+          0.11999999731779099,
+          1.7000000476837158
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -84.45999908447266,
+          39.040000915527344,
+          -673.2000122070312,
+          1.1920928955078125e-7,
+          -1.4901161193847656e-8,
+          -0.9999999403953552,
+          0.27563732862472534,
+          0.9612616896629333,
+          1.4901161193847656e-8,
+          0.9612616896629333,
+          -0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy3_-1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.87000274658203,
+          35.90999984741211,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow1Crossbar",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          0.10000000149011612,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -85.1500015258789,
+          34.40999984741211,
+          -692.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ClosedDomesticDoor1",
+        "variant": "Level5VeneerWood",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          7.599999904632568,
+          0.2199999988079071
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -84.45999908447266,
+          39.040000915527344,
+          -671.0999755859375,
+          1.1920928955078125e-7,
+          1.4901161193847656e-8,
+          -0.9999999403953552,
+          -0.27563732862472534,
+          0.9612616896629333,
+          -1.4901161193847656e-8,
+          0.9612616896629333,
+          0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy3_1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          34.459999084472656,
+          -693.8200073242188,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal1",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.0999984741211,
+          34.459999084472656,
+          -680.47998046875,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal2",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3176470696926117,
+          0.4000000059604645,
+          0.4000000059604645
+        ],
+        "class": "Part",
+        "cf": [
+          -84.94999694824219,
+          35.90999984741211,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0.20000000298023224,
+        "name": "DomesticWindow3TintedPane",
+        "variant": "",
+        "query": false,
+        "material": "Glass",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.5372549295425415,
+          0.43921568989753723,
+          0.15294118225574493
+        ],
+        "class": "Part",
+        "cf": [
+          -84.95999908447266,
+          34.40999984741211,
+          -671.0800170898438,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "QuietBrassHandle3",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.15000000596046448,
+          0.2800000011920929,
+          0.1899999976158142
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8705882430076599,
+          0.7647058963775635
+        ],
+        "class": "Part",
+        "cf": [
+          -84.1500015258789,
+          30.389999389648438,
+          -672.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "PalePorchStep3",
+        "variant": "",
+        "query": false,
+        "material": "Plaster",
+        "collide": false,
+        "size": [
+          4.199999809265137,
+          0.1599999964237213,
+          1.5
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.97999572753906,
+          35.90999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow2Mullion",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          4.199999809265137,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.83999633789062,
+          33.66999816894531,
+          -668,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow3WhiteSill",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.549999952316284,
+          0.20000000298023224,
+          0.4300000071525574
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          38.43000030517578,
+          -672.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorHeader3",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.5199999809265137,
+          0.23000000417232513,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1921568661928177,
+          0.20392157137393951,
+          0.21176470816135406
+        ],
+        "class": "Part",
+        "cf": [
+          -85.55999755859375,
+          39.040000915527344,
+          -681.0999755859375,
+          1.1920928955078125e-7,
+          1.4901161193847656e-8,
+          -0.9999999403953552,
+          -0.27563732862472534,
+          0.9612616896629333,
+          -1.4901161193847656e-8,
+          0.9612616896629333,
+          0.27563732862472534,
+          1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "SlateEntryCanopy2_1",
+        "variant": "",
+        "query": false,
+        "material": "Slate",
+        "collide": false,
+        "size": [
+          2.5,
+          0.2800000011920929,
+          1.600000023841858
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.37254902720451355,
+          0.33725491166114807,
+          0.2666666805744171
+        ],
+        "class": "Part",
+        "cf": [
+          -85.23999786376953,
+          30.479999542236328,
+          -682.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DarkDoorMat2",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          2.3499999046325684,
+          0.03999999910593033,
+          0.7799999713897705
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8392156958580017,
+          0.7882353067398071,
+          0.6274510025978088
+        ],
+        "class": "Part",
+        "cf": [
+          -85.0999984741211,
+          41.0099983215332,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperBalconySlab",
+        "variant": "",
+        "query": false,
+        "material": "Plaster",
+        "collide": false,
+        "size": [
+          9,
+          0.30000001192092896,
+          2.5999999046325684
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.0999984741211,
+          38.43000030517578,
+          -682.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorHeader2",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.5199999809265137,
+          0.23000000417232513,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.12999725341797,
+          35.90999984741211,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow1Recess",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.440000057220459,
+          4.539999961853027,
+          0.20000000298023224
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.16000366210938,
+          44.61000061035156,
+          -670,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "FrontCrown3",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          8.800000190734863,
+          0.4000000059604645,
+          0.3199999928474426
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -86.5999984741211,
+          39.40999984741211,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ResidentialFront2",
+        "variant": "Level5PaintedSiding",
+        "query": false,
+        "material": "WoodPlanks",
+        "collide": false,
+        "size": [
+          8.600000381469727,
+          18.200000762939453,
+          0.550000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.5372549295425415,
+          0.43921568989753723,
+          0.15294118225574493
+        ],
+        "class": "Part",
+        "cf": [
+          -86.05999755859375,
+          34.40999984741211,
+          -681.0800170898438,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "QuietBrassHandle2",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.15000000596046448,
+          0.2800000011920929,
+          0.1899999976158142
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -683,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -676,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -85.1500015258789,
+          34.40999984741211,
+          -672.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ClosedDomesticDoor3",
+        "variant": "Level5VeneerWood",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          7.599999904632568,
+          0.2199999988079071
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -83.91999816894531,
+          42.40999984741211,
+          -677,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "WhiteBalconyPicket",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          2.200000047683716,
+          0.10000000149011612
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85,
+          34.459999084472656,
+          -673.8200073242188,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DoorReveal3",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.18000000715255737,
+          8,
+          0.23999999463558197
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9098039269447327,
+          0.8823529481887817,
+          0.8039215803146362
+        ],
+        "class": "Part",
+        "cf": [
+          -86.25,
+          34.40999984741211,
+          -682.1500244140625,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "ClosedDomesticDoor2",
+        "variant": "Level5VeneerWood",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          7.599999904632568,
+          0.2199999988079071
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.93999481201172,
+          33.66999816894531,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow2WhiteSill",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.549999952316284,
+          0.20000000298023224,
+          0.4300000071525574
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -86.22999572753906,
+          44.80999755859375,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperDomesticWindowRecess",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          5.539999961853027,
+          4.539999961853027,
+          0.20000000298023224
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.97000122070312,
+          35.90999984741211,
+          -678,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow2Crossbar",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          3.0999999046325684,
+          0.10000000149011612,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -85.97000122070312,
+          44.80999755859375,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperDomesticWindowCrossbar",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          5.199999809265137,
+          0.10000000149011612,
+          0.12999999523162842
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.08235294371843338,
+          0.11764705926179886,
+          0.10980392247438431
+        ],
+        "class": "Part",
+        "cf": [
+          -86.11000061035156,
+          44.80999755859375,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "UpperDomesticWindowDarkInterior",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          5.199999809265137,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3176470696926117,
+          0.4000000059604645,
+          0.4000000059604645
+        ],
+        "class": "Part",
+        "cf": [
+          -86.04999542236328,
+          44.80999755859375,
+          -680,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0.20000000298023224,
+        "name": "UpperDomesticWindowTintedPane",
+        "variant": "",
+        "query": false,
+        "material": "Glass",
+        "collide": false,
+        "size": [
+          5.199999809265137,
+          4.199999809265137,
+          0.07999999821186066
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.9450980424880981,
+          0.9254902005195618,
+          0.8313725590705872
+        ],
+        "class": "Part",
+        "cf": [
+          -84.87999725341797,
+          35.90999984741211,
+          -688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "DomesticWindow1Mullion",
+        "variant": "",
+        "query": false,
+        "material": "Wood",
+        "collide": false,
+        "size": [
+          0.10000000149011612,
+          4.199999809265137,
+          0.12999999523162842
+        ]
+      }
+    ],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "LevelEnabled": false,
+      "Level5ResidentialPreview": true,
+      "LobbyBayStyleVersion": 2,
+      "CircularWallSegments": 64,
+      "LobbyBayTheme": "IndoorSuburbs",
+      "LevelNumber": 5,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  },
+  {
+    "name": "Level1QueueRoom",
+    "surfaces": [
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -78.55596923828125,
+          41.20000076293945,
+          -863.2811279296875,
+          -0.8314696550369263,
+          0,
+          -0.5555707812309265,
+          0,
+          1,
+          0,
+          0.5555707812309265,
+          0,
+          -0.8314696550369263
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://100093931957721",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.6196078658103943,
+          0.5647059082984924,
+          0.3764705955982208
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          29.579999923706055,
+          -840,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -78.55596923828125,
+          41.20000076293945,
+          -816.7188720703125,
+          0.8314692974090576,
+          0,
+          -0.5555707812309265,
+          0,
+          1,
+          0,
+          0.5555707812309265,
+          0,
+          0.8314692974090576
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -37.13137435913086,
+          41.20000076293945,
+          -829.2848510742188,
+          0.3826839327812195,
+          0,
+          0.9238793253898621,
+          0,
+          1,
+          0,
+          -0.9238793253898621,
+          0,
+          0.3826839327812195
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -60.25551986694336,
+          41.20000076293945,
+          -812.1348266601562,
+          0.9951847195625305,
+          0,
+          0.09801717102527618,
+          0,
+          1,
+          0,
+          -0.09801717102527618,
+          0,
+          0.9951847195625305
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -90.86517333984375,
+          41.20000076293945,
+          -842.7445068359375,
+          -0.09801805019378662,
+          0,
+          -0.995184600353241,
+          0,
+          1,
+          0,
+          0.995184600353241,
+          0,
+          -0.09801805019378662
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://87947439437597",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.772549033164978,
+          0.7058823704719543,
+          0.45490196347236633
+        ],
+        "class": "Part",
+        "cf": [
+          -45.23698806762695,
+          41.20000076293945,
+          -818.355712890625,
+          0.7730103731155396,
+          0,
+          0.6343933343887329,
+          0,
+          1,
+          0,
+          -0.6343933343887329,
+          0,
+          0.7730103731155396
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://100093931957721",
+            "tile": [
+              6,
+              6
+            ]
+          }
+        ],
+        "color": [
+          0.6196078658103943,
+          0.5647059082984924,
+          0.3764705955982208
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          29.75,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://91804597609254",
+            "tile": [
+              8,
+              8
+            ]
+          }
+        ],
+        "color": [
+          0.8705882430076599,
+          0.8392156958580017,
+          0.6666666865348816
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          52.599998474121094,
+          -840,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "Level1BayTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://91804597609254",
+            "tile": [
+              8,
+              8
+            ]
+          }
+        ],
+        "color": [
+          0.8705882430076599,
+          0.8392156958580017,
+          0.6666666865348816
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          49.400001525878906,
+          -840,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "",
+        "query": true,
+        "material": "SmoothPlastic",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [
+      {
+        "textures": [],
+        "color": [
+          0.40784314274787903,
+          0.34117648005485535,
+          0.1882352977991104
+        ],
+        "class": "Part",
+        "cf": [
+          -84.88896942138672,
+          34.14999771118164,
+          -835.2047729492188,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Back",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          3.799999952316284,
+          0.47999998927116394
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -84.94406127929688,
+          30.5,
+          -836.5220947265625,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -82.05593872070312,
+          30.5,
+          -834.4779052734375,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -84.40348815917969,
+          30.5,
+          -833.9789428710938,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -82.59651184082031,
+          30.5,
+          -837.0210571289062,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.40784314274787903,
+          0.34117648005485535,
+          0.1882352977991104
+        ],
+        "class": "Part",
+        "cf": [
+          -83.5,
+          32.04999923706055,
+          -835.5,
+          0.20791172981262207,
+          0,
+          -0.9781476259231567,
+          0,
+          1,
+          0,
+          0.9781476259231567,
+          0,
+          0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Seat",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          0.550000011920929,
+          3.4000000953674316
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -82.11141204833984,
+          30.5,
+          -845.5962524414062,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -84.88858795166016,
+          30.5,
+          -843.4037475585938,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -84.48186492919922,
+          30.5,
+          -845.9717407226562,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -82.51813507080078,
+          30.5,
+          -843.0282592773438,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.40784314274787903,
+          0.34117648005485535,
+          0.1882352977991104
+        ],
+        "class": "Part",
+        "cf": [
+          -84.90251922607422,
+          34.14999771118164,
+          -844.7221069335938,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Back",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          3.799999952316284,
+          0.47999998927116394
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.40784314274787903,
+          0.34117648005485535,
+          0.1882352977991104
+        ],
+        "class": "Part",
+        "cf": [
+          -83.5,
+          32.04999923706055,
+          -844.5,
+          -0.15643441677093506,
+          0,
+          -0.9876883029937744,
+          0,
+          1,
+          0,
+          0.9876883029937744,
+          0,
+          -0.15643441677093506
+        ],
+        "transparency": 0,
+        "name": "Seat",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          0.550000011920929,
+          3.4000000953674316
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -88.75516510009766,
+          35.16494369506836,
+          -828.0758666992188,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -91.03770446777344,
+          34.42330551147461,
+          -828.0758666992188,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3294117748737335,
+          0.27450981736183167,
+          0.1764705926179886
+        ],
+        "class": "Part",
+        "cf": [
+          -91.29698944091797,
+          34.509368896484375,
+          -831.9470825195312,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Back",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          3.799999952316284,
+          0.47999998927116394
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3294117748737335,
+          0.27450981736183167,
+          0.1764705926179886
+        ],
+        "class": "Part",
+        "cf": [
+          -89.7033920288086,
+          34.20000076293945,
+          -830,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Seat",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          3.5,
+          0.550000011920929,
+          3.4000000953674316
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -88.01022338867188,
+          32.87225341796875,
+          -829.0498657226562,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.21176470816135406,
+          0.2078431397676468,
+          0.18039216101169586
+        ],
+        "class": "Part",
+        "cf": [
+          -90.29276275634766,
+          32.130615234375,
+          -829.0498657226562,
+          -0.286515474319458,
+          -0.11575976014137268,
+          -0.9510564804077148,
+          0.8818042278289795,
+          0.35627204179763794,
+          -0.3090169429779053,
+          0.37460657954216003,
+          -0.9271838665008545,
+          0
+        ],
+        "transparency": 0,
+        "name": "Leg",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.2800000011920929,
+          2.8499999046325684,
+          0.2800000011920929
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.30588236451148987,
+          0.32156863808631897,
+          0.2862745225429535
+        ],
+        "class": "Part",
+        "cf": [
+          -89.4533920288086,
+          34.79999923706055,
+          -850,
+          -0.02190709114074707,
+          0.2475464940071106,
+          -0.9686285257339478,
+          -0.8801364302635193,
+          0.4547836184501648,
+          0.13613182306289673,
+          0.47421541810035706,
+          0.8555073142051697,
+          0.20791161060333252
+        ],
+        "transparency": 0,
+        "name": "WallGlitchedFileCabinet",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          4.599999904632568,
+          7.199999809265137,
+          2.9000000953674316
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.16470588743686676,
+          0.1764705926179886,
+          0.16078431904315948
+        ],
+        "class": "Part",
+        "cf": [
+          -87.5123519897461,
+          35.53083038330078,
+          -848.5538940429688,
+          -0.02190709114074707,
+          0.2475464940071106,
+          -0.9686285257339478,
+          -0.8801364302635193,
+          0.4547836184501648,
+          0.13613182306289673,
+          0.47421541810035706,
+          0.8555073142051697,
+          0.20791161060333252
+        ],
+        "transparency": 0,
+        "name": "GlitchedCabinetDrawer",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          3.700000047683716,
+          1.5499999523162842,
+          0.11999999731779099
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.16470588743686676,
+          0.1764705926179886,
+          0.16078431904315948
+        ],
+        "class": "Part",
+        "cf": [
+          -88.52729034423828,
+          33.66621780395508,
+          -852.0615234375,
+          -0.02190709114074707,
+          0.2475464940071106,
+          -0.9686285257339478,
+          -0.8801364302635193,
+          0.4547836184501648,
+          0.13613182306289673,
+          0.47421541810035706,
+          0.8555073142051697,
+          0.20791161060333252
+        ],
+        "transparency": 0,
+        "name": "GlitchedCabinetDrawer",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          3.700000047683716,
+          1.5499999523162842,
+          0.11999999731779099
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.16470588743686676,
+          0.1764705926179886,
+          0.16078431904315948
+        ],
+        "class": "Part",
+        "cf": [
+          -88.01982116699219,
+          34.59852600097656,
+          -850.3077392578125,
+          -0.02190709114074707,
+          0.2475464940071106,
+          -0.9686285257339478,
+          -0.8801364302635193,
+          0.4547836184501648,
+          0.13613182306289673,
+          0.47421541810035706,
+          0.8555073142051697,
+          0.20791161060333252
+        ],
+        "transparency": 0,
+        "name": "GlitchedCabinetDrawer",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          3.700000047683716,
+          1.5499999523162842,
+          0.11999999731779099
+        ]
+      }
+    ],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "LevelEnabled": true,
+      "Level1BayStyleVersion": 1,
+      "Level1InspiredBay": true,
+      "CircularWallSegments": 64,
+      "LevelNumber": 1,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  },
+  {
+    "name": "Level6QueueRoom",
+    "surfaces": [
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          54.87202835083008,
+          41.20000076293945,
+          -706.7943115234375,
+          -0.9569402933120728,
+          0,
+          -0.2902848720550537,
+          0,
+          1,
+          0,
+          0.2902848720550537,
+          0,
+          -0.9569402933120728
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          80.76301574707031,
+          41.20000076293945,
+          -701.644287109375,
+          -0.7730106115341187,
+          0,
+          0.6343936324119568,
+          0,
+          1,
+          0,
+          -0.6343936324119568,
+          0,
+          -0.7730106115341187
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          52.28486633300781,
+          41.20000076293945,
+          -705.86865234375,
+          -0.9238796234130859,
+          0,
+          -0.38268306851387024,
+          0,
+          1,
+          0,
+          0.38268306851387024,
+          0,
+          -0.9238796234130859
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          57.537471771240234,
+          41.20000076293945,
+          -707.4619750976562,
+          -0.9807852506637573,
+          0,
+          -0.1950903832912445,
+          0,
+          1,
+          0,
+          0.1950903832912445,
+          0,
+          -0.9807852506637573
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          71.12796783447266,
+          41.20000076293945,
+          -706.7943115234375,
+          -0.9569402933120728,
+          0,
+          0.2902847230434418,
+          0,
+          1,
+          0,
+          -0.2902847230434418,
+          0,
+          -0.9569402933120728
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          76.19911193847656,
+          41.20000076293945,
+          -704.6937866210938,
+          -0.8819212913513184,
+          0,
+          0.4713970124721527,
+          0,
+          1,
+          0,
+          -0.4713970124721527,
+          0,
+          -0.8819212913513184
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          82.79898834228516,
+          41.20000076293945,
+          -699.7990112304688,
+          -0.7071075439453125,
+          0,
+          0.7071065902709961,
+          0,
+          1,
+          0,
+          -0.7071065902709961,
+          0,
+          -0.7071075439453125
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          52.599998474121094,
+          -680,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          }
+        ],
+        "color": [
+          0.2862745225429535,
+          0.2666666805744171,
+          0.22745098173618317
+        ],
+        "class": "Part",
+        "cf": [
+          63,
+          29.579999923706055,
+          -680,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://137549469660951",
+            "tile": [
+              14,
+              14
+            ]
+          }
+        ],
+        "color": [
+          0.45490196347236633,
+          0.4117647111415863,
+          0.32156863808631897
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          49.400001525878906,
+          -680,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Bottom",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Back",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          },
+          {
+            "transparency": 0,
+            "name": "LobbyConcreteTexture",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Left",
+            "asset": "rbxassetid://134299652574760",
+            "tile": [
+              12,
+              12
+            ]
+          }
+        ],
+        "color": [
+          0.2862745225429535,
+          0.2666666805744171,
+          0.22745098173618317
+        ],
+        "class": "Part",
+        "cf": [
+          38,
+          29.75,
+          -680,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "",
+        "query": true,
+        "material": "Concrete",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "CircularWallSegments": 64,
+      "LevelEnabled": false,
+      "LevelNumber": 6,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  },
+  {
+    "name": "Level3QueueRoom",
+    "surfaces": [
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -90.86517333984375,
+          41.20000076293945,
+          -762.7445068359375,
+          -0.09801805019378662,
+          0,
+          -0.995184600353241,
+          0,
+          1,
+          0,
+          0.995184600353241,
+          0,
+          -0.09801805019378662
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -91,
+          41.20000076293945,
+          -760,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -87.69379425048828,
+          41.20000076293945,
+          -773.1990966796875,
+          -0.47139668464660645,
+          0,
+          -0.8819214701652527,
+          0,
+          1,
+          0,
+          0.8819214701652527,
+          0,
+          -0.47139668464660645
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -90.46199035644531,
+          41.20000076293945,
+          -765.4625244140625,
+          -0.1950904130935669,
+          0,
+          -0.9807854890823364,
+          0,
+          1,
+          0,
+          0.9807854890823364,
+          0,
+          -0.1950904130935669
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -89.79432678222656,
+          41.20000076293945,
+          -768.1279907226562,
+          -0.2902853488922119,
+          0,
+          -0.9569401144981384,
+          0,
+          1,
+          0,
+          0.9569401144981384,
+          0,
+          -0.2902853488922119
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -78.55596923828125,
+          41.20000076293945,
+          -783.2811279296875,
+          -0.8314696550369263,
+          0,
+          -0.5555707812309265,
+          0,
+          1,
+          0,
+          0.5555707812309265,
+          0,
+          -0.8314696550369263
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0.2800000011920929,
+            "name": "LobbyLevel3OrangeWall",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Front",
+            "asset": "rbxassetid://128270554927663",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.7176470756530762,
+          0.30588236451148987,
+          0.13725490868091583
+        ],
+        "class": "Part",
+        "cf": [
+          -87.69379425048828,
+          41.20000076293945,
+          -746.8009033203125,
+          0.4713963270187378,
+          0,
+          -0.8819215297698975,
+          0,
+          1,
+          0,
+          0.8819215297698975,
+          0,
+          0.4713963270187378
+        ],
+        "transparency": 0,
+        "name": "CurvedChamberWall",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          2.831103563308716,
+          22.399999618530273,
+          1.25
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel3PartyCarpet",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://110230144446272",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.05098039284348488,
+          0.06666667014360428,
+          0.0941176488995552
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          29.75,
+          -760,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleFloor",
+        "variant": "",
+        "query": true,
+        "material": "Carpet",
+        "collide": true,
+        "size": [
+          11,
+          0.800000011920929,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8549019694328308,
+          0.8274509906768799,
+          0.7215686440467834
+        ],
+        "class": "Part",
+        "cf": [
+          -38,
+          49.400001525878906,
+          -760,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "DoorVestibuleCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          11,
+          7.800000190734863,
+          21.799999237060547
+        ]
+      },
+      {
+        "textures": [
+          {
+            "transparency": 0,
+            "name": "LobbyLevel3PartyCarpet",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Right",
+            "asset": "rbxassetid://110230144446272",
+            "tile": [
+              22,
+              22
+            ]
+          }
+        ],
+        "color": [
+          0.05098039284348488,
+          0.06666667014360428,
+          0.0941176488995552
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          29.579999923706055,
+          -760,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberFloor",
+        "variant": "",
+        "query": true,
+        "material": "Carpet",
+        "collide": true,
+        "size": [
+          1.399999976158142,
+          59,
+          59
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8549019694328308,
+          0.8274509906768799,
+          0.7215686440467834
+        ],
+        "class": "Part",
+        "cf": [
+          -63,
+          52.599998474121094,
+          -760,
+          -1.1920928955078125e-7,
+          -1.0000001192092896,
+          0,
+          1.0000001192092896,
+          -1.1920928955078125e-7,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "ChamberCeiling",
+        "variant": "",
+        "query": true,
+        "material": "Plaster",
+        "collide": true,
+        "size": [
+          1.7999999523162842,
+          59,
+          59
+        ]
+      }
+    ],
+    "queueZones": [],
+    "decor": [
+      {
+        "textures": [
+          {
+            "transparency": 0.3400000035762787,
+            "name": "LobbyLevel3ConfettiTablecloth",
+            "tint": [
+              1,
+              1,
+              1
+            ],
+            "face": "Top",
+            "asset": "rbxassetid://103412925025303",
+            "tile": [
+              10,
+              10
+            ]
+          }
+        ],
+        "color": [
+          0.14901961386203766,
+          0.6000000238418579,
+          0.6470588445663452
+        ],
+        "class": "Part",
+        "cf": [
+          -82,
+          33.47999954223633,
+          -760,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Confetti Tablecloth",
+        "variant": "",
+        "query": false,
+        "material": "Fabric",
+        "collide": false,
+        "size": [
+          11.449999809265137,
+          0.11999999731779099,
+          4.619999885559082
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.5372549295425415,
+          0.1764705926179886,
+          0.20392157137393951
+        ],
+        "class": "MeshPart",
+        "texture": "",
+        "collide": false,
+        "cf": [
+          -86.0999984741211,
+          32.279998779296875,
+          -757.2999877929688,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Mismatched Party Chair 2",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "mesh": "Content{SourceType=Uri, Uri=rbxassetid://135253309610935}",
+        "size": [
+          2.549999952316284,
+          4.300000190734863,
+          2.5799999237060547
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.2862745225429535,
+          0.5058823823928833,
+          0.33725491166114807
+        ],
+        "class": "MeshPart",
+        "texture": "",
+        "collide": false,
+        "cf": [
+          -89.29878234863281,
+          34.20000076293945,
+          -749,
+          -0.33043456077575684,
+          0.082049161195755,
+          -0.940255880355835,
+          0.8697983026504517,
+          0.41323018074035645,
+          -0.2696141004562378,
+          0.36642053723335266,
+          -0.9069226980209351,
+          -0.20791172981262207
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Wall Glitched Party Chair",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "mesh": "Content{SourceType=Uri, Uri=rbxassetid://135253309610935}",
+        "size": [
+          2.549999952316284,
+          4.300000190734863,
+          2.5799999237060547
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7607843279838562,
+          0.615686297416687,
+          0.1921568661928177
+        ],
+        "class": "MeshPart",
+        "texture": "",
+        "collide": false,
+        "cf": [
+          -77.9000015258789,
+          32.279998779296875,
+          -762.7000122070312,
+          -1.1920928955078125e-7,
+          0,
+          1.0000001192092896,
+          0,
+          1,
+          0,
+          -1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Mismatched Party Chair 1",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "mesh": "Content{SourceType=Uri, Uri=rbxassetid://135253309610935}",
+        "size": [
+          2.549999952316284,
+          4.300000190734863,
+          2.5799999237060547
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3529411852359772,
+          0.34117648005485535,
+          0.30980393290519714
+        ],
+        "class": "Part",
+        "cf": [
+          -82.19999694824219,
+          33.70000076293945,
+          -770,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Balloon String 1",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.05000000074505806,
+          6.7999982833862305,
+          0.05000000074505806
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.7333333492279053,
+          0.16470588743686676,
+          0.20392157137393951
+        ],
+        "class": "Part",
+        "cf": [
+          -82.19999694824219,
+          37.099998474121094,
+          -770,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0.02500000037252903,
+        "name": "Lobby L3 Party Balloon 1",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          1.7200000286102295,
+          2.359999895095825,
+          1.7200000286102295
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.1568627506494522,
+          0.40784314274787903,
+          0.6627451181411743
+        ],
+        "class": "Part",
+        "cf": [
+          -80.80000305175781,
+          38.20000076293945,
+          -769.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0.02500000037252903,
+        "name": "Lobby L3 Party Balloon 2",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          1.7200000286102295,
+          2.359999895095825,
+          1.7200000286102295
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3529411852359772,
+          0.34117648005485535,
+          0.30980393290519714
+        ],
+        "class": "Part",
+        "cf": [
+          -80.80000305175781,
+          34.25,
+          -769.5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Balloon String 2",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.05000000074505806,
+          7.90000057220459,
+          0.05000000074505806
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.8235294222831726,
+          0.6235294342041016,
+          0.14509804546833038
+        ],
+        "class": "Part",
+        "cf": [
+          -79.6500015258789,
+          37.349998474121094,
+          -770.25,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0.02500000037252903,
+        "name": "Lobby L3 Party Balloon 3",
+        "variant": "",
+        "query": false,
+        "material": "SmoothPlastic",
+        "collide": false,
+        "size": [
+          1.7200000286102295,
+          2.359999895095825,
+          1.7200000286102295
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.3529411852359772,
+          0.34117648005485535,
+          0.30980393290519714
+        ],
+        "class": "Part",
+        "cf": [
+          -79.6500015258789,
+          33.82500076293945,
+          -770.25,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Balloon String 3",
+        "variant": "",
+        "query": false,
+        "material": "Metal",
+        "collide": false,
+        "size": [
+          0.05000000074505806,
+          7.0499982833862305,
+          0.05000000074505806
+        ]
+      },
+      {
+        "textures": [],
+        "color": [
+          0.6392157077789307,
+          0.6352941393852234,
+          0.6470588445663452
+        ],
+        "class": "MeshPart",
+        "texture": "rbxassetid://112282995723556",
+        "collide": false,
+        "cf": [
+          -82,
+          31.719999313354492,
+          -760,
+          -1.1920928955078125e-7,
+          0,
+          -1.0000001192092896,
+          0,
+          1,
+          0,
+          1.0000001192092896,
+          0,
+          -1.1920928955078125e-7
+        ],
+        "transparency": 0,
+        "name": "Lobby L3 Vetted Folding Table",
+        "variant": "",
+        "query": false,
+        "material": "Plastic",
+        "mesh": "Content{SourceType=Uri, Uri=rbxassetid://135921646304432}",
+        "size": [
+          11.199999809265137,
+          3.440000057220459,
+          4.349999904632568
+        ]
+      }
+    ],
+    "attributes": {
+      "CircularVisibleWallCount": 57,
+      "CircularDoorwayDotCutoff": 0.955,
+      "LevelEnabled": true,
+      "LobbyBayStyleVersion": 2,
+      "CircularWallSegments": 64,
+      "LobbyBayTheme": "MallBackroomsParty",
+      "LevelNumber": 3,
+      "CircularBayDiameter": 56,
+      "BayPlanShape": "Circle"
+    }
+  }
+]

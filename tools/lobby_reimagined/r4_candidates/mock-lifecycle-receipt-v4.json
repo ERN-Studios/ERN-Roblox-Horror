@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "scope": "Offline exact QueueBridge lifecycle with mocked services/plane; no Studio, actual geometry, multiplayer, mobile or publication claim",
+  "sourceSHA256": "5010de5d51db0615397d0a987d2a4e1c345c035e95e49af506271893ffc33203",
+  "tests": [
+    {
+      "name": "exact controller registration rejects unrelated Script",
+      "passed": true
+    },
+    {
+      "name": "unauthorized cohort rejected before movement",
+      "passed": true
+    },
+    {
+      "name": "whole cohort commits separated after successful streams",
+      "passed": true
+    },
+    {
+      "name": "one failed stream moves nobody",
+      "passed": true
+    },
+    {
+      "name": "character change while streaming revokes all admissions",
+      "passed": true
+    },
+    {
+      "name": "join rejection rolls back every moved member",
+      "passed": true
+    },
+    {
+      "name": "cancelled bounded world preparation cannot ghost-enter or multiply",
+      "passed": true
+    },
+    {
+      "name": "cancel during yielding Join keeps lock through rollback and preserves explicit departure",
+      "passed": true
+    }
+  ]
+}

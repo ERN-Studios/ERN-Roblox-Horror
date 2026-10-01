@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "Syntax only, no Studio/gameplay claim",
+  "sources": [
+    {
+      "passed": true,
+      "path": "tools/lobby_reimagined/r4_candidates/Builder.ModuleScript.luau",
+      "sha256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd"
+    },
+    {
+      "passed": true,
+      "path": "tools/lobby_reimagined/r4_candidates/RuntimeBake.ModuleScript.luau",
+      "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28"
+    }
+  ]
+}

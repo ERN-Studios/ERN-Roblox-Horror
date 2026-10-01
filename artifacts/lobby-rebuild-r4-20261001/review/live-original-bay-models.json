@@ -1,0 +1,252 @@
+{
+  "children": [
+    {
+      "class": "Folder",
+      "name": "LevelQueueRooms",
+      "count": 1524
+    },
+    {
+      "class": "Folder",
+      "name": "LevelDoorways",
+      "count": 108
+    },
+    {
+      "class": "Folder",
+      "name": "TunnelLighting",
+      "count": 176
+    },
+    {
+      "class": "Folder",
+      "name": "TunnelGeometry",
+      "count": 155
+    },
+    {
+      "class": "Folder",
+      "name": "TunnelDetails",
+      "count": 935
+    },
+    {
+      "class": "SpawnLocation",
+      "name": "LobbySpawn",
+      "count": 0
+    }
+  ],
+  "bays": [
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level4QueueRoom",
+      "name": "Level4QueueRoom",
+      "features": [],
+      "count": 244,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "CircularWallSegments": 64,
+        "LevelEnabled": false,
+        "LevelNumber": 4,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom",
+      "name": "Level2QueueRoom",
+      "features": [
+        "Lobby L2 Pool Ladder Rail",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Column Flare",
+        "Lobby L2 Column Flare",
+        "Lobby L2 Pool Ladder Rail",
+        "Lobby L2 Tiled Column",
+        "Lobby L2 Shallow Water Surface",
+        "Lobby L2 Pool Ball",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Sunken Lounger Seat",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Sunken Lounger Back",
+        "Lobby L2 Wall Glitched Pool Noodle",
+        "Lobby L2 Pool Ceiling Frame 1",
+        "Lobby L2 Pool Ceiling Frame 2",
+        "Lobby L2 Pool Ceiling Diffuser 1",
+        "Lobby L2 Pool Ceiling Diffuser 2"
+      ],
+      "count": 257,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "LevelEnabled": true,
+        "LobbyBayStyleVersion": 1,
+        "CircularWallSegments": 64,
+        "LobbyBayTheme": "Poolrooms",
+        "LevelNumber": 2,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom.LobbyLevel2PoolroomsDecor",
+      "name": "LobbyLevel2PoolroomsDecor",
+      "features": [
+        "Lobby L2 Pool Ladder Rail",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Column Flare",
+        "Lobby L2 Column Flare",
+        "Lobby L2 Pool Ladder Rail",
+        "Lobby L2 Tiled Column",
+        "Lobby L2 Shallow Water Surface",
+        "Lobby L2 Pool Ball",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Sunken Lounger Seat",
+        "Lobby L2 Pool Ladder Rung",
+        "Lobby L2 Sunken Lounger Back",
+        "Lobby L2 Wall Glitched Pool Noodle"
+      ],
+      "count": 30,
+      "attributes": {
+        "LobbyBayDecorLevel": 2
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom",
+      "name": "Level5QueueRoom",
+      "features": [],
+      "count": 263,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "LevelEnabled": false,
+        "Level5ResidentialPreview": true,
+        "LobbyBayStyleVersion": 2,
+        "CircularWallSegments": 64,
+        "LobbyBayTheme": "IndoorSuburbs",
+        "LevelNumber": 5,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor",
+      "name": "LobbyLevel5ResidentialDecor",
+      "features": [],
+      "count": 102,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom",
+      "name": "Level1QueueRoom",
+      "features": [
+        "Level1BayFluorescentFixture_04",
+        "Level1BayFluorescentFixture_02",
+        "Level1BayFluorescentFixture_01",
+        "Level1BayFluorescentFixture_03"
+      ],
+      "count": 258,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "LevelEnabled": true,
+        "Level1BayStyleVersion": 1,
+        "Level1InspiredBay": true,
+        "CircularWallSegments": 64,
+        "LevelNumber": 1,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.Level1BackroomsDecor",
+      "name": "Level1BackroomsDecor",
+      "features": [],
+      "count": 25,
+      "attributes": {
+        "Level1BayDecor": true
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level6QueueRoom",
+      "name": "Level6QueueRoom",
+      "features": [],
+      "count": 244,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "CircularWallSegments": 64,
+        "LevelEnabled": false,
+        "LevelNumber": 6,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom",
+      "name": "Level3QueueRoom",
+      "features": [
+        "Lobby L3 Fluorescent Frame 3",
+        "Lobby L3 Fluorescent Diffuser 3",
+        "Lobby L3 Fluorescent Diffuser 4",
+        "Lobby L3 Fluorescent Frame 4",
+        "Lobby L3 Confetti Tablecloth",
+        "Lobby L3 Mismatched Party Chair 2",
+        "Lobby L3 Wall Glitched Party Chair",
+        "Lobby L3 Mismatched Party Chair 1",
+        "Lobby L3 Balloon String 1",
+        "Lobby L3 Party Balloon 1",
+        "Lobby L3 Party Balloon 2",
+        "Lobby L3 Balloon String 2",
+        "Lobby L3 Party Balloon 3",
+        "Lobby L3 Balloon String 3",
+        "Lobby L3 Vetted Folding Table",
+        "Lobby L3 Fluorescent Diffuser 2",
+        "Lobby L3 Fluorescent Frame 2",
+        "Lobby L3 Fluorescent Diffuser 1",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Fluorescent Frame 1",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid",
+        "Lobby L3 Ceiling Grid"
+      ],
+      "count": 252,
+      "attributes": {
+        "CircularVisibleWallCount": 57,
+        "CircularDoorwayDotCutoff": 0.955,
+        "LevelEnabled": true,
+        "LobbyBayStyleVersion": 2,
+        "CircularWallSegments": 64,
+        "LobbyBayTheme": "MallBackroomsParty",
+        "LevelNumber": 3,
+        "CircularBayDiameter": 56,
+        "BayPlanShape": "Circle"
+      }
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom.LobbyLevel3MallPartyDecor",
+      "name": "LobbyLevel3MallPartyDecor",
+      "features": [
+        "Lobby L3 Confetti Tablecloth",
+        "Lobby L3 Mismatched Party Chair 2",
+        "Lobby L3 Wall Glitched Party Chair",
+        "Lobby L3 Mismatched Party Chair 1",
+        "Lobby L3 Balloon String 1",
+        "Lobby L3 Party Balloon 1",
+        "Lobby L3 Party Balloon 2",
+        "Lobby L3 Balloon String 2",
+        "Lobby L3 Party Balloon 3",
+        "Lobby L3 Balloon String 3",
+        "Lobby L3 Vetted Folding Table"
+      ],
+      "count": 12,
+      "attributes": {
+        "LobbyBayDecorLevel": 3
+      }
+    }
+  ]
+}

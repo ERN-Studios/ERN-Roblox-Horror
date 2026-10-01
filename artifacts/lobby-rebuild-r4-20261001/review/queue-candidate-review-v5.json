@@ -1,0 +1,105 @@
+{
+  "schema": "lobby-r4-independent-queue-review-v5",
+  "atUTC": "2026-10-01T22:06:13.919422+00:00",
+  "scope": "Offline candidates only; no Studio/Blender write, no Play or publication by this reviewer",
+  "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+  "expectedBeforeParity": true,
+  "sourceRows": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "beforeSHA256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+      "bytes": 3598,
+      "beforeFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.before.luau",
+      "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+      "candidateFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.candidate.luau",
+      "afterSHA256": "a7c52119135e62e0a2c38fd2eee0d730b24d3e290a27e9dbed100ece8e063bae",
+      "afterBytes": 19129,
+      "diffFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.diff",
+      "scope": "Candidate only; not installed or playtested"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "beforeSHA256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "bytes": 163203,
+      "beforeFile": "ServerScriptService.GameManager.Script.before.luau",
+      "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+      "candidateFile": "ServerScriptService.GameManager.Script.candidate.luau",
+      "afterSHA256": "8f48325ae359b6de2f8a09a599853bea01a4e2dc1de0c5462834a934c2a82c5c",
+      "afterBytes": 164902,
+      "diffFile": "ServerScriptService.GameManager.Script.diff",
+      "scope": "Candidate only; not installed or playtested"
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+      "bytes": 10629,
+      "beforeFile": "ServerScriptService.Level4V4PreviewAccess.Script.before.luau",
+      "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+      "candidateFile": "ServerScriptService.Level4V4PreviewAccess.Script.candidate.luau",
+      "afterSHA256": "912ee8af83db69cc67003d3668de8d429b156df74a466ff178a35a444b115455",
+      "afterBytes": 12166,
+      "diffFile": "ServerScriptService.Level4V4PreviewAccess.Script.diff",
+      "scope": "Candidate only; not installed or playtested"
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "bytes": 10544,
+      "beforeFile": "ServerScriptService.Level5PreviewAccess.Script.before.luau",
+      "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+      "candidateFile": "ServerScriptService.Level5PreviewAccess.Script.candidate.luau",
+      "afterSHA256": "4334bb71d79f4954f210884f0078b200b4377a3e7fd4c6c3cfbcaaff5589835e",
+      "afterBytes": 12081,
+      "diffFile": "ServerScriptService.Level5PreviewAccess.Script.diff",
+      "scope": "Candidate only; not installed or playtested"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "beforeSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+      "bytes": 10762,
+      "beforeFile": "ServerScriptService.Level6PreviewAccess.Script.before.luau",
+      "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+      "candidateFile": "ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
+      "afterSHA256": "1bd0744cc099119b3ab5c5df54d4f5f7ad60263f4a7797a79a39873c4cafda15",
+      "afterBytes": 12481,
+      "diffFile": "ServerScriptService.Level6PreviewAccess.Script.diff",
+      "scope": "Candidate only; not installed or playtested"
+    }
+  ],
+  "syntaxReceipt": "tools/lobby_reimagined/r4_candidates/syntax-receipt-v5.json",
+  "lifecycleReceipt": "tools/lobby_reimagined/r4_candidates/mock-lifecycle-receipt-v5.json",
+  "syntaxPassed": true,
+  "mockLifecyclePassed": true,
+  "mockLifecycleCases": 9,
+  "campaignRoutingChanges": false,
+  "DevAccessSourceChanges": false,
+  "originalEEntryBodiesChanged": false,
+  "QueueControllerChanged": false,
+  "codexPeer": "/root/lobby_r4_blender_audit",
+  "peerFindingsResolved": [
+    "Return prompt+floor readiness recheck after streaming and before commit",
+    "Controller nextUse/pending race addressed with shared private locks and finalizers",
+    "Cancellation during solo/final yielding Join now revalidates and rolls back after commit return"
+  ],
+  "ClaudeReview": {
+    "canonicalRequested": "claude-opus-5-5",
+    "effort": "max",
+    "designAttempt": "timeout540seconds; no response",
+    "focusedAttempt": "timeout180seconds; only thinking_tokens events",
+    "exactAttempt": "running1200second bound on v3 input; will reconcile resulting findings against v5",
+    "privateThinkingStored": false
+  },
+  "remainingActualChecks": [
+    "Fresh live Source/editor CAS against expectedBefore before installation",
+    "Actual all24pad host/setup/cancel/countdown and correct destination",
+    "Authorized4/5preview entry/return; unavailable user remains unverified rather than whitelist widened",
+    "ActualLevel6groupstream/arrival/return and firstJoin cancellation",
+    "Actualcollision/spacing/cameraFloor across imported geometry",
+    "Published privateServer transfer/multiplayer/mobile are separate from offline checks"
+  ]
+}
