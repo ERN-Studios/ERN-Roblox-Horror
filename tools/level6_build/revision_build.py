@@ -13,6 +13,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import os
 import struct
 import sys
 from pathlib import Path
@@ -24,7 +25,8 @@ SOURCE = ROOT / 'assets/level6-worn-party/Level6_FULL_Seed101.blend'
 MAP_FILE = ROOT / 'artifacts/level6-build-20260930/seed101-layout.json'
 MATERIAL_FILE = OUT / 'materials/material-manifest.json'
 SCENE_NAME = 'Level 6 | Revised FULL seed 101 | 35 rooms'
-OUTPUT = OUT / 'Level6_Revised_Full_Seed101.blend'
+OUTPUT = Path(os.environ.get('LEVEL6_REVISION_OUTPUT', ROOT / 'artifacts/level6-studio-revision-20261001/StudioImport_Portal14_Full_Seed101.blend')).resolve()
+RECORD_OUT = Path(os.environ.get('LEVEL6_REVISION_RECORD_DIR', ROOT / 'artifacts/level6-studio-revision-20261001/blender-portal14')).resolve()
 PLAN = json.loads(MAP_FILE.read_text())['layout']
 SURFACES = json.loads(MATERIAL_FILE.read_text())['materials']
 ATLAS = json.loads((ROOT / 'assets/level6-worn-party/textures/atlas-layout.json').read_text())
@@ -394,6 +396,8 @@ def main():
     assert Path(bpy.data.filepath).resolve() == SOURCE.resolve(), bpy.data.filepath
     assert len(PLAN['Rooms']) == 32 and len(PLAN['Links']) == 37
     OUT.mkdir(parents=True, exist_ok=True)
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    RECORD_OUT.mkdir(parents=True, exist_ok=True)
     for p in [SOURCE, ROOT / 'assets/level6-worn-party/Level6_WornParty_v2.blend', MAP_FILE]:
         SOURCE_HASHES[str(p.relative_to(ROOT))] = sha(p)
     kit_inventory = sorted(c.name for c in bpy.data.collections if c.name.startswith('L6K_'))
@@ -521,7 +525,8 @@ def main():
               'outputBlend': str(OUTPUT.relative_to(ROOT)), 'outputSha256': sha(OUTPUT),
               'sourceLayoutHash': PLAN['LayoutHash'], 'originalRooms': 32, 'originalLinks': 37,
               'originalFloorAreaStud2': PLAN['RoomFloorArea'], 'addedRoomModules': 3,
-              'addedLinks': 3, 'addedFloorAreaStud2': 1296, 'revisedFloorAreaStud2': PLAN['RoomFloorArea'] + 1296,
+              'addedLinks': 3, 'addedFloorAreaStud2': 3 * module.ROOM_WIDTH * module.ROOM_DEPTH,
+              'revisedFloorAreaStud2': PLAN['RoomFloorArea'] + 3 * module.ROOM_WIDTH * module.ROOM_DEPTH,
               'originalKitCollectionsPreserved': all(bpy.data.collections.get(n) for n in kit_inventory),
               'originalKitCollections': kit_inventory, 'newCollections': sorted(c.name for c in new['new_collections'].values()) + ['L6K_FloorDefault'],
               'originalMeshVertexPositionsPreserved': True, 'sourceObjectCount': source_object_count,
@@ -534,8 +539,8 @@ def main():
               'limitations': ['Studio place not open; fresh live source/editor inspection blocked.',
                               'Blender seed 101 preserved; random runtime generator not changed.',
                               'Roblox material import, gameplay and performance are unverified.']}
-    (OUT / 'build-manifest.json').write_text(json.dumps(record, indent=2) + '\n')
-    (OUT / 'physical-uv-records.json').write_text(json.dumps(UV_RECORDS, indent=2) + '\n')
+    (RECORD_OUT / 'build-manifest.json').write_text(json.dumps(record, indent=2) + '\n')
+    (RECORD_OUT / 'physical-uv-records.json').write_text(json.dumps(UV_RECORDS, indent=2) + '\n')
     print('LEVEL6_REVISION_BUILT', json.dumps(record), flush=True)
 
 

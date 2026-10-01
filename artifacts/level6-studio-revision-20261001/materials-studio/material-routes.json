@@ -1,0 +1,2535 @@
+{
+  "schema": "level6-studio-material-routes/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "sourceImportManifestSha256": "6389224558ced4e3b2fdb09e43cc9065433a9875b43b142a0300dbcdf2b4e340",
+  "sourceMaterialManifestSha256": "7515152956ec7b84dddcf87865d5375c11e42965f9ca88a906ff52bbe372392f",
+  "images": [
+    {
+      "key": "carpet_city__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/color-1024.png",
+      "sha256": "ab8c4709372235fd620d6cca859c20b103f7c1fbd6d06834de8960ea63968513",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_city__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/normal-opengl-1024.png",
+      "sha256": "8331bf8ef4096067ee519e4d4517443d58d9f87d00b460853a4eb2d113f0bd20",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_city__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/roughness-1024.png",
+      "sha256": "0a37b3c5337a65397c663fa435aa46e066ce95f1b35c85a8858ca2297604a9c1",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_default__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/color-1024.png",
+      "sha256": "5167d949ce619c2f1fd3aeae9d92101e36c50bc4ea1f9e2490f6bd1853b59dc7",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_default__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/normal-opengl-1024.png",
+      "sha256": "2ccc73544884aba92b111d82739f5e5093681d2427f94f1e5f530c1462bed50f",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_default__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/roughness-1024.png",
+      "sha256": "bd6c0174e69ae557d65011b20f6ae067b18314effdca751b040679374249aecb",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_neon__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/color-1024.png",
+      "sha256": "875b9a69214d93e22fe88c6ddf69c96e356f64b53e9dd226cc8258b32e3cc40e",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_neon__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/normal-opengl-1024.png",
+      "sha256": "df391ee9c2c5f1b1ef4e4414f3b91b8b9a7c67041a97ec973b2992725a6df86d",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_neon__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/roughness-1024.png",
+      "sha256": "4bce7aa9dd4e7185b1008c0823bbb218cd5c3fe1ab22f82e4c70b7fbbb8cf815",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_red__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/color-1024.png",
+      "sha256": "4f335d3775aadd09f2ffef818c89c7b757b38f3b1fe59a48eb1764943c2d5e17",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_red__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/normal-opengl-1024.png",
+      "sha256": "7586f84daa0859d5135da44821dfea6f197f553e32697b05b21e19456e8609fa",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "carpet_red__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/roughness-1024.png",
+      "sha256": "1cbfce1957776197e700553e96387768217f6b5d15d74219eaa06b94a7d258f2",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "diamondplate__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/color-1024.png",
+      "sha256": "bb652c3b027bfc5b02e4de1c42d010ff15b9e97c4fee2d4042d60e50ceb2b286",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "diamondplate__metalness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/metalness-1024.png",
+      "sha256": "4d3fe1bc7957d028dd7e0360294bd64289c12432aed26cc60737d245ad33e725",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "diamondplate__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/normal-opengl-1024.png",
+      "sha256": "481f4699aa56c25080bc51ae1789ece77387069d40ea67928a38fce638f5ad39",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "diamondplate__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/roughness-1024.png",
+      "sha256": "0098d6603e27d441e8d5c2ae26577bddb3c9b27cb5b155cd3a6d2b2e92a3ad1b",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "kitchen_tile__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/color-1024.png",
+      "sha256": "7442f61902091f77efa065a93adf112b013f13861119240fe3bc6c335ff0e2a6",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "kitchen_tile__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/normal-opengl-1024.png",
+      "sha256": "0746acea7615acdb0becf259b20f53aa34a56f53076ac03567c6c6d6e8b62b3c",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "kitchen_tile__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/roughness-1024.png",
+      "sha256": "d4fa105a4b2041d6b87cfae5824f0f572dcd281d2be8d512461d966e199aaf33",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "orange_wall__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/color-1024.png",
+      "sha256": "a9866e6be6f55abc0d47311b469da3b054a2220d2bfe2b6e52ecbdc2df6a63b4",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "orange_wall__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/normal-opengl-1024.png",
+      "sha256": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "orange_wall__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/roughness-1024.png",
+      "sha256": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "props__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/props/color-1024.png",
+      "sha256": "de67024e687ba1e36ab7fcacc1c9d2a84f5ff6ef45cb0ad155c8b95b9dc4937c",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "red-wall-color",
+      "source": "artifacts/level6-blender-revision-20260930/exports/red-wall-color-1024.png",
+      "sha256": "7708e920dc5b4885c3ec04f061ea22d672e1c913d21a5cfc5e2d2692c81a398a",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "wallpaper__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/color-1024.png",
+      "sha256": "ed4c4da330aba86f2b5c60ed1453019c68c460036f46d3452542fc1b5209c7f4",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "wallpaper__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/normal-opengl-1024.png",
+      "sha256": "9e484ebe8adf0ea1b029f62e4362fb456e7a9a7109d9e28045b9a5360b8ca109",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "key": "wallpaper__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/roughness-1024.png",
+      "sha256": "f161d6c1c82d5b1862c4ba516158eaa116d190383389736cc0d293f9e753ee19",
+      "width": 1024,
+      "height": 1024
+    }
+  ],
+  "variants": {
+    "carpet_city": {
+      "name": "L6R_CarpetCity",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 52,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "carpet_city__color",
+        "normalOpenGL": "carpet_city__normal-opengl",
+        "roughness": "carpet_city__roughness"
+      }
+    },
+    "carpet_default": {
+      "name": "L6R_CarpetDefault",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 28,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "carpet_default__color",
+        "normalOpenGL": "carpet_default__normal-opengl",
+        "roughness": "carpet_default__roughness"
+      }
+    },
+    "carpet_neon": {
+      "name": "L6R_CarpetNeon",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "carpet_neon__color",
+        "normalOpenGL": "carpet_neon__normal-opengl",
+        "roughness": "carpet_neon__roughness"
+      }
+    },
+    "carpet_red": {
+      "name": "L6R_CarpetRed",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 30,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "carpet_red__color",
+        "normalOpenGL": "carpet_red__normal-opengl",
+        "roughness": "carpet_red__roughness"
+      }
+    },
+    "diamondplate": {
+      "name": "L6R_Diamondplate",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 8,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "diamondplate__color",
+        "normalOpenGL": "diamondplate__normal-opengl",
+        "roughness": "diamondplate__roughness",
+        "metalness": "diamondplate__metalness"
+      }
+    },
+    "kitchen_tile": {
+      "name": "L6R_KitchenTile",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 8,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "kitchen_tile__color",
+        "normalOpenGL": "kitchen_tile__normal-opengl",
+        "roughness": "kitchen_tile__roughness"
+      }
+    },
+    "orange_wall": {
+      "name": "L6R_OrangeWall",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "orange_wall__color",
+        "normalOpenGL": "orange_wall__normal-opengl",
+        "roughness": "orange_wall__roughness"
+      }
+    },
+    "red_wall": {
+      "name": "L6R_RedWall",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "red-wall-color",
+        "normalOpenGL": "orange_wall__normal-opengl",
+        "roughness": "orange_wall__roughness"
+      }
+    },
+    "wallpaper": {
+      "name": "L6R_Wallpaper",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 18,
+      "normalConvention": "OpenGL +Y tangent",
+      "mapImageKeys": {
+        "color": "wallpaper__color",
+        "normalOpenGL": "wallpaper__normal-opengl",
+        "roughness": "wallpaper__roughness"
+      }
+    }
+  },
+  "routes": [
+    {
+      "chunkId": 0,
+      "family": "ArcadeInvaders",
+      "childName": "m000__black_metal",
+      "object": "L6K_ArcadeInvaders__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 1,
+      "family": "ArcadeInvaders",
+      "childName": "m001__blue_plastic",
+      "object": "L6K_ArcadeInvaders__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 2,
+      "family": "ArcadeInvaders",
+      "childName": "m002__chrome",
+      "object": "L6K_ArcadeInvaders__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 3,
+      "family": "ArcadeInvaders",
+      "childName": "m003__grey_metal",
+      "object": "L6K_ArcadeInvaders__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 4,
+      "family": "ArcadeInvaders",
+      "childName": "m004__red_plastic",
+      "object": "L6K_ArcadeInvaders__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 5,
+      "family": "ArcadeInvaders",
+      "childName": "m005__rubber",
+      "object": "L6K_ArcadeInvaders__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 6,
+      "family": "ArcadeInvaders",
+      "childName": "m006__screen_cyan",
+      "object": "L6K_ArcadeInvaders__screen_cyan",
+      "material": "L6_screen_cyan_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 7,
+      "family": "ArcadeInvaders",
+      "childName": "m007__screen_dark",
+      "object": "L6K_ArcadeInvaders__screen_dark",
+      "material": "L6_screen_dark_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 8,
+      "family": "ArcadeInvaders",
+      "childName": "m008__screen_green",
+      "object": "L6K_ArcadeInvaders__screen_green",
+      "material": "L6_screen_green_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 9,
+      "family": "ArcadeInvaders",
+      "childName": "m009__screen_magenta",
+      "object": "L6K_ArcadeInvaders__screen_magenta",
+      "material": "L6_screen_magenta_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 10,
+      "family": "ArcadeInvaders",
+      "childName": "m010__yellow_plastic",
+      "object": "L6K_ArcadeInvaders__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 11,
+      "family": "ArcadeMaze",
+      "childName": "m011__black_metal",
+      "object": "L6K_ArcadeMaze__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 12,
+      "family": "ArcadeMaze",
+      "childName": "m012__chrome",
+      "object": "L6K_ArcadeMaze__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 13,
+      "family": "ArcadeMaze",
+      "childName": "m013__red_plastic",
+      "object": "L6K_ArcadeMaze__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 14,
+      "family": "ArcadeMaze",
+      "childName": "m014__rubber",
+      "object": "L6K_ArcadeMaze__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 15,
+      "family": "ArcadeMaze",
+      "childName": "m015__screen_cyan",
+      "object": "L6K_ArcadeMaze__screen_cyan",
+      "material": "L6_screen_cyan_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 16,
+      "family": "ArcadeMaze",
+      "childName": "m016__screen_dark",
+      "object": "L6K_ArcadeMaze__screen_dark",
+      "material": "L6_screen_dark_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 17,
+      "family": "ArcadeMaze",
+      "childName": "m017__screen_magenta",
+      "object": "L6K_ArcadeMaze__screen_magenta",
+      "material": "L6_screen_magenta_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 18,
+      "family": "ArcadeMaze",
+      "childName": "m018__yellow_plastic",
+      "object": "L6K_ArcadeMaze__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 19,
+      "family": "ArcadePlatform",
+      "childName": "m019__black_metal",
+      "object": "L6K_ArcadePlatform__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 20,
+      "family": "ArcadePlatform",
+      "childName": "m020__chrome",
+      "object": "L6K_ArcadePlatform__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 21,
+      "family": "ArcadePlatform",
+      "childName": "m021__grey_metal",
+      "object": "L6K_ArcadePlatform__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 22,
+      "family": "ArcadePlatform",
+      "childName": "m022__red_plastic",
+      "object": "L6K_ArcadePlatform__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 23,
+      "family": "ArcadePlatform",
+      "childName": "m023__rubber",
+      "object": "L6K_ArcadePlatform__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 24,
+      "family": "ArcadePlatform",
+      "childName": "m024__screen_cyan",
+      "object": "L6K_ArcadePlatform__screen_cyan",
+      "material": "L6_screen_cyan_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 25,
+      "family": "ArcadePlatform",
+      "childName": "m025__screen_dark",
+      "object": "L6K_ArcadePlatform__screen_dark",
+      "material": "L6_screen_dark_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 26,
+      "family": "ArcadePlatform",
+      "childName": "m026__screen_magenta",
+      "object": "L6K_ArcadePlatform__screen_magenta",
+      "material": "L6_screen_magenta_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 27,
+      "family": "ArcadePlatform",
+      "childName": "m027__yellow_plastic",
+      "object": "L6K_ArcadePlatform__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 28,
+      "family": "BalloonCluster",
+      "childName": "m028__balloon_green",
+      "object": "L6K_BalloonCluster__balloon_green",
+      "material": "L6_balloon_green_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 29,
+      "family": "BalloonCluster",
+      "childName": "m029__balloon_red",
+      "object": "L6K_BalloonCluster__balloon_red",
+      "material": "L6_balloon_red_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 30,
+      "family": "BalloonCluster",
+      "childName": "m030__balloon_yellow",
+      "object": "L6K_BalloonCluster__balloon_yellow",
+      "material": "L6_balloon_yellow_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 31,
+      "family": "BalloonCluster",
+      "childName": "m031__paper",
+      "object": "L6K_BalloonCluster__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 32,
+      "family": "BalloonCluster",
+      "childName": "m032__red_plastic",
+      "object": "L6K_BalloonCluster__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 33,
+      "family": "BirthdayGarland",
+      "childName": "m033__blue_plastic",
+      "object": "L6K_BirthdayGarland__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 34,
+      "family": "BirthdayGarland",
+      "childName": "m034__green_plastic",
+      "object": "L6K_BirthdayGarland__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 35,
+      "family": "BirthdayGarland",
+      "childName": "m035__paper",
+      "object": "L6K_BirthdayGarland__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 36,
+      "family": "BirthdayGarland",
+      "childName": "m036__red_plastic",
+      "object": "L6K_BirthdayGarland__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 37,
+      "family": "BirthdayGarland",
+      "childName": "m037__yellow_plastic",
+      "object": "L6K_BirthdayGarland__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 38,
+      "family": "BreakerPanel",
+      "childName": "m038__black_metal",
+      "object": "L6K_BreakerPanel__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 39,
+      "family": "BreakerPanel",
+      "childName": "m039__chrome",
+      "object": "L6K_BreakerPanel__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 40,
+      "family": "BreakerPanel",
+      "childName": "m040__grey_metal",
+      "object": "L6K_BreakerPanel__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 41,
+      "family": "BreakerPanel",
+      "childName": "m041__paper",
+      "object": "L6K_BreakerPanel__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 42,
+      "family": "BreakerPanel",
+      "childName": "m042__yellow_plastic",
+      "object": "L6K_BreakerPanel__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 43,
+      "family": "CD",
+      "childName": "m043__cd_silver",
+      "object": "L6K_CD__cd_silver",
+      "material": "L6_cd_silver_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 44,
+      "family": "CD",
+      "childName": "m044__paper",
+      "object": "L6K_CD__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 45,
+      "family": "CD",
+      "childName": "m045__screen_cyan",
+      "object": "L6K_CD__screen_cyan",
+      "material": "L6_screen_cyan_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 46,
+      "family": "CD",
+      "childName": "m046__screen_green",
+      "object": "L6K_CD__screen_green",
+      "material": "L6_screen_green_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 47,
+      "family": "CD",
+      "childName": "m047__screen_magenta",
+      "object": "L6K_CD__screen_magenta",
+      "material": "L6_screen_magenta_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 48,
+      "family": "CDCase",
+      "childName": "m048__black_metal",
+      "object": "L6K_CDCase__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 49,
+      "family": "CDCase",
+      "childName": "m049__glass",
+      "object": "L6K_CDCase__glass",
+      "material": "L6_glass_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 50,
+      "family": "CDCase",
+      "childName": "m050__paper",
+      "object": "L6K_CDCase__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 51,
+      "family": "CDCase",
+      "childName": "m051__red_plastic",
+      "object": "L6K_CDCase__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 52,
+      "family": "CDPlayer",
+      "childName": "m052__black_metal",
+      "object": "L6K_CDPlayer__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 53,
+      "family": "CDPlayer",
+      "childName": "m053__grey_metal",
+      "object": "L6K_CDPlayer__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 54,
+      "family": "CDPlayer",
+      "childName": "m054__paper",
+      "object": "L6K_CDPlayer__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 55,
+      "family": "CDPlayer",
+      "childName": "m055__rubber",
+      "object": "L6K_CDPlayer__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 56,
+      "family": "CDPlayer",
+      "childName": "m056__screen_dark",
+      "object": "L6K_CDPlayer__screen_dark",
+      "material": "L6_screen_dark_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 57,
+      "family": "CDPlayer",
+      "childName": "m057__screen_green",
+      "object": "L6K_CDPlayer__screen_green",
+      "material": "L6_screen_green_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 58,
+      "family": "CakeTable",
+      "childName": "m058__black_metal",
+      "object": "L6K_CakeTable__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 59,
+      "family": "CakeTable",
+      "childName": "m059__laminate",
+      "object": "L6K_CakeTable__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 60,
+      "family": "CakeTable",
+      "childName": "m060__paper",
+      "object": "L6K_CakeTable__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 61,
+      "family": "CakeTable",
+      "childName": "m061__red_plastic",
+      "object": "L6K_CakeTable__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 62,
+      "family": "CakeTable",
+      "childName": "m062__rubber",
+      "object": "L6K_CakeTable__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 63,
+      "family": "CakeTable",
+      "childName": "m063__wood_worn",
+      "object": "L6K_CakeTable__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 64,
+      "family": "CakeTable",
+      "childName": "m064__yellow_plastic",
+      "object": "L6K_CakeTable__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 65,
+      "family": "Ceiling",
+      "childName": "m065__ceiling",
+      "object": "L6K_Ceiling__ceiling",
+      "material": "L6_ceiling_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 66,
+      "family": "Ceiling",
+      "childName": "m066__ceiling_grid",
+      "object": "L6K_Ceiling__ceiling_grid",
+      "material": "L6_ceiling_grid_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 67,
+      "family": "ChairBlue",
+      "childName": "m067__blue_plastic",
+      "object": "L6K_ChairBlue__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 68,
+      "family": "ChairBlue",
+      "childName": "m068__ivory_plastic",
+      "object": "L6K_ChairBlue__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 69,
+      "family": "ChairBlue",
+      "childName": "m069__rubber",
+      "object": "L6K_ChairBlue__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 70,
+      "family": "ChairGreen",
+      "childName": "m070__green_plastic",
+      "object": "L6K_ChairGreen__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 71,
+      "family": "ChairGreen",
+      "childName": "m071__ivory_plastic",
+      "object": "L6K_ChairGreen__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 72,
+      "family": "ChairGreen",
+      "childName": "m072__rubber",
+      "object": "L6K_ChairGreen__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 73,
+      "family": "ChairRed",
+      "childName": "m073__ivory_plastic",
+      "object": "L6K_ChairRed__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 74,
+      "family": "ChairRed",
+      "childName": "m074__red_plastic",
+      "object": "L6K_ChairRed__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 75,
+      "family": "ChairRed",
+      "childName": "m075__rubber",
+      "object": "L6K_ChairRed__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 76,
+      "family": "ChairStack",
+      "childName": "m076__green_plastic",
+      "object": "L6K_ChairStack__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 77,
+      "family": "ChairStack",
+      "childName": "m077__ivory_plastic",
+      "object": "L6K_ChairStack__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 78,
+      "family": "ChairStack",
+      "childName": "m078__rubber",
+      "object": "L6K_ChairStack__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 79,
+      "family": "ChairYellow",
+      "childName": "m079__ivory_plastic",
+      "object": "L6K_ChairYellow__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 80,
+      "family": "ChairYellow",
+      "childName": "m080__rubber",
+      "object": "L6K_ChairYellow__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 81,
+      "family": "ChairYellow",
+      "childName": "m081__yellow_plastic",
+      "object": "L6K_ChairYellow__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 82,
+      "family": "ClawMachine",
+      "childName": "m082__black_metal",
+      "object": "L6K_ClawMachine__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 83,
+      "family": "ClawMachine",
+      "childName": "m083__blue_plastic",
+      "object": "L6K_ClawMachine__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 84,
+      "family": "ClawMachine",
+      "childName": "m084__chrome",
+      "object": "L6K_ClawMachine__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 85,
+      "family": "ClawMachine",
+      "childName": "m085__glass",
+      "object": "L6K_ClawMachine__glass",
+      "material": "L6_glass_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 86,
+      "family": "ClawMachine",
+      "childName": "m086__green_plastic",
+      "object": "L6K_ClawMachine__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 87,
+      "family": "ClawMachine",
+      "childName": "m087__grey_metal",
+      "object": "L6K_ClawMachine__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 88,
+      "family": "ClawMachine",
+      "childName": "m088__paper",
+      "object": "L6K_ClawMachine__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 89,
+      "family": "ClawMachine",
+      "childName": "m089__red_plastic",
+      "object": "L6K_ClawMachine__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 90,
+      "family": "ClawMachine",
+      "childName": "m090__rubber",
+      "object": "L6K_ClawMachine__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 91,
+      "family": "ClawMachine",
+      "childName": "m091__yellow_plastic",
+      "object": "L6K_ClawMachine__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 92,
+      "family": "Clock",
+      "childName": "m092__black_metal",
+      "object": "L6K_Clock__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 93,
+      "family": "Clock",
+      "childName": "m093__paper",
+      "object": "L6K_Clock__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 94,
+      "family": "FlatClownCutout",
+      "childName": "m094__black_metal",
+      "object": "L6K_FlatClownCutout__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 95,
+      "family": "FlatClownCutout",
+      "childName": "m095__blue_plastic",
+      "object": "L6K_FlatClownCutout__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 96,
+      "family": "FlatClownCutout",
+      "childName": "m096__cardboard",
+      "object": "L6K_FlatClownCutout__cardboard",
+      "material": "L6_cardboard_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 97,
+      "family": "FlatClownCutout",
+      "childName": "m097__paper",
+      "object": "L6K_FlatClownCutout__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 98,
+      "family": "FlatClownCutout",
+      "childName": "m098__red_plastic",
+      "object": "L6K_FlatClownCutout__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 99,
+      "family": "FlatClownCutout",
+      "childName": "m099__yellow_plastic",
+      "object": "L6K_FlatClownCutout__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 100,
+      "family": "FloorBeige",
+      "childName": "m100__carpet_beige",
+      "object": "L6K_FloorBeige__carpet_beige",
+      "material": "L6_carpet_beige_Export",
+      "variantKey": "carpet_city"
+    },
+    {
+      "chunkId": 101,
+      "family": "FloorBeige",
+      "childName": "m101__black_wall",
+      "object": "L6K_FloorBeige__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 102,
+      "family": "FloorDefault",
+      "childName": "m102__L6R_carpet_default",
+      "object": "L6K_FloorDefault__L6R_carpet_default",
+      "material": "L6R_carpet_default_Export",
+      "variantKey": "carpet_default"
+    },
+    {
+      "chunkId": 103,
+      "family": "FloorDefault",
+      "childName": "m103__black_wall",
+      "object": "L6K_FloorDefault__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 104,
+      "family": "FloorOrange",
+      "childName": "m104__carpet_confetti",
+      "object": "L6K_FloorOrange__carpet_confetti",
+      "material": "L6_carpet_confetti_Export",
+      "variantKey": "carpet_neon"
+    },
+    {
+      "chunkId": 105,
+      "family": "FloorOrange",
+      "childName": "m105__black_wall",
+      "object": "L6K_FloorOrange__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 106,
+      "family": "FloorRed",
+      "childName": "m106__carpet_red",
+      "object": "L6K_FloorRed__carpet_red",
+      "material": "L6_carpet_red_Export",
+      "variantKey": "carpet_red"
+    },
+    {
+      "chunkId": 107,
+      "family": "FloorRed",
+      "childName": "m107__black_wall",
+      "object": "L6K_FloorRed__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 108,
+      "family": "FloorService",
+      "childName": "m108__linoleum",
+      "object": "L6K_FloorService__linoleum",
+      "material": "L6_linoleum_Export",
+      "variantKey": "diamondplate"
+    },
+    {
+      "chunkId": 109,
+      "family": "FloorService",
+      "childName": "m109__black_wall",
+      "object": "L6K_FloorService__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 110,
+      "family": "FluorescentDiffuser",
+      "childName": "m110__glow",
+      "object": "L6K_FluorescentDiffuser__glow",
+      "material": "L6_glow_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 111,
+      "family": "FluorescentDiffuser",
+      "childName": "m111__ivory_plastic",
+      "object": "L6K_FluorescentDiffuser__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 112,
+      "family": "FluorescentFixture",
+      "childName": "m112__black_metal",
+      "object": "L6K_FluorescentFixture__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 113,
+      "family": "FluorescentFixture",
+      "childName": "m113__ivory_plastic",
+      "object": "L6K_FluorescentFixture__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 114,
+      "family": "FluorescentFixture",
+      "childName": "m114__paper",
+      "object": "L6K_FluorescentFixture__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 115,
+      "family": "FluorescentFrame",
+      "childName": "m115__grey_metal",
+      "object": "L6K_FluorescentFrame__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 116,
+      "family": "FluorescentFrame",
+      "childName": "m116__chrome",
+      "object": "L6K_FluorescentFrame__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 117,
+      "family": "FoldedTables",
+      "childName": "m117__black_metal",
+      "object": "L6K_FoldedTables__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 118,
+      "family": "FoldedTables",
+      "childName": "m118__laminate",
+      "object": "L6K_FoldedTables__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 119,
+      "family": "FoldingTable",
+      "childName": "m119__black_metal",
+      "object": "L6K_FoldingTable__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 120,
+      "family": "FoldingTable",
+      "childName": "m120__grey_metal",
+      "object": "L6K_FoldingTable__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 121,
+      "family": "FoldingTable",
+      "childName": "m121__laminate",
+      "object": "L6K_FoldingTable__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 122,
+      "family": "FoldingTable",
+      "childName": "m122__rubber",
+      "object": "L6K_FoldingTable__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 123,
+      "family": "FoldingTable",
+      "childName": "m123__wood_worn",
+      "object": "L6K_FoldingTable__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 124,
+      "family": "HeliumTank",
+      "childName": "m124__black_metal",
+      "object": "L6K_HeliumTank__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 125,
+      "family": "HeliumTank",
+      "childName": "m125__chrome",
+      "object": "L6K_HeliumTank__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 126,
+      "family": "HeliumTank",
+      "childName": "m126__grey_metal",
+      "object": "L6K_HeliumTank__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 127,
+      "family": "HeliumTank",
+      "childName": "m127__paper",
+      "object": "L6K_HeliumTank__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 128,
+      "family": "HeliumTank",
+      "childName": "m128__red_plastic",
+      "object": "L6K_HeliumTank__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 129,
+      "family": "HeliumTank",
+      "childName": "m129__yellow_plastic",
+      "object": "L6K_HeliumTank__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 130,
+      "family": "KitchenFridge",
+      "childName": "m130__black_metal",
+      "object": "L6K_KitchenFridge__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 131,
+      "family": "KitchenFridge",
+      "childName": "m131__chrome",
+      "object": "L6K_KitchenFridge__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 132,
+      "family": "KitchenFridge",
+      "childName": "m132__grey_metal",
+      "object": "L6K_KitchenFridge__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 133,
+      "family": "KitchenFridge",
+      "childName": "m133__ivory_plastic",
+      "object": "L6K_KitchenFridge__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 134,
+      "family": "KitchenFridge",
+      "childName": "m134__paper",
+      "object": "L6K_KitchenFridge__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 135,
+      "family": "KitchenFridge",
+      "childName": "m135__red_plastic",
+      "object": "L6K_KitchenFridge__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 136,
+      "family": "KitchenHood",
+      "childName": "m136__black_metal",
+      "object": "L6K_KitchenHood__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 137,
+      "family": "KitchenHood",
+      "childName": "m137__grey_metal",
+      "object": "L6K_KitchenHood__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 138,
+      "family": "KitchenPrepBench",
+      "childName": "m138__black_metal",
+      "object": "L6K_KitchenPrepBench__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 139,
+      "family": "KitchenPrepBench",
+      "childName": "m139__chrome",
+      "object": "L6K_KitchenPrepBench__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 140,
+      "family": "KitchenPrepBench",
+      "childName": "m140__grey_metal",
+      "object": "L6K_KitchenPrepBench__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 141,
+      "family": "KitchenPrepBench",
+      "childName": "m141__rubber",
+      "object": "L6K_KitchenPrepBench__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 142,
+      "family": "KitchenShelf",
+      "childName": "m142__black_metal",
+      "object": "L6K_KitchenShelf__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 143,
+      "family": "KitchenShelf",
+      "childName": "m143__cardboard",
+      "object": "L6K_KitchenShelf__cardboard",
+      "material": "L6_cardboard_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 144,
+      "family": "KitchenShelf",
+      "childName": "m144__grey_metal",
+      "object": "L6K_KitchenShelf__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 145,
+      "family": "KitchenShelf",
+      "childName": "m145__ivory_plastic",
+      "object": "L6K_KitchenShelf__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 146,
+      "family": "KitchenShelf",
+      "childName": "m146__paper",
+      "object": "L6K_KitchenShelf__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 147,
+      "family": "KitchenStove",
+      "childName": "m147__black_metal",
+      "object": "L6K_KitchenStove__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 148,
+      "family": "KitchenStove",
+      "childName": "m148__chrome",
+      "object": "L6K_KitchenStove__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 149,
+      "family": "KitchenStove",
+      "childName": "m149__grey_metal",
+      "object": "L6K_KitchenStove__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 150,
+      "family": "KitchenTrayStack",
+      "childName": "m150__grey_metal",
+      "object": "L6K_KitchenTrayStack__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 151,
+      "family": "KitchenWasteBin",
+      "childName": "m151__black_metal",
+      "object": "L6K_KitchenWasteBin__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 152,
+      "family": "KitchenWasteBin",
+      "childName": "m152__grey_metal",
+      "object": "L6K_KitchenWasteBin__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 153,
+      "family": "KitchenWasteBin",
+      "childName": "m153__paper",
+      "object": "L6K_KitchenWasteBin__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 154,
+      "family": "LintelBeige",
+      "childName": "m154__beige_wall",
+      "object": "L6K_LintelBeige__beige_wall",
+      "material": "L6_beige_wall_Export",
+      "variantKey": "wallpaper"
+    },
+    {
+      "chunkId": 155,
+      "family": "LintelOrange",
+      "childName": "m155__orange_wall",
+      "object": "L6K_LintelOrange__orange_wall",
+      "material": "L6_orange_wall_Export",
+      "variantKey": "orange_wall"
+    },
+    {
+      "chunkId": 156,
+      "family": "LintelRed",
+      "childName": "m156__red_wall",
+      "object": "L6K_LintelRed__red_wall",
+      "material": "L6_red_wall_Export",
+      "variantKey": "red_wall"
+    },
+    {
+      "chunkId": 157,
+      "family": "LintelService",
+      "childName": "m157__beige_wall",
+      "object": "L6K_LintelService__beige_wall",
+      "material": "L6_beige_wall_Export",
+      "variantKey": "wallpaper"
+    },
+    {
+      "chunkId": 158,
+      "family": "MopBucket",
+      "childName": "m158__black_metal",
+      "object": "L6K_MopBucket__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 159,
+      "family": "MopBucket",
+      "childName": "m159__chrome",
+      "object": "L6K_MopBucket__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 160,
+      "family": "MopBucket",
+      "childName": "m160__paper",
+      "object": "L6K_MopBucket__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 161,
+      "family": "MopBucket",
+      "childName": "m161__red_plastic",
+      "object": "L6K_MopBucket__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 162,
+      "family": "MopBucket",
+      "childName": "m162__rubber",
+      "object": "L6K_MopBucket__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 163,
+      "family": "MopBucket",
+      "childName": "m163__yellow_plastic",
+      "object": "L6K_MopBucket__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 164,
+      "family": "PASpeaker",
+      "childName": "m164__black_metal",
+      "object": "L6K_PASpeaker__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 165,
+      "family": "PASpeaker",
+      "childName": "m165__rubber",
+      "object": "L6K_PASpeaker__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 166,
+      "family": "Pegboard",
+      "childName": "m166__black_metal",
+      "object": "L6K_Pegboard__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 167,
+      "family": "Pegboard",
+      "childName": "m167__blue_plastic",
+      "object": "L6K_Pegboard__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 168,
+      "family": "Pegboard",
+      "childName": "m168__chrome",
+      "object": "L6K_Pegboard__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 169,
+      "family": "Pegboard",
+      "childName": "m169__grey_metal",
+      "object": "L6K_Pegboard__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 170,
+      "family": "Pegboard",
+      "childName": "m170__red_plastic",
+      "object": "L6K_Pegboard__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 171,
+      "family": "Pegboard",
+      "childName": "m171__wood_worn",
+      "object": "L6K_Pegboard__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 172,
+      "family": "PrizeCounter",
+      "childName": "m172__black_metal",
+      "object": "L6K_PrizeCounter__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 173,
+      "family": "PrizeCounter",
+      "childName": "m173__blue_plastic",
+      "object": "L6K_PrizeCounter__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 174,
+      "family": "PrizeCounter",
+      "childName": "m174__glass",
+      "object": "L6K_PrizeCounter__glass",
+      "material": "L6_glass_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 175,
+      "family": "PrizeCounter",
+      "childName": "m175__green_plastic",
+      "object": "L6K_PrizeCounter__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 176,
+      "family": "PrizeCounter",
+      "childName": "m176__grey_metal",
+      "object": "L6K_PrizeCounter__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 177,
+      "family": "PrizeCounter",
+      "childName": "m177__ivory_plastic",
+      "object": "L6K_PrizeCounter__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 178,
+      "family": "PrizeCounter",
+      "childName": "m178__laminate",
+      "object": "L6K_PrizeCounter__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 179,
+      "family": "PrizeCounter",
+      "childName": "m179__paper",
+      "object": "L6K_PrizeCounter__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 180,
+      "family": "PrizeCounter",
+      "childName": "m180__red_plastic",
+      "object": "L6K_PrizeCounter__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 181,
+      "family": "PrizeCounter",
+      "childName": "m181__yellow_plastic",
+      "object": "L6K_PrizeCounter__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 182,
+      "family": "RoomDivider",
+      "childName": "m182__black_metal",
+      "object": "L6K_RoomDivider__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 183,
+      "family": "RoomDivider",
+      "childName": "m183__paper_worn",
+      "object": "L6K_RoomDivider__paper_worn",
+      "material": "L6_paper_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 184,
+      "family": "RoomDivider",
+      "childName": "m184__rubber",
+      "object": "L6K_RoomDivider__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 185,
+      "family": "RoomKitchenPrep",
+      "childName": "m185__black_metal",
+      "object": "L6K_RoomKitchenPrep__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 186,
+      "family": "RoomKitchenPrep",
+      "childName": "m186__black_wall",
+      "object": "L6K_RoomKitchenPrep__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 187,
+      "family": "RoomKitchenPrep",
+      "childName": "m187__ceiling",
+      "object": "L6K_RoomKitchenPrep__ceiling",
+      "material": "L6_ceiling_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 188,
+      "family": "RoomKitchenPrep",
+      "childName": "m188__ceiling_grid",
+      "object": "L6K_RoomKitchenPrep__ceiling_grid",
+      "material": "L6_ceiling_grid_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 189,
+      "family": "RoomKitchenPrep",
+      "childName": "m189__grey_metal",
+      "object": "L6K_RoomKitchenPrep__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 190,
+      "family": "RoomKitchenPrep",
+      "childName": "m190__L6R_kitchen_tile",
+      "object": "L6K_RoomKitchenPrep__L6R_kitchen_tile",
+      "material": "L6R_kitchen_tile_Export",
+      "variantKey": "kitchen_tile"
+    },
+    {
+      "chunkId": 191,
+      "family": "RoomKitchenPrep",
+      "childName": "m191__orange_wall",
+      "object": "L6K_RoomKitchenPrep__orange_wall",
+      "material": "L6_orange_wall_Export",
+      "variantKey": "orange_wall"
+    },
+    {
+      "chunkId": 192,
+      "family": "RoomKitchenPrep",
+      "childName": "m192__chrome",
+      "object": "L6K_RoomKitchenPrep__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 193,
+      "family": "RoomKitchenPrep",
+      "childName": "m193__rubber",
+      "object": "L6K_RoomKitchenPrep__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 194,
+      "family": "RoomKitchenPrep",
+      "childName": "m194__ivory_plastic",
+      "object": "L6K_RoomKitchenPrep__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 195,
+      "family": "RoomKitchenPrep",
+      "childName": "m195__paper",
+      "object": "L6K_RoomKitchenPrep__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 196,
+      "family": "RoomKitchenPrep",
+      "childName": "m196__red_plastic",
+      "object": "L6K_RoomKitchenPrep__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 197,
+      "family": "RoomKitchenPrep",
+      "childName": "m197__cardboard",
+      "object": "L6K_RoomKitchenPrep__cardboard",
+      "material": "L6_cardboard_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 198,
+      "family": "RoomKitchenPrep",
+      "childName": "m198__glow",
+      "object": "L6K_RoomKitchenPrep__glow",
+      "material": "L6_glow_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 199,
+      "family": "RoomStaffNook",
+      "childName": "m199__black_wall",
+      "object": "L6K_RoomStaffNook__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 200,
+      "family": "RoomStaffNook",
+      "childName": "m200__carpet_beige",
+      "object": "L6K_RoomStaffNook__carpet_beige",
+      "material": "L6_carpet_beige_Export",
+      "variantKey": "carpet_city"
+    },
+    {
+      "chunkId": 201,
+      "family": "RoomStaffNook",
+      "childName": "m201__carpet_red",
+      "object": "L6K_RoomStaffNook__carpet_red",
+      "material": "L6_carpet_red_Export",
+      "variantKey": "carpet_red"
+    },
+    {
+      "chunkId": 202,
+      "family": "RoomStaffNook",
+      "childName": "m202__ceiling",
+      "object": "L6K_RoomStaffNook__ceiling",
+      "material": "L6_ceiling_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 203,
+      "family": "RoomStaffNook",
+      "childName": "m203__ceiling_grid",
+      "object": "L6K_RoomStaffNook__ceiling_grid",
+      "material": "L6_ceiling_grid_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 204,
+      "family": "RoomStaffNook",
+      "childName": "m204__grey_metal",
+      "object": "L6K_RoomStaffNook__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 205,
+      "family": "RoomStaffNook",
+      "childName": "m205__beige_wall",
+      "object": "L6K_RoomStaffNook__beige_wall",
+      "material": "L6_beige_wall_Export",
+      "variantKey": "wallpaper"
+    },
+    {
+      "chunkId": 206,
+      "family": "RoomStaffNook",
+      "childName": "m206__wood_worn",
+      "object": "L6K_RoomStaffNook__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 207,
+      "family": "RoomStaffNook",
+      "childName": "m207__black_metal",
+      "object": "L6K_RoomStaffNook__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 208,
+      "family": "RoomStaffNook",
+      "childName": "m208__chrome",
+      "object": "L6K_RoomStaffNook__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 209,
+      "family": "RoomStaffNook",
+      "childName": "m209__ivory_plastic",
+      "object": "L6K_RoomStaffNook__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 210,
+      "family": "RoomStaffNook",
+      "childName": "m210__laminate",
+      "object": "L6K_RoomStaffNook__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 211,
+      "family": "RoomStaffNook",
+      "childName": "m211__paper",
+      "object": "L6K_RoomStaffNook__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 212,
+      "family": "RoomStaffNook",
+      "childName": "m212__red_plastic",
+      "object": "L6K_RoomStaffNook__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 213,
+      "family": "RoomStaffNook",
+      "childName": "m213__rubber",
+      "object": "L6K_RoomStaffNook__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 214,
+      "family": "RoomStaffNook",
+      "childName": "m214__blue_plastic",
+      "object": "L6K_RoomStaffNook__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 215,
+      "family": "RoomStaffNook",
+      "childName": "m215__glow",
+      "object": "L6K_RoomStaffNook__glow",
+      "material": "L6_glow_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 216,
+      "family": "RoomUtilityHall",
+      "childName": "m216__black_wall",
+      "object": "L6K_RoomUtilityHall__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 217,
+      "family": "RoomUtilityHall",
+      "childName": "m217__ceiling",
+      "object": "L6K_RoomUtilityHall__ceiling",
+      "material": "L6_ceiling_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 218,
+      "family": "RoomUtilityHall",
+      "childName": "m218__ceiling_grid",
+      "object": "L6K_RoomUtilityHall__ceiling_grid",
+      "material": "L6_ceiling_grid_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 219,
+      "family": "RoomUtilityHall",
+      "childName": "m219__linoleum",
+      "object": "L6K_RoomUtilityHall__linoleum",
+      "material": "L6_linoleum_Export",
+      "variantKey": "diamondplate"
+    },
+    {
+      "chunkId": 220,
+      "family": "RoomUtilityHall",
+      "childName": "m220__grey_metal",
+      "object": "L6K_RoomUtilityHall__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 221,
+      "family": "RoomUtilityHall",
+      "childName": "m221__orange_wall",
+      "object": "L6K_RoomUtilityHall__orange_wall",
+      "material": "L6_orange_wall_Export",
+      "variantKey": "orange_wall"
+    },
+    {
+      "chunkId": 222,
+      "family": "RoomUtilityHall",
+      "childName": "m222__black_metal",
+      "object": "L6K_RoomUtilityHall__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 223,
+      "family": "RoomUtilityHall",
+      "childName": "m223__chrome",
+      "object": "L6K_RoomUtilityHall__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 224,
+      "family": "RoomUtilityHall",
+      "childName": "m224__green_plastic",
+      "object": "L6K_RoomUtilityHall__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 225,
+      "family": "RoomUtilityHall",
+      "childName": "m225__ivory_plastic",
+      "object": "L6K_RoomUtilityHall__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 226,
+      "family": "RoomUtilityHall",
+      "childName": "m226__paper",
+      "object": "L6K_RoomUtilityHall__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 227,
+      "family": "RoomUtilityHall",
+      "childName": "m227__red_plastic",
+      "object": "L6K_RoomUtilityHall__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 228,
+      "family": "RoomUtilityHall",
+      "childName": "m228__wood_worn",
+      "object": "L6K_RoomUtilityHall__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 229,
+      "family": "RoomUtilityHall",
+      "childName": "m229__blue_plastic",
+      "object": "L6K_RoomUtilityHall__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 230,
+      "family": "RoomUtilityHall",
+      "childName": "m230__cardboard",
+      "object": "L6K_RoomUtilityHall__cardboard",
+      "material": "L6_cardboard_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 231,
+      "family": "RoomUtilityHall",
+      "childName": "m231__yellow_plastic",
+      "object": "L6K_RoomUtilityHall__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 232,
+      "family": "RoomUtilityHall",
+      "childName": "m232__rubber",
+      "object": "L6K_RoomUtilityHall__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 233,
+      "family": "RoomUtilityHall",
+      "childName": "m233__glow",
+      "object": "L6K_RoomUtilityHall__glow",
+      "material": "L6_glow_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 234,
+      "family": "ServiceDoor",
+      "childName": "m234__service_door",
+      "object": "L6K_ServiceDoor__service_door",
+      "material": "L6_service_door_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 235,
+      "family": "ServiceDoor",
+      "childName": "m235__grey_metal",
+      "object": "L6K_ServiceDoor__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 236,
+      "family": "ServiceDoor",
+      "childName": "m236__chrome",
+      "object": "L6K_ServiceDoor__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 237,
+      "family": "StaffBreakCounter",
+      "childName": "m237__black_metal",
+      "object": "L6K_StaffBreakCounter__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 238,
+      "family": "StaffBreakCounter",
+      "childName": "m238__chrome",
+      "object": "L6K_StaffBreakCounter__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 239,
+      "family": "StaffBreakCounter",
+      "childName": "m239__grey_metal",
+      "object": "L6K_StaffBreakCounter__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 240,
+      "family": "StaffBreakCounter",
+      "childName": "m240__ivory_plastic",
+      "object": "L6K_StaffBreakCounter__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 241,
+      "family": "StaffBreakCounter",
+      "childName": "m241__laminate",
+      "object": "L6K_StaffBreakCounter__laminate",
+      "material": "L6_laminate_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 242,
+      "family": "StaffBreakCounter",
+      "childName": "m242__paper",
+      "object": "L6K_StaffBreakCounter__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 243,
+      "family": "StaffBreakCounter",
+      "childName": "m243__wood_worn",
+      "object": "L6K_StaffBreakCounter__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 244,
+      "family": "SupplyShelf",
+      "childName": "m244__blue_plastic",
+      "object": "L6K_SupplyShelf__blue_plastic",
+      "material": "L6_blue_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 245,
+      "family": "SupplyShelf",
+      "childName": "m245__cardboard",
+      "object": "L6K_SupplyShelf__cardboard",
+      "material": "L6_cardboard_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 246,
+      "family": "SupplyShelf",
+      "childName": "m246__green_plastic",
+      "object": "L6K_SupplyShelf__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 247,
+      "family": "SupplyShelf",
+      "childName": "m247__grey_metal",
+      "object": "L6K_SupplyShelf__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 248,
+      "family": "SupplyShelf",
+      "childName": "m248__paper",
+      "object": "L6K_SupplyShelf__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 249,
+      "family": "SupplyShelf",
+      "childName": "m249__red_plastic",
+      "object": "L6K_SupplyShelf__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 250,
+      "family": "SupplyShelf",
+      "childName": "m250__wood_worn",
+      "object": "L6K_SupplyShelf__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 251,
+      "family": "SupplyShelf",
+      "childName": "m251__yellow_plastic",
+      "object": "L6K_SupplyShelf__yellow_plastic",
+      "material": "L6_yellow_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 252,
+      "family": "Tableware",
+      "childName": "m252__ivory_plastic",
+      "object": "L6K_Tableware__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 253,
+      "family": "Tableware",
+      "childName": "m253__paper",
+      "object": "L6K_Tableware__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 254,
+      "family": "Tableware",
+      "childName": "m254__wood_worn",
+      "object": "L6K_Tableware__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 255,
+      "family": "VentGrille",
+      "childName": "m255__grey_metal",
+      "object": "L6K_VentGrille__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 256,
+      "family": "VentGrille",
+      "childName": "m256__black_metal",
+      "object": "L6K_VentGrille__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 257,
+      "family": "WallBeige",
+      "childName": "m257__beige_wall",
+      "object": "L6K_WallBeige__beige_wall",
+      "material": "L6_beige_wall_Export",
+      "variantKey": "wallpaper"
+    },
+    {
+      "chunkId": 258,
+      "family": "WallBeige",
+      "childName": "m258__black_wall",
+      "object": "L6K_WallBeige__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 259,
+      "family": "WallClock",
+      "childName": "m259__black_metal",
+      "object": "L6K_WallClock__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 260,
+      "family": "WallClock",
+      "childName": "m260__paper",
+      "object": "L6K_WallClock__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 261,
+      "family": "WallOrange",
+      "childName": "m261__orange_wall",
+      "object": "L6K_WallOrange__orange_wall",
+      "material": "L6_orange_wall_Export",
+      "variantKey": "orange_wall"
+    },
+    {
+      "chunkId": 262,
+      "family": "WallOrange",
+      "childName": "m262__black_wall",
+      "object": "L6K_WallOrange__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 263,
+      "family": "WallRed",
+      "childName": "m263__red_wall",
+      "object": "L6K_WallRed__red_wall",
+      "material": "L6_red_wall_Export",
+      "variantKey": "red_wall"
+    },
+    {
+      "chunkId": 264,
+      "family": "WallRed",
+      "childName": "m264__black_wall",
+      "object": "L6K_WallRed__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 265,
+      "family": "WallService",
+      "childName": "m265__beige_wall",
+      "object": "L6K_WallService__beige_wall",
+      "material": "L6_beige_wall_Export",
+      "variantKey": "wallpaper"
+    },
+    {
+      "chunkId": 266,
+      "family": "WallService",
+      "childName": "m266__black_wall",
+      "object": "L6K_WallService__black_wall",
+      "material": "L6_black_wall_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 267,
+      "family": "WallService",
+      "childName": "m267__grey_metal",
+      "object": "L6K_WallService__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 268,
+      "family": "WallSpeaker",
+      "childName": "m268__black_metal",
+      "object": "L6K_WallSpeaker__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 269,
+      "family": "WallSpeaker",
+      "childName": "m269__grey_metal",
+      "object": "L6K_WallSpeaker__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 270,
+      "family": "WallSpeaker",
+      "childName": "m270__rubber",
+      "object": "L6K_WallSpeaker__rubber",
+      "material": "L6_rubber_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 271,
+      "family": "WorkshopBench",
+      "childName": "m271__black_metal",
+      "object": "L6K_WorkshopBench__black_metal",
+      "material": "L6_black_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 272,
+      "family": "WorkshopBench",
+      "childName": "m272__chrome",
+      "object": "L6K_WorkshopBench__chrome",
+      "material": "L6_chrome_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 273,
+      "family": "WorkshopBench",
+      "childName": "m273__green_plastic",
+      "object": "L6K_WorkshopBench__green_plastic",
+      "material": "L6_green_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 274,
+      "family": "WorkshopBench",
+      "childName": "m274__grey_metal",
+      "object": "L6K_WorkshopBench__grey_metal",
+      "material": "L6_grey_metal_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 275,
+      "family": "WorkshopBench",
+      "childName": "m275__ivory_plastic",
+      "object": "L6K_WorkshopBench__ivory_plastic",
+      "material": "L6_ivory_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 276,
+      "family": "WorkshopBench",
+      "childName": "m276__paper",
+      "object": "L6K_WorkshopBench__paper",
+      "material": "L6_paper_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 277,
+      "family": "WorkshopBench",
+      "childName": "m277__red_plastic",
+      "object": "L6K_WorkshopBench__red_plastic",
+      "material": "L6_red_plastic_Export",
+      "atlasImageKey": "props__color"
+    },
+    {
+      "chunkId": 278,
+      "family": "WorkshopBench",
+      "childName": "m278__wood_worn",
+      "object": "L6K_WorkshopBench__wood_worn",
+      "material": "L6_wood_worn_Export",
+      "atlasImageKey": "props__color"
+    }
+  ]
+}

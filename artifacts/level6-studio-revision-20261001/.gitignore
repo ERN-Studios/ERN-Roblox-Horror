@@ -1,0 +1,31 @@
+# Native Studio backups remain recoverable locally. They include every live
+# script and may contain secrets; commit reviewed hashes/manifests instead.
+/native-before/*
+!/native-before/service-property-schema.json
+!/native-before/source-manifest.json
+!/native-before/backup-file-hashes.json
+!/native-before/backup-metadata-summary.json
+!/native-before/native-place-verification.json
+/native-after/*
+!/native-after/service-property-schema.json
+!/native-after/source-manifest.json
+!/native-after/backup-file-hashes.json
+!/native-after/backup-metadata-summary.json
+!/native-after/native-place-verification.json
+!/native-after/revision-native-verification.json
+
+# Regenerable 27-image transfer parts and upload copies come from the tracked
+# PNG sources, payload builder, and checked manifests.
+/taskgroup-owned-images/upload-staging/
+/taskgroup-owned-images/*.zstd.b64.*.txt
+/taskgroup-owned-images/*.raw.b64.*.txt
+# Failed alternatives and transient transport files stay local.
+/scoped-script-payload.json
+/lighting-script-payload.json
+/candidates-runtime/*v3*
+/candidates-runtime/live-baseline/visual_adapter_v3.luau
+/qa/*.base64
+/taskgroup-owned-images/probe*.json
+/taskgroup-owned-images/*.b64.*.txt
+*.log
+__pycache__/

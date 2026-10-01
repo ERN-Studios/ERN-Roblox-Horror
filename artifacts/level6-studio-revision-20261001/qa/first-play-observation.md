@@ -1,0 +1,11 @@
+# First Level 6 Play observation (2026-10-01)
+
+Historical first-attempt record. The Zen-owned image authorization failure described below was later resolved with group-owned image content; see [verified Play summary](verified-play-summary.md). The original failed result is retained here for provenance.
+
+The main Studio operator reported a real **E** entry through the developer preview prompt. The server built 279 Blender chunks in 9.53 seconds; the generated world had 13,941 descendants, replicated `Level6_Phase=SEARCH`, and ZenMeister02 had `Level6InRound=true` and `Level6PreviewActive=true`. Play was stopped after Output reported **all 27 newly uploaded texture assets unauthorized for this experience**, with clickable per-asset share actions. That is an active material blocker; visual/PBR gameplay has not passed.
+
+The main operator is handling Studio asset sharing. The adjacent `asset-permission-batch.json` is a credential-free exact Open Cloud batch request body for granting this universe `Use` on all 27 IDs if an already authorized API route is preferred. No grant was sent by this QA package.
+
+Ownership investigation: the read-only Studio `search_asset(scope='user', assetType='Image')` inventory lists these new image IDs under **ZenMeister02, user 11374988579**. Chrome Creator Dashboard in this session is signed in as **LaverSneglen** (and can switch creator context to ERN Roblox Studios), neither of which may configure Zen's images. Opening a known ID's Configure page yielded `You need permission to access this content`. The browser account switcher offers only LaverSneglen. Existing-ID grants therefore require a Zen-owned browser session, an authorized Zen-scoped Open Cloud key, or Studio's owner-authenticated Output share flow; this QA package has used none of those credentials or grants.
+
+`execute_luau` in this Studio MCP session has an isolated ModuleScript `require` cache: re-requiring `Level 6 Preview Runtime` or controllers from a probe returns a fresh idle singleton, not the one running the round. Those zero/idle `GetSnapshot()` results must not be used as evidence. Use replicated `Level 6 State`, player/workspace attributes, generated world descendants, the client viewport, and Output instead.

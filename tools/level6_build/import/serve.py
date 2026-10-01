@@ -49,6 +49,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             path = urllib.parse.urlparse(self.path).path
             if path == "/manifest":
                 return self.reply(json.dumps(manifest), content_type="application/json")
+            if path == "/runtime-manifest":
+                return self.reply((root / "runtime-manifest.json").read_bytes(), content_type="application/json")
+            if path == "/materials-runtime":
+                return self.reply((root / "materials-runtime.json").read_bytes(), content_type="application/json")
             if path == "/pending":
                 completed = done()
                 return self.reply(",".join(str(i) for i in chunks if str(i) not in completed))

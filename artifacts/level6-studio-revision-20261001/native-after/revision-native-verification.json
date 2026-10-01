@@ -1,0 +1,95 @@
+{
+  "schema": "level6-studio-revision-native-verification-v1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "beforePlaceVersion": 2430,
+  "afterPlaceVersion": 2430,
+  "beforeScriptCount": 202,
+  "afterScriptCount": 202,
+  "beforeNativeSha256": "74c9c13de13e8d4d7dcb033485ea2941a89ee1790c401e6596362ea9319f0573",
+  "afterNativeSha256": "a6fdc1a7edef1d8c2ce0b0bbf2713b45da0de61db78ff37a0b2a2dbb6205bdbf",
+  "beforePlaceBytes": 29970267,
+  "afterPlaceBytes": 65918701,
+  "placeLimitBytes": 104857600,
+  "afterPlaceSha256": "08fa0783352e8cc63f83165c6668fecbd036cdc333d383827e4bacaaaadb96ef",
+  "packageManifestSha256": "505f39fe9fc5655b19f2cdf164caf1dacf58f6ad837a1cab882209191e189036",
+  "runtimeManifestSha256": "f43bf338f78eccbc0fe3cc12dda8c43e3999fc11581fa2acbbaf6ca32cb5b414",
+  "legacySourcePreserved": true,
+  "level3NativeRootsUnchanged": [
+    "ReplicatedStorage.Level 3 Assets",
+    "ReplicatedStorage.Level 3 Remotes",
+    "ReplicatedStorage.Level 3 Sound Library",
+    "ReplicatedStorage.Level 3 State",
+    "ServerScriptService.Level 3 Systems",
+    "ServerScriptService.Level3Generator",
+    "ServerStorage.Level3Assets"
+  ],
+  "expectedChangedRoots": [
+    "ServerScriptService.Level 6 Systems",
+    "StarterPlayer.StarterPlayerScripts"
+  ],
+  "expectedAddedRoots": [
+    "MaterialService.L6R_CarpetCity",
+    "MaterialService.L6R_CarpetDefault",
+    "MaterialService.L6R_CarpetNeon",
+    "MaterialService.L6R_CarpetRed",
+    "MaterialService.L6R_Diamondplate",
+    "MaterialService.L6R_KitchenTile",
+    "MaterialService.L6R_OrangeWall",
+    "MaterialService.L6R_RedWall",
+    "MaterialService.L6R_Wallpaper",
+    "ServerStorage.Level6BlenderSourceRevision20261001"
+  ],
+  "otherNativeRootChanges": [
+    {
+      "path": "ServerStorage.Level6TextureImportReferences",
+      "kind": "added",
+      "beforeSHA256": null,
+      "afterSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167"
+    }
+  ],
+  "otherServicePropertyChanges": [],
+  "revisionSource": {
+    "chunks": 279,
+    "triangles": 74092,
+    "rawBytes": 3597112
+  },
+  "revisionImageSource": {
+    "images": 27,
+    "compressedBytes": 25753201,
+    "encodedBytes": 34337640,
+    "rgbaBytes": 113246208
+  },
+  "materialVariants": [
+    "L6R_CarpetCity",
+    "L6R_CarpetDefault",
+    "L6R_CarpetNeon",
+    "L6R_CarpetRed",
+    "L6R_Diamondplate",
+    "L6R_KitchenTile",
+    "L6R_OrangeWall",
+    "L6R_RedWall",
+    "L6R_Wallpaper"
+  ],
+  "materialRoutes": {
+    "routedChunks": 279,
+    "verifiedImageHashes": 27,
+    "variantDefinitions": 9
+  },
+  "scriptSourceEditorParity": true,
+  "scopedScripts": [
+    "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+    "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+    "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+    "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+    "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+    "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+    "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+    "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller"
+  ],
+  "level3Unchanged": true,
+  "otherDeveloperChanges": [],
+  "newScriptPaths": [],
+  "removedScriptPaths": [],
+  "passed": true
+}

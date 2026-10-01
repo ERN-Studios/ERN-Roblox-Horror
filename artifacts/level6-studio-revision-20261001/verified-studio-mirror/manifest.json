@@ -1,0 +1,73 @@
+{
+  "schema": "verified-studio-scoped-mirror/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "capturedScriptsSHA256": "2bb8ac0beec2eead6d882468b67acc2cc502e9fb29cb191f60f22fe9e22ce858",
+  "studioSourceIsAuthoritative": true,
+  "scripts": [
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "sourceSHA256": "5b95d2e19c68457804258154e0b5a6f0fb0b9e73261df70513da15bd83c12b88",
+      "bytes": 47446,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 Layout Generator.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceSHA256": "880855864ce803903d42810db8035dd960f5a679927c09d9c3e4f3182bb4bfb0",
+      "bytes": 92349,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 World Builder.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sourceSHA256": "37f6dcf71a40820a923e2ebd66c91f3f1c3fde4221ac0aaeb440dacbf67b03a9",
+      "bytes": 22645,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 Visual Adapter.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "class": "ModuleScript",
+      "sourceSHA256": "777727733c8b0be627f2abe1a67eb03af22f494f977cc86d36733ac2d5fd0a49",
+      "bytes": 72455,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 Objective Controller.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "class": "ModuleScript",
+      "sourceSHA256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "bytes": 21622,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 Preview Runtime.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "class": "ModuleScript",
+      "sourceSHA256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "bytes": 31504,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level 6 Kit Metadata.ModuleScript.luau"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "class": "ModuleScript",
+      "sourceSHA256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "bytes": 10474,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/ServerScriptService/Level 6 Systems/Level6BlenderRuntimeBake.ModuleScript.luau"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "sourceSHA256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886",
+      "bytes": 44030,
+      "sourceEditorParity": true,
+      "repositoryFile": "artifacts/level6-studio-revision-20261001/verified-studio-mirror/StarterPlayer/StarterPlayerScripts/Level 6 Lighting Controller.LocalScript.luau"
+    }
+  ]
+}

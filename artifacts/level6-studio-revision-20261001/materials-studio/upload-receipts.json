@@ -1,0 +1,224 @@
+{
+  "schema": "level6-material-upload-receipts/1",
+  "studioId": "2af60b48-d8bb-48df-a650-ee890914ddf8",
+  "placeId": 131311258779917,
+  "images": [
+    {
+      "key": "carpet_city__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/color-1024.png",
+      "sha256": "ab8c4709372235fd620d6cca859c20b103f7c1fbd6d06834de8960ea63968513",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://132790982247033"
+    },
+    {
+      "key": "carpet_city__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/normal-opengl-1024.png",
+      "sha256": "8331bf8ef4096067ee519e4d4517443d58d9f87d00b460853a4eb2d113f0bd20",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://80660148568960"
+    },
+    {
+      "key": "carpet_city__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/roughness-1024.png",
+      "sha256": "0a37b3c5337a65397c663fa435aa46e066ce95f1b35c85a8858ca2297604a9c1",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://73502694711467"
+    },
+    {
+      "key": "carpet_default__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/color-1024.png",
+      "sha256": "5167d949ce619c2f1fd3aeae9d92101e36c50bc4ea1f9e2490f6bd1853b59dc7",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://91741108024348"
+    },
+    {
+      "key": "carpet_default__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/normal-opengl-1024.png",
+      "sha256": "2ccc73544884aba92b111d82739f5e5093681d2427f94f1e5f530c1462bed50f",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://124245216980517"
+    },
+    {
+      "key": "carpet_default__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/roughness-1024.png",
+      "sha256": "bd6c0174e69ae557d65011b20f6ae067b18314effdca751b040679374249aecb",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://124549688722616"
+    },
+    {
+      "key": "carpet_neon__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/color-1024.png",
+      "sha256": "875b9a69214d93e22fe88c6ddf69c96e356f64b53e9dd226cc8258b32e3cc40e",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://75705552619347"
+    },
+    {
+      "key": "carpet_neon__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/normal-opengl-1024.png",
+      "sha256": "df391ee9c2c5f1b1ef4e4414f3b91b8b9a7c67041a97ec973b2992725a6df86d",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://77197908678900"
+    },
+    {
+      "key": "carpet_neon__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/roughness-1024.png",
+      "sha256": "4bce7aa9dd4e7185b1008c0823bbb218cd5c3fe1ab22f82e4c70b7fbbb8cf815",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://134246452400559"
+    },
+    {
+      "key": "carpet_red__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/color-1024.png",
+      "sha256": "4f335d3775aadd09f2ffef818c89c7b757b38f3b1fe59a48eb1764943c2d5e17",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://108774727227729"
+    },
+    {
+      "key": "carpet_red__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/normal-opengl-1024.png",
+      "sha256": "7586f84daa0859d5135da44821dfea6f197f553e32697b05b21e19456e8609fa",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://82242543701773"
+    },
+    {
+      "key": "carpet_red__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/roughness-1024.png",
+      "sha256": "1cbfce1957776197e700553e96387768217f6b5d15d74219eaa06b94a7d258f2",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://80380970345074"
+    },
+    {
+      "key": "diamondplate__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/color-1024.png",
+      "sha256": "bb652c3b027bfc5b02e4de1c42d010ff15b9e97c4fee2d4042d60e50ceb2b286",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://123284965632869"
+    },
+    {
+      "key": "diamondplate__metalness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/metalness-1024.png",
+      "sha256": "4d3fe1bc7957d028dd7e0360294bd64289c12432aed26cc60737d245ad33e725",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://111359091414160"
+    },
+    {
+      "key": "diamondplate__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/normal-opengl-1024.png",
+      "sha256": "481f4699aa56c25080bc51ae1789ece77387069d40ea67928a38fce638f5ad39",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://119057460725717"
+    },
+    {
+      "key": "diamondplate__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/roughness-1024.png",
+      "sha256": "0098d6603e27d441e8d5c2ae26577bddb3c9b27cb5b155cd3a6d2b2e92a3ad1b",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://81766063150603"
+    },
+    {
+      "key": "kitchen_tile__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/color-1024.png",
+      "sha256": "7442f61902091f77efa065a93adf112b013f13861119240fe3bc6c335ff0e2a6",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://118192063553860"
+    },
+    {
+      "key": "kitchen_tile__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/normal-opengl-1024.png",
+      "sha256": "0746acea7615acdb0becf259b20f53aa34a56f53076ac03567c6c6d6e8b62b3c",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://132898202245381"
+    },
+    {
+      "key": "kitchen_tile__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/roughness-1024.png",
+      "sha256": "d4fa105a4b2041d6b87cfae5824f0f572dcd281d2be8d512461d966e199aaf33",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://104848653256953"
+    },
+    {
+      "key": "orange_wall__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/color-1024.png",
+      "sha256": "a9866e6be6f55abc0d47311b469da3b054a2220d2bfe2b6e52ecbdc2df6a63b4",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://119876675052986"
+    },
+    {
+      "key": "orange_wall__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/normal-opengl-1024.png",
+      "sha256": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://83563690907279"
+    },
+    {
+      "key": "orange_wall__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/roughness-1024.png",
+      "sha256": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://117293783404334"
+    },
+    {
+      "key": "props__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/props/color-1024.png",
+      "sha256": "de67024e687ba1e36ab7fcacc1c9d2a84f5ff6ef45cb0ad155c8b95b9dc4937c",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://119366040096776"
+    },
+    {
+      "key": "red-wall-color",
+      "source": "artifacts/level6-blender-revision-20260930/exports/red-wall-color-1024.png",
+      "sha256": "7708e920dc5b4885c3ec04f061ea22d672e1c913d21a5cfc5e2d2692c81a398a",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://116262571153797"
+    },
+    {
+      "key": "wallpaper__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/color-1024.png",
+      "sha256": "ed4c4da330aba86f2b5c60ed1453019c68c460036f46d3452542fc1b5209c7f4",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://94610099985829"
+    },
+    {
+      "key": "wallpaper__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/normal-opengl-1024.png",
+      "sha256": "9e484ebe8adf0ea1b029f62e4362fb456e7a9a7109d9e28045b9a5360b8ca109",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://107064693112194"
+    },
+    {
+      "key": "wallpaper__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/roughness-1024.png",
+      "sha256": "f161d6c1c82d5b1862c4ba516158eaa116d190383389736cc0d293f9e753ee19",
+      "width": 1024,
+      "height": 1024,
+      "assetId": "rbxassetid://134574001368311"
+    }
+  ],
+  "scope": "Images uploaded through Studio MCP; actual material rendering verified separately"
+}

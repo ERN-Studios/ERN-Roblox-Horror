@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"checkedAt\":\"2026-10-01T00:49:16Z\",\"universeId\":10559217407,\"success\":true,\"scripts\":{\"1\":{\"sourceSHA256\":\"5b95d2e19c68457804258154e0b5a6f0fb0b9e73261df70513da15bd83c12b88\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Layout Generator\"},\"8\":{\"sourceSHA256\":\"54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886\",\"class\":\"LocalScript\",\"editorParity\":true,\"path\":\"StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller\"},\"3\":{\"sourceSHA256\":\"37f6dcf71a40820a923e2ebd66c91f3f1c3fde4221ac0aaeb440dacbf67b03a9\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Visual Adapter\"},\"2\":{\"sourceSHA256\":\"880855864ce803903d42810db8035dd960f5a679927c09d9c3e4f3182bb4bfb0\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 World Builder\"},\"5\":{\"sourceSHA256\":\"f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Preview Runtime\"},\"4\":{\"sourceSHA256\":\"777727733c8b0be627f2abe1a67eb03af22f494f977cc86d36733ac2d5fd0a49\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Objective Controller\"},\"7\":{\"sourceSHA256\":\"a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake\"},\"6\":{\"sourceSHA256\":\"468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d\",\"class\":\"ModuleScript\",\"editorParity\":true,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Kit Metadata\"}},\"placeId\":131311258779917,\"http\":false}"
+    }
+  ],
+  "isError": false
+}

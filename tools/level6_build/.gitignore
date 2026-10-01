@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+# Incomplete V3 material experiment: real client Play showed checkerboard maps.
+# Keep local until a supported published-server rendering route is proven.
+import/Level6BlenderRuntimeBake.V3.ModuleScript.luau

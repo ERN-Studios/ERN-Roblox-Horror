@@ -6,7 +6,7 @@ room collections, placement records, and measured triangle counts. This module
 does not clear a scene, save a file, export meshes, or touch a live game.
 
 All distances are Roblox studs (one Blender unit per stud), Z is up, and a
-prefab's front is -Y. Rooms are 18 X by 24 Y by 12 Z with clear, eight-stud
+prefab's front is -Y. Rooms are 24 X by 24 Y by 12 Z with clear, 14-stud
 north/south portals. Collection instances in room modules must be realized or
 exported separately by a caller that needs a flat mesh package. Collision-only
 proxies and connection anchors must not become visual meshes.
@@ -22,10 +22,10 @@ import bpy
 
 
 PREFIX = "L6K_"
-ROOM_WIDTH = 18.0
+ROOM_WIDTH = 24.0
 ROOM_DEPTH = 24.0
 ROOM_HEIGHT = 12.0
-DOOR_WIDTH = 8.0
+DOOR_WIDTH = 14.0
 DOOR_HEIGHT = 10.5
 WALL_THICKNESS = 1.5
 
@@ -75,6 +75,14 @@ ROOM_FURNISHINGS = {
         ("WallClock", (7.42, 0.4, 8.1), -90),
     ),
 }
+
+
+def room_furnishings(name):
+    """Keep furnishings at their authored distance from the widened side walls."""
+    shift = (ROOM_WIDTH - 18.0) / 2
+    return tuple((asset, (xyz[0] + math.copysign(shift, xyz[0]) if xyz[0] else 0,
+                           xyz[1], xyz[2]), angle)
+                 for asset, xyz, angle in ROOM_FURNISHINGS[name])
 
 ROOM_FINISHES = {
     "RoomKitchenPrep": {"floor": "kitchen_tile", "wall": "kitchen_tile",
@@ -326,15 +334,17 @@ def _room_geometry(G, room_name):
     for y in (-11.25, 11.25):
         g.box(f["upper"], (0, y, 11.25),
               (DOOR_WIDTH, WALL_THICKNESS, ROOM_HEIGHT-DOOR_HEIGHT))
-        for x in (-4.03, 4.03):
+        for x in (-(DOOR_WIDTH/2+.03), DOOR_WIDTH/2+.03):
             g.box("grey_metal", (x, y-.015, 5.24), (.055, 1.56, 10.48))
-        g.box("grey_metal", (0, y-.015, 10.51), (8.07, 1.56, .055))
+        g.box("grey_metal", (0, y-.015, 10.51), (DOOR_WIDTH+.07, 1.56, .055))
     # Raised kick strip protects all four sides, kept outside the clear portal.
-    for x in (-7.47, 7.47):
+    side_kick_x = ROOM_WIDTH/2 - WALL_THICKNESS - .03
+    for x in (-side_kick_x, side_kick_x):
         g.box(f["kick"], (x, 0, .56), (.08, ROOM_DEPTH, 1.12))
     for y in (-11.46, 11.46):
-        for x in (-6.48, 6.48):
-            g.box(f["kick"], (x, y, .56), (4.98, .08, 1.12))
+        side_width = (ROOM_WIDTH-DOOR_WIDTH)/2
+        for x in (-(DOOR_WIDTH+side_width)/2, (DOOR_WIDTH+side_width)/2):
+            g.box(f["kick"], (x, y, .56), (side_width, .08, 1.12))
     g.box("ceiling", (0, 0, 11.94), (ROOM_WIDTH, ROOM_DEPTH, .12))
     for x in (-6, 6):
         g.box("ceiling_grid", (x, 0, 11.867), (.055, ROOM_DEPTH, .045))
@@ -357,11 +367,13 @@ def _room_geometry(G, room_name):
 
 def _room_shell_collision():
     boxes = [((0, 0, -.50), (ROOM_WIDTH, ROOM_DEPTH, 1.0))]
-    for x in (-8.25, 8.25):
+    side_wall_x = ROOM_WIDTH/2 - WALL_THICKNESS/2
+    for x in (-side_wall_x, side_wall_x):
         boxes.append(((x, 0, 6.0), (WALL_THICKNESS, ROOM_DEPTH, ROOM_HEIGHT)))
     for y in (-11.25, 11.25):
-        for x in (-6.5, 6.5):
-            boxes.append(((x, y, 6.0), (5.0, WALL_THICKNESS, ROOM_HEIGHT)))
+        side_width = (ROOM_WIDTH-DOOR_WIDTH)/2
+        for x in (-(DOOR_WIDTH+side_width)/2, (DOOR_WIDTH+side_width)/2):
+            boxes.append(((x, y, 6.0), (side_width, WALL_THICKNESS, ROOM_HEIGHT)))
         boxes.append(((0, y, 11.25), (DOOR_WIDTH, WALL_THICKNESS, 1.5)))
     return boxes
 
@@ -406,7 +418,7 @@ def _room(helpers, parent, name, collections, materials):
     helpers._create_mesh_objects(name, _room_geometry(helpers.Geometry, name),
                                  col, materials)
     collision = _room_shell_collision()
-    for asset, xyz, angle in ROOM_FURNISHINGS[name]:
+    for asset, xyz, angle in room_furnishings(name):
         _instance(col, name, xyz, angle, collections[asset])
         raw = PROP_COLLISION.get(asset, helpers.COLLIDERS.get(asset, ()))
         collision.extend(_transformed_box(center, size, xyz, angle)
@@ -498,7 +510,7 @@ def build_revision_sections(materials, *, parent=None, existing=None):
         "collections": collections,
         "new_collections": new,
         "room_collisions": room_collisions,
-        "room_furnishings": ROOM_FURNISHINGS,
+        "room_furnishings": {name: room_furnishings(name) for name in NEW_ROOMS},
         "stats": {
             "new_prefabs": len(NEW_PROPS),
             "new_rooms": len(NEW_ROOMS),

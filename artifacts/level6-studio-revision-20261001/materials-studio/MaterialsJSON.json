@@ -1,0 +1,98 @@
+{
+  "schema": "level6-blender-materials/1",
+  "sourceMaterialManifestSha256": "7515152956ec7b84dddcf87865d5375c11e42965f9ca88a906ff52bbe372392f",
+  "propsAtlasAssetId": 131879734824108,
+  "variants": {
+    "carpet_city": {
+      "name": "L6R_CarpetCity",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 52,
+      "mapAssetIds": {
+        "color": 98621799303808,
+        "normalOpenGL": 116328137445668,
+        "roughness": 139484007192880
+      }
+    },
+    "carpet_default": {
+      "name": "L6R_CarpetDefault",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 28,
+      "mapAssetIds": {
+        "color": 121093973500899,
+        "normalOpenGL": 88452853835386,
+        "roughness": 89198380667728
+      }
+    },
+    "carpet_neon": {
+      "name": "L6R_CarpetNeon",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "mapAssetIds": {
+        "color": 82722133850652,
+        "normalOpenGL": 136787342451954,
+        "roughness": 126571057020383
+      }
+    },
+    "carpet_red": {
+      "name": "L6R_CarpetRed",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 30,
+      "mapAssetIds": {
+        "color": 109876058879522,
+        "normalOpenGL": 90745928741030,
+        "roughness": 89535429729385
+      }
+    },
+    "diamondplate": {
+      "name": "L6R_Diamondplate",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 8,
+      "mapAssetIds": {
+        "color": 90077623524283,
+        "normalOpenGL": 120950641893693,
+        "roughness": 131427650798902,
+        "metalness": 93496645006098
+      }
+    },
+    "kitchen_tile": {
+      "name": "L6R_KitchenTile",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 8,
+      "mapAssetIds": {
+        "color": 98462196883058,
+        "normalOpenGL": 125119207906835,
+        "roughness": 132364237361992
+      }
+    },
+    "orange_wall": {
+      "name": "L6R_OrangeWall",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "mapAssetIds": {
+        "color": 132985994016596,
+        "normalOpenGL": 88928822227258,
+        "roughness": 93438818761889
+      }
+    },
+    "red_wall": {
+      "name": "L6R_RedWall",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 22,
+      "mapAssetIds": {
+        "color": 126159886412197,
+        "normalOpenGL": 88928822227258,
+        "roughness": 93438818761889
+      }
+    },
+    "wallpaper": {
+      "name": "L6R_Wallpaper",
+      "baseMaterial": "SmoothPlastic",
+      "studsPerTile": 18,
+      "mapAssetIds": {
+        "color": 132668244812004,
+        "normalOpenGL": 78155391373634,
+        "roughness": 86046024871236
+      }
+    }
+  }
+}

@@ -1,9 +1,11 @@
 -- Studio plugin context. Uploads only; never changes a place instance.
--- Explicit user authorization: import this Blender-authored Level6 kit.
+-- Optional direct asset path for the revised material-split Level 6 kit.
+-- The persistent raw-source installer remains the supported fallback when
+-- CreateAssetAsync is unavailable in this Studio security context.
 local AS = game:GetService("AssetService")
 local HS = game:GetService("HttpService")
 local ENC = game:GetService("EncodingService")
-local BASE = "http://127.0.0.1:8876"
+local BASE = "http://127.0.0.1:8890"
 local LIMIT = 64
 local ONLY = nil -- Optional comma-separated manifest IDs for a bounded retry.
 local GROUP = 1039373905
@@ -29,7 +31,7 @@ local function build(b)
 			offset += 12
 		end
 		for i = 1, nu do
-			uvs[i] = em:AddUV(Vector2.new(buffer.readf32(b, offset), buffer.readf32(b, offset + 4)))
+			uvs[i] = em:AddUV(Vector2.new(buffer.readf32(b, offset), 1 - buffer.readf32(b, offset + 4)))
 			offset += 8
 		end
 		for _ = 1, nf do
@@ -54,7 +56,8 @@ local function run()
 	HS.HttpEnabled = true
 	local ok, err = pcall(function()
 		local manifest = HS:JSONDecode(HS:GetAsync(BASE .. "/manifest", true))
-		assert(manifest.schema == "level6-blender-prefabs-v1" and manifest.groupId == GROUP, "Wrong manifest")
+		assert(manifest.schema == "level6-blender-prefabs-v2" and manifest.groupId == GROUP
+			and #manifest.chunks == 279 and manifest.uniqueTriangles == 74092, "Wrong revised Level 6 manifest")
 		local byId = {}
 		for _, chunk in ipairs(manifest.chunks) do byId[tostring(chunk.id)] = chunk end
 		local pending = ONLY or HS:GetAsync(BASE .. "/pending", true)

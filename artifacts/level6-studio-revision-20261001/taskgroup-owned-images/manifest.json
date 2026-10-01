@@ -1,0 +1,1902 @@
+{
+  "schema": "level6-group-owned-rgba-upload/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "targetCreatorType": "Group",
+  "targetCreatorId": 1039373905,
+  "sourceMaterialRoutesSha256": "c7819b4ca22e6366274ddb438c2985264499d7e44621e4638198fc3aff38ba37",
+  "imageCount": 27,
+  "images": [
+    {
+      "key": "carpet_city__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/color-1024.png",
+      "sourcePngSha256": "ab8c4709372235fd620d6cca859c20b103f7c1fbd6d06834de8960ea63968513",
+      "sourcePngBytes": 2284936,
+      "oldZenImageAssetId": 132790982247033,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "648258aea49aff5e15e78df59e31f4189a4bfdcc2173e4f52487311319d47059",
+      "compression": "Zstd",
+      "compressedBytes": 2860427,
+      "compressedSha256": "4dd838156269a990c13cf0193ee9379fa20153a92815e819297f48d786ea3f66",
+      "base64Chars": 3813904,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "8efbdb9a1577e6e5e9012d50ec7d1df9cd9348366f7c0a9bbdfb69d6664bf34d"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "7929ec77995151e55af222fa7e460eaf84adc31da1ee89a6f2f52c781672e5e0"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "9a6ae094a6735b360af4ac095ffdaaf3b17654a9abed98ef6f54775832214207"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "f45d82a0fdb70f6538ed2d9f08a4007ec2b3d8e06c2086c9f07625febbffd95d"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "8c91db73e54c7e2533186d50bb8b23df7ea8900bec8f2c73d139755b9147a543"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "c2f4aa9f60aded14c16ab7d183744dd5dabe4711408fb360030e59170d4c0a6b"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "705e0cb54e12aed5f79f71460a1f6034810ac6d2d50fdd3299bf5fd3add8b752"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "a03099aaed9a6678d9691cbe462972aaeb8df684478bb54024d3c572b23531b6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "d859b071b267c21f2c0cb4c254aa71bee374aa4ed89f110d184cc31291f2c8d7"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "d786e5d689f58679d4efc1aa914646c776284a9a48c177f44d4345d8ecb0089f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "226a3a5fc26f0f1f55479e3153827a22aef1c6e7e8a8f030b5eeb211f6bf9db6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "6063fa5d6e4f5e45178bb7dc4b8f4aecd469e2aae2c9cc7560a4ace30095cd84"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "d01b6321183e4fb96667e30225a072c7de2241f1bbe1a4878a3621fefccbf650"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "0a2e6ea9f0066118029c060394f64ce711bd11076a41f7cdeb1f390aad4ba563"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "2cc4ccf805a1cba6685273c4a8cda5bf2f56ece0406641fe01e1ac9eeb161cc4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.015.txt",
+          "bytes": 128000,
+          "sha256": "319d2de0ab69e667f56c793717c825b66774fcf7df22046fbca3f36910c50246"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.016.txt",
+          "bytes": 128000,
+          "sha256": "5d2d57d22f9689118447e505329f80dd2c3c5e7464da747ce03598baf57fafce"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.017.txt",
+          "bytes": 128000,
+          "sha256": "b2ae2284507d4205eb13c637cd6ca5f96708dd0c93bec92dfaba248829a25fa5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.018.txt",
+          "bytes": 128000,
+          "sha256": "e3628020dbbfdf603b53e1ab0fae85dde808fd44d6f0cca696bc662c8e09dbfd"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.019.txt",
+          "bytes": 128000,
+          "sha256": "2419d49c2b17bae0379696f75c074d52653ae2753b3fdd64d74b33e00360faf9"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.020.txt",
+          "bytes": 128000,
+          "sha256": "93034334a1c032036941f29b78ab9d9efcdb71dc54fd6bbb9c315e328bcdf292"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.021.txt",
+          "bytes": 128000,
+          "sha256": "2954db75489d28ef6a4f76dd38f88bee1e21ed565ffda3a323359c2280f30892"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.022.txt",
+          "bytes": 128000,
+          "sha256": "956e7a7a2cf129e6091ce885f5ad6ed627485f3f5b8dfcd2aed561c9aff4a20a"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.023.txt",
+          "bytes": 128000,
+          "sha256": "a956c27b7e5148df9aa8a0c3a7629fb99a76374005f4be653f5811c24328c806"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.024.txt",
+          "bytes": 128000,
+          "sha256": "1f5b94a1f6f29276225cd7d01f6c4a63f5e95e0a69e795de8ffa875922514d0f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.025.txt",
+          "bytes": 128000,
+          "sha256": "65edc81d9eec015a5bdd8cd279208ec581e176c646217ccc3f4984f516eb3738"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.026.txt",
+          "bytes": 128000,
+          "sha256": "755f8f53f1d3c1a9d4c0f8314523a18cfedafa9b98f3842fb8074ac8ca20ed2e"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.027.txt",
+          "bytes": 128000,
+          "sha256": "79e6a6d12d58b97fe74780c855b0741e9a77856ceb3c539a46d2461e46b54fbf"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.028.txt",
+          "bytes": 128000,
+          "sha256": "fdb19c74f64012777debc9bbcea4404d55557092354e9ec07bf58c46e014b1d8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__color.zstd.b64.029.txt",
+          "bytes": 101904,
+          "sha256": "b6916688e3f7f591ee11e4d50500adc5ece7356f4f6634415ab562ec755c24ac"
+        }
+      ]
+    },
+    {
+      "key": "carpet_city__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/normal-opengl-1024.png",
+      "sourcePngSha256": "8331bf8ef4096067ee519e4d4517443d58d9f87d00b460853a4eb2d113f0bd20",
+      "sourcePngBytes": 459747,
+      "oldZenImageAssetId": 80660148568960,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "078328777ba8143384bcc5fb2ecbc4c3bc1775fd681c3d940af18e80bc2ddda2",
+      "compression": "Zstd",
+      "compressedBytes": 702812,
+      "compressedSha256": "0a608e0529d8eb2d26e0ad74de1de8c5c31dcca17d3687f8aaf4f07bf879f248",
+      "base64Chars": 937084,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "67368d0c533634ac81baa04a3b55e2da5ed83bc7a5b4ecba004eefbd50a34a50"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "7c4c608faba5d89234714d0a8a8a2a30c8fbb8eea5314c001ea40bb023af8c2e"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "c485e52261f1d72456c83b992aade05c274e45bb7a7fde7b6692db9952b39851"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "a5eaa4a8b09c6aa25c992cd4ff40fafa61f8daa17c0c422b32c61fe34e93f3b3"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "694cf60489bb00e95fcb261e516bca49c3867ba1cbb6a3563dbc62b9436fe0f4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "23d72e58d19feedd10d1c3363a2d7bae04539c2b317c5dda9b9630fcabe70fd8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "759bd5556a83f3dbcfe5539562a2ad6dc6a85db28fe3b37da476977136d5818f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__normal-opengl.zstd.b64.007.txt",
+          "bytes": 41084,
+          "sha256": "e860911344d41e1cc2464ad3129d088511bc24881fed125d2ea5ad221e11d4fe"
+        }
+      ]
+    },
+    {
+      "key": "carpet_city__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_city/roughness-1024.png",
+      "sourcePngSha256": "0a37b3c5337a65397c663fa435aa46e066ce95f1b35c85a8858ca2297604a9c1",
+      "sourcePngBytes": 234022,
+      "oldZenImageAssetId": 73502694711467,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "8755288b0d4eda9493061ac5da39d4a6e31dc14b3ae425d707966b85fc29c5c0",
+      "compression": "Zstd",
+      "compressedBytes": 462424,
+      "compressedSha256": "97e4cb5ab63fc38ccd92fbeead35c455398aecb334d9b3bcf9d99da9da5723a8",
+      "base64Chars": 616568,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_city__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "36686845d5331e3d5d32c0c0edd6a47f4a6d1d32a24ab3ddb67e5666f33977b0"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "a803b4301e54370d5b31228692d3446a9f380ceee4953f4fb9001752d46357de"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "8f00916e24baba8fb5180676366511ae34da57e5783bbc0e30ea8c082938f195"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "37a9ff467046d2ce42c01c6e46f785cc67a24fcc8c996ff2c992ff73e287cb70"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_city__roughness.zstd.b64.004.txt",
+          "bytes": 104568,
+          "sha256": "08dc7b8f03be188328691dd61a7a935f5a97113cbcd4426d39a17a59476cf13f"
+        }
+      ]
+    },
+    {
+      "key": "carpet_default__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/color-1024.png",
+      "sourcePngSha256": "5167d949ce619c2f1fd3aeae9d92101e36c50bc4ea1f9e2490f6bd1853b59dc7",
+      "sourcePngBytes": 1929916,
+      "oldZenImageAssetId": 91741108024348,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "a24d8a8c3d5c8fa93ef55bf41851e828d81b27b6d72d9d42883474e9665b0438",
+      "compression": "Zstd",
+      "compressedBytes": 1981209,
+      "compressedSha256": "80fd3ad8daaf48d7e76ccccee6ff83807a4a7bce4ab81caef177ec456dcfdb8c",
+      "base64Chars": 2641612,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "25f8791da9897356cb0ccaea5f6a3fd01eb7dd5f37796883199eafb6bef24856"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "f82a744f23cc313e1df2b0174a8d2b6c66f9187cb603f7663af75b889b161f84"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "95e02f7a47b8b4d2e42b34eebcf28b7210157aa05143e9f3af302b300c85134f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "e052bc4facf20a4fe25d0259272ed929d206d692b7c982cf613527e04fc81449"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "f56ac750876658730fbaa64585d485035166eb51113942a193e3e3ecf766ae54"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "1ba4093b1881ce71a595910ea3b72e6096637975a2af6793a12cf2ef06368fda"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "c8422532213b42786cce9730c732da6f8d1da9bf5a455bd577104e6aa318bfe5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "9568d5e416da747d78de02438888206e7a9dedfa2fb2db1d16e02c4e8cf4d51f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "3c9cdcfed1071adefb3927c416def57bb6f9ef59c414d2c20713d81979b5c4b2"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "39c0479acee851df71500269a9d0c3761ee9156d27aa0a401b949e4c964a1c6c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "ea3dcb9bc0d80174682b2e2485623f52116248b72b41ee5c2e99dc5e06509f06"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "d41fa00a2bc5173cd8f92705cdaff34118ccaf7850fb88ff9fa3748c6cff21f6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "6cd33552aaa90618e1e0f51d1336cc27340a400dad9790f254a89948ad3c43d5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "98b6bc60114c3be3afb8f427e295031590a8e790fa3af974c91cfcd6ace17644"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "9adce993897ddd4b590925913e0e2a184bf8d5bca204f1e21a0360c1ac2f2a51"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.015.txt",
+          "bytes": 128000,
+          "sha256": "85b69b95ea0d4d9d88e7f866bdbaa9ef9797c4a64da4b9062d2f66513cbe7968"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.016.txt",
+          "bytes": 128000,
+          "sha256": "1ef4421c8946703c11a1abb0b05d76d5831557c8051bcc7012bf80852c132a2b"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.017.txt",
+          "bytes": 128000,
+          "sha256": "bddfc1a450dfca2aaeefdfb398f078a61d5a9530a4f24c219d8a10b8de4b0ee6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.018.txt",
+          "bytes": 128000,
+          "sha256": "1ce236fa3e50dd9c3be622665dbafa53f3a2e94bf069a678615b854dc0f5e47c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.019.txt",
+          "bytes": 128000,
+          "sha256": "10b654700bbab7d1904e2ca028bbd29ddc771377c86d4fcfee1d43079ba5264a"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__color.zstd.b64.020.txt",
+          "bytes": 81612,
+          "sha256": "14c176a2b3064b5e307d17d1573b20f0c994c9512e05dcb914d8140fc01645c4"
+        }
+      ]
+    },
+    {
+      "key": "carpet_default__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/normal-opengl-1024.png",
+      "sourcePngSha256": "2ccc73544884aba92b111d82739f5e5093681d2427f94f1e5f530c1462bed50f",
+      "sourcePngBytes": 615999,
+      "oldZenImageAssetId": 124245216980517,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "dd9030f64845bf4376bb40a416f392e08c176b9e68702f44eee8307bdcaadf4a",
+      "compression": "Zstd",
+      "compressedBytes": 954646,
+      "compressedSha256": "6a1fb92c4efdb1da8379ba1eae8bf7c33f1ea8ba6e0b3f816383abd507f1b008",
+      "base64Chars": 1272864,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "bc2c5cc60b130342b85b6fa386047e9cabca2e13aff8b976d05fa41358a3792f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "d9250c72df8ca27796a833f32c3ea2dbaca5e1554bf0d71676b78a306c009924"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "f64710617fef44dba64e264bc4d3c5836f6ff491c7d7eb64df156352ba718bc6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "3b5e092b364bbe5d6ef949838222555c67917ae88eda0ecc76cbe633639519ff"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "cf225b4d6047a1a887371f83cb16d10ec7e50a25e76c4f0b4134b70208b63313"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "f5dae1a61c26152daa5954f8dce89cd6b9a4b230c8148f2e758e28a53f713ad4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "11408fc6c513c37109af920109620ac8b2cd48e3c5bfbd65bddc69e6d22c796a"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "bfc937beb8b09a2ef607d08592d65a881fbdbfaf396f1b7ac6e01a2812da0bbb"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "ecdd3ed3f41f41678b749e9f46d28042cd777852355e45b158fd248c12a606ea"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__normal-opengl.zstd.b64.009.txt",
+          "bytes": 120864,
+          "sha256": "291282ecf722a7bd89fe7a673d855c829674bf454f149f284062cf9f7e2e458e"
+        }
+      ]
+    },
+    {
+      "key": "carpet_default__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_default/roughness-1024.png",
+      "sourcePngSha256": "bd6c0174e69ae557d65011b20f6ae067b18314effdca751b040679374249aecb",
+      "sourcePngBytes": 233977,
+      "oldZenImageAssetId": 124549688722616,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "158ac6aaf4064319056145093bb13e336bc2beb627eaffac51006311ba78eea9",
+      "compression": "Zstd",
+      "compressedBytes": 463796,
+      "compressedSha256": "b3fef198e8c619a9f513e938a27a2e8ac8c77c11ab6749ddf404e3dd2fd5411d",
+      "base64Chars": 618396,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_default__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "aab6210b76d2eb06b5da58df86b7c3156caaed3473acba25ad7a9dc6c093ea7f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "6d17704210fd9bcc6113f65aca51c646bd34a84fa1a62dfca85da826902a231f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "3a01313d140f102f6f71245d186c3f28a9ccc8bdd503a94aafd2ba8be3005f57"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "298ae91f95aa26050b0c4eeb2075b24477a02c6086e78c36840a7e460c9a604f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_default__roughness.zstd.b64.004.txt",
+          "bytes": 106396,
+          "sha256": "8fb6a240ed291e8c239a9bfad70a5f41c888404c9dd2edff06d7d6e56631bf70"
+        }
+      ]
+    },
+    {
+      "key": "carpet_neon__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/color-1024.png",
+      "sourcePngSha256": "875b9a69214d93e22fe88c6ddf69c96e356f64b53e9dd226cc8258b32e3cc40e",
+      "sourcePngBytes": 1813020,
+      "oldZenImageAssetId": 75705552619347,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "0a7b5e6295d299f2eebb204583a4b2a3247f2d731584c41bcb91f5cf53523bd0",
+      "compression": "Zstd",
+      "compressedBytes": 2217791,
+      "compressedSha256": "c8199c289d6b7a40354af9db75309b67ca87960806b1f64e1912304c33faa09b",
+      "base64Chars": 2957056,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "24ef4e87f682b6bc5c6f81dfcaaf5841ea8daeb1c5f059bcf94ad13b08d18343"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "5fbf0b04fa6f12d45f009f10f43f14fc641b8aaa8cd6a53489e59c49a9848af4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "d5d128b67b985fc1e842fa54399c8c65d015aea135d497d2ef2a9ff54fed5cf8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "aa9da501673e61bb5699ed6e90ffb3e06002d220a9a241a75d828e595185db80"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "7b82f92d096a55584f77432227808d22d3c09625e0bb81149e57f36cca6f7105"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "a9f2ca247a9e972f7f3d55d981d1027624a48d7900b8cbbffbb3c48fe4a46df0"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "affbd6756acbe0de79b48710dfbac7f6947721ac16ae7f7d63b6f3dfbebf4eed"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "a2e199b183a181c64941a35ab6150c70dc1a2b7d66471cf18ce9fc54452ab173"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "89f2d4daed24f86b43b639d23039d1ff04afe79fed30c068776a8d7865e4f94c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "7bd2a3973c0c2b12b6821a64e097e0f2620905296f4fa5922257a4d68479253c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "d0bb253ee53a16b5b6e3aaf8f0ac4bc4bcd5581890812c41ca11afe073185c48"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "c331f423aebf3d5115c9e7bc7a70c2b522c4b5d4c3561d49b598f8a5cb8688fe"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "5ade8a23db24deb520c6f1dea07da92ccc944235effe37d8bac73544775f373f"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "31a36d2e88751e9eac8db18759dc9aa8a042523cf742d5c853e766389c541e5b"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "32ee8f81d7a1e7236553aa1316b752ed78088afe81758d779088f106d99ec198"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.015.txt",
+          "bytes": 128000,
+          "sha256": "52cc4292da0e694e03f5c93c7cee26edd66d3f3099e7c9ac434b141fdb0f1696"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.016.txt",
+          "bytes": 128000,
+          "sha256": "9ac52e57264963354996288a56540bab91b64f48604e5c3d1d5a4f5a3f080c53"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.017.txt",
+          "bytes": 128000,
+          "sha256": "fd7454a1a5fa3db567ad843a5c130ab2a53c4f3840d5c4e914845ebeedbc53e3"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.018.txt",
+          "bytes": 128000,
+          "sha256": "9babcebd9ef2569ce4c606ed54527cf0c9d507cb73ca705dd75fb88592edc0f5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.019.txt",
+          "bytes": 128000,
+          "sha256": "14f7a6318e08e9889f1b2bb7865e2cd702b94883e73b8c0adfd88d4913bff045"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.020.txt",
+          "bytes": 128000,
+          "sha256": "6ab4cf5c9841b5956367d4d4b4cd9a7d8fab05598487c5ee63591dbf0b9262c4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.021.txt",
+          "bytes": 128000,
+          "sha256": "529f1e322b9ac8e070ece2ed6ab08e921f85aa6bab19d86d611aa7d33f6f88a5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.022.txt",
+          "bytes": 128000,
+          "sha256": "642bd912409854996f3ad0ed48790fd4b207fa506e8386212d669d99d279f226"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__color.zstd.b64.023.txt",
+          "bytes": 13056,
+          "sha256": "0602b4dd329e4965f43f5860f6fe0fd8d5e796c7f92c497c657766e447385b3b"
+        }
+      ]
+    },
+    {
+      "key": "carpet_neon__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/normal-opengl-1024.png",
+      "sourcePngSha256": "df391ee9c2c5f1b1ef4e4414f3b91b8b9a7c67041a97ec973b2992725a6df86d",
+      "sourcePngBytes": 692376,
+      "oldZenImageAssetId": 77197908678900,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "32c18fff44f8cfa8320c68b47329866ae7ff0d97c6e9fb8e8a2b57e226dbe170",
+      "compression": "Zstd",
+      "compressedBytes": 1063998,
+      "compressedSha256": "594fce8ece458cf8b343efb43155b2bb9cc21f370eac32361aa820e97c64a907",
+      "base64Chars": 1418664,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "13b6abb0cffe76fb661c49a0ccec48ce86c85fe76a7927b43de7c0ce079ba09d"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "71e2b2bc1a6d14c830bc4cb1fd29f8cbd5347411d06f073caae94d7c8228f957"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "44e0eceb5b32431dc0e840a4381e9b7b8e3f6217987af9fb8d95e3313597a401"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "6d671c8f37fae9206da8b3239b7437df03cbca7eb85991714faaede53eb5c703"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "cdf459b0b85b8b6d3124d46b4c5179c3ac24d25054f19faf3d03bc6d71c9a5d1"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "b4feee1b457b5d31cd37d0479f6a909aafe552014d90158fc6c15f2e77aac844"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "708b5fca4c9e78e8d4b32fa5a3039a075e4af3ca12051ab0aaf2531633d833a8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "20146b9ef5da1125d1d5edab0af8185b4e7215dd410ff3f467eb91a7706ad476"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "7011434865a84aa355987ecd7d3bcbe75f6bedd6009857929d8f937a3c8763ba"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "c0b661084ee0eeba69c7c1ebb9769632c58634d22202beab5e2ac10bcf2e59e5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "f3adca322d3f29b1af564977c4b6892e0bdfa363e697eb751171c0fa7ce4ff86"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__normal-opengl.zstd.b64.011.txt",
+          "bytes": 10664,
+          "sha256": "bb7dabaa703a6c5440a8ecefb1d571bb034aaf92c57110bf3ff14cd42ec7e7a1"
+        }
+      ]
+    },
+    {
+      "key": "carpet_neon__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_neon/roughness-1024.png",
+      "sourcePngSha256": "4bce7aa9dd4e7185b1008c0823bbb218cd5c3fe1ab22f82e4c70b7fbbb8cf815",
+      "sourcePngBytes": 234162,
+      "oldZenImageAssetId": 134246452400559,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "e9c9ccdd7fe86557bad1dc115bfa1d148a8a9c7c0af99fafc0d63589a9201342",
+      "compression": "Zstd",
+      "compressedBytes": 461986,
+      "compressedSha256": "2672fe68ee15c751767b8858cb30be2b8de2a7b7d7c1084aad4c7d89ccf758b4",
+      "base64Chars": 615984,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_neon__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "26119f49a234ffed8841bb07df46ef0f03e034e44ed292fcd231838d16d844bb"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "98b23980f5f4b48499a803d0f15bd41a63a05a52e68b80f76d5710394013e2f0"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "5e8400b7b762a265237989eefb4e314b1afb28efc5eb932c4acc32b17f904bd7"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "9eaee93e16fe45f39725f1665c7c8defb9e8d5998fac89f08789e5e0987a4665"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_neon__roughness.zstd.b64.004.txt",
+          "bytes": 103984,
+          "sha256": "64d2fe8a9222417b752c2627d82d16b92c547b0732f7e4c8359ffdf7162c71ed"
+        }
+      ]
+    },
+    {
+      "key": "carpet_red__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/color-1024.png",
+      "sourcePngSha256": "4f335d3775aadd09f2ffef818c89c7b757b38f3b1fe59a48eb1764943c2d5e17",
+      "sourcePngBytes": 2156664,
+      "oldZenImageAssetId": 108774727227729,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "5feb47a3757a3cc53a694209874ee5f7e9b38417781f2b174a3b43b9f2d9f25c",
+      "compression": "Zstd",
+      "compressedBytes": 2553618,
+      "compressedSha256": "9d53cde6b76c8d0c37785be4e1cb2b55c5d8ba8e5c2a0d154d1cf1096ed437cd",
+      "base64Chars": 3404824,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "aac33ade6b7c4efd333db2e08cc9ee12d0d18ee1961c654e7da98eb8bf70be78"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "9e608a7591c90a54264c8674d6145feb6da3d3b6df6877c67a64eb96077a9421"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "009bba81a62e8cb538adc53a09378fb05f2df51098b6cc39a9ff99f113ff9986"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "2223fe6ba08c485ca80f85cbcb93173d7e29a6cadc311c7fd568b23c46962533"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "6abbec42f8f8a955b33e7c274fbabbdb30f44d7ff48039d178f791a3738185c8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "4d3bdb5d7039d8be60d23c9532fe422c4919c8740606fdb16fa7a3eabb034653"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "87b78df46d53edfd5a4f127dda4d0999f99bb0a19edf278ba8beb18e6ec2d33c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "ad7bc561c7b78f7ad87011c29a9376c2d1b000b46a3930a16e1d40b84bb482f4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "1a962b249f8d1a18c731ceaad4c93727e5eed5de607dd5bfd617f00e540832bd"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "23421c9a44c800a48271607412a8f347dd5f6b6b327f918004f580a6a3899724"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "33bbf3b60fdd2596ae05f004d3e32987d758a4b33b9564032709a6f7fba2d803"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "c543408f42c3a4ab70a8d34b099eea464f0e50ba7c50c4c57a81d1d537fadfd5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "7aebede69f7934aab9bd94526f1d6ae293fcddb9de2da42f6b0b868ff84b65aa"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "5f814376652a56e5cca208ab245b9e3aa7214757821d52cfca5691f898d35738"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "1534f0092e1739650ccbb684c35cd034ba687fbf4cf06552c162ac47471bb02b"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.015.txt",
+          "bytes": 128000,
+          "sha256": "3d433b39cc02cf67c5e3b18bd26cb8509eb95f9b9e94f33bb1c768713b84f585"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.016.txt",
+          "bytes": 128000,
+          "sha256": "5dcbc9ec1565e9432629139ba31f4986dabe214e49bb2064815cb55b853898e5"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.017.txt",
+          "bytes": 128000,
+          "sha256": "912ba6451f9e417a95221e73496ffb4aa9e59c4b10db1682c277424696b0e5e8"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.018.txt",
+          "bytes": 128000,
+          "sha256": "ad4cb91a2ae0d311b79e8d6a78ca505974d3c3a16be7b37cb7b39df3db7dc692"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.019.txt",
+          "bytes": 128000,
+          "sha256": "88a816b457d9888bebcc085e0fbe97100f4d283c89c5e8629bfd084c7b76516c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.020.txt",
+          "bytes": 128000,
+          "sha256": "5fc5e4b7be5fb6291d4336e6fb253ba3fde0665de9aa1720cffd0abf0f9540a9"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.021.txt",
+          "bytes": 128000,
+          "sha256": "bf8a94bc5f7df6b1ffc434f2e3055718f7833ff6c3433324ac664067741cd71d"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.022.txt",
+          "bytes": 128000,
+          "sha256": "f5e23b7afab010e063885b1bad0735d7f675930f22085931b00d3395f1bd2f61"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.023.txt",
+          "bytes": 128000,
+          "sha256": "eb52f55580e8fc522021c10c54adbe0e28a9a9cf484a8517ece63344f2820b5c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.024.txt",
+          "bytes": 128000,
+          "sha256": "f40c6f040766a1cbebe8023fe61a62570e59386841f1dd23c5358b3aab5e6bd4"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.025.txt",
+          "bytes": 128000,
+          "sha256": "285df1baf8bfc1330ce48d6ff68cc4287f44b3606672aacc4a931a092b784d0d"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__color.zstd.b64.026.txt",
+          "bytes": 76824,
+          "sha256": "a5d83f3944377a3319874c6ec2b6594abb8dae6065b4b6af78df03948ac3c30d"
+        }
+      ]
+    },
+    {
+      "key": "carpet_red__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/normal-opengl-1024.png",
+      "sourcePngSha256": "7586f84daa0859d5135da44821dfea6f197f553e32697b05b21e19456e8609fa",
+      "sourcePngBytes": 597040,
+      "oldZenImageAssetId": 82242543701773,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "0735f5b95d962bab4ac204bc293debb8973a36db2f59f92710206a18d3c9dffe",
+      "compression": "Zstd",
+      "compressedBytes": 925066,
+      "compressedSha256": "f4f02ffa8b0356e202311b1f9c55fe59d1e108b1b478cff7587ce52ebf805615",
+      "base64Chars": 1233424,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "7b0a39433abda83a0792169b3e9f0129ad593017c6208bfb703c1f54f29901fc"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "fc8fee43e752d0ea2ac969a5e5663b4bdfb9baa3b3630b23cbcabf50a53d260c"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "50100e651ae0b8de11f41bdb799d42749269258c05be334c11ec36af50f94fed"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "3464b1290d253bb85e7f1c69850986dd64a6a5dd384dc81165feba0d1353ec86"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "7b382eaff37ca0006d6709093bd9cdcb5863d65701560a879650758e205ace80"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "511992581700e230a0b335c1bae516286782cb7ee409ddac6b2d8ff5eb3b48f2"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "f4c9dff75159eb253c7ce210bb8f95ce39923f035f51238deabaacc3e9f46d90"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "8ae73efd96054f88422bdedb09fdbaa5f8537aba9b2f51e26c5ba24015dc8706"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "30c939b61ad1be0b85b81e5075ff78e6e1a4cac466c94d909391257089b2cc56"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__normal-opengl.zstd.b64.009.txt",
+          "bytes": 81424,
+          "sha256": "7320a36983c8add45585c680b40ffec002b17b4a1faff2e0d22b9717c613d54e"
+        }
+      ]
+    },
+    {
+      "key": "carpet_red__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/carpet_red/roughness-1024.png",
+      "sourcePngSha256": "1cbfce1957776197e700553e96387768217f6b5d15d74219eaa06b94a7d258f2",
+      "sourcePngBytes": 233958,
+      "oldZenImageAssetId": 80380970345074,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "b1b601fa00812095f0c417ed16d5554b49e7ac7e6cd498189e17747cc2e39551",
+      "compression": "Zstd",
+      "compressedBytes": 463075,
+      "compressedSha256": "0922027300afad289f45f4be320bc8d4f6db3c9578bee946c4dd8a7f3970afe4",
+      "base64Chars": 617436,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/carpet_red__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "37984f5ddf84d53a8e0c4ce52e2c32839f8316c0c1ec7dd8b0a1dc6abdb15934"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "9523ef3ccccc38bb5a0a221a12069cce03e0bfab43fa4902f80058bd2f992cc6"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "1665f459df7f3aa1cc5a6daede215e8e2ca85afc0caa7845e60362745ce3afa3"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "d07e5ab39fd520db0a2b41cd0052a7d79f8f0f80f4ebe5821a0a8b8fa0f20277"
+        },
+        {
+          "path": "taskgroup-owned-images/carpet_red__roughness.zstd.b64.004.txt",
+          "bytes": 105436,
+          "sha256": "b323d023cf1cd6ec5bfa4ae35267e4f0305876529fe9fff5f9826b0508d99bb4"
+        }
+      ]
+    },
+    {
+      "key": "diamondplate__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/color-1024.png",
+      "sourcePngSha256": "bb652c3b027bfc5b02e4de1c42d010ff15b9e97c4fee2d4042d60e50ceb2b286",
+      "sourcePngBytes": 367643,
+      "oldZenImageAssetId": 123284965632869,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "7a20d2f6190f970c00a1a5ad40a25b0c205c3be9f090d450451d8d2e4d3cf357",
+      "compression": "Zstd",
+      "compressedBytes": 435091,
+      "compressedSha256": "490378cd8edc3c431e15fba77a7964c91fb045d1fba1f50c9224e05780379c49",
+      "base64Chars": 580124,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/diamondplate__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "cb062a6a3f2f7afee7a7530947a612bf04eac62159d9264ccd35d72d1f16d042"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "014f817077f36e56faa93f407712743540420e0569beba5269b7ced56ff1e9fb"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "ef56e70db8b2d247691cdb0c1961c6166459fdbf744b0ee76e8e9e5d1d030a0f"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "d4a49d2a99f8285f0e09b65505170c62d0d8311194ca4a013deb32a902eb3681"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__color.zstd.b64.004.txt",
+          "bytes": 68124,
+          "sha256": "65a3766a78b076bc311b28c0b1b32dfdd0f3d77e587bf2b4db362afd41730ba2"
+        }
+      ]
+    },
+    {
+      "key": "diamondplate__metalness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/metalness-1024.png",
+      "sourcePngSha256": "4d3fe1bc7957d028dd7e0360294bd64289c12432aed26cc60737d245ad33e725",
+      "sourcePngBytes": 119200,
+      "oldZenImageAssetId": 111359091414160,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "fadb13852b3d3d635cc87bccdc0fa57d84ef92da044c5f5a8e313ec34ad25a04",
+      "compression": "Zstd",
+      "compressedBytes": 167533,
+      "compressedSha256": "87de63d9b364a1cde1560f38f9f35fcfd103084ff548d2a589659c6f3da93a5b",
+      "base64Chars": 223380,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/diamondplate__metalness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "2038e907d4a6666fa8c8d5deecc3f301bef7a657135edebfbd99741634c7233a"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__metalness.zstd.b64.001.txt",
+          "bytes": 95380,
+          "sha256": "6b9d0fee11e55338c84bdf765d380b7df2e4722e8dcfb0dcc76a229bf3afd649"
+        }
+      ]
+    },
+    {
+      "key": "diamondplate__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/normal-opengl-1024.png",
+      "sourcePngSha256": "481f4699aa56c25080bc51ae1789ece77387069d40ea67928a38fce638f5ad39",
+      "sourcePngBytes": 604158,
+      "oldZenImageAssetId": 119057460725717,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "9c96868c2809e460be1715c0e54fc81d7a2a7253f87a182e25000db643d2b69c",
+      "compression": "Zstd",
+      "compressedBytes": 621978,
+      "compressedSha256": "5330b14ce53eae79bdf02061965c602c15113ced8ab465fdd34cd8cb2784ad3a",
+      "base64Chars": 829304,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "985d8d867cb7938a0c5b8f47ed98cda82ba4dc1144cd090ff07a01b72129e2d7"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "c686d83b94c86ed48b03a7e41d67e0f640ea33700508999b3d4d1fe3c55f5771"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "b9fa58e46a916d7616f94529f83ab6203527facb52177a5e08c7404ea49a23f3"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "b5af2ba65b04cd20417fbaca27ae3c1accb5b38860a96c471f8af7240d36496d"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "2d9fa4401c44baf72feaf4c6f74b84be54bd6d8f70b210a6c400a3c294770fbb"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "cff8b47c2dca2600b31b9b181e958e20bc77f071a552760b39d2365dcec09a86"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__normal-opengl.zstd.b64.006.txt",
+          "bytes": 61304,
+          "sha256": "adf3a575fed5cafe18e4907bdd71d92180f4db3940793ce217b4696844b84145"
+        }
+      ]
+    },
+    {
+      "key": "diamondplate__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/diamondplate/roughness-1024.png",
+      "sourcePngSha256": "0098d6603e27d441e8d5c2ae26577bddb3c9b27cb5b155cd3a6d2b2e92a3ad1b",
+      "sourcePngBytes": 354583,
+      "oldZenImageAssetId": 81766063150603,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "c2757a13a69a17ef4fd5a3e2eda21a221d2b7f7d02b6ed76dcd5ad1e56910db7",
+      "compression": "Zstd",
+      "compressedBytes": 605716,
+      "compressedSha256": "e611130812fc0b2012d01715168e95075016f0d75035164bfed41e31aa122e79",
+      "base64Chars": 807624,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "397afa99f819dc6e2ff3fc3d113192b3aacbd74349649875145a35d18ecb9464"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "3948594b5611ef7bfbba2f0e66b685c990b883c09459c13ca2794dcc8179538f"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "f37c095f99670fca573b53a0ebbe4a4dbdf798712e197d9d76be2e4c1b108503"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "b469ddc25e040bf3dddabc0dbaa1b17878660cb4134898bf5001b3c0f39d8322"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "d7f5510d7e19fd1be56b8b607568a349563604a84c537b2d530b63a0d80b0601"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "5d1a082c19842680b6d550a9deefcf06eceed0fdea354e1f36a1be3cf758b56d"
+        },
+        {
+          "path": "taskgroup-owned-images/diamondplate__roughness.zstd.b64.006.txt",
+          "bytes": 39624,
+          "sha256": "292679d823873a648ddf9a92c9b84f0cf7e64c6b1bd1794b7a0d9e2e8c0db048"
+        }
+      ]
+    },
+    {
+      "key": "kitchen_tile__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/color-1024.png",
+      "sourcePngSha256": "7442f61902091f77efa065a93adf112b013f13861119240fe3bc6c335ff0e2a6",
+      "sourcePngBytes": 313088,
+      "oldZenImageAssetId": 118192063553860,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "e0ff92e8bcd898d2fffd630c62f4b6c5c37bf78053c316b954a1aba246dfadea",
+      "compression": "Zstd",
+      "compressedBytes": 450303,
+      "compressedSha256": "3f4a8705841f485804cde29e44c247ad0d6b835ab7396748af73425ee9001f29",
+      "base64Chars": 600404,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "a4e537e033cf41bf6c9724f4cc52e66ef72fa11f828678145eb2de85423500da"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "c87854c5ca19c6fe955b00283bdb8d1c16d145a964c5d155d4c15f25fbc21fc4"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "54dd569de4d93e4d73287c2229b15a80be10199062176440e1e5e5ac906cbb35"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "f652267a87057b904cb267c0ef17f5c2408afd9b4a13d55ccd7091674d8841fb"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__color.zstd.b64.004.txt",
+          "bytes": 88404,
+          "sha256": "551d74fdc4874325044f7a0938eea96dca2f6ee2f772f0755ca449877eb48cc4"
+        }
+      ]
+    },
+    {
+      "key": "kitchen_tile__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/normal-opengl-1024.png",
+      "sourcePngSha256": "0746acea7615acdb0becf259b20f53aa34a56f53076ac03567c6c6d6e8b62b3c",
+      "sourcePngBytes": 405841,
+      "oldZenImageAssetId": 132898202245381,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "1d8421df12e809ca732276cd2a975980b21bf25889b4042c26e5cb2ed91bc33d",
+      "compression": "Zstd",
+      "compressedBytes": 596351,
+      "compressedSha256": "eb46fbc94ecb18ea0eec4869fb12fc3234add2e06b1d7f3f6d341849234f4ccf",
+      "base64Chars": 795136,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "caf9251e814767207682a7507240af09e2313b3ee4246707d1788f174c9a79ff"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "d620a6c16943a73689f77b8ce4480efa40443d3aecd13ec82b8ad10e4d192497"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "9d012955560e3db3cd1744c0d84ee835d256af79aa275444732a2eced83e01fa"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "52688a2b2afb19d5251fa5a66bb32c928d40514641988b72ae3febbbc06755c1"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "af012bda14b198f637a990435d990a206f949b7c735f80c316b20c587de224d8"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "b81aaf174faacd89cdf31bf3a233616382768ae1220ae623cf3a9ea6933a76ad"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__normal-opengl.zstd.b64.006.txt",
+          "bytes": 27136,
+          "sha256": "b7d9f0f77cf5cec6d5f4a29a84fe0d191efee279522d928797b07f6d3f81bc28"
+        }
+      ]
+    },
+    {
+      "key": "kitchen_tile__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/kitchen_tile/roughness-1024.png",
+      "sourcePngSha256": "d4fa105a4b2041d6b87cfae5824f0f572dcd281d2be8d512461d966e199aaf33",
+      "sourcePngBytes": 262496,
+      "oldZenImageAssetId": 104848653256953,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "e6c6b88a63fe887c1b2764a2fe08bbd3ef629eebf7607913af11523c05f39563",
+      "compression": "Zstd",
+      "compressedBytes": 484018,
+      "compressedSha256": "524b2ab01308575cc951da78dc1409f16cd98e6f3532446a704f7e9acd4d4c94",
+      "base64Chars": 645360,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "38b6e607b999c2b0bb01ad558882d3fcd18b489cb84eb6642d4ddd55aba96776"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "bd55281cacdd4bf996d1c6cacd383bad018b38751ff4473fb50c04a57a8166c1"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "59bf9505bf760caf6711a4862f974fa615ee65e12a98eb628840d9f625aa7510"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "a10b55a7337ae7749659c93b1d85ab6c47fc4334718498aed75f5dd0000a2ad0"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "26ddd55456d12fe84e7d0d505e9462d32414f1f56ae7d7673bca523fc09f5622"
+        },
+        {
+          "path": "taskgroup-owned-images/kitchen_tile__roughness.zstd.b64.005.txt",
+          "bytes": 5360,
+          "sha256": "d1e3cffc39ca0f8fc70e98f212ee093f52bf96d3af201f2af9d4596ebfe8d9a2"
+        }
+      ]
+    },
+    {
+      "key": "orange_wall__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/color-1024.png",
+      "sourcePngSha256": "a9866e6be6f55abc0d47311b469da3b054a2220d2bfe2b6e52ecbdc2df6a63b4",
+      "sourcePngBytes": 1235149,
+      "oldZenImageAssetId": 119876675052986,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "cb1f430d8c254299c0f6a534e063c2f6a009cd058273b5c7229bc50cccb16f5f",
+      "compression": "Zstd",
+      "compressedBytes": 1516361,
+      "compressedSha256": "ee0c6a75805a1ce4fa8d76f92875c7c72c5cf1c33b50095c0eea01e9ddc11616",
+      "base64Chars": 2021816,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "e1d9f63e5beb9d581a8e072d2e977eeef2adfab4a4fbd878ddabd934955e316e"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "a2b7ee6bb657eb7c73f5b514bc22e3471ffd0a12fcbe6332260e86fa39fdaab3"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "65b708a3375099e3b9983a5fa6b95995827cbf41cf96964a8f844015e4d4b07e"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "edc25bef37d38cf1e2ac8ac2edff947005be0a75c2b2fa7164f86972ae84e919"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "d9b3d722e2ca589447475f26bfc2af1e2a002ca396b11e9e9f8084a25d0c6e82"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "b7b5687afff3f7a782af341b3da72df3b3ce0a883f116232e0e57e5b61b3550a"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "07c13fcc491f39a4e58f471fbe6c3d0d43ef7fb6137e015f29ccba2e476c9e71"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "712feeec1bbb0d4e0e1d5c3bb1cb39c9360e420f938c740e057df49a519d7ff6"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "47e7df525a4e36f89f7261d092f9e6e9edca14f3baf73ea9fd42a20682169093"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "268f08874d8cfe85d89d34731f2db5a1aeb24e2d5382769a7e59e8fcf4cb27d3"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "bad455304ebeb6b8dfd535f4df252198caa129d65b6b9e0cb7f4d912add229fe"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "ff43c4ed05a24bf96d46d105930ad0fe7df4de2a78f613e304c419f99809fa2d"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "1c632665ddd47bac5e0f528ee85624c75c299ba08cb4f4490f17adf4f9fab3d7"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "bd541bfd5f0f616102bf6e0663c3129c074210214ba3358d4190d717a44e4626"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "e9918ccb1e8a0a9c0a03288e5206b813b05b5c162d815569c1bed4c8c183f56d"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__color.zstd.b64.015.txt",
+          "bytes": 101816,
+          "sha256": "108c8b9b513c63daa1a2ba21df25fef6e7f571a2756648342f9d625ae92a3a6d"
+        }
+      ]
+    },
+    {
+      "key": "orange_wall__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/normal-opengl-1024.png",
+      "sourcePngSha256": "15265a3e0a4c78357ee19bc50c964e80ae3f08e7727b27286997722853bcef88",
+      "sourcePngBytes": 460853,
+      "oldZenImageAssetId": 83563690907279,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "03c7f241d4921b65a1910efb1e81a5327694920cc854861f0061e4240838da6b",
+      "compression": "Zstd",
+      "compressedBytes": 622422,
+      "compressedSha256": "762cbebf833c4d78becc20ac08f55cb7c997b11af863b7889faf28ffb2d417bc",
+      "base64Chars": 829896,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "733eefe8b8d0b291c9983898fe840dd4c40c26cfceb5619ca83e4a67c461a27b"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "c22017722a6a2210047951447c313fc132c650ca878b5dcb7a792fd4ca938ed3"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "09e4634c5c2cd34031d3fd409215d06068a7f50cde7ca80bf6e5f46b12d1c0c2"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "f77b9bc3f92aa4c798e9f83fe8de673b63c72ed15d81c5c2a31c0859253a92c9"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "cc3f64def9001a55e022da3cbce3c13c5ca538ddaf7376721b0795ff324f3cba"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "6edb81a8b9465380167da29d1d4af43ed29a689c8529255202eade5548837686"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__normal-opengl.zstd.b64.006.txt",
+          "bytes": 61896,
+          "sha256": "afcb284c07737b56ff6db77e3d27577b8372386d22cfe363de0622f525eace3b"
+        }
+      ]
+    },
+    {
+      "key": "orange_wall__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/orange_wall/roughness-1024.png",
+      "sourcePngSha256": "3cb94f463e9db9cf0802e68c75cfc86c276eda869ba8dbdd7413e37d270d9c6c",
+      "sourcePngBytes": 109039,
+      "oldZenImageAssetId": 117293783404334,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "6a01d174b72166af84e22d4e9c984bb61e54ea9f38873ed60ee6c34bc5b0c8c3",
+      "compression": "Zstd",
+      "compressedBytes": 225345,
+      "compressedSha256": "5b52d39b11a62be8c9c8a258a4caae8dccfc7000a2b2e3f80705101f28286d32",
+      "base64Chars": 300460,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/orange_wall__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "3f5f972b4bd2947781637aefd057e8f04a95c1e59dbb1e84a3180f06223fe230"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "64d2a8fe3de515ea9290092d235ddb7ea2fc2394b9b5fee4379a551df0cfbe56"
+        },
+        {
+          "path": "taskgroup-owned-images/orange_wall__roughness.zstd.b64.002.txt",
+          "bytes": 44460,
+          "sha256": "d29a33b3475d51319f8474ce581616076d7be0217dfd919ecf8e6c603d91a818"
+        }
+      ]
+    },
+    {
+      "key": "props__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/props/color-1024.png",
+      "sourcePngSha256": "de67024e687ba1e36ab7fcacc1c9d2a84f5ff6ef45cb0ad155c8b95b9dc4937c",
+      "sourcePngBytes": 1139686,
+      "oldZenImageAssetId": 119366040096776,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "fe5149dac32069beb659aee3fee5d38af0c56c44a3df080b923998ad9fd42c40",
+      "compression": "Zstd",
+      "compressedBytes": 1259218,
+      "compressedSha256": "c8244f17d7ecbeb5e5ff7fa5e0bba39dafc2f0e6a58f71fb3993d9fa247194a8",
+      "base64Chars": 1678960,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "2a8be835fc8ba684e32076a99433eff99451429589a0e7475dd58fa9e5f1d90a"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "97b48ab1d5b7bfb8f194b3f1efe0262b3e7a3c95ddea0fa2a1fb78d25cba9936"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "da55d61e8635a0964364bc6881644b01d252b6323e4bbd62191f71dceac2966c"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "e4cde64f1d130610825395682e8b0faab8706a1b3c5b99810f6410d49b522a47"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "8e4ca8af206cfbb1a7719ae610c75dd4ac604c6d71c38f186d117942ef549d70"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "91deddac3ad7b4dd9d7b515e03bcc3220397a520f2d04314a56c0de129fec67d"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "b0b93eaff171cfb72d97ccd6ec7f72a4d628d3f70ab2f41850208afa95e4d2bc"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "2345402e138753fb7f45e177884af502ada0ba874fe1f1588d2cb90a71100391"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "ef9b23567b479ab4f9013bd440a33c144c6a2b3c8e756ddbed0bbe795d0b4f81"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "05ca1548f9e4aea14bb5f5b600673f918c5efb093501971eda8bf06d6252e0ad"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "e03b0d183a8920e0d8ee875a79279fd50dd4ccad7932379b29e28d6b24e75cec"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "350dfae1031e207f9c259ae5e722202ebab86a84c2dbdb12d64c7e78e5f9104b"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "22599667d1a397e4918f272637b2880fe95d170810828347538d95fd32b2b7fa"
+        },
+        {
+          "path": "taskgroup-owned-images/props__color.zstd.b64.013.txt",
+          "bytes": 14960,
+          "sha256": "a37df1320262a1aed09d93065216fc67126dd4b602d5ee2082ed651a2da4635f"
+        }
+      ]
+    },
+    {
+      "key": "red-wall-color",
+      "source": "artifacts/level6-blender-revision-20260930/exports/red-wall-color-1024.png",
+      "sourcePngSha256": "7708e920dc5b4885c3ec04f061ea22d672e1c913d21a5cfc5e2d2692c81a398a",
+      "sourcePngBytes": 871336,
+      "oldZenImageAssetId": 116262571153797,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "0d124c01b556f4c75f0903b075cfc6c4c5b1a68c4877c67203273246c204ed99",
+      "compression": "Zstd",
+      "compressedBytes": 563312,
+      "compressedSha256": "5b7599f31374cc13e491438930106ae8957571a1f2b0b98476823219988c23eb",
+      "base64Chars": 751084,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "f866af0de24e51780b1e8e7038c6e2c093d7a3ca9f219d14254fdf8ba350fae2"
+        },
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "99204f8bc64a2404c348e1fd6bc265c237d510b89a4b677becbfe9742ad6c16c"
+        },
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "0ff4d5c610bcb4e04bce982342bdfdf18696d0d4d6cb1790f3cb6ad47e74d44d"
+        },
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "f0ec07e01f4f4b0c73c961e6a98a159377a22f7ef8220c0e9e30725c258b5632"
+        },
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "5ea3c63d9d2fbb54aabbc8d089dee0a58d62652ab5ec119a2aa1025459a503ea"
+        },
+        {
+          "path": "taskgroup-owned-images/red-wall-color.zstd.b64.005.txt",
+          "bytes": 111084,
+          "sha256": "ae67a9d83c7b275fbb765cb654aeb43a92309d06bc396b580747ace32b407010"
+        }
+      ]
+    },
+    {
+      "key": "wallpaper__color",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/color-1024.png",
+      "sourcePngSha256": "ed4c4da330aba86f2b5c60ed1453019c68c460036f46d3452542fc1b5209c7f4",
+      "sourcePngBytes": 2113837,
+      "oldZenImageAssetId": 94610099985829,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "4c52cddc2c4f128c9364e0cb4839706343a8aa6321b5013d3b32def1e7b3559a",
+      "compression": "Zstd",
+      "compressedBytes": 2235807,
+      "compressedSha256": "d59b1cf66b710643a7343862cdbbc7d75838b8c45cc9572b6451474c168952cf",
+      "base64Chars": 2981076,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "7db2c47d3827f879e0062f19ebf1db9315c2b99efa1965174598ff72c55fdb4e"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "49112fb66e3c8d59d18ff9b0468f9f8b5fb859e4e6076e188ca449bc88e9f20e"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "a4a66fdaee62cf6443bd098ece0389ca5597d89a158dba63946c9854527de8b0"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "d514a42b0ed1f53a387a2c275367e2dadb203ccad3faaa53af910edc1cda4646"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.004.txt",
+          "bytes": 128000,
+          "sha256": "315a91450e8b2011c4fbcf246288588760e59d2ff629f6582c8c96b9665dbea6"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.005.txt",
+          "bytes": 128000,
+          "sha256": "f56e80ae42fb8f3d52fd80343e6bbf8a68d692add2f1edf09e33c35532d54d17"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.006.txt",
+          "bytes": 128000,
+          "sha256": "14d95e0ba74fcd3d6f9194bb538b9f3bc14e86c2d157a821fd97854665e07336"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.007.txt",
+          "bytes": 128000,
+          "sha256": "82cfb712f1309ea768ffc27f48f14ec4bf50a8764b1b3e4b61d63cd4397a9c3b"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.008.txt",
+          "bytes": 128000,
+          "sha256": "a8f8d1718a0939bd0e478b339447c054fc13787d4dabc5cfa39aef50ea6b6695"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.009.txt",
+          "bytes": 128000,
+          "sha256": "f513e9eadf51f2b789cac4c39730852819376c0e5083050923088177d46120f2"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.010.txt",
+          "bytes": 128000,
+          "sha256": "9fcd3dff334d54e1180551e39bb747867e4f72a43b6c5b4e3a5a08a140514c95"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.011.txt",
+          "bytes": 128000,
+          "sha256": "2a472065db29cf3697d15158df64abac6dda3f9747f17f6bcee0ae33315c63c2"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.012.txt",
+          "bytes": 128000,
+          "sha256": "0667b395878d0727fbdb89a528bc048096cbce84c7feb1c4bd67b36d3efa6d72"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.013.txt",
+          "bytes": 128000,
+          "sha256": "c4338d46d382eca0b7257a10def10e349b682ac7dca9d1c63ba26866b66be7bf"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.014.txt",
+          "bytes": 128000,
+          "sha256": "85bae7f8ed016ada7e432a83a1ee03675d04ba6176402d0f77e62001c99b98e0"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.015.txt",
+          "bytes": 128000,
+          "sha256": "bc411e06ce1b2ae7a43e4a740cee3315cb0276e4faaf131ec400345d372c8d50"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.016.txt",
+          "bytes": 128000,
+          "sha256": "fa1ec260ef0c60f5dc9fab3188cd10ff1553475357fb2ebb64e6ac9074de1e4a"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.017.txt",
+          "bytes": 128000,
+          "sha256": "aee36e56d713a6142e634366211b9022dfa259938aa349bb29e09a6cfe379ecd"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.018.txt",
+          "bytes": 128000,
+          "sha256": "46842b6f755ce12fc85638ed4d8a1e95958f4eebac259e56248321c9e8b69820"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.019.txt",
+          "bytes": 128000,
+          "sha256": "b8b4313bec0b479f76f3de9954a79b1f9a4faddd875f7a06359acf519cec29ae"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.020.txt",
+          "bytes": 128000,
+          "sha256": "de527e38c5a5031666c31c2184da7e8a72bea3df4d541e2f5bbb02bf29901d57"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.021.txt",
+          "bytes": 128000,
+          "sha256": "512ad1a260bdecc408cf3ffa9c858df541d426af7558b3d4929ba71046d74f04"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.022.txt",
+          "bytes": 128000,
+          "sha256": "1d96abbd66928122f7c5d6e08abad00cda08092aff5ff5fac0f921bf09af5a5f"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__color.zstd.b64.023.txt",
+          "bytes": 37076,
+          "sha256": "f3698ea17cff99f3deaa229baabbd900493189d0d80610459e73df973007bf8d"
+        }
+      ]
+    },
+    {
+      "key": "wallpaper__normal-opengl",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/normal-opengl-1024.png",
+      "sourcePngSha256": "9e484ebe8adf0ea1b029f62e4362fb456e7a9a7109d9e28045b9a5360b8ca109",
+      "sourcePngBytes": 345090,
+      "oldZenImageAssetId": 107064693112194,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "0e694fafa750a0a544851aa064b0034950083d5743ee026777bf1417585720fe",
+      "compression": "Zstd",
+      "compressedBytes": 461194,
+      "compressedSha256": "7e13c33f31d86b5315d3b7be1ef4cac71cc8f736c51034a96bc5b8e60b9c3c6c",
+      "base64Chars": 614928,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/wallpaper__normal-opengl.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "11495fad0fe8be0b64a60fc3e4d56d2c858d2d3e111adbce35218fd08361a732"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__normal-opengl.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "c2d8639d526e45c66eacfb6ab2a1bc762770fd8844a5de316aa03e9c64076af0"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__normal-opengl.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "6a6eb92ac998197c1257761de29a2249ff7e946de16cc0b0e36341a94654e9de"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__normal-opengl.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "2432c4a353383a00029d2fc02fd0a70794009e54cf03dd1252cec5f897849396"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__normal-opengl.zstd.b64.004.txt",
+          "bytes": 102928,
+          "sha256": "1f8934dbe1b6c74d3559bc340c906fd0ae84802900498c34ff664f859973f686"
+        }
+      ]
+    },
+    {
+      "key": "wallpaper__roughness",
+      "source": "artifacts/level6-blender-revision-20260930/materials/wallpaper/roughness-1024.png",
+      "sourcePngSha256": "f161d6c1c82d5b1862c4ba516158eaa116d190383389736cc0d293f9e753ee19",
+      "sourcePngBytes": 209434,
+      "oldZenImageAssetId": 134574001368311,
+      "width": 1024,
+      "height": 1024,
+      "pixelFormat": "RGBA8",
+      "rgbaBytes": 4194304,
+      "rgbaSha256": "6ead239bd1cf3f314662eed305bf4d91dafe933cf28b698c3f072135ebbe66dc",
+      "compression": "Zstd",
+      "compressedBytes": 397704,
+      "compressedSha256": "06cdcb50825ab2a1b231aa2a8512d65d15572036518303a3261d807463674728",
+      "base64Chars": 530272,
+      "parts": [
+        {
+          "path": "taskgroup-owned-images/wallpaper__roughness.zstd.b64.000.txt",
+          "bytes": 128000,
+          "sha256": "85141cd7f3d1f63b5b6b26a2774ea449faf9aaa0d4a00b4051ed405b013814ae"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__roughness.zstd.b64.001.txt",
+          "bytes": 128000,
+          "sha256": "e4499f9910a3bd09e9941789b167f6aef647d7f922c65b83971cdac46e6daea1"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__roughness.zstd.b64.002.txt",
+          "bytes": 128000,
+          "sha256": "7b1b6b049b1414d6dafb76e064eb5f426a8c7f6cc9063506081ea4239e49492a"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__roughness.zstd.b64.003.txt",
+          "bytes": 128000,
+          "sha256": "6870974d3d563166da71eb9a66fa1be05f8f05c2cb226927e9a3cc9ffdf3ddaa"
+        },
+        {
+          "path": "taskgroup-owned-images/wallpaper__roughness.zstd.b64.004.txt",
+          "bytes": 18272,
+          "sha256": "11e16cb4ce7665b690c2349514ce14e6cec88db7b65614b86388b2e4b62e145d"
+        }
+      ]
+    }
+  ]
+}

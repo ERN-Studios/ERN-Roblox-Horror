@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"inserted\":5,\"held\":0,\"pos\":\"20627.484375, 26.998046875, 480.489990234375\",\"phase\":\"EXIT_UNLOCKED\",\"unlocked\":true,\"escapes\":{\"1\":{\"attrs\":{\"Level6_LegacyTransparency\":1,\"Level6_ExitTrigger\":true},\"pos\":\"21251.599609375, 29, 490\",\"name\":\"Workspace.Level 6 Generated World.Level 6 Energon Freight Exit.EscapeTrigger\",\"size\":\"3, 10, 9.5\"}},\"states\":{\"1\":\"INSERTED\",\"3\":\"INSERTED\",\"2\":\"INSERTED\",\"5\":\"INSERTED\",\"4\":\"INSERTED\"}}"
+    }
+  ],
+  "isError": false
+}

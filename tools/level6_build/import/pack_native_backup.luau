@@ -87,7 +87,9 @@ if #report.rootErrors > 0 or #report.sourceErrors > 0 then
 end
 assert(#report.rootErrors == 0, "Native descendants mismatch")
 assert(#report.sourceErrors == 0, "Native script sources mismatch")
-local output = root .. "/BeforeLevel6-AuthoritativeStudio.rbxl"
+local placeFile = if root:match("native%-after/?$") then "AfterLevel6-AuthoritativeStudio.rbxl"
+	else "BeforeLevel6-AuthoritativeStudio.rbxl"
+local output = root .. "/" .. placeFile
 local encoded = rbx.serializePlace(game)
 fs.writeFile(output, encoded)
 local reopened = rbx.deserializePlace(encoded)

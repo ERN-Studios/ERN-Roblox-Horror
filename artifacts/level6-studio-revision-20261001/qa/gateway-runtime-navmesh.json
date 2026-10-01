@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"1\":{\"room\":\"RoomKitchenPrep\",\"to\":\"20032, 27, -90\",\"waypoints\":11,\"status\":\"Success\",\"from\":\"20072, 27, -90\"},\"3\":{\"room\":\"RoomUtilityHall\",\"to\":\"20468, 27, 422\",\"waypoints\":11,\"status\":\"Success\",\"from\":\"20468, 27, 462\"},\"2\":{\"room\":\"RoomStaffNook\",\"to\":\"20349, 27, 122\",\"waypoints\":0,\"status\":\"NoPath\",\"from\":\"20349, 27, 162\"}}"
+    }
+  ],
+  "isError": false
+}

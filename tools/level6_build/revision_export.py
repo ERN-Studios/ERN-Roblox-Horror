@@ -6,13 +6,14 @@ import bmesh
 import hashlib
 import importlib.util
 import json
+import os
 import shutil
 from pathlib import Path
 from mathutils import Matrix
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'artifacts/level6-blender-revision-20260930'
-EXPORT = OUT / 'exports'
+EXPORT = Path(os.environ.get('LEVEL6_REVISION_EXPORT_DIR', ROOT / 'artifacts/level6-studio-revision-20261001/exports-portal14')).resolve()
 PROP_ATLAS = OUT / 'materials/props/color-1024.png'
 
 
@@ -109,7 +110,7 @@ def main():
     EXPORT.mkdir(parents=True, exist_ok=True)
     PROP_ATLAS.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ROOT / 'artifacts/level6-textures-20260930/candidate/textures/WornParty_Level3Reference_Atlas1024.png', PROP_ATLAS)
-    source = OUT / 'Level6_Revised_Full_Seed101.blend'
+    source = Path(os.environ.get('LEVEL6_REVISION_SOURCE', ROOT / 'artifacts/level6-studio-revision-20261001/StudioImport_Portal14_Full_Seed101.blend')).resolve()
     source_hash = sha(source)
     helper = load_helpers()
     red_path, red_image = bake_red_color(bpy.data.materials['L6_red_wall'], helper)
@@ -158,7 +159,10 @@ def main():
             surface = mat.get('l6_surface_id')
             maps = dict(helper.SURFACES[surface]['maps']) if surface else {'color': str(PROP_ATLAS.relative_to(OUT))}
             if mat.get('l6_color_variant'):
-                maps['color'] = str(red_path.relative_to(OUT))
+                # The original red bake is byte-identical and its image was
+                # already routed/uploaded; keep that stable material source.
+                assert sha(red_path) == sha(OUT / 'exports/red-wall-color-1024.png')
+                maps['color'] = 'exports/red-wall-color-1024.png'
             chunks.append({'asset': col.name.removeprefix('L6K_'), 'object': obj.name,
                            'material': mat.name, 'surface': surface, 'maps': maps,
                            'vertices': len(obj.data.vertices), 'triangles': triangles,
@@ -180,14 +184,14 @@ def main():
     bpy.data.libraries.write(str(EXPORT / 'Level6_Revised_ImportKit.blend'),
                              {scene}, fake_user=False, compress=True)
     record = {'schemaVersion': 1, 'sourceBlendSha256': source_hash,
-              'fbx': str(fbx.relative_to(OUT)), 'fbxSha256': sha(fbx),
-              'importKitBlend': 'exports/Level6_Revised_ImportKit.blend',
+              'fbx': os.path.relpath(fbx, OUT), 'fbxSha256': sha(fbx),
+              'importKitBlend': os.path.relpath(EXPORT / 'Level6_Revised_ImportKit.blend', OUT),
               'importKitBlendSha256': sha(EXPORT / 'Level6_Revised_ImportKit.blend'),
               'kitCollections': len({r['asset'] for r in chunks}),
               'meshObjects': len(chunks), 'totalUniqueTriangles': sum(r['triangles'] for r in chunks),
               'maximumTrianglesPerMesh': max(r['triangles'] for r in chunks),
               'axisMapping': '(x,y,z) -> (x,z,-y)', 'studsPerUnit': 1,
-              'tangentsExportRequested': True, 'redWallColorBaked': str(red_path.relative_to(OUT)),
+              'tangentsExportRequested': True, 'redWallColorBaked': os.path.relpath(red_path, OUT),
               'redWallColorSha256': sha(red_path), 'sourceBlendUnchanged': sha(source) == source_hash,
               'studioImportVerified': False, 'meshes': chunks,
               'limitations': ['PBR sidecars present; actual Studio import/assignment is unverified.',
