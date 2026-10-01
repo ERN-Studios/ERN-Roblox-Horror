@@ -1,0 +1,23 @@
+{
+  "schema": "level6-ceiling-verified-live-source-export/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "scripts": [
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 93154,
+      "sourceSha256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3",
+      "editorMatch": true,
+      "file": "verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 World Builder.ModuleScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 45552,
+      "sourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "editorMatch": true,
+      "file": "verified-studio-source/StarterPlayer__StarterPlayerScripts__Level 6 Lighting Controller.LocalScript.luau"
+    }
+  ]
+}

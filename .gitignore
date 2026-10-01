@@ -148,3 +148,15 @@
 /assets/models/lobby-reimagined-r3-20261001/*.blend1
 /assets/models/lobby-reimagined-r3-20261001/qa-intermediate-d242eed4/*.blend
 /assets/models/lobby-reimagined-r3-20261001/qa-intermediate-d242eed4/*.copy-failed
+
+# Subtle Level 6 ceiling lighting: retain complete native recovery locally.
+# Version exact scoped Sources, screenshots and reviewed verification receipts.
+/artifacts/level6-ceiling-lighting-20261001/native-*/*
+!/artifacts/level6-ceiling-lighting-20261001/native-*/source-manifest.json
+!/artifacts/level6-ceiling-lighting-20261001/native-*/backup-file-hashes.json
+!/artifacts/level6-ceiling-lighting-20261001/native-*/backup-metadata-summary.json
+!/artifacts/level6-ceiling-lighting-20261001/native-*/native-place-verification.json
+/artifacts/level6-ceiling-lighting-20261001/screenshots/*.b64
+/artifacts/level6-ceiling-lighting-20261001/**/*.log
+/artifacts/level6-ceiling-lighting-20261001/**/__pycache__/
+/artifacts/level6-ceiling-lighting-20261001/review/*.prompt.md

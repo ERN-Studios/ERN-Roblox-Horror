@@ -1,0 +1,32 @@
+{
+  "scope": "Read-only exact candidate diff and Lune/Luau compilation; no Studio mutations",
+  "syntaxCompiler": "/private/tmp/level6-lune-20261001/lune @lune/luau.compile",
+  "status": "PASS",
+  "sources": [
+    {
+      "name": "ServerScriptService.Level 6 Systems.Level 6 World Builder.ModuleScript.luau",
+      "baselineSHA256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+      "candidateSHA256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3",
+      "beforeBytes": 92349,
+      "candidateBytes": 93154,
+      "syntax": "PASS"
+    },
+    {
+      "name": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller.LocalScript.luau",
+      "baselineSHA256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886",
+      "candidateSHA256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "beforeBytes": 44030,
+      "candidateBytes": 45552,
+      "syntax": "PASS"
+    }
+  ],
+  "designAssessment": "No blocking issue found in exact candidate; only two Level6 Sources, source grade/lightdefaults untouched, bounded world-owned listeners, fill followsprimary and baselineorderpreserved. Actual Play required for implementation runtime behavior.",
+  "requiredChecks": [
+    "Final WorldBuilder light visibility/placement under nested Attachment after Blender adapter",
+    "Normal primary ballast flicker matches bounce fraction/enabled/color",
+    "Pre-blackout/recovery/allblackout/completionfade through original primary indices",
+    "Per-round listenercleanup/regeneration withoutduplicatewatchers",
+    "Final normal-height rooms/corridors and bounded FPS comparison",
+    "OtherSourcesandEditorLighting properties unchanged"
+  ]
+}

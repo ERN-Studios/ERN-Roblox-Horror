@@ -1,0 +1,19 @@
+# Bounded Level 6 fixture fill
+
+The actual arrival Ambient+3 trial did not reveal ceiling detail. Two broad ceiling image regions remained effectively RGB zero. An environment-diffuse trial also did not resolve the ceiling. The PointLight trial reveals the ceiling tile grid with low warm light while retaining the original palette and dark corners. This supersedes the initial Ambient candidate recommendation; it is an observed trial result, not a claim that the rendering cause is known.
+
+The exact candidate adds a PointLight with brightness `.16`, range `28`, shadows disabled, and the existing fixture's color. Its Attachment is placed `(0,-1.2,0)` below the original working diffuser. It is omitted from dead fixtures and all fixtures tagged by `index % 7 == 0` for regular client flicker. Existing downward SurfaceLights remain unchanged.
+
+Fresh Visual Adapter source keeps the original legacy diffuser at its original world pose and transfers direct child Lights to the Blender carrier at that same pose. An Attachment child remains under the original legacy diffuser, preserving its world position. This should be confirmed on generated final instances; the fill must not be accidentally duplicated or moved into a large scaled room carrier.
+
+Existing blackout/completion code captures descendant `Light` instances, including a Light parented under an Attachment. Disabling or fading the fill does not require changing its parent's material. The primary SurfaceLight still causes the physical diffuser carrier to enter the appropriate blackout visual state. Added Lights change the pre/recovery list indices, but do not change the configured cadence or safety limits. Excluding regular flicker fixtures avoids unsynchronized steady fill around a blinking lamp without adding connections or polling.
+
+PointLight fill is not exclusive to the ceiling: arrival carpet RGB means rise from `(46.18,32.90,18.19)` to `(49.30,35.32,19.61)` and sampled wall means rise about `(1.13,.68,.24)`. These remain visually subtle. Broad ceiling samples rise from zero to `(4.75,2.19,.35)` and `(11.02,6.34,1.44)`, exposing the grid without grey ambient wash.
+
+No blocking source-design issue found in the described candidate. Acceptance still depends on representative final Play views, actual final fill counts/poses, fixture exclusions, blackout/completion suppression, and bounded rendering performance. Arrival shows a small highlight by the foreground lamp and reflective bands above a distant lamp; inspect those at normal player views before shipping. The existing authored gateway PointLights can remain unchanged if their ceilings are already legible.
+
+No Studio, Play or UI mutations were made by this review agent. No game/performance PASS is implied by source inspection.
+
+An additional scan of all fresh Level 6 Sources found no generic PointLight recolor or gateway handler that would capture the proposed ceiling fill. Objective Controller PointLight selectors are restricted to `Final Exit Energon Spill`; CD light edits operate within CD models. The legacy nearest-guide helper selects the exact named fluorescent SurfaceLight and is documented dormant. The adapter's existing SurfaceLight angle increase to at least 175 degrees is baseline behavior, not part of this change. No runtime fluorescent color changes were found.
+
+Actual Claude Opus 5.5/max completed a tool-disabled exact candidate review in 196.024 seconds and approved it for final Play verification, while explicitly distinguishing the 159-light arrival trial from the planned approximately 137-light final candidate. Its receipt and response are `claude-exact-fill.receipt.json` and `claude-exact-fill.response.md`. Final arrival and representative views must be recaptured from the installed candidate; the earlier trial screenshot must not be labeled the final result.

@@ -1,0 +1,65 @@
+{
+  "scope": "Fresh native-before exact source review; no mutation or playtest",
+  "sources": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "class": "ModuleScript",
+      "sourceSHA256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "bytes": 105403,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sourceSHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+      "bytes": 23443,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceSHA256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+      "bytes": 92349,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "class": "LocalScript",
+      "sourceSHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "bytes": 39946,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "sourceSHA256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886",
+      "bytes": 44030,
+      "editorMatches": true
+    }
+  ],
+  "candidateNormalAmbientBefore": [
+    18,
+    17,
+    16
+  ],
+  "claudeRecommendedAmbientAfter": [
+    21,
+    20,
+    19
+  ],
+  "candidateMutationCount": 1,
+  "leaveUnlockedAmbientUntouched": [
+    19,
+    21,
+    22
+  ],
+  "reviewedSafeguards": [
+    "three-part Level6 controller ownership guard",
+    "captured Lighting snapshot immediately restored on exit",
+    "normal-grade-only candidate does not alter blackout or completion branches",
+    "no new light instances or connections"
+  ],
+  "limitations": [
+    "not a gameplay or visual PASS; actual matched Play screenshots required"
+  ]
+}

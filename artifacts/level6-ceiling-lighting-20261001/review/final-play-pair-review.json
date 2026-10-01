@@ -1,0 +1,241 @@
+{
+  "scope": "Independent review of root-saved actual final Play receipts/screenshots; no Studio mutation",
+  "actualPairs": [
+    {
+      "name": "city",
+      "rootDeltaMax": 0.0,
+      "cameraDeltaMax": 0.0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 159,
+      "followingFlicker": 22,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    },
+    {
+      "name": "orange",
+      "rootDeltaMax": 0.0,
+      "cameraDeltaMax": 0.0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 159,
+      "followingFlicker": 22,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    },
+    {
+      "name": "red",
+      "rootDeltaMax": 0.0,
+      "cameraDeltaMax": 0.0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 162,
+      "followingFlicker": 23,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    },
+    {
+      "name": "corridor",
+      "rootDeltaMax": 0.0,
+      "cameraDeltaMax": 0.0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 162,
+      "followingFlicker": 23,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    },
+    {
+      "name": "kitchen",
+      "rootDeltaMax": 0.0,
+      "cameraDeltaMax": 0.0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 162,
+      "followingFlicker": 23,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    },
+    {
+      "name": "arrival",
+      "rootDeltaMax": 0,
+      "cameraDeltaMax": 0,
+      "seedMatches": true,
+      "health": 100,
+      "normalGrade": true,
+      "fillCount": 162,
+      "followingFlicker": 23,
+      "mismatches": [],
+      "ambient": "0.0705882, 0.0666667, 0.0627451"
+    }
+  ],
+  "arrivalRegions": [
+    {
+      "label": "ceilingLeft",
+      "boxXYXY": [
+        160,
+        10,
+        700,
+        330
+      ],
+      "meanRGBBefore": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meanRGBAfter": [
+        4.749675925925926,
+        2.1952141203703706,
+        0.3449537037037037
+      ],
+      "meanAbsoluteRGBDifference": [
+        4.749675925925926,
+        2.1952141203703706,
+        0.3449537037037037
+      ]
+    },
+    {
+      "label": "ceilingRight",
+      "boxXYXY": [
+        1100,
+        5,
+        1480,
+        330
+      ],
+      "meanRGBBefore": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meanRGBAfter": [
+        11.02302024291498,
+        6.345935222672065,
+        1.4375708502024291
+      ],
+      "meanAbsoluteRGBDifference": [
+        11.02302024291498,
+        6.345935222672065,
+        1.4375708502024291
+      ]
+    },
+    {
+      "label": "carpet",
+      "boxXYXY": [
+        300,
+        620,
+        1350,
+        820
+      ],
+      "meanRGBBefore": [
+        46.180995238095235,
+        32.902009523809525,
+        18.18610476190476
+      ],
+      "meanRGBAfter": [
+        49.29579523809524,
+        35.31516190476191,
+        19.614733333333334
+      ],
+      "meanAbsoluteRGBDifference": [
+        3.119285714285714,
+        2.415352380952381,
+        1.547095238095238
+      ]
+    },
+    {
+      "label": "wallLeft",
+      "boxXYXY": [
+        165,
+        420,
+        990,
+        530
+      ],
+      "meanRGBBefore": [
+        47.29932782369146,
+        28.286567493112948,
+        9.211041322314049
+      ],
+      "meanRGBAfter": [
+        48.432947658402206,
+        28.96912396694215,
+        9.449421487603306
+      ],
+      "meanAbsoluteRGBDifference": [
+        1.1821046831955924,
+        0.742236914600551,
+        0.5202093663911845
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "arrival-before.jpg",
+      "bytes": 221512,
+      "sha256": "221680acbe8c3fcdce96bba241e5c807998703e59441ea113143c6ee3a08b800"
+    },
+    {
+      "name": "arrival-final.jpg",
+      "bytes": 276828,
+      "sha256": "ef6a4fc529138fdf2569a616e6cb57243b670ba0703090b6b949fe8eccef96b6"
+    },
+    {
+      "name": "city-before.jpg",
+      "bytes": 289961,
+      "sha256": "0db9f6828d49a175872b960368db855c4e632a03868411b1c6827a30d3e0f597"
+    },
+    {
+      "name": "city-final.jpg",
+      "bytes": 350879,
+      "sha256": "9c672060e0a5d94bf9fe99a6ca879cc34bd774668abbb2aeecc55643d2cd5ea3"
+    },
+    {
+      "name": "orange-before.jpg",
+      "bytes": 215926,
+      "sha256": "e042ff76c1eacbd3fb4f3a05e5ee035f4a9e5c1fdae8b7b5539c17dfbc8ebc2d"
+    },
+    {
+      "name": "orange-final.jpg",
+      "bytes": 226400,
+      "sha256": "4a43b88ecdf622fcf0db585911da80154859b253935be213993a91ae1eaeb930"
+    },
+    {
+      "name": "red-before.jpg",
+      "bytes": 256967,
+      "sha256": "581a41b11870267867e617a3099d32d78f498e68be9ba6247fd78a0cfd2339d4"
+    },
+    {
+      "name": "red-final.jpg",
+      "bytes": 289230,
+      "sha256": "38184f7a4e9c6c3915a4d9e9a9da61259962c256789ca13b20d838a57887597e"
+    },
+    {
+      "name": "corridor-before.jpg",
+      "bytes": 216035,
+      "sha256": "e1a5a11ad076bb06d3e0d61674767634f37d83c49bbb325329b7634e324befd4"
+    },
+    {
+      "name": "corridor-final.jpg",
+      "bytes": 291544,
+      "sha256": "d5d4156c4eb75133bef52c173391ac0a73bd9fd16bfa818eb0192fd2ea7205dd"
+    },
+    {
+      "name": "kitchen-before.jpg",
+      "bytes": 381758,
+      "sha256": "decba994af4636f363e6a5e64362c965f0d538e759485fa63aaebc7258c723a1"
+    },
+    {
+      "name": "kitchen-final.jpg",
+      "bytes": 362604,
+      "sha256": "9e9bfa7a28f7b3e8510614262f967569fca58629df3598bb3c4c0edbbdbdc0b0"
+    }
+  ],
+  "actualPlayReceiptChecks": "PASS: all six final camera/root poses and seed match baseline exactly; health100,normalLevel6grade,159fills,22followingflicker,no mismatches in savedreceipts.",
+  "codexVisualAssessment": "All six final normal-height shots viewed directly. Final Arrival, City, Orange, Red and Corridor show readable low warm ceilinggrid with original saturatedfloor/wallpalette anddarkcorners/distance. Kitchenwasalreadyreadable; its localceilingunchanged. FinalCitynowimprovespreviouslyexcludedflickerfixtureceiling. Orangefinalfloor is blurrier than baseline/trial image; textureloading/miplevelcause unverified, rootnotified to reshoot ifneeded. No code/assets/material change found in this twoSourcecandidate.",
+  "supersedingOrangeImage": "screenshots/orange-final-clean.jpg",
+  "resolvedOrangeVisualConcern": "Clean final image reviewed against baseline and confirms crisp confetti texture with low warm ceiling grid and original saturated colors. Full hashes and reviewed controlled Play QA in orange-clean-final-review.json."
+}

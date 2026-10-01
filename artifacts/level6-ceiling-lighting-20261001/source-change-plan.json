@@ -1,0 +1,14 @@
+[
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+    "class": "LocalScript",
+    "beforeSha256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886",
+    "afterSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f"
+  },
+  {
+    "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+    "class": "ModuleScript",
+    "beforeSha256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+    "afterSha256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3"
+  }
+]

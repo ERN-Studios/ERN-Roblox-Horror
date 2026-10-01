@@ -1,0 +1,60 @@
+{
+  "stagedFileCount": 76,
+  "exactExplicitPlanMatch": true,
+  "stagedBytesMatchReviewedFiles": true,
+  "sourceExportsMatchAuthoritativeNativeSources": [
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/before-source/StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller.LocalScript.luau",
+      "instancePath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "sha256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/before-source/ServerScriptService.Level 6 Systems.Level 6 World Builder.ModuleScript.luau",
+      "instancePath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "sha256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/before-source/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "instancePath": "ServerScriptService.Level6PreviewAccess",
+      "sha256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/before-source/ServerScriptService.Level 6 Systems.Level 6 Preview Runtime.ModuleScript.luau",
+      "instancePath": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "sha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/before-source/ServerScriptService.Level 6 Systems.Level 6 Visual Adapter.ModuleScript.luau",
+      "instancePath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "sha256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/candidate-source/StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller.LocalScript.luau",
+      "instancePath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "sha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/candidate-source/ServerScriptService.Level 6 Systems.Level 6 World Builder.ModuleScript.luau",
+      "instancePath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "sha256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 World Builder.ModuleScript.luau",
+      "instancePath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "sha256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3"
+    },
+    {
+      "file": "artifacts/level6-ceiling-lighting-20261001/verified-studio-source/StarterPlayer__StarterPlayerScripts__Level 6 Lighting Controller.LocalScript.luau",
+      "instancePath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "sha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f"
+    }
+  ],
+  "credentialPatternFindings": [],
+  "unrelatedCathedralStaged": false,
+  "passed": true,
+  "whitespaceCheck": {
+    "nonPatchFiles": "PASS after removing surplus EOF blank lines in four QA/installer scripts",
+    "patchException": "Unified diff context prefixes intentionally contain a space before original tab indentation; source-diff.patch excluded from whitespace check only",
+    "authoritativeSourceBytesUnchanged": true
+  }
+}

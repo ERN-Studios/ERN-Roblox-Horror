@@ -1,0 +1,312 @@
+{
+  "scope": "Metrics from actual matching Studio Play screenshot image files; no screenshot editing",
+  "regions": [
+    {
+      "label": "ceilingLeft",
+      "boxXYXY": [
+        160,
+        10,
+        700,
+        330
+      ],
+      "trials": {
+        "arrival-before.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trial21.jpg": {
+          "meanRGB": [
+            0.00047453703703703704,
+            0.00011574074074074075,
+            0.00028935185185185184
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.00047453703703703704,
+            0.00011574074074074075,
+            0.00028935185185185184
+          ]
+        },
+        "arrival-trialbounce012.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trialpoint016.jpg": {
+          "meanRGB": [
+            4.745081018518518,
+            2.1905555555555556,
+            0.34554976851851854
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            4.745081018518518,
+            2.1905555555555556,
+            0.34554976851851854
+          ]
+        },
+        "arrival-trialdiffuse008.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "label": "ceilingRight",
+      "boxXYXY": [
+        1100,
+        5,
+        1480,
+        330
+      ],
+      "trials": {
+        "arrival-before.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trial21.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trialbounce012.jpg": {
+          "meanRGB": [
+            0.014445344129554656,
+            0.004696356275303644,
+            0.002283400809716599
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.014445344129554656,
+            0.004696356275303644,
+            0.002283400809716599
+          ]
+        },
+        "arrival-trialpoint016.jpg": {
+          "meanRGB": [
+            11.018704453441295,
+            6.3429473684210524,
+            1.4397327935222672
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            11.018704453441295,
+            6.3429473684210524,
+            1.4397327935222672
+          ]
+        },
+        "arrival-trialdiffuse008.jpg": {
+          "meanRGB": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "label": "carpet",
+      "boxXYXY": [
+        300,
+        620,
+        1350,
+        820
+      ],
+      "trials": {
+        "arrival-before.jpg": {
+          "meanRGB": [
+            46.180995238095235,
+            32.902009523809525,
+            18.18610476190476
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trial21.jpg": {
+          "meanRGB": [
+            46.187357142857145,
+            32.910085714285714,
+            18.192061904761903
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.12450476190476191,
+            0.10132380952380952,
+            0.12906190476190477
+          ]
+        },
+        "arrival-trialbounce012.jpg": {
+          "meanRGB": [
+            46.180995238095235,
+            32.902009523809525,
+            18.18610476190476
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trialpoint016.jpg": {
+          "meanRGB": [
+            49.29560476190476,
+            35.31536666666667,
+            19.614757142857144
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            3.1190761904761906,
+            2.4155285714285712,
+            1.5472809523809523
+          ]
+        },
+        "arrival-trialdiffuse008.jpg": {
+          "meanRGB": [
+            46.18103333333333,
+            32.90204285714286,
+            18.186519047619047
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.005628571428571429,
+            0.004985714285714286,
+            0.006557142857142857
+          ]
+        }
+      }
+    },
+    {
+      "label": "wallLeft",
+      "boxXYXY": [
+        165,
+        420,
+        990,
+        530
+      ],
+      "trials": {
+        "arrival-before.jpg": {
+          "meanRGB": [
+            47.29932782369146,
+            28.286567493112948,
+            9.211041322314049
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "arrival-trial21.jpg": {
+          "meanRGB": [
+            47.99580165289256,
+            28.83087603305785,
+            9.50959779614325
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.7744903581267217,
+            0.6377741046831956,
+            0.7270964187327824
+          ]
+        },
+        "arrival-trialbounce012.jpg": {
+          "meanRGB": [
+            47.297399449035815,
+            28.281190082644628,
+            9.209068870523415
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.032385674931129475,
+            0.028297520661157025,
+            0.034391184573002755
+          ]
+        },
+        "arrival-trialpoint016.jpg": {
+          "meanRGB": [
+            48.4334435261708,
+            28.962986225895317,
+            9.448440771349862
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            1.1995702479338843,
+            0.7553388429752066,
+            0.529763085399449
+          ]
+        },
+        "arrival-trialdiffuse008.jpg": {
+          "meanRGB": [
+            47.31277134986226,
+            28.293079889807164,
+            9.223669421487603
+          ],
+          "meanAbsoluteRGBDifferenceFromBefore": [
+            0.10016528925619834,
+            0.08585123966942149,
+            0.1210137741046832
+          ]
+        }
+      }
+    }
+  ],
+  "files": [
+    {
+      "name": "arrival-before.jpg",
+      "sha256": "221680acbe8c3fcdce96bba241e5c807998703e59441ea113143c6ee3a08b800"
+    },
+    {
+      "name": "arrival-trial21.jpg",
+      "sha256": "edcec3107aafd6584622be5a363afa5c345eb7b5cbda9e94c56e71dc0df891e7"
+    },
+    {
+      "name": "arrival-trialbounce012.jpg",
+      "sha256": "2be9ffde1e489578ab32dd229d9851980f029894ac2ab347757000db4517cac6"
+    },
+    {
+      "name": "arrival-trialpoint016.jpg",
+      "sha256": "b4039f936fdb41aaaf6f9a284f805b3b0bef2481b474c5db5eabd12885e69855"
+    },
+    {
+      "name": "arrival-trialdiffuse008.jpg",
+      "sha256": "392246af57b34f474a9c7ec3c6d5d7d30a79745f111647e7a7aa475cc3b7bbf7"
+    }
+  ],
+  "codexVisualAssessment": "Point016 shows ceiling tile grid with low warm fill and preserves warm wall/carpet palette. Ambient21 and diffuse008 leave ceiling black; upwardSurfaceLight012 shows mainly a tiny lamp halo. Arrival Point016 promising, subject to exactsettings/code, normalflicker, blackout and other-room Play tests."
+}
