@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "httpRestored": true,
+  "scripts": {
+    "1": {
+      "bytes": 23443,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "editorMatch": true,
+      "beforeSHA256": "e41b585ceebc5f814341659610a8360de321650f233a7275de842cb056fbc3bb",
+      "afterSHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+      "class": "ModuleScript",
+      "new": false
+    }
+  }
+}

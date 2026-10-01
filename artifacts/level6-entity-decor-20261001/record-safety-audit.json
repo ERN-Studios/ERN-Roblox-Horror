@@ -1,0 +1,8 @@
+{
+  "scope": "New task tools and selected text records, including task payloads; raw backups and preexisting mirrors excluded",
+  "method": "Local literal-credential/private-key patterns; values never printed",
+  "filesChecked": 46,
+  "findings": [],
+  "contentReview": "Crayon prompt records request transparent, non-graphic surreal horror; no physical injuries, sexual content or abuse. Runtime image IDs are public asset references, not credentials.",
+  "passed": true
+}

@@ -1,0 +1,31 @@
+{
+  "expectedDifferences": [
+    {
+      "level3": 0.4,
+      "level6": 0.97,
+      "path": "MallManager.FinalHallSpawnProgress"
+    },
+    {
+      "level3": 360,
+      "level6": 28,
+      "path": "MallManager.FinaleApproachSpeed"
+    },
+    {
+      "level3": "Level3ManagerFurniture",
+      "level6": "Level6ManagerFurniture",
+      "path": "MallManager.FurniturePathLabel"
+    }
+  ],
+  "gameplayVerified": false,
+  "level6OverlaySources": {
+    "Blackout": "L3ManagerBlackout",
+    "Normal": "L3Manager"
+  },
+  "method": "Execute authoritative Level 3 and candidate Level 6 frozen declarative tables offline",
+  "musicSequenceEqual": true,
+  "navigationAttackAudioTuningEqual": true,
+  "normalProfilesEqual": true,
+  "normalSpawnTuningEqual": true,
+  "studioMasterAttributesAtCapture": {},
+  "tableCheckEqual": true
+}

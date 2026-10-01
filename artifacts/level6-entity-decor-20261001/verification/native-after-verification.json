@@ -1,0 +1,2245 @@
+{
+  "schema": "level6-entity-decor-native-verification/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "beforeObservedPlaceVersion": 2430,
+  "afterObservedPlaceVersion": 2430,
+  "studioIsAuthoritative": true,
+  "scriptSourceEditorParity": true,
+  "beforeScriptCount": 203,
+  "afterScriptCount": 205,
+  "scopedScriptCount": 7,
+  "scopedScripts": [
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": "91ea0307b47fa4fefffeda72133991ce7c3a578f2adf0aa17e9771acc1f669cb",
+      "afterSHA256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "kind": "modified"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": "777727733c8b0be627f2abe1a67eb03af22f494f977cc86d36733ac2d5fd0a49",
+      "afterSHA256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "kind": "modified"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": "635b3c5d3ab2ac5230e746a70f430492336aeffde6493fa011c1c87f49a514df",
+      "afterSHA256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "kind": "modified"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": "880855864ce803903d42810db8035dd960f5a679927c09d9c3e4f3182bb4bfb0",
+      "afterSHA256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+      "kind": "modified"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": "37f6dcf71a40820a923e2ebd66c91f3f1c3fde4221ac0aaeb440dacbf67b03a9",
+      "afterSHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+      "kind": "modified"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": null,
+      "afterSHA256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "kind": "added"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "checks": {
+        "beforeSourceMatchesManifest": true,
+        "afterSourceMatchesManifest": true,
+        "beforeAbsentExactlyWhenNew": true,
+        "afterExpectedClass": true,
+        "beforeExpectedClass": true,
+        "afterEditorParity": true
+      },
+      "beforeSHA256": null,
+      "afterSHA256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "kind": "added"
+    }
+  ],
+  "unrelatedScriptsUnchangedCount": 195,
+  "otherScriptChanges": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "beforeSHA256": "6b835beff8b804ac575f37f311464e7a23055dff6c7bb2c2c2e8b1f58aeec517",
+      "afterSHA256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392",
+      "beforeClass": "LocalScript",
+      "afterClass": "LocalScript",
+      "kind": "changed"
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "beforeSHA256": "d86fd89a1796eadbf976c8b88db63bb7856ae5e0ab45d5fd41efc60862a3bc2b",
+      "afterSHA256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "kind": "changed"
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "beforeSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "afterSHA256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "kind": "changed"
+    }
+  ],
+  "originalLevel3ScriptPaths": [
+    "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+    "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+    "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+    "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+    "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+    "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+    "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+    "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+    "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+    "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+    "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+    "ServerScriptService.Level3Generator",
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+    "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+    "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+    "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+    "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+    "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+    "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+    "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker"
+  ],
+  "originalLevel3ScriptChanges": [],
+  "originalLevel3NativeRoots": [
+    {
+      "path": "ReplicatedStorage.Level 3 Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1134,
+      "afterBytes": 1134,
+      "beforeSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216",
+      "afterSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Remotes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1153,
+      "afterBytes": 1153,
+      "beforeSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef",
+      "afterSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Sound Library",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1025,
+      "afterBytes": 1025,
+      "beforeSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f",
+      "afterSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 State",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2035,
+      "afterBytes": 2035,
+      "beforeSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "afterSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 296082,
+      "afterBytes": 296082,
+      "beforeSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed",
+      "afterSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 838,
+      "afterBytes": 838,
+      "beforeSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c",
+      "afterSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level3Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 141421,
+      "afterBytes": 141421,
+      "beforeSHA256": "a47016a5b2517ea778ca69db03a0b0e94129d9380906e7a0c385d7a0859ccf32",
+      "afterSHA256": "a47016a5b2517ea778ca69db03a0b0e94129d9380906e7a0c385d7a0859ccf32",
+      "unchanged": true
+    }
+  ],
+  "allNativeRootCount": 181,
+  "allNativeRootRecords": [
+    {
+      "path": "Lighting.Atmosphere",
+      "beforeClass": "Atmosphere",
+      "afterClass": "Atmosphere",
+      "beforeBytes": 638,
+      "afterBytes": 638,
+      "beforeSHA256": "b7c90e34e06739c1801478f8ec49311d76dbf9d63a608b96da201239275f9722",
+      "afterSHA256": "b7c90e34e06739c1801478f8ec49311d76dbf9d63a608b96da201239275f9722",
+      "unchanged": true
+    },
+    {
+      "path": "Lighting.Bloom",
+      "beforeClass": "BloomEffect",
+      "afterClass": "BloomEffect",
+      "beforeBytes": 550,
+      "afterBytes": 550,
+      "beforeSHA256": "4ead19a720b889f334414f26ecc37e9e174b72c11e29e4c16cfab74a4e7cedbc",
+      "afterSHA256": "4ead19a720b889f334414f26ecc37e9e174b72c11e29e4c16cfab74a4e7cedbc",
+      "unchanged": true
+    },
+    {
+      "path": "Lighting.DepthOfField",
+      "beforeClass": "DepthOfFieldEffect",
+      "afterClass": "DepthOfFieldEffect",
+      "beforeBytes": 624,
+      "afterBytes": 624,
+      "beforeSHA256": "30e5302d23fb24d7f36a520351968a6e7325bf44606d2d5d45ecebb067ac60e4",
+      "afterSHA256": "30e5302d23fb24d7f36a520351968a6e7325bf44606d2d5d45ecebb067ac60e4",
+      "unchanged": true
+    },
+    {
+      "path": "Lighting.Sky",
+      "beforeClass": "Sky",
+      "afterClass": "Sky",
+      "beforeBytes": 1321,
+      "afterBytes": 1321,
+      "beforeSHA256": "1541ac022b8d2c6bbea471e56ebde9128e55901eb16d822ef8bdc8200a9287f2",
+      "afterSHA256": "1541ac022b8d2c6bbea471e56ebde9128e55901eb16d822ef8bdc8200a9287f2",
+      "unchanged": true
+    },
+    {
+      "path": "Lighting.SunRays",
+      "beforeClass": "SunRaysEffect",
+      "afterClass": "SunRaysEffect",
+      "beforeBytes": 516,
+      "afterBytes": 516,
+      "beforeSHA256": "c57ad4731f63d60719947f1de227e84ce4a45ed34b9281118deba169024a6279",
+      "afterSHA256": "c57ad4731f63d60719947f1de227e84ce4a45ed34b9281118deba169024a6279",
+      "unchanged": true
+    },
+    {
+      "path": "LocalScript.BubbleChatConfiguration",
+      "beforeClass": "BubbleChatConfiguration",
+      "afterClass": "BubbleChatConfiguration",
+      "beforeBytes": 5163,
+      "afterBytes": 5163,
+      "beforeSHA256": "1becb07d132af9cc6bb93860c98d827cab69958e6570ac705a7071e863a46407",
+      "afterSHA256": "1becb07d132af9cc6bb93860c98d827cab69958e6570ac705a7071e863a46407",
+      "unchanged": true
+    },
+    {
+      "path": "LocalScript.ChannelTabsConfiguration",
+      "beforeClass": "ChannelTabsConfiguration",
+      "afterClass": "ChannelTabsConfiguration",
+      "beforeBytes": 1003,
+      "afterBytes": 1003,
+      "beforeSHA256": "fcaa9062f6f73bd8597e0decc4e7e699e08fb82566a9b39c9e58abd549f1168d",
+      "afterSHA256": "fcaa9062f6f73bd8597e0decc4e7e699e08fb82566a9b39c9e58abd549f1168d",
+      "unchanged": true
+    },
+    {
+      "path": "LocalScript.ChatInputBarConfiguration",
+      "beforeClass": "ChatInputBarConfiguration",
+      "afterClass": "ChatInputBarConfiguration",
+      "beforeBytes": 1084,
+      "afterBytes": 1084,
+      "beforeSHA256": "21b4c123d0d7b1b475a039f24d49e740cecc63633180989c3ce750a163ec27b2",
+      "afterSHA256": "21b4c123d0d7b1b475a039f24d49e740cecc63633180989c3ce750a163ec27b2",
+      "unchanged": true
+    },
+    {
+      "path": "LocalScript.ChatWindowConfiguration",
+      "beforeClass": "ChatWindowConfiguration",
+      "afterClass": "ChatWindowConfiguration",
+      "beforeBytes": 1117,
+      "afterBytes": 1117,
+      "beforeSHA256": "5e3151c3b3fcc2faf5483d2f830107843efd3d8e82d3a5e8f57297378e4cf449",
+      "afterSHA256": "5e3151c3b3fcc2faf5483d2f830107843efd3d8e82d3a5e8f57297378e4cf449",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_CarpetCity",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1296,
+      "afterBytes": 1296,
+      "beforeSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9",
+      "afterSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_CarpetDefault",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1299,
+      "afterBytes": 1299,
+      "beforeSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a",
+      "afterSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_CarpetNeon",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1296,
+      "afterBytes": 1296,
+      "beforeSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f",
+      "afterSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_CarpetRed",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1295,
+      "afterBytes": 1295,
+      "beforeSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018",
+      "afterSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_Diamondplate",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1334,
+      "afterBytes": 1334,
+      "beforeSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd",
+      "afterSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_KitchenTile",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1298,
+      "afterBytes": 1298,
+      "beforeSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f",
+      "afterSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_OrangeWall",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1296,
+      "afterBytes": 1296,
+      "beforeSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12",
+      "afterSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_RedWall",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1292,
+      "afterBytes": 1292,
+      "beforeSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b",
+      "afterSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.L6R_Wallpaper",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1294,
+      "afterBytes": 1294,
+      "beforeSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373",
+      "afterSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level2 Kids Foam Vinyl",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1189,
+      "afterBytes": 1189,
+      "beforeSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4",
+      "afterSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level2 Kids Rubber Floor",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1190,
+      "afterBytes": 1190,
+      "beforeSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246",
+      "afterSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level2 Kids Slide Fiberglass",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1194,
+      "afterBytes": 1194,
+      "beforeSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25",
+      "afterSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5AgedPlaster",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1188,
+      "afterBytes": 1188,
+      "beforeSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f",
+      "afterSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5CourtyardClapboard",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1133,
+      "afterBytes": 1133,
+      "beforeSHA256": "8e2e4db217760025f8f3ffb3b39a88584047bf228f7156c7677c9d4d0575dd06",
+      "afterSHA256": "8e2e4db217760025f8f3ffb3b39a88584047bf228f7156c7677c9d4d0575dd06",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5FloralWallpaper",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1192,
+      "afterBytes": 1192,
+      "beforeSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb",
+      "afterSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5LawnGrass",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1186,
+      "afterBytes": 1186,
+      "beforeSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96",
+      "afterSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5LoopCarpet",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1188,
+      "afterBytes": 1188,
+      "beforeSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441",
+      "afterSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5PaintedSiding",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1191,
+      "afterBytes": 1191,
+      "beforeSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24",
+      "afterSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5RoofShingles",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1190,
+      "afterBytes": 1190,
+      "beforeSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7",
+      "afterSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.Level5VeneerWood",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1188,
+      "afterBytes": 1188,
+      "beforeSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5",
+      "afterSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5",
+      "unchanged": true
+    },
+    {
+      "path": "MaterialService.MaterialVariant",
+      "beforeClass": "MaterialVariant",
+      "afterClass": "MaterialVariant",
+      "beforeBytes": 1061,
+      "afterBytes": 1061,
+      "beforeSHA256": "871df50baf795c9ef993f47231729a1ae06335937ac9296ac7e95994a19bf6bb",
+      "afterSHA256": "871df50baf795c9ef993f47231729a1ae06335937ac9296ac7e95994a19bf6bb",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 4950,
+      "afterBytes": 4950,
+      "beforeSHA256": "33db2377b7678fa10c006a0b2585ce92d7d10e4d89dc32829d2aece410f5a99d",
+      "afterSHA256": "33db2377b7678fa10c006a0b2585ce92d7d10e4d89dc32829d2aece410f5a99d",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1219,
+      "afterBytes": 1219,
+      "beforeSHA256": "116fd07b386ca239f16cddacac3c4f68dc36cba14dd4193104d73497f6b793d0",
+      "afterSHA256": "116fd07b386ca239f16cddacac3c4f68dc36cba14dd4193104d73497f6b793d0",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.FlashlightProfiles",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1982,
+      "afterBytes": 1982,
+      "beforeSHA256": "0e5b3935b5ad5fb7f3618208cece123332478d039e5c2315721c3099c8a89b59",
+      "afterSHA256": "0e5b3935b5ad5fb7f3618208cece123332478d039e5c2315721c3099c8a89b59",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 1 Sound Library",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 893,
+      "afterBytes": 893,
+      "beforeSHA256": "9bc89256cc73d15bcca1d830bbe7532a07501ba9d8a1f4bc6b4ce2b4fdfa5afe",
+      "afterSHA256": "9bc89256cc73d15bcca1d830bbe7532a07501ba9d8a1f4bc6b4ce2b4fdfa5afe",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1262,
+      "afterBytes": 1262,
+      "beforeSHA256": "3cf2c945e29c36be9b50e0248422496090d3bded6b22ca12d897c1a5c92552db",
+      "afterSHA256": "3cf2c945e29c36be9b50e0248422496090d3bded6b22ca12d897c1a5c92552db",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3429,
+      "afterBytes": 3429,
+      "beforeSHA256": "dced844ba37fe6fe7517aafa9d64d1309aa25a413347cd2cb785f2d86f68f0c2",
+      "afterSHA256": "dced844ba37fe6fe7517aafa9d64d1309aa25a413347cd2cb785f2d86f68f0c2",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Pool Foam Audio",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1021,
+      "afterBytes": 1021,
+      "beforeSHA256": "e2e15590f1d59af89182c1fa3f41a9032d19dbbf8574f23860a9661b2bf93af2",
+      "afterSHA256": "e2e15590f1d59af89182c1fa3f41a9032d19dbbf8574f23860a9661b2bf93af2",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Pool Foam Remotes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 908,
+      "afterBytes": 908,
+      "beforeSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e",
+      "afterSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Remotes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 818,
+      "afterBytes": 818,
+      "beforeSHA256": "6a9750785f3a91e96499729c40d88175ea2d8161973a59954c7beca6fa6bd290",
+      "afterSHA256": "6a9750785f3a91e96499729c40d88175ea2d8161973a59954c7beca6fa6bd290",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Sound Library",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2218,
+      "afterBytes": 2218,
+      "beforeSHA256": "9ed29ad3dff8c939c49568080341bbd33db34e9685f0eb23d0c74c8636bbbb67",
+      "afterSHA256": "9ed29ad3dff8c939c49568080341bbd33db34e9685f0eb23d0c74c8636bbbb67",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 State",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 746,
+      "afterBytes": 746,
+      "beforeSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772",
+      "afterSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1134,
+      "afterBytes": 1134,
+      "beforeSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216",
+      "afterSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Remotes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1153,
+      "afterBytes": 1153,
+      "beforeSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef",
+      "afterSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Sound Library",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1025,
+      "afterBytes": 1025,
+      "beforeSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f",
+      "afterSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 State",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2035,
+      "afterBytes": 2035,
+      "beforeSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "afterSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Level2Audio",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1313,
+      "afterBytes": 1313,
+      "beforeSHA256": "ad28763b662105264d800a0a9f686594a57d1987ade262f41c793a9e97361973",
+      "afterSHA256": "ad28763b662105264d800a0a9f686594a57d1987ade262f41c793a9e97361973",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 9407,
+      "afterBytes": 9407,
+      "beforeSHA256": "24077ea5c18f83a87d08356f92e203d35c0f860d659cdf883ab0a593ccf5d6b2",
+      "afterSHA256": "24077ea5c18f83a87d08356f92e203d35c0f860d659cdf883ab0a593ccf5d6b2",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.MasterTuning",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 857,
+      "afterBytes": 857,
+      "beforeSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4",
+      "afterSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ProtectionClient",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3763,
+      "afterBytes": 3763,
+      "beforeSHA256": "859830283619e4856c24f42b057e3f600bcde67cc0cd9786b39765f71d398ee2",
+      "afterSHA256": "859830283619e4856c24f42b057e3f600bcde67cc0cd9786b39765f71d398ee2",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.Remotes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 939,
+      "afterBytes": 939,
+      "beforeSHA256": "0e99eb43e84a11daeacaffa3afbbc8ba9ee3a7f3635b9182b1631b2eb1bb54b3",
+      "afterSHA256": "0e99eb43e84a11daeacaffa3afbbc8ba9ee3a7f3635b9182b1631b2eb1bb54b3",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.SlideContinuationSafety",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 2810,
+      "afterBytes": 2810,
+      "beforeSHA256": "d02faa0b83a8b6fa8cd9a423ff7e6fe6ba10e97ced1af487d68ecf1f3448adf5",
+      "afterSHA256": "d02faa0b83a8b6fa8cd9a423ff7e6fe6ba10e97ced1af487d68ecf1f3448adf5",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.UIDevice",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 50886,
+      "afterBytes": 50886,
+      "beforeSHA256": "36eb03dd4f032e5e0c96c1a9f5285811a9edf78dfe3bdcde5acf94d116fea577",
+      "afterSHA256": "36eb03dd4f032e5e0c96c1a9f5285811a9edf78dfe3bdcde5acf94d116fea577",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.UIRegression",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 211698,
+      "afterBytes": 211698,
+      "beforeSHA256": "7fe65a2b8d84a0a618b11a706be0c28daf341db6abb5771ab6bc623c4eb0eb4f",
+      "afterSHA256": "7fe65a2b8d84a0a618b11a706be0c28daf341db6abb5771ab6bc623c4eb0eb4f",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.UIStyle",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 5957,
+      "afterBytes": 5957,
+      "beforeSHA256": "ae546fca16332ac4d970ae1142c0810b8acafb60bdf48772411b13a4781239e1",
+      "afterSHA256": "ae546fca16332ac4d970ae1142c0810b8acafb60bdf48772411b13a4781239e1",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraChallenges",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3760,
+      "afterBytes": 3760,
+      "beforeSHA256": "850b254f3137bf4d53f69f210f33b8f7c6d831a055d8dd870743df8839562b12",
+      "afterSHA256": "850b254f3137bf4d53f69f210f33b8f7c6d831a055d8dd870743df8839562b12",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 9911,
+      "afterBytes": 9911,
+      "beforeSHA256": "b160c4bea1e9dbc6f1effd8ffc251ae8896f12455b3611474fbea062c2e2ac06",
+      "afterSHA256": "b160c4bea1e9dbc6f1effd8ffc251ae8896f12455b3611474fbea062c2e2ac06",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyResearch",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1445,
+      "afterBytes": 1445,
+      "beforeSHA256": "b3df6295d9fc4c9e0b2f1c4d2445da8916c00bbb2b02e66161cd7359ec1f7193",
+      "afterSHA256": "b3df6295d9fc4c9e0b2f1c4d2445da8916c00bbb2b02e66161cd7359ec1f7193",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 20087,
+      "afterBytes": 20087,
+      "beforeSHA256": "145f73a9f65646a4a31fe776f4df4fe670f45e4292aab085e829e94419238a71",
+      "afterSHA256": "145f73a9f65646a4a31fe776f4df4fe670f45e4292aab085e829e94419238a71",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDetectorVisual",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 7395,
+      "afterBytes": 7395,
+      "beforeSHA256": "ae173c44ed530ae6d2f3ef82ab0606eb1bcd2f542e22c103f332f042d8b79391",
+      "afterSHA256": "ae173c44ed530ae6d2f3ef82ab0606eb1bcd2f542e22c103f332f042d8b79391",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraRecordsPage",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 8805,
+      "afterBytes": 8805,
+      "beforeSHA256": "8bc7dc81210a79436a0fa9b74c0ad53bcfb5adfe8e4fd647049caf7e714d0b17",
+      "afterSHA256": "8bc7dc81210a79436a0fa9b74c0ad53bcfb5adfe8e4fd647049caf7e714d0b17",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkins",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3700,
+      "afterBytes": 3700,
+      "beforeSHA256": "9290978af15fe25bd3f831b1f7117908d2a50e7d3334ca0be692356367899042",
+      "afterSHA256": "9290978af15fe25bd3f831b1f7117908d2a50e7d3334ca0be692356367899042",
+      "unchanged": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 9984,
+      "afterBytes": 9984,
+      "beforeSHA256": "35fe6e51a993d4d09e0b53069f6a69d683fb557b8f74c802890defade7de9f53",
+      "afterSHA256": "35fe6e51a993d4d09e0b53069f6a69d683fb557b8f74c802890defade7de9f53",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.AvatarNormalize",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 2489,
+      "afterBytes": 2489,
+      "beforeSHA256": "ecab8ec1b47b1e56f0c179ff5d514ffd5fe600d97521c26b7a61b3e40a00da04",
+      "afterSHA256": "ecab8ec1b47b1e56f0c179ff5d514ffd5fe600d97521c26b7a61b3e40a00da04",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Crouch State Server",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 3449,
+      "afterBytes": 3449,
+      "beforeSHA256": "51e737a0db55be8c7c074646e540f3ec819ef670e8094b7fe91f0a3d3ed0f1d9",
+      "afterSHA256": "51e737a0db55be8c7c074646e540f3ec819ef670e8094b7fe91f0a3d3ed0f1d9",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.FlashlightSync",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 3828,
+      "afterBytes": 3828,
+      "beforeSHA256": "8569db06488d6870dc4dad5f3364a8e0dffeb90e778518d097f960743cc347e0",
+      "afterSHA256": "8569db06488d6870dc4dad5f3364a8e0dffeb90e778518d097f960743cc347e0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.FriendBoost",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3972,
+      "afterBytes": 3972,
+      "beforeSHA256": "f64ebc09f7f3c0dd59fb726e3ab2f929c7083235ffb4df117e45517b14641bc2",
+      "afterSHA256": "f64ebc09f7f3c0dd59fb726e3ab2f929c7083235ffb4df117e45517b14641bc2",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 73941,
+      "afterBytes": 73941,
+      "beforeSHA256": "bd02076bfffffd9bc0c62447325fff800883ac22e5a2fb380bb5f53f9c94fcb3",
+      "afterSHA256": "bd02076bfffffd9bc0c62447325fff800883ac22e5a2fb380bb5f53f9c94fcb3",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 7516,
+      "afterBytes": 7516,
+      "beforeSHA256": "59b3fc43037a3d3230a2db5862245a318ec0b64ac1e205d14bc399429bc9b253",
+      "afterSHA256": "59b3fc43037a3d3230a2db5862245a318ec0b64ac1e205d14bc399429bc9b253",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 121905,
+      "afterBytes": 121905,
+      "beforeSHA256": "cbc4bd8d870edaf475a3dcd07258ee445c6b6e2840dbe8cc0ae90284433dc0e0",
+      "afterSHA256": "cbc4bd8d870edaf475a3dcd07258ee445c6b6e2840dbe8cc0ae90284433dc0e0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 439825,
+      "afterBytes": 439825,
+      "beforeSHA256": "059bb79711548d5c075f9432af10034312babfba5e0e1436f333e8def0361f87",
+      "afterSHA256": "059bb79711548d5c075f9432af10034312babfba5e0e1436f333e8def0361f87",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 296082,
+      "afterBytes": 296082,
+      "beforeSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed",
+      "afterSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 224217,
+      "afterBytes": 234614,
+      "beforeSHA256": "30b4a8b075ad5cb197bc82e347e532d7254b7367982b64eb3f7c758ce142c92e",
+      "afterSHA256": "f37c2a47b82276ab607e757acd05c48c329db31a3c2f0d13da31d37a5adca985",
+      "unchanged": false
+    },
+    {
+      "path": "ServerScriptService.Level2Generator",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 815,
+      "afterBytes": 815,
+      "beforeSHA256": "e05ba1f1e9732338d2408ba77b57aa816adcce926240a3e095e23ac7646215e6",
+      "afterSHA256": "e05ba1f1e9732338d2408ba77b57aa816adcce926240a3e095e23ac7646215e6",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 838,
+      "afterBytes": 838,
+      "beforeSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c",
+      "afterSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV4",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 21995,
+      "afterBytes": 21995,
+      "beforeSHA256": "f108ef0b2d42c38b2b648dbb7091d72901ce092748df035610febb4bb5346fe5",
+      "afterSHA256": "f108ef0b2d42c38b2b648dbb7091d72901ce092748df035610febb4bb5346fe5",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV5",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 35381,
+      "afterBytes": 35381,
+      "beforeSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3",
+      "afterSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV6",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 40864,
+      "afterBytes": 40864,
+      "beforeSHA256": "916b26bdef87e5b91c2a8459fddc699d412e429aa1b0a13181d48cbeb40aaf9b",
+      "afterSHA256": "916b26bdef87e5b91c2a8459fddc699d412e429aa1b0a13181d48cbeb40aaf9b",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV7",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 53468,
+      "afterBytes": 53468,
+      "beforeSHA256": "b89d726537ebdd29969d5972203cf89a32d74b4301570bcd59177ccccfc52923",
+      "afterSHA256": "b89d726537ebdd29969d5972203cf89a32d74b4301570bcd59177ccccfc52923",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4Expansion",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 18199,
+      "afterBytes": 18199,
+      "beforeSHA256": "9292d5d7bdd0d25ecb167a682a39a703ea02f58c996f69d5a6835ff9352106b2",
+      "afterSHA256": "9292d5d7bdd0d25ecb167a682a39a703ea02f58c996f69d5a6835ff9352106b2",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4Generator",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 16613,
+      "afterBytes": 16613,
+      "beforeSHA256": "65c38772060ae75340dca2dcea18d7d1ec27d7f1c4908a30f169b61c715955c0",
+      "afterSHA256": "65c38772060ae75340dca2dcea18d7d1ec27d7f1c4908a30f169b61c715955c0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 5995,
+      "afterBytes": 5995,
+      "beforeSHA256": "138f1efe76c19ef78f8fd72f92114fe1a3a447b7f0d3e6e4844efbd724aa6f0d",
+      "afterSHA256": "138f1efe76c19ef78f8fd72f92114fe1a3a447b7f0d3e6e4844efbd724aa6f0d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4Renovation",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 19064,
+      "afterBytes": 19064,
+      "beforeSHA256": "75541849a35d282469ad93c4e79fc5d650204f289abcec01f82db789b4386dd4",
+      "afterSHA256": "75541849a35d282469ad93c4e79fc5d650204f289abcec01f82db789b4386dd4",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4RenovationBoot",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 1232,
+      "afterBytes": 1232,
+      "beforeSHA256": "e3f17f1895f75ca313c9f5f5c9c53e1a12dd79d7e9a2ace77ceaaabfd06bf772",
+      "afterSHA256": "e3f17f1895f75ca313c9f5f5c9c53e1a12dd79d7e9a2ace77ceaaabfd06bf772",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 4384,
+      "afterBytes": 4384,
+      "beforeSHA256": "afc18e7b0260fb517bf391a5c63537372583aaafbde7acb5f16a7db1ecc87168",
+      "afterSHA256": "afc18e7b0260fb517bf391a5c63537372583aaafbde7acb5f16a7db1ecc87168",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 4350,
+      "afterBytes": 4350,
+      "beforeSHA256": "544ae607e0feb9487933909c39493c66b5b250ac444e1560485f0879d782d93f",
+      "afterSHA256": "544ae607e0feb9487933909c39493c66b5b250ac444e1560485f0879d782d93f",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 4596,
+      "afterBytes": 4596,
+      "beforeSHA256": "37e536c695ccf85298596954fa3e737e2a44e6a4f41b889e7eb1dedf172d117e",
+      "afterSHA256": "37e536c695ccf85298596954fa3e737e2a44e6a4f41b889e7eb1dedf172d117e",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 3935,
+      "afterBytes": 3935,
+      "beforeSHA256": "45765bec89cc5c787b12a6d068d827c052526b681a8433627c615f202c77802d",
+      "afterSHA256": "45765bec89cc5c787b12a6d068d827c052526b681a8433627c615f202c77802d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 12739,
+      "afterBytes": 12739,
+      "beforeSHA256": "59c47116ce5932a4603cda457b51f7dabe631349bdb5ca34f96a68887995bd71",
+      "afterSHA256": "59c47116ce5932a4603cda457b51f7dabe631349bdb5ca34f96a68887995bd71",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.NoiseRegistry",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1933,
+      "afterBytes": 1933,
+      "beforeSHA256": "f3b7121b7d1b1888639dde315a3979296ae6975ebffbd4d4134bdb18b577810d",
+      "afterSHA256": "f3b7121b7d1b1888639dde315a3979296ae6975ebffbd4d4134bdb18b577810d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.PlayerProtection",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 3924,
+      "afterBytes": 3924,
+      "beforeSHA256": "5c4680d90fe4b57f390ced878674a2f6a9494f6d3b6a93db292e8938829261f4",
+      "afterSHA256": "5c4680d90fe4b57f390ced878674a2f6a9494f6d3b6a93db292e8938829261f4",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.PurchaseAlerts",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 4290,
+      "afterBytes": 4290,
+      "beforeSHA256": "ef760f75790be994964c77fe54e5230547046a3adc9971b20a88c78d28e1537e",
+      "afterSHA256": "ef760f75790be994964c77fe54e5230547046a3adc9971b20a88c78d28e1537e",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.ReentryPlacement",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 2882,
+      "afterBytes": 2882,
+      "beforeSHA256": "ae4f0f37641b99b61111480a44b714a96983f146f3fe85869815cc8b74355a1c",
+      "afterSHA256": "ae4f0f37641b99b61111480a44b714a96983f146f3fe85869815cc8b74355a1c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 36382,
+      "afterBytes": 36382,
+      "beforeSHA256": "33398fcb86cd28b46f431c034836e6e87522200416c5e18dd74f39842d2c1fd3",
+      "afterSHA256": "33398fcb86cd28b46f431c034836e6e87522200416c5e18dd74f39842d2c1fd3",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Round Completion Test Suite",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 54485,
+      "afterBytes": 54485,
+      "beforeSHA256": "f4193335e164d5863d9ce7d15e49a92ff9b7678c25477f32ac95770f56b6c0b9",
+      "afterSHA256": "f4193335e164d5863d9ce7d15e49a92ff9b7678c25477f32ac95770f56b6c0b9",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Runtime",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 5022,
+      "afterBytes": 5022,
+      "beforeSHA256": "895ea00d962e01462cd0204998f632268669afdc88caec08e0577f05624f871b",
+      "afterSHA256": "895ea00d962e01462cd0204998f632268669afdc88caec08e0577f05624f871b",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Test Suite",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 7805,
+      "afterBytes": 7805,
+      "beforeSHA256": "8f290add056077ae716c27e682ccc4ebe3fff5eaef28f3489644b3deea2abe73",
+      "afterSHA256": "8f290add056077ae716c27e682ccc4ebe3fff5eaef28f3489644b3deea2abe73",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.RouteMarkerService",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 7754,
+      "afterBytes": 7754,
+      "beforeSHA256": "e95cf83e71a10a24439c3c6a7f5521f18fc2e61dc52b2fb2eb7fe8cb84c5de97",
+      "afterSHA256": "e95cf83e71a10a24439c3c6a7f5521f18fc2e61dc52b2fb2eb7fe8cb84c5de97",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.TeamObjectives",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1409,
+      "afterBytes": 1409,
+      "beforeSHA256": "90abd0bac66cdd33da9125cf5f89c99ca3dc55c51166decfffa20df449028b28",
+      "afterSHA256": "90abd0bac66cdd33da9125cf5f89c99ca3dc55c51166decfffa20df449028b28",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 50759,
+      "afterBytes": 50759,
+      "beforeSHA256": "331aada4ba290ec421c7ca4daae1c3bc0103e5a46b42f448dd95dc726c7c66f0",
+      "afterSHA256": "331aada4ba290ec421c7ca4daae1c3bc0103e5a46b42f448dd95dc726c7c66f0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraAnalytics",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 10612,
+      "afterBytes": 10612,
+      "beforeSHA256": "2c87566b1d07868706b8e3506d9bac029538efbf7373245358a011558d325acf",
+      "afterSHA256": "2c87566b1d07868706b8e3506d9bac029538efbf7373245358a011558d325acf",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorSensing",
+      "beforeClass": "ModuleScript",
+      "afterClass": "ModuleScript",
+      "beforeBytes": 1601,
+      "afterBytes": 1601,
+      "beforeSHA256": "6e4a3a34380f6e9f806d8d9d17a52e7209b1b6626ce33fad767d4af366713ffd",
+      "afterSHA256": "6e4a3a34380f6e9f806d8d9d17a52e7209b1b6626ce33fad767d4af366713ffd",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 2036,
+      "afterBytes": 2036,
+      "beforeSHA256": "e52d019f358c92da21daf779a742dff734b6f228ce786a92ddffa7ace87269be",
+      "afterSHA256": "e52d019f358c92da21daf779a742dff734b6f228ce786a92ddffa7ace87269be",
+      "unchanged": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraMonetization",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "beforeBytes": 92479,
+      "afterBytes": 92479,
+      "beforeSHA256": "6ce18fab884a1f9a8d312c30175e0bcbe8e3fa4615737965bcc998435ec82181",
+      "afterSHA256": "6ce18fab884a1f9a8d312c30175e0bcbe8e3fa4615737965bcc998435ec82181",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Archive",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 618910,
+      "afterBytes": 618910,
+      "beforeSHA256": "296691f402538983a302f3037eb82bae55bbdbc3ac2803d2b7edbcb41265e865",
+      "afterSHA256": "296691f402538983a302f3037eb82bae55bbdbc3ac2803d2b7edbcb41265e865",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_ComingSoonGates",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 39053,
+      "afterBytes": 39053,
+      "beforeSHA256": "7813ba7f040b65233af25b9a8732e8bc4713ff6340798b803839e6a38a980a84",
+      "afterSHA256": "7813ba7f040b65233af25b9a8732e8bc4713ff6340798b803839e6a38a980a84",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_CrouchFunction",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 25909,
+      "afterBytes": 25909,
+      "beforeSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d",
+      "afterSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 102383,
+      "afterBytes": 102383,
+      "beforeSHA256": "e69bbbec48ff2059ee28a44ae1d8502a6e310cdf2e121bea9fb1fe94c1f8afbd",
+      "afterSHA256": "e69bbbec48ff2059ee28a44ae1d8502a6e310cdf2e121bea9fb1fe94c1f8afbd",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatBaselineRig_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38405,
+      "afterBytes": 38405,
+      "beforeSHA256": "c11f2f03b5d87f321d941955f1a37ab6a935e59e8b0d40f9b8ef59334282b06a",
+      "afterSHA256": "c11f2f03b5d87f321d941955f1a37ab6a935e59e8b0d40f9b8ef59334282b06a",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatFalseSunTopper_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 22903,
+      "afterBytes": 22903,
+      "beforeSHA256": "0eabf372379a94db9a8e3702bdbce1e6c0aa66a2696cb31e337af39ed470a1bd",
+      "afterSHA256": "0eabf372379a94db9a8e3702bdbce1e6c0aa66a2696cb31e337af39ed470a1bd",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSignalArchitectTopper_20260925",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 13566,
+      "afterBytes": 13566,
+      "beforeSHA256": "2284e90c9cb986e83d0199d8be9c44ac61e61701e4c368914beef9496081e2c9",
+      "afterSHA256": "2284e90c9cb986e83d0199d8be9c44ac61e61701e4c368914beef9496081e2c9",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_BaselineYellow_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38414,
+      "afterBytes": 38414,
+      "beforeSHA256": "e35f6db8aa160d69edfc0f4aa35f26b64f781a9ec20caa7f8295b22cde291117",
+      "afterSHA256": "e35f6db8aa160d69edfc0f4aa35f26b64f781a9ec20caa7f8295b22cde291117",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_BlacksiteDirector_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38415,
+      "afterBytes": 38415,
+      "beforeSHA256": "a4ebb5b7644c55db1d6dd13aac64495e72939c67cde7d5d762cebfe1253313bc",
+      "afterSHA256": "a4ebb5b7644c55db1d6dd13aac64495e72939c67cde7d5d762cebfe1253313bc",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_FalseSun_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38406,
+      "afterBytes": 38406,
+      "beforeSHA256": "5d62c32f324f783c14105467ced37066b557fbe6e24034e9e5acda726e9926b1",
+      "afterSHA256": "5d62c32f324f783c14105467ced37066b557fbe6e24034e9e5acda726e9926b1",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_PoolService_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38410,
+      "afterBytes": 38410,
+      "beforeSHA256": "00f39e310cad6c0ddb5f1bddaa5dc0a2d1c4e1c5099e0ffe2286651a41177046",
+      "afterSHA256": "00f39e310cad6c0ddb5f1bddaa5dc0a2d1c4e1c5099e0ffe2286651a41177046",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_SignalArchitect_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38537,
+      "afterBytes": 38537,
+      "beforeSHA256": "1b59730b6f03b32eeeae2fc8b8717e91f2e9c3e1995ffd533578938479fe36b4",
+      "afterSHA256": "1b59730b6f03b32eeeae2fc8b8717e91f2e9c3e1995ffd533578938479fe36b4",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_StaticWraith_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38411,
+      "afterBytes": 38411,
+      "beforeSHA256": "bb982b9e5e42a6c9620ac5f7b77b935426ee4387c9a4895746e1ff3696560a9d",
+      "afterSHA256": "bb982b9e5e42a6c9620ac5f7b77b935426ee4387c9a4895746e1ff3696560a9d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatSkin_SuburbSurvey_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38410,
+      "afterBytes": 38410,
+      "beforeSHA256": "109603505b014ab06612503d0d023feab0cf7fade3d6cf7bac45231cec90f283",
+      "afterSHA256": "109603505b014ab06612503d0d023feab0cf7fade3d6cf7bac45231cec90f283",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.HazmatStaticWraithTopper_20260924",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 19025,
+      "afterBytes": 19025,
+      "beforeSHA256": "5054506b5b24b512debffd33f3a496bc7515da5560ca66bd5245bc9e61a2bace",
+      "afterSHA256": "5054506b5b24b512debffd33f3a496bc7515da5560ca66bd5245bc9e61a2bace",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 4315,
+      "afterBytes": 4315,
+      "beforeSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888",
+      "afterSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 4300,
+      "afterBytes": 4300,
+      "beforeSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16",
+      "afterSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Closed Slide End Cap Template",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 3518,
+      "afterBytes": 3518,
+      "beforeSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef",
+      "afterSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Column Flare Template",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 3524,
+      "afterBytes": 3524,
+      "beforeSHA256": "6bbffd2dfd96594e9f7e28d4188d65498f9508699422297e9bf8afaab5a78d9f",
+      "afterSHA256": "6bbffd2dfd96594e9f7e28d4188d65498f9508699422297e9bf8afaab5a78d9f",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Column Flare Template 4.500:7.200",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 4540,
+      "afterBytes": 4540,
+      "beforeSHA256": "2732df1036b7dde288500e54a293ed53e30e44fbe1cbf1e8513a94af8da6e0c3",
+      "afterSHA256": "2732df1036b7dde288500e54a293ed53e30e44fbe1cbf1e8513a94af8da6e0c3",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Column Flare Template 5.500:7.425",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 4541,
+      "afterBytes": 4541,
+      "beforeSHA256": "4cc0c9932647cc30bf225d6c7be2525c2a0867f9c60f24b32f3f45980bc1bb3c",
+      "afterSHA256": "4cc0c9932647cc30bf225d6c7be2525c2a0867f9c60f24b32f3f45980bc1bb3c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Column Flare Template 9.000:10.200",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 4542,
+      "afterBytes": 4542,
+      "beforeSHA256": "f22f7c8d4ac8014b73fc915ee3bb166e0de5b4f03cf752afbbe25dab2b60d4f8",
+      "afterSHA256": "f22f7c8d4ac8014b73fc915ee3bb166e0de5b4f03cf752afbbe25dab2b60d4f8",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Column Tile Surface Template",
+      "beforeClass": "SurfaceAppearance",
+      "afterClass": "SurfaceAppearance",
+      "beforeBytes": 1050,
+      "afterBytes": 1050,
+      "beforeSHA256": "9ef87ea616c740c2ae4f7497bd6098638aaadc128c92d5f0b10cb0bb9809be79",
+      "afterSHA256": "9ef87ea616c740c2ae4f7497bd6098638aaadc128c92d5f0b10cb0bb9809be79",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Fitted Slide Cradle Template",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 3561,
+      "afterBytes": 3561,
+      "beforeSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38",
+      "afterSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Kids Round Skylight Templates",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 6171,
+      "afterBytes": 6171,
+      "beforeSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc",
+      "afterSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Open Slide End Cap Template",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 3598,
+      "afterBytes": 3598,
+      "beforeSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6",
+      "afterSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Sealed Open Slide Segment Template",
+      "beforeClass": "MeshPart",
+      "afterClass": "MeshPart",
+      "beforeBytes": 3518,
+      "afterBytes": 3518,
+      "beforeSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55",
+      "afterSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level 2 Slide Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 7408,
+      "afterBytes": 7408,
+      "beforeSHA256": "7c842281d951360c7e751eb83d9a31c5c9b297d7732775dc2e31aa721f322fde",
+      "afterSHA256": "7c842281d951360c7e751eb83d9a31c5c9b297d7732775dc2e31aa721f322fde",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level2Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 168686,
+      "afterBytes": 168686,
+      "beforeSHA256": "6c1792bf997a5f5391ada9a4820d15a2c7fcbc8bc18eb874e96538141057219d",
+      "afterSHA256": "6c1792bf997a5f5391ada9a4820d15a2c7fcbc8bc18eb874e96538141057219d",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level3Assets",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 141421,
+      "afterBytes": 141421,
+      "beforeSHA256": "a47016a5b2517ea778ca69db03a0b0e94129d9380906e7a0c385d7a0859ccf32",
+      "afterSHA256": "a47016a5b2517ea778ca69db03a0b0e94129d9380906e7a0c385d7a0859ccf32",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level4CinemaV3Archived",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 54604,
+      "afterBytes": 54604,
+      "beforeSHA256": "f1a10d34d9db599c577866e216e123daac3ec93dda756d1879a8c03c17c988eb",
+      "afterSHA256": "f1a10d34d9db599c577866e216e123daac3ec93dda756d1879a8c03c17c988eb",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level4V10Templates",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 543557,
+      "afterBytes": 543557,
+      "beforeSHA256": "f88d50bba2c00bdf9ae211c0e375e70118674cc650e4d0f3787f2a986455ef44",
+      "afterSHA256": "f88d50bba2c00bdf9ae211c0e375e70118674cc650e4d0f3787f2a986455ef44",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level4V4Archived_20260927",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 35220,
+      "afterBytes": 35220,
+      "beforeSHA256": "9c2e52cf799fe859f68f878c2bf97f3bf7819578a6ab8615cc286c44b594a213",
+      "afterSHA256": "9c2e52cf799fe859f68f878c2bf97f3bf7819578a6ab8615cc286c44b594a213",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level4V7Templates",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 73456,
+      "afterBytes": 73456,
+      "beforeSHA256": "058fb51c79ef420e1759febbce9648410ded2720c042e54fd8498fa8fb61c333",
+      "afterSHA256": "058fb51c79ef420e1759febbce9648410ded2720c042e54fd8498fa8fb61c333",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level6BlenderSource",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2360623,
+      "afterBytes": 2360623,
+      "beforeSHA256": "88867b5502f29d92f1f0b8d52efda7063afb0d5a23d259b36641e8a2226be221",
+      "afterSHA256": "88867b5502f29d92f1f0b8d52efda7063afb0d5a23d259b36641e8a2226be221",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level6BlenderSourceRevision20261001",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 35931166,
+      "afterBytes": 35931166,
+      "beforeSHA256": "0441dd9c3f90e97f70cbc6d5150b5d892c1f3d6639142098f8fa1645a13c60d5",
+      "afterSHA256": "0441dd9c3f90e97f70cbc6d5150b5d892c1f3d6639142098f8fa1645a13c60d5",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Level6TextureImportReferences",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 486,
+      "afterBytes": 486,
+      "beforeSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167",
+      "afterSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.MongoTVEntityAnimations",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 7682736,
+      "afterBytes": 7682736,
+      "beforeSHA256": "71c93ececb7e10747fea4aef38f5ab5de259368dbb86f190eb6364c7e8c1d511",
+      "afterSHA256": "71c93ececb7e10747fea4aef38f5ab5de259368dbb86f190eb6364c7e8c1d511",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContactAnimations_20260910",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 188972,
+      "afterBytes": 188972,
+      "beforeSHA256": "25142418f770f35f5f55fffd8245568085c89c0733fbb6c5f4e8a5f6ca809e80",
+      "afterSHA256": "25142418f770f35f5f55fffd8245568085c89c0733fbb6c5f4e8a5f6ca809e80",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 77072,
+      "afterBytes": 77072,
+      "beforeSHA256": "2214e2f183f9c4dd9174599db742169ab5d5fcdd692e47cbab78c59535269b5a",
+      "afterSHA256": "2214e2f183f9c4dd9174599db742169ab5d5fcdd692e47cbab78c59535269b5a",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 77096,
+      "afterBytes": 77096,
+      "beforeSHA256": "a869cdb1f357f630ed021266e3a1d5b08c43327324411fa35bdbb85a86b53358",
+      "afterSHA256": "a869cdb1f357f630ed021266e3a1d5b08c43327324411fa35bdbb85a86b53358",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 77096,
+      "afterBytes": 77096,
+      "beforeSHA256": "161ecab040cc8305e2e18442421aae87de99943418bde19a86454a183d4e82b4",
+      "afterSHA256": "161ecab040cc8305e2e18442421aae87de99943418bde19a86454a183d4e82b4",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 136902,
+      "afterBytes": 136902,
+      "beforeSHA256": "9564e1a0004e4411b4495d2f9a0ecd8efa666fff7a62c76e6735c9005352fb9a",
+      "afterSHA256": "9564e1a0004e4411b4495d2f9a0ecd8efa666fff7a62c76e6735c9005352fb9a",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 77254,
+      "afterBytes": 77254,
+      "beforeSHA256": "691936fc02e16eb77597dc3d3538dafbe0c50a9c1d89478c4a5e8c1a9aa54a7c",
+      "afterSHA256": "691936fc02e16eb77597dc3d3538dafbe0c50a9c1d89478c4a5e8c1a9aa54a7c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 40152,
+      "afterBytes": 40152,
+      "beforeSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb",
+      "afterSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.Project Mirror",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1671,
+      "afterBytes": 1671,
+      "beforeSHA256": "fb2f409371e1f23ecea93e62eb376e5ee455a97269a2dc5e0b44887b6b52730c",
+      "afterSHA256": "fb2f409371e1f23ecea93e62eb376e5ee455a97269a2dc5e0b44887b6b52730c",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.RBX_ANIMSAVES",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 2514905,
+      "afterBytes": 2514905,
+      "beforeSHA256": "a8f9c4670380995b8e202f2396052bed761530adfc9454610dd6dd9849dfd744",
+      "afterSHA256": "a8f9c4670380995b8e202f2396052bed761530adfc9454610dd6dd9849dfd744",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1022182,
+      "afterBytes": 1022182,
+      "beforeSHA256": "db4451e9402b4415a5f02f2baaf5647b801ada13fd8ecc23f8a4457d3fab366e",
+      "afterSHA256": "db4451e9402b4415a5f02f2baaf5647b801ada13fd8ecc23f8a4457d3fab366e",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 839304,
+      "afterBytes": 839304,
+      "beforeSHA256": "2e90145453a96884e3cd8171dea46f318a0a2a265250c862ed6c94d432f047c2",
+      "afterSHA256": "2e90145453a96884e3cd8171dea46f318a0a2a265250c862ed6c94d432f047c2",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityLobbyRigResult_0748Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2927,
+      "afterBytes": 2927,
+      "beforeSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f",
+      "afterSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0457Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 1372,
+      "afterBytes": 1372,
+      "beforeSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5",
+      "afterSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0503Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2336,
+      "afterBytes": 2336,
+      "beforeSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b",
+      "afterSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0508Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 23116,
+      "afterBytes": 23116,
+      "beforeSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614",
+      "afterSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0638Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 25526,
+      "afterBytes": 25526,
+      "beforeSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562",
+      "afterSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0706Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 8750,
+      "afterBytes": 8750,
+      "beforeSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0",
+      "afterSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1609Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2630,
+      "afterBytes": 2630,
+      "beforeSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79",
+      "afterSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1624Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 32627,
+      "afterBytes": 32627,
+      "beforeSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc",
+      "afterSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1633Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 26847,
+      "afterBytes": 26847,
+      "beforeSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc",
+      "afterSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1640Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 27847,
+      "afterBytes": 27847,
+      "beforeSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd",
+      "afterSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1648Z",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 2872,
+      "afterBytes": 2872,
+      "beforeSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0",
+      "afterSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityMultiplayerLaunch",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 554,
+      "afterBytes": 554,
+      "beforeSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a",
+      "afterSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityValidation",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 74194,
+      "afterBytes": 74194,
+      "beforeSHA256": "63e62d5132a9d888d7c22eefebcdebab39bc78ab81ddf81f68ad998291203528",
+      "afterSHA256": "63e62d5132a9d888d7c22eefebcdebab39bc78ab81ddf81f68ad998291203528",
+      "unchanged": true
+    },
+    {
+      "path": "ServerStorage.TrelloPoolSlideReleaseBackup_20260910",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 76278,
+      "afterBytes": 76278,
+      "beforeSHA256": "44d9e15f48348829e2c77eaaafd1bcc97b87101fb19053489291efcc759b29c2",
+      "afterSHA256": "44d9e15f48348829e2c77eaaafd1bcc97b87101fb19053489291efcc759b29c2",
+      "unchanged": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacter",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 172656,
+      "afterBytes": 172656,
+      "beforeSHA256": "ff24814226b3fb5669cd3e7c9bba33f84eb349f463cdad422c929930faea8c37",
+      "afterSHA256": "ff24814226b3fb5669cd3e7c9bba33f84eb349f463cdad422c929930faea8c37",
+      "unchanged": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts",
+      "beforeClass": "StarterCharacterScripts",
+      "afterClass": "StarterCharacterScripts",
+      "beforeBytes": 2678,
+      "afterBytes": 2678,
+      "beforeSHA256": "eba2ae8c48529d6f8db7abe691ef77a30327d9fd2f35ddd6240aff94a1a0f9a2",
+      "afterSHA256": "eba2ae8c48529d6f8db7abe691ef77a30327d9fd2f35ddd6240aff94a1a0f9a2",
+      "unchanged": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "beforeClass": "StarterPlayerScripts",
+      "afterClass": "StarterPlayerScripts",
+      "beforeBytes": 700467,
+      "afterBytes": 700519,
+      "beforeSHA256": "6153fe2f50d56905d855add8b24b49e0b41231c903a1341f838177d0810053ff",
+      "afterSHA256": "2c01a27825e8c6c478947d097c951903464114ecb7247ed3eb35886369635e10",
+      "unchanged": false
+    },
+    {
+      "path": "Workspace.Avatar Rigged No Animation",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 55755,
+      "afterBytes": 55755,
+      "beforeSHA256": "a8e1f4670be94dbe98b98500008af15c40e3bf8391012c57034681f613f09737",
+      "afterSHA256": "a8e1f4670be94dbe98b98500008af15c40e3bf8391012c57034681f613f09737",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Camera",
+      "beforeClass": "Camera",
+      "afterClass": "Camera",
+      "beforeBytes": 786,
+      "afterBytes": 786,
+      "beforeSHA256": "a080cd13af7e15ee127e4726cc90498deb6bb903c4e2528e87a14939ea2f39d2",
+      "afterSHA256": "a080cd13af7e15ee127e4726cc90498deb6bb903c4e2528e87a14939ea2f39d2",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Dummy",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 38379,
+      "afterBytes": 38379,
+      "beforeSHA256": "251bf19326ce4d923ec5d4347c97cb26810fb1fed71ea6125e62f0a67adc076c",
+      "afterSHA256": "251bf19326ce4d923ec5d4347c97cb26810fb1fed71ea6125e62f0a67adc076c",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Entity",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 61082,
+      "afterBytes": 61082,
+      "beforeSHA256": "c0fedd48690812aaeeef1dbf8a11453ca4f4cb75cb8b1090380626bd68428354",
+      "afterSHA256": "c0fedd48690812aaeeef1dbf8a11453ca4f4cb75cb8b1090380626bd68428354",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.L5_ImportProbe",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 4057,
+      "afterBytes": 4057,
+      "beforeSHA256": "7699fcf352dce2c3893f845b52047742b37d76b58420ff1af8259e7a192904a5",
+      "afterSHA256": "7699fcf352dce2c3893f845b52047742b37d76b58420ff1af8259e7a192904a5",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 290043,
+      "afterBytes": 394005,
+      "beforeSHA256": "9ed78e3602c0aebec260032a9317b2b344433558ded23bcc8c207e1d6a29f681",
+      "afterSHA256": "38363c2e7a0805a3b6f66d8c3d70407d304af0d327478434e027fc393995cd14",
+      "unchanged": false
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Preview",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 281129,
+      "afterBytes": 281129,
+      "beforeSHA256": "edc7e56112c1a80137a1a6df62a79b20bdbe9d8827d3733424c28262eb6b70a3",
+      "afterSHA256": "edc7e56112c1a80137a1a6df62a79b20bdbe9d8827d3733424c28262eb6b70a3",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema V9 QA",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 721911,
+      "afterBytes": 721911,
+      "beforeSHA256": "3b4692c39203827adf6c8952bda96c852b182f56220e5d8a6c28fd264c030daf",
+      "afterSHA256": "3b4692c39203827adf6c8952bda96c852b182f56220e5d8a6c28fd264c030daf",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Level 5 Quiet Suburbs",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 9153340,
+      "afterBytes": 9153340,
+      "beforeSHA256": "5c273aa52f6ebc043aa7c349c4c274f01a13e4ca4dd2659bc06f7252a9cd6eae",
+      "afterSHA256": "5c273aa52f6ebc043aa7c349c4c274f01a13e4ca4dd2659bc06f7252a9cd6eae",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.ServerLobby",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 138186,
+      "afterBytes": 138186,
+      "beforeSHA256": "6b89a39717adef517875ebab3f1cbeabc967c999d22195a74533a1190b7abc97",
+      "afterSHA256": "6b89a39717adef517875ebab3f1cbeabc967c999d22195a74533a1190b7abc97",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.StarterCharacter",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 161772,
+      "afterBytes": 161772,
+      "beforeSHA256": "a8e8a12061e526c682455a291d9c85c3548c581c6f8387c868d931470a03888a",
+      "afterSHA256": "a8e8a12061e526c682455a291d9c85c3548c581c6f8387c868d931470a03888a",
+      "unchanged": true
+    },
+    {
+      "path": "Workspace.Terrain",
+      "beforeClass": "Terrain",
+      "afterClass": "Terrain",
+      "beforeBytes": 3366,
+      "afterBytes": 3366,
+      "beforeSHA256": "80b09cbf6431a037543f7ee65f6b60f2b04b88e8628462d9ba16f5aa9c1c087f",
+      "afterSHA256": "80b09cbf6431a037543f7ee65f6b60f2b04b88e8628462d9ba16f5aa9c1c087f",
+      "unchanged": true
+    }
+  ],
+  "changedNativeRoots": [
+    {
+      "path": "ServerScriptService.Level 6 Systems",
+      "beforeClass": "Folder",
+      "afterClass": "Folder",
+      "beforeBytes": 224217,
+      "afterBytes": 234614,
+      "beforeSHA256": "30b4a8b075ad5cb197bc82e347e532d7254b7367982b64eb3f7c758ce142c92e",
+      "afterSHA256": "f37c2a47b82276ab607e757acd05c48c329db31a3c2f0d13da31d37a5adca985",
+      "unchanged": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "beforeClass": "StarterPlayerScripts",
+      "afterClass": "StarterPlayerScripts",
+      "beforeBytes": 700467,
+      "afterBytes": 700519,
+      "beforeSHA256": "6153fe2f50d56905d855add8b24b49e0b41231c903a1341f838177d0810053ff",
+      "afterSHA256": "2c01a27825e8c6c478947d097c951903464114ecb7247ed3eb35886369635e10",
+      "unchanged": false
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 290043,
+      "afterBytes": 394005,
+      "beforeSHA256": "9ed78e3602c0aebec260032a9317b2b344433558ded23bcc8c207e1d6a29f681",
+      "afterSHA256": "38363c2e7a0805a3b6f66d8c3d70407d304af0d327478434e027fc393995cd14",
+      "unchanged": false
+    }
+  ],
+  "serviceMetadataChanges": [
+    {
+      "service": "HttpService",
+      "kind": "changed",
+      "changedProperties": [
+        "HttpEnabled"
+      ],
+      "changedAttributes": [],
+      "beforeSHA256": "bb7fd19c4b1b73eb5e6f9cbf4789941e1ffe35786da2ddc1cbf0d6019de3e923",
+      "afterSHA256": "a62a3ed6f7a3b9f4e45ea131cb6ea3eefd93e13dda175cac68c7129e3be7d842"
+    },
+    {
+      "service": "Lighting",
+      "kind": "changed",
+      "changedProperties": [
+        "LightingStyle"
+      ],
+      "changedAttributes": [],
+      "beforeSHA256": "8483beb52e692257cf1e81f90a1e3f606e7dd2b02f962242e4c49b993b353177",
+      "afterSHA256": "5200aefa1a87235d4c681e5b5dd99a4ec6eacf97e41b96319b675e3726712fe9"
+    }
+  ],
+  "fullNativePlaces": [
+    {
+      "phase": "native-before",
+      "file": "artifacts/level6-entity-decor-20261001/native-before/BeforeLevel6-AuthoritativeStudio.rbxl",
+      "bytes": 65922197,
+      "sha256": "63471fbad90cc70b4d194160ffa260cc1bc45f117fbe41e0bded6eb646a1df74",
+      "sourceErrors": 0,
+      "rootErrors": 0,
+      "propertyAssignmentLimitations": 29,
+      "unreadableLivePropertyLimitations": 129,
+      "reopenedDescendants": 383419
+    },
+    {
+      "phase": "native-after",
+      "file": "artifacts/level6-entity-decor-20261001/native-after/AfterLevel6-AuthoritativeStudio.rbxl",
+      "bytes": 66046711,
+      "sha256": "dd51e15be5d700e3be0dc4e0ef3f58ab295ee45bc38e3395a45b7a41af95cf1a",
+      "sourceErrors": 0,
+      "rootErrors": 0,
+      "propertyAssignmentLimitations": 29,
+      "unreadableLivePropertyLimitations": 129,
+      "reopenedDescendants": 387493
+    }
+  ],
+  "preservedConcurrentDifferences": {
+    "acknowledgement": "artifacts/level6-entity-decor-20261001/verification/preserved-concurrent-studio-differences.json",
+    "reviewAuthority": "Root agent reviewed exact live native Source diffs, Level 4 asset root state, and owner settings; preserve concurrent developer work under Studio-authoritative owner instructions.",
+    "scripts": [
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+        "beforeSHA256": "6b835beff8b804ac575f37f311464e7a23055dff6c7bb2c2c2e8b1f58aeec517",
+        "afterSHA256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392",
+        "beforeClass": "LocalScript",
+        "afterClass": "LocalScript",
+        "kind": "changed"
+      },
+      {
+        "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+        "beforeSHA256": "d86fd89a1796eadbf976c8b88db63bb7856ae5e0ab45d5fd41efc60862a3bc2b",
+        "afterSHA256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47",
+        "beforeClass": "Script",
+        "afterClass": "Script",
+        "kind": "changed"
+      },
+      {
+        "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+        "beforeSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+        "afterSHA256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb",
+        "beforeClass": "Script",
+        "afterClass": "Script",
+        "kind": "changed"
+      }
+    ],
+    "nativeRoots": [
+      {
+        "path": "StarterPlayer.StarterPlayerScripts",
+        "beforeClass": "StarterPlayerScripts",
+        "afterClass": "StarterPlayerScripts",
+        "beforeBytes": 700467,
+        "afterBytes": 700519,
+        "beforeSHA256": "6153fe2f50d56905d855add8b24b49e0b41231c903a1341f838177d0810053ff",
+        "afterSHA256": "2c01a27825e8c6c478947d097c951903464114ecb7247ed3eb35886369635e10",
+        "unchanged": false
+      },
+      {
+        "path": "Workspace.Level 4 Cinema Blender",
+        "beforeClass": "Model",
+        "afterClass": "Model",
+        "beforeBytes": 290043,
+        "afterBytes": 394005,
+        "beforeSHA256": "9ed78e3602c0aebec260032a9317b2b344433558ded23bcc8c207e1d6a29f681",
+        "afterSHA256": "38363c2e7a0805a3b6f66d8c3d70407d304af0d327478434e027fc393995cd14",
+        "unchanged": false
+      }
+    ],
+    "services": [
+      {
+        "service": "HttpService",
+        "kind": "changed",
+        "changedProperties": [
+          "HttpEnabled"
+        ],
+        "changedAttributes": [],
+        "beforeSHA256": "bb7fd19c4b1b73eb5e6f9cbf4789941e1ffe35786da2ddc1cbf0d6019de3e923",
+        "afterSHA256": "a62a3ed6f7a3b9f4e45ea131cb6ea3eefd93e13dda175cac68c7129e3be7d842"
+      },
+      {
+        "service": "Lighting",
+        "kind": "changed",
+        "changedProperties": [
+          "LightingStyle"
+        ],
+        "changedAttributes": [],
+        "beforeSHA256": "8483beb52e692257cf1e81f90a1e3f606e7dd2b02f962242e4c49b993b353177",
+        "afterSHA256": "5200aefa1a87235d4c681e5b5dd99a4ec6eacf97e41b96319b675e3726712fe9"
+      }
+    ],
+    "servicePropertyValues": [
+      {
+        "service": "HttpService",
+        "property": "HttpEnabled",
+        "before": {
+          "value": false,
+          "type": "boolean"
+        },
+        "after": {
+          "value": true,
+          "type": "boolean"
+        }
+      },
+      {
+        "service": "Lighting",
+        "property": "LightingStyle",
+        "before": {
+          "value": "Soft",
+          "type": "EnumItem",
+          "enum": "LightingStyle",
+          "ordinal": 1
+        },
+        "after": {
+          "value": "Realistic",
+          "type": "EnumItem",
+          "enum": "LightingStyle",
+          "ordinal": 0
+        }
+      }
+    ],
+    "unrelatedGameplayVerified": false
+  },
+  "beforeRawNativeSHA256": "648e28a979bda64f0e40118322ff6aa5b31bd5ae74e46a48243840505b7285eb",
+  "afterRawNativeSHA256": "52ad26bff971ff6d1709e16a9217b7995ab51cd59b853c6eaefb33d6865e5e70",
+  "beforeScriptsCaptureSHA256": "1c87f3e722a99881a4adc872f6ea8521b2479c84e4fd790fb5370ceb746c58c5",
+  "afterScriptsCaptureSHA256": "c4dda0623c528e49f48cc70fca8c14c8fb123223d49b92405e6af6e9d6f6fb3e",
+  "verifiedMirrorManifest": "artifacts/level6-entity-decor-20261001/verified-studio-mirror/manifest.json",
+  "verifiedMirrorManifestSHA256": "7b7a4b20a0cc79f0d5ea4196b5fc54b349b4a67edd593cefb3dbb9e3f37ac573",
+  "verifiedMirrorScripts": 7,
+  "blockers": [],
+  "passed": true,
+  "limitations": [
+    "Native per-root bytes are produced by the same Lune deserialize/reserialize method for both captures.",
+    "The original jointly serialized raw .rbxm plus live service metadata are retained for recovery.",
+    "Reconstructed .rbxl files retain recorded property-assignment/unreadable-property limitations; full service-property parity is not claimed.",
+    "This local verifier does not establish gameplay, performance, multiplayer behavior, asset permissions or successful publication."
+  ]
+}

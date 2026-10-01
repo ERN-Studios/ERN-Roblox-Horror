@@ -1,0 +1,224 @@
+{
+  "UniverseId": 10559217407,
+  "LiveLevel4PartCount": 13912,
+  "phase": "after-successful-native-ui-publication",
+  "PlaceId": 131311258779917,
+  "ProbeAbsent": true,
+  "Passed": true,
+  "scripts": [
+    {
+      "SHA256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "path": "ServerScriptService.Level3Generator",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "scope"
+    },
+    {
+      "SHA256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "original-level3"
+    },
+    {
+      "SHA256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "role": "preserved-concurrent"
+    },
+    {
+      "SHA256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47",
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "editorMatch": true,
+      "class": "Script",
+      "role": "preserved-concurrent"
+    },
+    {
+      "SHA256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb",
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "editorMatch": true,
+      "class": "Script",
+      "role": "preserved-concurrent"
+    }
+  ],
+  "LiveLevel4Revision": 9,
+  "HttpEnabled": true,
+  "VerifiedAt": "2026-10-01T05:25:23Z",
+  "LightingStyle": "Realistic"
+}

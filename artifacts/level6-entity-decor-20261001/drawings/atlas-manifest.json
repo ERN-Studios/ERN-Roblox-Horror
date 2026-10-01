@@ -1,0 +1,92 @@
+[
+  {
+    "path": "artifacts/level6-entity-decor-20261001/drawings/crayon-tier1-ordinary.png",
+    "size": 1837824,
+    "sha256": "31e203653acaee2d9c6ac3755e42f3e547e498ee6bfadc313193aaa7a8e871d7",
+    "width": 1254,
+    "height": 1254,
+    "png_bit_depth": 8,
+    "png_color_type": 6,
+    "alpha_present": true,
+    "grid": [
+      4,
+      4
+    ],
+    "cell": [
+      313,
+      313
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "fully_transparent_fraction": 0.55320200239616,
+    "cell_boundaries": [
+      0,
+      313,
+      627,
+      940,
+      1254
+    ]
+  },
+  {
+    "path": "artifacts/level6-entity-decor-20261001/drawings/crayon-tier2-unsettling.png",
+    "size": 2105964,
+    "sha256": "8b08ba3c486dc1d1ddabb73de7d098a94ad069bb5b3603880b05c34e7086e811",
+    "width": 1254,
+    "height": 1254,
+    "png_bit_depth": 8,
+    "png_color_type": 6,
+    "alpha_present": true,
+    "grid": [
+      4,
+      4
+    ],
+    "cell": [
+      313,
+      313
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "fully_transparent_fraction": 0.417246628969117,
+    "cell_boundaries": [
+      0,
+      313,
+      627,
+      940,
+      1254
+    ]
+  },
+  {
+    "path": "artifacts/level6-entity-decor-20261001/drawings/crayon-tier3-disturbing.png",
+    "size": 2769679,
+    "sha256": "222c8ef04469997bcf733deecf2652946ef64ace0ae49bc80000f7e091b67de5",
+    "width": 1254,
+    "height": 1254,
+    "png_bit_depth": 8,
+    "png_color_type": 6,
+    "alpha_present": true,
+    "grid": [
+      4,
+      4
+    ],
+    "cell": [
+      313,
+      313
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "fully_transparent_fraction": 0.2967193974496921,
+    "cell_boundaries": [
+      0,
+      313,
+      627,
+      940,
+      1254
+    ]
+  }
+]

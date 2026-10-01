@@ -1,0 +1,3 @@
+{
+  "toolResult": "{\"ok\":true,\"httpRestored\":true,\"scripts\":{\"1\":{\"bytes\":23194,\"path\":\"ServerScriptService.Level 6 Systems.Level 6 Visual Adapter\",\"editorMatch\":true,\"beforeSHA256\":\"8cf095561f26abdc04dda02d2ad59e9b620bc04dbccc9011a6ad5dab1adea054\",\"afterSHA256\":\"e41b585ceebc5f814341659610a8360de321650f233a7275de842cb056fbc3bb\",\"class\":\"ModuleScript\",\"new\":false}}}"
+}

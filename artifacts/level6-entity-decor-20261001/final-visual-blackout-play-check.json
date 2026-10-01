@@ -1,0 +1,2843 @@
+{
+  "capturedAt": "2026-10-01",
+  "finalVisualAdapterSHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+  "snapshot": {
+    "Runtime": {
+      "LayoutHash": "L6-6-0acc9d7b",
+      "RoomCount": 32,
+      "Stale": false,
+      "Building": false,
+      "AuthoredGatewayRoomCount": 3,
+      "Generation": 1,
+      "Seed": 1862232497,
+      "Participants": 0,
+      "Playing": false
+    },
+    "EscapeTrigger": "Workspace.Level 6 Generated World.Level 6 Energon Freight Exit.EscapeTrigger",
+    "FinalHall": {
+      "HalfwayMarker": "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit.Level 6 Final Hall Halfway",
+      "Model": "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit",
+      "Length": 560,
+      "EndPoint": [
+        21197,
+        24,
+        499
+      ],
+      "Width": 14,
+      "StartPoint": [
+        20637,
+        24,
+        499
+      ],
+      "Forward": [
+        1,
+        0,
+        0
+      ],
+      "Corridor": {
+        "A": {
+          "Module": false,
+          "ThemeId": "RedParty",
+          "GridColumn": 5,
+          "D": 72,
+          "Decor": "AfterParty",
+          "H": 13,
+          "GridRow": 1,
+          "HideSpotCount": 1,
+          "DistrictId": "RED_PARTY",
+          "Id": "SignalHall",
+          "W": 84,
+          "X": 595,
+          "Name": "Signal Hall",
+          "Z": 499,
+          "LocalSeed": 897768082,
+          "Kind": "Party",
+          "SectionIndex": 3,
+          "Role": "SignalHall"
+        },
+        "Segments": [
+          {
+            "EndDistance": 560,
+            "WallCenter": [
+              20917,
+              24,
+              499
+            ],
+            "Length": 560,
+            "StartDistance": 0,
+            "Center": [
+              20917,
+              24,
+              499
+            ],
+            "WallLength": 558.4200000000001
+          }
+        ],
+        "Wallpaper": false,
+        "B": {
+          "Module": false,
+          "ThemeId": "RedParty",
+          "GridColumn": 6,
+          "D": 52,
+          "Decor": "EmptyTransition",
+          "H": 12,
+          "GridRow": 1,
+          "HideSpotCount": 0,
+          "DistrictId": "EXIT",
+          "Id": "Exit",
+          "W": 58,
+          "X": 1226,
+          "Name": "Level 6 Exit",
+          "Z": 499,
+          "LocalSeed": 529726829,
+          "Kind": "Exit",
+          "SectionIndex": 4,
+          "Role": "Exit"
+        },
+        "Forward": [
+          1,
+          0,
+          0
+        ],
+        "WallColor": "0.568627, 0.227451, 0.188235",
+        "EndPoint": [
+          21197,
+          24,
+          499
+        ],
+        "Width": 14,
+        "StartPoint": [
+          20637,
+          24,
+          499
+        ],
+        "Height": 10.5,
+        "Center": [
+          20917,
+          24,
+          499
+        ],
+        "Model": "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit",
+        "ScreamOpenings": [
+          "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit.Level 6 Corridor Floor.Level 6 Corridor Opening A",
+          "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit.Level 6 Corridor Floor.Level 6 Corridor Opening B"
+        ],
+        "Length": 560,
+        "DoorType": "HiddenExit",
+        "DoorPosition": [
+          20917,
+          24,
+          499
+        ]
+      },
+      "SpawnMarker": "Workspace.Level 6 Generated World.Corridors.Level 6 Corridor 37 SignalHall-Exit.Level 6 Mall Manager Finale Spawn",
+      "Height": 10.5,
+      "FloorY": 24,
+      "SpawnProgress": 0.97,
+      "HalfwayProgress": 0.5
+    },
+    "CDPlayer": "Workspace.Level 6 Generated World.Doors.Level 6 Hidden Exit Portal.Level 6 Signal Hall Disc Player",
+    "Rooms": [
+      {
+        "Module": false,
+        "ThemeId": "ArrivalTransition",
+        "GridColumn": 0,
+        "D": 54,
+        "Decor": "SparseWelcome",
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 0,
+        "DistrictId": "ARRIVAL",
+        "Id": "Arrival",
+        "W": 64,
+        "X": 0,
+        "Name": "Level 6 Arrival",
+        "Z": 90,
+        "LocalSeed": 692287447,
+        "Kind": "PartyHall",
+        "SectionIndex": 0,
+        "Role": "Arrival"
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 1,
+        "D": 72,
+        "Decor": "KidsCluster",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R01",
+        "W": 80,
+        "X": 117,
+        "Name": "Beige City Party Rooms 01",
+        "Z": -90,
+        "LocalSeed": 641588813,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 2,
+        "D": 72,
+        "Decor": "KidsCafeteria",
+        "H": 11,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R02",
+        "W": 88,
+        "X": 235,
+        "Name": "Beige City Party Rooms 02",
+        "Z": -90,
+        "LocalSeed": 13879565,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 3,
+        "D": 72,
+        "Decor": "WhiteClassroom",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R03",
+        "W": 88,
+        "X": 355,
+        "Name": "Beige City Party Rooms 03",
+        "Z": -90,
+        "LocalSeed": 696887564,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 4,
+        "D": 72,
+        "Decor": "SparseWelcome",
+        "H": 13,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R04",
+        "W": 88,
+        "X": 475,
+        "Name": "Beige City Party Rooms 04",
+        "Z": -90,
+        "LocalSeed": 806509071,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": true,
+        "ThemeId": "City",
+        "GridColumn": 5,
+        "D": 72,
+        "Decor": "ForgottenPair",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R05",
+        "W": 88,
+        "X": 595,
+        "Name": "Beige City Party Rooms 05",
+        "Z": -90,
+        "LocalSeed": 1022331373,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "ModuleRoom"
+      },
+      {
+        "Module": true,
+        "ThemeId": "City",
+        "GridColumn": 1,
+        "D": 72,
+        "Decor": "CityCafe",
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R06",
+        "W": 80,
+        "X": 117,
+        "Name": "Beige City Party Rooms 06",
+        "Z": 90,
+        "LocalSeed": 839182720,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "ModuleRoom"
+      },
+      {
+        "Module": true,
+        "ThemeId": "City",
+        "GridColumn": 2,
+        "D": 72,
+        "Decor": "SparseGallery",
+        "H": 13,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R07",
+        "W": 88,
+        "X": 235,
+        "Name": "Beige City Party Rooms 07",
+        "Z": 90,
+        "LocalSeed": 263207829,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "ModuleRoom"
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 3,
+        "D": 72,
+        "Decor": "WhiteAtrium",
+        "H": 11,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R08",
+        "W": 88,
+        "X": 355,
+        "Name": "Beige City Party Rooms 08",
+        "Z": 90,
+        "LocalSeed": 256182243,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ServiceVariant": "BudgetArcade",
+        "GridColumn": 4,
+        "ServicePocketDepth": 24,
+        "Decor": "KidsCluster",
+        "ServicePocketWidth": 18,
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R09",
+        "ServicePocketSeed": 912860499,
+        "W": 88,
+        "SectionIndex": 1,
+        "Role": "Room",
+        "X": 475,
+        "Name": "Beige City Party Rooms 09",
+        "Z": 90,
+        "LocalSeed": 11600036,
+        "Kind": "City",
+        "ThemeId": "City",
+        "D": 72
+      },
+      {
+        "Module": false,
+        "ThemeId": "City",
+        "GridColumn": 5,
+        "D": 72,
+        "Decor": "KidsCafeteria",
+        "H": 11,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "CITY",
+        "Id": "L6_S1_R10",
+        "W": 88,
+        "X": 595,
+        "Name": "Beige City Party Rooms 10",
+        "Z": 90,
+        "LocalSeed": 923960746,
+        "Kind": "City",
+        "SectionIndex": 1,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 1,
+        "D": 64,
+        "Decor": "BanquetRows",
+        "H": 11,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R01",
+        "W": 80,
+        "X": 117,
+        "Name": "Orange and Black Party Rooms 01",
+        "Z": 201,
+        "LocalSeed": 303047664,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 2,
+        "D": 64,
+        "Decor": "GrandBanquet",
+        "H": 11,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R02",
+        "W": 80,
+        "X": 235,
+        "Name": "Orange and Black Party Rooms 02",
+        "Z": 201,
+        "LocalSeed": 273904503,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 3,
+        "D": 64,
+        "Decor": "DanceFloor",
+        "H": 13,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R03",
+        "W": 88,
+        "X": 355,
+        "Name": "Orange and Black Party Rooms 03",
+        "Z": 201,
+        "LocalSeed": 679686403,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 4,
+        "D": 64,
+        "Decor": "BirthdayCenter",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R04",
+        "W": 80,
+        "X": 475,
+        "Name": "Orange and Black Party Rooms 04",
+        "Z": 201,
+        "LocalSeed": 718552988,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 5,
+        "D": 64,
+        "Decor": "AbandonedCelebration",
+        "H": 11,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R05",
+        "W": 88,
+        "X": 595,
+        "Name": "Orange and Black Party Rooms 05",
+        "Z": 201,
+        "LocalSeed": 540143478,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 1,
+        "D": 76,
+        "Decor": "AfterParty",
+        "H": 13,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R06",
+        "W": 80,
+        "X": 117,
+        "Name": "Orange and Black Party Rooms 06",
+        "Z": 381,
+        "LocalSeed": 412947680,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ServiceVariant": "PartySupplyStore",
+        "GridColumn": 2,
+        "ServicePocketDepth": 24,
+        "Decor": "SparseGallery",
+        "ServicePocketWidth": 18,
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R07",
+        "ServicePocketSeed": 268348122,
+        "W": 80,
+        "SectionIndex": 2,
+        "Role": "Room",
+        "X": 235,
+        "Name": "Orange and Black Party Rooms 07",
+        "Z": 381,
+        "LocalSeed": 810311655,
+        "Kind": "PartyHall",
+        "ThemeId": "OrangeBlackParty",
+        "D": 76
+      },
+      {
+        "Module": true,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 3,
+        "D": 76,
+        "Decor": "SparseWelcome",
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R08",
+        "W": 88,
+        "X": 355,
+        "Name": "Orange and Black Party Rooms 08",
+        "Z": 381,
+        "LocalSeed": 891395300,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "ModuleRoom"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 4,
+        "D": 76,
+        "Decor": "BanquetRows",
+        "H": 11,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R09",
+        "W": 80,
+        "X": 475,
+        "Name": "Orange and Black Party Rooms 09",
+        "Z": 381,
+        "LocalSeed": 832983793,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "OrangeBlackParty",
+        "GridColumn": 5,
+        "D": 76,
+        "Decor": "GrandBanquet",
+        "H": 11,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "ORANGE_BLACK",
+        "Id": "L6_S2_R10",
+        "W": 88,
+        "X": 595,
+        "Name": "Orange and Black Party Rooms 10",
+        "Z": 381,
+        "LocalSeed": 144693109,
+        "Kind": "PartyHall",
+        "SectionIndex": 2,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 1,
+        "D": 72,
+        "Decor": "SparseWelcome",
+        "H": 11,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R01",
+        "W": 84,
+        "X": 117,
+        "Name": "Red Carpet Party Rooms 01",
+        "Z": 499,
+        "LocalSeed": 940428152,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 2,
+        "D": 72,
+        "Decor": "AbandonedCelebration",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R02",
+        "W": 88,
+        "X": 235,
+        "Name": "Red Carpet Party Rooms 02",
+        "Z": 499,
+        "LocalSeed": 855238202,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 3,
+        "D": 72,
+        "Decor": "BanquetRows",
+        "H": 13,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R03",
+        "W": 88,
+        "X": 355,
+        "Name": "Red Carpet Party Rooms 03",
+        "Z": 499,
+        "LocalSeed": 690950358,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 4,
+        "D": 72,
+        "Decor": "SparseGallery",
+        "H": 13,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R04",
+        "W": 84,
+        "X": 475,
+        "Name": "Red Carpet Party Rooms 04",
+        "Z": 499,
+        "LocalSeed": 177132626,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 5,
+        "D": 72,
+        "Decor": "AfterParty",
+        "H": 13,
+        "GridRow": 1,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "SignalHall",
+        "W": 84,
+        "X": 595,
+        "Name": "Signal Hall",
+        "Z": 499,
+        "LocalSeed": 897768082,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "SignalHall"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 1,
+        "D": 68,
+        "Decor": "GrandBanquet",
+        "H": 13,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R06",
+        "W": 84,
+        "X": 117,
+        "Name": "Red Carpet Party Rooms 06",
+        "Z": 679,
+        "LocalSeed": 604264571,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": true,
+        "ThemeId": "RedParty",
+        "GridColumn": 2,
+        "D": 68,
+        "Decor": "DanceFloor",
+        "H": 13,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R07",
+        "W": 88,
+        "X": 235,
+        "Name": "Red Carpet Party Rooms 07",
+        "Z": 679,
+        "LocalSeed": 876467020,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "ModuleRoom"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 3,
+        "D": 68,
+        "Decor": "BirthdayCenter",
+        "H": 12,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R08",
+        "W": 88,
+        "X": 355,
+        "Name": "Red Carpet Party Rooms 08",
+        "Z": 679,
+        "LocalSeed": 655454085,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ServiceVariant": "MaintenanceWorkshop",
+        "GridColumn": 4,
+        "ServicePocketDepth": 24,
+        "Decor": "SparseWelcome",
+        "ServicePocketWidth": 18,
+        "H": 11,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R09",
+        "ServicePocketSeed": 578791733,
+        "W": 84,
+        "SectionIndex": 3,
+        "Role": "Room",
+        "X": 475,
+        "Name": "Red Carpet Party Rooms 09",
+        "Z": 679,
+        "LocalSeed": 179750997,
+        "Kind": "Party",
+        "ThemeId": "RedParty",
+        "D": 68
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 5,
+        "D": 68,
+        "Decor": "AbandonedCelebration",
+        "H": 13,
+        "GridRow": 2,
+        "HideSpotCount": 1,
+        "DistrictId": "RED_PARTY",
+        "Id": "L6_S3_R10",
+        "W": 84,
+        "X": 595,
+        "Name": "Red Carpet Party Rooms 10",
+        "Z": 679,
+        "LocalSeed": 652139512,
+        "Kind": "Party",
+        "SectionIndex": 3,
+        "Role": "Room"
+      },
+      {
+        "Module": false,
+        "ThemeId": "RedParty",
+        "GridColumn": 6,
+        "D": 52,
+        "Decor": "EmptyTransition",
+        "H": 12,
+        "GridRow": 1,
+        "HideSpotCount": 0,
+        "DistrictId": "EXIT",
+        "Id": "Exit",
+        "W": 58,
+        "X": 1226,
+        "Name": "Level 6 Exit",
+        "Z": 499,
+        "LocalSeed": 529726829,
+        "Kind": "Exit",
+        "SectionIndex": 4,
+        "Role": "Exit"
+      }
+    ],
+    "Visual": {
+      "Kit": {
+        "Meshes": 7368,
+        "Tables": 49,
+        "Triangles": 1047552,
+        "CollisionBoxes": 64,
+        "Chairs": 169,
+        "Fixtures": 170
+      },
+      "Dressing": {
+        "ServiceRooms": [
+          {
+            "Props": 5,
+            "Width": 18,
+            "Corner": [
+              -1,
+              1
+            ],
+            "Variant": "BudgetArcade",
+            "Mode": "validated-open-front-alcove",
+            "Depth": 24,
+            "RoomId": "L6_S1_R09",
+            "ExclusionCount": 7
+          },
+          {
+            "Props": 6,
+            "Width": 18,
+            "Corner": [
+              1,
+              -1
+            ],
+            "Variant": "PartySupplyStore",
+            "Mode": "validated-open-front-alcove",
+            "Depth": 24,
+            "RoomId": "L6_S2_R07",
+            "ExclusionCount": 3
+          },
+          {
+            "Props": 6,
+            "Width": 18,
+            "Corner": [
+              -1,
+              -1
+            ],
+            "Variant": "MaintenanceWorkshop",
+            "Mode": "validated-open-front-alcove",
+            "Depth": 24,
+            "RoomId": "L6_S3_R09",
+            "ExclusionCount": 3
+          }
+        ],
+        "Navigation": {
+          "CenterCrossWidth": 14,
+          "ManagerSweepRadius": 5.25,
+          "PerimeterPolicy": "Wall-attached service alcoves; fresh active-round pathfinding verification required"
+        },
+        "Skipped": [],
+        "Rooms": 30,
+        "PropsPlaced": 133,
+        "Interactions": 5,
+        "FullServicePockets": 3,
+        "FallbackServiceRooms": 0,
+        "MissingAssets": []
+      },
+      "Balloons": {
+        "Rooms": 30,
+        "CeilingClusters": 43,
+        "Balloons": 390,
+        "MeshParts": 650,
+        "SkippedClusters": 0,
+        "CenterCrossWidth": 14,
+        "MaxClusters": 160,
+        "DensityRooms": {
+          "Dense": 10,
+          "Sparse": 10,
+          "Medium": 10
+        },
+        "Seed": 1862232497,
+        "Clusters": 130,
+        "Version": "seeded-blender-balloons-1",
+        "RoomPlans": [
+          {
+            "Bundles": 3,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 7,
+            "Clusters": 7,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S1_R01",
+            "Positions": [
+              [
+                -35.41866191962786,
+                8.10372118923405,
+                -26.722617390079968,
+                0.427204881857352,
+                1
+              ],
+              [
+                -34.69647092479783,
+                8.03163327308934,
+                -26.82352301747631,
+                0.4362725442654918,
+                1
+              ],
+              [
+                -34.979593891952035,
+                8.113592434938973,
+                -26.21501352595494,
+                0.4259632157309468,
+                1
+              ],
+              [
+                -35.47665529313846,
+                0,
+                15.889249076428875,
+                1.0319686714459977,
+                2
+              ],
+              [
+                -34.9257679302672,
+                0,
+                14.335755604915796,
+                1.0809706273675985,
+                2
+              ],
+              [
+                18.57970220298794,
+                0,
+                30.895475796311583,
+                1.0347997469410783,
+                3
+              ],
+              [
+                16.96666959138864,
+                0,
+                30.937307487871,
+                1.0519403881491862,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 14
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 3,
+            "Clusters": 3,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S1_R02",
+            "Positions": [
+              [
+                -26.4864638840514,
+                7.290618700872923,
+                31.128122069751413,
+                0.4036957608964877,
+                1
+              ],
+              [
+                -26.76573958986044,
+                7.214927349408102,
+                31.6945766112623,
+                0.41321668560904384,
+                1
+              ],
+              [
+                39.30648436844953,
+                0,
+                -27.432124944107724,
+                0.9586616270927709,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 2,
+            "Clusters": 2,
+            "GroundedClusters": 2,
+            "RoomId": "L6_S1_R03",
+            "Positions": [
+              [
+                38.30079337145101,
+                0,
+                -26.541069503477278,
+                0.8867343134161552,
+                1
+              ],
+              [
+                37.145327033645664,
+                0,
+                -25.734569022288582,
+                0.8770067898243025,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 4,
+            "Clusters": 4,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S1_R04",
+            "Positions": [
+              [
+                19.092126289581458,
+                0,
+                -29.445253519617538,
+                1.037099128467412,
+                1
+              ],
+              [
+                17.83858441998874,
+                0,
+                -30.59195885932014,
+                1.0679217648243953,
+                1
+              ],
+              [
+                -11.644417863333258,
+                0,
+                -30.173676516885482,
+                0.9949115859067964,
+                2
+              ],
+              [
+                -12.654960022816574,
+                0,
+                -29.000458403372203,
+                1.0018371763501264,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 10
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 2,
+            "Clusters": 2,
+            "GroundedClusters": 2,
+            "RoomId": "L6_S1_R05",
+            "Positions": [
+              [
+                -38.81731281994661,
+                0,
+                31.29522414206068,
+                1.0915521271850164,
+                1
+              ],
+              [
+                -39.35483272225688,
+                0,
+                29.7078773858136,
+                1.0851232486574693,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 10
+          },
+          {
+            "Bundles": 3,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 8,
+            "Clusters": 8,
+            "GroundedClusters": 5,
+            "RoomId": "L6_S1_R06",
+            "Positions": [
+              [
+                26.45882727708504,
+                0,
+                -30.492639621811303,
+                0.995044217684471,
+                1
+              ],
+              [
+                27.769259394403807,
+                0,
+                -31.487918083734645,
+                0.9419283478892321,
+                1
+              ],
+              [
+                27.88312214723064,
+                0,
+                -29.977672216663017,
+                0.9714240883079666,
+                1
+              ],
+              [
+                -33.22554749830131,
+                7.525048047673305,
+                27.01427381949273,
+                0.4999939562675088,
+                2
+              ],
+              [
+                -33.97723675370723,
+                7.440335944176739,
+                27.382847302186,
+                0.5106495667702216,
+                2
+              ],
+              [
+                -33.88619890808544,
+                7.691032060172489,
+                26.617709772571153,
+                0.47911546412924655,
+                2
+              ],
+              [
+                29.71616501159694,
+                0,
+                31.627712248561103,
+                0.9069694932040228,
+                3
+              ],
+              [
+                30.64202132613957,
+                0,
+                30.519675882917245,
+                0.8918249997910668,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 4,
+            "Clusters": 4,
+            "GroundedClusters": 2,
+            "RoomId": "L6_S1_R07",
+            "Positions": [
+              [
+                34.03964564077608,
+                8.059158157940715,
+                30.67568607546282,
+                0.5585964581206648,
+                1
+              ],
+              [
+                33.20032725615804,
+                7.8957549220336585,
+                30.34062959011918,
+                0.5791503242724958,
+                1
+              ],
+              [
+                38.6119524113376,
+                0,
+                19.265813131636577,
+                0.9706510776561112,
+                2
+              ],
+              [
+                39.24884536327211,
+                0,
+                17.84350164374362,
+                1.019693475947897,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 11
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S1_R08",
+            "Positions": [
+              [
+                -38.32326417586139,
+                0,
+                -17.859875884940735,
+                1.0411441148527918,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 15
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 3,
+            "Clusters": 3,
+            "GroundedClusters": 3,
+            "RoomId": "L6_S1_R09",
+            "Positions": [
+              [
+                27.83633301840728,
+                0,
+                -30.67864371017218,
+                0.9922903135192397,
+                1
+              ],
+              [
+                28.783161919730915,
+                0,
+                -31.891885215214327,
+                0.9962892618182703,
+                1
+              ],
+              [
+                39.159715865421774,
+                0,
+                -20.2343898627296,
+                0.9642258997200266,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 27
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 3,
+            "Clusters": 3,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S1_R10",
+            "Positions": [
+              [
+                37.645943031700696,
+                7.336114344286204,
+                -18.523362011931205,
+                0.3979730384545655,
+                1
+              ],
+              [
+                38.156571409362584,
+                7.292019938904874,
+                -18.149008821938185,
+                0.4035195045402675,
+                1
+              ],
+              [
+                -34.62232273712039,
+                0,
+                -31.382056796813437,
+                1.0120527157624462,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 12
+          },
+          {
+            "Bundles": 4,
+            "CeilingClusters": 5,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 9,
+            "Clusters": 9,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S2_R01",
+            "Positions": [
+              [
+                -26.60568409883786,
+                7.37670570762615,
+                -25.84017088582282,
+                0.39286720658790564,
+                1
+              ],
+              [
+                -27.0608170640237,
+                7.328284442407305,
+                -25.330102088084853,
+                0.3989579317726661,
+                1
+              ],
+              [
+                -27.227394652410116,
+                7.209976558344595,
+                -25.936830141870164,
+                0.41383942662332135,
+                1
+              ],
+              [
+                16.23681191735344,
+                0,
+                -26.515955260756975,
+                0.9417221696592155,
+                2
+              ],
+              [
+                16.17585628032822,
+                0,
+                -25.04327837082196,
+                0.9216218962354081,
+                2
+              ],
+              [
+                -34.65643442096027,
+                0,
+                15.610370973593817,
+                0.9141344702993168,
+                3
+              ],
+              [
+                -33.3195195297683,
+                0,
+                14.94513768199974,
+                0.9185901115103877,
+                3
+              ],
+              [
+                31.430158324053107,
+                7.206061486327622,
+                -27.13874469404481,
+                0.4143318885122489,
+                4
+              ],
+              [
+                31.453552253075056,
+                7.380915571655021,
+                -27.76876906259856,
+                0.39233766394276465,
+                4
+              ]
+            ],
+            "BlockedEnvelopes": 12
+          },
+          {
+            "Bundles": 4,
+            "CeilingClusters": 4,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 8,
+            "Clusters": 8,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S2_R02",
+            "Positions": [
+              [
+                -21.457199730767083,
+                7.192726648800212,
+                27.332600786943804,
+                0.41600922656601097,
+                1
+              ],
+              [
+                -22.01589849620178,
+                7.346393220811468,
+                27.033911811715864,
+                0.39668009801113613,
+                1
+              ],
+              [
+                -20.773329706128973,
+                0,
+                -25.87280131263634,
+                1.0824739303884356,
+                2
+              ],
+              [
+                -20.232334015660218,
+                0,
+                -27.46061159904107,
+                1.09525149850701,
+                2
+              ],
+              [
+                -34.03132960363923,
+                7.242223165945761,
+                27.558366919542742,
+                0.4097832495665709,
+                3
+              ],
+              [
+                -34.01480954005027,
+                7.370908985654289,
+                26.92142827125732,
+                0.39359635400574977,
+                3
+              ],
+              [
+                15.431646896167091,
+                0,
+                26.634434107434316,
+                1.011084109080449,
+                4
+              ],
+              [
+                16.98802788749009,
+                0,
+                26.782830064594567,
+                0.9971728699583357,
+                4
+              ]
+            ],
+            "BlockedEnvelopes": 14
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 4,
+            "Clusters": 4,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S2_R03",
+            "Positions": [
+              [
+                -22.452115564635864,
+                0,
+                -25.02162415660936,
+                0.9480614396560924,
+                1
+              ],
+              [
+                -21.971301527500387,
+                0,
+                -26.395547530412067,
+                0.8947847975613054,
+                1
+              ],
+              [
+                39.42660001806844,
+                0,
+                21.749530730414605,
+                1.0131036442047563,
+                2
+              ],
+              [
+                37.947376715687476,
+                0,
+                21.024868630391524,
+                1.0131750892159455,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 14
+          },
+          {
+            "Bundles": 4,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 9,
+            "Clusters": 9,
+            "GroundedClusters": 7,
+            "RoomId": "L6_S2_R04",
+            "Positions": [
+              [
+                33.784204967790075,
+                0,
+                26.313722243343996,
+                1.0456756383821806,
+                1
+              ],
+              [
+                35.35762139241034,
+                0,
+                25.41206121661032,
+                1.0301990604208435,
+                1
+              ],
+              [
+                35.267651246212594,
+                0,
+                27.07871351263827,
+                1.1045627431422171,
+                1
+              ],
+              [
+                24.32442266089395,
+                7.7896496228473175,
+                -26.49960578118132,
+                0.46671073926448836,
+                2
+              ],
+              [
+                23.607569053429337,
+                7.676086522530968,
+                -26.25454929237644,
+                0.4809954059709475,
+                2
+              ],
+              [
+                35.527717695393,
+                0,
+                -21.04233342164999,
+                1.0019176158916392,
+                3
+              ],
+              [
+                35.61098979076655,
+                0,
+                -22.67642560947288,
+                1.054448748977324,
+                3
+              ],
+              [
+                -29.79285192315267,
+                0,
+                -26.919542828357837,
+                0.9667600561153786,
+                4
+              ],
+              [
+                -28.627516955262234,
+                0,
+                -25.989010400019648,
+                0.9759700050827765,
+                4
+              ]
+            ],
+            "BlockedEnvelopes": 18
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S2_R05",
+            "Positions": [
+              [
+                -35.461781247483366,
+                0,
+                -27.475087858713312,
+                0.8782100839925161,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 10
+          },
+          {
+            "Bundles": 3,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 8,
+            "Clusters": 8,
+            "GroundedClusters": 5,
+            "RoomId": "L6_S2_R06",
+            "Positions": [
+              [
+                35.16452990242692,
+                0,
+                31.156470490278114,
+                0.9686968741472922,
+                1
+              ],
+              [
+                34.81185383335459,
+                0,
+                32.74997576012942,
+                0.9868404322168933,
+                1
+              ],
+              [
+                33.756846886642016,
+                0,
+                31.680700708193328,
+                0.9215412368326904,
+                1
+              ],
+              [
+                -30.793800682349993,
+                8.965388909290965,
+                31.836096158188855,
+                0.44460516864264576,
+                2
+              ],
+              [
+                -30.237574201199227,
+                9.043829827370551,
+                31.312394835320656,
+                0.4347383864942702,
+                2
+              ],
+              [
+                -30.111009146831,
+                8.923523870503194,
+                32.00405686855307,
+                0.4498712112574599,
+                2
+              ],
+              [
+                35.27146759545491,
+                0,
+                -16.271370855234117,
+                1.0067550415506197,
+                3
+              ],
+              [
+                34.7726532209303,
+                0,
+                -14.709150625729805,
+                1.0345274004480076,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 11
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S2_R07",
+            "Positions": [
+              [
+                -16.734971733051324,
+                0,
+                32.3229841914242,
+                1.0395760780209558,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 22
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 1,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 0,
+            "RoomId": "L6_S2_R08",
+            "Positions": [
+              [
+                -23.180860811081587,
+                7.5177240897512725,
+                32.17111124067671,
+                0.5009152088363178,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 12
+          },
+          {
+            "Bundles": 3,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 8,
+            "Clusters": 8,
+            "GroundedClusters": 6,
+            "RoomId": "L6_S2_R09",
+            "Positions": [
+              [
+                -35.9767072448397,
+                0,
+                17.06595728438803,
+                0.9164156554875675,
+                1
+              ],
+              [
+                -35.18586199852254,
+                0,
+                15.745695329286967,
+                0.9066782774886998,
+                1
+              ],
+              [
+                -34.5610822018303,
+                0,
+                17.016933997173492,
+                0.8747090083136255,
+                1
+              ],
+              [
+                33.35119461297919,
+                0,
+                -18.91074397968104,
+                0.9967957842978608,
+                2
+              ],
+              [
+                34.85941471063639,
+                0,
+                -18.19194373184938,
+                0.9493569925904521,
+                2
+              ],
+              [
+                33.54986810666515,
+                0,
+                -17.385901053030096,
+                0.9504221577834745,
+                2
+              ],
+              [
+                17.41474255144717,
+                7.335678094417302,
+                -33.285671946076256,
+                0.39802791265191173,
+                3
+              ],
+              [
+                18.034776897230465,
+                7.240264674903894,
+                -33.16421654909729,
+                0.4100296006410196,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 12
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 4,
+            "Clusters": 4,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S2_R10",
+            "Positions": [
+              [
+                17.084757806882443,
+                0,
+                32.652844988325924,
+                1.0168034007138764,
+                1
+              ],
+              [
+                18.504876694906663,
+                0,
+                32.02608116871219,
+                0.9478056017937481,
+                1
+              ],
+              [
+                26.62793027512217,
+                0,
+                33.03348429135801,
+                0.9141294585152033,
+                2
+              ],
+              [
+                25.23582006130447,
+                0,
+                33.25388640278981,
+                0.9002150117465386,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 1,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 0,
+            "RoomId": "L6_S3_R01",
+            "Positions": [
+              [
+                36.38707783342067,
+                7.165443747060748,
+                22.892261356480663,
+                0.41944103810556627,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 11
+          },
+          {
+            "Bundles": 3,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 7,
+            "Clusters": 7,
+            "GroundedClusters": 4,
+            "RoomId": "L6_S3_R02",
+            "Positions": [
+              [
+                -38.508071172353986,
+                7.873449662327822,
+                -16.445539071829067,
+                0.4561698537952424,
+                1
+              ],
+              [
+                -37.79987627960259,
+                8.066575792374312,
+                -16.73763439550055,
+                0.43187725882084116,
+                1
+              ],
+              [
+                -37.92826370314124,
+                7.962020663904003,
+                -16.044345225629645,
+                0.4450288473076726,
+                1
+              ],
+              [
+                -22.906168391997017,
+                0,
+                30.893447543642917,
+                1.0076142228600211,
+                2
+              ],
+              [
+                -24.35056442959909,
+                0,
+                31.4730902460043,
+                0.9501762963927012,
+                2
+              ],
+              [
+                37.17096381526129,
+                0,
+                -31.595649291495853,
+                0.9937830889636247,
+                3
+              ],
+              [
+                37.46993176427862,
+                0,
+                -30.08705037754307,
+                0.9408012640177763,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 11
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 1,
+            "Clusters": 1,
+            "GroundedClusters": 1,
+            "RoomId": "L6_S3_R03",
+            "Positions": [
+              [
+                16.010039918599688,
+                0,
+                -31.08117059951757,
+                0.9598796853616585,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 3,
+            "Clusters": 3,
+            "GroundedClusters": 3,
+            "RoomId": "L6_S3_R04",
+            "Positions": [
+              [
+                17.68924758222468,
+                0,
+                29.30373629020503,
+                0.9061467542586095,
+                1
+              ],
+              [
+                17.37335783399572,
+                0,
+                30.748745333718457,
+                0.9258271976400606,
+                1
+              ],
+              [
+                -21.48855578665487,
+                0,
+                31.27703777400501,
+                0.9288323357723454,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 10
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 2,
+            "Clusters": 2,
+            "GroundedClusters": 2,
+            "RoomId": "SignalHall",
+            "Positions": [
+              [
+                -29.11671999296368,
+                0,
+                30.91802938895741,
+                0.8676069012970015,
+                1
+              ],
+              [
+                -29.88897084843441,
+                0,
+                29.78326484367784,
+                0.8583841702076306,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 13
+          },
+          {
+            "Bundles": 1,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Sparse",
+            "TargetClusters": 2,
+            "Clusters": 2,
+            "GroundedClusters": 0,
+            "RoomId": "L6_S3_R06",
+            "Positions": [
+              [
+                -30.169934137629678,
+                8.97719675812779,
+                27.812639455261234,
+                0.4431199046380138,
+                1
+              ],
+              [
+                -29.47853591008453,
+                9.01655025887925,
+                27.864332890829044,
+                0.43816977875732704,
+                1
+              ]
+            ],
+            "BlockedEnvelopes": 14
+          },
+          {
+            "Bundles": 4,
+            "CeilingClusters": 0,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 9,
+            "Clusters": 9,
+            "GroundedClusters": 9,
+            "RoomId": "L6_S3_R07",
+            "Positions": [
+              [
+                15.968484388688852,
+                0,
+                -27.20813769988598,
+                0.9684879812668425,
+                1
+              ],
+              [
+                17.026943764141052,
+                0,
+                -28.547253897229048,
+                0.9982178272762606,
+                1
+              ],
+              [
+                17.532485683452776,
+                0,
+                -27.059795372071722,
+                1.0021594467204173,
+                1
+              ],
+              [
+                -38.38625127626495,
+                0,
+                -23.832809677155446,
+                0.996449938263857,
+                2
+              ],
+              [
+                -37.10999738938371,
+                0,
+                -23.012560316735737,
+                0.9315040464794709,
+                2
+              ],
+              [
+                -29.04739975420492,
+                0,
+                -28.57415289567136,
+                1.0154599054478912,
+                3
+              ],
+              [
+                -27.402069183343656,
+                0,
+                -28.36279732027109,
+                1.0364654333369028,
+                3
+              ],
+              [
+                27.35880233712483,
+                0,
+                -27.478286824447654,
+                0.9045152679204197,
+                4
+              ],
+              [
+                26.20161724488055,
+                0,
+                -28.22993162582699,
+                0.906130299280132,
+                4
+              ]
+            ],
+            "BlockedEnvelopes": 12
+          },
+          {
+            "Bundles": 3,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Dense",
+            "TargetClusters": 8,
+            "Clusters": 8,
+            "GroundedClusters": 5,
+            "RoomId": "L6_S3_R08",
+            "Positions": [
+              [
+                -39.002954887811626,
+                0,
+                28.41822115349974,
+                1.0759104596199078,
+                1
+              ],
+              [
+                -37.26466271543913,
+                0,
+                28.866830694622966,
+                1.040583696389662,
+                1
+              ],
+              [
+                -38.48046162885696,
+                0,
+                29.985751693621914,
+                1.05624125492588,
+                1
+              ],
+              [
+                -38.25642581652184,
+                8.080707667323518,
+                12.504652563487761,
+                0.4300996644876078,
+                2
+              ],
+              [
+                -38.06265186611425,
+                7.989867929136155,
+                11.801546643466347,
+                0.4415260466495402,
+                2
+              ],
+              [
+                -37.6162297213015,
+                8.032602857216476,
+                12.302834019701105,
+                0.4361505839979275,
+                2
+              ],
+              [
+                -30.770402654757483,
+                0,
+                -27.525768666364385,
+                0.9856620907382476,
+                3
+              ],
+              [
+                -29.195090576081807,
+                0,
+                -27.34665580168689,
+                0.9702856865641677,
+                3
+              ]
+            ],
+            "BlockedEnvelopes": 16
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 2,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 4,
+            "Clusters": 4,
+            "GroundedClusters": 2,
+            "RoomId": "L6_S3_R09",
+            "Positions": [
+              [
+                36.76271912866136,
+                0,
+                -27.484190248763163,
+                1.066338334484253,
+                1
+              ],
+              [
+                35.128211707436556,
+                0,
+                -27.70950853293368,
+                1.0078561877118233,
+                1
+              ],
+              [
+                35.69407558498074,
+                7.403626822296703,
+                28.44464361466014,
+                0.3894809028557606,
+                2
+              ],
+              [
+                35.07556602616551,
+                7.24504892054186,
+                28.586932613010227,
+                0.4094278087368729,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 20
+          },
+          {
+            "Bundles": 2,
+            "CeilingClusters": 3,
+            "SkippedClusters": 0,
+            "Density": "Medium",
+            "TargetClusters": 3,
+            "Clusters": 3,
+            "GroundedClusters": 0,
+            "RoomId": "L6_S3_R10",
+            "Positions": [
+              [
+                35.93781212921784,
+                7.939988732070805,
+                19.404738217568077,
+                0.5735863230099615,
+                1
+              ],
+              [
+                36.034857138055905,
+                7.911627244493435,
+                18.50052870447054,
+                0.5771538057240964,
+                1
+              ],
+              [
+                -16.936778354632462,
+                8.521592588601528,
+                -29.14187978360977,
+                0.5004286052073549,
+                2
+              ]
+            ],
+            "BlockedEnvelopes": 10
+          }
+        ],
+        "GroundedClusters": 87,
+        "MaxMeshParts": 800,
+        "Bundles": 64,
+        "Triangles": 88920
+      },
+      "Crayon": {
+        "Disturbing": 173,
+        "Total": 331,
+        "Unsettling": 87,
+        "Rooms": {
+          "Exit": {
+            "Progress": 1,
+            "Count": 8,
+            "GraphDepth": 19,
+            "Section": 4
+          },
+          "L6_S3_R07": {
+            "Progress": 0.7555555555555555,
+            "Count": 16,
+            "GraphDepth": 14,
+            "Section": 3
+          },
+          "L6_S1_R01": {
+            "Progress": 0.03809523809523809,
+            "Count": 5,
+            "GraphDepth": 2,
+            "Section": 1
+          },
+          "L6_S1_R03": {
+            "Progress": 0.11428571428571428,
+            "Count": 5,
+            "GraphDepth": 4,
+            "Section": 1
+          },
+          "L6_S1_R09": {
+            "Progress": 0.1904761904761905,
+            "Count": 5,
+            "GraphDepth": 6,
+            "Section": 1
+          },
+          "L6_S1_R06": {
+            "Progress": 0,
+            "Count": 6,
+            "GraphDepth": 1,
+            "Section": 1
+          },
+          "L6_S1_R08": {
+            "Progress": 0.15238095238095237,
+            "Count": 5,
+            "GraphDepth": 5,
+            "Section": 1
+          },
+          "L6_S3_R01": {
+            "Progress": 0.6666666666666666,
+            "Count": 15,
+            "GraphDepth": 12,
+            "Section": 3
+          },
+          "L6_S1_R04": {
+            "Progress": 0.15238095238095237,
+            "Count": 6,
+            "GraphDepth": 5,
+            "Section": 1
+          },
+          "Arrival": {
+            "Progress": 0,
+            "Count": 3,
+            "GraphDepth": 0,
+            "Section": 0
+          },
+          "L6_S2_R05": {
+            "Progress": 0.3866666666666667,
+            "Count": 11,
+            "GraphDepth": 8,
+            "Section": 2
+          },
+          "L6_S1_R02": {
+            "Progress": 0.07619047619047618,
+            "Count": 5,
+            "GraphDepth": 3,
+            "Section": 1
+          },
+          "L6_S2_R10": {
+            "Progress": 0.44,
+            "Count": 10,
+            "GraphDepth": 9,
+            "Section": 2
+          },
+          "L6_S3_R06": {
+            "Progress": 0.7111111111111111,
+            "Count": 13,
+            "GraphDepth": 13,
+            "Section": 3
+          },
+          "L6_S3_R03": {
+            "Progress": 0.7555555555555555,
+            "Count": 15,
+            "GraphDepth": 14,
+            "Section": 3
+          },
+          "L6_S1_R10": {
+            "Progress": 0.22857142857142856,
+            "Count": 5,
+            "GraphDepth": 7,
+            "Section": 1
+          },
+          "L6_S2_R03": {
+            "Progress": 0.3866666666666667,
+            "Count": 10,
+            "GraphDepth": 8,
+            "Section": 2
+          },
+          "L6_S2_R07": {
+            "Progress": 0.49333333333333335,
+            "Count": 8,
+            "GraphDepth": 10,
+            "Section": 2
+          },
+          "SignalHall": {
+            "Progress": 0.9333333333333332,
+            "Count": 15,
+            "GraphDepth": 18,
+            "Section": 3
+          },
+          "L6_S2_R09": {
+            "Progress": 0.3866666666666667,
+            "Count": 8,
+            "GraphDepth": 8,
+            "Section": 2
+          },
+          "L6_S3_R10": {
+            "Progress": 0.888888888888889,
+            "Count": 14,
+            "GraphDepth": 17,
+            "Section": 3
+          },
+          "L6_S2_R04": {
+            "Progress": 0.3333333333333333,
+            "Count": 11,
+            "GraphDepth": 7,
+            "Section": 2
+          },
+          "L6_S3_R08": {
+            "Progress": 0.7999999999999999,
+            "Count": 15,
+            "GraphDepth": 15,
+            "Section": 3
+          },
+          "L6_S2_R06": {
+            "Progress": 0.5466666666666667,
+            "Count": 11,
+            "GraphDepth": 11,
+            "Section": 2
+          },
+          "L6_S2_R02": {
+            "Progress": 0.5466666666666667,
+            "Count": 10,
+            "GraphDepth": 11,
+            "Section": 2
+          },
+          "L6_S1_R05": {
+            "Progress": 0.26666666666666666,
+            "Count": 7,
+            "GraphDepth": 8,
+            "Section": 1
+          },
+          "L6_S3_R04": {
+            "Progress": 0.7999999999999999,
+            "Count": 16,
+            "GraphDepth": 15,
+            "Section": 3
+          },
+          "L6_S3_R02": {
+            "Progress": 0.7111111111111111,
+            "Count": 16,
+            "GraphDepth": 13,
+            "Section": 3
+          },
+          "L6_S3_R09": {
+            "Progress": 0.8444444444444444,
+            "Count": 16,
+            "GraphDepth": 16,
+            "Section": 3
+          },
+          "L6_S1_R07": {
+            "Progress": 0.11428571428571428,
+            "Count": 7,
+            "GraphDepth": 4,
+            "Section": 1
+          },
+          "L6_S2_R01": {
+            "Progress": 0.6,
+            "Count": 8,
+            "GraphDepth": 12,
+            "Section": 2
+          },
+          "L6_S2_R08": {
+            "Progress": 0.44,
+            "Count": 8,
+            "GraphDepth": 9,
+            "Section": 2
+          }
+        },
+        "Revision": "20261001-crayon-progression",
+        "Wholesome": 71
+      }
+    },
+    "Links": [
+      {
+        "A": "L6_S1_R06",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R01",
+        "Id": "Level6_Link_01",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R01",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R02",
+        "Id": "Level6_Link_02",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R02",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R03",
+        "Id": "Level6_Link_03",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R03",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R04",
+        "Id": "Level6_Link_04",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R04",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R09",
+        "Id": "Level6_Link_05",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R09",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R10",
+        "Id": "Level6_Link_06",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R10",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R05",
+        "Id": "Level6_Link_07",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R09",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R08",
+        "Id": "Level6_Link_08",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R08",
+        "ThemeId": "City",
+        "LinkType": "Internal",
+        "B": "L6_S1_R07",
+        "Id": "Level6_Link_09",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R03",
+        "ThemeId": "City",
+        "LinkType": "InternalLoop",
+        "B": "L6_S1_R08",
+        "Id": "Level6_Link_10",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R02",
+        "ThemeId": "City",
+        "LinkType": "InternalLoop",
+        "B": "L6_S1_R07",
+        "Id": "Level6_Link_11",
+        "SectionIndex": 1,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R04",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R09",
+        "Id": "Level6_Link_12",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R09",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R08",
+        "Id": "Level6_Link_13",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R08",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R07",
+        "Id": "Level6_Link_14",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R07",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R06",
+        "Id": "Level6_Link_15",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R06",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R01",
+        "Id": "Level6_Link_16",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R01",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R02",
+        "Id": "Level6_Link_17",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R08",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R03",
+        "Id": "Level6_Link_18",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R04",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R05",
+        "Id": "Level6_Link_19",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R05",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "Internal",
+        "B": "L6_S2_R10",
+        "Id": "Level6_Link_20",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R02",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "InternalLoop",
+        "B": "L6_S2_R07",
+        "Id": "Level6_Link_21",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R03",
+        "ThemeId": "OrangeBlackParty",
+        "LinkType": "InternalLoop",
+        "B": "L6_S2_R04",
+        "Id": "Level6_Link_22",
+        "SectionIndex": 2,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R01",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R06",
+        "Id": "Level6_Link_23",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R06",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R07",
+        "Id": "Level6_Link_24",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R07",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R02",
+        "Id": "Level6_Link_25",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R02",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R03",
+        "Id": "Level6_Link_26",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R03",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R08",
+        "Id": "Level6_Link_27",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R03",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R04",
+        "Id": "Level6_Link_28",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R04",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R09",
+        "Id": "Level6_Link_29",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R09",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "L6_S3_R10",
+        "Id": "Level6_Link_30",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R10",
+        "ThemeId": "RedParty",
+        "LinkType": "Internal",
+        "B": "SignalHall",
+        "Id": "Level6_Link_31",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R07",
+        "ThemeId": "RedParty",
+        "LinkType": "InternalLoop",
+        "B": "L6_S3_R08",
+        "Id": "Level6_Link_32",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S3_R01",
+        "ThemeId": "RedParty",
+        "LinkType": "InternalLoop",
+        "B": "L6_S3_R02",
+        "Id": "Level6_Link_33",
+        "SectionIndex": 3,
+        "Gateway": false,
+        "Door": "Open"
+      },
+      {
+        "A": "Arrival",
+        "ThemeId": "City",
+        "BlenderRoom": {
+          "SectionIndex": 1,
+          "StartDistance": 12,
+          "Asset": "RoomUtilityHall",
+          "Width": 24,
+          "LinkId": "Level6_Link_34",
+          "PortalWidth": 14,
+          "Height": 12,
+          "Length": 24,
+          "PortalHeight": 10.5
+        },
+        "B": "L6_S1_R06",
+        "Id": "Level6_Link_34",
+        "GatewayKind": "Entry",
+        "FromSection": 0,
+        "LinkType": "Gateway",
+        "FromThemeId": "ArrivalTransition",
+        "ToThemeId": "City",
+        "Gateway": true,
+        "SectionIndex": 1,
+        "ToSection": 1,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S1_R09",
+        "ThemeId": "OrangeBlackParty",
+        "BlenderRoom": {
+          "SectionIndex": 2,
+          "StartDistance": 12,
+          "Asset": "RoomKitchenPrep",
+          "Width": 24,
+          "LinkId": "Level6_Link_35",
+          "PortalWidth": 14,
+          "Height": 12,
+          "Length": 24,
+          "PortalHeight": 10.5
+        },
+        "B": "L6_S2_R04",
+        "Id": "Level6_Link_35",
+        "GatewayKind": "District",
+        "FromSection": 1,
+        "LinkType": "Gateway",
+        "FromThemeId": "City",
+        "ToThemeId": "OrangeBlackParty",
+        "Gateway": true,
+        "SectionIndex": 2,
+        "ToSection": 2,
+        "Door": "Open"
+      },
+      {
+        "A": "L6_S2_R06",
+        "ThemeId": "RedParty",
+        "BlenderRoom": {
+          "SectionIndex": 3,
+          "StartDistance": 11,
+          "Asset": "RoomStaffNook",
+          "Width": 24,
+          "LinkId": "Level6_Link_36",
+          "PortalWidth": 14,
+          "Height": 12,
+          "Length": 24,
+          "PortalHeight": 10.5
+        },
+        "B": "L6_S3_R01",
+        "Id": "Level6_Link_36",
+        "GatewayKind": "District",
+        "FromSection": 2,
+        "LinkType": "Gateway",
+        "FromThemeId": "OrangeBlackParty",
+        "ToThemeId": "RedParty",
+        "Gateway": true,
+        "SectionIndex": 3,
+        "ToSection": 3,
+        "Door": "Open"
+      },
+      {
+        "A": "SignalHall",
+        "ThemeId": "RedParty",
+        "B": "Exit",
+        "Id": "Level6_Link_37",
+        "GatewayKind": "Exit",
+        "FromSection": 3,
+        "LinkType": "Gateway",
+        "FromThemeId": "RedParty",
+        "ToThemeId": "RedParty",
+        "Gateway": true,
+        "SectionIndex": 3,
+        "ToSection": 4,
+        "Door": "HiddenExit"
+      }
+    ]
+  },
+  "finalNormalLighting": {
+    "UnsafeDecoration": 0,
+    "InvalidEmitter": 0,
+    "ClockTime": 0.5,
+    "Brightness": 0,
+    "Art": 331,
+    "Lights": 162,
+    "BalloonParts": 0
+  },
+  "blackout": {
+    "ClockTime": 0.5,
+    "Clusters": 129,
+    "NeonDiffuserChunks": 16,
+    "Lit": 0,
+    "UnsafeBalloonParts": 0,
+    "FixtureLights": 159,
+    "BalloonParts": 645
+  },
+  "blackoutRestore": {
+    "ClockTime": 0.5,
+    "RestoredLit": 159
+  },
+  "setup": "Studio solo DEV preview as ZenMeister02; temporary normal server QA Script never installed into Edit. Diagnostic client changes discarded before final fresh Play. Camera was positioned for screenshots; no final lighting override.",
+  "limitation": "Blackout light disable/restore passed. Sixteen Blender diffuser chunks still reported Neon during this isolated test although all 159 fixture SurfaceLights were off; full blackout material parity is not claimed. Multiplayer threshold and mobile/foreground-device performance are unverified.",
+  "performance": {
+    "context": "Earlier actual Studio Client RenderStepped observer with same new balloons/art before ceiling cone fix; Studio inactive/background automation context; whole Studio memory.",
+    "durationSeconds": 10,
+    "samples": 151,
+    "meanFrameMilliseconds": 66.67,
+    "p95FrameMilliseconds": 68.4,
+    "approximateFPS": 15,
+    "wholeStudioMemoryMB": 6655,
+    "interpretation": "Nearly exact15FPS appears to be Studio automation/backgroundcap, not verified. Stable whole Studio memory during bounded observer; no claim that foreground60FPS, mobile, or GPU performance passed."
+  }
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "animationReferences": {
+      "AnimationContent": "rbxassetid://123012476898232"
+    },
+    "path": "Level3Assets.EntityAnimations.MallManager.Walk",
+    "root": "Level3Assets"
+  }
+]

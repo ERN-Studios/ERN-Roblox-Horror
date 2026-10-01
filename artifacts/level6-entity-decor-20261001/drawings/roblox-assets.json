@@ -1,0 +1,54 @@
+{
+  "creatorGroup": 1039373905,
+  "universeId": 10559217407,
+  "placeId": 131311258779917,
+  "uploadRoute": "Creator Dashboard > Development items > Images; uploaded to ERN Roblox Studios",
+  "privacy": "Restricted",
+  "records": [
+    {
+      "tier": 1,
+      "name": "crayon-tier1-ordinary",
+      "imageId": 122680678983418,
+      "wrapperId": 84491048449681,
+      "uri": "rbxassetid://122680678983418",
+      "decodedRobloxWidth": 1024,
+      "decodedRobloxHeight": 1024,
+      "atlasColumns": 4,
+      "atlasRows": 4,
+      "tileWidth": 256,
+      "tileHeight": 256,
+      "sourcePngWidth": 1254,
+      "sourcePngHeight": 1254
+    },
+    {
+      "tier": 2,
+      "name": "crayon-tier2-unsettling",
+      "imageId": 86367389253858,
+      "wrapperId": 77077491514036,
+      "uri": "rbxassetid://86367389253858",
+      "decodedRobloxWidth": 1024,
+      "decodedRobloxHeight": 1024,
+      "atlasColumns": 4,
+      "atlasRows": 4,
+      "tileWidth": 256,
+      "tileHeight": 256,
+      "sourcePngWidth": 1254,
+      "sourcePngHeight": 1254
+    },
+    {
+      "tier": 3,
+      "name": "crayon-tier3-disturbing",
+      "imageId": 117801916744224,
+      "wrapperId": 71723784606437,
+      "uri": "rbxassetid://117801916744224",
+      "decodedRobloxWidth": 1024,
+      "decodedRobloxHeight": 1024,
+      "atlasColumns": 4,
+      "atlasRows": 4,
+      "tileWidth": 256,
+      "tileHeight": 256,
+      "sourcePngWidth": 1254,
+      "sourcePngHeight": 1254
+    }
+  ]
+}

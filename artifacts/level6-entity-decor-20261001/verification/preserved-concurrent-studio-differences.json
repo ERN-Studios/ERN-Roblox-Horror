@@ -1,0 +1,118 @@
+{
+  "schema": "level6-preserved-concurrent-studio-differences/1",
+  "reviewed": true,
+  "reviewAuthority": "Root agent reviewed exact live native Source diffs, Level 4 asset root state, and owner settings; preserve concurrent developer work under Studio-authoritative owner instructions.",
+  "beforeRawNativeSHA256": "648e28a979bda64f0e40118322ff6aa5b31bd5ae74e46a48243840505b7285eb",
+  "afterRawNativeSHA256": "52ad26bff971ff6d1709e16a9217b7995ab51cd59b853c6eaefb33d6865e5e70",
+  "beforeCapturedAt": "2026-10-01T04:22:24Z",
+  "afterCapturedAt": "2026-10-01T05:16:46Z",
+  "scripts": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "beforeSHA256": "6b835beff8b804ac575f37f311464e7a23055dff6c7bb2c2c2e8b1f58aeec517",
+      "afterSHA256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392",
+      "beforeClass": "LocalScript",
+      "afterClass": "LocalScript",
+      "kind": "changed"
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "beforeSHA256": "d86fd89a1796eadbf976c8b88db63bb7856ae5e0ab45d5fd41efc60862a3bc2b",
+      "afterSHA256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "kind": "changed"
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "beforeSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "afterSHA256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb",
+      "beforeClass": "Script",
+      "afterClass": "Script",
+      "kind": "changed"
+    }
+  ],
+  "nativeRoots": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "beforeClass": "StarterPlayerScripts",
+      "afterClass": "StarterPlayerScripts",
+      "beforeBytes": 700467,
+      "afterBytes": 700519,
+      "beforeSHA256": "6153fe2f50d56905d855add8b24b49e0b41231c903a1341f838177d0810053ff",
+      "afterSHA256": "2c01a27825e8c6c478947d097c951903464114ecb7247ed3eb35886369635e10",
+      "unchanged": false
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender",
+      "beforeClass": "Model",
+      "afterClass": "Model",
+      "beforeBytes": 290043,
+      "afterBytes": 394005,
+      "beforeSHA256": "9ed78e3602c0aebec260032a9317b2b344433558ded23bcc8c207e1d6a29f681",
+      "afterSHA256": "38363c2e7a0805a3b6f66d8c3d70407d304af0d327478434e027fc393995cd14",
+      "unchanged": false
+    }
+  ],
+  "services": [
+    {
+      "service": "HttpService",
+      "kind": "changed",
+      "changedProperties": [
+        "HttpEnabled"
+      ],
+      "changedAttributes": [],
+      "beforeSHA256": "bb7fd19c4b1b73eb5e6f9cbf4789941e1ffe35786da2ddc1cbf0d6019de3e923",
+      "afterSHA256": "a62a3ed6f7a3b9f4e45ea131cb6ea3eefd93e13dda175cac68c7129e3be7d842"
+    },
+    {
+      "service": "Lighting",
+      "kind": "changed",
+      "changedProperties": [
+        "LightingStyle"
+      ],
+      "changedAttributes": [],
+      "beforeSHA256": "8483beb52e692257cf1e81f90a1e3f606e7dd2b02f962242e4c49b993b353177",
+      "afterSHA256": "5200aefa1a87235d4c681e5b5dd99a4ec6eacf97e41b96319b675e3726712fe9"
+    }
+  ],
+  "servicePropertyValues": [
+    {
+      "service": "HttpService",
+      "property": "HttpEnabled",
+      "before": {
+        "value": false,
+        "type": "boolean"
+      },
+      "after": {
+        "value": true,
+        "type": "boolean"
+      }
+    },
+    {
+      "service": "Lighting",
+      "property": "LightingStyle",
+      "before": {
+        "value": "Soft",
+        "type": "EnumItem",
+        "enum": "LightingStyle",
+        "ordinal": 1
+      },
+      "after": {
+        "value": "Realistic",
+        "type": "EnumItem",
+        "enum": "LightingStyle",
+        "ordinal": 0
+      }
+    }
+  ],
+  "reviewNotes": [
+    "Level 4 Lighting Controller changes only its Level 4 grade ambient/exposure.",
+    "Level 4 PushDoors adds a double-door comment and uses time() for its door-close deadline.",
+    "Level 4 OccasionalFixtureFlicker is rewritten per fixture and remains scoped to its own Level 4 parent model.",
+    "Level 4 Cinema Blender grew from 9840 to 13912 descendants; native after preserves that concurrent authoritative revision.",
+    "HttpEnabled false to true and LightingStyle Soft to Realistic changed outside this Level 6 task; preserve current owner/developer settings.",
+    "No Level 4 gameplay or performance verification is claimed by the Level 6 task.",
+    "No out-of-scope Source, root or service property was restored or written by this verifier."
+  ]
+}

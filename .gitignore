@@ -68,3 +68,18 @@
 /artifacts/level6-blender-revision-20260930/review/*-result.json
 /artifacts/level6-blender-revision-20260930/review/*-prompt.txt
 /tools/level6_build/__pycache__/
+
+# Level 6 entity/decor task: retain native recovery locally and version scoped
+# mirrors, texture assets, reviewed verification receipts and backup hashes.
+/artifacts/level6-entity-decor-20261001/native-*/*
+!/artifacts/level6-entity-decor-20261001/native-*/source-manifest.json
+!/artifacts/level6-entity-decor-20261001/native-*/backup-file-hashes.json
+!/artifacts/level6-entity-decor-20261001/native-*/backup-metadata-summary.json
+/artifacts/level6-entity-decor-20261001/fresh-baseline/
+/artifacts/level6-entity-decor-20261001/qa-baseline/
+/artifacts/level6-entity-decor-20261001/candidates/
+/artifacts/level6-entity-decor-20261001/unrelated-checkpoint.patch
+/artifacts/level6-entity-decor-20261001/repository-before.txt
+/artifacts/level6-entity-decor-20261001/*-payload.json
+/artifacts/level6-entity-decor-20261001/**/*.log
+/artifacts/level6-entity-decor-20261001/**/__pycache__/
