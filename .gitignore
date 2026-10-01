@@ -83,3 +83,25 @@
 /artifacts/level6-entity-decor-20261001/*-payload.json
 /artifacts/level6-entity-decor-20261001/**/*.log
 /artifacts/level6-entity-decor-20261001/**/__pycache__/
+
+# Robux shop artwork/pricing: retain full authoritative Studio recovery locally.
+# Version scoped Sources, asset receipts, native hashes and reviewed evidence.
+/artifacts/robux-icons-20261001/native-*/*
+!/artifacts/robux-icons-20261001/native-*/source-manifest.json
+!/artifacts/robux-icons-20261001/native-*/backup-file-hashes.json
+!/artifacts/robux-icons-20261001/native-*/backup-metadata-summary.json
+/artifacts/robux-icons-20261001/**/*.log
+/artifacts/robux-icons-20261001/**/__pycache__/
+/artifacts/robux-icons-20261001/claude-review/design-review.stream.jsonl
+/artifacts/robux-icons-20261001/audit/raw-source-chunks/
+/artifacts/robux-icons-20261001/unrelated-checkpoint.patch
+/artifacts/robux-icons-20261001/repository-before.txt
+# Reproduce checks with the five relevant exact audit Sources and four verified
+# mirrors. Historical locators, write baselines and full proposals stay local.
+/artifacts/robux-icons-20261001/audit/recent-native-locator/
+/artifacts/robux-icons-20261001/audit/live-sources/ServerScriptService.ZyntraMonetization.Script.luau
+/artifacts/robux-icons-20261001/audit/live-sources/StarterPlayer.StarterPlayerScripts.Shop Display Client.LocalScript.luau
+/artifacts/robux-icons-20261001/write-baseline/
+/artifacts/robux-icons-20261001/pricing-fix/proposed-after/
+!/artifacts/robux-icons-20261001/native-*/native-completeness-receipt.json
+!/artifacts/robux-icons-20261001/native-*/native-place-verification.json

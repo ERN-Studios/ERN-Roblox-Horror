@@ -1,0 +1,53 @@
+{
+  "mode": "built-in imagegen",
+  "records": [
+    {
+      "key": "TokenEarner2x",
+      "prompt": "Create one finished square 1024x1024 raster shop icon for Backrooms: Stay Quiet, a Roblox horror exploration game with a practical research-agency aesthetic. This is the permanent 2x earned research-token multiplier. Art direction: extremely clean, confident editorial game UI pictogram, flat screen-printed shapes, two dimensional, crisp edges, no photorealism. Solid very dark charcoal background (#171D20) filling the whole square. Centered giant bold warm-ivory text exactly '2×', clean heavy condensed industrial sans serif, occupying about 58% of the square width; perfectly legible at a 52px thumbnail. Behind and slightly below the text, one simple teal research token: a modest flat chamfered square chip, with one large hollow square aperture, single broad ivory line at most, no intricate engravings. The chip is a secondary cue, not a medallion. Small muted teal solid bar near the lower edge, plenty of breathing space with 12% safe margins. Restrained palette charcoal, warm ivory, muted teal (#55B4AB). Design should feel like a professional human designed research-terminal icon from a grounded horror game, not a shiny casino reward. The text 2× is the only lettering. No outer frame, no circles, no gold, no metallic bevels, no boxes of loot, no sparkles, no lightning, no bloom, no gradients, no tiny technical lines, no labels, no additional text, no watermark. Export opaque square background.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-9a22f45f-baf3-42dd-8a9d-9553b09a51e0.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    },
+    {
+      "key": "TokenEarner3x",
+      "prompt": "Edit this shop icon into the permanent 3x token multiplier variant. Preserve the entire exact graphic design: charcoal opaque square background, huge warm ivory heavy sans serif lettering, flat muted teal chamfered square research token with square aperture below the lettering, one teal bottom bar, same text size, stroke weight, safe margins and precise minimal composition. Change only the text from '2×' to '3×'. The exact text '3×' is the only lettering. This is a consistent family, no new decoration, no tier stars, no gold, no metal, no gradients, no glow, no frames, no loot boxes. Clean legibility at52px. Square1024x1024 finished standalone icon.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-80b1746b-0ab5-4fb9-9c44-1437c0f5abc5.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarner3x.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    },
+    {
+      "key": "TokenEarner5x",
+      "prompt": "Edit this shop icon into the permanent 5x token multiplier variant. Preserve the entire exact graphic design: charcoal opaque square background, huge warm ivory heavy sans serif lettering, flat muted teal chamfered square research token with square aperture below the lettering, one teal bottom bar, same text size, stroke weight, safe margins and precise minimal composition. Change only the text from '2×' to '5×'. The exact text '5×' is the only lettering. This is a consistent family, no new decoration, no tier stars, no gold, no metal, no gradients, no glow, no frames, no loot boxes. Clean legibility at52px. Square1024x1024 finished standalone icon.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-99eb8cef-e50d-472c-a77c-1038623d8a96.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarner5x.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    },
+    {
+      "key": "TokenEarnerUp2to3",
+      "prompt": "Edit the reference into a clean permanent research-token upgrade icon for 2x to 3x. Same exact flat printed research-terminal graphic family, opaque dark charcoal square background, warm ivory bold industrial sans serif, muted teal, no borders. It must clearly show the transition, not just the destination tier: large text '2×' centered in upper third, a single wide simple muted teal DOWNWARD arrow centered in the middle, then large text '3×' centered in the lower third. Both numbers equally legible, the source text muted ivory and destination warm bright ivory. The only text is '2×' and '3×'. Exactly two rows and one simple arrow. Keep 15% safe margins around all edges and sufficient space between rows. No token shape is necessary in this upgrade version; the matching typography and teal arrow establish family. Intended to read perfectly at52px. No gold, no metal, no glow, no gradients, no circles, no sparkles, no lootboxes, no technical ornament or microtext. Finished square1024x1024 standalone icon.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-5f144552-b8b7-4f6e-b9c1-085fea6c99fa.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarnerUp2to3.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    },
+    {
+      "key": "TokenEarnerUp3to5",
+      "prompt": "Edit the reference into a clean permanent research-token upgrade icon for 3x to 5x. Same exact flat printed research-terminal graphic family, opaque dark charcoal square background, warm ivory bold industrial sans serif, muted teal, no borders. It must clearly show the transition, not just the destination tier: large text '3×' centered in upper third, a single wide simple muted teal DOWNWARD arrow centered in the middle, then large text '5×' centered in the lower third. Both numbers equally legible, the source text muted ivory and destination warm bright ivory. The only text is '3×' and '5×'. Exactly two rows and one simple arrow. Keep 15% safe margins around all edges and sufficient space between rows. No token shape is necessary in this upgrade version; the matching typography and teal arrow establish family. Intended to read perfectly at52px. No gold, no metal, no glow, no gradients, no circles, no sparkles, no lootboxes, no technical ornament or microtext. Finished square1024x1024 standalone icon.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-bbfaa1b5-3e98-4192-b89c-b9061065b1de.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarnerUp3to5.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    },
+    {
+      "key": "TokenEarnerUp2to5",
+      "prompt": "Edit the reference into a clean permanent research-token upgrade icon for 2x to 5x. Same exact flat printed research-terminal graphic family, opaque dark charcoal square background, warm ivory bold industrial sans serif, muted teal, no borders. It must clearly show the transition, not just the destination tier: large text '2×' centered in upper third, a single wide simple muted teal DOWNWARD arrow centered in the middle, then large text '5×' centered in the lower third. Both numbers equally legible, the source text muted ivory and destination warm bright ivory. The only text is '2×' and '5×'. Exactly two rows and one simple arrow. Keep 15% safe margins around all edges and sufficient space between rows. No token shape is necessary in this upgrade version; the matching typography and teal arrow establish family. Intended to read perfectly at52px. No gold, no metal, no glow, no gradients, no circles, no sparkles, no lootboxes, no technical ornament or microtext. Finished square1024x1024 standalone icon.",
+      "sourceGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-cc638b34-7d79-4728-aa63-f1faab6c4028.png",
+      "path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/shop/icons-v2-20261001/TokenEarnerUp2to5.png",
+      "generationMode": "built-in imagegen",
+      "transparent_background": false
+    }
+  ]
+}

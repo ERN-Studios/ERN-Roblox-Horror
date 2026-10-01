@@ -1,0 +1,110 @@
+{
+  "generator_mode": "builtin",
+  "style_reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+  "records": [
+    {
+      "key": "EntityDetector",
+      "path": "assets/shop/icons-v2-20261001/EntityDetector.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square purchasable-item icon for the Roblox co-op horror game Backrooms: Stay Quiet, readable at 52 pixels.\nInput image: style reference only. Match its charcoal square background, matte ivory and teal printed shapes, strong simple silhouette and 12% safe margins. Create a different subject, not a token multiplier.\nPrimary request: Entity Detector icon. One large front-facing handheld detector, occupying the central 70% of the canvas. Simple rounded rectangular warm ivory body; a charcoal display in its upper half with exactly three broad horizontally stacked signal bars: muted teal bottom, muted amber middle, muted coral top. One large simple teal circular scan button below. At most one tiny short antenna silhouette if needed; prefer no antenna.\nStyle: flat industrial research-terminal pictogram, confident thick shapes, subtle printed grain only, no realistic product rendering.\nBackground: opaque matte charcoal #151C1F, edge to edge. Ivory #EFEBDD, teal #54AEA7. No text.\nConstraints: three threat-level bars, not a radar; no map, dots identifying monster positions, creatures or exact distance indicators. Do not imply guaranteed safety. No screws, tiny controls, decorative frame, bevels, metal, circuitry, bloom, glow, shadows, gradients, scenery, logos, watermark, numbers or letters. All essential shapes stay at least 12% from edges.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-4cbc4fa9-c75f-41a1-9e4e-4d5b6f93602c.png",
+      "revision_prompt": null,
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-4cbc4fa9-c75f-41a1-9e4e-4d5b6f93602c.png",
+      "revisions_reason": null,
+      "visually_inspected": true
+    },
+    {
+      "key": "Supporter",
+      "path": "assets/shop/icons-v2-20261001/Supporter.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match the opaque matte charcoal square, flat industrial research-terminal pictogram, warm ivory printed shapes, muted teal accent, subtle printed grain, broad strokes and at least 12% safe margins.\nBackground: opaque charcoal #151C1F edge to edge.\nConstraints: one clear large subject, confidence and restraint, no realistic rendering, no fine decorative frames, no bevels, metal, screws, sparkle, circuitry, glow, bloom, drop shadows, gradients, scenery, logos, watermark, text or numbers unless specifically requested.\nPrimary request: Zyntra Supporter shop icon. A simple upright wide printed supporter ID badge silhouette in warm ivory, with one small rectangular lanyard slot at its top and an oversized warm muted amber five-point star in its center. Flat star shape only; no ornate medal, ribbons or metal decoration. A thick simple muted amber horizontal identification stripe beneath the star. The badge is the dominant central shape at 70% canvas height. This symbolizes a permanent supporter tag, not gameplay equipment or a ranking reward. No coins or other objects.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-48a25960-180f-45d9-be66-896d569fc5d6.png",
+      "revision_prompt": null,
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-48a25960-180f-45d9-be66-896d569fc5d6.png",
+      "revisions_reason": null,
+      "visually_inspected": true
+    },
+    {
+      "key": "AdvancedEquipment",
+      "path": "assets/shop/icons-v2-20261001/AdvancedEquipment.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match the opaque matte charcoal square, flat industrial research-terminal pictogram, warm ivory printed shapes, muted teal accent, subtle printed grain, broad strokes and at least 12% safe margins.\nBackground: opaque charcoal #151C1F edge to edge.\nConstraints: one clear large subject, confidence and restraint, no realistic rendering, no fine decorative frames, no bevels, metal, screws, sparkle, circuitry, glow, bloom, drop shadows, gradients, scenery, logos, watermark, text or numbers unless specifically requested.\nPrimary request: Focused flashlight shop icon for the Advanced Equipment purchase. One unmistakable rugged handheld flashlight, warm ivory and muted teal, diagonal from bottom left toward upper right, with a large tapered cylindrical handle and broad lamp head. A narrow crisp flat ivory light cone projects to upper right, two straight beam edges and flat cut-off, no atmospheric glow. Keep the flashlight and complete beam inside the 12% margins. The overall graphic fills about 72% of the canvas and reads immediately as a focused torch. No helmet, gas mask, armor, medical symbols, battery or extra objects.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-7d3e6017-7fdb-4ea1-bb6b-2e0957496dc1.png",
+      "revision_prompt": "Use case: precise-object-edit\nAsset type: square Roblox focused flashlight purchase icon.\nInput image: edit target. Preserve the recognizable warm ivory and muted teal flat printed flashlight, diagonal from lower left to upper right, and the crisp narrow ivory beam pointing toward the upper right. Change only the composition size and beam length: shrink the entire flashlight-and-beam symbol to 70% of its current size, center it in the square, and shorten the light cone to half its current length. Keep broad strong silhouette and just one simple teal power switch. Every part including both flashlight ends and the whole beam must lie comfortably inside a central circle occupying 76% of the canvas diameter, leaving generous space near corners and edges for a circular marketplace crop.\nKeep charcoal opaque background, restrained matte ivory/teal palette, subtle printed grain. No text, helmets, gas mask, armor, extra objects, frame, circuitry, fine detailing, bevels, metal reflections, glow, bloom or shadow.",
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-dd276779-2040-4071-9e6a-4449e550b720.png",
+      "revisions_reason": "Tighten flashlight and shorten beam for circular crop safety.",
+      "visually_inspected": true
+    },
+    {
+      "key": "CosmeticEquipment",
+      "path": "assets/shop/icons-v2-20261001/CosmeticEquipment.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match the opaque matte charcoal square, flat industrial research-terminal pictogram, warm ivory printed shapes, muted teal accent, subtle printed grain, broad strokes and at least 12% safe margins.\nBackground: opaque charcoal #151C1F edge to edge.\nConstraints: one clear large subject, confidence and restraint, no realistic rendering, no fine decorative frames, no bevels, metal, screws, sparkle, circuitry, glow, bloom, drop shadows, gradients, scenery, logos, watermark, text or numbers unless specifically requested.\nPrimary request: Glowstick Customizer shop icon. Exactly three plain chem-light glowstick silhouettes, with simple short dark end caps and small hanging tabs. Vertical center muted coral stick; outer muted teal and muted lime sticks tilt slightly outward. Each stick is a broad plain flat rectangle with gently rounded corners, dark dividing cap bands, no realistic tube interior. Together the trio fills 68% of the square and forms one broad clean fan-shaped silhouette. These are color customization only; no shield or power-up symbols, no rainbow ring, no neon bloom or emitted-light effect. No text.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-de3e1019-79c3-41e7-95bb-a1fc378a4f02.png",
+      "revision_prompt": null,
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-de3e1019-79c3-41e7-95bb-a1fc378a4f02.png",
+      "revisions_reason": null,
+      "visually_inspected": true
+    },
+    {
+      "key": "ExpeditionPack",
+      "path": "assets/shop/icons-v2-20261001/ExpeditionPack.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match its matte opaque charcoal square, warm ivory and teal flat printed silhouettes, subtle printed grain, large confident broad shapes and 12% safe margins. The reference teal token is a flat square with chamfered corners and a square aperture.\nBackground: opaque charcoal #151C1F edge to edge.\nStyle: flat industrial research-terminal pictogram, confident and restrained. Colors ivory #EFEBDD, teal #54AEA7. No realistic product rendering, fine frames, metal, bevels, circuitry, bloom, sparkle, atmospheric glow, drop shadows, gradients, scenery, logos or watermark.\nPrimary request: consumable Expedition Pack icon showing the EXACT bundle: one Emergency Re-entry, one Entity Shield charge and three Route Markers. One flat wide ivory research supply voucher/card silhouette inside central 74% width/height, simple solid rounded rectangle with no decorative frame. On the card, three large broad teal symbols arranged compactly: an oversized simple return arrow in the top left, an oversized flat shield in the top right, and exactly three large identical right-pointing chevron route markers in one spaced row across the lower portion. The shield has a dark center cutout so it reads strongly; return arrow visibly hooks inward once. Give all three symbol groups generous empty space so each reads at 52 px. No lettering or numbers.\nNo crate, lootbox, bags, guns, extra equipment, glowsticks, cylinders, token coins, star, random rewards, permanent equipment cues or extra marks. Only one return, one shield, exactly three chevrons.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-8494a82e-d337-4e2a-aee5-2e3afd94b0e1.png",
+      "revision_prompt": null,
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-8494a82e-d337-4e2a-aee5-2e3afd94b0e1.png",
+      "revisions_reason": null,
+      "visually_inspected": true
+    },
+    {
+      "key": "Tokens4",
+      "path": "assets/shop/icons-v2-20261001/Tokens4.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match its matte opaque charcoal square, warm ivory and teal flat printed silhouettes, subtle printed grain, large confident broad shapes and 12% safe margins. The reference teal token is a flat square with chamfered corners and a square aperture.\nBackground: opaque charcoal #151C1F edge to edge.\nStyle: flat industrial research-terminal pictogram, confident and restrained. Colors ivory #EFEBDD, teal #54AEA7. No realistic product rendering, fine frames, metal, bevels, circuitry, bloom, sparkle, atmospheric glow, drop shadows, gradients, scenery, logos or watermark.\nPrimary request: one-time grant of FOUR Research Tokens. Put a huge, bold upright warm ivory numeral \"4\" in the upper central 48% of the square. Below it put exactly one large flat muted teal token: a chamfered square with one square hole, matching the reference token precisely in shape. Beneath the token one simple short broad teal baseline, as in the reference.\nText (verbatim): \"4\".\nOnly one numeral 4; no multiplication sign, letter x, plus sign, arrow or other text. It is a token amount, not a token earning multiplier. No piles, stacks or extra tokens. Everything inside central 76% width/height. Same visual hierarchy and layout as the reference, changing just 2× to 4.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-93c00a3a-5e4c-44eb-bc5d-be9c5016d6a4.png",
+      "revision_prompt": "Use case: precise-object-edit\nAsset type: square Roblox immediate Research Token purchase icon.\nInput image: edit target. Change only the large warm ivory numeral \"4\" to the exact text \"+4\", centered as a single bold large line in the upper half.\nText (verbatim): \"+4\".\nKeep the same opaque charcoal background, flat matte printed palette, chamfered square teal token with square aperture, token position, short teal baseline, subtle printed grain, and the overall restrained industrial-terminal style. The plus is essential: this is an immediate amount grant, not an earning multiplier. No ×, no x. Use broad matching bold glyphs, plenty of space. Keep every critical shape inside a central circle occupying 76% of the canvas diameter, at least 12% safe margins. No extra symbols, text, frame, realistic material, glow, bevel or clutter.",
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-271a181a-2bdb-49fc-a2c8-3b6dd7714ed4.png",
+      "revisions_reason": "Actual Claude Opus 5.5 review requested plus sign for immediate amount grant, contrasting with earning multipliers.",
+      "visually_inspected": true
+    },
+    {
+      "key": "Tokens20",
+      "path": "assets/shop/icons-v2-20261001/Tokens20.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match its matte opaque charcoal square, warm ivory and teal flat printed silhouettes, subtle printed grain, large confident broad shapes and 12% safe margins. The reference teal token is a flat square with chamfered corners and a square aperture.\nBackground: opaque charcoal #151C1F edge to edge.\nStyle: flat industrial research-terminal pictogram, confident and restrained. Colors ivory #EFEBDD, teal #54AEA7. No realistic product rendering, fine frames, metal, bevels, circuitry, bloom, sparkle, atmospheric glow, drop shadows, gradients, scenery, logos or watermark.\nPrimary request: one-time grant of TWENTY Research Tokens. Put huge, bold upright warm ivory numerals \"20\" in the upper central 48% of the square. Below them put exactly one large flat muted teal token: a chamfered square with one square hole, matching the reference token precisely in shape. Beneath the token one simple short broad teal baseline, as in the reference.\nText (verbatim): \"20\".\nOnly the number20; no multiplication sign, letter x, plus sign, arrow or other text. It is a token amount, not a token earning multiplier. No piles, stacks or extra tokens. Everything inside central 76% width/height. Same visual hierarchy and layout as the reference, changing just 2× to 20.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-4b63dcb6-6808-4acc-9deb-46b36aa4b2ba.png",
+      "revision_prompt": "Use case: precise-object-edit\nAsset type: square Roblox immediate Research Token purchase icon.\nInput image: edit target. Change only the large warm ivory numeral \"20\" to the exact text \"+20\", centered as a single bold large line in the upper half.\nText (verbatim): \"+20\".\nKeep the same opaque charcoal background, flat matte printed palette, chamfered square teal token with square aperture, token position, short teal baseline, subtle printed grain, and the overall restrained industrial-terminal style. The plus is essential: this is an immediate amount grant, not an earning multiplier. No ×, no x. Use broad matching bold glyphs, reduce glyph size only as needed for generous margins. Keep every critical shape inside a central circle occupying 76% of the canvas diameter, at least 12% safe margins. No extra symbols, text, frame, realistic material, glow, bevel or clutter.",
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-d2f13e37-76f7-4a7e-a9d0-a48786a58deb.png",
+      "revisions_reason": "Actual Claude Opus 5.5 review requested plus sign for immediate amount grant, contrasting with earning multipliers.",
+      "visually_inspected": true
+    },
+    {
+      "key": "EmergencyReentry",
+      "path": "assets/shop/icons-v2-20261001/EmergencyReentry.png",
+      "tool": "builtin image_gen.imagegen",
+      "reference": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+      "transparent_background": false,
+      "initial_prompt": "Use case: logo-brand\nAsset type: square Roblox shop purchase icon, intended display 52 pixels.\nInput image: style reference only. Match its matte opaque charcoal square, warm ivory and teal flat printed silhouettes, subtle printed grain, large confident broad shapes and 12% safe margins. The reference teal token is a flat square with chamfered corners and a square aperture.\nBackground: opaque charcoal #151C1F edge to edge.\nStyle: flat industrial research-terminal pictogram, confident and restrained. Colors ivory #EFEBDD, teal #54AEA7. No realistic product rendering, fine frames, metal, bevels, circuitry, bloom, sparkle, atmospheric glow, drop shadows, gradients, scenery, logos or watermark.\nPrimary request: Emergency Re-entry icon, an ordinary backrooms doorway represented by one large flat warm ivory rectangular doorframe with its dark opening and a plain ivory door panel angled slightly open. A single oversized flat teal return arrow curls once from lower left across the doorway and points inward toward the center opening. Arrow must be simple broad return symbol clearly visible at 52 px. Door and arrow together occupy central 72% width/height. Only these two symbols.\nNo futuristic portal, tubes, colored warning rails, human character, medical cross, health meter, life count, halo or guaranteed safety symbols. No numbers or words.",
+      "initial_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-e8b9cdb3-780b-4819-8a6e-dca6606ef1ea.png",
+      "revision_prompt": null,
+      "final_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0f610-0a91-7cf3-8895-3d62044838a9/exec-e8b9cdb3-780b-4819-8a6e-dca6606ef1ea.png",
+      "revisions_reason": null,
+      "visually_inspected": true
+    }
+  ]
+}

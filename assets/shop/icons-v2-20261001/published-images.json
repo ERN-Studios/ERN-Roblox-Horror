@@ -1,0 +1,112 @@
+{
+  "groupId": 1039373905,
+  "universeId": 10559217407,
+  "source": "Creator Dashboard group-owned batch upload; InsertService decoded exact Decal.Texture",
+  "rows": [
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://80999828522184",
+      "key": "AdvancedEquipment",
+      "imageAssetId": 80999828522184,
+      "decalAssetId": 93955741424368
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://123958330018036",
+      "key": "DonationSupport",
+      "imageAssetId": 123958330018036,
+      "decalAssetId": 96765651181007
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://92866750717809",
+      "key": "EmergencyReentry",
+      "imageAssetId": 92866750717809,
+      "decalAssetId": 134269180449779
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://109389693183150",
+      "key": "TokenEarnerUp2to3",
+      "imageAssetId": 109389693183150,
+      "decalAssetId": 89404136100782
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://125900723066493",
+      "key": "TokenEarnerUp2to5",
+      "imageAssetId": 125900723066493,
+      "decalAssetId": 115290090448283
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://118242405264841",
+      "key": "Tokens4",
+      "imageAssetId": 118242405264841,
+      "decalAssetId": 105816258132894
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://118036691232665",
+      "key": "TokenEarner2x",
+      "imageAssetId": 118036691232665,
+      "decalAssetId": 98310598099056
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://83090272487976",
+      "key": "CosmeticEquipment",
+      "imageAssetId": 83090272487976,
+      "decalAssetId": 78744444495038
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://80236147559406",
+      "key": "TokenEarnerUp3to5",
+      "imageAssetId": 80236147559406,
+      "decalAssetId": 136071686760140
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://124733504759279",
+      "key": "Tokens20",
+      "imageAssetId": 124733504759279,
+      "decalAssetId": 124135806714223
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://87690773145206",
+      "key": "TokenEarner3x",
+      "imageAssetId": 87690773145206,
+      "decalAssetId": 108075745777769
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://135373819751914",
+      "key": "TokenEarner5x",
+      "imageAssetId": 135373819751914,
+      "decalAssetId": 80982991097390
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://106022873152277",
+      "key": "Supporter",
+      "imageAssetId": 106022873152277,
+      "decalAssetId": 111581165935734
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://134334664606741",
+      "key": "ExpeditionPack",
+      "imageAssetId": 134334664606741,
+      "decalAssetId": 126054956646209
+    },
+    {
+      "ok": true,
+      "imageUri": "rbxassetid://87202894425080",
+      "key": "EntityDetector",
+      "imageAssetId": 87202894425080,
+      "decalAssetId": 86950067720768
+    }
+  ]
+}

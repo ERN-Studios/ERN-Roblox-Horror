@@ -1,0 +1,42 @@
+{
+  "universeId": 10559217407,
+  "method": "AssetService.SavePlaceAsync",
+  "placeId": 131311258779917,
+  "versionAfter": 2450,
+  "completedAt": "2026-10-01T07:25:59Z",
+  "startedAt": "2026-10-01T07:25:59Z",
+  "error": "Game:SavePlace can only be called from a server script, aborting save function",
+  "versionBefore": 2450,
+  "requestParameters": {
+    "SaveWithoutPublish": false,
+    "PlaceId": 131311258779917
+  },
+  "pcallSuccess": false,
+  "status": "failed",
+  "nativeMenuPublish": {
+    "confirmed": false,
+    "versionRemained": 2450,
+    "attempts": 2
+  },
+  "nativeControlErrors": [
+    "noWindowsAvailable",
+    "timeoutReached"
+  ],
+  "studioInternalPublisher": {
+    "serviceAvailable": false,
+    "methodReadable": false,
+    "eventReadable": false
+  },
+  "sourceGuard": "Exact four Source/editor strings freshly matched the verified native-after exports before attempted publication.",
+  "managedPricing": {
+    "enabled": 12,
+    "total": 25,
+    "remaining": 13,
+    "status": "held until successful pricing-compatible publication"
+  },
+  "ownerClarification": {
+    "requested": "Unlock/bring Studio forward if screen unavailable",
+    "answered": false
+  },
+  "docs": "https://create.roblox.com/docs/reference/engine/classes/AssetService#SavePlaceAsync"
+}

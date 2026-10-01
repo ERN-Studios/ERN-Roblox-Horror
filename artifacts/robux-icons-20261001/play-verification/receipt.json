@@ -1,0 +1,47 @@
+{
+  "studioId": "08b776ed-0330-44f6-8378-c6eea82b3f38",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "account": "ZenMeister02",
+  "actualPlay": true,
+  "scope": "Shop and Skins menus",
+  "allElevenVisibleShopProductIconsLoaded": true,
+  "checkedCards": [
+    "Supporter",
+    "AdvancedEquipment",
+    "EntityDetector",
+    "Tokens4",
+    "Tokens20",
+    "EmergencyReentry",
+    "ExpeditionPack",
+    "CosmeticEquipment",
+    "TokenEarner2x",
+    "TokenEarner3x",
+    "TokenEarner5x"
+  ],
+  "observedPrices": {
+    "Tokens4": 49,
+    "Tokens20": 149,
+    "EmergencyReentry": 29
+  },
+  "skinsOwnedStateVisible": true,
+  "skinPortraitsAndUVTexturesPreserved": true,
+  "temporaryClientOwnershipAttributesRestored": true,
+  "stoppedPlay": true,
+  "tests": {
+    "purchaseTransactions": "Not performed; no Robux spent",
+    "multiRegionLiveAccounts": "Not tested; production functions tested against regional/pricing matrix",
+    "cachedPreloadResult": "Initially stale failures for earner assets; actual visible ImageLabel.IsLoaded and screenshots subsequently succeeded"
+  },
+  "unrelatedConsoleWarnings": [
+    "Animation asset 114302219876492 lacks access in Studio test",
+    "Level 6 lobby WaitForChild warnings for round-owned remotes/state"
+  ],
+  "screenshots": [
+    "shop-new-token-2x.png",
+    "shop-new-token-3x.png",
+    "shop-new-token-packs.png",
+    "shop-new-reentry.png",
+    "gallery-small-circle.jpg"
+  ]
+}

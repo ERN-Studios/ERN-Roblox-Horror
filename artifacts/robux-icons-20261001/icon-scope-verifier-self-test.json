@@ -1,0 +1,20 @@
+{
+  "verifier_self_test": {
+    "passed": true,
+    "synthetic_allowed_22_literal_replacements_accepted": true,
+    "synthetic_evaluated_allowed_catalog_accepted": true,
+    "prohibited_mutations_rejected": [
+      "price_change",
+      "grant_change",
+      "product_id_change",
+      "function_change",
+      "unrelated_item_icon_change",
+      "surrounding_comment_change",
+      "wrong_utility_image_id",
+      "unrelated_wall_icon_change",
+      "evaluated_token_grant_change"
+    ],
+    "negative_control_count": 9,
+    "note": "Synthetic verifier controls; not a Studio or gameplay test."
+  }
+}

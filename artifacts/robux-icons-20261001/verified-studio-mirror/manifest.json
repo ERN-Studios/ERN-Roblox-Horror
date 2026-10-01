@@ -1,0 +1,40 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "capturedAt": "2026-10-01T07:07:45Z",
+  "sourceAndEditorVerified": true,
+  "scripts": [
+    {
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "class": "ModuleScript",
+      "sourceBytes": 16706,
+      "sourceSha256": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0",
+      "editorMatch": true,
+      "file": "verified-studio-mirror/ReplicatedStorage/ZyntraConfig.ModuleScript.luau"
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "class": "ModuleScript",
+      "sourceBytes": 19759,
+      "sourceSha256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "editorMatch": true,
+      "file": "verified-studio-mirror/ReplicatedStorage/ZyntraSkinsPage.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "sourceBytes": 22048,
+      "sourceSha256": "b775d16d58ef30a3415936d8728862f321ca0e8651279f9541c7ea436d7eab44",
+      "editorMatch": true,
+      "file": "verified-studio-mirror/ServerScriptService/LobbyShopDisplay.ModuleScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "class": "LocalScript",
+      "sourceBytes": 198511,
+      "sourceSha256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "editorMatch": true,
+      "file": "verified-studio-mirror/StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.luau"
+    }
+  ]
+}

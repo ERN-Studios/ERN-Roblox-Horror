@@ -1,0 +1,55 @@
+{
+  "authority": "Complete authoritative current Studio Edit capture, taken after the four approved source edits and after Play stopped. No Studio objects restored or changed by backup verification.",
+  "capturedAt": "2026-10-01T07:07:45Z",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "observedPlaceVersion": 2450,
+  "nativePlace": "AfterRobuxIcons-AuthoritativeStudio.rbxl",
+  "nativePlaceBytes": 66121185,
+  "nativePlaceSHA256": "7db2807e48cd8c3414008556f70b127e2182717ce0a2211cca97062fae45e73b",
+  "rawNativeSHA256": "746102004741d6946b339b57353dc2f9352377742f10917365ce2f29f824e67a",
+  "scriptsJsonSHA256": "6483e2196897fbba2a46142ab5cb3458ba807ed2f596a97ce75b566bb9243cbb",
+  "sourceCount": 205,
+  "sourceEditorConflicts": 0,
+  "skippedRoots": 0,
+  "rootCount": 181,
+  "serviceCount": 24,
+  "nativeContentInstances": 387471,
+  "packedDescendants": 387493,
+  "reopenedDescendants": 387493,
+  "sourceErrors": {},
+  "rootErrors": {},
+  "unsupportedServicePropertyAssignments": 29,
+  "unreadableLiveServiceProperties": 129,
+  "intentionallyOmitted": [
+    {
+      "class": "Status",
+      "path": "Workspace.StarterCharacter.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    },
+    {
+      "class": "Status",
+      "path": "Workspace.Dummy.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    }
+  ],
+  "instanceCountExplanation": {
+    "nativeContent": 387471,
+    "serviceObjectsAdded": 24,
+    "nonArchivableEngineStatusChildrenOmitted": 2,
+    "packedAndReopened": 387493
+  },
+  "scopeVerificationPassed": true,
+  "changedSources": [
+    "ReplicatedStorage.ZyntraConfig",
+    "ReplicatedStorage.ZyntraSkinsPage",
+    "ServerScriptService.LobbyShopDisplay",
+    "StarterPlayer.StarterPlayerScripts.ZyntraStore"
+  ],
+  "unchangedOtherSources": 201,
+  "allNativePropertiesUnchangedExceptFourSourceEdits": true,
+  "allServiceAndGlobalSettingsUnchanged": true,
+  "localCaptureDirectory": "/private/tmp/robux-icons-native-after-20261001",
+  "receiverStopped": true,
+  "limitations": "Raw native child bytes and live service metadata are retained. The local reconstruction cannot assign 29 service properties; 129 live service property reads were unavailable. Roblox omits two non-archivable engine Status objects. Exact fields remain recorded in native-place-verification.json. The generic local packer output is copied byte-exact to the after-capture filename recorded here."
+}

@@ -1,0 +1,130 @@
+{
+  "authority": "Fresh native-before current Studio Source capture",
+  "priceReferences": [
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "line": 21,
+      "source": "and info.PriceInRobux == item.RobuxPrice"
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "line": 344,
+      "source": "entry.Meta.Text = (\"%d R$\"):format(item.RobuxPrice)"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "line": 4938,
+      "source": "or (tostring(tonumber(player:GetAttribute(\"ZyntraReentryPrice\")) or \"--\")"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 36,
+      "source": "local displayedProductPrices = {}"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1789,
+      "source": "local buy = button(card, kind == \"TokenItem\" and (tostring(item.TokenCost) .. \" TOKENS\") or (tostring(item.Price) .. \" R$\"), UDim2.new(1, -28, 0, 38), UDim2.new(0, 14, 1, -50))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1831,
+      "source": "displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1836,
+      "source": "local price = ok and type(info) == \"table\" and tonumber(info.PriceInRobux) or nil"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1840,
+      "source": "displayedProductPrices[key] = math.floor(price)"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1909,
+      "source": "if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1910,
+      "source": "itemButton.Text = not pass and \"OWNED\" or onSale and (tostring(pass.Price) .. \" R$\") or \"COMING SOON\""
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1920,
+      "source": "and info.PriceInRobux == pass.Price"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 1938,
+      "source": "--   * THE PRICE IS THE LIVE ONE. displayedProductPrices is filled by the per-card"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2117,
+      "source": "local robux = math.max(0, math.floor(tonumber(displayedProductPrices[selected]) or 0))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2455,
+      "source": "local buy = button(card, tostring(item.Price) .. actionCaption, UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2460,
+      "source": "displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2483,
+      "source": "buy.Text = owned and \"OWNED\" or tostring(displayedProductPrices[key]) .. actionCaption"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2493,
+      "source": "local price = ok and type(info) == \"table\" and tonumber(info.PriceInRobux) or nil"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 2495,
+      "source": "displayedProductPrices[key] = math.floor(price)"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 3169,
+      "source": "or (tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. \" R$  //  BUY CREDIT\")"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 3178,
+      "source": "player:SetAttribute(\"ZyntraReentryPrice\","
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "line": 3179,
+      "source": "displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price)"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "line": 96,
+      "source": "local function requestPrice(key, item, kind, apply)"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "line": 98,
+      "source": "apply(math.max(0, math.floor(tonumber(item.Price) or 0)))"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "line": 104,
+      "source": "local price = ok and type(info) == \"table\" and tonumber(info.PriceInRobux) or nil"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "line": 443,
+      "source": "requestPrice(key, item, kind, function(price)"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "key": "TokenEarner2x",
+    "path": "assets/shop/icons-v2-20261001/TokenEarner2x.png",
+    "bytes": 920316,
+    "sha256": "8c89ab826a1b7b7005505924bef08ff75bf22ac9f5c08f04a1729039dad38dd1",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "EntityDetector",
+    "path": "assets/shop/icons-v2-20261001/EntityDetector.png",
+    "bytes": 988169,
+    "sha256": "b875e4b7e674c4b67ffc3a5fe05274348c5e94bc248d7601907325e89a6f9358",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "Supporter",
+    "path": "assets/shop/icons-v2-20261001/Supporter.png",
+    "bytes": 1296556,
+    "sha256": "c0635ed932bb45510432731f2b12aad2dd450e77060f791b5ee84155bd9b3636",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "AdvancedEquipment",
+    "path": "assets/shop/icons-v2-20261001/AdvancedEquipment.png",
+    "bytes": 1232228,
+    "sha256": "a64e3f2eccad7e5dddc2f59d2713568566447798467ca6160643b7048794cf33",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "CosmeticEquipment",
+    "path": "assets/shop/icons-v2-20261001/CosmeticEquipment.png",
+    "bytes": 1089891,
+    "sha256": "5e0fbcc5319e6c9ca64d41bbe535f504a01589c91ccc41b528a16d69c4165d46",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "ExpeditionPack",
+    "path": "assets/shop/icons-v2-20261001/ExpeditionPack.png",
+    "bytes": 1145724,
+    "sha256": "b65323cf4bb1f3560ce136698461a47c8b99eb9464f4ba2ec22e62507a9af28b",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "Tokens4",
+    "path": "assets/shop/icons-v2-20261001/Tokens4.png",
+    "bytes": 1163739,
+    "sha256": "2c47bb346eeb720d73ac39d2712aea33663f4b10f355077b0ae6f75a5c87aa1d",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "Tokens20",
+    "path": "assets/shop/icons-v2-20261001/Tokens20.png",
+    "bytes": 1109944,
+    "sha256": "2c10b9f60f5aaa198dbc6d8347b98f454e91204432c9b9e40da17d84e2438cd1",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  },
+  {
+    "key": "EmergencyReentry",
+    "path": "assets/shop/icons-v2-20261001/EmergencyReentry.png",
+    "bytes": 1063341,
+    "sha256": "4bd2485d00b25c2d844dd094ecb112495c60ddabf6ea57d6ee7f208a27a14dd9",
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "opaque_no_alpha_channel": true
+  }
+]

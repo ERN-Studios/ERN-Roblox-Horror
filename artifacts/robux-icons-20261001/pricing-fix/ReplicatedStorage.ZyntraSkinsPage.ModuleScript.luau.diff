@@ -1,0 +1,52 @@
+--- live-before/ReplicatedStorage.ZyntraSkinsPage.ModuleScript.luau
++++ proposed-after/ReplicatedStorage.ZyntraSkinsPage.ModuleScript.luau
+@@ -17,8 +17,11 @@
+ 	if not id or id <= 0 or id % 1 ~= 0 then return false end
+ 	local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService,
+ 		id, Enum.InfoType.GamePass)
+-	return ok and type(info) == "table" and info.IsForSale == true
+-		and info.PriceInRobux == item.RobuxPrice
++	if not ok or type(info) ~= "table" or info.IsForSale ~= true or info.TargetId ~= id then return false end
++	local price = info.PriceInRobux
++	if type(price) ~= "number" or price ~= price or price <= 0
++		or price == math.huge or price % 1 ~= 0 then return false end
++	return true, price
+ end
+ 
+ function Page.mount(page, ctx)
+@@ -228,6 +231,7 @@
+ 
+ 	local entries = {}
+ 	local paidVerified = {}
++	local paidPrices = {}
+ 	for order, skinId in ipairs(Skins.Order) do
+ 		local item = Skins.ById[skinId]
+ 		-- DEV_SUIT_20260924: a Developer suit has no card for anyone else.
+@@ -341,8 +345,9 @@
+ 				entry.Meta.Text = "DEVELOPER ONLY"
+ 				button.Text = "UNAVAILABLE"
+ 			else
+-				entry.Meta.Text = ("%d R$"):format(item.RobuxPrice)
+ 				canAct = paidVerified[skinId] == true
++				entry.Meta.Text = canAct and ("%d R$"):format(paidPrices[skinId])
++					or paidVerified[skinId] == nil and "CHECKING PRICE" or "PRICE UNAVAILABLE"
+ 				button.Text = canAct and "BUY" or "UNAVAILABLE"
+ 			end
+ 			ctx.UIDevice.SetEnabled(button, canAct)
+@@ -437,13 +442,13 @@
+ 	local stopProfile = ctx.onProfile(render)
+ 	ctx.registerLayoutHook(layout)
+ 	render()
+-	-- Price and availability are checked with Roblox before a paid prompt can
+-	-- open. A missing ID, network error, or price mismatch leaves it disabled.
++	-- Each player's price and availability are read from Roblox before a paid
++	-- prompt can open. Invalid IDs, unavailable prices and network errors disable it.
+ 	for _, skinId in ipairs(Skins.Order) do
+ 		local item = Skins.ById[skinId]
+ 		if item.Kind == "Robux" and item.PassId > 0 then
+ 			task.spawn(function()
+-				paidVerified[skinId] = allowedRobuxPass(item)
++				paidVerified[skinId], paidPrices[skinId] = allowedRobuxPass(item)
+ 				render()
+ 			end)
+ 		end

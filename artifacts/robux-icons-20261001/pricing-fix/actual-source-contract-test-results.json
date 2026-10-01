@@ -1,0 +1,26 @@
+{
+  "baseCatalogueUnchanged": true,
+  "cases": [
+    "base",
+    "regional_half",
+    "pinned_price_10",
+    "reordered_region_prices",
+    "partial_off_sale",
+    "all_unavailable",
+    "pending"
+  ],
+  "compiledScripts": 2,
+  "earnerRows": 1344,
+  "prerequisiteAndNonStackingChecks": true,
+  "productionFunctionsExecuted": true,
+  "skinRows": 10,
+  "sourceMirror": "artifacts/robux-icons-20261001/verified-studio-mirror",
+  "sourceOrigin": "Actual verified Studio native-after Sources",
+  "sourceSHA256": {
+    "config": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0",
+    "skinsPage": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+    "store": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9"
+  },
+  "status": "passed",
+  "validators": 23
+}

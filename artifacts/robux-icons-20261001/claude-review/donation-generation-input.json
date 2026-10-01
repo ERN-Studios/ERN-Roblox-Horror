@@ -1,0 +1,10 @@
+{
+  "tool": "image_gen__imagegen",
+  "mode": "built-in",
+  "intent": "generate",
+  "prompt": "Use case: logo-brand. Asset type: a finished square raster donation-support icon for the Roblox co-op horror game BACKROOMS: STAY QUIET, readable at 52 pixels and also at full-size purchase prompts. Create a clean professional graphic that belongs to a dark industrial research-game UI. Flat fully opaque charcoal graphite background #16191C extending to all four edges. ONE very large perfectly clean symmetric warm-ivory heart silhouette #E8E2D2 in the upper center, supported below by ONE short thick straight desaturated teal underline #3F9E96. The heart is matte and flat, with no bevels, 3D, metallic shading, facial features, shine or glow. The teal line is a quiet support accent, not a progress meter. Hard intentional printed shapes, crisp smooth edges, strong negative space, balanced proportions. The heart and underline together occupy around 66 percent of the square width and remain entirely within the central 76 percent area, with at least 12 percent padding on every edge; the subject must survive a circular Roblox gamepass crop intact. Match an elegant minimalist icon family with giant ivory glyphs on charcoal and one simple teal secondary motif. No words, no numbers, no multiplication signs, no plus signs, no arrows, no badges, no frames, no rings, no currency or research-token chips, no coins, no diamonds, no prices, no logos, no loot, no reward or gameplay-perk symbols, no watermark. This icon means voluntary support for development only, with no gameplay rewards. Generate exactly one final square icon, not a sheet or a UI mockup.",
+  "transparent_background": false,
+  "requestedAt": "2026-10-01T06:21:13.852Z",
+  "outputPath": "assets/shop/icons-v2-20261001/DonationSupport.png",
+  "generatedSourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0f60a-493f-7d42-8aae-b540338e0e27/exec-824e2996-fa58-4c57-8a6e-ea1d7004be4f.png"
+}
