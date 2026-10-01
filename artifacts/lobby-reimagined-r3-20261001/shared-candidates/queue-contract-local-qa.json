@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "name": "Actual R3-only access predicate: Studio/DEV accepted; original zones unchanged",
+      "passed": true
+    },
+    {
+      "name": "24 descriptors, 12 public queues, original presentation index retained",
+      "passed": true
+    },
+    {
+      "name": "rejects unowned lobby",
+      "passed": true
+    },
+    {
+      "name": "rejects unready lobby",
+      "passed": true
+    },
+    {
+      "name": "rejects wrong revision",
+      "passed": true
+    },
+    {
+      "name": "rejects wrong parent",
+      "passed": true
+    },
+    {
+      "name": "rejects missing zone",
+      "passed": true
+    },
+    {
+      "name": "rejects duplicate id",
+      "passed": true
+    },
+    {
+      "name": "rejects mismatched level",
+      "passed": true
+    },
+    {
+      "name": "rejects mismatched display index",
+      "passed": true
+    },
+    {
+      "name": "rejects physical detector",
+      "passed": true
+    },
+    {
+      "name": "rejects radius outside bounds",
+      "passed": true
+    },
+    {
+      "name": "rejects zone reparented below floor contract",
+      "passed": true
+    },
+    {
+      "name": "rejects missing render owner",
+      "passed": true
+    },
+    {
+      "name": "rejects render owner outside owned lobby",
+      "passed": true
+    },
+    {
+      "name": "rejects missing title",
+      "passed": true
+    },
+    {
+      "name": "DEV endpoint guard accepts exact owned hosts and rejects public/foreign hosts",
+      "passed": true
+    }
+  ],
+  "executedStudio": false,
+  "limitations": "Local adapter fixtures only. Real queue admission/cancellation/countdown/teleport, DEV preview streaming and multiplayer remain Play checks.",
+  "passed": true,
+  "schema": "r3-queue-adapter-local-contract-v1",
+  "syntaxOnlyForGameManager": true
+}

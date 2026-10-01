@@ -1,0 +1,620 @@
+{
+  "schema": "lobby-r3b-independent-front-contact-review-v1",
+  "capturedAtUTC": "2026-10-01T15:38:58.906076+00:00",
+  "passed": true,
+  "scope": "Read-only canonical manifest and actual exported binary review; no Studio edits or runtime claim",
+  "beforeManifest": "assets/models/lobby-reimagined-r3-20261001/qa-intermediate-d242eed4/manifest.json",
+  "beforeManifestSha256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+  "afterManifest": "assets/models/lobby-reimagined-r3-20261001/manifest.json",
+  "afterManifestSha256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+  "afterSourceBlendSha256": "768045ae70b97407d57fb44a9827298905c17641a845a5ae2d2561b8f166ea36",
+  "onlyChangedTopLevelKeys": [
+    "sourceBlendSha256",
+    "chunks",
+    "colliders",
+    "geometryContract"
+  ],
+  "changedChunks": [
+    {
+      "index": 10,
+      "family": "EntryConnector",
+      "beforeSha256": "2d87bd5cb0e08e9e823b6a6baf54a97982395fbf3841383f6b4a847ae2165b49",
+      "afterSha256": "5c5465d41ca1bcbec2c5afdb17c87e68fa59e1ddbb65cd704246155f4a13b93d"
+    }
+  ],
+  "changedColliderCount": 12,
+  "changedColliders": [
+    {
+      "index": 356,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.60000095367432,
+          10.45,
+          -69.14999961853027
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.97500095367432,
+          10.45,
+          -69.14999961853027
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 357,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.599999046325685,
+          10.45,
+          -90.85000038146973
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.974999046325685,
+          10.45,
+          -90.85000038146973
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 411,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.60000095367432,
+          10.45,
+          10.850000381469727
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.97500095367432,
+          10.45,
+          10.850000381469727
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 412,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.599999046325685,
+          10.45,
+          -10.850000381469727
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.974999046325685,
+          10.45,
+          -10.850000381469727
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 466,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.60000095367432,
+          10.45,
+          90.85000038146973
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.97500095367432,
+          10.45,
+          90.85000038146973
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 467,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.599999046325685,
+          10.45,
+          69.14999961853027
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          -33.974999046325685,
+          10.45,
+          69.14999961853027
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 521,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.60000047683716,
+          10.45,
+          -90.85000038146973
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97500047683716,
+          10.45,
+          -90.85000038146973
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 522,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.59999952316284,
+          10.45,
+          -69.14999961853027
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97499952316284,
+          10.45,
+          -69.14999961853027
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 576,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.60000047683716,
+          10.45,
+          -10.850000381469727
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97500047683716,
+          10.45,
+          -10.850000381469727
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 577,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.59999952316284,
+          10.45,
+          10.850000381469727
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97499952316284,
+          10.45,
+          10.850000381469727
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 631,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.60000047683716,
+          10.45,
+          69.14999961853027
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97500047683716,
+          10.45,
+          69.14999961853027
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    },
+    {
+      "index": 632,
+      "before": {
+        "name": "Connector Cheek",
+        "position": [
+          33.59999952316284,
+          10.45,
+          90.85000038146973
+        ],
+        "size": [
+          13,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      },
+      "after": {
+        "name": "Connector Cheek",
+        "position": [
+          33.97499952316284,
+          10.45,
+          90.85000038146973
+        ],
+        "size": [
+          12.25,
+          20.4,
+          0.9
+        ],
+        "yaw": 0
+      }
+    }
+  ],
+  "geometryContractAdditions": {
+    "connectorCheekFrontLocalY": -0.75,
+    "connectorCheekBackLocalY": 11.5
+  },
+  "countsUnchanged": {
+    "uniqueTriangles": 45812,
+    "instantiatedTriangles": 153484,
+    "vinylDiscCount": 2
+  },
+  "unchangedManifestSections": [
+    "schema",
+    "revision",
+    "placeId",
+    "groupId",
+    "previewCenter",
+    "axisMapping",
+    "studsPerUnit",
+    "atlas",
+    "prefabs",
+    "placements",
+    "signs",
+    "lights",
+    "pads",
+    "bays",
+    "notice",
+    "uniqueTriangles",
+    "instantiatedTriangles",
+    "materialCount",
+    "vinylDiscCount",
+    "runtimeNotes"
+  ],
+  "actualBinaryBoundsBlenderLocal": {
+    "EntryConnectorCheeks": [
+      [
+        [
+          -11.300000190734863,
+          -0.75,
+          0.25000019073486257
+        ],
+        [
+          -10.399999618530273,
+          11.5,
+          20.649999809265136
+        ]
+      ],
+      [
+        [
+          10.399999618530273,
+          -0.75,
+          0.25000019073486257
+        ],
+        [
+          11.300000190734863,
+          11.5,
+          20.649999809265136
+        ]
+      ]
+    ],
+    "GateSteelPosts": [
+      [
+        [
+          -11.450000381469726,
+          -1.0000000953674313,
+          1.948242189797611e-07
+        ],
+        [
+          -9.950000381469726,
+          0.9999999046325687,
+          16.20000095776367
+        ]
+      ],
+      [
+        [
+          9.950000190734864,
+          -1.0000000953674313,
+          1.948242189797611e-07
+        ],
+        [
+          11.450000190734864,
+          0.9999999046325687,
+          16.20000095776367
+        ]
+      ]
+    ],
+    "GateCyanStrips": [
+      [
+        [
+          -10.780000305175781,
+          -1.145000076293945,
+          1.0999996226196291
+        ],
+        [
+          -10.620000457763672,
+          -1.014999961853027,
+          8.099999980247498
+        ]
+      ],
+      [
+        [
+          10.620000267028809,
+          -1.145000076293945,
+          1.0999996226196291
+        ],
+        [
+          10.780000114440918,
+          -1.014999961853027,
+          8.099999980247498
+        ]
+      ]
+    ],
+    "GateHazardFeet": [
+      [
+        [
+          -11.35,
+          -1.139999961853027,
+          1.948242189797611e-07
+        ],
+        [
+          -10.049999809265136,
+          -1.020000076293945,
+          2.799999908721924
+        ]
+      ],
+      [
+        [
+          10.049999618530274,
+          -1.139999961853027,
+          1.948242189797611e-07
+        ],
+        [
+          11.349999809265137,
+          -1.020000076293945,
+          2.799999908721924
+        ]
+      ]
+    ],
+    "ConnectorFloor": [
+      [
+        [
+          -11.300000190734863,
+          -1.5,
+          1.9073486257070726e-07
+        ],
+        [
+          11.300000190734863,
+          11.5,
+          0.8000003814697259
+        ]
+      ]
+    ],
+    "ConnectorRoof": [
+      [
+        [
+          -11.300000190734863,
+          -1.5,
+          19.79999942779541
+        ],
+        [
+          11.300000190734863,
+          11.5,
+          20.599999618530273
+        ]
+      ]
+    ]
+  },
+  "contactStuds": {
+    "steelFrontExposed": 0.2500000953674313,
+    "steelToCheekDepthOverlap": 1.7499999046325687,
+    "cyanFrontProudOfConcrete": 0.39500007629394496,
+    "hazardFrontProudOfConcrete": 0.389999961853027
+  },
+  "geometryReport": {
+    "path": "artifacts/lobby-reimagined-r3-20261001/geometry-qa.json",
+    "sha256": "056628048758e654fdd211f74ce936a3564d94d2aeafc945000f366c69f08b20",
+    "manifestSha256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+    "passed": true,
+    "checks": [
+      {
+        "name": "All exported binary hashes/counts/indices/vertices validated",
+        "passed": true
+      },
+      {
+        "name": "Six complete bay/gate groups and 24 pads",
+        "passed": true
+      },
+      {
+        "name": "All six approach aisles have continuous floors and avatar headroom",
+        "passed": true
+      },
+      {
+        "name": "Actual Blender meshes cover former sky gaps over all six gates",
+        "passed": true
+      },
+      {
+        "name": "All six bay interiors have actual opaque mesh roofs and ground coverage",
+        "passed": true
+      },
+      {
+        "name": "All24 radial pad approaches have continuous ground",
+        "passed": true
+      },
+      {
+        "name": "Every inward-oriented phone cancellation clears all queues and bay walls",
+        "passed": true
+      },
+      {
+        "name": "Actual Blender blade/header mounts are connected to gate posts",
+        "passed": true
+      },
+      {
+        "name": "Header faces aisle and both blade arrows point into the correct bay",
+        "passed": true
+      }
+    ]
+  },
+  "limitations": [
+    "Local geometry checks do not establish avatar travel, live collision parity, frame rate, multiplayer or current publication.",
+    "Final native-after comparison and live R3B render are owned by root; not yet part of this receipt.",
+    "Connector floor and roof retain their existing bounds. Any preexisting coplanar threshold mark is outside this scoped skin fix."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "sources": [
+    {"key":"builder","path":"ServerScriptService.LobbyReimaginedPreview.Builder","class":"ModuleScript","file":"preview_builder.ModuleScript.luau"},
+    {"key":"bootstrap","path":"ServerScriptService.LobbyReimaginedPreview.Bootstrap","class":"Script","file":"preview_bootstrap.Script.luau"},
+    {"key":"queue-client","path":"StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController","class":"LocalScript","file":"queue_controller.LocalScript.luau"},
+    {"key":"queue-bridge","path":"ServerScriptService.LobbyReimaginedPreview.QueueBridge","class":"ModuleScript","file":"queue_bridge.ModuleScript.luau"},
+    {"key":"game-manager","path":"ServerScriptService.GameManager","class":"Script","file":"../../artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.GameManager.Script.luau"},
+    {"key":"shop-focus","path":"ServerScriptService.LobbyShopDisplay","class":"ModuleScript","file":"../../artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.LobbyShopDisplay.ModuleScript.luau"},
+    {"key":"level4-preview","path":"ServerScriptService.Level4V4PreviewAccess","class":"Script","file":"../../artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4V4PreviewAccess.Script.luau"},
+    {"key":"level5-preview","path":"ServerScriptService.Level5PreviewAccess","class":"Script","file":"../../artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level5PreviewAccess.Script.luau"},
+    {"key":"level6-preview","path":"ServerScriptService.Level6PreviewAccess","class":"Script","file":"../../artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level6PreviewAccess.Script.luau"}
+  ]
+}

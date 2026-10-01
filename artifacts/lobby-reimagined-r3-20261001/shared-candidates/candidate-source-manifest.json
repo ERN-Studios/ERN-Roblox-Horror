@@ -1,0 +1,78 @@
+{
+  "schema": "r3-shared-source-candidates-v1",
+  "sources": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "beforeBytes": 159281,
+      "beforeSha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a",
+      "candidateBytes": 163203,
+      "candidateSha256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.GameManager.Script.luau",
+      "status": "Local candidate only; parent owns fresh Studio CAS"
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "beforeBytes": 22843,
+      "beforeSha256": "284a9c6bee23b1574533f910d4cb064c4244d08ddb2931aa243d04d13eac08f0",
+      "candidateBytes": 24220,
+      "candidateSha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.LobbyShopDisplay.ModuleScript.luau",
+      "status": "Local candidate only; parent owns fresh Studio CAS"
+    },
+    {
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "class": "Script",
+      "beforeBytes": 11150,
+      "beforeSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "candidateBytes": 13652,
+      "candidateSha256": "d925ee4c0c10c75300f9649251d21486af3b78b14cce594759747ec681973a1a",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4PreviewAccess.Script.luau",
+      "status": "Historical candidate for dormant disabled script; not final target. Parent restores exact native-before Source, preserving disabled flag."
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "beforeBytes": 8042,
+      "beforeSha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504",
+      "candidateBytes": 10544,
+      "candidateSha256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "status": "Local candidate only; parent owns fresh Studio CAS"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "beforeBytes": 8135,
+      "beforeSha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "candidateBytes": 10609,
+      "candidateSha256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "status": "Local candidate only; parent owns fresh Studio CAS"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "candidateBytes": 3598,
+      "candidateSha256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+      "candidateFile": "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+      "status": "New owned candidate; no Studio writes by auditor"
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "beforeBytes": 8127,
+      "beforeSha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+      "candidateBytes": 10629,
+      "candidateSha256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+      "candidateFile": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4V4PreviewAccess.Script.luau",
+      "status": "Final active V4 target; parent owns fresh CAS, enabled state untouched",
+      "baselineReceipt": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/active-level4-authoritative-edit-verification.json"
+    }
+  ],
+  "candidateCompiled": true,
+  "localAdapterChecks": 17,
+  "baselineVerification": "Fresh current Edit Source/editor parity, correct place131311258779917/universe10559217407; see interaction-baseline receipts",
+  "noStudioWrites": true
+}

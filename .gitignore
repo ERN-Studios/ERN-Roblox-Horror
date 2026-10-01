@@ -134,3 +134,17 @@
 /assets/models/lobby-reimagined-20261001/*.blend1
 /artifacts/lobby-reimagined-20261001/**/*.blend1
 /artifacts/lobby-reimagined-20261001/blender/fbx-fallback/*.fbx
+
+# Revised lobby R3 native recovery and transients stay local.
+/artifacts/lobby-reimagined-r3-20261001/native-*/*
+!/artifacts/lobby-reimagined-r3-20261001/native-*/source-manifest.json
+!/artifacts/lobby-reimagined-r3-20261001/native-*/backup-file-hashes.json
+!/artifacts/lobby-reimagined-r3-20261001/native-*/backup-metadata-summary.json
+!/artifacts/lobby-reimagined-r3-20261001/native-*/native-place-verification.json
+/artifacts/lobby-reimagined-r3-20261001/unrelated-checkpoint.patch
+/artifacts/lobby-reimagined-r3-20261001/**/__pycache__/
+/artifacts/lobby-reimagined-r3-20261001/**/*.log
+/artifacts/lobby-reimagined-r3-20261001/claude-review/*-prompt.txt
+/assets/models/lobby-reimagined-r3-20261001/*.blend1
+/assets/models/lobby-reimagined-r3-20261001/qa-intermediate-d242eed4/*.blend
+/assets/models/lobby-reimagined-r3-20261001/qa-intermediate-d242eed4/*.copy-failed

@@ -1,0 +1,3 @@
+- **Transition (proposal):** Reported sky slot is likely the ~5 studs between shell edge X28.07 and gate plane X33.1. Infill with opaque yellow concrete, overlapping both. Recheck Y21.90: 35·sin0.64≈20.90 (centre offset?).
+- **Bracket/arrows:** Relocate the grey bracket to the jamb, clear of LEVEL3 text. Confirm arrows point into the doorway from both ±Z approaches; mirrored copies can flip.
+- **Queues:** Unique pads feed the existing server queue engine; server derives level from pad. No duplicate timers; retest original controls and access.

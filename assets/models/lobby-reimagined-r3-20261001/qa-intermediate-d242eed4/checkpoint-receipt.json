@@ -1,0 +1,20 @@
+{
+  "intermediateManifestSha256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+  "sourceBlendSha256": "84f7bdda418b52d52543f500f33bf7555c9b7aae63b08ded5962fea3d57973d7",
+  "preservedFiles": {
+    "manifest.json": {
+      "bytes": 282824,
+      "sha256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e"
+    },
+    "LobbyReimaginedPreview.blend": {
+      "bytes": 1876793,
+      "sha256": "84f7bdda418b52d52543f500f33bf7555c9b7aae63b08ded5962fea3d57973d7"
+    },
+    "LobbyReimaginedPreview.fbx.copy-failed": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "copyNote": "Native Blender source, manifest and verification receipts preserved and hashes checked before cheek fix. Old FBX backup copy timed out and produced zero bytes; labelled copy-failed, not an import artifact. Native source fully preserves old geometry.",
+  "previousVerifiedFBXSha256": "e38e5c80fff071036f43791c49f8fbaf9ca92f25a9d74583e7a27b5ada9b848d"
+}

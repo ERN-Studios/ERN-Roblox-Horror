@@ -1,0 +1,16 @@
+{
+  "schema": "r3-active-level4-authoritative-baseline-v1",
+  "path": "ServerScriptService.Level4V4PreviewAccess",
+  "class": "Script",
+  "enabled": true,
+  "sourceBytes": 8127,
+  "sourceSha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+  "editorBytes": 8127,
+  "editorSha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+  "editorMatch": true,
+  "correctPlaceId": 131311258779917,
+  "universeId": 10559217407,
+  "parentConfirmedFreshEditAfterStop": true,
+  "evidence": "Parent /root fresh authoritative Edit read after stopping first Play; auditor independently fresh Server8127B source and exact native-before bytes equality. This receipt distinguishes parent Edit verification from auditor read-only Server verification.",
+  "dormantScript": "ServerScriptService.Level4PreviewAccess remains disabled; parent will scoped-CAS restore its original before Source only."
+}

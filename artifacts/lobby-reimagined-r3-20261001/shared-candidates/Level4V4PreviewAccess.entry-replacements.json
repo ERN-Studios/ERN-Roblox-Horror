@@ -1,0 +1,43 @@
+{
+  "beforeSha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+  "afterSha256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+  "replacements": [
+    {
+      "label": "Additional-host ownership helper and bounded in-flight visual state",
+      "old": "local function liveSpawn()",
+      "new": "-- R3 additional hosts retain this controller's existing access/stream/launch path.\nlocal function r3Bridge()\n local folder = script.Parent:FindFirstChild(\"LobbyReimaginedPreview\")\n local module = folder and folder:FindFirstChild(\"QueueBridge\")\n return module and module:IsA(\"ModuleScript\") and require(module) or nil\nend\nlocal function isR3Entry(door)\n local bridge = r3Bridge()\n return bridge and bridge.IsPreviewEntry(door, 4) or false\nend\nlocal r3Inflight = setmetatable({}, {__mode = \"k\"})\nlocal function beginR3Entry(door)\n if not isR3Entry(door) then return nil end\n local ref = door:FindFirstChild(\"QueueRenderOwner\")\n local owner = ref and ref:IsA(\"ObjectValue\") and ref.Value\n if not owner or not owner:IsA(\"Model\") or not owner:IsDescendantOf(door:FindFirstAncestor(\"LobbyReimaginedPreview\")) then return nil end\n r3Inflight[owner] = (r3Inflight[owner] or 0) + 1\n owner:SetAttribute(\"QueueActive\", true)\n return owner\nend\nlocal function finishR3Entry(owner)\n if not owner then return end\n local count = math.max(0, (r3Inflight[owner] or 1) - 1)\n r3Inflight[owner] = count > 0 and count or nil\n if owner.Parent then owner:SetAttribute(\"QueueActive\", count > 0) end\nend\n\nlocal function liveSpawn()"
+    },
+    {
+      "label": "Resolve actual prompt host and validate owned/original",
+      "old": "\tlocal character, root = readyPlayer(player)\n\tlocal door = liveDoor()\n\tif not character or not door or prompt.Parent ~= door or (root.Position - door.Position).Magnitude > 14 then return end",
+      "new": "\tlocal character, root = readyPlayer(player)\n\tlocal door = prompt.Parent\n\tif not character or not door or not door:IsA(\"BasePart\")\n  or not (door == liveDoor() or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end"
+    },
+    {
+      "label": "Revalidate owned/original after streaming",
+      "old": "or prompt.Parent ~= door or liveDoor() ~= door",
+      "new": "or prompt.Parent ~= door or not (door == liveDoor() or isR3Entry(door))"
+    },
+    {
+      "label": "Activate only validated ready preview entry",
+      "old": "\tnextUse[player] = math.huge\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, exit.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit\n\t\t\tor prompt.Parent ~= door",
+      "new": "\tnextUse[player] = math.huge\n local r3Owner = beginR3Entry(door)\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, exit.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit\n\t\t\tor prompt.Parent ~= door"
+    },
+    {
+      "label": "Clear in-flight contribution before returning from entry",
+      "old": "\trelease(player)\n\tif not ok then warn(\"[Level4V4PreviewAccess] entry failed:\", err) end",
+      "new": " finishR3Entry(r3Owner)\n\trelease(player)\n\tif not ok then warn(\"[Level4V4PreviewAccess] entry failed:\", err) end"
+    },
+    {
+      "label": "Bind same existing server callback to additional owned hosts",
+      "old": "\tif door then ensurePrompt(door, ENTER_PROMPT, \"ENTER LEVEL 4 PREVIEW\", \"DEVELOPER PREVIEW\", onEnter) end",
+      "new": "\tif door then ensurePrompt(door, ENTER_PROMPT, \"ENTER LEVEL 4 PREVIEW\", \"DEVELOPER PREVIEW\", onEnter) end\n local bridge = r3Bridge()\n local model = workspace:FindFirstChild(\"LobbyReimaginedPreview\")\n if bridge then\n  for _, host in ipairs(bridge.GetPreviewEntries(model, 4)) do\n   ensurePrompt(host, ENTER_PROMPT, \"ENTER LEVEL 4 PREVIEW\", \"DEVELOPER PREVIEW\", onEnter)\n  end\n end"
+    },
+    {
+      "label": "Owned-model ready/restoration observers",
+      "old": "",
+      "new": "\n-- Observe ready publication/restoration; the original lobby watcher is unchanged.\nlocal r3Watched = setmetatable({}, {__mode = \"k\"})\nlocal function watchR3Lobby(model)\n if not model or not model:IsA(\"Model\") or model.Name ~= \"LobbyReimaginedPreview\" or r3Watched[model] then return end\n r3Watched[model] = true\n local ready = model:GetAttributeChangedSignal(\"Ready\"):Connect(hookDoor)\n local ancestry = model.AncestryChanged:Connect(function() if model.Parent == workspace then task.defer(hookDoor) end end)\n local descendants = model.DescendantAdded:Connect(function(part)\n  if part:GetAttribute(\"R3DeveloperPreviewEntry\") == 4 then task.defer(hookDoor) end\n end)\n model.Destroying:Once(function() ready:Disconnect(); ancestry:Disconnect(); descendants:Disconnect() end)\n task.defer(hookDoor)\nend\nworkspace.ChildAdded:Connect(watchR3Lobby)\nwatchR3Lobby(workspace:FindFirstChild(\"LobbyReimaginedPreview\"))\n",
+      "at": "EOF"
+    }
+  ],
+  "scope": "Additional owned DEV hosts only; original eligibility, destination/runtime, transport, return spawn, cooldown and preview behavior preserved."
+}

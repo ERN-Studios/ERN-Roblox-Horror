@@ -1,0 +1,18 @@
+{
+  "schema": "lobby-r3b-publication/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "publishedVersion": 2459,
+  "verified": true,
+  "method": "Native Studio File > Publish to Roblox, then Creator Dashboard Version History with Show published only enabled",
+  "dashboardURL": "https://create.roblox.com/dashboard/creations/experiences/10559217407/places/131311258779917/version-history",
+  "observedLastUpdatedLocal": "October 1, 2026 at 5:40 PM",
+  "verifiedAtUTC": "2026-10-01T15:57:00Z",
+  "loadedEditPlaceVersion": 2450,
+  "loadedEditVersionIsNotCloudPublicationVersion": true,
+  "manifestSha256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+  "beforePublishSourcesVerified": 210,
+  "activeServersRestarted": false,
+  "accessSettingsChanged": false
+}

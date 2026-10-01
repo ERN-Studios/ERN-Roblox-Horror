@@ -1,0 +1,6557 @@
+{
+  "schema": "lobby-reimagined-fbx-roundtrip/1",
+  "blender_version": "5.2.0 LTS",
+  "fbx": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/models/lobby-reimagined-r3-20261001/LobbyReimaginedPreview.fbx",
+  "fbx_sha256": "e38e5c80fff071036f43791c49f8fbaf9ca92f25a9d74583e7a27b5ada9b848d",
+  "fbx_bytes": 4544796,
+  "manifest": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/models/lobby-reimagined-r3-20261001/manifest.json",
+  "manifest_sha256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+  "source_blend_sha256_recorded": "84f7bdda418b52d52543f500f33bf7555c9b7aae63b08ded5962fea3d57973d7",
+  "expected_objects": 260,
+  "actual_mesh_objects": 260,
+  "unique_mesh_datablocks": 260,
+  "expected_triangles": 153484,
+  "actual_triangles": 153484,
+  "triangle_count_multiset_matches": true,
+  "world_placement_bounds_match_001_stud": true,
+  "largest_matched_placement_bound_error_studs": 1.52587890625e-05,
+  "missing_or_changed_placement_bounds": [],
+  "unexpected_placement_bounds": [],
+  "all_geometry_material_indices_valid": true,
+  "all_geometry_uvs_valid": true,
+  "all_assigned_materials_route_base_color_to_image": true,
+  "connected_images_valid": true,
+  "all_texture_routes_use_AtlasUV": true,
+  "bad_texture_uv_objects": [],
+  "images": {
+    "Lobby Preview | Color Wear Atlas": {
+      "size": [
+        1024,
+        1024
+      ],
+      "channels": 4,
+      "has_data": true,
+      "packed": true,
+      "filepath": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/models/lobby-reimagined-r3-20261001/atlas.png",
+      "file_exists": true,
+      "file_sha256": "d575c861334a0029a4fe0c74e4c3df48c76e37873d3b20025b267dd4c266a7c8"
+    }
+  },
+  "materials": {
+    "LRP_FBX_Atlas": {
+      "base_color_image_routes": [
+        "Lobby Preview | Color Wear Atlas"
+      ],
+      "image_explicit_uv_maps": []
+    }
+  },
+  "objects": [
+    {
+      "object": "ArchRib.013",
+      "mesh": "ArchRib.001",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -141.39999389648438,
+        -2.280889361827576e-07,
+        34.75,
+        -138.60000610351562,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.014",
+      "mesh": "ArchRib.002",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -121.4000015258789,
+        -2.280889361827576e-07,
+        34.75,
+        -118.5999984741211,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.015",
+      "mesh": "ArchRib.003",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -101.4000015258789,
+        -2.280889361827576e-07,
+        34.75,
+        -98.5999984741211,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.016",
+      "mesh": "ArchRib.004",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -61.400001525878906,
+        -2.280889361827576e-07,
+        34.75,
+        -58.599998474121094,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.017",
+      "mesh": "ArchRib.005",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -41.400001525878906,
+        -2.280889361827576e-07,
+        34.75,
+        -38.599998474121094,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.018",
+      "mesh": "ArchRib.006",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -21.399999618530273,
+        -2.280889361827576e-07,
+        34.75,
+        -18.600000381469727,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.019",
+      "mesh": "ArchRib.007",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        18.600000381469727,
+        -2.280889361827576e-07,
+        34.75,
+        21.399999618530273,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.020",
+      "mesh": "ArchRib.008",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        38.599998474121094,
+        -2.280889361827576e-07,
+        34.75,
+        41.400001525878906,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.021",
+      "mesh": "ArchRib.009",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        58.599998474121094,
+        -2.280889361827576e-07,
+        34.75,
+        61.400001525878906,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.022",
+      "mesh": "ArchRib.010",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        98.5999984741211,
+        -2.280889361827576e-07,
+        34.75,
+        101.4000015258789,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.023",
+      "mesh": "ArchRib.011",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        118.5999984741211,
+        -2.280889361827576e-07,
+        34.75,
+        121.4000015258789,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ArchRib.024",
+      "mesh": "ArchRib.012",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        138.60000610351562,
+        -2.280889361827576e-07,
+        34.75,
+        141.39999389648438,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.029",
+      "mesh": "CableTray.001",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -140.0550079345703,
+        32.02000045776367,
+        -9.920000076293945,
+        -119.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.030",
+      "mesh": "CableTray.002",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -140.0550079345703,
+        32.02000045776367,
+        12.079999923706055,
+        -119.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.031",
+      "mesh": "CableTray.003",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -120.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -99.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.032",
+      "mesh": "CableTray.004",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -120.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -99.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.033",
+      "mesh": "CableTray.005",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -100.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -79.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.034",
+      "mesh": "CableTray.006",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -100.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -79.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.035",
+      "mesh": "CableTray.007",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -80.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -59.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.036",
+      "mesh": "CableTray.008",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -80.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -59.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.037",
+      "mesh": "CableTray.009",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -60.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -39.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.038",
+      "mesh": "CableTray.010",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -60.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -39.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.039",
+      "mesh": "CableTray.011",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -40.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -19.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.040",
+      "mesh": "CableTray.012",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -40.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -19.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.041",
+      "mesh": "CableTray.013",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -20.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        0.05500026419758797,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.042",
+      "mesh": "CableTray.014",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -20.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        0.05500026419758797,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.043",
+      "mesh": "CableTray.015",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -0.055000368505716324,
+        32.02000045776367,
+        -9.920000076293945,
+        20.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.044",
+      "mesh": "CableTray.016",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -0.055000368505716324,
+        32.02000045776367,
+        12.079999923706055,
+        20.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.045",
+      "mesh": "CableTray.017",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        19.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        40.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.046",
+      "mesh": "CableTray.018",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        19.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        40.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.047",
+      "mesh": "CableTray.019",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        39.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        60.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.048",
+      "mesh": "CableTray.020",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        39.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        60.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.049",
+      "mesh": "CableTray.021",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        59.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        80.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.050",
+      "mesh": "CableTray.022",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        59.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        80.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.051",
+      "mesh": "CableTray.023",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        79.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        100.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.052",
+      "mesh": "CableTray.024",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        79.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        100.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.053",
+      "mesh": "CableTray.025",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        99.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        120.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.054",
+      "mesh": "CableTray.026",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        99.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        120.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.055",
+      "mesh": "CableTray.027",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        119.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        140.05499267578125,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "CableTray.056",
+      "mesh": "CableTray.028",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        119.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        140.05499267578125,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.017",
+      "mesh": "ConduitSection.001",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -140.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.018",
+      "mesh": "ConduitSection.002",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -120.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -100.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.019",
+      "mesh": "ConduitSection.003",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -60.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.020",
+      "mesh": "ConduitSection.004",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -40.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -20.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.021",
+      "mesh": "ConduitSection.005",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        20.0,
+        11.79999828338623,
+        -32.689998626708984,
+        40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.022",
+      "mesh": "ConduitSection.006",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        40.0,
+        11.79999828338623,
+        -32.689998626708984,
+        60.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.023",
+      "mesh": "ConduitSection.007",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        100.0,
+        11.79999828338623,
+        -32.689998626708984,
+        120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.024",
+      "mesh": "ConduitSection.008",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        120.0,
+        11.79999828338623,
+        -32.689998626708984,
+        140.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.025",
+      "mesh": "ConduitSection.009",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -140.0,
+        11.79999828338623,
+        33.0099983215332,
+        -120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.026",
+      "mesh": "ConduitSection.010",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -120.0,
+        11.79999828338623,
+        33.0099983215332,
+        -100.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.027",
+      "mesh": "ConduitSection.011",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -60.0,
+        11.79999828338623,
+        33.0099983215332,
+        -40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.028",
+      "mesh": "ConduitSection.012",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -40.0,
+        11.79999828338623,
+        33.0099983215332,
+        -20.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.029",
+      "mesh": "ConduitSection.013",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        20.0,
+        11.79999828338623,
+        33.0099983215332,
+        40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.030",
+      "mesh": "ConduitSection.014",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        40.0,
+        11.79999828338623,
+        33.0099983215332,
+        60.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.031",
+      "mesh": "ConduitSection.015",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        100.0,
+        11.79999828338623,
+        33.0099983215332,
+        120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ConduitSection.032",
+      "mesh": "ConduitSection.016",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        120.0,
+        11.79999828338623,
+        33.0099983215332,
+        140.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.007",
+      "mesh": "DoorThreshold.001",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.80000114440918,
+        70.0,
+        -1.955049242496898e-07,
+        -27.399995803833008,
+        90.0,
+        0.8175001740455627
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.008",
+      "mesh": "DoorThreshold.002",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.80000114440918,
+        -10.0,
+        -1.955049242496898e-07,
+        -27.399995803833008,
+        10.0,
+        0.8175001740455627
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.009",
+      "mesh": "DoorThreshold.003",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.80000114440918,
+        -90.0,
+        -1.955049242496898e-07,
+        -27.399995803833008,
+        -70.0,
+        0.8175001740455627
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.010",
+      "mesh": "DoorThreshold.004",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.399995803833008,
+        70.0,
+        -5.2453689391995795e-08,
+        29.80000114440918,
+        90.0,
+        0.8175000548362732
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.011",
+      "mesh": "DoorThreshold.005",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.399995803833008,
+        -10.0,
+        -5.2453689391995795e-08,
+        29.80000114440918,
+        10.0,
+        0.8175000548362732
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "DoorThreshold.012",
+      "mesh": "DoorThreshold.006",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.399995803833008,
+        -90.0,
+        -5.2453689391995795e-08,
+        29.80000114440918,
+        -70.0,
+        0.8175000548362732
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EndBackstop.003",
+      "mesh": "EndBackstop.001",
+      "vertices": 24,
+      "triangles": 12,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.5,
+        -139.60000610351562,
+        -1.0000001192092896,
+        36.5,
+        -138.39999389648438,
+        38.0
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EndBackstop.004",
+      "mesh": "EndBackstop.002",
+      "vertices": 24,
+      "triangles": 12,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.5,
+        138.39999389648438,
+        -1.0000001192092896,
+        36.5,
+        139.60000610351562,
+        38.0
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.007",
+      "mesh": "EntryConnector.001",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -40.100006103515625,
+        68.69999694824219,
+        -1.8735876210485003e-06,
+        -27.099994659423828,
+        91.30000305175781,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.008",
+      "mesh": "EntryConnector.002",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -40.100006103515625,
+        -11.300000190734863,
+        -1.8735876210485003e-06,
+        -27.099994659423828,
+        11.300004005432129,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.009",
+      "mesh": "EntryConnector.003",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -40.100006103515625,
+        -91.30000305175781,
+        -1.8735876210485003e-06,
+        -27.099994659423828,
+        -68.69999694824219,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.010",
+      "mesh": "EntryConnector.004",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.099994659423828,
+        68.69999694824219,
+        -5.026809049013536e-07,
+        40.10000228881836,
+        91.30000305175781,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.011",
+      "mesh": "EntryConnector.005",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.099994659423828,
+        -11.300000190734863,
+        -5.026809049013536e-07,
+        40.10000228881836,
+        11.300004005432129,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "EntryConnector.012",
+      "mesh": "EntryConnector.006",
+      "vertices": 240,
+      "triangles": 120,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        27.099994659423828,
+        -91.30000305175781,
+        -5.026809049013536e-07,
+        40.10000228881836,
+        -68.69999694824219,
+        20.649999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.053",
+      "mesh": "Fluorescent.001",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -130.60000610351562,
+        30.17999839782715,
+        -9.149999618530273,
+        -129.39999389648438,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.054",
+      "mesh": "Fluorescent.002",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -130.60000610351562,
+        30.17999839782715,
+        12.850000381469727,
+        -129.39999389648438,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.055",
+      "mesh": "Fluorescent.003",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -110.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -109.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.056",
+      "mesh": "Fluorescent.004",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -110.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -109.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.057",
+      "mesh": "Fluorescent.005",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -90.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -89.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.058",
+      "mesh": "Fluorescent.006",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -90.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -89.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.059",
+      "mesh": "Fluorescent.007",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -70.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -69.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.060",
+      "mesh": "Fluorescent.008",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -70.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -69.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.061",
+      "mesh": "Fluorescent.009",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -50.599998474121094,
+        30.17999839782715,
+        -9.149999618530273,
+        -49.400001525878906,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.062",
+      "mesh": "Fluorescent.010",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -50.599998474121094,
+        30.17999839782715,
+        12.850000381469727,
+        -49.400001525878906,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.063",
+      "mesh": "Fluorescent.011",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -30.600000381469727,
+        30.17999839782715,
+        -9.149999618530273,
+        -29.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.064",
+      "mesh": "Fluorescent.012",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -30.600000381469727,
+        30.17999839782715,
+        12.850000381469727,
+        -29.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.065",
+      "mesh": "Fluorescent.013",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -10.600000381469727,
+        30.17999839782715,
+        -9.149999618530273,
+        -9.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.066",
+      "mesh": "Fluorescent.014",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -10.600000381469727,
+        30.17999839782715,
+        12.850000381469727,
+        -9.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.067",
+      "mesh": "Fluorescent.015",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        9.399999618530273,
+        30.17999839782715,
+        -9.149999618530273,
+        10.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.068",
+      "mesh": "Fluorescent.016",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        9.399999618530273,
+        30.17999839782715,
+        12.850000381469727,
+        10.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.069",
+      "mesh": "Fluorescent.017",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        29.399999618530273,
+        30.17999839782715,
+        -9.149999618530273,
+        30.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.070",
+      "mesh": "Fluorescent.018",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        29.399999618530273,
+        30.17999839782715,
+        12.850000381469727,
+        30.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.071",
+      "mesh": "Fluorescent.019",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        49.400001525878906,
+        30.17999839782715,
+        -9.149999618530273,
+        50.599998474121094,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.072",
+      "mesh": "Fluorescent.020",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        49.400001525878906,
+        30.17999839782715,
+        12.850000381469727,
+        50.599998474121094,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.073",
+      "mesh": "Fluorescent.021",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        69.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        70.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.074",
+      "mesh": "Fluorescent.022",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        69.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        70.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.075",
+      "mesh": "Fluorescent.023",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        89.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        90.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.076",
+      "mesh": "Fluorescent.024",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        89.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        90.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.077",
+      "mesh": "Fluorescent.025",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        109.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        110.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.078",
+      "mesh": "Fluorescent.026",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        109.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        110.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.079",
+      "mesh": "Fluorescent.027",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        129.39999389648438,
+        30.17999839782715,
+        -9.149999618530273,
+        130.60000610351562,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.080",
+      "mesh": "Fluorescent.028",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        129.39999389648438,
+        30.17999839782715,
+        12.850000381469727,
+        130.60000610351562,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.081",
+      "mesh": "Fluorescent.029",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        67.4000015258789,
+        20.979999542236328,
+        -49.150001525878906,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.082",
+      "mesh": "Fluorescent.030",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        91.4000015258789,
+        20.979999542236328,
+        -49.150001525878906,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.083",
+      "mesh": "Fluorescent.031",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        67.4000015258789,
+        20.979999542236328,
+        -73.1500015258789,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.084",
+      "mesh": "Fluorescent.032",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        91.4000015258789,
+        20.979999542236328,
+        -73.1500015258789,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.085",
+      "mesh": "Fluorescent.033",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -12.600001335144043,
+        20.979999542236328,
+        -49.150001525878906,
+        -11.40000057220459,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.086",
+      "mesh": "Fluorescent.034",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        11.39999771118164,
+        20.979999542236328,
+        -49.150001525878906,
+        12.599998474121094,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.087",
+      "mesh": "Fluorescent.035",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -12.599998474121094,
+        20.979999542236328,
+        -73.1500015258789,
+        -11.39999771118164,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.088",
+      "mesh": "Fluorescent.036",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        11.40000057220459,
+        20.979999542236328,
+        -73.1500015258789,
+        12.600001335144043,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.089",
+      "mesh": "Fluorescent.037",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -92.5999984741211,
+        20.979999542236328,
+        -49.150001525878906,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.090",
+      "mesh": "Fluorescent.038",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -68.5999984741211,
+        20.979999542236328,
+        -49.150001525878906,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.091",
+      "mesh": "Fluorescent.039",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -92.5999984741211,
+        20.979999542236328,
+        -73.1500015258789,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.092",
+      "mesh": "Fluorescent.040",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -68.5999984741211,
+        20.979999542236328,
+        -73.1500015258789,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.093",
+      "mesh": "Fluorescent.041",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        91.4000015258789,
+        20.979999542236328,
+        52.849998474121094,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.094",
+      "mesh": "Fluorescent.042",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        67.4000015258789,
+        20.979999542236328,
+        52.849998474121094,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.095",
+      "mesh": "Fluorescent.043",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        91.4000015258789,
+        20.979999542236328,
+        76.8499984741211,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.096",
+      "mesh": "Fluorescent.044",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        67.4000015258789,
+        20.979999542236328,
+        76.8499984741211,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.097",
+      "mesh": "Fluorescent.045",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        11.40000057220459,
+        20.979999542236328,
+        52.849998474121094,
+        12.600001335144043,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.098",
+      "mesh": "Fluorescent.046",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -12.599998474121094,
+        20.979999542236328,
+        52.849998474121094,
+        -11.39999771118164,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.099",
+      "mesh": "Fluorescent.047",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        11.39999771118164,
+        20.979999542236328,
+        76.8499984741211,
+        12.599998474121094,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.100",
+      "mesh": "Fluorescent.048",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -12.600001335144043,
+        20.979999542236328,
+        76.8499984741211,
+        -11.40000057220459,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.101",
+      "mesh": "Fluorescent.049",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -68.5999984741211,
+        20.979999542236328,
+        52.849998474121094,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.102",
+      "mesh": "Fluorescent.050",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -92.5999984741211,
+        20.979999542236328,
+        52.849998474121094,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.103",
+      "mesh": "Fluorescent.051",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -68.5999984741211,
+        20.979999542236328,
+        76.8499984741211,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "Fluorescent.104",
+      "mesh": "Fluorescent.052",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -92.5999984741211,
+        20.979999542236328,
+        76.8499984741211,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BeigeCRTMonitor.004",
+      "mesh": "LRP_BeigeCRTMonitor_Mesh.001",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        15.007469177246094,
+        130.40919494628906,
+        0.7999998927116394,
+        17.9249324798584,
+        133.2964630126953,
+        3.440000057220459
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BeigeCRTMonitor.005",
+      "mesh": "LRP_BeigeCRTMonitor_Mesh.002",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -18.065813064575195,
+        130.91616821289062,
+        4.339999675750732,
+        -15.485641479492188,
+        133.35208129882812,
+        6.980000019073486
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BeigeCRTMonitor.006",
+      "mesh": "LRP_BeigeCRTMonitor_Mesh.003",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.346424102783203,
+        -135.72117614746094,
+        7.713870048522949,
+        19.123411178588867,
+        -133.01644897460938,
+        10.353870391845703
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BrownStackChair.005",
+      "mesh": "LRP_BrownStackChair_Mesh.001",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        5.673297882080078,
+        130.9219207763672,
+        4.829999923706055,
+        8.301841735839844,
+        133.6427764892578,
+        8.353870391845703
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BrownStackChair.006",
+      "mesh": "LRP_BrownStackChair_Mesh.002",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.28030014038086,
+        131.2453155517578,
+        9.149999618530273,
+        -25.80327606201172,
+        133.8369140625,
+        12.673870086669922
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BrownStackChair.007",
+      "mesh": "LRP_BrownStackChair_Mesh.003",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.21841812133789,
+        -135.32498168945312,
+        0.7999998927116394,
+        18.668289184570312,
+        -132.7603302001953,
+        4.3238701820373535
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_BrownStackChair.008",
+      "mesh": "LRP_BrownStackChair_Mesh.004",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.288339614868164,
+        -135.63768005371094,
+        5.62999963760376,
+        -16.674314498901367,
+        -132.9289093017578,
+        9.15386962890625
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FestivalTrussSpeakerTower.003",
+      "mesh": "LRP_FestivalTrussSpeakerTower_Mesh.001",
+      "vertices": 3272,
+      "triangles": 5820,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -23.415000915527344,
+        -121.13999938964844,
+        0.7999995350837708,
+        -18.584999084472656,
+        -116.89585876464844,
+        23.067001342773438
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FestivalTrussSpeakerTower.004",
+      "mesh": "LRP_FestivalTrussSpeakerTower_Mesh.002",
+      "vertices": 3272,
+      "triangles": 5820,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.584999084472656,
+        -121.13999938964844,
+        0.7999995350837708,
+        23.415000915527344,
+        -116.89585876464844,
+        23.067001342773438
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FloralSofa90s.005",
+      "mesh": "LRP_FloralSofa90s_Mesh.001",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -31.174745559692383,
+        129.2516632080078,
+        0.7999998331069946,
+        -23.027084350585938,
+        134.84259033203125,
+        4.470000267028809
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FloralSofa90s.006",
+      "mesh": "LRP_FloralSofa90s_Mesh.002",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        23.728445053100586,
+        129.53041076660156,
+        3.934499740600586,
+        31.874250411987305,
+        135.06300354003906,
+        7.604499816894531
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FloralSofa90s.007",
+      "mesh": "LRP_FloralSofa90s_Mesh.003",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -11.783119201660156,
+        129.9804229736328,
+        6.193499565124512,
+        -3.6719603538513184,
+        135.1070098876953,
+        9.863499641418457
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FloralSofa90s.008",
+      "mesh": "LRP_FloralSofa90s_Mesh.004",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -30.230953216552734,
+        -136.78012084960938,
+        6.993500232696533,
+        -22.241455078125,
+        -132.2977294921875,
+        10.66349983215332
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FourDrawerFilingCabinet.006",
+      "mesh": "LRP_FourDrawerFilingCabinet_Mesh.001",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        5.3575310707092285,
+        130.27755737304688,
+        -2.579118927314994e-07,
+        8.754728317260742,
+        133.72244262695312,
+        4.9800004959106445
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FourDrawerFilingCabinet.007",
+      "mesh": "LRP_FourDrawerFilingCabinet_Mesh.002",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.660369873046875,
+        130.52928161621094,
+        4.320000171661377,
+        -25.267419815063477,
+        133.97071838378906,
+        9.300000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FourDrawerFilingCabinet.008",
+      "mesh": "LRP_FourDrawerFilingCabinet_Mesh.003",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        26.290246963500977,
+        130.80189514160156,
+        7.4544997215271,
+        29.628671646118164,
+        134.19810485839844,
+        12.434499740600586
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FourDrawerFilingCabinet.009",
+      "mesh": "LRP_FourDrawerFilingCabinet_Mesh.004",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.39151382446289,
+        -135.49472045898438,
+        0.7999998927116394,
+        -16.506927490234375,
+        -132.44773864746094,
+        5.78000020980835
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_FourDrawerFilingCabinet.010",
+      "mesh": "LRP_FourDrawerFilingCabinet_Mesh.005",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        6.4633355140686035,
+        -135.9923553466797,
+        -1.0334134259437633e-07,
+        9.34281063079834,
+        -132.94778442382812,
+        4.980000019073486
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_LaminateOfficeDesk.006",
+      "mesh": "LRP_LaminateOfficeDesk_Mesh.001",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -11.347536087036133,
+        129.2220001220703,
+        -5.1579444715343925e-08,
+        -3.963810443878174,
+        134.7779998779297,
+        3.2089998722076416
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_LaminateOfficeDesk.007",
+      "mesh": "LRP_LaminateOfficeDesk_Mesh.002",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        12.566394805908203,
+        130.43966674804688,
+        7.00499963760376,
+        19.766170501708984,
+        134.56033325195312,
+        10.21399974822998
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_LaminateOfficeDesk.008",
+      "mesh": "LRP_LaminateOfficeDesk_Mesh.003",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.942964553833008,
+        -136.6389923095703,
+        0.7999998927116394,
+        -22.555767059326172,
+        -131.3610076904297,
+        4.008999824523926
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_LaminateOfficeDesk.009",
+      "mesh": "LRP_LaminateOfficeDesk_Mesh.004",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        23.322023391723633,
+        -136.82412719726562,
+        4.515000343322754,
+        30.70319938659668,
+        -131.67587280273438,
+        7.724000453948975
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_LaminateOfficeDesk.010",
+      "mesh": "LRP_LaminateOfficeDesk_Mesh.005",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -10.88216781616211,
+        -137.484375,
+        -2.634022848724271e-07,
+        -3.5537164211273193,
+        -131.515625,
+        3.2089998722076416
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OfficePhotocopier.005",
+      "mesh": "LRP_OfficePhotocopier_Mesh.001",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        25.263002395629883,
+        130.00550842285156,
+        0.7999998927116394,
+        30.233516693115234,
+        134.03289794921875,
+        4.084500312805176
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OfficePhotocopier.006",
+      "mesh": "LRP_OfficePhotocopier_Mesh.002",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -10.279337882995605,
+        130.04598999023438,
+        3.058999538421631,
+        -5.220491886138916,
+        134.48992919921875,
+        6.343499660491943
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OfficePhotocopier.007",
+      "mesh": "LRP_OfficePhotocopier_Mesh.003",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.150957107543945,
+        -135.90321350097656,
+        3.8589999675750732,
+        -23.587514877319336,
+        -132.63674926757812,
+        7.143500328063965
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OfficePhotocopier.008",
+      "mesh": "LRP_OfficePhotocopier_Mesh.004",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        24.475444793701172,
+        -136.78810119628906,
+        7.573999881744385,
+        29.577117919921875,
+        -132.2468719482422,
+        10.858500480651855
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OliveVinylBench.005",
+      "mesh": "LRP_OliveVinylBench_Mesh.001",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.778274536132812,
+        129.77037048339844,
+        0.7999998927116394,
+        -13.96762752532959,
+        134.19505310058594,
+        4.490000247955322
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OliveVinylBench.006",
+      "mesh": "LRP_OliveVinylBench_Mesh.002",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        4.204658508300781,
+        130.42359924316406,
+        8.203869819641113,
+        10.07338809967041,
+        134.53860473632812,
+        11.893869400024414
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OliveVinylBench.007",
+      "mesh": "LRP_OliveVinylBench_Mesh.003",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        14.613633155822754,
+        -136.37242126464844,
+        4.173870086669922,
+        20.456661224365234,
+        -132.0914306640625,
+        7.863870143890381
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_OliveVinylBench.008",
+      "mesh": "LRP_OliveVinylBench_Mesh.004",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -20.75258445739746,
+        -135.87123107910156,
+        9.003870010375977,
+        -14.99174976348877,
+        -133.08152770996094,
+        12.693870544433594
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_TwinDeckDJConsole.002",
+      "mesh": "LRP_TwinDeckDJConsole_Mesh.001",
+      "vertices": 5356,
+      "triangles": 9844,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -5.509235858917236,
+        -123.042724609375,
+        4.499999046325684,
+        5.385001182556152,
+        -118.90999603271484,
+        8.67500114440918
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_TwinSubwoofer.003",
+      "mesh": "LRP_TwinSubwoofer_Mesh.001",
+      "vertices": 576,
+      "triangles": 1088,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -23.09000015258789,
+        -115.44999694824219,
+        0.7999994158744812,
+        -18.90999984741211,
+        -112.46700286865234,
+        3.560000419616699
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_TwinSubwoofer.004",
+      "mesh": "LRP_TwinSubwoofer_Mesh.002",
+      "vertices": 576,
+      "triangles": 1088,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.90999984741211,
+        -115.44999694824219,
+        0.7999994158744812,
+        23.09000015258789,
+        -112.46700286865234,
+        3.560000419616699
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_VinylDiscAmber.002",
+      "mesh": "LRP_VinylDiscAmber_Mesh.001",
+      "vertices": 1424,
+      "triangles": 2824,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        1.6150000095367432,
+        -122.13500213623047,
+        8.27299976348877,
+        4.305000305175781,
+        -119.44499969482422,
+        8.352999687194824
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_VinylDiscCyan.002",
+      "mesh": "LRP_VinylDiscCyan_Mesh.001",
+      "vertices": 1424,
+      "triangles": 2824,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -3.984999895095825,
+        -122.13500213623047,
+        8.27299976348877,
+        -1.2949998378753662,
+        -119.44499969482422,
+        8.352999687194824
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_WireServiceTrolley.004",
+      "mesh": "LRP_WireServiceTrolley_Mesh.001",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        14.124175071716309,
+        130.55482482910156,
+        3.2899999618530273,
+        18.4990234375,
+        134.48631286621094,
+        7.15500020980835
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_WireServiceTrolley.005",
+      "mesh": "LRP_WireServiceTrolley_Mesh.002",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.286054611206055,
+        130.58953857421875,
+        6.829999923706055,
+        -14.604361534118652,
+        134.9297332763672,
+        10.694999694824219
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LRP_WireServiceTrolley.006",
+      "mesh": "LRP_WireServiceTrolley_Mesh.003",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        24.725290298461914,
+        -136.21075439453125,
+        0.7999998331069946,
+        29.058380126953125,
+        -132.33212280273438,
+        4.6650004386901855
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.007",
+      "mesh": "LevelGate.001",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.900005340576172,
+        64.55000305175781,
+        0.7999997735023499,
+        -18.600006103515625,
+        92.0,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.008",
+      "mesh": "LevelGate.002",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.900005340576172,
+        -15.449999809265137,
+        0.7999997735023499,
+        -18.600006103515625,
+        12.0,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.009",
+      "mesh": "LevelGate.003",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.900005340576172,
+        -95.44999694824219,
+        0.7999997735023499,
+        -18.600006103515625,
+        -68.0,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.010",
+      "mesh": "LevelGate.004",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.599994659423828,
+        68.0,
+        0.7999998927116394,
+        29.90000343322754,
+        95.44999694824219,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.011",
+      "mesh": "LevelGate.005",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.599994659423828,
+        -12.0,
+        0.7999998927116394,
+        29.90000343322754,
+        15.449999809265137,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "LevelGate.012",
+      "mesh": "LevelGate.006",
+      "vertices": 792,
+      "triangles": 396,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.599994659423828,
+        -92.0,
+        0.7999998927116394,
+        29.90000343322754,
+        -64.55000305175781,
+        20.160001754760742
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PlainShell.005",
+      "mesh": "PlainShell.001",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -140.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -99.99999237060547,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PlainShell.006",
+      "mesh": "PlainShell.002",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -60.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -19.9999942779541,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PlainShell.007",
+      "mesh": "PlainShell.003",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        20.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        60.00000762939453,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PlainShell.008",
+      "mesh": "PlainShell.004",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        100.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        140.0,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PortalShell.004",
+      "mesh": "PortalShell.001",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -100.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -59.99999237060547,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PortalShell.005",
+      "mesh": "PortalShell.002",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -20.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        20.0000057220459,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "PortalShell.006",
+      "mesh": "PortalShell.003",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        60.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        100.00000762939453,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.025",
+      "mesh": "QueueKiosk.001",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        59.900001525878906,
+        0.7999997138977051,
+        -53.14999771118164,
+        61.10000228881836,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.026",
+      "mesh": "QueueKiosk.002",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        98.9000015258789,
+        0.7999998331069946,
+        -53.150001525878906,
+        100.0999984741211,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.027",
+      "mesh": "QueueKiosk.003",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        59.900001525878906,
+        0.7999997138977051,
+        -72.1500015258789,
+        61.10000228881836,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.028",
+      "mesh": "QueueKiosk.004",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        98.9000015258789,
+        0.7999998331069946,
+        -72.1500015258789,
+        100.0999984741211,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.029",
+      "mesh": "QueueKiosk.005",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        -20.100000381469727,
+        0.7999997138977051,
+        -53.14999771118164,
+        -18.899999618530273,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.030",
+      "mesh": "QueueKiosk.006",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        18.899999618530273,
+        0.7999998331069946,
+        -53.150001525878906,
+        20.100000381469727,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.031",
+      "mesh": "QueueKiosk.007",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        -20.100000381469727,
+        0.7999997138977051,
+        -72.1500015258789,
+        -18.899999618530273,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.032",
+      "mesh": "QueueKiosk.008",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        18.899999618530273,
+        0.7999998331069946,
+        -72.1500015258789,
+        20.100000381469727,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.033",
+      "mesh": "QueueKiosk.009",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        -100.0999984741211,
+        0.7999997138977051,
+        -53.14999771118164,
+        -98.9000015258789,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.034",
+      "mesh": "QueueKiosk.010",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -54.849998474121094,
+        -61.099998474121094,
+        0.7999998331069946,
+        -53.150001525878906,
+        -59.89999771118164,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.035",
+      "mesh": "QueueKiosk.011",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        -100.0999984741211,
+        0.7999997138977051,
+        -72.1500015258789,
+        -98.9000015258789,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.036",
+      "mesh": "QueueKiosk.012",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -73.8499984741211,
+        -61.099998474121094,
+        0.7999998331069946,
+        -72.1500015258789,
+        -59.89999771118164,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.037",
+      "mesh": "QueueKiosk.013",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        98.9000015258789,
+        0.7999998331069946,
+        54.849998474121094,
+        100.0999984741211,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.038",
+      "mesh": "QueueKiosk.014",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        59.900001525878906,
+        0.7999997138977051,
+        54.85000228881836,
+        61.10000228881836,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.039",
+      "mesh": "QueueKiosk.015",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        98.9000015258789,
+        0.7999998331069946,
+        73.8499984741211,
+        100.0999984741211,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.040",
+      "mesh": "QueueKiosk.016",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        59.900001525878906,
+        0.7999997138977051,
+        73.8499984741211,
+        61.10000228881836,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.041",
+      "mesh": "QueueKiosk.017",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        18.899999618530273,
+        0.7999998331069946,
+        54.849998474121094,
+        20.100000381469727,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.042",
+      "mesh": "QueueKiosk.018",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        -20.100000381469727,
+        0.7999997138977051,
+        54.85000228881836,
+        -18.899999618530273,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.043",
+      "mesh": "QueueKiosk.019",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        18.899999618530273,
+        0.7999998331069946,
+        73.8499984741211,
+        20.100000381469727,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.044",
+      "mesh": "QueueKiosk.020",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        -20.100000381469727,
+        0.7999997138977051,
+        73.8499984741211,
+        -18.899999618530273,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.045",
+      "mesh": "QueueKiosk.021",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        -61.099998474121094,
+        0.7999998331069946,
+        54.849998474121094,
+        -59.89999771118164,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.046",
+      "mesh": "QueueKiosk.022",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        53.150001525878906,
+        -100.0999984741211,
+        0.7999997138977051,
+        54.85000228881836,
+        -98.9000015258789,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.047",
+      "mesh": "QueueKiosk.023",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        -61.099998474121094,
+        0.7999998331069946,
+        73.8499984741211,
+        -59.89999771118164,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueKiosk.048",
+      "mesh": "QueueKiosk.024",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        72.1500015258789,
+        -100.0999984741211,
+        0.7999997138977051,
+        73.8499984741211,
+        -98.9000015258789,
+        5.050000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.025",
+      "mesh": "QueuePad.001",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        61.599998474121094,
+        0.7999987602233887,
+        -46.599998474121094,
+        76.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.026",
+      "mesh": "QueuePad.002",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        83.5999984741211,
+        0.7999987602233887,
+        -46.599998474121094,
+        98.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.027",
+      "mesh": "QueuePad.003",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        61.599998474121094,
+        0.7999987602233887,
+        -65.5999984741211,
+        76.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.028",
+      "mesh": "QueuePad.004",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        83.5999984741211,
+        0.7999987602233887,
+        -65.5999984741211,
+        98.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.029",
+      "mesh": "QueuePad.005",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -18.400001525878906,
+        0.7999987602233887,
+        -46.599998474121094,
+        -3.6000006198883057,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.030",
+      "mesh": "QueuePad.006",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        3.5999979972839355,
+        0.7999987602233887,
+        -46.599998474121094,
+        18.39999771118164,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.031",
+      "mesh": "QueuePad.007",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -18.39999771118164,
+        0.7999987602233887,
+        -65.5999984741211,
+        -3.5999977588653564,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.032",
+      "mesh": "QueuePad.008",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        3.6000008583068848,
+        0.7999987602233887,
+        -65.5999984741211,
+        18.400001525878906,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.033",
+      "mesh": "QueuePad.009",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -98.4000015258789,
+        0.7999987602233887,
+        -46.599998474121094,
+        -83.5999984741211,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.034",
+      "mesh": "QueuePad.010",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -76.4000015258789,
+        0.7999987602233887,
+        -46.599998474121094,
+        -61.599998474121094,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.035",
+      "mesh": "QueuePad.011",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -98.4000015258789,
+        0.7999987602233887,
+        -65.5999984741211,
+        -83.5999984741211,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.036",
+      "mesh": "QueuePad.012",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -76.4000015258789,
+        0.7999987602233887,
+        -65.5999984741211,
+        -61.599998474121094,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.037",
+      "mesh": "QueuePad.013",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        83.5999984741211,
+        0.7999987602233887,
+        61.400001525878906,
+        98.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.038",
+      "mesh": "QueuePad.014",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        61.599998474121094,
+        0.7999987602233887,
+        61.400001525878906,
+        76.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.039",
+      "mesh": "QueuePad.015",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        83.5999984741211,
+        0.7999987602233887,
+        80.4000015258789,
+        98.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.040",
+      "mesh": "QueuePad.016",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        61.599998474121094,
+        0.7999987602233887,
+        80.4000015258789,
+        76.4000015258789,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.041",
+      "mesh": "QueuePad.017",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        3.5999999046325684,
+        0.7999987602233887,
+        61.400001525878906,
+        18.399999618530273,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.042",
+      "mesh": "QueuePad.018",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -18.399999618530273,
+        0.7999987602233887,
+        61.400001525878906,
+        -3.5999996662139893,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.043",
+      "mesh": "QueuePad.019",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        3.5999999046325684,
+        0.7999987602233887,
+        80.4000015258789,
+        18.399999618530273,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.044",
+      "mesh": "QueuePad.020",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -18.399999618530273,
+        0.7999987602233887,
+        80.4000015258789,
+        -3.5999996662139893,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.045",
+      "mesh": "QueuePad.021",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -76.4000015258789,
+        0.7999987602233887,
+        61.400001525878906,
+        -61.599998474121094,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.046",
+      "mesh": "QueuePad.022",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -98.4000015258789,
+        0.7999987602233887,
+        61.400001525878906,
+        -83.5999984741211,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.047",
+      "mesh": "QueuePad.023",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -76.4000015258789,
+        0.7999987602233887,
+        80.4000015258789,
+        -61.599998474121094,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueuePad.048",
+      "mesh": "QueuePad.024",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -98.4000015258789,
+        0.7999987602233887,
+        80.4000015258789,
+        -83.5999984741211,
+        1.6200010776519775
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.007",
+      "mesh": "QueueRoom.001",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        51.85000228881836,
+        -4.5129022510081995e-06,
+        -34.85000228881836,
+        108.1500015258789,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.008",
+      "mesh": "QueueRoom.002",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        -28.149999618530273,
+        -4.5129022510081995e-06,
+        -34.85000228881836,
+        28.149999618530273,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.009",
+      "mesh": "QueueRoom.003",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        -108.1500015258789,
+        -4.5129022510081995e-06,
+        -34.85000228881836,
+        -51.849998474121094,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.010",
+      "mesh": "QueueRoom.004",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        34.85000228881836,
+        51.85000228881836,
+        -1.2108054079362773e-06,
+        91.1500015258789,
+        108.1500015258789,
+        22.700002670288086
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.011",
+      "mesh": "QueueRoom.005",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        34.85000228881836,
+        -28.149999618530273,
+        -1.2108054079362773e-06,
+        91.1500015258789,
+        28.149999618530273,
+        22.700002670288086
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "QueueRoom.012",
+      "mesh": "QueueRoom.006",
+      "vertices": 3104,
+      "triangles": 1688,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        34.85000228881836,
+        -108.1500015258789,
+        -1.2108054079362773e-06,
+        91.1500015258789,
+        -51.849998474121094,
+        22.700002670288086
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RevisionPlaque.002",
+      "mesh": "RevisionPlaque.001",
+      "vertices": 120,
+      "triangles": 60,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.78999710083008,
+        109.0,
+        6.099999904632568,
+        -33.59999465942383,
+        115.0,
+        7.900000095367432
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.008",
+      "mesh": "RoadSection.001",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -140.0,
+        -1.0000032186508179,
+        16.5,
+        -100.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.009",
+      "mesh": "RoadSection.002",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -100.0,
+        -1.0000032186508179,
+        16.5,
+        -60.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.010",
+      "mesh": "RoadSection.003",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -60.0,
+        -1.0000032186508179,
+        16.5,
+        -20.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.011",
+      "mesh": "RoadSection.004",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -20.0,
+        -1.0000032186508179,
+        16.5,
+        20.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.012",
+      "mesh": "RoadSection.005",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        20.0,
+        -1.0000032186508179,
+        16.5,
+        60.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.013",
+      "mesh": "RoadSection.006",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        60.0,
+        -1.0000032186508179,
+        16.5,
+        100.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "RoadSection.014",
+      "mesh": "RoadSection.007",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        100.0,
+        -1.0000032186508179,
+        16.5,
+        140.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.009",
+      "mesh": "ServicePanel.001",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        -121.5,
+        4.899999618530273,
+        -32.25499725341797,
+        -118.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.010",
+      "mesh": "ServicePanel.002",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        -41.5,
+        4.899999618530273,
+        -32.25499725341797,
+        -38.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.011",
+      "mesh": "ServicePanel.003",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        38.5,
+        4.899999618530273,
+        -32.25499725341797,
+        41.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.012",
+      "mesh": "ServicePanel.004",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        118.5,
+        4.899999618530273,
+        -32.25499725341797,
+        121.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.013",
+      "mesh": "ServicePanel.005",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        -121.5,
+        4.899999618530273,
+        32.79999923706055,
+        -118.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.014",
+      "mesh": "ServicePanel.006",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        -41.5,
+        4.899999618530273,
+        32.79999923706055,
+        -38.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.015",
+      "mesh": "ServicePanel.007",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        38.5,
+        4.899999618530273,
+        32.79999923706055,
+        41.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "ServicePanel.016",
+      "mesh": "ServicePanel.008",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        118.5,
+        4.899999618530273,
+        32.79999923706055,
+        121.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.015",
+      "mesh": "SidewalkSection.001",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        -140.0,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        -100.0,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.016",
+      "mesh": "SidewalkSection.002",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        -140.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        -100.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.017",
+      "mesh": "SidewalkSection.003",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        -100.0,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        -60.0,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.018",
+      "mesh": "SidewalkSection.004",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        -100.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        -60.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.019",
+      "mesh": "SidewalkSection.005",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        -60.0,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        -19.999998092651367,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.020",
+      "mesh": "SidewalkSection.006",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        -60.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        -20.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.021",
+      "mesh": "SidewalkSection.007",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        -20.000001907348633,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        20.000001907348633,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.022",
+      "mesh": "SidewalkSection.008",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        -20.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        20.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.023",
+      "mesh": "SidewalkSection.009",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        19.999998092651367,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        60.0,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.024",
+      "mesh": "SidewalkSection.010",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        20.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        60.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.025",
+      "mesh": "SidewalkSection.011",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        60.0,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        100.0,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.026",
+      "mesh": "SidewalkSection.012",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        60.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        100.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.027",
+      "mesh": "SidewalkSection.013",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.80000305175781,
+        100.0,
+        -4.5871770453231875e-06,
+        -16.199996948242188,
+        140.0,
+        0.8950018286705017
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "SidewalkSection.028",
+      "mesh": "SidewalkSection.014",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.200000762939453,
+        100.0,
+        -3.2584134714852553e-06,
+        33.79999923706055,
+        140.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "StageDeck.002",
+      "mesh": "StageDeck.001",
+      "vertices": 336,
+      "triangles": 168,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -15.0,
+        -128.5,
+        -2.44543934968533e-06,
+        15.0,
+        -104.95999908447266,
+        4.559998512268066
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    },
+    {
+      "object": "StageRearRail.002",
+      "mesh": "StageRearRail.001",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -14.100000381469727,
+        -128.49000549316406,
+        4.500001430511475,
+        14.100000381469727,
+        -128.30999755859375,
+        7.630001544952393
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Atlas"
+      ]
+    }
+  ],
+  "source_fbx_changed_during_inspection": false,
+  "source_manifest_changed_during_inspection": false,
+  "limitations": [
+    "No Studio mesh-import or Roblox performance result is inferred.",
+    "FBX excludes native Studio text, queue controls, real launch logic and collision proxies."
+  ],
+  "passed": true
+}

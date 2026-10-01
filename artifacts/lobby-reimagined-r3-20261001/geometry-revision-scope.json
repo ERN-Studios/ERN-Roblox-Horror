@@ -1,0 +1,18 @@
+{
+  "schema": "lobby-r3b-geometry-revision-scope-v1",
+  "priorManifestSHA256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+  "finalManifestSHA256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+  "finalSourceBlendSHA256": "768045ae70b97407d57fb44a9827298905c17641a845a5ae2d2561b8f166ea36",
+  "finalLocalGeometryPassed": true,
+  "passedCheckCount": 9,
+  "unchangedCounts": {
+    "placements": true,
+    "staticTriangles": true,
+    "colliders": true
+  },
+  "changeScope": "EntryConnector cheek mesh vertices and12 matching colliders only; front edge -.75 Blender coordinate, back11.5, preserving .75stud overlap into gate jambs. Binary diff independently reviewed by reviewer; final geometry rerun pinned to final file bytes.",
+  "priorGeometryReceipt": "artifacts/lobby-reimagined-r3-20261001/geometry-qa-prior-d242eed49.json",
+  "finalGeometryReceipt": "artifacts/lobby-reimagined-r3-20261001/geometry-qa.json",
+  "historicalLiveGeometryReceipt": "artifacts/lobby-reimagined-r3-20261001/live-geometry-qa.json",
+  "liveVerificationLimits": "Historical4908 engine raycasts and performance receipts refer to prior d242 geometry. Current c428 geometry passed local analytic actual-mesh checks. Root separately owns final installed Play walk/entry/screenshots. This receipt makes no new live engine or performance claim."
+}

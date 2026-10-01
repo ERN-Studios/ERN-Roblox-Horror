@@ -1,0 +1,95 @@
+{
+  "schema": "lobby-r3-independent-shared-source-code-qa-v1",
+  "observedAtUTC": "2026-10-01T14:47:28.777000+00:00",
+  "sources": [
+    {
+      "candidate": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.GameManager.Script.luau",
+      "baseline": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.GameManager.Script.luau",
+      "baselineSha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a",
+      "candidateSha256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "candidateBytes": 163203,
+      "exactReplacementSpans": 11,
+      "EOFAppends": 0,
+      "replayExact": true
+    },
+    {
+      "candidate": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.LobbyShopDisplay.ModuleScript.luau",
+      "baseline": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.LobbyShopDisplay.ModuleScript.luau",
+      "baselineSha256": "284a9c6bee23b1574533f910d4cb064c4244d08ddb2931aa243d04d13eac08f0",
+      "candidateSha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "candidateBytes": 24220,
+      "exactReplacementSpans": 2,
+      "EOFAppends": 0,
+      "replayExact": true
+    },
+    {
+      "candidate": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4PreviewAccess.Script.luau",
+      "baseline": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.Level4PreviewAccess.Script.luau",
+      "baselineSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "candidateSha256": "d925ee4c0c10c75300f9649251d21486af3b78b14cce594759747ec681973a1a",
+      "candidateBytes": 13652,
+      "exactReplacementSpans": 6,
+      "EOFAppends": 1,
+      "replayExact": true
+    },
+    {
+      "candidate": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "baseline": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "baselineSha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504",
+      "candidateSha256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "candidateBytes": 10544,
+      "exactReplacementSpans": 6,
+      "EOFAppends": 1,
+      "replayExact": true
+    },
+    {
+      "candidate": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "baseline": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "baselineSha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "candidateSha256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548",
+      "candidateBytes": 10609,
+      "exactReplacementSpans": 6,
+      "EOFAppends": 1,
+      "replayExact": true
+    }
+  ],
+  "queueBridge": {
+    "file": "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+    "bytes": 3598,
+    "sha256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa"
+  },
+  "scopeVerdict": "PASS for reviewed local candidates against fresh authoritative baseline; root must recheck same Source/editor baseline within CAS before installation.",
+  "findings": {
+    "ownerReadyRevisionGate": "Only direct Workspace owned revision3 Ready model;24 descriptors uniquely validated,12 public levels1\u20133 enter existing private engine",
+    "roundUiNumericIdCompatibility": "Current numeric station101\u2013124 contract accepted without RoundUI edits",
+    "access": "Original canAccessLevel/routing/DevAccess rules unchanged;4\u20136 stay separate DEV preview routes",
+    "lifecycle": "Idempotent retire onDestroying and leavingWorkspace; registry/barrier/member/feedback cleanup; reparent schedules new descriptors",
+    "yieldRace": "Retired early-return guards now after all runStation yielded queuedPlayers calls and after launch; guard before cancelled feedback avoids old cohort cancellation/new-render reset",
+    "shop": "One existing server focus writer; old shop precedence retained, owned Ready revision3 pressure-plate fallback limited to actual shopKeys; no duplicate Build or purchase/catalog/grant/price changes",
+    "devAdmission": "revisionOwned-only RunService:IsStudio()/DevAccess.IsLevel6PreviewAllowed predicate beforeexisting roundlevel/character/zone guards; original stations bypassnewpredicate unchanged.",
+    "devPreviewAdapters": "Three original callbacks additionally accept owned ReadyR3 hosts before/after streaming; existinglevel4/5whitelist, level6specialwhitelist, livingavatar/cooldown/reach/returnfloor/streamhandshake/destination preserved. Holograminflight referencecountsperrenderowner."
+  },
+  "remainingIntegrationChecks": [
+    "Root must preserve fresh live Source/editor equality within every guarded write; this local review does not certify actual installation.",
+    "New QueueBridge floor+direct bay-parent contract must match built model; collision proxies need inclusion under each bay for existing queueOutsidePosition overlap filter.",
+    "Cancel zone LookVectors must land outside all pads/walls in central aisle.",
+    "Single-player local Play, public teleport, friends/multiplayer, mobile and performance are not certified by this source review.",
+    "Per-playerDEV admission sourceguard andthreepreviewadapters require actual local Play checks; public/friends/multiplayer/mobile/performance remain uncertified."
+  ],
+  "claudeContribution": "Actual67.03second claude-opus-5-5/max no-tool design advice received; independent code review here is Codex, not a fabricated Claude code pass.",
+  "mutations": "Child only wrote task QA artifacts; no Studio, implementation, staging or commit.",
+  "localSyntaxVerification": {
+    "receipt": "artifacts/lobby-reimagined-r3-20261001/claude-review/final-adapter-syntax.json",
+    "sha256": "f6a0729e45f23ef2be74cff9ced99b5f5fa9df7b50f5353c9b61d6890869cd5b",
+    "candidates": 6,
+    "passed": true,
+    "executed": false
+  },
+  "priorSnapshot": "artifacts/lobby-reimagined-r3-20261001/claude-review/shared-source-code-qa-before-dev-guard.json",
+  "reviewedDevAccessPolicies": {
+    "Level4": "Original DevAccess.IsAllowed and ready/round exclusions unchanged",
+    "Level5": "Original DevAccess.IsAllowed and ready/round exclusions unchanged",
+    "Level6": "Original DevAccess.IsLevel6PreviewAllowed, InRound/reserved restrictions and Runtime.TryJoin preserved",
+    "R3Rounds1to3": "New per-player admission uses IsStudio OR IsLevel6PreviewAllowed only for revisionOwned stations"
+  }
+}

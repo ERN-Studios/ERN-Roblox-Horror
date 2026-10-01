@@ -1,0 +1,21 @@
+{
+  "sha256": "d69f35d32abfa729c3852a6fd7f3101854d7702607858b6732700c13530fd684",
+  "manifestSha256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+  "sources": [
+    {
+      "key": "runtime-bake",
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "bytes": 8508,
+      "sha256": "c022cdb69d117c1654e398881dee6bd1621d9945e0e6747f3059185b65b07c5d"
+    }
+  ],
+  "expected": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "sourceSha256": "f6a98570f3acadb011b0313b2a36d3da04eb67d0dec4b70d665ec330e73eaa4a"
+    }
+  ],
+  "scope": "Additive final R3B Blender payload; RuntimeBake Source/editor CAS only; all shared adapters unchanged."
+}

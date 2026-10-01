@@ -1,0 +1,111 @@
+{
+  "schema": "lobby-r3-native-scope-contract-v1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "beforeSources": 209,
+  "afterSources": 210,
+  "unchangedExistingSources": 201,
+  "changedExistingSources": 8,
+  "sourceRows": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "expectedAfterSHA256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "expectedAfterBytes": 163203,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.GameManager.Script.luau",
+      "expectedBeforeSHA256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a",
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "expectedAfterSHA256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "expectedAfterBytes": 24220,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.LobbyShopDisplay.ModuleScript.luau",
+      "expectedBeforeSHA256": "284a9c6bee23b1574533f910d4cb064c4244d08ddb2931aa243d04d13eac08f0",
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "expectedAfterSHA256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "expectedAfterBytes": 10544,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "expectedBeforeSHA256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504",
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "expectedAfterSHA256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548",
+      "expectedAfterBytes": 10609,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "expectedBeforeSHA256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "expectedAfterSHA256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+      "expectedAfterBytes": 3598,
+      "file": "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+      "expectedBeforeSHA256": null,
+      "new": true,
+      "allowInstalledSourceSHA256Change": true
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "expectedAfterSHA256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
+      "expectedAfterBytes": 10629,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4V4PreviewAccess.Script.luau",
+      "expectedBeforeSHA256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "expectedAfterSHA256": "c022cdb69d117c1654e398881dee6bd1621d9945e0e6747f3059185b65b07c5d",
+      "expectedAfterBytes": 8508,
+      "file": "tools/lobby_reimagined/runtime_bake.ModuleScript.luau",
+      "new": false,
+      "allowInstalledSourceSHA256Change": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "expectedAfterSHA256": "1b2f45d140545009a82cca7f5f9400453d3860cd1bc0aa2e4fb39ef96ec97338",
+      "expectedAfterBytes": 11114,
+      "file": "tools/lobby_reimagined/preview_builder.ModuleScript.luau",
+      "new": false,
+      "allowInstalledSourceSHA256Change": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "expectedAfterSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "expectedAfterBytes": 4105,
+      "file": "tools/lobby_reimagined/queue_controller.LocalScript.luau",
+      "new": false,
+      "allowInstalledSourceSHA256Change": true
+    }
+  ],
+  "addedRoots": [
+    {
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3",
+      "class": "Folder",
+      "manifestSHA256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e"
+    },
+    {
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3B",
+      "class": "Folder",
+      "manifestSHA256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3"
+    }
+  ],
+  "memoryOnlyNormalization": "Eight approved Source properties and InstalledSourceSHA256 on three existing owned script containers; remove new QueueBridge and two new owned raw roots in local deserialized copy only. No Studio or backup-file mutations."
+}

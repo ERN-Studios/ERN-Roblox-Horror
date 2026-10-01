@@ -29,7 +29,13 @@ def inside(root, relative):
     return path
 
 
-def load_package(directory, sources_manifest=None):
+def load_package(directory, sources_manifest=None, source_name=SOURCE_NAME, allow_r3_shared=False):
+    assert source_name in {SOURCE_NAME,"LobbyReimaginedBlenderSource20261001R3","LobbyReimaginedBlenderSource20261001R3B"}
+    assert not allow_r3_shared or source_name in {"LobbyReimaginedBlenderSource20261001R3","LobbyReimaginedBlenderSource20261001R3B"}
+    shared_paths = {"ServerScriptService.GameManager":"Script", "ServerScriptService.LobbyShopDisplay":"ModuleScript",
+                    "ServerScriptService.Level4PreviewAccess":"Script", "ServerScriptService.Level5PreviewAccess":"Script",
+                    "ServerScriptService.Level6PreviewAccess":"Script",
+                    "ServerScriptService.Level4V4PreviewAccess":"Script"}
     root = Path(directory).resolve(strict=True)
     manifest_bytes = inside(root, "manifest.json").read_bytes()
     manifest = json.loads(manifest_bytes)
@@ -93,8 +99,9 @@ def load_package(directory, sources_manifest=None):
         assert cls in {"ModuleScript", "Script", "LocalScript"} and path not in paths
         assert (path.startswith(f"ServerScriptService.{SYSTEM_NAME}.") and cls in {"ModuleScript", "Script"}) or (
             path == "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController" and cls == "LocalScript") or (
-            path.startswith(f"ReplicatedStorage.{SYSTEM_NAME}.") and cls == "ModuleScript"), "Source outside new preview namespaces"
-        assert len(path.split(".")) == 3, "Only direct new module children are allowed"
+            path.startswith(f"ReplicatedStorage.{SYSTEM_NAME}.") and cls == "ModuleScript") or (
+            allow_r3_shared and shared_paths.get(path) == cls), "Source outside approved R3 scope"
+        assert len(path.split(".")) == 3 or (allow_r3_shared and path in shared_paths), "Only direct approved Sources are allowed"
         source_path = Path(row["file"])
         if not source_path.is_absolute() and sources_manifest:
             source_path = Path(sources_manifest).resolve().parent / source_path
@@ -104,7 +111,7 @@ def load_package(directory, sources_manifest=None):
         keys.add(key); paths.add(path); scripts[key] = data
         source_specs.append({"key": key, "path": path, "class": cls, "bytes": len(data), "sha256": sha(data)})
     plan = {"schema": "lobby-reimagined-install-plan-v1", "placeId": PLACE, "universeId": UNIVERSE,
-            "groupId": GROUP, "sourceName": SOURCE_NAME, "manifestSha256": sha(manifest_bytes),
+            "groupId": GROUP, "sourceName": source_name, "manifestSha256": sha(manifest_bytes),
             "manifestBytes": len(manifest_bytes), "chunks": chunks,
             "atlas": {"width": 1024, "height": 1024, "bytes": len(atlas_raw), "sha256": sha(atlas_raw)},
             "sources": source_specs}
@@ -117,10 +124,12 @@ def main():
     parser.add_argument("root", type=Path)
     parser.add_argument("--port", type=int, default=8892)
     parser.add_argument("--sources-manifest", type=Path)
+    parser.add_argument("--source-name", choices=[SOURCE_NAME,"LobbyReimaginedBlenderSource20261001R3","LobbyReimaginedBlenderSource20261001R3B"], default=SOURCE_NAME)
+    parser.add_argument("--allow-r3-shared", action="store_true")
     parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args()
     assert 1024 <= args.port <= 65535
-    package = load_package(args.root, args.sources_manifest)
+    package = load_package(args.root, args.sources_manifest, args.source_name, args.allow_r3_shared)
     plan_bytes = json.dumps(package["plan"], separators=(",", ":")).encode()
     if args.verify_only:
         print(json.dumps({"passed": True, "manifestSha256": package["plan"]["manifestSha256"],

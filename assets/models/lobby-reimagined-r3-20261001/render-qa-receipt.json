@@ -1,0 +1,10 @@
+{
+  "sourceBlendSha256": "768045ae70b97407d57fb44a9827298905c17641a845a5ae2d2561b8f166ea36",
+  "manifestSha256": "c4289515c6253bf6414f745723a4466fbef59e9c40e179f13c14412349b72ba3",
+  "views": [
+    "blender-gate3-front.png",
+    "blender-gate3-approach-north.png",
+    "blender-gate3-approach-south.png"
+  ],
+  "readOnlySource": true
+}

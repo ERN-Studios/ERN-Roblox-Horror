@@ -1,0 +1,654 @@
+{
+  "prompts": [
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 01.Queue Kiosk Control.Level5DeveloperPreviewPrompt",
+      "name": "Level5DeveloperPreviewPrompt",
+      "level": 5
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 02.Queue Kiosk Control.Level5DeveloperPreviewPrompt",
+      "name": "Level5DeveloperPreviewPrompt",
+      "level": 5
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 03.Queue Kiosk Control.Level5DeveloperPreviewPrompt",
+      "name": "Level5DeveloperPreviewPrompt",
+      "level": 5
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 04.Queue Kiosk Control.Level5DeveloperPreviewPrompt",
+      "name": "Level5DeveloperPreviewPrompt",
+      "level": 5
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 01.Queue Kiosk Control.Level6DeveloperPreviewPrompt",
+      "name": "Level6DeveloperPreviewPrompt",
+      "level": 6
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 02.Queue Kiosk Control.Level6DeveloperPreviewPrompt",
+      "name": "Level6DeveloperPreviewPrompt",
+      "level": 6
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 03.Queue Kiosk Control.Level6DeveloperPreviewPrompt",
+      "name": "Level6DeveloperPreviewPrompt",
+      "level": 6
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 04.Queue Kiosk Control.Level6DeveloperPreviewPrompt",
+      "name": "Level6DeveloperPreviewPrompt",
+      "level": 6
+    }
+  ],
+  "universeId": 10559217407,
+  "registeredQueueCount": 12,
+  "minimumCancelQueueMargin": 5.17997932434082,
+  "modelOwned": true,
+  "placeId": 131311258779917,
+  "passed": true,
+  "running": true,
+  "center": [
+    220,
+    30,
+    -760
+  ],
+  "limitations": [
+    "Actual engine ray/overlap queries only; no player move, UI, mode or instance writes.",
+    "Level4 prompt absence diagnosed separately; this receipt is geometry only.",
+    "Multiplayer/actual teleport not tested by these queries."
+  ],
+  "revision": 3,
+  "rayCount": 4908,
+  "sourceBlendSha256": "84f7bdda418b52d52543f500f33bf7555c9b7aae63b08ded5962fea3d57973d7",
+  "failures": [],
+  "approaches": [
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.98000144958496,
+      "level": 1,
+      "maximumFloorY": 0.8000011444091797,
+      "floorSamples": 345
+    },
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.980003356933594,
+      "level": 2,
+      "maximumFloorY": 0.7999992370605469,
+      "floorSamples": 345
+    },
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.98000144958496,
+      "level": 3,
+      "maximumFloorY": 0.8000011444091797,
+      "floorSamples": 345
+    },
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.980003356933594,
+      "level": 4,
+      "maximumFloorY": 0.7999992370605469,
+      "floorSamples": 345
+    },
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.98000144958496,
+      "level": 5,
+      "maximumFloorY": 0.8000011444091797,
+      "floorSamples": 345
+    },
+    {
+      "minimumFloorY": 0,
+      "minimumHeadroom": 18.980003356933594,
+      "level": 6,
+      "maximumFloorY": 0.7999992370605469,
+      "floorSamples": 345
+    }
+  ],
+  "modelReady": true,
+  "padApproaches": [
+    {
+      "id": 101,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 102,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 103,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 104,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 105,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 106,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 107,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 108,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 109,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 110,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 111,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 112,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 113,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 114,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 115,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 116,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 117,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 118,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 119,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 120,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 121,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 122,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 123,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    },
+    {
+      "id": 124,
+      "samples": 31,
+      "maximumRise": 0.8199996948242188
+    }
+  ],
+  "cancellations": [
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 01",
+      "id": 101,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -838.4268188476562
+      ],
+      "level": 1,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 02",
+      "id": 102,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -841.5731811523438
+      ],
+      "level": 1,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 03",
+      "id": 103,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -838.012451171875
+      ],
+      "level": 1,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 04",
+      "id": 104,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -841.987548828125
+      ],
+      "level": 1,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 01",
+      "id": 105,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -841.5731811523438
+      ],
+      "level": 2,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 02",
+      "id": 106,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -838.4268188476562
+      ],
+      "level": 2,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 03",
+      "id": 107,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -841.987548828125
+      ],
+      "level": 2,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 04",
+      "id": 108,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -838.012451171875
+      ],
+      "level": 2,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 01",
+      "id": 109,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -758.4268188476562
+      ],
+      "level": 3,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 02",
+      "id": 110,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -761.5731811523438
+      ],
+      "level": 3,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 03",
+      "id": 111,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -758.012451171875
+      ],
+      "level": 3,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 04",
+      "id": 112,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -761.987548828125
+      ],
+      "level": 3,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 01",
+      "id": 113,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -761.5731811523438
+      ],
+      "level": 4,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 02",
+      "id": 114,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -758.4268188476562
+      ],
+      "level": 4,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 03",
+      "id": 115,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -761.987548828125
+      ],
+      "level": 4,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 04",
+      "id": 116,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -758.012451171875
+      ],
+      "level": 4,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 01",
+      "id": 117,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -678.4268188476562
+      ],
+      "level": 5,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 02",
+      "id": 118,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        158.28717041015625,
+        34.62000274658203,
+        -681.5731811523438
+      ],
+      "level": 5,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 03",
+      "id": 119,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -678.012451171875
+      ],
+      "level": 5,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.179989814758301,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 04",
+      "id": 120,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        155.1931610107422,
+        34.62000274658203,
+        -681.987548828125
+      ],
+      "level": 5,
+      "humanoidWallMargin": 23.363921689987183,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 01",
+      "id": 121,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -681.5731811523438
+      ],
+      "level": 6,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.180009841918945,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 02",
+      "id": 122,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        281.71282958984375,
+        34.62000274658203,
+        -678.4268188476562
+      ],
+      "level": 6,
+      "humanoidWallMargin": 24.017339992523194,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 03",
+      "id": 123,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -681.987548828125
+      ],
+      "level": 6,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    },
+    {
+      "nearestQueueEdgeStuds": 5.17997932434082,
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 04",
+      "id": 124,
+      "passed": true,
+      "detectorNonphysical": true,
+      "floorPresent": true,
+      "solidOverlapPaths": [],
+      "actualCancelPoint": [
+        284.8068542480469,
+        34.62000274658203,
+        -678.012451171875
+      ],
+      "level": 6,
+      "humanoidWallMargin": 23.363911199569703,
+      "orientationTowardCenter": 1
+    }
+  ],
+  "zoneCount": 24,
+  "schema": "r3-live-server-readonly-geometry-v1",
+  "originalLobbyPresent": true,
+  "overlapMethod": "Exact current GameManager phone-cancel root position with3.3x5.5x3.3 collision query, rather than an invented lower settled-root position."
+}

@@ -10,7 +10,7 @@ import bpy
 from mathutils import Vector, Matrix
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'assets/models/lobby-reimagined-20261001'
+OUT = ROOT / 'assets/models/lobby-reimagined-r3-20261001'
 OUT.mkdir(parents=True, exist_ok=True)
 sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(ROOT / 'tools/level6_build/import'))
@@ -20,7 +20,15 @@ LIB = bpy.data.collections.new('Lobby Preview | Reusable Blender Kit')
 bpy.context.scene.collection.children.link(LIB)
 FAMILIES = {}
 MATERIALS = {}
-PLACEMENTS, COLLIDERS, SIGNS, LIGHTS, PADS = [], [], [], [], []
+PLACEMENTS, COLLIDERS, SIGNS, LIGHTS, PADS, BAYS = [], [], [], [], [], []
+GATE_X, GATE_BASE = 28.6, .8
+PORTAL_HALF_WIDTH, PORTAL_CUT_Z = 10.6, 20.4
+PORTAL_ANGLE = math.asin((PORTAL_CUT_Z-1)/35)
+SIDEWALK_WIDTH = 17.6
+HEADER_POSITION, HEADER_SIZE = [0,17.2,1.42], [22.8,2.68,.04]
+HEADER_FACE_CENTER = [0,17.2,1.44]
+BLADE_POSITION, BLADE_SIZE = [-15.0,17.0,5.1], [.86,2.95,9.2]
+BLADE_FACE_CENTERS = {'Left':[-15.43,17.0,5.1],'Right':[-14.57,17.0,5.1]}
 
 def material(name, rgb, rough=.72, metal=0):
     m = bpy.data.materials.new('LRP_'+name); m.use_nodes=True
@@ -89,21 +97,21 @@ def light(name,c,color,bright=1.4,rng=22):LIGHTS.append({'name':name,'position':
 # Reusable plain and portal shells; portal gaps are genuinely open geometry.
 for portal in (False,True):
     g=Geometry('PortalShell' if portal else 'PlainShell')
-    runs=[(-20,-10,0,math.pi),(-10,10,.64,math.pi-.64),(10,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
+    runs=[(-20,-PORTAL_HALF_WIDTH,0,math.pi),(-PORTAL_HALF_WIDTH,PORTAL_HALF_WIDTH,PORTAL_ANGLE,math.pi-PORTAL_ANGLE),(PORTAL_HALF_WIDTH,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
     for y0,y1,a,b in runs:g.arc(35,a,b,y0,y1,1.1,CONCRETE,36)
     for side in (-1,1):
-        for y0,y1 in ([(-20,-10),(10,20)] if portal else [(-20,20)]):g.box((side*34.5,(y0+y1)/2,4),(1.4,y1-y0,8),CONCRETE)
+        for y0,y1 in ([(-20,-PORTAL_HALF_WIDTH),(PORTAL_HALF_WIDTH,20)] if portal else [(-20,20)]):g.box((side*34.5,(y0+y1)/2,4),(1.4,y1-y0,8),CONCRETE)
     g.object()
 for i,y in enumerate(range(-120,121,40)):
     portal=y in (-80,0,80);place('PortalShell' if portal else 'PlainShell',0,y)
-    runs=[(-20,-10,0,math.pi),(-10,10,.64,math.pi-.64),(10,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
+    runs=[(-20,-PORTAL_HALF_WIDTH,0,math.pi),(-PORTAL_HALF_WIDTH,PORTAL_HALF_WIDTH,PORTAL_ANGLE,math.pi-PORTAL_ANGLE),(PORTAL_HALF_WIDTH,20,0,math.pi)] if portal else [(-20,20,0,math.pi)]
     for ya,yb,ta,tb in runs:
         for j in range(24):
             angle=ta+(tb-ta)*(j+.5)/24
             collider('Arch Collision',(35.3*math.cos(angle),y+(ya+yb)/2,1+35.3*math.sin(angle)),(2*35.3*math.sin((tb-ta)/48)+.1,yb-ya,1.1))
             COLLIDERS[-1]['rotation']=[0,0,angle+math.pi/2]
     for side in (-1,1):
-        for ya,yb in ([(-20,-10),(10,20)] if portal else [(-20,20)]):collider('Lower Tunnel Wall',(side*34.2,y+(ya+yb)/2,4),(1.3,yb-ya,8))
+        for ya,yb in ([(-20,-PORTAL_HALF_WIDTH),(PORTAL_HALF_WIDTH,20)] if portal else [(-20,20)]):collider('Lower Tunnel Wall',(side*34.2,y+(ya+yb)/2,4),(1.3,yb-ya,8))
 
 g=Geometry('ArchRib');g.arc(33.9,0,math.pi,-.6,.6,.75,STEEL,40)
 for side in (-1,1):
@@ -112,23 +120,24 @@ for side in (-1,1):
         for zz in (.6,2.1):g.box((side*32.22,yy,zz),(.13,.22,.22),EDGE)
 for a in (.35,.65,1.05,1.5,1.95,2.5,2.8):g.box((33.85*math.cos(a),0,1+33.85*math.sin(a)),(.7,1.65,.7),EDGE)
 g.object()
-for y in range(-130,131,20):place('ArchRib',0,y)
+for y in range(-140,141,20):
+    if y not in (-80,0,80):place('ArchRib',0,y)
 
 g=Geometry('RoadSection');g.box((0,0,-.5),(33,40,1),ASPHALT)
 for y in (-15,-5,5,15):g.box((0,y,.015),(.28,4,.035),PAINT)
 for side in (-1,1):g.box((side*16.05,0,.01),(.12,40,.03),PAINT)
 g.object()
-g=Geometry('SidewalkSection');g.box((0,0,.4),(16.6,40,.8),CURB)
-for y in (-16,-8,0,8,16):g.box((0,y,.812),(16.2,.04,.025),STEEL)
+g=Geometry('SidewalkSection');g.box((0,0,.4),(SIDEWALK_WIDTH,40,.8),CURB)
+for y in (-16,-8,0,8,16):g.box((0,y,.812),(17.2,.04,.025),STEEL)
 for x in (-5.4,0,5.4):g.box((x,0,.812),(.035,39.9,.025),STEEL)
 for y in range(-18,19,4):
-    g.box((-7.7,y,.84),(.65,2.7,.06),STEEL)
-    for v in (-.9,-.5,-.1,.3,.7):g.box((-7.7,y+v,.88),(.59,.06,.03),EDGE)
-    g.box((-8.2,y,.65),(.1,1.5,.16),CYAN)
+    g.box((-8.35,y,.84),(.65,2.7,.06),STEEL)
+    for v in (-.9,-.5,-.1,.3,.7):g.box((-8.35,y+v,.88),(.59,.06,.03),EDGE)
+    g.box((-8.75,y,.65),(.1,1.5,.16),CYAN)
 g.object()
 for y in range(-120,121,40):
     place('RoadSection',0,y);collider('Road',(0,y,-.5),(33,40,1))
-    for side in (-1,1):place('SidewalkSection',side*25,y,yaw=0 if side==1 else math.pi);collider('Sidewalk',(side*25,y,.4),(16.6,40,.8))
+    for side in (-1,1):place('SidewalkSection',side*25,y,yaw=0 if side==1 else math.pi);collider('Sidewalk',(side*25,y,.4),(SIDEWALK_WIDTH,40,.8))
 
 g=Geometry('CableTray');
 for x in (-1,1):g.box((x,0,0),(.16,20,.65),STEEL)
@@ -150,34 +159,60 @@ for y in (-8,-2,4,9):g.box((0,y,.35),(.32,.18,1.1),EDGE)
 g.object()
 for side in (-1,1):
     for y in range(-130,131,20):
-        if all(abs(y-gate)>10 for gate in (-80,0,80)):place('ConduitSection',side*32.85,y,12,yaw=0 if side<0 else math.pi)
+        if all(abs(y-gate)>20.6 for gate in (-80,0,80)):place('ConduitSection',side*32.85,y,12,yaw=0 if side<0 else math.pi)
     for y in (-120,-40,40,120):place('ServicePanel',side*32.6,y,6,yaw=0 if side>0 else math.pi)
 
 g=Geometry('LevelGate')
 for side in (-1,1):
-    g.box((side*10.7,0,9.7),(1.5,2,19.4),STEEL)
+    g.box((side*10.7,0,8.1),(1.5,2,16.2),STEEL)
     g.box((side*10.7,-1.08,4.6),(.16,.13,7),CYAN)
     g.box((side*10.7,-1.08,1.4),(1.3,.12,2.8),PAINT)
-    for z in (1,3,6,9,12,15,18):g.box((side*10.7,-1.08,z),(.22,.1,.22),EDGE)
-g.box((0,0,20),(24,2.6,4.2),STEEL);g.box((0,-1.38,17.9),(21.8,.18,.2),CYAN)
-g.box((-11,-9.1,18.4),(.75,7.8,3.4),STEEL)
-g.box((-11,-9.1,16.6),(.82,7.2,.13),CYAN)
-g.box((-11,-5.2,14.1),(.65,7.9,.4),EDGE)
-g.box((-11,-9.1,16.1),(.65,.4,4.1),EDGE)
+    for z in (1,3,6,9,12,15):g.box((side*10.7,-1.08,z),(.22,.1,.22),EDGE)
+g.box((0,-.3,17.2),(24,2.0,3.2),STEEL)
+g.box((0,-1.32,17.2),(22.8,.04,2.75),SCREEN)
+g.box((0,-1.38,15.65),(21.8,.18,.14),CYAN)
+g.box((0,.55,19.0),(20.8,1.5,.55),STEEL)
+# The blade is separate from the doorway. Its broad faces look up/down the
+# tunnel; the bolted boom stays above text and connects behind the header.
+g.box((-15.0,-5.1,17.0),(.6,9.8,3.3),STEEL)
+for face in (-1,1):g.box((-15.0+face*.315,-5.1,17.0),(.03,9.2,2.95),SCREEN)
+g.box((-15.0,-5.1,15.24),(.65,8.7,.11),CYAN)
+g.box((-10.7,.25,18.65),(.7,.45,1.4),EDGE)
+g.box((-12.85,.25,19.15),(5.2,.42,.42),STEEL)
+g.box((-15.0,-3.55,19.15),(.42,8.0,.42),STEEL)
+for y in (-6.9,-1.1):g.box((-15.0,y,18.89),(.2,.2,.68),EDGE)
+for z in (18.3,18.9):g.box((-10.33,.25,z),(.10,.16,.16),EDGE)
+g.object()
+
+g=Geometry('EntryConnector')
+g.box((0,5.0,.4),(22.6,13.0,.8),CURB)
+for side in (-1,1):
+    g.box((side*10.85,5.375,10.45),(.9,12.25,20.4),CONCRETE)
+    g.box((side*10.36,5.375,1.45),(.08,12.0,.32),STEEL)
+    g.box((side*10.35,5.375,18.65),(.09,12.0,.16),CYAN)
+g.box((0,5.0,20.2),(22.6,13.0,.8),CONCRETE)
+g.box((0,3.8,19.71),(15,.8,.10),STEEL)
+g.box((0,3.8,19.64),(14.4,.55,.05),CYAN)
 g.object()
 
 g=Geometry('QueueRoom')
-g.cylinder((0,0,.38),27.7,.76,CARPET,72)
-g.cylinder((0,0,22),28,.6,CURB,72)
+g.cylinder((0,0,.4),27.7,.8,CARPET,72)
+g.cylinder((0,0,22.3),28.15,.8,CURB,72)
 for i in range(52):
     a=math.radians(-66+312*i/52);b=math.radians(-66+312*(i+1)/52)
-    v=[(rr*math.cos(t),rr*math.sin(t),z) for z in (.8,21.8) for rr in (27.5,28.15) for t in (a,b)]
+    v=[(rr*math.cos(t),rr*math.sin(t),z) for z in (.55,22.4) for rr in (27.5,28.15) for t in (a,b)]
     for ids in [(0,1,5,4),(2,6,7,3),(4,5,7,6),(0,2,3,1)]:g.face([v[k] for k in ids],ORANGE)
     g.box((27.15*math.cos(a),27.15*math.sin(a),10.8),(.11,.11,20),STEEL)
+# The upper bay wall spans the entry gap and overlaps the connector roof,
+# closing the curved room's change in ceiling height rather than showing sky.
+for i in range(10):
+    a=math.radians(246+48*i/10);b=math.radians(246+48*(i+1)/10)
+    v=[(rr*math.cos(t),rr*math.sin(t),z) for z in (20.35,22.4) for rr in (27.5,28.15) for t in (a,b)]
+    for ids in [(0,1,5,4),(2,6,7,3),(4,5,7,6),(0,2,3,1)]:g.face([v[k] for k in ids],ORANGE)
 g.object()
 g=Geometry('QueuePad');g.cylinder((0,0,.37),7.4,.74,STEEL,64);g.cylinder((0,0,.77),7.1,.1,SCREEN,64);g.ring((0,0,.79),7.2,.11,.055,CYAN);g.ring((0,0,.8),6.85,.06,.025,EDGE);g.object()
 g=Geometry('QueueKiosk');g.box((0,0,1.7),(1.6,1.2,3.4),STEEL);g.box((0,-.2,3.45),(1.7,.2,1.6),STEEL);g.box((0,-.33,3.47),(1.5,.045,1.35),SCREEN);g.box((0,-.4,2.65),(1.4,.05,.12),CYAN);g.object()
-g=Geometry('DoorThreshold');g.box((0,0,.55),(20,6.2,1.1),CURB);g.box((0,-3,1.105),(19.6,.08,.025),EDGE);g.object()
+g=Geometry('DoorThreshold');g.box((0,0,.4),(20,2.4,.8),CURB);g.box((0,-1.08,.805),(19.6,.08,.025),EDGE);g.object()
 g=Geometry('HologramRing');g.ring((0,0,.04),7.18,.085,.07,CYAN);g.object()
 g=Geometry('HologramBand')
 for i in range(64):
@@ -188,24 +223,48 @@ for side in (-1,1):
     angle=math.pi/2 if side<0 else -math.pi/2
     for row in (-80,0,80):
         level={(-1,-80):1,(-1,0):3,(-1,80):5,(1,-80):2,(1,0):4,(1,80):6}[(side,row)]
-        y=-row;place('LevelGate',side*33.1,y,.8,yaw=angle)
-        place('QueueRoom',side*63,y,.4,yaw=angle)
-        place('DoorThreshold',side*34.4,y,yaw=angle)
-        collider('Door Threshold',(side*34.4,y,.55),(6.2,20,1.1))
-        # Collider floor and walls; opening is kept free of collision geometry.
-        collider('Bay Floor',(side*63,y,.76),(55.4,55.4,.8));COLLIDERS[-1]['shape']='Cylinder'
+        y=-row;place('LevelGate',side*GATE_X,y,GATE_BASE,yaw=angle)
+        place('EntryConnector',side*GATE_X,y,yaw=angle)
+        place('QueueRoom',side*63,y,yaw=angle)
+        place('DoorThreshold',side*GATE_X,y,yaw=angle)
+        collider('Door Threshold',(side*GATE_X,y,.4),(2.4,20,.8))
         rot=Matrix.Rotation(angle,3,'Z')
+        connector_mid=rot@Vector((0,5,0))
+        collider('Connector Floor',(side*GATE_X+connector_mid.x,y+connector_mid.y,.4),(13,22.6,.8))
+        collider('Connector Roof',(side*GATE_X+connector_mid.x,y+connector_mid.y,20.2),(13,22.6,.8))
+        for edge in (-1,1):
+            p=rot@Vector((edge*10.85,5.375,0))
+            collider('Connector Cheek',(side*GATE_X+p.x,y+p.y,10.45),(12.25,.9,20.4))
+        # Collider floor and walls; opening is kept free of collision geometry.
+        collider('Bay Floor',(side*63,y,.4),(55.4,55.4,.8));COLLIDERS[-1]['shape']='Cylinder'
+        BAYS.append({'level':level,'position':[side*63,.4,row],'diameter':55.4,
+                     'floorPosition':[side*63,.4,row],'floorSize':[55.4,.8,55.4],'floorTopY':.8,'yaw':angle})
         for i in range(32):
             t=math.radians(-66+312*(i+.5)/32);p=rot@Vector((27.8*math.cos(t),27.8*math.sin(t),11))
-            collider('Bay Wall',(side*63+p.x,y+p.y,11.4),(.6,4.8,21.2),t+angle)
-        collider('Bay Roof',(side*63,y,22.4),(55,55,.5))
+            collider('Bay Wall',(side*63+p.x,y+p.y,11.475),(.65,4.8,21.85),t+angle)
+        collider('Bay Roof',(side*63,y,22.3),(56.3,56.3,.8));COLLIDERS[-1]['shape']='Cylinder'
+        for i in range(8):
+            t=math.radians(246+48*(i+.5)/8);p=rot@Vector((27.8*math.cos(t),27.8*math.sin(t),0))
+            collider('Bay Entry Upper Frieze',(side*63+p.x,y+p.y,21.375),(.65,3.0,2.05),t+angle)
         # Native signs match the exact Blender lintel and separate blade host.
-        SIGNS.append({'level':level,'side':side,'row':row,'gatePosition':[side*33.1,.8,row],'yaw':angle})
-        for dx,dy in [(-11,-9),(11,-9),(-11,10),(11,10)]:
+        SIGNS.append({'level':level,'side':side,'row':row,'gatePosition':[side*GATE_X,GATE_BASE,row],'yaw':angle,
+                      'headerLocalPosition':HEADER_POSITION,'headerLocalSize':HEADER_SIZE,'headerFace':'Back',
+                      'headerFaceCenter':HEADER_FACE_CENTER,'bladeLocalPosition':BLADE_POSITION,
+                      'bladeLocalSize':BLADE_SIZE,'bladeFaceCenters':BLADE_FACE_CENTERS,
+                      'bladeArrows':{'Left':'←','Right':'→'},'renderPlaneProudStuds':.10})
+        for pad_index,(dx,dy) in enumerate([(-11,-9),(11,-9),(-11,10),(11,10)],1):
             point=rot@Vector((dx,dy,0));cx,cy=side*63+point.x,y+point.y
-            place('QueuePad',cx,cy,1.0);place('QueueKiosk',cx-8,cy,1.0,yaw=angle)
-            PADS.append({'level':level,'position':[cx,1.79,-cy],'radius':7.18})
-            collider('Queue Pad',(cx,cy,1.42),(14.8,14.8,.8));COLLIDERS[-1]['shape']='Cylinder'
+            kiosk=rot@Vector((dx+math.copysign(8.5,dx),dy,0))
+            kx,ky=side*63+kiosk.x,y+kiosk.y
+            kiosk_yaw=angle-math.copysign(math.pi/2,dx)
+            place('QueuePad',cx,cy,.8);place('QueueKiosk',kx,ky,.8,yaw=kiosk_yaw)
+            PADS.append({'id':f'R3_Level{level}_Pad{pad_index}','level':level,'position':[cx,1.62,-cy],'radius':7.18,
+                         'bayPosition':[side*63,.4,row],'kioskPosition':[kx,.8,-ky],'kioskYaw':kiosk_yaw,
+                         'controlLocalPosition':[0,3.1,.46],'statusLocalPosition':[0,3.47,.46],
+                         'statusLocalSize':[1.45,1.28,.04],'statusFace':'Back'})
+            collider('Queue Pad',(cx,cy,1.21),(14.8,14.8,.82));COLLIDERS[-1]['shape']='Cylinder'
+            collider('Queue Kiosk',(kx,ky,2.5),(1.6,1.2,3.4),kiosk_yaw)
+        light('Connector Lamp',(side*(GATE_X+3.8),y,18.9),[.28,.78,.73],.8,17)
         for dx,dy in [(-12,-12),(12,-12),(-12,12),(12,12)]:
             v=rot@Vector((dx,dy,0));place('Fluorescent',side*63+v.x,y+v.y,21.4);light('Bay Lamp',(side*63+v.x,y+v.y,20.5),[1,.72,.38],1.35,24)
 
@@ -214,6 +273,11 @@ for i in range(6):
     z=4.5*(i+1)/6;yy=14.5-i
     g.box((0,yy,z/2),(30,2.02 if i==5 else 1.02,z),STEEL);g.box((0,yy+.51,z+.02),(28,.06,.06),AMBER)
 g.box((0,8.5,4.52),(29.8,.06,.08),AMBER);g.object();place('StageDeck',0,-120)
+g=Geometry('StageRearRail')
+for x in (-14,-7,0,7,14):g.box((x,-8.4,6.05),(.16,.18,3.1),STEEL)
+for z in (5.65,7.55):g.box((0,-8.4,z),(28.2,.18,.16),EDGE)
+g.object();place('StageRearRail',0,-120)
+collider('Stage Rear Guard',(0,-128.4,6.05),(28.2,.18,3.1))
 collider('Stage Deck',(0,-120,2.25),(30,17,4.5))
 for i in range(6):z=4.5*(i+1)/6;collider('Stage Step',(0,-120+14.5-i,z/2),(30,2.02 if i==5 else 1.02,z))
 for x in (-10,0,10):light('Stage Fill',(x,-114,17),[1,.57,.23],1.6,22)
@@ -255,8 +319,13 @@ for far in (False,True):
             place(family,pile_x[idx]+(jitter*.15 if stacked else 0),y,base,yaw=rng.uniform(-.55,.55)+(math.pi if far else 0))
             pile_tops[idx]=base+upper[2]
             if tier==0:collider('Furniture Base',(x,y,2.4),(8,5,4))
-    collider('Opaque End Cap',(0,-139 if far else 139,18),(70,2,36))
-g=Geometry('EndBackstop');g.box((0,0,18),(70,1.2,36),CONCRETE);g.object();place('EndBackstop',0,-139);place('EndBackstop',0,139)
+    collider('Opaque End Cap',(0,-139 if far else 139,18.5),(73,2,39))
+g=Geometry('EndBackstop');g.box((0,0,18.5),(73,1.2,39),CONCRETE);g.object();place('EndBackstop',0,-139);place('EndBackstop',0,139)
+g=Geometry('RevisionPlaque');g.box((0,0,0),(6,.14,1.8),STEEL)
+for x in (-2.76,2.76):
+    for z in (-.65,.65):g.box((x,-.09,z),(.11,.06,.11),EDGE)
+g.object();place('RevisionPlaque',-33.72,112,7,yaw=math.pi/2)
+NOTICE={'position':[-33.55,7,-112],'size':[5.5,1.5,.04],'yaw':math.pi/2,'face':'Back','text':'LOBBY REVISION · DEV'}
 
 def atlasify():
     # A deterministic color/wear atlas, created from the authored materials.
@@ -321,16 +390,43 @@ for li in LIGHTS:
     x,z,minusy=li['position'];data=bpy.data.lights.new(li['name'],'POINT');data.energy=420 if 'Bay' in li['name'] else 600;data.color=li['color'];data.shadow_soft_size=1
     data.energy=1450 if 'Warm Wall' in li['name'] else (1200 if 'Stage' in li['name'] else 800)
     o=bpy.data.objects.new(li['name'],data);o.location=(x,-minusy,z);scene.collection.objects.link(o)
+# Native font curves illustrate the exact SurfaceGui face centers in the blend.
+# Their emissive material remains independent from the mesh wear atlas.
+font_open=material('native_font_open',(.63,1,.93),.5)
+font_locked=material('native_font_locked',(.96,.64,.25),.5)
+for mat in (font_open,font_locked):
+    shader=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    shader.inputs['Emission Color'].default_value=mat.diffuse_color
+    shader.inputs['Emission Strength'].default_value=1.8
+def font_label(body,color,cf,width,height):
+    data=bpy.data.curves.new(body,'FONT');data.body=body;data.size=2;data.extrude=.012
+    data.materials.append(color)
+    obj=bpy.data.objects.new(body,data);scene.collection.objects.link(obj)
+    bpy.context.view_layer.update()
+    points=[Vector(p) for p in obj.bound_box]
+    lo=Vector(tuple(min(p[i] for p in points) for i in range(3)))
+    hi=Vector(tuple(max(p[i] for p in points) for i in range(3)))
+    factor=min(width/max(.01,hi.x-lo.x),height/max(.01,hi.y-lo.y))
+    # Center actual glyph bounds, including arrows, on the host's visible face.
+    center=Vector(((lo.x+hi.x)*.5,(lo.y+hi.y)*.5,hi.z))*factor
+    obj.matrix_world=cf@Matrix.Translation(-center)@Matrix.Scale(factor,4)
+    return obj
+header_orientation=Matrix(((1,0,0,0),(0,0,-1,0),(0,1,0,0),(0,0,0,1)))
 for s in SIGNS:
-    side,row=s['side'],s['row'];data=bpy.data.curves.new('LEVEL '+str(s['level']),'FONT');data.body='LEVEL '+str(s['level']);data.size=2.65;data.align_x='CENTER';data.extrude=.015
-    o=bpy.data.objects.new(data.body,data);scene.collection.objects.link(o);o.location=(side*31.72,-row,20.05);o.rotation_euler=(math.pi/2,0,math.pi/2 if side<0 else -math.pi/2);o.data.materials.append(CYAN if s['level']<=3 else AMBER)
-    gate=Matrix.Translation(Vector((side*33.1,-row,.8)))@Matrix.Rotation(s['yaw'],4,'Z')
-    for face in (-1,1):
-        font=bpy.data.curves.new('Projecting LEVEL '+str(s['level']),'FONT');font.body=('LEVEL '+str(s['level'])+' →') if face>0 else ('← LEVEL '+str(s['level']))
-        font.size=1.12;font.align_x='CENTER';font.extrude=.008;font.materials.append(CYAN if s['level']<=3 else AMBER)
-        sign=bpy.data.objects.new(font.body,font);scene.collection.objects.link(sign)
+    side,row=s['side'],s['row']
+    gate=Matrix.Translation(Vector((side*GATE_X,-row,GATE_BASE)))@Matrix.Rotation(s['yaw'],4,'Z')
+    color=font_open
+    h=s['headerFaceCenter'];point=Vector((h[0],-h[2],h[1]))
+    font_label('LEVEL '+str(s['level']),color,gate@Matrix.Translation(point)@header_orientation,21.3,2.30)
+    for face,name in ((-1,'Left'),(1,'Right')):
+        # Local -X face shows a left arrow; +X face a right arrow. Both arrows
+        # point to local -Z Roblox / +Y Blender, towards this gate's doorway.
+        f=s['bladeFaceCenters'][name];point=Vector((f[0],-f[2],f[1]))
         orientation=Matrix(((0,0,face,0),(face,0,0,0),(0,1,0,0),(0,0,0,1)))
-        sign.matrix_world=gate@Matrix.Translation(Vector((-11+face*.385,-9.1,17.75)))@orientation
+        body=('LEVEL '+str(s['level'])+' →') if face>0 else ('← LEVEL '+str(s['level']))
+        font_label(body,color,gate@Matrix.Translation(point)@orientation,8.60,2.08)
+notice_point=Vector((NOTICE['position'][0],-NOTICE['position'][2],NOTICE['position'][1]))
+font_label(NOTICE['text'],font_open,Matrix.Translation(notice_point)@Matrix.Rotation(NOTICE['yaw'],4,'Z')@header_orientation,5.2,1.05)
 world=bpy.data.worlds.new('Enclosed night preview');world.use_nodes=True;scene.world=world
 bg=next(n for n in world.node_tree.nodes if n.type=='BACKGROUND');bg.inputs['Color'].default_value=(.025,.028,.03,1);bg.inputs['Strength'].default_value=.08
 camdata=bpy.data.cameras.new('Full tunnel camera');cam=bpy.data.objects.new('Full tunnel camera',camdata);scene.collection.objects.link(cam)
@@ -339,26 +435,45 @@ scene.render.resolution_x=1400;scene.render.resolution_y=820;scene.render.resolu
 try:scene.render.engine='CYCLES';scene.cycles.samples=24
 except TypeError:pass
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'LobbyReimaginedPreview.blend'),compress=True)
-manifest={'schema':'lobby-reimagined-blender-v1','placeId':131311258779917,'groupId':1039373905,'previewCenter':[220,30,-760],'axisMapping':'X,Z,-Y','studsPerUnit':1,
+manifest={'schema':'lobby-reimagined-blender-v1','revision':3,'placeId':131311258779917,'groupId':1039373905,'previewCenter':[220,30,-760],'axisMapping':'X,Z,-Y','studsPerUnit':1,
     'sourceBlendSha256':hashlib.sha256((OUT/'LobbyReimaginedPreview.blend').read_bytes()).hexdigest(),'atlas':{'width':1024,'height':1024,'file':'atlas.rgba.b64','bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()},
-    'chunks':chunks,'prefabs':[c['family'] for c in chunks],'placements':PLACEMENTS,'colliders':COLLIDERS,'signs':SIGNS,'lights':LIGHTS,'pads':PADS,
+    'chunks':chunks,'prefabs':[c['family'] for c in chunks],'placements':PLACEMENTS,'colliders':COLLIDERS,'signs':SIGNS,'lights':LIGHTS,'pads':PADS,'bays':BAYS,'notice':NOTICE,
     'uniqueTriangles':sum(c['triangles'] for c in chunks),'instantiatedTriangles':sum(next(c['triangles'] for c in chunks if c['family']==p['family']) for p in PLACEMENTS),'materialCount':len(mats),
-    'vinylDiscCount':len(disc_anchors),'runtimeNotes':'Isolated dev preview; no actual level launches or live queue edits. E demo controls visual queue cylinder.'}
+    'vinylDiscCount':len(disc_anchors),'runtimeNotes':'Revised independent dev lobby; root Studio integration owns live server queues and level launches.',
+    'geometryContract':{'sidewalkInnerX':16.2,'roadEdgeX':16.5,'sidewalkOuterX':33.8,'wallInnerX':33.8,
+       'portalHalfWidth':PORTAL_HALF_WIDTH,'portalCutZ':PORTAL_CUT_Z,'entryGateX':GATE_X,
+       'connectorFloorTopY':.8,'connectorRoofBottomY':19.8,'connectorRoofTopY':20.6,
+       'connectorCheekFrontLocalY':-.75,'connectorCheekBackLocalY':11.5,
+       'bayEntryFriezeBottomY':20.35,'headerGlobalCenterY':18.0,'bladeGlobalCenterY':17.8,
+       'doorClearWidth':19.9,'doorClearHeight':15.6,'signFacesProudStuds':.10,
+       'physicalMountAboveGlyphs':True,'ribRowsAvoidEntry':True,'endCapTopY':38,
+       'shopSuggestedScale':.90,'shopSuggestedRowCenter':-40}}
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 export_scene=bpy.data.scenes.new('Roblox FBX | Opaque Color Atlas')
 export_mat=bpy.data.materials.new('LRP_FBX_Atlas');export_mat.use_nodes=True
 shader=next(n for n in export_mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED');node=export_mat.node_tree.nodes.new('ShaderNodeTexImage');node.image=bpy.data.images['Lobby Preview | Color Wear Atlas'];export_mat.node_tree.links.new(node.outputs['Color'],shader.inputs['Base Color'])
-export_data={}
+uv_node=export_mat.node_tree.nodes.new('ShaderNodeUVMap');uv_node.uv_map='AtlasUV';export_mat.node_tree.links.new(uv_node.outputs['UV'],node.inputs['Vector'])
 for src in scene.objects:
     if src.type!='MESH':continue
-    if src.data.name not in export_data:
-        mesh=src.data.copy();mesh.materials.clear();mesh.materials.append(export_mat)
-        for polygon in mesh.polygons:polygon.material_index=0
-        export_data[src.data.name]=mesh
-    o=bpy.data.objects.new(src.name,export_data[src.data.name]);o.matrix_world=src.matrix_world;export_scene.collection.objects.link(o)
+    mesh=src.data.copy()
+    for uv in list(mesh.uv_layers):
+        if uv.name!='AtlasUV':mesh.uv_layers.remove(uv)
+    mesh.uv_layers.active_index=0;mesh.uv_layers[0].active_render=True
+    mesh.materials.clear();mesh.materials.append(export_mat)
+    for polygon in mesh.polygons:polygon.material_index=0
+    o=bpy.data.objects.new(src.name,mesh);o.matrix_world=src.matrix_world;export_scene.collection.objects.link(o)
 bpy.context.window.scene=export_scene
 for o in export_scene.objects:o.select_set(True)
+bpy.context.view_layer.objects.active=next(iter(export_scene.objects))
 bpy.ops.export_scene.fbx(filepath=str(OUT/'LobbyReimaginedPreview.fbx'),use_selection=True,object_types={'MESH'},axis_forward='-Z',axis_up='Y',global_scale=1,apply_unit_scale=True,bake_anim=False,use_mesh_modifiers=True,path_mode='COPY',embed_textures=True,add_leaf_bones=False)
 bpy.context.window.scene=scene
-scene.render.filepath=str(OUT/'blender-tunnel-preview.png');bpy.ops.render.render(write_still=True)
+if '--skip-renders' not in sys.argv:
+    scene.render.filepath=str(OUT/'blender-tunnel-preview.png');bpy.ops.render.render(write_still=True)
+    for name,position,target,lens in (
+    ('blender-gate3-approach-north.png',(-13,30,5.8),(-25,-1,14),28),
+    ('blender-gate3-approach-south.png',(-13,-35,5.8),(-25,-3,14),28),
+    ('blender-gate3-connector.png',(-24,0,5.8),(-55,0,13),24),
+    ):
+        cam.location=position;cam.rotation_euler=(Vector(target)-Vector(position)).to_track_quat('-Z','Y').to_euler();camdata.lens=lens
+        scene.render.filepath=str(OUT/name);bpy.ops.render.render(write_still=True)
 print('LOBBY_PREVIEW_BUILT',json.dumps({k:v for k,v in manifest.items() if k not in ('chunks','placements','colliders','signs','lights','pads')}),flush=True)

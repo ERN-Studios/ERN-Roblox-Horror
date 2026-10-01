@@ -1,0 +1,24 @@
+{
+  "candidates": [
+    {
+      "bytes": 163079,
+      "executed": false,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.GameManager.Script.luau",
+      "syntax": "passed"
+    },
+    {
+      "bytes": 24220,
+      "executed": false,
+      "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.LobbyShopDisplay.ModuleScript.luau",
+      "syntax": "passed"
+    },
+    {
+      "bytes": 3598,
+      "executed": false,
+      "file": "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+      "syntax": "passed"
+    }
+  ],
+  "limitations": "Syntax only; no Roblox API/runtime/gameplay check.",
+  "passed": true
+}

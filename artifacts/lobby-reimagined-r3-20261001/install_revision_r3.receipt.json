@@ -1,0 +1,156 @@
+{
+  "sha256": "125cf3f445c14a9c1a8b9f63e3d5e66c4021a1f79e67fc6c64a3adac8a452d07",
+  "manifestSha256": "d242eed49d5cab337067ffd6dd3c84207a05a094bd2784dd5a7188dc068a760e",
+  "sources": [
+    {
+      "key": "runtime-bake",
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "bytes": 8506,
+      "sha256": "f6a98570f3acadb011b0313b2a36d3da04eb67d0dec4b70d665ec330e73eaa4a"
+    },
+    {
+      "key": "builder",
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "bytes": 11114,
+      "sha256": "1b2f45d140545009a82cca7f5f9400453d3860cd1bc0aa2e4fb39ef96ec97338"
+    },
+    {
+      "key": "bootstrap",
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "bytes": 1217,
+      "sha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee"
+    },
+    {
+      "key": "queue-client",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "bytes": 4105,
+      "sha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7"
+    },
+    {
+      "key": "queue-bridge",
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "bytes": 3598,
+      "sha256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa"
+    },
+    {
+      "key": "game-manager",
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "bytes": 163203,
+      "sha256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d"
+    },
+    {
+      "key": "shop-focus",
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "bytes": 24220,
+      "sha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7"
+    },
+    {
+      "key": "level4-preview",
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "class": "Script",
+      "bytes": 13652,
+      "sha256": "d925ee4c0c10c75300f9649251d21486af3b78b14cce594759747ec681973a1a"
+    },
+    {
+      "key": "level5-preview",
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "bytes": 10544,
+      "sha256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d"
+    },
+    {
+      "key": "level6-preview",
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "bytes": 10609,
+      "sha256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548"
+    }
+  ],
+  "expected": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 8504,
+      "sourceSha256": "55c9d77186978a40abab0f32a1b570f70bdcd2adcbba55af2e8bc9c2750a1290",
+      "editorMatch": true,
+      "owned": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 9162,
+      "sourceSha256": "8d808c569101432309f954d5a0f33f48ba4e1b115831b4877e064ca56c0be921",
+      "editorMatch": true,
+      "owned": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "sourceBytes": 1217,
+      "sourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorMatch": true,
+      "owned": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "sourceBytes": 4119,
+      "sourceSha256": "ea8152bbde903fe9d7c741492c6612982ce7b5976a9cea31b601839994815818",
+      "editorMatch": true,
+      "owned": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "isNew": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sourceBytes": 159281,
+      "sourceSha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a",
+      "editorMatch": true,
+      "owned": false
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "sourceBytes": 22843,
+      "sourceSha256": "284a9c6bee23b1574533f910d4cb064c4244d08ddb2931aa243d04d13eac08f0",
+      "editorMatch": true,
+      "owned": false
+    },
+    {
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 11150,
+      "sourceSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "editorMatch": true,
+      "owned": false
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 8042,
+      "sourceSha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504",
+      "editorMatch": true,
+      "owned": false
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 8135,
+      "sourceSha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "editorMatch": true,
+      "owned": false
+    }
+  ],
+  "scope": "Additive R3 payload + new owned QueueBridge; nine pinned Source/editor comparisons; original Source changes replay exactly five scoped replacement sets."
+}

@@ -1,0 +1,43 @@
+{
+  "beforeSha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+  "afterSha256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548",
+  "replacements": [
+    {
+      "label": "Additional-host ownership helper and bounded in-flight visual state",
+      "old": "local function playerReady(player)",
+      "new": "-- R3 additional hosts retain this controller's existing access/stream/launch path.\nlocal function r3Bridge()\n local folder = script.Parent:FindFirstChild(\"LobbyReimaginedPreview\")\n local module = folder and folder:FindFirstChild(\"QueueBridge\")\n return module and module:IsA(\"ModuleScript\") and require(module) or nil\nend\nlocal function isR3Entry(door)\n local bridge = r3Bridge()\n return bridge and bridge.IsPreviewEntry(door, 6) or false\nend\nlocal r3Inflight = setmetatable({}, {__mode = \"k\"})\nlocal function beginR3Entry(door)\n if not isR3Entry(door) then return nil end\n local ref = door:FindFirstChild(\"QueueRenderOwner\")\n local owner = ref and ref:IsA(\"ObjectValue\") and ref.Value\n if not owner or not owner:IsA(\"Model\") or not owner:IsDescendantOf(door:FindFirstAncestor(\"LobbyReimaginedPreview\")) then return nil end\n r3Inflight[owner] = (r3Inflight[owner] or 0) + 1\n owner:SetAttribute(\"QueueActive\", true)\n return owner\nend\nlocal function finishR3Entry(owner)\n if not owner then return end\n local count = math.max(0, (r3Inflight[owner] or 1) - 1)\n r3Inflight[owner] = count > 0 and count or nil\n if owner.Parent then owner:SetAttribute(\"QueueActive\", count > 0) end\nend\n\nlocal function playerReady(player)"
+    },
+    {
+      "label": "Resolve actual prompt host and validate owned/original",
+      "old": "\tlocal character, root = playerReady(player)\n\tlocal door = lobbyPart(\"Level6SealedDoor\")\n\tif not character or not door or prompt.Parent ~= door or (root.Position - door.Position).Magnitude > 14 then return end",
+      "new": "\tlocal character, root = playerReady(player)\n\tlocal door = prompt.Parent\n\tif not character or not door or not door:IsA(\"BasePart\")\n  or not (door == lobbyPart(\"Level6SealedDoor\") or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end"
+    },
+    {
+      "label": "Revalidate exact owned/original after streaming handshake",
+      "old": "or lobbyPart(\"Level6SealedDoor\") ~= door or prompt.Parent ~= door",
+      "new": "or not (door == lobbyPart(\"Level6SealedDoor\") or isR3Entry(door)) or prompt.Parent ~= door"
+    },
+    {
+      "label": "Activate only validated DEV preview entry",
+      "old": "\tnextUse[player] = math.huge\n\tlocal previous = character:GetPivot()",
+      "new": "\tnextUse[player] = math.huge\n local r3Owner = beginR3Entry(door)\n\tlocal previous = character:GetPivot()"
+    },
+    {
+      "label": "Clear in-flight contribution before returning from entry",
+      "old": "\t\t\terror(\"Preview join rejected: \" .. tostring(reason))\n\t\tend\n\tend)\n\trelease(player)\n\tif not ok then warn(\"[Level6PreviewAccess] \" .. tostring(err)) end",
+      "new": "\t\t\terror(\"Preview join rejected: \" .. tostring(reason))\n\t\tend\n\tend)\n finishR3Entry(r3Owner)\n\trelease(player)\n\tif not ok then warn(\"[Level6PreviewAccess] \" .. tostring(err)) end"
+    },
+    {
+      "label": "Bind same existing server callback to additional owned hosts",
+      "old": "\tif door and door:IsA(\"BasePart\") then ensurePrompt(door, ENTER, \"ENTER PARTY BACKROOMS\", onEnter) end",
+      "new": "\tif door and door:IsA(\"BasePart\") then ensurePrompt(door, ENTER, \"ENTER PARTY BACKROOMS\", onEnter) end\n local bridge = r3Bridge()\n local model = workspace:FindFirstChild(\"LobbyReimaginedPreview\")\n if bridge then\n  for _, host in ipairs(bridge.GetPreviewEntries(model, 6)) do\n   ensurePrompt(host, ENTER, \"ENTER PARTY BACKROOMS\", onEnter)\n  end\n end"
+    },
+    {
+      "label": "Owned-model ready/restoration observers",
+      "old": "",
+      "new": "\n-- Observe ready publication/restoration; the original lobby watcher is unchanged.\nlocal r3Watched = setmetatable({}, {__mode = \"k\"})\nlocal function watchR3Lobby(model)\n if not model or not model:IsA(\"Model\") or model.Name ~= \"LobbyReimaginedPreview\" or r3Watched[model] then return end\n r3Watched[model] = true\n local ready = model:GetAttributeChangedSignal(\"Ready\"):Connect(hookDoor)\n local ancestry = model.AncestryChanged:Connect(function() if model.Parent == workspace then task.defer(hookDoor) end end)\n local descendants = model.DescendantAdded:Connect(function(part)\n  if part:GetAttribute(\"R3DeveloperPreviewEntry\") == 6 then task.defer(hookDoor) end\n end)\n model.Destroying:Once(function() ready:Disconnect(); ancestry:Disconnect(); descendants:Disconnect() end)\n task.defer(hookDoor)\nend\nworkspace.ChildAdded:Connect(watchR3Lobby)\nwatchR3Lobby(workspace:FindFirstChild(\"LobbyReimaginedPreview\"))\n",
+      "at": "EOF"
+    }
+  ],
+  "scope": "Additional owned DEV hosts only; original eligibility, destination/runtime, transport, return spawn, cooldown and preview behavior preserved."
+}

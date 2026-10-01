@@ -1,0 +1,39 @@
+{
+  "schema": "lobby-r3-active-level4-v4-independent-review-v1",
+  "observedAtUTC": "2026-10-01T15:01:07.859487+00:00",
+  "baseline": {
+    "file": "artifacts/lobby-reimagined-r3-20261001/interaction-baseline/ServerScriptService.Level4V4PreviewAccess.Script.luau",
+    "bytes": 8127,
+    "sha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+    "authority": "Root reports fresh authoritative Edit Source/editor equality and Enabledtrue for active Level4V4PreviewAccess; baseline8127B46987ec2\u2026"
+  },
+  "candidate": {
+    "file": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/ServerScriptService.Level4V4PreviewAccess.Script.luau",
+    "bytes": 10629,
+    "sha256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8"
+  },
+  "exactReplay": {
+    "passed": true,
+    "uniqueSpans": 6,
+    "EOFAppends": 1,
+    "spec": "artifacts/lobby-reimagined-r3-20261001/shared-candidates/Level4V4PreviewAccess.entry-replacements.json"
+  },
+  "verdict": "PASS for reviewed local candidate; fresh live CAS required before apply",
+  "preserved": {
+    "enabledPolicy": "ActiveV4 remains enabled; dormant older Level4PreviewAccess stays disabled and restored to originalSource byroot",
+    "access": "DevAccess.IsAllowed, livingunanchoredavatar/noSeat/deadguard, InRound/reserved exclusions unchanged",
+    "destination": "Level4CinemaBlender model; PreviewOnly/Level4Preview/Ready/LayoutVersion4; Level4V4Exit exact descendant",
+    "reachAndCooldown": "Original14stud entryreach,12stud returnreach,2second cooldown retained",
+    "stream": "RequestStreamAroundAsync8seconds; recheck avatar/model/exit/hostreach/returnprompt/floor afteryield",
+    "return": "Original ServerLobby.LobbySpawn return unchanged"
+  },
+  "addedScope": [
+    "Original callback additionally accepts only ownedReadyrevision3 Level4 entry hosts, checked again afterstream",
+    "PerQueueRenderOwner inflight referencecount activates andclearscosmetichologram",
+    "Ready/restoration/descendant observers connect only LobbyReimaginedPreview; disconnect when destroyed"
+  ],
+  "limitations": [
+    "No child Studio/APIwrites, no implementation edits, staging or commit",
+    "Local code review does not certify actualE entry, clientstreaming or return; root Play checks pending"
+  ]
+}
