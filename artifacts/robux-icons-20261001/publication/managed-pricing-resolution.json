@@ -1,0 +1,254 @@
+{
+  "schema": "robux-managed-pricing-resolution/1",
+  "observedAt": "2026-10-01T09:24:31.894Z",
+  "universeId": 10559217407,
+  "creatorGroupId": 1039373905,
+  "account": "LaverSneglen",
+  "dashboardUrl": "https://create.roblox.com/dashboard/creations/experiences/10559217407/monetization/managed-pricing",
+  "clearedByPublishedPlaceVersion": 2453,
+  "initialEnabled": 12,
+  "newlyEnabled": 13,
+  "finalEnabled": 25,
+  "finalDisabled": 0,
+  "gamePassCount": 13,
+  "developerProductCount": 12,
+  "eligibleCount": 25,
+  "persistedAfterReload": true,
+  "coverageText": "Item coverage 25/25 items 100% optimized",
+  "exactCatalogIdsUnchanged": true,
+  "exactNamesUnchanged": true,
+  "all25CurrentPricesMatchRecordedConfiguredBaseline": true,
+  "basePriceFieldsEdited": false,
+  "robuxSpent": 0,
+  "accessSettingsEdited": false,
+  "termsAcceptanceDialogEncountered": false,
+  "historicalPendingReceiptPreserved": true,
+  "pendingResolution": "All25 eligible purchases are enabled and persisted after reload; prior pending13 resolved after authoritative cloud publication verification.",
+  "items": [
+    {
+      "id": 1994252411,
+      "kind": "Pass",
+      "name": "Token Earner Upgrade 2x to 5x",
+      "price": 250,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994252411/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1995812369,
+      "kind": "Pass",
+      "name": "Token Earner Upgrade 3x to 5x",
+      "price": 100,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995812369/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1994282418,
+      "kind": "Pass",
+      "name": "Token Earner Upgrade 2x to 3x",
+      "price": 150,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994282418/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1994654411,
+      "kind": "Pass",
+      "name": "Token Earner 5x",
+      "price": 399,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994654411/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1995716395,
+      "kind": "Pass",
+      "name": "Token Earner 3x",
+      "price": 299,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995716395/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1995218405,
+      "kind": "Pass",
+      "name": "Token Earner 2x",
+      "price": 149,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995218405/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1994816385,
+      "kind": "Pass",
+      "name": "False Sun",
+      "price": 149,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994816385/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1994666374,
+      "kind": "Pass",
+      "name": "Static Wraith",
+      "price": 99,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994666374/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1982715834,
+      "kind": "Pass",
+      "name": "Zyntra Entity Detector",
+      "price": 149,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1982715834/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1978617781,
+      "kind": "Pass",
+      "name": "ZYNTRA Support — 20K",
+      "price": 20000,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1978617781/sales",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 1946086261,
+      "kind": "Pass",
+      "name": "Glowstick Customizer",
+      "price": 99,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1946086261/sales",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 1945402536,
+      "kind": "Pass",
+      "name": "Advanced Equipment",
+      "price": 149,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1945402536/sales",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 1941938256,
+      "kind": "Pass",
+      "name": "Zyntra Supporter",
+      "price": 99,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/passes/1941938256/sales",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3713829859,
+      "kind": "Dev Product",
+      "name": "Zyntra Expedition Pack",
+      "price": 69,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713829859/configure",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 3713115125,
+      "kind": "Dev Product",
+      "name": "Donate — 10,000 Robux",
+      "price": 10000,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713115125/configure",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 3713115025,
+      "kind": "Dev Product",
+      "name": "Donate — 5,000 Robux",
+      "price": 5000,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713115025/configure",
+      "initialManagedPricing": "Disabled"
+    },
+    {
+      "id": 3710117136,
+      "kind": "Dev Product",
+      "name": "Donate Director",
+      "price": 1000,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117136/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3710117099,
+      "kind": "Dev Product",
+      "name": "Donate Command",
+      "price": 500,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117099/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3710117070,
+      "kind": "Dev Product",
+      "name": "Donate Research",
+      "price": 250,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117070/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3710117017,
+      "kind": "Dev Product",
+      "name": "Donate Field",
+      "price": 100,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117017/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3710116945,
+      "kind": "Dev Product",
+      "name": "Donate Supply",
+      "price": 50,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710116945/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3710116814,
+      "kind": "Dev Product",
+      "name": "Donate Signal",
+      "price": 10,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710116814/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3707755318,
+      "kind": "Dev Product",
+      "name": "Emergency Re-entry",
+      "price": 29,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755318/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3707755233,
+      "kind": "Dev Product",
+      "name": "20 Research Tokens",
+      "price": 149,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755233/configure",
+      "initialManagedPricing": "Enabled"
+    },
+    {
+      "id": 3707755089,
+      "kind": "Dev Product",
+      "name": "4 Research Tokens",
+      "price": 49,
+      "managedPricing": "Enabled",
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755089/configure",
+      "initialManagedPricing": "Enabled"
+    }
+  ]
+}
