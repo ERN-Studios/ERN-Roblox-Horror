@@ -343,9 +343,26 @@ local function applyPlayerLighting()
  local selectedLevel = workspace:GetAttribute("SelectedLevel")
  local levelTwoWorld = workspace:FindFirstChild("Level 2 Generated World")
  local levelThreeWorld = workspace:FindFirstChild("Level 3 Generated World")
+ local levelSixWorld = workspace:FindFirstChild("Level 6 Generated World")
  local isLevelTwo = levelTwoWorld ~= nil and (selectedLevel == 2 or inMaze)
  local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
+ if player:GetAttribute("Level4LightingOwned") == true then
+  -- the Level 4 cinema preview grades itself (Level 4 Lighting Controller); stand down while it owns it
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
 
+ if levelSixWorld ~= nil and workspace:GetAttribute("Level6SelectedLevel") == 6
+  and player:GetAttribute("Level6InRound") == true
+  and workspace:GetAttribute("Level6LightingOwnedByController") == true then
+  -- Level 6 runs as a separate preview round, so InRound remains false. Let
+  -- its own client controller keep the mall at night instead of restoring the
+  -- lobby's 14:00 daylight every half-second.
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
  if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
   -- The dedicated mall controller owns and restores this grade. Never let the
   -- Level 1 darkness reassert itself over Level 3.

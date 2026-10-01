@@ -496,3 +496,18 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
 - Publishing from a session: Studio has no scriptable publish and synthetic clicks on File > Publish did
   nothing; Codex computer use (`codex exec --enable computer_use`) published it. The public asset
   `Updated` timestamp does not move on publish — trust Studio's "Published" toast.
+
+### Added 2026-10-01 - Level 4 facelift v2 + LightingStyle Realistic
+
+- **The place runs LightingStyle Realistic** (was Soft) since the Level 4 facelift: owner decision after a
+  Studio comparison (artifacts/level4-facelift-20260930/lighting/). Levels 1-3 were checked in real rounds:
+  L2/L3 look the same, Level 1 is darker and more contrasty (real light falloff), not broken.
+- **`Workspace."Level 4 Cinema Blender"` is now the facelift build** (Synthwave Grid 80s-90s cinema lost in
+  the Backrooms): PBR SurfaceAppearances, Meshy props, split double doors, ~300 local lights with flicker and
+  dead stretches. Pipeline: tools/level4_blender/README.md "Facelift v2". The Blender master is
+  G:\Blender\Level4_Cinema\Level4_Cinema.blend (v1 kept as Level4_Cinema_v1.blend).
+- **`StarterPlayerScripts."Level 4 Lighting Controller"`** grades the interior while the local character is
+  inside the model's BoundsCenter/BoundsSize and sets the client attribute `Level4LightingOwned`;
+  **RoundUI's applyPlayerLighting returns early on it** (no new top-level local; RoundUI is at the 200-register
+  limit).
+- Normal maps DO work on EditableMesh-uploaded meshes (tested 2026-09-30 against an imported mesh).

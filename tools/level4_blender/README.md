@@ -49,3 +49,33 @@ east of the original, at (29000, 0, 0).
   * `PushDoors` opens a door away from whoever walks into it, and closes it once its swing arc is empty.
   * Doors without floor on both sides (the two street doors) are welded shut. `PushDoor` shows which is
     which.
+
+## Facelift v2 (2026-10-01): "Synthwave Grid" 80s-90s cinema lost in the Backrooms
+
+The owner asked for a film-still facelift: same floor plan, new architecture, PBR, much better doors, toilets
+and arcade machines, and collision on everything solid. The owner picked moodboard F "Synthwave Grid"
+(`artifacts/level4-facelift-20260930/moodboard/`), wants lights blinking here and there and half-dark places,
+and approved LightingStyle Realistic for the place.
+
+Build (headless; every step is idempotent and is skipped if its file is missing):
+```
+blender -b G:/Blender/Level4_Cinema/Level4_Cinema.blend -P build_all.py -- <out.blend>   # L4_BUILD_KEEP_GOING=1 to carry on past a failing step
+blender -b <out.blend> -P export_l4.py                                                     # -> G:\Roblox\_local\l4blender\export
+python make_place.py --tex-requests      # upload the listed maps with Studio MCP upload_image, then:
+python make_place.py --tex-merge <answers.json> ...
+python serve.py 8765  +  upload.luau (Studio)  ->  results.jsonl ;  python make_place.py ;  place.luau (Studio)
+```
+Pieces (each owns one collection; see the header of each file):
+- `slots.py`: every PBR material slot + the export conventions (colliders, seats, tags, fixture lights).
+- `make_pbr.py` / `make_pbr_all.py` / `pbr_spec.json`: albedo/normal/rough/metal sets from the Codex texture art.
+- `import_meshy.py` + `meshy_specs.json`: the 9 Meshy props (arcade x4, toilet, urinal, popcorn, soda, projector).
+- `arch_detail.py` (A): acoustic-panel facades with real magenta/cyan neon, coves, columns, mouldings, casings,
+  nosings, handrails, bevels. `ceilings.py` (B): coffers, ACT + troffers, decks, bulkheads, fixtures + lights.
+- `doors_v2.py` (C): every opening >= 9 studs is a mirrored pair of hinged leaves; leaf colliders ride on the leaves.
+- `props_lobby.py` (D1): seats (Level4V4Seat), tables, cafe Seats, banquettes, stanchions, lightboxes, marquees,
+  sconces, screens, projectors. `props_rooms.py` (D2): restrooms, concession, arcade, service.
+- `props_decay.py` (F, written by Codex): decals, puddles, peeling sheets, cobwebs, rubbish, wear lanes.
+- `Level4LightingController.client.lua` (installed in StarterPlayerScripts as "Level 4 Lighting Controller"):
+  the interior grade while inside the model's BoundsCenter/BoundsSize; RoundUI stands down on the client
+  attribute `Level4LightingOwned`.
+Design plan and research: G:\Roblox\_local\l4facelift\r7.md (Roblox PBR/lighting/collision) and r8.md (element plan).

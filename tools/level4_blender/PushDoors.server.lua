@@ -2,6 +2,7 @@
 -- Every Model in this folder with a "Hinge" and a "Leaf" is one door. A door that has floor on both
 -- sides (a room behind it) swings AWAY from whoever walks into it and eases shut once its swing area
 -- is empty. A door with no floor behind it (the street doors) stays shut and does not move.
+-- A split double door is two such Models (one Hinge + Leaf each); each half swings away from its pusher.
 local Players = game:GetService("Players")
 
 local doorsFolder = script.Parent
@@ -82,7 +83,7 @@ local function swing(d, open, side)
 end
 
 while model:IsDescendantOf(workspace) do
-	local now = os.clock()
+	local now = time()        -- game time; os.clock() is CPU time and runs ~4x slow on a Studio server
 	for _, d in doors do
 		local side, near = pusher(d)
 		if side or (near and d.open) then
