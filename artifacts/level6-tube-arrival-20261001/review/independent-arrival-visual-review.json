@@ -1,0 +1,38 @@
+{
+  "scope": "Independent read-only review of root-saved actual Play images and exact source candidates. Reviewer did not control Studio or mutate UI.",
+  "images": [
+    {
+      "file": "artifacts/level6-tube-arrival-20261001/screenshots/before-player.jpg",
+      "sha256": "2caa0938129c8fff43e366705bee247858fd969a150b4aa0c2540deec257231e",
+      "visuallyViewedByReviewer": true
+    },
+    {
+      "file": "artifacts/level6-tube-arrival-20261001/screenshots/after-spawn-player.jpg",
+      "sha256": "26f7ae39835fe5cd3f23144243f3ae8323e94208bdcbb3e3d6ffb4df69bb973b",
+      "visuallyViewedByReviewer": true
+    },
+    {
+      "file": "artifacts/level6-tube-arrival-20261001/screenshots/after-forward-player.jpg",
+      "sha256": "7ed336f4b42eb1da8d0cda2c94b108f8fab13fd07e0bbfcac94f4ca1b6900e84",
+      "visuallyViewedByReviewer": true
+    },
+    {
+      "file": "artifacts/level6-tube-arrival-20261001/screenshots/after-tube-room-player.jpg",
+      "sha256": "245add299f55594bfbc9b100ca45e864c1a6affd4b871d651990afb3681b348c",
+      "visuallyViewedByReviewer": true
+    }
+  ],
+  "visualAssessment": "New upright spawn frames the round outlet toward the tall orange room; forward route appears open; look-back tube and NO EXIT header render; no visible ceiling clipping in these views. Aperture seal surround is flatter orange than the textured imported wall, consistent with copied primitive seals. This is a minor material transition, not a visible open seam.",
+  "rootReportedActualPlay": {
+    "cameraFacing": "Positive X persisted 4 seconds after entry; default player movement remained available",
+    "walkthrough": "Normal W walk out of mouth into Arrival and through the opposite corridor, health100/Running/PlatformStand=false",
+    "floorProbe": "Actual spawn floor ray hit owned lower fiberglass shell atY24.1557 with normalY.98765; runout remains beneath. Analytic runout plane is not the highest actual support surface.",
+    "sideEdgeWalk": "Normal sustained walk at offsets +7.5,+6.5,-6.5 stayed grounded and blocked safely; no observed outside fall"
+  },
+  "limitations": [
+    "Before/after are actual old and new arrival views; spawn/camera locations intentionally differ, so this is not a matched lighting-only comparison.",
+    "Root gameplay observations are explicitly attributed; reviewer independently inspected images/source, not own live keyboard gameplay.",
+    "Return/re-entry/other-seed acceptance remains root-owned until its saved receipts are available.",
+    "Claude initial and exact-excerpt processes timed out; focused invocation returned visible final review but process termination still timed out. No complete code-diff Claude approval claimed."
+  ]
+}

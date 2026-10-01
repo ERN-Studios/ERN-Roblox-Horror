@@ -1,0 +1,11 @@
+--- ServerScriptService.Level6PreviewAccess BEFORE
++++ ServerScriptService.Level6PreviewAccess AFTER
+@@ -148,6 +148,8 @@
+ 			character:PivotTo(previous)
+ 			error("Preview join rejected: " .. tostring(reason))
+ 		end
++		-- Orient once only after an authorized, successful Level 6 arrival.
++		transport:FireClient(player, "ArrivalFacing", upright(exit.CFrame), MODEL_NAME)
+ 	end)
+  finishR3Entry(r3Owner)
+ 	release(player)

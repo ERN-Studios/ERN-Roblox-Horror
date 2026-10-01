@@ -1,0 +1,15 @@
+{
+  "scope": "Analytic reference geometry only, not actual Play proof",
+  "last6Alpha": 0.015,
+  "curveRise": 0.025875,
+  "firstSegmentAxisXY": [
+    -0.9999596429460988,
+    0.008984012417093856
+  ],
+  "firstRunoutTopRelativeX": -6,
+  "firstRunoutTopAboveRoomFloor": 0.1035833805387313,
+  "firstRunoutUpNormalY": 0.9999596429460988,
+  "recommendedSpawnMarkerAboveRoomFloor": 0.3535833805387313,
+  "previewRootAboveRoomFloor": 3.853583380538731,
+  "curveBottomAboveRoomFloor": 0.07587499999999991
+}

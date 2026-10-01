@@ -1,0 +1,58 @@
+{
+  "schema": "level6-tube-arrival-source-only-native-scope/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "beforeSources": 210,
+  "afterSources": 210,
+  "unchangedExistingSources": 205,
+  "changedExistingSources": 5,
+  "addedSources": 0,
+  "sourceRows": [
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "expectedBeforeSHA256": "f319c353f8d5dea1f38fc206642841051ba8e520fa4da654be5abc7b379b73e3",
+      "expectedAfterSHA256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "expectedAfterBytes": 102901,
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "expectedBeforeSHA256": "5b95d2e19c68457804258154e0b5a6f0fb0b9e73261df70513da15bd83c12b88",
+      "expectedAfterSHA256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "expectedAfterBytes": 47446,
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "expectedBeforeSHA256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f",
+      "expectedAfterSHA256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "expectedAfterBytes": 23744,
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "expectedBeforeSHA256": "c774561962639d682b508b6f3335e79031d44fb93c5e957ad295363d6d8cd548",
+      "expectedAfterSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+      "expectedAfterBytes": 10762,
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "expectedBeforeSHA256": "3621ec9cb5adf11e955ec317e59dca226e3b3d0563f7b6587c34a92ebef9941c",
+      "expectedAfterSHA256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "expectedAfterBytes": 2509,
+      "new": false,
+      "allowInstalledSourceSHA256Change": false
+    }
+  ],
+  "addedRoots": []
+}

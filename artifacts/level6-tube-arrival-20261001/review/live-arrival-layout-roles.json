@@ -1,0 +1,546 @@
+{
+  "at": "2026-10-01T20:48:32Z",
+  "sources": [
+    {
+      "lines": [
+        {
+          "text": "\tExtraLinksPerDistrict = 2,",
+          "line": 52
+        },
+        {
+          "text": "\tMinimumModuleSeparation = 105,",
+          "line": 53
+        },
+        {
+          "text": "\tMaximumStraightRunLinks = 3,",
+          "line": 54
+        },
+        {
+          "text": "\tMaximumVerticalRunLinks = 3,",
+          "line": 55
+        },
+        {
+          "text": "\tArrivalWidth = 64,",
+          "line": 56
+        },
+        {
+          "text": "\tArrivalDepth = 54,",
+          "line": 57
+        },
+        {
+          "text": "\tExitWidth = 58,",
+          "line": 58
+        },
+        {
+          "text": "\tExitDepth = 52,",
+          "line": 59
+        },
+        {
+          "text": "}",
+          "line": 60
+        },
+        {
+          "text": "",
+          "line": 61
+        },
+        {
+          "text": "-- Resolved on every Generate, not once at module load.",
+          "line": 62
+        },
+        {
+          "text": "\t\tExtraLinksPerDistrict = integerSetting(\"ExtraLinksPerDistrict\", DEFAULTS.ExtraLinksPerDistrict, 0, 3),",
+          "line": 112
+        },
+        {
+          "text": "\t\tMinimumModuleSeparation = numberSetting(\"MinimumModuleSeparation\", DEFAULTS.MinimumModuleSeparation, 60, 220),",
+          "line": 113
+        },
+        {
+          "text": "\t\tMaximumStraightRunLinks = integerSetting(\"MaximumStraightRunLinks\", DEFAULTS.MaximumStraightRunLinks, 1, 8),",
+          "line": 114
+        },
+        {
+          "text": "\t\tMaximumVerticalRunLinks = integerSetting(\"MaximumVerticalRunLinks\", DEFAULTS.MaximumVerticalRunLinks, 1, 8),",
+          "line": 115
+        },
+        {
+          "text": "\t\tArrivalWidth = integerSetting(\"ArrivalWidth\", DEFAULTS.ArrivalWidth, 52, 90),",
+          "line": 116
+        },
+        {
+          "text": "\t\tArrivalDepth = integerSetting(\"ArrivalDepth\", DEFAULTS.ArrivalDepth, 44, 80),",
+          "line": 117
+        },
+        {
+          "text": "\t\tExitWidth = integerSetting(\"ExitWidth\", DEFAULTS.ExitWidth, 48, 80),",
+          "line": 118
+        },
+        {
+          "text": "\t\tExitDepth = integerSetting(\"ExitDepth\", DEFAULTS.ExitDepth, 44, 76),",
+          "line": 119
+        },
+        {
+          "text": "\t}",
+          "line": 120
+        },
+        {
+          "text": "",
+          "line": 121
+        },
+        {
+          "text": "\tif Tuning.MinimumRoomWidth > Tuning.MaximumRoomWidth then",
+          "line": 122
+        },
+        {
+          "text": "\t\treturn room",
+          "line": 380
+        },
+        {
+          "text": "\tend",
+          "line": 381
+        },
+        {
+          "text": "",
+          "line": 382
+        },
+        {
+          "text": "\tlocal arrival = addRoom({",
+          "line": 383
+        },
+        {
+          "text": "\t\tId = \"Arrival\",",
+          "line": 384
+        },
+        {
+          "text": "\t\tName = \"Level 6 Arrival\",",
+          "line": 385
+        },
+        {
+          "text": "\t\tX = 0,",
+          "line": 386
+        },
+        {
+          "text": "\t\tZ = rowZ[entryRow],",
+          "line": 387
+        },
+        {
+          "text": "\t\tW = Tuning.ArrivalWidth,",
+          "line": 388
+        },
+        {
+          "text": "\t\tD = Tuning.ArrivalDepth,",
+          "line": 389
+        },
+        {
+          "text": "\t\tH = 12,",
+          "line": 390
+        },
+        {
+          "text": "\t\tKind = \"PartyHall\",",
+          "line": 391
+        },
+        {
+          "text": "\t\tDecor = \"SparseWelcome\",",
+          "line": 392
+        },
+        {
+          "text": "\t\tModule = false,",
+          "line": 393
+        },
+        {
+          "text": "\t\tThemeId = \"ArrivalTransition\",",
+          "line": 394
+        },
+        {
+          "text": "\t\tSectionIndex = 0,",
+          "line": 395
+        },
+        {
+          "text": "\t\tDistrictId = \"ARRIVAL\",",
+          "line": 396
+        },
+        {
+          "text": "\t\tRole = \"Arrival\",",
+          "line": 397
+        },
+        {
+          "text": "\t\tHideSpotCount = 0,",
+          "line": 398
+        },
+        {
+          "text": "\t\tLocalSeed = rng:NextInteger(1, 2 ^ 30),",
+          "line": 399
+        },
+        {
+          "text": "\t\tGridRow = entryRow,",
+          "line": 400
+        },
+        {
+          "text": "\t\tGridColumn = 0,",
+          "line": 401
+        },
+        {
+          "text": "\t})",
+          "line": 402
+        },
+        {
+          "text": "\tlayout.CyclomaticLoops = #layout.Links - #layout.Rooms + 1",
+          "line": 814
+        },
+        {
+          "text": "\tlayout.MaximumStraightRun, layout.MaximumVerticalRun = straightRuns(layout)",
+          "line": 815
+        },
+        {
+          "text": "\tlayout.GatewayColumns = gatewayColumns",
+          "line": 816
+        },
+        {
+          "text": "\tlayout.Roles = {",
+          "line": 817
+        },
+        {
+          "text": "\t\tArrivalRoomId = \"Arrival\",",
+          "line": 818
+        },
+        {
+          "text": "\t\tExitRoomId = \"Exit\",",
+          "line": 819
+        },
+        {
+          "text": "\t\tSignalRoomId = \"SignalHall\",",
+          "line": 820
+        },
+        {
+          "text": "\t\tMallManagerSpawnRoomId = \"SignalHall\",",
+          "line": 821
+        },
+        {
+          "text": "\t\tEntryDistrictRoomId = gatewaySpecs[1].B.Id,",
+          "line": 822
+        },
+        {
+          "text": "\t\tFirstCDRoomId = firstCDRoom.Id,",
+          "line": 823
+        }
+      ],
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator"
+    },
+    {
+      "lines": [
+        {
+          "text": "\tExtraLinksPerDistrict = 2,",
+          "line": 51
+        },
+        {
+          "text": "\tMinimumModuleSeparation = 105,",
+          "line": 52
+        },
+        {
+          "text": "\tMaximumStraightRunLinks = 3,",
+          "line": 53
+        },
+        {
+          "text": "\tMaximumVerticalRunLinks = 2,",
+          "line": 54
+        },
+        {
+          "text": "\tArrivalWidth = 64,",
+          "line": 55
+        },
+        {
+          "text": "\tArrivalDepth = 54,",
+          "line": 56
+        },
+        {
+          "text": "\tExitWidth = 58,",
+          "line": 57
+        },
+        {
+          "text": "\tExitDepth = 52,",
+          "line": 58
+        },
+        {
+          "text": "}",
+          "line": 59
+        },
+        {
+          "text": "",
+          "line": 60
+        },
+        {
+          "text": "-- Resolved on every Generate, not once at module load.",
+          "line": 61
+        },
+        {
+          "text": "\t\tExtraLinksPerDistrict = integerSetting(\"ExtraLinksPerDistrict\", DEFAULTS.ExtraLinksPerDistrict, 0, 3),",
+          "line": 111
+        },
+        {
+          "text": "\t\tMinimumModuleSeparation = numberSetting(\"MinimumModuleSeparation\", DEFAULTS.MinimumModuleSeparation, 60, 220),",
+          "line": 112
+        },
+        {
+          "text": "\t\tMaximumStraightRunLinks = integerSetting(\"MaximumStraightRunLinks\", DEFAULTS.MaximumStraightRunLinks, 1, 8),",
+          "line": 113
+        },
+        {
+          "text": "\t\tMaximumVerticalRunLinks = integerSetting(\"MaximumVerticalRunLinks\", DEFAULTS.MaximumVerticalRunLinks, 1, 8),",
+          "line": 114
+        },
+        {
+          "text": "\t\tArrivalWidth = integerSetting(\"ArrivalWidth\", DEFAULTS.ArrivalWidth, 52, 90),",
+          "line": 115
+        },
+        {
+          "text": "\t\tArrivalDepth = integerSetting(\"ArrivalDepth\", DEFAULTS.ArrivalDepth, 44, 80),",
+          "line": 116
+        },
+        {
+          "text": "\t\tExitWidth = integerSetting(\"ExitWidth\", DEFAULTS.ExitWidth, 48, 80),",
+          "line": 117
+        },
+        {
+          "text": "\t\tExitDepth = integerSetting(\"ExitDepth\", DEFAULTS.ExitDepth, 44, 76),",
+          "line": 118
+        },
+        {
+          "text": "\t}",
+          "line": 119
+        },
+        {
+          "text": "",
+          "line": 120
+        },
+        {
+          "text": "\tif Tuning.MinimumRoomWidth > Tuning.MaximumRoomWidth then",
+          "line": 121
+        },
+        {
+          "text": "\t\treturn room",
+          "line": 371
+        },
+        {
+          "text": "\tend",
+          "line": 372
+        },
+        {
+          "text": "",
+          "line": 373
+        },
+        {
+          "text": "\tlocal arrival = addRoom({",
+          "line": 374
+        },
+        {
+          "text": "\t\tId = \"Arrival\",",
+          "line": 375
+        },
+        {
+          "text": "\t\tName = \"Level 3 Arrival\",",
+          "line": 376
+        },
+        {
+          "text": "\t\tX = 0,",
+          "line": 377
+        },
+        {
+          "text": "\t\tZ = rowZ[entryRow],",
+          "line": 378
+        },
+        {
+          "text": "\t\tW = Tuning.ArrivalWidth,",
+          "line": 379
+        },
+        {
+          "text": "\t\tD = Tuning.ArrivalDepth,",
+          "line": 380
+        },
+        {
+          "text": "\t\tH = 12,",
+          "line": 381
+        },
+        {
+          "text": "\t\tKind = \"PartyHall\",",
+          "line": 382
+        },
+        {
+          "text": "\t\tDecor = \"SparseWelcome\",",
+          "line": 383
+        },
+        {
+          "text": "\t\tModule = false,",
+          "line": 384
+        },
+        {
+          "text": "\t\tThemeId = \"ArrivalTransition\",",
+          "line": 385
+        },
+        {
+          "text": "\t\tSectionIndex = 0,",
+          "line": 386
+        },
+        {
+          "text": "\t\tDistrictId = \"ARRIVAL\",",
+          "line": 387
+        },
+        {
+          "text": "\t\tRole = \"Arrival\",",
+          "line": 388
+        },
+        {
+          "text": "\t\tHideSpotCount = 0,",
+          "line": 389
+        },
+        {
+          "text": "\t\tLocalSeed = rng:NextInteger(1, 2 ^ 30),",
+          "line": 390
+        },
+        {
+          "text": "\t\tGridRow = entryRow,",
+          "line": 391
+        },
+        {
+          "text": "\t\tGridColumn = 0,",
+          "line": 392
+        },
+        {
+          "text": "\t})",
+          "line": 393
+        },
+        {
+          "text": "\tlayout.CyclomaticLoops = #layout.Links - #layout.Rooms + 1",
+          "line": 796
+        },
+        {
+          "text": "\tlayout.MaximumStraightRun, layout.MaximumVerticalRun = straightRuns(layout)",
+          "line": 797
+        },
+        {
+          "text": "\tlayout.GatewayColumns = gatewayColumns",
+          "line": 798
+        },
+        {
+          "text": "\tlayout.Roles = {",
+          "line": 799
+        },
+        {
+          "text": "\t\tArrivalRoomId = \"Arrival\",",
+          "line": 800
+        },
+        {
+          "text": "\t\tExitRoomId = \"Exit\",",
+          "line": 801
+        },
+        {
+          "text": "\t\tSignalRoomId = \"SignalHall\",",
+          "line": 802
+        },
+        {
+          "text": "\t\tMallManagerSpawnRoomId = \"SignalHall\",",
+          "line": 803
+        },
+        {
+          "text": "\t\tEntryDistrictRoomId = gatewaySpecs[1].B.Id,",
+          "line": 804
+        },
+        {
+          "text": "\t\tFirstCDRoomId = firstCDRoom.Id,",
+          "line": 805
+        }
+      ],
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator"
+    },
+    {
+      "lines": [
+        {
+          "text": "\t\tDarkCarpet = Color3.fromRGB(18, 18, 22),",
+          "line": 378
+        },
+        {
+          "text": "\t\tEnergon = Color3.fromRGB(66, 244, 218),",
+          "line": 379
+        },
+        {
+          "text": "\t},",
+          "line": 380
+        },
+        {
+          "text": "\tRooms = {",
+          "line": 381
+        },
+        {
+          "text": "\t\t{Id=\"Arrival\", Name=\"Receiving Vestibule\", Kind=\"PartyHall\", Decor=\"SparseWelcome\", X=0, Z=0, W=70, D=52, H=12.5},",
+          "line": 382
+        },
+        {
+          "text": "\t\t{Id=\"StaffJunction\", Name=\"Service Junction A\", Kind=\"PartyHall\", Decor=\"EmptyTransition\", X=100, Z=0, W=56, D=36, H=11.5},",
+          "line": 383
+        },
+        {
+          "text": "\t\t{Id=\"BackOffice\", Name=\"Vacant Leasing Office\", Kind=\"City\", Decor=\"KidsCafeteria\", X=195, Z=0, W=78, D=48, H=12},",
+          "line": 384
+        },
+        {
+          "text": "\t\t{Id=\"BreakRoom\", Name=\"Employee Break Room\", Kind=\"City\", Decor=\"ForgottenPair\", X=100, Z=-105, W=60, D=50, H=10.5, Module=true},",
+          "line": 385
+        },
+        {
+          "text": "\t\t{Id=\"UtilityWest\", Name=\"West Party Annex\", Kind=\"PartyHall\", Decor=\"DanceFloor\", X=100, Z=105, W=80, D=70, H=16},",
+          "line": 386
+        },
+        {
+          "text": "\t\t{Id=\"PartySpine\", Name=\"Party Service Gallery\", Kind=\"PartyHall\", Decor=\"SparseGallery\", X=300, Z=0, W=98, D=40, H=13},",
+          "line": 387
+        }
+      ],
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration"
+    },
+    {
+      "lines": [
+        {
+          "text": "\t\tDarkCarpet = Color3.fromRGB(18, 18, 22),",
+          "line": 376
+        },
+        {
+          "text": "\t\tEnergon = Color3.fromRGB(66, 244, 218),",
+          "line": 377
+        },
+        {
+          "text": "\t},",
+          "line": 378
+        },
+        {
+          "text": "\tRooms = {",
+          "line": 379
+        },
+        {
+          "text": "\t\t{Id=\"Arrival\", Name=\"Receiving Vestibule\", Kind=\"PartyHall\", Decor=\"SparseWelcome\", X=0, Z=0, W=70, D=52, H=12.5},",
+          "line": 380
+        },
+        {
+          "text": "\t\t{Id=\"StaffJunction\", Name=\"Service Junction A\", Kind=\"PartyHall\", Decor=\"EmptyTransition\", X=100, Z=0, W=56, D=36, H=11.5},",
+          "line": 381
+        },
+        {
+          "text": "\t\t{Id=\"BackOffice\", Name=\"Vacant Leasing Office\", Kind=\"City\", Decor=\"KidsCafeteria\", X=195, Z=0, W=78, D=48, H=12},",
+          "line": 382
+        },
+        {
+          "text": "\t\t{Id=\"BreakRoom\", Name=\"Employee Break Room\", Kind=\"City\", Decor=\"ForgottenPair\", X=100, Z=-105, W=60, D=50, H=10.5, Module=true},",
+          "line": 383
+        },
+        {
+          "text": "\t\t{Id=\"UtilityWest\", Name=\"West Party Annex\", Kind=\"PartyHall\", Decor=\"DanceFloor\", X=100, Z=105, W=80, D=70, H=16},",
+          "line": 384
+        },
+        {
+          "text": "\t\t{Id=\"PartySpine\", Name=\"Party Service Gallery\", Kind=\"PartyHall\", Decor=\"SparseGallery\", X=300, Z=0, W=98, D=40, H=13},",
+          "line": 385
+        }
+      ],
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration"
+    }
+  ],
+  "datamodel": "Server Play copies"
+}

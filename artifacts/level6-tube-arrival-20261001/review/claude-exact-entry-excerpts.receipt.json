@@ -1,0 +1,29 @@
+{
+  "scope": "Read-only critique of supplied lobby observations/images; no tools or live application access",
+  "startedAtUTC": "2026-10-01T21:00:32.631438+00:00",
+  "finishedAtUTC": "2026-10-01T21:03:33.584224+00:00",
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "requestedModel": "claude-opus-5-5",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "highestEffortSupportedByInspectedCLIHelp": "max",
+  "reportedTools": [],
+  "strictEmptyMcpConfig": true,
+  "safeMode": true,
+  "inputPrompt": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/level6-tube-arrival-20261001/review/claude-exact-entry-excerpts.prompt.md",
+  "inputPromptSHA256": "4342f14f7870a2da16112163f61398c542f8c91e631e2ab04b62a66ca8baa91f",
+  "inputImages": [],
+  "elapsedSeconds": 180.958,
+  "hardTimeoutSeconds": 180,
+  "exitCode": 143,
+  "status": "timeout",
+  "isError": null,
+  "permissionDenials": [],
+  "resultSubtype": null,
+  "eventCount": 144,
+  "rawInternalStreamSaved": false,
+  "visibleAssistantTextBlocks": 0,
+  "eventTypeCounts": {
+    "system": 144
+  }
+}

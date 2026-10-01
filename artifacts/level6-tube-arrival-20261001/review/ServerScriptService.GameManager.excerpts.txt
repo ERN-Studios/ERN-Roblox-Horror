@@ -1,0 +1,369 @@
+
+LINES 690-990
+690  local deadline = os.clock() + timeOut + 2
+691  while not state.Done and os.clock() < deadline do task.wait(0.1) end
+692  return state.Done and state.Succeeded
+693 end
+694 
+695 -- Choose against actual characters immediately before PivotTo, without yielding.
+696 -- This also leaves a returning player a free space when a teammate camps spawn.
+697 local function arrivalPointFree(player, position)
+698  for _, other in ipairs(Players:GetPlayers()) do
+699   if other ~= player then
+700    local character = other.Character
+701    local otherRoot = character and character:FindFirstChild("HumanoidRootPart")
+702    if otherRoot then
+703     local offset = otherRoot.Position - position
+704     if math.abs(offset.Y) < 6 and Vector2.new(offset.X, offset.Z).Magnitude < 3.9 then
+705      return false
+706     end
+707    end
+708   end
+709  end
+710  return true
+711 end
+712 
+713 local function freeElevatorFrame(player, pad)
+714  local levelOne = pad:GetAttribute("Level2_CompatibilityMarker") ~= true
+715   and pad:GetAttribute("Level3_CompatibilityMarker") ~= true
+716  local forward = levelOne and Vector3.xAxis or pad.CFrame.LookVector
+717  local side = levelOne and Vector3.zAxis or pad.CFrame.RightVector
+718  local depth = pad.Size.X + 3 -- Level 1's emergency pad is 3 studs shorter than its floor.
+719  local rows = levelOne and math.max(1, math.floor((depth - 6) / 4) + 1) or 7
+720  for row = 0, rows - 1 do
+721   for column = 0, (levelOne and 1 or 3) do
+722    local across = (column % 2 == 0 and -1 or 1) * (2 + math.floor(column / 2) * 4)
+723    local along = levelOne and (depth / 2 - 3 - row * 4) or row * 4
+724    local position = pad.Position + side * across + forward * along + Vector3.new(0, 4, 0)
+725    if arrivalPointFree(player, position) then
+726     return CFrame.lookAt(position, position + forward)
+727    end
+728   end
+729  end
+730  return nil
+731 end
+732 
+733 local function placeSafelyInElevator(player, char)
+734  local entry = activeEntry
+735  local pad = workspace:FindFirstChild("ElevatorSpawn")
+736  local root = char and char:WaitForChild("HumanoidRootPart", 8)
+737  local hum = char and char:FindFirstChildOfClass("Humanoid")
+738  if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
+739  if not (pad and root and hum and hum.Health > 0) then return false end
+740 
+741  -- The lobby and maze are far apart. Keep the character server-anchored while
+742  -- the client streams the elevator region so it cannot fall through an unloaded floor.
+743  pad.CanCollide = true -- invisible emergency floor inside the cabin
+744  local target = freeElevatorFrame(player, pad)
+745  if not target then return false end
+746  root.Anchored = true
+747  root.AssemblyLinearVelocity = Vector3.zero
+748  root.AssemblyAngularVelocity = Vector3.zero
+749  char:PivotTo(target * root.CFrame:ToObjectSpace(char:GetPivot()))
+750  local streamed = beginStreamAround(player, target.Position, STREAM_AROUND_TIMEOUT)
+751 
+752  local shield = Instance.new("ForceField")
+753  shield.Name = "LobbyTransferShield"
+754  shield.Visible = false
+755  shield.Parent = char
+756  task.delay(2.5, function()
+757   -- Streaming is awaited rather than fired and forgotten, but a timeout is not
+758   -- a reason to strand anyone: the character stays anchored for the grace below
+759   -- either way, and an un-streamed release is still better than a permanent one.
+760   local didStream = awaitStreamAround(streamed, STREAM_AROUND_TIMEOUT)
+761   if not didStream then
+762    warn("GameManager: elevator region did not stream in for " .. player.Name)
+763   end
+764   -- Level 2's loading cover can outlive this fixed placement grace, and the
+765   -- cover does not block input (loadingFrame sets neither .Active nor .Modal,
+766   -- unlike queueShade). Unanchoring on the timer alone would hand back control
+767   -- while the player is still looking at black, on an arrival deck ringed by
+768   -- water. Hold until the round is actually live, which by construction is
+769   -- after every client has dropped its cover. Levels 1 and 3 never enter this
+770   -- branch: they are already out of the cover and inside the sealed cabin.
+771   if activeLevel == 2 then
+772    local deadline = os.clock() + 30
+773    while workspace:GetAttribute("RoundActive") ~= true and os.clock() < deadline do
+774     task.wait(0.1)
+775    end
+776   end
+777   while entry and entry.State == "loading" do task.wait(.1) end
+778   if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return end
+779   if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
+780    root.AssemblyLinearVelocity = Vector3.zero
+781    root.Anchored = false
+782   end
+783   if shield.Parent then shield:Destroy() end
+784  end)
+785  return true
+786 end
+787 
+788 -- LEVEL2_EXIT_TRANSITION_20260828
+789 -- Level 2's exit is one continuous slide into Level 3. A player who rode it out
+790 -- resumes near the REAR of Level 3's continuation bore, already moving, and
+791 -- physically slides the rest of the way into the mall. The alternative -- the
+792 -- old placeSafelyInElevator -- stands them up on a pad facing away from the
+793 -- tube, which reads as a teleport and throws away the whole transition.
+794 --
+795 -- The resume frame is published by the Level 3 World Builder as attributes on
+796 -- the continuation model, so this function needs no knowledge of its geometry.
+797 -- Every failure path falls through to placeSafelyInElevator: an arrival that
+798 -- cannot find the tube must still put the player somewhere solid.
+799 local LEVEL_TWO_TUBE_ENTRY_MODE = "level2-exit-tube"
+800 
+801 -- How the party that playRound is about to run ARRIVED. Set immediately before
+802 -- every playRound call so the level-3 opening can tell a service-elevator
+803 -- descent apart from a party that is already halfway down the continuation bore.
+804 local roundEntryMode = nil
+805 
+806 -- onCharacter defers a placeSafelyInElevator for anyone in a round, which is
+807 -- right for a respawn but wrong when the round-entry code is ABOUT to place the
+808 -- character itself. Left alone it would fire a frame after the Level 3 slide
+809 -- resume and drag the rider off the bore onto the spawn pad, silently undoing
+810 -- the whole continuous transition.
+811 local pendingExplicitPlacement = {}
+812 local pendingReentryPlacement = {}
+813 
+814 -- A rider placed in Level 3's bore stays anchored until the mall around them is
+815 -- actually live. Holding the release here rather than on a fixed timer is the
+816 -- difference between sliding out into a running level and sliding out into a
+817 -- world whose objective, hiding and music controllers have not been armed yet.
+818 local pendingSlideRelease = {}
+819 
+820 -- RequestStreamAroundAsync returning without an exception does not prove that
+821 -- the destination exists on the client. Level 3's bore therefore has a small
+822 -- tokenized client acknowledgement: the client requests the region itself and
+823 -- replies only after a tagged collidable slide part near the resume point is
+824 -- actually present. A stale/forged token cannot release another placement.
+825 local slideStreamSerial = 0
+826 local pendingSlideStream = {}
+827 
+828 level3SlideStream.OnServerEvent:Connect(function(player, action, token, ready)
+829  if action ~= "ack" or type(token) ~= "string" or type(ready) ~= "boolean" then return end
+830  local state = pendingSlideStream[player]
+831  if not state or state.Token ~= token or state.Done then return end
+832  state.Done = true
+833  state.Ready = ready
+834 end)
+835 
+836 local function beginVerifiedBoreStream(player, position)
+837  slideStreamSerial += 1
+838  local state = {
+839   Token = table.concat({game.JobId, tostring(player.UserId), tostring(slideStreamSerial)}, ":"),
+840   Done = false,
+841   Ready = false,
+842  }
+843  pendingSlideStream[player] = state
+844  level3SlideStream:FireClient(player, "request", state.Token, position, STREAM_AROUND_TIMEOUT)
+845  return state
+846 end
+847 
+848 local function awaitVerifiedBoreStream(player, state)
+849  local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 2
+850  while pendingSlideStream[player] == state and not state.Done
+851   and os.clock() < deadline do
+852   task.wait(.05)
+853  end
+854  if pendingSlideStream[player] == state then pendingSlideStream[player] = nil end
+855  return state.Done and state.Ready
+856 end
+857 
+858 local function levelThreeSlideResume(player)
+859  local world = workspace:FindFirstChild("Level 3 Generated World")
+860  if not world then return nil end
+861  for _, object in ipairs(world:GetDescendants()) do
+862   if object:GetAttribute("Level3_Level2ExitTube") == true then
+863    local position = object:GetAttribute("Level3_SlideResumePosition")
+864    local tangent = object:GetAttribute("Level3_SlideResumeTangent")
+865    local velocity = object:GetAttribute("Level3_SlideResumeVelocity")
+866    if typeof(position) == "Vector3" and typeof(tangent) == "Vector3"
+867     and typeof(velocity) == "Vector3" and tangent.Magnitude > .1 then
+868     local mouth = object:GetAttribute("Level3_SlideMouthPosition")
+869     local length = object:GetAttribute("Level3_SlideLength")
+870     local rise = object:GetAttribute("Level3_SlideRise")
+871     if typeof(mouth) ~= "Vector3" or type(length) ~= "number" or length <= 0
+872      or type(rise) ~= "number" then return nil end
+873     local startAlpha = (mouth.X - position.X) / length
+874     for slot = 0, MAX_PLAYERS_PER_STATION - 1 do
+875      -- Keep each successive actual-root placement farther UP the same bore.
+876      -- The rear reserve prevents any candidate from crossing its physical cap.
+877      local alpha = startAlpha + slot * 12 / length
+878      if alpha <= .025 or (1 - alpha) * length < 12 then break end
+879      local point = Vector3.new(mouth.X - length * alpha, mouth.Y + rise * alpha * alpha, mouth.Z)
+880      if arrivalPointFree(player, point) then
+881       local direction = Vector3.new(length, -2 * rise * alpha, 0).Unit
+882       return {Position = point, Tangent = direction, Velocity = direction * velocity.Magnitude}
+883      end
+884     end
+885     return nil
+886    end
+887    return nil
+888   end
+889  end
+890  return nil
+891 end
+892 
+893 local function placeAtLevelThreeSlideResume(player, char)
+894  local entry = activeEntry
+895  local root = char and char:WaitForChild("HumanoidRootPart", 8)
+896  local hum = char and char:FindFirstChildOfClass("Humanoid")
+897  if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
+898  if not (root and hum and hum.Health > 0) then return false end
+899 
+900  local resume = levelThreeSlideResume(player)
+901  if not resume then return false end
+902 
+903  root.Anchored = true
+904  root.AssemblyLinearVelocity = Vector3.zero
+905  root.AssemblyAngularVelocity = Vector3.zero
+906  local target = CFrame.lookAt(resume.Position, resume.Position + resume.Tangent)
+907  char:PivotTo(target * root.CFrame:ToObjectSpace(char:GetPivot()))
+908  local shield = Instance.new("ForceField")
+909  shield.Name = "LobbyTransferShield"
+910  shield.Visible = false
+911  shield.Parent = char
+912 
+913  -- Stream the bore in before handing the character over; resuming into an
+914  -- unloaded region drops the rider through the tube floor. This is an actual
+915  -- local-geometry acknowledgement, not pcall completion from the server API.
+916  local streamed = beginVerifiedBoreStream(player, resume.Position)
+917 
+918 	local released = false
+919 	local preparation = {Started = false, Done = false, Streamed = false}
+920 	local function prepare()
+921 		if not preparation.Started then
+922 			preparation.Started = true
+923 			preparation.Streamed = awaitVerifiedBoreStream(player, streamed)
+924 			preparation.Done = true
+925 		else
+926 			local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 2
+927 			while not preparation.Done and os.clock() < deadline do task.wait(.05) end
+928 		end
+929 		return preparation.Done and preparation.Streamed
+930 	end
+931 	local function release(prepareOnly)
+932 		if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
+933 		local didStream = prepare()
+934 		if prepareOnly then return didStream end
+935 		if released then return didStream end
+936 		released = true
+937 		pendingSlideRelease[player] = nil
+938 		if not didStream then
+939 			warn("GameManager: Level 3 bore was not locally ready for " .. player.Name
+940 				.. "; using the solid arrival elevator fallback")
+941 			-- Keep the root anchored while the ordinary placement takes over. Its
+942 			-- emergency cabin floor and bounded release are safer than handing an
+943 			-- unstreamed character to gravity.
+944 			if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
+945 				if not placeSafelyInElevator(player, char) and player.Character == char then
+946 					root.Anchored = false
+947 					hum.Health = 0
+948 				end
+949 			end
+950 		elseif root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
+951 			root.Anchored = false
+952    -- Hand the ride back with real momentum so the rider continues down the
+953    -- bore instead of starting from rest on a steep slope.
+954    root.AssemblyLinearVelocity = resume.Velocity
+955 		end
+956 		if shield.Parent then shield:Destroy() end
+957 		return didStream
+958 	end
+959 	pendingSlideRelease[player] = release
+960  -- Backstop. Nothing in this file may leave a player anchored forever, however
+961  -- the round that was supposed to release them ends up failing.
+962 	task.delay(25, function()
+963 		if pendingSlideRelease[player] == release then
+964 			if entry and (activeEntry ~= entry or entry.State ~= "ready") then return end
+965 			task.spawn(function() release(false) end)
+966 		end
+967 	end)
+968 	return true
+969 end
+970 
+971 local function releaseSlideResume(group)
+972 	for _, player in ipairs(group) do
+973 		local release = pendingSlideRelease[player]
+974 		if release then release(false) end
+975 	end
+976 end
+977 
+978 -- Every arrival funnels through here so the tube path and the fallback can
+979 -- never diverge between the Studio in-place route and the reserved-server one.
+980 local function placeOnLevelEntry(player, char, useSlideResume)
+981  -- The latch holds the CHARACTER being placed, not just the player, so a later
+982  -- respawn still receives its ordinary elevator placement.
+983  pendingExplicitPlacement[player] = char
+984  local placed = useSlideResume and placeAtLevelThreeSlideResume(player, char)
+985  if not placed then placed = placeSafelyInElevator(player, char) end
+986  -- Released two resumptions later, never in this one. onCharacter's fallback is
+987  -- deferred, so clearing the latch inline reopens exactly the race it closes.
+988  task.defer(function()
+989   if player.Character ~= char then return end
+990   task.defer(function()
+
+LINES 2800-2835
+2800   -- until every client reports the complex has streamed in around it. The
+2801   -- timeout sits one second past the client's own 15s cap so a live client
+2802   -- always reports first, and a dead one can still never stall the round.
+2803   fireGroup(participants, "poolaccess")
+2804   -- The shared entry barrier has already verified every client.
+2805 	elseif activeLevel == 3 and roundEntryMode == LEVEL_TWO_TUBE_ENTRY_MODE then
+2806   -- LEVEL2_EXIT_TRANSITION_20260828
+2807   -- This party is already inside the continuation bore. Replaying the service
+2808   -- elevator would put a descending-lift countdown over a moving slide and,
+2809   -- worse, hold the mall inert for seven seconds underneath them. So the mall is
+2810   -- brought fully live FIRST and only then is the ride handed back: by the time
+2811   -- anyone moves, the objective, hiding and music controllers are all armed.
+2812 		-- Placement started streaming while the new world was being prepared. Wait
+2813 		-- for every bounded request while riders are still anchored and covered.
+2814 		-- Then arm Level 3, give its controllers one heartbeat to observe the
+2815 		-- authority change, release everyone together, and only then remove the
+2816 		-- loading cover / begin the round timer.
+2817 		-- The shared entry barrier verified the tube before this activation.
+2818 		workspace:SetAttribute("PuzzleWon", false)
+2819 		workspace:SetAttribute("PostWinIntermissionActive", false)
+2820 		workspace:SetAttribute("RoundActive", true)
+2821 		RunService.Heartbeat:Wait()
+2822 		releaseSlideResume(participants)
+2823 		fireGroup(participants, "level3access")
+2824  elseif activeLevel == 3 then
+2825   -- A short service descent establishes the level without replaying Level 1's
+2826   -- fuse briefing. Level 3 owns its own objective presentation.
+2827   for t = 7, 1, -1 do
+2828    if aliveCount <= 0 then sendWipedPartyHome(); return end
+2829    fireGroup(participants, "elevator", t)
+2830    task.wait(1)
+2831   end
+2832   elevatorApi.open()
+2833   -- level3access is Level 3's own cue and must not be sent for another level.
+2834   -- The "elevator" ticks above already released the client's loading cover.
+2835   if activeLevel == 3 then fireGroup(participants, "level3access") end
+
+LINES 2925-2950
+2925     } or nil
+2926     zyntraLevelCompleted:Fire(participant, activeLevel,
+2927      FriendBoost.CountRoundFriends(participant, participants), run, completionRoundId)
+2928    end
+2929   end
+2930  end
+2931  if result == "win" then
+2932   -- LEVEL2_EXIT_TRANSITION_20260828: everyone continuing out of Level 2 left
+2933   -- down the exit flume (the win condition requires every surviving participant
+2934   -- to have escaped), so the next server resumes them inside Level 3's
+2935   -- continuation bore rather than on a spawn pad. Decided BEFORE the window
+2936   -- opens: an immediate Continue departs during it and has to arrive exactly
+2937   -- the way a timed-out continuer will. The entry mode describes the ROUTE the
+2938   -- party took, not per-player state, so one straggler recovered to the chamber
+2939   -- must not downgrade everyone else's arrival.
+2940   local entryMode = (activeLevel == 2 and Routing.NextLevel(activeLevel) == 3
+2941    and exitTubeRoute) and LEVEL_TWO_TUBE_ENTRY_MODE or nil
+2942   local outcome = runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
+2943   local nextLevel = outcome.NextLevel
+2944   local continuing, returning = outcome.Continuing, outcome.Returning
+2945 	closeRoundLifecycle()
+2946   -- RoundActive still stops hazards immediately, but the completed world and
+2947   -- its solved lighting remain intact for the full result countdown.
+2948   workspace:SetAttribute("PostWinIntermissionActive", false)
+2949   workspace:SetAttribute("LightMode", "NORMAL")
+2950   workspace:SetAttribute("FlickerBoost", 0)

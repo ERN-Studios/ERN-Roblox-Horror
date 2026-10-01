@@ -160,3 +160,17 @@
 /artifacts/level6-ceiling-lighting-20261001/**/*.log
 /artifacts/level6-ceiling-lighting-20261001/**/__pycache__/
 /artifacts/level6-ceiling-lighting-20261001/review/*.prompt.md
+
+# Full authoritative tube-arrival native backups remain local; receipts are tracked.
+/artifacts/level6-tube-arrival-20261001/native-*/*
+!/artifacts/level6-tube-arrival-20261001/native-*/source-manifest.json
+!/artifacts/level6-tube-arrival-20261001/native-*/backup-file-hashes.json
+!/artifacts/level6-tube-arrival-20261001/native-*/backup-metadata-summary.json
+!/artifacts/level6-tube-arrival-20261001/native-*/native-place-verification.json
+/artifacts/level6-tube-arrival-20261001/screenshots/*.b64
+/artifacts/level6-tube-arrival-20261001/candidate-source/write-plan.json
+/artifacts/level6-tube-arrival-20261001/**/*.log
+/artifacts/level6-tube-arrival-20261001/**/__pycache__/
+/artifacts/level6-tube-arrival-20261001/review/*.prompt.md
+/artifacts/lobby-rebuild-r4-20261001/**/__pycache__/
+/artifacts/lobby-rebuild-r4-20261001/**/*.log

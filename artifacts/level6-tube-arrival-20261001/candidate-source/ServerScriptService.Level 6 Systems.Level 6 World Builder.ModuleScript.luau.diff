@@ -1,0 +1,280 @@
+--- ServerScriptService.Level 6 Systems.Level 6 World Builder BEFORE
++++ ServerScriptService.Level 6 Systems.Level 6 World Builder AFTER
+@@ -105,7 +105,7 @@
+ local function roomHeight(room: {[string]: any}): number
+ 	-- The Poolrooms hand-off needs the same tall gateway proportions as Level 2.
+ 	-- Other generated rooms keep their authored/randomized mall ceiling heights.
+-	if room.Id == "Arrival" then return 12 end
++	if room.Id == "Arrival" then return 30 end
+ 	return tonumber(room.H) or Configuration.RoomHeight
+ end
+ 
+@@ -1387,8 +1387,8 @@
+ 		map[a.Id][sideBetween(a, b)] = true
+ 		map[b.Id][sideBetween(b, a)] = true
+ 	end
+-	-- The story-only Level 2 flume mouth opens behind the Level 6 spawn.
+-	-- Level 6 arrival has a closed west wall and a dev return prompt.
++	-- The Level 6 arrival tube enters through its own west aperture.
++	map.Arrival.West = true
+ 	return map
+ end
+ 
+@@ -1667,29 +1667,237 @@
+ end
+ 
+ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Model, BasePart, BasePart)
+-	-- Preview-owned compatibility markers; the production lobby and Level 2 flume are untouched.
+ 	local p = worldPosition(room)
+-	local model = Instance.new("Model")
+-	model.Name = "Level6CompatibilityElevator"
+-	model:SetAttribute("Level6_CompatibilityMarker", true)
+-	model.Parent = parent
+-	local spawnPosition = p + Vector3.new(-room.W * .5 + 16, .25, 0)
+-	local spawnCF = CFrame.lookAt(spawnPosition, p + Vector3.new(2, .25, 0))
+-	local spawn = part(parent, "Level6ElevatorSpawn", spawnCF, Vector3.new(8, .5, 8),
+-		Color3.new(), Enum.Material.SmoothPlastic, 1)
+-	spawn.CanCollide = false
+-	spawn.CanQuery = false
+-	spawn.CanTouch = false
++	local visual = Instance.new("Model")
++	visual.Name = "Level 6 Poolrooms Arrival Tube"
++	visual.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
++	visual:SetAttribute("Level6_ArrivalTube", true)
++	visual:SetAttribute("Level6_ProgressionLandmark", true)
++	visual.Parent = parent
++
++	-- Match the authored Level 3 flume and its tall orange landing room.
++	-- Level 6 preview enters upright at the outlet; production progression
++	-- and the Level 2/3 slide controller remain owned by their existing systems.
++	local tubeLength, rise, radius = 400, 115, 8
++	local shellThickness, runoutThickness = .30 * 1.5, .60 * 1.5
++	local shellRadius = radius + (shellThickness - .30) * .5
++	visual:SetAttribute("Level6_SlideBoreRadius", radius)
++	visual:SetAttribute("Level6_SlideWallThickness", shellThickness)
++	-- A longer run leaves room for six riders, spaced uphill before the rear cap.
++	-- The gentle curve still uses 32 sections (panels shorter than 14.6 studs) and the
++	-- same 20-sided bore, preserving the existing shell/collision part budget.
++	local pathSections, shellSegments = 32, 20
++	local wallX = p.X - room.W * .5
++	local mouthX = wallX + Configuration.WallThickness * .5 + .12
++	local centerY = p.Y + radius + .05
++	visual:SetAttribute("Level6_SlideMouthPosition", Vector3.new(mouthX, centerY, p.Z))
++	visual:SetAttribute("Level6_DirectMallArrival", true)
++	local signPosition = Vector3.new(mouthX + .16, centerY + radius + 2.3, p.Z)
++	local arrivalSign = part(visual, "Arrival Only Sign",
++		CFrame.lookAt(signPosition, signPosition + Vector3.xAxis),
++		Vector3.new(14, 3.6, .2), Color3.fromRGB(223, 197, 115), Enum.Material.SmoothPlastic)
++	decorative(arrivalSign)
++	local signGui = Instance.new("SurfaceGui")
++	signGui.Name = "Arrival Only Notice"
++	signGui.Face = Enum.NormalId.Front
++	signGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
++	signGui.CanvasSize = Vector2.new(840, 216)
++	signGui.LightInfluence = .15
++	signGui.AlwaysOnTop = false
++	signGui.Parent = arrivalSign
++	local signTitle = Instance.new("TextLabel")
++	signTitle.Name = "NoExit"
++	signTitle.BackgroundTransparency = 1
++	signTitle.Size = UDim2.new(1, 0, .62, 0)
++	signTitle.Font = Enum.Font.GothamBold
++	signTitle.TextSize = 78
++	signTitle.TextColor3 = Color3.fromRGB(37, 33, 23)
++	signTitle.Text = "NO EXIT"
++	signTitle.Parent = signGui
++	local signDetail = Instance.new("TextLabel")
++	signDetail.Name = "ArrivalOnly"
++	signDetail.BackgroundTransparency = 1
++	signDetail.Position = UDim2.new(0, 0, .62, 0)
++	signDetail.Size = UDim2.new(1, 0, .3, 0)
++	signDetail.Font = Enum.Font.GothamMedium
++	signDetail.TextSize = 36
++	signDetail.TextColor3 = signTitle.TextColor3
++	signDetail.Text = "ONE-WAY ARRIVAL"
++	signDetail.Parent = signGui
++	local shellColor = Color3.fromRGB(218, 226, 211)
++	local shellShadow = Color3.fromRGB(193, 207, 197)
++	local slipperyPhysics = PhysicalProperties.new(.7, .02, 0, 100, 1)
++	local pathPoints: {Vector3} = {}
++	for section = 0, pathSections do
++		local alpha = section / pathSections
++		table.insert(pathPoints, Vector3.new(
++			mouthX - tubeLength * alpha,
++			centerY + rise * alpha * alpha,
++			p.Z
++		))
++	end
++	for section = 1, pathSections do
++		local a, b = pathPoints[section], pathPoints[section + 1]
++		local segmentAxis = (b - a).Unit
++		local segmentCenter = (a + b) * .5
++		local segmentLength = (b - a).Magnitude
++		local radialZero = Vector3.zAxis
++		for shellIndex = 0, shellSegments - 1 do
++			local angle = (shellIndex + .5) / shellSegments * math.pi * 2
++			local radial = CFrame.fromAxisAngle(segmentAxis, angle)
++				:VectorToWorldSpace(radialZero).Unit
++			local tangent = segmentAxis:Cross(radial).Unit
++			local panel = part(visual, "Level 6 Arrival Tube Fiberglass Shell",
++				CFrame.fromMatrix(segmentCenter + radial * shellRadius, segmentAxis, radial, tangent),
++				Vector3.new(segmentLength + 1, shellThickness,
++					2 * shellRadius * math.tan(math.pi / shellSegments) + .06),
++				shellColor, Enum.Material.SmoothPlastic)
++			panel.CanCollide = true
++			panel.CanTouch = false
++			panel.CastShadow = false
++			panel.Reflectance = .025
++			panel.CustomPhysicalProperties = slipperyPhysics
++			panel:SetAttribute("Level6_ProgressionSlide", true)
++		end
++
++		local downSeed = -Vector3.yAxis
++		local radialDown = (downSeed - segmentAxis * downSeed:Dot(segmentAxis)).Unit
++		local floorTangent = segmentAxis:Cross(radialDown).Unit
++		local runout = part(visual, "Level 6 Arrival Tube Runout",
++			CFrame.fromMatrix(segmentCenter + radialDown * (radius + runoutThickness * .5),
++				segmentAxis, radialDown, floorTangent),
++			Vector3.new(segmentLength + 1, runoutThickness, 11.8),
++			shellShadow, Enum.Material.SmoothPlastic)
++		runout.CanCollide = true
++		runout.CastShadow = false
++		runout.Reflectance = .02
++		runout.CustomPhysicalProperties = slipperyPhysics
++		runout:SetAttribute("Level6_ProgressionSlide", true)
++		-- Keep the mouth visually clean; the wear rails begin one section inside.
++		if section > 1 then
++			for _, zOffset in ipairs({-3.7, 3.7}) do
++				local guide = part(visual, "Level 6 Arrival Tube Wear Guide",
++					CFrame.fromMatrix(segmentCenter + radialDown * (radius - .10)
++						+ floorTangent * zOffset, segmentAxis, radialDown, floorTangent),
++					Vector3.new(segmentLength + .10, .10, .30),
++					Color3.fromRGB(71, 88, 85), Enum.Material.SmoothPlastic, .05)
++				decorative(guide)
++			end
++		end
++	end
++	visual:SetAttribute("Level6_SlideCollisionPartCount", pathSections * (shellSegments + 1))
++	visual:SetAttribute("Level6_SlideRise", rise)
++	visual:SetAttribute("Level6_SlideLength", tubeLength)
++
++	local rearPoint = pathPoints[#pathPoints]
++	local rearAxis = (rearPoint - pathPoints[#pathPoints - 1]).Unit
++
++	-- Match the twenty flat shell panels, not a stepped approximation of a circle.
++	-- Each band is a rectangle plus a wedge: a continuous plaster face with the
++	-- same forty-part budget. Its inner edge meets the middle of the fiberglass.
++	-- Project the first tube segment onto the wall so its slight rise cannot
++	-- expose a seam. Across the wall depth the edge stays within the .30 shell.
++	local sealSlope = (pathPoints[2].Y - pathPoints[1].Y)
++		/ (pathPoints[1].X - pathPoints[2].X)
++	local sealYScale = math.sqrt(1 + sealSlope * sealSlope)
++	local sealCenter = Vector3.new(wallX, centerY + (mouthX - wallX) * sealSlope, p.Z)
++	local sealVertexRadius = radius / math.cos(math.pi / shellSegments)
++	local sealOuterZ = radius + .30
++	local sealDepth = Configuration.WallThickness + .02
++	for bandIndex = 0, shellSegments / 2 - 1 do
++		local angle0 = -math.pi * .5 + bandIndex * math.pi * 2 / shellSegments
++		local angle1 = angle0 + math.pi * 2 / shellSegments
++		local y0 = math.sin(angle0) * sealVertexRadius * sealYScale
++		local y1 = math.sin(angle1) * sealVertexRadius * sealYScale
++		local z0 = math.cos(angle0) * sealVertexRadius
++		local z1 = math.cos(angle1) * sealVertexRadius
++		local outerEdge = math.max(z0, z1)
++		local wedgeUp = Vector3.yAxis * (if z1 > z0 then 1 else -1)
++		for _, side in ipairs({-1, 1}) do
++			local sideName = side < 0 and "Left" or "Right"
++			local fill = Instance.new("Part")
++			fill.Name = "Level 6 West Wall Circular Aperture Fill " .. sideName
++			fill.CFrame = CFrame.new(sealCenter
++				+ Vector3.new(0, (y0 + y1) * .5, side * (outerEdge + sealOuterZ) * .5))
++			fill.Size = Vector3.new(sealDepth, y1 - y0, sealOuterZ - outerEdge)
++			local wedge = Instance.new("WedgePart")
++			wedge.Name = "Level 6 West Wall Circular Aperture Wedge " .. sideName
++			local wedgeBack = Vector3.zAxis * side
++			wedge.CFrame = CFrame.fromMatrix(sealCenter
++				+ Vector3.new(0, (y0 + y1) * .5, side * (z0 + z1) * .5),
++				wedgeUp:Cross(wedgeBack), wedgeUp, wedgeBack)
++			wedge.Size = Vector3.new(sealDepth, y1 - y0, math.abs(z1 - z0))
++			for _, seal in ipairs({fill, wedge}) do
++				seal.Anchored = true
++				seal.Color = wallColor(room)
++				seal.Material = Enum.Material.Plaster
++				seal.TopSurface = Enum.SurfaceType.Smooth
++				seal.BottomSurface = Enum.SurfaceType.Smooth
++				decorative(seal)
++				seal:SetAttribute("Level6_TransitionWallSeal", true)
++				seal.Parent = visual
++			end
++		end
++	end
++
++	-- The physical safety stop sits far beyond the upward bend. A muted pale
++	-- shadow cap prevents outdoor sky from leaking through without reading as a portal.
++	local rearUp = (Vector3.yAxis - rearAxis * Vector3.yAxis:Dot(rearAxis)).Unit
++	local rearTangent = rearAxis:Cross(rearUp).Unit
++	local field = part(visual, "One Way Pool Exit Field",
++		CFrame.fromMatrix(rearPoint, rearAxis, rearUp, rearTangent),
++		Vector3.new(.42, 17, 17),
++		Color3.fromRGB(142, 153, 147), Enum.Material.SmoothPlastic, .02)
++	field.CanCollide = true
++	field.CastShadow = true
++	field:SetAttribute("Level6_ReturnPathSealed", true)
++
++	local mouthLightAnchor = part(visual, "Poolrooms Slide Mouth Light Anchor",
++		CFrame.new(mouthX + 1.2, centerY + 1.0, p.Z),
++		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
++	decorative(mouthLightAnchor)
++	local mouthGlow = Instance.new("PointLight")
++	mouthGlow.Name = "Poolrooms Slide Mouth Fill"
++	mouthGlow.Color = Color3.fromRGB(226, 235, 214)
++	mouthGlow.Brightness = .82
++	mouthGlow.Range = 30
++	mouthGlow.Shadows = false
++	mouthGlow.Parent = mouthLightAnchor
++
++	local depthLightAnchor = part(visual, "Poolrooms Slide Depth Light Anchor",
++		CFrame.new(pathPoints[math.floor(#pathPoints * .56)]),
++		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
++	decorative(depthLightAnchor)
++	local depthGlow = Instance.new("PointLight")
++	depthGlow.Name = "Poolrooms Slide Indirect Depth Fill"
++	depthGlow.Color = Color3.fromRGB(194, 210, 201)
++	depthGlow.Brightness = .48
++	depthGlow.Range = 38
++	depthGlow.Shadows = false
++	depthGlow.Parent = depthLightAnchor
++
++	-- Spawn at the last six studs of the actual first runout plane, not the
++	-- curve's centerline. Preview Runtime lifts this floor-relative marker 3.5.
++	local spawnX = mouthX - 6
++	local firstAxis = (pathPoints[2] - pathPoints[1]).Unit
++	local down = (-Vector3.yAxis - firstAxis * (-Vector3.yAxis):Dot(firstAxis)).Unit
++	local firstCenter = (pathPoints[1] + pathPoints[2]) * .5
++	local floorPoint = firstCenter + down * radius
++	local floorNormal = -down
++	local floorY = floorPoint.Y - floorNormal.X * (spawnX - floorPoint.X) / floorNormal.Y
++	local spawnPosition = Vector3.new(spawnX, floorY + .25, p.Z)
++	local spawnCF = CFrame.lookAt(spawnPosition, spawnPosition + Vector3.xAxis)
++	visual:SetAttribute("Level6_ArrivalSpawnDistanceFromMouth", 6)
++	local spawn = part(parent, "Level6ElevatorSpawn", spawnCF,
++		Vector3.new(8, .5, 8), Color3.new(), Enum.Material.SmoothPlastic, 1)
++	decorative(spawn)
+ 	spawn:SetAttribute("Level6_CompatibilityMarker", true)
+-	local mazeStart = part(parent, "Level6MazeStart", spawnCF, Vector3.new(2, .3, 2),
+-		Color3.new(), Enum.Material.SmoothPlastic, 1)
+-	mazeStart.CanCollide = false
+-	mazeStart.CanQuery = false
+-	mazeStart.CanTouch = false
++	local mazeStart = part(parent, "Level6MazeStart", spawnCF,
++		Vector3.new(2, .3, 2), Color3.new(), Enum.Material.SmoothPlastic, 1)
++	decorative(mazeStart)
+ 	mazeStart:SetAttribute("Level6_CompatibilityMarker", true)
+-	return model, spawn, mazeStart
+-end
+-
++	return visual, spawn, mazeStart
++end
+ local function makeExitSet(parent: Instance, room: {[string]: any}): (BasePart, BasePart, Vector3, Model)
+ 	local model = Instance.new("Model")
+ 	model.Name = "Level 6 Energon Freight Exit"

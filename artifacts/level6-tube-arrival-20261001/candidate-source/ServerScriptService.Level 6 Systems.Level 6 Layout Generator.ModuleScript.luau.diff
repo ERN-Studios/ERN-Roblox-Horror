@@ -1,0 +1,11 @@
+--- ServerScriptService.Level 6 Systems.Level 6 Layout Generator BEFORE
++++ ServerScriptService.Level 6 Systems.Level 6 Layout Generator AFTER
+@@ -387,7 +387,7 @@
+ 		Z = rowZ[entryRow],
+ 		W = Tuning.ArrivalWidth,
+ 		D = Tuning.ArrivalDepth,
+-		H = 12,
++		H = 30,
+ 		Kind = "PartyHall",
+ 		Decor = "SparseWelcome",
+ 		Module = false,

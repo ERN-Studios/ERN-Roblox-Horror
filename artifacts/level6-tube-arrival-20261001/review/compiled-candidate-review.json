@@ -1,0 +1,37 @@
+{
+  "compiler": "@lune/luau.compile",
+  "passed": true,
+  "scope": "Exact candidate Luau syntax compilation only; no Studio or UI mutation",
+  "sources": [
+    {
+      "bytes": 47446,
+      "file": "artifacts/level6-tube-arrival-20261001/candidate-source/ServerScriptService.Level 6 Systems.Level 6 Layout Generator.ModuleScript.luau",
+      "sha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 23744,
+      "file": "artifacts/level6-tube-arrival-20261001/candidate-source/ServerScriptService.Level 6 Systems.Level 6 Visual Adapter.ModuleScript.luau",
+      "sha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 102901,
+      "file": "artifacts/level6-tube-arrival-20261001/candidate-source/ServerScriptService.Level 6 Systems.Level 6 World Builder.ModuleScript.luau",
+      "sha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 10762,
+      "file": "artifacts/level6-tube-arrival-20261001/candidate-source/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "sha256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+      "syntax": "PASS"
+    },
+    {
+      "bytes": 2509,
+      "file": "artifacts/level6-tube-arrival-20261001/candidate-source/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.LocalScript.luau",
+      "sha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "syntax": "PASS"
+    }
+  ]
+}

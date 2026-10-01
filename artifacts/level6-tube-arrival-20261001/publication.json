@@ -1,0 +1,15 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2461,
+  "studioPublishSuccessfulUtc": "2026-10-01T21:17:03.781Z",
+  "studioPlacePublishedUtc": "2026-10-01T21:17:04.000Z",
+  "verification": [
+    "Studio native log reports PublishSuccessful and Place published",
+    "Creator Hub version history with Show published only checked displays version2461 with Published Version checkmark"
+  ],
+  "creatorHubUrl": "https://create.roblox.com/dashboard/creations/experiences/10559217407/places/131311258779917/version-history",
+  "restartActiveServers": false,
+  "githubPush": false,
+  "remoteConfigured": false
+}

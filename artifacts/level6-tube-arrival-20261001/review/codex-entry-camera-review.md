@@ -1,0 +1,10 @@
+# Preview entry camera review
+
+Fresh live Edit source for StarterPlayer.StarterPlayerScripts.Level6PreviewTransport was read at 2026-10-01T20:56:25Z. It is 1,361 bytes, SHA-256 3621ec9cb5adf11e955ec317e59dca226e3b3d0563f7b6587c34a92ebef9941c, with Source/editor parity. The exact reference is Level6PreviewTransport.live-baseline.LocalScript.luau. It currently handles only nonce/target/model streaming requests; its ACK is sent before the server performs the upright teleport and calls Runtime.Join.
+
+Camera orientation must therefore run after confirmed entry, rather than on the existing stream ACK. A narrow server-to-client notification after successful Join, or a rising-edge participant watcher that also confirms the local root reached the expected destination, can apply the tube's positive-X direction once. Preserve the existing stream ACK and ServerLobby return path. Use the current character/root, reject dead or superseded arrivals, and cancel an outstanding callback on later generation, return, character removal or lost Level6 participation.
+
+Do not persist a per-frame camera lock or overwrite Scriptable cameras owned by death/spectating. Preserve normal camera subject, zoom, field of view and player controls. Compute the new position relative to the actual arrival character; the former lobby camera/Focus positions are stale across teleport. A one-shot Custom camera orientation may be consumed by the default camera module as its new yaw, but that must be shown in actual Play after later camera frames and mouse movement; source inspection alone is insufficient.
+
+The official Camera documentation confirms that CFrame controls position/orientation and that default camera scripts also write CFrame. It documents Scriptable for fully manual control; that is a different use case from this small spawn-facing reset, so retaining the ordinary controller requires practical validation.
+Primary source: https://create.roblox.com/docs/reference/engine/classes/Camera/CameraSubject

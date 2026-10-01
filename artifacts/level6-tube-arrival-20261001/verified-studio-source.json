@@ -1,0 +1,57 @@
+{
+  "schema": "level6-tube-arrival-verified-live-source-export/1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "scripts": [
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 102901,
+      "sourceSha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "editorMatch": true,
+      "nativeMatch": true,
+      "candidateMatch": true,
+      "file": "verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 World Builder.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 47446,
+      "sourceSha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "editorMatch": true,
+      "nativeMatch": true,
+      "candidateMatch": true,
+      "file": "verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 Layout Generator.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 23744,
+      "sourceSha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "editorMatch": true,
+      "nativeMatch": true,
+      "candidateMatch": true,
+      "file": "verified-studio-source/ServerScriptService__Level 6 Systems__Level 6 Visual Adapter.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 10762,
+      "sourceSha256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+      "editorMatch": true,
+      "nativeMatch": true,
+      "candidateMatch": true,
+      "file": "verified-studio-source/ServerScriptService__Level6PreviewAccess.Script.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "sourceBytes": 2509,
+      "sourceSha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "editorMatch": true,
+      "nativeMatch": true,
+      "candidateMatch": true,
+      "file": "verified-studio-source/StarterPlayer__StarterPlayerScripts__Level6PreviewTransport.LocalScript.luau"
+    }
+  ]
+}

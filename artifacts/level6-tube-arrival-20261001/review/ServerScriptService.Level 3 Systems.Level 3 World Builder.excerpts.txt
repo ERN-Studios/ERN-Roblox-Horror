@@ -1,0 +1,565 @@
+
+LINES 1-195
+1 --!strict
+2 -- Level 3 World Builder
+3 -- Builds a deliberately authored network of forgotten mall service spaces.
+4 
+5 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+6 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+7 local ServerStorage = game:GetService("ServerStorage")
+8 local Players = game:GetService("Players")
+9 local RunService = game:GetService("RunService")
+10 
+11 local SlideSafety = require(ReplicatedStorage:WaitForChild("SlideContinuationSafety"))
+12 local Builder = {}
+13 local C = Configuration.Colors
+14 
+15 -- Build-scoped layout authority.  The generated manifest supplies this table;
+16 -- Configuration.Rooms/Links remain only as a recovery fallback for old callers.
+17 local activeLayout: {[string]: any}? = nil
+18 
+19 local function contentTexture(slotName: string, fallback: string): string
+20 	local assets = ReplicatedStorage:FindFirstChild("Level 3 Assets")
+21 	local slot = assets and assets:FindFirstChild(slotName)
+22 	if slot and slot:IsA("StringValue") and slot.Value ~= "" then return slot.Value end
+23 	return fallback
+24 end
+25 
+26 local TEXTURES = {
+27 	PartyCarpet = contentTexture("PartyCarpetTexture", Configuration.Textures.PartyCarpet),
+28 	PartyCarpetNeon = contentTexture("PartyCarpetNeonTexture", Configuration.Textures.PartyCarpetNeon),
+29 	PartyCarpetRed = contentTexture("PartyCarpetRedTexture", Configuration.Textures.PartyCarpetRed),
+30 	CityCarpet = contentTexture("CityPlayCarpetTexture", Configuration.Textures.CityCarpet),
+31 	PastelWallpaper = contentTexture("PastelWallpaperTexture", Configuration.Textures.PastelWallpaper),
+32 	OrangeWall = contentTexture("OrangeWallTexture", Configuration.Textures.OrangeWall),
+33 	ConfettiTablecloth = contentTexture("ConfettiTableclothTexture", Configuration.Textures.ConfettiTablecloth),
+34 	FinalExitDoor = contentTexture("FinalExitDoorTexture", Configuration.Textures.FinalExitDoor),
+35 	KidsDrawingsAtlas = contentTexture("KidsDrawingsAtlasTexture", Configuration.Textures.KidsDrawingsAtlas),
+36 	KidsDrawingsWholesome25 = contentTexture("KidsDrawingsWholesome25Texture", Configuration.Textures.KidsDrawingsWholesome25),
+37 	KidsDrawingsDisturbing25 = contentTexture("KidsDrawingsDisturbing25Texture", Configuration.Textures.KidsDrawingsDisturbing25),
+38 	KidsNotesAtlas = contentTexture("KidsNotesAtlasTexture", Configuration.Textures.KidsNotesAtlas),
+39 	CDCoversAtlas = contentTexture("CDCoversAtlasTexture", Configuration.Textures.CDCoversAtlas),
+40 	DiscPlayerPanel = contentTexture("DiscPlayerPanelTexture", Configuration.Textures.DiskPlayerSurface),
+41 	CRTScreen = contentTexture("CRTScreenTexture", Configuration.Textures.CRTScreenSurface),
+42 }
+43 
+44 local function folder(parent: Instance, name: string): Folder
+45 	local object = Instance.new("Folder")
+46 	object.Name = name
+47 	object.Parent = parent
+48 	return object
+49 end
+50 
+51 local function part(parent: Instance, name: string, cframe: CFrame, size: Vector3,
+52 	color: Color3, material: Enum.Material?, transparency: number?): Part
+53 	local object = Instance.new("Part")
+54 	object.Name = name
+55 	object.Anchored = true
+56 	object.CFrame = cframe
+57 	object.Size = size
+58 	object.Color = color
+59 	object.Material = material or Enum.Material.SmoothPlastic
+60 	object.Transparency = transparency or 0
+61 	object.CanCollide = true
+62 	object.CanTouch = false
+63 	object.CanQuery = true
+64 	object.TopSurface = Enum.SurfaceType.Smooth
+65 	object.BottomSurface = Enum.SurfaceType.Smooth
+66 	object.CastShadow = true
+67 	object.Parent = parent
+68 	return object
+69 end
+70 
+71 local function decorative(object: BasePart)
+72 	object.CanCollide = false
+73 	object.CanTouch = false
+74 	object.CanQuery = false
+75 	object.CastShadow = false
+76 end
+77 
+78 local function texture(object: BasePart, textureId: string, face: Enum.NormalId,
+79 	studsU: number, studsV: number?, transparency: number?): Texture
+80 	local image = Instance.new("Texture")
+81 	image.Name = "Level 3 Surface Texture"
+82 	image.Texture = textureId
+83 	image.Face = face
+84 	image.StudsPerTileU = studsU
+85 	image.StudsPerTileV = studsV or studsU
+86 	image.Transparency = transparency or 0
+87 	image.Parent = object
+88 	return image
+89 end
+90 
+91 local function roomById(id: string): {[string]: any}
+92 	local layout = activeLayout
+93 	if layout and layout.RoomById and layout.RoomById[id] then return layout.RoomById[id] end
+94 	local rooms = layout and layout.Rooms or Configuration.Rooms
+95 	for _, room in ipairs(rooms) do
+96 		if room.Id == id then return room end
+97 	end
+98 	error("Unknown Level 3 room: " .. id)
+99 end
+100 
+101 local function worldPosition(room: {[string]: any}, y: number?): Vector3
+102 	return Configuration.WorldOrigin + Vector3.new(room.X, y or 0, room.Z)
+103 end
+104 
+105 local function roomHeight(room: {[string]: any}): number
+106 	-- The Poolrooms hand-off needs the same tall gateway proportions as Level 2.
+107 	-- Other generated rooms keep their authored/randomized mall ceiling heights.
+108 	if room.Id == "Arrival" then return 30 end
+109 	return tonumber(room.H) or Configuration.RoomHeight
+110 end
+111 
+112 local RED_PARTY_ROOMS = {PartyA = true, Records = true}
+113 local NEON_PARTY_ROOMS = {PartyB = true, UtilityWest = true, CentralHall = true}
+114 local CITY_ROOMS = {
+115 	BackOffice = true, BreakRoom = true, Maintenance = true, ChairStore = true,
+116 	CityPlay = true, LostFound = true, Exit = true,
+117 }
+118 
+119 local function floorStyle(kind: string, roomId: string?, themeId: string?): (Color3, Enum.Material, string?, number)
+120 	if kind == "Exit" then
+121 		return Color3.fromRGB(70, 71, 66), Enum.Material.DiamondPlate, nil, 10
+122 	elseif (themeId == "City" or themeId == "CityPlay") or (not themeId and kind == "City") then
+123 		return Color3.fromRGB(190, 188, 166), Enum.Material.Carpet, TEXTURES.CityCarpet, Configuration.TextureStuds.CityCarpet
+124 	elseif (themeId == "RedParty" or themeId == "RedCelebration") or (not themeId and roomId and RED_PARTY_ROOMS[roomId]) then
+125 		return Color3.fromRGB(111, 31, 27), Enum.Material.Carpet, TEXTURES.PartyCarpetRed, Configuration.TextureStuds.PartyCarpetRed
+126 	elseif (themeId == "OrangeBlackParty" or themeId == "OrangeParty") or (not themeId and roomId and NEON_PARTY_ROOMS[roomId]) then
+127 		return Color3.fromRGB(13, 17, 24), Enum.Material.Carpet, TEXTURES.PartyCarpetNeon, Configuration.TextureStuds.PartyCarpetNeon
+128 	end
+129 	return C.DarkCarpet, Enum.Material.Carpet, TEXTURES.PartyCarpet, Configuration.TextureStuds.PartyCarpet
+130 end
+131 
+132 local function usesWallpaper(room: {[string]: any}): boolean
+133 	if room.WallStyle ~= nil then return room.WallStyle == "PastelWallpaper" end
+134 	if room.ThemeId ~= nil then return (room.ThemeId == "City" or room.ThemeId == "CityPlay") end
+135 	return CITY_ROOMS[room.Id] == true
+136 end
+137 
+138 local function wallColor(room: {[string]: any}): Color3
+139 	if usesWallpaper(room) then return Color3.fromRGB(220, 213, 187) end
+140 	if (room.ThemeId == "RedParty" or room.ThemeId == "RedCelebration") then return Color3.fromRGB(145, 58, 48) end
+141 	return Color3.fromRGB(183, 78, 35)
+142 end
+143 
+144 local function lightTone(kind: string): Color3
+145 	if kind == "Party" or kind == "PartyHall" then return Color3.fromRGB(255, 222, 181) end
+146 	if kind == "Utility" or kind == "Maintenance" then return Color3.fromRGB(204, 222, 202) end
+147 	if kind == "Signal" or kind == "Exit" then return Color3.fromRGB(185, 222, 215) end
+148 	return Color3.fromRGB(235, 229, 198)
+149 end
+150 
+151 local function wallSegment(parent: Instance, name: string, cframe: CFrame, size: Vector3,
+152 	color: Color3, wallpaperFace: Enum.NormalId?, wallpaper: boolean): BasePart
+153 	local wall = part(parent, name, cframe, size, color,
+154 		wallpaper and Enum.Material.SmoothPlastic or Enum.Material.Plaster)
+155 	if wallpaper then wall.Reflectance = 0.08 end
+156 	if wallpaper and wallpaperFace then
+157 		texture(wall, TEXTURES.PastelWallpaper, wallpaperFace,
+158 			Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, 0.08)
+159 	elseif wallpaperFace then
+160 		-- Orange rooms retain their color identity while gaining subtle plaster
+161 		-- wear, roller variation and removed-decoration pinholes.
+162 		texture(wall, TEXTURES.OrangeWall, wallpaperFace,
+163 			Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, 0.28)
+164 	end
+165 	return wall
+166 end
+167 
+168 local function makeWall(parent: Instance, room: {[string]: any}, side: string, hasOpening: boolean)
+169 	local origin = worldPosition(room)
+170 	local h = roomHeight(room)
+171 	local t = Configuration.WallThickness
+172 	-- The room portal is the complete corridor cross-section. Its width and
+173 	-- height therefore match every tunnel exactly instead of shrinking to an
+174 	-- old door-sized opening at each room boundary.
+175 	local poolArrivalOpening = room.Id == "Arrival" and side == "West"
+176 	local doorW = poolArrivalOpening and 16.0 or Configuration.CorridorWidth
+177 	-- The bore rises slightly through the wall thickness; clear its top vertex.
+178 	local doorH = poolArrivalOpening and 16.1 or Configuration.CorridorHeight
+179 	local color = wallColor(room)
+180 	local wallpaper = usesWallpaper(room)
+181 	local horizontal = side == "North" or side == "South"
+182 	local length = horizontal and room.W or room.D
+183 	local sign = (side == "East" or side == "South") and 1 or -1
+184 	local face = horizontal and (side == "North" and Enum.NormalId.Back or Enum.NormalId.Front)
+185 		or (side == "West" and Enum.NormalId.Right or Enum.NormalId.Left)
+186 	local function cfAlong(offset: number, y: number): CFrame
+187 		if horizontal then
+188 			return CFrame.new(origin + Vector3.new(offset, y, sign * room.D * 0.5))
+189 		end
+190 		return CFrame.new(origin + Vector3.new(sign * room.W * 0.5, y, offset))
+191 	end
+192 	local function wallSize(segmentLength: number, height: number): Vector3
+193 		return horizontal and Vector3.new(segmentLength, height, t) or Vector3.new(t, height, segmentLength)
+194 	end
+195 	if not hasOpening then
+
+LINES 1353-1372
+1353 	local layout = activeLayout
+1354 	local rooms = layout and layout.Rooms or Configuration.Rooms
+1355 	local links = layout and layout.Links or Configuration.Links
+1356 	local map = {}
+1357 	for _, room in ipairs(rooms) do map[room.Id] = {} end
+1358 	for _, link in ipairs(links) do
+1359 		local a, b = roomById(link.A), roomById(link.B)
+1360 		map[a.Id][sideBetween(a, b)] = true
+1361 		map[b.Id][sideBetween(b, a)] = true
+1362 	end
+1363 	-- The story-only Level 2 flume mouth opens behind the Level 3 spawn.
+1364 	if map.Arrival then map.Arrival.West = true end
+1365 	return map
+1366 end
+1367 
+1368 local function makeRoom(parent: Instance, room: {[string]: any}, openings: {[string]: boolean}, index: number)
+1369 	local model = Instance.new("Model")
+1370 	model.Name = string.format("%02d %s", index, room.Name)
+1371 	model:SetAttribute("Level3_RoomId", room.Id)
+1372 	model:SetAttribute("Level3_RoomKind", room.Kind)
+
+LINES 1603-1946
+1603 local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Model, BasePart, BasePart)
+1604 	local p = worldPosition(room)
+1605 	local visual = Instance.new("Model")
+1606 	visual.Name = "Level 2 Exit Slide Continuation"
+1607 	visual.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+1608 	visual:SetAttribute("Level3_Level2ExitTube", true)
+1609 	visual:SetAttribute("Level3_ProgressionLandmark", true)
+1610 	visual.Parent = parent
+1611 
+1612 	-- LEVEL2_EXIT_TRANSITION_20260828
+1613 	-- This is the far end of Level 2's exit flume, not a decorative stub. A
+1614 	-- player who chose to continue resumes near the REAR of this bore, still
+1615 	-- moving, and physically slides the rest of the way out into the mall. That
+1616 	-- requires a real run: enough length for the arrival to read as the tail of
+1617 	-- one long ride, and enough rise that the resume point is genuinely downhill.
+1618 	-- The bore still finishes level with the landing-room floor so the outlet is
+1619 	-- a slide mouth rather than a drop.
+1620 	local tubeLength, rise, radius = 400, 115, 8
+1621 	local shellThickness, runoutThickness = .30 * 1.5, .60 * 1.5
+1622 	local shellRadius = radius + (shellThickness - .30) * .5
+1623 	visual:SetAttribute("Level3_SlideBoreRadius", radius)
+1624 	visual:SetAttribute("Level3_SlideWallThickness", shellThickness)
+1625 	-- A longer run leaves room for six riders, spaced uphill before the rear cap.
+1626 	-- The gentle curve still uses 32 sections (panels shorter than 14.6 studs) and the
+1627 	-- same 20-sided bore, preserving the existing shell/collision part budget.
+1628 	local pathSections, shellSegments = 32, 20
+1629 	local wallX = p.X - room.W * .5
+1630 	local mouthX = wallX + Configuration.WallThickness * .5 + .12
+1631 	local centerY = p.Y + radius + .05
+1632 	visual:SetAttribute("Level3_SlideMouthPosition", Vector3.new(mouthX, centerY, p.Z))
+1633 	visual:SetAttribute("Level3_DirectMallArrival", true)
+1634 	local signPosition = Vector3.new(mouthX + .16, centerY + radius + 2.3, p.Z)
+1635 	local arrivalSign = part(visual, "Arrival Only Sign",
+1636 		CFrame.lookAt(signPosition, signPosition + Vector3.xAxis),
+1637 		Vector3.new(14, 3.6, .2), Color3.fromRGB(223, 197, 115), Enum.Material.SmoothPlastic)
+1638 	decorative(arrivalSign)
+1639 	local signGui = Instance.new("SurfaceGui")
+1640 	signGui.Name = "Arrival Only Notice"
+1641 	signGui.Face = Enum.NormalId.Front
+1642 	signGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+1643 	signGui.CanvasSize = Vector2.new(840, 216)
+1644 	signGui.LightInfluence = .15
+1645 	signGui.AlwaysOnTop = false
+1646 	signGui.Parent = arrivalSign
+1647 	local signTitle = Instance.new("TextLabel")
+1648 	signTitle.Name = "NoExit"
+1649 	signTitle.BackgroundTransparency = 1
+1650 	signTitle.Size = UDim2.new(1, 0, .62, 0)
+1651 	signTitle.Font = Enum.Font.GothamBold
+1652 	signTitle.TextSize = 78
+1653 	signTitle.TextColor3 = Color3.fromRGB(37, 33, 23)
+1654 	signTitle.Text = "NO EXIT"
+1655 	signTitle.Parent = signGui
+1656 	local signDetail = Instance.new("TextLabel")
+1657 	signDetail.Name = "ArrivalOnly"
+1658 	signDetail.BackgroundTransparency = 1
+1659 	signDetail.Position = UDim2.new(0, 0, .62, 0)
+1660 	signDetail.Size = UDim2.new(1, 0, .3, 0)
+1661 	signDetail.Font = Enum.Font.GothamMedium
+1662 	signDetail.TextSize = 36
+1663 	signDetail.TextColor3 = signTitle.TextColor3
+1664 	signDetail.Text = "ONE-WAY ARRIVAL"
+1665 	signDetail.Parent = signGui
+1666 	local shellColor = Color3.fromRGB(218, 226, 211)
+1667 	local shellShadow = Color3.fromRGB(193, 207, 197)
+1668 	local slipperyPhysics = PhysicalProperties.new(.7, .02, 0, 100, 1)
+1669 	local pathPoints: {Vector3} = {}
+1670 	for section = 0, pathSections do
+1671 		local alpha = section / pathSections
+1672 		table.insert(pathPoints, Vector3.new(
+1673 			mouthX - tubeLength * alpha,
+1674 			centerY + rise * alpha * alpha,
+1675 			p.Z
+1676 		))
+1677 	end
+1678 	for section = 1, pathSections do
+1679 		local a, b = pathPoints[section], pathPoints[section + 1]
+1680 		local segmentAxis = (b - a).Unit
+1681 		local segmentCenter = (a + b) * .5
+1682 		local segmentLength = (b - a).Magnitude
+1683 		local radialZero = Vector3.zAxis
+1684 		for shellIndex = 0, shellSegments - 1 do
+1685 			local angle = (shellIndex + .5) / shellSegments * math.pi * 2
+1686 			local radial = CFrame.fromAxisAngle(segmentAxis, angle)
+1687 				:VectorToWorldSpace(radialZero).Unit
+1688 			local tangent = segmentAxis:Cross(radial).Unit
+1689 			local panel = part(visual, "Level 2 Exit Slide Fiberglass Shell",
+1690 				CFrame.fromMatrix(segmentCenter + radial * shellRadius, segmentAxis, radial, tangent),
+1691 				Vector3.new(segmentLength + 1, shellThickness,
+1692 					2 * shellRadius * math.tan(math.pi / shellSegments) + .06),
+1693 				shellColor, Enum.Material.SmoothPlastic)
+1694 			panel.CanCollide = true
+1695 			panel.CanTouch = false
+1696 			panel.CastShadow = false
+1697 			panel.Reflectance = .025
+1698 			panel.CustomPhysicalProperties = slipperyPhysics
+1699 			panel:SetAttribute("Level3_ProgressionSlide", true)
+1700 		end
+1701 
+1702 		local downSeed = -Vector3.yAxis
+1703 		local radialDown = (downSeed - segmentAxis * downSeed:Dot(segmentAxis)).Unit
+1704 		local floorTangent = segmentAxis:Cross(radialDown).Unit
+1705 		local runout = part(visual, "Level 2 Exit Slide Runout",
+1706 			CFrame.fromMatrix(segmentCenter + radialDown * (radius + runoutThickness * .5),
+1707 				segmentAxis, radialDown, floorTangent),
+1708 			Vector3.new(segmentLength + 1, runoutThickness, 11.8),
+1709 			shellShadow, Enum.Material.SmoothPlastic)
+1710 		runout.CanCollide = true
+1711 		runout.CastShadow = false
+1712 		runout.Reflectance = .02
+1713 		runout.CustomPhysicalProperties = slipperyPhysics
+1714 		runout:SetAttribute("Level3_ProgressionSlide", true)
+1715 		-- Keep the mouth visually clean; the wear rails begin one section inside.
+1716 		if section > 1 then
+1717 			for _, zOffset in ipairs({-3.7, 3.7}) do
+1718 				local guide = part(visual, "Level 2 Exit Slide Wear Guide",
+1719 					CFrame.fromMatrix(segmentCenter + radialDown * (radius - .10)
+1720 						+ floorTangent * zOffset, segmentAxis, radialDown, floorTangent),
+1721 					Vector3.new(segmentLength + .10, .10, .30),
+1722 					Color3.fromRGB(71, 88, 85), Enum.Material.SmoothPlastic, .05)
+1723 				decorative(guide)
+1724 			end
+1725 		end
+1726 	end
+1727 	visual:SetAttribute("Level3_SlideCollisionPartCount", pathSections * (shellSegments + 1))
+1728 	visual:SetAttribute("Level3_SlideRise", rise)
+1729 	visual:SetAttribute("Level3_SlideSlipback", true)
+1730 	visual:SetAttribute("Level3_SlideLength", tubeLength)
+1731 
+1732 	-- The resume frame: where a continuing Level 2 rider re-enters the world.
+1733 	-- It leaves room uphill for the remaining five riders, all on the bore axis,
+1734 	-- with tangents pointing down toward the mall. GameManager places the
+1735 	-- character here and gives it this velocity, so the ride continues instead
+1736 	-- of restarting as a stand-up spawn somewhere else.
+1737 	local RESUME_ALPHA = .80
+1738 	local RESUME_SPEED = 62
+1739 	local resumePosition = Vector3.new(
+1740 		mouthX - tubeLength * RESUME_ALPHA,
+1741 		centerY + rise * RESUME_ALPHA * RESUME_ALPHA,
+1742 		p.Z)
+1743 	-- Direction of TRAVEL, which is -d/dalpha: the path is
+1744 	-- x = mouthX - tubeLength*alpha, so riding toward the mouth means alpha
+1745 	-- decreasing and x increasing. Negating only the Y term (as an earlier
+1746 	-- version did) points the rider back up the bore; the slip loop then
+1747 	-- silently corrected their velocity while they faced the wrong way.
+1748 	local resumeTangent = Vector3.new(tubeLength, -2 * rise * RESUME_ALPHA, 0).Unit
+1749 	visual:SetAttribute("Level3_SlideResumePosition", resumePosition)
+1750 	visual:SetAttribute("Level3_SlideResumeTangent", resumeTangent)
+1751 	visual:SetAttribute("Level3_SlideResumeVelocity", resumeTangent * RESUME_SPEED)
+1752 	visual:SetAttribute("Level3_SlideResumeSpeed", RESUME_SPEED)
+1753 	local rearPoint = pathPoints[#pathPoints]
+1754 	local rearAxis = (rearPoint - pathPoints[#pathPoints - 1]).Unit
+1755 
+1756 	-- Match the twenty flat shell panels, not a stepped approximation of a circle.
+1757 	-- Each band is a rectangle plus a wedge: a continuous plaster face with the
+1758 	-- same forty-part budget. Its inner edge meets the middle of the fiberglass.
+1759 	-- Project the first tube segment onto the wall so its slight rise cannot
+1760 	-- expose a seam. Across the wall depth the edge stays within the .30 shell.
+1761 	local sealSlope = (pathPoints[2].Y - pathPoints[1].Y)
+1762 		/ (pathPoints[1].X - pathPoints[2].X)
+1763 	local sealYScale = math.sqrt(1 + sealSlope * sealSlope)
+1764 	local sealCenter = Vector3.new(wallX, centerY + (mouthX - wallX) * sealSlope, p.Z)
+1765 	local sealVertexRadius = radius / math.cos(math.pi / shellSegments)
+1766 	local sealOuterZ = radius + .30
+1767 	local sealDepth = Configuration.WallThickness + .02
+1768 	for bandIndex = 0, shellSegments / 2 - 1 do
+1769 		local angle0 = -math.pi * .5 + bandIndex * math.pi * 2 / shellSegments
+1770 		local angle1 = angle0 + math.pi * 2 / shellSegments
+1771 		local y0 = math.sin(angle0) * sealVertexRadius * sealYScale
+1772 		local y1 = math.sin(angle1) * sealVertexRadius * sealYScale
+1773 		local z0 = math.cos(angle0) * sealVertexRadius
+1774 		local z1 = math.cos(angle1) * sealVertexRadius
+1775 		local outerEdge = math.max(z0, z1)
+1776 		local wedgeUp = Vector3.yAxis * (if z1 > z0 then 1 else -1)
+1777 		for _, side in ipairs({-1, 1}) do
+1778 			local sideName = side < 0 and "Left" or "Right"
+1779 			local fill = Instance.new("Part")
+1780 			fill.Name = "Level 3 West Wall Circular Aperture Fill " .. sideName
+1781 			fill.CFrame = CFrame.new(sealCenter
+1782 				+ Vector3.new(0, (y0 + y1) * .5, side * (outerEdge + sealOuterZ) * .5))
+1783 			fill.Size = Vector3.new(sealDepth, y1 - y0, sealOuterZ - outerEdge)
+1784 			local wedge = Instance.new("WedgePart")
+1785 			wedge.Name = "Level 3 West Wall Circular Aperture Wedge " .. sideName
+1786 			local wedgeBack = Vector3.zAxis * side
+1787 			wedge.CFrame = CFrame.fromMatrix(sealCenter
+1788 				+ Vector3.new(0, (y0 + y1) * .5, side * (z0 + z1) * .5),
+1789 				wedgeUp:Cross(wedgeBack), wedgeUp, wedgeBack)
+1790 			wedge.Size = Vector3.new(sealDepth, y1 - y0, math.abs(z1 - z0))
+1791 			for _, seal in ipairs({fill, wedge}) do
+1792 				seal.Anchored = true
+1793 				seal.Color = wallColor(room)
+1794 				seal.Material = Enum.Material.Plaster
+1795 				seal.TopSurface = Enum.SurfaceType.Smooth
+1796 				seal.BottomSurface = Enum.SurfaceType.Smooth
+1797 				decorative(seal)
+1798 				seal:SetAttribute("Level3_TransitionWallSeal", true)
+1799 				seal.Parent = visual
+1800 			end
+1801 		end
+1802 	end
+1803 
+1804 	-- The physical safety stop sits far beyond the upward bend. A muted pale
+1805 	-- shadow cap prevents outdoor sky from leaking through without reading as a portal.
+1806 	local rearUp = (Vector3.yAxis - rearAxis * Vector3.yAxis:Dot(rearAxis)).Unit
+1807 	local rearTangent = rearAxis:Cross(rearUp).Unit
+1808 	local field = part(visual, "One Way Pool Exit Field",
+1809 		CFrame.fromMatrix(rearPoint, rearAxis, rearUp, rearTangent),
+1810 		Vector3.new(.42, 14.8, 14.8),
+1811 		Color3.fromRGB(142, 153, 147), Enum.Material.SmoothPlastic, .02)
+1812 	field.CanCollide = true
+1813 	field.CastShadow = true
+1814 	field:SetAttribute("Level3_ReturnPathSealed", true)
+1815 
+1816 	local mouthLightAnchor = part(visual, "Poolrooms Slide Mouth Light Anchor",
+1817 		CFrame.new(mouthX + 1.2, centerY + 1.0, p.Z),
+1818 		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+1819 	decorative(mouthLightAnchor)
+1820 	local mouthGlow = Instance.new("PointLight")
+1821 	mouthGlow.Name = "Poolrooms Slide Mouth Fill"
+1822 	mouthGlow.Color = Color3.fromRGB(226, 235, 214)
+1823 	mouthGlow.Brightness = .82
+1824 	mouthGlow.Range = 30
+1825 	mouthGlow.Shadows = false
+1826 	mouthGlow.Parent = mouthLightAnchor
+1827 
+1828 	local depthLightAnchor = part(visual, "Poolrooms Slide Depth Light Anchor",
+1829 		CFrame.new(pathPoints[math.floor(#pathPoints * .56)]),
+1830 		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+1831 	decorative(depthLightAnchor)
+1832 	local depthGlow = Instance.new("PointLight")
+1833 	depthGlow.Name = "Poolrooms Slide Indirect Depth Fill"
+1834 	depthGlow.Color = Color3.fromRGB(194, 210, 201)
+1835 	depthGlow.Brightness = .48
+1836 	depthGlow.Range = 38
+1837 	depthGlow.Shadows = false
+1838 	depthGlow.Parent = depthLightAnchor
+1839 
+1840 	-- Low-friction parts communicate the material; this lightweight server loop
+1841 	-- makes the one-way behavior deterministic for every avatar controller.
+1842 	-- Fast enough to read as the tail of a long slide; slow enough that the
+1843 	-- arrival into the mall is survivable and controllable.
+1844 	local SLIDE_MINIMUM_SPEED = 48
+1845 	local riders = setmetatable({}, {__mode = "k"})
+1846 	local slipAccumulator = 0
+1847 	local slipConnection: RBXScriptConnection?
+1848 	slipConnection = RunService.Heartbeat:Connect(function(deltaTime)
+1849 		if not visual:IsDescendantOf(workspace) then
+1850 			if slipConnection then slipConnection:Disconnect() end
+1851 			-- The world can be torn down with a rider still in the bore. Release
+1852 			-- every PlatformStand this loop set, or that player stays a ragdoll
+1853 			-- for the rest of their session.
+1854 			for _, player in ipairs(Players:GetPlayers()) do
+1855 				local character = player.Character
+1856 				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+1857 				if humanoid and character:GetAttribute("Level3_ProgressionSliding") == true then
+1858 					humanoid.PlatformStand = false
+1859 					character:SetAttribute("Level3_ProgressionSliding", nil)
+1860 				end
+1861 			end
+1862 			return
+1863 		end
+1864 		slipAccumulator += deltaTime
+1865 		if slipAccumulator < .08 then return end
+1866 		slipAccumulator = 0
+1867 		for _, player in ipairs(Players:GetPlayers()) do
+1868 			local character = player.Character
+1869 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+1870 			local root = character and character:FindFirstChild("HumanoidRootPart")
+1871 			if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
+1872 				if player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 3 then
+1873 					riders[character] = SlideSafety.Apply(visual, character, riders[character], true) or nil
+1874 				end
+1875 				local alpha = (mouthX - root.Position.X) / tubeLength
+1876 				local pathY = centerY + rise * alpha * alpha
+1877 				local insideBore = alpha > .025 and alpha < .99
+1878 					and math.abs(root.Position.Z - p.Z) < radius - .8
+1879 					and math.abs(root.Position.Y - pathY) < radius + 2
+1880 				if insideBore then
+1881 					-- LEVEL2_EXIT_TRANSITION_20260828
+1882 					-- This is the tail of Level 2's flume, so it has to ride like
+1883 					-- one. PlatformStand takes the humanoid controller out of the
+1884 					-- way: without it the character stays in Running, resists the
+1885 					-- imposed velocity and WALKS the bore at about 16 studs/s,
+1886 					-- which reads as a corridor rather than the end of a slide.
+1887 					if not humanoid.PlatformStand then
+1888 						humanoid.PlatformStand = true
+1889 						character:SetAttribute("Level3_ProgressionSliding", true)
+1890 					end
+1891 					-- Push along the live path tangent rather than world +X, so
+1892 					-- the steep rear section drives the rider forward instead of
+1893 					-- straight down into the shell.
+1894 					local tangent = Vector3.new(tubeLength, -2 * rise * alpha, 0).Unit
+1895 					-- The shared slide controller owns production client physics and
+1896 					-- releases the actual body joints. Keep this velocity write only as
+1897 					-- a server fallback until its replicated ragdoll session is live.
+1898 					if character:GetAttribute("Level2_RagdollServerActive") ~= true then
+1899 						local velocity = root.AssemblyLinearVelocity
+1900 						local along = velocity:Dot(tangent)
+1901 						local lateral = velocity - tangent * along
+1902 						root.AssemblyLinearVelocity = tangent * math.max(along, SLIDE_MINIMUM_SPEED)
+1903 							+ lateral * .35
+1904 					end
+1905 				elseif character:GetAttribute("Level3_ProgressionSliding") == true then
+1906 					-- Out of the bore: hand control straight back. Leaving
+1907 					-- PlatformStand set would drop the arriving player onto the
+1908 					-- mall floor as an inert ragdoll.
+1909 					-- If the shared ragdoll service is still live, let its client End
+1910 					-- restore joints and humanoid state atomically instead of racing it.
+1911 					if character:GetAttribute("Level2_RagdollServerActive") ~= true then
+1912 						humanoid.PlatformStand = false
+1913 						character:SetAttribute("Level3_ProgressionSliding", nil)
+1914 					end
+1915 				end
+1916 			end
+1917 		end
+1918 	end)
+1919 
+1920 	-- Invisible compatibility elevator retained for GameManager choreography.
+1921 	local model = Instance.new("Model")
+1922 	model.Name = "Elevator"
+1923 	model.Parent = workspace
+1924 	local compatibilityCF = CFrame.new(rearPoint)
+1925 	local doorL = part(model, "DoorL", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+1926 	local doorR = part(model, "DoorR", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+1927 	decorative(doorL)
+1928 	decorative(doorR)
+1929 	model.PrimaryPart = doorL
+1930 
+1931 	-- Twenty-six studs of reveal distance frame the clean tube mouth on narrow
+1932 	-- mobile screens while the forward vector still leads naturally into Level 3.
+1933 	local spawnPosition = p + Vector3.new(-room.W * .5 + 26, .25, 0)
+1934 	local spawnCF = CFrame.lookAt(spawnPosition, p + Vector3.new(2, .25, 0))
+1935 	local spawn = part(parent, "ElevatorSpawn", spawnCF, Vector3.new(10, .5, 10),
+1936 		Color3.new(), Enum.Material.SmoothPlastic, 1)
+1937 	spawn.CanCollide = true
+1938 	spawn:SetAttribute("Level3_CompatibilityMarker", true)
+1939 	spawn.Parent = workspace
+1940 	local mazeStart = part(parent, "MazeStart", spawn.CFrame, Vector3.new(2, .3, 2),
+1941 		Color3.new(), Enum.Material.SmoothPlastic, 1)
+1942 	mazeStart.CanCollide = false
+1943 	mazeStart:SetAttribute("Level3_CompatibilityMarker", true)
+1944 	mazeStart.Parent = workspace
+1945 	model:SetAttribute("Level3_CompatibilityMarker", true)
+1946 	return model, spawn, mazeStart
