@@ -1,0 +1,39 @@
+{
+  "schema": "lobby-reimagined-generated-installer-v1",
+  "output": "artifacts/lobby-reimagined-20261001/install_preview.luau",
+  "sha256": "eabb8177da59390debaad37f39067ff0e0cff5c2bfcc9c50d112e2a7cf223262",
+  "bytes": 16263,
+  "manifestSha256": "1ff90cd173a37c3c9c2044227630f44c5eaa8fe61e500549e611b5824861d0fe",
+  "chunks": 32,
+  "sources": [
+    {
+      "key": "runtime-bake",
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "bytes": 8145,
+      "sha256": "d542c29ddffb10687c66a7e55220e4fea3c8b63ae856cedfd467b414ed894ab6"
+    },
+    {
+      "key": "builder",
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "bytes": 7362,
+      "sha256": "b8777d196e4a7243762eb373554a42ebe3ce9b67ecd2d76921b012b5c0902a9b"
+    },
+    {
+      "key": "bootstrap",
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "bytes": 929,
+      "sha256": "48ea72987c70e668d837fff0e3d0939c13c809e6e52c0b7f83dabaf91139e5c9"
+    },
+    {
+      "key": "queue-client",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "bytes": 3219,
+      "sha256": "f8e1e33278f7a0ab17e7cfbe472e4f565e7802df26ad78b5ad70f49fac6f3585"
+    }
+  ],
+  "scope": "Generate local candidate only; no Studio connection, installation, upload or publish"
+}

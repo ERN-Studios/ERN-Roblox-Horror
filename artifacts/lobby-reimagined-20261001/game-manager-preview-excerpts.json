@@ -1,0 +1,48 @@
+{
+  "sourceBytes": 159281,
+  "path": "ServerScriptService.GameManager",
+  "editorMatch": true,
+  "class": "Script",
+  "excerpts": [
+    {
+      "text": "end",
+      "line": 572
+    },
+    {
+      "text": "",
+      "line": 573
+    },
+    {
+      "text": "local function buildLobby()",
+      "line": 574
+    },
+    {
+      "text": " return require(script.Parent:WaitForChild(\"TunnelLobbyBuilder\")).Build(LOBBY_CENTER)",
+      "line": 575
+    },
+    {
+      "text": "end",
+      "line": 576
+    },
+    {
+      "text": "",
+      "line": 577
+    },
+    {
+      "text": "-- Recover automatically if a generated world was accidentally saved into the",
+      "line": 578
+    },
+    {
+      "text": "-- place from Edit mode. Without this, Level 1 builds its maze on top of the",
+      "line": 579
+    },
+    {
+      "text": "-- saved level while its Entity and puzzle scripts remain stored/disabled.",
+      "line": 580
+    },
+    {
+      "text": "local function sanitizePersistedLevelState()",
+      "line": 581
+    }
+  ]
+}

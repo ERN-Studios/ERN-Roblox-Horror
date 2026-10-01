@@ -1,0 +1,14 @@
+{
+  "observedAtUTC": "2026-10-01T10:16:20.389866+00:00",
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "cliVersion": "2.1.286 (Claude Code)",
+  "highestEffort": "max",
+  "ultraCodeEffortFlagSupported": false,
+  "helpEvidence": [
+    "  --effort <level>                      Effort level for the current session\n                                        (low, medium, high, xhigh, max)",
+    "  --model <model>                       Model for the current session. Provide\n                                        an alias for the latest model (e.g.\n                                        'fable', 'opus', or 'sonnet') or a\n                                        model's full name.",
+    "  --safe-mode                           Start with all customizations\n                                        (CLAUDE.md, skills, installed plugins,\n                                        hooks, MCP servers, custom commands and\n                                        agents, output styles, workflows, custom\n                                        themes, keybindings, and more) disabled\n                                        \u2014 useful for troubleshooting a broken\n                                        configuration. Admin-managed (policy)\n                                        settings still apply. Auth, model\n                                        selection, built-in tools and plugins,\n                                        and permissions work normally. Sets\n                                        CLAUDE_CODE_SAFE_MODE=1.",
+    "  --tools <tools...>                    Specify the list of available tools from\n                                        the built-in set. Use \"\" to disable all\n                                        tools, \"default\" to use all tools, or\n                                        specify tool names (e.g.\n                                        \"Bash,Edit,Read\").",
+    "                                        apply; add --strict-mcp-config to skip\n                                        MCP servers too). Also confines the file\n                                        tools to the working directories\n                                        (--add-dir included), refuses\n                                        bypassPermissions, and lets only a\n                                        person or the configured permission\n                                        handler approve writes to settings, git\n                                        and tool-configuration files."
+  ]
+}

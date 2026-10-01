@@ -1,0 +1,2878 @@
+{
+  "actualRootCount": 181,
+  "actualWholeForestSHA256": "3911459900a08f5d95973357ccdfe074e5a284cb5c2eaf6b32e5022a4b1d7d60",
+  "capturedAt": "2026-10-01T10:45:54Z",
+  "comparisonOnly": true,
+  "memoryOnlyExclusions": {},
+  "normalizedRootCount": 181,
+  "normalizedWholeForestSHA256": "3911459900a08f5d95973357ccdfe074e5a284cb5c2eaf6b32e5022a4b1d7d60",
+  "observedPlaceVersion": 2450,
+  "phase": "before",
+  "placeId": 131311258779917,
+  "rootRecords": {
+    "Lighting.Atmosphere": {
+      "actualBytes": 638,
+      "actualSHA256": "b7c90e34e06739c1801478f8ec49311d76dbf9d63a608b96da201239275f9722",
+      "capturedDescendants": 0,
+      "class": "Atmosphere",
+      "nativeDescendants": 0,
+      "normalizedBytes": 638,
+      "normalizedSHA256": "b7c90e34e06739c1801478f8ec49311d76dbf9d63a608b96da201239275f9722"
+    },
+    "Lighting.Bloom": {
+      "actualBytes": 550,
+      "actualSHA256": "4ead19a720b889f334414f26ecc37e9e174b72c11e29e4c16cfab74a4e7cedbc",
+      "capturedDescendants": 0,
+      "class": "BloomEffect",
+      "nativeDescendants": 0,
+      "normalizedBytes": 550,
+      "normalizedSHA256": "4ead19a720b889f334414f26ecc37e9e174b72c11e29e4c16cfab74a4e7cedbc"
+    },
+    "Lighting.DepthOfField": {
+      "actualBytes": 624,
+      "actualSHA256": "30e5302d23fb24d7f36a520351968a6e7325bf44606d2d5d45ecebb067ac60e4",
+      "capturedDescendants": 0,
+      "class": "DepthOfFieldEffect",
+      "nativeDescendants": 0,
+      "normalizedBytes": 624,
+      "normalizedSHA256": "30e5302d23fb24d7f36a520351968a6e7325bf44606d2d5d45ecebb067ac60e4"
+    },
+    "Lighting.Sky": {
+      "actualBytes": 1321,
+      "actualSHA256": "1541ac022b8d2c6bbea471e56ebde9128e55901eb16d822ef8bdc8200a9287f2",
+      "capturedDescendants": 0,
+      "class": "Sky",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1321,
+      "normalizedSHA256": "1541ac022b8d2c6bbea471e56ebde9128e55901eb16d822ef8bdc8200a9287f2"
+    },
+    "Lighting.SunRays": {
+      "actualBytes": 516,
+      "actualSHA256": "c57ad4731f63d60719947f1de227e84ce4a45ed34b9281118deba169024a6279",
+      "capturedDescendants": 0,
+      "class": "SunRaysEffect",
+      "nativeDescendants": 0,
+      "normalizedBytes": 516,
+      "normalizedSHA256": "c57ad4731f63d60719947f1de227e84ce4a45ed34b9281118deba169024a6279"
+    },
+    "LocalScript.BubbleChatConfiguration": {
+      "actualBytes": 5163,
+      "actualSHA256": "1becb07d132af9cc6bb93860c98d827cab69958e6570ac705a7071e863a46407",
+      "capturedDescendants": 4,
+      "class": "BubbleChatConfiguration",
+      "nativeDescendants": 4,
+      "normalizedBytes": 5163,
+      "normalizedSHA256": "1becb07d132af9cc6bb93860c98d827cab69958e6570ac705a7071e863a46407"
+    },
+    "LocalScript.ChannelTabsConfiguration": {
+      "actualBytes": 1003,
+      "actualSHA256": "fcaa9062f6f73bd8597e0decc4e7e699e08fb82566a9b39c9e58abd549f1168d",
+      "capturedDescendants": 0,
+      "class": "ChannelTabsConfiguration",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1003,
+      "normalizedSHA256": "fcaa9062f6f73bd8597e0decc4e7e699e08fb82566a9b39c9e58abd549f1168d"
+    },
+    "LocalScript.ChatInputBarConfiguration": {
+      "actualBytes": 1084,
+      "actualSHA256": "21b4c123d0d7b1b475a039f24d49e740cecc63633180989c3ce750a163ec27b2",
+      "capturedDescendants": 0,
+      "class": "ChatInputBarConfiguration",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1084,
+      "normalizedSHA256": "21b4c123d0d7b1b475a039f24d49e740cecc63633180989c3ce750a163ec27b2"
+    },
+    "LocalScript.ChatWindowConfiguration": {
+      "actualBytes": 1117,
+      "actualSHA256": "5e3151c3b3fcc2faf5483d2f830107843efd3d8e82d3a5e8f57297378e4cf449",
+      "capturedDescendants": 0,
+      "class": "ChatWindowConfiguration",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1117,
+      "normalizedSHA256": "5e3151c3b3fcc2faf5483d2f830107843efd3d8e82d3a5e8f57297378e4cf449"
+    },
+    "MaterialService.L6R_CarpetCity": {
+      "actualBytes": 1296,
+      "actualSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1296,
+      "normalizedSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9"
+    },
+    "MaterialService.L6R_CarpetDefault": {
+      "actualBytes": 1299,
+      "actualSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1299,
+      "normalizedSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a"
+    },
+    "MaterialService.L6R_CarpetNeon": {
+      "actualBytes": 1296,
+      "actualSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1296,
+      "normalizedSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f"
+    },
+    "MaterialService.L6R_CarpetRed": {
+      "actualBytes": 1295,
+      "actualSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1295,
+      "normalizedSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018"
+    },
+    "MaterialService.L6R_Diamondplate": {
+      "actualBytes": 1334,
+      "actualSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1334,
+      "normalizedSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd"
+    },
+    "MaterialService.L6R_KitchenTile": {
+      "actualBytes": 1298,
+      "actualSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1298,
+      "normalizedSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f"
+    },
+    "MaterialService.L6R_OrangeWall": {
+      "actualBytes": 1296,
+      "actualSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1296,
+      "normalizedSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12"
+    },
+    "MaterialService.L6R_RedWall": {
+      "actualBytes": 1292,
+      "actualSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1292,
+      "normalizedSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b"
+    },
+    "MaterialService.L6R_Wallpaper": {
+      "actualBytes": 1294,
+      "actualSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1294,
+      "normalizedSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373"
+    },
+    "MaterialService.Level2 Kids Foam Vinyl": {
+      "actualBytes": 1189,
+      "actualSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1189,
+      "normalizedSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4"
+    },
+    "MaterialService.Level2 Kids Rubber Floor": {
+      "actualBytes": 1190,
+      "actualSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1190,
+      "normalizedSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246"
+    },
+    "MaterialService.Level2 Kids Slide Fiberglass": {
+      "actualBytes": 1194,
+      "actualSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1194,
+      "normalizedSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25"
+    },
+    "MaterialService.Level5AgedPlaster": {
+      "actualBytes": 1188,
+      "actualSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1188,
+      "normalizedSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f"
+    },
+    "MaterialService.Level5CourtyardClapboard": {
+      "actualBytes": 1133,
+      "actualSHA256": "8e2e4db217760025f8f3ffb3b39a88584047bf228f7156c7677c9d4d0575dd06",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1133,
+      "normalizedSHA256": "8e2e4db217760025f8f3ffb3b39a88584047bf228f7156c7677c9d4d0575dd06"
+    },
+    "MaterialService.Level5FloralWallpaper": {
+      "actualBytes": 1192,
+      "actualSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1192,
+      "normalizedSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb"
+    },
+    "MaterialService.Level5LawnGrass": {
+      "actualBytes": 1186,
+      "actualSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1186,
+      "normalizedSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96"
+    },
+    "MaterialService.Level5LoopCarpet": {
+      "actualBytes": 1188,
+      "actualSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1188,
+      "normalizedSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441"
+    },
+    "MaterialService.Level5PaintedSiding": {
+      "actualBytes": 1191,
+      "actualSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1191,
+      "normalizedSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24"
+    },
+    "MaterialService.Level5RoofShingles": {
+      "actualBytes": 1190,
+      "actualSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1190,
+      "normalizedSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7"
+    },
+    "MaterialService.Level5VeneerWood": {
+      "actualBytes": 1188,
+      "actualSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1188,
+      "normalizedSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5"
+    },
+    "MaterialService.MaterialVariant": {
+      "actualBytes": 1061,
+      "actualSHA256": "871df50baf795c9ef993f47231729a1ae06335937ac9296ac7e95994a19bf6bb",
+      "capturedDescendants": 0,
+      "class": "MaterialVariant",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1061,
+      "normalizedSHA256": "871df50baf795c9ef993f47231729a1ae06335937ac9296ac7e95994a19bf6bb"
+    },
+    "ReplicatedStorage.DeathAdvice": {
+      "actualBytes": 4950,
+      "actualSHA256": "33db2377b7678fa10c006a0b2585ce92d7d10e4d89dc32829d2aece410f5a99d",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4950,
+      "normalizedSHA256": "33db2377b7678fa10c006a0b2585ce92d7d10e4d89dc32829d2aece410f5a99d"
+    },
+    "ReplicatedStorage.DevAccess": {
+      "actualBytes": 1219,
+      "actualSHA256": "116fd07b386ca239f16cddacac3c4f68dc36cba14dd4193104d73497f6b793d0",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1219,
+      "normalizedSHA256": "116fd07b386ca239f16cddacac3c4f68dc36cba14dd4193104d73497f6b793d0"
+    },
+    "ReplicatedStorage.FlashlightProfiles": {
+      "actualBytes": 1982,
+      "actualSHA256": "0e5b3935b5ad5fb7f3618208cece123332478d039e5c2315721c3099c8a89b59",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1982,
+      "normalizedSHA256": "0e5b3935b5ad5fb7f3618208cece123332478d039e5c2315721c3099c8a89b59"
+    },
+    "ReplicatedStorage.Level 1 Sound Library": {
+      "actualBytes": 893,
+      "actualSHA256": "9bc89256cc73d15bcca1d830bbe7532a07501ba9d8a1f4bc6b4ce2b4fdfa5afe",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 893,
+      "normalizedSHA256": "9bc89256cc73d15bcca1d830bbe7532a07501ba9d8a1f4bc6b4ce2b4fdfa5afe"
+    },
+    "ReplicatedStorage.Level 2 Assets": {
+      "actualBytes": 1262,
+      "actualSHA256": "3cf2c945e29c36be9b50e0248422496090d3bded6b22ca12d897c1a5c92552db",
+      "capturedDescendants": 7,
+      "class": "Folder",
+      "nativeDescendants": 7,
+      "normalizedBytes": 1262,
+      "normalizedSHA256": "3cf2c945e29c36be9b50e0248422496090d3bded6b22ca12d897c1a5c92552db"
+    },
+    "ReplicatedStorage.Level 2 Entity Audio Bank": {
+      "actualBytes": 3429,
+      "actualSHA256": "dced844ba37fe6fe7517aafa9d64d1309aa25a413347cd2cb785f2d86f68f0c2",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3429,
+      "normalizedSHA256": "dced844ba37fe6fe7517aafa9d64d1309aa25a413347cd2cb785f2d86f68f0c2"
+    },
+    "ReplicatedStorage.Level 2 Pool Foam Audio": {
+      "actualBytes": 1021,
+      "actualSHA256": "e2e15590f1d59af89182c1fa3f41a9032d19dbbf8574f23860a9661b2bf93af2",
+      "capturedDescendants": 12,
+      "class": "Folder",
+      "nativeDescendants": 12,
+      "normalizedBytes": 1021,
+      "normalizedSHA256": "e2e15590f1d59af89182c1fa3f41a9032d19dbbf8574f23860a9661b2bf93af2"
+    },
+    "ReplicatedStorage.Level 2 Pool Foam Remotes": {
+      "actualBytes": 908,
+      "actualSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 908,
+      "normalizedSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e"
+    },
+    "ReplicatedStorage.Level 2 Remotes": {
+      "actualBytes": 818,
+      "actualSHA256": "6a9750785f3a91e96499729c40d88175ea2d8161973a59954c7beca6fa6bd290",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 818,
+      "normalizedSHA256": "6a9750785f3a91e96499729c40d88175ea2d8161973a59954c7beca6fa6bd290"
+    },
+    "ReplicatedStorage.Level 2 Sound Library": {
+      "actualBytes": 2218,
+      "actualSHA256": "9ed29ad3dff8c939c49568080341bbd33db34e9685f0eb23d0c74c8636bbbb67",
+      "capturedDescendants": 25,
+      "class": "Folder",
+      "nativeDescendants": 25,
+      "normalizedBytes": 2218,
+      "normalizedSHA256": "9ed29ad3dff8c939c49568080341bbd33db34e9685f0eb23d0c74c8636bbbb67"
+    },
+    "ReplicatedStorage.Level 2 State": {
+      "actualBytes": 746,
+      "actualSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 746,
+      "normalizedSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772"
+    },
+    "ReplicatedStorage.Level 3 Assets": {
+      "actualBytes": 1134,
+      "actualSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216",
+      "capturedDescendants": 7,
+      "class": "Folder",
+      "nativeDescendants": 7,
+      "normalizedBytes": 1134,
+      "normalizedSHA256": "b3af7c540980c7c4e1d4a4c86e952c4c2f87f4f40ab2cf16587b8781744da216"
+    },
+    "ReplicatedStorage.Level 3 Remotes": {
+      "actualBytes": 1153,
+      "actualSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 1153,
+      "normalizedSHA256": "5bdd2289200bbfe9fc6581580a12f8712e14f194885198fde21d4369f49d4bef"
+    },
+    "ReplicatedStorage.Level 3 Sound Library": {
+      "actualBytes": 1025,
+      "actualSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f",
+      "capturedDescendants": 6,
+      "class": "Folder",
+      "nativeDescendants": 6,
+      "normalizedBytes": 1025,
+      "normalizedSHA256": "46ab59ece766301e8c2c6149691d337eab4a04f57710297caf12335b9db7868f"
+    },
+    "ReplicatedStorage.Level 3 State": {
+      "actualBytes": 2035,
+      "actualSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2035,
+      "normalizedSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2"
+    },
+    "ReplicatedStorage.Level2Audio": {
+      "actualBytes": 1313,
+      "actualSHA256": "ad28763b662105264d800a0a9f686594a57d1987ade262f41c793a9e97361973",
+      "capturedDescendants": 13,
+      "class": "Folder",
+      "nativeDescendants": 13,
+      "normalizedBytes": 1313,
+      "normalizedSHA256": "ad28763b662105264d800a0a9f686594a57d1987ade262f41c793a9e97361973"
+    },
+    "ReplicatedStorage.MasterConfiguration": {
+      "actualBytes": 9407,
+      "actualSHA256": "24077ea5c18f83a87d08356f92e203d35c0f860d659cdf883ab0a593ccf5d6b2",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 9407,
+      "normalizedSHA256": "24077ea5c18f83a87d08356f92e203d35c0f860d659cdf883ab0a593ccf5d6b2"
+    },
+    "ReplicatedStorage.MasterTuning": {
+      "actualBytes": 857,
+      "actualSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4",
+      "capturedDescendants": 1,
+      "class": "Folder",
+      "nativeDescendants": 1,
+      "normalizedBytes": 857,
+      "normalizedSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4"
+    },
+    "ReplicatedStorage.ProtectionClient": {
+      "actualBytes": 3763,
+      "actualSHA256": "859830283619e4856c24f42b057e3f600bcde67cc0cd9786b39765f71d398ee2",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3763,
+      "normalizedSHA256": "859830283619e4856c24f42b057e3f600bcde67cc0cd9786b39765f71d398ee2"
+    },
+    "ReplicatedStorage.Remotes": {
+      "actualBytes": 939,
+      "actualSHA256": "0e99eb43e84a11daeacaffa3afbbc8ba9ee3a7f3635b9182b1631b2eb1bb54b3",
+      "capturedDescendants": 9,
+      "class": "Folder",
+      "nativeDescendants": 9,
+      "normalizedBytes": 939,
+      "normalizedSHA256": "0e99eb43e84a11daeacaffa3afbbc8ba9ee3a7f3635b9182b1631b2eb1bb54b3"
+    },
+    "ReplicatedStorage.SlideContinuationSafety": {
+      "actualBytes": 2810,
+      "actualSHA256": "d02faa0b83a8b6fa8cd9a423ff7e6fe6ba10e97ced1af487d68ecf1f3448adf5",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2810,
+      "normalizedSHA256": "d02faa0b83a8b6fa8cd9a423ff7e6fe6ba10e97ced1af487d68ecf1f3448adf5"
+    },
+    "ReplicatedStorage.UIDevice": {
+      "actualBytes": 50886,
+      "actualSHA256": "36eb03dd4f032e5e0c96c1a9f5285811a9edf78dfe3bdcde5acf94d116fea577",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 50886,
+      "normalizedSHA256": "36eb03dd4f032e5e0c96c1a9f5285811a9edf78dfe3bdcde5acf94d116fea577"
+    },
+    "ReplicatedStorage.UIRegression": {
+      "actualBytes": 211698,
+      "actualSHA256": "7fe65a2b8d84a0a618b11a706be0c28daf341db6abb5771ab6bc623c4eb0eb4f",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 211698,
+      "normalizedSHA256": "7fe65a2b8d84a0a618b11a706be0c28daf341db6abb5771ab6bc623c4eb0eb4f"
+    },
+    "ReplicatedStorage.UIStyle": {
+      "actualBytes": 5957,
+      "actualSHA256": "ae546fca16332ac4d970ae1142c0810b8acafb60bdf48772411b13a4781239e1",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 5957,
+      "normalizedSHA256": "ae546fca16332ac4d970ae1142c0810b8acafb60bdf48772411b13a4781239e1"
+    },
+    "ReplicatedStorage.ZyntraChallenges": {
+      "actualBytes": 3760,
+      "actualSHA256": "850b254f3137bf4d53f69f210f33b8f7c6d831a055d8dd870743df8839562b12",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3760,
+      "normalizedSHA256": "850b254f3137bf4d53f69f210f33b8f7c6d831a055d8dd870743df8839562b12"
+    },
+    "ReplicatedStorage.ZyntraConfig": {
+      "actualBytes": 9897,
+      "actualSHA256": "a6f35a7a55822f15c297472ed420e3891dc94298f7bbffb4c564cd21c29d659f",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 9897,
+      "normalizedSHA256": "a6f35a7a55822f15c297472ed420e3891dc94298f7bbffb4c564cd21c29d659f"
+    },
+    "ReplicatedStorage.ZyntraDailyResearch": {
+      "actualBytes": 1445,
+      "actualSHA256": "b3df6295d9fc4c9e0b2f1c4d2445da8916c00bbb2b02e66161cd7359ec1f7193",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1445,
+      "normalizedSHA256": "b3df6295d9fc4c9e0b2f1c4d2445da8916c00bbb2b02e66161cd7359ec1f7193"
+    },
+    "ReplicatedStorage.ZyntraDailyRewardsPage": {
+      "actualBytes": 20087,
+      "actualSHA256": "145f73a9f65646a4a31fe776f4df4fe670f45e4292aab085e829e94419238a71",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 20087,
+      "normalizedSHA256": "145f73a9f65646a4a31fe776f4df4fe670f45e4292aab085e829e94419238a71"
+    },
+    "ReplicatedStorage.ZyntraDetectorVisual": {
+      "actualBytes": 7395,
+      "actualSHA256": "ae173c44ed530ae6d2f3ef82ab0606eb1bcd2f542e22c103f332f042d8b79391",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 7395,
+      "normalizedSHA256": "ae173c44ed530ae6d2f3ef82ab0606eb1bcd2f542e22c103f332f042d8b79391"
+    },
+    "ReplicatedStorage.ZyntraRecordsPage": {
+      "actualBytes": 8805,
+      "actualSHA256": "8bc7dc81210a79436a0fa9b74c0ad53bcfb5adfe8e4fd647049caf7e714d0b17",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 8805,
+      "normalizedSHA256": "8bc7dc81210a79436a0fa9b74c0ad53bcfb5adfe8e4fd647049caf7e714d0b17"
+    },
+    "ReplicatedStorage.ZyntraSkins": {
+      "actualBytes": 3700,
+      "actualSHA256": "9290978af15fe25bd3f831b1f7117908d2a50e7d3334ca0be692356367899042",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3700,
+      "normalizedSHA256": "9290978af15fe25bd3f831b1f7117908d2a50e7d3334ca0be692356367899042"
+    },
+    "ReplicatedStorage.ZyntraSkinsPage": {
+      "actualBytes": 10112,
+      "actualSHA256": "e61a175f97e647f7bdd9fb1dbb9f866f9ec594a495cb99c3fc16e17c9507d140",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 10112,
+      "normalizedSHA256": "e61a175f97e647f7bdd9fb1dbb9f866f9ec594a495cb99c3fc16e17c9507d140"
+    },
+    "ServerScriptService.AvatarNormalize": {
+      "actualBytes": 2489,
+      "actualSHA256": "ecab8ec1b47b1e56f0c179ff5d514ffd5fe600d97521c26b7a61b3e40a00da04",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2489,
+      "normalizedSHA256": "ecab8ec1b47b1e56f0c179ff5d514ffd5fe600d97521c26b7a61b3e40a00da04"
+    },
+    "ServerScriptService.Crouch State Server": {
+      "actualBytes": 3449,
+      "actualSHA256": "51e737a0db55be8c7c074646e540f3ec819ef670e8094b7fe91f0a3d3ed0f1d9",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3449,
+      "normalizedSHA256": "51e737a0db55be8c7c074646e540f3ec819ef670e8094b7fe91f0a3d3ed0f1d9"
+    },
+    "ServerScriptService.FlashlightSync": {
+      "actualBytes": 3828,
+      "actualSHA256": "8569db06488d6870dc4dad5f3364a8e0dffeb90e778518d097f960743cc347e0",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3828,
+      "normalizedSHA256": "8569db06488d6870dc4dad5f3364a8e0dffeb90e778518d097f960743cc347e0"
+    },
+    "ServerScriptService.FriendBoost": {
+      "actualBytes": 3972,
+      "actualSHA256": "f64ebc09f7f3c0dd59fb726e3ab2f929c7083235ffb4df117e45517b14641bc2",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3972,
+      "normalizedSHA256": "f64ebc09f7f3c0dd59fb726e3ab2f929c7083235ffb4df117e45517b14641bc2"
+    },
+    "ServerScriptService.GameManager": {
+      "actualBytes": 73941,
+      "actualSHA256": "bd02076bfffffd9bc0c62447325fff800883ac22e5a2fb380bb5f53f9c94fcb3",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 73941,
+      "normalizedSHA256": "bd02076bfffffd9bc0c62447325fff800883ac22e5a2fb380bb5f53f9c94fcb3"
+    },
+    "ServerScriptService.HazmatSkinVisuals": {
+      "actualBytes": 7516,
+      "actualSHA256": "59b3fc43037a3d3230a2db5862245a318ec0b64ac1e205d14bc399429bc9b253",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 7516,
+      "normalizedSHA256": "59b3fc43037a3d3230a2db5862245a318ec0b64ac1e205d14bc399429bc9b253"
+    },
+    "ServerScriptService.Level 1 Systems": {
+      "actualBytes": 121905,
+      "actualSHA256": "cbc4bd8d870edaf475a3dcd07258ee445c6b6e2840dbe8cc0ae90284433dc0e0",
+      "capturedDescendants": 5,
+      "class": "Folder",
+      "nativeDescendants": 5,
+      "normalizedBytes": 121905,
+      "normalizedSHA256": "cbc4bd8d870edaf475a3dcd07258ee445c6b6e2840dbe8cc0ae90284433dc0e0"
+    },
+    "ServerScriptService.Level 2 Systems": {
+      "actualBytes": 439825,
+      "actualSHA256": "059bb79711548d5c075f9432af10034312babfba5e0e1436f333e8def0361f87",
+      "capturedDescendants": 19,
+      "class": "Folder",
+      "nativeDescendants": 19,
+      "normalizedBytes": 439825,
+      "normalizedSHA256": "059bb79711548d5c075f9432af10034312babfba5e0e1436f333e8def0361f87"
+    },
+    "ServerScriptService.Level 3 Systems": {
+      "actualBytes": 296082,
+      "actualSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed",
+      "capturedDescendants": 11,
+      "class": "Folder",
+      "nativeDescendants": 11,
+      "normalizedBytes": 296082,
+      "normalizedSHA256": "0e1fdc492fca8886ce3b167096a16dd9ad6bc332ebe08590ab81d28d70f2c6ed"
+    },
+    "ServerScriptService.Level 6 Systems": {
+      "actualBytes": 234614,
+      "actualSHA256": "f37c2a47b82276ab607e757acd05c48c329db31a3c2f0d13da31d37a5adca985",
+      "capturedDescendants": 14,
+      "class": "Folder",
+      "nativeDescendants": 14,
+      "normalizedBytes": 234614,
+      "normalizedSHA256": "f37c2a47b82276ab607e757acd05c48c329db31a3c2f0d13da31d37a5adca985"
+    },
+    "ServerScriptService.Level2Generator": {
+      "actualBytes": 815,
+      "actualSHA256": "e05ba1f1e9732338d2408ba77b57aa816adcce926240a3e095e23ac7646215e6",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 815,
+      "normalizedSHA256": "e05ba1f1e9732338d2408ba77b57aa816adcce926240a3e095e23ac7646215e6"
+    },
+    "ServerScriptService.Level3Generator": {
+      "actualBytes": 838,
+      "actualSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 838,
+      "normalizedSHA256": "dda1749d625e7fe0358b0f92494c629e9b451055abe520df44fd4b44ad0eb36c"
+    },
+    "ServerScriptService.Level4CinemaV4": {
+      "actualBytes": 21995,
+      "actualSHA256": "f108ef0b2d42c38b2b648dbb7091d72901ce092748df035610febb4bb5346fe5",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 21995,
+      "normalizedSHA256": "f108ef0b2d42c38b2b648dbb7091d72901ce092748df035610febb4bb5346fe5"
+    },
+    "ServerScriptService.Level4CinemaV5": {
+      "actualBytes": 35381,
+      "actualSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 35381,
+      "normalizedSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3"
+    },
+    "ServerScriptService.Level4CinemaV6": {
+      "actualBytes": 40864,
+      "actualSHA256": "916b26bdef87e5b91c2a8459fddc699d412e429aa1b0a13181d48cbeb40aaf9b",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 40864,
+      "normalizedSHA256": "916b26bdef87e5b91c2a8459fddc699d412e429aa1b0a13181d48cbeb40aaf9b"
+    },
+    "ServerScriptService.Level4CinemaV7": {
+      "actualBytes": 53468,
+      "actualSHA256": "b89d726537ebdd29969d5972203cf89a32d74b4301570bcd59177ccccfc52923",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 53468,
+      "normalizedSHA256": "b89d726537ebdd29969d5972203cf89a32d74b4301570bcd59177ccccfc52923"
+    },
+    "ServerScriptService.Level4Expansion": {
+      "actualBytes": 18199,
+      "actualSHA256": "9292d5d7bdd0d25ecb167a682a39a703ea02f58c996f69d5a6835ff9352106b2",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 18199,
+      "normalizedSHA256": "9292d5d7bdd0d25ecb167a682a39a703ea02f58c996f69d5a6835ff9352106b2"
+    },
+    "ServerScriptService.Level4Generator": {
+      "actualBytes": 16613,
+      "actualSHA256": "65c38772060ae75340dca2dcea18d7d1ec27d7f1c4908a30f169b61c715955c0",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 16613,
+      "normalizedSHA256": "65c38772060ae75340dca2dcea18d7d1ec27d7f1c4908a30f169b61c715955c0"
+    },
+    "ServerScriptService.Level4PreviewAccess": {
+      "actualBytes": 5995,
+      "actualSHA256": "138f1efe76c19ef78f8fd72f92114fe1a3a447b7f0d3e6e4844efbd724aa6f0d",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 5995,
+      "normalizedSHA256": "138f1efe76c19ef78f8fd72f92114fe1a3a447b7f0d3e6e4844efbd724aa6f0d"
+    },
+    "ServerScriptService.Level4Renovation": {
+      "actualBytes": 19064,
+      "actualSHA256": "75541849a35d282469ad93c4e79fc5d650204f289abcec01f82db789b4386dd4",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 19064,
+      "normalizedSHA256": "75541849a35d282469ad93c4e79fc5d650204f289abcec01f82db789b4386dd4"
+    },
+    "ServerScriptService.Level4RenovationBoot": {
+      "actualBytes": 1232,
+      "actualSHA256": "e3f17f1895f75ca313c9f5f5c9c53e1a12dd79d7e9a2ace77ceaaabfd06bf772",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1232,
+      "normalizedSHA256": "e3f17f1895f75ca313c9f5f5c9c53e1a12dd79d7e9a2ace77ceaaabfd06bf772"
+    },
+    "ServerScriptService.Level4V4PreviewAccess": {
+      "actualBytes": 4384,
+      "actualSHA256": "afc18e7b0260fb517bf391a5c63537372583aaafbde7acb5f16a7db1ecc87168",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4384,
+      "normalizedSHA256": "afc18e7b0260fb517bf391a5c63537372583aaafbde7acb5f16a7db1ecc87168"
+    },
+    "ServerScriptService.Level5PreviewAccess": {
+      "actualBytes": 4350,
+      "actualSHA256": "544ae607e0feb9487933909c39493c66b5b250ac444e1560485f0879d782d93f",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4350,
+      "normalizedSHA256": "544ae607e0feb9487933909c39493c66b5b250ac444e1560485f0879d782d93f"
+    },
+    "ServerScriptService.Level6PreviewAccess": {
+      "actualBytes": 4596,
+      "actualSHA256": "37e536c695ccf85298596954fa3e737e2a44e6a4f41b889e7eb1dedf172d117e",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4596,
+      "normalizedSHA256": "37e536c695ccf85298596954fa3e737e2a44e6a4f41b889e7eb1dedf172d117e"
+    },
+    "ServerScriptService.LobbyPartyModeController": {
+      "actualBytes": 3935,
+      "actualSHA256": "45765bec89cc5c787b12a6d068d827c052526b681a8433627c615f202c77802d",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3935,
+      "normalizedSHA256": "45765bec89cc5c787b12a6d068d827c052526b681a8433627c615f202c77802d"
+    },
+    "ServerScriptService.LobbyShopDisplay": {
+      "actualBytes": 13092,
+      "actualSHA256": "f903d0c119d8cda89fc42d9eeb304a258b9b944c0d66be32df1bbe5256d035ec",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 13092,
+      "normalizedSHA256": "f903d0c119d8cda89fc42d9eeb304a258b9b944c0d66be32df1bbe5256d035ec"
+    },
+    "ServerScriptService.NoiseRegistry": {
+      "actualBytes": 1933,
+      "actualSHA256": "f3b7121b7d1b1888639dde315a3979296ae6975ebffbd4d4134bdb18b577810d",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1933,
+      "normalizedSHA256": "f3b7121b7d1b1888639dde315a3979296ae6975ebffbd4d4134bdb18b577810d"
+    },
+    "ServerScriptService.PlayerProtection": {
+      "actualBytes": 3924,
+      "actualSHA256": "5c4680d90fe4b57f390ced878674a2f6a9494f6d3b6a93db292e8938829261f4",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3924,
+      "normalizedSHA256": "5c4680d90fe4b57f390ced878674a2f6a9494f6d3b6a93db292e8938829261f4"
+    },
+    "ServerScriptService.PurchaseAlerts": {
+      "actualBytes": 4290,
+      "actualSHA256": "ef760f75790be994964c77fe54e5230547046a3adc9971b20a88c78d28e1537e",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4290,
+      "normalizedSHA256": "ef760f75790be994964c77fe54e5230547046a3adc9971b20a88c78d28e1537e"
+    },
+    "ServerScriptService.ReentryPlacement": {
+      "actualBytes": 2882,
+      "actualSHA256": "ae4f0f37641b99b61111480a44b714a96983f146f3fe85869815cc8b74355a1c",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2882,
+      "normalizedSHA256": "ae4f0f37641b99b61111480a44b714a96983f146f3fe85869815cc8b74355a1c"
+    },
+    "ServerScriptService.Round Completion Routing": {
+      "actualBytes": 36382,
+      "actualSHA256": "33398fcb86cd28b46f431c034836e6e87522200416c5e18dd74f39842d2c1fd3",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 36382,
+      "normalizedSHA256": "33398fcb86cd28b46f431c034836e6e87522200416c5e18dd74f39842d2c1fd3"
+    },
+    "ServerScriptService.Round Completion Test Suite": {
+      "actualBytes": 54485,
+      "actualSHA256": "f4193335e164d5863d9ce7d15e49a92ff9b7678c25477f32ac95770f56b6c0b9",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 54485,
+      "normalizedSHA256": "f4193335e164d5863d9ce7d15e49a92ff9b7678c25477f32ac95770f56b6c0b9"
+    },
+    "ServerScriptService.Round Loading Runtime": {
+      "actualBytes": 5022,
+      "actualSHA256": "895ea00d962e01462cd0204998f632268669afdc88caec08e0577f05624f871b",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 5022,
+      "normalizedSHA256": "895ea00d962e01462cd0204998f632268669afdc88caec08e0577f05624f871b"
+    },
+    "ServerScriptService.Round Loading Test Suite": {
+      "actualBytes": 7805,
+      "actualSHA256": "8f290add056077ae716c27e682ccc4ebe3fff5eaef28f3489644b3deea2abe73",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 7805,
+      "normalizedSHA256": "8f290add056077ae716c27e682ccc4ebe3fff5eaef28f3489644b3deea2abe73"
+    },
+    "ServerScriptService.RouteMarkerService": {
+      "actualBytes": 7754,
+      "actualSHA256": "e95cf83e71a10a24439c3c6a7f5521f18fc2e61dc52b2fb2eb7fe8cb84c5de97",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 7754,
+      "normalizedSHA256": "e95cf83e71a10a24439c3c6a7f5521f18fc2e61dc52b2fb2eb7fe8cb84c5de97"
+    },
+    "ServerScriptService.TeamObjectives": {
+      "actualBytes": 1409,
+      "actualSHA256": "90abd0bac66cdd33da9125cf5f89c99ca3dc55c51166decfffa20df449028b28",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1409,
+      "normalizedSHA256": "90abd0bac66cdd33da9125cf5f89c99ca3dc55c51166decfffa20df449028b28"
+    },
+    "ServerScriptService.TunnelLobbyBuilder": {
+      "actualBytes": 50759,
+      "actualSHA256": "331aada4ba290ec421c7ca4daae1c3bc0103e5a46b42f448dd95dc726c7c66f0",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 50759,
+      "normalizedSHA256": "331aada4ba290ec421c7ca4daae1c3bc0103e5a46b42f448dd95dc726c7c66f0"
+    },
+    "ServerScriptService.ZyntraAnalytics": {
+      "actualBytes": 10612,
+      "actualSHA256": "2c87566b1d07868706b8e3506d9bac029538efbf7373245358a011558d325acf",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 10612,
+      "normalizedSHA256": "2c87566b1d07868706b8e3506d9bac029538efbf7373245358a011558d325acf"
+    },
+    "ServerScriptService.ZyntraDetectorSensing": {
+      "actualBytes": 1601,
+      "actualSHA256": "6e4a3a34380f6e9f806d8d9d17a52e7209b1b6626ce33fad767d4af366713ffd",
+      "capturedDescendants": 0,
+      "class": "ModuleScript",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1601,
+      "normalizedSHA256": "6e4a3a34380f6e9f806d8d9d17a52e7209b1b6626ce33fad767d4af366713ffd"
+    },
+    "ServerScriptService.ZyntraDetectorService": {
+      "actualBytes": 2036,
+      "actualSHA256": "e52d019f358c92da21daf779a742dff734b6f228ce786a92ddffa7ace87269be",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2036,
+      "normalizedSHA256": "e52d019f358c92da21daf779a742dff734b6f228ce786a92ddffa7ace87269be"
+    },
+    "ServerScriptService.ZyntraMonetization": {
+      "actualBytes": 92479,
+      "actualSHA256": "6ce18fab884a1f9a8d312c30175e0bcbe8e3fa4615737965bcc998435ec82181",
+      "capturedDescendants": 0,
+      "class": "Script",
+      "nativeDescendants": 0,
+      "normalizedBytes": 92479,
+      "normalizedSHA256": "6ce18fab884a1f9a8d312c30175e0bcbe8e3fa4615737965bcc998435ec82181"
+    },
+    "ServerStorage.Archive": {
+      "actualBytes": 618910,
+      "actualSHA256": "c018ee7366dfea7e34048bfd960f7ed6e44b4c6f2e1060d31141c7f729cedcd4",
+      "capturedDescendants": 1314,
+      "class": "Folder",
+      "nativeDescendants": 1314,
+      "normalizedBytes": 618910,
+      "normalizedSHA256": "c018ee7366dfea7e34048bfd960f7ed6e44b4c6f2e1060d31141c7f729cedcd4"
+    },
+    "ServerStorage.CodexBackup_20260902_ComingSoonGates": {
+      "actualBytes": 39053,
+      "actualSHA256": "7813ba7f040b65233af25b9a8732e8bc4713ff6340798b803839e6a38a980a84",
+      "capturedDescendants": 1,
+      "class": "Folder",
+      "nativeDescendants": 1,
+      "normalizedBytes": 39053,
+      "normalizedSHA256": "7813ba7f040b65233af25b9a8732e8bc4713ff6340798b803839e6a38a980a84"
+    },
+    "ServerStorage.CodexBackup_20260902_CrouchFunction": {
+      "actualBytes": 25909,
+      "actualSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 25909,
+      "normalizedSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes": {
+      "actualBytes": 102383,
+      "actualSHA256": "e69bbbec48ff2059ee28a44ae1d8502a6e310cdf2e121bea9fb1fe94c1f8afbd",
+      "capturedDescendants": 9,
+      "class": "Folder",
+      "nativeDescendants": 9,
+      "normalizedBytes": 102383,
+      "normalizedSHA256": "e69bbbec48ff2059ee28a44ae1d8502a6e310cdf2e121bea9fb1fe94c1f8afbd"
+    },
+    "ServerStorage.HazmatBaselineRig_20260924": {
+      "actualBytes": 38405,
+      "actualSHA256": "c11f2f03b5d87f321d941955f1a37ab6a935e59e8b0d40f9b8ef59334282b06a",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38405,
+      "normalizedSHA256": "c11f2f03b5d87f321d941955f1a37ab6a935e59e8b0d40f9b8ef59334282b06a"
+    },
+    "ServerStorage.HazmatFalseSunTopper_20260924": {
+      "actualBytes": 22903,
+      "actualSHA256": "0eabf372379a94db9a8e3702bdbce1e6c0aa66a2696cb31e337af39ed470a1bd",
+      "capturedDescendants": 4,
+      "class": "Model",
+      "nativeDescendants": 4,
+      "normalizedBytes": 22903,
+      "normalizedSHA256": "0eabf372379a94db9a8e3702bdbce1e6c0aa66a2696cb31e337af39ed470a1bd"
+    },
+    "ServerStorage.HazmatSignalArchitectTopper_20260925": {
+      "actualBytes": 13566,
+      "actualSHA256": "2284e90c9cb986e83d0199d8be9c44ac61e61701e4c368914beef9496081e2c9",
+      "capturedDescendants": 2,
+      "class": "Model",
+      "nativeDescendants": 2,
+      "normalizedBytes": 13566,
+      "normalizedSHA256": "2284e90c9cb986e83d0199d8be9c44ac61e61701e4c368914beef9496081e2c9"
+    },
+    "ServerStorage.HazmatSkin_BaselineYellow_20260924": {
+      "actualBytes": 38414,
+      "actualSHA256": "e35f6db8aa160d69edfc0f4aa35f26b64f781a9ec20caa7f8295b22cde291117",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38414,
+      "normalizedSHA256": "e35f6db8aa160d69edfc0f4aa35f26b64f781a9ec20caa7f8295b22cde291117"
+    },
+    "ServerStorage.HazmatSkin_BlacksiteDirector_20260924": {
+      "actualBytes": 38415,
+      "actualSHA256": "a4ebb5b7644c55db1d6dd13aac64495e72939c67cde7d5d762cebfe1253313bc",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38415,
+      "normalizedSHA256": "a4ebb5b7644c55db1d6dd13aac64495e72939c67cde7d5d762cebfe1253313bc"
+    },
+    "ServerStorage.HazmatSkin_FalseSun_20260924": {
+      "actualBytes": 38406,
+      "actualSHA256": "5d62c32f324f783c14105467ced37066b557fbe6e24034e9e5acda726e9926b1",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38406,
+      "normalizedSHA256": "5d62c32f324f783c14105467ced37066b557fbe6e24034e9e5acda726e9926b1"
+    },
+    "ServerStorage.HazmatSkin_PoolService_20260924": {
+      "actualBytes": 38410,
+      "actualSHA256": "00f39e310cad6c0ddb5f1bddaa5dc0a2d1c4e1c5099e0ffe2286651a41177046",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38410,
+      "normalizedSHA256": "00f39e310cad6c0ddb5f1bddaa5dc0a2d1c4e1c5099e0ffe2286651a41177046"
+    },
+    "ServerStorage.HazmatSkin_SignalArchitect_20260924": {
+      "actualBytes": 38537,
+      "actualSHA256": "1b59730b6f03b32eeeae2fc8b8717e91f2e9c3e1995ffd533578938479fe36b4",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38537,
+      "normalizedSHA256": "1b59730b6f03b32eeeae2fc8b8717e91f2e9c3e1995ffd533578938479fe36b4"
+    },
+    "ServerStorage.HazmatSkin_StaticWraith_20260924": {
+      "actualBytes": 38411,
+      "actualSHA256": "bb982b9e5e42a6c9620ac5f7b77b935426ee4387c9a4895746e1ff3696560a9d",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38411,
+      "normalizedSHA256": "bb982b9e5e42a6c9620ac5f7b77b935426ee4387c9a4895746e1ff3696560a9d"
+    },
+    "ServerStorage.HazmatSkin_SuburbSurvey_20260924": {
+      "actualBytes": 38410,
+      "actualSHA256": "109603505b014ab06612503d0d023feab0cf7fade3d6cf7bac45231cec90f283",
+      "capturedDescendants": 108,
+      "class": "Model",
+      "nativeDescendants": 108,
+      "normalizedBytes": 38410,
+      "normalizedSHA256": "109603505b014ab06612503d0d023feab0cf7fade3d6cf7bac45231cec90f283"
+    },
+    "ServerStorage.HazmatStaticWraithTopper_20260924": {
+      "actualBytes": 19025,
+      "actualSHA256": "5054506b5b24b512debffd33f3a496bc7515da5560ca66bd5245bc9e61a2bace",
+      "capturedDescendants": 4,
+      "class": "Model",
+      "nativeDescendants": 4,
+      "normalizedBytes": 19025,
+      "normalizedSHA256": "5054506b5b24b512debffd33f3a496bc7515da5560ca66bd5245bc9e61a2bace"
+    },
+    "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26": {
+      "actualBytes": 4315,
+      "actualSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4315,
+      "normalizedSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888"
+    },
+    "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26": {
+      "actualBytes": 4300,
+      "actualSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 4300,
+      "normalizedSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16"
+    },
+    "ServerStorage.Level 2 Closed Slide End Cap Template": {
+      "actualBytes": 3518,
+      "actualSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3518,
+      "normalizedSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef"
+    },
+    "ServerStorage.Level 2 Column Flare Template": {
+      "actualBytes": 3524,
+      "actualSHA256": "6bbffd2dfd96594e9f7e28d4188d65498f9508699422297e9bf8afaab5a78d9f",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3524,
+      "normalizedSHA256": "6bbffd2dfd96594e9f7e28d4188d65498f9508699422297e9bf8afaab5a78d9f"
+    },
+    "ServerStorage.Level 2 Column Flare Template 4.500:7.200": {
+      "actualBytes": 4540,
+      "actualSHA256": "2732df1036b7dde288500e54a293ed53e30e44fbe1cbf1e8513a94af8da6e0c3",
+      "capturedDescendants": 1,
+      "class": "MeshPart",
+      "nativeDescendants": 1,
+      "normalizedBytes": 4540,
+      "normalizedSHA256": "2732df1036b7dde288500e54a293ed53e30e44fbe1cbf1e8513a94af8da6e0c3"
+    },
+    "ServerStorage.Level 2 Column Flare Template 5.500:7.425": {
+      "actualBytes": 4541,
+      "actualSHA256": "4cc0c9932647cc30bf225d6c7be2525c2a0867f9c60f24b32f3f45980bc1bb3c",
+      "capturedDescendants": 1,
+      "class": "MeshPart",
+      "nativeDescendants": 1,
+      "normalizedBytes": 4541,
+      "normalizedSHA256": "4cc0c9932647cc30bf225d6c7be2525c2a0867f9c60f24b32f3f45980bc1bb3c"
+    },
+    "ServerStorage.Level 2 Column Flare Template 9.000:10.200": {
+      "actualBytes": 4542,
+      "actualSHA256": "f22f7c8d4ac8014b73fc915ee3bb166e0de5b4f03cf752afbbe25dab2b60d4f8",
+      "capturedDescendants": 1,
+      "class": "MeshPart",
+      "nativeDescendants": 1,
+      "normalizedBytes": 4542,
+      "normalizedSHA256": "f22f7c8d4ac8014b73fc915ee3bb166e0de5b4f03cf752afbbe25dab2b60d4f8"
+    },
+    "ServerStorage.Level 2 Column Tile Surface Template": {
+      "actualBytes": 1050,
+      "actualSHA256": "9ef87ea616c740c2ae4f7497bd6098638aaadc128c92d5f0b10cb0bb9809be79",
+      "capturedDescendants": 0,
+      "class": "SurfaceAppearance",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1050,
+      "normalizedSHA256": "9ef87ea616c740c2ae4f7497bd6098638aaadc128c92d5f0b10cb0bb9809be79"
+    },
+    "ServerStorage.Level 2 Fitted Slide Cradle Template": {
+      "actualBytes": 3561,
+      "actualSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3561,
+      "normalizedSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38"
+    },
+    "ServerStorage.Level 2 Kids Round Skylight Templates": {
+      "actualBytes": 6171,
+      "actualSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 6171,
+      "normalizedSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc"
+    },
+    "ServerStorage.Level 2 Open Slide End Cap Template": {
+      "actualBytes": 3598,
+      "actualSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3598,
+      "normalizedSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6"
+    },
+    "ServerStorage.Level 2 Sealed Open Slide Segment Template": {
+      "actualBytes": 3518,
+      "actualSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55",
+      "capturedDescendants": 0,
+      "class": "MeshPart",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3518,
+      "normalizedSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55"
+    },
+    "ServerStorage.Level 2 Slide Assets": {
+      "actualBytes": 7408,
+      "actualSHA256": "7c842281d951360c7e751eb83d9a31c5c9b297d7732775dc2e31aa721f322fde",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 7408,
+      "normalizedSHA256": "7c842281d951360c7e751eb83d9a31c5c9b297d7732775dc2e31aa721f322fde"
+    },
+    "ServerStorage.Level2Assets": {
+      "actualBytes": 168686,
+      "actualSHA256": "1c8070536777af11965a079a04e608b5d21a3cf8b29a80e43f64c2a765b4ee64",
+      "capturedDescendants": 325,
+      "class": "Folder",
+      "nativeDescendants": 325,
+      "normalizedBytes": 168686,
+      "normalizedSHA256": "1c8070536777af11965a079a04e608b5d21a3cf8b29a80e43f64c2a765b4ee64"
+    },
+    "ServerStorage.Level3Assets": {
+      "actualBytes": 141421,
+      "actualSHA256": "398c921506cc0ee48e83dbadd1418361bd95a321fd15800c4e233c05c5998cf8",
+      "capturedDescendants": 2416,
+      "class": "Folder",
+      "nativeDescendants": 2416,
+      "normalizedBytes": 141421,
+      "normalizedSHA256": "398c921506cc0ee48e83dbadd1418361bd95a321fd15800c4e233c05c5998cf8"
+    },
+    "ServerStorage.Level4CinemaV3Archived": {
+      "actualBytes": 54604,
+      "actualSHA256": "f1a10d34d9db599c577866e216e123daac3ec93dda756d1879a8c03c17c988eb",
+      "capturedDescendants": 4557,
+      "class": "Model",
+      "nativeDescendants": 4557,
+      "normalizedBytes": 54604,
+      "normalizedSHA256": "f1a10d34d9db599c577866e216e123daac3ec93dda756d1879a8c03c17c988eb"
+    },
+    "ServerStorage.Level4V10Templates": {
+      "actualBytes": 543557,
+      "actualSHA256": "f88d50bba2c00bdf9ae211c0e375e70118674cc650e4d0f3787f2a986455ef44",
+      "capturedDescendants": 322,
+      "class": "Folder",
+      "nativeDescendants": 322,
+      "normalizedBytes": 543557,
+      "normalizedSHA256": "f88d50bba2c00bdf9ae211c0e375e70118674cc650e4d0f3787f2a986455ef44"
+    },
+    "ServerStorage.Level4V4Archived_20260927": {
+      "actualBytes": 35220,
+      "actualSHA256": "9c2e52cf799fe859f68f878c2bf97f3bf7819578a6ab8615cc286c44b594a213",
+      "capturedDescendants": 4060,
+      "class": "Model",
+      "nativeDescendants": 4060,
+      "normalizedBytes": 35220,
+      "normalizedSHA256": "9c2e52cf799fe859f68f878c2bf97f3bf7819578a6ab8615cc286c44b594a213"
+    },
+    "ServerStorage.Level4V7Templates": {
+      "actualBytes": 73456,
+      "actualSHA256": "058fb51c79ef420e1759febbce9648410ded2720c042e54fd8498fa8fb61c333",
+      "capturedDescendants": 105,
+      "class": "Folder",
+      "nativeDescendants": 105,
+      "normalizedBytes": 73456,
+      "normalizedSHA256": "058fb51c79ef420e1759febbce9648410ded2720c042e54fd8498fa8fb61c333"
+    },
+    "ServerStorage.Level6BlenderSource": {
+      "actualBytes": 2360623,
+      "actualSHA256": "88867b5502f29d92f1f0b8d52efda7063afb0d5a23d259b36641e8a2226be221",
+      "capturedDescendants": 130,
+      "class": "Folder",
+      "nativeDescendants": 130,
+      "normalizedBytes": 2360623,
+      "normalizedSHA256": "88867b5502f29d92f1f0b8d52efda7063afb0d5a23d259b36641e8a2226be221"
+    },
+    "ServerStorage.Level6BlenderSourceRevision20261001": {
+      "actualBytes": 35931166,
+      "actualSHA256": "0441dd9c3f90e97f70cbc6d5150b5d892c1f3d6639142098f8fa1645a13c60d5",
+      "capturedDescendants": 872,
+      "class": "Folder",
+      "nativeDescendants": 872,
+      "normalizedBytes": 35931166,
+      "normalizedSHA256": "0441dd9c3f90e97f70cbc6d5150b5d892c1f3d6639142098f8fa1645a13c60d5"
+    },
+    "ServerStorage.Level6TextureImportReferences": {
+      "actualBytes": 486,
+      "actualSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 486,
+      "normalizedSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167"
+    },
+    "ServerStorage.MongoTVEntityAnimations": {
+      "actualBytes": 7682736,
+      "actualSHA256": "71c93ececb7e10747fea4aef38f5ab5de259368dbb86f190eb6364c7e8c1d511",
+      "capturedDescendants": 223366,
+      "class": "Folder",
+      "nativeDescendants": 223366,
+      "normalizedBytes": 7682736,
+      "normalizedSHA256": "71c93ececb7e10747fea4aef38f5ab5de259368dbb86f190eb6364c7e8c1d511"
+    },
+    "ServerStorage.PoolSlideContactAnimations_20260910": {
+      "actualBytes": 188972,
+      "actualSHA256": "25142418f770f35f5f55fffd8245568085c89c0733fbb6c5f4e8a5f6ca809e80",
+      "capturedDescendants": 5373,
+      "class": "Folder",
+      "nativeDescendants": 5373,
+      "normalizedBytes": 188972,
+      "normalizedSHA256": "25142418f770f35f5f55fffd8245568085c89c0733fbb6c5f4e8a5f6ca809e80"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_0710": {
+      "actualBytes": 77072,
+      "actualSHA256": "2214e2f183f9c4dd9174599db742169ab5d5fcdd692e47cbab78c59535269b5a",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 77072,
+      "normalizedSHA256": "2214e2f183f9c4dd9174599db742169ab5d5fcdd692e47cbab78c59535269b5a"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z": {
+      "actualBytes": 77096,
+      "actualSHA256": "a869cdb1f357f630ed021266e3a1d5b08c43327324411fa35bdbb85a86b53358",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 77096,
+      "normalizedSHA256": "a869cdb1f357f630ed021266e3a1d5b08c43327324411fa35bdbb85a86b53358"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z": {
+      "actualBytes": 77096,
+      "actualSHA256": "161ecab040cc8305e2e18442421aae87de99943418bde19a86454a183d4e82b4",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 77096,
+      "normalizedSHA256": "161ecab040cc8305e2e18442421aae87de99943418bde19a86454a183d4e82b4"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z": {
+      "actualBytes": 136902,
+      "actualSHA256": "9564e1a0004e4411b4495d2f9a0ecd8efa666fff7a62c76e6735c9005352fb9a",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 136902,
+      "normalizedSHA256": "9564e1a0004e4411b4495d2f9a0ecd8efa666fff7a62c76e6735c9005352fb9a"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z": {
+      "actualBytes": 77254,
+      "actualSHA256": "691936fc02e16eb77597dc3d3538dafbe0c50a9c1d89478c4a5e8c1a9aa54a7c",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 77254,
+      "normalizedSHA256": "691936fc02e16eb77597dc3d3538dafbe0c50a9c1d89478c4a5e8c1a9aa54a7c"
+    },
+    "ServerStorage.PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z": {
+      "actualBytes": 40152,
+      "actualSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb",
+      "capturedDescendants": 3,
+      "class": "Folder",
+      "nativeDescendants": 3,
+      "normalizedBytes": 40152,
+      "normalizedSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb"
+    },
+    "ServerStorage.Project Mirror": {
+      "actualBytes": 1671,
+      "actualSHA256": "fb2f409371e1f23ecea93e62eb376e5ee455a97269a2dc5e0b44887b6b52730c",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 1671,
+      "normalizedSHA256": "fb2f409371e1f23ecea93e62eb376e5ee455a97269a2dc5e0b44887b6b52730c"
+    },
+    "ServerStorage.RBX_ANIMSAVES": {
+      "actualBytes": 2514906,
+      "actualSHA256": "64414490b342cf5f619117d8ed4828d458796899fcbc7dfedac267ca9a00d61b",
+      "capturedDescendants": 85711,
+      "class": "Model",
+      "nativeDescendants": 85711,
+      "normalizedBytes": 2514906,
+      "normalizedSHA256": "64414490b342cf5f619117d8ed4828d458796899fcbc7dfedac267ca9a00d61b"
+    },
+    "ServerStorage.TEMP_PipeEntityAnimations_20260909": {
+      "actualBytes": 1022182,
+      "actualSHA256": "db4451e9402b4415a5f02f2baaf5647b801ada13fd8ecc23f8a4457d3fab366e",
+      "capturedDescendants": 4642,
+      "class": "Folder",
+      "nativeDescendants": 4642,
+      "normalizedBytes": 1022182,
+      "normalizedSHA256": "db4451e9402b4415a5f02f2baaf5647b801ada13fd8ecc23f8a4457d3fab366e"
+    },
+    "ServerStorage.TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded": {
+      "actualBytes": 839304,
+      "actualSHA256": "2e90145453a96884e3cd8171dea46f318a0a2a265250c862ed6c94d432f047c2",
+      "capturedDescendants": 3821,
+      "class": "Folder",
+      "nativeDescendants": 3821,
+      "normalizedBytes": 839304,
+      "normalizedSHA256": "2e90145453a96884e3cd8171dea46f318a0a2a265250c862ed6c94d432f047c2"
+    },
+    "ServerStorage.TEMP_PipeEntityLobbyRigResult_0748Z": {
+      "actualBytes": 2927,
+      "actualSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2927,
+      "normalizedSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_0457Z": {
+      "actualBytes": 1372,
+      "actualSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 1372,
+      "normalizedSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_0503Z": {
+      "actualBytes": 2336,
+      "actualSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2336,
+      "normalizedSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_0508Z": {
+      "actualBytes": 23116,
+      "actualSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 23116,
+      "normalizedSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_0638Z": {
+      "actualBytes": 25526,
+      "actualSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 25526,
+      "normalizedSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_0706Z": {
+      "actualBytes": 8750,
+      "actualSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 8750,
+      "normalizedSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_1609Z": {
+      "actualBytes": 2630,
+      "actualSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2630,
+      "normalizedSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_1624Z": {
+      "actualBytes": 32627,
+      "actualSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 32627,
+      "normalizedSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_1633Z": {
+      "actualBytes": 26847,
+      "actualSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 26847,
+      "normalizedSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_1640Z": {
+      "actualBytes": 27847,
+      "actualSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 27847,
+      "normalizedSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd"
+    },
+    "ServerStorage.TEMP_PipeEntityMPResult_1648Z": {
+      "actualBytes": 2872,
+      "actualSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 2872,
+      "normalizedSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0"
+    },
+    "ServerStorage.TEMP_PipeEntityMultiplayerLaunch": {
+      "actualBytes": 554,
+      "actualSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a",
+      "capturedDescendants": 0,
+      "class": "Folder",
+      "nativeDescendants": 0,
+      "normalizedBytes": 554,
+      "normalizedSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a"
+    },
+    "ServerStorage.TEMP_PipeEntityValidation": {
+      "actualBytes": 74194,
+      "actualSHA256": "47992fa7c122014b0c57d0803541f574b89b468d23f16e94c87f7d4fe2670c6f",
+      "capturedDescendants": 100,
+      "class": "Folder",
+      "nativeDescendants": 100,
+      "normalizedBytes": 74194,
+      "normalizedSHA256": "47992fa7c122014b0c57d0803541f574b89b468d23f16e94c87f7d4fe2670c6f"
+    },
+    "ServerStorage.TrelloPoolSlideReleaseBackup_20260910": {
+      "actualBytes": 76278,
+      "actualSHA256": "2568f0bd6723cce27a6b36a3b487dd4e4429bb955d03bc6ae6b1d061559faf49",
+      "capturedDescendants": 106,
+      "class": "Folder",
+      "nativeDescendants": 106,
+      "normalizedBytes": 76278,
+      "normalizedSHA256": "2568f0bd6723cce27a6b36a3b487dd4e4429bb955d03bc6ae6b1d061559faf49"
+    },
+    "StarterPlayer.StarterCharacter": {
+      "actualBytes": 172653,
+      "actualSHA256": "3ff50b1af7d7ce288fa39b8383700c17716a4497c76cc330819dbbb21f6adf3d",
+      "capturedDescendants": 498,
+      "class": "Model",
+      "nativeDescendants": 498,
+      "normalizedBytes": 172653,
+      "normalizedSHA256": "3ff50b1af7d7ce288fa39b8383700c17716a4497c76cc330819dbbb21f6adf3d"
+    },
+    "StarterPlayer.StarterCharacterScripts": {
+      "actualBytes": 2678,
+      "actualSHA256": "eba2ae8c48529d6f8db7abe691ef77a30327d9fd2f35ddd6240aff94a1a0f9a2",
+      "capturedDescendants": 3,
+      "class": "StarterCharacterScripts",
+      "nativeDescendants": 3,
+      "normalizedBytes": 2678,
+      "normalizedSHA256": "eba2ae8c48529d6f8db7abe691ef77a30327d9fd2f35ddd6240aff94a1a0f9a2"
+    },
+    "StarterPlayer.StarterPlayerScripts": {
+      "actualBytes": 700919,
+      "actualSHA256": "7c16105fc604a6ffba802354e0df8574f434198186a3b9a5e24b688acd6dac5a",
+      "capturedDescendants": 49,
+      "class": "StarterPlayerScripts",
+      "nativeDescendants": 49,
+      "normalizedBytes": 700919,
+      "normalizedSHA256": "7c16105fc604a6ffba802354e0df8574f434198186a3b9a5e24b688acd6dac5a"
+    },
+    "Workspace.Avatar Rigged No Animation": {
+      "actualBytes": 55759,
+      "actualSHA256": "cfa3b1ef3b98796358691fbcf70454f2a0973e076ef38856a01995e3b5872e8a",
+      "capturedDescendants": 106,
+      "class": "Model",
+      "nativeDescendants": 106,
+      "normalizedBytes": 55759,
+      "normalizedSHA256": "cfa3b1ef3b98796358691fbcf70454f2a0973e076ef38856a01995e3b5872e8a"
+    },
+    "Workspace.Camera": {
+      "actualBytes": 786,
+      "actualSHA256": "b752fd57ca2ed1c7815eef23d665076223339ef30de7e41f9a46b725a7af6b78",
+      "capturedDescendants": 0,
+      "class": "Camera",
+      "nativeDescendants": 0,
+      "normalizedBytes": 786,
+      "normalizedSHA256": "b752fd57ca2ed1c7815eef23d665076223339ef30de7e41f9a46b725a7af6b78"
+    },
+    "Workspace.Dummy": {
+      "actualBytes": 38393,
+      "actualSHA256": "ba81196ba2002e0fc915f216564517213e0a991eefdbfb0e0fa6e281efd81058",
+      "capturedDescendants": 252,
+      "class": "Model",
+      "nativeDescendants": 251,
+      "normalizedBytes": 38393,
+      "normalizedSHA256": "ba81196ba2002e0fc915f216564517213e0a991eefdbfb0e0fa6e281efd81058"
+    },
+    "Workspace.Entity": {
+      "actualBytes": 61125,
+      "actualSHA256": "19eb776e75233fe3cc1981ba8d781ed2e95372375af0af6ba91d74853008d0a0",
+      "capturedDescendants": 156,
+      "class": "Model",
+      "nativeDescendants": 156,
+      "normalizedBytes": 61125,
+      "normalizedSHA256": "19eb776e75233fe3cc1981ba8d781ed2e95372375af0af6ba91d74853008d0a0"
+    },
+    "Workspace.L5_ImportProbe": {
+      "actualBytes": 4057,
+      "actualSHA256": "1cc59eae97afb78fe75345759464f3feaa95f75e609d2381aa495a94719249e3",
+      "capturedDescendants": 2,
+      "class": "Folder",
+      "nativeDescendants": 2,
+      "normalizedBytes": 4057,
+      "normalizedSHA256": "1cc59eae97afb78fe75345759464f3feaa95f75e609d2381aa495a94719249e3"
+    },
+    "Workspace.Level 4 Cinema Blender": {
+      "actualBytes": 458212,
+      "actualSHA256": "009a7a3bd079172d2871dd66dc7544662d1c03c2dd107f8d34e58cffb3f69270",
+      "capturedDescendants": 13912,
+      "class": "Model",
+      "nativeDescendants": 13912,
+      "normalizedBytes": 458212,
+      "normalizedSHA256": "009a7a3bd079172d2871dd66dc7544662d1c03c2dd107f8d34e58cffb3f69270"
+    },
+    "Workspace.Level 4 Cinema Preview": {
+      "actualBytes": 280087,
+      "actualSHA256": "639a71ff1b46855e52cc3a03bc5c4fb40cbba5a2795bcd37517a4eb663c4b20c",
+      "capturedDescendants": 8126,
+      "class": "Model",
+      "nativeDescendants": 8126,
+      "normalizedBytes": 280087,
+      "normalizedSHA256": "639a71ff1b46855e52cc3a03bc5c4fb40cbba5a2795bcd37517a4eb663c4b20c"
+    },
+    "Workspace.Level 4 Cinema V9 QA": {
+      "actualBytes": 721678,
+      "actualSHA256": "10ea7cf41d5a97b4852a56e38908b7a58e79ba65acfce4c04c6ab5787b738fdf",
+      "capturedDescendants": 9936,
+      "class": "Model",
+      "nativeDescendants": 9936,
+      "normalizedBytes": 721678,
+      "normalizedSHA256": "10ea7cf41d5a97b4852a56e38908b7a58e79ba65acfce4c04c6ab5787b738fdf"
+    },
+    "Workspace.Level 5 Quiet Suburbs": {
+      "actualBytes": 9160020,
+      "actualSHA256": "5241c188978e445537b56da96e497c53ff274e1da880001a7216f0b5cd9c9ee6",
+      "capturedDescendants": 12633,
+      "class": "Model",
+      "nativeDescendants": 12633,
+      "normalizedBytes": 9160020,
+      "normalizedSHA256": "5241c188978e445537b56da96e497c53ff274e1da880001a7216f0b5cd9c9ee6"
+    },
+    "Workspace.ServerLobby": {
+      "actualBytes": 138918,
+      "actualSHA256": "19ed6d07c050677230f3e6c35a049c6fd755e2df6ce51e0cd5fd61eba5d63bdc",
+      "capturedDescendants": 2904,
+      "class": "Model",
+      "nativeDescendants": 2904,
+      "normalizedBytes": 138918,
+      "normalizedSHA256": "19ed6d07c050677230f3e6c35a049c6fd755e2df6ce51e0cd5fd61eba5d63bdc"
+    },
+    "Workspace.StarterCharacter": {
+      "actualBytes": 161778,
+      "actualSHA256": "7e60a21be29024d65b27b0276c6afc50d4fb19fb5c4552eeb0ce01f7d4f4fabc",
+      "capturedDescendants": 438,
+      "class": "Model",
+      "nativeDescendants": 437,
+      "normalizedBytes": 161778,
+      "normalizedSHA256": "7e60a21be29024d65b27b0276c6afc50d4fb19fb5c4552eeb0ce01f7d4f4fabc"
+    },
+    "Workspace.Terrain": {
+      "actualBytes": 3366,
+      "actualSHA256": "80b09cbf6431a037543f7ee65f6b60f2b04b88e8628462d9ba16f5aa9c1c087f",
+      "capturedDescendants": 0,
+      "class": "Terrain",
+      "nativeDescendants": 0,
+      "normalizedBytes": 3366,
+      "normalizedSHA256": "80b09cbf6431a037543f7ee65f6b60f2b04b88e8628462d9ba16f5aa9c1c087f"
+    }
+  },
+  "schema": "lobby-preview-native-forest-scope-v1",
+  "scriptCount": 205,
+  "sourceRecords": {
+    "ReplicatedStorage.DeathAdvice": {
+      "bytes": 6953,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d"
+    },
+    "ReplicatedStorage.DevAccess": {
+      "bytes": 1353,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f"
+    },
+    "ReplicatedStorage.FlashlightProfiles": {
+      "bytes": 2505,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36"
+    },
+    "ReplicatedStorage.Level 2 Entity Audio Bank": {
+      "bytes": 5063,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f"
+    },
+    "ReplicatedStorage.MasterConfiguration": {
+      "bytes": 21208,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6"
+    },
+    "ReplicatedStorage.ProtectionClient": {
+      "bytes": 6906,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649"
+    },
+    "ReplicatedStorage.SlideContinuationSafety": {
+      "bytes": 3945,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40"
+    },
+    "ReplicatedStorage.UIDevice": {
+      "bytes": 99881,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f"
+    },
+    "ReplicatedStorage.UIRegression": {
+      "bytes": 462049,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "b8599730960c091325f59176badeedaaa14084e2631f6bbb29678cdbc0c9dd63"
+    },
+    "ReplicatedStorage.UIStyle": {
+      "bytes": 10555,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a"
+    },
+    "ReplicatedStorage.ZyntraChallenges": {
+      "bytes": 6018,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b"
+    },
+    "ReplicatedStorage.ZyntraConfig": {
+      "bytes": 16706,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0"
+    },
+    "ReplicatedStorage.ZyntraDailyResearch": {
+      "bytes": 1496,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515"
+    },
+    "ReplicatedStorage.ZyntraDailyRewardsPage": {
+      "bytes": 38146,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9"
+    },
+    "ReplicatedStorage.ZyntraDetectorVisual": {
+      "bytes": 13427,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce"
+    },
+    "ReplicatedStorage.ZyntraRecordsPage": {
+      "bytes": 15974,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2"
+    },
+    "ReplicatedStorage.ZyntraSkins": {
+      "bytes": 5823,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4"
+    },
+    "ReplicatedStorage.ZyntraSkinsPage": {
+      "bytes": 19759,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561"
+    },
+    "ServerScriptService.AvatarNormalize": {
+      "bytes": 2567,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de"
+    },
+    "ServerScriptService.Crouch State Server": {
+      "bytes": 7262,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c"
+    },
+    "ServerScriptService.FlashlightSync": {
+      "bytes": 6163,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2"
+    },
+    "ServerScriptService.FriendBoost": {
+      "bytes": 5413,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d"
+    },
+    "ServerScriptService.GameManager": {
+      "bytes": 159281,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a"
+    },
+    "ServerScriptService.HazmatSkinVisuals": {
+      "bytes": 15313,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798"
+    },
+    "ServerScriptService.Level 1 Systems.EntityAI": {
+      "bytes": 58731,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c"
+    },
+    "ServerScriptService.Level 1 Systems.EntityAnimation": {
+      "bytes": 6301,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "1416b0cc577a4ae2379c0a6c6fc6ffb68ddadf0afc1c43e3833444e7019d17f5"
+    },
+    "ServerScriptService.Level 1 Systems.EntityKill": {
+      "bytes": 11569,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727"
+    },
+    "ServerScriptService.Level 1 Systems.MazeGenerator": {
+      "bytes": 84208,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "e90cd8102f5183f5fa75447065d7de8ef1a14ee98e14e00c1ae25356d0cbb72e"
+    },
+    "ServerScriptService.Level 1 Systems.PuzzleManager": {
+      "bytes": 97783,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Configuration": {
+      "bytes": 12107,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite": {
+      "bytes": 47083,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Layout Generator": {
+      "bytes": 37520,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Objective Controller": {
+      "bytes": 50965,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter": {
+      "bytes": 16481,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration": {
+      "bytes": 16193,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller": {
+      "bytes": 99086,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator": {
+      "bytes": 123871,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer": {
+      "bytes": 17971,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory": {
+      "bytes": 11278,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration": {
+      "bytes": 691,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller": {
+      "bytes": 41529,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator": {
+      "bytes": 137281,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter": {
+      "bytes": 7632,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Round Adapter": {
+      "bytes": 20023,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service": {
+      "bytes": 21604,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a"
+    },
+    "ServerScriptService.Level 2 Systems.Level 2 World Builder": {
+      "bytes": 283839,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074"
+    },
+    "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM": {
+      "bytes": 8054,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941"
+    },
+    "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS": {
+      "bytes": 5828,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Configuration": {
+      "bytes": 19286,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller": {
+      "bytes": 25364,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Layout Generator": {
+      "bytes": 42613,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller": {
+      "bytes": 187862,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller": {
+      "bytes": 20901,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Objective Controller": {
+      "bytes": 70421,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Round Adapter": {
+      "bytes": 31538,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Test Suite": {
+      "bytes": 202633,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 World Builder": {
+      "bytes": 105403,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing": {
+      "bytes": 19427,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d"
+    },
+    "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter": {
+      "bytes": 19059,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing": {
+      "bytes": 12529,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Configuration": {
+      "bytes": 19430,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art": {
+      "bytes": 8896,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller": {
+      "bytes": 25600,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata": {
+      "bytes": 31504,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Layout Generator": {
+      "bytes": 47446,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "5b95d2e19c68457804258154e0b5a6f0fb0b9e73261df70513da15bd83c12b88"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller": {
+      "bytes": 188782,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller": {
+      "bytes": 21426,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Objective Controller": {
+      "bytes": 72634,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime": {
+      "bytes": 21622,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Room Dressing": {
+      "bytes": 18364,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter": {
+      "bytes": 23443,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "57cdcd51b1665619d07678163f9501613c8e067344b498f1f2406c623f4ca04f"
+    },
+    "ServerScriptService.Level 6 Systems.Level 6 World Builder": {
+      "bytes": 92349,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58"
+    },
+    "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake": {
+      "bytes": 10474,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc"
+    },
+    "ServerScriptService.Level2Generator": {
+      "bytes": 427,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76"
+    },
+    "ServerScriptService.Level3Generator": {
+      "bytes": 437,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d"
+    },
+    "ServerScriptService.Level4CinemaV4": {
+      "bytes": 40432,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "f301ebcd739aa43ed686c905daaa58b842bb88ba6f0cd598d563795fb7d8a2c1"
+    },
+    "ServerScriptService.Level4CinemaV5": {
+      "bytes": 72545,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "11bcd502d50630fa97fc52ad1f33e9d880c57de423e8d802e45b0b54e21d333b"
+    },
+    "ServerScriptService.Level4CinemaV6": {
+      "bytes": 84582,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "fedd1190c0c80dff435e90ba17054c89599948c5616d100eb13b8edb0d372a24"
+    },
+    "ServerScriptService.Level4CinemaV7": {
+      "bytes": 112876,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "20b6717146f3ee48e36c54099f5ac57c540ba5c4d6f5118ee87a422ca66014f2"
+    },
+    "ServerScriptService.Level4Expansion": {
+      "bytes": 36647,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "262b15148e0bb21c0ba3314a49e492e44d49eed76b82cf38cd920e49e0aaacb5"
+    },
+    "ServerScriptService.Level4Generator": {
+      "bytes": 34952,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "2b21a5bec2868cb5e0e25ec43b4d66a80b3a2a9c591cde35991a369305a40140"
+    },
+    "ServerScriptService.Level4PreviewAccess": {
+      "bytes": 11150,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d"
+    },
+    "ServerScriptService.Level4Renovation": {
+      "bytes": 44537,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3e52645dd98cbee42422a142da3821f5260e3410240081bfb52996fe613a52ec"
+    },
+    "ServerScriptService.Level4RenovationBoot": {
+      "bytes": 1123,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "4af6266bb5146e3d30805249688196a1ca352e7dc622b87fbd6508986e37a227"
+    },
+    "ServerScriptService.Level4V4PreviewAccess": {
+      "bytes": 8127,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253"
+    },
+    "ServerScriptService.Level5PreviewAccess": {
+      "bytes": 8042,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504"
+    },
+    "ServerScriptService.Level6PreviewAccess": {
+      "bytes": 8135,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9"
+    },
+    "ServerScriptService.LobbyPartyModeController": {
+      "bytes": 7124,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c"
+    },
+    "ServerScriptService.LobbyShopDisplay": {
+      "bytes": 22843,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "284a9c6bee23b1574533f910d4cb064c4244d08ddb2931aa243d04d13eac08f0"
+    },
+    "ServerScriptService.NoiseRegistry": {
+      "bytes": 1991,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9"
+    },
+    "ServerScriptService.PlayerProtection": {
+      "bytes": 7408,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b"
+    },
+    "ServerScriptService.PurchaseAlerts": {
+      "bytes": 6278,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2"
+    },
+    "ServerScriptService.ReentryPlacement": {
+      "bytes": 4473,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c"
+    },
+    "ServerScriptService.Round Completion Routing": {
+      "bytes": 75753,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85"
+    },
+    "ServerScriptService.Round Completion Test Suite": {
+      "bytes": 135364,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab"
+    },
+    "ServerScriptService.Round Loading Runtime": {
+      "bytes": 8712,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd"
+    },
+    "ServerScriptService.Round Loading Test Suite": {
+      "bytes": 15550,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b"
+    },
+    "ServerScriptService.RouteMarkerService": {
+      "bytes": 12066,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7"
+    },
+    "ServerScriptService.TeamObjectives": {
+      "bytes": 1228,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3"
+    },
+    "ServerScriptService.TunnelLobbyBuilder": {
+      "bytes": 118480,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a"
+    },
+    "ServerScriptService.ZyntraAnalytics": {
+      "bytes": 19089,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818"
+    },
+    "ServerScriptService.ZyntraDetectorSensing": {
+      "bytes": 1819,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab"
+    },
+    "ServerScriptService.ZyntraDetectorService": {
+      "bytes": 2562,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47"
+    },
+    "ServerScriptService.ZyntraMonetization": {
+      "bytes": 204565,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350"
+    },
+    "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client": {
+      "bytes": 9288,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72"
+    },
+    "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService": {
+      "bytes": 21612,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd"
+    },
+    "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes": {
+      "bytes": 7373,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18"
+    },
+    "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage": {
+      "bytes": 16492,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0"
+    },
+    "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights": {
+      "bytes": 84738,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0"
+    },
+    "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures": {
+      "bytes": 69618,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328"
+    },
+    "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration": {
+      "bytes": 5803,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f"
+    },
+    "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder": {
+      "bytes": 97093,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1"
+    },
+    "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration": {
+      "bytes": 5926,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c"
+    },
+    "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller": {
+      "bytes": 7391,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d"
+    },
+    "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder": {
+      "bytes": 58002,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046"
+    },
+    "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction": {
+      "bytes": 68535,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b"
+    },
+    "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration": {
+      "bytes": 9801,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a"
+    },
+    "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller": {
+      "bytes": 26598,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd"
+    },
+    "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client": {
+      "bytes": 9372,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d"
+    },
+    "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller": {
+      "bytes": 167166,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118"
+    },
+    "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite": {
+      "bytes": 295599,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf"
+    },
+    "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol": {
+      "bytes": 2250,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b"
+    },
+    "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon": {
+      "bytes": 96252,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync": {
+      "bytes": 6740,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration": {
+      "bytes": 5736,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller": {
+      "bytes": 42420,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller": {
+      "bytes": 16436,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder": {
+      "bytes": 95466,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController": {
+      "bytes": 8095,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController": {
+      "bytes": 28932,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client": {
+      "bytes": 6350,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17"
+    },
+    "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter": {
+      "bytes": 27514,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller": {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator": {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller": {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator": {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller": {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator": {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller": {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator": {
+      "bytes": 126975,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix": {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller": {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900"
+    },
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator": {
+      "bytes": 126975,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093"
+    },
+    "ServerStorage.Project Mirror.IMPORTANT": {
+      "bytes": 167,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da"
+    },
+    "ServerStorage.Project Mirror.Script": {
+      "bytes": 235,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf"
+    },
+    "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls": {
+      "bytes": 4670,
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "sha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e"
+    },
+    "StarterPlayer.StarterCharacter.Animate": {
+      "bytes": 28802,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0"
+    },
+    "StarterPlayer.StarterCharacterScripts.DanceEmote": {
+      "bytes": 1539,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b"
+    },
+    "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound": {
+      "bytes": 300,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f"
+    },
+    "StarterPlayer.StarterCharacterScripts.SetRunAnimation": {
+      "bytes": 654,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07"
+    },
+    "StarterPlayer.StarterPlayerScripts.Daily Rewards Client": {
+      "bytes": 27402,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50"
+    },
+    "StarterPlayer.StarterPlayerScripts.DevCheats": {
+      "bytes": 22809,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b"
+    },
+    "StarterPlayer.StarterPlayerScripts.EntityShakeController": {
+      "bytes": 10390,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1"
+    },
+    "StarterPlayer.StarterPlayerScripts.First Entry Guide": {
+      "bytes": 430,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0"
+    },
+    "StarterPlayer.StarterPlayerScripts.FlashlightController": {
+      "bytes": 33275,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283"
+    },
+    "StarterPlayer.StarterPlayerScripts.Friend Boost Client": {
+      "bytes": 8742,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262"
+    },
+    "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver": {
+      "bytes": 19378,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc"
+    },
+    "StarterPlayer.StarterPlayerScripts.JumpscareUI": {
+      "bytes": 7476,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current": {
+      "bytes": 10507,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller": {
+      "bytes": 3462,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio": {
+      "bytes": 20263,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller": {
+      "bytes": 5592,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI": {
+      "bytes": 13516,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client": {
+      "bytes": 18788,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP": {
+      "bytes": 9656,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller": {
+      "bytes": 31003,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller": {
+      "bytes": 40174,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller": {
+      "bytes": 39946,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother": {
+      "bytes": 6548,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client": {
+      "bytes": 59104,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller": {
+      "bytes": 46833,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client": {
+      "bytes": 21675,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller": {
+      "bytes": 6816,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 CD Dev ESP": {
+      "bytes": 6746,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller": {
+      "bytes": 44030,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother": {
+      "bytes": 6548,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client": {
+      "bytes": 59188,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller": {
+      "bytes": 46887,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level 6 Table Hiding Client": {
+      "bytes": 21976,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level2AlertClient": {
+      "bytes": 34389,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt": {
+      "bytes": 1620,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e"
+    },
+    "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport": {
+      "bytes": 1361,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "3621ec9cb5adf11e955ec317e59dca226e3b3d0563f7b6587c34a92ebef9941c"
+    },
+    "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps": {
+      "bytes": 7021,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a"
+    },
+    "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker": {
+      "bytes": 5033,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b"
+    },
+    "StarterPlayer.StarterPlayerScripts.LobbyMusicController": {
+      "bytes": 10226,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6"
+    },
+    "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client": {
+      "bytes": 39336,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9"
+    },
+    "StarterPlayer.StarterPlayerScripts.MasterTuningClient": {
+      "bytes": 10614,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4"
+    },
+    "StarterPlayer.StarterPlayerScripts.NoiseReporter": {
+      "bytes": 44350,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a"
+    },
+    "StarterPlayer.StarterPlayerScripts.ProtectionHUD": {
+      "bytes": 31713,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0"
+    },
+    "StarterPlayer.StarterPlayerScripts.PuzzleUI": {
+      "bytes": 81067,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3"
+    },
+    "StarterPlayer.StarterPlayerScripts.Round Entry Client": {
+      "bytes": 6328,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "edaf5fc171aadc2f74288e0d8198412c7d16f39d1c5b605a7c3f0b9ce13ae868"
+    },
+    "StarterPlayer.StarterPlayerScripts.Round Exit Client": {
+      "bytes": 20545,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0"
+    },
+    "StarterPlayer.StarterPlayerScripts.RoundUI": {
+      "bytes": 260892,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00"
+    },
+    "StarterPlayer.StarterPlayerScripts.Shop Display Client": {
+      "bytes": 32796,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce"
+    },
+    "StarterPlayer.StarterPlayerScripts.SoundController": {
+      "bytes": 67153,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6"
+    },
+    "StarterPlayer.StarterPlayerScripts.SpectateController": {
+      "bytes": 19883,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a"
+    },
+    "StarterPlayer.StarterPlayerScripts.Team Objective Feed": {
+      "bytes": 3388,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75"
+    },
+    "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient": {
+      "bytes": 3216,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232"
+    },
+    "StarterPlayer.StarterPlayerScripts.ZyntraStore": {
+      "bytes": 198511,
+      "class": "LocalScript",
+      "editorMatch": true,
+      "sha256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9"
+    },
+    "Workspace.Level 4 Cinema Blender.Doors.PushDoors": {
+      "bytes": 4363,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47"
+    },
+    "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker": {
+      "bytes": 1837,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb"
+    },
+    "Workspace.Level 4 Cinema Preview.AutomaticDoors.AutomaticDoorMotion": {
+      "bytes": 2616,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1"
+    },
+    "Workspace.Level 4 Cinema Preview.OccasionalFixtureFlicker": {
+      "bytes": 1037,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247"
+    },
+    "Workspace.Level 4 Cinema V9 QA.AutomaticDoors.AutomaticDoorMotion": {
+      "bytes": 2616,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1"
+    },
+    "Workspace.Level 4 Cinema V9 QA.OccasionalFixtureFlicker": {
+      "bytes": 1037,
+      "class": "Script",
+      "editorMatch": true,
+      "sha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247"
+    }
+  },
+  "universeId": 10559217407
+}

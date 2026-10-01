@@ -1,0 +1,5 @@
+- **Queue cylinder (proposal):** One teal tint matching curb lighting, thin scanlined wall, brightest at base rim. Non-colliding; queue instructions stay outside at full contrast; must not resemble sealed Coming Soon barriers.
+- **Motion (proposal):** Rise once, about a second, ease-out, then hold still. Opacity strongest low, gone before ceiling lights. No spin or pulse; reverse on cancel. Detector/pad path stays clear.
+- **Tower clearance:** Retain floor-mounted, independent towers; judge roof fit at outermost base and speaker-bracket corners. If tight, move inward before shortening.
+- **Open paths:** Stage, stairs, bases and cabling must not narrow last side bays or party-button path.
+- **Restraint:** Dark steel, dim utility default; ten-second party mode stays teal/amber, no rainbow.

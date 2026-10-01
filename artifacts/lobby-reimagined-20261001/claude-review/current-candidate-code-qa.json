@@ -1,0 +1,287 @@
+{
+  "schema": "lobby-preview-current-candidate-qa-v3",
+  "observedAtUTC": "2026-10-01T12:09:50.710304+00:00",
+  "authority": "Fresh local package and four Source files compared to parent-captured final native-after Source/editor export; final behavior observations come from actual saved local Studio Play receipts, not source review.",
+  "sources": [
+    {
+      "file": "tools/lobby_reimagined/runtime_bake.ModuleScript.luau",
+      "proposedStudioPath": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "bytes": 8504,
+      "sha256": "55c9d77186978a40abab0f32a1b570f70bdcd2adcbba55af2e8bc9c2750a1290",
+      "finalStudioPath": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "sourceEditorMatch": true,
+      "finalNativeExportMatch": true
+    },
+    {
+      "file": "tools/lobby_reimagined/preview_builder.ModuleScript.luau",
+      "proposedStudioPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "bytes": 9162,
+      "sha256": "8d808c569101432309f954d5a0f33f48ba4e1b115831b4877e064ca56c0be921",
+      "finalStudioPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "sourceEditorMatch": true,
+      "finalNativeExportMatch": true
+    },
+    {
+      "file": "tools/lobby_reimagined/preview_bootstrap.Script.luau",
+      "proposedStudioPath": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "bytes": 1217,
+      "sha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "finalStudioPath": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "sourceEditorMatch": true,
+      "finalNativeExportMatch": true
+    },
+    {
+      "file": "tools/lobby_reimagined/queue_controller.LocalScript.luau",
+      "proposedStudioPath": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "bytes": 4119,
+      "sha256": "ea8152bbde903fe9d7c741492c6612982ce7b5976a9cea31b601839994815818",
+      "finalStudioPath": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "sourceEditorMatch": true,
+      "finalNativeExportMatch": true
+    }
+  ],
+  "package": {
+    "manifestSha256": "9e25ce55ccfd8aec36878770967c83f6b1eb72676f9c783c562b5864ab333c3c",
+    "chunks": 34,
+    "sourceCount": 4,
+    "atlasSha256": "ab7f03b928fa2e8eef5232ee77211c58df0c22cf761fead586aac821db0f1ce2",
+    "allBinaryHashesLengthsIndicesFiniteBoundsVerified": true,
+    "sourceName": "LobbyReimaginedBlenderSource20261001R2",
+    "atlasRawRowOrder": "Blender bottom-up RGBA",
+    "runtimeAtlasConversion": "Reverse rows to top-down before WritePixelsBuffer; UV V separately converted to1\u2212V"
+  },
+  "claudeCodeReview": {
+    "status": "timeout",
+    "hardBoundSeconds": 90,
+    "finalAdviceReturned": false,
+    "receipt": "claude-review/code-review.receipt.json"
+  },
+  "codexFindings": {
+    "helperNewObjectFailureCleanup": "Implemented and local checks passed",
+    "builderOffTreeFailureCleanup": "Present in fresh candidate",
+    "clientTweenCancelDtAndStreamingAddRemove": "Present in fresh candidate",
+    "bootstrapFailureRetryReset": "Present with two-attempt cap and delayed retry; no verified clock blocker."
+  },
+  "limitations": [
+    "No Studio edits or API calls from this child; parent owns all live changes.",
+    "Code review/syntax alone does not establish gameplay or runtime behavior; stated local behavior comes from saved actual Play receipts.",
+    "Single local Studio client only; mobile, multiplayer, public-server DEV eligibility and streaming across multiple clients were not certified.",
+    "Low background whole-place Studio FPS and roughly 5.5 GB reported client memory are observations, not a performance pass or isolated preview memory.",
+    "Automatic queue reset configured at 20 seconds, but the saved auto-reset receipt only observed the inactive result at 212.68 seconds.",
+    "Historical R2 candidate is installed and differs from final Builder; do not regenerate or rerun historical installers over current Studio."
+  ],
+  "corrections": [
+    {
+      "finding": "Earlier parent message described os.clock as standard Lua CPU time and inferred a retry failure.",
+      "resolution": "Retracted after consulting primary Luau documentation: os.clock is documented as a high-precision timestamp suitable for measuring duration. Source retry reset and bounded attempt count remain the material checks.",
+      "source": "https://luau.org/library/#os-library"
+    }
+  ],
+  "guardedRevision": {
+    "generator": "tools/lobby_reimagined/revision_install.py",
+    "baselineFile": "artifacts/lobby-reimagined-20261001/installed-source-manifest.json",
+    "expectedSources": [
+      {
+        "sourceBytes": 3834,
+        "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+        "editorMatch": true,
+        "class": "LocalScript",
+        "sourceSha256": "308dbe49279b18590d4498a1c1ed0c15ab2bdf50f2a4480615638fcac11b7e9f"
+      },
+      {
+        "sourceBytes": 8215,
+        "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+        "editorMatch": true,
+        "class": "ModuleScript",
+        "sourceSha256": "ee07a14f0a4538b12d9d99dc1faf3e6402278befc492b1416724a514b8ac36c1"
+      },
+      {
+        "sourceBytes": 8938,
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "editorMatch": true,
+        "class": "ModuleScript",
+        "sourceSha256": "24ab75af8809039b7c7f379439959053431e72e0394596ba892a73872d436518"
+      },
+      {
+        "sourceBytes": 1217,
+        "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+        "editorMatch": true,
+        "class": "Script",
+        "sourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee"
+      }
+    ],
+    "priorRawSourcePreserved": "ServerStorage.LobbyReimaginedBlenderSource20261001",
+    "targetRawSource": "ServerStorage.LobbyReimaginedBlenderSource20261001R2",
+    "status": "Parent applied R2 successfully; historical generated candidate and receipt preserved.",
+    "installReceipt": "artifacts/lobby-reimagined-20261001/play-verification/install-r2-receipt.json"
+  },
+  "vinylAuthoredBehavior": {
+    "degreesPerSecond": 12,
+    "consoleAndTonearms": "Stationary; only separate PreviewVinylDisc parts receive client rotation",
+    "reducedMotion": "Cosmetic rotation skipped when preferences enabled",
+    "actualMotionCheck": "Verified in saved parent local Play receipts: two discs rotate, fixed console/pickup arms, reduced motion stops rotation and original preference restored."
+  },
+  "parentReportedRuntimeEvidence": {
+    "atlasOrientationCorrection": "Parent actual rendering proof for row reversal plus UV flip; final Play screenshots retained.",
+    "finalLocalPlay": {
+      "ready": true,
+      "buildSeconds": 4.279981958330609,
+      "buildAttempts": 1,
+      "gravity": 196.1999969482422,
+      "vinyl": {
+        "discCount": 2,
+        "observedDegreesPerSecond": [
+          11.802399274017983,
+          11.802399274017983
+        ],
+        "laterSampleDegreesPerSecond": 12.00884620205974,
+        "positionsFixed": true,
+        "fixedConsoleAndPickupArms": true,
+        "reducedMotionStopped": true,
+        "preferenceRestored": true
+      },
+      "stageMovement": {
+        "health": 100,
+        "allSamplesRunning": true,
+        "startY": 32.99802017211914,
+        "finalY": 37.49802017211914
+      },
+      "queue": {
+        "input": "Actual E held 500ms",
+        "active": true,
+        "bandCount": 10,
+        "baseTransparency": 0.6200000047683716,
+        "topTransparency": 1,
+        "realLevelLaunches": false,
+        "cancelInactive": true,
+        "cancelBandsHidden": true,
+        "authoredAutomaticResetSeconds": 20,
+        "laterObservedAfterSeconds": 212.676585541667,
+        "laterInactive": true,
+        "laterBandsHidden": true,
+        "exactAutomaticResetTimingMeasured": false
+      }
+    }
+  },
+  "priorSnapshot": "artifacts/lobby-reimagined-20261001/claude-review/candidate-code-qa-r2-before-final-builder-cas.json",
+  "finalSourceParity": {
+    "export": "artifacts/lobby-reimagined-20261001/native-after/source-manifest.json",
+    "sourceCount": 209,
+    "verifiedPreviewSources": 4,
+    "allFourLocalHashAndBytesMatch": true,
+    "allFourSourceEditorMatch": true
+  },
+  "localSyntaxVerification": {
+    "receipt": "artifacts/lobby-reimagined-20261001/candidate-syntax-verification.json",
+    "candidates": 4,
+    "passed": true,
+    "executed": false
+  },
+  "finalBuilderCorrection": {
+    "status": "Parent applied exact fresh Source/editor CAS after completed R2 installation; final receipt/export match.",
+    "priorR2Sha256": "1ef24ff4b6c72ddf3c16f5a51ee33951a64b01192b7b78ffa9feff5fbc9f80e5",
+    "finalSha256": "8d808c569101432309f954d5a0f33f48ba4e1b115831b4877e064ca56c0be921",
+    "finalBytes": 9162,
+    "scope": "Header canvas 450x110, projecting blade canvas 650x150 and warm main lights RGB205,214,190 brightness0.35 only",
+    "receipt": "artifacts/lobby-reimagined-20261001/play-verification/builder-legibility-receipt.json",
+    "historicalR2ReceiptNotRewritten": true
+  },
+  "performanceObservations": {
+    "certified": false,
+    "scope": "Background/local whole-place Studio client; not isolated preview, mobile or multiplayer performance.",
+    "initial": {
+      "clientTotalMemoryMb": 5527.09375,
+      "renderFrames": 45,
+      "p95FrameMs": 68.59166920185089,
+      "recordDegreesPerSecond": 12.00884620205974,
+      "meanFrameMs": 66.70603536897235,
+      "sampleSeconds": 3.013248499999463,
+      "observedFramesPerSecond": 14.93404875170701,
+      "limitations": "Single local Studio client only; includes whole existing place. No mobile/multiplayer or isolated before/after performance claim."
+    },
+    "settled": {
+      "seconds": 3.016076208332379,
+      "meanFrameMs": 70.10145052227864,
+      "scope": "Settled preview, native window raised; background-throttle/whole-place sample not device performance guarantee",
+      "frames": 43,
+      "fps": 14.25693379137886
+    },
+    "clientDetach": {
+      "previewVisible": {
+        "meanMs": 67.18299761414528,
+        "seconds": 3.8471917499991832,
+        "frames": 30,
+        "fps": 7.7978956988578405
+      },
+      "method": "Temporary detach only owned client preview; server/old lobby unchanged; background Studio measurement",
+      "previewHidden": {
+        "meanMs": 66.70367676350806,
+        "seconds": 3.0018994999991264,
+        "frames": 45,
+        "fps": 14.99050850969964
+      }
+    },
+    "detachInference": "Transient visible/hidden sample differences do not establish causal preview cost. Settled preview remained approximately 14.26 FPS.",
+    "wholeClientMemoryMb": 5527.09375,
+    "doNotClaimPreviewOnlyMemory": true
+  },
+  "historicalPreR2Snapshot": "artifacts/lobby-reimagined-20261001/claude-review/candidate-code-qa-pre-r2.json",
+  "evidenceFiles": [
+    {
+      "file": "artifacts/lobby-reimagined-20261001/native-after/source-manifest.json",
+      "sha256": "3b5703a8948c619af9331e0e57dd1cf8505eb3d9d239d4e3c4b8b0a672a720c8"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/candidate-syntax-verification.json",
+      "sha256": "ffcd1444849469229685ec79992f0d381d0e73977c2a25a0842ba4b69e0e9943"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/builder-legibility-receipt.json",
+      "sha256": "20ad5a65087ea73c570e4a709562c7bae67d60ad9ca98b61a3b8aa355cea6659"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/fresh-build-play-receipt.json",
+      "sha256": "fdfe7e3e3f2043312ed9deeecc5a8183068651886a595e76914a5a0102bb436e"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/install-r2-receipt.json",
+      "sha256": "de6ed98e472de97392b48b7a9e860fe9df2865344c88dd8bbc73e092236db767"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/performance-client-detach-sample.json",
+      "sha256": "6252406a7bdd7fb1eaf3ba16f28c3def47dac9ee8a05373280fe93628ac42cdf"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/performance-play-sample.json",
+      "sha256": "2da2ff6a2f4213ebfd4fe55fe04cca544a762c70edd4a3fcb039cdb246b50ed4"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/performance-settled-sample.json",
+      "sha256": "8bcca9034bc977b585cd7e5c104bbc3083ff902ecbd760771f82c63f9d4e350c"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/queue-active-play-receipt.json",
+      "sha256": "8147d7f6b292ff3fa464877fab18cdad164c91a6754b3cde60dc02aaa6bbfea0"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/queue-auto-reset-play-receipt.json",
+      "sha256": "56114ec06b7122de9e0d4d7357c88cec04df3f9fafa0a9d9e0062203630ec4a8"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/queue-cancel-play-receipt.json",
+      "sha256": "4e61a039f3c3709b692c26762d434c584d6921995487c3ecaa3bee02d787834e"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/stage-walk-play-receipt.json",
+      "sha256": "f0b852dbb4d9f7b0146f115dc04edae6fc1c47e4e5930a41a6ab98e66c59e1a0"
+    },
+    {
+      "file": "artifacts/lobby-reimagined-20261001/play-verification/vinyl-play-receipt.json",
+      "sha256": "1f31cbcf47f88ad5309e84bdd0829e3980cb5891b9c30cebbc9769cf9ccbeb4e"
+    }
+  ]
+}

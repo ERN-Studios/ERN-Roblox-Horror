@@ -1,0 +1,1483 @@
+{
+  "sourceBytes": 159281,
+  "path": "ServerScriptService.GameManager",
+  "version": 2450,
+  "editorMatch": true,
+  "universeId": 10559217407,
+  "class": "Script",
+  "placeId": 131311258779917,
+  "excerpts": [
+    {
+      "firstLine": 640,
+      "lines": [
+        {
+          "text": "",
+          "line": 640
+        },
+        {
+          "text": "sanitizePersistedLevelState()",
+          "line": 641
+        },
+        {
+          "text": "setLevelOneEntityActive(false)",
+          "line": 642
+        },
+        {
+          "text": "local _lobbyModel, lobbySpawn, lobbyStations = buildLobby()",
+          "line": 643
+        },
+        {
+          "text": "",
+          "line": 644
+        },
+        {
+          "text": "local function setStationDisplay(station, main, secondary, color)",
+          "line": 645
+        },
+        {
+          "text": " station.title.Text = main",
+          "line": 646
+        },
+        {
+          "text": " station.sub.Text = secondary or \"\"",
+          "line": 647
+        },
+        {
+          "text": " station.title.TextColor3 = color or station.color",
+          "line": 648
+        },
+        {
+          "text": "end",
+          "line": 649
+        },
+        {
+          "text": "",
+          "line": 650
+        },
+        {
+          "text": "local function scatterAt(char, pad, randomFacing)",
+          "line": 651
+        },
+        {
+          "text": " local hrp = char:WaitForChild(\"HumanoidRootPart\", 8)",
+          "line": 652
+        },
+        {
+          "text": " if not (pad and hrp) then return end",
+          "line": 653
+        },
+        {
+          "text": " local ox = (math.random() - 0.5) * math.max(pad.Size.X - 4, 1)",
+          "line": 654
+        },
+        {
+          "text": " local oz = (math.random() - 0.5) * math.max(pad.Size.Z - 4, 1)",
+          "line": 655
+        },
+        {
+          "text": " local facing = randomFacing and math.random() * math.pi * 2 or math.pi -- lobby faces the launch square",
+          "line": 656
+        },
+        {
+          "text": " char:PivotTo(CFrame.new(pad.Position + Vector3.new(ox, 3.2, oz)) * CFrame.Angles(0, facing, 0))",
+          "line": 657
+        },
+        {
+          "text": "end",
+          "line": 658
+        },
+        {
+          "text": "",
+          "line": 659
+        },
+        {
+          "text": "-- RequestStreamAroundAsync decides whether a character lands on a floor or",
+          "line": 660
+        },
+        {
+          "text": "-- through one. Start it before moving the character, then await that SAME request",
+          "line": 661
+        }
+      ],
+      "lastLine": 661
+    },
+    {
+      "firstLine": 1383,
+      "lines": [
+        {
+          "text": "  Routing.NoteDeparture(activePostWin.Roster, player)",
+          "line": 1383
+        },
+        {
+          "text": "  publishPostWinChoices(activePostWin)",
+          "line": 1384
+        },
+        {
+          "text": " end",
+          "line": 1385
+        },
+        {
+          "text": "end)",
+          "line": 1386
+        },
+        {
+          "text": "",
+          "line": 1387
+        },
+        {
+          "text": "local function privacyLabel(station)",
+          "line": 1388
+        },
+        {
+          "text": " return station.privacy == \"friends\" and \"FRIENDS ONLY\" or \"PUBLIC\"",
+          "line": 1389
+        },
+        {
+          "text": "end",
+          "line": 1390
+        },
+        {
+          "text": "",
+          "line": 1391
+        },
+        {
+          "text": "queueConfig.OnServerEvent:Connect(function(player, stationIndex, requestedMax, requestedPrivacy)",
+          "line": 1392
+        },
+        {
+          "text": " if IS_RESERVED_ROUND_SERVER then return end",
+          "line": 1393
+        },
+        {
+          "text": " stationIndex = math.floor(tonumber(stationIndex) or 0)",
+          "line": 1394
+        },
+        {
+          "text": " local station = lobbyStations[stationIndex]",
+          "line": 1395
+        },
+        {
+          "text": " if not station or station.busy then return end",
+          "line": 1396
+        },
+        {
+          "text": " if station.host ~= player or not station.awaitingConfig then return end",
+          "line": 1397
+        },
+        {
+          "text": "",
+          "line": 1398
+        },
+        {
+          "text": " if requestedPrivacy == \"cancel\" then",
+          "line": 1399
+        },
+        {
+          "text": "  -- The phone close button genuinely leaves the queue instead of only hiding UI.",
+          "line": 1400
+        },
+        {
+          "text": "  station.cancelRequested = true",
+          "line": 1401
+        },
+        {
+          "text": "  station.admissionEpoch = (station.admissionEpoch or 0) + 1",
+          "line": 1402
+        },
+        {
+          "text": "  local character = player.Character",
+          "line": 1403
+        },
+        {
+          "text": "  local root = character and character:FindFirstChild(\"HumanoidRootPart\")",
+          "line": 1404
+        },
+        {
+          "text": "  if character and root then",
+          "line": 1405
+        },
+        {
+          "text": "   root.AssemblyLinearVelocity = Vector3.zero",
+          "line": 1406
+        },
+        {
+          "text": "   root.AssemblyAngularVelocity = Vector3.zero",
+          "line": 1407
+        },
+        {
+          "text": "   local exitPosition = (station.zone.CFrame * CFrame.new(0, 3,",
+          "line": 1408
+        },
+        {
+          "text": "    -(station.zone.Size.Z * 0.5 + 5))).Position",
+          "line": 1409
+        },
+        {
+          "text": "   character:PivotTo(CFrame.lookAt(exitPosition, station.zone.Position))",
+          "line": 1410
+        },
+        {
+          "text": "  end",
+          "line": 1411
+        },
+        {
+          "text": "  return",
+          "line": 1412
+        },
+        {
+          "text": " end",
+          "line": 1413
+        },
+        {
+          "text": "",
+          "line": 1414
+        },
+        {
+          "text": " if not playerInsideZone(player, station) then return end",
+          "line": 1415
+        },
+        {
+          "text": "",
+          "line": 1416
+        },
+        {
+          "text": " station.admissionEpoch = (station.admissionEpoch or 0) + 1",
+          "line": 1417
+        },
+        {
+          "text": " station.maxPlayers = math.clamp(math.floor(tonumber(requestedMax) or MAX_PLAYERS_PER_STATION), 1, MAX_PLAYERS_PER_STATION)",
+          "line": 1418
+        },
+        {
+          "text": " station.privacy = requestedPrivacy == \"friends\" and \"friends\" or \"public\"",
+          "line": 1419
+        },
+        {
+          "text": " station.friendCache = {}",
+          "line": 1420
+        },
+        {
+          "text": " station.configured = true",
+          "line": 1421
+        },
+        {
+          "text": " station.awaitingConfig = false",
+          "line": 1422
+        },
+        {
+          "text": " setStationDisplay(station,",
+          "line": 1423
+        },
+        {
+          "text": "  \"STATION \" .. (station.displayIndex or station.index) .. \"  •  1/\" .. station.maxPlayers,",
+          "line": 1424
+        },
+        {
+          "text": "  privacyLabel(station) .. \"  •  COUNTDOWN STARTING\",",
+          "line": 1425
+        },
+        {
+          "text": "  station.color)",
+          "line": 1426
+        },
+        {
+          "text": " status:FireClient(player, \"queueconfigured\", station.maxPlayers, station.privacy, station.index)",
+          "line": 1427
+        },
+        {
+          "text": "end)",
+          "line": 1428
+        }
+      ],
+      "lastLine": 1428
+    },
+    {
+      "firstLine": 3033,
+      "lines": [
+        {
+          "text": "local function launchStation(station, participants)",
+          "line": 3033
+        },
+        {
+          "text": " if not canAccessLevel(station.level or 1, participants) then return end",
+          "line": 3034
+        },
+        {
+          "text": " station.busy = true",
+          "line": 3035
+        },
+        {
+          "text": " setStationDisplay(station, \"STARTING PRIVATE WORLD\", #participants .. \"/\" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. \" PLAYERS\", station.color)",
+          "line": 3036
+        },
+        {
+          "text": " fireGroup(participants, \"loadinggame\", station.level or 1)",
+          "line": 3037
+        },
+        {
+          "text": "",
+          "line": 3038
+        },
+        {
+          "text": " if IS_STUDIO then",
+          "line": 3039
+        },
+        {
+          "text": "  if roundBusy then",
+          "line": 3040
+        },
+        {
+          "text": "   setStationDisplay(station, \"STUDIO WORLD BUSY\", \"WAIT FOR THE ACTIVE TEST\", Color3.fromRGB(255, 210, 90))",
+          "line": 3041
+        },
+        {
+          "text": "   task.wait(2)",
+          "line": 3042
+        },
+        {
+          "text": "   fireGroup(participants, \"lobbycancel\")",
+          "line": 3043
+        },
+        {
+          "text": "   station.busy = false",
+          "line": 3044
+        },
+        {
+          "text": "   return",
+          "line": 3045
+        },
+        {
+          "text": "  end",
+          "line": 3046
+        },
+        {
+          "text": "",
+          "line": 3047
+        },
+        {
+          "text": "  roundBusy = true",
+          "line": 3048
+        },
+        {
+          "text": "  local attempt = beginGroupLoading(participants)",
+          "line": 3049
+        },
+        {
+          "text": "  clearGlowsticks()",
+          "line": 3050
+        },
+        {
+          "text": "  assignGlowstickSlots(participants)",
+          "line": 3051
+        },
+        {
+          "text": "  -- A round started from the lobby is never a continuation, whatever the last",
+          "line": 3052
+        },
+        {
+          "text": "  -- one was; leaving a stale route here would skip Level 3's elevator descent.",
+          "line": 3053
+        },
+        {
+          "text": "  roundEntryMode = nil",
+          "line": 3054
+        },
+        {
+          "text": "  if prepareGroupLoading(attempt, participants, station.level or 1, false) then",
+          "line": 3055
+        },
+        {
+          "text": "   playRound(participants)",
+          "line": 3056
+        },
+        {
+          "text": "  end",
+          "line": 3057
+        },
+        {
+          "text": "  if not activeEntry or activeEntry.State ~= \"failed\" then roundBusy = false end",
+          "line": 3058
+        },
+        {
+          "text": "  station.busy = false",
+          "line": 3059
+        },
+        {
+          "text": "  return",
+          "line": 3060
+        },
+        {
+          "text": " end",
+          "line": 3061
+        },
+        {
+          "text": "",
+          "line": 3062
+        },
+        {
+          "text": " local options = Instance.new(\"TeleportOptions\")",
+          "line": 3063
+        },
+        {
+          "text": " local glowstickSlots = {}",
+          "line": 3064
+        },
+        {
+          "text": " for index, player in ipairs(participants) do",
+          "line": 3065
+        },
+        {
+          "text": "  glowstickSlots[tostring(player.UserId)] = index",
+          "line": 3066
+        },
+        {
+          "text": " end",
+          "line": 3067
+        },
+        {
+          "text": " options.ShouldReserveServer = true",
+          "line": 3068
+        },
+        {
+          "text": " -- A station launch is a session too, and a complete one: the whole party",
+          "line": 3069
+        },
+        {
+          "text": " -- leaves in a single transfer, so the destination is told the exact cohort and",
+          "line": 3070
+        },
+        {
+          "text": " -- that no more are coming. It admits them as soon as they have all landed.",
+          "line": 3071
+        },
+        {
+          "text": " local launchToken = game.JobId .. \":station\" .. station.index",
+          "line": 3072
+        },
+        {
+          "text": "  .. \":\" .. math.floor(os.clock() * 1000)",
+          "line": 3073
+        },
+        {
+          "text": " local packet = Routing.ArrivalPacket({",
+          "line": 3074
+        },
+        {
+          "text": "  Ceiling = devCeiling(participants),",
+          "line": 3075
+        },
+        {
+          "text": "  Level = station.level or 1,",
+          "line": 3076
+        },
+        {
+          "text": "  SessionId = launchToken,",
+          "line": 3077
+        },
+        {
+          "text": "  Expected = #participants,",
+          "line": 3078
+        },
+        {
+          "text": "  Final = true,",
+          "line": 3079
+        },
+        {
+          "text": "  GlowstickSlots = glowstickSlots,",
+          "line": 3080
+        },
+        {
+          "text": "  LaunchToken = launchToken,",
+          "line": 3081
+        },
+        {
+          "text": " })",
+          "line": 3082
+        },
+        {
+          "text": " packet.Station = station.index",
+          "line": 3083
+        },
+        {
+          "text": " options:SetTeleportData(packet)",
+          "line": 3084
+        },
+        {
+          "text": " local ok, err = pcall(function()",
+          "line": 3085
+        },
+        {
+          "text": "  TeleportService:TeleportAsync(game.PlaceId, participants, options)",
+          "line": 3086
+        },
+        {
+          "text": " end)",
+          "line": 3087
+        },
+        {
+          "text": " if not ok then",
+          "line": 3088
+        },
+        {
+          "text": "  warn(\"GameManager: station \" .. station.index .. \" teleport failed: \" .. tostring(err))",
+          "line": 3089
+        },
+        {
+          "text": "  setStationDisplay(station, \"TELEPORT FAILED\", \"STEP OUT AND TRY AGAIN\", Color3.fromRGB(255, 105, 95))",
+          "line": 3090
+        },
+        {
+          "text": "  fireGroup(participants, \"lobbycancel\")",
+          "line": 3091
+        },
+        {
+          "text": "  task.wait(2.5)",
+          "line": 3092
+        },
+        {
+          "text": " else",
+          "line": 3093
+        },
+        {
+          "text": "  for _, member in ipairs(participants) do Analytics.Launch(member, station.level or 1) end",
+          "line": 3094
+        },
+        {
+          "text": "  task.wait(7)",
+          "line": 3095
+        },
+        {
+          "text": " end",
+          "line": 3096
+        },
+        {
+          "text": " station.busy = false",
+          "line": 3097
+        },
+        {
+          "text": "end",
+          "line": 3098
+        },
+        {
+          "text": "",
+          "line": 3099
+        },
+        {
+          "text": "local function resetStation(station, closeHost)",
+          "line": 3100
+        },
+        {
+          "text": " station.admissionEpoch = (station.admissionEpoch or 0) + 1",
+          "line": 3101
+        },
+        {
+          "text": " station.admittedCharacters = {}",
+          "line": 3102
+        },
+        {
+          "text": " station.entryCharacters = {}",
+          "line": 3103
+        },
+        {
+          "text": " local oldHost = station.host",
+          "line": 3104
+        },
+        {
+          "text": " if closeHost and oldHost and oldHost.Parent then",
+          "line": 3105
+        },
+        {
+          "text": "  status:FireClient(oldHost, \"queueconfigclosed\", station.index)",
+          "line": 3106
+        },
+        {
+          "text": " end",
+          "line": 3107
+        },
+        {
+          "text": " for player, stateName in pairs(station.feedback or {}) do",
+          "line": 3108
+        },
+        {
+          "text": "  if player.Parent and stateName ~= \"ready\" and player ~= oldHost then",
+          "line": 3109
+        },
+        {
+          "text": "   status:FireClient(player, \"lobby\")",
+          "line": 3110
+        },
+        {
+          "text": "  end",
+          "line": 3111
+        },
+        {
+          "text": " end",
+          "line": 3112
+        },
+        {
+          "text": " station.host = nil",
+          "line": 3113
+        },
+        {
+          "text": " station.configured = false",
+          "line": 3114
+        },
+        {
+          "text": " station.awaitingConfig = false",
+          "line": 3115
+        },
+        {
+          "text": " station.cancelRequested = false",
+          "line": 3116
+        },
+        {
+          "text": " station.maxPlayers = MAX_PLAYERS_PER_STATION",
+          "line": 3117
+        },
+        {
+          "text": " station.privacy = \"public\"",
+          "line": 3118
+        },
+        {
+          "text": " station.entrySeen = {}",
+          "line": 3119
+        },
+        {
+          "text": " station.friendCache = {}",
+          "line": 3120
+        },
+        {
+          "text": " station.feedback = {}",
+          "line": 3121
+        },
+        {
+          "text": " setStationDisplay(station,",
+          "line": 3122
+        },
+        {
+          "text": "  \"STATION \" .. (station.displayIndex or station.index) .. \"  •  0/6\",",
+          "line": 3123
+        },
+        {
+          "text": "  \"ENTER TO HOST  •  CHOOSE 1-6 PLAYERS\",",
+          "line": 3124
+        },
+        {
+          "text": "  station.color)",
+          "line": 3125
+        },
+        {
+          "text": "end",
+          "line": 3126
+        },
+        {
+          "text": "",
+          "line": 3127
+        },
+        {
+          "text": "local function syncSetupFeedback(station, raw)",
+          "line": 3128
+        },
+        {
+          "text": " local nextFeedback = {[station.host] = \"host\"}",
+          "line": 3129
+        },
+        {
+          "text": " for _, player in ipairs(raw) do",
+          "line": 3130
+        },
+        {
+          "text": "  if player ~= station.host then",
+          "line": 3131
+        },
+        {
+          "text": "   nextFeedback[player] = \"waiting\"",
+          "line": 3132
+        },
+        {
+          "text": "   if station.feedback[player] ~= \"waiting\" then",
+          "line": 3133
+        },
+        {
+          "text": "    status:FireClient(player, \"queuewaitinghost\", station.index)",
+          "line": 3134
+        },
+        {
+          "text": "   end",
+          "line": 3135
+        },
+        {
+          "text": "  end",
+          "line": 3136
+        },
+        {
+          "text": " end",
+          "line": 3137
+        },
+        {
+          "text": " for player, stateName in pairs(station.feedback) do",
+          "line": 3138
+        },
+        {
+          "text": "  if not nextFeedback[player] and player.Parent and stateName ~= \"host\" then",
+          "line": 3139
+        },
+        {
+          "text": "   status:FireClient(player, \"lobby\")",
+          "line": 3140
+        },
+        {
+          "text": "  end",
+          "line": 3141
+        },
+        {
+          "text": " end",
+          "line": 3142
+        },
+        {
+          "text": " station.feedback = nextFeedback",
+          "line": 3143
+        },
+        {
+          "text": "end",
+          "line": 3144
+        },
+        {
+          "text": "",
+          "line": 3145
+        }
+      ],
+      "lastLine": 3145
+    },
+    {
+      "firstLine": 3265,
+      "lines": [
+        {
+          "text": "local function setStationBarrier(station, active, members)",
+          "line": 3265
+        },
+        {
+          "text": " if active then",
+          "line": 3266
+        },
+        {
+          "text": "  if not station.barrier then station.barrier = buildStationBarrier(station) end",
+          "line": 3267
+        },
+        {
+          "text": "  if station.barrier.Parent ~= station.zone.Parent then station.barrier.Parent = station.zone.Parent end",
+          "line": 3268
+        },
+        {
+          "text": " elseif station.barrier and station.barrier.Parent then",
+          "line": 3269
+        },
+        {
+          "text": "  station.barrier.Parent = nil",
+          "line": 3270
+        },
+        {
+          "text": " end",
+          "line": 3271
+        },
+        {
+          "text": " local desired = {}",
+          "line": 3272
+        },
+        {
+          "text": " if active then",
+          "line": 3273
+        },
+        {
+          "text": "  for _, player in ipairs(members) do desired[player] = player.Character end",
+          "line": 3274
+        },
+        {
+          "text": " end",
+          "line": 3275
+        },
+        {
+          "text": " station.barrierMembers = station.barrierMembers or {}",
+          "line": 3276
+        },
+        {
+          "text": " for player, character in pairs(station.barrierMembers) do",
+          "line": 3277
+        },
+        {
+          "text": "  if desired[player] ~= character then",
+          "line": 3278
+        },
+        {
+          "text": "   setQueueMemberCollision(character, false)",
+          "line": 3279
+        },
+        {
+          "text": "   station.barrierMembers[player] = nil",
+          "line": 3280
+        },
+        {
+          "text": "  end",
+          "line": 3281
+        },
+        {
+          "text": " end",
+          "line": 3282
+        },
+        {
+          "text": " for player, character in pairs(desired) do",
+          "line": 3283
+        },
+        {
+          "text": "  if character and station.barrierMembers[player] ~= character then",
+          "line": 3284
+        },
+        {
+          "text": "   setQueueMemberCollision(character, true)",
+          "line": 3285
+        },
+        {
+          "text": "   station.barrierMembers[player] = character",
+          "line": 3286
+        },
+        {
+          "text": "  end",
+          "line": 3287
+        },
+        {
+          "text": " end",
+          "line": 3288
+        },
+        {
+          "text": "end",
+          "line": 3289
+        }
+      ],
+      "lastLine": 3289
+    },
+    {
+      "firstLine": 3345,
+      "lines": [
+        {
+          "text": "",
+          "line": 3345
+        },
+        {
+          "text": "local function runStation(station)",
+          "line": 3346
+        },
+        {
+          "text": " resetStation(station, false)",
+          "line": 3347
+        },
+        {
+          "text": " while true do",
+          "line": 3348
+        },
+        {
+          "text": "  if station.busy then task.wait(0.25) continue end",
+          "line": 3349
+        },
+        {
+          "text": "  if IS_STUDIO and roundBusy then",
+          "line": 3350
+        },
+        {
+          "text": "   if station.host then resetStation(station, true) end",
+          "line": 3351
+        },
+        {
+          "text": "   setStationDisplay(station,",
+          "line": 3352
+        },
+        {
+          "text": "    \"STATION \" .. (station.displayIndex or station.index) .. \"  •  0/6\",",
+          "line": 3353
+        },
+        {
+          "text": "    \"STUDIO TEST ROUND IN PROGRESS\",",
+          "line": 3354
+        },
+        {
+          "text": "    Color3.fromRGB(255, 210, 90))",
+          "line": 3355
+        },
+        {
+          "text": "   task.wait(0.5)",
+          "line": 3356
+        },
+        {
+          "text": "   continue",
+          "line": 3357
+        },
+        {
+          "text": "  end",
+          "line": 3358
+        },
+        {
+          "text": "",
+          "line": 3359
+        },
+        {
+          "text": "  if station.cancelRequested then",
+          "line": 3360
+        },
+        {
+          "text": "   resetStation(station, true)",
+          "line": 3361
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3362
+        },
+        {
+          "text": "   continue",
+          "line": 3363
+        },
+        {
+          "text": "  end",
+          "line": 3364
+        },
+        {
+          "text": "",
+          "line": 3365
+        },
+        {
+          "text": "  local raw = rawQueuedPlayers(station)",
+          "line": 3366
+        },
+        {
+          "text": "  if #raw == 0 then",
+          "line": 3367
+        },
+        {
+          "text": "   if station.host then resetStation(station, true) else",
+          "line": 3368
+        },
+        {
+          "text": "    setStationDisplay(station,",
+          "line": 3369
+        },
+        {
+          "text": "     \"STATION \" .. (station.displayIndex or station.index) .. \"  •  0/6\",",
+          "line": 3370
+        },
+        {
+          "text": "     \"ENTER TO HOST  •  CHOOSE 1-6 PLAYERS\",",
+          "line": 3371
+        },
+        {
+          "text": "     station.color)",
+          "line": 3372
+        },
+        {
+          "text": "   end",
+          "line": 3373
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3374
+        },
+        {
+          "text": "   continue",
+          "line": 3375
+        },
+        {
+          "text": "  end",
+          "line": 3376
+        },
+        {
+          "text": "",
+          "line": 3377
+        },
+        {
+          "text": "  if not station.host then",
+          "line": 3378
+        },
+        {
+          "text": "   station.host = raw[1]",
+          "line": 3379
+        },
+        {
+          "text": "   station.configured = false",
+          "line": 3380
+        },
+        {
+          "text": "   station.awaitingConfig = true",
+          "line": 3381
+        },
+        {
+          "text": "   station.maxPlayers = MAX_PLAYERS_PER_STATION",
+          "line": 3382
+        },
+        {
+          "text": "   station.privacy = \"public\"",
+          "line": 3383
+        },
+        {
+          "text": "   station.friendCache = {}",
+          "line": 3384
+        },
+        {
+          "text": "   station.feedback = {[station.host] = \"host\"}",
+          "line": 3385
+        },
+        {
+          "text": "   setStationDisplay(station,",
+          "line": 3386
+        },
+        {
+          "text": "    \"STATION \" .. (station.displayIndex or station.index) .. \"  •  HOST SETTING UP\",",
+          "line": 3387
+        },
+        {
+          "text": "    \"1/6 IN ZONE  •  CHOOSE PARTY SETTINGS\",",
+          "line": 3388
+        },
+        {
+          "text": "    station.color)",
+          "line": 3389
+        },
+        {
+          "text": "   status:FireClient(station.host, \"queuehost\", station.index, station.maxPlayers, station.privacy)",
+          "line": 3390
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3391
+        },
+        {
+          "text": "   continue",
+          "line": 3392
+        },
+        {
+          "text": "  end",
+          "line": 3393
+        },
+        {
+          "text": "",
+          "line": 3394
+        },
+        {
+          "text": "  if not playerInsideZone(station.host, station) then",
+          "line": 3395
+        },
+        {
+          "text": "   resetStation(station, true)",
+          "line": 3396
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3397
+        },
+        {
+          "text": "   continue",
+          "line": 3398
+        },
+        {
+          "text": "  end",
+          "line": 3399
+        },
+        {
+          "text": "",
+          "line": 3400
+        },
+        {
+          "text": "  if not station.configured then",
+          "line": 3401
+        },
+        {
+          "text": "   raw = rawQueuedPlayers(station)",
+          "line": 3402
+        },
+        {
+          "text": "   setStationDisplay(station,",
+          "line": 3403
+        },
+        {
+          "text": "    \"STATION \" .. (station.displayIndex or station.index) .. \"  •  HOST SETTING UP\",",
+          "line": 3404
+        },
+        {
+          "text": "    #raw .. \"/6 IN ZONE  •  WAITING FOR SETTINGS\",",
+          "line": 3405
+        },
+        {
+          "text": "    station.color)",
+          "line": 3406
+        },
+        {
+          "text": "   syncSetupFeedback(station, raw)",
+          "line": 3407
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3408
+        },
+        {
+          "text": "   continue",
+          "line": 3409
+        },
+        {
+          "text": "  end",
+          "line": 3410
+        },
+        {
+          "text": "",
+          "line": 3411
+        },
+        {
+          "text": "  local ready, allInside, rejected = queuedPlayers(station)",
+          "line": 3412
+        },
+        {
+          "text": "  if #ready == 0 then",
+          "line": 3413
+        },
+        {
+          "text": "   resetStation(station, true)",
+          "line": 3414
+        },
+        {
+          "text": "   task.wait(0.25)",
+          "line": 3415
+        },
+        {
+          "text": "   continue",
+          "line": 3416
+        },
+        {
+          "text": "  end",
+          "line": 3417
+        },
+        {
+          "text": "  syncQueueFeedback(station, allInside, ready, rejected)",
+          "line": 3418
+        },
+        {
+          "text": "",
+          "line": 3419
+        },
+        {
+          "text": "  local cancelled = false",
+          "line": 3420
+        },
+        {
+          "text": "  local lastReady = ready",
+          "line": 3421
+        },
+        {
+          "text": "  local countdownTime = QUEUE_TIME",
+          "line": 3422
+        },
+        {
+          "text": "  for _, player in ipairs(ready) do",
+          "line": 3423
+        },
+        {
+          "text": "   if player:GetAttribute(\"DevFastQueue\") == true then",
+          "line": 3424
+        },
+        {
+          "text": "    countdownTime = FAST_QUEUE_TIME",
+          "line": 3425
+        },
+        {
+          "text": "    break",
+          "line": 3426
+        },
+        {
+          "text": "   end",
+          "line": 3427
+        },
+        {
+          "text": "  end",
+          "line": 3428
+        },
+        {
+          "text": "  -- QUEUE_FULL_FASTSTART_20260923: once a party is full nobody else can join,",
+          "line": 3429
+        },
+        {
+          "text": "  -- so the rest of the countdown is only waiting (measured: a solo 1/1 party",
+          "line": 3430
+        },
+        {
+          "text": "  -- sat through all 10 s). A full party counts down the last FAST_QUEUE_TIME",
+          "line": 3431
+        },
+        {
+          "text": "  -- seconds instead, which it keeps as its window to step off and cancel.",
+          "line": 3432
+        },
+        {
+          "text": "  local t = countdownTime",
+          "line": 3433
+        },
+        {
+          "text": "  while t >= 1 do",
+          "line": 3434
+        },
+        {
+          "text": "   if not (station.host and playerInsideZone(station.host, station) and station.configured) then",
+          "line": 3435
+        },
+        {
+          "text": "    cancelled = true",
+          "line": 3436
+        },
+        {
+          "text": "    break",
+          "line": 3437
+        },
+        {
+          "text": "   end",
+          "line": 3438
+        },
+        {
+          "text": "   ready, allInside, rejected = queuedPlayers(station)",
+          "line": 3439
+        },
+        {
+          "text": "   if #ready == 0 then cancelled = true break end",
+          "line": 3440
+        },
+        {
+          "text": "   lastReady = ready",
+          "line": 3441
+        },
+        {
+          "text": "   syncQueueFeedback(station, allInside, ready, rejected)",
+          "line": 3442
+        },
+        {
+          "text": "   local full = #ready >= station.maxPlayers",
+          "line": 3443
+        },
+        {
+          "text": "   if full then t = math.min(t, FAST_QUEUE_TIME) end",
+          "line": 3444
+        },
+        {
+          "text": "   setStationDisplay(station,",
+          "line": 3445
+        },
+        {
+          "text": "    \"GAME BEGINS IN \" .. t,",
+          "line": 3446
+        },
+        {
+          "text": "    #ready .. \"/\" .. station.maxPlayers .. \" READY  •  \" .. privacyLabel(station)",
+          "line": 3447
+        },
+        {
+          "text": "     .. (full and \"  •  PARTY FULL\" or \"\"),",
+          "line": 3448
+        },
+        {
+          "text": "    station.color)",
+          "line": 3449
+        },
+        {
+          "text": "   fireGroup(ready, \"lobbycountdown\", t, #ready, station.index, station.maxPlayers, station.privacy)",
+          "line": 3450
+        },
+        {
+          "text": "   task.wait(1)",
+          "line": 3451
+        },
+        {
+          "text": "   t -= 1",
+          "line": 3452
+        },
+        {
+          "text": "  end",
+          "line": 3453
+        },
+        {
+          "text": "",
+          "line": 3454
+        },
+        {
+          "text": "  if cancelled then",
+          "line": 3455
+        },
+        {
+          "text": "   fireGroup(lastReady, \"lobbycancel\")",
+          "line": 3456
+        },
+        {
+          "text": "   resetStation(station, false)",
+          "line": 3457
+        },
+        {
+          "text": "   task.wait(1)",
+          "line": 3458
+        },
+        {
+          "text": "   continue",
+          "line": 3459
+        },
+        {
+          "text": "  end",
+          "line": 3460
+        },
+        {
+          "text": "",
+          "line": 3461
+        },
+        {
+          "text": "  local participants = queuedPlayers(station)",
+          "line": 3462
+        },
+        {
+          "text": "  if #participants > 0 and participants[1] == station.host then",
+          "line": 3463
+        },
+        {
+          "text": "   station.feedback = {}",
+          "line": 3464
+        },
+        {
+          "text": "   launchStation(station, participants)",
+          "line": 3465
+        },
+        {
+          "text": "  end",
+          "line": 3466
+        },
+        {
+          "text": "  resetStation(station, false)",
+          "line": 3467
+        },
+        {
+          "text": " end",
+          "line": 3468
+        },
+        {
+          "text": "end",
+          "line": 3469
+        }
+      ],
+      "lastLine": 3469
+    },
+    {
+      "firstLine": 1099,
+      "lines": [
+        {
+          "text": "",
+          "line": 1099
+        },
+        {
+          "text": "local function queueRadius(station)",
+          "line": 1100
+        },
+        {
+          "text": " local zone = station.zone",
+          "line": 1101
+        },
+        {
+          "text": " if zone:GetAttribute(\"QueueDetectorShape\") == \"Circle\" then",
+          "line": 1102
+        },
+        {
+          "text": "  local radius = tonumber(zone:GetAttribute(\"QueueRadius\"))",
+          "line": 1103
+        },
+        {
+          "text": "  if radius and radius > 0 and radius == radius then",
+          "line": 1104
+        },
+        {
+          "text": "   return math.min(radius, zone.Size.X * .5, zone.Size.Z * .5)",
+          "line": 1105
+        },
+        {
+          "text": "  end",
+          "line": 1106
+        },
+        {
+          "text": " end",
+          "line": 1107
+        },
+        {
+          "text": " return nil",
+          "line": 1108
+        },
+        {
+          "text": "end",
+          "line": 1109
+        },
+        {
+          "text": "",
+          "line": 1110
+        },
+        {
+          "text": "local function playerInsideZone(player, station, includeBusy)",
+          "line": 1111
+        },
+        {
+          "text": " if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end",
+          "line": 1112
+        },
+        {
+          "text": " if inRound[player] or (station.busy and not includeBusy) then return false end",
+          "line": 1113
+        },
+        {
+          "text": " local char = player.Character",
+          "line": 1114
+        },
+        {
+          "text": " local hum = char and char:FindFirstChildOfClass(\"Humanoid\")",
+          "line": 1115
+        },
+        {
+          "text": " local root = char and char:FindFirstChild(\"HumanoidRootPart\")",
+          "line": 1116
+        },
+        {
+          "text": " if player.Parent ~= Players or not (char and char.Parent and hum and hum.Health > 0",
+          "line": 1117
+        },
+        {
+          "text": "  and root and root:IsA(\"BasePart\")) then return false end",
+          "line": 1118
+        },
+        {
+          "text": " local zone = station.zone",
+          "line": 1119
+        },
+        {
+          "text": " if not zone or not zone.Parent then return false end",
+          "line": 1120
+        },
+        {
+          "text": " local p = zone.CFrame:PointToObjectSpace(root.Position)",
+          "line": 1121
+        },
+        {
+          "text": " local radius = queueRadius(station)",
+          "line": 1122
+        },
+        {
+          "text": " local inside = if radius then p.X * p.X + p.Z * p.Z <= radius * radius",
+          "line": 1123
+        },
+        {
+          "text": "  else math.abs(p.X) <= zone.Size.X * .5 and math.abs(p.Z) <= zone.Size.Z * .5",
+          "line": 1124
+        },
+        {
+          "text": " return inside and p.Y > -6 and p.Y < 12",
+          "line": 1125
+        },
+        {
+          "text": "end",
+          "line": 1126
+        }
+      ],
+      "lastLine": 1126
+    }
+  ]
+}

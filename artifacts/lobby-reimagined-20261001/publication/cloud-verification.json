@@ -1,0 +1,56 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "dashboardUrl": "https://create.roblox.com/dashboard/creations/experiences/10559217407/places/131311258779917/version-history",
+  "verifiedAtUTC": "2026-10-01 12:23:14 UTC",
+  "method": "Native CUA AX File > Publish to Roblox in the exact BACKROOMS: STAY QUIET Studio window; Creator Dashboard published-only rows and visible checkmark confirm version2456.",
+  "previousPublishedVersion": 2453,
+  "latestPublishedVersion": 2456,
+  "publishedOnly": true,
+  "visiblePublishedCheckmark": true,
+  "account": "LaverSneglen",
+  "latestVersionLastUpdatedDisplayed": "October 1, 2026 at 1:48 PM",
+  "timeFieldIsSaveVersionLastUpdatedNotMeasuredPublishTime": true,
+  "studioLoadedVersionStill": 2450,
+  "sourceEditorParityVerifiedBeforePublish": 209,
+  "cloudSourceHashVerified": false,
+  "nativeRecoveryRecord": "native-after/backup-metadata-summary.json",
+  "originalSourcesUnchanged": 205,
+  "scopeVerification": "native-scope-verification.json",
+  "serverRestartRequestedOrPerformed": false,
+  "accessSettingsChanged": false,
+  "limitations": [
+    "Creator Dashboard proves publication/version, not exact cloud script bytes.",
+    "Actual Play behavior was verified in Studio. A fresh public-server developer join has not been tested.",
+    "Background Studio samples do not certify production/mobile/multiplayer performance."
+  ],
+  "publishedRows": [
+    [
+      "2456",
+      "October 1, 2026 at 1:48 PM"
+    ],
+    [
+      "2453",
+      "October 1, 2026 at 11:14 AM"
+    ],
+    [
+      "2452",
+      "October 1, 2026 at 8:48 AM"
+    ],
+    [
+      "2450",
+      "October 1, 2026 at 7:11 AM"
+    ],
+    [
+      "2440",
+      "October 1, 2026 at 2:33 AM"
+    ]
+  ],
+  "failedAPIAttempt": {
+    "method": "AssetService:SavePlaceAsync in Edit",
+    "error": "Game:SavePlace can only be called from a server script, aborting save function",
+    "noServerPlaySaveAttempted": true,
+    "resolvedByNativePublish": true
+  }
+}

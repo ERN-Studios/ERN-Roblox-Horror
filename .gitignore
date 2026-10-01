@@ -118,3 +118,19 @@
 /artifacts/lobby-box-glow-20261001/proposal/
 /artifacts/lobby-box-glow-20261001/**/__pycache__/
 /artifacts/lobby-box-glow-20261001/**/*.log
+
+# Isolated revised lobby: native recovery and CLI transients remain local.
+/artifacts/lobby-reimagined-20261001/native-*/*
+!/artifacts/lobby-reimagined-20261001/native-*/source-manifest.json
+!/artifacts/lobby-reimagined-20261001/native-*/backup-file-hashes.json
+!/artifacts/lobby-reimagined-20261001/native-*/backup-metadata-summary.json
+!/artifacts/lobby-reimagined-20261001/native-*/native-place-verification.json
+/artifacts/lobby-reimagined-20261001/unrelated-checkpoint.patch
+/artifacts/lobby-reimagined-20261001/claude-review/*-prompt.txt
+/artifacts/lobby-reimagined-20261001/claude-review/*.stderr.log
+/artifacts/lobby-reimagined-20261001/**/__pycache__/
+/artifacts/lobby-reimagined-20261001/**/*.log
+/tools/lobby_reimagined/__pycache__/
+/assets/models/lobby-reimagined-20261001/*.blend1
+/artifacts/lobby-reimagined-20261001/**/*.blend1
+/artifacts/lobby-reimagined-20261001/blender/fbx-fallback/*.fbx

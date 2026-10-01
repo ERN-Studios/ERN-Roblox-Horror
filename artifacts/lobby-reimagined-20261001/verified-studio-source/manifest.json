@@ -1,0 +1,54 @@
+{
+  "schema": "lobby-preview-verified-studio-source-v1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "observedPlaceVersion": 2450,
+  "capturedAt": "2026-10-01T11:59:09Z",
+  "authority": "Fresh final Edit Studio Source and ScriptEditorService parity captured in native-after/scripts.json; no repository-to-Studio write",
+  "captureScriptsJsonSha256": "97faae7a633a20fca0ee0262f07cf1f68fd525f47de52e454d0dfaf2c64b25e9",
+  "capturedSources": 209,
+  "exportedSources": 4,
+  "sourceAndEditorConflicts": 0,
+  "scripts": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 8504,
+      "sourceSha256": "55c9d77186978a40abab0f32a1b570f70bdcd2adcbba55af2e8bc9c2750a1290",
+      "editorMatch": true,
+      "file": "verified-studio-source/ServerScriptService/LobbyReimaginedPreview/RuntimeBake.ModuleScript.luau",
+      "candidateFile": "tools/lobby_reimagined/runtime_bake.ModuleScript.luau",
+      "candidateBytesEqual": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 9162,
+      "sourceSha256": "8d808c569101432309f954d5a0f33f48ba4e1b115831b4877e064ca56c0be921",
+      "editorMatch": true,
+      "file": "verified-studio-source/ServerScriptService/LobbyReimaginedPreview/Builder.ModuleScript.luau",
+      "candidateFile": "tools/lobby_reimagined/preview_builder.ModuleScript.luau",
+      "candidateBytesEqual": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "sourceBytes": 1217,
+      "sourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorMatch": true,
+      "file": "verified-studio-source/ServerScriptService/LobbyReimaginedPreview/Bootstrap.Script.luau",
+      "candidateFile": "tools/lobby_reimagined/preview_bootstrap.Script.luau",
+      "candidateBytesEqual": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "sourceBytes": 4119,
+      "sourceSha256": "ea8152bbde903fe9d7c741492c6612982ce7b5976a9cea31b601839994815818",
+      "editorMatch": true,
+      "file": "verified-studio-source/StarterPlayer/StarterPlayerScripts/LobbyReimaginedQueueController.LocalScript.luau",
+      "candidateFile": "tools/lobby_reimagined/queue_controller.LocalScript.luau",
+      "candidateBytesEqual": true
+    }
+  ]
+}

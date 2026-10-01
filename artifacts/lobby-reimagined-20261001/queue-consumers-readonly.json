@@ -1,0 +1,103 @@
+{
+  "consumers": [
+    {
+      "sourceBytes": 260892,
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "lines": [
+        {
+          "text": "-- showRoundEnding and the lobby / queueconfigured / queueconfigclosed /",
+          "line": 940
+        },
+        {
+          "text": "-- queuewaitinghost / queueprivate / queuefull / lobbycancel / spectating /",
+          "line": 941
+        },
+        {
+          "text": "player:SetAttribute(\"QueueModalOpen\", queueShade.Visible)",
+          "line": 946
+        },
+        {
+          "text": " player:SetAttribute(\"QueueModalOpen\", queueShade.Visible)",
+          "line": 973
+        },
+        {
+          "text": "\telseif ev == \"queueconfigured\" then",
+          "line": 4417
+        },
+        {
+          "text": "\telseif ev == \"queueconfigclosed\" then",
+          "line": 4427
+        },
+        {
+          "text": "\telseif ev == \"lobbycountdown\" then",
+          "line": 4453
+        },
+        {
+          "text": "\telseif ev == \"lobbycancel\" then",
+          "line": 4464
+        }
+      ]
+    },
+    {
+      "sourceBytes": 10226,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "lines": [
+        {
+          "text": "\t\tor eventName == \"queuehost\" or eventName == \"queueconfigured\"",
+          "line": 198
+        },
+        {
+          "text": "\t\tor eventName == \"queueconfigclosed\" or eventName == \"queuewaitinghost\"",
+          "line": 199
+        },
+        {
+          "text": "\t\tor eventName == \"lobbycountdown\" or eventName == \"lobbycancel\" then",
+          "line": 201
+        }
+      ]
+    },
+    {
+      "sourceBytes": 159281,
+      "path": "ServerScriptService.GameManager",
+      "editorMatch": true,
+      "class": "Script",
+      "lines": [
+        {
+          "text": "  player:SetAttribute(\"DevFastQueue\", enabled == true and true or nil)",
+          "line": 262
+        },
+        {
+          "text": " status:FireClient(player, \"queueconfigured\", station.maxPlayers, station.privacy, station.index)",
+          "line": 1427
+        },
+        {
+          "text": "   fireGroup(participants, \"lobbycancel\")",
+          "line": 3043
+        },
+        {
+          "text": "  fireGroup(participants, \"lobbycancel\")",
+          "line": 3091
+        },
+        {
+          "text": "  status:FireClient(oldHost, \"queueconfigclosed\", station.index)",
+          "line": 3106
+        },
+        {
+          "text": "   fireGroup(ready, \"lobbycountdown\", t, #ready, station.index, station.maxPlayers, station.privacy)",
+          "line": 3450
+        },
+        {
+          "text": "   fireGroup(lastReady, \"lobbycancel\")",
+          "line": 3456
+        }
+      ]
+    }
+  ],
+  "placeId": 131311258779917,
+  "version": 2450,
+  "universeId": 10559217407
+}

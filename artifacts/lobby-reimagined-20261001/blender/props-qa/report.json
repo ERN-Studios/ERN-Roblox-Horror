@@ -1,0 +1,598 @@
+{
+  "schema": "lobby-reimagined-props/1",
+  "builder": "tools/lobby_reimagined/props.py",
+  "coordinates": {
+    "up": "+Z",
+    "front": "-Y",
+    "unit": "Roblox stud"
+  },
+  "triangle_limit_per_mesh": 20000,
+  "total_original_triangles": 37096,
+  "assets": {
+    "FloralSofa90s": {
+      "asset": "FloralSofa90s",
+      "vertices": 1416,
+      "triangles": 1456,
+      "materials": [
+        "wood_edge",
+        "fabric_shadow",
+        "fabric_olive",
+        "fabric_flower"
+      ],
+      "bounds_xyz": [
+        [
+          -3.8000001907348633,
+          -1.6200000047683716,
+          0.0
+        ],
+        [
+          3.8000001907348633,
+          1.6800000667572021,
+          3.6700000762939453
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Budget 1990s olive/gold damask sofa, three seat cushions, piping and low feet."
+    },
+    "OliveVinylBench": {
+      "asset": "OliveVinylBench",
+      "vertices": 440,
+      "triangles": 808,
+      "materials": [
+        "chrome_dull",
+        "rubber",
+        "steel_black",
+        "vinyl_olive",
+        "vinyl_brown"
+      ],
+      "bounds_xyz": [
+        [
+          -2.799999952316284,
+          -1.1099998950958252,
+          0.0
+        ],
+        [
+          2.799999952316284,
+          1.0600000619888306,
+          3.690000057220459
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "LaminateOfficeDesk": {
+      "asset": "LaminateOfficeDesk",
+      "vertices": 528,
+      "triangles": 972,
+      "materials": [
+        "wood_edge",
+        "laminate_worn",
+        "wood_laminate",
+        "chrome_dull",
+        "steel_black",
+        "label_dark",
+        "tape"
+      ],
+      "bounds_xyz": [
+        [
+          -3.4000000953674316,
+          -1.5,
+          0.0
+        ],
+        [
+          3.4000000953674316,
+          1.5,
+          3.2089998722076416
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "FourDrawerFilingCabinet": {
+      "asset": "FourDrawerFilingCabinet",
+      "vertices": 608,
+      "triangles": 1080,
+      "materials": [
+        "cabinet_olive",
+        "steel_black",
+        "steel_edge",
+        "cabinet_light",
+        "chrome_dull",
+        "paper",
+        "label_dark"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2400000095367432,
+          -1.524999976158142,
+          0.0
+        ],
+        [
+          1.2400000095367432,
+          1.3049999475479126,
+          4.980000019073486
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "BeigeCRTMonitor": {
+      "asset": "BeigeCRTMonitor",
+      "vertices": 331,
+      "triangles": 564,
+      "materials": [
+        "plastic_edge",
+        "plastic_beige",
+        "screen_dark",
+        "led_green"
+      ],
+      "bounds_xyz": [
+        [
+          -1.3,
+          -1.28,
+          0.0
+        ],
+        [
+          1.3,
+          1.0175000429153442,
+          2.64
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "OfficePhotocopier": {
+      "asset": "OfficePhotocopier",
+      "vertices": 816,
+      "triangles": 1520,
+      "materials": [
+        "rubber",
+        "plastic_edge",
+        "plastic_beige",
+        "plastic_ivory",
+        "label_dark",
+        "paper",
+        "screen_cold",
+        "led_green"
+      ],
+      "bounds_xyz": [
+        [
+          -2.4850001335144043,
+          -1.5290000438690186,
+          -1.4901161193847656e-08
+        ],
+        [
+          1.965000033378601,
+          1.5649999380111694,
+          3.2845001220703125
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "BrownOfficeChair": {
+      "asset": "BrownOfficeChair",
+      "vertices": 412,
+      "triangles": 748,
+      "materials": [
+        "steel_black",
+        "rubber",
+        "chrome_dull",
+        "vinyl_brown"
+      ],
+      "bounds_xyz": [
+        [
+          -1.25,
+          -1.2580046653747559,
+          0.008809760212898254
+        ],
+        [
+          1.2999999523162842,
+          1.2701338529586792,
+          4.039801120758057
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "BrownStackChair": {
+      "asset": "BrownStackChair",
+      "vertices": 320,
+      "triangles": 584,
+      "materials": [
+        "chrome_dull",
+        "rubber",
+        "vinyl_brown"
+      ],
+      "bounds_xyz": [
+        [
+          -1.0362000465393066,
+          -1.0343999862670898,
+          0.0
+        ],
+        [
+          1.0362000465393066,
+          1.1519216299057007,
+          3.5238702297210693
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "WireServiceTrolley": {
+      "asset": "WireServiceTrolley",
+      "vertices": 980,
+      "triangles": 1660,
+      "materials": [
+        "rubber",
+        "chrome_dull",
+        "steel_grey",
+        "cardboard",
+        "tape"
+      ],
+      "bounds_xyz": [
+        [
+          -1.9249999523162842,
+          -1.3649998903274536,
+          -2.9802322387695312e-08
+        ],
+        [
+          1.9249999523162842,
+          1.9162917137145996,
+          3.8650002479553223
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Open front lip and rear/side cage; purely cosmetic collision should remain simple."
+    },
+    "RolledCarpet": {
+      "asset": "RolledCarpet",
+      "vertices": 1336,
+      "triangles": 2064,
+      "materials": [
+        "carpet_roll",
+        "fabric_shadow",
+        "tape"
+      ],
+      "bounds_xyz": [
+        [
+          -2.240999937057495,
+          -0.6800000667572021,
+          -2.384185791015625e-07
+        ],
+        [
+          2.240999937057495,
+          0.6800000667572021,
+          1.371999979019165
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "BeigeKeyboard": {
+      "asset": "BeigeKeyboard",
+      "vertices": 1728,
+      "triangles": 3240,
+      "materials": [
+        "plastic_edge",
+        "plastic_beige"
+      ],
+      "bounds_xyz": [
+        [
+          -1.4500000476837158,
+          -0.5,
+          0.0
+        ],
+        [
+          1.4500000476837158,
+          0.5,
+          0.3375000059604645
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "TwinDeckDJConsole": {
+      "asset": "TwinDeckDJConsole",
+      "vertices": 5356,
+      "triangles": 9844,
+      "materials": [
+        "flightcase",
+        "chrome_dull",
+        "steel_edge",
+        "rubber",
+        "steel_black",
+        "steel_grey",
+        "plastic_ivory",
+        "led_green",
+        "led_amber",
+        "label_dark",
+        "tape"
+      ],
+      "bounds_xyz": [
+        [
+          -5.385000228881836,
+          -2.0899999141693115,
+          0.0
+        ],
+        [
+          5.5092363357543945,
+          2.042721748352051,
+          4.175000190734863
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Raised-stage console asset only; stage platform/stairs supplied by caller. Two physical turntables with offset pickup tonearms/counterweights/needles, mixer, headphones, flightcase hardware and cable runs. Record discs are separate meshes for slow client rotation.",
+      "anchors_xyz": {
+        "left_record_base": [
+          -2.96,
+          -0.21,
+          3.773
+        ],
+        "right_record_base": [
+          2.64,
+          -0.21,
+          3.773
+        ]
+      },
+      "record_assets": {
+        "left_record_base": "VinylDiscAmber",
+        "right_record_base": "VinylDiscCyan"
+      },
+      "record_animation": {
+        "axis": "+Z Blender / +Y Roblox",
+        "suggested_degrees_per_second": 12,
+        "authoring_preview_only": true
+      }
+    },
+    "VinylDiscAmber": {
+      "asset": "VinylDiscAmber",
+      "vertices": 1424,
+      "triangles": 2824,
+      "materials": [
+        "rubber",
+        "steel_black",
+        "record_label_amber",
+        "paper",
+        "label_dark",
+        "chrome_dull"
+      ],
+      "bounds_xyz": [
+        [
+          -1.3450000286102295,
+          -1.3450000286102295,
+          0.0
+        ],
+        [
+          1.3450000286102295,
+          1.3450000286102295,
+          0.07999999821186066
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "VinylDiscCyan": {
+      "asset": "VinylDiscCyan",
+      "vertices": 1424,
+      "triangles": 2824,
+      "materials": [
+        "rubber",
+        "steel_black",
+        "record_label_cyan",
+        "paper",
+        "label_dark",
+        "chrome_dull"
+      ],
+      "bounds_xyz": [
+        [
+          -1.3450000286102295,
+          -1.3450000286102295,
+          0.0
+        ],
+        [
+          1.3450000286102295,
+          1.3450000286102295,
+          0.07999999821186066
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    },
+    "FestivalTrussSpeakerTower": {
+      "asset": "FestivalTrussSpeakerTower",
+      "vertices": 3272,
+      "triangles": 5820,
+      "materials": [
+        "steel_black",
+        "steel_grey",
+        "chrome_dull",
+        "steel_edge",
+        "grille",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -2.4149999618530273,
+          -3.1041388511657715,
+          0.0
+        ],
+        [
+          2.4149999618530273,
+          1.1399999856948853,
+          22.267000198364258
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Independent ground-mounted four-upright lattice, low outriggers, cantilever, five downward-angled hanging cabinets. Keep outside deck and check roof clearance at all corners."
+    },
+    "TwinSubwoofer": {
+      "asset": "TwinSubwoofer",
+      "vertices": 576,
+      "triangles": 1088,
+      "materials": [
+        "steel_black",
+        "grille",
+        "cone",
+        "rubber",
+        "steel_edge",
+        "steel_grey"
+      ],
+      "bounds_xyz": [
+        [
+          -2.0900001525878906,
+          -1.5329999923706055,
+          0.0
+        ],
+        [
+          2.0900001525878906,
+          1.4500000476837158,
+          2.759999990463257
+        ]
+      ],
+      "origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "stud",
+      "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+      "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+    }
+  },
+  "blender_version": "5.2.0 LTS",
+  "builder_sha256": "875a124f460d39b4b84675e7612a512e99fd98e88e4364f46c1c5ac98fc66986",
+  "checks": {
+    "triangles_below_20000_per_mesh": true,
+    "total_below_60000": true,
+    "all_grounded": true,
+    "no_degenerate_triangles": true,
+    "palette_uvs_inside_0_1": true,
+    "all_vertices_finite": true,
+    "existing_names_preserved": true,
+    "live_blender_or_studio_mutated": false,
+    "single_atlas_export_keeps_authoring_materials": true
+  }
+}

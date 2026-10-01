@@ -1,0 +1,9 @@
+{
+  "final_fbx": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/models/lobby-reimagined-20261001/LobbyReimaginedPreview.fbx",
+  "final_sha256": "ad476c7dfe20172c37634cc2a88a31cb358605eddbd77806504ed7b56b36f91c",
+  "final_bytes": 4530348,
+  "replaced_original_sha256": "4dc98675f5374041ca8aeae50cc2dba89b91fa5067da0e9be248ad3c63297a99",
+  "original_checkpoint": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/blender/fbx-fallback/original-before-AtlasUV-4dc98675f537.fbx",
+  "candidate_roundtrip_passed": true,
+  "source_blend_manifest_unchanged": true
+}

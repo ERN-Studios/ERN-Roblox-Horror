@@ -1,0 +1,45 @@
+{
+  "task": "Read-only lobby inspection and four redesign concepts for future Blender authoring",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioId": "08b776ed-0330-44f6-8378-c6eea82b3f38",
+  "nativeComputerControl": {
+    "AXWindow": "BACKROOMS: STAY QUIET [CO-OP HORROR] - Roblox Studio",
+    "AXAndScreenshotReadable": true,
+    "attemptedViewportClickAndWalk": true,
+    "inputResult": "Computer Use server error -10005: noWindowsAvailable",
+    "manualWalkVerified": false
+  },
+  "actualPlayInspection": {
+    "startedViaStudioMCP": true,
+    "availableDataModels": [
+      "Client",
+      "Server"
+    ],
+    "focusedDataModel": "Client",
+    "player": "ZenMeister02",
+    "cameraCaptures": [
+      "references/01-spawn-axis.png",
+      "references/02-mid-axis.png",
+      "references/03-far-levels.png",
+      "references/04-near-barricade.png",
+      "references/05-level3-gate.png"
+    ],
+    "runtimeProperties": "runtime-reference.json",
+    "sourceManifest": "source-manifest.json",
+    "gameManagerRead": "game-manager-preview-excerpts.json (fresh excerpt, not a full Source mirror)",
+    "playStopped": true
+  },
+  "changes": {
+    "studioSourcesEdited": 0,
+    "studioArtInstalled": false,
+    "blenderModelsAuthored": false,
+    "publicationRequired": false
+  },
+  "existingNativeRecoveryRecord": "../lobby-box-glow-20261001/native-after/native-completeness-receipt.json",
+  "limitations": [
+    "This is a visual/Source/property inspection, not a manual walking, multiplayer or performance test.",
+    "Generated concepts are illustrative; exact gate/shop counts and measurements remain authoritative in Studio and the future Blender build manifest.",
+    "No source-only export is claimed as a complete native place backup."
+  ]
+}

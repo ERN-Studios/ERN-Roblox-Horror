@@ -1,0 +1,16 @@
+{
+  "schema": "lobby-reimagined-import-helper-verification-v1",
+  "passed": true,
+  "checks": [
+    "valid binary geometry/atlas package accepted and original manifest bytes SHA-pinned",
+    "wrong mesh SHA rejected",
+    "path traversal outside package rejected",
+    "new client Source allowlist accepted without duplicating default RuntimeBake",
+    "existing/unrelated Studio Source namespace rejected",
+    "RuntimeBake and generated installer compile; neither executed"
+  ],
+  "limits": [
+    "Synthetic payload only; actual Blender package still needs the same verification.",
+    "No HTTP server, live Studio, asset upload, runtime rendering, replication or performance check executed."
+  ]
+}

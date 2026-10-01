@@ -1,0 +1,102 @@
+{
+  "schema": "lobby-preview-final-native-scope-verification-v1",
+  "passed": true,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "comparisonOnly": true,
+  "scope": "Three owned added root folders and one added preview LocalScript. All 181 original root forests, 205 original Sources and captured service/world settings retained. Only local deserialized after copies were normalized; backups and Studio unchanged.",
+  "beforeRootCount": 181,
+  "afterRootCount": 184,
+  "originalRootsUnchangedAfterAdditionsExcluded": 181,
+  "addedRoots": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview",
+      "class": "Folder",
+      "capturedDescendants": 3,
+      "nativeDescendants": 3,
+      "nativeSha256": "18dfc7e9ecdb8692918a5c39daa60c924fa6cacc0b8d7f39ae75f735480ba472"
+    },
+    {
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001",
+      "class": "Folder",
+      "capturedDescendants": 96,
+      "nativeDescendants": 96,
+      "nativeSha256": "33c7fbc994ebc04039a864104e6d04ae70de666cffa25e0c52dd3e318b603ed0"
+    },
+    {
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R2",
+      "class": "Folder",
+      "capturedDescendants": 96,
+      "nativeDescendants": 96,
+      "nativeSha256": "768fd48656c36310e7100e80acc0849420752e9f544541a5bcc64336d9d2ed8a"
+    }
+  ],
+  "existingRootsChangedOnlyByAddition": [
+    "StarterPlayer.StarterPlayerScripts"
+  ],
+  "memoryOnlyExcludedPreviewClient": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+  "originalNormalizedWholeForestSha256": "3911459900a08f5d95973357ccdfe074e5a284cb5c2eaf6b32e5022a4b1d7d60",
+  "unexpectedRootChanges": [],
+  "removedRoots": [],
+  "beforeSources": 205,
+  "afterSources": 209,
+  "unchangedOriginalSources": 205,
+  "originalSourceChanges": [],
+  "sourceEditorConflicts": 0,
+  "verifiedNewSourceExport": "verified-studio-source/manifest.json",
+  "finalBuilderSourceBytes": 9162,
+  "finalBuilderSourceSha256": "8d808c569101432309f954d5a0f33f48ba4e1b115831b4877e064ca56c0be921",
+  "serviceScope": "service-scope-verification.json",
+  "capturedServicesUnchanged": 24,
+  "capturedServicePropertiesUnchanged": 151,
+  "capturedServiceAttributesUnchanged": 37,
+  "collisionAndMaterialSettingsUnchanged": true,
+  "backups": {
+    "native-before": {
+      "capturedAt": "2026-10-01T10:45:54Z",
+      "observedPlaceVersion": 2450,
+      "rawNativeFile": "native-before/all-service-children.rbxm",
+      "rawNativeBytes": 66148025,
+      "rawNativeSha256": "08c1b4c873e128b3766be0cb45b6e9990b43b4eddd326c66ea176ee534ec31d5",
+      "packedPlaceFile": "artifacts/lobby-reimagined-20261001/native-before/BeforeLevel6-AuthoritativeStudio.rbxl",
+      "packedPlaceBytes": 66121550,
+      "packedPlaceSha256": "bc5e31052710dacaf17802545ad06047eb6f820e417a3f761f5370edd05d8925",
+      "capturedContentInstances": 387471,
+      "serializedContentInstances": 387469,
+      "rootCount": 181,
+      "scriptCount": 205,
+      "sourceAndEditorConflicts": 0,
+      "skippedRoots": 0,
+      "packedRootErrors": 0,
+      "packedSourceErrors": 0,
+      "unreadableServiceFields": 129,
+      "packedServiceAssignmentErrors": 29
+    },
+    "native-after": {
+      "capturedAt": "2026-10-01T11:59:09Z",
+      "observedPlaceVersion": 2450,
+      "rawNativeFile": "native-after/all-service-children.rbxm",
+      "rawNativeBytes": 70151801,
+      "rawNativeSha256": "0320dbdd2add23480a07ba12bc063f6630cc883d9299bbb8786c44a479f7d25f",
+      "packedPlaceFile": "artifacts/lobby-reimagined-20261001/native-after/AfterLevel6-AuthoritativeStudio.rbxl",
+      "packedPlaceBytes": 70126994,
+      "packedPlaceSha256": "9e792635b20cca4cf48a47efd34c9715dd76cc21ea84df4ed70539baee997e1a",
+      "capturedContentInstances": 387670,
+      "serializedContentInstances": 387668,
+      "rootCount": 184,
+      "scriptCount": 209,
+      "sourceAndEditorConflicts": 0,
+      "skippedRoots": 0,
+      "packedRootErrors": 0,
+      "packedSourceErrors": 0,
+      "unreadableServiceFields": 129,
+      "packedServiceAssignmentErrors": 29
+    }
+  },
+  "historicalReceiptNote": "runtime-contract-play-receipt.json and independent-local-qa.json Source rows capture R2 Builder 1ef24ff before final canvas/local warm-fill changes; final-builder-delta-verification.json binds exactly seven visualization spans to final 8d808c Source. Geometry manifest 9e25ce remains unchanged.",
+  "limits": [
+    "Native forests are compared after canonical Lune serialization, including all captured properties and cross-references. The 129 unreadable service fields and 29 packed assignment errors remain unsupported; this does not assert they were reconstructed.",
+    "Two Archivable=false engine Status nodes are intentionally omitted in each capture, recorded and unchanged.",
+    "Edit captured place version 2450 is not publication proof. Live verification and publication are separate root-owned receipts."
+  ]
+}

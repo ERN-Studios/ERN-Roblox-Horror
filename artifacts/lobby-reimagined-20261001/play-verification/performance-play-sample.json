@@ -1,0 +1,10 @@
+{
+  "clientTotalMemoryMb": 5527.09375,
+  "renderFrames": 45,
+  "p95FrameMs": 68.59166920185089,
+  "recordDegreesPerSecond": 12.00884620205974,
+  "meanFrameMs": 66.70603536897235,
+  "sampleSeconds": 3.013248499999463,
+  "observedFramesPerSecond": 14.93404875170701,
+  "limitations": "Single local Studio client only; includes whole existing place. No mobile/multiplayer or isolated before/after performance claim."
+}

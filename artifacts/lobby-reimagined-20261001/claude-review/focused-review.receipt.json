@@ -1,0 +1,56 @@
+{
+  "scope": "Read-only critique of supplied lobby observations/images; no tools or live application access",
+  "startedAtUTC": "2026-10-01T10:36:34.393907+00:00",
+  "finishedAtUTC": "2026-10-01T10:39:35.059900+00:00",
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "requestedModel": "claude-opus-5-5",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "highestEffortSupportedByInspectedCLIHelp": "max",
+  "reportedTools": [],
+  "strictEmptyMcpConfig": true,
+  "safeMode": true,
+  "inputPrompt": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/claude-review/focused-review-prompt.txt",
+  "inputPromptSHA256": "f92f9aab31d229b1ffa89c9740023e463e7c1bc15ccf6f580748c778c0e6e7d4",
+  "inputImages": [
+    {
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/references/01-spawn-axis.png",
+      "mediaType": "image/png",
+      "bytes": 311323,
+      "sha256": "b7a2901f4d2a71f6240208c9aa51539e85191bc2e8522758317e719f1b065559"
+    },
+    {
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/references/02-mid-axis.png",
+      "mediaType": "image/png",
+      "bytes": 352787,
+      "sha256": "4b26d25700a7abdd6ef43ff7f6b56bc75a2d8278fa08555ef5bbf85573eac070"
+    },
+    {
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/references/03-far-levels.png",
+      "mediaType": "image/png",
+      "bytes": 349391,
+      "sha256": "ab7854e6500975770d7a0f110e9679f449a70567b773e1365d71ce2aa0da7eb6"
+    },
+    {
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/references/04-near-barricade.png",
+      "mediaType": "image/png",
+      "bytes": 225822,
+      "sha256": "003655ef28925ff3974b97a29b02829da7ae2cecd9efbc3256e7b247a3b4e8a9"
+    },
+    {
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/references/05-level3-gate.png",
+      "mediaType": "image/png",
+      "bytes": 339148,
+      "sha256": "f9ff50582f902c5d7bd0599ef671bc4e2d09d07624de4a95e91eb8c0e85f0487"
+    }
+  ],
+  "elapsedSeconds": 180.67,
+  "hardTimeoutSeconds": 180,
+  "exitCode": 143,
+  "status": "timeout",
+  "isError": null,
+  "permissionDenials": [],
+  "resultSubtype": null,
+  "eventCount": 147,
+  "rawInternalStreamSaved": false
+}

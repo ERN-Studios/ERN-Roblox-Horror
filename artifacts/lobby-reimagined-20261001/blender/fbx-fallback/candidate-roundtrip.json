@@ -1,0 +1,6407 @@
+{
+  "schema": "lobby-reimagined-fbx-roundtrip/1",
+  "blender_version": "5.2.0 LTS",
+  "fbx": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/blender/fbx-fallback/LobbyReimaginedPreview-AtlasUV-candidate.fbx",
+  "fbx_sha256": "ad476c7dfe20172c37634cc2a88a31cb358605eddbd77806504ed7b56b36f91c",
+  "fbx_bytes": 4530348,
+  "manifest": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/models/lobby-reimagined-20261001/manifest.json",
+  "manifest_sha256": "9e25ce55ccfd8aec36878770967c83f6b1eb72676f9c783c562b5864ab333c3c",
+  "source_blend_sha256_recorded": "cef02885bc8b4aa34c3ca21d3d9eb3eac39fa257c67da1e5284a09d39dd10141",
+  "expected_objects": 254,
+  "actual_mesh_objects": 254,
+  "unique_mesh_datablocks": 254,
+  "expected_triangles": 153004,
+  "actual_triangles": 153004,
+  "triangle_count_multiset_matches": true,
+  "world_placement_bounds_match_001_stud": true,
+  "largest_matched_placement_bound_error_studs": 1.52587890625e-05,
+  "missing_or_changed_placement_bounds": [],
+  "unexpected_placement_bounds": [],
+  "all_geometry_material_indices_valid": true,
+  "all_geometry_uvs_valid": true,
+  "all_assigned_materials_route_base_color_to_image": true,
+  "connected_images_valid": true,
+  "all_texture_routes_use_AtlasUV": true,
+  "bad_texture_uv_objects": [],
+  "images": {
+    "Lobby Preview | Color Wear Atlas": {
+      "size": [
+        1024,
+        1024
+      ],
+      "channels": 4,
+      "has_data": true,
+      "packed": true,
+      "filepath": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-reimagined-20261001/blender/fbx-fallback/LobbyReimaginedPreview-AtlasUV-candidate.fbm/atlas.png",
+      "file_exists": false,
+      "file_sha256": null
+    }
+  },
+  "materials": {
+    "LRP_FBX_Fallback_AtlasUV": {
+      "base_color_image_routes": [
+        "Lobby Preview | Color Wear Atlas"
+      ],
+      "image_explicit_uv_maps": []
+    }
+  },
+  "objects": [
+    {
+      "object": "LRP_FBX_0000_PlainShell.001",
+      "mesh": "LRP_FBX_IndependentMesh_0000",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -140.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -99.99999237060547,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0001_PortalShell.001",
+      "mesh": "LRP_FBX_IndependentMesh_0001",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -100.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -59.99999237060547,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0002_PlainShell.002",
+      "mesh": "LRP_FBX_IndependentMesh_0002",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -60.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        -19.9999942779541,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0003_PortalShell.002",
+      "mesh": "LRP_FBX_IndependentMesh_0003",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        -20.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        20.0000057220459,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0004_PlainShell.003",
+      "mesh": "LRP_FBX_IndependentMesh_0004",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        20.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        60.00000762939453,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0005_PortalShell.003",
+      "mesh": "LRP_FBX_IndependentMesh_0005",
+      "vertices": 2688,
+      "triangles": 1344,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        60.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        100.00000762939453,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0006_PlainShell.004",
+      "mesh": "LRP_FBX_IndependentMesh_0006",
+      "vertices": 912,
+      "triangles": 456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -36.099998474121094,
+        100.0,
+        -3.2584134714852553e-06,
+        36.099998474121094,
+        140.0,
+        37.10000228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0007_ArchRib.001",
+      "mesh": "LRP_FBX_IndependentMesh_0007",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -131.39999389648438,
+        -2.280889361827576e-07,
+        34.75,
+        -128.60000610351562,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0008_ArchRib.002",
+      "mesh": "LRP_FBX_IndependentMesh_0008",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -111.4000015258789,
+        -2.280889361827576e-07,
+        34.75,
+        -108.5999984741211,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0009_ArchRib.003",
+      "mesh": "LRP_FBX_IndependentMesh_0009",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -91.4000015258789,
+        -2.280889361827576e-07,
+        34.75,
+        -88.5999984741211,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0010_ArchRib.004",
+      "mesh": "LRP_FBX_IndependentMesh_0010",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -71.4000015258789,
+        -2.280889361827576e-07,
+        34.75,
+        -68.5999984741211,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0011_ArchRib.005",
+      "mesh": "LRP_FBX_IndependentMesh_0011",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -51.400001525878906,
+        -2.280889361827576e-07,
+        34.75,
+        -48.599998474121094,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0012_ArchRib.006",
+      "mesh": "LRP_FBX_IndependentMesh_0012",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -31.399999618530273,
+        -2.280889361827576e-07,
+        34.75,
+        -28.600000381469727,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0013_ArchRib.007",
+      "mesh": "LRP_FBX_IndependentMesh_0013",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        -11.399999618530273,
+        -2.280889361827576e-07,
+        34.75,
+        -8.59999942779541,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0014_ArchRib.008",
+      "mesh": "LRP_FBX_IndependentMesh_0014",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        8.600000381469727,
+        -2.280889361827576e-07,
+        34.75,
+        11.40000057220459,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0015_ArchRib.009",
+      "mesh": "LRP_FBX_IndependentMesh_0015",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        28.600000381469727,
+        -2.280889361827576e-07,
+        34.75,
+        31.399999618530273,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0016_ArchRib.010",
+      "mesh": "LRP_FBX_IndependentMesh_0016",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        48.599998474121094,
+        -2.280889361827576e-07,
+        34.75,
+        51.400001525878906,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0017_ArchRib.011",
+      "mesh": "LRP_FBX_IndependentMesh_0017",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        68.5999984741211,
+        -2.280889361827576e-07,
+        34.75,
+        71.4000015258789,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0018_ArchRib.012",
+      "mesh": "LRP_FBX_IndependentMesh_0018",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        88.5999984741211,
+        -2.280889361827576e-07,
+        34.75,
+        91.4000015258789,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0019_ArchRib.013",
+      "mesh": "LRP_FBX_IndependentMesh_0019",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        108.5999984741211,
+        -2.280889361827576e-07,
+        34.75,
+        111.4000015258789,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0020_ArchRib.014",
+      "mesh": "LRP_FBX_IndependentMesh_0020",
+      "vertices": 1368,
+      "triangles": 684,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.75,
+        128.60000610351562,
+        -2.280889361827576e-07,
+        34.75,
+        131.39999389648438,
+        35.650001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0021_RoadSection.001",
+      "mesh": "LRP_FBX_IndependentMesh_0021",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -140.0,
+        -1.0000032186508179,
+        16.5,
+        -100.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0022_SidewalkSection.001",
+      "mesh": "LRP_FBX_IndependentMesh_0022",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        -140.0,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        -100.0,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0023_SidewalkSection.002",
+      "mesh": "LRP_FBX_IndependentMesh_0023",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        -140.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        -100.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0024_RoadSection.002",
+      "mesh": "LRP_FBX_IndependentMesh_0024",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -100.0,
+        -1.0000032186508179,
+        16.5,
+        -60.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0025_SidewalkSection.003",
+      "mesh": "LRP_FBX_IndependentMesh_0025",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        -100.0,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        -60.0,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0026_SidewalkSection.004",
+      "mesh": "LRP_FBX_IndependentMesh_0026",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        -100.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        -60.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0027_RoadSection.003",
+      "mesh": "LRP_FBX_IndependentMesh_0027",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -60.0,
+        -1.0000032186508179,
+        16.5,
+        -20.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0028_SidewalkSection.005",
+      "mesh": "LRP_FBX_IndependentMesh_0028",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        -60.0,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        -19.999998092651367,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0029_SidewalkSection.006",
+      "mesh": "LRP_FBX_IndependentMesh_0029",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        -60.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        -20.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0030_RoadSection.004",
+      "mesh": "LRP_FBX_IndependentMesh_0030",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        -20.0,
+        -1.0000032186508179,
+        16.5,
+        20.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0031_SidewalkSection.007",
+      "mesh": "LRP_FBX_IndependentMesh_0031",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        -20.000001907348633,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        20.000001907348633,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0032_SidewalkSection.008",
+      "mesh": "LRP_FBX_IndependentMesh_0032",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        -20.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        20.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0033_RoadSection.005",
+      "mesh": "LRP_FBX_IndependentMesh_0033",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        20.0,
+        -1.0000032186508179,
+        16.5,
+        60.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0034_SidewalkSection.009",
+      "mesh": "LRP_FBX_IndependentMesh_0034",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        19.999998092651367,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        60.0,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0035_SidewalkSection.010",
+      "mesh": "LRP_FBX_IndependentMesh_0035",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        20.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        60.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0036_RoadSection.006",
+      "mesh": "LRP_FBX_IndependentMesh_0036",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        60.0,
+        -1.0000032186508179,
+        16.5,
+        100.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0037_SidewalkSection.011",
+      "mesh": "LRP_FBX_IndependentMesh_0037",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        60.0,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        100.0,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0038_SidewalkSection.012",
+      "mesh": "LRP_FBX_IndependentMesh_0038",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        60.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        100.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0039_RoadSection.007",
+      "mesh": "LRP_FBX_IndependentMesh_0039",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -16.5,
+        100.0,
+        -1.0000032186508179,
+        16.5,
+        140.0,
+        0.03250276669859886
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0040_SidewalkSection.013",
+      "mesh": "LRP_FBX_IndependentMesh_0040",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.30000305175781,
+        100.0,
+        -4.511678980634315e-06,
+        -16.699996948242188,
+        140.0,
+        0.8950018882751465
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0041_SidewalkSection.014",
+      "mesh": "LRP_FBX_IndependentMesh_0041",
+      "vertices": 1896,
+      "triangles": 948,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.700000762939453,
+        100.0,
+        -3.2584134714852553e-06,
+        33.29999923706055,
+        140.0,
+        0.895003080368042
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0042_CableTray.001",
+      "mesh": "LRP_FBX_IndependentMesh_0042",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -140.0550079345703,
+        32.02000045776367,
+        -9.920000076293945,
+        -119.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0043_Fluorescent.001",
+      "mesh": "LRP_FBX_IndependentMesh_0043",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -130.60000610351562,
+        30.17999839782715,
+        -9.149999618530273,
+        -129.39999389648438,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0044_CableTray.002",
+      "mesh": "LRP_FBX_IndependentMesh_0044",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -140.0550079345703,
+        32.02000045776367,
+        12.079999923706055,
+        -119.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0045_Fluorescent.002",
+      "mesh": "LRP_FBX_IndependentMesh_0045",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -130.60000610351562,
+        30.17999839782715,
+        12.850000381469727,
+        -129.39999389648438,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0046_CableTray.003",
+      "mesh": "LRP_FBX_IndependentMesh_0046",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -120.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -99.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0047_Fluorescent.003",
+      "mesh": "LRP_FBX_IndependentMesh_0047",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -110.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -109.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0048_CableTray.004",
+      "mesh": "LRP_FBX_IndependentMesh_0048",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -120.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -99.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0049_Fluorescent.004",
+      "mesh": "LRP_FBX_IndependentMesh_0049",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -110.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -109.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0050_CableTray.005",
+      "mesh": "LRP_FBX_IndependentMesh_0050",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -100.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -79.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0051_Fluorescent.005",
+      "mesh": "LRP_FBX_IndependentMesh_0051",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -90.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -89.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0052_CableTray.006",
+      "mesh": "LRP_FBX_IndependentMesh_0052",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -100.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -79.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0053_Fluorescent.006",
+      "mesh": "LRP_FBX_IndependentMesh_0053",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -90.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -89.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0054_CableTray.007",
+      "mesh": "LRP_FBX_IndependentMesh_0054",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -80.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -59.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0055_Fluorescent.007",
+      "mesh": "LRP_FBX_IndependentMesh_0055",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -70.5999984741211,
+        30.17999839782715,
+        -9.149999618530273,
+        -69.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0056_CableTray.008",
+      "mesh": "LRP_FBX_IndependentMesh_0056",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -80.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -59.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0057_Fluorescent.008",
+      "mesh": "LRP_FBX_IndependentMesh_0057",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -70.5999984741211,
+        30.17999839782715,
+        12.850000381469727,
+        -69.4000015258789,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0058_CableTray.009",
+      "mesh": "LRP_FBX_IndependentMesh_0058",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -60.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -39.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0059_Fluorescent.009",
+      "mesh": "LRP_FBX_IndependentMesh_0059",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -50.599998474121094,
+        30.17999839782715,
+        -9.149999618530273,
+        -49.400001525878906,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0060_CableTray.010",
+      "mesh": "LRP_FBX_IndependentMesh_0060",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -60.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -39.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0061_Fluorescent.010",
+      "mesh": "LRP_FBX_IndependentMesh_0061",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -50.599998474121094,
+        30.17999839782715,
+        12.850000381469727,
+        -49.400001525878906,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0062_CableTray.011",
+      "mesh": "LRP_FBX_IndependentMesh_0062",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -40.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        -19.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0063_Fluorescent.011",
+      "mesh": "LRP_FBX_IndependentMesh_0063",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -30.600000381469727,
+        30.17999839782715,
+        -9.149999618530273,
+        -29.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0064_CableTray.012",
+      "mesh": "LRP_FBX_IndependentMesh_0064",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -40.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        -19.94499969482422,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0065_Fluorescent.012",
+      "mesh": "LRP_FBX_IndependentMesh_0065",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -30.600000381469727,
+        30.17999839782715,
+        12.850000381469727,
+        -29.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0066_CableTray.013",
+      "mesh": "LRP_FBX_IndependentMesh_0066",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -20.05500030517578,
+        32.02000045776367,
+        -9.920000076293945,
+        0.05500026419758797,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0067_Fluorescent.013",
+      "mesh": "LRP_FBX_IndependentMesh_0067",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        -10.600000381469727,
+        30.17999839782715,
+        -9.149999618530273,
+        -9.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0068_CableTray.014",
+      "mesh": "LRP_FBX_IndependentMesh_0068",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -20.05500030517578,
+        32.02000045776367,
+        12.079999923706055,
+        0.05500026419758797,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0069_Fluorescent.014",
+      "mesh": "LRP_FBX_IndependentMesh_0069",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        -10.600000381469727,
+        30.17999839782715,
+        12.850000381469727,
+        -9.399999618530273,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0070_CableTray.015",
+      "mesh": "LRP_FBX_IndependentMesh_0070",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        -0.055000368505716324,
+        32.02000045776367,
+        -9.920000076293945,
+        20.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0071_Fluorescent.015",
+      "mesh": "LRP_FBX_IndependentMesh_0071",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        9.399999618530273,
+        30.17999839782715,
+        -9.149999618530273,
+        10.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0072_CableTray.016",
+      "mesh": "LRP_FBX_IndependentMesh_0072",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        -0.055000368505716324,
+        32.02000045776367,
+        12.079999923706055,
+        20.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0073_Fluorescent.016",
+      "mesh": "LRP_FBX_IndependentMesh_0073",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        9.399999618530273,
+        30.17999839782715,
+        12.850000381469727,
+        10.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0074_CableTray.017",
+      "mesh": "LRP_FBX_IndependentMesh_0074",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        19.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        40.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0075_Fluorescent.017",
+      "mesh": "LRP_FBX_IndependentMesh_0075",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        29.399999618530273,
+        30.17999839782715,
+        -9.149999618530273,
+        30.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0076_CableTray.018",
+      "mesh": "LRP_FBX_IndependentMesh_0076",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        19.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        40.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0077_Fluorescent.018",
+      "mesh": "LRP_FBX_IndependentMesh_0077",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        29.399999618530273,
+        30.17999839782715,
+        12.850000381469727,
+        30.600000381469727,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0078_CableTray.019",
+      "mesh": "LRP_FBX_IndependentMesh_0078",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        39.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        60.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0079_Fluorescent.019",
+      "mesh": "LRP_FBX_IndependentMesh_0079",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        49.400001525878906,
+        30.17999839782715,
+        -9.149999618530273,
+        50.599998474121094,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0080_CableTray.020",
+      "mesh": "LRP_FBX_IndependentMesh_0080",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        39.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        60.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0081_Fluorescent.020",
+      "mesh": "LRP_FBX_IndependentMesh_0081",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        49.400001525878906,
+        30.17999839782715,
+        12.850000381469727,
+        50.599998474121094,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0082_CableTray.021",
+      "mesh": "LRP_FBX_IndependentMesh_0082",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        59.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        80.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0083_Fluorescent.021",
+      "mesh": "LRP_FBX_IndependentMesh_0083",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        69.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        70.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0084_CableTray.022",
+      "mesh": "LRP_FBX_IndependentMesh_0084",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        59.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        80.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0085_Fluorescent.022",
+      "mesh": "LRP_FBX_IndependentMesh_0085",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        69.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        70.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0086_CableTray.023",
+      "mesh": "LRP_FBX_IndependentMesh_0086",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        79.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        100.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0087_Fluorescent.023",
+      "mesh": "LRP_FBX_IndependentMesh_0087",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        89.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        90.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0088_CableTray.024",
+      "mesh": "LRP_FBX_IndependentMesh_0088",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        79.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        100.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0089_Fluorescent.024",
+      "mesh": "LRP_FBX_IndependentMesh_0089",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        89.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        90.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0090_CableTray.025",
+      "mesh": "LRP_FBX_IndependentMesh_0090",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        99.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        120.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0091_Fluorescent.025",
+      "mesh": "LRP_FBX_IndependentMesh_0091",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        109.4000015258789,
+        30.17999839782715,
+        -9.149999618530273,
+        110.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0092_CableTray.026",
+      "mesh": "LRP_FBX_IndependentMesh_0092",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        99.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        120.05500030517578,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0093_Fluorescent.026",
+      "mesh": "LRP_FBX_IndependentMesh_0093",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        109.4000015258789,
+        30.17999839782715,
+        12.850000381469727,
+        110.5999984741211,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0094_CableTray.027",
+      "mesh": "LRP_FBX_IndependentMesh_0094",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.079999923706055,
+        119.94499969482422,
+        32.02000045776367,
+        -9.920000076293945,
+        140.05499267578125,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0095_Fluorescent.027",
+      "mesh": "LRP_FBX_IndependentMesh_0095",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -12.850000381469727,
+        129.39999389648438,
+        30.17999839782715,
+        -9.149999618530273,
+        130.60000610351562,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0096_CableTray.028",
+      "mesh": "LRP_FBX_IndependentMesh_0096",
+      "vertices": 408,
+      "triangles": 204,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.920000076293945,
+        119.94499969482422,
+        32.02000045776367,
+        12.079999923706055,
+        140.05499267578125,
+        32.72500228881836
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0097_Fluorescent.028",
+      "mesh": "LRP_FBX_IndependentMesh_0097",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        9.149999618530273,
+        129.39999389648438,
+        30.17999839782715,
+        12.850000381469727,
+        130.60000610351562,
+        30.89999771118164
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0098_ConduitSection.001",
+      "mesh": "LRP_FBX_IndependentMesh_0098",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -140.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0099_ConduitSection.002",
+      "mesh": "LRP_FBX_IndependentMesh_0099",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -120.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -100.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0100_ConduitSection.003",
+      "mesh": "LRP_FBX_IndependentMesh_0100",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -60.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0101_ConduitSection.004",
+      "mesh": "LRP_FBX_IndependentMesh_0101",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        -40.0,
+        11.79999828338623,
+        -32.689998626708984,
+        -20.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0102_ConduitSection.005",
+      "mesh": "LRP_FBX_IndependentMesh_0102",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        20.0,
+        11.79999828338623,
+        -32.689998626708984,
+        40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0103_ConduitSection.006",
+      "mesh": "LRP_FBX_IndependentMesh_0103",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        40.0,
+        11.79999828338623,
+        -32.689998626708984,
+        60.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0104_ConduitSection.007",
+      "mesh": "LRP_FBX_IndependentMesh_0104",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        100.0,
+        11.79999828338623,
+        -32.689998626708984,
+        120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0105_ConduitSection.008",
+      "mesh": "LRP_FBX_IndependentMesh_0105",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -33.0099983215332,
+        120.0,
+        11.79999828338623,
+        -32.689998626708984,
+        140.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0106_ServicePanel.001",
+      "mesh": "LRP_FBX_IndependentMesh_0106",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        -121.5,
+        4.899999618530273,
+        -32.25499725341797,
+        -118.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0107_ServicePanel.002",
+      "mesh": "LRP_FBX_IndependentMesh_0107",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        -41.5,
+        4.899999618530273,
+        -32.25499725341797,
+        -38.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0108_ServicePanel.003",
+      "mesh": "LRP_FBX_IndependentMesh_0108",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        38.5,
+        4.899999618530273,
+        -32.25499725341797,
+        41.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0109_ServicePanel.004",
+      "mesh": "LRP_FBX_IndependentMesh_0109",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -32.79999923706055,
+        118.5,
+        4.899999618530273,
+        -32.25499725341797,
+        121.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0110_ConduitSection.009",
+      "mesh": "LRP_FBX_IndependentMesh_0110",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -140.0,
+        11.79999828338623,
+        33.0099983215332,
+        -120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0111_ConduitSection.010",
+      "mesh": "LRP_FBX_IndependentMesh_0111",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -120.0,
+        11.79999828338623,
+        33.0099983215332,
+        -100.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0112_ConduitSection.011",
+      "mesh": "LRP_FBX_IndependentMesh_0112",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -60.0,
+        11.79999828338623,
+        33.0099983215332,
+        -40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0113_ConduitSection.012",
+      "mesh": "LRP_FBX_IndependentMesh_0113",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        -40.0,
+        11.79999828338623,
+        33.0099983215332,
+        -20.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0114_ConduitSection.013",
+      "mesh": "LRP_FBX_IndependentMesh_0114",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        20.0,
+        11.79999828338623,
+        33.0099983215332,
+        40.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0115_ConduitSection.014",
+      "mesh": "LRP_FBX_IndependentMesh_0115",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        40.0,
+        11.79999828338623,
+        33.0099983215332,
+        60.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0116_ConduitSection.015",
+      "mesh": "LRP_FBX_IndependentMesh_0116",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        100.0,
+        11.79999828338623,
+        33.0099983215332,
+        120.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0117_ConduitSection.016",
+      "mesh": "LRP_FBX_IndependentMesh_0117",
+      "vertices": 168,
+      "triangles": 84,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.689998626708984,
+        120.0,
+        11.79999828338623,
+        33.0099983215332,
+        140.0,
+        12.900001525878906
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0118_ServicePanel.005",
+      "mesh": "LRP_FBX_IndependentMesh_0118",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        -121.5,
+        4.899999618530273,
+        32.79999923706055,
+        -118.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0119_ServicePanel.006",
+      "mesh": "LRP_FBX_IndependentMesh_0119",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        -41.5,
+        4.899999618530273,
+        32.79999923706055,
+        -38.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0120_ServicePanel.007",
+      "mesh": "LRP_FBX_IndependentMesh_0120",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        38.5,
+        4.899999618530273,
+        32.79999923706055,
+        41.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0121_ServicePanel.008",
+      "mesh": "LRP_FBX_IndependentMesh_0121",
+      "vertices": 192,
+      "triangles": 96,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        32.25499725341797,
+        118.5,
+        4.899999618530273,
+        32.79999923706055,
+        121.5,
+        7.100000381469727
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0122_LevelGate.001",
+      "mesh": "LRP_FBX_IndependentMesh_0122",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.40000534057617,
+        68.0,
+        0.7999997735023499,
+        -20.100004196166992,
+        92.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0123_QueueRoom.001",
+      "mesh": "LRP_FBX_IndependentMesh_0123",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        51.85000228881836,
+        0.39999547600746155,
+        -35.000003814697266,
+        108.1500015258789,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0124_DoorThreshold.001",
+      "mesh": "LRP_FBX_IndependentMesh_0124",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -37.500003814697266,
+        70.0,
+        -5.050541176387924e-07,
+        -31.299999237060547,
+        90.0,
+        1.1175004243850708
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0125_QueuePad.001",
+      "mesh": "LRP_FBX_IndependentMesh_0125",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        61.599998474121094,
+        0.9999988079071045,
+        -46.599998474121094,
+        76.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0126_QueueKiosk.001",
+      "mesh": "LRP_FBX_IndependentMesh_0126",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        68.1500015258789,
+        0.9999998807907104,
+        -61.400001525878906,
+        69.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0127_QueuePad.002",
+      "mesh": "LRP_FBX_IndependentMesh_0127",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        83.5999984741211,
+        0.9999988079071045,
+        -46.599998474121094,
+        98.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0128_QueueKiosk.002",
+      "mesh": "LRP_FBX_IndependentMesh_0128",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        90.1500015258789,
+        0.9999998807907104,
+        -61.400001525878906,
+        91.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0129_QueuePad.003",
+      "mesh": "LRP_FBX_IndependentMesh_0129",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        61.599998474121094,
+        0.9999988079071045,
+        -65.5999984741211,
+        76.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0130_QueueKiosk.003",
+      "mesh": "LRP_FBX_IndependentMesh_0130",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        68.1500015258789,
+        0.9999998807907104,
+        -80.4000015258789,
+        69.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0131_QueuePad.004",
+      "mesh": "LRP_FBX_IndependentMesh_0131",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        83.5999984741211,
+        0.9999988079071045,
+        -65.5999984741211,
+        98.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0132_QueueKiosk.004",
+      "mesh": "LRP_FBX_IndependentMesh_0132",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        90.1500015258789,
+        0.9999998807907104,
+        -80.4000015258789,
+        91.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0133_Fluorescent.029",
+      "mesh": "LRP_FBX_IndependentMesh_0133",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        67.4000015258789,
+        20.979999542236328,
+        -49.150001525878906,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0134_Fluorescent.030",
+      "mesh": "LRP_FBX_IndependentMesh_0134",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        91.4000015258789,
+        20.979999542236328,
+        -49.150001525878906,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0135_Fluorescent.031",
+      "mesh": "LRP_FBX_IndependentMesh_0135",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        67.4000015258789,
+        20.979999542236328,
+        -73.1500015258789,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0136_Fluorescent.032",
+      "mesh": "LRP_FBX_IndependentMesh_0136",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        91.4000015258789,
+        20.979999542236328,
+        -73.1500015258789,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0137_LevelGate.002",
+      "mesh": "LRP_FBX_IndependentMesh_0137",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.40000534057617,
+        -12.0,
+        0.7999997735023499,
+        -20.100004196166992,
+        12.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0138_QueueRoom.002",
+      "mesh": "LRP_FBX_IndependentMesh_0138",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        -28.149999618530273,
+        0.39999547600746155,
+        -35.000003814697266,
+        28.149999618530273,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0139_DoorThreshold.002",
+      "mesh": "LRP_FBX_IndependentMesh_0139",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -37.500003814697266,
+        -10.000000953674316,
+        -5.050541176387924e-07,
+        -31.299999237060547,
+        10.000000953674316,
+        1.1175004243850708
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0140_QueuePad.005",
+      "mesh": "LRP_FBX_IndependentMesh_0140",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -18.400001525878906,
+        0.9999988079071045,
+        -46.599998474121094,
+        -3.6000006198883057,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0141_QueueKiosk.005",
+      "mesh": "LRP_FBX_IndependentMesh_0141",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        -11.850001335144043,
+        0.9999998807907104,
+        -61.400001525878906,
+        -10.15000057220459,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0142_QueuePad.006",
+      "mesh": "LRP_FBX_IndependentMesh_0142",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        3.5999979972839355,
+        0.9999988079071045,
+        -46.599998474121094,
+        18.39999771118164,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0143_QueueKiosk.006",
+      "mesh": "LRP_FBX_IndependentMesh_0143",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        10.14999771118164,
+        0.9999998807907104,
+        -61.400001525878906,
+        11.849998474121094,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0144_QueuePad.007",
+      "mesh": "LRP_FBX_IndependentMesh_0144",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -18.39999771118164,
+        0.9999988079071045,
+        -65.5999984741211,
+        -3.5999977588653564,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0145_QueueKiosk.007",
+      "mesh": "LRP_FBX_IndependentMesh_0145",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        -11.849998474121094,
+        0.9999998807907104,
+        -80.4000015258789,
+        -10.14999771118164,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0146_QueuePad.008",
+      "mesh": "LRP_FBX_IndependentMesh_0146",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        3.6000008583068848,
+        0.9999988079071045,
+        -65.5999984741211,
+        18.400001525878906,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0147_QueueKiosk.008",
+      "mesh": "LRP_FBX_IndependentMesh_0147",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        10.15000057220459,
+        0.9999998807907104,
+        -80.4000015258789,
+        11.850001335144043,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0148_Fluorescent.033",
+      "mesh": "LRP_FBX_IndependentMesh_0148",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -12.600001335144043,
+        20.979999542236328,
+        -49.150001525878906,
+        -11.40000057220459,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0149_Fluorescent.034",
+      "mesh": "LRP_FBX_IndependentMesh_0149",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        11.39999771118164,
+        20.979999542236328,
+        -49.150001525878906,
+        12.599998474121094,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0150_Fluorescent.035",
+      "mesh": "LRP_FBX_IndependentMesh_0150",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -12.599998474121094,
+        20.979999542236328,
+        -73.1500015258789,
+        -11.39999771118164,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0151_Fluorescent.036",
+      "mesh": "LRP_FBX_IndependentMesh_0151",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        11.40000057220459,
+        20.979999542236328,
+        -73.1500015258789,
+        12.600001335144043,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0152_LevelGate.003",
+      "mesh": "LRP_FBX_IndependentMesh_0152",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -34.40000534057617,
+        -92.0,
+        0.7999997735023499,
+        -20.100004196166992,
+        -68.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0153_QueueRoom.003",
+      "mesh": "LRP_FBX_IndependentMesh_0153",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -91.1500015258789,
+        -108.1500015258789,
+        0.39999547600746155,
+        -35.000003814697266,
+        -51.849998474121094,
+        22.70000457763672
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0154_DoorThreshold.003",
+      "mesh": "LRP_FBX_IndependentMesh_0154",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -37.500003814697266,
+        -90.0,
+        -5.050541176387924e-07,
+        -31.299999237060547,
+        -70.0,
+        1.1175004243850708
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0155_QueuePad.009",
+      "mesh": "LRP_FBX_IndependentMesh_0155",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -98.4000015258789,
+        0.9999988079071045,
+        -46.599998474121094,
+        -83.5999984741211,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0156_QueueKiosk.009",
+      "mesh": "LRP_FBX_IndependentMesh_0156",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        -91.8499984741211,
+        0.9999998807907104,
+        -61.400001525878906,
+        -90.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0157_QueuePad.010",
+      "mesh": "LRP_FBX_IndependentMesh_0157",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -61.400001525878906,
+        -76.4000015258789,
+        0.9999988079071045,
+        -46.599998474121094,
+        -61.599998474121094,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0158_QueueKiosk.010",
+      "mesh": "LRP_FBX_IndependentMesh_0158",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -62.60000228881836,
+        -69.8499984741211,
+        0.9999998807907104,
+        -61.400001525878906,
+        -68.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0159_QueuePad.011",
+      "mesh": "LRP_FBX_IndependentMesh_0159",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -98.4000015258789,
+        0.9999988079071045,
+        -65.5999984741211,
+        -83.5999984741211,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0160_QueueKiosk.011",
+      "mesh": "LRP_FBX_IndependentMesh_0160",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        -91.8499984741211,
+        0.9999998807907104,
+        -80.4000015258789,
+        -90.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0161_QueuePad.012",
+      "mesh": "LRP_FBX_IndependentMesh_0161",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -80.4000015258789,
+        -76.4000015258789,
+        0.9999988079071045,
+        -65.5999984741211,
+        -61.599998474121094,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0162_QueueKiosk.012",
+      "mesh": "LRP_FBX_IndependentMesh_0162",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -81.5999984741211,
+        -69.8499984741211,
+        0.9999998807907104,
+        -80.4000015258789,
+        -68.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0163_Fluorescent.037",
+      "mesh": "LRP_FBX_IndependentMesh_0163",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -92.5999984741211,
+        20.979999542236328,
+        -49.150001525878906,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0164_Fluorescent.038",
+      "mesh": "LRP_FBX_IndependentMesh_0164",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -52.849998474121094,
+        -68.5999984741211,
+        20.979999542236328,
+        -49.150001525878906,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0165_Fluorescent.039",
+      "mesh": "LRP_FBX_IndependentMesh_0165",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -92.5999984741211,
+        20.979999542236328,
+        -73.1500015258789,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0166_Fluorescent.040",
+      "mesh": "LRP_FBX_IndependentMesh_0166",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -76.8499984741211,
+        -68.5999984741211,
+        20.979999542236328,
+        -73.1500015258789,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0167_LevelGate.004",
+      "mesh": "LRP_FBX_IndependentMesh_0167",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        20.09999656677246,
+        68.0,
+        0.7999998927116394,
+        34.400001525878906,
+        92.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0168_QueueRoom.004",
+      "mesh": "LRP_FBX_IndependentMesh_0168",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        35.0,
+        51.85000228881836,
+        0.3999987542629242,
+        91.1500015258789,
+        108.1500015258789,
+        22.700000762939453
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0169_DoorThreshold.004",
+      "mesh": "LRP_FBX_IndependentMesh_0169",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        31.299999237060547,
+        70.0,
+        -1.3550531718919956e-07,
+        37.500003814697266,
+        90.0,
+        1.1175000667572021
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0170_QueuePad.013",
+      "mesh": "LRP_FBX_IndependentMesh_0170",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        83.5999984741211,
+        0.9999988079071045,
+        61.400001525878906,
+        98.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0171_QueueKiosk.013",
+      "mesh": "LRP_FBX_IndependentMesh_0171",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        90.1500015258789,
+        1.0,
+        46.60000228881836,
+        91.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0172_QueuePad.014",
+      "mesh": "LRP_FBX_IndependentMesh_0172",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        61.599998474121094,
+        0.9999988079071045,
+        61.400001525878906,
+        76.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0173_QueueKiosk.014",
+      "mesh": "LRP_FBX_IndependentMesh_0173",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        68.1500015258789,
+        1.0,
+        46.60000228881836,
+        69.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0174_QueuePad.015",
+      "mesh": "LRP_FBX_IndependentMesh_0174",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        83.5999984741211,
+        0.9999988079071045,
+        80.4000015258789,
+        98.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0175_QueueKiosk.015",
+      "mesh": "LRP_FBX_IndependentMesh_0175",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        90.1500015258789,
+        1.0,
+        65.5999984741211,
+        91.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0176_QueuePad.016",
+      "mesh": "LRP_FBX_IndependentMesh_0176",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        61.599998474121094,
+        0.9999988079071045,
+        80.4000015258789,
+        76.4000015258789,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0177_QueueKiosk.016",
+      "mesh": "LRP_FBX_IndependentMesh_0177",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        68.1500015258789,
+        1.0,
+        65.5999984741211,
+        69.8499984741211,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0178_Fluorescent.041",
+      "mesh": "LRP_FBX_IndependentMesh_0178",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        91.4000015258789,
+        20.979999542236328,
+        52.849998474121094,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0179_Fluorescent.042",
+      "mesh": "LRP_FBX_IndependentMesh_0179",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        67.4000015258789,
+        20.979999542236328,
+        52.849998474121094,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0180_Fluorescent.043",
+      "mesh": "LRP_FBX_IndependentMesh_0180",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        91.4000015258789,
+        20.979999542236328,
+        76.8499984741211,
+        92.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0181_Fluorescent.044",
+      "mesh": "LRP_FBX_IndependentMesh_0181",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        67.4000015258789,
+        20.979999542236328,
+        76.8499984741211,
+        68.5999984741211,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0182_LevelGate.005",
+      "mesh": "LRP_FBX_IndependentMesh_0182",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        20.09999656677246,
+        -12.0,
+        0.7999998927116394,
+        34.400001525878906,
+        12.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0183_QueueRoom.005",
+      "mesh": "LRP_FBX_IndependentMesh_0183",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        35.0,
+        -28.149999618530273,
+        0.3999987542629242,
+        91.1500015258789,
+        28.149999618530273,
+        22.700000762939453
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0184_DoorThreshold.005",
+      "mesh": "LRP_FBX_IndependentMesh_0184",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        31.299999237060547,
+        -10.000000953674316,
+        -1.3550531718919956e-07,
+        37.500003814697266,
+        10.000000953674316,
+        1.1175000667572021
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0185_QueuePad.017",
+      "mesh": "LRP_FBX_IndependentMesh_0185",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        3.5999999046325684,
+        0.9999988079071045,
+        61.400001525878906,
+        18.399999618530273,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0186_QueueKiosk.017",
+      "mesh": "LRP_FBX_IndependentMesh_0186",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        10.149999618530273,
+        1.0,
+        46.60000228881836,
+        11.850000381469727,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0187_QueuePad.018",
+      "mesh": "LRP_FBX_IndependentMesh_0187",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -18.399999618530273,
+        0.9999988079071045,
+        61.400001525878906,
+        -3.5999996662139893,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0188_QueueKiosk.018",
+      "mesh": "LRP_FBX_IndependentMesh_0188",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        -11.850000381469727,
+        1.0,
+        46.60000228881836,
+        -10.149999618530273,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0189_QueuePad.019",
+      "mesh": "LRP_FBX_IndependentMesh_0189",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        3.5999999046325684,
+        0.9999988079071045,
+        80.4000015258789,
+        18.399999618530273,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0190_QueueKiosk.019",
+      "mesh": "LRP_FBX_IndependentMesh_0190",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        10.149999618530273,
+        1.0,
+        65.5999984741211,
+        11.850000381469727,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0191_QueuePad.020",
+      "mesh": "LRP_FBX_IndependentMesh_0191",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -18.399999618530273,
+        0.9999988079071045,
+        80.4000015258789,
+        -3.5999996662139893,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0192_QueueKiosk.020",
+      "mesh": "LRP_FBX_IndependentMesh_0192",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        -11.850000381469727,
+        1.0,
+        65.5999984741211,
+        -10.149999618530273,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0193_Fluorescent.045",
+      "mesh": "LRP_FBX_IndependentMesh_0193",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        11.40000057220459,
+        20.979999542236328,
+        52.849998474121094,
+        12.600001335144043,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0194_Fluorescent.046",
+      "mesh": "LRP_FBX_IndependentMesh_0194",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -12.599998474121094,
+        20.979999542236328,
+        52.849998474121094,
+        -11.39999771118164,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0195_Fluorescent.047",
+      "mesh": "LRP_FBX_IndependentMesh_0195",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        11.39999771118164,
+        20.979999542236328,
+        76.8499984741211,
+        12.599998474121094,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0196_Fluorescent.048",
+      "mesh": "LRP_FBX_IndependentMesh_0196",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -12.600001335144043,
+        20.979999542236328,
+        76.8499984741211,
+        -11.40000057220459,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0197_LevelGate.006",
+      "mesh": "LRP_FBX_IndependentMesh_0197",
+      "vertices": 624,
+      "triangles": 312,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        20.09999656677246,
+        -92.0,
+        0.7999998927116394,
+        34.400001525878906,
+        -68.0,
+        22.899999618530273
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0198_QueueRoom.006",
+      "mesh": "LRP_FBX_IndependentMesh_0198",
+      "vertices": 2944,
+      "triangles": 1608,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        35.0,
+        -108.1500015258789,
+        0.3999987542629242,
+        91.1500015258789,
+        -51.849998474121094,
+        22.700000762939453
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0199_DoorThreshold.006",
+      "mesh": "LRP_FBX_IndependentMesh_0199",
+      "vertices": 48,
+      "triangles": 24,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        31.299999237060547,
+        -90.0,
+        -1.3550531718919956e-07,
+        37.500003814697266,
+        -70.0,
+        1.1175000667572021
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0200_QueuePad.021",
+      "mesh": "LRP_FBX_IndependentMesh_0200",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -76.4000015258789,
+        0.9999988079071045,
+        61.400001525878906,
+        -61.599998474121094,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0201_QueueKiosk.021",
+      "mesh": "LRP_FBX_IndependentMesh_0201",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        -69.8499984741211,
+        1.0,
+        46.60000228881836,
+        -68.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0202_QueuePad.022",
+      "mesh": "LRP_FBX_IndependentMesh_0202",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        46.599998474121094,
+        -98.4000015258789,
+        0.9999988079071045,
+        61.400001525878906,
+        -83.5999984741211,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0203_QueueKiosk.022",
+      "mesh": "LRP_FBX_IndependentMesh_0203",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        45.400001525878906,
+        -91.8499984741211,
+        1.0,
+        46.60000228881836,
+        -90.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0204_QueuePad.023",
+      "mesh": "LRP_FBX_IndependentMesh_0204",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -76.4000015258789,
+        0.9999988079071045,
+        80.4000015258789,
+        -61.599998474121094,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0205_QueueKiosk.023",
+      "mesh": "LRP_FBX_IndependentMesh_0205",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        -69.8499984741211,
+        1.0,
+        65.5999984741211,
+        -68.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0206_QueuePad.024",
+      "mesh": "LRP_FBX_IndependentMesh_0206",
+      "vertices": 2816,
+      "triangles": 1528,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        65.5999984741211,
+        -98.4000015258789,
+        0.9999988079071045,
+        80.4000015258789,
+        -83.5999984741211,
+        1.8200011253356934
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0207_QueueKiosk.024",
+      "mesh": "LRP_FBX_IndependentMesh_0207",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        64.4000015258789,
+        -91.8499984741211,
+        1.0,
+        65.5999984741211,
+        -90.1500015258789,
+        5.25
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0208_Fluorescent.049",
+      "mesh": "LRP_FBX_IndependentMesh_0208",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -68.5999984741211,
+        20.979999542236328,
+        52.849998474121094,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0209_Fluorescent.050",
+      "mesh": "LRP_FBX_IndependentMesh_0209",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        49.150001525878906,
+        -92.5999984741211,
+        20.979999542236328,
+        52.849998474121094,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0210_Fluorescent.051",
+      "mesh": "LRP_FBX_IndependentMesh_0210",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -68.5999984741211,
+        20.979999542236328,
+        76.8499984741211,
+        -67.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0211_Fluorescent.052",
+      "mesh": "LRP_FBX_IndependentMesh_0211",
+      "vertices": 96,
+      "triangles": 48,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        73.1500015258789,
+        -92.5999984741211,
+        20.979999542236328,
+        76.8499984741211,
+        -91.4000015258789,
+        21.69999885559082
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0212_StageDeck.001",
+      "mesh": "LRP_FBX_IndependentMesh_0212",
+      "vertices": 336,
+      "triangles": 168,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -15.0,
+        -128.5,
+        -2.44543934968533e-06,
+        15.0,
+        -104.95999908447266,
+        4.559998512268066
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0213_LRP_TwinDeckDJConsole.001",
+      "mesh": "LRP_FBX_IndependentMesh_0213",
+      "vertices": 5356,
+      "triangles": 9844,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -5.509235858917236,
+        -123.042724609375,
+        4.499999046325684,
+        5.385001182556152,
+        -118.90999603271484,
+        8.67500114440918
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0214_LRP_FestivalTrussSpeakerTower.001",
+      "mesh": "LRP_FBX_IndependentMesh_0214",
+      "vertices": 3272,
+      "triangles": 5820,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -23.415000915527344,
+        -121.13999938964844,
+        0.7999995350837708,
+        -18.584999084472656,
+        -116.89585876464844,
+        23.067001342773438
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0215_LRP_TwinSubwoofer.001",
+      "mesh": "LRP_FBX_IndependentMesh_0215",
+      "vertices": 576,
+      "triangles": 1088,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -23.09000015258789,
+        -115.44999694824219,
+        0.7999994158744812,
+        -18.90999984741211,
+        -112.46700286865234,
+        3.560000419616699
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0216_LRP_FestivalTrussSpeakerTower.002",
+      "mesh": "LRP_FBX_IndependentMesh_0216",
+      "vertices": 3272,
+      "triangles": 5820,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.584999084472656,
+        -121.13999938964844,
+        0.7999995350837708,
+        23.415000915527344,
+        -116.89585876464844,
+        23.067001342773438
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0217_LRP_TwinSubwoofer.002",
+      "mesh": "LRP_FBX_IndependentMesh_0217",
+      "vertices": 576,
+      "triangles": 1088,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        18.90999984741211,
+        -115.44999694824219,
+        0.7999994158744812,
+        23.09000015258789,
+        -112.46700286865234,
+        3.560000419616699
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0218_LRP_VinylDiscAmber.001",
+      "mesh": "LRP_FBX_IndependentMesh_0218",
+      "vertices": 1424,
+      "triangles": 2824,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        1.6150000095367432,
+        -122.13500213623047,
+        8.27299976348877,
+        4.305000305175781,
+        -119.44499969482422,
+        8.352999687194824
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0219_LRP_VinylDiscCyan.001",
+      "mesh": "LRP_FBX_IndependentMesh_0219",
+      "vertices": 1424,
+      "triangles": 2824,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -3.984999895095825,
+        -122.13500213623047,
+        8.27299976348877,
+        -1.2949998378753662,
+        -119.44499969482422,
+        8.352999687194824
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0220_LRP_FloralSofa90s.001",
+      "mesh": "LRP_FBX_IndependentMesh_0220",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -31.174745559692383,
+        129.2516632080078,
+        0.7999998331069946,
+        -23.027084350585938,
+        134.84259033203125,
+        4.470000267028809
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0221_LRP_OliveVinylBench.001",
+      "mesh": "LRP_FBX_IndependentMesh_0221",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.778274536132812,
+        129.77037048339844,
+        0.7999998927116394,
+        -13.96762752532959,
+        134.19505310058594,
+        4.490000247955322
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0222_LRP_LaminateOfficeDesk.001",
+      "mesh": "LRP_FBX_IndependentMesh_0222",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -11.347536087036133,
+        129.2220001220703,
+        -5.1579444715343925e-08,
+        -3.963810443878174,
+        134.7779998779297,
+        3.2089998722076416
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0223_LRP_FourDrawerFilingCabinet.001",
+      "mesh": "LRP_FBX_IndependentMesh_0223",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        5.3575310707092285,
+        130.27755737304688,
+        -2.579118927314994e-07,
+        8.754728317260742,
+        133.72244262695312,
+        4.9800004959106445
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0224_LRP_BeigeCRTMonitor.001",
+      "mesh": "LRP_FBX_IndependentMesh_0224",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        15.007469177246094,
+        130.40919494628906,
+        0.7999998927116394,
+        17.9249324798584,
+        133.2964630126953,
+        3.440000057220459
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0225_LRP_OfficePhotocopier.001",
+      "mesh": "LRP_FBX_IndependentMesh_0225",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        25.263002395629883,
+        130.00550842285156,
+        0.7999998927116394,
+        30.233516693115234,
+        134.03289794921875,
+        4.084500312805176
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0226_LRP_FourDrawerFilingCabinet.002",
+      "mesh": "LRP_FBX_IndependentMesh_0226",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.660369873046875,
+        130.52928161621094,
+        4.320000171661377,
+        -25.267419815063477,
+        133.97071838378906,
+        9.300000190734863
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0227_LRP_BeigeCRTMonitor.002",
+      "mesh": "LRP_FBX_IndependentMesh_0227",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -18.065813064575195,
+        130.91616821289062,
+        4.339999675750732,
+        -15.485641479492188,
+        133.35208129882812,
+        6.980000019073486
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0228_LRP_OfficePhotocopier.002",
+      "mesh": "LRP_FBX_IndependentMesh_0228",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -10.279337882995605,
+        130.04598999023438,
+        3.058999538421631,
+        -5.220491886138916,
+        134.48992919921875,
+        6.343499660491943
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0229_LRP_BrownStackChair.001",
+      "mesh": "LRP_FBX_IndependentMesh_0229",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        5.673297882080078,
+        130.9219207763672,
+        4.829999923706055,
+        8.301841735839844,
+        133.6427764892578,
+        8.353870391845703
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0230_LRP_WireServiceTrolley.001",
+      "mesh": "LRP_FBX_IndependentMesh_0230",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        14.124175071716309,
+        130.55482482910156,
+        3.2899999618530273,
+        18.4990234375,
+        134.48631286621094,
+        7.15500020980835
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0231_LRP_FloralSofa90s.002",
+      "mesh": "LRP_FBX_IndependentMesh_0231",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        23.728445053100586,
+        129.53041076660156,
+        3.934499740600586,
+        31.874250411987305,
+        135.06300354003906,
+        7.604499816894531
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0232_LRP_BrownStackChair.002",
+      "mesh": "LRP_FBX_IndependentMesh_0232",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.28030014038086,
+        131.2453155517578,
+        9.149999618530273,
+        -25.80327606201172,
+        133.8369140625,
+        12.673870086669922
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0233_LRP_WireServiceTrolley.002",
+      "mesh": "LRP_FBX_IndependentMesh_0233",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.286054611206055,
+        130.58953857421875,
+        6.829999923706055,
+        -14.604361534118652,
+        134.9297332763672,
+        10.694999694824219
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0234_LRP_FloralSofa90s.003",
+      "mesh": "LRP_FBX_IndependentMesh_0234",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -11.783119201660156,
+        129.9804229736328,
+        6.193499565124512,
+        -3.6719603538513184,
+        135.1070098876953,
+        9.863499641418457
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0235_LRP_OliveVinylBench.002",
+      "mesh": "LRP_FBX_IndependentMesh_0235",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        4.204658508300781,
+        130.42359924316406,
+        8.203869819641113,
+        10.07338809967041,
+        134.53860473632812,
+        11.893869400024414
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0236_LRP_LaminateOfficeDesk.002",
+      "mesh": "LRP_FBX_IndependentMesh_0236",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        12.566394805908203,
+        130.43966674804688,
+        7.00499963760376,
+        19.766170501708984,
+        134.56033325195312,
+        10.21399974822998
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0237_LRP_FourDrawerFilingCabinet.003",
+      "mesh": "LRP_FBX_IndependentMesh_0237",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        26.290246963500977,
+        130.80189514160156,
+        7.4544997215271,
+        29.628671646118164,
+        134.19810485839844,
+        12.434499740600586
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0238_LRP_LaminateOfficeDesk.003",
+      "mesh": "LRP_FBX_IndependentMesh_0238",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -29.942964553833008,
+        -136.6389923095703,
+        0.7999998927116394,
+        -22.555767059326172,
+        -131.3610076904297,
+        4.008999824523926
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0239_LRP_FourDrawerFilingCabinet.004",
+      "mesh": "LRP_FBX_IndependentMesh_0239",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.39151382446289,
+        -135.49472045898438,
+        0.7999998927116394,
+        -16.506927490234375,
+        -132.44773864746094,
+        5.78000020980835
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0240_LRP_BrownStackChair.003",
+      "mesh": "LRP_FBX_IndependentMesh_0240",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.21841812133789,
+        -135.32498168945312,
+        0.7999998927116394,
+        18.668289184570312,
+        -132.7603302001953,
+        4.3238701820373535
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0241_LRP_WireServiceTrolley.003",
+      "mesh": "LRP_FBX_IndependentMesh_0241",
+      "vertices": 980,
+      "triangles": 1660,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        24.725290298461914,
+        -136.21075439453125,
+        0.7999998331069946,
+        29.058380126953125,
+        -132.33212280273438,
+        4.6650004386901855
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0242_LRP_OfficePhotocopier.003",
+      "mesh": "LRP_FBX_IndependentMesh_0242",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -28.150957107543945,
+        -135.90321350097656,
+        3.8589999675750732,
+        -23.587514877319336,
+        -132.63674926757812,
+        7.143500328063965
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0243_LRP_BrownStackChair.004",
+      "mesh": "LRP_FBX_IndependentMesh_0243",
+      "vertices": 320,
+      "triangles": 584,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -19.288339614868164,
+        -135.63768005371094,
+        5.62999963760376,
+        -16.674314498901367,
+        -132.9289093017578,
+        9.15386962890625
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0244_LRP_OliveVinylBench.003",
+      "mesh": "LRP_FBX_IndependentMesh_0244",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        14.613633155822754,
+        -136.37242126464844,
+        4.173870086669922,
+        20.456661224365234,
+        -132.0914306640625,
+        7.863870143890381
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0245_LRP_LaminateOfficeDesk.004",
+      "mesh": "LRP_FBX_IndependentMesh_0245",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        23.322023391723633,
+        -136.82412719726562,
+        4.515000343322754,
+        30.70319938659668,
+        -131.67587280273438,
+        7.724000453948975
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0246_LRP_FloralSofa90s.004",
+      "mesh": "LRP_FBX_IndependentMesh_0246",
+      "vertices": 1416,
+      "triangles": 1456,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -30.230953216552734,
+        -136.78012084960938,
+        6.993500232696533,
+        -22.241455078125,
+        -132.2977294921875,
+        10.66349983215332
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0247_LRP_OliveVinylBench.004",
+      "mesh": "LRP_FBX_IndependentMesh_0247",
+      "vertices": 440,
+      "triangles": 808,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -20.75258445739746,
+        -135.87123107910156,
+        9.003870010375977,
+        -14.99174976348877,
+        -133.08152770996094,
+        12.693870544433594
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0248_LRP_LaminateOfficeDesk.005",
+      "mesh": "LRP_FBX_IndependentMesh_0248",
+      "vertices": 528,
+      "triangles": 972,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -10.88216781616211,
+        -137.484375,
+        -2.634022848724271e-07,
+        -3.5537164211273193,
+        -131.515625,
+        3.2089998722076416
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0249_LRP_FourDrawerFilingCabinet.005",
+      "mesh": "LRP_FBX_IndependentMesh_0249",
+      "vertices": 608,
+      "triangles": 1080,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        6.4633355140686035,
+        -135.9923553466797,
+        -1.0334134259437633e-07,
+        9.34281063079834,
+        -132.94778442382812,
+        4.980000019073486
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0250_LRP_BeigeCRTMonitor.003",
+      "mesh": "LRP_FBX_IndependentMesh_0250",
+      "vertices": 331,
+      "triangles": 564,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        16.346424102783203,
+        -135.72117614746094,
+        7.713870048522949,
+        19.123411178588867,
+        -133.01644897460938,
+        10.353870391845703
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0251_LRP_OfficePhotocopier.004",
+      "mesh": "LRP_FBX_IndependentMesh_0251",
+      "vertices": 816,
+      "triangles": 1520,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        24.475444793701172,
+        -136.78810119628906,
+        7.573999881744385,
+        29.577117919921875,
+        -132.2468719482422,
+        10.858500480651855
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0252_EndBackstop.001",
+      "mesh": "LRP_FBX_IndependentMesh_0252",
+      "vertices": 24,
+      "triangles": 12,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -35.0,
+        -139.60000610351562,
+        -9.775240528142604e-08,
+        35.0,
+        -138.39999389648438,
+        36.0
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    },
+    {
+      "object": "LRP_FBX_0253_EndBackstop.002",
+      "mesh": "LRP_FBX_IndependentMesh_0253",
+      "vertices": 24,
+      "triangles": 12,
+      "material_slots": 1,
+      "world_bounds_xyz": [
+        -35.0,
+        138.39999389648438,
+        -9.775240528142604e-08,
+        35.0,
+        139.60000610351562,
+        36.0
+      ],
+      "material_indices_valid": true,
+      "uvs_valid": true,
+      "uv_layers": [
+        "AtlasUV"
+      ],
+      "active_uv": "AtlasUV",
+      "render_uv": "AtlasUV",
+      "material_names": [
+        "LRP_FBX_Fallback_AtlasUV"
+      ]
+    }
+  ],
+  "source_fbx_changed_during_inspection": false,
+  "source_manifest_changed_during_inspection": false,
+  "limitations": [
+    "No Studio mesh-import or Roblox performance result is inferred.",
+    "FBX excludes native Studio text, queue controls, real launch logic and collision proxies."
+  ],
+  "passed": true
+}

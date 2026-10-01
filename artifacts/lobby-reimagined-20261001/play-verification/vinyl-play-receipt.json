@@ -1,0 +1,23 @@
+{
+  "records": [
+    {
+      "name": "VinylDiscAmber",
+      "elapsed": 2.0168014999944717,
+      "positionDelta": 0,
+      "angleDegrees": 23.80309655937313,
+      "degreesPerSecond": 11.802399274017983
+    },
+    {
+      "name": "VinylDiscCyan",
+      "elapsed": 2.0168014999944717,
+      "positionDelta": 0,
+      "angleDegrees": 23.80309655937313,
+      "degreesPerSecond": 11.802399274017983
+    }
+  ],
+  "originalReduceFlashing": false,
+  "preferenceRestored": true,
+  "fixedConsoleAndPickupArms": true,
+  "reducedMotionStopped": true,
+  "discCount": 2
+}

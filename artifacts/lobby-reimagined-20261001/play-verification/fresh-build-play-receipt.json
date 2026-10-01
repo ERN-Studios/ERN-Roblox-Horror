@@ -1,0 +1,11 @@
+{
+  "gravity": 196.1999969482422,
+  "ready": true,
+  "build": {
+    "BuildSeconds": 4.279981958330609,
+    "InstalledSourceSHA256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+    "BuildAttempts": 1,
+    "PreviewReady": true,
+    "LobbyReimaginedOwned": true
+  }
+}
