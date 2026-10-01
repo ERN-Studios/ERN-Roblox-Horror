@@ -1,0 +1,162 @@
+{
+  "universeId": 10559217407,
+  "tabId": "1021425765",
+  "url": "https://create.roblox.com/dashboard/creations/experiences/10559217407/monetization/managed-pricing?tab=manage-items",
+  "pricingChanged": false,
+  "enabled": 12,
+  "disabled": 13,
+  "selection": "0 of 25 selected",
+  "gate": "Await parent confirmed successful publish of dynamic-price compatibility before enrollment",
+  "rows": [
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994252411/sales",
+      "name": "Token Earner Upgrade 2x to 5x\nPass",
+      "price": "250",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995812369/sales",
+      "name": "Token Earner Upgrade 3x to 5x\nPass",
+      "price": "100",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994282418/sales",
+      "name": "Token Earner Upgrade 2x to 3x\nPass",
+      "price": "150",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994654411/sales",
+      "name": "Token Earner 5x\nPass",
+      "price": "399",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995716395/sales",
+      "name": "Token Earner 3x\nPass",
+      "price": "299",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1995218405/sales",
+      "name": "Token Earner 2x\nPass",
+      "price": "149",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994816385/sales",
+      "name": "False Sun\nPass",
+      "price": "149",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1994666374/sales",
+      "name": "Static Wraith\nPass",
+      "price": "99",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1982715834/sales",
+      "name": "Zyntra Entity Detector\nPass",
+      "price": "149",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1978617781/sales",
+      "name": "ZYNTRA Support — 20K\nPass",
+      "price": "20000",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1946086261/sales",
+      "name": "Glowstick Customizer\nPass",
+      "price": "99",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1945402536/sales",
+      "name": "Advanced Equipment\nPass",
+      "price": "149",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/passes/1941938256/sales",
+      "name": "Zyntra Supporter\nPass",
+      "price": "99",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713829859/configure",
+      "name": "Zyntra Expedition Pack\nDev Product",
+      "price": "69",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713115125/configure",
+      "name": "Donate — 10,000 Robux\nDev Product",
+      "price": "10000",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3713115025/configure",
+      "name": "Donate — 5,000 Robux\nDev Product",
+      "price": "5000",
+      "status": "Disabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117136/configure",
+      "name": "Donate Director\nDev Product",
+      "price": "1000",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117099/configure",
+      "name": "Donate Command\nDev Product",
+      "price": "500",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117070/configure",
+      "name": "Donate Research\nDev Product",
+      "price": "250",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710117017/configure",
+      "name": "Donate Field\nDev Product",
+      "price": "100",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710116945/configure",
+      "name": "Donate Supply\nDev Product",
+      "price": "50",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3710116814/configure",
+      "name": "Donate Signal\nDev Product",
+      "price": "10",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755318/configure",
+      "name": "Emergency Re-entry\nDev Product",
+      "price": "29",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755233/configure",
+      "name": "20 Research Tokens\nDev Product",
+      "price": "149",
+      "status": "Enabled"
+    },
+    {
+      "href": "/dashboard/creations/experiences/10559217407/developer-products/3707755089/configure",
+      "name": "4 Research Tokens\nDev Product",
+      "price": "49",
+      "status": "Enabled"
+    }
+  ]
+}
