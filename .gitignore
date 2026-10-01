@@ -105,3 +105,16 @@
 /artifacts/robux-icons-20261001/pricing-fix/proposed-after/
 !/artifacts/robux-icons-20261001/native-*/native-completeness-receipt.json
 !/artifacts/robux-icons-20261001/native-*/native-place-verification.json
+
+# Lobby box glow: retain complete Studio recovery locally; version exact scope,
+# source hashes, reconstruction limits and rendering evidence.
+/artifacts/lobby-box-glow-20261001/native-*/*
+!/artifacts/lobby-box-glow-20261001/native-*/source-manifest.json
+!/artifacts/lobby-box-glow-20261001/native-*/backup-file-hashes.json
+!/artifacts/lobby-box-glow-20261001/native-*/backup-metadata-summary.json
+!/artifacts/lobby-box-glow-20261001/native-*/native-completeness-receipt.json
+!/artifacts/lobby-box-glow-20261001/native-*/native-place-verification.json
+/artifacts/lobby-box-glow-20261001/before/
+/artifacts/lobby-box-glow-20261001/proposal/
+/artifacts/lobby-box-glow-20261001/**/__pycache__/
+/artifacts/lobby-box-glow-20261001/**/*.log

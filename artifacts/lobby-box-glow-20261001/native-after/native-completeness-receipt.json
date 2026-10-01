@@ -1,0 +1,42 @@
+{
+  "schema": "lobby-box-glow-native-completeness/1",
+  "phase": "after",
+  "authority": "Complete authoritative current Studio Edit capture. Verification only reconstructed local copies; no Studio world was restored or uploaded.",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "capturedAt": "2026-10-01T09:10:35Z",
+  "observedPlaceVersion": 2450,
+  "nativePlace": "AfterLobbyBoxGlow-AuthoritativeStudio.rbxl",
+  "nativePlaceBytes": 66121550,
+  "nativePlaceSHA256": "bc5e31052710dacaf17802545ad06047eb6f820e417a3f761f5370edd05d8925",
+  "rawNativeSHA256": "08c1b4c873e128b3766be0cb45b6e9990b43b4eddd326c66ea176ee534ec31d5",
+  "scriptsJsonSHA256": "a0f835c2264583c4f4014b94e3e1c877c7a6246ea918d32bb0920258c4aa2d84",
+  "sourceCount": 205,
+  "sourceEditorConflicts": 0,
+  "skippedRoots": 0,
+  "rootCount": 181,
+  "serviceCount": 24,
+  "nativeContentInstances": 387471,
+  "packedDescendants": 387493,
+  "reopenedDescendants": 387493,
+  "unsupportedServicePropertyAssignments": 29,
+  "unreadableLiveServiceProperties": 129,
+  "intentionallyOmitted": [
+    {
+      "class": "Status",
+      "path": "Workspace.StarterCharacter.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    },
+    {
+      "class": "Status",
+      "path": "Workspace.Dummy.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    }
+  ],
+  "sourceErrors": {},
+  "rootErrors": {},
+  "scopeVerificationPassed": true,
+  "localCaptureDirectory": "/private/tmp/lobby-box-glow-native-after-20261001",
+  "receiverStopped": true,
+  "limitations": "Raw native child bytes and live service metadata are retained. The local place reconstruction has the property limitations and non-archivable engine omissions listed in native-place-verification.json. The reconstructed local place is never a deployment source."
+}
