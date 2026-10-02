@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"qaClient\":false,\"errors\":[],\"capturedSourceCount\":227,\"passed\":true,\"checkedAt\":\"2026-10-02T13:03:32Z\",\"universe\":10559217407,\"sourceCount\":227,\"qaServer\":false,\"captureId\":\"e89b2ace-e45b-4a19-bf49-aafce986ef64\",\"place\":131311258779917}"
+    }
+  ],
+  "isError": false
+}

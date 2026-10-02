@@ -9,7 +9,7 @@
   "files": [
     {
       "path": "artifacts/lobby-polish-20261002/README.md",
-      "bytes": 4526
+      "bytes": 5214
     },
     {
       "path": "artifacts/lobby-polish-20261002/bays/actual-interaction-aggregate.json",
@@ -393,6 +393,78 @@
       "bytes": 84091
     },
     {
+      "path": "artifacts/lobby-polish-20261002/publication/backup-metadata-summary.json",
+      "bytes": 1808
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/checkpoint-install-gate.json",
+      "bytes": 18847
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/checkpoint-reuse-proof.json",
+      "bytes": 1320
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/concurrent-source-observation.json",
+      "bytes": 2160
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/durable-publication-backup-receipt.json",
+      "bytes": 59897
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/native-place-verification.json",
+      "bytes": 37420
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/native-recovery-reopen-verification.json",
+      "bytes": 84851
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/peer-review.json",
+      "bytes": 614
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/prepublish-live-227-source-check.json",
+      "bytes": 356
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/publication-receipt.json",
+      "bytes": 2243
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/publication-source-preflight.json",
+      "bytes": 58916
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/ready-file-inventory.json",
+      "bytes": 7279
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/review-concurrent-test-suite.json",
+      "bytes": 3382
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/source-guard-fixtures.json",
+      "bytes": 1311
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-eligibility-validation.json",
+      "bytes": 4457
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-guard-fixtures.json",
+      "bytes": 1775
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-peer-review.json",
+      "bytes": 755
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/verification-bundle.json",
+      "bytes": 3706
+    },
+    {
       "path": "artifacts/lobby-polish-20261002/receiver-after.py",
       "bytes": 6124
     },
@@ -514,7 +586,7 @@
     },
     {
       "path": "artifacts/lobby-polish-20261002/root/release-status.current.json",
-      "bytes": 5588
+      "bytes": 5796
     },
     {
       "path": "artifacts/lobby-polish-20261002/root/release-status.json",
@@ -523,6 +595,10 @@
     {
       "path": "artifacts/lobby-polish-20261002/root/return-lobby-proof.json",
       "bytes": 503
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/scoped-commit-receipt.json",
+      "bytes": 25511
     },
     {
       "path": "artifacts/lobby-polish-20261002/root/server-inspection-final.json",
@@ -973,12 +1049,28 @@
       "bytes": 1261
     },
     {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/README.md",
+      "bytes": 2723
+    },
+    {
       "path": "tools/lobby_reimagined/polish_20261002/publication/capture-publish-readonly.luau",
       "bytes": 11617
     },
     {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/expected-source-pins.json",
+      "bytes": 2408
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/finalize-publication-checkpoint.py",
+      "bytes": 6425
+    },
+    {
       "path": "tools/lobby_reimagined/polish_20261002/publication/input-manifest.json",
       "bytes": 788
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/preserve_publication_backup.py",
+      "bytes": 5789
     },
     {
       "path": "tools/lobby_reimagined/polish_20261002/publication/receiver-publication.py",
@@ -987,6 +1079,22 @@
     {
       "path": "tools/lobby_reimagined/polish_20261002/publication/service-property-schema.json",
       "bytes": 29210
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/test_source_guard.py",
+      "bytes": 2985
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/test_supplemental_review.py",
+      "bytes": 2701
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/validate_supplemental_review.py",
+      "bytes": 9786
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/verify-publication-checkpoint.py",
+      "bytes": 10672
     },
     {
       "path": "tools/lobby_reimagined/polish_20261002/scene/HANDOFF.md",
@@ -1025,9 +1133,14 @@
       "bytes": 6124
     }
   ],
-  "excludedFiles": [],
-  "fileCount": 254,
-  "totalBytes": 22384810,
+  "excludedFiles": [
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/__pycache__/verify-publication-checkpoint.cpython-313.pyc",
+      "bytes": 226
+    }
+  ],
+  "fileCount": 281,
+  "totalBytes": 22745803,
   "isContentReview": false,
   "gitOrStudioWrites": false,
   "notes": "Refresh after final exports/publication records. Inspect actual content/staged diff; no historical task directories, raw native forests, transfer parts, caches or credential files are included."

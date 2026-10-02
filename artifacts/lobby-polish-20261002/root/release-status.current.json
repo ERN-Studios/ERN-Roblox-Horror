@@ -1,12 +1,12 @@
 {
   "schema": "lobby-polish-current-release-v2",
-  "status": "installed-playtested-fresh-publication-checkpoint-in-progress",
+  "status": "installed-playtested-published",
   "installed": true,
   "playtested": true,
   "taskScopeVerified": true,
   "wholeForestStrictVerified": false,
-  "published": false,
-  "lastConfirmedPublishedVersion": 2495,
+  "published": true,
+  "lastConfirmedPublishedVersion": 2517,
   "sourceEditorConflicts": 0,
   "backupCaptureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
   "nativeBackupVerified": true,
@@ -123,8 +123,17 @@
       "scope": "unclassified-concurrent"
     }
   ],
-  "publicationHold": "Historical after capture includes concurrently owned QA, subsequently removed by owner; fresh native publication checkpoint and exact current Source/editor checks in progress. No concurrent work restored or removed by this lobby task.",
+  "publicationHold": null,
   "historicalStatus": "root/release-status.json records preinstallation blockers already resolved; this file is current.",
   "temporaryQACleanupObservedAt": "2026-10-02T12:37:51Z",
-  "temporaryQAStillPresent": false
+  "temporaryQAStillPresent": false,
+  "publishedAtUTC": "2026-10-02T13:04:43.054Z",
+  "publicationReceipt": "publication/publication-receipt.json",
+  "publicationBackupCaptureId": "e89b2ace-e45b-4a19-bf49-aafce986ef64",
+  "publicationSourceCount": 227,
+  "publicationSourceEditorConflicts": 0,
+  "concurrentTestSuiteReview": "publication/supplemental-eligibility-validation.json",
+  "implementationCommit": "69f5ed6a9b9234966fab841a23dc5d8a489be24b",
+  "githubPushed": false,
+  "gitRemoteConfigured": false
 }

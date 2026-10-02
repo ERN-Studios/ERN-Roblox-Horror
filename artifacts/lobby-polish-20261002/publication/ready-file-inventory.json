@@ -1,0 +1,174 @@
+{
+  "schema": "lobby-polish-publication-ready-file-inventory-v1",
+  "recordedAtUtc": "2026-10-02T13:03:42.078967+00:00",
+  "files": [
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/README.md",
+      "bytes": 2723,
+      "sha256": "8a64a732988d0270dd01baf9b36b78368897f4e011c39a3df941f5ffb2f9972c"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/capture-publish-readonly.luau",
+      "bytes": 11617,
+      "sha256": "05555ffd9bcc5b47f2705e58dcc7383dfc67cb25c9f531f83bd9c98b3001b30b"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/expected-source-pins.json",
+      "bytes": 2408,
+      "sha256": "481d2a584db8bff9469c6f496ebdbdb68a89d0e6e0135caa03d76394102ed7a2"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/finalize-publication-checkpoint.py",
+      "bytes": 6425,
+      "sha256": "e2c407df27da19df2f6446a3ad505c228191ce6f7eace13e277578a3daa3c13b"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/input-manifest.json",
+      "bytes": 788,
+      "sha256": "0d2b888a3ec26a0e454439c8461719223165f4f3e3ce8cf88035023ee2557888"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/preserve_publication_backup.py",
+      "bytes": 5789,
+      "sha256": "b1efb6bda93dc9a716d8a877bf157a6959f003d71686835c71d5bbf274b073fa"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/receiver-publication.py",
+      "bytes": 6632,
+      "sha256": "47e307cf198e781ad325bc0ba59d72183d9a3e25aff2b8706974d5206767d0f7"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/service-property-schema.json",
+      "bytes": 29210,
+      "sha256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/test_source_guard.py",
+      "bytes": 2985,
+      "sha256": "7d500fedb4703abf0f7e69f67c06104350c37f7f57adfc666ee23ec8cab37b82"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/test_supplemental_review.py",
+      "bytes": 2701,
+      "sha256": "7103056fda5923bfa690f8452af1b20abf9afad0cf07280dc276cb63d843c911"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/validate_supplemental_review.py",
+      "bytes": 9786,
+      "sha256": "de82f8e27488136b15a573521a6279b95f0fb3deb1fd535a0a05cd394156c090"
+    },
+    {
+      "path": "tools/lobby_reimagined/polish_20261002/publication/verify-publication-checkpoint.py",
+      "bytes": 10672,
+      "sha256": "fa541ecf63328d26a3e9e1660642443a7a8a672d3e125cd042182d2531991051"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/backup-metadata-summary.json",
+      "bytes": 1808,
+      "sha256": "2c174dbd0a3491d0de8e9c6225cc6ca30cee34ff83ac83491904d72b41545f74"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/checkpoint-install-gate.json",
+      "bytes": 18847,
+      "sha256": "f2db1546fce719cf10856bbd16c40e48a93eb36c69fa60f93029a94c96028323"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/checkpoint-reuse-proof.json",
+      "bytes": 1320,
+      "sha256": "d571bb872c47f5fd57f35f1335ed50ed875770b9fc6cebf7cb21d727b40ef737"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/concurrent-source-observation.json",
+      "bytes": 2160,
+      "sha256": "b6e2a7dca00815a0c9e4af1e953f8600889e069f673251f6d65fecc2c73e0720"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/durable-publication-backup-receipt.json",
+      "bytes": 59897,
+      "sha256": "a2883cfefe309ff9ccae8d7f2d0740746c169fb620b2258187031a24d7c940ff"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/native-place-verification.json",
+      "bytes": 37420,
+      "sha256": "00662b78702031dfca20be2db1c276ed75726a0b1e83c1af4c93f8918954de42"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/native-recovery-reopen-verification.json",
+      "bytes": 84851,
+      "sha256": "6fc35b9932fc25e4c3d9e33a60c3b4d35a261292ac4941953c2fdf211dd32f13"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/peer-review.json",
+      "bytes": 614,
+      "sha256": "3c3916d40ba3c5c1586dd793f8e5a0840fdc2e0cc5e803c0fc1301db6bb25e18"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/publication-source-preflight.json",
+      "bytes": 58916,
+      "sha256": "537837a247b62bdb4c37ec0aa0cc3e725516f9af68f7a6221b168deb4e38b038"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/review-concurrent-test-suite.json",
+      "bytes": 3382,
+      "sha256": "fe7cf667901c566351c374aa14558332ade87d58963320b02015728f3db60dd4"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/source-guard-fixtures.json",
+      "bytes": 1311,
+      "sha256": "284631447b124d23d7d2f09cae174fc3d2cff7e465def868f3ef204f86fc76a9"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-eligibility-validation.json",
+      "bytes": 4457,
+      "sha256": "aa3f333d1a2bd2fab770e92dbf9ce3d8d1292d10c4b748cf3e62606a28f7c96d"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-guard-fixtures.json",
+      "bytes": 1775,
+      "sha256": "5f4e90e8b636089cefef74b61514da42a2b75af72041fb5da56d59b5dadaa065"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/supplemental-peer-review.json",
+      "bytes": 755,
+      "sha256": "b0b0f58358222c1a59a34099bc7dd0ca26c2298730b7b5fcd95f627bc2f226d8"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/publication/verification-bundle.json",
+      "bytes": 3706,
+      "sha256": "e5a03857e8606fb63b9078c0439ede2cce38ee6285a364bdf24b4e2fd9adc94f"
+    }
+  ],
+  "fileCount": 27,
+  "totalBytes": 372955,
+  "ownReceiver": {
+    "port": 8910,
+    "pid": 99881,
+    "session": 5805,
+    "healthSHA256": "0b7319efa62eac624ee8ba60a1ee5a86d0080abf317651c517373741360899bf",
+    "health": {
+      "schema": "lobby-polish-publication-frozen-inputs-v1",
+      "captureSHA256": "05555ffd9bcc5b47f2705e58dcc7383dfc67cb25c9f531f83bd9c98b3001b30b",
+      "captureBytes": 11617,
+      "schemaSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+      "schemaBytes": 29210,
+      "capturePrefix": "__lobbyPolishPublish",
+      "expectedPriorNativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+      "priorCaptureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+      "destination": "/private/tmp/lobby-polish-publish-20261002",
+      "port": 8910,
+      "source": "frozen after-capture template; only BASE/session-prefix/prior-native-pin/return label differ",
+      "receiverSHA256": "47e307cf198e781ad325bc0ba59d72183d9a3e25aff2b8706974d5206767d0f7",
+      "oldAfterUntouched": true,
+      "pid": 99881,
+      "frozenInMemory": true
+    }
+  },
+  "nativeRecoveryVerified": true,
+  "durableBackupVerified": true,
+  "originalPublicationPreflightPassed": false,
+  "supplementalClosedReviewPassed": true,
+  "historicStrictNativeAuditVerified": false,
+  "sourceBodiesOrNativeBinariesCopiedToRepository": false,
+  "studioOrGitWrites": false,
+  "rootFreshLive227CheckRequired": true
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "lobby-polish-publication-single-concurrent-delta-review-v1",
+  "rootReviewAccepted": true,
+  "reviewedBy": "/root",
+  "decision": "Preserve the exact concurrent test-only delta under the existing owner publish preference; no restoration and no Level 4 gameplay claim.",
+  "captures": {
+    "prior": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+    "current": "e89b2ace-e45b-4a19-bf49-aafce986ef64",
+    "priorNativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+    "currentNativeSHA256": "7bd1d2e12cb0dc3a284e8f7c135eb18fc8d1d5b2da1a7df3fcaa4a1e01a0a8e9",
+    "nativePlaceSHA256": "60dceb74ee67e2f3df72ce8a6aa036a686b9117410cd1aaa376596718826aeaa"
+  },
+  "bindings": [
+    {
+      "label": "priorSourceCatalog",
+      "path": "/private/tmp/lobby-polish-after-20261002/scripts.json",
+      "sha256": "4f26e8f4e929e6372eb34509220091fd7f5946a03cf7a1428c9e85e6eedcdb58"
+    },
+    {
+      "label": "currentSourceCatalog",
+      "path": "/private/tmp/lobby-polish-publish-20261002/scripts.json",
+      "sha256": "1459c7bafa8551413874518eaa1b53ce2658168caf9ef4cdcb627939cd01093c"
+    },
+    {
+      "label": "nativeRecovery",
+      "path": "/private/tmp/lobby-polish-publish-20261002/native-recovery-reopen-verification.json",
+      "sha256": "6fc35b9932fc25e4c3d9e33a60c3b4d35a261292ac4941953c2fdf211dd32f13"
+    },
+    {
+      "label": "nativeGate",
+      "path": "/private/tmp/lobby-polish-publish-20261002/checkpoint-install-gate.json",
+      "sha256": "f2db1546fce719cf10856bbd16c40e48a93eb36c69fa60f93029a94c96028323"
+    },
+    {
+      "label": "originalFailedPreflight",
+      "path": "/private/tmp/lobby-polish-publish-20261002/publication-source-preflight.json",
+      "sha256": "537837a247b62bdb4c37ec0aa0cc3e725516f9af68f7a6221b168deb4e38b038"
+    },
+    {
+      "label": "durableBackupReceipt",
+      "path": "/private/tmp/lobby-polish-publish-20261002/durable-publication-backup-receipt.json",
+      "sha256": "a2883cfefe309ff9ccae8d7f2d0740746c169fb620b2258187031a24d7c940ff"
+    },
+    {
+      "label": "capturedMetadata",
+      "path": "/private/tmp/lobby-polish-publish-20261002/metadata.received.json",
+      "sha256": "16c49c3020a7b00c21169f90de6ff5a22daf754a8f0ac7f4cfcd8b660df462ca"
+    },
+    {
+      "label": "finalizedMetadata",
+      "path": "/private/tmp/lobby-polish-publish-20261002/metadata.json",
+      "sha256": "f135259a22a42a400cb1bfa625d86aee186cacd163a3e1eb322ec7a7a8d88e75"
+    }
+  ],
+  "approvedSourceDelta": {
+    "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+    "before": {
+      "class": "ModuleScript",
+      "sourceBytes": 5916,
+      "sourceSha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff"
+    },
+    "after": {
+      "class": "ModuleScript",
+      "sourceBytes": 6821,
+      "sourceSha256": "59f1cd5e87c72c89a60e0f1c4119a5d931b9084ba9689df1e1b94f06a3869335"
+    }
+  },
+  "expectedPinFileSHA256": "481d2a584db8bff9469c6f496ebdbdb68a89d0e6e0135caa03d76394102ed7a2",
+  "scopeLimits": {
+    "sourceDeltaCount": 1,
+    "exactKnownQARemovalCount": 2,
+    "noAdditionalSourceDeltas": true,
+    "originalPreflightRemainsFalse": true,
+    "historicStrictNativeAuditRemainsFalse": true,
+    "noNativeNormalization": true,
+    "noSourceOrIndexWrites": true,
+    "noActualPublishByThisTool": true,
+    "rootMustRecheckAll227LiveImmediatelyBeforePublish": true
+  }
+}
