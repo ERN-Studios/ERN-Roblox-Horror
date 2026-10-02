@@ -98,9 +98,25 @@ and `/Users/zeanjuul4/Projects/RobloxStudioBackups/20261002-level3-promotion/aft
 These Source snapshots are not a full native place backup. The native computer
 control pipe failed, MCP HTTP export was denied its Network capability, and the
 direct native forest return was truncated by the 100,000-character tool limit.
-No final after-native Save or successful publication is established. Explicit
-user approval for AppleScript as an alternative UI method is pending.
+The user then explicitly approved AppleScript as the alternative UI method.
+Studio downloaded the actual after-native place at 20:55:55Z to
+`/Users/zeanjuul4/Projects/RobloxStudioBackups/20261002-level3-promotion/after/after.rbxl`.
+The 51,826,241-byte file has SHA-256
+`bc32152e6fd668aab75108576c454ef84a3c914ec4e606f094e5599c5e34f378`.
+Offline native deserialization verified all 231 Sources and 195 root
+identities/counts against the fresh capture, with the two documented engine
+Status omissions. See [native backup verification](backup/after/actual-native-source-structure-parity.json).
+Full-property equality and an actual restore into Studio were not tested.
 
-Inspect the final export, exact staged diff and task-only file list before
-committing. Local commits, GitHub pushes and Roblox publication are separate
-actions. No index, commit or push was performed by the handoff writer.
+Native **Publish to Roblox** succeeded at 20:57:46Z and again at 20:58:36Z;
+both receipts report unchanged version **2526**. The second action was a retry
+before the first asynchronous success was observed. Roblox explicitly reported
+that eligible players can play the published place. All 231 current Studio
+Source/editor hashes still matched at 20:59:07Z. See
+[publication receipt](publication/published-v2526-receipt.json).
+
+Implementation and verified Studio mirrors were committed locally as
+`52b2c0e567cabd88e0670837035d3df992a0f699`; cleanup records as `5f835e8`.
+The final native-backup/publication records are committed separately after
+reviewing their exact staged diff. No GitHub push or live-server restart was
+performed. The missing historical before-native file remains a recovery limit.

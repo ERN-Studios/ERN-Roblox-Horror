@@ -1,6 +1,6 @@
 {
   "task": "level3-promotion-20261002",
-  "checkedAtUTC": "2026-10-02T20:38:02.592565+00:00",
+  "checkedAtUTC": "2026-10-02T20:59:07Z",
   "freshSourceCatalogs": [
     {
       "path": "/private/tmp/level3-promotion-source-recovery-20261002/capture-b77cb356-1cc3-4843-8fa1-d4e4b540510b/scripts.json",
@@ -23,24 +23,12 @@
   "previousBackupRootCurrentlyExists": false,
   "beforeNativeHistoricalBytes": 51825054,
   "beforeNativeHistoricalSHA256": "927669257a0305b094bcf2d7303b499a6853c50bff60d291dc739bc5cf1a0001",
-  "afterNativeBackupCurrentlyVerified": false,
+  "afterNativeBackupCurrentlyVerified": true,
   "afterNativeForestTransferred": false,
   "afterNativeRecoveryVerified": false,
   "nativeGeometryParityVerified": false,
-  "publicationVerified": false,
+  "publicationVerified": true,
   "blockers": [
-    {
-      "action": "Synchronous read-only HTTP capture through purpose MCP",
-      "reason": "The current thread cannot call GetAsync (lacking capability Network)"
-    },
-    {
-      "action": "Direct-return complete native forest transfer",
-      "reason": "Tool response hard-truncated at approximately 100000 characters; complete native buffer was not recovered"
-    },
-    {
-      "action": "Actual native Save Download a Copy and publication",
-      "reason": "Native CUA pipe startup unavailable; parent awaits the user authorization for an alternative UI route"
-    },
     {
       "action": "Preservation of historical before native backup",
       "reason": "Previously verified Documents backup tree is now absent; no deletion or move was performed by this agent; current location is unknown"
@@ -52,5 +40,25 @@
   ],
   "studioWritesPerformedByAgent": false,
   "gitIndexWritesByAgent": false,
-  "limits": "Source/editor and exact 14 mirror parity are verified. Root identities/counts do not establish native geometry/property parity. Historical native receipts do not prove a missing file remains recoverable."
+  "limits": "Source/editor and exact 14 mirror parity are verified. Root identities/counts do not establish native geometry/property parity. Historical native receipts do not prove a missing file remains recoverable. Actual after.rbxl deserializes successfully and matches all 231 Sources plus 195 root identities/counts. No full-property parity or actual restore-in-Studio test is claimed.",
+  "afterNativeFileDeserializationVerified": true,
+  "afterNativePath": "/Users/zeanjuul4/Projects/RobloxStudioBackups/20261002-level3-promotion/after/after.rbxl",
+  "afterNativeBytes": 51826241,
+  "afterNativeSHA256": "bc32152e6fd668aab75108576c454ef84a3c914ec4e606f094e5599c5e34f378",
+  "afterNativeVerificationReceipt": "artifacts/level3-promotion-20261002/backup/after/actual-native-source-structure-parity.json",
+  "publishedVersion": 2526,
+  "resolvedTechnicalFailures": [
+    {
+      "action": "Synchronous read-only HTTP capture through purpose MCP",
+      "reason": "The current thread cannot call GetAsync (lacking capability Network)"
+    },
+    {
+      "action": "Direct-return complete native forest transfer",
+      "reason": "Tool response hard-truncated at approximately 100000 characters; complete native buffer was not recovered"
+    },
+    {
+      "action": "Actual native Save Download a Copy and publication",
+      "reason": "Native CUA pipe startup unavailable; parent awaits the user authorization for an alternative UI route"
+    }
+  ]
 }
