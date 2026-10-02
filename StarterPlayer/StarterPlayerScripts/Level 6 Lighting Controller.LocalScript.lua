@@ -104,6 +104,33 @@ local blackoutPartSeen: {[BasePart]: boolean} = {}
 local kitFixtureSeen: {[BasePart]: boolean} = {}
 local kitFixtureConnections: {RBXScriptConnection} = {}
 local kitVisualVariants: {[MeshPart]: string} = {}
+local ceilingBounceSeen: {[PointLight]: boolean} = {}
+
+-- Ceiling fill follows its original ballast through normal flicker, pre-
+-- blackout, recovery and the completion fade. It has no independent pulse or
+-- blackout baseline entry, so the authored fixture ordering stays unchanged.
+local function tryWatchCeilingBounce(instance: Instance)
+	if not instance:IsA("PointLight")
+		or instance:GetAttribute("Level6_CeilingBounce") ~= true
+		or ceilingBounceSeen[instance] then return end
+	local anchor = instance.Parent
+	local primary = anchor and anchor.Parent
+	if not (primary and primary:IsA("SurfaceLight")
+		and primary.Name == "Level 6 Fluorescent Light") then return end
+	local normalBrightness = instance:GetAttribute("Level6_PrimaryBrightness")
+	if type(normalBrightness) ~= "number" or normalBrightness <= 0 then return end
+	ceilingBounceSeen[instance] = true
+	local function sync()
+		if not instance.Parent or not primary.Parent then return end
+		instance.Enabled = primary.Enabled
+		instance.Brightness = .16 * math.clamp(primary.Brightness / normalBrightness, 0, 1)
+		instance.Color = primary.Color
+	end
+	for _, property in ipairs({"Enabled", "Brightness", "Color"}) do
+		table.insert(kitFixtureConnections, primary:GetPropertyChangedSignal(property):Connect(sync))
+	end
+	sync()
+end
 
 local function syncKitFixtureVisuals(carrier: BasePart)
 	for _, child in ipairs(carrier:GetChildren()) do
@@ -148,6 +175,7 @@ local function clearKitFixtureWatchers()
 	table.clear(kitFixtureConnections)
 	table.clear(kitFixtureSeen)
 	table.clear(kitVisualVariants)
+	table.clear(ceilingBounceSeen)
 end
 -- enforceBlackout used to walk the WHOLE generated mall on every throttled
 -- Heartbeat -- 12.5 times a second for the ~52 s of each blackout that is not
@@ -333,7 +361,7 @@ local function captureWorldLightBaseline()
 	if not world then return end
 	for _, descendant in ipairs(world:GetDescendants()) do
 		captureAuthoredRoomGlow(descendant)
-		if descendant:IsA("Light") then
+		if descendant:IsA("Light") and descendant:GetAttribute("Level6_CeilingBounce") ~= true then
 			table.insert(blackoutLights, {
 				Light = descendant,
 				Enabled = descendant.Enabled,
@@ -858,6 +886,7 @@ local function bindWorld(world: Model?)
 	for _, descendant in ipairs(world:GetDescendants()) do
 		tryAddFixture(descendant)
 		tryWatchKitFixture(descendant)
+		tryWatchCeilingBounce(descendant)
 	end
 	worldAddedConnection = world.DescendantAdded:Connect(function(descendant)
 		-- The builder attaches the flicker attribute immediately after parenting.
@@ -866,6 +895,7 @@ local function bindWorld(world: Model?)
 			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
 			tryAddFixture(descendant)
 			tryWatchKitFixture(descendant)
+			tryWatchCeilingBounce(descendant)
 			if descendant:IsA("Light") then
 				local lightParent = descendant.Parent
 				if lightParent then tryWatchKitFixture(lightParent) end
@@ -903,7 +933,8 @@ local function bindWorld(world: Model?)
 				-- time. It costs one boolean write per late fixture.
 				blackoutSweptUnlocked = nil
 			end
-			if blackoutApplied and exitUnlocked() and descendant:IsA("Light") then
+			if blackoutApplied and exitUnlocked() and descendant:IsA("Light")
+				and descendant:GetAttribute("Level6_CeilingBounce") ~= true then
 				local _, duration, progress = completionTiming()
 				local remaining = duration * (1 - progress)
 				local parent = descendant.Parent

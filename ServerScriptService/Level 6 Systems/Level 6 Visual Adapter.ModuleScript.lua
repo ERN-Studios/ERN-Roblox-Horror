@@ -16,6 +16,7 @@ local function multiply(a: Vector3, b: Vector3): Vector3
     return Vector3.new(a.X*b.X, a.Y*b.Y, a.Z*b.Z)
 end
 local function theme(room): string
+    if room.Role == "Arrival" then return "Orange" end
     if room.ThemeId == "OrangeBlackParty" then return "Orange" end
     if room.ThemeId == "RedParty" then return "Red" end
     if room.Role == "Exit" then return "Service" end
@@ -159,8 +160,12 @@ function Adapter.Apply(manifest)
         return carrier
     end
 
-    -- Hide all old rendering, including surface content which Transparency alone does not hide.
+    -- Keep the owned arrival tube, aperture seals and notice visible; the
+    -- Blender kit still replaces every other legacy room/corridor visual.
+    local arrivalTube = manifest.Elevator
     for _, object in ipairs(legacy) do
+        if arrivalTube and arrivalTube:GetAttribute("Level6_ArrivalTube") == true
+            and object:IsDescendantOf(arrivalTube) then continue end
         if object:IsA("BasePart") then
             object:SetAttribute("Level6_LegacyTransparency", object.Transparency)
             object.Transparency = 1
@@ -328,7 +333,13 @@ function Adapter.Apply(manifest)
             skin.Material = part.Material
             skin.Transparency = part:GetAttribute("Level6_LegacyTransparency") or 0
             if part:GetAttribute("Level6_SubtleFlicker") then skin:SetAttribute("Level6_SubtleFlicker", true) end
-            for _, child in ipairs(part:GetChildren()) do if child:IsA("Light") then child.Parent = skin end end
+            for _, child in ipairs(part:GetChildren()) do
+                if child:IsA("Light") then
+                    -- A broad ceiling cone reaches wall art without adding daylight.
+                    if child:IsA("SurfaceLight") then child.Angle = math.max(child.Angle, 175) end
+                    child.Parent = skin
+                end
+            end
             part.Name = "Legacy Hidden Fluorescent Anchor"
             counts.Fixtures += 1
         elseif part.Name == "PA Speaker Housing" then

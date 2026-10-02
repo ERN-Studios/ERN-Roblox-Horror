@@ -97,7 +97,7 @@ return {
 	Detector = {Range=120, HighRange=50, Cooldown=20, ReadingSeconds=4},
 	Passes = {
   EntityDetector = {
-   Id=1982715834, IconId=90757067349588, Name="Zyntra Entity Detector", Price=149,
+   Id=1982715834, IconId=87202894425080, Name="Zyntra Entity Detector", Price=149,
    Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run to scan for nearby threats. It reads LOW / MEDIUM / HIGH for 4 seconds and is ready again after 20 seconds. It never shows exact positions and cannot guarantee safety. Free simulated demo in the lobby shop.",
    PreviewDescription="PERMANENT · Scan nearby threats: LOW / MEDIUM / HIGH for 4 seconds. Ready again after 20 seconds. No exact positions, no guaranteed safety.",
   },
@@ -106,7 +106,7 @@ return {
 			-- The previous asset was hazmat-themed and did not represent Supporter.
 			-- Keep it retired until an approved replacement exists; the client renders
 			-- this neutral Zyntra monogram instead of inventing or uploading artwork.
-			IconId = 89100714759013,
+			IconId = 106022873152277,
 			IconText = "Z//S",
 			Name = "Zyntra Supporter",
 			Price = 99,
@@ -115,7 +115,7 @@ return {
 		},
 		AdvancedEquipment = {
 			Id = 1945402536,
-			IconId = 105990911046404,
+			IconId = 80999828522184,
 			Name = "Advanced Equipment",
 			PreviewDescription = "PERMANENT · Focused torch (+45% range, same drain), +50% base stamina, hazmat colors and one +5% stamina/battery upgrade. Demo includes colors.",
 			StaminaBonus = 0.50, -- additive capacity bonus; existing upgrades remain
@@ -124,7 +124,7 @@ return {
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,
-			IconId = 120190657040752,
+			IconId = 83090272487976,
 			Name = "Glowstick Customizer",
 			PreviewDescription = "PERMANENT · Choose the color of every glowstick you deploy. Cosmetic only; preview colors on your avatar without buying.",
 			Price = 99,
@@ -141,12 +141,12 @@ return {
 	-- Kept out of Passes so the lobby wall does not list six more boxes.
 	TokenEarner = {
 		Passes = {
-			TokenEarner2x = {Id = 1995218405, Price = 149, IconId = 110042354901224, Name = "Token Earner 2x"},
-			TokenEarner3x = {Id = 1995716395, Price = 299, IconId = 90602955172781, Name = "Token Earner 3x"},
-			TokenEarner5x = {Id = 1994654411, Price = 399, IconId = 123482394566073, Name = "Token Earner 5x"},
-			TokenEarnerUp2to3 = {Id = 1994282418, Price = 150, IconId = 127143625556663, Name = "Token Earner Upgrade 2x to 3x"},
-			TokenEarnerUp3to5 = {Id = 1995812369, Price = 100, IconId = 99847748150208, Name = "Token Earner Upgrade 3x to 5x"},
-			TokenEarnerUp2to5 = {Id = 1994252411, Price = 250, IconId = 138859474490319, Name = "Token Earner Upgrade 2x to 5x"},
+			TokenEarner2x = {Id = 1995218405, Price = 149, IconId = 118036691232665, Name = "Token Earner 2x"},
+			TokenEarner3x = {Id = 1995716395, Price = 299, IconId = 87690773145206, Name = "Token Earner 3x"},
+			TokenEarner5x = {Id = 1994654411, Price = 399, IconId = 135373819751914, Name = "Token Earner 5x"},
+			TokenEarnerUp2to3 = {Id = 1994282418, Price = 150, IconId = 109389693183150, Name = "Token Earner Upgrade 2x to 3x"},
+			TokenEarnerUp3to5 = {Id = 1995812369, Price = 100, IconId = 80236147559406, Name = "Token Earner Upgrade 3x to 5x"},
+			TokenEarnerUp2to5 = {Id = 1994252411, Price = 250, IconId = 125900723066493, Name = "Token Earner Upgrade 2x to 5x"},
 		},
 		-- `owns` maps pass key -> true. Returns 1, 2, 3 or 5.
 		Tier = function(owns)
@@ -177,7 +177,7 @@ return {
 	Products = {
 		ExpeditionPack = {
 			Id = 3713829859,
-			IconId = 132485864297801,
+			IconId = 134334664606741,
 			Name = "Expedition Pack",
 			PreviewDescription = "CONSUMABLE · 1 re-entry after death (10s protection), 1 shield charge (5s), 3 route markers. Stored until used. Repeatable purchase.",
 			IconText = "PACK",
@@ -187,7 +187,7 @@ return {
 		},
 		Tokens4 = {
 			Id = 3707755089,
-			IconId = 106212286945374,
+			IconId = 118242405264841,
 			Name = "4 Research Tokens",
 			Price = 49,
 			TokenGrant = 4,
@@ -195,7 +195,7 @@ return {
 		},
 		Tokens20 = {
 			Id = 3707755233,
-			IconId = 136487758639981,
+			IconId = 124733504759279,
 			Name = "20 Research Tokens",
 			Price = 149,
 			TokenGrant = 20,
@@ -203,7 +203,7 @@ return {
 		},
 		EmergencyReentry = {
 			Id = 3707755318,
-			IconId = 137929784189814,
+			IconId = 92866750717809,
 			Name = "Emergency Re-entry",
 			Price = 29,
 			ReentryGrant = 1,

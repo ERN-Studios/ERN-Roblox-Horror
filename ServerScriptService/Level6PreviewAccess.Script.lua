@@ -23,6 +23,33 @@ local function lobbyPart(name)
 	local doors = lobby:FindFirstChild("LevelDoorways")
 	return doors and doors:FindFirstChild(name)
 end
+-- R3 additional hosts retain this controller's existing access/stream/launch path.
+local function r3Bridge()
+ local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
+ local module = folder and folder:FindFirstChild("QueueBridge")
+ return module and module:IsA("ModuleScript") and require(module) or nil
+end
+local function isR3Entry(door)
+ local bridge = r3Bridge()
+ return bridge and bridge.IsPreviewEntry(door, 6) or false
+end
+local r3Inflight = setmetatable({}, {__mode = "k"})
+local function beginR3Entry(door)
+ if not isR3Entry(door) then return nil end
+ local ref = door:FindFirstChild("QueueRenderOwner")
+ local owner = ref and ref:IsA("ObjectValue") and ref.Value
+ if not owner or not owner:IsA("Model") or not owner:IsDescendantOf(door:FindFirstAncestor("LobbyReimaginedPreview")) then return nil end
+ r3Inflight[owner] = (r3Inflight[owner] or 0) + 1
+ owner:SetAttribute("QueueActive", true)
+ return owner
+end
+local function finishR3Entry(owner)
+ if not owner then return end
+ local count = math.max(0, (r3Inflight[owner] or 1) - 1)
+ r3Inflight[owner] = count > 0 and count or nil
+ if owner.Parent then owner:SetAttribute("QueueActive", count > 0) end
+end
+
 local function playerReady(player)
 	if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)
 		or player:GetAttribute("InRound") == true
@@ -97,9 +124,11 @@ end
 local function onEnter(player, prompt)
 	if (nextUse[player] or 0) > os.clock() or player:GetAttribute("Level6InRound") == true then return end
 	local character, root = playerReady(player)
-	local door = lobbyPart("Level6SealedDoor")
-	if not character or not door or prompt.Parent ~= door or (root.Position - door.Position).Magnitude > 14 then return end
+	local door = prompt.Parent
+	if not character or not door or not door:IsA("BasePart")
+  or not (door == lobbyPart("Level6SealedDoor") or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end
 	nextUse[player] = math.huge
+ local r3Owner = beginR3Entry(door)
 	local previous = character:GetPivot()
 	local ok, err = pcall(function()
 		local model, exit = Runtime.EnsureWorld()
@@ -109,7 +138,7 @@ local function onEnter(player, prompt)
 		local currentCharacter, currentRoot = playerReady(player)
 		local currentModel, currentExit = previewReady()
 		if currentCharacter ~= character or currentModel ~= model or currentExit ~= exit
-			or lobbyPart("Level6SealedDoor") ~= door or prompt.Parent ~= door
+			or not (door == lobbyPart("Level6SealedDoor") or isR3Entry(door)) or prompt.Parent ~= door
 			or (currentRoot.Position - door.Position).Magnitude > 14
 			or not floorAt(model, exit.Position) then return end
 		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
@@ -119,7 +148,10 @@ local function onEnter(player, prompt)
 			character:PivotTo(previous)
 			error("Preview join rejected: " .. tostring(reason))
 		end
+		-- Orient once only after an authorized, successful Level 6 arrival.
+		transport:FireClient(player, "ArrivalFacing", upright(exit.CFrame), MODEL_NAME)
 	end)
+ finishR3Entry(r3Owner)
 	release(player)
 	if not ok then warn("[Level6PreviewAccess] " .. tostring(err)) end
 end
@@ -147,6 +179,13 @@ end
 local function hookDoor()
 	local door = lobbyPart("Level6SealedDoor")
 	if door and door:IsA("BasePart") then ensurePrompt(door, ENTER, "ENTER PARTY BACKROOMS", onEnter) end
+ local bridge = r3Bridge()
+ local model = workspace:FindFirstChild("LobbyReimaginedPreview")
+ if bridge then
+  for _, host in ipairs(bridge.GetPreviewEntries(model, 6)) do
+   ensurePrompt(host, ENTER, "ENTER PARTY BACKROOMS", onEnter)
+  end
+ end
 end
 local watchedModel, readyConnection
 local function watchModel(model)
@@ -164,3 +203,19 @@ workspace.DescendantAdded:Connect(function(instance)
 	elseif instance.Name == EXIT_NAME then hookExit() end
 end)
 hookDoor(); watchModel(workspace:FindFirstChild(MODEL_NAME))
+
+-- Observe ready publication/restoration; the original lobby watcher is unchanged.
+local r3Watched = setmetatable({}, {__mode = "k"})
+local function watchR3Lobby(model)
+ if not model or not model:IsA("Model") or model.Name ~= "LobbyReimaginedPreview" or r3Watched[model] then return end
+ r3Watched[model] = true
+ local ready = model:GetAttributeChangedSignal("Ready"):Connect(hookDoor)
+ local ancestry = model.AncestryChanged:Connect(function() if model.Parent == workspace then task.defer(hookDoor) end end)
+ local descendants = model.DescendantAdded:Connect(function(part)
+  if part:GetAttribute("R3DeveloperPreviewEntry") == 6 then task.defer(hookDoor) end
+ end)
+ model.Destroying:Once(function() ready:Disconnect(); ancestry:Disconnect(); descendants:Disconnect() end)
+ task.defer(hookDoor)
+end
+workspace.ChildAdded:Connect(watchR3Lobby)
+watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))

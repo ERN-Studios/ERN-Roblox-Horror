@@ -643,6 +643,10 @@ setLevelOneEntityActive(false)
 local _lobbyModel, lobbySpawn, lobbyStations = buildLobby()
 
 local function setStationDisplay(station, main, secondary, color)
+ -- R3 holograms mirror this engine's true host/reset/launch state only.
+ if station.revisionOwned and station.renderOwner and station.renderOwner.Parent then
+  station.renderOwner:SetAttribute("QueueActive", station.host ~= nil and not station.busy and not station.revisionRetired)
+ end
  station.title.Text = main
  station.sub.Text = secondary or ""
  station.title.TextColor3 = color or station.color
@@ -1109,6 +1113,7 @@ local function queueRadius(station)
 end
 
 local function playerInsideZone(player, station, includeBusy)
+ if station.revisionOwned and not (RunService:IsStudio() or DevAccess.IsLevel6PreviewAllowed(player)) then return false end
  if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
  if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
@@ -3346,6 +3351,7 @@ end)
 local function runStation(station)
  resetStation(station, false)
  while true do
+  if station.revisionOwned and (station.revisionRetired or not station.zone:IsDescendantOf(workspace)) then return end
   if station.busy then task.wait(0.25) continue end
   if IS_STUDIO and roundBusy then
    if station.host then resetStation(station, true) end
@@ -3410,6 +3416,7 @@ local function runStation(station)
   end
 
   local ready, allInside, rejected = queuedPlayers(station)
+  if station.revisionRetired then return end
   if #ready == 0 then
    resetStation(station, true)
    task.wait(0.25)
@@ -3432,11 +3439,12 @@ local function runStation(station)
   -- seconds instead, which it keeps as its window to step off and cancel.
   local t = countdownTime
   while t >= 1 do
-   if not (station.host and playerInsideZone(station.host, station) and station.configured) then
+   if station.revisionRetired or not (station.host and playerInsideZone(station.host, station) and station.configured) then
     cancelled = true
     break
    end
    ready, allInside, rejected = queuedPlayers(station)
+   if station.revisionRetired then return end
    if #ready == 0 then cancelled = true break end
    lastReady = ready
    syncQueueFeedback(station, allInside, ready, rejected)
@@ -3452,6 +3460,7 @@ local function runStation(station)
    t -= 1
   end
 
+  if station.revisionRetired then return end
   if cancelled then
    fireGroup(lastReady, "lobbycancel")
    resetStation(station, false)
@@ -3460,12 +3469,84 @@ local function runStation(station)
   end
 
   local participants = queuedPlayers(station)
-  if #participants > 0 and participants[1] == station.host then
+  if station.revisionRetired then return end
+  if not station.revisionRetired and #participants > 0 and participants[1] == station.host then
    station.feedback = {}
    launchStation(station, participants)
   end
+  if station.revisionRetired then return end
   resetStation(station, false)
  end
+end
+
+-- R3 parallel lobby uses the same private queue engine, never a second countdown.
+-- Only ready, explicitly owned pads 101-112 enter the registry; 4-6 stay DEV previews.
+if not IS_RESERVED_ROUND_SERVER then
+ local r3Models = setmetatable({}, {__mode = "k"})
+ local function bindR3(model)
+  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or model.Parent ~= workspace
+   or model:GetAttribute("LobbyReimaginedOwned") ~= true then return end
+  if r3Models[model] then return end
+  local ownerFolder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
+  local module = ownerFolder and ownerFolder:FindFirstChild("QueueBridge")
+  if not module or not module:IsA("ModuleScript") then return end
+  local bridge = require(module)
+  if not bridge.IsLobby(model) then return end
+  local ok, specs = pcall(bridge.Build, model)
+  if not ok then warn("[R3 Queue Bridge] " .. tostring(specs)); return end
+  local registered = {}
+  for _, station in ipairs(specs) do
+   if not station.previewOnly then
+    if station.level > Routing.MaxLevel or lobbyStations[station.index] then
+     warn("[R3 Queue Bridge] conflicting or unavailable queue id " .. station.index); return
+    end
+    table.insert(registered, station)
+   end
+  end
+  r3Models[model] = registered
+  local retired = false
+  local ancestryConnection
+  local function retire()
+   if retired then return end
+   retired = true
+   if ancestryConnection then ancestryConnection:Disconnect() end
+   for _, station in ipairs(registered) do
+    station.revisionRetired = true
+    local feedback = {}
+    for player in pairs(station.feedback or {}) do
+     if player.Parent == Players and not inRound[player] then table.insert(feedback, player) end
+    end
+    fireGroup(feedback, "lobbycancel")
+    resetStation(station, true)
+    setStationBarrier(station, false)
+    if station.barrier then station.barrier:Destroy(); station.barrier = nil end
+    if lobbyStations[station.index] == station then lobbyStations[station.index] = nil end
+   end
+   r3Models[model] = nil
+  end
+  model.Destroying:Once(retire)
+  ancestryConnection = model.AncestryChanged:Connect(function()
+   if model.Parent ~= workspace then retire() end
+  end)
+  for _, station in ipairs(registered) do
+   lobbyStations[station.index] = station
+   task.spawn(function() runStation(station) end)
+  end
+  model:SetAttribute("RegisteredQueueCount", #registered)
+ end
+ local watched = setmetatable({}, {__mode = "k"})
+ local function watchR3(model)
+  if model.Name ~= "LobbyReimaginedPreview" or not model:IsA("Model") or watched[model] then return end
+  watched[model] = true
+  local readyConnection = model:GetAttributeChangedSignal("Ready"):Connect(function() bindR3(model) end)
+  local ancestryConnection = model.AncestryChanged:Connect(function()
+   if model.Parent == workspace then task.defer(bindR3, model) end
+  end)
+  model.Destroying:Once(function() readyConnection:Disconnect(); ancestryConnection:Disconnect() end)
+  task.defer(bindR3, model)
+ end
+ workspace.ChildAdded:Connect(watchR3)
+ for _, model in ipairs(workspace:GetChildren()) do watchR3(model) end
 end
 
 -- Every arrival's OWN packet. Admission is decided from the session each player

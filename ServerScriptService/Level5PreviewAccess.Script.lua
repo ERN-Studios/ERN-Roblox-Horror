@@ -19,6 +19,33 @@ local function liveDoor()
 	return door and door:IsA("BasePart") and door or nil
 end
 
+-- R3 additional hosts retain this controller's existing access/stream/launch path.
+local function r3Bridge()
+ local folder = script.Parent:FindFirstChild("LobbyReimaginedPreview")
+ local module = folder and folder:FindFirstChild("QueueBridge")
+ return module and module:IsA("ModuleScript") and require(module) or nil
+end
+local function isR3Entry(door)
+ local bridge = r3Bridge()
+ return bridge and bridge.IsPreviewEntry(door, 5) or false
+end
+local r3Inflight = setmetatable({}, {__mode = "k"})
+local function beginR3Entry(door)
+ if not isR3Entry(door) then return nil end
+ local ref = door:FindFirstChild("QueueRenderOwner")
+ local owner = ref and ref:IsA("ObjectValue") and ref.Value
+ if not owner or not owner:IsA("Model") or not owner:IsDescendantOf(door:FindFirstAncestor("LobbyReimaginedPreview")) then return nil end
+ r3Inflight[owner] = (r3Inflight[owner] or 0) + 1
+ owner:SetAttribute("QueueActive", true)
+ return owner
+end
+local function finishR3Entry(owner)
+ if not owner then return end
+ local count = math.max(0, (r3Inflight[owner] or 1) - 1)
+ r3Inflight[owner] = count > 0 and count or nil
+ if owner.Parent then owner:SetAttribute("QueueActive", count > 0) end
+end
+
 local function liveSpawn()
 	local lobby = workspace:FindFirstChild("ServerLobby")
 	local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
@@ -96,8 +123,9 @@ end
 local function onEnter(player, prompt)
 	if (nextUse[player] or 0) > os.clock() then return end
 	local character, root = readyPlayer(player)
-	local door = liveDoor()
-	if not character or not door or prompt.Parent ~= door or (root.Position - door.Position).Magnitude > 14 then return end
+	local door = prompt.Parent
+	if not character or not door or not door:IsA("BasePart")
+  or not (door == liveDoor() or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end
 	local model, exit = readyPreview()
 	local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
 	if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
@@ -106,17 +134,19 @@ local function onEnter(player, prompt)
 		return
 	end
 	nextUse[player] = math.huge
+ local r3Owner = beginR3Entry(door)
 	local ok, err = pcall(function()
 		if not stream(player, exit.Position) then return end
 		local nowCharacter, nowRoot = readyPlayer(player)
 		local nowModel, nowExit = readyPreview()
 		if nowCharacter ~= character or nowModel ~= model or nowExit ~= exit
-			or prompt.Parent ~= door or liveDoor() ~= door
+			or prompt.Parent ~= door or not (door == liveDoor() or isR3Entry(door))
 			or (nowRoot.Position - door.Position).Magnitude > 14
 			or returnPrompt.Parent ~= exit or not returnPrompt.Enabled
 			or not hasFloor(model, exit) then return end
 		character:PivotTo(upright(exit.Position, exit.CFrame.LookVector))
 	end)
+ finishR3Entry(r3Owner)
 	release(player)
 	if not ok then warn("[Level5PreviewAccess] entry failed:", err) end
 end
@@ -143,6 +173,13 @@ end
 local function hookDoor()
 	local door = liveDoor()
 	if door then ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onEnter) end
+ local bridge = r3Bridge()
+ local model = workspace:FindFirstChild("LobbyReimaginedPreview")
+ if bridge then
+  for _, host in ipairs(bridge.GetPreviewEntries(model, 5)) do
+   ensurePrompt(host, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onEnter)
+  end
+ end
 end
 
 local function hookExit()
@@ -203,3 +240,19 @@ task.spawn(function()
 		end
 	end
 end)
+
+-- Observe ready publication/restoration; the original lobby watcher is unchanged.
+local r3Watched = setmetatable({}, {__mode = "k"})
+local function watchR3Lobby(model)
+ if not model or not model:IsA("Model") or model.Name ~= "LobbyReimaginedPreview" or r3Watched[model] then return end
+ r3Watched[model] = true
+ local ready = model:GetAttributeChangedSignal("Ready"):Connect(hookDoor)
+ local ancestry = model.AncestryChanged:Connect(function() if model.Parent == workspace then task.defer(hookDoor) end end)
+ local descendants = model.DescendantAdded:Connect(function(part)
+  if part:GetAttribute("R3DeveloperPreviewEntry") == 5 then task.defer(hookDoor) end
+ end)
+ model.Destroying:Once(function() ready:Disconnect(); ancestry:Disconnect(); descendants:Disconnect() end)
+ task.defer(hookDoor)
+end
+workspace.ChildAdded:Connect(watchR3Lobby)
+watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))

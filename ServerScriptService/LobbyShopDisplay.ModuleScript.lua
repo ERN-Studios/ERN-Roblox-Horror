@@ -44,14 +44,14 @@ local LobbyShopDisplay = {}
 local SHOP_TEXTURES = {
 	BoxFallback = "rbxassetid://90558430724311",
 	Box = {
-		Supporter = "rbxassetid://75534988741783",
-		AdvancedEquipment = "rbxassetid://133698774797678",
-		CosmeticEquipment = "rbxassetid://95744112613263",
-		Tokens4 = "rbxassetid://127956354478910",
-		Tokens20 = "rbxassetid://114348157561307",
-		EmergencyReentry = "rbxassetid://93091494402773",
-		ExpeditionPack = "rbxassetid://132485864297801",
-		EntityDetector = "rbxassetid://90757067349588",
+		Supporter = "rbxassetid://106022873152277",
+		AdvancedEquipment = "rbxassetid://80999828522184",
+		CosmeticEquipment = "rbxassetid://83090272487976",
+		Tokens4 = "rbxassetid://118242405264841",
+		Tokens20 = "rbxassetid://124733504759279",
+		EmergencyReentry = "rbxassetid://92866750717809",
+		ExpeditionPack = "rbxassetid://134334664606741",
+		EntityDetector = "rbxassetid://87202894425080",
 		SpeedPotion = "rbxassetid://73457681182843",
 		RouteMarker = "rbxassetid://100856675462356",
 	},
@@ -221,6 +221,33 @@ local function addDecal(part, face, url)
 	return decal
 end
 
+-- Keep the existing decals and add self-lit artwork for the dark lobby.
+local function addBoxArtwork(part, face, url)
+	addDecal(part, face, url)
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = "ShopArtwork_" .. face.Name
+	gui.Face = face
+	gui.LightInfluence = 0
+	gui.Brightness = 1.25
+	gui.AlwaysOnTop = false
+	gui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	gui.CanvasSize = Vector2.new(256, 256)
+	gui.MaxDistance = 90
+	gui.Active = false
+
+	local artwork = Instance.new("ImageLabel")
+	artwork.Name = "Artwork"
+	artwork.Size = UDim2.fromScale(1, 1)
+	artwork.BackgroundTransparency = 1
+	artwork.BorderSizePixel = 0
+	artwork.Image = url
+	artwork.ImageColor3 = Color3.new(1, 1, 1)
+	artwork.ImageTransparency = 0
+	artwork.Active = false
+	artwork.Parent = gui
+	gui.Parent = part
+end
+
 local function addPointLight(parent, name, color, brightness, range)
 	local light = Instance.new("PointLight")
 	light.Name = name
@@ -318,7 +345,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		if url then
 			box:SetAttribute("ShopTextureSlot", "Box:" .. key)
 			for _, face in ipairs(BOX_FACES) do
-				addDecal(box, face, url)
+				addBoxArtwork(box, face, url)
 			end
 		else
 			warn("[LobbyShopDisplay] no product art for " .. tostring(key))
@@ -451,12 +478,38 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		return nil
 	end
 
+	-- Both lobbies share this one focus writer and the unchanged purchase routes.
+	local shopKeys = {}
+	for _, record in ipairs(plates) do shopKeys[record.Key] = true end
+	local function r3PlateUnder(position, current)
+		local preview = workspace:FindFirstChild("LobbyReimaginedPreview")
+		if not preview or not preview:IsA("Model") or preview:GetAttribute("LobbyReimaginedOwned") ~= true
+			or preview:GetAttribute("R3QueueRevision") ~= 3 or preview:GetAttribute("Ready") ~= true then return nil end
+		local folder = preview:FindFirstChild("PreviewShopPressurePlates")
+		if not folder or not folder:IsA("Folder") then return nil end
+		local candidates = folder:GetChildren()
+		local function contains(plate, hysteresis)
+			if not plate:IsA("BasePart") or not shopKeys[plate:GetAttribute("ShopItemKey")] then return false end
+			local delta = position - plate.Position
+			return math.abs(delta.X) <= PLATE_HALF_X + hysteresis
+				and math.abs(delta.Z) <= PLATE_HALF_Z + hysteresis and math.abs(delta.Y) <= 8
+		end
+		for _, plate in ipairs(candidates) do
+			if plate:GetAttribute("ShopItemKey") == current and contains(plate, PLATE_HYSTERESIS) then return current end
+		end
+		for _, plate in ipairs(candidates) do
+			if contains(plate, 0) then return plate:GetAttribute("ShopItemKey") end
+		end
+		return nil
+	end
+
 	local function focusFor(player)
 		if player:GetAttribute("InRound") == true then return nil end
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if not root then return nil end
-		return plateUnder(root.Position, player:GetAttribute(FOCUS_ATTRIBUTE))
+		local current = player:GetAttribute(FOCUS_ATTRIBUTE)
+		return plateUnder(root.Position, current) or r3PlateUnder(root.Position, current)
 	end
 
 	task.spawn(function()

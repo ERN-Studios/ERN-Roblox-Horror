@@ -387,7 +387,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		Z = rowZ[entryRow],
 		W = Tuning.ArrivalWidth,
 		D = Tuning.ArrivalDepth,
-		H = 12,
+		H = 30,
 		Kind = "PartyHall",
 		Decor = "SparseWelcome",
 		Module = false,

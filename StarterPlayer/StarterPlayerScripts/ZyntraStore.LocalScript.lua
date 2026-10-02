@@ -1892,33 +1892,51 @@ for _, tier in ipairs({2, 3, 5}) do
 	makeProductCard("TokenEarner" .. tier .. "x", item, "Pass")
 	shopDetail.TokenEarner[tier] = item
 end
--- Sale state is Roblox's: a pass that is off sale (all six are until QA) or not
--- at its approved price shows COMING SOON, never a BUY that cannot complete.
-shopDetail.EarnerForSale = {}
+-- Managed Pricing can return a different price for each player. Only verified
+-- on-sale offers enter this client price table; the configured base catalogue
+-- and its ownership/prerequisite rules remain unchanged.
+shopDetail.EarnerLivePasses = {}
+shopDetail.EarnerPricesPending = true
+local function verifiedEarnerPrice(info, expectedId)
+	if type(info) ~= "table" or info.IsForSale ~= true or info.TargetId ~= expectedId then return nil end
+	local price = info.PriceInRobux
+	if type(price) ~= "number" or price ~= price or price <= 0
+		or price == math.huge or price % 1 ~= 0 then return nil end
+	return price
+end
 function shopDetail.renderEarner()
 	local earner = Config.TokenEarner
 	local owns = {}
 	for key in pairs(earner.Passes) do owns[key] = player:GetAttribute("ZyntraOwns" .. key) == true end
+	local ownedTier = earner.Tier(owns)
 	for tier, item in pairs(shopDetail.TokenEarner) do
 		local key = "TokenEarner" .. tier .. "x"
 		local itemButton = productButtons[key]
-		local offer = earner.Offer(earner.Passes, earner.Tier, owns, tier)
-		local pass = offer and earner.Passes[offer]
-		local onSale = pass ~= nil and shopDetail.EarnerForSale[pass.Id] == true
+		local reached = ownedTier >= tier
+		local offer = not reached and earner.Offer(shopDetail.EarnerLivePasses, earner.Tier, owns, tier) or nil
+		local pass = offer and shopDetail.EarnerLivePasses[offer]
+		local onSale = pass ~= nil
 		item.Id = onSale and pass.Id or 0
 		if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end
-		itemButton.Text = not pass and "OWNED" or onSale and (tostring(pass.Price) .. " R$") or "COMING SOON"
-		itemButton.TextColor3 = not pass and COLORS.accent or onSale and COLORS.accent2 or COLORS.muted
+		itemButton.Text = reached and "OWNED" or onSale and (tostring(pass.Price) .. " R$")
+			or shopDetail.EarnerPricesPending and "CHECKING PRICE" or "UNAVAILABLE"
+		itemButton.TextColor3 = reached and COLORS.accent or onSale and COLORS.accent2 or COLORS.muted
 		UIDevice.SetEnabled(itemButton, onSale)
 		if shopDetail.priceChanged then shopDetail.priceChanged(key) end
 	end
 end
+shopDetail.renderEarner()
 task.spawn(function()
-	for _, pass in pairs(Config.TokenEarner.Passes) do
+	for key, pass in pairs(Config.TokenEarner.Passes) do
 		local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, pass.Id, Enum.InfoType.GamePass)
-		shopDetail.EarnerForSale[pass.Id] = ok and type(info) == "table" and info.IsForSale == true
-			and info.PriceInRobux == pass.Price
+		local price = ok and verifiedEarnerPrice(info, pass.Id) or nil
+		if price then
+			local offer = table.clone(pass)
+			offer.Price = price
+			shopDetail.EarnerLivePasses[key] = offer
+		end
 	end
+	shopDetail.EarnerPricesPending = false
 	shopDetail.renderEarner()
 end)
 
