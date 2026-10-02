@@ -1,0 +1,23 @@
+{
+  "editorHash": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+  "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+  "editorMatch": true,
+  "class": "LocalScript",
+  "sourceBytes": 59104,
+  "sourceHash": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+  "capturedAtUTC": "2026-10-02T21:24:15Z",
+  "universeId": 10559217407,
+  "placeId": 131311258779917,
+  "operation": "edit",
+  "baselinePath": "tools/level3_finale_player_20261002/reader/Reader.fresh.baseline.luau",
+  "candidatePath": "tools/level3_finale_player_20261002/reader/Reader.candidate.luau",
+  "candidateHash": "e0da4f1c023c3047ab5493a1dc576845cc166693cad022fde32c8dfb760006f1",
+  "candidateBytes": 69316,
+  "targetContract": {
+    "state": "Level3_CDPlayerPosition",
+    "workspaceMirror": "Level3CDPlayerPosition",
+    "source": "actual post-Visual session.DiscPlayer.Position",
+    "cleanup": "both cleared by Objective"
+  },
+  "scope": "Only public Level3 Reader Client; current-state secured mode, exact camera compass/projection, existing UI gates and teardown"
+}

@@ -1,0 +1,157 @@
+--- fresh live ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller
++++ scoped candidate Level 3 Mall Manager AI Controller
+@@ -148,7 +148,7 @@
+ 	local root = character and character:FindFirstChild("HumanoidRootPart")
+ 	if not character or not character.Parent or not humanoid or humanoid.Health <= 0
+ 		or not root or not root:IsA("BasePart")
+-		or PlayerProtection.IsActive(player, character) then
++		or (not session.FinalHallChase and PlayerProtection.IsActive(player, character)) then
+ 		return nil, nil, nil
+ 	end
+ 	return character, humanoid, root
+@@ -2059,6 +2059,15 @@
+ 		session.LastKnownCharacter = nil
+ 		session.LastSenseAt = -math.huge
+ 		session.SearchUntil = nil
++		if session.FinalHallChase then
++			-- A finale without a runner holds position; never switch to random mall patrol.
++			session.PatrolGoal = nil
++			session.PatrolLegUntil = nil
++			clearGoal(session)
++			publishState(session, "WAITING")
++			publishTargetTelemetry(session, "NO_LIVING_PLAYER", -1, nil)
++			return false
++		end
+ 		-- Patrol only when no living round participant remains. Hiding players
+ 		-- remain chase targets and therefore never enter this fallback.
+ 		local sweepGoal = arrivalGoal(session)
+@@ -2333,16 +2342,17 @@
+ 	if not player or not character or not liveSession(session)
+ 		or player.Character ~= character or not PlayerProtection.IsActive(player, character) then return end
+ 	session.Suspicion[player] = nil
+-	local ownsTarget = session.Target == player
++	local ownsTarget = not session.FinalHallChase and session.Target == player
+ 	-- Retired-avatar memory still belongs to this player and must not restart pursuit.
+-	local ownsMemory = session.LastKnownPlayer == player
++	local ownsMemory = not session.FinalHallChase and session.LastKnownPlayer == player
+ 	local ownsAttack = session.Attacking and session.AttackPlayer == player and session.AttackCharacter == character
+-	local ownsCheck = session.TableCheckTargetPlayer == player
++	local ownsCheck = not session.FinalHallChase and session.TableCheckTargetPlayer == player
+ 	if ownsAttack then
+ 		session.AttackToken += 1
+ 		session.Attacking = false
+ 		session.AttackPlayer = nil
+ 		session.AttackCharacter = nil
++		if session.FinalHallChase and validRound(session) then publishState(session, "CHASE") end
+ 	end
+ 	if ownsCheck then endTableCheck(session, false) end
+ 	if ownsTarget then
+@@ -2484,6 +2494,8 @@
+ end
+ 
+ local function attackLineClear(session: any, player: Player, maximumRange: number): (boolean, Humanoid?)
++	-- Finale can face/chase protected runners, but immunity still fences every attack.
++	if PlayerProtection.IsActive(player, player.Character) then return false, nil end
+ 	if HidingController.IsHidden(player, session.Generation) then return false, nil end
+ 	-- A flushed player gets a head start, never an instant kill: the Manager can
+ 	-- chase and be right on top of them, but the attack itself is refused.
+@@ -3303,19 +3315,19 @@
+ 	return track
+ end
+ 
+-local function eligibleSpawnPlayers(): {any}
++local function eligibleSpawnPlayers(includeProtected: boolean?): {any}
+ 	local records = {}
+ 	if workspace:GetAttribute("SelectedLevel") ~= 3 or workspace:GetAttribute("RoundActive") ~= true then
+ 		return records
+ 	end
+ 	for _, player in ipairs(Players:GetPlayers()) do
+-		if player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
++		if player.Parent == Players and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
+ 			local character = player.Character
+ 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ 			local root = character and character:FindFirstChild("HumanoidRootPart")
+ 			if character and character.Parent and humanoid and humanoid.Health > 0
+ 				and root and root:IsA("BasePart")
+-				and not PlayerProtection.IsActive(player, character) then
++				and (includeProtected or not PlayerProtection.IsActive(player, character)) then
+ 				table.insert(records, {Player=player, Character=character, Root=root, Position=root.Position})
+ 			end
+ 		end
+@@ -3384,33 +3396,30 @@
+ end
+ 
+ local function chooseFinalHallSpawn(manifest: any, generation: number): any?
+-	local records = eligibleSpawnPlayers()
++	local records = eligibleSpawnPlayers(true)
+ 	if #records == 0 then return nil end
+ 	local hall = manifest.FinalHall
+ 	if type(hall) ~= "table" or not hall.Model or not hall.Model.Parent then return nil end
+ 	local state = stateFolder()
+ 	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+ 	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+-	-- Start in the last ten percent of the actual final corridor and face its runners.
+-	-- Preserve the normal minimum distance from EVERY eligible living participant.
+-	-- If someone is already at the far end, bindManager retries until it is safe;
+-	-- never relocate the reveal beside that player or back to the level entrance.
+-	local position: Vector3? = nil
+-	local overlap = spawnOverlapParams(records)
+-	local preferred = math.clamp(tonumber(hall.SpawnProgress) or Tuning.FinalHallSpawnProgress, .90, .98)
+-	for _, progress in ipairs({preferred, .95, .93, .90}) do
+-		local candidate = hall.StartPoint:Lerp(hall.EndPoint, progress)
+-		candidate = Vector3.new(candidate.X, hall.FloorY, candidate.Z)
+-		local nearestDistance = math.huge
+-		for _, record in ipairs(records) do
+-			nearestDistance = math.min(nearestDistance, planarDistance(candidate, record.Position))
+-		end
+-		if nearestDistance >= Tuning.SpawnMinimumDistance and spawnVolumeFits(candidate, overlap) then
+-			position = candidate
+-			break
+-		end
+-	end
+-	if not position then return nil end
++	-- The barrier is life-scoped. A revive or temporarily missing living root
++	-- during a deferred clearance retry must not inherit an earlier crossing.
++	for _, player in ipairs(Players:GetPlayers()) do
++		if player.Parent == Players and player:GetAttribute("InRound") == true
++			and player:GetAttribute("Escaped") ~= true then
++			local character = player.Character
++			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
++			if character and character.Parent and humanoid and humanoid.Health > 0 then
++				local root = character:FindFirstChild("HumanoidRootPart")
++				if not root or not root:IsA("BasePart")
++					or character:GetAttribute("Level3_FinalHallCrossedGeneration") ~= generation then return nil end
++			end
++		end
++	end
++	-- Exactly the authored far endpoint; never move the reveal toward a player.
++	local position = Vector3.new(hall.EndPoint.X, hall.FloorY, hall.EndPoint.Z)
++	if not spawnVolumeFits(position, spawnOverlapParams(records)) then return nil end
+ 	-- Face a runner in the exit lane before the first authoritative chase tick.
+ 	table.sort(records, function(a, b)
+ 		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
+@@ -3586,6 +3595,15 @@
+ 	local groundOffset = pivot.Position.Y - (boundingCFrame.Position.Y - boundingSize.Y * .5)
+ 	local rootPosition = spawnPosition + Vector3.new(0, groundOffset, 0)
+ 	local target = Vector3.new(facePosition.X, rootPosition.Y, facePosition.Z)
++	if (target - rootPosition).Magnitude <= .001 then
++		-- A runner may stand exactly at the fixed endpoint. Keep the authored
++		-- position and face back down the hall instead of constructing a zero look vector.
++		local hall = manifest.FinalHall
++		local forward = type(hall) == "table" and hall.Forward
++		local direction = forward and Vector3.new(-forward.X, 0, -forward.Z) or Vector3.new(0, 0, -1)
++		if direction.Magnitude <= .001 then direction = Vector3.new(0, 0, -1) end
++		target = rootPosition + direction.Unit
++	end
+ 	model:PivotTo(CFrame.lookAt(rootPosition, target))
+ 	model.Parent = manifest.MallManagerRuntime
+ 	CollectionService:AddTag(model, "Level3HostileEntity")
+@@ -3834,7 +3852,7 @@
+ 		if workspace:GetAttribute("RoundActive") == true
+ 			and workspace:GetAttribute("SelectedLevel") == 3
+ 			and workspace:GetAttribute("Level3MallManagerHuntActive") == true then
+-			session.ActivatedAt = os.clock() + Tuning.SpawnGraceSeconds
++			session.ActivatedAt = os.clock() + (session.FinalHallChase and 0 or Tuning.SpawnGraceSeconds)
+ 			session.LastProgressAt = os.clock()
+ 			session.LastGenuineProgressAt = os.clock()
+ 			session.ProgressObjectiveKey = nil

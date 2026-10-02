@@ -159,7 +159,8 @@ local function updateFinalHallChase(session: AnyTable)
 					local lateral = (offset - horizontalForward * along).Magnitude
 					-- Every living survivor must pass strictly beyond 50% of this hall.
 					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
-					local entryProgress = hall.Length * .50
+					local entryProgress = hall.Length * (hall.HalfwayProgress
+						or Configuration.Layout.FinalHallHalfwayProgress or .50)
 					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
 					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
 					if along > entryProgress and along <= hall.Length + 2.5

@@ -2203,7 +2203,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		if link.Door == "HiddenExit" then
 			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
 			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
-			local spawnProgress = 1 -- Fixed far-end doorway; never move the finale spawn toward players.
+			local spawnProgress = Configuration.MallManager.FinalHallSpawnProgress or .97
 			local halfwayMarker = part(corridor.Model, "Level 3 Final Hall Halfway",
 				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, halfwayProgress) + Vector3.new(0, .05, 0)),
 				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)

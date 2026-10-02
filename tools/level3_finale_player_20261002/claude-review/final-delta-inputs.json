@@ -1,0 +1,86 @@
+{
+  "createdUTC": "2026-10-02T21:33:59.272299+00:00",
+  "sources": [
+    {
+      "label": "Objective",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Objective Controller.v2.candidate.luau",
+      "sha256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "bytes": 74217,
+      "ranges": [
+        [
+          131,
+          174
+        ],
+        [
+          183,
+          200
+        ],
+        [
+          391,
+          396
+        ]
+      ]
+    },
+    {
+      "label": "AI",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Mall Manager AI Controller.v2.candidate.luau",
+      "sha256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "bytes": 189602,
+      "ranges": [
+        [
+          139,
+          154
+        ],
+        [
+          2061,
+          2074
+        ],
+        [
+          2342,
+          2357
+        ],
+        [
+          2496,
+          2504
+        ],
+        [
+          3398,
+          3431
+        ],
+        [
+          3595,
+          3612
+        ],
+        [
+          3850,
+          3859
+        ]
+      ]
+    },
+    {
+      "label": "Reader",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/reader/Reader.v2.candidate.luau",
+      "sha256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "bytes": 70098,
+      "ranges": [
+        [
+          1044,
+          1120
+        ],
+        [
+          899,
+          902
+        ],
+        [
+          1415,
+          1425
+        ],
+        [
+          1442,
+          1449
+        ]
+      ]
+    }
+  ],
+  "scope": "focused frozen v2 candidate excerpts only"
+}

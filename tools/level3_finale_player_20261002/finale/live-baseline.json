@@ -1,0 +1,22 @@
+{
+  "placeId": 131311258779917,
+  "sources": [
+    {
+      "editorHash": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "sourceHash": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "bytes": 188320
+    },
+    {
+      "editorHash": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "sourceHash": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "bytes": 72453
+    }
+  ],
+  "universeId": 10559217407
+}

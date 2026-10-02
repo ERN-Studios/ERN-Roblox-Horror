@@ -1,0 +1,17 @@
+{
+  "changes": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "editorSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "candidateSHA256": "74e0238d0c20cd381e60baf5f8567c0882f84dcb0b29bb52deb51039edc87599",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Mall Manager AI Controller.v3.candidate.luau",
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Mall Manager AI Controller.v2.candidate.luau",
+      "baselineMeasuredAtUTC": "2026-10-02T21:35:48Z",
+      "baselineEvidence": "Actual Studio install Source/editor receipt; parent must freshly recheck Edit before CAS",
+      "freshEditCASRequired": true
+    }
+  ]
+}

@@ -17,7 +17,6 @@ local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
-local MallManagerController = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
 local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
 
 type AnyTable = {[any]: any}
@@ -130,7 +129,7 @@ local function validPlayer(player: Player, session: AnyTable): boolean
 end
 
 local function updateFinalHallChase(session: AnyTable)
-	if not session.ExitUnlocked
+	if not session.ExitUnlocked or session.FinalHallChaseTriggered
 		or session.State:GetAttribute("Level3_RoomSongPhase") ~= "DONE" then
 		return
 	end
@@ -143,29 +142,23 @@ local function updateFinalHallChase(session: AnyTable)
 	local crossedCount = 0
 	for _, player in ipairs(Players:GetPlayers()) do
 		if validPlayer(player, session) then
-			local character = player.Character
-			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-			local root = character and character:FindFirstChild("HumanoidRootPart")
-			-- A live life still owns a barrier slot while its position is unavailable.
-			if character and character.Parent and humanoid and humanoid.Health > 0 then
+			local character, _, root = livingCharacter(player)
+			if character and root then
 				eligibleCount += 1
 				if session.FinalHallCrossed[player] ~= character then
-					character:SetAttribute("Level3_FinalHallCrossedGeneration", nil)
-				end
-				if root and root:IsA("BasePart") and session.FinalHallCrossed[player] ~= character then
 					local offset = Vector3.new(
 						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
 					local along = offset:Dot(horizontalForward)
 					local lateral = (offset - horizontalForward * along).Magnitude
-					-- Every living survivor must pass strictly beyond 50% of this hall.
+					-- The first living survivor must pass strictly beyond 50% of this hall.
 					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
-					local entryProgress = hall.Length * .50
+					local entryProgress = hall.Length * (hall.HalfwayProgress
+						or Configuration.Layout.FinalHallHalfwayProgress or .50)
 					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
 					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
 					if along > entryProgress and along <= hall.Length + 2.5
 						and insideHallWidth and insideHallHeight then
 						session.FinalHallCrossed[player] = character
-						character:SetAttribute("Level3_FinalHallCrossedGeneration", session.Generation)
 					end
 				end
 				if session.FinalHallCrossed[player] == character then crossedCount += 1 end
@@ -180,12 +173,8 @@ local function updateFinalHallChase(session: AnyTable)
 	session.Manifest.World:SetAttribute("Level3_FinalHallCrossedCount", crossedCount)
 	workspace:SetAttribute("Level3FinalHallEligibleCount", eligibleCount)
 	workspace:SetAttribute("Level3FinalHallCrossedCount", crossedCount)
-	if session.FinalHallChaseTriggered or eligibleCount == 0 or crossedCount ~= eligibleCount then return end
+	if eligibleCount == 0 or crossedCount == 0 then return end
 
-	-- Attribute callbacks may be deferred. Stop the owned normal rig directly,
-	-- then issue a fresh hunt edge so the adapter cannot reuse a nearby Manager.
-	workspace:SetAttribute("Level3MallManagerHuntActive", false)
-	MallManagerController.Stop()
 	session.FinalHallChaseTriggered = true
 	session.State:SetAttribute("Level3_FinalHallChaseTriggered", true)
 	session.State:SetAttribute("Level3_FinalHallChaseActive", true)
@@ -388,9 +377,6 @@ end
 local function updateSharedState(session: AnyTable)
 	if not liveSession(session) then return end
 	local exitPosition = session.Manifest.ExitPosition
-	local playerPosition = session.DiscPlayer and session.DiscPlayer.Position
-	session.State:SetAttribute("Level3_CDPlayerPosition", playerPosition)
-	workspace:SetAttribute("Level3CDPlayerPosition", playerPosition)
 	local insertedCount = math.max(0, session.InsertedCount or session.ModuleCount or 0)
 	local collectedCount = math.max(0, session.CollectedCount or 0)
 	local heldCount = math.max(0, session.HeldCount or 0)
@@ -930,8 +916,6 @@ local function bindPlayerLifecycle(session: AnyTable, player: Player)
 		local humanoid = watchedHumanoid or character:FindFirstChildOfClass("Humanoid")
 		if not humanoid or humanoid.Health > 0 then return end
 		local root = character:FindFirstChild("HumanoidRootPart")
-		session.FinalHallCrossed[player] = nil
-		character:SetAttribute("Level3_FinalHallCrossedGeneration", nil)
 		dropHeldCDs(session, player, if root and root:IsA("BasePart") then root.Position else nil)
 	end
 	local function bindCharacter(character: Model)
@@ -974,17 +958,7 @@ local function updateDiscPlayerVisuals(session: AnyTable, animate: boolean)
 	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
 	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
 	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
-		discPlayer.StatusLabel.Text = if insertedCount >= session.ModuleGoal
-			then "SIGNAL RESTORED" else "AWAITING DISCS"
-	end
-	if discPlayer.ProgressLabel and discPlayer.ProgressLabel.Parent then
-		discPlayer.ProgressLabel.Text = string.format("%d / %d CDS", insertedCount, session.ModuleGoal)
-	end
-	for index, screenSlot in ipairs(discPlayer.ScreenSlots or {}) do
-		if screenSlot and screenSlot.Parent then
-			screenSlot.BackgroundColor3 = index <= insertedCount
-				and Color3.fromRGB(56, 255, 176) or Color3.fromRGB(20, 37, 35)
-		end
+		discPlayer.StatusLabel.Text = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
 	end
 	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
 		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
@@ -1581,7 +1555,6 @@ function ObjectiveController.Stop()
 		player:SetAttribute("Level3_HeldCDCount", 0)
 		player:SetAttribute("Level3_HeldCDMask", 0)
 		if player:GetAttribute("Level3_Room") ~= nil then player:SetAttribute("Level3_Room", "") end
-		if player.Character then player.Character:SetAttribute("Level3_FinalHallCrossedGeneration", nil) end
 	end
 	session.InsertedCount = 0
 	session.ModuleCount = 0
@@ -1655,7 +1628,6 @@ function ObjectiveController.Stop()
 		session.State:SetAttribute("Level3_ExitGuideStartRoom", "")
 		session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
 		session.State:SetAttribute("Level3_ExitPosition", nil)
-		session.State:SetAttribute("Level3_CDPlayerPosition", nil)
 		session.State:SetAttribute("Level3_Phase", "STOPPED")
 		session.State:SetAttribute("Level3_EntryRoomId", "")
 		session.State:SetAttribute("Level3_FirstCDRoomId", "")
@@ -1667,7 +1639,6 @@ function ObjectiveController.Stop()
 			session.State:SetAttribute(string.format("Level3_CD%dPosition", index), nil)
 		end
 	end
-	workspace:SetAttribute("Level3CDPlayerPosition", nil)
 	workspace:SetAttribute("Level3Modules", 0)
 	workspace:SetAttribute("Level3ModuleGoal", 0)
 	workspace:SetAttribute("Level3CDsCollected", 0)

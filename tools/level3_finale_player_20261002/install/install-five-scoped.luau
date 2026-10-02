@@ -1,0 +1,1089 @@
+-- Reviewed scoped Source delta installer; parent only, correct Studio Edit context.
+-- No place restore, instance creation, external upload, or unrelated script writes.
+local E, SES = game:GetService("EncodingService"), game:GetService("ScriptEditorService")
+local R, H = game:GetService("RunService"), game:GetService("HttpService")
+assert(not R:IsRunning(), "Edit only")
+assert(game.PlaceId == 131311258779917 and game.GameId == 10559217407, "Wrong place/universe")
+local rows = {{path=[[ServerScriptService.Level 3 Systems.Level 3 World Builder]],className=[[ModuleScript]],baselineSHA256=[[507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2]],editorSHA256=[[507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2]],candidateSHA256=[[7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587]],baselineBytes=108609,candidateBytes=108625,patches={{before=[[		if link.Door == "HiddenExit" then
+			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
+			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
+			local spawnProgress = Configuration.MallManager.FinalHallSpawnProgress or .97
+			local halfwayMarker = part(corridor.Model, "Level 3 Final Hall Halfway",
+				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, halfwayProgress) + Vector3.new(0, .05, 0)),
+				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)
+]],after=[[		if link.Door == "HiddenExit" then
+			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
+			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
+			local spawnProgress = 1 -- Fixed far-end doorway; never move the finale spawn toward players.
+			local halfwayMarker = part(corridor.Model, "Level 3 Final Hall Halfway",
+				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, halfwayProgress) + Vector3.new(0, .05, 0)),
+				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)
+]]}}},
+{path=[[ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter]],className=[[ModuleScript]],baselineSHA256=[[799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9]],editorSHA256=[[799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9]],candidateSHA256=[[c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568]],baselineBytes=24266,candidateBytes=29939,patches={{before=[[    player.Position = player.ControlPanel.Position
+    player.Prompt.RequiresLineOfSight = false
+    player.Prompt.ObjectText = "BIRTHDAY CD PLAYER  0/5"
+    if statusSurface and statusSurface.Parent:IsA("BasePart") then
+        local screen = statusSurface.Parent
+        screen.Size = Vector3.new(3.3,.72,.04)
+        screen.CFrame = playerCF*CFrame.new(0,4.40,1.55)
+        statusSurface.Enabled = true
+        local static = statusSurface:FindFirstChild("CRT Generated Static")
+        if static and static:IsA("ImageLabel") then static.Visible=false end
+        player.StatusLabel.Size = UDim2.fromScale(.92,.45)
+        player.InstructionLabel.Position = UDim2.fromScale(.05,.55)
+        player.InstructionLabel.Size = UDim2.fromScale(.9,.35)
+    end
+    for index, slot in ipairs(player.Slots) do
+        local slotCF = playerCF*CFrame.new((index-3)*.9,3.5,1.0)
+]],after=[[    player.Position = player.ControlPanel.Position
+    player.Prompt.RequiresLineOfSight = false
+    player.Prompt.ObjectText = "BIRTHDAY CD PLAYER  0/5"
+    -- A readable 90s relay display above the authored Blender deck. Keep the
+    -- physical screen and canvas at the same aspect ratio; the old 800x600
+    -- TV canvas was squeezed onto a 3.3x0.72 strip and distorted every glyph.
+    player.Model:SetAttribute("Level3_DiscPlayerVisualRevision", 3)
+    local function devicePart(name, relativeCF, size, color, material)
+        local p = Instance.new("Part")
+        p.Name = name
+        p.Size = size
+        p.CFrame = playerCF * relativeCF
+        p.Color = color
+        p.Material = material or Enum.Material.Metal
+        p.Anchored = true
+        p.CanCollide = false
+        p.CanTouch = false
+        p.CanQuery = false
+        p.CastShadow = false
+        p.Parent = player.Model
+        return p
+    end
+    local housing = devicePart("CD Relay Display Housing", CFrame.new(0,6.02,1.37),
+        Vector3.new(4.92,1.86,.24), Color3.fromRGB(27,31,29))
+    housing:SetAttribute("Level3_DiscPlayerDisplayHousing", true)
+    for _, side in ipairs({-1,1}) do
+        devicePart("CD Relay Display Support", CFrame.new(side*2.30,5.34,.94),
+            Vector3.new(.12,2.12,.12), Color3.fromRGB(67,69,62))
+        for _, y in ipairs({5.21,6.83}) do
+            local screw = devicePart("CD Relay Display Screw", CFrame.new(side*2.34,y,1.506),
+                Vector3.new(.095,.095,.025), Color3.fromRGB(132,132,114))
+            screw.Shape = Enum.PartType.Ball
+        end
+    end
+    local taskLamp = devicePart("CD Player Task Lamp", CFrame.new(0,7.06,1.52),
+        Vector3.new(3.40,.10,.36), Color3.fromRGB(255,227,162), Enum.Material.Neon)
+    local lampShade = devicePart("CD Player Task Lamp Shade", CFrame.new(0,7.16,1.48),
+        Vector3.new(3.65,.13,.54), Color3.fromRGB(46,48,42))
+    local taskLight = Instance.new("SurfaceLight")
+    taskLight.Name = "CD Player Warm Task Light"
+    taskLight.Face = Enum.NormalId.Bottom
+    taskLight.Angle = 120
+    taskLight.Range = 13
+    taskLight.Brightness = .85
+    taskLight.Color = Color3.fromRGB(255,225,165)
+    taskLight.Shadows = false
+    taskLight.Parent = taskLamp
+    if statusSurface and statusSurface.Parent:IsA("BasePart") then
+        local screen = statusSurface.Parent
+        screen.Name = "CD Player Phosphor Display"
+        screen.Size = Vector3.new(4.55,1.50,.04)
+        screen.CFrame = playerCF*CFrame.new(0,6.02,1.514)
+        screen.Material = Enum.Material.SmoothPlastic
+        screen.Color = Color3.fromRGB(3,14,11)
+        screen.Transparency = 0
+        screen.Reflectance = 0
+        statusSurface.Enabled = true
+        statusSurface.Face = Enum.NormalId.Back
+        statusSurface.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+        statusSurface.CanvasSize = Vector2.new(910,300)
+        statusSurface.LightInfluence = 0
+        statusSurface.Brightness = 1.25
+        statusSurface.AlwaysOnTop = false
+        statusSurface.MaxDistance = 95
+        local static = statusSurface:FindFirstChild("CRT Generated Static")
+        if static and static:IsA("ImageLabel") then static.Visible=false end
+        local background = Instance.new("Frame")
+        background.Name = "Phosphor Background"
+        background.Size = UDim2.fromScale(1,1)
+        background.BackgroundColor3 = Color3.fromRGB(3,17,13)
+        background.BorderSizePixel = 0
+        background.ZIndex = 1
+        background.Parent = statusSurface
+        local function displayText(name, text, position, size, fontSize, color)
+            local label = Instance.new("TextLabel")
+            label.Name = name
+            label.Text = text
+            label.Position = position
+            label.Size = size
+            label.BackgroundTransparency = 1
+            label.Font = Enum.Font.Code
+            label.TextSize = fontSize
+            label.TextColor3 = color
+            label.TextXAlignment = Enum.TextXAlignment.Left
+            label.TextYAlignment = Enum.TextYAlignment.Center
+            label.TextStrokeTransparency = 1
+            label.ZIndex = 3
+            label.Parent = statusSurface
+            return label
+        end
+        displayText("Device Header", "BIRTHDAY CD PLAYER", UDim2.fromScale(.045,.045),
+            UDim2.fromScale(.72,.18), 48, Color3.fromRGB(174,220,190))
+        displayText("Deck Identifier", "RELAY 03", UDim2.fromScale(.79,.06),
+            UDim2.fromScale(.19,.14), 20, Color3.fromRGB(91,140,112))
+        local status = player.StatusLabel
+        status.BackgroundTransparency = 1
+        status.Position = UDim2.fromScale(.045,.29)
+        status.Size = UDim2.fromScale(.63,.26)
+        status.TextScaled = false
+        status.TextSize = 52
+        status.TextXAlignment = Enum.TextXAlignment.Left
+        status.TextColor3 = Color3.fromRGB(103,247,177)
+        status.TextStrokeTransparency = 1
+        status.Text = "AWAITING DISCS"
+        player.ProgressLabel = displayText("Inserted Disc Count", "0 / 5 CDS",
+            UDim2.fromScale(.72,.29), UDim2.fromScale(.25,.26), 46, Color3.fromRGB(234,216,151))
+        player.ScreenSlots = {}
+        for index=1,5 do
+            local slot = Instance.new("Frame")
+            slot.Name = string.format("Disc Progress Segment %02d", index)
+            slot.Position = UDim2.fromScale(.045+(index-1)*.184,.62)
+            slot.Size = UDim2.fromScale(.168,.065)
+            slot.BackgroundColor3 = Color3.fromRGB(20,37,35)
+            slot.BorderSizePixel = 0
+            slot.ZIndex = 3
+            slot.Parent = statusSurface
+            player.ScreenSlots[index] = slot
+        end
+        local instruction = player.InstructionLabel
+        instruction.BackgroundTransparency = 1
+        instruction.Position = UDim2.fromScale(.045,.77)
+        instruction.Size = UDim2.fromScale(.92,.16)
+        instruction.TextScaled = false
+        instruction.TextSize = 40
+        instruction.TextXAlignment = Enum.TextXAlignment.Left
+        instruction.TextColor3 = Color3.fromRGB(161,198,166)
+        instruction.TextStrokeTransparency = 1
+        local glow = Instance.new("SurfaceLight")
+        glow.Name = "CD Player Screen Glow"
+        glow.Face = Enum.NormalId.Back
+        glow.Angle = 110
+        glow.Range = 9
+        glow.Brightness = .45
+        glow.Color = Color3.fromRGB(125,231,179)
+        glow.Shadows = false
+        glow.Parent = screen
+    end
+    for index, slot in ipairs(player.Slots) do
+        local slotCF = playerCF*CFrame.new((index-3)*.9,3.5,1.0)
+]]}}},
+{path=[[ServerScriptService.Level 3 Systems.Level 3 Objective Controller]],className=[[ModuleScript]],baselineSHA256=[[5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8]],editorSHA256=[[5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8]],candidateSHA256=[[4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38]],baselineBytes=72453,candidateBytes=74217,patches={{before=[[local RunService = game:GetService("RunService")
+
+local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
+
+type AnyTable = {[any]: any}
+]],after=[[local RunService = game:GetService("RunService")
+
+local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local MallManagerController = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
+local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
+
+type AnyTable = {[any]: any}
+]]},{before=[[end
+
+local function updateFinalHallChase(session: AnyTable)
+	if not session.ExitUnlocked or session.FinalHallChaseTriggered
+		or session.State:GetAttribute("Level3_RoomSongPhase") ~= "DONE" then
+		return
+	end
+]],after=[[end
+
+local function updateFinalHallChase(session: AnyTable)
+	if not session.ExitUnlocked
+		or session.State:GetAttribute("Level3_RoomSongPhase") ~= "DONE" then
+		return
+	end
+]]},{before=[[	local crossedCount = 0
+	for _, player in ipairs(Players:GetPlayers()) do
+		if validPlayer(player, session) then
+			local character, _, root = livingCharacter(player)
+			if character and root then
+				eligibleCount += 1
+				if session.FinalHallCrossed[player] ~= character then
+					local offset = Vector3.new(
+						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
+					local along = offset:Dot(horizontalForward)
+					local lateral = (offset - horizontalForward * along).Magnitude
+					-- The first living survivor must pass strictly beyond 50% of this hall.
+					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
+					local entryProgress = hall.Length * (hall.HalfwayProgress
+						or Configuration.Layout.FinalHallHalfwayProgress or .50)
+					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
+					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
+					if along > entryProgress and along <= hall.Length + 2.5
+						and insideHallWidth and insideHallHeight then
+						session.FinalHallCrossed[player] = character
+					end
+				end
+				if session.FinalHallCrossed[player] == character then crossedCount += 1 end
+]],after=[[	local crossedCount = 0
+	for _, player in ipairs(Players:GetPlayers()) do
+		if validPlayer(player, session) then
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			-- A live life still owns a barrier slot while its position is unavailable.
+			if character and character.Parent and humanoid and humanoid.Health > 0 then
+				eligibleCount += 1
+				if session.FinalHallCrossed[player] ~= character then
+					character:SetAttribute("Level3_FinalHallCrossedGeneration", nil)
+				end
+				if root and root:IsA("BasePart") and session.FinalHallCrossed[player] ~= character then
+					local offset = Vector3.new(
+						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
+					local along = offset:Dot(horizontalForward)
+					local lateral = (offset - horizontalForward * along).Magnitude
+					-- Every living survivor must pass strictly beyond 50% of this hall.
+					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
+					local entryProgress = hall.Length * .50
+					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
+					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
+					if along > entryProgress and along <= hall.Length + 2.5
+						and insideHallWidth and insideHallHeight then
+						session.FinalHallCrossed[player] = character
+						character:SetAttribute("Level3_FinalHallCrossedGeneration", session.Generation)
+					end
+				end
+				if session.FinalHallCrossed[player] == character then crossedCount += 1 end
+]]},{before=[[	session.Manifest.World:SetAttribute("Level3_FinalHallCrossedCount", crossedCount)
+	workspace:SetAttribute("Level3FinalHallEligibleCount", eligibleCount)
+	workspace:SetAttribute("Level3FinalHallCrossedCount", crossedCount)
+	if eligibleCount == 0 or crossedCount == 0 then return end
+
+	session.FinalHallChaseTriggered = true
+	session.State:SetAttribute("Level3_FinalHallChaseTriggered", true)
+	session.State:SetAttribute("Level3_FinalHallChaseActive", true)
+]],after=[[	session.Manifest.World:SetAttribute("Level3_FinalHallCrossedCount", crossedCount)
+	workspace:SetAttribute("Level3FinalHallEligibleCount", eligibleCount)
+	workspace:SetAttribute("Level3FinalHallCrossedCount", crossedCount)
+	if session.FinalHallChaseTriggered or eligibleCount == 0 or crossedCount ~= eligibleCount then return end
+
+	-- Attribute callbacks may be deferred. Stop the owned normal rig directly,
+	-- then issue a fresh hunt edge so the adapter cannot reuse a nearby Manager.
+	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	MallManagerController.Stop()
+	session.FinalHallChaseTriggered = true
+	session.State:SetAttribute("Level3_FinalHallChaseTriggered", true)
+	session.State:SetAttribute("Level3_FinalHallChaseActive", true)
+]]},{before=[[local function updateSharedState(session: AnyTable)
+	if not liveSession(session) then return end
+	local exitPosition = session.Manifest.ExitPosition
+	local insertedCount = math.max(0, session.InsertedCount or session.ModuleCount or 0)
+	local collectedCount = math.max(0, session.CollectedCount or 0)
+	local heldCount = math.max(0, session.HeldCount or 0)
+]],after=[[local function updateSharedState(session: AnyTable)
+	if not liveSession(session) then return end
+	local exitPosition = session.Manifest.ExitPosition
+	local playerPosition = session.DiscPlayer and session.DiscPlayer.Position
+	session.State:SetAttribute("Level3_CDPlayerPosition", playerPosition)
+	workspace:SetAttribute("Level3CDPlayerPosition", playerPosition)
+	local insertedCount = math.max(0, session.InsertedCount or session.ModuleCount or 0)
+	local collectedCount = math.max(0, session.CollectedCount or 0)
+	local heldCount = math.max(0, session.HeldCount or 0)
+]]},{before=[[		local humanoid = watchedHumanoid or character:FindFirstChildOfClass("Humanoid")
+		if not humanoid or humanoid.Health > 0 then return end
+		local root = character:FindFirstChild("HumanoidRootPart")
+		dropHeldCDs(session, player, if root and root:IsA("BasePart") then root.Position else nil)
+	end
+	local function bindCharacter(character: Model)
+]],after=[[		local humanoid = watchedHumanoid or character:FindFirstChildOfClass("Humanoid")
+		if not humanoid or humanoid.Health > 0 then return end
+		local root = character:FindFirstChild("HumanoidRootPart")
+		session.FinalHallCrossed[player] = nil
+		character:SetAttribute("Level3_FinalHallCrossedGeneration", nil)
+		dropHeldCDs(session, player, if root and root:IsA("BasePart") then root.Position else nil)
+	end
+	local function bindCharacter(character: Model)
+]]},{before=[[	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
+	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
+	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
+		discPlayer.StatusLabel.Text = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
+	end
+	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
+		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
+]],after=[[	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
+	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
+	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
+		discPlayer.StatusLabel.Text = if insertedCount >= session.ModuleGoal
+			then "SIGNAL RESTORED" else "AWAITING DISCS"
+	end
+	if discPlayer.ProgressLabel and discPlayer.ProgressLabel.Parent then
+		discPlayer.ProgressLabel.Text = string.format("%d / %d CDS", insertedCount, session.ModuleGoal)
+	end
+	for index, screenSlot in ipairs(discPlayer.ScreenSlots or {}) do
+		if screenSlot and screenSlot.Parent then
+			screenSlot.BackgroundColor3 = index <= insertedCount
+				and Color3.fromRGB(56, 255, 176) or Color3.fromRGB(20, 37, 35)
+		end
+	end
+	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
+		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
+]]},{before=[[		player:SetAttribute("Level3_HeldCDCount", 0)
+		player:SetAttribute("Level3_HeldCDMask", 0)
+		if player:GetAttribute("Level3_Room") ~= nil then player:SetAttribute("Level3_Room", "") end
+	end
+	session.InsertedCount = 0
+	session.ModuleCount = 0
+]],after=[[		player:SetAttribute("Level3_HeldCDCount", 0)
+		player:SetAttribute("Level3_HeldCDMask", 0)
+		if player:GetAttribute("Level3_Room") ~= nil then player:SetAttribute("Level3_Room", "") end
+		if player.Character then player.Character:SetAttribute("Level3_FinalHallCrossedGeneration", nil) end
+	end
+	session.InsertedCount = 0
+	session.ModuleCount = 0
+]]},{before=[[		session.State:SetAttribute("Level3_ExitGuideStartRoom", "")
+		session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
+		session.State:SetAttribute("Level3_ExitPosition", nil)
+		session.State:SetAttribute("Level3_Phase", "STOPPED")
+		session.State:SetAttribute("Level3_EntryRoomId", "")
+		session.State:SetAttribute("Level3_FirstCDRoomId", "")
+]],after=[[		session.State:SetAttribute("Level3_ExitGuideStartRoom", "")
+		session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
+		session.State:SetAttribute("Level3_ExitPosition", nil)
+		session.State:SetAttribute("Level3_CDPlayerPosition", nil)
+		session.State:SetAttribute("Level3_Phase", "STOPPED")
+		session.State:SetAttribute("Level3_EntryRoomId", "")
+		session.State:SetAttribute("Level3_FirstCDRoomId", "")
+]]},{before=[[			session.State:SetAttribute(string.format("Level3_CD%dPosition", index), nil)
+		end
+	end
+	workspace:SetAttribute("Level3Modules", 0)
+	workspace:SetAttribute("Level3ModuleGoal", 0)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+]],after=[[			session.State:SetAttribute(string.format("Level3_CD%dPosition", index), nil)
+		end
+	end
+	workspace:SetAttribute("Level3CDPlayerPosition", nil)
+	workspace:SetAttribute("Level3Modules", 0)
+	workspace:SetAttribute("Level3ModuleGoal", 0)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+]]}}},
+{path=[[ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller]],className=[[ModuleScript]],baselineSHA256=[[af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d]],editorSHA256=[[af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d]],candidateSHA256=[[c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490]],baselineBytes=188320,candidateBytes=189602,patches={{before=[[	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not character or not character.Parent or not humanoid or humanoid.Health <= 0
+		or not root or not root:IsA("BasePart")
+		or PlayerProtection.IsActive(player, character) then
+		return nil, nil, nil
+	end
+	return character, humanoid, root
+]],after=[[	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not character or not character.Parent or not humanoid or humanoid.Health <= 0
+		or not root or not root:IsA("BasePart")
+		or (not session.FinalHallChase and PlayerProtection.IsActive(player, character)) then
+		return nil, nil, nil
+	end
+	return character, humanoid, root
+]]},{before=[[		session.LastKnownCharacter = nil
+		session.LastSenseAt = -math.huge
+		session.SearchUntil = nil
+		-- Patrol only when no living round participant remains. Hiding players
+		-- remain chase targets and therefore never enter this fallback.
+		local sweepGoal = arrivalGoal(session)
+]],after=[[		session.LastKnownCharacter = nil
+		session.LastSenseAt = -math.huge
+		session.SearchUntil = nil
+		if session.FinalHallChase then
+			-- A finale without a runner holds position; never switch to random mall patrol.
+			session.PatrolGoal = nil
+			session.PatrolLegUntil = nil
+			clearGoal(session)
+			publishState(session, "WAITING")
+			publishTargetTelemetry(session, "NO_LIVING_PLAYER", -1, nil)
+			return false
+		end
+		-- Patrol only when no living round participant remains. Hiding players
+		-- remain chase targets and therefore never enter this fallback.
+		local sweepGoal = arrivalGoal(session)
+]]},{before=[[	if not player or not character or not liveSession(session)
+		or player.Character ~= character or not PlayerProtection.IsActive(player, character) then return end
+	session.Suspicion[player] = nil
+	local ownsTarget = session.Target == player
+	-- Retired-avatar memory still belongs to this player and must not restart pursuit.
+	local ownsMemory = session.LastKnownPlayer == player
+	local ownsAttack = session.Attacking and session.AttackPlayer == player and session.AttackCharacter == character
+	local ownsCheck = session.TableCheckTargetPlayer == player
+	if ownsAttack then
+		session.AttackToken += 1
+		session.Attacking = false
+		session.AttackPlayer = nil
+		session.AttackCharacter = nil
+	end
+	if ownsCheck then endTableCheck(session, false) end
+	if ownsTarget then
+]],after=[[	if not player or not character or not liveSession(session)
+		or player.Character ~= character or not PlayerProtection.IsActive(player, character) then return end
+	session.Suspicion[player] = nil
+	local ownsTarget = not session.FinalHallChase and session.Target == player
+	-- Retired-avatar memory still belongs to this player and must not restart pursuit.
+	local ownsMemory = not session.FinalHallChase and session.LastKnownPlayer == player
+	local ownsAttack = session.Attacking and session.AttackPlayer == player and session.AttackCharacter == character
+	local ownsCheck = not session.FinalHallChase and session.TableCheckTargetPlayer == player
+	if ownsAttack then
+		session.AttackToken += 1
+		session.Attacking = false
+		session.AttackPlayer = nil
+		session.AttackCharacter = nil
+		if session.FinalHallChase and validRound(session) then publishState(session, "CHASE") end
+	end
+	if ownsCheck then endTableCheck(session, false) end
+	if ownsTarget then
+]]},{before=[[end
+
+local function attackLineClear(session: any, player: Player, maximumRange: number): (boolean, Humanoid?)
+	if HidingController.IsHidden(player, session.Generation) then return false, nil end
+	-- A flushed player gets a head start, never an instant kill: the Manager can
+	-- chase and be right on top of them, but the attack itself is refused.
+]],after=[[end
+
+local function attackLineClear(session: any, player: Player, maximumRange: number): (boolean, Humanoid?)
+	-- Finale can face/chase protected runners, but immunity still fences every attack.
+	if PlayerProtection.IsActive(player, player.Character) then return false, nil end
+	if HidingController.IsHidden(player, session.Generation) then return false, nil end
+	-- A flushed player gets a head start, never an instant kill: the Manager can
+	-- chase and be right on top of them, but the attack itself is refused.
+]]},{before=[[	return track
+end
+
+local function eligibleSpawnPlayers(): {any}
+	local records = {}
+	if workspace:GetAttribute("SelectedLevel") ~= 3 or workspace:GetAttribute("RoundActive") ~= true then
+		return records
+	end
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if character and character.Parent and humanoid and humanoid.Health > 0
+				and root and root:IsA("BasePart")
+				and not PlayerProtection.IsActive(player, character) then
+				table.insert(records, {Player=player, Character=character, Root=root, Position=root.Position})
+			end
+		end
+]],after=[[	return track
+end
+
+local function eligibleSpawnPlayers(includeProtected: boolean?): {any}
+	local records = {}
+	if workspace:GetAttribute("SelectedLevel") ~= 3 or workspace:GetAttribute("RoundActive") ~= true then
+		return records
+	end
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Parent == Players and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if character and character.Parent and humanoid and humanoid.Health > 0
+				and root and root:IsA("BasePart")
+				and (includeProtected or not PlayerProtection.IsActive(player, character)) then
+				table.insert(records, {Player=player, Character=character, Root=root, Position=root.Position})
+			end
+		end
+]]},{before=[[end
+
+local function chooseFinalHallSpawn(manifest: any, generation: number): any?
+	local records = eligibleSpawnPlayers()
+	if #records == 0 then return nil end
+	local hall = manifest.FinalHall
+	if type(hall) ~= "table" or not hall.Model or not hall.Model.Parent then return nil end
+	local state = stateFolder()
+	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+	-- Start in the last ten percent of the actual final corridor and face its runners.
+	-- Preserve the normal minimum distance from EVERY eligible living participant.
+	-- If someone is already at the far end, bindManager retries until it is safe;
+	-- never relocate the reveal beside that player or back to the level entrance.
+	local position: Vector3? = nil
+	local overlap = spawnOverlapParams(records)
+	local preferred = math.clamp(tonumber(hall.SpawnProgress) or Tuning.FinalHallSpawnProgress, .90, .98)
+	for _, progress in ipairs({preferred, .95, .93, .90}) do
+		local candidate = hall.StartPoint:Lerp(hall.EndPoint, progress)
+		candidate = Vector3.new(candidate.X, hall.FloorY, candidate.Z)
+		local nearestDistance = math.huge
+		for _, record in ipairs(records) do
+			nearestDistance = math.min(nearestDistance, planarDistance(candidate, record.Position))
+		end
+		if nearestDistance >= Tuning.SpawnMinimumDistance and spawnVolumeFits(candidate, overlap) then
+			position = candidate
+			break
+		end
+	end
+	if not position then return nil end
+	-- Face a runner in the exit lane before the first authoritative chase tick.
+	table.sort(records, function(a, b)
+		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
+]],after=[[end
+
+local function chooseFinalHallSpawn(manifest: any, generation: number): any?
+	local records = eligibleSpawnPlayers(true)
+	if #records == 0 then return nil end
+	local hall = manifest.FinalHall
+	if type(hall) ~= "table" or not hall.Model or not hall.Model.Parent then return nil end
+	local state = stateFolder()
+	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+	-- The barrier is life-scoped. A revive or temporarily missing living root
+	-- during a deferred clearance retry must not inherit an earlier crossing.
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Parent == Players and player:GetAttribute("InRound") == true
+			and player:GetAttribute("Escaped") ~= true then
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			if character and character.Parent and humanoid and humanoid.Health > 0 then
+				local root = character:FindFirstChild("HumanoidRootPart")
+				if not root or not root:IsA("BasePart")
+					or character:GetAttribute("Level3_FinalHallCrossedGeneration") ~= generation then return nil end
+			end
+		end
+	end
+	-- Exactly the authored far endpoint; never move the reveal toward a player.
+	local position = Vector3.new(hall.EndPoint.X, hall.FloorY, hall.EndPoint.Z)
+	if not spawnVolumeFits(position, spawnOverlapParams(records)) then return nil end
+	-- Face a runner in the exit lane before the first authoritative chase tick.
+	table.sort(records, function(a, b)
+		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
+]]},{before=[[	local groundOffset = pivot.Position.Y - (boundingCFrame.Position.Y - boundingSize.Y * .5)
+	local rootPosition = spawnPosition + Vector3.new(0, groundOffset, 0)
+	local target = Vector3.new(facePosition.X, rootPosition.Y, facePosition.Z)
+	model:PivotTo(CFrame.lookAt(rootPosition, target))
+	model.Parent = manifest.MallManagerRuntime
+	CollectionService:AddTag(model, "Level3HostileEntity")
+]],after=[[	local groundOffset = pivot.Position.Y - (boundingCFrame.Position.Y - boundingSize.Y * .5)
+	local rootPosition = spawnPosition + Vector3.new(0, groundOffset, 0)
+	local target = Vector3.new(facePosition.X, rootPosition.Y, facePosition.Z)
+	if (target - rootPosition).Magnitude <= .001 then
+		-- A runner may stand exactly at the fixed endpoint. Keep the authored
+		-- position and face back down the hall instead of constructing a zero look vector.
+		local hall = manifest.FinalHall
+		local forward = type(hall) == "table" and hall.Forward
+		local direction = forward and Vector3.new(-forward.X, 0, -forward.Z) or Vector3.new(0, 0, -1)
+		if direction.Magnitude <= .001 then direction = Vector3.new(0, 0, -1) end
+		target = rootPosition + direction.Unit
+	end
+	model:PivotTo(CFrame.lookAt(rootPosition, target))
+	model.Parent = manifest.MallManagerRuntime
+	CollectionService:AddTag(model, "Level3HostileEntity")
+]]},{before=[[		if workspace:GetAttribute("RoundActive") == true
+			and workspace:GetAttribute("SelectedLevel") == 3
+			and workspace:GetAttribute("Level3MallManagerHuntActive") == true then
+			session.ActivatedAt = os.clock() + Tuning.SpawnGraceSeconds
+			session.LastProgressAt = os.clock()
+			session.LastGenuineProgressAt = os.clock()
+			session.ProgressObjectiveKey = nil
+]],after=[[		if workspace:GetAttribute("RoundActive") == true
+			and workspace:GetAttribute("SelectedLevel") == 3
+			and workspace:GetAttribute("Level3MallManagerHuntActive") == true then
+			session.ActivatedAt = os.clock() + (session.FinalHallChase and 0 or Tuning.SpawnGraceSeconds)
+			session.LastProgressAt = os.clock()
+			session.LastGenuineProgressAt = os.clock()
+			session.ProgressObjectiveKey = nil
+]]}}},
+{path=[[StarterPlayer.StarterPlayerScripts.Level 3 Reader Client]],className=[[LocalScript]],baselineSHA256=[[0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b]],editorSHA256=[[0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b]],candidateSHA256=[[b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e]],baselineBytes=59104,candidateBytes=70098,patches={{before=[[signalLabel.TextTruncate = Enum.TextTruncate.AtEnd
+signalLabel.TextXAlignment = Enum.TextXAlignment.Left
+signalLabel.Parent = panel
+
+-- C_READER_TOGGLE_REMOVED_20260830 -- WHAT SHIPPED BROKEN.
+-- `ReaderToggle` was a permanently-visible 150x44 chip reading "CLOSE READER
+]],after=[[signalLabel.TextTruncate = Enum.TextTruncate.AtEnd
+signalLabel.TextXAlignment = Enum.TextXAlignment.Left
+signalLabel.Parent = panel
+
+-- A precise full-circle compass and a scene pin share the reader's existing
+-- visibility/input gates. They are presentation only, never insert controls.
+local playerCompassArrow = Instance.new("TextLabel")
+playerCompassArrow.Name = "CDPlayerCompassArrow"
+playerCompassArrow.BackgroundTransparency = 1
+playerCompassArrow.AnchorPoint = Vector2.new(.5, .5)
+playerCompassArrow.Position = UDim2.fromScale(.10, .5)
+playerCompassArrow.Size = UDim2.fromOffset(18, 18)
+UIStyle.readout(playerCompassArrow, {TextColor=ENERGON, TextSize=18})
+playerCompassArrow.Text = "▲"
+playerCompassArrow.Visible = false
+playerCompassArrow.Parent = track
+local playerCompassLabel = Instance.new("TextLabel")
+playerCompassLabel.Name = "CDPlayerBearing"
+playerCompassLabel.BackgroundTransparency = 1
+playerCompassLabel.Position = UDim2.fromScale(.22, 0)
+playerCompassLabel.Size = UDim2.fromScale(.75, 1)
+UIStyle.readout(playerCompassLabel, {TextColor=ENERGON, TextSize=12})
+playerCompassLabel.TextXAlignment = Enum.TextXAlignment.Left
+playerCompassLabel.TextTruncate = Enum.TextTruncate.AtEnd
+playerCompassLabel.Visible = false
+playerCompassLabel.Parent = track
+
+local playerGuide = Instance.new("Frame")
+playerGuide.Name = "CDPlayerGuide"
+playerGuide.AnchorPoint = Vector2.new(.5, 0)
+playerGuide.Size = UDim2.fromOffset(136, 50)
+playerGuide.BackgroundTransparency = 1
+playerGuide.Active = false
+playerGuide.Visible = false
+playerGuide.Parent = gui
+local guideArrow = Instance.new("TextLabel")
+guideArrow.Name = "DirectionArrow"
+guideArrow.AnchorPoint = Vector2.new(.5, .5)
+guideArrow.Position = UDim2.fromScale(.5, 0)
+guideArrow.Size = UDim2.fromOffset(22, 22)
+guideArrow.BackgroundTransparency = 1
+UIStyle.readout(guideArrow, {TextColor=ENERGON, TextSize=20})
+guideArrow.TextStrokeTransparency = .3
+guideArrow.Text = "◆"
+guideArrow.Parent = playerGuide
+local guideLabel = Instance.new("TextLabel")
+guideLabel.Name = "Label"
+guideLabel.Position = UDim2.fromOffset(0, 14)
+guideLabel.Size = UDim2.new(1, 0, 0, 32)
+guideLabel.BackgroundColor3 = PANEL
+guideLabel.BackgroundTransparency = .12
+guideLabel.BorderSizePixel = 0
+UIStyle.readout(guideLabel, {TextColor=ENERGON, TextSize=11})
+guideLabel.Text = "CD PLAYER"
+guideLabel.Parent = playerGuide
+local guideCorner = Instance.new("UICorner")
+guideCorner.CornerRadius = UDim.new(0, 5)
+guideCorner.Parent = guideLabel
+
+local guidePlayerMode = false
+local guideTarget: Vector3? = nil
+local guideRoot: BasePart? = nil
+local guideBearing, guideDistance = 0, 0
+local guideMinX, guideMinY, guideMaxX, guideMaxY = 0, 0, 1, 1
+local guideOffsetX, guideOffsetY = 0, 0
+
+-- C_READER_TOGGLE_REMOVED_20260830 -- WHAT SHIPPED BROKEN.
+-- `ReaderToggle` was a permanently-visible 150x44 chip reading "CLOSE READER
+]]},{before=[[		progressLabel.TextSize = narrow and 13 or 15
+		signalLabel.TextSize = narrow and 11 or 13
+	end
+
+	-- The toast carries two lines of authored copy in a box that was a fixed
+	-- 52px -- 20 for the title and 18 for a body that regularly needs two
+]],after=[[		progressLabel.TextSize = narrow and 13 or 15
+		signalLabel.TextSize = narrow and 11 or 13
+	end
+
+
+	-- Cache viewport/safe-area conversion here, not in the RenderStepped path.
+	guideOffsetX, guideOffsetY = UIDevice.LocalOffset(gui, 0, 0)
+	local guideWidth = math.clamp(layoutInfo.Safe.Width - 32, 100, 136)
+	playerGuide.Size = UDim2.fromOffset(guideWidth, 50)
+	guideMinX = layoutInfo.Safe.Left + guideWidth * .5 + 8
+	guideMaxX = layoutInfo.Safe.Right - guideWidth * .5 - 8
+	guideMinY = layoutInfo.Safe.Top + panelHeight + 24
+	guideMaxY = layoutInfo.Safe.Bottom - 90
+	if guideMaxY <= guideMinY then
+		guideMinY = layoutInfo.Safe.Top + 24
+		guideMaxY = math.max(guideMinY + 1, layoutInfo.Safe.Bottom - 56)
+	end
+	guideMaxX = math.max(guideMinX + 1, guideMaxX)
+	playerCompassArrow.Size = UDim2.fromOffset(compactLandscape and 10 or 18, compactLandscape and 10 or 18)
+	playerCompassArrow.TextSize = compactLandscape and 10 or 18
+	playerCompassLabel.TextSize = compactLandscape and 9 or (narrow and 10 or 12)
+	guideLabel.TextSize = narrow and 10 or 11
+
+	-- The toast carries two lines of authored copy in a box that was a fixed
+	-- 52px -- 20 for the title and 18 for a body that regularly needs two
+]]},{before=[[	return nil
+end
+
+local function generationMatches(payload: {[any]: any}): boolean
+	local payloadGeneration = payload.Generation
+	if type(payloadGeneration) ~= "number" then return true end
+]],after=[[	return nil
+end
+
+
+local cachedPlayerWorld: Model? = nil
+local cachedPlayerControl: BasePart? = nil
+local nextPlayerControlSearch = 0
+local function cdPlayerPosition(): Vector3?
+	local value = stateAttribute("Level3_CDPlayerPosition", "Level3CDPlayerPosition")
+	if typeof(value) == "Vector3" then return value :: Vector3 end
+	-- A bounded streamed-instance fallback for an older server. The replicated
+	-- exact control-panel position remains available when the model is absent.
+	local world = currentWorld()
+	if world ~= cachedPlayerWorld then
+		cachedPlayerWorld, cachedPlayerControl, nextPlayerControlSearch = world, nil, 0
+	end
+	if cachedPlayerControl and world and cachedPlayerControl:IsDescendantOf(world) then
+		return cachedPlayerControl.Position
+	end
+	if not world or os.clock() < nextPlayerControlSearch then return nil end
+	nextPlayerControlSearch = os.clock() + 1
+	local control = world:FindFirstChild("Disc Player Control Panel", true)
+	if control and control:IsA("BasePart")
+		and control:GetAttribute("Level3_DiscPlayerControlPanel") == true then
+		cachedPlayerControl = control
+		return control.Position
+	end
+	return nil
+end
+
+local function generationMatches(payload: {[any]: any}): boolean
+	local payloadGeneration = payload.Generation
+	if type(payloadGeneration) ~= "number" then return true end
+]]},{before=[[	-- and Visible move together, synchronously, in one statement.
+	UIDevice.SetInteractive(panel, false)
+	UIDevice.SetInteractive(restoreButton, false)
+	local hold = math.clamp(if type(duration) == "number" then duration else 2.4, 0.8, 6)
+	task.delay(hold, function()
+		if serial ~= toastSerial or not toast.Parent then return end
+]],after=[[	-- and Visible move together, synchronously, in one statement.
+	UIDevice.SetInteractive(panel, false)
+	UIDevice.SetInteractive(restoreButton, false)
+	playerGuide.Visible = false
+	local hold = math.clamp(if type(duration) == "number" then duration else 2.4, 0.8, 6)
+	task.delay(hold, function()
+		if serial ~= toastSerial or not toast.Parent then return end
+]]},{before=[[	return nearest, nearestDistance, sameRoom
+end
+
+local function pickableCDs(goal: number): {any}
+	local beacons = {}
+	for index = 1, goal do
+		local state = stateAttribute(string.format("Level3_CD%dState", index), nil)
+		local position = stateAttribute(string.format("Level3_CD%dPosition", index), nil)
+		if (state == "WORLD" or state == "DROPPED") and typeof(position) == "Vector3" then
+			local room = stateAttribute(string.format("Level3_CD%dRoom", index), nil)
+			table.insert(beacons, {
+				Index = index,
+				X = position.X,
+				Z = position.Z,
+				Room = if type(room) == "string" then room else "",
+			})
+		end
+	end
+	return beacons
+end
+-- L3_CD_READER_TARGET_END_20260921
+
+]],after=[[	return nearest, nearestDistance, sameRoom
+end
+
+local cdBeaconBuffer: {any} = {}
+local cdBeaconPool: {any} = {}
+local cdStateBuffer: {any} = {}
+local cdStateKeys: {string}, cdPositionKeys: {string}, cdRoomKeys: {string} = {}, {}, {}
+for index = 1, 12 do
+	cdBeaconPool[index] = {Index=index, X=0, Z=0, Room=""}
+	cdStateKeys[index] = string.format("Level3_CD%dState", index)
+	cdPositionKeys[index] = string.format("Level3_CD%dPosition", index)
+	cdRoomKeys[index] = string.format("Level3_CD%dRoom", index)
+end
+local function pickableCDs(goal: number): {any}
+	table.clear(cdBeaconBuffer)
+	for index = 1, goal do
+		local state = stateAttribute(cdStateKeys[index], nil)
+		cdStateBuffer[index] = state
+		local position = stateAttribute(cdPositionKeys[index], nil)
+		if (state == "WORLD" or state == "DROPPED") and typeof(position) == "Vector3" then
+			local room = stateAttribute(cdRoomKeys[index], nil)
+			local beacon = cdBeaconPool[index]
+			beacon.X, beacon.Z = position.X, position.Z
+			beacon.Room = if type(room) == "string" then room else ""
+			table.insert(cdBeaconBuffer, beacon)
+		end
+	end
+	return cdBeaconBuffer
+end
+-- L3_CD_READER_TARGET_END_20260921
+
+]]},{before=[[	a = a.Unit
+	b = b.Unit
+	return math.atan2(a.X * b.Z - a.Z * b.X, math.clamp(a:Dot(b), -1, 1))
+end
+
+local function updateReader(dt: number)
+]],after=[[	a = a.Unit
+	b = b.Unit
+	return math.atan2(a.X * b.Z - a.Z * b.X, math.clamp(a:Dot(b), -1, 1))
+end
+
+
+-- L3_CD_PLAYER_GUIDANCE_PURE_BEGIN
+local function readerTargetMode(states: {any}, goal: number, inserted: number, unlocked: boolean): string
+	if unlocked or inserted >= goal then return "EXIT" end
+	local insertedStates = 0
+	for index = 1, goal do
+		local state = states[index]
+		if state == "INSERTED" then insertedStates += 1
+		elseif state ~= "CARRIED" then return "SCAN" end
+	end
+	return if insertedStates == goal then "EXIT" else "PLAYER"
+end
+local function precisePlanarBearing(fx: number, fz: number, dx: number, dz: number): number
+	if fx*fx + fz*fz < .000001 or dx*dx + dz*dz < .000001 then return 0 end
+	return math.atan2(fx*dz - fz*dx, fx*dx + fz*dz)
+end
+local function precisePlanarHeading(fx: number, fz: number, rx: number, rz: number,
+	fallbackX: number, fallbackZ: number): (number, number)
+	if fx*fx + fz*fz >= .000001 then return fx, fz end
+	-- yAxis cross RightVector retains the camera's yaw when pitched straight
+	-- up/down; character body yaw may point somewhere else in first person.
+	if rx*rx + rz*rz >= .000001 then return rz, -rx end
+	return fallbackX, fallbackZ
+end
+local function projectGuidePoint(x: number, y: number, depth: number, bearing: number,
+	minX: number, minY: number, maxX: number, maxY: number): (number, number, number, boolean)
+	if depth > 0 and x >= minX and x <= maxX and y >= minY and y <= maxY then
+		return x, y, 0, true
+	end
+	local cx, cy = (minX+maxX)*.5, (minY+maxY)*.5
+	local dx, dy = x-cx, y-cy
+	-- Negative projection depth mirrors screen coordinates: use the full-circle
+	-- camera bearing instead, so a player behind never masquerades as ahead.
+	if depth <= 0 then dx, dy = math.sin(bearing), -math.cos(bearing) end
+	if math.abs(dx)+math.abs(dy) < .000001 then dx, dy = 0, -1 end
+	local sx = if math.abs(dx) > .000001 then (maxX-minX)*.5/math.abs(dx) else math.huge
+	local sy = if math.abs(dy) > .000001 then (maxY-minY)*.5/math.abs(dy) else math.huge
+	local scale = math.min(sx, sy)
+	return cx+dx*scale, cy+dy*scale, math.deg(math.atan2(dx, -dy)), false
+end
+-- L3_CD_PLAYER_GUIDANCE_PURE_END
+
+local function setPlayerGuide(enabled: boolean, target: Vector3?, root: BasePart?)
+	guidePlayerMode, guideTarget, guideRoot = enabled, target, root
+	needle.Visible, centerLine.Visible = not enabled, not enabled
+	playerCompassArrow.Visible = enabled and target ~= nil
+	playerCompassLabel.Visible = enabled and target ~= nil
+	if not enabled or not target or not root then playerGuide.Visible = false end
+end
+local function updatePlayerGuideGeometry()
+	local root, target = guideRoot, guideTarget
+	if not guidePlayerMode or not root or not root.Parent or not target
+		or not panel.Visible or not isActive() then
+		playerGuide.Visible = false
+		return
+	end
+	local camera = workspace.CurrentCamera
+	local forward = if camera then camera.CFrame.LookVector else root.CFrame.LookVector
+	local fx, fz = forward.X, forward.Z
+	if fx*fx + fz*fz < .000001 then
+		local right = if camera then camera.CFrame.RightVector else root.CFrame.RightVector
+		local fallback = root.CFrame.LookVector
+		fx, fz = precisePlanarHeading(fx, fz, right.X, right.Z, fallback.X, fallback.Z)
+	end
+	local position = root.Position
+	local dx, dy, dz = target.X-position.X, target.Y-position.Y, target.Z-position.Z
+	guideBearing = precisePlanarBearing(fx, fz, dx, dz)
+	guideDistance = math.sqrt(dx*dx + dy*dy + dz*dz)
+	playerCompassArrow.Rotation = math.deg(guideBearing)
+	if not camera then playerGuide.Visible = false; return end
+	local projected = camera:WorldToViewportPoint(target)
+	local x, y, rotation, onPoint = projectGuidePoint(projected.X, projected.Y, projected.Z,
+		guideBearing, guideMinX, guideMinY, guideMaxX, guideMaxY)
+	playerGuide.Position = UDim2.fromOffset(math.floor(x+guideOffsetX), math.floor(y+guideOffsetY))
+	guideArrow.Rotation = rotation
+	-- These two interned literals do not build strings/tables each frame.
+	guideArrow.Text = if onPoint then "◆" else "▲"
+	playerGuide.Visible = true
+end
+local function updatePlayerGuideReadout()
+	local degrees = math.floor(math.abs(math.deg(guideBearing))+.5)
+	playerCompassLabel.Text = if degrees <= 8 then "AHEAD"
+		elseif degrees >= 150 then string.format("BEHIND  %d°", degrees)
+		else string.format("%s  %d°", guideBearing < 0 and "LEFT" or "RIGHT", degrees)
+	local metres = guideDistance / 3.571
+	local distanceText = if metres < 10 then string.format("%.1fm", metres)
+		else string.format("%dm", math.floor(metres+.5))
+	signalLabel.Text = "CD PLAYER  " .. distanceText
+	guideLabel.Text = "CD PLAYER\n" .. distanceText
+end
+
+local function updateReader(dt: number)
+]]},{before=[[	UIDevice.SetInteractive(restoreButton,
+		touch and active and hidden and not toast.Visible)
+	if not active then
+		toastSerial += 1
+		toast.Visible = false
+		return
+]],after=[[	UIDevice.SetInteractive(restoreButton,
+		touch and active and hidden and not toast.Visible)
+	if not active then
+		setPlayerGuide(false, nil, nil)
+		toastSerial += 1
+		toast.Visible = false
+		return
+]]},{before=[[	local character = readerSubject().Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (root and root:IsA("BasePart")) then
+		signalLabel.Text = "SIGNAL // NO TRACE"
+		signalLabel.TextColor3 = MUTED
+		signalLabel.TextTransparency = 0
+		return
+	end
+
+	-- A remaining disc outranks the exit. Once every CD has been collected the
+	-- panel hands the needle straight back to the exit bearing it always had,
+	-- and the DISC RELAY row above keeps saying how many still owe the VCR.
+	local beacons = pickableCDs(goal)
+	local subjectRoom = readerSubject():GetAttribute("Level3_Room")
+	local cd, cdDistance, sameRoom = chooseCDTarget(beacons, root.Position.X, root.Position.Z,
+		if type(subjectRoom) == "string" then subjectRoom else "")
+	local exit = exitPosition()
+	if not cd and not exit then
+		title.Text = "> EXIT DOOR READER"
+]],after=[[	local character = readerSubject().Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (root and root:IsA("BasePart")) then
+		setPlayerGuide(false, nil, nil)
+		signalLabel.Text = "SIGNAL // NO TRACE"
+		signalLabel.TextColor3 = MUTED
+		signalLabel.TextTransparency = 0
+		return
+	end
+
+	-- Current states are authoritative: collected-ever progress does not fall
+	-- on a drop, and a missing streamed beacon is not proof that a CD is held.
+	local beacons = pickableCDs(goal)
+	local mode = readerTargetMode(cdStateBuffer, goal, progress,
+		stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true)
+	if mode == "PLAYER" then
+		title.Text = "> CD PLAYER"
+		progressLabel.Text = string.format("INSERT CDS  %d/%d", progress, goal)
+		local target = cdPlayerPosition()
+		setPlayerGuide(true, target, root)
+		signalLabel.TextColor3, signalLabel.TextTransparency = ENERGON, 0
+		panelStroke.Color = ENERGON
+		if target then
+			updatePlayerGuideGeometry()
+			updatePlayerGuideReadout()
+		else signalLabel.Text = "CD PLAYER // LOCATING" end
+		return
+	end
+	setPlayerGuide(false, nil, nil)
+	local subjectRoom = readerSubject():GetAttribute("Level3_Room")
+	local cd, cdDistance, sameRoom = chooseCDTarget(beacons, root.Position.X, root.Position.Z,
+		if type(subjectRoom) == "string" then subjectRoom else "")
+	if mode == "SCAN" and not cd then
+		title.Text = "> CD READER"
+		signalLabel.Text = "CD // LOCATING"
+		signalLabel.TextColor3, signalLabel.TextTransparency = MUTED, 0
+		needle.Position = UDim2.fromScale(.5, .5)
+		return
+	end
+	-- Inserted/unlocked authority can replicate before the individual CD states.
+	if mode == "EXIT" then cd = nil end
+	local exit = exitPosition()
+	if not cd and not exit then
+		title.Text = "> EXIT DOOR READER"
+]]},{before=[[end
+
+trackReaderConnection(RunService.RenderStepped:Connect(function(dt)
+	accumulated += dt
+	if accumulated < UPDATE_INTERVAL then return end
+	local elapsed = accumulated
+]],after=[[end
+
+trackReaderConnection(RunService.RenderStepped:Connect(function(dt)
+	if not readerAlive then return end
+	-- Smooth exact camera geometry every frame; target/state/text refresh remains
+	-- on the existing 10Hz tick. No tables, scans, subscriptions or formatting here.
+	updatePlayerGuideGeometry()
+	accumulated += dt
+	if accumulated < UPDATE_INTERVAL then return end
+	local elapsed = accumulated
+]]},{before=[[local function teardownReader()
+	if not readerAlive then return end
+	readerAlive = false
+	for _, connection in ipairs(readerConnections) do
+		if connection.Connected then connection:Disconnect() end
+	end
+]],after=[[local function teardownReader()
+	if not readerAlive then return end
+	readerAlive = false
+	playerGuide.Visible = false
+	guidePlayerMode, guideTarget, guideRoot = false, nil, nil
+	cachedPlayerWorld, cachedPlayerControl = nil, nil
+	for _, connection in ipairs(readerConnections) do
+		if connection.Connected then connection:Disconnect() end
+	end
+]]}}}}
+assert(#rows == 5, "Unexpected scope")
+local function hash(source)
+    local digest = E:ComputeBufferHash(buffer.fromstring(source), Enum.HashAlgorithm.Sha256)
+    local bytes = {}
+    for index=0,buffer.len(digest)-1 do bytes[index+1]=string.format("%02x",buffer.readu8(digest,index)) end
+    return table.concat(bytes)
+end
+local function at(path)
+    local object = game
+    for name in path:gmatch("[^.]+") do object=assert(object:FindFirstChild(name),"Missing path: "..path) end
+    return object
+end
+local targets, parents, expected, prepared = {}, {}, {}, {}
+for _,row in ipairs(rows) do
+    assert(row.className == "ModuleScript" or row.className == "LocalScript", "Unexpected class")
+    assert(row.baselineSHA256 == row.editorSHA256, "Unresolved captured editor conflict")
+    targets[row.path] = at(row.path)
+    parents[row.path] = targets[row.path].Parent
+    expected[row.path] = row.baselineSHA256
+end
+local function verifyAll()
+    assert(not R:IsRunning() and game.PlaceId == 131311258779917 and game.GameId == 10559217407,
+        "Context changed")
+    for _,row in ipairs(rows) do
+        local object = at(row.path)
+        assert(object == targets[row.path] and object.Parent == parents[row.path]
+            and object.ClassName == row.className, "Instance/class/parent changed: "..row.path)
+        assert(hash(object.Source) == expected[row.path]
+            and hash(SES:GetEditorSource(object)) == expected[row.path],
+            "Fresh Source/editor changed: "..row.path)
+    end
+end
+verifyAll() -- All five are checked before any candidate preparation or mutation.
+local prewrite = {}
+for _,row in ipairs(rows) do
+    local current = targets[row.path].Source
+    assert(#current == row.baselineBytes, "Baseline byte mismatch")
+    table.insert(prewrite,{path=row.path,className=targets[row.path].ClassName,
+        sourceSHA256=hash(current),editorSHA256=hash(SES:GetEditorSource(targets[row.path])),
+        bytes=#current,editorMatch=current==SES:GetEditorSource(targets[row.path])})
+    for _,patch in ipairs(row.patches) do
+        local first,last = current:find(patch.before,1,true)
+        assert(first and not current:find(patch.before,last+1,true),"Nonunique exact patch: "..row.path)
+        current = current:sub(1,first-1)..patch.after..current:sub(last+1)
+    end
+    assert(#current == row.candidateBytes and hash(current) == row.candidateSHA256,
+        "Prepared candidate mismatch: "..row.path)
+    local compiled,problem = loadstring(current,"="..row.path)
+    assert(compiled, "Candidate compile failed: "..row.path..": "..tostring(problem))
+    prepared[row.path] = current
+end
+verifyAll() -- Compile/preparation may yield; all baselines must still match.
+for _,row in ipairs(rows) do
+    local object = targets[row.path]
+    SES:UpdateSourceAsync(object,function(current)
+        -- The whole set is rechecked, including already-written candidate hashes.
+        verifyAll()
+        assert(hash(current) == expected[row.path],"Callback baseline changed: "..row.path)
+        return prepared[row.path]
+    end)
+    assert(object.Source == prepared[row.path] and SES:GetEditorSource(object) == prepared[row.path],
+        "Post-write Source/editor conflict: "..row.path)
+    expected[row.path] = row.candidateSHA256
+    verifyAll()
+end
+verifyAll()
+local receipt = {task="level3-finale-player-20261002",installedAtUTC=DateTime.now():ToIsoDate(),
+    placeId=game.PlaceId,universeId=game.GameId,sourceCount=#rows,sceneChanged=false,
+    nativeBeforeSHA256="bc32152e6fd668aab75108576c454ef84a3c914ec4e606f094e5599c5e34f378",
+    prewrite=prewrite,sources={}}
+for _,row in ipairs(rows) do
+    local object = targets[row.path]
+    assert(hash(object.Source)==row.candidateSHA256 and SES:GetEditorSource(object)==prepared[row.path],
+        "Final Source/editor mismatch: "..row.path)
+    table.insert(receipt.sources,{path=row.path,className=object.ClassName,
+        sourceSHA256=hash(object.Source),editorSHA256=hash(SES:GetEditorSource(object)),
+        candidateSHA256=row.candidateSHA256,bytes=#object.Source,editorMatch=true})
+end
+print("LEVEL3_FINALE_PLAYER_SCOPED_INSTALL_OK",H:JSONEncode(receipt))
+return receipt

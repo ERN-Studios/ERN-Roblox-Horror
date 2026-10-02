@@ -464,7 +464,6 @@ function Adapter.Apply(manifest)
             label.Size = size
             label.BackgroundTransparency = 1
             label.Font = Enum.Font.Code
-            label.FontFace = Font.new(label.FontFace.Family, Enum.FontWeight.Bold, Enum.FontStyle.Normal)
             label.TextSize = fontSize
             label.TextColor3 = color
             label.TextXAlignment = Enum.TextXAlignment.Left
@@ -484,7 +483,6 @@ function Adapter.Apply(manifest)
         status.Size = UDim2.fromScale(.63,.26)
         status.TextScaled = false
         status.TextSize = 52
-        status.FontFace = Font.new(status.FontFace.Family, Enum.FontWeight.Bold, Enum.FontStyle.Normal)
         status.TextXAlignment = Enum.TextXAlignment.Left
         status.TextColor3 = Color3.fromRGB(103,247,177)
         status.TextStrokeTransparency = 1
@@ -509,7 +507,6 @@ function Adapter.Apply(manifest)
         instruction.Size = UDim2.fromScale(.92,.16)
         instruction.TextScaled = false
         instruction.TextSize = 40
-        instruction.FontFace = Font.new(instruction.FontFace.Family, Enum.FontWeight.Bold, Enum.FontStyle.Normal)
         instruction.TextXAlignment = Enum.TextXAlignment.Left
         instruction.TextColor3 = Color3.fromRGB(161,198,166)
         instruction.TextStrokeTransparency = 1

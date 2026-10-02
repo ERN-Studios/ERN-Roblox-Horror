@@ -1,0 +1,14 @@
+--- Reader.v3
++++ Reader v4 screen-space pin
+@@ -1129,7 +1129,10 @@
+ 	guideDistance = math.sqrt(dx*dx + dy*dy + dz*dz)
+ 	playerCompassArrow.Rotation = math.deg(guideBearing)
+ 	if not camera or not guideProjectionFits then playerGuide.Visible = false; return end
+-	local projected = camera:WorldToViewportPoint(target)
++	-- UIDevice safe rectangles and GuiObject.AbsolutePosition share screen-GUI
++	-- coordinates. Viewport projection omits the topbar conversion (58px in the
++	-- measured desktop run); LocalOffset only removes this GUI's own origin.
++	local projected = camera:WorldToScreenPoint(target)
+ 	local x, y, rotation, onPoint = projectGuidePoint(projected.X, projected.Y, projected.Z,
+ 		guideBearing, guideMinX, guideMinY, guideMaxX, guideMaxY)
+ 	playerGuide.Position = UDim2.fromOffset(math.floor(x+guideOffsetX), math.floor(y+guideOffsetY))

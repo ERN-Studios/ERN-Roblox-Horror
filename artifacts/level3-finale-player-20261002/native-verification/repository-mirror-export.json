@@ -1,0 +1,59 @@
+{
+  "schema": "level3-finale-mirror-export-v1",
+  "exportedAtUTC": "2026-10-02T22:02:11.295921+00:00",
+  "method": "Purpose-built apply_patch, exact diff from verified saved native Source after normal and escalated in-place Python writes failed with EPERM",
+  "mirrors": [
+    {
+      "instancePath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "mirrorPath": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "sourceSHA256": "74e0238d0c20cd381e60baf5f8567c0882f84dcb0b29bb52deb51039edc87599",
+      "sourceBytes": 189956,
+      "changed": true,
+      "priorSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d"
+    },
+    {
+      "instancePath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "mirrorPath": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "sourceSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "sourceBytes": 74217,
+      "changed": true,
+      "priorSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8"
+    },
+    {
+      "instancePath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "class": "ModuleScript",
+      "mirrorPath": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "sourceSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "sourceBytes": 108625,
+      "changed": true,
+      "priorSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2"
+    },
+    {
+      "instancePath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "class": "ModuleScript",
+      "mirrorPath": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
+      "sourceSHA256": "6c16bd4ca1d6f32008c5f1f9acaeec3265908bd45531430beba9c456c53ca2ba",
+      "sourceBytes": 30263,
+      "changed": true,
+      "priorSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9"
+    },
+    {
+      "instancePath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "class": "LocalScript",
+      "mirrorPath": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "sourceSHA256": "fb853734db1bde20c2c0e61a69ccb37a01b5780816ad48c875337ecb1a30f2d6",
+      "sourceBytes": 71506,
+      "changed": true,
+      "priorSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b"
+    }
+  ],
+  "mirrorCount": 5,
+  "checkpoint": "/Users/zeanjuul4/Projects/RobloxStudioBackups/20261002-level3-finale-player/prior-mirrors",
+  "nativeAfterSHA256": "ef13ad402336e33e1f08253ca3cd94b8a12375a92da8c5d64e4e1abb5ace16fb",
+  "exactNativeSourceBytesVerified": true,
+  "studioWrites": false,
+  "gitWrites": false,
+  "publicationClaim": false
+}

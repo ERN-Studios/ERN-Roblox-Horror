@@ -1,0 +1,182 @@
+{
+  "createdUTC": "2026-10-02T21:21:39.922427+00:00",
+  "sources": [
+    {
+      "label": "AI",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "sha256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "bytes": 188320,
+      "ranges": [
+        [
+          98,
+          190
+        ],
+        [
+          1973,
+          2176
+        ],
+        [
+          2486,
+          2558
+        ],
+        [
+          2561,
+          2589
+        ],
+        [
+          2669,
+          2693
+        ],
+        [
+          3041,
+          3075
+        ],
+        [
+          3195,
+          3206
+        ],
+        [
+          3306,
+          3323
+        ],
+        [
+          3352,
+          3456
+        ],
+        [
+          3584,
+          3619
+        ],
+        [
+          3662,
+          3671
+        ],
+        [
+          3832,
+          3861
+        ],
+        [
+          3885,
+          3942
+        ]
+      ]
+    },
+    {
+      "label": "Objective",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "sha256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "bytes": 72453,
+      "ranges": [
+        [
+          97,
+          189
+        ],
+        [
+          1200,
+          1259
+        ],
+        [
+          1347,
+          1367
+        ],
+        [
+          1420,
+          1437
+        ],
+        [
+          1465,
+          1489
+        ],
+        [
+          1490,
+          1510
+        ],
+        [
+          1611,
+          1656
+        ]
+      ]
+    },
+    {
+      "label": "Reader",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/capture-baseline/StarterPlayer.StarterPlayerScripts.Level 3 Reader Client.luau",
+      "sha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "bytes": 59104,
+      "ranges": [
+        [
+          13,
+          38
+        ],
+        [
+          668,
+          765
+        ],
+        [
+          868,
+          1060
+        ],
+        [
+          1172,
+          1230
+        ]
+      ]
+    },
+    {
+      "label": "Config",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+      "sha256": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba",
+      "bytes": 19281,
+      "ranges": [
+        [
+          46,
+          51
+        ],
+        [
+          152,
+          230
+        ]
+      ]
+    },
+    {
+      "label": "Adapter",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+      "sha256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+      "bytes": 32558,
+      "ranges": [
+        [
+          276,
+          305
+        ]
+      ]
+    },
+    {
+      "label": "Music",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
+      "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "bytes": 20901,
+      "ranges": [
+        [
+          119,
+          165
+        ],
+        [
+          208,
+          225
+        ]
+      ]
+    },
+    {
+      "label": "WorldBuilder",
+      "path": "/Users/zeanjuul4/Projects/Roblox Horror REPO/ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "sha256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "bytes": 108609,
+      "ranges": [
+        [
+          2185,
+          2235
+        ]
+      ]
+    }
+  ],
+  "scope": "baseline read-only task files"
+}

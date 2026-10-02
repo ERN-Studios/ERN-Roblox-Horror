@@ -1,0 +1,18 @@
+{
+  "task": "level3-finale-player-reader-inset-bounds-20261002",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "changes": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "class": "LocalScript",
+      "new": false,
+      "baselineSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "editorSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "candidateSHA256": "fb853734db1bde20c2c0e61a69ccb37a01b5780816ad48c875337ecb1a30f2d6",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/reader/Reader.v4.candidate.luau",
+      "candidateBytes": 71506
+    }
+  ],
+  "rootRequirement": "Recheck current stopped Edit Source/editor b452... inside callback. Original five-source native comparison retains original 000056... Reader baseline and final v4 hash."
+}

@@ -3361,19 +3361,11 @@ local function chooseDenseGroup(records: {any}, random: Random): ({any}, any, Ve
 	return bestMembers, anchor, centroid
 end
 
-local function spawnOverlapParams(records: {any}, ignoreAllAvatars: boolean?): OverlapParams
+local function spawnOverlapParams(records: {any}): OverlapParams
 	local params = OverlapParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	local ignored = {}
-	if ignoreAllAvatars then
-		-- Match navigation's current-avatar exclusions: a retired round life
-		-- cannot veto the fixed reveal with a body the Manager already walks through.
-		for _, player in ipairs(Players:GetPlayers()) do
-			if player.Character then table.insert(ignored, player.Character) end
-		end
-	else
-		for _, record in ipairs(records) do table.insert(ignored, record.Character) end
-	end
+	for _, record in ipairs(records) do table.insert(ignored, record.Character) end
 	params.FilterDescendantsInstances = ignored
 	params.RespectCanCollide = true
 	params.MaxParts = 1
@@ -3427,7 +3419,7 @@ local function chooseFinalHallSpawn(manifest: any, generation: number): any?
 	end
 	-- Exactly the authored far endpoint; never move the reveal toward a player.
 	local position = Vector3.new(hall.EndPoint.X, hall.FloorY, hall.EndPoint.Z)
-	if not spawnVolumeFits(position, spawnOverlapParams(records, true)) then return nil end
+	if not spawnVolumeFits(position, spawnOverlapParams(records)) then return nil end
 	-- Face a runner in the exit lane before the first authoritative chase tick.
 	table.sort(records, function(a, b)
 		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)

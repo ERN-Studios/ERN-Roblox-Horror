@@ -1,0 +1,8 @@
+{
+  "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+  "className": "ModuleScript",
+  "baselineSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+  "candidateSHA256": "6c16bd4ca1d6f32008c5f1f9acaeec3265908bd45531430beba9c456c53ca2ba",
+  "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/device/Level 3 Worn Party Visual Adapter.candidate.luau",
+  "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/device/Level 3 Worn Party Visual Adapter.v2.candidate.luau"
+}

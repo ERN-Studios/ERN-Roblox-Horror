@@ -3361,19 +3361,11 @@ local function chooseDenseGroup(records: {any}, random: Random): ({any}, any, Ve
 	return bestMembers, anchor, centroid
 end
 
-local function spawnOverlapParams(records: {any}, ignoreAllAvatars: boolean?): OverlapParams
+local function spawnOverlapParams(records: {any}): OverlapParams
 	local params = OverlapParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	local ignored = {}
-	if ignoreAllAvatars then
-		-- Match navigation's current-avatar exclusions: a retired round life
-		-- cannot veto the fixed reveal with a body the Manager already walks through.
-		for _, player in ipairs(Players:GetPlayers()) do
-			if player.Character then table.insert(ignored, player.Character) end
-		end
-	else
-		for _, record in ipairs(records) do table.insert(ignored, record.Character) end
-	end
+	for _, record in ipairs(records) do table.insert(ignored, record.Character) end
 	params.FilterDescendantsInstances = ignored
 	params.RespectCanCollide = true
 	params.MaxParts = 1
@@ -3427,7 +3419,7 @@ local function chooseFinalHallSpawn(manifest: any, generation: number): any?
 	end
 	-- Exactly the authored far endpoint; never move the reveal toward a player.
 	local position = Vector3.new(hall.EndPoint.X, hall.FloorY, hall.EndPoint.Z)
-	if not spawnVolumeFits(position, spawnOverlapParams(records, true)) then return nil end
+	if not spawnVolumeFits(position, spawnOverlapParams(records)) then return nil end
 	-- Face a runner in the exit lane before the first authoritative chase tick.
 	table.sort(records, function(a, b)
 		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
@@ -3603,15 +3595,6 @@ local function cloneManager(manifest: any, spawnPosition: Vector3, facePosition:
 	local groundOffset = pivot.Position.Y - (boundingCFrame.Position.Y - boundingSize.Y * .5)
 	local rootPosition = spawnPosition + Vector3.new(0, groundOffset, 0)
 	local target = Vector3.new(facePosition.X, rootPosition.Y, facePosition.Z)
-	if (target - rootPosition).Magnitude <= .001 then
-		-- A runner may stand exactly at the fixed endpoint. Keep the authored
-		-- position and face back down the hall instead of constructing a zero look vector.
-		local hall = manifest.FinalHall
-		local forward = type(hall) == "table" and hall.Forward
-		local direction = forward and Vector3.new(-forward.X, 0, -forward.Z) or Vector3.new(0, 0, -1)
-		if direction.Magnitude <= .001 then direction = Vector3.new(0, 0, -1) end
-		target = rootPosition + direction.Unit
-	end
 	model:PivotTo(CFrame.lookAt(rootPosition, target))
 	model.Parent = manifest.MallManagerRuntime
 	CollectionService:AddTag(model, "Level3HostileEntity")

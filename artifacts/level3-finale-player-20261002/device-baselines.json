@@ -1,0 +1,20 @@
+{
+  "checkedAtUTC": "2026-10-02T21:20:32.980867+00:00",
+  "method": "fresh live Source/editor full-string hash matched exact local bytes",
+  "rows": [
+    {
+      "mirror": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "sourceSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "sourceEditorMatch": true,
+      "baselineFile": "tools/level3_finale_player_20261002/device/Level 3 World Builder.ModuleScript.lua.baseline.luau",
+      "bytes": 108609
+    },
+    {
+      "mirror": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
+      "sourceSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "sourceEditorMatch": true,
+      "baselineFile": "tools/level3_finale_player_20261002/device/Level 3 Worn Party Visual Adapter.ModuleScript.lua.baseline.luau",
+      "bytes": 24266
+    }
+  ]
+}

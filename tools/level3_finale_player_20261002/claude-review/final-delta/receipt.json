@@ -1,0 +1,119 @@
+{
+  "schema": "level3-promotion-claude-review-v1",
+  "scope": "Read-only explicitly supplied code/facts, tools disabled; no Studio access",
+  "commandArguments": [
+    "--print",
+    "--safe-mode",
+    "--no-chrome",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--model",
+    "opus",
+    "--effort",
+    "max",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a read-only Roblox Luau code-security and game-behavior reviewer. Use only supplied code and facts. You have no tools and cannot inspect or mutate live applications. Distinguish tested facts from inference. Give concise concrete findings within the requested word limit. Do not disclose private internal reasoning."
+  ],
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "startedAtUTC": "2026-10-02T21:34:52.707182+00:00",
+  "finishedAtUTC": "2026-10-02T21:41:31.549507+00:00",
+  "requestedModel": "opus",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "reportedAssistantModels": [
+    "claude-opus-5-5"
+  ],
+  "requestedEffort": "max",
+  "strictEmptyMcpConfig": true,
+  "reportedTools": [],
+  "inputPrompt": "tools/level3_finale_player_20261002/claude-review/final-delta-prompt.md",
+  "inputPromptSHA256": "c1fdcffff22b29596dbc66e1546382319f2cb22d6bf6f7d2824c93b2a40affe6",
+  "elapsedSeconds": 398.846,
+  "hardTimeoutSeconds": 900,
+  "exitCode": 0,
+  "spawnedChildPID": 59265,
+  "cleanupTarget": "Only directly spawned owned Claude CLI PID",
+  "childExitConfirmed": true,
+  "timedOut": false,
+  "status": "success",
+  "result": {
+    "subtype": "success",
+    "is_error": false,
+    "result": "**Verdict (excerpt scope only):** nothing in the supplied lines provably breaks the contract. Eight conditional or hardening items remain, and items 1\u20133 could silently suppress or mis-gate the finale if an unseen assumption is wrong. Check item 1 first. This is not a full-file approval.\n\n## Source findings\n\n1. **AI 3416, generation domain (blocker if wrong).** The spawn requires `Level3_FinalHallCrossedGeneration == generation`; Objective 168 writes `session.Generation`. The call site is not supplied. If the AI passes its own hunt or session counter, or anything the forced Stop then Start bumps, the Manager never spawns and nothing errors. Fix: both modules read one round-generation source; assert equality at finale Start.\n\n2. **AI 3400/3402/3416/3422, four deferral paths.** The supplied summary says \"blocked endpoint only\". The source also returns nil for no records, a missing hall, and any uncrossed or rootless living participant. 3416 is contract-consistent, but once `\u2026ChaseActive=true` is published, a respawned or rootless participant means indefinite, silent no-Manager retries. Fix: keep the behavior, publish a distinct telemetry reason per path, and confirm the .35 s retry covers all four.\n\n3. **Objective 150\u2013172, latch not cleared on death in the shown lines.** Clearing happens only when the Character instance changes (152). A same-Model revive keeps the table latch and the attribute, so the player counts without re-crossing; AI 3416 inherits this. Lines 175\u2013182 were not supplied and may cover it. If not, add before the `end` at 172:\n```lua\nelseif session.FinalHallCrossed[player] then\n\tsession.FinalHallCrossed[player] = nil\n\tif character then character:SetAttribute(\"Level3_FinalHallCrossedGeneration\", nil) end\n```\nThis is moot if every revive creates a new Character.\n\n4. **AI 3403\u20133405, `stateFolder()` and `Random.new` unused through 3431.** If unused below, delete them: they add a possible nil-index throw to the finale spawn. If `random` is used below 3431, that use is outside this review and must be checked against the no-random contract.\n\n5. **Objective 192, ordering (hardening).** State `Level3_MallManagerHuntActive=true` is set before the World/workspace finale flags (193\u2013198). AI 3854 reads workspace, so this is probably safe. A State listener that reads those flags under Immediate signals would start a normal hunt. Fix: move 192 after 198.\n\n6. **Reader 1084\u20131097, degraded PLAYER state.** With `enabled` and `target == nil`, the needle, centre line and arrow are all hidden (blank dial). With a target but `root` nil or unparented, the arrow stays visible and is never updated. Fix:\n```lua\nlocal live = enabled and target ~= nil and root ~= nil and root.Parent ~= nil\nneedle.Visible, centerLine.Visible = not live, not live\nplayerCompassArrow.Visible, playerCompassLabel.Visible = live, live\nif not live then playerGuide.Visible = false end\n```\nWhether the fallback is the needle or a \"locating\" label is a design call.\n\n7. **Reader 900 vs 1094, toast flash (conditional).** Line 900 hides the pin, but the next RenderStepped re-shows it unless `panel.Visible` is already false. If panel visibility is only recomputed in the 10 Hz `updateReader`, the pin reappears over the toast for up to 100 ms. Fix: test the toast flag directly at 1093.\n\n8. **Reader 1045, count precedes states.** `goal <= 0` (unreplicated) returns EXIT, and a saturated `inserted` overrides WORLD/DROPPED/unknown. Objective 394's `InsertedCount or ModuleCount` fallback makes this worth checking: if `ModuleCount` is a total, EXIT is premature. Fix:\n```lua\nif unlocked then return \"EXIT\" end\nif goal < 1 then return \"SCAN\" end\n```\nthen let the loop decide. The caller's guard is unseen.\n\n**Checked, no finding in the shown lines:**\n- Strict `>` 50% crossing test.\n- Protected players counted and targetable, attack immunity kept (139\u2013154, 2342\u20132357, 2498).\n- Finale with no target goes to WAITING without patrol.\n- Endpoint XZ/FloorY placement with no alternate, facing fallback, zero finale grace.\n- Bearing sign, vertical-camera heading and edge-pin rotation math.\n\nPin construction (non-interactive) and destruction are not in the excerpt.\n\n## Owner-reported mocked checks\n\nThe SHA256s, compiles, 80 assertions in 33 scenarios and 60 reader function checks are taken as reported; I did not run them. They do not settle item 1 (unless both real generation sources were exercised together), item 3 (same-Model revive), or items 6\u20137 (visibility sequencing across frames).\n\n## Unverified runtime\n\n| Case | Expect |\n|---|---|\n| 2\u20134 players; last one at 49.9% then 50.1% | No Manager, then one at EndPoint in CHASE on first tick |\n| Protected player crosses last or is nearest | Counted and chased; no damage |\n| Death and respawn (or in-place revive) after latch | Must re-cross |\n| Leaver, escapee, spectator in hall | Excluded |\n| Rootless character; prop or corpse on EndPoint | Deferred, no alternate placement, spawns when cleared |\n| Player standing on EndPoint | Spawns there; no fling |\n| Player beyond EndPoint+2.5 or outside width at DONE | Confirm unreachable, else finale blocks |\n| Second round, same server | Stale attributes ignored |\n| EntityPaused at trigger | Chase starts on unpause |\n| CD states: all CARRIED; mixed; one DROPPED with collected==goal; nil; all INSERTED | PLAYER; PLAYER; SCAN; SCAN; EXIT |\n| Pin in view, each edge, behind, camera vertical, fast pan | Correct edge and rotation; no one-frame lag |\n| Toast, hide, modal, hiding, spectate switch, teardown | Pin gone at once; no orphan |\n| Notched phone, both orientations; touch under pin | Inside safe area; input passes through |\n| CD player not streamed in | Attribute still gives position |",
+    "duration_ms": 397426,
+    "duration_api_ms": 397347,
+    "num_turns": 1,
+    "total_cost_usd": 0.8791199999999999,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 8754,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 40454,
+      "output_tokens_details": {
+        "thinking_tokens": 38270
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 8754,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 40454,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 8754,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 8754
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 40454,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 8754,
+        "webSearchRequests": 0,
+        "costUSD": 0.8791199999999999,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 38270,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": []
+  },
+  "eventTypeCounts": {
+    "system": 310,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1
+  },
+  "rawInternalStreamSaved": false
+}

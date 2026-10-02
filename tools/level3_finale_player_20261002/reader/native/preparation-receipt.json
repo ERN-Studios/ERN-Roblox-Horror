@@ -1,0 +1,18 @@
+{
+  "beforeNativePath": "/Users/zeanjuul4/Projects/RobloxStudioBackups/20261002-level3-finale-player/before/before.rbxl",
+  "beforeNativeBytes": 51826241,
+  "beforeNativeSHA256": "bc32152e6fd668aab75108576c454ef84a3c914ec4e606f094e5599c5e34f378",
+  "beforeSourceCount": 231,
+  "beforeServiceRoots": 52,
+  "beforeDescendants": 391959,
+  "sourceMaskedCanonicalRepeatEqual": true,
+  "sourceMaskedBeforeCanonicalSHA256": "ee09aeccf7a76fe2a9530b1ba434a5b26611fc5af562028d350b9650e6e0da23",
+  "helperCompile": "PASS",
+  "exportDriverCompile": "PASS",
+  "isolatedSyntheticFixtureChecks": "PASS read-only default; failed native verification/live catalog/payload stops before writes; exact five export preserves prior bytes; repeat receipt blocked",
+  "afterNativeVerified": false,
+  "all231LiveNativeEditorParityVerified": false,
+  "actualRepositorySourceWrites": false,
+  "StudioWrites": false,
+  "GitWrites": false
+}

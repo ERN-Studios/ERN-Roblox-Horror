@@ -1,0 +1,79 @@
+{
+  "task": "level3-finale-player-20261002",
+  "sourceCount": 5,
+  "status": "Expected final five Sources; actual final CAS receipt/export required for parity claim",
+  "originalPrewriteCaptureAtUTC": "2026-10-02T21:33:45Z",
+  "followupCaptureAtUTC": "2026-10-02T21:48:42Z",
+  "changes": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "className": "ModuleScript",
+      "baselineSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "editorSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "baselineBytes": 108609,
+      "candidateSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "candidateBytes": 108625,
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/install/ServerScriptService.Level 3 Systems.Level 3 World Builder.baseline.luau",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/device/Level 3 World Builder.candidate.luau",
+      "patchCount": 1,
+      "incrementalBaselineSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "changedInFollowup": false
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "className": "ModuleScript",
+      "baselineSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "editorSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "baselineBytes": 24266,
+      "candidateSHA256": "6c16bd4ca1d6f32008c5f1f9acaeec3265908bd45531430beba9c456c53ca2ba",
+      "candidateBytes": 30263,
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/install/ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter.baseline.luau",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/device/Level 3 Worn Party Visual Adapter.v2.candidate.luau",
+      "patchCount": 1,
+      "incrementalBaselineSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+      "changedInFollowup": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "className": "ModuleScript",
+      "baselineSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "baselineBytes": 72453,
+      "candidateSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "candidateBytes": 74217,
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/install/ServerScriptService.Level 3 Systems.Level 3 Objective Controller.baseline.luau",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Objective Controller.v2.candidate.luau",
+      "patchCount": 10,
+      "incrementalBaselineSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "changedInFollowup": false
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "className": "ModuleScript",
+      "baselineSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "baselineBytes": 188320,
+      "candidateSHA256": "74e0238d0c20cd381e60baf5f8567c0882f84dcb0b29bb52deb51039edc87599",
+      "candidateBytes": 189956,
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/install/ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller.baseline.luau",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Mall Manager AI Controller.v3.candidate.luau",
+      "patchCount": 8,
+      "incrementalBaselineSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "changedInFollowup": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "className": "LocalScript",
+      "baselineSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "baselineBytes": 59104,
+      "candidateSHA256": "fb853734db1bde20c2c0e61a69ccb37a01b5780816ad48c875337ecb1a30f2d6",
+      "candidateBytes": 71506,
+      "baselineFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/install/StarterPlayer.StarterPlayerScripts.Level 3 Reader Client.baseline.luau",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/reader/Reader.v4.candidate.luau",
+      "patchCount": 10,
+      "incrementalBaselineSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "changedInFollowup": true
+    }
+  ]
+}

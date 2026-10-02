@@ -1,0 +1,54 @@
+{
+  "sources": [
+    {
+      "sourceBytes": 188320,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorMatch": true,
+      "sourceSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorBytes": 188320,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 72453,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorMatch": true,
+      "sourceSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorBytes": 72453,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 108609,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "editorSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "editorMatch": true,
+      "sourceSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "editorBytes": 108609,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 24266,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "editorSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "editorMatch": true,
+      "sourceSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "editorBytes": 24266,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 59104,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorMatch": true,
+      "sourceSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorBytes": 59104,
+      "class": "LocalScript"
+    }
+  ],
+  "capturedAtUTC": "2026-10-02T21:33:45Z",
+  "placeId": 131311258779917,
+  "isRunning": false,
+  "universeId": 10559217407,
+  "method": "Read-only live Source/editor hash comparison; frozen baseline files retain exact matching bytes"
+}

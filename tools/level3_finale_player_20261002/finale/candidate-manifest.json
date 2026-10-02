@@ -1,0 +1,22 @@
+{
+  "changes": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "candidateSHA256": "c112e13f8ce5771c4532001bfaa5670695a9ffadb97e4fa4cf73caba46876261",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Objective Controller.candidate.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "candidateSHA256": "f11a074d8428a084737c7e502984530264f23a59e504ba77e426f7a6f441d3ff",
+      "candidateFile": "/Users/zeanjuul4/Projects/Roblox Horror REPO/tools/level3_finale_player_20261002/finale/Level 3 Mall Manager AI Controller.candidate.luau"
+    }
+  ]
+}

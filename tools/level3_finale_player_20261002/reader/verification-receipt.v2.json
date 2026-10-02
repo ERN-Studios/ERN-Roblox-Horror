@@ -1,0 +1,39 @@
+{
+  "verifiedAtUTC": "2026-10-02T21:33:15Z",
+  "baselineSourceHash": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+  "baselineEditorHash": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+  "candidateHash": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+  "candidateBytes": 70098,
+  "compile": "PASS full LocalScript syntax via lune luau.compile",
+  "focusedChecks": 60,
+  "testPath": "tools/level3_finale_player_20261002/reader/verify_reader.luau",
+  "testCommand": "/tmp/level3-promotion-backup-lune-20261002/lune run tools/level3_finale_player_20261002/reader/verify_reader.luau",
+  "coverage": [
+    "current WORLD/DROPPED/CARRIED/INSERTED states and authoritative inserted/unlocked lag",
+    "pooled beacon record/buffer reuse across pickup/drop/missing position",
+    "camera bearing 0, +90, -90, 180 and rotated yaw",
+    "camera exactly vertical preserves yaw +90/-90 rather than body orientation",
+    "exact projected point and behind/offscreen safe clamps across desktop, portrait phone, landscape phone",
+    "existing selected-level/in-round/escaped/spectate/hiding/modal/dispatch visibility gates",
+    "bounded RenderStepped geometry without Luau table allocation, descendant scans, string formatting or connections",
+    "teardown clears target/root/world/control caches"
+  ],
+  "unverified": [
+    "native UI composition, legibility and touch safe-area positioning",
+    "live replicated-state ordering / target availability and streaming",
+    "live spectate parity",
+    "measured client performance"
+  ],
+  "writes": {
+    "Studio": false,
+    "Git": false,
+    "DataStore": false
+  },
+  "sourceContract": {
+    "state": "Level3_CDPlayerPosition",
+    "workspaceMirror": "Level3CDPlayerPosition",
+    "source": "actual post-Visual session.DiscPlayer.Position",
+    "cleanup": "both cleared by Objective"
+  },
+  "claudeStatus": "Baseline actual Opus5.5 review completed separately; final v2 delta review pending with spawn_path_audit."
+}

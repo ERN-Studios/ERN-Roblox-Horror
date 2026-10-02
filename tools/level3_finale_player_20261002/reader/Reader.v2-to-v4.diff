@@ -1,0 +1,58 @@
+--- Reader.v2
++++ Reader v4 screen-space pin
+@@ -207,6 +207,15 @@
+ local guideBearing, guideDistance = 0, 0
+ local guideMinX, guideMinY, guideMaxX, guideMaxY = 0, 0, 1, 1
+ local guideOffsetX, guideOffsetY = 0, 0
++local guideProjectionFits = false
++-- L3_GUIDE_MOVEMENT_BOUNDS_BEGIN
++local function guideMovementCeiling(maxY: number, minY: number, controlsTop: number,
++	thumbstickTop: number, jumpTop: number): (number, boolean)
++	-- The card extends 46px below its pin; keep an additional 8px gutter.
++	local ceiling = math.min(maxY, controlsTop-54, thumbstickTop-54, jumpTop-54)
++	return ceiling, ceiling >= minY
++end
++-- L3_GUIDE_MOVEMENT_BOUNDS_END
+ 
+ -- C_READER_TOGGLE_REMOVED_20260830 -- WHAT SHIPPED BROKEN.
+ -- `ReaderToggle` was a permanently-visible 150x44 chip reading "CLOSE READER
+@@ -446,11 +455,22 @@
+ 	guideMaxX = layoutInfo.Safe.Right - guideWidth * .5 - 8
+ 	guideMinY = layoutInfo.Safe.Top + panelHeight + 24
+ 	guideMaxY = layoutInfo.Safe.Bottom - 90
+-	if guideMaxY <= guideMinY then
+-		guideMinY = layoutInfo.Safe.Top + 24
+-		guideMaxY = math.max(guideMinY + 1, layoutInfo.Safe.Bottom - 56)
++	guideProjectionFits = guideMaxX >= guideMinX and guideMaxY >= guideMinY
++	if UIDevice.IsTouch() then
++		local zones = layoutInfo.Zones
++		local controlsTop = if zones and zones.Controls then zones.Controls.Top else math.huge
++		local thumbstickTop = if zones and zones.Thumbstick then zones.Thumbstick.Top else math.huge
++		local jumpTop = if zones and zones.Jump then zones.Jump.Top else math.huge
++		local ceiling, clearHeight = guideMovementCeiling(guideMaxY, guideMinY,
++			controlsTop, thumbstickTop, jumpTop)
++		guideMaxY = ceiling
++		guideProjectionFits = guideProjectionFits and clearHeight
+ 	end
+ 	guideMaxX = math.max(guideMinX + 1, guideMaxX)
++	guideMaxY = math.max(guideMinY + 1, guideMaxY)
++	-- Short screens retain the exact in-panel compass and distance when a scene
++	-- card cannot fit without covering movement controls or the reader itself.
++	if not guideProjectionFits then playerGuide.Visible = false end
+ 	playerCompassArrow.Size = UDim2.fromOffset(compactLandscape and 10 or 18, compactLandscape and 10 or 18)
+ 	playerCompassArrow.TextSize = compactLandscape and 10 or 18
+ 	playerCompassLabel.TextSize = compactLandscape and 9 or (narrow and 10 or 12)
+@@ -1108,8 +1128,11 @@
+ 	guideBearing = precisePlanarBearing(fx, fz, dx, dz)
+ 	guideDistance = math.sqrt(dx*dx + dy*dy + dz*dz)
+ 	playerCompassArrow.Rotation = math.deg(guideBearing)
+-	if not camera then playerGuide.Visible = false; return end
+-	local projected = camera:WorldToViewportPoint(target)
++	if not camera or not guideProjectionFits then playerGuide.Visible = false; return end
++	-- UIDevice safe rectangles and GuiObject.AbsolutePosition share screen-GUI
++	-- coordinates. Viewport projection omits the topbar conversion (58px in the
++	-- measured desktop run); LocalOffset only removes this GUI's own origin.
++	local projected = camera:WorldToScreenPoint(target)
+ 	local x, y, rotation, onPoint = projectGuidePoint(projected.X, projected.Y, projected.Z,
+ 		guideBearing, guideMinX, guideMinY, guideMaxX, guideMaxY)
+ 	playerGuide.Position = UDim2.fromOffset(math.floor(x+guideOffsetX), math.floor(y+guideOffsetY))

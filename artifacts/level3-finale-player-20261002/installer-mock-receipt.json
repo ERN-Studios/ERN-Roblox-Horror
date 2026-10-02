@@ -1,0 +1,20 @@
+{
+  "installerBytes": 55539,
+  "installerSHA256": "3a0a942798e0773c80e43f017f02083c7938d8611223b24c48738cb8d89aa1bb",
+  "kind": "Exact generated installer fake Studio CAS tests",
+  "passed": [
+    "valid five-source CAS prepares exact candidate hashes and writes all five",
+    "initialSource aborts before any install write",
+    "initialEditor aborts before any install write",
+    "initialClass aborts before any install write",
+    "wrongPlace aborts before any install write",
+    "running aborts before any install write",
+    "futureSource during callback aborts with no install writes",
+    "futureEditor during callback aborts with no install writes",
+    "instanceSwap during callback aborts with no install writes",
+    "callbackArgument during callback aborts with no install writes",
+    "concurrent edit to an already-written source aborts next write and preserves edit"
+  ],
+  "scenarios": 11,
+  "studioWriteClaim": false
+}

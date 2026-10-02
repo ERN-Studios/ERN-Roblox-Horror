@@ -1,0 +1,98 @@
+{
+  "universeId": 10559217407,
+  "sceneChanged": false,
+  "placeId": 131311258779917,
+  "installedAtUTC": "2026-10-02T21:35:48Z",
+  "sources": [
+    {
+      "bytes": 108625,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "editorSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "className": "ModuleScript",
+      "sourceSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "editorMatch": true,
+      "candidateSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587"
+    },
+    {
+      "bytes": 29939,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "editorSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+      "className": "ModuleScript",
+      "sourceSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+      "editorMatch": true,
+      "candidateSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568"
+    },
+    {
+      "bytes": 74217,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "className": "ModuleScript",
+      "sourceSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "editorMatch": true,
+      "candidateSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38"
+    },
+    {
+      "bytes": 189602,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "className": "ModuleScript",
+      "sourceSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "editorMatch": true,
+      "candidateSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490"
+    },
+    {
+      "bytes": 70098,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "className": "LocalScript",
+      "sourceSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "editorMatch": true,
+      "candidateSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e"
+    }
+  ],
+  "nativeBeforeSHA256": "bc32152e6fd668aab75108576c454ef84a3c914ec4e606f094e5599c5e34f378",
+  "sourceCount": 5,
+  "task": "level3-finale-player-20261002",
+  "prewrite": [
+    {
+      "bytes": 108609,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "editorSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "className": "ModuleScript",
+      "sourceSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "editorMatch": true
+    },
+    {
+      "bytes": 24266,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "editorSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "className": "ModuleScript",
+      "sourceSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "editorMatch": true
+    },
+    {
+      "bytes": 72453,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "className": "ModuleScript",
+      "sourceSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "editorMatch": true
+    },
+    {
+      "bytes": 188320,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "className": "ModuleScript",
+      "sourceSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "editorMatch": true
+    },
+    {
+      "bytes": 59104,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "className": "LocalScript",
+      "sourceSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorMatch": true
+    }
+  ]
+}

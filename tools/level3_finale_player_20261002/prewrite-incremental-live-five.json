@@ -1,0 +1,54 @@
+{
+  "sources": [
+    {
+      "sourceBytes": 189602,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "editorMatch": true,
+      "sourceSHA256": "c78189234adcd884ef21371d5f4dfe0ebf7d54efbfc45c290f37a0e3ffeae490",
+      "editorBytes": 189602,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 74217,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "editorMatch": true,
+      "sourceSHA256": "4271bc4890412385b496aebd626e33336e913fbf90bf9646d378ae62a31d8e38",
+      "editorBytes": 74217,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 108625,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "editorSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "editorMatch": true,
+      "sourceSHA256": "7ff641c16e65879663bf41771ecb547687c4634847ecacd64a87b76629ec6587",
+      "editorBytes": 108625,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 29939,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "editorSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+      "editorMatch": true,
+      "sourceSHA256": "c53420d67edb315810450d420f0e1de739281bd4d753d8a69929695a66b6a568",
+      "editorBytes": 29939,
+      "class": "ModuleScript"
+    },
+    {
+      "sourceBytes": 70098,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "editorMatch": true,
+      "sourceSHA256": "b452be2e27d398c282ce8c2d26f3add7e78074a71a5d9799f086591a93c1fb9e",
+      "editorBytes": 70098,
+      "class": "LocalScript"
+    }
+  ],
+  "capturedAtUTC": "2026-10-02T21:48:42Z",
+  "placeId": 131311258779917,
+  "isRunning": false,
+  "universeId": 10559217407,
+  "method": "Read-only fresh Edit Source/editor parity before three incremental changes; full matching bytes retained in original installed candidates"
+}
