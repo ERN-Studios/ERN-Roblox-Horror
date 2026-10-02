@@ -27,8 +27,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--finalize", action="store_true", help="Only after owner confirms RuntimeBake static-template fix")
     parser.add_argument("--output", type=Path, default=HERE / "install-catalog-r4-draft.json")
+    parser.add_argument("--baseline", type=Path, default=BASELINE)
+    parser.add_argument("--baseline-version", type=int, default=2461)
+    parser.add_argument("--baseline-kind", choices=("published-export", "live-studio"), default="published-export")
     args = parser.parse_args()
-    raw = BASELINE.read_bytes()
+    baseline = args.baseline.resolve()
+    raw = baseline.read_bytes()
     native = json.loads(raw)
     by_path = {row["path"]: row for row in native}
     assert len(by_path) == len(native), "Duplicate native Source paths"
@@ -63,7 +67,7 @@ def main():
             "key": spec["key"], "path": spec["path"], "class": spec["class"], "isNew": False,
             "expectedSourceSHA256": sha(before), "expectedEditorSourceSHA256": sha(before),
             "expectedBeforeBytes": len(before), "editorMatch": True,
-            "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+            "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
             "candidateFile": relative(spec["file"]), "sourceURLPath": "/source/" + spec["key"],
             "candidateBytes": len(candidate),
             "afterSHA256": None if pending else sha(candidate),
@@ -110,9 +114,10 @@ def main():
         "packageBlockers": ["Missing published PBR assetId: " + value for value in missing_material_assets],
         "scope": "Local catalog only; no Studio writes, no installation/Play/publication inferred",
         "placeId": 131311258779917, "universeId": 10559217407, "groupId": 1039373905,
-        "publishedBaselineVersion": 2461,
-        "publishedBaselineVerification": "Root verified publish; catalog does not query publication",
-        "baselineFile": relative(BASELINE), "baselineFileSHA256": sha(raw),
+        "baselineKind": args.baseline_kind,
+        "baselinePlaceVersion": args.baseline_version,
+        "baselineVerification": "Exact captured Studio Source/editor bytes; fresh session/native guards remain required",
+        "baselineFile": relative(baseline), "baselineFileSHA256": sha(raw),
         "missingBaselines": [], "newSources": 0, "sourceCount": 7,
         "sources": sources, "preservedSources": preserved,
         "payload": {"sourceName": "LobbyReimaginedBlenderSource20261001R4", "kitName": "LobbyReimaginedBlenderKit20261001R4",

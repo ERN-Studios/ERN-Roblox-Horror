@@ -1,0 +1,70 @@
+{
+  "schema": "lobby-r4-scoped-native-preservation-fixtures-v1",
+  "scope": "Local synthetic native fixtures only; no Studio calls",
+  "allSixCasesPassed": true,
+  "auditHelperSHA256": "e194f548523342566222185cc18078a81bea6d09a53685d2fcbc77d4601afdf8",
+  "cases": [
+    {
+      "scenario": "allowed",
+      "expectedVerified": true,
+      "observedVerified": true,
+      "exitCode": 0,
+      "errors": {},
+      "passed": true
+    },
+    {
+      "scenario": "geometry-change",
+      "expectedVerified": false,
+      "observedVerified": false,
+      "exitCode": 1,
+      "errors": [
+        "Existing native root differs beyond scoped Source/hash attributes: ServerStorage.PreservedAsset",
+        "Whole baseline forest differs beyond exact scoped normalization"
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "unrelated-source",
+      "expectedVerified": false,
+      "observedVerified": false,
+      "exitCode": 1,
+      "errors": [
+        "Unrelated Source changed: ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+        "Existing native root differs beyond scoped Source/hash attributes: ServerScriptService.LobbyReimaginedPreview",
+        "Whole baseline forest differs beyond exact scoped normalization"
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "source-pin",
+      "expectedVerified": false,
+      "observedVerified": false,
+      "exitCode": 1,
+      "errors": [
+        "After Source differs from final catalog: ServerScriptService.LobbyReimaginedPreview.Builder"
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "unrelated-attribute",
+      "expectedVerified": false,
+      "observedVerified": false,
+      "exitCode": 1,
+      "errors": [
+        "Existing native root differs beyond scoped Source/hash attributes: ServerScriptService.GameManager",
+        "Whole baseline forest differs beyond exact scoped normalization"
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "service-change",
+      "expectedVerified": false,
+      "observedVerified": false,
+      "exitCode": 1,
+      "errors": [
+        "Saved service/settings receipt changed: materialOverrides"
+      ],
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "candidateSHA256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+  "fragmentSHA256": "b8943f4b2793a60d5604eb69c41c0f9ab954d5553502537346985441e30b479f",
+  "passed": true,
+  "scope": "Offline exact extracted RoundUI lighting fragment with mocks; not actual Studio, gameplay, performance or multiplayer",
+  "tests": [
+    {
+      "name": "only owned Ready R4 spatial lobby receives neutral night pass",
+      "passed": true
+    },
+    {
+      "name": "original lobby immediately restores exact inherited density and warm defaults",
+      "passed": true
+    },
+    {
+      "name": "active maze is excluded even before position transfer",
+      "passed": true
+    },
+    {
+      "name": "unowned or unfinished visual revision cannot acquire lighting",
+      "passed": true
+    },
+    {
+      "name": "all existing controller guards release R4 without touching owned level values",
+      "passed": true
+    },
+    {
+      "name": "new external atmosphere density while inside becomes restoration baseline",
+      "passed": true
+    },
+    {
+      "name": "replacement atmosphere is restored without overwriting another controller",
+      "passed": true
+    },
+    {
+      "name": "missing character and distant previews release owned atmosphere",
+      "passed": true
+    },
+    {
+      "name": "Level4 snapshot of R4 zero cannot leak into original lobby after return",
+      "passed": true
+    },
+    {
+      "name": "Level4 intentional zero remains untouched until owner releases",
+      "passed": true
+    },
+    {
+      "name": "R4 nonparticipants retain night while another global Level2 or3 controller is selected",
+      "passed": true
+    },
+    {
+      "name": "outside R4 nonparticipant retains existing global Level2 or3 stand-down",
+      "passed": true
+    },
+    {
+      "name": "leaving R4 restores all nine globals despite another global Level2 or3 stand-down",
+      "passed": true
+    },
+    {
+      "name": "R4 exit preserves newer external values rather than restoring over them",
+      "passed": true
+    },
+    {
+      "name": "actual local participant ownership retains global snapshot until release",
+      "passed": true
+    },
+    {
+      "name": "returning inside R4 after Level4 ownership keeps the pre-R4 global baseline",
+      "passed": true
+    },
+    {
+      "name": "Float32 engine readback brightness restores on nonparticipant R4 exit",
+      "passed": true
+    }
+  ]
+}

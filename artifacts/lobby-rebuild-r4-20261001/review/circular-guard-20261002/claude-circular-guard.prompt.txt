@@ -1,0 +1,17 @@
+Review only the supplied minimal Luau patch. This is a Roblox Studio game. Current actual Play fails registration for all 24 revised lobby queue zones with Invalid circular detector. Builder sets Vector3.new(14.82,1,14.82) and Number attribute QueueRadius=7.41. Root fresh live read confirmed Size.X=Size.Z=14.819999694824219; radius minus half-min-size=1.5258789076710856e-7. Part/vector component is float32, Number attribute retains double. Candidate adds 1e-4 stud to the maximum-radius validation bound only, keeps finite/positive/shape/nonphysical and duplicate checks and actual admission radius unchanged. No controller permission or queue routing changes. Exact Bridge.Build fixture has completed 16 cases: before rejects float32 valid zones; after accepts all24; reject oversized7.5 and7.4102, zero/negative/NaN/Inf/string, undersized X/Z, wrong shape, physical zone, duplicate ID. Graph and typeof are mocked; native Vector3 float32 used, no claim fixture proves live gameplay. Root CAS has already applied this exact small patch to fresh Source/editor and will actual Play-test it. Please independently assess whether this is safe and sufficient as a numeric precision correction, flag material issues only, and give under 300 words with PASS or issue and scope limits. Do not invoke tools or suggest unrelated changes.
+
+Exact diff:
+--- QueueBridge.installed-v6
++++ QueueBridge.circular-tolerance.candidate
+@@ -25,9 +25,10 @@
+ 			assert(zone.Anchored and not zone.CanCollide and not zone.CanTouch and not zone.CanQuery,
+ 				"Queue detector must be anchored/nonphysical")
+ 			local radius = zone:GetAttribute("QueueRadius")
++			-- Part.Size is float32; Number attributes retain the double radius.
+ 			assert(zone:GetAttribute("QueueDetectorShape") == "Circle" and type(radius) == "number"
+ 				and radius == radius and radius > 0 and radius < math.huge
+-				and radius <= math.min(zone.Size.X, zone.Size.Z) * .5, "Invalid circular detector")
++				and radius <= math.min(zone.Size.X, zone.Size.Z) * .5 + 1e-4, "Invalid circular detector")
+ 			local bay = zone.Parent
+ 			local floor = bay and bay:FindFirstChild("ChamberFloor")
+ 			local diameter = bay and bay:GetAttribute("CircularBayDiameter")

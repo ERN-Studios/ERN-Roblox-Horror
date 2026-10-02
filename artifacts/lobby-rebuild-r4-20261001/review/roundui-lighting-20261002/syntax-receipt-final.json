@@ -1,0 +1,8 @@
+{
+  "bytes": 264690,
+  "candidateFile": "/private/tmp/lobby-r4-roundui-lighting-review/RoundUI.candidate.luau",
+  "passed": true,
+  "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+  "scope": "Exact local Luau syntax only; no Studio or Play",
+  "sha256": "f468fc9fb87b61641fd54a626922e9281e8bd9bc222e8a1d2ab27579cb5d906a"
+}

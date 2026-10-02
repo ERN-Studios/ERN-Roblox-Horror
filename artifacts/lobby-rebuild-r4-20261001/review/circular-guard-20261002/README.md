@@ -1,0 +1,9 @@
+The first actual R4 Play built successfully, then QueueBridge.Build rejected its 24 valid detector zones. Root fresh live reads confirmed Part.Size.X/Z = 14.819999694824219 and Number QueueRadius = 7.41; the strict half-size comparison failed by 1.5258789076710856e-7 stud.
+
+This exact fix adds 1e-4 stud only to the detector-size validation bound. Radius 7.41, physical-zone guards, metadata, queue admission, permissions, routing and lifecycle behavior stay unchanged. Root reports scoped fresh Source/editor CAS installation from 1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08 to ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674, plus matching owned InstalledSourceSHA256. This local record does not independently certify live installation, gameplay or publication.
+
+The completed 16-case Lune regression exercises exact Bridge.Build with native float32 Vector3 geometry and double attributes on a mocked Instance graph. It reproduces the old rejection and verifies all24 fixed zones, invalid sizes/radii/shapes/physics and duplicate IDs. The graph/typeof are mocks, and Lune NativePart.Size introduces different upward quantization; this test deliberately uses native Vector3 geometry rather than claiming NativePart.Size reproduces the live failure. Both exact modules compile.
+
+Actual Claude Opus5.5 with CLI max effort reviewed the exact diff successfully (no tools/MCP) and returned PASS. Its visible response and receipt are included. Follow-up inspection found no strict double-vs-Size check beyond this bound: bay diameter56 is safely greater than radius*2, and admission uses only radius squared. Actual new Play registration, interactions, multiplayer and publication remain root-owned separate verification.
+
+To rerun, pass this directory to test-circular-guard.luau with Lune; inputs are hash-pinned. The result file is written in the supplied directory.

@@ -1,0 +1,102 @@
+{
+  "schema": "lobby-r4-authoritative-catalog-reconciliation-v1",
+  "verified": true,
+  "createdAtUtc": "2026-10-02T06:32:06.896946+00:00",
+  "captureId": "684d0294-7864-4cf6-b455-09db2b536cea",
+  "nativeSHA256": "fa76d0b6fa23b850524a1204a4c90354ed389cb467b811036e05b58b5926ae8b",
+  "catalogSHA256": "e0e1873cd4947bc80904ea0256c3a529f4436639f350359fd353e412bf02af4b",
+  "finalSourceCount": 8,
+  "allSourceEditorEqual": true,
+  "originalBeforeHashesPreserved": true,
+  "gameManagerAppliedTaskSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+  "gameManagerAuthoritativeSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+  "concurrentDeveloperChangePreserved": true,
+  "actualClaudeExactRoundUIV6": {
+    "status": "success",
+    "verdict": "PASS FOR ACTUAL PLAY",
+    "actualModel": "claude-opus-5-5",
+    "effort": "max",
+    "elapsedSeconds": 346.574,
+    "exitCode": 0,
+    "tools": [],
+    "noPermissionDenials": true,
+    "response": "/private/tmp/lobby-r4-roundui-lighting-review/claude-lighting-v6.response.md",
+    "responseSHA256": "609e45767b0403bf497767ecfda669d3e571082476e2d301b1df74368dca93c3",
+    "receipt": "/private/tmp/lobby-r4-roundui-lighting-review/claude-lighting-v6.receipt.json",
+    "scope": "Actual read-only supplied exact v6 source/diff critique only; no executed/hashing/live/multiplayer claim by Claude; independent Codex exact full-source hashes/compile/mocks recorded separately",
+    "nonBlockingPlayNotes": [
+      "Actual local2/3/6 owner-release versus capturedsnapshotrestore ordering; verify actual6entry+return separately from fixtures",
+      "Identical values from another owner are indistinguishable; preserve activeownershipguards",
+      "Restorepre-R4snapshot notcanonicalwarm; initialentry state matters"
+    ]
+  },
+  "reviewArchiveFiles": [
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/RoundUI.v6.candidate.luau",
+      "bytes": 265744,
+      "sha256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/RoundUI.before-to-v6.diff",
+      "bytes": 7561,
+      "sha256": "0c2472d9a861cb03fee432ded1dce23f2f2af61e1fdb9acc46f53f8fe4865574"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/RoundUI.v4-to-v6.diff",
+      "bytes": 3292,
+      "sha256": "d25d50ad729d54b837f195b3905740a2634c5d17752f0b1ef70b481bec0bc106"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/candidate-manifest-v6.json",
+      "bytes": 818,
+      "sha256": "ba6e8785c1fda6a96265800406d9f1df9a963fa1b84f904cad9daa23740ba724"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/scope-receipt-v6.json",
+      "bytes": 4278,
+      "sha256": "e1ed49c5d740ad673a39cb9473ae260d30555f9cd467c236ba0c36e715f639ec"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/compile-v6.luau",
+      "bytes": 659,
+      "sha256": "679340ebeb846c34b5f0c86738230d3349c4fa394ce17ed2d6b5f651189e4efb"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/test-v6.luau",
+      "bytes": 13004,
+      "sha256": "3e029b81e7a2918567dfb263e99258c538c2bdd11776291a27da86aef3df4958"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/review-fragment-v6.luau",
+      "bytes": 8046,
+      "sha256": "b8943f4b2793a60d5604eb69c41c0f9ab954d5553502537346985441e30b479f"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/syntax-receipt-v6.json",
+      "bytes": 332,
+      "sha256": "8065461af23c5930e447201f558b471f758fbc5ce5b194d98fdcaff2349e330c"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/mock-lighting-receipt-v6.json",
+      "bytes": 2427,
+      "sha256": "fa0ae8811a590910dd86765f598530c506866cdd0fc21b7a6ef7484f549063fa"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/claude-lighting-v6.prompt.md",
+      "bytes": 12840,
+      "sha256": "cb863b0000a0032c173106eb113473ca5e5cde91a75a82e73ec4a1685879db99"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/claude-lighting-v6.response.md",
+      "bytes": 1480,
+      "sha256": "609e45767b0403bf497767ecfda669d3e571082476e2d301b1df74368dca93c3"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/claude-lighting-v6.receipt.json",
+      "bytes": 1211,
+      "sha256": "e8db74d4c2e2982a2e152e1a0d888791ae546e6fe1d4bcd8eabd1ddc66937612"
+    }
+  ],
+  "studioActions": false,
+  "commitsOrPublication": false
+}

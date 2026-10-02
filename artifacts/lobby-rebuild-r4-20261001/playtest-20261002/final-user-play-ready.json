@@ -1,0 +1,19 @@
+{
+  "mode": "Actual Studio Play",
+  "probe": {
+    "player": "ZenMeister02",
+    "cameraType": "Enum.CameraType.Custom",
+    "position": {
+      "1": 220,
+      "3": -845,
+      "2": 32.99802017211914
+    },
+    "clock": 0,
+    "health": 100,
+    "ready": true
+  },
+  "screenshot": "final-user-play-ready.jpg",
+  "sha256": "a407d083a7d80ee290c59361a23b3d8fd5524263008de93df53f892b0cce7314",
+  "note": "Normal Custom camera, no persistent test scripts or camera override; user can inspect beside original lobby.",
+  "mimeType": "image/jpeg"
+}

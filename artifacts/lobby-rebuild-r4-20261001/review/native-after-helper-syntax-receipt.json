@@ -1,0 +1,29 @@
+{
+  "scope": "Separate native-after helper syntax only; no Studio invocation or backup claim",
+  "syntaxPass": true,
+  "noncloudDestination": "/private/tmp/lobby-r4-native-after-20261001",
+  "sources": [
+    {
+      "file": "receiver_r4_after_chunked.py",
+      "sha256": "abb670c0ad50a80d8c021025846a3b07fb08aa55e94145831807d46e20f97014",
+      "pythonSyntaxPass": true
+    },
+    {
+      "file": "finalize_r4_after_checkpoint.py",
+      "sha256": "edde5d421e2afbcbe94743acd4ab699061ebab2dd3fedf7b7a115e95175927ce",
+      "pythonSyntaxPass": true
+    },
+    {
+      "file": "verify_r4_after_checkpoint_gate.py",
+      "sha256": "07f186cbc396ceced3fa51abbcf0e5b20f1875a2e0627eb5e7edef20712f9832",
+      "pythonSyntaxPass": true
+    },
+    {
+      "bytes": 11479,
+      "passed": true,
+      "scope": "Syntax only; no Studio execution",
+      "sha256": "6c84980921d8449639ccc26ed2070d40d871aac01c8b83634a03f0fe597a089b",
+      "file": "capture-r4-after-readonly-chunked.luau"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "lobby-r4-level6-return-anchor-peer-v1",
+  "beforeSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
+  "afterSHA256": "3cd36733907163daa409e4f76ffa1e4222f97d05588f9689c6fcd0fad4a4fa5b",
+  "bytes": 14596,
+  "sourceScopeExactInverseVerified": true,
+  "changedScope": [
+    "three RETURN-only constants",
+    "owned runtime Attachment helpers and existing RETURN migration",
+    "RETURN pre/post-stream parent validation",
+    "Level6 queue-ready nested prompt lookup"
+  ],
+  "preserved": [
+    "ENTER prompts and lobby/R4 entry path",
+    "DevAccess preview allowlist",
+    "12-stud exit-relative RETURN distance",
+    "streamReady nonce/auth checks and 22sec bounded wait",
+    "nextUse shared queue/controller locks and release",
+    "Runtime.Join/Leave and upright lobby landing",
+    "campaign/progression/public access",
+    "native Edit instances and generated geometry dimensions"
+  ],
+  "codexVerdict": "PASS for fresh root CAS and subsequent actual Play verification",
+  "claudeStatus": "completed",
+  "actualPlayTestedByAuthor": false,
+  "runtimeOnlyAttachment": true,
+  "noCatalogWrites": true,
+  "claudeModel": "claude-opus-5-5",
+  "claudeEffort": "max",
+  "claudeVerdict": "PASS",
+  "claudeElapsedSeconds": 317.578,
+  "claudeReceipt": "claude-return-anchor.receipt.json",
+  "nonblockingLimitations": [
+    "Offset activation sphere can show RETURN beyond unchanged 12stud server exit range on forward/right approach",
+    "Portrait aspect1:1 or narrower may hide exact requested right-offset anchor; normal landscape actualPlay still required"
+  ],
+  "nativeBeforeConsumersAudited": [
+    "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt uses name-based ProximityPrompt DescendantAdded watcher, no parent assumption",
+    "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime has no named RETURN lookup or Attachment rejection",
+    "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport has no named RETURN lookup or Attachment rejection",
+    "ServerScriptService.LobbyReimaginedPreview.QueueBridge has no named RETURN lookup or Attachment rejection"
+  ]
+}

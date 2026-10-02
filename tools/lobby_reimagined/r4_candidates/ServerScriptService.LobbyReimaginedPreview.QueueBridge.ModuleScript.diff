@@ -1,6 +1,18 @@
---- ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.before
-+++ ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.candidate
-@@ -41,7 +41,7 @@
+--- ServerScriptService.LobbyReimaginedPreview.QueueBridge.before
++++ ServerScriptService.LobbyReimaginedPreview.QueueBridge.candidate
+@@ -25,9 +25,10 @@
+ 			assert(zone.Anchored and not zone.CanCollide and not zone.CanTouch and not zone.CanQuery,
+ 				"Queue detector must be anchored/nonphysical")
+ 			local radius = zone:GetAttribute("QueueRadius")
++			-- Part.Size is float32; Number attributes retain the double radius.
+ 			assert(zone:GetAttribute("QueueDetectorShape") == "Circle" and type(radius) == "number"
+ 				and radius == radius and radius > 0 and radius < math.huge
+-				and radius <= math.min(zone.Size.X, zone.Size.Z) * .5, "Invalid circular detector")
++				and radius <= math.min(zone.Size.X, zone.Size.Z) * .5 + 1e-4, "Invalid circular detector")
+ 			local bay = zone.Parent
+ 			local floor = bay and bay:FindFirstChild("ChamberFloor")
+ 			local diameter = bay and bay:GetAttribute("CircularBayDiameter")
+@@ -41,7 +42,7 @@
  			assert(title and title:IsA("TextLabel") and sub and sub:IsA("TextLabel"), "Missing queue text labels")
  			found[id] = {index = id, displayIndex = displayIndex, level = level,
  				zone = zone, title = title, sub = sub, color = zone.Color, busy = false,
@@ -9,7 +21,7 @@
  		end
  	end
  	for id = FIRST_ID, FIRST_ID + COUNT - 1 do
-@@ -69,4 +69,329 @@
+@@ -69,4 +70,329 @@
  	return result
  end
  

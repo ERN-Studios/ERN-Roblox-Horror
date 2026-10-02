@@ -1,0 +1,8 @@
+{
+  "schema": "lobby-r4-static-atlas-fallback-candidate-v1",
+  "beforeSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+  "candidateSHA256": "bfb3227408249e65887b3db8793fad5b97b029b078c3d9966a4e4c3ee638779f",
+  "candidateBytes": 12179,
+  "status": "UNAPPLIED_OPTIONAL_FALLBACK_REQUIRES_ACTUAL_PUBLISHED_ATLAS_IMAGE_AND_ENGINE_ORIENTATION_CALIBRATION",
+  "limits": "No manifest/candidate/catalog repository edits. No Studio execution. Do not apply unless manifest.atlas.assetId pins a real published Image allowed for the experience and calibration verifies PNG orientation. The opaque API is documented to replicate and permit EditableImage destruction; this is a fallback, not a claim that API is unsupported."
+}

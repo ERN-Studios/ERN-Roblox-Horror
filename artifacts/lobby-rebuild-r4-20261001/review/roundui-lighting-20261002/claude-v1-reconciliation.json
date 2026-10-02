@@ -1,0 +1,29 @@
+{
+  "review": "claude-lighting.response.md",
+  "exactReviewedVersion": "v1",
+  "actualModel": "claude-opus-5-5",
+  "effort": "max",
+  "status": "Actual CLI success; not exactfinal review",
+  "findings": [
+    {
+      "finding": "Controller snapshots/takeover can lose pre-R4 density",
+      "resolution": "Concrete Level4 path fixedv2, tenmocktests/peerPASS; actualv2Claude pending"
+    },
+    {
+      "finding": "Assumes RoundUI re-runs through ResetOnSpawn ScreenGui",
+      "resolution": "Authoritative path is StarterPlayer.StarterPlayerScripts.RoundUI LocalScript, not GUI descendant; its created GUI ResetOnSpawn=false; official StarterPlayer documents these scripts run once perplayer and StarterCharacterScripts docs distinguish respawn lifetime",
+      "sources": [
+        "https://create.roblox.com/docs/reference/engine/classes/StarterPlayer",
+        "https://create.roblox.com/docs/reference/engine/classes/StarterCharacterScripts"
+      ]
+    },
+    {
+      "finding": "Arbitrary reparented Atmosphere could be abandoned",
+      "resolution": "No existing active controller reparent path observed; Level4 creates/destroys only its own replacement when none exists, Level2 keeps startup atmosphere; MazeGenerator can deliberately destroy atmosphere, which should not be recreated by this scoped lobby branch"
+    },
+    {
+      "finding": "Bounds anchor/hysteresis",
+      "resolution": "PreviewCenter is floororigin220,30,-760 andmesh collidersrelativeY0..39 verifiedsource; tube opaque endcapsZ\u00b1139 block normalwalking before\u00b1144 boundary; root reports actualwalkall6R4night passed"
+    }
+  ]
+}

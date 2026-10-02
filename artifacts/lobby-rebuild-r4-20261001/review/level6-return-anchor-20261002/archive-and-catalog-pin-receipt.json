@@ -1,0 +1,94 @@
+{
+  "schema": "lobby-r4-final-level6-return-source-live-pin-v1",
+  "archivedAtUtc": "2026-10-02T06:11:00.290564+00:00",
+  "path": "ServerScriptService.Level6PreviewAccess",
+  "class": "Script",
+  "original2470SourceSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
+  "previousAppliedTaskSourceSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
+  "finalSourceSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+  "bytes": 14689,
+  "catalogBeforeSHA256": "98cbcba643cf2ed2064e96cccc1b537fbff02554c39286293e4aaaf1ac16bebd",
+  "catalogAfterSHA256": "8a23307b4eea6f02ebd33973fe8b07de56e908281ab4398545bd8a0288a99cbe",
+  "rootReportedLiveSourceAndEditorEqual": true,
+  "runtimeOnlyAttachment": true,
+  "files": [
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.before.luau",
+      "bytes": 12632,
+      "sha256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.candidate.luau",
+      "bytes": 14689,
+      "sha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.candidate.luau.claude-reviewed-v1",
+      "bytes": 14596,
+      "sha256": "3cd36733907163daa409e4f76ffa1e4222f97d05588f9689c6fcd0fad4a4fa5b"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.diff",
+      "bytes": 4393,
+      "sha256": "ca73e661703f4bee55835852daff3f4dedc1975db0f0bc3acdad49db9df4937f"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.diff.claude-reviewed-v1",
+      "bytes": 4281,
+      "sha256": "197ffc8da988de2e5311451cab6db03f803ac6dfddff6500204ecccbb2eccf6d"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/Level6PreviewAccess.v1-to-v2.diff",
+      "bytes": 919,
+      "sha256": "4a0419864c4fa20e5545238e61310361bc43f1e4bad666f33aef6ddd2c663c6f"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/claude-return-anchor.prompt.txt",
+      "bytes": 20554,
+      "sha256": "25c6123b3d4413a5872b209f93d3541fe71f2f0f6a9be247b1429439a01f0ff2"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/claude-return-anchor.receipt.json",
+      "bytes": 1219,
+      "sha256": "a079221a4b9f2ba6685dc0b103e4ed0914d76250ccebc6ba3b8730f6cdcec658"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/claude-return-anchor.response.md",
+      "bytes": 3543,
+      "sha256": "188c4c9fc202605fdc1fa1272e82037f2a403543855672ab6e2df41950fbf817"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/return-anchor-regression.json",
+      "bytes": 3006,
+      "sha256": "f1db70b4dc7f28bb762f2f4a0748c3c2158ebeacf5ab6f9d1386cacbdf8cb1d0"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/return-anchor-regression.json.claude-reviewed-v1",
+      "bytes": 2667,
+      "sha256": "56acd654c139532ca31839670726270affe65b092173740d9df91a5fc965637e"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/return-anchor-scope-peer.json",
+      "bytes": 2293,
+      "sha256": "be2c50cbe435aea694b0820f4874322a646a4d471982519c0bcc14bd3448b0fd"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/return-anchor-scope-peer.json.claude-reviewed-v1",
+      "bytes": 2128,
+      "sha256": "89958c52f1c26ccecce5a5675fcc9ad97d62a201784a7d5c7570542317657751"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/test-return-anchor.luau",
+      "bytes": 13112,
+      "sha256": "aa118f5a8426aabf40b647429040f97423ea90d2a729f1ec1a3ddec4739bc178"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/test-return-anchor.luau.claude-reviewed-v1",
+      "bytes": 11433,
+      "sha256": "a0431eb3d826fc438c0c0e65fbefd64f82fd26fd2e3886efc1588e1971d02e53"
+    }
+  ],
+  "finalActualPlayAndNativeAfter": "Pending root final test and fresh capture",
+  "studioActions": false,
+  "ownedSourceHashAttributeExpected": false
+}

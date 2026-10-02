@@ -1,0 +1,67 @@
+{
+  "schema": "studio-native-backup-summary/1",
+  "phase": "lobby-r4-native-after-20261001",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "observedPlaceVersion": 2470,
+  "studioVersion": "0.741.19.7411056",
+  "capturedAt": "2026-10-02T06:23:40Z",
+  "method": "SerializationService.SerializeInstancesAsync(all place-service children); native properties and cross-references retained.",
+  "nativeFile": "all-service-children.rbxm",
+  "nativeFileBytes": 77061432,
+  "nativeFileSha256": "fa76d0b6fa23b850524a1204a4c90354ed389cb467b811036e05b58b5926ae8b",
+  "nativeParts": 103,
+  "nativeBytes": 77061432,
+  "rootCount": 189,
+  "expectedDescendants": 389540,
+  "scriptCount": 213,
+  "sourceAndEditorConflicts": 0,
+  "skippedRoots": 0,
+  "assetRoots": [
+    {
+      "path": "ReplicatedStorage.Level 3 Remotes",
+      "class": "Folder",
+      "descendants": 3
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Assets",
+      "class": "Folder",
+      "descendants": 7
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems",
+      "class": "Folder",
+      "descendants": 11
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems",
+      "class": "Folder",
+      "descendants": 14
+    },
+    {
+      "path": "ServerStorage.Level3Assets",
+      "class": "Folder",
+      "descendants": 2416
+    },
+    {
+      "path": "ServerStorage.Level6BlenderSource",
+      "class": "Folder",
+      "descendants": 130
+    }
+  ],
+  "workspaceProperties": {
+    "Gravity": {
+      "value": 196.1999969482422,
+      "type": "number"
+    },
+    "FallenPartsDestroyHeight": {
+      "value": -500,
+      "type": "number"
+    },
+    "StreamingEnabled": {
+      "value": true,
+      "type": "boolean"
+    }
+  },
+  "scriptsJsonSha256": "b7805932ebeb3ba1b9c5615a98553575358f1d61cf71ac204e9875d9ff6bfed5"
+}

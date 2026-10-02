@@ -1,0 +1,40 @@
+{
+  "schema": "lobby-r4-concurrent-source-compatibility-review-v1",
+  "reviewer": "/root/lobby_r4_blender_audit",
+  "status": "PASS",
+  "scope": "Read-only exact source compatibility and syntax, not a multiplayer or live execution claim by reviewer",
+  "authoritativeGameManagerSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+  "appliedR4GameManagerSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+  "preservedR4Fragments": [
+    {
+      "name": "launchStation",
+      "bytes": 3448,
+      "sha256": "032412601b28563b64a949d331aa38598004e92cc2a5f7708cea4c6ca73e21c9"
+    },
+    {
+      "name": "reset/config/runStation/R4registration",
+      "bytes": 17251,
+      "sha256": "b44b82dddc689a83e0b8b3392a29f01a9def4d72ee8b99dbc4bb3ece79b6639c"
+    }
+  ],
+  "fullSyntaxPASS": [
+    "GameManager",
+    "Level1BlenderPreviewAccess",
+    "BlenderRoomRenderer",
+    "Level1BlenderPreviewButton",
+    "MazeGenerator",
+    "PushDoors"
+  ],
+  "findings": [
+    "R4 launch/reset/config/runStation/registration fragments byte-identical to task951",
+    "Normal R4 queue101 remains unmarked regular Level1; preview renderer gated and dev transport revalidated",
+    "MazeGenerator new skin/Rooms/hide/props guarded by local blender initialized only when Level1BlenderPreviewActive is true",
+    "PushDoors remains inside existing CinemaDoors/model, without R4 queue/pad hooks"
+  ],
+  "actualPlayRootReport": {
+    "originalLevel1Queue101": "READY/InRoundtrue/WorldGeneratedtrue/Health100; actual L hold returned original lobby/InRoundfalse",
+    "originalLevel3Queue109": "READY/InRoundtrue/WorldGeneratedtrue/Health100"
+  },
+  "allConcurrentBytesPreserved": true,
+  "studioActions": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "lobby-r4-atlas-live-diagnosis-v1",
+  "status": "ORIGINAL_OPAQUE_PIPELINE_RETAINED_NO_URI_OR_ROW_FIX",
+  "runtimeBakeSHA256Unchanged": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+  "atlasPixelSHA256Unchanged": "95292c1e2c397c0e492763f719a616c36f9c0fe80c3c4c566e91e9ff250f6917",
+  "actualMeshUVTransform": "(rawU,1-rawV)",
+  "actualImageRowTransform": "reverse1024rows",
+  "offlineCurrentPairOpaqueCentroids": 53160,
+  "offlineCurrentPairTransparentCentroids": 0,
+  "offlineAtlasChunkCount": 48,
+  "offlineCoordinateAssumption": "UV V=0 at image top; live image visibility separately verified by root",
+  "rootReportedActualPlayObservations": [
+    {
+      "probe": "Original baked replicated Opaque atlas on unlit ImageLabel",
+      "IsLoaded": true,
+      "render": "Palette visibly present, including magenta backdrop through transparent unused top rows, after delayed load"
+    },
+    {
+      "probe": "Client newly baked solid-black Opaque image on unlit ImageLabel",
+      "IsLoaded": true,
+      "render": "Solid black visible"
+    },
+    {
+      "probe": "Unflipped replicated Opaque diagnostic image",
+      "IsLoaded": false,
+      "render": "Magenta/blank at observation time; cannot use this as UV calibration evidence"
+    }
+  ],
+  "rootDecision": "Stop Play to discard temporary unflipped diagnostics; retain original image/UV pipeline, apply scoped client lobby lighting, start new Play and wait for the original image IsLoaded before judging material colors.",
+  "withdrawnCandidateSHA256": "242448dd646ba9f056ca4060ef9df7698156bed1a1510030d18ae0733bcc4f35",
+  "unappliedStaticFallbackSHA256": "bfb3227408249e65887b3db8793fad5b97b029b078c3d9966a4e4c3ee638779f",
+  "thisAgentStudioExecuted": false,
+  "thisAgentBlenderReadOnly": true,
+  "liveBlenderIsDirtyObserved": false,
+  "sourceDocumentation": "https://devforum.roblox.com/t/full-release-introducing-createdatamodelcontent-convert-editable-mesh-and-image-data-into-static-content/4541898",
+  "sourceDocumentationClaim": "Roblox documents that static CreateDataModelContentAsync image content replicates with MeshPart.TextureContent and can outlive destruction of its source EditableImage.",
+  "freshWholeLobbyVisualVerification": "pending root fresh Play after scoped lighting change",
+  "publicationClaimed": false
+}

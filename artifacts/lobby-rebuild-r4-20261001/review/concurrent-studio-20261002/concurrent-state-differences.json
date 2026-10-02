@@ -1,0 +1,113 @@
+{
+  "schema": "lobby-r4-concurrent-authoritative-state-differences-v1",
+  "observedAtUTC": "2026-10-02T06:26:40.296726+00:00",
+  "beforeCaptureId": "a3e80689-a0f2-4f26-8d6e-f5b8b4adaaf7",
+  "afterCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea",
+  "afterNativeSHA256": "fa76d0b6fa23b850524a1204a4c90354ed389cb467b811036e05b58b5926ae8b",
+  "addedSourceRows": [
+    {
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "class": "ModuleScript",
+      "bytes": 9763,
+      "sourceSHA256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "editorMatch": true,
+      "editorSHA256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/ServerScriptService.Level 1 Systems.BlenderRoomRenderer.ModuleScript.observed.luau"
+    },
+    {
+      "path": "ServerScriptService.Level1BlenderPreviewAccess",
+      "class": "Script",
+      "bytes": 6132,
+      "sourceSHA256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "editorMatch": true,
+      "editorSHA256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/ServerScriptService.Level1BlenderPreviewAccess.Script.observed.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level1BlenderPreviewButton",
+      "class": "LocalScript",
+      "bytes": 3100,
+      "sourceSHA256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "editorMatch": true,
+      "editorSHA256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/StarterPlayer.StarterPlayerScripts.Level1BlenderPreviewButton.LocalScript.observed.luau"
+    }
+  ],
+  "changedUnrelatedSourceRows": [
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "class": "Script",
+      "bytes": 85506,
+      "sourceSHA256": "764b9f503e2f412089f274d778dccff3b9bdac4110848e68b40e5d81d24d8265",
+      "editorMatch": true,
+      "editorSHA256": "764b9f503e2f412089f274d778dccff3b9bdac4110848e68b40e5d81d24d8265",
+      "beforeSourceSHA256": "e90cd8102f5183f5fa75447065d7de8ef1a14ee98e14e00c1ae25356d0cbb72e",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/ServerScriptService.Level 1 Systems.MazeGenerator.Script.observed.luau"
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "class": "Script",
+      "bytes": 7027,
+      "sourceSHA256": "aad1a72872be1b1ef5b34657a1947bd67413f0ebbd3d877f91315ca2992f5c1b",
+      "editorMatch": true,
+      "editorSHA256": "aad1a72872be1b1ef5b34657a1947bd67413f0ebbd3d877f91315ca2992f5c1b",
+      "beforeSourceSHA256": "1794ea0c31e8cfffe7066fbe936b8beeec902c4916176e6dd3d127906d92d425",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/Workspace.Level 4 Cinema Blender.Doors.PushDoors.Script.observed.luau"
+    }
+  ],
+  "scopedSourceWithConcurrentDelta": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "bytes": 169980,
+      "sourceSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "editorMatch": true,
+      "editorSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "taskCandidateSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/ServerScriptService.GameManager.Script.observed.luau"
+    }
+  ],
+  "addedNativeRoots": [
+    {
+      "path": "ServerScriptService.Level1BlenderPreviewAccess",
+      "index": 101,
+      "descendants": 0,
+      "service": "ServerScriptService",
+      "class": "Script",
+      "name": "Level1BlenderPreviewAccess"
+    },
+    {
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R4",
+      "index": 169,
+      "descendants": 195,
+      "service": "ServerStorage",
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001R4"
+    },
+    {
+      "path": "ServerStorage.Level1BlenderKit",
+      "index": 170,
+      "descendants": 1214,
+      "service": "ServerStorage",
+      "class": "Folder",
+      "name": "Level1BlenderKit"
+    }
+  ],
+  "existingRootDescendantCountChanges": [
+    {
+      "path": "ServerScriptService.Level 1 Systems",
+      "beforeDescendants": 5,
+      "afterDescendants": 6
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "beforeDescendants": 50,
+      "afterDescendants": 51
+    }
+  ],
+  "GameManagerTaskToCurrentDiffFile": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/GameManager.task-to-authoritative-after.diff",
+  "GameManagerDiffBytes": 6709,
+  "sourceEditorConflicts": [],
+  "scope": "Fresh authoritative after data preserved exactly. Source additions and overlapping task-Source changes require reconciliation; no rollback, historical restore, or all-unrelated-unchanged claim. Native properties within existing roots are audited separately.",
+  "studioActions": false
+}

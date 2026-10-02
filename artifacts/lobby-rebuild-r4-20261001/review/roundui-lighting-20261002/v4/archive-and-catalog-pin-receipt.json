@@ -1,0 +1,73 @@
+{
+  "schema": "lobby-r4-roundui-v4-live-pin-archive-v1",
+  "archivedAtUtc": "2026-10-02T06:01:02.926212+00:00",
+  "sourcePath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+  "class": "LocalScript",
+  "originalSourceSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+  "priorAppliedSourceSHA256": "f468fc9fb87b61641fd54a626922e9281e8bd9bc222e8a1d2ab27579cb5d906a",
+  "finalSourceSHA256": "afe552d5f3a058ad67f63a20e12ba0f26ebbf562a55c857324f5448dd0ed1662",
+  "bytes": 264690,
+  "catalogBeforeSHA256": "12402bbd3757142130612dc53d9a224b9e0c597e2a9db1e1f63c1eda0bc12a92",
+  "catalogAfterSHA256": "402bd368008805b1dbf9be77f511be4e5fa06ea1b8c826f9387bc2b2c3824a3a",
+  "rootReportedLiveSourceAndEditorEqual": true,
+  "finalActualNativeCapturePending": true,
+  "finalClaudeVerdict": "Pending exact v4 confirmation",
+  "files": [
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/RoundUI.before-to-v4.diff",
+      "bytes": 6487,
+      "sha256": "d6c544da35837bf07f84cc444b93b1dd336ca310595a5f8e2391047df47793b4"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/RoundUI.final-to-v4.diff",
+      "bytes": 686,
+      "sha256": "99a601347860e7d43c093fd3a6be8896758ffe2bd2b81684319cf9a4a8b908a5"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/RoundUI.v4.candidate.luau",
+      "bytes": 264690,
+      "sha256": "afe552d5f3a058ad67f63a20e12ba0f26ebbf562a55c857324f5448dd0ed1662"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/candidate-manifest-v4.json",
+      "bytes": 891,
+      "sha256": "d807fbcce24483d5122d9c81af64aa73e433dcf7402bc9045c57f007414259cd"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/claude-lighting-v4.prompt.md",
+      "bytes": 9139,
+      "sha256": "f1ee2c0a99219d2261e09c043989f5d39d6606556ef852345cb914c0d64cc48a"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/compile-v4.luau",
+      "bytes": 659,
+      "sha256": "64c2bbbb3355e76f95c4d91bb84b71ccbaadc1aa32d59467a01f33f09c9e696c"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/mock-lighting-receipt-v4.json",
+      "bytes": 1799,
+      "sha256": "0f2d12a756a7922b6cb7062232d37ee741b63b8186035bd2b35a13816ffa485c"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/review-fragment-v4.luau",
+      "bytes": 6992,
+      "sha256": "53c56c4a4af2abc0df1aca009345b757a6f26f15e44bece9f5981d7ba2fbb35d"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/scope-receipt-v4.json",
+      "bytes": 2924,
+      "sha256": "023b37630ec6c1d0ac901c9e9fea2aa9b75778e012268bdd034fd887df62ecf8"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/syntax-receipt-v4.json",
+      "bytes": 332,
+      "sha256": "fbc87e6398bd70876dcdaf84cbf7eff8edf1ddcd1996c3b1c00174f56e264978"
+    },
+    {
+      "file": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v4/test-v4.luau",
+      "bytes": 8492,
+      "sha256": "2408e5982c06864b129674a234dd03900f387e9c3e64d553fa69e243151a5fd2"
+    }
+  ],
+  "studioActions": false
+}

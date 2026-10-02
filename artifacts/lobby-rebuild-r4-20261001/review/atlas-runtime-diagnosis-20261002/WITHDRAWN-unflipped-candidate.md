@@ -1,0 +1,1 @@
+The unflipped-only RuntimeBake candidate was prematurely based on inspecting exported UVs without accounting for runtime mesh() inversion. Do not apply it. Runtime mesh() line82 uses (U,1-V); paired row reversal matches under a top-left UV convention. Four-combination audit v2 accounts for both; actual engine calibration is required.

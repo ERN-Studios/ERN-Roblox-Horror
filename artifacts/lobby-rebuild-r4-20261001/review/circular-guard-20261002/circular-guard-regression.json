@@ -1,0 +1,128 @@
+{
+  "actualNativeVector3": {
+    "difference": 1.5258789076710855e-7,
+    "halfSize": 7.409999847412109,
+    "radius": 7.41,
+    "sizeX": 14.819999694824219,
+    "sizeZ": 14.819999694824219
+  },
+  "afterSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+  "beforeSHA256": "1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08",
+  "completedTestCount": 16,
+  "limits": "Exact unmodified Bridge.Build code runs with native float32 Vector3 geometry and double radius attributes on an Instance graph fixture. Graph/typeof are mocks because Lune NativePart.Size introduces different upward quantization than actual engine Vector3. No live Play registration/group test claim.",
+  "passed": true,
+  "results": [
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:28: Invalid circular detector",
+      "expectedPass": false,
+      "name": "installed guard reproduces native float32 detector rejection",
+      "testPassed": true
+    },
+    {
+      "actualPass": true,
+      "expectedPass": true,
+      "name": "candidate registers all24 unchanged radius7.41 detector zones",
+      "testPassed": true
+    },
+    {
+      "actualPass": true,
+      "expectedPass": true,
+      "name": "valid strict-inside radius still accepted",
+      "testPassed": true
+    },
+    {
+      "actualPass": true,
+      "expectedPass": true,
+      "name": "half-size boundary rounding tolerated",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "materially oversized radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "radius beyond tolerance rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "zero radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "negative radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "NaN radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "infinite radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "non-number radius rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "undersized X detector rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "undersized Z detector rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:29: Invalid circular detector",
+      "expectedPass": false,
+      "name": "wrong detector shape rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:25: Queue detector must be anchored/nonphysical",
+      "expectedPass": false,
+      "name": "physical detector remains rejected",
+      "testPassed": true
+    },
+    {
+      "actualPass": false,
+      "error": "[string \"luau.load(...)\"]:20: Duplicate R3 queue id",
+      "expectedPass": false,
+      "name": "duplicate station ID remains rejected",
+      "testPassed": true
+    }
+  ],
+  "schema": "lobby-r4-circular-guard-regression-v1",
+  "studioExecuted": false,
+  "syntaxPassed": true
+}

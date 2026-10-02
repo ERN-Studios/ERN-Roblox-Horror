@@ -1,0 +1,102 @@
+{
+  "captureId": "684d0294-7864-4cf6-b455-09db2b536cea",
+  "catalogSHA256": "0c223815b584ef11b7209beee854634911b813613e14ebb43878eae32bc5a4d4",
+  "imageReferenceCount": 9,
+  "manifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "nativeSHA256": "fa76d0b6fa23b850524a1204a4c90354ed389cb467b811036e05b58b5926ae8b",
+  "schema": "lobby-r4-static-pbr-native-reference-verification-v1",
+  "scope": "Exact nine published URI references and three template properties in the actual final native checkpoint. This does not prove client permission, fetch status, rendering, gameplay or publication.",
+  "sourcePath": "ServerStorage.LobbyReimaginedBlenderSource20261001R4",
+  "studioActions": false,
+  "templateCount": 3,
+  "templates": [
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "75893473229833",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://75893473229833"
+        },
+        "normal": {
+          "assetId": "127271719715729",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://127271719715729"
+        },
+        "roughness": {
+          "assetId": "96772314871126",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://96772314871126"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "tunnel_concrete",
+      "owned": true
+    },
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "122629305677764",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://122629305677764"
+        },
+        "normal": {
+          "assetId": "124637763157232",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://124637763157232"
+        },
+        "roughness": {
+          "assetId": "102850469487873",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://102850469487873"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "asphalt_road",
+      "owned": true
+    },
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "103015335983029",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://103015335983029"
+        },
+        "normal": {
+          "assetId": "134697002832773",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://134697002832773"
+        },
+        "roughness": {
+          "assetId": "117887403540614",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://117887403540614"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "sidewalk_concrete",
+      "owned": true
+    }
+  ],
+  "verified": true
+}

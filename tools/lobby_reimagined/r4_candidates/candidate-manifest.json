@@ -7,10 +7,10 @@
     "beforeFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.before.luau",
     "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
     "candidateFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.candidate.luau",
-    "afterSHA256": "1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08",
-    "afterBytes": 20210,
+    "afterSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+    "afterBytes": 20289,
     "diffFile": "ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.diff",
-    "scope": "Candidate only; not installed or playtested"
+    "scope": "Exact numeric precision fix; root reported fresh live Source/editor CAS equality. Completed offline regression and Claude review recorded separately; actual Play/gameplay verification is separate."
   },
   {
     "path": "ServerScriptService.GameManager",
@@ -19,11 +19,13 @@
     "bytes": 163203,
     "beforeFile": "ServerScriptService.GameManager.Script.before.luau",
     "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
-    "candidateFile": "ServerScriptService.GameManager.Script.candidate.luau",
-    "afterSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
-    "afterBytes": 165258,
-    "diffFile": "ServerScriptService.GameManager.Script.diff",
-    "scope": "Candidate only; not installed or playtested"
+    "candidateFile": "ServerScriptService.GameManager.Script.authoritative-after.luau",
+    "afterSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+    "afterBytes": 169980,
+    "diffFile": "ServerScriptService.GameManager.Script.before-to-authoritative-after.diff",
+    "scope": "Captured authoritative Studio Source/editor parity. Concurrent Level1 delta is preserved separately from applied R4 source951; original before and applied task candidate/diff retained. No Studio write by this script.",
+    "appliedTaskSourceSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+    "appliedTaskCandidateFile": "ServerScriptService.GameManager.Script.candidate.luau"
   },
   {
     "path": "ServerScriptService.Level4V4PreviewAccess",
@@ -57,11 +59,13 @@
     "beforeSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
     "bytes": 10762,
     "beforeFile": "ServerScriptService.Level6PreviewAccess.Script.before.luau",
-    "baseline": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
+    "baseline": "artifacts/lobby-rebuild-r4-20261001/native-before/scripts.json",
     "candidateFile": "ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
-    "afterSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
-    "afterBytes": 12632,
+    "afterSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+    "afterBytes": 14689,
     "diffFile": "ServerScriptService.Level6PreviewAccess.Script.diff",
-    "scope": "Candidate only; not installed or playtested"
+    "scope": "Root reports fresh Edit Source/editor CAS equal to final candidate. Original2470 before preserved; actual final normal E return and fresh native-after parity passed. Runtime-only owned RETURN Attachment; no persistent instance addition.",
+    "previousAppliedTaskSourceSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
+    "originalBaselineRecord": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json"
   }
 ]

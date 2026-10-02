@@ -1,0 +1,13 @@
+{
+  "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+  "class": "LocalScript",
+  "originalBeforeSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+  "currentLiveExpectedSHA256": "f468fc9fb87b61641fd54a626922e9281e8bd9bc222e8a1d2ab27579cb5d906a",
+  "afterSHA256": "afe552d5f3a058ad67f63a20e12ba0f26ebbf562a55c857324f5448dd0ed1662",
+  "afterBytes": 264690,
+  "candidateFile": "/private/tmp/lobby-r4-roundui-lighting-review/RoundUI.v4.candidate.luau",
+  "incrementalDiffFile": "/private/tmp/lobby-r4-roundui-lighting-review/RoundUI.final-to-v4.diff",
+  "scope": "Move only owned spatial R4 branch before global Level2/3 stand-down and after actual local Level4/6 guards; preserve all active participant and outside-R4 paths",
+  "priorByteExactlyRecoveredByInverseMove": true,
+  "UIStrings": "Both existing STEP OFF THE PAD TO CANCEL copies untouched from f468"
+}

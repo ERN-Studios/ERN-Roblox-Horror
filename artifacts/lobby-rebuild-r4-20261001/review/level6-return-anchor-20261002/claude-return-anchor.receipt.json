@@ -1,0 +1,37 @@
+{
+  "scope": "Read-only critique of supplied lobby observations/images; no tools or live application access",
+  "startedAtUTC": "2026-10-02T05:56:48.719873+00:00",
+  "finishedAtUTC": "2026-10-02T06:02:06.296526+00:00",
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "requestedModel": "claude-opus-5-5",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "requestedEffort": "max",
+  "highestEffortSupportedByInspectedCLIHelp": "max",
+  "reportedTools": [],
+  "strictEmptyMcpConfig": true,
+  "safeMode": true,
+  "inputPrompt": "/private/tmp/lobby-r4-return-anchor-review-20261002/claude-return-anchor.prompt.txt",
+  "inputPromptSHA256": "25c6123b3d4413a5872b209f93d3541fe71f2f0f6a9be247b1429439a01f0ff2",
+  "inputImages": [],
+  "elapsedSeconds": 317.578,
+  "hardTimeoutSeconds": 360,
+  "exitCode": 0,
+  "status": "success",
+  "isError": false,
+  "permissionDenials": [],
+  "resultSubtype": "success",
+  "eventCount": 253,
+  "systemEventSubtypeCounts": {
+    "init": 1,
+    "thinking_tokens": 248
+  },
+  "numericSystemStatusCounts": {},
+  "rawInternalStreamSaved": false,
+  "visibleAssistantTextBlocks": 1,
+  "eventTypeCounts": {
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1,
+    "system": 249
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "lobby-r4-publication-receipt-v1",
+  "recordedAtUtc": "2026-10-02T06:47:04.983157+00:00",
+  "studioId": "0552e451-d540-464e-ad9f-478d00392f88",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "creatorGroupId": 1039373905,
+  "action": "Native Studio File > Publish to Roblox, current authoritative place",
+  "requestedAtUtc": "2026-10-02T06:45:18.436Z",
+  "reportedSuccessfulAtUtc": "2026-10-02T06:45:31.714Z",
+  "publishedVersion": 2483,
+  "success": true,
+  "verification": "Current Studio log PublishSuccessful plus explicit Place published and version2483 acknowledgment. PlaceVersion2470 belongs to loaded session; version2483 was already created by concurrent Studio saves and was republished successfully without a new version number. No active servers restarted.",
+  "logFile": "0.741.19.7411056_20261002T044013Z_Studio_1949b_last.log",
+  "filteredEvidence": [
+    "2026-10-02T06:45:18.436Z,7505.436523,f33e20c0,6,Info [FLog::StudioKeyEvents] publish request routing through state machine (publishType=1)",
+    "2026-10-02T06:45:18.554Z,7505.554199,6dcff000,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing",
+    "2026-10-02T06:45:18.567Z,7505.567871,6dcff000,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress",
+    "2026-10-02T06:45:21.418Z,7508.418945,6d27b000,6,Info [FLog::CreatorOutput] Sent message to server to publish.",
+    "2026-10-02T06:45:31.513Z,7518.513672,6daf3000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful",
+    "2026-10-02T06:45:31.566Z,7518.566406,f33e20c0,6,Info [FLog::CreatorOutput] Published new changes in \"BACKROOMS: STAY QUIET [CO-OP HORROR]\" to Roblox.",
+    "2026-10-02T06:45:31.714Z,7518.714355,f33e20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.",
+    "2026-10-02T06:45:31.714Z,7518.714355,f33e20c0,6,Info [FLog::CreatorOutput] \u2192 Add publish notes to v2483"
+  ],
+  "filteredEvidenceSha256": "fc3407b5c7c20955a57643d0434400a828bff8f4cac01a21b59729753a8fda0c",
+  "finalSourceParityReceipt": "playtest-20261002/final-live-checks.json",
+  "catalogSha256": "e0e1873cd4947bc80904ea0256c3a529f4436639f350359fd353e412bf02af4b",
+  "localGitCommit": "Commit ID is reported after creating the scoped local commit; no configured Git remote or GitHub push."
+}

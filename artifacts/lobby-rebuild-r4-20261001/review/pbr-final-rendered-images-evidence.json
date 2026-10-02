@@ -1,0 +1,112 @@
+{
+  "schema": "lobby-r4-nine-actual-rendered-image-evidence-v1",
+  "verified": true,
+  "verifiedAtUTC": "2026-10-02T06:19:43.971420+00:00",
+  "scope": "Independent parsing of root actual Studio client ImageLabel loading evidence; not an independent Studio invocation or proof of full material shader rendering, multiplayer or publication.",
+  "sourceEvidenceFile": "artifacts/lobby-rebuild-r4-20261001/playtest-20261002/final-live-checks.json",
+  "sourceEvidenceSHA256": "bfe2d55a0d3a02e12b4bc7931d9559ceb1e6abcee1a0fcf56a19af611e299c4e",
+  "imageCount": 9,
+  "images": [
+    {
+      "imageAssetId": "122629305677764",
+      "material": "asphalt_road",
+      "role": "color",
+      "uri": "rbxassetid://122629305677764",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "ffbfd2d8098355696f0d491b3544d00654c0c9f97a644e3d6ac1036b2bba1dde"
+    },
+    {
+      "imageAssetId": "124637763157232",
+      "material": "asphalt_road",
+      "role": "normal",
+      "uri": "rbxassetid://124637763157232",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "47b9084b178bd89e6376722e37c533ce40e16f6dace5c1b4cc06109b9e061636"
+    },
+    {
+      "imageAssetId": "102850469487873",
+      "material": "asphalt_road",
+      "role": "roughness",
+      "uri": "rbxassetid://102850469487873",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "772bd6f0988c6fb748abdf9f5ccec8f5fa00a50188d62726a0eb0a9d272ea239"
+    },
+    {
+      "imageAssetId": "103015335983029",
+      "material": "sidewalk_concrete",
+      "role": "color",
+      "uri": "rbxassetid://103015335983029",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "f49486eff7a5cb2efa60689aac3c5b93c43491c06f5e53927e72fdbe011d2289"
+    },
+    {
+      "imageAssetId": "134697002832773",
+      "material": "sidewalk_concrete",
+      "role": "normal",
+      "uri": "rbxassetid://134697002832773",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "6a38c1a0b17d1fde94f8795469d34a664e637731795452c7331d57d7a64d0ead"
+    },
+    {
+      "imageAssetId": "117887403540614",
+      "material": "sidewalk_concrete",
+      "role": "roughness",
+      "uri": "rbxassetid://117887403540614",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "c4b9aba746b93d545b9a4e003d4ff1403ccc98fcf5f4adc3a67e6a95f16642aa"
+    },
+    {
+      "imageAssetId": "75893473229833",
+      "material": "tunnel_concrete",
+      "role": "color",
+      "uri": "rbxassetid://75893473229833",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "b23eba4560166b0deb6fa2e3d75c671ae2dc9ed93e93dd4267d5bb33f5491427"
+    },
+    {
+      "imageAssetId": "127271719715729",
+      "material": "tunnel_concrete",
+      "role": "normal",
+      "uri": "rbxassetid://127271719715729",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "3eb9eb90cf939583ace020ddcfe91b12de2ce374d3ad5cf2d37618301d53b1d9"
+    },
+    {
+      "imageAssetId": "96772314871126",
+      "material": "tunnel_concrete",
+      "role": "roughness",
+      "uri": "rbxassetid://96772314871126",
+      "ImageLabelIsLoaded": true,
+      "GetAssetFetchStatus": "Success",
+      "pngSHA256": "64a576a561f8c8134e3b20ea3ba73797344b4c0aa9be31a8b1cafdf365ed9550"
+    }
+  ],
+  "actualDiagnosticScreenshot": {
+    "file": "artifacts/lobby-rebuild-r4-20261001/playtest-20261002/pbr-nine-images-loaded.png",
+    "bytes": 307715,
+    "sha256": "c8d27e0bd11ab457efcf174cf724e751921bf441296bdeafd9b2b04204a9d916"
+  },
+  "conflictingRawPreloadResult": {
+    "rbxassetid://127271719715729": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://103015335983029": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://134697002832773": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://102850469487873": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://122629305677764": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://75893473229833": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://117887403540614": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://96772314871126": "Enum.AssetFetchStatus.Failure",
+    "rbxassetid://124637763157232": "Enum.AssetFetchStatus.Failure"
+  },
+  "resolution": "Actual visible ImageLabels load all nine correct URIs with IsLoaded=true and Success after delay. Raw-string Preload callbacks were inconsistent; no additional grants or reuploads performed. SurfaceAppearance Preload is documented unsupported.",
+  "primaryDocumentation": "https://create.roblox.com/docs/reference/engine/classes/ContentProvider",
+  "priorPermissionHypothesis": "Superseded by actual loaded-image evidence; never confirmed and no permission edits by this agent.",
+  "studioActions": false
+}

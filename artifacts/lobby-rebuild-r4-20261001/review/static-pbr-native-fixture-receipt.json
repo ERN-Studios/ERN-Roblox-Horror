@@ -1,0 +1,107 @@
+{
+  "captureId": "fixture",
+  "catalogSHA256": "12402bbd3757142130612dc53d9a224b9e0c597e2a9db1e1f63c1eda0bc12a92",
+  "imageReferenceCount": 9,
+  "manifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "nativeSHA256": "9bf01a53255e48bf434495a368e6883938eb16f7108f5386354d199646e2b97e",
+  "schema": "lobby-r4-static-pbr-native-reference-verification-v1",
+  "scope": "Local synthetic serialization fixture only. Verified typed Content URI migration and exact map values; not actual Studio/native-after, rendering, permissions or publication.",
+  "sourcePath": "ServerStorage.LobbyReimaginedBlenderSource20261001R4",
+  "studioActions": false,
+  "templateCount": 3,
+  "templates": [
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "75893473229833",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://75893473229833"
+        },
+        "normal": {
+          "assetId": "127271719715729",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://127271719715729"
+        },
+        "roughness": {
+          "assetId": "96772314871126",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://96772314871126"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "tunnel_concrete",
+      "owned": true
+    },
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "122629305677764",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://122629305677764"
+        },
+        "normal": {
+          "assetId": "124637763157232",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://124637763157232"
+        },
+        "roughness": {
+          "assetId": "102850469487873",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://102850469487873"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "asphalt_road",
+      "owned": true
+    },
+    {
+      "alphaMode": "Overlay",
+      "class": "SurfaceAppearance",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "maps": {
+        "color": {
+          "assetId": "103015335983029",
+          "property": "ColorMapContent",
+          "uri": "rbxassetid://103015335983029"
+        },
+        "normal": {
+          "assetId": "134697002832773",
+          "property": "NormalMapContent",
+          "uri": "rbxassetid://134697002832773"
+        },
+        "roughness": {
+          "assetId": "117887403540614",
+          "property": "RoughnessMapContent",
+          "uri": "rbxassetid://117887403540614"
+        }
+      },
+      "metalnessMapContent": "None",
+      "name": "sidewalk_concrete",
+      "owned": true
+    }
+  ],
+  "verified": true,
+  "isActualStudioCapture": false,
+  "fixtureOnly": true,
+  "helperSHA256": "7db1efc9badb5207ea8f55df02ca03e7cb8836862fa493bc64af4ae3444148d7",
+  "primaryDocumentation": "https://lune-org.github.io/docs/api-reference/roblox/",
+  "fixtureBuilderSHA256": "59f95e8d94a127d825ef187f9516b460762305c35298d4fe232315a4bc995a43"
+}

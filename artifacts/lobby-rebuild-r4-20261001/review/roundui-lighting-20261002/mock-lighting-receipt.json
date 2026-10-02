@@ -1,0 +1,40 @@
+{
+  "candidateSHA256": "834b50c183b5971ed565db481a2cc807e6680a98dd467de9df6e5a26d4ec5fe0",
+  "fragmentSHA256": "26fd39534b3ac4733adb6120ecb2ecdd1b1ae6fadd541502452a2fa2a8aa2c0d",
+  "passed": true,
+  "scope": "Offline exact extracted RoundUI lighting fragment with mocks; not actual Studio, gameplay, performance or multiplayer",
+  "tests": [
+    {
+      "name": "only owned Ready R4 spatial lobby receives neutral night pass",
+      "passed": true
+    },
+    {
+      "name": "original lobby immediately restores exact inherited density and warm defaults",
+      "passed": true
+    },
+    {
+      "name": "active maze is excluded even before position transfer",
+      "passed": true
+    },
+    {
+      "name": "unowned or unfinished visual revision cannot acquire lighting",
+      "passed": true
+    },
+    {
+      "name": "all existing controller guards release R4 without touching owned level values",
+      "passed": true
+    },
+    {
+      "name": "new external atmosphere density while inside becomes restoration baseline",
+      "passed": true
+    },
+    {
+      "name": "replacement atmosphere is restored without overwriting another controller",
+      "passed": true
+    },
+    {
+      "name": "missing character and distant previews release owned atmosphere",
+      "passed": true
+    }
+  ]
+}

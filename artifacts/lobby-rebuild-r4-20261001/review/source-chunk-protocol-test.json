@@ -1,0 +1,22 @@
+{
+  "schema": "lobby-r4-source-chunk-protocol-test-v1",
+  "scope": "Local temporary HTTP receiver only; no Studio calls",
+  "passed": true,
+  "sourceJSONBytes": 2250106,
+  "sourceParts": 4,
+  "chunkMaximumBytes": 750000,
+  "unicodeAndQuotedSourcePreserved": true,
+  "exactReconstructedSHA256": "c514679549df1406cc8dcbfecd37df172b42702bc5bf20404fec64f2adedf89a",
+  "helpers": [
+    {
+      "file": "capture-r4-fresh-readonly-chunked.luau",
+      "bytes": 11406,
+      "sha256": "32717b81499602a87623a977bbac191b1b82cfbe08a7e8524d497fb331203adc"
+    },
+    {
+      "file": "receiver_r4_exports_chunked.py",
+      "bytes": 5980,
+      "sha256": "3f1d6c53ff57efa0266334a9aff2d4351c2f862f610dfc5c91e35934421f1437"
+    }
+  ]
+}

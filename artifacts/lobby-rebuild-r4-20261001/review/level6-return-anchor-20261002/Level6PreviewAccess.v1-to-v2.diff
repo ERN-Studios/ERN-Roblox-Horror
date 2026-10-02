@@ -1,0 +1,21 @@
+--- Level6PreviewAccess.Claude-reviewed-v1-3cd367
++++ Level6PreviewAccess.RETURN-anchor-v2-bounded-radius
+@@ -8,7 +8,7 @@
+ local ENTER, RETURN = "Level6DeveloperPreviewPrompt", "Level6DeveloperPreviewReturnPrompt"
+ local RETURN_ANCHOR = "Level6DeveloperPreviewReturnAnchor"
+ local RETURN_OWNER = "Level6PreviewReturnOwned"
+-local RETURN_OFFSET = Vector3.new(3.5, 2.5, -5)
++local RETURN_OFFSET = Vector3.new(1, 1.5, -4)
+ local transport = ReplicatedStorage:FindFirstChild("Level6PreviewTransport")
+ if not transport then
+ 	transport = Instance.new("RemoteEvent")
+@@ -161,7 +161,8 @@
+ 		anchor.Parent = exit
+ 	end
+ 	if legacy then legacy.Parent = anchor end
+-	ensurePrompt(anchor, RETURN, "RETURN TO LOBBY", onReturn)
++	local prompt = ensurePrompt(anchor, RETURN, "RETURN TO LOBBY", onReturn)
++	if validReturnPrompt(prompt, exit) then prompt.MaxActivationDistance = 7.5 end
+ end
+ 
+ local function onEnter(player, prompt)

@@ -1,0 +1,23 @@
+{
+  "scope": "Local helper syntax only; no Studio actions",
+  "sources": [
+    {
+      "file": "archive_r4_verified_after.py",
+      "bytes": 3387,
+      "sha256": "aaea45692c974e6ccea9a76e33c408f4f9158276a94b3d16cdd2b7094ba5898f",
+      "pythonSyntaxPass": true
+    },
+    {
+      "file": "cache_r4_verified_checkpoint.py",
+      "bytes": 5309,
+      "sha256": "57933b043911fc5a68d6339f0eb70a53f64785d029eafae7b494b1b9bcc059f9",
+      "pythonSyntaxPass": true
+    },
+    {
+      "file": "serve_r4_verified_checkpoint_cache.py",
+      "bytes": 2307,
+      "sha256": "952c310bc81d316ead46305b35cc5ab504a75673c00a3cca9f08adf7575f4e52",
+      "pythonSyntaxPass": true
+    }
+  ]
+}

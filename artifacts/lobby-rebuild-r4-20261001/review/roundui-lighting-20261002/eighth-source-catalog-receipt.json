@@ -1,0 +1,15 @@
+{
+  "schema": "lobby-r4-eighth-source-catalog-pin-v1",
+  "catalogFile": "tools/lobby_reimagined/r4_candidates/install-catalog-r4-final.json",
+  "previousSevenSourceCatalogSHA256": "71a622d8750487944926ce400a878490b7ede9638c8f4b3901179c9d9acd5ad6",
+  "catalogSHA256": "12402bbd3757142130612dc53d9a224b9e0c597e2a9db1e1f63c1eda0bc12a92",
+  "sourceCount": 8,
+  "sevenOriginalEntriesPreservedExactly": true,
+  "originalRoundUIBaselineSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+  "finalRoundUISourceSHA256": "f468fc9fb87b61641fd54a626922e9281e8bd9bc222e8a1d2ab27579cb5d906a",
+  "manifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "studioActions": false,
+  "rootReportedLiveCAS": true,
+  "nativeAfterParity": "Pending final fresh capture",
+  "finalClaudeVerdict": "Pending; publication held"
+}

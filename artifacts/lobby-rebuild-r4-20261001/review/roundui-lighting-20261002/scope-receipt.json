@@ -1,0 +1,14 @@
+{
+  "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+  "originalRecoveredByteExactly": true,
+  "baselineSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+  "candidateSHA256": "834b50c183b5971ed565db481a2cc807e6680a98dd467de9df6e5a26d4ec5fe0",
+  "scope": "Only R4 lighting helper, bounded branch and R4 cleanup in existing controller guards; unrelated RoundUI byte-identical",
+  "remainingPlayChecks": [
+    "New R4 night branch across tunnel and six bays from normal player viewpoints",
+    "OriginalLobby warm defaults+Atmosphere restoration after leaving R4",
+    "Actual3/6controller-owned entry/return with original palettes retained",
+    "Actual4/5preview priority preserved for existing authorized tester",
+    "No manual Play diagnostic or disabled RoundUI left active"
+  ]
+}

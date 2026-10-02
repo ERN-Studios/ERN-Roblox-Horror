@@ -1,0 +1,13 @@
+{
+  "schema": "lobby-r4-pre-publication-version-observation-v1",
+  "reportedBy": "/root",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "loadedSessionPlaceVersion": 2470,
+  "latestBrowserPublishedVersionBeforeOurPublish": 2483,
+  "latestBrowserPublishedTimeLocal": "2026-10-02 08:23 Europe/Copenhagen",
+  "previousPublishedVersion": 2471,
+  "attribution": "Existing coauthor publication before our final publish; not our publication proof",
+  "source": "Parent actual CreatorHub VersionHistory Show published only observation",
+  "scope": "Historical pre-publication observation; root must verify a newer successful current-place publish separately"
+}

@@ -1,0 +1,129 @@
+--- RoundUI.original
++++ RoundUI.final-R4-lighting-pad-copy
+@@ -337,6 +337,67 @@
+ lobbyGrade.TintColor = Color3.fromRGB(255, 242, 188)
+ lobbyGrade.Parent = Lighting
+ 
++-- Only the owned R4 lobby has its own enclosed-night client pass. Preserve
++-- atmosphere values while here; never carry this pass into an active level.
++local revisedLobbyLighting = {active=false, atmospheres={}}
++function revisedLobbyLighting.contains(inMaze)
++ if inMaze or player:GetAttribute("Level6InRound") == true then return false end
++ local model = workspace:FindFirstChild("LobbyReimaginedPreview")
++ if not model or not model:IsA("Model") or model.Parent ~= workspace
++  or model:GetAttribute("LobbyReimaginedOwned") ~= true or model:GetAttribute("Ready") ~= true
++  or model:GetAttribute("LobbyVisualRevision") ~= 4 then return false end
++ local center = model:GetAttribute("PreviewCenter")
++ local character = player.Character
++ local root = character and character:FindFirstChild("HumanoidRootPart")
++ if typeof(center) ~= "Vector3" or not root or not root:IsA("BasePart") then return false end
++ local point = root.Position-center
++ -- Authored R4 tube plus six circular bays. The original lobby is outside
++ -- these bounds even at its nearest bay; distant level previews stay excluded.
++ return math.abs(point.X) <= 100 and math.abs(point.Z) <= 144 and point.Y >= -5 and point.Y <= 45
++end
++function revisedLobbyLighting.restore()
++ -- Level4 captures the current atmosphere at entry, then restores that
++ -- snapshot on exit. Keep our pre-R4 density pending through its ownership;
++ -- otherwise its saved zero would leak into the original lobby on return.
++ local atmosphereOwned = player:GetAttribute("Level4LightingOwned") == true
++  or (player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 2
++   and workspace:FindFirstChild("Level 2 Generated World") ~= nil
++   and workspace:GetAttribute("Level2LightingOwnedByController") == true)
++ if not atmosphereOwned then
++  for atmosphere, density in pairs(revisedLobbyLighting.atmospheres) do
++   -- Restore only our zero; preserve a later nonzero controller/server value.
++   if atmosphere.Parent == Lighting and atmosphere.Density == 0 then atmosphere.Density = density end
++   revisedLobbyLighting.atmospheres[atmosphere]=nil
++  end
++ end
++ local grade = revisedLobbyLighting.grade
++ if grade then
++  lobbyGrade.TintColor=grade.tint; lobbyGrade.Contrast=grade.contrast
++  lobbyGrade.Brightness=grade.brightness; lobbyGrade.Saturation=grade.saturation
++ end
++ revisedLobbyLighting.grade=nil; revisedLobbyLighting.active=false
++end
++function revisedLobbyLighting.apply(mazeGrade)
++ if not revisedLobbyLighting.active then
++  revisedLobbyLighting.grade={tint=lobbyGrade.TintColor,contrast=lobbyGrade.Contrast,
++   brightness=lobbyGrade.Brightness,saturation=lobbyGrade.Saturation}
++  revisedLobbyLighting.active=true
++ end
++ local atmosphere=Lighting:FindFirstChildOfClass("Atmosphere")
++ if atmosphere then
++  local saved=revisedLobbyLighting.atmospheres[atmosphere]
++  if saved == nil or atmosphere.Density ~= 0 then revisedLobbyLighting.atmospheres[atmosphere]=atmosphere.Density end
++  atmosphere.Density=0
++ end
++ Lighting.ColorShift_Top=Color3.new(0,0,0); Lighting.ColorShift_Bottom=Color3.new(0,0,0)
++ Lighting.Ambient=Color3.fromRGB(30,32,30); Lighting.OutdoorAmbient=Color3.fromRGB(0,0,0)
++ Lighting.Brightness=.6; Lighting.ClockTime=0
++ Lighting.FogColor=Color3.fromRGB(30,32,30); Lighting.FogStart=0; Lighting.FogEnd=100000
++ lobbyGrade.TintColor=Color3.new(1,1,1); lobbyGrade.Contrast=.12
++ lobbyGrade.Brightness=0; lobbyGrade.Saturation=0; lobbyGrade.Enabled=true
++ if mazeGrade then mazeGrade.Enabled=false end
++end
++
+ local function applyPlayerLighting()
+  local inMaze = player:GetAttribute("InRound") == true
+  local mazeGrade = Lighting:FindFirstChild("MongoGrade")
+@@ -346,8 +407,11 @@
+  local levelSixWorld = workspace:FindFirstChild("Level 6 Generated World")
+  local isLevelTwo = levelTwoWorld ~= nil and (selectedLevel == 2 or inMaze)
+  local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
++ local inRevisedLobby = revisedLobbyLighting.contains(inMaze)
++ if not inRevisedLobby then revisedLobbyLighting.restore() end
+  if player:GetAttribute("Level4LightingOwned") == true then
+   -- the Level 4 cinema preview grades itself (Level 4 Lighting Controller); stand down while it owns it
++  revisedLobbyLighting.restore()
+   lobbyGrade.Enabled = false
+   if mazeGrade then mazeGrade.Enabled = false end
+   return
+@@ -359,6 +423,7 @@
+   -- Level 6 runs as a separate preview round, so InRound remains false. Let
+   -- its own client controller keep the mall at night instead of restoring the
+   -- lobby's 14:00 daylight every half-second.
++  revisedLobbyLighting.restore()
+   lobbyGrade.Enabled = false
+   if mazeGrade then mazeGrade.Enabled = false end
+   return
+@@ -366,13 +431,20 @@
+  if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
+   -- The dedicated mall controller owns and restores this grade. Never let the
+   -- Level 1 darkness reassert itself over Level 3.
++  revisedLobbyLighting.restore()
+   lobbyGrade.Enabled = false
+   if mazeGrade then mazeGrade.Enabled = false end
+   return
+  end
+  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
++  revisedLobbyLighting.restore()
+   lobbyGrade.Enabled = false
+   if mazeGrade then mazeGrade.Enabled = false end
++  return
++ end
++
++ if inRevisedLobby then
++  revisedLobbyLighting.apply(mazeGrade)
+   return
+  end
+ 
+@@ -544,7 +616,7 @@
+ queueClose.BackgroundColor3 = Color3.fromRGB(76, 38, 38)
+ queueCloseStroke.Color = Color3.fromRGB(255, 138, 120)
+ queueCloseStroke.Transparency = 0.35
+-local queueHint = queueText("CancelHint", "STEP OUT OF THE SQUARE TO CANCEL", UDim2.new(0.08, 0, 1, -23), UDim2.new(0.84, 0, 0, 16), 14, Color3.fromRGB(125, 137, 126))
++local queueHint = queueText("CancelHint", "STEP OFF THE PAD TO CANCEL", UDim2.new(0.08, 0, 1, -23), UDim2.new(0.84, 0, 0, 16), 14, Color3.fromRGB(125, 137, 126))
+ queueHint.TextXAlignment = Enum.TextXAlignment.Center
+ 
+ local function applyQueueDeviceLayout()
+@@ -770,7 +842,7 @@
+   queuePrivacyButton.TextSize = 18
+   queueSubmit.TextSize = 21
+   queueHint.TextSize = 14
+-  queueHint.Text = "STEP OUT OF THE SQUARE TO CANCEL"
++  queueHint.Text = "STEP OFF THE PAD TO CANCEL"
+ 
+   layoutQueueRows(queueHeight, 7, 6, {
+    {Height = 38, Gap = 16, MinGap = 8, Control = queueTitle, Apply = function(y, h)

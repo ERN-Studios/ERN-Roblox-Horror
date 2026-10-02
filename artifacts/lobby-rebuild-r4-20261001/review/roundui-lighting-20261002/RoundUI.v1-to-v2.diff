@@ -1,0 +1,28 @@
+--- RoundUI.live-candidate-v1
++++ RoundUI.R4-lighting-v2
+@@ -356,12 +356,20 @@
+  return math.abs(point.X) <= 100 and math.abs(point.Z) <= 144 and point.Y >= -5 and point.Y <= 45
+ end
+ function revisedLobbyLighting.restore()
+- if not revisedLobbyLighting.active then return end
+- for atmosphere, density in pairs(revisedLobbyLighting.atmospheres) do
+-  -- Do not overwrite a level controller/server that has since changed density.
+-  if atmosphere.Parent == Lighting and atmosphere.Density == 0 then atmosphere.Density = density end
++ -- Level4 captures the current atmosphere at entry, then restores that
++ -- snapshot on exit. Keep our pre-R4 density pending through its ownership;
++ -- otherwise its saved zero would leak into the original lobby on return.
++ local atmosphereOwned = player:GetAttribute("Level4LightingOwned") == true
++  or (player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 2
++   and workspace:FindFirstChild("Level 2 Generated World") ~= nil
++   and workspace:GetAttribute("Level2LightingOwnedByController") == true)
++ if not atmosphereOwned then
++  for atmosphere, density in pairs(revisedLobbyLighting.atmospheres) do
++   -- Restore only our zero; preserve a later nonzero controller/server value.
++   if atmosphere.Parent == Lighting and atmosphere.Density == 0 then atmosphere.Density = density end
++   revisedLobbyLighting.atmospheres[atmosphere]=nil
++  end
+  end
+- table.clear(revisedLobbyLighting.atmospheres)
+  local grade = revisedLobbyLighting.grade
+  if grade then
+   lobbyGrade.TintColor=grade.tint; lobbyGrade.Contrast=grade.contrast

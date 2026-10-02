@@ -1,0 +1,48 @@
+{
+  "candidateSHA256": "9dca96019f1b392c650467561db3393935cce6eaa0d4f64c962adb67957b40b1",
+  "fragmentSHA256": "18e7dea5950fda8e9d7ae0a43284ba6f866bac7ce0e1fdc5068a736c33dbf458",
+  "passed": true,
+  "scope": "Offline exact extracted RoundUI lighting fragment with mocks; not actual Studio, gameplay, performance or multiplayer",
+  "tests": [
+    {
+      "name": "only owned Ready R4 spatial lobby receives neutral night pass",
+      "passed": true
+    },
+    {
+      "name": "original lobby immediately restores exact inherited density and warm defaults",
+      "passed": true
+    },
+    {
+      "name": "active maze is excluded even before position transfer",
+      "passed": true
+    },
+    {
+      "name": "unowned or unfinished visual revision cannot acquire lighting",
+      "passed": true
+    },
+    {
+      "name": "all existing controller guards release R4 without touching owned level values",
+      "passed": true
+    },
+    {
+      "name": "new external atmosphere density while inside becomes restoration baseline",
+      "passed": true
+    },
+    {
+      "name": "replacement atmosphere is restored without overwriting another controller",
+      "passed": true
+    },
+    {
+      "name": "missing character and distant previews release owned atmosphere",
+      "passed": true
+    },
+    {
+      "name": "Level4 snapshot of R4 zero cannot leak into original lobby after return",
+      "passed": true
+    },
+    {
+      "name": "Level4 intentional zero remains untouched until owner releases",
+      "passed": true
+    }
+  ]
+}

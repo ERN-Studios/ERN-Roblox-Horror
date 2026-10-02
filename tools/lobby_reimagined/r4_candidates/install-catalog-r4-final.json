@@ -1,30 +1,21 @@
 {
   "schema": "lobby-r4-exact-install-catalog-v1",
-  "createdAtUTC": "2026-10-01T22:32:01.766345+00:00",
+  "createdAtUTC": "2026-10-02T04:54:53.739234+00:00",
   "sourceCatalogReady": true,
   "readyForInstaller": false,
-  "packageBlockers": [
-    "Missing published PBR assetId: tunnel_concrete/color",
-    "Missing published PBR assetId: tunnel_concrete/normal",
-    "Missing published PBR assetId: tunnel_concrete/roughness",
-    "Missing published PBR assetId: asphalt_road/color",
-    "Missing published PBR assetId: asphalt_road/normal",
-    "Missing published PBR assetId: asphalt_road/roughness",
-    "Missing published PBR assetId: sidewalk_concrete/color",
-    "Missing published PBR assetId: sidewalk_concrete/normal",
-    "Missing published PBR assetId: sidewalk_concrete/roughness"
-  ],
-  "scope": "Local catalog only; no Studio writes, no installation/Play/publication inferred",
+  "packageBlockers": [],
+  "scope": "Cumulative final authoritative native-after preservation catalog; not an installer or deployment baseline",
   "placeId": 131311258779917,
   "universeId": 10559217407,
   "groupId": 1039373905,
-  "publishedBaselineVersion": 2461,
-  "publishedBaselineVerification": "Root verified publish; catalog does not query publication",
-  "baselineFile": "artifacts/level6-tube-arrival-20261001/native-after/scripts.json",
-  "baselineFileSHA256": "0af7eb63bbf8fc03ba52d5760e3ac10b5d0a67b8c8a9fac2927e0bf7ec446b94",
+  "baselineKind": "live-studio",
+  "baselinePlaceVersion": 2470,
+  "baselineVerification": "Exact captured Studio Source/editor bytes; fresh session/native guards remain required",
+  "baselineFile": "artifacts/lobby-rebuild-r4-20261001/native-before/scripts.json",
+  "baselineFileSHA256": "4be1ec62ca053c9098689dbc987887585d5a620140231c7f7e08ddcff29c3377",
   "missingBaselines": [],
   "newSources": 0,
-  "sourceCount": 7,
+  "sourceCount": 8,
   "sources": [
     {
       "key": "builder",
@@ -35,15 +26,16 @@
       "expectedEditorSourceSHA256": "1b2f45d140545009a82cca7f5f9400453d3860cd1bc0aa2e4fb39ef96ec97338",
       "expectedBeforeBytes": 11114,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/Builder.ModuleScript.luau",
       "sourceURLPath": "/source/builder",
       "candidateBytes": 11266,
       "afterSHA256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
       "observedCandidateSHA256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": true,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required",
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "runtime-bake",
@@ -54,15 +46,16 @@
       "expectedEditorSourceSHA256": "c022cdb69d117c1654e398881dee6bd1621d9945e0e6747f3059185b65b07c5d",
       "expectedBeforeBytes": 8508,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/RuntimeBake.ModuleScript.luau",
       "sourceURLPath": "/source/runtime-bake",
       "candidateBytes": 12341,
       "afterSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
       "observedCandidateSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": true,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required",
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "queue-bridge",
@@ -73,15 +66,16 @@
       "expectedEditorSourceSHA256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
       "expectedBeforeBytes": 3598,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.candidate.luau",
       "sourceURLPath": "/source/queue-bridge",
-      "candidateBytes": 20210,
-      "afterSHA256": "1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08",
-      "observedCandidateSHA256": "1a5e14256a7725a35b0b13a6d31b6fd4ea47d14875368d46e9593fe365226e08",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "candidateBytes": 20289,
+      "afterSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "observedCandidateSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": true,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required",
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "game-manager",
@@ -92,15 +86,21 @@
       "expectedEditorSourceSHA256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
       "expectedBeforeBytes": 163203,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
-      "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.GameManager.Script.candidate.luau",
-      "sourceURLPath": "/source/game-manager",
-      "candidateBytes": 165258,
-      "afterSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
-      "observedCandidateSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
+      "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.GameManager.Script.authoritative-after.luau",
+      "sourceURLPath": null,
+      "candidateBytes": 169980,
+      "afterSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "observedCandidateSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": false,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Authoritative final Studio mirror includes concurrent Level1 developer changes beyond the applied R4 task source951. Original2470 baseline and applied task951 remain historical; this mirror is not a deployment source. Root read-only peer compatibility review and actual original Level1/3 queue launches passed.",
+      "appliedTaskSourceSHA256": "951c6af430bf99d9ece0caf858545d2d00e59683155067d3c5e4d398e9997f34",
+      "appliedTaskCandidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.GameManager.Script.candidate.luau",
+      "authoritativeAfterSourceFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.GameManager.Script.authoritative-after.luau",
+      "concurrentDeltaDiffFile": "artifacts/lobby-rebuild-r4-20261001/review/concurrent-studio-20261002/GameManager.task-to-authoritative-after.diff",
+      "concurrentDeveloperChangePreserved": true,
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "level4-preview",
@@ -111,15 +111,16 @@
       "expectedEditorSourceSHA256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
       "expectedBeforeBytes": 10629,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.Level4V4PreviewAccess.Script.candidate.luau",
       "sourceURLPath": "/source/level4-preview",
       "candidateBytes": 12317,
       "afterSHA256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
       "observedCandidateSHA256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": false,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required",
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "level5-preview",
@@ -130,15 +131,16 @@
       "expectedEditorSourceSHA256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
       "expectedBeforeBytes": 10544,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.Level5PreviewAccess.Script.candidate.luau",
       "sourceURLPath": "/source/level5-preview",
       "candidateBytes": 12232,
       "afterSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
       "observedCandidateSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": false,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required",
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     },
     {
       "key": "level6-preview",
@@ -149,15 +151,63 @@
       "expectedEditorSourceSHA256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
       "expectedBeforeBytes": 10762,
       "editorMatch": true,
-      "editorHashBasis": "Published native export editorMatch=true; editor Source byte-equal to captured Source",
+      "editorHashBasis": "Native Studio export editorMatch=true; editor Source byte-equal to captured Source",
       "candidateFile": "tools/lobby_reimagined/r4_candidates/ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
       "sourceURLPath": "/source/level6-preview",
-      "candidateBytes": 12632,
-      "afterSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
-      "observedCandidateSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
-      "status": "PINNED_LOCAL_CANDIDATE",
+      "candidateBytes": 14689,
+      "afterSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "observedCandidateSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
       "owned": false,
-      "scope": "Exact scoped existing Source update; fresh live identity/Source/editor CAS still required"
+      "scope": "Existing exact scoped Script updates: R4 launch paths plus runtime-only owned RETURN Attachment at local(1,1.5,-4), mounted activation7.5 preserving ENTER10 and exit-relative server guard12. Original2470 baseline preserved; root final Source/editor CAS verified; actual final normal E return and full native-after Source/editor parity passed.",
+      "previousAppliedTaskSourceSHA256": "0829dc2fed34719fde2937a51a7a18f22f7ea64aa5d89ae06cbc2bb54b193868",
+      "reviewDirectory": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002",
+      "actualClaudeReview": {
+        "model": "claude-opus-5-5",
+        "effort": "max",
+        "verdict": "PASS for prior proposed3cd version; final bc8 mechanical bound/framing fixes verified by Codex23 regressions and syntax",
+        "reviewedSourceSHA256": "3cd36733907163daa409e4f76ffa1e4222f97d05588f9689c6fcd0fad4a4fa5b",
+        "finalCandidateReviewedByClaude": false,
+        "receiptFile": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/claude-return-anchor.receipt.json",
+        "responseFile": "artifacts/lobby-rebuild-r4-20261001/review/level6-return-anchor-20261002/claude-return-anchor.response.md"
+      },
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
+    },
+    {
+      "key": "round-ui",
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "class": "LocalScript",
+      "isNew": false,
+      "expectedSourceSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+      "expectedEditorSourceSHA256": "72a06bcf47a1c1f13a4bc820fea96225866e625748f37fef3c1972eef7018f00",
+      "expectedBeforeBytes": 260892,
+      "editorMatch": true,
+      "editorHashBasis": "Fresh authoritative before capture; Source/editor byte-equal with same exact root instance",
+      "candidateFile": "tools/lobby_reimagined/r4_candidates/StarterPlayer.StarterPlayerScripts.RoundUI.LocalScript.candidate.luau",
+      "sourceURLPath": null,
+      "candidateBytes": 265744,
+      "afterSHA256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+      "observedCandidateSHA256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+      "status": "FINAL_NATIVE_AFTER_SOURCE_EDITOR_EQUAL",
+      "owned": false,
+      "scope": "R4-only enclosed-night lighting, atmosphere and nine-property restore with actual engine readback ownership markers; two cancellation-hint copies; bounded R4 branch before global2/3 guards. Existing original guards and owner72a baseline retained. Root final v6 Source/editor CAS verified;17 mocks/full syntax passed; exact v6 Claude PASS, actual final nine-property exit/Level4 handoff/natural respawn and native Source/editor parity passed.",
+      "deploymentPhase": "Post-install scoped fresh CAS; not served by historical seven-source installer",
+      "reviewDirectory": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6",
+      "previousAppliedTaskSourceSHA256": "afe552d5f3a058ad67f63a20e12ba0f26ebbf562a55c857324f5448dd0ed1662",
+      "finalReviewDirectory": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review",
+      "actualClaudeReview": {
+        "model": "claude-opus-5-5",
+        "effort": "max",
+        "verdict": "PASS FOR ACTUAL PLAY",
+        "priorV4Verdict": "PASS FOR ACTUAL PLAY; actual Play later exposed additional return edge, so v4 is historical only",
+        "finalCandidateReviewedByClaude": true,
+        "reviewedSourceSHA256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+        "elapsedSeconds": 346.574,
+        "receiptFile": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/claude-lighting-v6.receipt.json",
+        "responseFile": "artifacts/lobby-rebuild-r4-20261001/review/roundui-lighting-20261002/v6-final-review/claude-lighting-v6.response.md",
+        "scope": "Actual read-only exact supplied v6 critique; no live or multiplayer execution by Claude"
+      },
+      "authoritativeCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea"
     }
   ],
   "preservedSources": [
@@ -184,7 +234,7 @@
     "sourceName": "LobbyReimaginedBlenderSource20261001R4",
     "kitName": "LobbyReimaginedBlenderKit20261001R4",
     "manifestFile": "assets/models/lobby-reimagined-r4-20261001/manifest.json",
-    "manifestSHA256": "5fa07c5e2f9edf53f288096e8a5853591d0e384ce81600583294a34d6d7c0c56",
+    "manifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
     "chunks": 71,
     "families": 54,
     "manifestURLPath": "/manifest",
@@ -203,9 +253,9 @@
           "name": "tunnel_concrete",
           "class": "SurfaceAppearance",
           "assetIds": {
-            "color": null,
-            "normal": null,
-            "roughness": null
+            "color": "75893473229833",
+            "normal": "127271719715729",
+            "roughness": "96772314871126"
           },
           "AlphaMode": "Overlay",
           "Color": [
@@ -222,9 +272,9 @@
           "name": "asphalt_road",
           "class": "SurfaceAppearance",
           "assetIds": {
-            "color": null,
-            "normal": null,
-            "roughness": null
+            "color": "122629305677764",
+            "normal": "124637763157232",
+            "roughness": "102850469487873"
           },
           "AlphaMode": "Overlay",
           "Color": [
@@ -241,9 +291,9 @@
           "name": "sidewalk_concrete",
           "class": "SurfaceAppearance",
           "assetIds": {
-            "color": null,
-            "normal": null,
-            "roughness": null
+            "color": "103015335983029",
+            "normal": "134697002832773",
+            "roughness": "117887403540614"
           },
           "AlphaMode": "Overlay",
           "Color": [
@@ -285,6 +335,14 @@
       "/source/level4-preview",
       "/source/level5-preview",
       "/source/level6-preview"
+    ],
+    "additionalTaskSourceMirrorsNotServed": [
+      {
+        "key": "round-ui",
+        "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+        "candidateFile": "tools/lobby_reimagined/r4_candidates/StarterPlayer.StarterPlayerScripts.RoundUI.LocalScript.candidate.luau",
+        "alreadyAppliedSeparatelyByRoot": true
+      }
     ]
   },
   "historicalR3References": [
@@ -299,5 +357,12 @@
     "Recheck Source/editor and instance identity after downloads and inside each UpdateSourceAsync callback",
     "Verify post-write Source/editor hash; preserve all unrelated Sources and original lobby/native data",
     "Add only R4-owned payload; retain existing R3/R3B payloads and original lobby"
-  ]
+  ],
+  "readyForHistoricalSevenSourceInstaller": false,
+  "catalogUsage": "Cumulative eight-Source task preservation catalog. Historical seven-Source installer receipt remains separate; do not replay it against this cumulative catalog. GameManager authoritative7e includes separately recorded concurrent work; do not replay this catalog against Studio.",
+  "extendedAtUTC": "2026-10-02T05:55:16.032414+00:00",
+  "historicalSevenSourceCatalogSHA256": "71a622d8750487944926ce400a878490b7ede9638c8f4b3901179c9d9acd5ad6",
+  "authoritativeAfterCaptureId": "684d0294-7864-4cf6-b455-09db2b536cea",
+  "authoritativeAfterNativeSHA256": "fa76d0b6fa23b850524a1204a4c90354ed389cb467b811036e05b58b5926ae8b",
+  "concurrentChangesPresent": true
 }
