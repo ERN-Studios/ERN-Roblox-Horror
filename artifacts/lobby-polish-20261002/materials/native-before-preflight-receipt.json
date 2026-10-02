@@ -1,0 +1,24 @@
+{
+  "allNativeSourcesMatchFullLiveSourceEditorCatalog": true,
+  "beforeNativeSHA256": "451e86549091122a992da3a8cabee5f38471dd20d5b77212dc6d77dad1433872",
+  "exactBeforeForestSelfComparison": true,
+  "expectedUninstalledScopeErrors": [
+    "Scoped existing Source pin differs: ServerScriptService.LobbyReimaginedPreview.Builder",
+    "Scoped installed hash differs: ServerScriptService.LobbyReimaginedPreview.Builder",
+    "Scoped existing Source pin differs: StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+    "Scoped installed hash differs: StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+    "Scoped existing Source pin differs: ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+    "Scoped installed hash differs: ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+    "Missing frozen task Source: ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+    "Missing frozen task Source: ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+    "Missing frozen task Source: ServerScriptService.LobbyReimaginedPreview.MaterialPolish"
+  ],
+  "inputBackupWrites": false,
+  "installedOrAfterVerified": false,
+  "nativeSourceCount": 224,
+  "passed": true,
+  "referencesChecked": 113588,
+  "schema": "lobby-polish-native-before-preflight-v1",
+  "serverLobbyFingerprint": "91bd95df1c6cffbb4b8bdb544d2b7aaa60d41cd6b315f706ff8b1a4cde87de1a",
+  "studioWrites": false
+}

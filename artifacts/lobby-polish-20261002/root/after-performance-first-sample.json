@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"elapsed\":5.010489291656995,\"healthy\":100,\"p95ms\":72.78862595558167,\"lighting\":{\"clockTime\":0,\"brightness\":0.6000000238418579},\"scope\":\"Solo Studio, same fixed road viewpoint, RenderStepped5s, client Lighting ClockTime0; not multiplayer/mobile/GPU attribution\",\"samples\":74,\"p50ms\":66.70970469713211,\"clientMemory\":6096.39306640625}"
+    }
+  ],
+  "isError": false
+}

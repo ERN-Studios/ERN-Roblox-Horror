@@ -1,0 +1,58 @@
+[
+  {
+    "path": "ReplicatedStorage.DevAccess",
+    "class": "ModuleScript",
+    "sourceBytes": 1353,
+    "sourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+    "editorSourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+    "editorMatch": true
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+    "class": "ModuleScript",
+    "sourceBytes": 12341,
+    "sourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+    "editorSourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+    "editorMatch": true
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+    "class": "ModuleScript",
+    "sourceBytes": 11490,
+    "sourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+    "editorSourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+    "editorMatch": true
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+    "class": "ModuleScript",
+    "sourceBytes": 20289,
+    "sourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+    "editorSourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+    "editorMatch": true
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+    "class": "ModuleScript",
+    "sourceBytes": 67127,
+    "sourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+    "editorSourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+    "editorMatch": true
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+    "class": "LocalScript",
+    "sourceBytes": 4105,
+    "sourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+    "editorSourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+    "editorMatch": true
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+    "class": "LocalScript",
+    "sourceBytes": 8306,
+    "sourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+    "editorSourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+    "editorMatch": true
+  }
+]

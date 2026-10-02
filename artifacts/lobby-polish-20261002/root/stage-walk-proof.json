@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"state\":\"Running\",\"health\":100,\"walkSpeed\":16,\"position\":\"220, 37.498046875, -639.4241333007812\"}"
+    }
+  ],
+  "isError": false
+}

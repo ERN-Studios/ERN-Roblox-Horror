@@ -1,0 +1,17 @@
+# R4 scene polish candidate, 2026-10-02
+
+Install `LobbyPolishScene.ModuleScript.candidate.luau` as a new ModuleScript in the existing owned preview folder. Call `require(script.Parent:WaitForChild("LobbyPolishScene")).Apply(model)` after the cloned shop/focus plates and other owned presentation helpers exist and before Ready/Workspace parenting. Return is the owned `R4ScenePresentation` folder. Root owns the fresh Source/editor compare-and-set install and actual Studio verification.
+
+Final helper SHA256: `9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d`. It replaces the earlier draft `239a0cdc...` sent before the final nosing/contact adjustment. The composed helper is self-contained; the shop/prelude/suffix files are local authoring fragments rather than additional modules to install.
+
+The helper reuses 36 existing lights: 28 tunnel carriers move closer to the road/avatar with neutral, shorter fills; three stage fills move toward the stairs and deck; four end wall fills and one shop wall fill become quieter. It disables the ten cloned shop glow lights. Total emitters remain 87, enabled emitters become 77, and no emitters are added. The global Lighting service and original lobby/shop remain untouched.
+
+Twenty noncolliding primitive parts add a cloth approach, six exposed treads, six risers, six matte nosings, and a short deck runner. Tread depth is clipped using the actual overlapping stair colliders. Existing collision, rear rail, DJ controls/record positions, gates and queues stay with their original owners. New nosing bottoms are .001 stud above the existing stair top; cloth treads/deck are .001 stud above their supporting surfaces.
+
+Ten product cards become shallow tiles with fixed physical name panels and separate category headers. Product keys/kinds, all existing art objects, original caption text, purchase/focus policy and their attributes remain intact. Cloned pressure plates and their matching live focus copies move together and remain exactly equal. The original shop is never passed to the helper. See SHOP-HANDOFF.md for details and live asset readback limitations.
+
+There are 34 new box primitives (20 stage, 14 shop), equivalent to 408 nominal primitive triangles, zero new unique meshes and zero new colliders. `AddedInstancedTriangles` is set to 408 for the requested integration counter; this is a primitive geometry count and not a GPU/frame-time measurement.
+
+The exact source compiled and executed in the installed Lune runtime against a reconstruction of captured Studio scene/shop data. Serializing original-shop, collision, gate and queue sentinels before/after yielded identical bytes. Existing art objects/synthetic art IDs/commerce attributes were retained, matching focus copies were verified, lights stayed 87 total, and a repeated construction apply was rejected. Target sphere geometry includes center-road avatar and stair-tread targets and excludes the upper crown from the three stage fills. Full receipts are in `artifacts/lobby-polish-20261002/scene/helper-validation.json` and `scene/shop/offline-validation.json`.
+
+These checks do not establish actual Roblox visual readability, live image-ID parity, focus approach/switch/leave behavior, purchase UI routing, gameplay, multiplayer, CPU/memory or frame time. Root still performs actual Play checks, final source/editor export, scope comparison, commit and publication.

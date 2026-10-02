@@ -1,0 +1,1411 @@
+{
+  "assets": {
+    "materials": {
+      "asphalt_road": {
+        "color": {
+          "originalURI": "rbxassetid://122629305677764",
+          "pngSHA256": "f25701af130f829777208c0b6679cb46f5418cb18f8c22d13d6b969f0b969482",
+          "uri": "rbxassetid://93427464566515"
+        },
+        "normal": {
+          "originalURI": "rbxassetid://124637763157232",
+          "pngSHA256": "a8eb947bede56280fcbfe794c53959e901d8cabb517759c20afbdb8901d68831",
+          "uri": "rbxassetid://85799149505047"
+        },
+        "roughness": {
+          "originalURI": "rbxassetid://102850469487873",
+          "pngSHA256": "d3a24522eedbfa79c1880b39d354ac702bfd6c90867e20ce80ddaf76266ab563",
+          "uri": "rbxassetid://106931720832992"
+        }
+      },
+      "sidewalk_concrete": {
+        "color": {
+          "originalURI": "rbxassetid://103015335983029",
+          "pngSHA256": "c2ff43d2c7b6254589d99cbf5e09f727ec9faede72034fa054515a2c75fdb5f4",
+          "uri": "rbxassetid://137946858019381"
+        },
+        "normal": {
+          "originalURI": "rbxassetid://134697002832773",
+          "pngSHA256": "0fcfeaf303ca9ac4a68e6f319a2f961594f0ac9fccdf140e8f47d026f8656ab6",
+          "uri": "rbxassetid://97239310145567"
+        },
+        "roughness": {
+          "originalURI": "rbxassetid://117887403540614",
+          "pngSHA256": "881ae43eb5ef0b4ade620d2922a6966dae7864139a5ba2e788c866813ef1c2ee",
+          "uri": "rbxassetid://138358337027432"
+        }
+      },
+      "tunnel_concrete": {
+        "color": {
+          "originalURI": "rbxassetid://75893473229833",
+          "pngSHA256": "174360cb5b0b750ccb4183fe393e29cf6f33149eb462786f8691ef2d56f0c130",
+          "uri": "rbxassetid://72127726815177"
+        },
+        "normal": {
+          "originalURI": "rbxassetid://127271719715729",
+          "pngSHA256": "87693ee0d94628e58f20901849584d1eb6c35f71dc5c76fc4e200572b8f53c04",
+          "uri": "rbxassetid://112801222792719"
+        },
+        "roughness": {
+          "originalURI": "rbxassetid://96772314871126",
+          "pngSHA256": "0e302cdf650a03989127b2e3cf05032348bfa4cbbaacdf1437b3f238097ae902",
+          "uri": "rbxassetid://70562685470916"
+        }
+      }
+    },
+    "sidewalkAtlas": {
+      "chunkSHA256": "9f1e2113cecb2fb4697f28fbd3088ba3981cddd9ad72c98564730ecdbe17e50f",
+      "pngSHA256": "86447fb4c82082d2262327765a21ba8ef87c85b13dc53f524cbd130d5625d5f1",
+      "uri": "rbxassetid://85967831334476"
+    }
+  },
+  "bays": [
+    {
+      "floorPosition": [
+        -63,
+        0.4,
+        -80
+      ],
+      "level": 1,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "floorPosition": [
+        63,
+        0.4,
+        -80
+      ],
+      "level": 2,
+      "yaw": -1.5707963267948966
+    },
+    {
+      "floorPosition": [
+        -63,
+        0.4,
+        0
+      ],
+      "level": 3,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "floorPosition": [
+        63,
+        0.4,
+        0
+      ],
+      "level": 4,
+      "yaw": -1.5707963267948966
+    },
+    {
+      "floorPosition": [
+        -63,
+        0.4,
+        80
+      ],
+      "level": 5,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "floorPosition": [
+        63,
+        0.4,
+        80
+      ],
+      "level": 6,
+      "yaw": -1.5707963267948966
+    }
+  ],
+  "catalogSHA256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+  "clutterColliders": [
+    {
+      "name": "South Furniture Blocker 00",
+      "position": [
+        -32,
+        4.063649814445855,
+        -132
+      ],
+      "size": [
+        2.08,
+        8.12729962889171,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 01",
+      "position": [
+        -30,
+        7.188766702464661,
+        -132
+      ],
+      "size": [
+        2.08,
+        14.377533404929322,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 02",
+      "position": [
+        -28,
+        9.147519875663772,
+        -132
+      ],
+      "size": [
+        2.08,
+        18.295039751327543,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 03",
+      "position": [
+        -26,
+        10.639999999999999,
+        -132
+      ],
+      "size": [
+        2.08,
+        21.279999999999998,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 04",
+      "position": [
+        -24,
+        11.851634243579202,
+        -132
+      ],
+      "size": [
+        2.08,
+        23.703268487158404,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 05",
+      "position": [
+        -22,
+        12.865257781380862,
+        -132
+      ],
+      "size": [
+        2.08,
+        25.730515562761724,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 06",
+      "position": [
+        -20,
+        13.72647345288985,
+        -132
+      ],
+      "size": [
+        2.08,
+        27.4529469057797,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 07",
+      "position": [
+        -18,
+        14.463509587492679,
+        -132
+      ],
+      "size": [
+        2.08,
+        28.927019174985357,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 08",
+      "position": [
+        -16,
+        15.095190988815459,
+        -132
+      ],
+      "size": [
+        2.08,
+        30.190381977630917,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 09",
+      "position": [
+        -14,
+        15.63471506173803,
+        -132
+      ],
+      "size": [
+        2.08,
+        31.26943012347606,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 10",
+      "position": [
+        -12,
+        16.091651612321254,
+        -132
+      ],
+      "size": [
+        2.08,
+        32.18330322464251,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 11",
+      "position": [
+        -10,
+        16.473089870153487,
+        -132
+      ],
+      "size": [
+        2.08,
+        32.946179740306974,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 12",
+      "position": [
+        -8,
+        16.784336031905013,
+        -132
+      ],
+      "size": [
+        2.08,
+        33.56867206381003,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 13",
+      "position": [
+        -6,
+        17.02935570432193,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.05871140864386,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 14",
+      "position": [
+        -4,
+        17.21106220442016,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.42212440884032,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 15",
+      "position": [
+        -2,
+        17.331506171463086,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.66301234292617,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 16",
+      "position": [
+        0,
+        17.391998105612018,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.783996211224036,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 17",
+      "position": [
+        2,
+        17.331506171463086,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.66301234292617,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 18",
+      "position": [
+        4,
+        17.21106220442016,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.42212440884032,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 19",
+      "position": [
+        6,
+        17.02935570432193,
+        -132
+      ],
+      "size": [
+        2.08,
+        34.05871140864386,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 20",
+      "position": [
+        8,
+        16.784336031905013,
+        -132
+      ],
+      "size": [
+        2.08,
+        33.56867206381003,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 21",
+      "position": [
+        10,
+        16.473089870153487,
+        -132
+      ],
+      "size": [
+        2.08,
+        32.946179740306974,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 22",
+      "position": [
+        12,
+        16.091651612321254,
+        -132
+      ],
+      "size": [
+        2.08,
+        32.18330322464251,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 23",
+      "position": [
+        14,
+        15.63471506173803,
+        -132
+      ],
+      "size": [
+        2.08,
+        31.26943012347606,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 24",
+      "position": [
+        16,
+        15.095190988815459,
+        -132
+      ],
+      "size": [
+        2.08,
+        30.190381977630917,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 25",
+      "position": [
+        18,
+        14.463509587492679,
+        -132
+      ],
+      "size": [
+        2.08,
+        28.927019174985357,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 26",
+      "position": [
+        20,
+        13.72647345288985,
+        -132
+      ],
+      "size": [
+        2.08,
+        27.4529469057797,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 27",
+      "position": [
+        22,
+        12.865257781380862,
+        -132
+      ],
+      "size": [
+        2.08,
+        25.730515562761724,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 28",
+      "position": [
+        24,
+        11.851634243579202,
+        -132
+      ],
+      "size": [
+        2.08,
+        23.703268487158404,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 29",
+      "position": [
+        26,
+        10.639999999999999,
+        -132
+      ],
+      "size": [
+        2.08,
+        21.279999999999998,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 30",
+      "position": [
+        28,
+        9.147519875663772,
+        -132
+      ],
+      "size": [
+        2.08,
+        18.295039751327543,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 31",
+      "position": [
+        30,
+        7.188766702464661,
+        -132
+      ],
+      "size": [
+        2.08,
+        14.377533404929322,
+        1
+      ]
+    },
+    {
+      "name": "South Furniture Blocker 32",
+      "position": [
+        32,
+        4.063649814445855,
+        -132
+      ],
+      "size": [
+        2.08,
+        8.12729962889171,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 00",
+      "position": [
+        -32,
+        4.063649814445855,
+        132
+      ],
+      "size": [
+        2.08,
+        8.12729962889171,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 01",
+      "position": [
+        -30,
+        7.188766702464661,
+        132
+      ],
+      "size": [
+        2.08,
+        14.377533404929322,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 02",
+      "position": [
+        -28,
+        9.147519875663772,
+        132
+      ],
+      "size": [
+        2.08,
+        18.295039751327543,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 03",
+      "position": [
+        -26,
+        10.639999999999999,
+        132
+      ],
+      "size": [
+        2.08,
+        21.279999999999998,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 04",
+      "position": [
+        -24,
+        11.851634243579202,
+        132
+      ],
+      "size": [
+        2.08,
+        23.703268487158404,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 05",
+      "position": [
+        -22,
+        12.865257781380862,
+        132
+      ],
+      "size": [
+        2.08,
+        25.730515562761724,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 06",
+      "position": [
+        -20,
+        13.72647345288985,
+        132
+      ],
+      "size": [
+        2.08,
+        27.4529469057797,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 07",
+      "position": [
+        -18,
+        14.463509587492679,
+        132
+      ],
+      "size": [
+        2.08,
+        28.927019174985357,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 08",
+      "position": [
+        -16,
+        15.095190988815459,
+        132
+      ],
+      "size": [
+        2.08,
+        30.190381977630917,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 09",
+      "position": [
+        -14,
+        15.63471506173803,
+        132
+      ],
+      "size": [
+        2.08,
+        31.26943012347606,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 10",
+      "position": [
+        -12,
+        16.091651612321254,
+        132
+      ],
+      "size": [
+        2.08,
+        32.18330322464251,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 11",
+      "position": [
+        -10,
+        16.473089870153487,
+        132
+      ],
+      "size": [
+        2.08,
+        32.946179740306974,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 12",
+      "position": [
+        -8,
+        16.784336031905013,
+        132
+      ],
+      "size": [
+        2.08,
+        33.56867206381003,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 13",
+      "position": [
+        -6,
+        17.02935570432193,
+        132
+      ],
+      "size": [
+        2.08,
+        34.05871140864386,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 14",
+      "position": [
+        -4,
+        17.21106220442016,
+        132
+      ],
+      "size": [
+        2.08,
+        34.42212440884032,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 15",
+      "position": [
+        -2,
+        17.331506171463086,
+        132
+      ],
+      "size": [
+        2.08,
+        34.66301234292617,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 16",
+      "position": [
+        0,
+        17.391998105612018,
+        132
+      ],
+      "size": [
+        2.08,
+        34.783996211224036,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 17",
+      "position": [
+        2,
+        17.331506171463086,
+        132
+      ],
+      "size": [
+        2.08,
+        34.66301234292617,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 18",
+      "position": [
+        4,
+        17.21106220442016,
+        132
+      ],
+      "size": [
+        2.08,
+        34.42212440884032,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 19",
+      "position": [
+        6,
+        17.02935570432193,
+        132
+      ],
+      "size": [
+        2.08,
+        34.05871140864386,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 20",
+      "position": [
+        8,
+        16.784336031905013,
+        132
+      ],
+      "size": [
+        2.08,
+        33.56867206381003,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 21",
+      "position": [
+        10,
+        16.473089870153487,
+        132
+      ],
+      "size": [
+        2.08,
+        32.946179740306974,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 22",
+      "position": [
+        12,
+        16.091651612321254,
+        132
+      ],
+      "size": [
+        2.08,
+        32.18330322464251,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 23",
+      "position": [
+        14,
+        15.63471506173803,
+        132
+      ],
+      "size": [
+        2.08,
+        31.26943012347606,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 24",
+      "position": [
+        16,
+        15.095190988815459,
+        132
+      ],
+      "size": [
+        2.08,
+        30.190381977630917,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 25",
+      "position": [
+        18,
+        14.463509587492679,
+        132
+      ],
+      "size": [
+        2.08,
+        28.927019174985357,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 26",
+      "position": [
+        20,
+        13.72647345288985,
+        132
+      ],
+      "size": [
+        2.08,
+        27.4529469057797,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 27",
+      "position": [
+        22,
+        12.865257781380862,
+        132
+      ],
+      "size": [
+        2.08,
+        25.730515562761724,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 28",
+      "position": [
+        24,
+        11.851634243579202,
+        132
+      ],
+      "size": [
+        2.08,
+        23.703268487158404,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 29",
+      "position": [
+        26,
+        10.639999999999999,
+        132
+      ],
+      "size": [
+        2.08,
+        21.279999999999998,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 30",
+      "position": [
+        28,
+        9.147519875663772,
+        132
+      ],
+      "size": [
+        2.08,
+        18.295039751327543,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 31",
+      "position": [
+        30,
+        7.188766702464661,
+        132
+      ],
+      "size": [
+        2.08,
+        14.377533404929322,
+        1
+      ]
+    },
+    {
+      "name": "NorthDJ Furniture Blocker 32",
+      "position": [
+        32,
+        4.063649814445855,
+        132
+      ],
+      "size": [
+        2.08,
+        8.12729962889171,
+        1
+      ]
+    }
+  ],
+  "djConsoleSHA256": "9a48ba903b8105664d14d827caa0303497b79ea3e7e7a73467b3f6c046f28776",
+  "finalSourcePinsSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+  "pads": [
+    {
+      "level": 1,
+      "position": [
+        -72,
+        1.62,
+        -93.2
+      ]
+    },
+    {
+      "level": 1,
+      "position": [
+        -54,
+        1.62,
+        -93.2
+      ]
+    },
+    {
+      "level": 1,
+      "position": [
+        -72,
+        1.62,
+        -66.8
+      ]
+    },
+    {
+      "level": 1,
+      "position": [
+        -54,
+        1.62,
+        -66.8
+      ]
+    },
+    {
+      "level": 2,
+      "position": [
+        54,
+        1.62,
+        -93.2
+      ]
+    },
+    {
+      "level": 2,
+      "position": [
+        72,
+        1.62,
+        -93.2
+      ]
+    },
+    {
+      "level": 2,
+      "position": [
+        54,
+        1.62,
+        -66.8
+      ]
+    },
+    {
+      "level": 2,
+      "position": [
+        72,
+        1.62,
+        -66.8
+      ]
+    },
+    {
+      "level": 3,
+      "position": [
+        -72,
+        1.62,
+        -13.2
+      ]
+    },
+    {
+      "level": 3,
+      "position": [
+        -54,
+        1.62,
+        -13.2
+      ]
+    },
+    {
+      "level": 3,
+      "position": [
+        -72,
+        1.62,
+        13.2
+      ]
+    },
+    {
+      "level": 3,
+      "position": [
+        -54,
+        1.62,
+        13.2
+      ]
+    },
+    {
+      "level": 4,
+      "position": [
+        54,
+        1.62,
+        -13.2
+      ]
+    },
+    {
+      "level": 4,
+      "position": [
+        72,
+        1.62,
+        -13.2
+      ]
+    },
+    {
+      "level": 4,
+      "position": [
+        54,
+        1.62,
+        13.2
+      ]
+    },
+    {
+      "level": 4,
+      "position": [
+        72,
+        1.62,
+        13.2
+      ]
+    },
+    {
+      "level": 5,
+      "position": [
+        -72,
+        1.62,
+        66.8
+      ]
+    },
+    {
+      "level": 5,
+      "position": [
+        -54,
+        1.62,
+        66.8
+      ]
+    },
+    {
+      "level": 5,
+      "position": [
+        -72,
+        1.62,
+        93.2
+      ]
+    },
+    {
+      "level": 5,
+      "position": [
+        -54,
+        1.62,
+        93.2
+      ]
+    },
+    {
+      "level": 6,
+      "position": [
+        54,
+        1.62,
+        66.8
+      ]
+    },
+    {
+      "level": 6,
+      "position": [
+        72,
+        1.62,
+        66.8
+      ]
+    },
+    {
+      "level": 6,
+      "position": [
+        54,
+        1.62,
+        93.2
+      ]
+    },
+    {
+      "level": 6,
+      "position": [
+        72,
+        1.62,
+        93.2
+      ]
+    }
+  ],
+  "pbrCounts": {
+    "asphalt_road": 7,
+    "sidewalk_concrete": 26,
+    "tunnel_concrete": 15
+  },
+  "placeId": 131311258779917,
+  "rawManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "signs": [
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        -28.6,
+        0.8,
+        -80
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 1,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        -28.6,
+        0.8,
+        0
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 3,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        -28.6,
+        0.8,
+        80
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 5,
+      "yaw": 1.5707963267948966
+    },
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        28.6,
+        0.8,
+        -80
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 2,
+      "yaw": -1.5707963267948966
+    },
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        28.6,
+        0.8,
+        0
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 4,
+      "yaw": -1.5707963267948966
+    },
+    {
+      "bladeLocalPosition": [
+        -15,
+        17,
+        5.1
+      ],
+      "bladeLocalSize": [
+        0.86,
+        2.95,
+        9.2
+      ],
+      "gatePosition": [
+        28.6,
+        0.8,
+        80
+      ],
+      "headerLocalPosition": [
+        0,
+        17.2,
+        1.42
+      ],
+      "headerLocalSize": [
+        22.8,
+        2.68,
+        0.04
+      ],
+      "level": 6,
+      "yaw": -1.5707963267948966
+    }
+  ],
+  "sources": [
+    {
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/clutter/backing-v2/EndBlockades.ModuleScript.candidate.luau",
+      "new": false,
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a"
+    },
+    {
+      "className": "LocalScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+      "new": false,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac"
+    },
+    {
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+      "new": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e"
+    },
+    {
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+      "new": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c"
+    },
+    {
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau",
+      "new": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d"
+    },
+    {
+      "className": "ModuleScript",
+      "file": "artifacts/lobby-polish-20261002/root/Builder.candidate.luau",
+      "new": false,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b"
+    }
+  ],
+  "themes": [
+    "OFFICE BACKROOMS · START HERE",
+    "POOLROOMS",
+    "MALL BACKROOMS",
+    "90s CINEMA · DEV ONLY",
+    "QUIET SUBURBS",
+    "MALL PARTY"
+  ],
+  "universeId": 10559217407
+}

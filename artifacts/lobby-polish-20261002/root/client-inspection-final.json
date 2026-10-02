@@ -1,0 +1,2666 @@
+{
+  "playVisualsVerified": false,
+  "candidateSources": {
+    "1": {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/clutter/backing-v2/EndBlockades.ModuleScript.candidate.luau",
+      "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+      "new": false
+    },
+    "2": {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "className": "LocalScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "new": false
+    },
+    "3": {
+      "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+      "new": true
+    },
+    "4": {
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+      "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+      "new": true
+    },
+    "5": {
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+      "new": true
+    },
+    "6": {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "className": "ModuleScript",
+      "file": "artifacts/lobby-polish-20261002/root/Builder.candidate.luau",
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+      "new": false
+    }
+  },
+  "routes": {
+    "scope": "Thin horizontal collision rays only; avatar width, walking/stairs and return-lobby travel require actual interaction",
+    "rows": {
+      "1": {
+        "name": "central-road-eye-height",
+        "clear": true
+      },
+      "2": {
+        "name": "bay-1",
+        "clear": true
+      },
+      "3": {
+        "name": "bay-2",
+        "clear": true
+      },
+      "4": {
+        "name": "bay-3",
+        "clear": true
+      },
+      "5": {
+        "name": "bay-4",
+        "clear": true
+      },
+      "6": {
+        "expectedClientShutter": true,
+        "name": "bay-5"
+      },
+      "7": {
+        "name": "bay-6",
+        "clear": true
+      }
+    }
+  },
+  "shop": {
+    "1": {
+      "kind": "Item",
+      "art": {
+        "1": "rbxassetid://100856675462356",
+        "2": "rbxassetid://100856675462356",
+        "3": "rbxassetid://100856675462356",
+        "4": "rbxassetid://100856675462356",
+        "5": "rbxassetid://100856675462356",
+        "6": "rbxassetid://100856675462356"
+      },
+      "name": "ROUTE MARKER PACK",
+      "key": "RouteMarker"
+    },
+    "2": {
+      "kind": "Pass",
+      "art": {
+        "1": "rbxassetid://87202894425080",
+        "2": "rbxassetid://87202894425080",
+        "3": "rbxassetid://87202894425080",
+        "4": "rbxassetid://87202894425080",
+        "5": "rbxassetid://87202894425080",
+        "6": "rbxassetid://87202894425080"
+      },
+      "name": "ENTITY\nDETECTOR",
+      "key": "EntityDetector"
+    },
+    "3": {
+      "kind": "Product",
+      "art": {
+        "1": "rbxassetid://134334664606741",
+        "2": "rbxassetid://134334664606741",
+        "3": "rbxassetid://134334664606741",
+        "4": "rbxassetid://134334664606741",
+        "5": "rbxassetid://134334664606741",
+        "6": "rbxassetid://134334664606741"
+      },
+      "name": "EXPEDITION PACK",
+      "key": "ExpeditionPack"
+    },
+    "4": {
+      "kind": "Pass",
+      "art": {
+        "1": "rbxassetid://83090272487976",
+        "2": "rbxassetid://83090272487976",
+        "3": "rbxassetid://83090272487976",
+        "4": "rbxassetid://83090272487976",
+        "5": "rbxassetid://83090272487976",
+        "6": "rbxassetid://83090272487976"
+      },
+      "name": "GLOWSTICK CUSTOMIZER",
+      "key": "CosmeticEquipment"
+    },
+    "5": {
+      "kind": "Item",
+      "art": {
+        "1": "rbxassetid://73457681182843",
+        "2": "rbxassetid://73457681182843",
+        "3": "rbxassetid://73457681182843",
+        "4": "rbxassetid://73457681182843",
+        "5": "rbxassetid://73457681182843",
+        "6": "rbxassetid://73457681182843"
+      },
+      "name": "SPEED POTION",
+      "key": "SpeedPotion"
+    },
+    "6": {
+      "kind": "Pass",
+      "art": {
+        "1": "rbxassetid://106022873152277",
+        "2": "rbxassetid://106022873152277",
+        "3": "rbxassetid://106022873152277",
+        "4": "rbxassetid://106022873152277",
+        "5": "rbxassetid://106022873152277",
+        "6": "rbxassetid://106022873152277"
+      },
+      "name": "ZYNTRA SUPPORTER",
+      "key": "Supporter"
+    },
+    "7": {
+      "kind": "Product",
+      "art": {
+        "1": "rbxassetid://118242405264841",
+        "2": "rbxassetid://118242405264841",
+        "3": "rbxassetid://118242405264841",
+        "4": "rbxassetid://118242405264841",
+        "5": "rbxassetid://118242405264841",
+        "6": "rbxassetid://118242405264841"
+      },
+      "name": "4 RESEARCH TOKENS",
+      "key": "Tokens4"
+    },
+    "8": {
+      "kind": "Product",
+      "art": {
+        "1": "rbxassetid://92866750717809",
+        "2": "rbxassetid://92866750717809",
+        "3": "rbxassetid://92866750717809",
+        "4": "rbxassetid://92866750717809",
+        "5": "rbxassetid://92866750717809",
+        "6": "rbxassetid://92866750717809"
+      },
+      "name": "EMERGENCY RE-ENTRY",
+      "key": "EmergencyReentry"
+    },
+    "9": {
+      "kind": "Product",
+      "art": {
+        "1": "rbxassetid://124733504759279",
+        "2": "rbxassetid://124733504759279",
+        "3": "rbxassetid://124733504759279",
+        "4": "rbxassetid://124733504759279",
+        "5": "rbxassetid://124733504759279",
+        "6": "rbxassetid://124733504759279"
+      },
+      "name": "20 RESEARCH TOKENS",
+      "key": "Tokens20"
+    },
+    "10": {
+      "kind": "Pass",
+      "art": {
+        "1": "rbxassetid://80999828522184",
+        "2": "rbxassetid://80999828522184",
+        "3": "rbxassetid://80999828522184",
+        "4": "rbxassetid://80999828522184",
+        "5": "rbxassetid://80999828522184",
+        "6": "rbxassetid://80999828522184"
+      },
+      "name": "ADVANCED EQUIPMENT",
+      "key": "AdvancedEquipment"
+    }
+  },
+  "catalogSHA256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+  "passedCount": 604,
+  "gameplayVerified": false,
+  "context": "Client",
+  "propertyChecksPassed": true,
+  "coverage": {
+    "1": "Active hologram fade was not observed; rerun during a real queue"
+  },
+  "queues": {
+    "1": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 01",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 101,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 1,
+      "index": 1,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "2": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 02",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 102,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 1,
+      "index": 2,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "3": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 03",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 103,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 1,
+      "index": 3,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "4": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 04",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 104,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 1,
+      "index": 4,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "5": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 01",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 105,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 2,
+      "index": 1,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "6": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 02",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 106,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 2,
+      "index": 2,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "7": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 03",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 107,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 2,
+      "index": 3,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "8": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 04",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 108,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 2,
+      "index": 4,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "9": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 01",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 109,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 3,
+      "index": 1,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "10": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 02",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 110,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 3,
+      "index": 2,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "11": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 03",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 111,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 3,
+      "index": 3,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "12": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 04",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 112,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 3,
+      "index": 4,
+      "subtitle": "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
+    },
+    "13": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 01",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 113,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 4,
+      "index": 1,
+      "subtitle": "TRIAL ROUND OR MAP PREVIEW  •  DEV ACCESS"
+    },
+    "14": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 02",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 114,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 4,
+      "index": 2,
+      "subtitle": "TRIAL ROUND OR MAP PREVIEW  •  DEV ACCESS"
+    },
+    "15": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 03",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 115,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 4,
+      "index": 3,
+      "subtitle": "TRIAL ROUND OR MAP PREVIEW  •  DEV ACCESS"
+    },
+    "16": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 04",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 116,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 4,
+      "index": 4,
+      "subtitle": "TRIAL ROUND OR MAP PREVIEW  •  DEV ACCESS"
+    },
+    "17": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 01",
+      "titleVisible": false,
+      "subtitleVisible": false,
+      "id": 117,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 5,
+      "index": 1,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "18": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 02",
+      "titleVisible": false,
+      "subtitleVisible": false,
+      "id": 118,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 5,
+      "index": 2,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "19": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 03",
+      "titleVisible": false,
+      "subtitleVisible": false,
+      "id": 119,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 5,
+      "index": 3,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "20": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 04",
+      "titleVisible": false,
+      "subtitleVisible": false,
+      "id": 120,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 5,
+      "index": 4,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "21": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 01",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 121,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.QueueZone1",
+      "title": "STATION 1  •  0/6",
+      "active": false,
+      "level": 6,
+      "index": 1,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "22": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 02",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 122,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.QueueZone2",
+      "title": "STATION 2  •  0/6",
+      "active": false,
+      "level": 6,
+      "index": 2,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "23": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 03",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 123,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.QueueZone3",
+      "title": "STATION 3  •  0/6",
+      "active": false,
+      "level": 6,
+      "index": 3,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    },
+    "24": {
+      "renderOwner": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 04",
+      "titleVisible": true,
+      "subtitleVisible": true,
+      "id": 124,
+      "detector": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.QueueZone4",
+      "title": "STATION 4  •  0/6",
+      "active": false,
+      "level": 6,
+      "index": 4,
+      "subtitle": "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+    }
+  },
+  "checks": [],
+  "scope": "Actual instance/property observations only; screenshots, avatar walking, multiplayer and material shader rendering remain separate checks",
+  "viewer": {
+    "name": "ZenMeister02",
+    "gates": {
+      "1": {
+        "status": "COMING SOON",
+        "level": 5,
+        "shutter": true,
+        "allowed": false
+      },
+      "2": {
+        "status": "DEV PREVIEW",
+        "level": 6,
+        "shutter": false,
+        "allowed": true
+      }
+    },
+    "reduceFlashing": false,
+    "userId": 11374988579
+  },
+  "performanceVerified": false,
+  "checkCount": 604,
+  "vinyl": {
+    "scope": "Two separate discs; known DJConsole mesh containing tonearms/needles observed fixed for the same interval",
+    "rows": {
+      "1": {
+        "centerDrift": 0,
+        "name": "VinylDiscAmber",
+        "animationEligible": true,
+        "elapsed": 3.0506842083123047,
+        "degrees": 36.29326541908952
+      },
+      "2": {
+        "centerDrift": 0,
+        "name": "VinylDiscCyan",
+        "animationEligible": true,
+        "elapsed": 3.0506842083123047,
+        "degrees": 36.29326541908952
+      }
+    },
+    "animationEligibility": true
+  },
+  "propClearance": {
+    "scope": "Bounding-box X/Z distance to actual circular detectors; not an avatar movement test",
+    "rows": {
+      "1": {
+        "name": "Cinema Waiting Bench B",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 4,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "2": {
+        "name": "Cinema Waiting Bench A",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 4,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "3": {
+        "name": "Cinema Check Monitor",
+        "renderFidelity": "Precise",
+        "family": "CRTMonitor",
+        "level": 4,
+        "nearestDetectorClearance": 7.117266047906577
+      },
+      "4": {
+        "name": "Cinema Check Desk",
+        "renderFidelity": "Precise",
+        "family": "Desk",
+        "level": 4,
+        "nearestDetectorClearance": 4.93057358291987
+      },
+      "5": {
+        "name": "Suburb Waiting Bench",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 5,
+        "nearestDetectorClearance": 1.7479162759703595
+      },
+      "6": {
+        "name": "Suburb Waiting Sofa",
+        "renderFidelity": "Precise",
+        "family": "Sofa",
+        "level": 5,
+        "nearestDetectorClearance": 0.6207883442496325
+      },
+      "7": {
+        "name": "Mall Waiting Bench A",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 6,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "8": {
+        "name": "Suburb Moving Carpet",
+        "renderFidelity": "Precise",
+        "family": "RolledCarpet",
+        "level": 5,
+        "nearestDetectorClearance": 1.0548034163527067
+      },
+      "9": {
+        "name": "Mall Spare Party Chair",
+        "renderFidelity": "Precise",
+        "family": "R4PartyChair",
+        "level": 6,
+        "nearestDetectorClearance": 2.0640887976418707
+      },
+      "10": {
+        "name": "Mall Waiting Bench B",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 6,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "11": {
+        "name": "Office Terminal",
+        "renderFidelity": "Precise",
+        "family": "CRTMonitor",
+        "level": 1,
+        "nearestDetectorClearance": 3.9225204849243163
+      },
+      "12": {
+        "name": "Office Keyboard",
+        "renderFidelity": "Precise",
+        "family": "BeigeKeyboard",
+        "level": 1,
+        "nearestDetectorClearance": 3.2099960708618163
+      },
+      "13": {
+        "name": "Office Workstation",
+        "renderFidelity": "Precise",
+        "family": "Desk",
+        "level": 1,
+        "nearestDetectorClearance": 3.0900009536743163
+      },
+      "14": {
+        "name": "Pool Waiting Bench B",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 2,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "15": {
+        "name": "Pool Waiting Bench A",
+        "renderFidelity": "Precise",
+        "family": "VinylBench",
+        "level": 2,
+        "nearestDetectorClearance": 1.7479266063234462
+      },
+      "16": {
+        "name": "Party Chair A",
+        "renderFidelity": "Precise",
+        "family": "R4PartyChair",
+        "level": 3,
+        "nearestDetectorClearance": 2.5628645596507216
+      },
+      "17": {
+        "name": "Pool Service Trolley",
+        "renderFidelity": "Precise",
+        "family": "WireTrolley",
+        "level": 2,
+        "nearestDetectorClearance": 2.1737106704711913
+      },
+      "18": {
+        "name": "Party Supply Trolley",
+        "renderFidelity": "Precise",
+        "family": "WireTrolley",
+        "level": 3,
+        "nearestDetectorClearance": 5.646469772222323
+      },
+      "19": {
+        "name": "Party Chair B",
+        "renderFidelity": "Precise",
+        "family": "R4PartyChair",
+        "level": 3,
+        "nearestDetectorClearance": 2.5628665917196347
+      }
+    },
+    "minimum": 0.6207883442496325
+  },
+  "expectedFinalSourcePinsSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+  "materials": {
+    "shaderRenderingVerified": false,
+    "rows": {
+      "1": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "2": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "3": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "4": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "5": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "6": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "7": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "8": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EndBackstop"
+      },
+      "9": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "10": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "11": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "12": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "13": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "14": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "15": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EndBackstop"
+      },
+      "16": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "17": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "18": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "19": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.DoorThreshold.DoorThreshold_sidewalk_concrete"
+      },
+      "20": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_sidewalk_concrete"
+      },
+      "21": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.EntryConnector.EntryConnector_tunnel_concrete"
+      },
+      "22": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PortalShell"
+      },
+      "23": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "24": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "25": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "26": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "27": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "28": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "29": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "30": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "31": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "32": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "33": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "34": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "35": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "36": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PlainShell"
+      },
+      "37": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "38": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PlainShell"
+      },
+      "39": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "40": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PlainShell"
+      },
+      "41": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "42": {
+        "material": "sidewalk_concrete",
+        "maps": {
+          "normal": "rbxassetid://97239310145567",
+          "color": "rbxassetid://137946858019381",
+          "roughness": "rbxassetid://138358337027432"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.SidewalkSection.SidewalkSection_sidewalk_concrete"
+      },
+      "43": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PlainShell"
+      },
+      "44": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "45": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PortalShell"
+      },
+      "46": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      },
+      "47": {
+        "material": "tunnel_concrete",
+        "maps": {
+          "normal": "rbxassetid://112801222792719",
+          "color": "rbxassetid://72127726815177",
+          "roughness": "rbxassetid://70562685470916"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.PortalShell"
+      },
+      "48": {
+        "material": "asphalt_road",
+        "maps": {
+          "normal": "rbxassetid://85799149505047",
+          "color": "rbxassetid://93427464566515",
+          "roughness": "rbxassetid://106931720832992"
+        },
+        "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.RoadSection.RoadSection_asphalt_road"
+      }
+    },
+    "counts": {
+      "tunnel_concrete": 15,
+      "asphalt_road": 7,
+      "sidewalk_concrete": 26
+    },
+    "jointAtlasCount": 14
+  },
+  "signs": {
+    "1": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 1",
+        "Right": "LEVEL 1  →"
+      },
+      "level": 1,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "OFFICE BACKROOMS · START HERE",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 1",
+          "name": "Label"
+        }
+      }
+    },
+    "2": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 3",
+        "Right": "LEVEL 3  →"
+      },
+      "level": 3,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "MALL BACKROOMS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 3",
+          "name": "Label"
+        }
+      }
+    },
+    "3": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ACCESS REQUIRED · PARTY QUEUE",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 5",
+        "Right": "LEVEL 5  →"
+      },
+      "level": 5,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "QUIET SUBURBS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 5",
+          "name": "Label"
+        }
+      }
+    },
+    "4": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 2",
+        "Right": "LEVEL 2  →"
+      },
+      "level": 2,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "POOLROOMS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 2",
+          "name": "Label"
+        }
+      }
+    },
+    "5": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ONLY · TRIAL OR MAP PREVIEW",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 4",
+        "Right": "LEVEL 4  →"
+      },
+      "level": 4,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "90s CINEMA · DEV ONLY",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 4",
+          "name": "Label"
+        }
+      }
+    },
+    "6": {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ACCESS REQUIRED · PARTY QUEUE",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 6",
+        "Right": "LEVEL 6  →"
+      },
+      "level": 6,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "MALL PARTY",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 6",
+          "name": "Label"
+        }
+      }
+    }
+  },
+  "failures": [],
+  "schema": "lobby-polish-readonly-play-inspection-v1",
+  "holograms": {
+    "idleVisualCoverage": true,
+    "active": 0,
+    "activeVisualCoverage": false,
+    "rows": {
+      "1": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 01",
+        "active": false
+      },
+      "2": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 02",
+        "active": false
+      },
+      "3": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 03",
+        "active": false
+      },
+      "4": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level1.Level1 Queue 04",
+        "active": false
+      },
+      "5": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 01",
+        "active": false
+      },
+      "6": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 02",
+        "active": false
+      },
+      "7": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 03",
+        "active": false
+      },
+      "8": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level2.Level2 Queue 04",
+        "active": false
+      },
+      "9": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 01",
+        "active": false
+      },
+      "10": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 02",
+        "active": false
+      },
+      "11": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 03",
+        "active": false
+      },
+      "12": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level3.Level3 Queue 04",
+        "active": false
+      },
+      "13": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 01",
+        "active": false
+      },
+      "14": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 02",
+        "active": false
+      },
+      "15": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 03",
+        "active": false
+      },
+      "16": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level4.Level4 Queue 04",
+        "active": false
+      },
+      "17": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 01",
+        "active": false
+      },
+      "18": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 02",
+        "active": false
+      },
+      "19": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 03",
+        "active": false
+      },
+      "20": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 04",
+        "active": false
+      },
+      "21": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 01",
+        "active": false
+      },
+      "22": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 02",
+        "active": false
+      },
+      "23": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 03",
+        "active": false
+      },
+      "24": {
+        "bands": {
+          "1": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 1
+          },
+          "2": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 2
+          },
+          "3": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 3
+          },
+          "4": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 4
+          },
+          "5": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 5
+          },
+          "6": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 6
+          },
+          "7": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 7
+          },
+          "8": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 8
+          },
+          "9": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 9
+          },
+          "10": {
+            "height": 0.014999985694885254,
+            "transparency": 1,
+            "index": 10
+          }
+        },
+        "station": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level6.Level6 Queue 04",
+        "active": false
+      }
+    },
+    "idle": 24
+  }
+}

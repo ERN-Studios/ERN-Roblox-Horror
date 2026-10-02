@@ -1,0 +1,34 @@
+[
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+    "name": "Builder",
+    "class": "ModuleScript",
+    "editorOk": true,
+    "sourceSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+    "editorSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494"
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+    "name": "QueueBridge",
+    "class": "ModuleScript",
+    "editorOk": true,
+    "sourceSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+    "editorSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+    "name": "LobbyReimaginedQueueController",
+    "class": "LocalScript",
+    "editorOk": true,
+    "sourceSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+    "editorSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7"
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+    "name": "R4DevGateController",
+    "class": "LocalScript",
+    "editorOk": true,
+    "sourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+    "editorSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+  }
+]

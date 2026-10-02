@@ -1,0 +1,106 @@
+{
+  "fixtureDirectory": "/private/tmp/lobby-polish-native-scope-selftest-20261002",
+  "inputBackupWrites": false,
+  "passed": true,
+  "realCaptureCompared": false,
+  "schema": "lobby-polish-native-audit-selftest-v1",
+  "studioWrites": false,
+  "tests": [
+    {
+      "actualVerified": true,
+      "concurrentNativeRows": 0,
+      "concurrentSources": 0,
+      "errors": {},
+      "expectedVerified": true,
+      "name": "exact_scope",
+      "taskScopeVerified": true
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 2,
+      "concurrentSources": 0,
+      "errors": [
+        "Original ServerLobby native fingerprint changed or missing"
+      ],
+      "expectedVerified": false,
+      "name": "original_lobby_geometry",
+      "taskScopeVerified": false
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 2,
+      "concurrentSources": 1,
+      "errors": {},
+      "expectedVerified": false,
+      "name": "unrelated_source_addition",
+      "taskScopeVerified": true
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 0,
+      "concurrentSources": 0,
+      "errors": [
+        "Static material URI/PNG pin differs: tunnel_concrete/color"
+      ],
+      "expectedVerified": false,
+      "name": "material_uri_mismatch",
+      "taskScopeVerified": false
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 0,
+      "concurrentSources": 0,
+      "errors": [
+        "Unexpected new helper descendants: ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays"
+      ],
+      "expectedVerified": false,
+      "name": "unexpected_helper_child",
+      "taskScopeVerified": false
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 0,
+      "concurrentSources": 0,
+      "errors": [
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/ServerScriptService.LobbyReimaginedPreview.Builder",
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+        "Source/editor/export differs: /private/tmp/lobby-polish-native-scope-selftest-20261002/source_editor_conflict/StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController"
+      ],
+      "expectedVerified": false,
+      "name": "source_editor_conflict",
+      "taskScopeVerified": false
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 3,
+      "concurrentSources": 0,
+      "errors": [
+        "Original ServerLobby native fingerprint changed or missing"
+      ],
+      "expectedVerified": false,
+      "name": "reference_to_new_task_module",
+      "taskScopeVerified": false
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 2,
+      "concurrentSources": 0,
+      "errors": {},
+      "expectedVerified": false,
+      "name": "unrelated_attribute",
+      "taskScopeVerified": true
+    },
+    {
+      "actualVerified": false,
+      "concurrentNativeRows": 1,
+      "concurrentSources": 0,
+      "errors": {},
+      "expectedVerified": false,
+      "name": "new_root",
+      "taskScopeVerified": true
+    }
+  ]
+}

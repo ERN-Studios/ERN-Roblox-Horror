@@ -1,0 +1,3061 @@
+{
+  "root": "Workspace.LobbyReimaginedPreview.R3ShopDisplay",
+  "rows": [
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SuppliesAndUpgradesSign",
+      "color": [
+        0.03921568766236305,
+        0.0941176488995552,
+        0.0941176488995552
+      ],
+      "class": "Part",
+      "cf": [
+        248.10400390625,
+        41.79975128173828,
+        -800,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0,
+      "name": "SuppliesAndUpgradesSign",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        40.5,
+        2.5199999809265137,
+        0.16200000047683716
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SuppliesAndUpgradesSign.SuppliesAndUpgradesFace",
+      "name": "SuppliesAndUpgradesFace",
+      "canvas": [
+        1800,
+        112
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SuppliesAndUpgradesSign.SuppliesAndUpgradesFace.Title",
+      "text": "SUPPLIES  &  UPGRADES",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": false,
+      "font": "GothamBlack",
+      "name": "Title",
+      "class": "TextLabel",
+      "textColor": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "wrapped": false,
+      "textSize": 76,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SuppliesAndUpgradesSign.SuppliesAndUpgradesFace.Title.UIGradient",
+      "name": "UIGradient",
+      "class": "UIGradient"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SupplySignNeon",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        247.96900939941406,
+        40.35974884033203,
+        -800,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0,
+      "name": "SupplySignNeon",
+      "material": "Neon",
+      "collide": false,
+      "size": [
+        40.5,
+        0.08100000023841858,
+        0.10799999535083771
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.SupplySignNeon",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.96900939941406,
+        43.239749908447266,
+        -800,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0,
+      "name": "SupplySignNeon",
+      "material": "Neon",
+      "collide": false,
+      "size": [
+        40.5,
+        0.08100000023841858,
+        0.10799999535083771
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Pass",
+        "ShopItemKey": "Supporter"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter",
+      "name": "ShopStand_Supporter",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:Supporter",
+        "ShopItemKey": "Supporter"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -823.4000244140625,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "ZYNTRA SUPPORTER",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "Supporter"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Supporter.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -823.4000244140625,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Pass",
+        "ShopItemKey": "AdvancedEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment",
+      "name": "ShopStand_AdvancedEquipment",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:AdvancedEquipment",
+        "ShopItemKey": "AdvancedEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -818.2000122070312,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "ADVANCED EQUIPMENT",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "AdvancedEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_AdvancedEquipment.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -818.2000122070312,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Product",
+        "ShopItemKey": "Tokens4"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4",
+      "name": "ShopStand_Tokens4",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:Tokens4",
+        "ShopItemKey": "Tokens4"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -813,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "4 RESEARCH TOKENS",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "Tokens4"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens4.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -813,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Product",
+        "ShopItemKey": "Tokens20"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20",
+      "name": "ShopStand_Tokens20",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:Tokens20",
+        "ShopItemKey": "Tokens20"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -807.800048828125,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "20 RESEARCH TOKENS",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "Tokens20"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_Tokens20.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -807.800048828125,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Product",
+        "ShopItemKey": "EmergencyReentry"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry",
+      "name": "ShopStand_EmergencyReentry",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:EmergencyReentry",
+        "ShopItemKey": "EmergencyReentry"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox",
+      "color": [
+        0.95686274766922,
+        0.37254902720451355,
+        0.32156863808631897
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -802.6000366210938,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "EMERGENCY RE-ENTRY",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        0.95686274766922,
+        0.37254902720451355,
+        0.32156863808631897
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        0.95686274766922,
+        0.37254902720451355,
+        0.32156863808631897
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "EmergencyReentry"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EmergencyReentry.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -802.6000366210938,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Product",
+        "ShopItemKey": "ExpeditionPack"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack",
+      "name": "ShopStand_ExpeditionPack",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:ExpeditionPack",
+        "ShopItemKey": "ExpeditionPack"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -797.3999633789062,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "EXPEDITION PACK",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "ExpeditionPack"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_ExpeditionPack.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -797.3999633789062,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Pass",
+        "ShopItemKey": "CosmeticEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment",
+      "name": "ShopStand_CosmeticEquipment",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:CosmeticEquipment",
+        "ShopItemKey": "CosmeticEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -792.199951171875,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "GLOWSTICK CUSTOMIZER",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "CosmeticEquipment"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_CosmeticEquipment.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -792.199951171875,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Item",
+        "ShopItemKey": "SpeedPotion"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion",
+      "name": "ShopStand_SpeedPotion",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:SpeedPotion",
+        "ShopItemKey": "SpeedPotion"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -787,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "SPEED POTION",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "SpeedPotion"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_SpeedPotion.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -787,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Item",
+        "ShopItemKey": "RouteMarker"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker",
+      "name": "ShopStand_RouteMarker",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:RouteMarker",
+        "ShopItemKey": "RouteMarker"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox",
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -781.7999877929688,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "ROUTE MARKER PACK",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        1,
+        0.7960784435272217,
+        0.30980393290519714
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "RouteMarker"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_RouteMarker.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -781.7999877929688,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    },
+    {
+      "attrs": {
+        "ShopItemKind": "Pass",
+        "ShopItemKey": "EntityDetector"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector",
+      "name": "ShopStand_EntityDetector",
+      "class": "Model"
+    },
+    {
+      "attrs": {
+        "ShopTextureSlot": "Box:EntityDetector",
+        "ShopItemKey": "EntityDetector"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        250.08401489257812,
+        37.02975082397461,
+        -776.5999755859375,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 0.3499999940395355,
+      "name": "ShopHologramBox",
+      "material": "ForceField",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        3.059999942779541,
+        3.059999942779541
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Front",
+      "name": "ShopArtwork_Front",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Front",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Front.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Back",
+      "name": "ShopArtwork_Back",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Back",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Back.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Left",
+      "name": "ShopArtwork_Left",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Left",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Left.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Right",
+      "name": "ShopArtwork_Right",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Right",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Right.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Top",
+      "name": "ShopArtwork_Top",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Top",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Top.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopTexture",
+      "name": "ShopTexture",
+      "class": "Decal"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Bottom",
+      "name": "ShopArtwork_Bottom",
+      "canvas": [
+        256,
+        256
+      ],
+      "face": "Bottom",
+      "class": "SurfaceGui",
+      "alwaysOnTop": false,
+      "light": 0
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopArtwork_Bottom.Artwork",
+      "name": "Artwork",
+      "class": "ImageLabel"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopHologramCaption",
+      "name": "ShopHologramCaption",
+      "class": "BillboardGui"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopHologramCaption.ShopHologramName",
+      "text": "ENTITY\nDETECTOR",
+      "pos": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "scaled": true,
+      "font": "GothamBlack",
+      "name": "ShopHologramName",
+      "class": "TextLabel",
+      "textColor": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "wrapped": true,
+      "textSize": 8,
+      "size": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopHologramCaption.ShopHologramName.UIStroke",
+      "name": "UIStroke",
+      "class": "UIStroke"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopBoxEdge",
+      "name": "ShopBoxEdge",
+      "class": "SelectionBox"
+    },
+    {
+      "attrs": [],
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopHologramBox.ShopBoxGlow",
+      "name": "ShopBoxGlow",
+      "brightness": 1.100000023841858,
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "PointLight",
+      "range": 11,
+      "enabled": true
+    },
+    {
+      "attrs": {
+        "ShopItemKey": "EntityDetector"
+      },
+      "path": "Workspace.LobbyReimaginedPreview.R3ShopDisplay.ShopStand_EntityDetector.ShopPressurePlate",
+      "color": [
+        0.2862745225429535,
+        0.9607843160629272,
+        0.800000011920929
+      ],
+      "class": "Part",
+      "cf": [
+        247.906005859375,
+        31.368749618530273,
+        -776.5999755859375,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "transparency": 1,
+      "name": "ShopPressurePlate",
+      "material": "SmoothPlastic",
+      "collide": false,
+      "size": [
+        3.059999942779541,
+        0.10799999535083771,
+        2.879999876022339
+      ]
+    }
+  ],
+  "attrs": {
+    "ShopDisplayVersion": 5,
+    "ShopItemCount": 10,
+    "FocusAttribute": "ZyntraShopFocus",
+    "LobbyReimaginedOwned": true,
+    "FrontmostX": 26.18,
+    "Placement": "Right wall between the Level 2 and Level 4 gates",
+    "ShellInnerRadius": 33.9,
+    "RibInnerRadius": 33.25
+  }
+}

@@ -1,0 +1,518 @@
+{
+  "schema": "lobby-material-polish-v1",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "baselineManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "materials": {
+    "tunnel_concrete": {
+      "settings": {
+        "targetColor": [
+          162,
+          158,
+          149
+        ],
+        "colorContrast": 1.24,
+        "sourceChroma": 0.38,
+        "normalStrength": 1.25,
+        "roughnessMinimum": 0.77,
+        "roughnessMaximum": 0.98,
+        "source": "concrete_wall_008"
+      },
+      "maps": {
+        "color": {
+          "file": "tunnel_concrete_color.png",
+          "pngSHA256": "174360cb5b0b750ccb4183fe393e29cf6f33149eb462786f8691ef2d56f0c130",
+          "bytes": 976597,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 7,
+          "maximum": 197,
+          "median": [
+            162.0,
+            158.0,
+            149.0
+          ],
+          "standardDeviation": 8.83347,
+          "seams": {
+            "horizontalEdgeMeanDifference": 4.9339,
+            "verticalEdgeMeanDifference": 5.0417,
+            "horizontalInteriorMeanDifference": 4.7733,
+            "verticalInteriorMeanDifference": 4.5052
+          },
+          "sourceSHA256": "72686751abff9fd701cf9c419b3f84090e255ee10a865be47a89930ecfd966b3",
+          "originalPNG_SHA256": "b23eba4560166b0deb6fa2e3d75c671ae2dc9ed93e93dd4267d5bb33f5491427",
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "tunnel_concrete_normal.png",
+          "pngSHA256": "87693ee0d94628e58f20901849584d1eb6c35f71dc5c76fc4e200572b8f53c04",
+          "bytes": 876859,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 24,
+          "maximum": 255,
+          "median": [
+            127.0,
+            127.0,
+            255.0
+          ],
+          "standardDeviation": 60.3301,
+          "seams": {
+            "horizontalEdgeMeanDifference": 1.9564,
+            "verticalEdgeMeanDifference": 1.7546,
+            "horizontalInteriorMeanDifference": 1.9241,
+            "verticalInteriorMeanDifference": 1.7296
+          },
+          "sourceSHA256": "76b85b25ec9d3c0b79aaad02690b9f2a0fe5613001d5c8063e0c2a56698e0d2f",
+          "originalPNG_SHA256": "3eb9eb90cf939583ace020ddcfe91b12de2ce374d3ad5cf2d37618301d53b1d9",
+          "colorSpace": "Non-Color",
+          "normalConvention": "OpenGL",
+          "normalLengthMaximumError": 0.00578373850296332,
+          "minimumZ": 0.3803921568627451,
+          "tangentRMS": 0.036259768775376636
+        },
+        "roughness": {
+          "file": "tunnel_concrete_roughness.png",
+          "pngSHA256": "0e302cdf650a03989127b2e3cf05032348bfa4cbbaacdf1437b3f238097ae902",
+          "bytes": 333897,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 196,
+          "maximum": 250,
+          "median": 207.0,
+          "standardDeviation": 12.09013,
+          "seams": {
+            "horizontalEdgeMeanDifference": 9.8945,
+            "verticalEdgeMeanDifference": 9.793,
+            "horizontalInteriorMeanDifference": 9.1292,
+            "verticalInteriorMeanDifference": 8.6775
+          },
+          "sourceSHA256": "aa4d1d51f856d104b9e3254b0723ced26d368e626cb2fec194f6305e51edd79b",
+          "originalPNG_SHA256": "64a576a561f8c8134e3b20ea3ba73797344b4c0aa9be31a8b1cafdf365ed9550",
+          "colorSpace": "Non-Color"
+        }
+      },
+      "tileStuds": 10
+    },
+    "asphalt_road": {
+      "settings": {
+        "targetColor": [
+          92,
+          93,
+          89
+        ],
+        "colorContrast": 1.14,
+        "sourceChroma": 0.15,
+        "normalStrength": 0.95,
+        "roughnessMinimum": 0.76,
+        "roughnessMaximum": 0.98,
+        "source": "clean_asphalt"
+      },
+      "maps": {
+        "color": {
+          "file": "asphalt_road_color.png",
+          "pngSHA256": "f25701af130f829777208c0b6679cb46f5418cb18f8c22d13d6b969f0b969482",
+          "bytes": 1382182,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 60,
+          "maximum": 203,
+          "median": [
+            92.0,
+            93.0,
+            89.0
+          ],
+          "standardDeviation": 6.90806,
+          "seams": {
+            "horizontalEdgeMeanDifference": 6.7562,
+            "verticalEdgeMeanDifference": 6.9964,
+            "horizontalInteriorMeanDifference": 6.8309,
+            "verticalInteriorMeanDifference": 6.8104
+          },
+          "sourceSHA256": "57cea7a4dc688aa9764d64450997124edf188c802a94d2b773441618ec3cab19",
+          "originalPNG_SHA256": "ffbfd2d8098355696f0d491b3544d00654c0c9f97a644e3d6ac1036b2bba1dde",
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "asphalt_road_normal.png",
+          "pngSHA256": "a8eb947bede56280fcbfe794c53959e901d8cabb517759c20afbdb8901d68831",
+          "bytes": 1804618,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 54,
+          "maximum": 255,
+          "median": [
+            127.0,
+            127.0,
+            255.0
+          ],
+          "standardDeviation": 60.29053,
+          "seams": {
+            "horizontalEdgeMeanDifference": 5.236,
+            "verticalEdgeMeanDifference": 5.4974,
+            "horizontalInteriorMeanDifference": 5.3235,
+            "verticalInteriorMeanDifference": 5.5426
+          },
+          "sourceSHA256": "5d5f512a8d90fa4c43f52f22c1904a845aefddb162b03d2547f0c60175b17125",
+          "originalPNG_SHA256": "47b9084b178bd89e6376722e37c533ce40e16f6dace5c1b4cc06109b9e061636",
+          "colorSpace": "Non-Color",
+          "normalConvention": "OpenGL",
+          "normalLengthMaximumError": 0.0049856493129019075,
+          "minimumZ": 0.780392156862745,
+          "tangentRMS": 0.05634593390620213
+        },
+        "roughness": {
+          "file": "asphalt_road_roughness.png",
+          "pngSHA256": "d3a24522eedbfa79c1880b39d354ac702bfd6c90867e20ce80ddaf76266ab563",
+          "bytes": 750609,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 194,
+          "maximum": 250,
+          "median": 222.0,
+          "standardDeviation": 13.33582,
+          "seams": {
+            "horizontalEdgeMeanDifference": 12.71,
+            "verticalEdgeMeanDifference": 13.6475,
+            "horizontalInteriorMeanDifference": 12.7527,
+            "verticalInteriorMeanDifference": 12.7635
+          },
+          "sourceSHA256": "aff9bbdf84f878887e3b259bcb46e38135eb3416e56d83da5d02b123dade1911",
+          "originalPNG_SHA256": "772bd6f0988c6fb748abdf9f5ccec8f5fa00a50188d62726a0eb0a9d272ea239",
+          "colorSpace": "Non-Color"
+        }
+      },
+      "tileStuds": 10
+    },
+    "sidewalk_concrete": {
+      "settings": {
+        "targetColor": [
+          159,
+          157,
+          149
+        ],
+        "colorContrast": 1.01,
+        "sourceChroma": 0.35,
+        "normalStrength": 0.87,
+        "roughnessMinimum": 0.77,
+        "roughnessMaximum": 0.97,
+        "source": "concrete_pavement"
+      },
+      "maps": {
+        "color": {
+          "file": "sidewalk_concrete_color.png",
+          "pngSHA256": "c2ff43d2c7b6254589d99cbf5e09f727ec9faede72034fa054515a2c75fdb5f4",
+          "bytes": 1939799,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 65,
+          "maximum": 233,
+          "median": [
+            159.0,
+            157.0,
+            149.0
+          ],
+          "standardDeviation": 12.25308,
+          "seams": {
+            "horizontalEdgeMeanDifference": 13.5934,
+            "verticalEdgeMeanDifference": 15.5964,
+            "horizontalInteriorMeanDifference": 8.485,
+            "verticalInteriorMeanDifference": 8.5172
+          },
+          "sourceSHA256": "eb1a433ffbb22ee124cc0d7e04e9344d73cb255550e091777450841ad3436c3e",
+          "originalPNG_SHA256": "f49486eff7a5cb2efa60689aac3c5b93c43491c06f5e53927e72fdbe011d2289",
+          "colorSpace": "sRGB"
+        },
+        "normal": {
+          "file": "sidewalk_concrete_normal.png",
+          "pngSHA256": "0fcfeaf303ca9ac4a68e6f319a2f961594f0ac9fccdf140e8f47d026f8656ab6",
+          "bytes": 2354768,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "minimum": 33,
+          "maximum": 255,
+          "median": [
+            127.0,
+            127.0,
+            253.0
+          ],
+          "standardDeviation": 60.9033,
+          "seams": {
+            "horizontalEdgeMeanDifference": 14.9964,
+            "verticalEdgeMeanDifference": 14.734,
+            "horizontalInteriorMeanDifference": 14.3376,
+            "verticalInteriorMeanDifference": 14.1328
+          },
+          "sourceSHA256": "9800e6b905862cbe4c5729d60d62b1c9dbf8e9cb52a7a468489131c556ec5e7c",
+          "originalPNG_SHA256": "6a38c1a0b17d1fde94f8795469d34a664e637731795452c7331d57d7a64d0ead",
+          "colorSpace": "Non-Color",
+          "normalConvention": "OpenGL",
+          "normalLengthMaximumError": 0.005719896677428116,
+          "minimumZ": 0.6470588235294117,
+          "tangentRMS": 0.15626027553258146
+        },
+        "roughness": {
+          "file": "sidewalk_concrete_roughness.png",
+          "pngSHA256": "881ae43eb5ef0b4ade620d2922a6966dae7864139a5ba2e788c866813ef1c2ee",
+          "bytes": 669415,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "L",
+          "minimum": 196,
+          "maximum": 247,
+          "median": 230.0,
+          "standardDeviation": 10.60893,
+          "seams": {
+            "horizontalEdgeMeanDifference": 7.1611,
+            "verticalEdgeMeanDifference": 6.8926,
+            "horizontalInteriorMeanDifference": 9.4644,
+            "verticalInteriorMeanDifference": 9.5056
+          },
+          "sourceSHA256": "ad66866f5ade952461d5bf140f0388fc87cfe7ae3519ec7931d562edad7da0f6",
+          "originalPNG_SHA256": "c4b9aba746b93d545b9a4e003d4ff1403ccc98fcf5f4adc3a67e6a95f16642aa",
+          "colorSpace": "Non-Color"
+        }
+      },
+      "tileStuds": 8
+    }
+  },
+  "sources": {
+    "concrete_wall_008": {
+      "slug": "concrete_wall_008",
+      "url": "https://polyhaven.com/a/concrete_wall_008",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Charlotte Baglioni": "Photography",
+        "Dario Barresi": "Processing"
+      },
+      "widthMeters": 2.7,
+      "maps": {
+        "color": {
+          "path": "source/concrete_wall_008/concrete_wall_008_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_diff_1k.png",
+          "upstreamMD5": "28b99bf8056aba1efc21ef09f0477820",
+          "sha256": "72686751abff9fd701cf9c419b3f84090e255ee10a865be47a89930ecfd966b3",
+          "bytes": 3913395,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/concrete_wall_008/concrete_wall_008_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_nor_gl_1k.png",
+          "upstreamMD5": "514111a547adc8b3870732f864fc46b4",
+          "sha256": "76b85b25ec9d3c0b79aaad02690b9f2a0fe5613001d5c8063e0c2a56698e0d2f",
+          "bytes": 3548968,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/concrete_wall_008/concrete_wall_008_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_disp_1k.png",
+          "upstreamMD5": "98c7c2c3cccb4f5992e09c77ee3e6706",
+          "sha256": "10352a14ce10c0b01c8be602981c3720961440247b182844515c589c5f820d28",
+          "bytes": 1108458,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/concrete_wall_008/concrete_wall_008_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_wall_008/concrete_wall_008_rough_1k.png",
+          "upstreamMD5": "f7fdbaef34b034e53e5fd31c64e09b71",
+          "sha256": "aa4d1d51f856d104b9e3254b0723ced26d368e626cb2fec194f6305e51edd79b",
+          "bytes": 1659465,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        }
+      }
+    },
+    "clean_asphalt": {
+      "slug": "clean_asphalt",
+      "url": "https://polyhaven.com/a/clean_asphalt",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Dimitrios Savva": "All"
+      },
+      "widthMeters": 2.1,
+      "maps": {
+        "color": {
+          "path": "source/clean_asphalt/clean_asphalt_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_diff_1k.png",
+          "upstreamMD5": "4e453946e65d04a45012ae4cb7472ce9",
+          "sha256": "57cea7a4dc688aa9764d64450997124edf188c802a94d2b773441618ec3cab19",
+          "bytes": 5618915,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/clean_asphalt/clean_asphalt_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_nor_gl_1k.png",
+          "upstreamMD5": "2609fb18d22b915d5ba6dee13fcae1c7",
+          "sha256": "5d5f512a8d90fa4c43f52f22c1904a845aefddb162b03d2547f0c60175b17125",
+          "bytes": 5632375,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/clean_asphalt/clean_asphalt_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_disp_1k.png",
+          "upstreamMD5": "bebadf4488c21b1cdbdf24301ae3eb19",
+          "sha256": "e949dc95e16cb100b3bb4ee4efd63d0930af6ebc7378e5484cab9dd1c3309b2a",
+          "bytes": 1604467,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/clean_asphalt/clean_asphalt_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/clean_asphalt/clean_asphalt_rough_1k.png",
+          "upstreamMD5": "a6b14fa39340820d707401d377b58e7d",
+          "sha256": "aff9bbdf84f878887e3b259bcb46e38135eb3416e56d83da5d02b123dade1911",
+          "bytes": 1878547,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        }
+      }
+    },
+    "concrete_pavement": {
+      "slug": "concrete_pavement",
+      "url": "https://polyhaven.com/a/concrete_pavement",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "widthMeters": 1.8,
+      "maps": {
+        "color": {
+          "path": "source/concrete_pavement/concrete_pavement_diff_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_diff_1k.png",
+          "upstreamMD5": "17ed111caa1e92341a8eb741d91d2312",
+          "sha256": "eb1a433ffbb22ee124cc0d7e04e9344d73cb255550e091777450841ad3436c3e",
+          "bytes": 5754280,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "normal": {
+          "path": "source/concrete_pavement/concrete_pavement_nor_gl_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_nor_gl_1k.png",
+          "upstreamMD5": "6676e0e60345c2697ff62aedeaaafe4f",
+          "sha256": "9800e6b905862cbe4c5729d60d62b1c9dbf8e9cb52a7a468489131c556ec5e7c",
+          "bytes": 5974518,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        },
+        "height": {
+          "path": "source/concrete_pavement/concrete_pavement_disp_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_disp_1k.png",
+          "upstreamMD5": "1dbcee625e4ec4dfad1db65c86396196",
+          "sha256": "ec4bdcf2210d8d836b093037b9896082e12fb1f0e80af45b9106adab031b2d17",
+          "bytes": 1900759,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "I;16"
+        },
+        "roughness": {
+          "path": "source/concrete_pavement/concrete_pavement_rough_1k.png",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/concrete_pavement/concrete_pavement_rough_1k.png",
+          "upstreamMD5": "f888482083833815e8aa9cf3395660aa",
+          "sha256": "ad66866f5ade952461d5bf140f0388fc87cfe7ae3519ec7931d562edad7da0f6",
+          "bytes": 2409808,
+          "dimensions": [
+            1024,
+            1024
+          ],
+          "mode": "RGB"
+        }
+      }
+    }
+  },
+  "sidewalkAtlas": {
+    "file": "sidewalk_joint_atlas.png",
+    "pngSHA256": "86447fb4c82082d2262327765a21ba8ef87c85b13dc53f524cbd130d5625d5f1",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "mode": "RGBA",
+    "originalRuntimeAtlasSHA256": "95292c1e2c397c0e492763f719a616c36f9c0fe80c3c4c566e91e9ff250f6917",
+    "onlyChangedBottomUpCell": [
+      0,
+      0
+    ],
+    "previousMedianRGB": [
+      43.0,
+      48.0,
+      49.0
+    ],
+    "newMedianRGB": [
+      108.0,
+      104.0,
+      96.0
+    ],
+    "sampledTriangles": 216,
+    "scope": "SidewalkSection_atlas only; drain body shares joint tile",
+    "assetId": null
+  },
+  "assetsPinned": false,
+  "notice": "Local candidate assets only. Install pinned static templates, run Play visual/performance checks, then publish current place."
+}

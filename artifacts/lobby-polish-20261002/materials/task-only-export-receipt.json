@@ -1,0 +1,67 @@
+{
+  "schema": "lobby-polish-task-only-export-receipt-v1",
+  "taskSourceExportVerified": true,
+  "exportedAtUTC": "2026-10-02T12:40:35.143188+00:00",
+  "captureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+  "nativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+  "manifest": "artifacts/lobby-polish-20261002/fresh-source-after/manifest.json",
+  "manifestSHA256": "75d922fb18f62e56fc0ccf9358e7c0165c6497477fe60ad6e96979ea67105fb5",
+  "sources": [
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau",
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+      "bytes": 11780,
+      "class": "ModuleScript"
+    },
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.EndBlockades.ModuleScript.luau",
+      "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+      "bytes": 67522,
+      "class": "ModuleScript"
+    },
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays.ModuleScript.luau",
+      "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+      "bytes": 10695,
+      "class": "ModuleScript"
+    },
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene.ModuleScript.luau",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+      "bytes": 15812,
+      "class": "ModuleScript"
+    },
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.MaterialPolish.ModuleScript.luau",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+      "bytes": 22848,
+      "class": "ModuleScript"
+    },
+    {
+      "file": "artifacts/lobby-polish-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController.LocalScript.luau",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "bytes": 4848,
+      "class": "LocalScript"
+    }
+  ],
+  "fullHashedSourceCount": 229,
+  "unrelatedSourceBodiesExported": 0,
+  "reviewedConcurrentSourceRows": 7,
+  "reviewedConcurrentNativeRows": 6,
+  "reviewFile": "artifacts/lobby-polish-20261002/materials/concurrent-export-review.json",
+  "reviewSHA256": "24fb9a26fe7e693f5d4d8bab0a5f5d7e49b80aaf7d56a96c25061830820a3fd0",
+  "peerReview": {
+    "agent": "lobby_polish_bays",
+    "passed": true,
+    "finding": "Exact closed rows and all Source/editor/native recovery guards retained; no false global parity or broad export defect"
+  },
+  "helperSHA256": "d7544286322e0c7a4415be1f4d24b5b8898bdf4daccf97a8b47edcea3eda88c8",
+  "fixtureCount": 12,
+  "fixturesPassed": true,
+  "strictNativeAuditVerified": false,
+  "wholeForestPreservedBeyondTaskScope": false,
+  "publicationAuthorized": false,
+  "cleanupAuthorized": false,
+  "studioOrIndexWrites": false,
+  "observationalLimit": "Immutable captured state4df9e7f4 at publication hold; root later observed live QA removal separately. This export does not overwrite or reinterpret the older capture/strict-false facts."
+}

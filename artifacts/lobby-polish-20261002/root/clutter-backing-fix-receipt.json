@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"sourceBytes\":67522,\"path\":\"ServerScriptService.LobbyReimaginedPreview.EndBlockades\",\"only12BackingPosesChanged\":true,\"editorMatch\":true,\"beforeSHA256\":\"4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d\",\"afterSHA256\":\"5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a\",\"actualVisualClosureStillRequiresPlay\":true,\"changedAt\":\"2026-10-02T12:15:16Z\"}"
+    }
+  ],
+  "isError": false
+}

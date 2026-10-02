@@ -1,0 +1,12 @@
+{
+  "p95ms": 20.920416340231895,
+  "lighting": {
+    "clockTime": 0,
+    "brightness": 0.6000000238418579
+  },
+  "samples": 276,
+  "p50ms": 16.678541898727417,
+  "clientMemory": 6125.345703125,
+  "scope": "Solo Studio, same fixed road viewpoint, RenderStepped 5s, night client Lighting; not multiplayer/mobile/GPU attribution",
+  "serverMemoryMb": 6105.830078125
+}

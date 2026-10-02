@@ -1,0 +1,598 @@
+{
+  "schema": "lobby-r4-bay-polish-offline-verification-v1",
+  "scope": "Local candidate only; static geometry/scope checks. No Studio runtime, gameplay, multiplayer, CPU/memory or frame-time pass is claimed.",
+  "baselineManifest": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "name": "Builder",
+      "class": "ModuleScript",
+      "editorOk": true,
+      "sourceSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "editorSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "name": "QueueBridge",
+      "class": "ModuleScript",
+      "editorOk": true,
+      "sourceSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "editorSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "name": "LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "editorOk": true,
+      "sourceSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "editorSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "name": "R4DevGateController",
+      "class": "LocalScript",
+      "editorOk": true,
+      "sourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "editorSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+    }
+  ],
+  "helperSHA256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+  "controllerSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+  "newPropClones": 19,
+  "newUniqueMeshes": 0,
+  "newPointLights": 0,
+  "newColliders": 0,
+  "addedMeshTriangles": 19312,
+  "passiveNumberedPads": 24,
+  "maxPropRadius": 27.842593270024256,
+  "minDetectorClearance": 0.6208405537652144,
+  "minCenterPathClearance": 15.583708,
+  "controllerEventAndLifecycleTailExactlyPreserved": true,
+  "originalHeaderAndArrowCFramesAndTextUntouched": true,
+  "devAccessControllerUntouched": true,
+  "queueBridgeUntouched": true,
+  "signVerticalIntervals": {
+    "instruction": [
+      13.34,
+      14.260000000000002
+    ],
+    "theme": [
+      14.82,
+      15.68
+    ],
+    "existingHeader": [
+      15.86,
+      18.54
+    ],
+    "existingDevAccess": [
+      19.225,
+      19.975
+    ]
+  },
+  "activeBandTransparency": [
+    0.74,
+    0.7801667982535707,
+    0.812400691015253,
+    0.8421927959590517,
+    0.8705023125416811,
+    0.8977581187223339,
+    0.9242026092671791,
+    0.9499909358100742,
+    0.9752305390999464,
+    1.0
+  ],
+  "props": [
+    {
+      "level": 1,
+      "family": "Desk",
+      "name": "Office Workstation",
+      "position": [
+        13.0,
+        0.8,
+        -21.0
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        9.6,
+        0.8,
+        -22.5
+      ],
+      "boundingBoxMaximum": [
+        16.4,
+        4.009,
+        -19.5
+      ],
+      "maxFloorRadius": 27.842593270024256,
+      "minimumDetectorClearance": 3.09,
+      "centerPathClearance": 19.5,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 972
+    },
+    {
+      "level": 1,
+      "family": "CRTMonitor",
+      "name": "Office Terminal",
+      "position": [
+        13.0,
+        4.009,
+        -21.35
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        11.7,
+        4.009,
+        -22.630000000000003
+      ],
+      "boundingBoxMaximum": [
+        14.3,
+        6.649000000000001,
+        -20.332500000000003
+      ],
+      "maxFloorRadius": 26.76951437736591,
+      "minimumDetectorClearance": 3.922500000000003,
+      "centerPathClearance": 20.332500000000003,
+      "support": "matching office/cinema desk top",
+      "supportGap": 0.0,
+      "triangles": 564
+    },
+    {
+      "level": 1,
+      "family": "BeigeKeyboard",
+      "name": "Office Keyboard",
+      "position": [
+        13.0,
+        4.009,
+        -20.12
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        11.55,
+        4.009,
+        -20.62
+      ],
+      "boundingBoxMaximum": [
+        14.45,
+        4.346500000000001,
+        -19.62
+      ],
+      "maxFloorRadius": 25.179096488952894,
+      "minimumDetectorClearance": 3.210000000000001,
+      "centerPathClearance": 19.62,
+      "support": "matching office/cinema desk top",
+      "supportGap": 0.0,
+      "triangles": 3240
+    },
+    {
+      "level": 2,
+      "family": "VinylBench",
+      "name": "Pool Waiting Bench A",
+      "position": [
+        -21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": -1.5707963267948966,
+      "boundingBoxMinimum": [
+        -22.11,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        -19.94,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.747925529288823,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 2,
+      "family": "VinylBench",
+      "name": "Pool Waiting Bench B",
+      "position": [
+        21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": 1.5707963267948966,
+      "boundingBoxMinimum": [
+        19.94,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        22.11,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.747925529288823,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 2,
+      "family": "WireTrolley",
+      "name": "Pool Service Trolley",
+      "position": [
+        -14.0,
+        0.8,
+        -20.5
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        -15.925,
+        0.8,
+        -21.865
+      ],
+      "boundingBoxMaximum": [
+        -12.075,
+        4.665,
+        -18.583708
+      ],
+      "maxFloorRadius": 27.04965526582548,
+      "minimumDetectorClearance": 2.1737080000000013,
+      "centerPathClearance": 18.583708,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 1660
+    },
+    {
+      "level": 3,
+      "family": "R4PartyChair",
+      "name": "Party Chair A",
+      "position": [
+        -15.0,
+        0.76,
+        -20.0
+      ],
+      "yaw": 0,
+      "boundingBoxMinimum": [
+        -16.125,
+        0.8,
+        -21.05
+      ],
+      "boundingBoxMaximum": [
+        -13.875,
+        4.91,
+        -18.95
+      ],
+      "maxFloorRadius": 26.516374657935426,
+      "minimumDetectorClearance": 2.562869446653755,
+      "centerPathClearance": 18.95,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 168
+    },
+    {
+      "level": 3,
+      "family": "R4PartyChair",
+      "name": "Party Chair B",
+      "position": [
+        15.0,
+        0.76,
+        -20.0
+      ],
+      "yaw": 0,
+      "boundingBoxMinimum": [
+        13.875,
+        0.8,
+        -21.05
+      ],
+      "boundingBoxMaximum": [
+        16.125,
+        4.91,
+        -18.95
+      ],
+      "maxFloorRadius": 26.516374657935426,
+      "minimumDetectorClearance": 2.562869446653755,
+      "centerPathClearance": 18.95,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 168
+    },
+    {
+      "level": 3,
+      "family": "WireTrolley",
+      "name": "Party Supply Trolley",
+      "position": [
+        0.0,
+        0.8,
+        -17.5
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        -1.9250000000000003,
+        0.8,
+        -18.865
+      ],
+      "boundingBoxMaximum": [
+        1.9250000000000003,
+        4.665,
+        -15.583708
+      ],
+      "maxFloorRadius": 18.962959948278115,
+      "minimumDetectorClearance": 5.646448063285204,
+      "centerPathClearance": 15.583708,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 1660
+    },
+    {
+      "level": 4,
+      "family": "VinylBench",
+      "name": "Cinema Waiting Bench A",
+      "position": [
+        -21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": -1.5707963267948966,
+      "boundingBoxMinimum": [
+        -22.11,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        -19.94,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.7479255292888265,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 4,
+      "family": "VinylBench",
+      "name": "Cinema Waiting Bench B",
+      "position": [
+        21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": 1.5707963267948966,
+      "boundingBoxMinimum": [
+        19.94,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        22.11,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.7479255292888265,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 4,
+      "family": "Desk",
+      "name": "Cinema Check Desk",
+      "position": [
+        0.0,
+        0.8,
+        -18.0
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        -3.4,
+        0.8,
+        -19.5
+      ],
+      "boundingBoxMaximum": [
+        3.4,
+        4.009,
+        -16.5
+      ],
+      "maxFloorRadius": 19.79419106707824,
+      "minimumDetectorClearance": 4.930583454602136,
+      "centerPathClearance": 16.5,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 972
+    },
+    {
+      "level": 4,
+      "family": "CRTMonitor",
+      "name": "Cinema Check Monitor",
+      "position": [
+        0.0,
+        4.009,
+        -18.35
+      ],
+      "yaw": 3.141592653589793,
+      "boundingBoxMinimum": [
+        -1.3000000000000003,
+        4.009,
+        -19.630000000000003
+      ],
+      "boundingBoxMaximum": [
+        1.3000000000000003,
+        6.649000000000001,
+        -17.332500000000003
+      ],
+      "maxFloorRadius": 19.672999262949208,
+      "minimumDetectorClearance": 7.11723498295529,
+      "centerPathClearance": 17.332500000000003,
+      "support": "matching office/cinema desk top",
+      "supportGap": 0.0,
+      "triangles": 564
+    },
+    {
+      "level": 5,
+      "family": "Sofa",
+      "name": "Suburb Waiting Sofa",
+      "position": [
+        -21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": -1.5707963267948966,
+      "boundingBoxMinimum": [
+        -22.62,
+        0.8,
+        -3.8
+      ],
+      "boundingBoxMaximum": [
+        -19.32,
+        4.47,
+        3.8
+      ],
+      "maxFloorRadius": 22.936965797594066,
+      "minimumDetectorClearance": 0.6208405537652144,
+      "centerPathClearance": 17.17,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 1456
+    },
+    {
+      "level": 5,
+      "family": "VinylBench",
+      "name": "Suburb Waiting Bench",
+      "position": [
+        21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": 1.5707963267948966,
+      "boundingBoxMinimum": [
+        19.94,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        22.11,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.747925529288823,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 5,
+      "family": "RolledCarpet",
+      "name": "Suburb Moving Carpet",
+      "position": [
+        17.0,
+        0.8,
+        -18.0
+      ],
+      "yaw": 0,
+      "boundingBoxMinimum": [
+        14.759,
+        0.8,
+        -18.68
+      ],
+      "boundingBoxMaximum": [
+        19.241,
+        2.172,
+        -17.32
+      ],
+      "maxFloorRadius": 26.817130364750067,
+      "minimumDetectorClearance": 1.054802478498834,
+      "centerPathClearance": 17.32,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 2064
+    },
+    {
+      "level": 6,
+      "family": "VinylBench",
+      "name": "Mall Waiting Bench A",
+      "position": [
+        -21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": -1.5707963267948966,
+      "boundingBoxMinimum": [
+        -22.11,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        -19.94,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.747925529288823,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 6,
+      "family": "VinylBench",
+      "name": "Mall Waiting Bench B",
+      "position": [
+        21.0,
+        0.8,
+        0.0
+      ],
+      "yaw": 1.5707963267948966,
+      "boundingBoxMinimum": [
+        19.94,
+        0.8,
+        -2.8
+      ],
+      "boundingBoxMaximum": [
+        22.11,
+        4.49,
+        2.8
+      ],
+      "maxFloorRadius": 22.286590138466675,
+      "minimumDetectorClearance": 1.747925529288823,
+      "centerPathClearance": 17.790000000000003,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 808
+    },
+    {
+      "level": 6,
+      "family": "R4PartyChair",
+      "name": "Mall Spare Party Chair",
+      "position": [
+        -15.0,
+        0.76,
+        -19.5
+      ],
+      "yaw": 0,
+      "boundingBoxMinimum": [
+        -16.125,
+        0.8,
+        -20.55
+      ],
+      "boundingBoxMaximum": [
+        -13.875,
+        4.91,
+        -18.45
+      ],
+      "maxFloorRadius": 26.121219822205855,
+      "minimumDetectorClearance": 2.0640764721422844,
+      "centerPathClearance": 18.45,
+      "support": "existing floor",
+      "supportGap": 0.0,
+      "triangles": 168
+    }
+  ]
+}

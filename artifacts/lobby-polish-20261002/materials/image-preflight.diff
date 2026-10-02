@@ -1,0 +1,57 @@
+--- install-string-preflight.baseline.luau
++++ install-image-label.candidate.luau
+@@ -69,9 +69,42 @@
+ local atlas=Instance.new("StringValue");atlas.Name="SidewalkAtlas";atlas.Value=assert(C.assets.sidewalkAtlas.uri:match("^rbxassetid://([1-9]%d*)$"))
+ atlas:SetAttribute("LobbyReimaginedOwned",true);atlas:SetAttribute("PNG_SHA256",C.assets.sidewalkAtlas.pngSHA256);atlas.Parent=mat
+ table.insert(preloads,C.assets.sidewalkAtlas.uri)
+-local fetch={}
+-game:GetService("ContentProvider"):PreloadAsync(preloads,function(uri,status)fetch[uri]=status.Name end)
+-for _,uri in ipairs(preloads) do assert(fetch[uri]=="Success","Static asset unavailable: "..uri.." "..tostring(fetch[uri])) end
++-- Preload exact image Instances: raw-string callbacks can fail for uploaded image IDs.
++-- Roblox documents invisible ImageLabel texture downloads, while SurfaceAppearance
++-- texture packs are unsupported by PreloadAsync and still need actual Play verification.
++local fetch,imageFetchRows={},{}
++local imageProbes,uniqueImageURIs={},{}
++local imagePreflightOk,imagePreflightError=pcall(function()
++ assert(#preloads==10,"Expected exactly ten reviewed static images")
++ for index,uri in ipairs(preloads) do
++  assert(uri:match("^rbxassetid://[1-9]%d*$") and not uniqueImageURIs[uri],"Duplicate or invalid reviewed image URI")
++  uniqueImageURIs[uri]=true
++  local probe=Instance.new("ImageLabel");table.insert(imageProbes,probe)
++  probe.Name="LobbyPolishDetachedImageFetchProbe"..index;probe.Image=uri
++  assert(probe.Parent==nil,"Temporary image probe must stay detached")
++ end
++ game:GetService("ContentProvider"):PreloadAsync(imageProbes,function(uri,status)fetch[uri]=status.Name end)
++ for index,probe in ipairs(imageProbes) do
++  local uri=preloads[index]
++  assert(probe.Parent==nil,"Temporary image probe was unexpectedly parented")
++  table.insert(imageFetchRows,{uri=uri,imageAssetId=uri:match("^rbxassetid://(%d+)$"),
++   status=fetch[uri],ImageLabelIsLoaded=probe.IsLoaded,detached=true})
++  -- Unparented textures may be unloaded after PreloadAsync; IsLoaded is recorded only.
++  assert(fetch[uri]=="Success","Static image unavailable: "..uri.." "..tostring(fetch[uri]))
++ end
++ assert(#imageFetchRows==10,"Expected ten successful image fetch callbacks")
++end)
++local unexpectedProbeParent=false
++for _,probe in ipairs(imageProbes) do
++ if probe.Parent==nil then probe:Destroy() else unexpectedProbeParent=true end
++end
++assert(not unexpectedProbeParent,"Refused to destroy a probe that was unexpectedly parented")
++assert(imagePreflightOk,"Detached image preflight failed: "..tostring(imagePreflightError))
++local imageFetchProof={method="ContentProvider.PreloadAsync(detached ImageLabel instances)",
++ imageCount=#imageFetchRows,successCount=#imageFetchRows,images=imageFetchRows,
++ immediateIsLoadedRequired=false,temporaryDetachedProbesDestroyed=true,
++ surfaceAppearancePlayRequired=true,
++ scope="Image texture fetch proof only; actual SurfaceAppearance rendering still requires Play verification"}
+ folder:SetAttribute("Ready",true)
+ verify()
+ for _,row in ipairs(C.sources) do
+@@ -87,7 +120,7 @@
+ end
+ verify()
+ for _,row in ipairs(C.sources) do if row.new then prepared[row.path].Parent=at(row.path:match("^(.*)%.[^.]+$")) end end
+-local receipt={placeId=game.PlaceId,universeId=game.GameId,backupCaptureId=gate.captureId,assetFetch=fetch,sources={}}
++local receipt={placeId=game.PlaceId,universeId=game.GameId,backupCaptureId=gate.captureId,assetFetch=fetch,assetImageFetchProof=imageFetchProof,sources={}}
+ for _,row in ipairs(C.sources) do
+  local i=at(row.path);assert(hash(i.Source)==row.sha256 and SES:GetEditorSource(i)==row.source,"Installed source differs")
+  table.insert(receipt.sources,{path=row.path,class=i.ClassName,sha256=row.sha256,bytes=#i.Source,editorMatch=true})

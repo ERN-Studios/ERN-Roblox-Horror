@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "bytes": 10695,
+      "compiled": true,
+      "path": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+      "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c"
+    },
+    {
+      "bytes": 4848,
+      "compiled": true,
+      "path": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac"
+    },
+    {
+      "bytes": 13267,
+      "compiled": true,
+      "path": "tools/lobby_reimagined/polish_20261002/bays/fix_render_fidelity.EditCAS.luau",
+      "sha256": "a4093f521b2fba782cb0708fb69b3da5c597da8fd3a749fdb91e0ef70cb0cf8a"
+    }
+  ],
+  "interface": "Add(model,kit,manifest) -> owned Folder with AddedInstancedTriangles",
+  "maxObservedNumericDifference": 0,
+  "scope": "Local Luau compilation and helper module/interface/serialized prop-plan check only",
+  "serializedPropsMatchGeometryReceipt": true,
+  "status": "PASS"
+}

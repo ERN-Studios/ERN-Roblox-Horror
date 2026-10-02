@@ -1,0 +1,733 @@
+{
+  "schema": "lobby-polish-root-actual-interaction-aggregate-v1",
+  "scope": "Independent disk parsing of root's actual Studio Server/Client/UI evidence, not an independent Studio invocation. Historical interaction checks used EndBlockades426; final backing-only source is5c. No publication or native-parity claim.",
+  "aggregationValidation": "PASS",
+  "actualPropertyInspections": [
+    {
+      "context": "Server",
+      "condition": "Server",
+      "passedChecks": 620,
+      "failures": []
+    },
+    {
+      "context": "Client",
+      "condition": "Idle Client",
+      "passedChecks": 604,
+      "failures": []
+    },
+    {
+      "context": "Client",
+      "condition": "Active Client",
+      "passedChecks": 604,
+      "failures": []
+    }
+  ],
+  "queue": {
+    "id": 121,
+    "level": 6,
+    "activeTitle": "STATION 1  •  1/6",
+    "existingQueueSubtitle": "PUBLIC  •  COUNTDOWN STARTING",
+    "subtitleIsNotCampaignAccessProof": true,
+    "activeStations": 1,
+    "idleStations": 23,
+    "bandTransparencies": [
+      0.7400000095367432,
+      0.7801668047904968,
+      0.8124006986618042,
+      0.8421927690505981,
+      0.8705022931098938,
+      0.8977581262588501,
+      0.9242026209831238,
+      0.9499909281730652,
+      0.9752305150032043,
+      1
+    ],
+    "healthyDestination": {
+      "health": 100,
+      "position": [
+        19962.869140625,
+        27.15380859375,
+        90
+      ]
+    },
+    "Level6PreviewActive": true,
+    "Level6InRound": true,
+    "multiplayerVerified": false
+  },
+  "returnLobby": {
+    "actualEHoldMilliseconds": 1500,
+    "health": 100,
+    "position": [
+      0,
+      32.998046875,
+      -860
+    ],
+    "previewAttributeAbsent": true,
+    "roundAttributeAbsent": true,
+    "gameplay": "Returned via existing Level6DeveloperPreviewReturnPrompt after UI queue121 launch; avatar repositioned near existing exit solely to bound route test; no remote invocation",
+    "cameraArtifact": "Fixed test camera had to follow player manually after launch; discarded black screenshots from old camera position."
+  },
+  "stageEndpoint": {
+    "state": "Running",
+    "health": 100,
+    "walkSpeed": 16,
+    "position": "220, 37.498046875, -639.4241333007812",
+    "scope": "Running healthy avatar observed on stage; this endpoint record alone is not a continuous stair-path trace"
+  },
+  "viewerAccess": {
+    "name": "ZenMeister02",
+    "gates": {
+      "1": {
+        "status": "COMING SOON",
+        "level": 5,
+        "shutter": true,
+        "allowed": false
+      },
+      "2": {
+        "status": "DEV PREVIEW",
+        "level": 6,
+        "shutter": false,
+        "allowed": true
+      }
+    },
+    "reduceFlashing": false,
+    "userId": 11374988579
+  },
+  "vinyl": {
+    "scope": "Two separate discs; known DJConsole mesh containing tonearms/needles observed fixed for the same interval",
+    "rows": {
+      "1": {
+        "centerDrift": 0,
+        "name": "VinylDiscCyan",
+        "animationEligible": true,
+        "elapsed": 3.059416833333671,
+        "degrees": 36.99494099780868
+      },
+      "2": {
+        "centerDrift": 0,
+        "name": "VinylDiscAmber",
+        "animationEligible": true,
+        "elapsed": 3.059416833333671,
+        "degrees": 36.99494099780868
+      }
+    },
+    "animationEligibility": true
+  },
+  "furniture": {
+    "actualCloneCount": 19,
+    "actualRenderFidelityCounts": {
+      "Precise": 19
+    },
+    "minimumDetectorClearance": 0.6207883442496325
+  },
+  "materials": {
+    "exactPBRMeshCounts": {
+      "asphalt_road": 7,
+      "sidewalk_concrete": 26,
+      "tunnel_concrete": 15
+    },
+    "exactJointAtlasCount": 14,
+    "shaderRenderingVerifiedByThisAggregate": false
+  },
+  "shop": {
+    "cards": [
+      {
+        "kind": "Pass",
+        "art": {
+          "1": "rbxassetid://106022873152277",
+          "2": "rbxassetid://106022873152277",
+          "3": "rbxassetid://106022873152277",
+          "4": "rbxassetid://106022873152277",
+          "5": "rbxassetid://106022873152277",
+          "6": "rbxassetid://106022873152277"
+        },
+        "name": "ZYNTRA SUPPORTER",
+        "key": "Supporter"
+      },
+      {
+        "kind": "Pass",
+        "art": {
+          "1": "rbxassetid://80999828522184",
+          "2": "rbxassetid://80999828522184",
+          "3": "rbxassetid://80999828522184",
+          "4": "rbxassetid://80999828522184",
+          "5": "rbxassetid://80999828522184",
+          "6": "rbxassetid://80999828522184"
+        },
+        "name": "ADVANCED EQUIPMENT",
+        "key": "AdvancedEquipment"
+      },
+      {
+        "kind": "Product",
+        "art": {
+          "1": "rbxassetid://118242405264841",
+          "2": "rbxassetid://118242405264841",
+          "3": "rbxassetid://118242405264841",
+          "4": "rbxassetid://118242405264841",
+          "5": "rbxassetid://118242405264841",
+          "6": "rbxassetid://118242405264841"
+        },
+        "name": "4 RESEARCH TOKENS",
+        "key": "Tokens4"
+      },
+      {
+        "kind": "Product",
+        "art": {
+          "1": "rbxassetid://124733504759279",
+          "2": "rbxassetid://124733504759279",
+          "3": "rbxassetid://124733504759279",
+          "4": "rbxassetid://124733504759279",
+          "5": "rbxassetid://124733504759279",
+          "6": "rbxassetid://124733504759279"
+        },
+        "name": "20 RESEARCH TOKENS",
+        "key": "Tokens20"
+      },
+      {
+        "kind": "Product",
+        "art": {
+          "1": "rbxassetid://92866750717809",
+          "2": "rbxassetid://92866750717809",
+          "3": "rbxassetid://92866750717809",
+          "4": "rbxassetid://92866750717809",
+          "5": "rbxassetid://92866750717809",
+          "6": "rbxassetid://92866750717809"
+        },
+        "name": "EMERGENCY RE-ENTRY",
+        "key": "EmergencyReentry"
+      },
+      {
+        "kind": "Product",
+        "art": {
+          "1": "rbxassetid://134334664606741",
+          "2": "rbxassetid://134334664606741",
+          "3": "rbxassetid://134334664606741",
+          "4": "rbxassetid://134334664606741",
+          "5": "rbxassetid://134334664606741",
+          "6": "rbxassetid://134334664606741"
+        },
+        "name": "EXPEDITION PACK",
+        "key": "ExpeditionPack"
+      },
+      {
+        "kind": "Pass",
+        "art": {
+          "1": "rbxassetid://83090272487976",
+          "2": "rbxassetid://83090272487976",
+          "3": "rbxassetid://83090272487976",
+          "4": "rbxassetid://83090272487976",
+          "5": "rbxassetid://83090272487976",
+          "6": "rbxassetid://83090272487976"
+        },
+        "name": "GLOWSTICK CUSTOMIZER",
+        "key": "CosmeticEquipment"
+      },
+      {
+        "kind": "Item",
+        "art": {
+          "1": "rbxassetid://73457681182843",
+          "2": "rbxassetid://73457681182843",
+          "3": "rbxassetid://73457681182843",
+          "4": "rbxassetid://73457681182843",
+          "5": "rbxassetid://73457681182843",
+          "6": "rbxassetid://73457681182843"
+        },
+        "name": "SPEED POTION",
+        "key": "SpeedPotion"
+      },
+      {
+        "kind": "Item",
+        "art": {
+          "1": "rbxassetid://100856675462356",
+          "2": "rbxassetid://100856675462356",
+          "3": "rbxassetid://100856675462356",
+          "4": "rbxassetid://100856675462356",
+          "5": "rbxassetid://100856675462356",
+          "6": "rbxassetid://100856675462356"
+        },
+        "name": "ROUTE MARKER PACK",
+        "key": "RouteMarker"
+      },
+      {
+        "kind": "Pass",
+        "art": {
+          "1": "rbxassetid://87202894425080",
+          "2": "rbxassetid://87202894425080",
+          "3": "rbxassetid://87202894425080",
+          "4": "rbxassetid://87202894425080",
+          "5": "rbxassetid://87202894425080",
+          "6": "rbxassetid://87202894425080"
+        },
+        "name": "ENTITY\nDETECTOR",
+        "key": "EntityDetector"
+      }
+    ],
+    "originalProductAttributesArtAndFocusCopiesPassed": true,
+    "actualFocusScreenshot": {
+      "path": "artifacts/lobby-polish-20261002/screenshots/shop-focus-tokens20.jpg",
+      "sha256": "c1f40cbd1aeb250f90f7f2c20fde07f7aeea9af6a200b083cdba4ff21bdfc19f",
+      "independentlyReadVisibleTitle": "20 Research Tokens",
+      "independentlyReadVisiblePrice": "149 R$"
+    },
+    "purchaseExecutionVerified": false
+  },
+  "signs": [
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 1",
+        "Right": "LEVEL 1  →"
+      },
+      "level": 1,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "OFFICE BACKROOMS · START HERE",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 1",
+          "name": "Label"
+        }
+      }
+    },
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 3",
+        "Right": "LEVEL 3  →"
+      },
+      "level": 3,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "MALL BACKROOMS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 3",
+          "name": "Label"
+        }
+      }
+    },
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ACCESS REQUIRED · PARTY QUEUE",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 5",
+        "Right": "LEVEL 5  →"
+      },
+      "level": 5,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "QUIET SUBURBS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 5",
+          "name": "Label"
+        }
+      }
+    },
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "STEP ON A PAD · CHOOSE 1–6 PLAYERS",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 2",
+        "Right": "LEVEL 2  →"
+      },
+      "level": 2,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "POOLROOMS",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 2",
+          "name": "Label"
+        }
+      }
+    },
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ONLY · TRIAL OR MAP PREVIEW",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 4",
+        "Right": "LEVEL 4  →"
+      },
+      "level": 4,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "90s CINEMA · DEV ONLY",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 4",
+          "name": "Label"
+        }
+      }
+    },
+    {
+      "instruction": {
+        "1": {
+          "visible": true,
+          "text": "DEV ACCESS REQUIRED · PARTY QUEUE",
+          "name": "Legend"
+        }
+      },
+      "approachCameraViewsRequired": true,
+      "arrow": {
+        "Left": "←  LEVEL 6",
+        "Right": "LEVEL 6  →"
+      },
+      "level": 6,
+      "theme": {
+        "1": {
+          "visible": true,
+          "text": "MALL PARTY",
+          "name": "Legend"
+        }
+      },
+      "header": {
+        "1": {
+          "visible": true,
+          "text": "LEVEL 6",
+          "name": "Label"
+        }
+      }
+    }
+  ],
+  "performance": {
+    "scope": "Final12backingposes; SoloStudio5s settled playerheight same roadview; frameintervals plus engineCPU/GPU metrics; no mobile/multiplayer/GPU attribution",
+    "before": {
+      "samples": 276,
+      "p50ms": 16.678541898727417,
+      "p95ms": 20.920416340231895,
+      "clientMemory": 6125.345703125,
+      "serverMemoryMb": 6105.830078125
+    },
+    "finalAfter": {
+      "samples": 284,
+      "elapsed": 5.112407374981558,
+      "p50ms": 16.635708510875702,
+      "p95ms": 25.54929256439209,
+      "clientMemory": 6106.56494140625,
+      "serverMemoryMb": 6103.25244140625
+    },
+    "p50DeltaMs": -0.04283338785171509,
+    "p95DeltaMs": 4.628876224160194,
+    "afterEngineSamples": {
+      "cpuMs": {
+        "minimum": 13.251458168029785,
+        "median": 16.864188194274902,
+        "maximum": 46.247249603271484
+      },
+      "gpuMs": {
+        "minimum": 4.991791725158691,
+        "median": 6.54045844078064,
+        "maximum": 13.671625137329102
+      },
+      "renderThreadMs": {
+        "minimum": 7.851187497377396,
+        "median": 11.286447919905186,
+        "maximum": 18.785304710268974
+      },
+      "renderAverageMs": {
+        "minimum": 16.13813151038812,
+        "median": 16.783197916709014,
+        "maximum": 23.958309895874663
+      },
+      "engineAverageFPS": {
+        "minimum": 44.991553121944925,
+        "median": 44.99251869136371,
+        "maximum": 44.993549117806715
+      }
+    },
+    "firstAfterOutlierRetained": {
+      "elapsed": 5.010489291656995,
+      "healthy": 100,
+      "p95ms": 72.78862595558167,
+      "lighting": {
+        "clockTime": 0,
+        "brightness": 0.6000000238418579
+      },
+      "scope": "Solo Studio, same fixed road viewpoint, RenderStepped5s, client Lighting ClockTime0; not multiplayer/mobile/GPU attribution",
+      "samples": 74,
+      "p50ms": 66.70970469713211,
+      "clientMemory": 6096.39306640625
+    },
+    "firstAfterOutlierComparability": "Root reported focus/CPU state was unknown; retain the 74-frame sample but do not compare it as the settled final measurement",
+    "performancePassClaimed": false,
+    "interpretation": "Median frame interval was similar and p95 was 4.63ms higher in short Solo Studio samples. CPU/GPU after-samples lack matched before metrics; these records do not isolate the change's cause or establish mobile/multiplayer performance."
+  },
+  "sourceScope": {
+    "historicallyTestedExpectedPins": [
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/clutter/EndBlockades.ModuleScript.candidate.luau",
+        "sha256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+        "new": false
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+        "className": "LocalScript",
+        "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+        "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+        "new": false
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+        "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+        "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau",
+        "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "className": "ModuleScript",
+        "file": "artifacts/lobby-polish-20261002/root/Builder.candidate.luau",
+        "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+        "new": false
+      }
+    ],
+    "finalExpectedPins": [
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/clutter/backing-v2/EndBlockades.ModuleScript.candidate.luau",
+        "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+        "new": false
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+        "className": "LocalScript",
+        "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+        "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+        "new": false
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+        "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+        "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+        "className": "ModuleScript",
+        "file": "tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau",
+        "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+        "new": true
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "className": "ModuleScript",
+        "file": "artifacts/lobby-polish-20261002/root/Builder.candidate.luau",
+        "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+        "new": false
+      }
+    ],
+    "finalPinsSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+    "changedSinceInteractionInspections": [
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+        "testedSHA256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+        "finalSHA256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a"
+      }
+    ],
+    "finalChangeOnly12BackingPoses": true,
+    "finalClutterCollidersEqualHistorical": true,
+    "refreshedInspectorPreparation": {
+      "PlayPassClaimed": false,
+      "StudioExecuted": false,
+      "catalogSHA256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+      "clutterPoseChecksIncluded": false,
+      "expectedBays": 6,
+      "expectedPBRCounts": {
+        "asphalt_road": 7,
+        "sidewalk_concrete": 26,
+        "tunnel_concrete": 15
+      },
+      "expectedQueues": 24,
+      "extraEndBlockerCount": 66,
+      "files": [
+        {
+          "bytes": 36426,
+          "compiled": true,
+          "path": "tools/lobby_reimagined/polish_20261002/bays/inspection/server.PlayInspect.luau",
+          "sha256": "a4160886ae97e5b9f9a5eb0fc62c5b7f6c670fb6078055ee666e7236c3b9da92",
+          "tmpPath": "/private/tmp/lobby-polish-server-inspect.luau"
+        },
+        {
+          "bytes": 30285,
+          "compiled": true,
+          "path": "tools/lobby_reimagined/polish_20261002/bays/inspection/client.PlayInspect.luau",
+          "sha256": "bc1042f20b1d72a14e3b08006757353c1b8b4b2ca42367727ed4d2750f58bd87",
+          "tmpPath": "/private/tmp/lobby-polish-client-inspect.luau"
+        }
+      ],
+      "finalClutterCollidersExactlyEqualFirstInstall": true,
+      "finalSourcePinsSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+      "originalColliderCount": 830,
+      "propertyWritesToLiveInstances": false,
+      "rawManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+      "sceneEnabledLights": 77,
+      "sceneLightTotal": 87,
+      "schema": "lobby-readonly-play-inspectors-offline-preparation-v1",
+      "scope": "Compilation and exact frozen evidence preparation only; root must execute inspectors and preserve returned actual observations",
+      "status": "PASS"
+    },
+    "finalNativeScopeAuditVerifiedByThisAggregate": false,
+    "freshFinalInspectorExecutionVerifiedByThisAggregate": false
+  },
+  "publicationVerified": false,
+  "inputs": [
+    {
+      "path": "artifacts/lobby-polish-20261002/root/server-inspection.json",
+      "bytes": 44619,
+      "sha256": "bb768cd05ee04342e225c39e6042d2ad6fe6a6714b8a35778283bc87ec78b89c"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/client-inspection-idle.json",
+      "bytes": 79337,
+      "sha256": "e9f8535bb9fab6b2bd251d672f3bf9edd049493f09970b7311ab133fb3990c67"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/client-inspection-active.json",
+      "bytes": 79378,
+      "sha256": "88edff0e73a897e62c96658c8f182d15d2527b62f8e8480ab13d39b82fd0fe5e"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/queue-launch-proof.json",
+      "bytes": 1792,
+      "sha256": "38e1edaa45c54a51abeab4f78f4b5ff6c16baf81c412a16278e182007d956dda"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/return-lobby-proof.json",
+      "bytes": 503,
+      "sha256": "37684c297e7b54cb37ee3473d68b60544bd92cf510ae6d52a493801734c1b5d9"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/stage-walk-proof.json",
+      "bytes": 204,
+      "sha256": "91681973464670a4a8dc717f745575f48c1e004d11ba08b7419a188be5e1dcbe"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/before-performance.json",
+      "bytes": 365,
+      "sha256": "e6ba5e6e7221bd3f4f5c12270428896ef7e1657a9ee05facbf5d24285349d7b6"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/after-performance-final.json",
+      "bytes": 2719,
+      "sha256": "e22fd4efc8c0ea1210a76bae3f3d1f7b6537a75fae436ef97951ad66424d5505"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/after-performance-first-sample.json",
+      "bytes": 449,
+      "sha256": "6e5ec0afe5ebea2781d9319515aedaeb5d1d5ebc56aaf120ba6e423becc8e018"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/after-server-memory.json",
+      "bytes": 131,
+      "sha256": "3341ba26432d3a018c8aded2b2a02bc4f752d5eba499da2825a767e886fa2725"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/bays-runtime-fix-receipt.json",
+      "bytes": 500,
+      "sha256": "347d8f03aacf39400341609fc5e033d489255286b072cc4cce365f59306b5fef"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/clutter-backing-fix-receipt.json",
+      "bytes": 498,
+      "sha256": "58925d399c01f4808e14351d5ec1301727b167cbd74ea8b86fbedf0db878029a"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/root/final-frozen-source-hashes.json",
+      "bytes": 1896,
+      "sha256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/bays/inspection/preparation-receipt.json",
+      "bytes": 1590,
+      "sha256": "0c71854b584a04fb82ce41195c967aacd9c464f77d9b6a2bdd1b37ae04acf6f4"
+    },
+    {
+      "path": "artifacts/lobby-polish-20261002/screenshots/shop-focus-tokens20.jpg",
+      "bytes": 107643,
+      "sha256": "c1f40cbd1aeb250f90f7f2c20fde07f7aeea9af6a200b083cdba4ff21bdfc19f"
+    }
+  ]
+}

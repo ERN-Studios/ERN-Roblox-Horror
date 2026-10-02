@@ -1,0 +1,13 @@
+{
+  "actualEHoldMilliseconds": 1500,
+  "health": 100,
+  "position": [
+    0,
+    32.998046875,
+    -860
+  ],
+  "previewAttributeAbsent": true,
+  "roundAttributeAbsent": true,
+  "gameplay": "Returned via existing Level6DeveloperPreviewReturnPrompt after UI queue121 launch; avatar repositioned near existing exit solely to bound route test; no remote invocation",
+  "cameraArtifact": "Fixed test camera had to follow player manually after launch; discarded black screenshots from old camera position."
+}

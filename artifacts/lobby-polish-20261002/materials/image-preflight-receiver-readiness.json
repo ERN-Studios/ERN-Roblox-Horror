@@ -1,0 +1,76 @@
+{
+  "schema": "lobby-polish-image-preflight-install-receiver-readiness-v1",
+  "verified": true,
+  "capturedAt": "2026-10-02T11:47:44.713873+00:00",
+  "checks": [
+    {
+      "port": 8905,
+      "endpoint": "/catalog",
+      "bytes": 149326,
+      "sha256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+      "seconds": 0.04483295799582265,
+      "verified": true
+    },
+    {
+      "port": 8905,
+      "endpoint": "/install",
+      "bytes": 8602,
+      "sha256": "f314f0bb838e5feb9a9619de7dcfab4a33e97328c4a2e4f889af2078634ba700",
+      "seconds": 0.0009808750182855874,
+      "verified": true
+    },
+    {
+      "port": 8906,
+      "endpoint": "/capture",
+      "bytes": 11587,
+      "sha256": "cf24f54f8d69da23513438955f155fc72683da03c4650c3a4877daf83bc14b44",
+      "seconds": 0.019345167005667463,
+      "verified": true
+    }
+  ],
+  "installPID": 93667,
+  "installSession": 57511,
+  "unchangedAfterPID": 92433,
+  "unchangedAfterSession": 89210,
+  "replacedOnlyVerifiedTaskPID": 92354,
+  "health": {
+    "captureDestination": "/private/tmp/lobby-polish-after-20261002",
+    "capturePrefix": "__lobbyPolishAfter",
+    "expectedBeforeNativeSHA": "451e86549091122a992da3a8cabee5f38471dd20d5b77212dc6d77dad1433872",
+    "frozenInMemory": true,
+    "inputs": [
+      {
+        "bytes": 149326,
+        "file": "catalog.json",
+        "sha256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+        "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-polish-20261002/root/install-catalog.json"
+      },
+      {
+        "bytes": 8602,
+        "file": "install.luau",
+        "sha256": "f314f0bb838e5feb9a9619de7dcfab4a33e97328c4a2e4f889af2078634ba700",
+        "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-polish-20261002/root/install-scoped.luau"
+      },
+      {
+        "bytes": 11587,
+        "file": "capture-after.luau",
+        "sha256": "cf24f54f8d69da23513438955f155fc72683da03c4650c3a4877daf83bc14b44",
+        "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-polish-20261002/capture-after-readonly.luau"
+      },
+      {
+        "bytes": 29210,
+        "file": "schema.json",
+        "sha256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+        "source": "/private/tmp/lobby-polish-before-20261002/service-property-schema.json"
+      }
+    ],
+    "pid": 93667,
+    "port": 8905,
+    "receipt": "/private/tmp/lobby-polish-frozen-receivers-20261002/install-receipt.json",
+    "role": "install",
+    "schema": "lobby-polish-frozen-receiver-inputs-v1"
+  },
+  "peerReviewPassed": true,
+  "localCompileAndSixFixturesPassed": true,
+  "noStudioOrGitWrites": true
+}

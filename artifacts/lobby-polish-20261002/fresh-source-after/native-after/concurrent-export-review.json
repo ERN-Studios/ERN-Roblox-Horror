@@ -1,0 +1,114 @@
+{
+  "schema": "lobby-polish-reviewed-concurrent-export-v1",
+  "approvedForTaskSourceExportOnly": true,
+  "reviewedBy": "/root task authorization; /root/lobby_polish_materials read-only exact-delta review",
+  "reviewPurpose": "Root-authorized export of only six lobby task Sources and hash metadata. Seven exact concurrent Source deltas and six exact native rows are retained. User/other-developer ownership response and QA cleanup remain pending; this does not approve unrelated code or publication.",
+  "nativeAuditSHA256": "5bb4c200d1cb6e96c6dba9c7789202a6abebb8743ec95c106cbac943cab876eb",
+  "beforeCaptureId": "115cbb46-954d-41d0-b397-0e8122c9a81f",
+  "afterCaptureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+  "beforeNativeSHA256": "451e86549091122a992da3a8cabee5f38471dd20d5b77212dc6d77dad1433872",
+  "afterNativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+  "beforeSourceCatalogSHA256": "08612d8b0e0e1acabef0fec55a88e8d40d9cd36bd4d4d8e73c14038eedd83ed8",
+  "afterSourceCatalogSHA256": "4f26e8f4e929e6372eb34509220091fd7f5946a03cf7a1428c9e85e6eedcdb58",
+  "sourceDeltas": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "kind": "changed",
+      "beforeSHA256": "ec0d4c331b273e3d9b0c0436a7659d70cbc097e0a2ac9f0e4c278a3eb9031a43",
+      "afterSHA256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f",
+      "beforeBytes": 174067,
+      "afterBytes": 174786
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "class": "ModuleScript",
+      "kind": "changed",
+      "beforeSHA256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "afterSHA256": "2057890603a40e357999f685784a79442c4b62413f6a0f9b9eb5b7d6c14f0ea3",
+      "beforeBytes": 9763,
+      "afterBytes": 23598
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "class": "Script",
+      "kind": "changed",
+      "beforeSHA256": "22f3bc9c317781856e6fce53b493236d4b670b074c0b3a8af59a98854fc895cc",
+      "afterSHA256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "beforeBytes": 9722,
+      "afterBytes": 10588
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "class": "Script",
+      "kind": "changed",
+      "beforeSHA256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "afterSHA256": "88f38d3b2e4d62b85a3082ab313ce3289654d2fde43aa4b8431c659fb02e8d8f",
+      "beforeBytes": 97783,
+      "afterBytes": 104041
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "class": "ModuleScript",
+      "kind": "changed",
+      "beforeSHA256": "823a108494f004d5cf21c8d08c980448f2ae7cbe4aa880539d64b3c9c91f05c4",
+      "afterSHA256": "6bef25bd3f7a0290dec8b01d87fafa6563b1d7fbfc8bec18d1eff53961686a4f",
+      "beforeBytes": 5051,
+      "afterBytes": 5138
+    },
+    {
+      "path": "ServerScriptService.Level4TemporaryIntegrationQA",
+      "class": "Script",
+      "kind": "added",
+      "beforeSHA256": null,
+      "afterSHA256": "baf5440ac57bd5b768d52bcd59c6c8916910569b93834bf826e2b71684a8ed85",
+      "beforeBytes": null,
+      "afterBytes": 3371
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level4TemporaryProfileQA",
+      "class": "LocalScript",
+      "kind": "added",
+      "beforeSHA256": null,
+      "afterSHA256": "afba9523a104afb621e10976d7a235b01951d319c38eb9fc1656c74b44ccfff8",
+      "beforeBytes": null,
+      "afterBytes": 3050
+    }
+  ],
+  "nativeDeltaDigests": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "kind": "savedRootFingerprintChanged",
+      "sha256": "29be269bd02cabcb7309ec3b8a888e1c7624b1b8447f838457de870ba1a5fc38"
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems",
+      "kind": "savedRootFingerprintChanged",
+      "sha256": "1d7ac085d79cfc17ef8452555daf4d3ab33b09483b8b7b6a2a142c7094791287"
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems",
+      "kind": "savedRootFingerprintChanged",
+      "sha256": "d2e70056501a980a4e06832ec04f79072868ff5609fda30b6840e6e8652e6e1a"
+    },
+    {
+      "path": "ServerScriptService.Level4TemporaryIntegrationQA",
+      "kind": "added",
+      "sha256": "d0735ed1e615aefc3d4fe58e5984383fa4d787d4886631725325795e1b0b8f36"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "kind": "savedRootFingerprintChanged",
+      "sha256": "01eb68b26a5e36923153fb11a890d5c5c0c2e334f26db25f6580f89096212a8f"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts/Level4TemporaryProfileQA|LocalScript#1",
+      "kind": "added",
+      "sha256": "0687ca6a9a56464cfb64dd282a18ee1def7b48bdee06d8da1616aab0b1b08a81"
+    }
+  ],
+  "publicationAuthorized": false,
+  "cleanupAuthorized": false,
+  "ownerIdentityConfirmed": false,
+  "publicationHoldReason": "Other developer temporary Level4Integration/ProfileQA scripts remain present (self-declared owner level1-quality-20261002-final-integration), and ownership/current work is unconfirmed. Preserve all other work. No QA removal or publication authorization is inferred."
+}

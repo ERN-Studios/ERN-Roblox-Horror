@@ -1,0 +1,15 @@
+{
+  "schema": "lobby-polish-publication-frozen-inputs-v1",
+  "captureSHA256": "05555ffd9bcc5b47f2705e58dcc7383dfc67cb25c9f531f83bd9c98b3001b30b",
+  "captureBytes": 11617,
+  "schemaSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+  "schemaBytes": 29210,
+  "capturePrefix": "__lobbyPolishPublish",
+  "expectedPriorNativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+  "priorCaptureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+  "destination": "/private/tmp/lobby-polish-publish-20261002",
+  "port": 8910,
+  "source": "frozen after-capture template; only BASE/session-prefix/prior-native-pin/return label differ",
+  "receiverSHA256": "47e307cf198e781ad325bc0ba59d72183d9a3e25aff2b8706974d5206767d0f7",
+  "oldAfterUntouched": true
+}

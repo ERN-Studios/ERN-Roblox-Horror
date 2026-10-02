@@ -1,0 +1,12 @@
+{
+  "schema": "lobby-material-polish-compile-v1",
+  "studioId": "0552e451-d540-464e-ad9f-478d00392f88",
+  "datamodel": "Edit",
+  "compileMethod": "loadstring candidate source without executing it or mutating the DataModel",
+  "compiled": true,
+  "sourceSHA256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+  "sourceBytes": 22848,
+  "pythonSyntaxPassed": ["prepare.py", "emit_helper.py"],
+  "runtimeExecuted": false,
+  "playVerified": false
+}

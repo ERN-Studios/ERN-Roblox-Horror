@@ -1,0 +1,28 @@
+{
+  "actualHelperAddExecuted": true,
+  "bays": 6,
+  "doubleSidedPreserved": true,
+  "exactOnlyRemovedRenderFidelityWrite": true,
+  "fidelityInheritanceCases": [
+    {
+      "cloneCount": 19,
+      "cloneFidelityEqualsSource": true,
+      "knownBadBaselineRejected": true,
+      "sourceKitRenderFidelity": "Precise"
+    },
+    {
+      "cloneCount": 19,
+      "cloneFidelityEqualsSource": true,
+      "knownBadBaselineRejected": true,
+      "sourceKitRenderFidelity": "Automatic"
+    }
+  ],
+  "forbiddenWritesInFixedHelper": 0,
+  "helperSHA256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+  "installedBaselineSHA256": "2f6c8007a8472aefad700dac5511a0ad24e8ba1341e745c7ef5306142fb92058",
+  "knownBadBaselineRejected": true,
+  "queuePads": 24,
+  "schema": "lobby-bays-runtime-property-security-fixture-v1",
+  "scope": "Offline fixture inputs test Precise and Automatic inheritance, not live kit defaults; actual 19-clone Studio property reads and rebuild remain required",
+  "status": "PASS"
+}

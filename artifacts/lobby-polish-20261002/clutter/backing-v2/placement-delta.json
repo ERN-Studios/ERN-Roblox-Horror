@@ -1,0 +1,761 @@
+{
+  "schema": "r4-backing-face-polish-v2",
+  "baselineSourceSHA256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+  "candidateSourceSHA256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+  "candidatePlanSHA256": "43d3b4bc71c0c2f9fb1a68c6d9ae160c9d8db44f5123a8ccc8538a20a47a6cd3",
+  "changedBackingFaces": 12,
+  "instances": 219,
+  "extraInstancedTriangles": 220612,
+  "all40OverlaysPreserved": true,
+  "all66CurtainsPreserved": true,
+  "runtimeFunctionsUnchanged": true,
+  "newUniqueMeshes": 0,
+  "interface": "Add(model, kit, manifest)",
+  "changes": [
+    {
+      "name": "South Embedded 06-02",
+      "reason": "left shoulder",
+      "factor": 1.0,
+      "degreeDeltas": [
+        6.0,
+        22.0,
+        -8.0
+      ],
+      "centerShiftXY": [
+        -0.62,
+        0.35
+      ],
+      "before": {
+        "name": "South Embedded 06-02",
+        "family": "VinylBench",
+        "robloxPosition": [
+          -18.537696,
+          21.761816,
+          -134.472114
+        ],
+        "rotation": [
+          0.06856191,
+          0.19817087,
+          -0.04598324
+        ],
+        "bboxCenter": [
+          -18.449625,
+          23.6,
+          -134.338055
+        ],
+        "bboxHalf": [
+          3.039058,
+          2.00342,
+          1.729067
+        ]
+      },
+      "after": {
+        "name": "South Embedded 06-02",
+        "family": "VinylBench",
+        "robloxPosition": [
+          -19.367774,
+          22.135169,
+          -134.486866
+        ],
+        "rotation": [
+          0.17328167,
+          0.58214331,
+          -0.18560958
+        ],
+        "bboxCenter": [
+          -19.069625,
+          23.95,
+          -134.338055
+        ],
+        "bboxHalf": [
+          3.179583,
+          2.222807,
+          2.600429
+        ]
+      }
+    },
+    {
+      "name": "South Embedded 06-07",
+      "reason": "right shoulder",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -5.0,
+        -26.0,
+        11.0
+      ],
+      "centerShiftXY": [
+        0.25,
+        0.18
+      ],
+      "before": {
+        "name": "South Embedded 06-07",
+        "family": "Desk",
+        "robloxPosition": [
+          15.412354,
+          21.997303,
+          -134.663324
+        ],
+        "rotation": [
+          0.04525248,
+          0.03264528,
+          -0.01568523
+        ],
+        "bboxCenter": [
+          15.437507,
+          23.6,
+          -134.59157
+        ],
+        "bboxHalf": [
+          3.471882,
+          1.71877,
+          1.682679
+        ]
+      },
+      "after": {
+        "name": "South Embedded 06-07",
+        "family": "Desk",
+        "robloxPosition": [
+          15.94433,
+          22.206597,
+          -134.410283
+        ],
+        "rotation": [
+          -0.04201398,
+          -0.42114033,
+          0.17630099
+        ],
+        "bboxCenter": [
+          15.687507,
+          23.78,
+          -134.59157
+        ],
+        "bboxHalf": [
+          3.924847,
+          2.284171,
+          2.89114
+        ]
+      }
+    },
+    {
+      "name": "South Embedded 07-03",
+      "reason": "upper drawer face",
+      "factor": 1.0,
+      "degreeDeltas": [
+        7.0,
+        24.0,
+        -11.0
+      ],
+      "centerShiftXY": [
+        -0.16,
+        -0.38
+      ],
+      "before": {
+        "name": "South Embedded 07-03",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -8.706224,
+          27.024005,
+          -134.923059
+        ],
+        "rotation": [
+          -0.01065659,
+          0.10297408,
+          1.50161746
+        ],
+        "bboxCenter": [
+          -11.165803,
+          27.2,
+          -134.560156
+        ],
+        "bboxHalf": [
+          2.701596,
+          1.426698,
+          1.682909
+        ]
+      },
+      "after": {
+        "name": "South Embedded 07-03",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -9.295261,
+          26.325119,
+          -135.918166
+        ],
+        "rotation": [
+          0.11151646,
+          0.5218531,
+          1.30963124
+        ],
+        "bboxCenter": [
+          -11.325803,
+          26.82,
+          -134.560156
+        ],
+        "bboxHalf": [
+          3.068295,
+          1.850274,
+          2.507581
+        ]
+      }
+    },
+    {
+      "name": "South Embedded 08-04",
+      "reason": "upper desk face",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -4.0,
+        -24.0,
+        7.0
+      ],
+      "centerShiftXY": [
+        0.17,
+        -0.32
+      ],
+      "before": {
+        "name": "South Embedded 08-04",
+        "family": "Desk",
+        "robloxPosition": [
+          -0.775489,
+          29.099587,
+          -134.203791
+        ],
+        "rotation": [
+          -0.05908843,
+          0.02837171,
+          -0.03844395
+        ],
+        "bboxCenter": [
+          -0.713846,
+          30.7,
+          -134.30022
+        ],
+        "bboxHalf": [
+          3.500316,
+          1.825099,
+          1.681702
+        ]
+      },
+      "after": {
+        "name": "South Embedded 08-04",
+        "family": "Desk",
+        "robloxPosition": [
+          -0.419762,
+          28.800952,
+          -134.044037
+        ],
+        "rotation": [
+          -0.1289016,
+          -0.39050731,
+          0.0837291
+        ],
+        "bboxCenter": [
+          -0.543846,
+          30.38,
+          -134.30022
+        ],
+        "bboxHalf": [
+          3.828091,
+          2.205122,
+          2.8742
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 05-04",
+      "reason": "middle drawer band",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -6.0,
+        -31.0,
+        -12.0
+      ],
+      "centerShiftXY": [
+        -0.15,
+        0.5
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 05-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -6.366091,
+          20.021454,
+          134.696436
+        ],
+        "rotation": [
+          0.0583026,
+          3.21931948,
+          1.5865302
+        ],
+        "bboxCenter": [
+          -3.892458,
+          20.0,
+          134.391679
+        ],
+        "bboxHalf": [
+          2.611498,
+          1.347875,
+          1.674339
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 05-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -6.277443,
+          19.975095,
+          133.421362
+        ],
+        "rotation": [
+          -0.04641716,
+          2.67826741,
+          1.37709069
+        ],
+        "bboxCenter": [
+          -4.042458,
+          20.5,
+          134.391679
+        ],
+        "bboxHalf": [
+          3.031753,
+          1.798754,
+          2.496094
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 06-02",
+      "reason": "left shoulder/drawer",
+      "factor": 1.0,
+      "degreeDeltas": [
+        5.0,
+        23.0,
+        12.0
+      ],
+      "centerShiftXY": [
+        0.12,
+        0.1
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 06-02",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -19.304604,
+          23.771955,
+          134.988443
+        ],
+        "rotation": [
+          0.0438759,
+          3.26804619,
+          1.64744077
+        ],
+        "bboxCenter": [
+          -16.85561,
+          23.6,
+          134.558256
+        ],
+        "bboxHalf": [
+          2.73551,
+          1.474005,
+          1.765787
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 06-02",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -18.74383,
+          24.226868,
+          135.937264
+        ],
+        "rotation": [
+          0.13114236,
+          3.66947192,
+          1.85688028
+        ],
+        "bboxCenter": [
+          -16.73561,
+          23.7,
+          134.558256
+        ],
+        "bboxHalf": [
+          3.078659,
+          1.901577,
+          2.515871
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 06-04",
+      "reason": "middle drawer band",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -4.0,
+        -27.0,
+        -11.0
+      ],
+      "centerShiftXY": [
+        0.12,
+        -0.65
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 06-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -7.068589,
+          23.719667,
+          134.209774
+        ],
+        "rotation": [
+          0.01463666,
+          2.94415771,
+          1.61664222
+        ],
+        "bboxCenter": [
+          -4.607951,
+          23.6,
+          134.588112
+        ],
+        "bboxHalf": [
+          2.772345,
+          1.379954,
+          1.902828
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 06-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -6.489084,
+          22.508493,
+          133.169402
+        ],
+        "rotation": [
+          -0.05517651,
+          2.47291881,
+          1.424656
+        ],
+        "bboxCenter": [
+          -4.487951,
+          22.95,
+          134.588112
+        ],
+        "bboxHalf": [
+          2.951845,
+          1.726239,
+          2.792901
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 06-05",
+      "reason": "central drawer band",
+      "factor": 1.0,
+      "degreeDeltas": [
+        7.0,
+        31.0,
+        10.0
+      ],
+      "centerShiftXY": [
+        -0.08,
+        0.4
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 06-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -1.94132,
+          23.828762,
+          134.818545
+        ],
+        "rotation": [
+          0.07615706,
+          3.18854371,
+          1.67002934
+        ],
+        "bboxCenter": [
+          0.528537,
+          23.6,
+          134.574263
+        ],
+        "bboxHalf": [
+          2.664143,
+          1.575423,
+          1.632196
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 06-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -1.485096,
+          24.379956,
+          136.100336
+        ],
+        "rotation": [
+          0.19833011,
+          3.72959578,
+          1.84456227
+        ],
+        "bboxCenter": [
+          0.448537,
+          24.0,
+          134.574263
+        ],
+        "bboxHalf": [
+          3.058492,
+          1.837026,
+          2.643519
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 07-04",
+      "reason": "upper drawer band",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -5.0,
+        -28.0,
+        11.0
+      ],
+      "centerShiftXY": [
+        -0.15,
+        0.33
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 07-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -5.025772,
+          27.244196,
+          134.35384
+        ],
+        "rotation": [
+          0.02521324,
+          3.10930448,
+          1.58885182
+        ],
+        "bboxCenter": [
+          -2.533924,
+          27.2,
+          134.323144
+        ],
+        "bboxHalf": [
+          2.556352,
+          1.322008,
+          1.525003
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 07-04",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -4.850866,
+          27.978917,
+          133.176393
+        ],
+        "rotation": [
+          -0.06205322,
+          2.62061229,
+          1.78083804
+        ],
+        "bboxCenter": [
+          -2.683924,
+          27.53,
+          134.323144
+        ],
+        "bboxHalf": [
+          3.040721,
+          1.737501,
+          2.520115
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 07-05",
+      "reason": "upper drawer band",
+      "factor": 1.0,
+      "degreeDeltas": [
+        6.0,
+        23.0,
+        -10.0
+      ],
+      "centerShiftXY": [
+        0.11,
+        -0.34
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 07-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          0.004006,
+          27.149822,
+          134.737912
+        ],
+        "rotation": [
+          -0.09992376,
+          3.2947572,
+          1.53087175
+        ],
+        "bboxCenter": [
+          2.446113,
+          27.2,
+          134.242133
+        ],
+        "bboxHalf": [
+          2.723684,
+          1.434112,
+          1.895155
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 07-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          0.54574,
+          26.323498,
+          135.614273
+        ],
+        "rotation": [
+          0.004796,
+          3.69618293,
+          1.35633882
+        ],
+        "bboxCenter": [
+          2.556113,
+          26.86,
+          134.242133
+        ],
+        "bboxHalf": [
+          3.03777,
+          1.752737,
+          2.626303
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 08-05",
+      "reason": "crest drawer face",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -4.0,
+        -21.0,
+        6.0
+      ],
+      "centerShiftXY": [
+        0.18,
+        -0.8
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 08-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          1.538913,
+          30.469485,
+          134.709193
+        ],
+        "rotation": [
+          0.04718458,
+          3.26859181,
+          1.48604407
+        ],
+        "bboxCenter": [
+          3.986062,
+          30.7,
+          134.296245
+        ],
+        "bboxHalf": [
+          2.744424,
+          1.525119,
+          1.777554
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 08-05",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          1.721533,
+          29.938758,
+          133.811503
+        ],
+        "rotation": [
+          -0.02262859,
+          2.90207267,
+          1.59076383
+        ],
+        "bboxCenter": [
+          4.166062,
+          29.9,
+          134.296245
+        ],
+        "bboxHalf": [
+          2.778174,
+          1.307011,
+          1.988006
+        ]
+      }
+    },
+    {
+      "name": "NorthDJ Embedded 05-07",
+      "reason": "right shoulder",
+      "factor": 1.0,
+      "degreeDeltas": [
+        -5.0,
+        -18.0,
+        -12.0
+      ],
+      "centerShiftXY": [
+        0.65,
+        0.3
+      ],
+      "before": {
+        "name": "NorthDJ Embedded 05-07",
+        "family": "Sofa",
+        "robloxPosition": [
+          15.82751,
+          18.164919,
+          134.265987
+        ],
+        "rotation": [
+          -0.00631018,
+          3.22818047,
+          -0.00938524
+        ],
+        "bboxCenter": [
+          15.812947,
+          20.0,
+          134.285784
+        ],
+        "bboxHalf": [
+          3.945446,
+          1.878854,
+          1.982702
+        ]
+      },
+      "after": {
+        "name": "NorthDJ Embedded 05-07",
+        "family": "Sofa",
+        "robloxPosition": [
+          16.857791,
+          18.522262,
+          134.513538
+        ],
+        "rotation": [
+          -0.09357664,
+          2.9140212,
+          -0.21882475
+        ],
+        "bboxCenter": [
+          16.462947,
+          20.3,
+          134.285784
+        ],
+        "bboxHalf": [
+          4.37408,
+          2.824711,
+          2.613419
+        ]
+      }
+    }
+  ],
+  "authorityLimit": "Runtime Server reference only; root must compare fresh Edit Source/editor/identity inside CAS."
+}

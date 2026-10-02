@@ -1,0 +1,39 @@
+--- fresh-live-QueueController
++++ candidate-QueueController
+@@ -9,6 +9,14 @@
+ local function reduceMotion()
+ 	return player:GetAttribute("ReduceFlashing") ~= false
+ end
++local function presentationAlpha(station, name, fallback)
++	local value = station:GetAttribute(name)
++	return type(value) == "number" and math.clamp(value, 0, 1) or fallback
++end
++local function presentationColor(station, name, fallback)
++	local value = station:GetAttribute(name)
++	return typeof(value) == "Color3" and value or fallback
++end
+ local function animate(station)
+ 	local active = station:GetAttribute("QueueActive") == true
+ 	local base = station:GetAttribute("HologramBase")
+@@ -17,7 +25,9 @@
+ 	local ring = station:FindFirstChild("Active Queue Ring")
+ 	if ring then
+ 		if tweens[ring] then tweens[ring]:Cancel() end
+-		local tween = TweenService:Create(ring,TweenInfo.new(duration),{Transparency=active and .12 or .8})
++		local alpha = presentationAlpha(station, active and "QueueActiveRingAlpha" or "QueueIdleRingAlpha", active and .12 or .8)
++		local color = presentationColor(station, active and "QueueActiveRingColor" or "QueueIdleRingColor", ring.Color)
++		local tween = TweenService:Create(ring,TweenInfo.new(duration),{Transparency=alpha,Color=color})
+ 		tweens[ring] = tween; tween:Play()
+ 	end
+ 	for _,wall in ipairs(station:GetChildren()) do
+@@ -26,7 +36,9 @@
+ 			if tweens[wall] then tweens[wall]:Cancel(); tweens[wall] = nil end
+ 			local full = wall:GetAttribute("HologramFullSize")
+ 			local target = wall:GetAttribute("HologramFullCFrame")
+-			local alpha = .62 + .38*((i-1)/9)^.85
++			local lowerAlpha = presentationAlpha(station,"QueueHologramLowerAlpha",.62)
++			local alpha = lowerAlpha + (1-lowerAlpha)*((i-1)/9)^.85
++			wall.Color = presentationColor(station,"QueueHologramColor",wall.Color)
+ 			local goal = active and {Size=full,CFrame=target,Transparency=alpha} or {Size=Vector3.new(full.X,.015,full.Z),CFrame=base*CFrame.new(0,.008,0),Transparency=1}
+ 			local tween = TweenService:Create(wall,TweenInfo.new(duration,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),goal)
+ 			tweens[wall] = tween; tween:Play()

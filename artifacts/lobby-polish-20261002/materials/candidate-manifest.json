@@ -1,0 +1,79 @@
+{
+  "schema": "lobby-material-polish-helper-candidate-v1",
+  "sourcePath": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+  "sourceFile": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+  "class": "ModuleScript",
+  "sourceBytes": 22848,
+  "sourceSHA256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+  "assetSpec": {
+    "materials": {
+      "tunnel_concrete": {
+        "color": {
+          "pngSHA256": "174360cb5b0b750ccb4183fe393e29cf6f33149eb462786f8691ef2d56f0c130",
+          "originalURI": "rbxassetid://75893473229833"
+        },
+        "normal": {
+          "pngSHA256": "87693ee0d94628e58f20901849584d1eb6c35f71dc5c76fc4e200572b8f53c04",
+          "originalURI": "rbxassetid://127271719715729"
+        },
+        "roughness": {
+          "pngSHA256": "0e302cdf650a03989127b2e3cf05032348bfa4cbbaacdf1437b3f238097ae902",
+          "originalURI": "rbxassetid://96772314871126"
+        }
+      },
+      "asphalt_road": {
+        "color": {
+          "pngSHA256": "f25701af130f829777208c0b6679cb46f5418cb18f8c22d13d6b969f0b969482",
+          "originalURI": "rbxassetid://122629305677764"
+        },
+        "normal": {
+          "pngSHA256": "a8eb947bede56280fcbfe794c53959e901d8cabb517759c20afbdb8901d68831",
+          "originalURI": "rbxassetid://124637763157232"
+        },
+        "roughness": {
+          "pngSHA256": "d3a24522eedbfa79c1880b39d354ac702bfd6c90867e20ce80ddaf76266ab563",
+          "originalURI": "rbxassetid://102850469487873"
+        }
+      },
+      "sidewalk_concrete": {
+        "color": {
+          "pngSHA256": "c2ff43d2c7b6254589d99cbf5e09f727ec9faede72034fa054515a2c75fdb5f4",
+          "originalURI": "rbxassetid://103015335983029"
+        },
+        "normal": {
+          "pngSHA256": "0fcfeaf303ca9ac4a68e6f319a2f961594f0ac9fccdf140e8f47d026f8656ab6",
+          "originalURI": "rbxassetid://134697002832773"
+        },
+        "roughness": {
+          "pngSHA256": "881ae43eb5ef0b4ade620d2922a6966dae7864139a5ba2e788c866813ef1c2ee",
+          "originalURI": "rbxassetid://117887403540614"
+        }
+      }
+    },
+    "sidewalkAtlas": {
+      "pngSHA256": "86447fb4c82082d2262327765a21ba8ef87c85b13dc53f524cbd130d5625d5f1",
+      "chunkSHA256": "9f1e2113cecb2fb4697f28fbd3088ba3981cddd9ad72c98564730ecdbe17e50f"
+    }
+  },
+  "assetsPinned": false,
+  "existingRuntimeBakeSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+  "baselineManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "singleSidedHashCount": 46,
+  "automaticHashCount": 5,
+  "optimizationDefault": false,
+  "builderIntegration": "Call require(script.Parent.MaterialPolish).Apply(model) after EndBlockades populates BlenderVisuals and before Ready=true/model.Parent=workspace.",
+  "requiredChildren": [
+    "StaticPBRMaterials (owned Folder, Ready=true, exactly 3 owned SurfaceAppearance templates)",
+    "SidewalkAtlas (owned StringValue, Value=published asset ID, PNG_SHA256 pinned)"
+  ],
+  "playValidationRequired": [
+    "matching PBR/joint counts",
+    "night normal-walk lane readability",
+    "shop-wall concrete close view",
+    "upper furniture tint and silhouette",
+    "drain legibility",
+    "texture permissions/loading on real client",
+    "GPU/frame time before and after optional optimization",
+    "backface silhouette views from all occupied queue entrances"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"state\":\"Enum.HumanoidStateType.Running\",\"health\":100,\"position\":{\"1\":219.9609375,\"3\":-890.935546875,\"2\":32.996543884277347}}"
+    }
+  ],
+  "isError": false
+}

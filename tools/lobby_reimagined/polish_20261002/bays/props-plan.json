@@ -1,0 +1,211 @@
+[
+  {
+    "level": 1,
+    "family": "Desk",
+    "name": "Office Workstation",
+    "position": [
+      13.0,
+      0.8,
+      -21.0
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 1,
+    "family": "CRTMonitor",
+    "name": "Office Terminal",
+    "position": [
+      13.0,
+      4.009,
+      -21.35
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 1,
+    "family": "BeigeKeyboard",
+    "name": "Office Keyboard",
+    "position": [
+      13.0,
+      4.009,
+      -20.12
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 2,
+    "family": "VinylBench",
+    "name": "Pool Waiting Bench A",
+    "position": [
+      -21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": -1.5707963267948966
+  },
+  {
+    "level": 2,
+    "family": "VinylBench",
+    "name": "Pool Waiting Bench B",
+    "position": [
+      21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": 1.5707963267948966
+  },
+  {
+    "level": 2,
+    "family": "WireTrolley",
+    "name": "Pool Service Trolley",
+    "position": [
+      -14.0,
+      0.8,
+      -20.5
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 3,
+    "family": "R4PartyChair",
+    "name": "Party Chair A",
+    "position": [
+      -15.0,
+      0.76,
+      -20.0
+    ],
+    "yaw": 0
+  },
+  {
+    "level": 3,
+    "family": "R4PartyChair",
+    "name": "Party Chair B",
+    "position": [
+      15.0,
+      0.76,
+      -20.0
+    ],
+    "yaw": 0
+  },
+  {
+    "level": 3,
+    "family": "WireTrolley",
+    "name": "Party Supply Trolley",
+    "position": [
+      0.0,
+      0.8,
+      -17.5
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 4,
+    "family": "VinylBench",
+    "name": "Cinema Waiting Bench A",
+    "position": [
+      -21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": -1.5707963267948966
+  },
+  {
+    "level": 4,
+    "family": "VinylBench",
+    "name": "Cinema Waiting Bench B",
+    "position": [
+      21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": 1.5707963267948966
+  },
+  {
+    "level": 4,
+    "family": "Desk",
+    "name": "Cinema Check Desk",
+    "position": [
+      0.0,
+      0.8,
+      -18.0
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 4,
+    "family": "CRTMonitor",
+    "name": "Cinema Check Monitor",
+    "position": [
+      0.0,
+      4.009,
+      -18.35
+    ],
+    "yaw": 3.141592653589793
+  },
+  {
+    "level": 5,
+    "family": "Sofa",
+    "name": "Suburb Waiting Sofa",
+    "position": [
+      -21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": -1.5707963267948966
+  },
+  {
+    "level": 5,
+    "family": "VinylBench",
+    "name": "Suburb Waiting Bench",
+    "position": [
+      21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": 1.5707963267948966
+  },
+  {
+    "level": 5,
+    "family": "RolledCarpet",
+    "name": "Suburb Moving Carpet",
+    "position": [
+      17.0,
+      0.8,
+      -18.0
+    ],
+    "yaw": 0
+  },
+  {
+    "level": 6,
+    "family": "VinylBench",
+    "name": "Mall Waiting Bench A",
+    "position": [
+      -21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": -1.5707963267948966
+  },
+  {
+    "level": 6,
+    "family": "VinylBench",
+    "name": "Mall Waiting Bench B",
+    "position": [
+      21.0,
+      0.8,
+      0.0
+    ],
+    "yaw": 1.5707963267948966
+  },
+  {
+    "level": 6,
+    "family": "R4PartyChair",
+    "name": "Mall Spare Party Chair",
+    "position": [
+      -15.0,
+      0.76,
+      -19.5
+    ],
+    "yaw": 0
+  }
+]

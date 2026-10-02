@@ -1,0 +1,38 @@
+{
+  "schema": "lobby-polish-native-audit-file-pins-v1",
+  "files": [
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/native_audit.luau",
+      "bytes": 21565,
+      "sha256": "3e680866a87b9a6da360daa3aace95c30b8872196fd9fb8c1b3740bd9c7f0e9d"
+    },
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/selftest.luau",
+      "bytes": 8223,
+      "sha256": "39043c186713885965660ef58c65aac19461caa68d9051b1e960963e19713bba"
+    },
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/verify_native_scope.luau",
+      "bytes": 1261,
+      "sha256": "53f8862cb87921861655ae1f3b6a087accf2cfd5a0f468a19e90192fd11cccdf"
+    },
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/probe_reflection.luau",
+      "bytes": 567,
+      "sha256": "768ee027b7bd66b08e70a39207f7dda00ba278442ff1667e1ca0b1e59e48b1fe"
+    },
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/probe_material_types.luau",
+      "bytes": 623,
+      "sha256": "a35451472d31e6c000eea6968f7cc9263926c24ae074e6c18a423cc353f70ee2"
+    },
+    {
+      "file": "tools/lobby_reimagined/polish_20261002/native_scope/preflight_before.luau",
+      "bytes": 2201,
+      "sha256": "02a9849e2db74977aba1e276335ffd0fac90c9332979f9de90113faf8501ca10"
+    }
+  ],
+  "selftestPassed": true,
+  "realBeforePreflightPassed": true,
+  "realAfterScopeVerified": false
+}

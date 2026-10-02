@@ -1,0 +1,18 @@
+{
+  "schema":"lobby-polish-native-audit-peer-review-v1",
+  "reviewer":"lobby_polish_bays",
+  "scope":"native_audit.luau, verify_native_scope.luau and selftest.luau",
+  "noFalseParityDefectFoundForStatedScope":true,
+  "verifiedDesignChecks":[
+    "Existing reference properties are inspected before task module omission",
+    "Native LuaSourceContainer inventory and exact full live Source/editor catalogs are matched",
+    "Class/path collisions reject ambiguous inputs",
+    "Frozen source hashes and published URI/PNG hashes gate task normalization",
+    "Only three exact existing Source/hash changes and three exact owned new modules are normalized",
+    "Other native/source changes remain unclassified and verified stays false"
+  ],
+  "limitation":"New modules are authorized whole creations. Classes, Sources, ownership, installed source hashes and material child contracts are checked; full new object properties/attributes are reported via canonical hashes and attributes, rather than claimed byte-pinned outside those explicit checks.",
+  "studioWrites":false,
+  "inputBackupWrites":false,
+  "gameplayVerified":false
+}

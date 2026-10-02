@@ -1,0 +1,40 @@
+{
+  "PlayPassClaimed": false,
+  "StudioExecuted": false,
+  "catalogSHA256": "a7b74111671b2baaa3dba2e8ac4602e1d5f9c9d6569436d4381cc90426c6f7d1",
+  "clutterPoseChecksIncluded": false,
+  "expectedBays": 6,
+  "expectedPBRCounts": {
+    "asphalt_road": 7,
+    "sidewalk_concrete": 26,
+    "tunnel_concrete": 15
+  },
+  "expectedQueues": 24,
+  "extraEndBlockerCount": 66,
+  "files": [
+    {
+      "bytes": 36426,
+      "compiled": true,
+      "path": "tools/lobby_reimagined/polish_20261002/bays/inspection/server.PlayInspect.luau",
+      "sha256": "a4160886ae97e5b9f9a5eb0fc62c5b7f6c670fb6078055ee666e7236c3b9da92",
+      "tmpPath": "/private/tmp/lobby-polish-server-inspect.luau"
+    },
+    {
+      "bytes": 30285,
+      "compiled": true,
+      "path": "tools/lobby_reimagined/polish_20261002/bays/inspection/client.PlayInspect.luau",
+      "sha256": "bc1042f20b1d72a14e3b08006757353c1b8b4b2ca42367727ed4d2750f58bd87",
+      "tmpPath": "/private/tmp/lobby-polish-client-inspect.luau"
+    }
+  ],
+  "finalClutterCollidersExactlyEqualFirstInstall": true,
+  "finalSourcePinsSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+  "originalColliderCount": 830,
+  "propertyWritesToLiveInstances": false,
+  "rawManifestSHA256": "17b68efc473a0f100cf6ce6b9389332a5f2a87d82faf7694a0536a82483bc995",
+  "sceneEnabledLights": 77,
+  "sceneLightTotal": 87,
+  "schema": "lobby-readonly-play-inspectors-offline-preparation-v1",
+  "scope": "Compilation and exact frozen evidence preparation only; root must execute inspectors and preserve returned actual observations",
+  "status": "PASS"
+}

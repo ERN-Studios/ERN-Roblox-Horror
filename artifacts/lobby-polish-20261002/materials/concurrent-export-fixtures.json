@@ -1,0 +1,55 @@
+{
+  "schema": "lobby-polish-concurrent-export-local-fixtures-v1",
+  "verified": true,
+  "executionScope": "Synthetic local fixtures only; no Studio/native parser/Git/index actions",
+  "cases": [
+    {
+      "name": "exact-closed-review-read-only",
+      "passed": true
+    },
+    {
+      "name": "missing-source-row-blocked",
+      "passed": true
+    },
+    {
+      "name": "wrong-native-delta-blocked",
+      "passed": true
+    },
+    {
+      "name": "wrong-before-catalog-blocked",
+      "passed": true
+    },
+    {
+      "name": "wrong-audit-blocked",
+      "passed": true
+    },
+    {
+      "name": "publication-authorized-blocked",
+      "passed": true
+    },
+    {
+      "name": "cleanup-authorized-blocked",
+      "passed": true
+    },
+    {
+      "name": "extra-review-field-blocked",
+      "passed": true
+    },
+    {
+      "name": "unapproved-review-blocked",
+      "passed": true
+    },
+    {
+      "name": "own-scope-error-blocked",
+      "passed": true
+    },
+    {
+      "name": "missing-own-error-inventory-blocked",
+      "passed": true
+    },
+    {
+      "name": "six-only-export-keeps-strict-false-and-no-foreign-sources",
+      "passed": true
+    }
+  ]
+}

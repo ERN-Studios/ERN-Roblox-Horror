@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"attributes\":{\"ZyntraFirstLogin\":false,\"Crouching\":false,\"ZyntraLobbyBriefingPlayed\":true,\"CaptionsEnabled\":true,\"ZyntraPassRobux\":0,\"ZyntraOwnsDonation20K\":true,\"ZyntraSpeedPotions\":0,\"ZyntraRecordedSupportRobux\":0,\"DisableCaptions\":false,\"Level6_HeldCDCount\":0,\"ZyntraOwnsTokenEarner3x\":true,\"ZyntraDeviceClass\":\"PC\",\"ZyntraDetectorReadingUntil\":0,\"ZyntraHazmatColor\":null,\"ZyntraStaminaMultiplier\":1.55,\"ZyntraDonationRobux\":0,\"ZyntraOwnsEntityDetector\":true,\"ReduceCameraShake\":false,\"ReduceFlashing\":false,\"ZyntraUtilityRobux\":0,\"ZyntraMuteDispatch\":false,\"ZyntraDispatchPreferenceLoaded\":true,\"Level6_HeldCDMask\":0,\"Level6_HideGeneration\":0,\"Level6PreviewActive\":true,\"RouteMarkersActive\":0,\"ZyntraSpeedBoostUntil\":0,\"ZyntraOwnsFalseSun\":true,\"Level6Escaped\":false,\"Level6_HideTableIndex\":0,\"ZyntraGlowstickColor\":null,\"ZyntraOwnsTokenEarner5x\":true,\"ZyntraOwnsCosmeticEquipment\":true,\"ZyntraOwnsAdvancedEquipment\":true,\"ZyntraOwnsTokenEarnerUp2to3\":true,\"Level6_Hiding\":false,\"ZyntraBatteryMultiplier\":1.05,\"ZyntraDailyAccruing\":false,\"FriendBoostPercent\":0,\"ZyntraOwnsSupporter\":true,\"FriendBoostFriends\":0,\"ZyntraProfileLoaded\":true,\"ZyntraSkinId\":\"BaselineYellow\",\"ZyntraOwnsStaticWraith\":true,\"ZyntraSpeedPotionUsedThisRound\":false,\"ZyntraSpeedBoostMultiplier\":1,\"ZyntraTokenEarnerMultiplier\":5,\"ZyntraOwnsTokenEarnerUp2to5\":true,\"ZyntraOwnsTokenEarnerUp3to5\":true,\"ZyntraOwnsTokenEarner2x\":true,\"Level6InRound\":true,\"LobbyMusicEnabled\":true,\"InRound\":false,\"ZyntraRouteMarkers\":0},\"health\":100,\"name\":\"ZenMeister02\",\"position\":[19962.869140625,27.15380859375,90]}"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,16 @@
+artifacts/lobby-polish-20261002/scene/helper-validation.json
+artifacts/lobby-polish-20261002/scene/shop/LobbyShopDisplay.edit-baseline.json
+artifacts/lobby-polish-20261002/scene/shop/LobbyShopDisplay.server-baseline.json
+artifacts/lobby-polish-20261002/scene/shop/offline-validation.json
+artifacts/lobby-polish-20261002/scene/shop/runtime-baseline.json
+artifacts/lobby-polish-20261002/scene/shop/runtime-summary.json
+artifacts/lobby-polish-20261002/scene/shop/task-paths-for-commit.txt
+tools/lobby_reimagined/polish_20261002/scene/HANDOFF.md
+tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau
+tools/lobby_reimagined/polish_20261002/scene/SHOP-HANDOFF.md
+tools/lobby_reimagined/polish_20261002/scene/baseline/runtime-lighting-stage.json
+tools/lobby_reimagined/polish_20261002/scene/scene_apply.prelude.luau
+tools/lobby_reimagined/polish_20261002/scene/scene_apply.suffix.luau
+tools/lobby_reimagined/polish_20261002/scene/shop_apply.fragment.luau
+tools/lobby_reimagined/polish_20261002/scene/test_scene_helper.luau
+tools/lobby_reimagined/polish_20261002/scene/test_shop_fragment.luau

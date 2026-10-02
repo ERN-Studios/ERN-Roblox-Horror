@@ -1,0 +1,12 @@
+{
+  "bytes": 67323,
+  "fullSerializedPlanEqualsCheckedJSON": true,
+  "interface": "Add(model, kit, manifest)",
+  "maxObservedNumericDifference": 3.552713678800501e-15,
+  "numericTolerance": 1e-12,
+  "path": "tools/lobby_reimagined/polish_20261002/clutter/EndBlockades.ModuleScript.candidate.luau",
+  "scope": "Exact candidate syntax, module-load/interface and full runtime PLAN equals checked JSON within numeric parser rounding",
+  "sha256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+  "status": "PASS",
+  "testNote": "Initial strict double equality exposed decimal parser rounding in an unchanged collider dimension; comparison now measures and bounds this rounding. Candidate unchanged."
+}

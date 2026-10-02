@@ -1,0 +1,3392 @@
+{
+  "afterCaptureId": "4df9e7f4-49ec-434d-abbf-d2607efa9c2a",
+  "afterNativeSHA256": "868f29672e3bda6b501e44d5039880304f3fce989d2934e86ba510834b539b11",
+  "afterRootCount": 195,
+  "afterSourceCount": 229,
+  "beforeCaptureId": "115cbb46-954d-41d0-b397-0e8122c9a81f",
+  "beforeNativeSHA256": "451e86549091122a992da3a8cabee5f38471dd20d5b77212dc6d77dad1433872",
+  "beforeRootCount": 194,
+  "beforeSourceCount": 224,
+  "canonicalAfterTaskNormalizationSHA256": "27df9a1f508b570e1af5b2ab95ddff24d198a91f255f3d6d8f72d17b7b1f5ba2",
+  "canonicalBeforeSHA256": "69274fb1b44f046a1a5785d27fad73ce06593fc3c9e5763ea9d1385abdb54ff0",
+  "criticalSourcesSHA256": "68027467bad251b7cf332c1d6c4af9e6e2d11f33bb2e2e054d78365f38e0c617",
+  "errors": {},
+  "frozenSourcesSHA256": "f975db7ff15edfae199325d3632fb321beb772378b83a96cb651d78e5ac80162",
+  "inputBackupWrites": false,
+  "limits": [
+    "Native preservation and full Source/editor catalog parity are not gameplay/performance/multiplayer checks.",
+    "Unclassified deltas require owner review. This audit does not infer author identity or authorization.",
+    "Readable reflected properties and cross-references diagnose changed roots; raw/canonical hashes additionally bind all saved properties and opaque data."
+  ],
+  "nativeSourceInventory": {
+    "after": 229,
+    "before": 224,
+    "referencesChecked": 113588
+  },
+  "newTaskSourceRows": [
+    {
+      "attributes": {
+        "InstalledSourceSHA256": {
+          "type": "string",
+          "value": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c"
+        },
+        "LobbyReimaginedOwned": {
+          "type": "boolean",
+          "value": true
+        }
+      },
+      "bytes": 10695,
+      "canonicalSHA256": "300d31d41d35794bb264052d9944257dcba2687f2aeed40c576b13db488f908c",
+      "class": "ModuleScript",
+      "descendants": 0,
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "sha256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c"
+    },
+    {
+      "attributes": {
+        "InstalledSourceSHA256": {
+          "type": "string",
+          "value": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e"
+        },
+        "LobbyReimaginedOwned": {
+          "type": "boolean",
+          "value": true
+        }
+      },
+      "bytes": 22848,
+      "canonicalSHA256": "a3173d9f900379aad5796bb7367cae01da4923f87c54c0831012dab1a901837b",
+      "class": "ModuleScript",
+      "descendants": 5,
+      "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e"
+    },
+    {
+      "attributes": {
+        "InstalledSourceSHA256": {
+          "type": "string",
+          "value": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d"
+        },
+        "LobbyReimaginedOwned": {
+          "type": "boolean",
+          "value": true
+        }
+      },
+      "bytes": 15812,
+      "canonicalSHA256": "8ec2a0a0c4956fd40868165b4bdb3e5814851ede9c0535f534b5146421f951bc",
+      "class": "ModuleScript",
+      "descendants": 0,
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d"
+    }
+  ],
+  "normalization": "Deserialized memory only: three exact pinned existing Sources and their InstalledSourceSHA256 attributes reset to before values; three exact pinned new modules and validated child subtrees omitted. Real attribute values preserved while absent/empty serialized storage is normalized equally. Concurrent/unclassified differences are reported and never normalized away or restored.",
+  "rootRows": [
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9c584304313e96a332de6afcb0794e54a7d5648fde3f16421f98bf0738c26c83",
+      "beforeCanonicalSHA256": "9c584304313e96a332de6afcb0794e54a7d5648fde3f16421f98bf0738c26c83",
+      "class": "Sky",
+      "path": "Lighting.Sky",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6cd1fcc2bfd55672dd47c6fe4c436fe9792957e7133377c829bed914e6a84bd4",
+      "beforeCanonicalSHA256": "6cd1fcc2bfd55672dd47c6fe4c436fe9792957e7133377c829bed914e6a84bd4",
+      "class": "SunRaysEffect",
+      "path": "Lighting.SunRays",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "01e5f187da387051f1d4b53fe4186d3daa237150fccc18612afd94a6633357e9",
+      "beforeCanonicalSHA256": "01e5f187da387051f1d4b53fe4186d3daa237150fccc18612afd94a6633357e9",
+      "class": "Atmosphere",
+      "path": "Lighting.Atmosphere",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a131c846eaac3586583d797dcdac860aaa3291bbb9d4e67556b166abc819818f",
+      "beforeCanonicalSHA256": "a131c846eaac3586583d797dcdac860aaa3291bbb9d4e67556b166abc819818f",
+      "class": "BloomEffect",
+      "path": "Lighting.Bloom",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "07fd6111c042c2b0ff086641e9aec02d0697d56c30d573a3ae402ff0eb100450",
+      "beforeCanonicalSHA256": "07fd6111c042c2b0ff086641e9aec02d0697d56c30d573a3ae402ff0eb100450",
+      "class": "DepthOfFieldEffect",
+      "path": "Lighting.DepthOfField",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4",
+      "beforeCanonicalSHA256": "e92a516448f42a41fa2ca3efe995966cc48ea3ad88e3fb3946bf6453505539c4",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level2 Kids Foam Vinyl",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246",
+      "beforeCanonicalSHA256": "dfa99298d925624f162789c6f3d620552cc761a8fbddc2d273b0a2cb8d353246",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level2 Kids Rubber Floor",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25",
+      "beforeCanonicalSHA256": "4a5c8f918b01b48a8e9ff0f53a75d836dfa54d7bf6313aec5e25cea9b86f7c25",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level2 Kids Slide Fiberglass",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "35897d5a32e40886faac6bdc28c9ba1b73c9e1dad97c7bdefe1b74c13cc9be3c",
+      "beforeCanonicalSHA256": "35897d5a32e40886faac6bdc28c9ba1b73c9e1dad97c7bdefe1b74c13cc9be3c",
+      "class": "MaterialVariant",
+      "path": "MaterialService.MaterialVariant",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f",
+      "beforeCanonicalSHA256": "e23f1a601e145e16fff0ef29cfbad24f9f6f5e241f6a0eca79bbcede357ebb2f",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5AgedPlaster",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb",
+      "beforeCanonicalSHA256": "cd27a10dc71c4e203248ad1e18b8675db703e68594b60e15722bbe3987e69ffb",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5FloralWallpaper",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24",
+      "beforeCanonicalSHA256": "e7e6de7bc3c1d098700694b61954f0c66153d4929d73934138807d1dc8d4ae24",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5PaintedSiding",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96",
+      "beforeCanonicalSHA256": "b7aaa73734ace8f5cebe7af3b9f00bd30514edc6e533836e1aa61784c9e2bb96",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5LawnGrass",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5",
+      "beforeCanonicalSHA256": "e41d5251cd964fd9d03a488142ba709c83f3f2ef95a5da3efb7a30bc0eddd0e5",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5VeneerWood",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7",
+      "beforeCanonicalSHA256": "4eddf3bdbe0ecbb61f0b1d9c244d100bb4ef6deea3ac5689462e2a6a2fc9aea7",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5RoofShingles",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441",
+      "beforeCanonicalSHA256": "83ef8393a9b15cfb2240e2a07bb78f2a801a9edd3c2558169e1cb40e7bfb0441",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5LoopCarpet",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8cbc2fa331412bb2a56416db4aef9813126ac0e6e6a7559587e18ae61aed8412",
+      "beforeCanonicalSHA256": "8cbc2fa331412bb2a56416db4aef9813126ac0e6e6a7559587e18ae61aed8412",
+      "class": "MaterialVariant",
+      "path": "MaterialService.Level5CourtyardClapboard",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9",
+      "beforeCanonicalSHA256": "93366f9141d568db1d024954624347bd76c5cbbbdc77eaddf27c19590abfd0b9",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_CarpetCity",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a",
+      "beforeCanonicalSHA256": "4a942cf3da003eeb65fc828f069dca784c699355b86a8667d5bab4bcec0c3e8a",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_CarpetDefault",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f",
+      "beforeCanonicalSHA256": "f6f2df7f5820d6e9da00256e8208ca16c297cb97d7abeae2c956a92cdf17428f",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_CarpetNeon",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018",
+      "beforeCanonicalSHA256": "deecad106977fef16d0d3a72e91035418a3279380b677a6c804e2cbdcb827018",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_CarpetRed",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd",
+      "beforeCanonicalSHA256": "51fe3e1309022755b184acaa9ac4d66af9d53d24c766b3d5b190cbe70d5ccdfd",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_Diamondplate",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f",
+      "beforeCanonicalSHA256": "1b5aa020706f8f532d948cb6bf7434e1f1c135d705622e741d4b71e14cd0020f",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_KitchenTile",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12",
+      "beforeCanonicalSHA256": "3e0178e3d0adc346c7e3f7a3fc6dff252fc6acc9da8aaafc4a59b3547e593b12",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_OrangeWall",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b",
+      "beforeCanonicalSHA256": "4354fe4bd0bd82a7129a4b0e846cf6724735b7389db01bcab5902ae68d2a687b",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_RedWall",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373",
+      "beforeCanonicalSHA256": "7652309e96f5f7e28779b33f89dd4a2d09b7fc6df1aace646090bdeed368c373",
+      "class": "MaterialVariant",
+      "path": "MaterialService.L6R_Wallpaper",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c4605f368dffe02a0536b1e4155c48a6f49f76d46c52a898c5e824c7e356164c",
+      "beforeCanonicalSHA256": "c4605f368dffe02a0536b1e4155c48a6f49f76d46c52a898c5e824c7e356164c",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.DevAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e6af8339c211298c18924394faa60cbf812daf67569e9a4264d91e5f301355ae",
+      "beforeCanonicalSHA256": "e6af8339c211298c18924394faa60cbf812daf67569e9a4264d91e5f301355ae",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "bb27cc9048f0fb033748768f3077e53978ca5f41ed46feb4b8c68c2f729341a8",
+      "beforeCanonicalSHA256": "bb27cc9048f0fb033748768f3077e53978ca5f41ed46feb4b8c68c2f729341a8",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.FlashlightProfiles",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a3db174bf710097fc7a21f99b5f41e220cf7e1392d89aa674b17edcce3db3e72",
+      "beforeCanonicalSHA256": "a3db174bf710097fc7a21f99b5f41e220cf7e1392d89aa674b17edcce3db3e72",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.UIDevice",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a6ed72175442a1e66292cf305a12049f3521ed6b4fc7e576772d69be5fa01dda",
+      "beforeCanonicalSHA256": "a6ed72175442a1e66292cf305a12049f3521ed6b4fc7e576772d69be5fa01dda",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.UIRegression",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6729470f3cc29085bdb482047426620e5eae851a701252befa74c2cdd28461f5",
+      "beforeCanonicalSHA256": "6729470f3cc29085bdb482047426620e5eae851a701252befa74c2cdd28461f5",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "bf71baa07a288beee795b9d0c6d84ef481f70525b0e0f5937fa7535661f58667",
+      "beforeCanonicalSHA256": "bf71baa07a288beee795b9d0c6d84ef481f70525b0e0f5937fa7535661f58667",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ProtectionClient",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "5d6a0d22671313a0a52d733494b55388459cf97bf8147d9174bff9b0858d5ba0",
+      "beforeCanonicalSHA256": "5d6a0d22671313a0a52d733494b55388459cf97bf8147d9174bff9b0858d5ba0",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "0ae5e6b1f59614d5ef1413ee0a8b3c43f2be1e83ebaddba671c199418f93e106",
+      "beforeCanonicalSHA256": "0ae5e6b1f59614d5ef1413ee0a8b3c43f2be1e83ebaddba671c199418f93e106",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.UIStyle",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7457453801360135173dd8011e63a4d949a8b87f70d98c420b8c697ee055aac7",
+      "beforeCanonicalSHA256": "7457453801360135173dd8011e63a4d949a8b87f70d98c420b8c697ee055aac7",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "aa87f7e97193c6ca9eac25763432afc90dd518c58315d1a0bf7f2e5de43bd2ca",
+      "beforeCanonicalSHA256": "aa87f7e97193c6ca9eac25763432afc90dd518c58315d1a0bf7f2e5de43bd2ca",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.DeathAdvice",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8e402db3d9bae1a2e62295e84a1d237fe68d373abe8ab768f4b319082f535f89",
+      "beforeCanonicalSHA256": "8e402db3d9bae1a2e62295e84a1d237fe68d373abe8ab768f4b319082f535f89",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraDetectorVisual",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "ad28edff7cc09e90bbe0ac14e89003968c7a4bff84d0daf0040c60fe28a4e4fa",
+      "beforeCanonicalSHA256": "ad28edff7cc09e90bbe0ac14e89003968c7a4bff84d0daf0040c60fe28a4e4fa",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.SlideContinuationSafety",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6dc97903ea7b31e51d35b1bceaeb20e404536d188d9ac757178906e399a11206",
+      "beforeCanonicalSHA256": "6dc97903ea7b31e51d35b1bceaeb20e404536d188d9ac757178906e399a11206",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraDailyResearch",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d8f2c517f6e56da83477034aae92e9b58005961883ba109c39896c2a035ce102",
+      "beforeCanonicalSHA256": "d8f2c517f6e56da83477034aae92e9b58005961883ba109c39896c2a035ce102",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraChallenges",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "df2b307c819fcee517130de34de97b8edc00ff78ca2f91ed6f91a57fb1bee2ce",
+      "beforeCanonicalSHA256": "df2b307c819fcee517130de34de97b8edc00ff78ca2f91ed6f91a57fb1bee2ce",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "bb2e264bcec8e04a19252ee264ece83d389077c8eb41590fde4daa2f83fa1064",
+      "beforeCanonicalSHA256": "bb2e264bcec8e04a19252ee264ece83d389077c8eb41590fde4daa2f83fa1064",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraRecordsPage",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "0a21356c8027da232ae222e7d903386a532a2a5f2192cb8c4775e70c9f93b626",
+      "beforeCanonicalSHA256": "0a21356c8027da232ae222e7d903386a532a2a5f2192cb8c4775e70c9f93b626",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.ZyntraSkins",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "bfce548995af197f615902cd9198e7271e2de741bbb5b5fe70c692d4400a3246",
+      "beforeCanonicalSHA256": "bfce548995af197f615902cd9198e7271e2de741bbb5b5fe70c692d4400a3246",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Remotes",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c45e724a9dc3638216201c9b8fce7bb768bace0e097a0f6fec204aeec37eaa68",
+      "beforeCanonicalSHA256": "c45e724a9dc3638216201c9b8fce7bb768bace0e097a0f6fec204aeec37eaa68",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 Remotes",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "1d41d4e57bb04e3c6b6f8a9ff99df6c06b850a29dc3682f78e287cc3f0857405",
+      "beforeCanonicalSHA256": "1d41d4e57bb04e3c6b6f8a9ff99df6c06b850a29dc3682f78e287cc3f0857405",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level2Audio",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772",
+      "beforeCanonicalSHA256": "d86d9ee0260d5dfbcecabda3eacb7260853b2385d667543300b17c8982605772",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 State",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e5fb2c1de49492c97f24409199ac4187078ddbbd969727e4ae39092017332785",
+      "beforeCanonicalSHA256": "e5fb2c1de49492c97f24409199ac4187078ddbbd969727e4ae39092017332785",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 Sound Library",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "554c703cf2e7cf19445c150e6603fec71cecb46bb3b27729c270dbfd2ae69c1e",
+      "beforeCanonicalSHA256": "554c703cf2e7cf19445c150e6603fec71cecb46bb3b27729c270dbfd2ae69c1e",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 1 Sound Library",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "dc796e826e105033d7f2465d565c1205b761ff6be47787b848220847f9f5995c",
+      "beforeCanonicalSHA256": "dc796e826e105033d7f2465d565c1205b761ff6be47787b848220847f9f5995c",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 Assets",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e",
+      "beforeCanonicalSHA256": "0b981800ff56c3012927d987fb12331016a34d86829836d3e606ac671d4a386e",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 Pool Foam Remotes",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7f01cc4781f1fde45246a206a2f980b82b54aa4c29def74bd5ced1571c6d7017",
+      "beforeCanonicalSHA256": "7f01cc4781f1fde45246a206a2f980b82b54aa4c29def74bd5ced1571c6d7017",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 2 Pool Foam Audio",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "beforeCanonicalSHA256": "37c26fd579c97427a6a99bd8a5a24bbcfa6b127423a9c9d5094fd448cd3afed2",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 3 State",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "14a52e5aaf60db74d333e08e14a7fe0f972abc30856fd1881f21cfef0b88dedc",
+      "beforeCanonicalSHA256": "14a52e5aaf60db74d333e08e14a7fe0f972abc30856fd1881f21cfef0b88dedc",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 3 Remotes",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e0e9a4c525834b89d284f858c4dcd88a7cda004695f1984e8972b4541158ae4c",
+      "beforeCanonicalSHA256": "e0e9a4c525834b89d284f858c4dcd88a7cda004695f1984e8972b4541158ae4c",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 3 Sound Library",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f1c645123c6cecd170952767927cfca74ce1d1bb19d4244b2ca605c46622e70b",
+      "beforeCanonicalSHA256": "f1c645123c6cecd170952767927cfca74ce1d1bb19d4244b2ca605c46622e70b",
+      "class": "Folder",
+      "path": "ReplicatedStorage.Level 3 Assets",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4",
+      "beforeCanonicalSHA256": "a505732ba2e3ce9dfc64e2c750b89c0f907d29fe25d7563412187fa50ab9f1b4",
+      "class": "Folder",
+      "path": "ReplicatedStorage.MasterTuning",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7b1eba09a9da524e0d01edd630772d45cb20ffd210a60f4bd58ce97faf8bd872",
+      "beforeCanonicalSHA256": "7b1eba09a9da524e0d01edd630772d45cb20ffd210a60f4bd58ce97faf8bd872",
+      "class": "ModuleScript",
+      "path": "ReplicatedStorage.Level 4 Usher Animations",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "764e4979a563b1241ae19a8a16ceeb2945bb573fa9b7cd34fa3f29a08edf57e4",
+      "beforeCanonicalSHA256": "764e4979a563b1241ae19a8a16ceeb2945bb573fa9b7cd34fa3f29a08edf57e4",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.NoiseRegistry",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "343410ede4db469b9ac2007ce7ac99a2baeda1c458839d8e6ac929f798ce2558",
+      "beforeCanonicalSHA256": "343410ede4db469b9ac2007ce7ac99a2baeda1c458839d8e6ac929f798ce2558",
+      "class": "Script",
+      "path": "ServerScriptService.FlashlightSync",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e46079dd2d1ee50b64a82ad054e3123ca14d2e5c394222b4bea4102bcbfdaca2",
+      "beforeCanonicalSHA256": "af1086909972090a5b61abcae4cad84ad583f0a3886d7c3d20647ba06720847c",
+      "class": "Script",
+      "path": "ServerScriptService.GameManager",
+      "unchangedBeyondTaskScope": false
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9aa791e219817f1056c54e750799d7648eed0390cf4bf5bd42fa00d52ed6114c",
+      "beforeCanonicalSHA256": "9aa791e219817f1056c54e750799d7648eed0390cf4bf5bd42fa00d52ed6114c",
+      "class": "Script",
+      "path": "ServerScriptService.AvatarNormalize",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "62aaadc66d48580d8f37c17f1db65d64c72e473bd1b5e9ef6d47e456131edcdc",
+      "beforeCanonicalSHA256": "62aaadc66d48580d8f37c17f1db65d64c72e473bd1b5e9ef6d47e456131edcdc",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a4c07a7be3a086c20050e9fb7d9fae68e02d68de5c1d2942baab0f51571062c9",
+      "beforeCanonicalSHA256": "a4c07a7be3a086c20050e9fb7d9fae68e02d68de5c1d2942baab0f51571062c9",
+      "class": "Script",
+      "path": "ServerScriptService.ZyntraMonetization",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "48aef795ea9444cb786bfe6a298c9d89b11bb7a2f59f288b88d56c3169f00582",
+      "beforeCanonicalSHA256": "48aef795ea9444cb786bfe6a298c9d89b11bb7a2f59f288b88d56c3169f00582",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level2Generator",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8f9e1438b2b46409c2a69f27c9009408b3135220f23914f9fc0700971c2275e2",
+      "beforeCanonicalSHA256": "8f9e1438b2b46409c2a69f27c9009408b3135220f23914f9fc0700971c2275e2",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level3Generator",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "177a44dd8fc2d42b1d23c69d2646014e9433e76cfc9426eee8e681acd4ed699c",
+      "beforeCanonicalSHA256": "177a44dd8fc2d42b1d23c69d2646014e9433e76cfc9426eee8e681acd4ed699c",
+      "class": "Script",
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c1701d7687705d0fe03eb31e1ae99a188ef0dca812815ff9f92fb82440b14611",
+      "beforeCanonicalSHA256": "c1701d7687705d0fe03eb31e1ae99a188ef0dca812815ff9f92fb82440b14611",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Round Completion Routing",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "3bcf80d1abf03c996c402a4d65597c90f15ad53fc3832417a9246fc8d4988ee5",
+      "beforeCanonicalSHA256": "3bcf80d1abf03c996c402a4d65597c90f15ad53fc3832417a9246fc8d4988ee5",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Round Completion Test Suite",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "fd7fd6991bdefbfbf5ed7ed725802c156946437de4d445084ef55f612a5e27f7",
+      "beforeCanonicalSHA256": "fd7fd6991bdefbfbf5ed7ed725802c156946437de4d445084ef55f612a5e27f7",
+      "class": "Script",
+      "path": "ServerScriptService.Crouch State Server",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e9bbb1e19f3af7450c9d92ab34aac80885b06018eea23c3aec0a663d8f48547b",
+      "beforeCanonicalSHA256": "e9bbb1e19f3af7450c9d92ab34aac80885b06018eea23c3aec0a663d8f48547b",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Round Loading Runtime",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f3a5f88e12efc77ea46601ae2392963d22b6596d4d036ac9836a1c6faffa9515",
+      "beforeCanonicalSHA256": "f3a5f88e12efc77ea46601ae2392963d22b6596d4d036ac9836a1c6faffa9515",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Round Loading Test Suite",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e1593322b2113f56496736d8644a074ff782f095d5b095f694ed9599528f2103",
+      "beforeCanonicalSHA256": "e1593322b2113f56496736d8644a074ff782f095d5b095f694ed9599528f2103",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.PlayerProtection",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "660ca1cef097de94b083f000f144c188b23d43b7d3683b2897188fed048cd575",
+      "beforeCanonicalSHA256": "660ca1cef097de94b083f000f144c188b23d43b7d3683b2897188fed048cd575",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.PurchaseAlerts",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "0a0964167e4acdc8ef0f5fbc6bf4978747858cd78f7147638ebedb35e8f6fbd2",
+      "beforeCanonicalSHA256": "0a0964167e4acdc8ef0f5fbc6bf4978747858cd78f7147638ebedb35e8f6fbd2",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "2b27cd9bef806f6caf3e05a4f46e60c7197175494f0bf4fbef642ee1bdeed00f",
+      "beforeCanonicalSHA256": "2b27cd9bef806f6caf3e05a4f46e60c7197175494f0bf4fbef642ee1bdeed00f",
+      "class": "Script",
+      "path": "ServerScriptService.RouteMarkerService",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3",
+      "beforeCanonicalSHA256": "fc348ce838039acc0c48a5cd1c1c2c2399d49dd49d041e353b16c2c4ef5e98f3",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4CinemaV5",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e464aa8e9182514df63933580e93c5cc45a00c0c0fdc10abca48e42940f1c8c0",
+      "beforeCanonicalSHA256": "e464aa8e9182514df63933580e93c5cc45a00c0c0fdc10abca48e42940f1c8c0",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.FriendBoost",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "131925e777451e212d864f7d78b47680acd2379dd946247235c64f3ab0dd9dda",
+      "beforeCanonicalSHA256": "131925e777451e212d864f7d78b47680acd2379dd946247235c64f3ab0dd9dda",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.TeamObjectives",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "582b3bfd7f32c37c7ccbfcfe42bb0f65b52203be7509dcf7d4397793ead978cc",
+      "beforeCanonicalSHA256": "582b3bfd7f32c37c7ccbfcfe42bb0f65b52203be7509dcf7d4397793ead978cc",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.ReentryPlacement",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "06388dcb8fa76a9b73d256923e1e91fbf10ddb7720c612eba89d2bae17abf537",
+      "beforeCanonicalSHA256": "06388dcb8fa76a9b73d256923e1e91fbf10ddb7720c612eba89d2bae17abf537",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.ZyntraDetectorSensing",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7a0116d088b1052abd657d839b01d3d1798e3dad11031a666b532c0cc4fe8628",
+      "beforeCanonicalSHA256": "7a0116d088b1052abd657d839b01d3d1798e3dad11031a666b532c0cc4fe8628",
+      "class": "Script",
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "082f796768c1c220005736109433c57142865508817999b3d6bd909f98d87c2b",
+      "beforeCanonicalSHA256": "082f796768c1c220005736109433c57142865508817999b3d6bd909f98d87c2b",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.ZyntraAnalytics",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "ae630066b300a62a3266b4fd575080d8ee614c4d1dfb427c8c081cda2003f02d",
+      "beforeCanonicalSHA256": "ae630066b300a62a3266b4fd575080d8ee614c4d1dfb427c8c081cda2003f02d",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4CinemaV7",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "904810c224304c1f09e66514cd73a77487e06cf1836ad6454b9efeb042d391a6",
+      "beforeCanonicalSHA256": "904810c224304c1f09e66514cd73a77487e06cf1836ad6454b9efeb042d391a6",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4CinemaV6",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9a2bd2387358739fdb2f5bd267f8e418626ad71fc46346548566ccf0c1d2f2ee",
+      "beforeCanonicalSHA256": "9a2bd2387358739fdb2f5bd267f8e418626ad71fc46346548566ccf0c1d2f2ee",
+      "class": "Script",
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9a1a51e45b4759ed23105eb540793cea11fb902c6f4ff5d2f871b8a562f90f5b",
+      "beforeCanonicalSHA256": "9a1a51e45b4759ed23105eb540793cea11fb902c6f4ff5d2f871b8a562f90f5b",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4CinemaV4",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "cb86be439b7164d3734ca27c752340ed93645973655c06321cc208c98ff6121f",
+      "beforeCanonicalSHA256": "cb86be439b7164d3734ca27c752340ed93645973655c06321cc208c98ff6121f",
+      "class": "Script",
+      "path": "ServerScriptService.Level4RenovationBoot",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b0c2572ddc7fe13abe4a5e4b8450f46331d15eea8771b9df2365ce0f7fbfb872",
+      "beforeCanonicalSHA256": "b0c2572ddc7fe13abe4a5e4b8450f46331d15eea8771b9df2365ce0f7fbfb872",
+      "class": "Script",
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b21a482f459826e35139ebe4f8f45697dc396539ac2da0737835937285f8c0c8",
+      "beforeCanonicalSHA256": "b21a482f459826e35139ebe4f8f45697dc396539ac2da0737835937285f8c0c8",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4Generator",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "dd12eb31385b3e68229b4b8fce84fbcc8cc7fc7a04cc60c5f74b67fd071a4e47",
+      "beforeCanonicalSHA256": "dd12eb31385b3e68229b4b8fce84fbcc8cc7fc7a04cc60c5f74b67fd071a4e47",
+      "class": "Script",
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7979e892e9af8f4b872ecbb3a5d2334da847eb804cd969b3af4fb6b58c2ad980",
+      "beforeCanonicalSHA256": "7979e892e9af8f4b872ecbb3a5d2334da847eb804cd969b3af4fb6b58c2ad980",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4Expansion",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6668f34f0e5ebf4afc89bea45bda601e79c9d3e1f5c4871e23c92d9118d76926",
+      "beforeCanonicalSHA256": "6668f34f0e5ebf4afc89bea45bda601e79c9d3e1f5c4871e23c92d9118d76926",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4Renovation",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "fbcdf1f9a7e6bb681ea53edd70899a6cb60535cfac1877a9c64235c72846600a",
+      "beforeCanonicalSHA256": "fbcdf1f9a7e6bb681ea53edd70899a6cb60535cfac1877a9c64235c72846600a",
+      "class": "Script",
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "644770e89602808328c6156306d68e488442aebdafe7cd9076deb342cad11870",
+      "beforeCanonicalSHA256": "644770e89602808328c6156306d68e488442aebdafe7cd9076deb342cad11870",
+      "class": "Script",
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "eba5295efd723477b039c3c4ddb012b743ec10a809fdd9a7369021b41d672c3b",
+      "beforeCanonicalSHA256": "eba5295efd723477b039c3c4ddb012b743ec10a809fdd9a7369021b41d672c3b",
+      "class": "Folder",
+      "path": "ServerScriptService.Level 2 Systems",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "104aa900e8b1d3790a8659bcf4bdec5378e30d8687f151d019d1a59c3ac8aec3",
+      "beforeCanonicalSHA256": "104aa900e8b1d3790a8659bcf4bdec5378e30d8687f151d019d1a59c3ac8aec3",
+      "class": "Folder",
+      "path": "ServerScriptService.Level 3 Systems",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "178a5f07b741ac5d10c6fd1a59e759dd191c36e94acdba9eddb43a8cd7b3bbea",
+      "beforeCanonicalSHA256": "e53d1088999ed7caa82e973dd120a764bc78db7b1f55d821ad02b18c87e236d3",
+      "class": "Folder",
+      "path": "ServerScriptService.Level 1 Systems",
+      "unchangedBeyondTaskScope": false
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c205af131e782f9532563254d046d585ce2638a314cb5b84807ac0a393a93761",
+      "beforeCanonicalSHA256": "c205af131e782f9532563254d046d585ce2638a314cb5b84807ac0a393a93761",
+      "class": "Folder",
+      "path": "ServerScriptService.Level 6 Systems",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8e25d9aef682544086e312032699e04ad87c752dd78edec56936a4a748e94db3",
+      "beforeCanonicalSHA256": "8e25d9aef682544086e312032699e04ad87c752dd78edec56936a4a748e94db3",
+      "class": "Folder",
+      "path": "ServerScriptService.LobbyReimaginedPreview",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7943a0b5948f6a83e0d5ab94a4dc91e633268030b35f329cbcaf671e38c0ee58",
+      "beforeCanonicalSHA256": "7943a0b5948f6a83e0d5ab94a4dc91e633268030b35f329cbcaf671e38c0ee58",
+      "class": "Script",
+      "path": "ServerScriptService.Level1BlenderPreviewAccess",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "63284640573695624d4612639e71f79c4a1a45eadf5964d56071525aa3f5cbf6",
+      "beforeCanonicalSHA256": "a46ab3425cc3f41e2345d7fa53ad1b0d8892896a9208a80b2ddd711c978151e2",
+      "class": "Folder",
+      "path": "ServerScriptService.Level 4 Systems",
+      "unchangedBeyondTaskScope": false
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "52b020f67d108dd2870a1847eae066eed1170d25f09836f14ceb20f9e5efd1b7",
+      "beforeCanonicalSHA256": "52b020f67d108dd2870a1847eae066eed1170d25f09836f14ceb20f9e5efd1b7",
+      "class": "ModuleScript",
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6a4df310dcd2b65ba089c78d74a0ab06c9ef55891832f683e7527f6513410fc7",
+      "beforeCanonicalSHA256": "6a4df310dcd2b65ba089c78d74a0ab06c9ef55891832f683e7527f6513410fc7",
+      "class": "Model",
+      "path": "ServerStorage.RBX_ANIMSAVES",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "abf9ec33e47580848cc66a26c15b59e3cba2ceb7db35db20ae83952a04bc2447",
+      "beforeCanonicalSHA256": "abf9ec33e47580848cc66a26c15b59e3cba2ceb7db35db20ae83952a04bc2447",
+      "class": "Folder",
+      "path": "ServerStorage.Archive",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b10e351cfaad897cb2341bec5b5f55f8df9635a4f992e6e0613afc7ae247a0a0",
+      "beforeCanonicalSHA256": "b10e351cfaad897cb2341bec5b5f55f8df9635a4f992e6e0613afc7ae247a0a0",
+      "class": "SurfaceAppearance",
+      "path": "ServerStorage.Level 2 Column Tile Surface Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "82106853a29924fc144fa7dcca3148adc1303ef5390a297d7a35699a6c8c6162",
+      "beforeCanonicalSHA256": "82106853a29924fc144fa7dcca3148adc1303ef5390a297d7a35699a6c8c6162",
+      "class": "Folder",
+      "path": "ServerStorage.Project Mirror",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4ef294f01ca60f0d6cd674a747b02a24a5fdc8fc6013b1045a27f328c3665e9f",
+      "beforeCanonicalSHA256": "4ef294f01ca60f0d6cd674a747b02a24a5fdc8fc6013b1045a27f328c3665e9f",
+      "class": "Folder",
+      "path": "ServerStorage.Level2Assets",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e4da1a095633646e815c909a4eb47cdd0ecec73e43d61c39606849267b8f99f0",
+      "beforeCanonicalSHA256": "e4da1a095633646e815c909a4eb47cdd0ecec73e43d61c39606849267b8f99f0",
+      "class": "Folder",
+      "path": "ServerStorage.MongoTVEntityAnimations",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d73304bf30b1a9c36a242bc174f606137ea29385087436098b2c0d5cdc3bb338",
+      "beforeCanonicalSHA256": "d73304bf30b1a9c36a242bc174f606137ea29385087436098b2c0d5cdc3bb338",
+      "class": "Folder",
+      "path": "ServerStorage.Level 2 Slide Assets",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc",
+      "beforeCanonicalSHA256": "8b5c1c4929ceada92d4fac82ead89cd4e591431aba19d06a7932420ae212fccc",
+      "class": "Folder",
+      "path": "ServerStorage.Level 2 Kids Round Skylight Templates",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "97b2e006d102baaa6c28a14c4849484816b39a1fc0c96892f744a4e56b44b975",
+      "beforeCanonicalSHA256": "97b2e006d102baaa6c28a14c4849484816b39a1fc0c96892f744a4e56b44b975",
+      "class": "Folder",
+      "path": "ServerStorage.Level3Assets",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "33c2c411613ea03d9658c2451ce0f2d8b555fac125cbff86070d09d3701cb653",
+      "beforeCanonicalSHA256": "33c2c411613ea03d9658c2451ce0f2d8b555fac125cbff86070d09d3701cb653",
+      "class": "Folder",
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "cd3ac0f16bb9c22a01de0ffaf52dba29cca9cb56f0388be5b8f5a27a1fb140e5",
+      "beforeCanonicalSHA256": "cd3ac0f16bb9c22a01de0ffaf52dba29cca9cb56f0388be5b8f5a27a1fb140e5",
+      "class": "Folder",
+      "path": "ServerStorage.CodexBackup_20260902_ComingSoonGates",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d",
+      "beforeCanonicalSHA256": "d1f5cd95be1196a032eb66867d0eb9faf3c1264cf489ac0a00c25f524fd3d71d",
+      "class": "Folder",
+      "path": "ServerStorage.CodexBackup_20260902_CrouchFunction",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c732115eb543aa200c4d72e0a7149490590c9f652f6f4d4b83bacfc77c33511c",
+      "beforeCanonicalSHA256": "c732115eb543aa200c4d72e0a7149490590c9f652f6f4d4b83bacfc77c33511c",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityValidation",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "867773e7cbb30a2e1f765ee17abec55e6a920d32dd1e4369113647091a04d8d8",
+      "beforeCanonicalSHA256": "867773e7cbb30a2e1f765ee17abec55e6a920d32dd1e4369113647091a04d8d8",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "93ba84baf84e4616bd1c4ef15b0b54757f34ce89b2b23f1f91f047565c816d08",
+      "beforeCanonicalSHA256": "93ba84baf84e4616bd1c4ef15b0b54757f34ce89b2b23f1f91f047565c816d08",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb",
+      "beforeCanonicalSHA256": "edbef7dd900476299ba0de05e6b424d1f1c815cc43e44089fed935d2823984eb",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a",
+      "beforeCanonicalSHA256": "e9ec8ce343f7154921b2364490f857b79769eeee62b81f0008ea681e02871d6a",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMultiplayerLaunch",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5",
+      "beforeCanonicalSHA256": "6b190efa0319afbfcfd7ebf42762cce04c223010543d2ad8b137a21a6102e1a5",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0457Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b",
+      "beforeCanonicalSHA256": "3f734d7134472b733a3f8ea185d860a03d69a2be5468b0cc792ab4ea3855ac7b",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0503Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614",
+      "beforeCanonicalSHA256": "33962bbe73fe06e9eea34dd7ada81ac0a6ac364d2f08dc4d02db7c816cac0614",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0508Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562",
+      "beforeCanonicalSHA256": "97e501f201041762ab3eaa1430c00c3671fa0db325e59a45a0d751b3f3d2a562",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0638Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7b7dfa91252f032659c6258368e8496739528c097009a4d7036f20f176c2d331",
+      "beforeCanonicalSHA256": "7b7dfa91252f032659c6258368e8496739528c097009a4d7036f20f176c2d331",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0",
+      "beforeCanonicalSHA256": "5f32ffc93abe665cc672bf1e2edfc71e0bac218d1884936a80469e570bdf93b0",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_0706Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f",
+      "beforeCanonicalSHA256": "d3d5efa4538d502bfd4bbbdcd45cf5d19990fc3e6f78d316d26f6be296038e6f",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityLobbyRigResult_0748Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d0a0e37cc1babcd89a3207e6789b0be9b93192becc639bc0059eee18386c322c",
+      "beforeCanonicalSHA256": "d0a0e37cc1babcd89a3207e6789b0be9b93192becc639bc0059eee18386c322c",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79",
+      "beforeCanonicalSHA256": "4718ca07a9165e31d1ab33508610dc474cbb1ec11aa57cbf91ed3f339cc73d79",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1609Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "23f4d5c6a4492eb125af3d9af2984eb173c067015a58a8c2885b3ff64525971b",
+      "beforeCanonicalSHA256": "23f4d5c6a4492eb125af3d9af2984eb173c067015a58a8c2885b3ff64525971b",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc",
+      "beforeCanonicalSHA256": "76699a3d657062699e6bc83c4cd2591048c7347b5b2a44ee46b2487c76bec2bc",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1624Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9d4e818b72f6c9a19a5dd0afb4de9b0e2320b907c9c5fa30d733ce0d03c9d0da",
+      "beforeCanonicalSHA256": "9d4e818b72f6c9a19a5dd0afb4de9b0e2320b907c9c5fa30d733ce0d03c9d0da",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc",
+      "beforeCanonicalSHA256": "332a651a674ba53870e84e8e8b12d7d557e6c53a48573545a906a545719294bc",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1633Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "733d4671390a87674e73182b3c588d3be6f329d856b811bb8cb22b2996f253e6",
+      "beforeCanonicalSHA256": "733d4671390a87674e73182b3c588d3be6f329d856b811bb8cb22b2996f253e6",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd",
+      "beforeCanonicalSHA256": "9f5b0a5799dfb2d7608394f48c4ca13955b4a7e060899ab8ec6306abb26696dd",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1640Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0",
+      "beforeCanonicalSHA256": "61fd2bb3a31813b9a4409d49ac0204017077a032f2730ed0c86032dd8f5b0ec0",
+      "class": "Folder",
+      "path": "ServerStorage.TEMP_PipeEntityMPResult_1648Z",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8d2237a0005329e847634547e4de839d563f5a1b87a185da0e93af44d6f5ed53",
+      "beforeCanonicalSHA256": "8d2237a0005329e847634547e4de839d563f5a1b87a185da0e93af44d6f5ed53",
+      "class": "Folder",
+      "path": "ServerStorage.PoolSlideContactAnimations_20260910",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a01bf3c345b7bbd706e50428abcd559c3ca4edbf8a37fa15d63fe50039992427",
+      "beforeCanonicalSHA256": "a01bf3c345b7bbd706e50428abcd559c3ca4edbf8a37fa15d63fe50039992427",
+      "class": "Folder",
+      "path": "ServerStorage.TrelloPoolSlideReleaseBackup_20260910",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "39dd208dba7e4a4e1fcfe8732fe66e49c50d2e67c1b5559f5e8c38d141734323",
+      "beforeCanonicalSHA256": "39dd208dba7e4a4e1fcfe8732fe66e49c50d2e67c1b5559f5e8c38d141734323",
+      "class": "Model",
+      "path": "ServerStorage.HazmatBaselineRig_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8afe02c7b44638b9c12b5ed469eb5b4451624effd34dedc97de77187c32a53fc",
+      "beforeCanonicalSHA256": "8afe02c7b44638b9c12b5ed469eb5b4451624effd34dedc97de77187c32a53fc",
+      "class": "Model",
+      "path": "ServerStorage.HazmatStaticWraithTopper_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b27aaca2cf187c3958107d682bec7c1ae2ead34bb4da725efb50bfd63c4995bd",
+      "beforeCanonicalSHA256": "b27aaca2cf187c3958107d682bec7c1ae2ead34bb4da725efb50bfd63c4995bd",
+      "class": "Model",
+      "path": "ServerStorage.HazmatFalseSunTopper_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b218e57fb5b9ca65e1592a8492ff34d005e0e84b027e8d40ca2699cf8b9e6578",
+      "beforeCanonicalSHA256": "b218e57fb5b9ca65e1592a8492ff34d005e0e84b027e8d40ca2699cf8b9e6578",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_BaselineYellow_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a3d0fa04ee989523f5fedd6d8510c2f6a1409bc7e3eb815c58607761100d25a8",
+      "beforeCanonicalSHA256": "a3d0fa04ee989523f5fedd6d8510c2f6a1409bc7e3eb815c58607761100d25a8",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_PoolService_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8cc4d1b1ff5591e44bb28abad226dcb7fe9bea9c775228f5563f62d7b9546e39",
+      "beforeCanonicalSHA256": "8cc4d1b1ff5591e44bb28abad226dcb7fe9bea9c775228f5563f62d7b9546e39",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_SuburbSurvey_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "46579bc91f7dccd03d14650601ebf639b79863f865c93f30efabcac75ac2659d",
+      "beforeCanonicalSHA256": "46579bc91f7dccd03d14650601ebf639b79863f865c93f30efabcac75ac2659d",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_BlacksiteDirector_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "192bff85313be6fc9430c7c8a9e6113441382fd4a1ce159d687c4f191cdf5522",
+      "beforeCanonicalSHA256": "192bff85313be6fc9430c7c8a9e6113441382fd4a1ce159d687c4f191cdf5522",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_StaticWraith_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "590e0ab62e87e9f9bf3dedeb7d77b5a34e3fc43a3f053cfe014e1c9f8e8f2592",
+      "beforeCanonicalSHA256": "590e0ab62e87e9f9bf3dedeb7d77b5a34e3fc43a3f053cfe014e1c9f8e8f2592",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_FalseSun_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "784056832b84c1b5c6fe7b50fdb13aba56856d1777a7b22bce99db9d8c6bfad6",
+      "beforeCanonicalSHA256": "784056832b84c1b5c6fe7b50fdb13aba56856d1777a7b22bce99db9d8c6bfad6",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSkin_SignalArchitect_20260924",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f007d1c098ab76a38e423dd1eed9cce4cfee1593d20417e300931c55724b82cb",
+      "beforeCanonicalSHA256": "f007d1c098ab76a38e423dd1eed9cce4cfee1593d20417e300931c55724b82cb",
+      "class": "Model",
+      "path": "ServerStorage.HazmatSignalArchitectTopper_20260925",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "fb48dce286ef354320018d7328d4c1f2b0d1e2a5bcd8d1de45ad7e3a27ff0404",
+      "beforeCanonicalSHA256": "fb48dce286ef354320018d7328d4c1f2b0d1e2a5bcd8d1de45ad7e3a27ff0404",
+      "class": "Folder",
+      "path": "ServerStorage.Level4V10Templates",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "03f5d39ee999f6493bafdffc7cd4007cf5719fc37a3623bb66199b1a4a95cd43",
+      "beforeCanonicalSHA256": "03f5d39ee999f6493bafdffc7cd4007cf5719fc37a3623bb66199b1a4a95cd43",
+      "class": "Folder",
+      "path": "ServerStorage.Level4V7Templates",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "6aa751fc2d6dafb285800b17268f8544ccfd3655e6483e8a3787a2fb7996e1cb",
+      "beforeCanonicalSHA256": "6aa751fc2d6dafb285800b17268f8544ccfd3655e6483e8a3787a2fb7996e1cb",
+      "class": "Model",
+      "path": "ServerStorage.Level4CinemaV3Archived",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "89fe901284d430c7ba1a00a219ab04a7048bb230b940a8aa2956efd786b4b854",
+      "beforeCanonicalSHA256": "89fe901284d430c7ba1a00a219ab04a7048bb230b940a8aa2956efd786b4b854",
+      "class": "Model",
+      "path": "ServerStorage.Level4V4Archived_20260927",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d3aac02c22f4bc4298b772f2a0859fcaa76e5734236f877d01d2d7cf7dc99146",
+      "beforeCanonicalSHA256": "d3aac02c22f4bc4298b772f2a0859fcaa76e5734236f877d01d2d7cf7dc99146",
+      "class": "Folder",
+      "path": "ServerStorage.Level6BlenderSource",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "bac4e352a24faaa8903b56ebcf494ad10b2c1dabb7c30a2d2206fe4e1b048dbf",
+      "beforeCanonicalSHA256": "bac4e352a24faaa8903b56ebcf494ad10b2c1dabb7c30a2d2206fe4e1b048dbf",
+      "class": "Folder",
+      "path": "ServerStorage.Level6BlenderSourceRevision20261001",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167",
+      "beforeCanonicalSHA256": "f078ab3ddf6d71019213d86878bd3290bd5bd4ab70e897b89c9a85c632eeb167",
+      "class": "Folder",
+      "path": "ServerStorage.Level6TextureImportReferences",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e1c6a984927c41e11b44904a0b975db2eb49802d5ae9abddfb02e63881086d10",
+      "beforeCanonicalSHA256": "e1c6a984927c41e11b44904a0b975db2eb49802d5ae9abddfb02e63881086d10",
+      "class": "Folder",
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "3655aa60efa184917f35183a58b21ff153308fe2c2f4bac24a22960d6f10c31d",
+      "beforeCanonicalSHA256": "3655aa60efa184917f35183a58b21ff153308fe2c2f4bac24a22960d6f10c31d",
+      "class": "Folder",
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R2",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "5e8ce3db6bdc34c6e218d2ce0f6c60ce4098fe34529c4c0ecfef4f928f8cb2f3",
+      "beforeCanonicalSHA256": "5e8ce3db6bdc34c6e218d2ce0f6c60ce4098fe34529c4c0ecfef4f928f8cb2f3",
+      "class": "Folder",
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "06b3acdaaeec973aaaf7a73ed47d2876d0cd79d8150adb6849cdaf316fbf6543",
+      "beforeCanonicalSHA256": "06b3acdaaeec973aaaf7a73ed47d2876d0cd79d8150adb6849cdaf316fbf6543",
+      "class": "Folder",
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3B",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "509ee0f9d0fa110baf48d634e9d7c5853cf1d6064098f9bd06bf66f2b941c466",
+      "beforeCanonicalSHA256": "509ee0f9d0fa110baf48d634e9d7c5853cf1d6064098f9bd06bf66f2b941c466",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Column Flare Template 9.000:10.200",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6",
+      "beforeCanonicalSHA256": "37ff3c4799e2044111146cb47406625016312bb043538cff8c3ee237d10962e6",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Open Slide End Cap Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "ed86de6d6ecbe019e7de09fcd722367be18ca1ea519634faf19e05151da7e0b5",
+      "beforeCanonicalSHA256": "ed86de6d6ecbe019e7de09fcd722367be18ca1ea519634faf19e05151da7e0b5",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Column Flare Template 4.500:7.200",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55",
+      "beforeCanonicalSHA256": "35735daaa3cf064cca1c19cdc4dc7cab2aa73e03a63c65c25ebd57186b4fea55",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Sealed Open Slide Segment Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38",
+      "beforeCanonicalSHA256": "8424eace866bca313ad6004a2a8381cd2b13fe4a6274a0763c98b0870de49c38",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Fitted Slide Cradle Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c26210f57be71587e7828ccfc599d96224bcd8356e1b46ea5d2e589dd6627969",
+      "beforeCanonicalSHA256": "c26210f57be71587e7828ccfc599d96224bcd8356e1b46ea5d2e589dd6627969",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Column Flare Template 5.500:7.425",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef",
+      "beforeCanonicalSHA256": "07ed8c79e5833a3871d00b15b3da3dacbd2435dceeacacda31a100dd991986ef",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Closed Slide End Cap Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "2335fd76d6afc03afb9cee31387eeab41a074d64172fe9308af2070ade5dc14f",
+      "beforeCanonicalSHA256": "2335fd76d6afc03afb9cee31387eeab41a074d64172fe9308af2070ade5dc14f",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Column Flare Template",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888",
+      "beforeCanonicalSHA256": "75080ebe36d08b942e52fb3a1e029c36c8654e6234679a6df91b89c6a583b888",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16",
+      "beforeCanonicalSHA256": "8c1609c98d4d8a656f0573ec573f451accbcd7b2811e248a984e22f72cda5e16",
+      "class": "MeshPart",
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "0dc63085cd80c66b34e97e5382f4f5cafc9d57f27fd74a60faf568ebe5ee22e5",
+      "beforeCanonicalSHA256": "0dc63085cd80c66b34e97e5382f4f5cafc9d57f27fd74a60faf568ebe5ee22e5",
+      "class": "Folder",
+      "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R4",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "2b604c6030693079296fe77a296ca7458b707b5d5e31c43d385d6ce16a7a6c16",
+      "beforeCanonicalSHA256": "2b604c6030693079296fe77a296ca7458b707b5d5e31c43d385d6ce16a7a6c16",
+      "class": "Folder",
+      "path": "ServerStorage.Level1BlenderKit",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "1d52ad303754865620b87a0a4392a088d983431ace1b1d443e9b29c59b86f678",
+      "beforeCanonicalSHA256": "1d52ad303754865620b87a0a4392a088d983431ace1b1d443e9b29c59b86f678",
+      "class": "Folder",
+      "path": "ServerStorage.Level1BlenderKitV2",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "7a5ed85c26f051ec787d39cdcd548555ba661c5676b66c66b1e76d04f1ff29a8",
+      "beforeCanonicalSHA256": "7a5ed85c26f051ec787d39cdcd548555ba661c5676b66c66b1e76d04f1ff29a8",
+      "class": "Folder",
+      "path": "ServerStorage.Level 4 Templates",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e962148da9a312238792a356d851f68c0d0b7a673abe0d9249a2606e15ccf7cd",
+      "beforeCanonicalSHA256": "1e7a4d040005eb5663505b18b4f0f710ad82cd76d9ea2fc72eacfe34eabfd485",
+      "class": "StarterPlayerScripts",
+      "path": "StarterPlayer.StarterPlayerScripts",
+      "unchangedBeyondTaskScope": false
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8eb2e24fd6f95f9b3e80788b6e79cd1eb9feb1ce2e545c2d52bf4637f8c49131",
+      "beforeCanonicalSHA256": "8eb2e24fd6f95f9b3e80788b6e79cd1eb9feb1ce2e545c2d52bf4637f8c49131",
+      "class": "StarterCharacterScripts",
+      "path": "StarterPlayer.StarterCharacterScripts",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "78c9824469e0497cb7b35ac566dfa8f04441da2571314d3bec40771acd6dd849",
+      "beforeCanonicalSHA256": "78c9824469e0497cb7b35ac566dfa8f04441da2571314d3bec40771acd6dd849",
+      "class": "Model",
+      "path": "StarterPlayer.StarterCharacter",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "ee575a8b6d3ab9241e1c3b15d3b2ae5bb9ddb0c602cd5427af6826931b097daa",
+      "beforeCanonicalSHA256": "ee575a8b6d3ab9241e1c3b15d3b2ae5bb9ddb0c602cd5427af6826931b097daa",
+      "class": "ChatWindowConfiguration",
+      "path": "LocalScript.ChatWindowConfiguration",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b8bce7d094c575718ddcdefa2b057f4bd996c267aeb5ea6e799495b08d155f8a",
+      "beforeCanonicalSHA256": "b8bce7d094c575718ddcdefa2b057f4bd996c267aeb5ea6e799495b08d155f8a",
+      "class": "ChatInputBarConfiguration",
+      "path": "LocalScript.ChatInputBarConfiguration",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "9c2f51410cd56fbb2bafddca370e404d90b69c6022caeb85f24be79dec287e67",
+      "beforeCanonicalSHA256": "9c2f51410cd56fbb2bafddca370e404d90b69c6022caeb85f24be79dec287e67",
+      "class": "BubbleChatConfiguration",
+      "path": "LocalScript.BubbleChatConfiguration",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "ed50dc79f839245d0345fcb36f5d824198ff1c49578c4c817c6b2366a8874766",
+      "beforeCanonicalSHA256": "ed50dc79f839245d0345fcb36f5d824198ff1c49578c4c817c6b2366a8874766",
+      "class": "ChannelTabsConfiguration",
+      "path": "LocalScript.ChannelTabsConfiguration",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "09bad1c5f9449cbb80162b64e889fbe2bd2197454b9a6375d1409b44cc80169b",
+      "beforeCanonicalSHA256": "09bad1c5f9449cbb80162b64e889fbe2bd2197454b9a6375d1409b44cc80169b",
+      "class": "Folder",
+      "path": "Workspace.L5_ImportProbe",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b8dcd3304105b8153774193a2aba35b33424d72a203dc8732cbc995c7d3b42dd",
+      "beforeCanonicalSHA256": "b8dcd3304105b8153774193a2aba35b33424d72a203dc8732cbc995c7d3b42dd",
+      "class": "Terrain",
+      "path": "Workspace.Terrain",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "891c6d11c35db193d13bf5649839f4b731833096e71b6ee3aff249be40c6a9b9",
+      "beforeCanonicalSHA256": "891c6d11c35db193d13bf5649839f4b731833096e71b6ee3aff249be40c6a9b9",
+      "class": "Model",
+      "path": "Workspace.Level 5 Quiet Suburbs",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "91bd95df1c6cffbb4b8bdb544d2b7aaa60d41cd6b315f706ff8b1a4cde87de1a",
+      "beforeCanonicalSHA256": "91bd95df1c6cffbb4b8bdb544d2b7aaa60d41cd6b315f706ff8b1a4cde87de1a",
+      "class": "Model",
+      "path": "Workspace.ServerLobby",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "a86c9c5bd73ee629e45eb442e8b40eef8d0ec6fa1a05888b546a5d3cde02c8ca",
+      "beforeCanonicalSHA256": "a86c9c5bd73ee629e45eb442e8b40eef8d0ec6fa1a05888b546a5d3cde02c8ca",
+      "class": "Model",
+      "path": "Workspace.Level 4 Cinema Blender",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "8053f3c4b52275337f24a42e6a18740aa4281ea9bdef51039fd9789c2733dbf0",
+      "beforeCanonicalSHA256": "8053f3c4b52275337f24a42e6a18740aa4281ea9bdef51039fd9789c2733dbf0",
+      "class": "Model",
+      "path": "Workspace.Level 4 Cinema Preview",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d6414ea984e567b055442b9759fbb646453e01dc999edea9439ca58efafbcd9e",
+      "beforeCanonicalSHA256": "d6414ea984e567b055442b9759fbb646453e01dc999edea9439ca58efafbcd9e",
+      "class": "Model",
+      "path": "Workspace.Level 4 Cinema V9 QA",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "f75efe3db8993b800436c9bbb54c2579463362a5501f9fa1fc3a2be9226ec7dd",
+      "beforeCanonicalSHA256": "f75efe3db8993b800436c9bbb54c2579463362a5501f9fa1fc3a2be9226ec7dd",
+      "class": "Model",
+      "path": "Workspace.Entity",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "d6fa34373fb35c05459cb8cd8bc68313f20b659f8d46f2363c6de08f71c5c288",
+      "beforeCanonicalSHA256": "d6fa34373fb35c05459cb8cd8bc68313f20b659f8d46f2363c6de08f71c5c288",
+      "class": "Model",
+      "path": "Workspace.Dummy",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "b927d54a8732379b1f888b015f28bf0b8e4bba8b1182143b0994bd0208bc275d",
+      "beforeCanonicalSHA256": "b927d54a8732379b1f888b015f28bf0b8e4bba8b1182143b0994bd0208bc275d",
+      "class": "Model",
+      "path": "Workspace.Avatar Rigged No Animation",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c02b4fb04ea79445b5818794f79443c8528c6b2d47bc74c7847d70ccdb0b5bdd",
+      "beforeCanonicalSHA256": "c02b4fb04ea79445b5818794f79443c8528c6b2d47bc74c7847d70ccdb0b5bdd",
+      "class": "Model",
+      "path": "Workspace.StarterCharacter",
+      "unchangedBeyondTaskScope": true
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "c7e2116e0bcd9fc6f42805afee1715cc30224593757bac28470e60265818a027",
+      "beforeCanonicalSHA256": "c7e2116e0bcd9fc6f42805afee1715cc30224593757bac28470e60265818a027",
+      "class": "Camera",
+      "path": "Workspace.Camera",
+      "unchangedBeyondTaskScope": true
+    }
+  ],
+  "schema": "lobby-polish-full-native-scope-v1",
+  "serverLobby": {
+    "afterTaskNormalizedCanonicalSHA256": "91bd95df1c6cffbb4b8bdb544d2b7aaa60d41cd6b315f706ff8b1a4cde87de1a",
+    "beforeCanonicalSHA256": "91bd95df1c6cffbb4b8bdb544d2b7aaa60d41cd6b315f706ff8b1a4cde87de1a",
+    "class": "Model",
+    "path": "Workspace.ServerLobby",
+    "unchangedBeyondTaskScope": true
+  },
+  "serviceRows": [
+    {
+      "equal": true,
+      "field": "services"
+    },
+    {
+      "equal": true,
+      "field": "collisionGroups"
+    },
+    {
+      "equal": true,
+      "field": "collisionMatrix"
+    },
+    {
+      "equal": true,
+      "field": "materialOverrides"
+    }
+  ],
+  "sourceRows": [
+    {
+      "afterSHA256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "beforeSHA256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.ReentryPlacement",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "fedd1190c0c80dff435e90ba17054c89599948c5616d100eb13b8edb0d372a24",
+      "beforeSHA256": "fedd1190c0c80dff435e90ba17054c89599948c5616d100eb13b8edb0d372a24",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4CinemaV6",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "beforeSHA256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "beforeSHA256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "beforeSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "beforeSHA256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "11bcd502d50630fa97fc52ad1f33e9d880c57de423e8d802e45b0b54e21d333b",
+      "beforeSHA256": "11bcd502d50630fa97fc52ad1f33e9d880c57de423e8d802e45b0b54e21d333b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4CinemaV5",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "beforeSHA256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "beforeSHA256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "beforeSHA256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "beforeSHA256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "beforeSHA256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c9128684b9854eb21550006f4e8671ab33cf23906883fe6874f04317bf3ed700",
+      "beforeSHA256": "c9128684b9854eb21550006f4e8671ab33cf23906883fe6874f04317bf3ed700",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "beforeSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "beforeSHA256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "beforeSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "beforeSHA256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "beforeSHA256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "beforeSHA256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "beforeSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.Level 4 Usher Animations",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "beforeSHA256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "beforeSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.NoiseRegistry",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "beforeSHA256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "beforeSHA256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraDetectorVisual",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "beforeSHA256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "beforeSHA256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "beforeSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "beforeSHA256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.SlideContinuationSafety",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "beforeSHA256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "beforeSHA256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "beforeSHA256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "beforeSHA256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "beforeSHA256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.ZyntraAnalytics",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "beforeSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "beforeSHA256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "beforeSHA256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "beforeSHA256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "beforeSHA256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "beforeSHA256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f301ebcd739aa43ed686c905daaa58b842bb88ba6f0cd598d563795fb7d8a2c1",
+      "beforeSHA256": "f301ebcd739aa43ed686c905daaa58b842bb88ba6f0cd598d563795fb7d8a2c1",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4CinemaV4",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "beforeSHA256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerStorage.Project Mirror.Script",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4af6266bb5146e3d30805249688196a1ca352e7dc622b87fbd6508986e37a227",
+      "beforeSHA256": "4af6266bb5146e3d30805249688196a1ca352e7dc622b87fbd6508986e37a227",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4RenovationBoot",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "beforeSHA256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.AvatarNormalize",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "beforeSHA256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88",
+      "beforeSHA256": "07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+      "beforeSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "taskOwned": true
+    },
+    {
+      "afterSHA256": "3e52645dd98cbee42422a142da3821f5260e3410240081bfb52996fe613a52ec",
+      "beforeSHA256": "3e52645dd98cbee42422a142da3821f5260e3410240081bfb52996fe613a52ec",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4Renovation",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "beforeSHA256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "beforeSHA256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.PurchaseAlerts",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "beforeSHA256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "beforeSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "beforeSHA256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "beforeSHA256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "beforeSHA256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "beforeSHA256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level3Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "beforeSHA256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "beforeSHA256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Round Completion Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "beforeSHA256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
+      "beforeSHA256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "beforeSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "beforeSHA256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Daily Rewards Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "beforeSHA256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "beforeSHA256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "beforeSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "beforeSHA256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema V9 QA.AutomaticDoors.AutomaticDoorMotion",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "beforeSHA256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.UIStyle",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "beforeSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "beforeSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "beforeSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema V9 QA.OccasionalFixtureFlicker",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "beforeSHA256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "beforeSHA256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "beforeSHA256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "beforeSHA256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "beforeSHA256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterCharacter.Animate",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+      "beforeSHA256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c9824bc6d3959f9f500eb09f0217b7f3787acc0c089136b3c3154077e8df374f",
+      "beforeSHA256": "c9824bc6d3959f9f500eb09f0217b7f3787acc0c089136b3c3154077e8df374f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "beforeSHA256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "beforeSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "beforeSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Round Completion Routing",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "beforeSHA256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "beforeSHA256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "beforeSHA256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "313e0913e41f904295b041afc608e689767f196e9bb72bd3d19be36f51dd38f3",
+      "beforeSHA256": "313e0913e41f904295b041afc608e689767f196e9bb72bd3d19be36f51dd38f3",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Nav",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
+      "beforeSHA256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "beforeSHA256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.UIDevice",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "beforeSHA256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "beforeSHA256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.ZyntraDetectorSensing",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "beforeSHA256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "beforeSHA256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level1BlenderPreviewAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "beforeSHA256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema Preview.AutomaticDoors.AutomaticDoorMotion",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "beforeSHA256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "beforeSHA256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "beforeSHA256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "beforeSHA256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.DevAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "beforeSHA256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "beforeSHA256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "beforeSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "beforeSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "beforeSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f1e8b13d210ddd4e098bc2bed42e36fad4b5d043295f198663f5e89beaca059e",
+      "beforeSHA256": "f1e8b13d210ddd4e098bc2bed42e36fad4b5d043295f198663f5e89beaca059e",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.ZyntraMonetization",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "beforeSHA256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "beforeSHA256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "beforeSHA256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "beforeSHA256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "beforeSHA256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level1BlenderPreviewButton",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "beforeSHA256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "taskOwned": true
+    },
+    {
+      "afterSHA256": "5ba0187f1769c7b3f5bc52dd4bec1746cca1683c493921fb1d20a7a1f81ddb7f",
+      "beforeSHA256": "5ba0187f1769c7b3f5bc52dd4bec1746cca1683c493921fb1d20a7a1f81ddb7f",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2057890603a40e357999f685784a79442c4b62413f6a0f9b9eb5b7d6c14f0ea3",
+      "beforeSHA256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "beforeSHA256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "beforeSHA256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 CD Dev ESP",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "beforeSHA256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "beforeSHA256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2b21a5bec2868cb5e0e25ec43b4d66a80b3a2a9c591cde35991a369305a40140",
+      "beforeSHA256": "2b21a5bec2868cb5e0e25ec43b4d66a80b3a2a9c591cde35991a369305a40140",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4907bd95c0fcf5d352f8553a76f60ec3194ca652f40756664f65c17ed2e61541",
+      "beforeSHA256": "4907bd95c0fcf5d352f8553a76f60ec3194ca652f40756664f65c17ed2e61541",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "beforeSHA256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "beforeSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ProtectionClient",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "beforeSHA256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "beforeSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "beforeSHA256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraSkins",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "beforeSHA256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "beforeSHA256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "beforeSHA256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "beforeSHA256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "beforeSHA256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "beforeSHA256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "beforeSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "beforeSHA256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level2Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "beforeSHA256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "beforeSHA256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "beforeSHA256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f",
+      "beforeSHA256": "ec0d4c331b273e3d9b0c0436a7659d70cbc097e0a2ac9f0e4c278a3eb9031a43",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.GameManager",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b11f7c8d6a3e6843370c6b4dfa17c61c2fd8c68110a6173fd5d63f139393cdd8",
+      "beforeSHA256": "b11f7c8d6a3e6843370c6b4dfa17c61c2fd8c68110a6173fd5d63f139393cdd8",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "beforeSHA256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "beforeSHA256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "20b6717146f3ee48e36c54099f5ac57c540ba5c4d6f5118ee87a422ca66014f2",
+      "beforeSHA256": "20b6717146f3ee48e36c54099f5ac57c540ba5c4d6f5118ee87a422ca66014f2",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4CinemaV7",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "beforeSHA256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "beforeSHA256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "beforeSHA256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "beforeSHA256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "beforeSHA256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "beforeSHA256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "beforeSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "beforeSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "beforeSHA256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "6bef25bd3f7a0290dec8b01d87fafa6563b1d7fbfc8bec18d1eff53961686a4f",
+      "beforeSHA256": "823a108494f004d5cf21c8d08c980448f2ae7cbe4aa880539d64b3c9c91f05c4",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "beforeSHA256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "beforeSHA256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Crouch State Server",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "beforeSHA256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "beforeSHA256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "beforeSHA256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "beforeSHA256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "beforeSHA256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "beforeSHA256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraDailyResearch",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "beforeSHA256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "beforeSHA256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "beforeSHA256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "beforeSHA256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "beforeSHA256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "beforeSHA256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+      "beforeSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "taskOwned": true
+    },
+    {
+      "afterSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "beforeSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "beforeSHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "beforeSHA256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "beforeSHA256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.PlayerProtection",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "beforeSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "beforeSHA256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.DeathAdvice",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "cfaa0c1a8337c28550fee91ea29e309844134d71000b668d3360f79088d0ed0b",
+      "beforeSHA256": "cfaa0c1a8337c28550fee91ea29e309844134d71000b668d3360f79088d0ed0b",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "beforeSHA256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "beforeSHA256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "beforeSHA256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "beforeSHA256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "Workspace.Level 4 Cinema Preview.OccasionalFixtureFlicker",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "beforeSHA256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "beforeSHA256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "beforeSHA256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "beforeSHA256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "beforeSHA256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.EntityAI",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "beforeSHA256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "beforeSHA256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "262b15148e0bb21c0ba3314a49e492e44d49eed76b82cf38cd920e49e0aaacb5",
+      "beforeSHA256": "262b15148e0bb21c0ba3314a49e492e44d49eed76b82cf38cd920e49e0aaacb5",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4Expansion",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "beforeSHA256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "beforeSHA256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "beforeSHA256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "beforeSHA256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "beforeSHA256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Project Mirror.IMPORTANT",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "49136bbaf21bfa333be72000c7a167ffb144d53d438a9891b359deee32d1e4e9",
+      "beforeSHA256": "49136bbaf21bfa333be72000c7a167ffb144d53d438a9891b359deee32d1e4e9",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "beforeSHA256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "beforeSHA256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "beforeSHA256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "beforeSHA256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraChallenges",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "beforeSHA256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.EntityKill",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "88f38d3b2e4d62b85a3082ab313ce3289654d2fde43aa4b8431c659fb02e8d8f",
+      "beforeSHA256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "beforeSHA256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "beforeSHA256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.FriendBoost",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "beforeSHA256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "beforeSHA256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "beforeSHA256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.RouteMarkerService",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "beforeSHA256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "beforeSHA256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "beforeSHA256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.FlashlightProfiles",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "beforeSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "beforeSHA256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "beforeSHA256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "beforeSHA256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "beforeSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "beforeSHA256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Round Loading Test Suite",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "9ab12e55c402f2fbb6f4ad9419d9446b7d320f324eb511c264774fc2a06d7376",
+      "beforeSHA256": "9ab12e55c402f2fbb6f4ad9419d9446b7d320f324eb511c264774fc2a06d7376",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.UIRegression",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "beforeSHA256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "beforeSHA256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Table Hiding Client",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "ad041906493745b041bcc81d1b6c98ec31edcb9ad1171c7af08315475782f9a0",
+      "beforeSHA256": "ad041906493745b041bcc81d1b6c98ec31edcb9ad1171c7af08315475782f9a0",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "beforeSHA256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Round Loading Runtime",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a",
+      "beforeSHA256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "beforeSHA256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "beforeSHA256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.FlashlightSync",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "beforeSHA256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "beforeSHA256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "beforeSHA256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.TeamObjectives",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "beforeSHA256": "22f3bc9c317781856e6fce53b493236d4b670b074c0b3a8af59a98854fc895cc",
+      "class": "Script",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "beforeSHA256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "beforeSHA256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "beforeSHA256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "beforeSHA256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "class": "LocalScript",
+      "editorMatch": true,
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "beforeSHA256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "beforeSHA256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "taskOwned": false
+    },
+    {
+      "afterSHA256": "832c4eb75d979d16ef6a20a0679078c319cc28c2b14d7d08cb979e467e426eeb",
+      "beforeSHA256": "832c4eb75d979d16ef6a20a0679078c319cc28c2b14d7d08cb979e467e426eeb",
+      "class": "ModuleScript",
+      "editorMatch": true,
+      "path": "ReplicatedStorage.ZyntraRecordsPage",
+      "taskOwned": false
+    }
+  ],
+  "studioWrites": false,
+  "taskScopeVerified": true,
+  "unclassifiedConcurrentNativeDeltas": [
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e46079dd2d1ee50b64a82ad054e3123ca14d2e5c394222b4bea4102bcbfdaca2",
+      "allSavedDataBoundByRawNativeCapture": true,
+      "beforeCanonicalSHA256": "af1086909972090a5b61abcae4cad84ad583f0a3886d7c3d20647ba06720847c",
+      "kind": "savedRootFingerprintChanged",
+      "path": "ServerScriptService.GameManager"
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "178a5f07b741ac5d10c6fd1a59e759dd191c36e94acdba9eddb43a8cd7b3bbea",
+      "allSavedDataBoundByRawNativeCapture": true,
+      "beforeCanonicalSHA256": "e53d1088999ed7caa82e973dd120a764bc78db7b1f55d821ad02b18c87e236d3",
+      "kind": "savedRootFingerprintChanged",
+      "path": "ServerScriptService.Level 1 Systems"
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "63284640573695624d4612639e71f79c4a1a45eadf5964d56071525aa3f5cbf6",
+      "allSavedDataBoundByRawNativeCapture": true,
+      "beforeCanonicalSHA256": "a46ab3425cc3f41e2345d7fa53ad1b0d8892896a9208a80b2ddd711c978151e2",
+      "kind": "savedRootFingerprintChanged",
+      "path": "ServerScriptService.Level 4 Systems"
+    },
+    {
+      "attributes": {
+        "TemporaryQAOwner": {
+          "type": "string",
+          "value": "level1-quality-20261002-final-integration"
+        }
+      },
+      "canonicalSHA256": "0a98bb93d92e9af834802606dc22fff8533da7814fcf71a4e7f69a51b5a7862b",
+      "class": "LocalScript",
+      "descendants": 0,
+      "kind": "added",
+      "path": "StarterPlayer.StarterPlayerScripts/Level4TemporaryProfileQA|LocalScript#1"
+    },
+    {
+      "afterTaskNormalizedCanonicalSHA256": "e962148da9a312238792a356d851f68c0d0b7a673abe0d9249a2606e15ccf7cd",
+      "allSavedDataBoundByRawNativeCapture": true,
+      "beforeCanonicalSHA256": "1e7a4d040005eb5663505b18b4f0f710ad82cd76d9ea2fc72eacfe34eabfd485",
+      "kind": "savedRootFingerprintChanged",
+      "path": "StarterPlayer.StarterPlayerScripts"
+    },
+    {
+      "attributes": {
+        "TemporaryQAOwner": {
+          "type": "string",
+          "value": "level1-quality-20261002-final-integration"
+        }
+      },
+      "canonicalSHA256": "6b981ba6bd2cc29170c777d53c15dbf77efff888d0063adc95cec29454de173d",
+      "class": "Script",
+      "descendants": 0,
+      "kind": "added",
+      "path": "ServerScriptService.Level4TemporaryIntegrationQA"
+    }
+  ],
+  "unclassifiedConcurrentSourceDeltas": [
+    {
+      "afterBytes": 23598,
+      "afterSHA256": "2057890603a40e357999f685784a79442c4b62413f6a0f9b9eb5b7d6c14f0ea3",
+      "beforeBytes": 9763,
+      "beforeSHA256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "class": "ModuleScript",
+      "kind": "changed",
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 174786,
+      "afterSHA256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f",
+      "beforeBytes": 174067,
+      "beforeSHA256": "ec0d4c331b273e3d9b0c0436a7659d70cbc097e0a2ac9f0e4c278a3eb9031a43",
+      "class": "Script",
+      "kind": "changed",
+      "path": "ServerScriptService.GameManager",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 5138,
+      "afterSHA256": "6bef25bd3f7a0290dec8b01d87fafa6563b1d7fbfc8bec18d1eff53961686a4f",
+      "beforeBytes": 5051,
+      "beforeSHA256": "823a108494f004d5cf21c8d08c980448f2ae7cbe4aa880539d64b3c9c91f05c4",
+      "class": "ModuleScript",
+      "kind": "changed",
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 104041,
+      "afterSHA256": "88f38d3b2e4d62b85a3082ab313ce3289654d2fde43aa4b8431c659fb02e8d8f",
+      "beforeBytes": 97783,
+      "beforeSHA256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "class": "Script",
+      "kind": "changed",
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 10588,
+      "afterSHA256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "beforeBytes": 9722,
+      "beforeSHA256": "22f3bc9c317781856e6fce53b493236d4b670b074c0b3a8af59a98854fc895cc",
+      "class": "Script",
+      "kind": "changed",
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 3371,
+      "afterSHA256": "baf5440ac57bd5b768d52bcd59c6c8916910569b93834bf826e2b71684a8ed85",
+      "class": "Script",
+      "kind": "added",
+      "path": "ServerScriptService.Level4TemporaryIntegrationQA",
+      "scope": "unclassified-concurrent"
+    },
+    {
+      "afterBytes": 3050,
+      "afterSHA256": "afba9523a104afb621e10976d7a235b01951d319c38eb9fc1656c74b44ccfff8",
+      "class": "LocalScript",
+      "kind": "added",
+      "path": "StarterPlayer.StarterPlayerScripts.Level4TemporaryProfileQA",
+      "scope": "unclassified-concurrent"
+    }
+  ],
+  "uploadedAssetsSHA256": "81a0364340cfdc012e0c9a97d7da5e76f83212ee86dde7356436209a6fcebdea",
+  "verified": false,
+  "wholeForestPreservedBeyondTaskScope": false
+}

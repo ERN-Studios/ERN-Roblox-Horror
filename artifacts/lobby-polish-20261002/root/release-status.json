@@ -1,0 +1,64 @@
+{
+  "schema": "lobby-polish-release-status-v1",
+  "status": "installation-blocked-before-persistent-source-writes",
+  "installed": false,
+  "published": false,
+  "candidateSources": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/clutter/EndBlockades.ModuleScript.candidate.luau",
+      "sha256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+      "new": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "className": "LocalScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyReimaginedQueueController.LocalScript.candidate.luau",
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "new": false
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/materials/MaterialPolish.ModuleScript.luau",
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+      "new": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/bays/LobbyPolishBays.ModuleScript.candidate.luau",
+      "sha256": "2f6c8007a8472aefad700dac5511a0ad24e8ba1341e745c7ef5306142fb92058",
+      "new": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "className": "ModuleScript",
+      "file": "tools/lobby_reimagined/polish_20261002/scene/LobbyPolishScene.ModuleScript.candidate.luau",
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+      "new": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "className": "ModuleScript",
+      "file": "artifacts/lobby-polish-20261002/root/Builder.candidate.luau",
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+      "new": false
+    }
+  ],
+  "blockers": [
+    "Uploaded images require usage permission for universe10559217407; guarded PreloadAsync rejected missing permissions before Source CAS.",
+    "Original Studio log reports repeated RBXCRASH-HangDetected; native computer control and execute calls timeout."
+  ],
+  "beforeBackup": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-lobby-polish/before/BeforeLobbyPolish-AuthoritativeStudio.rbxl",
+  "originalLobbyChanged": false,
+  "nextActions": [
+    "Restore responsive current authoritative Studio session",
+    "Grant usage of ten own images to existing universe only",
+    "Re-read exact sources/editor and reconcile fresh baselines",
+    "Guarded CAS install six owned sources",
+    "Real Play visuals/collision/queue/shop/vinyl/performance verification",
+    "Verified current native backup, scope audit, scoped commit, publish confirmation"
+  ]
+}

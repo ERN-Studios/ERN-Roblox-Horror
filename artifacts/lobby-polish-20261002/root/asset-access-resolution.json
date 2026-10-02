@@ -1,0 +1,45 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioUserId": 11374988579,
+  "assetOwner": "ZenMeister02",
+  "studioGrantAt": "2026-10-02T11:35:48.285Z",
+  "creatorDashboard": {
+    "assetId": 72127726815177,
+    "universeId": 10559217407,
+    "result": "BACKROOMS: STAY QUIET [CO-OP HORROR] \u2014 Already added",
+    "account": "ZenMeister02",
+    "observedAt": "2026-10-02T11:43Z"
+  },
+  "instanceProbe": {
+    "checkedAt": "2026-10-02T11:41:07Z",
+    "placeId": 131311258779917,
+    "method": "unparentedImageLabelContent",
+    "fetch": {
+      "rbxassetid://106931720832992": "Success",
+      "rbxassetid://97239310145567": "Success",
+      "rbxassetid://138358337027432": "Success",
+      "rbxassetid://112801222792719": "Success",
+      "rbxassetid://85799149505047": "Success",
+      "rbxassetid://93427464566515": "Success",
+      "rbxassetid://70562685470916": "Success",
+      "rbxassetid://85967831334476": "Success",
+      "rbxassetid://72127726815177": "Success",
+      "rbxassetid://137946858019381": "Success"
+    }
+  },
+  "conflictingStringProbe": {
+    "rbxassetid://106931720832992": "Failure",
+    "rbxassetid://97239310145567": "Failure",
+    "rbxassetid://85799149505047": "Failure",
+    "rbxassetid://93427464566515": "Failure",
+    "rbxassetid://112801222792719": "Failure",
+    "rbxassetid://138358337027432": "Failure",
+    "rbxassetid://70562685470916": "Failure",
+    "rbxassetid://85967831334476": "Failure",
+    "rbxassetid://72127726815177": "Failure",
+    "rbxassetid://137946858019381": "Failure"
+  },
+  "limitation": "ImageLabel fetch verification is not SurfaceAppearance rendering proof; actual Play verification required.",
+  "officialReference": "https://github.com/Roblox/creator-docs/blob/main/content/en-us/reference/engine/classes/ContentProvider.yaml"
+}

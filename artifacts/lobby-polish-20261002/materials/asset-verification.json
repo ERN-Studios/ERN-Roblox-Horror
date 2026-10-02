@@ -1,0 +1,13 @@
+{
+  "exactLiveManifest": true,
+  "exactLiveMeshMetadata": true,
+  "exactSourceScanHashes": true,
+  "alignedMaps": true,
+  "allNineMaps1024": true,
+  "allNormalsUnitWithin012": true,
+  "allNormalZPositive": true,
+  "allMapsNonconstant": true,
+  "assetCount": 10,
+  "uploaded": false,
+  "playVerified": false
+}

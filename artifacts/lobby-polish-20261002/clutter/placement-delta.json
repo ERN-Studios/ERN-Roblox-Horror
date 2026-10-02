@@ -1,0 +1,994 @@
+{
+  "schema": "lobby-r4-clutter-polish-delta-v1",
+  "baselineSourceSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+  "candidateSourceSHA256": "4269373d1ddd04106a082e3f859222a691ed7faedb46c0ec03116beeff50a78d",
+  "candidatePlanSHA256": "b0e23f0d2603e33366a4ceef0b517485f7cad0a59c4e4cc1dee9914890b65404",
+  "instances": 219,
+  "extraInstancedTriangles": 220612,
+  "changedOverlays": 16,
+  "unchangedDenseBacking": 179,
+  "unchangedOtherOverlays": 24,
+  "collidersUnchanged": 66,
+  "newUniqueMeshes": 0,
+  "runtimeFunctionsUnchanged": true,
+  "interface": "Add(model, kit, manifest)",
+  "changes": [
+    {
+      "name": "South Chaotic front overlay 12 VinylBench",
+      "family": "VinylBench",
+      "support": "South Embedded 06-02",
+      "before": {
+        "name": "South Chaotic front overlay 12 VinylBench",
+        "family": "VinylBench",
+        "robloxPosition": [
+          5.797241,
+          4.470719,
+          -133.450307
+        ],
+        "rotation": [
+          -0.30345579,
+          0.37145081,
+          0.38565709
+        ],
+        "bboxCenter": [
+          5.159617,
+          6.184336,
+          -133.698505
+        ],
+        "bboxHalf": [
+          3.457933,
+          2.732523,
+          2.448616
+        ],
+        "overlaySupport": "South Embedded 01-05"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 12 VinylBench",
+        "family": "VinylBench",
+        "robloxPosition": [
+          -18.147571,
+          21.725394,
+          -133.317401
+        ],
+        "rotation": [
+          -0.17565371,
+          0.52043477,
+          0.15565502
+        ],
+        "bboxCenter": [
+          -18.383296,
+          23.548687,
+          -133.474524
+        ],
+        "bboxHalf": [
+          3.1876,
+          2.171033,
+          2.535522
+        ],
+        "overlaySupport": "South Embedded 06-02"
+      },
+      "supportAABBOverlapXYZ": [
+        6.078116000000001,
+        4.006839999999997,
+        3.4010581910644078
+      ],
+      "towardViewerStuds": 0.8635307953256586
+    },
+    {
+      "name": "South Chaotic front overlay 09 Desk",
+      "family": "Desk",
+      "support": "South Embedded 06-03",
+      "before": {
+        "name": "South Chaotic front overlay 09 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -22.563073,
+          4.936835,
+          -132.608186
+        ],
+        "rotation": [
+          -0.317211,
+          0.83856546,
+          -0.37432391
+        ],
+        "bboxCenter": [
+          -22.170863,
+          6.219634,
+          -133.488537
+        ],
+        "bboxHalf": [
+          3.623346,
+          3.510833,
+          3.681369
+        ],
+        "overlaySupport": "South Embedded 01-01"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 09 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -12.042109,
+          22.087156,
+          -133.745582
+        ],
+        "rotation": [
+          0.10614026,
+          0.20713941,
+          0.12660226
+        ],
+        "bboxCenter": [
+          -12.240369,
+          23.665443,
+          -133.535529
+        ],
+        "bboxHalf": [
+          3.807442,
+          2.234171,
+          2.313995
+        ],
+        "overlaySupport": "South Embedded 06-03"
+      },
+      "supportAABBOverlapXYZ": [
+        7.277640185003078,
+        3.487656000000001,
+        3.601063043098577
+      ],
+      "towardViewerStuds": 0.8225677112169194
+    },
+    {
+      "name": "South Chaotic front overlay 19 Sofa",
+      "family": "Sofa",
+      "support": "South Embedded 06-05",
+      "before": {
+        "name": "South Chaotic front overlay 19 Sofa",
+        "family": "Sofa",
+        "robloxPosition": [
+          -16.020997,
+          14.85246,
+          -133.194832
+        ],
+        "rotation": [
+          -0.31424522,
+          -0.08063966,
+          0.52057776
+        ],
+        "bboxCenter": [
+          -16.928309,
+          16.334457,
+          -133.78525
+        ],
+        "bboxHalf": [
+          4.328549,
+          3.87917,
+          2.457746
+        ],
+        "overlaySupport": "South Embedded 04-02"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 19 Sofa",
+        "family": "Sofa",
+        "robloxPosition": [
+          0.034606,
+          21.732302,
+          -133.404084
+        ],
+        "rotation": [
+          -0.17197781,
+          -0.30555894,
+          -0.22602615
+        ],
+        "bboxCenter": [
+          0.435817,
+          23.510522,
+          -133.616425
+        ],
+        "bboxHalf": [
+          4.420353,
+          2.700794,
+          2.977876
+        ],
+        "overlaySupport": "South Embedded 06-05"
+      },
+      "supportAABBOverlapXYZ": [
+        7.695625999999999,
+        4.071461999999997,
+        3.5931039999999825
+      ],
+      "towardViewerStuds": 0.8616765673448583
+    },
+    {
+      "name": "South Chaotic front overlay 07 Desk",
+      "family": "Desk",
+      "support": "South Embedded 06-07",
+      "before": {
+        "name": "South Chaotic front overlay 07 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          17.263599,
+          4.946486,
+          -134.062897
+        ],
+        "rotation": [
+          0.44607522,
+          0.00300398,
+          0.44806922
+        ],
+        "bboxCenter": [
+          16.568491,
+          6.250191,
+          -133.43712
+        ],
+        "bboxHalf": [
+          3.76397,
+          3.283651,
+          2.606168
+        ],
+        "overlaySupport": "South Embedded 01-07"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 07 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          15.601377,
+          22.130184,
+          -133.941845
+        ],
+        "rotation": [
+          0.15533545,
+          -0.30598248,
+          0.14112157
+        ],
+        "bboxCenter": [
+          15.386181,
+          23.710124,
+          -133.763241
+        ],
+        "bboxHalf": [
+          3.876887,
+          2.116815,
+          2.667488
+        ],
+        "overlaySupport": "South Embedded 06-07"
+      },
+      "supportAABBOverlapXYZ": [
+        6.943764000000002,
+        3.4375399999999985,
+        3.3653580000000147
+      ],
+      "towardViewerStuds": 0.8283291702096278
+    },
+    {
+      "name": "South Chaotic front overlay 17 FilingCabinet",
+      "family": "FilingCabinet",
+      "support": "South Embedded 07-03",
+      "before": {
+        "name": "South Chaotic front overlay 17 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -3.629146,
+          10.155802,
+          -133.112087
+        ],
+        "rotation": [
+          -0.50712286,
+          -0.54166224,
+          1.97009935
+        ],
+        "bboxCenter": [
+          -5.651579,
+          8.780936,
+          -133.593449
+        ],
+        "bboxHalf": [
+          3.108314,
+          2.887445,
+          2.395719
+        ],
+        "overlaySupport": "South Embedded 02-04"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 17 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -9.01201,
+          26.678252,
+          -133.030098
+        ],
+        "rotation": [
+          -0.15436403,
+          -0.26861166,
+          1.31730293
+        ],
+        "bboxCenter": [
+          -11.365191,
+          27.213237,
+          -133.653419
+        ],
+        "bboxHalf": [
+          2.999344,
+          1.927224,
+          2.179162
+        ],
+        "overlaySupport": "South Embedded 07-03"
+      },
+      "supportAABBOverlapXYZ": [
+        5.403192000000001,
+        2.8533959999999965,
+        2.955334455975674
+      ],
+      "towardViewerStuds": 0.9067367159818502
+    },
+    {
+      "name": "South Chaotic front overlay 15 VinylBench",
+      "family": "VinylBench",
+      "support": "South Embedded 07-04",
+      "before": {
+        "name": "South Chaotic front overlay 15 VinylBench",
+        "family": "VinylBench",
+        "robloxPosition": [
+          -11.710339,
+          8.28556,
+          -133.891471
+        ],
+        "rotation": [
+          0.31606485,
+          0.16429608,
+          -0.64837932
+        ],
+        "bboxCenter": [
+          -10.607067,
+          9.732276,
+          -133.584137
+        ],
+        "bboxHalf": [
+          3.478368,
+          3.280779,
+          2.173787
+        ],
+        "overlaySupport": "South Embedded 02-03"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 15 VinylBench",
+        "family": "VinylBench",
+        "robloxPosition": [
+          -5.423125,
+          25.539196,
+          -133.531837
+        ],
+        "rotation": [
+          -0.12947658,
+          0.34826034,
+          0.26343033
+        ],
+        "bboxCenter": [
+          -5.866179,
+          27.32984,
+          -133.575954
+        ],
+        "bboxHalf": [
+          3.362972,
+          2.523172,
+          2.087737
+        ],
+        "overlaySupport": "South Embedded 07-04"
+      },
+      "supportAABBOverlapXYZ": [
+        5.8422279999999995,
+        4.206082000000002,
+        2.345889457028079
+      ],
+      "towardViewerStuds": 0.9627657068458007
+    },
+    {
+      "name": "South Chaotic front overlay 11 Desk",
+      "family": "Desk",
+      "support": "South Embedded 07-06",
+      "before": {
+        "name": "South Chaotic front overlay 11 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -13.611382,
+          12.058994,
+          -132.181857
+        ],
+        "rotation": [
+          -0.50770371,
+          1.82698651,
+          -0.70568442
+        ],
+        "bboxCenter": [
+          -13.875068,
+          12.636836,
+          -133.655284
+        ],
+        "bboxHalf": [
+          2.370514,
+          3.906712,
+          2.921249
+        ],
+        "overlaySupport": "South Embedded 03-02"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 11 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          7.779538,
+          25.772446,
+          -133.729729
+        ],
+        "rotation": [
+          0.15425129,
+          -0.46893012,
+          -0.15791145
+        ],
+        "bboxCenter": [
+          8.004618,
+          27.32065,
+          -133.373604
+        ],
+        "bboxHalf": [
+          3.89822,
+          2.51525,
+          3.095604
+        ],
+        "overlaySupport": "South Embedded 07-06"
+      },
+      "supportAABBOverlapXYZ": [
+        7.146044,
+        3.5469459999999984,
+        3.935385999999994
+      ],
+      "towardViewerStuds": 0.9344970852525591
+    },
+    {
+      "name": "South Chaotic front overlay 02 Desk",
+      "family": "Desk",
+      "support": "South Embedded 08-04",
+      "before": {
+        "name": "South Chaotic front overlay 02 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          3.54686,
+          11.690391,
+          -134.651628
+        ],
+        "rotation": [
+          0.55090911,
+          -0.54277973,
+          -0.38737986
+        ],
+        "bboxCenter": [
+          4.065868,
+          12.792322,
+          -133.607214
+        ],
+        "bboxHalf": [
+          3.9894,
+          3.719809,
+          2.851925
+        ],
+        "overlaySupport": "South Embedded 03-05"
+      },
+      "after": {
+        "name": "South Chaotic front overlay 02 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -0.743644,
+          28.92437,
+          -133.143108
+        ],
+        "rotation": [
+          -0.13089637,
+          -0.35925326,
+          0.09648434
+        ],
+        "bboxCenter": [
+          -0.888345,
+          30.500652,
+          -133.405436
+        ],
+        "bboxHalf": [
+          3.840203,
+          2.239599,
+          2.791421
+        ],
+        "overlaySupport": "South Embedded 08-04"
+      },
+      "supportAABBOverlapXYZ": [
+        7.000632,
+        3.6501979999999996,
+        3.3634040000000027
+      ],
+      "towardViewerStuds": 0.8947842772848276
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 06 Desk",
+      "family": "Desk",
+      "support": "NorthDJ Embedded 06-03",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 06 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          0.391278,
+          4.999936,
+          134.376899
+        ],
+        "rotation": [
+          -0.31063133,
+          2.53836624,
+          -0.31819375
+        ],
+        "bboxCenter": [
+          -0.022099,
+          6.363916,
+          133.639946
+        ],
+        "bboxHalf": [
+          3.923712,
+          3.314308,
+          3.332296
+        ],
+        "overlaySupport": "NorthDJ Embedded 01-04"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 06 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -10.862495,
+          21.683908,
+          133.488097
+        ],
+        "rotation": [
+          -0.1358567,
+          2.89435527,
+          0.09777889
+        ],
+        "bboxCenter": [
+          -10.710622,
+          23.271222,
+          133.309803
+        ],
+        "bboxHalf": [
+          3.79983,
+          2.000999,
+          2.484701
+        ],
+        "overlaySupport": "NorthDJ Embedded 06-03"
+      },
+      "supportAABBOverlapXYZ": [
+        7.339804000000001,
+        3.533447056573454,
+        3.7483204886452484
+      ],
+      "towardViewerStuds": 0.9138813204829717
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 16 FilingCabinet",
+      "family": "FilingCabinet",
+      "support": "NorthDJ Embedded 06-04",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 16 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          4.674113,
+          10.530689,
+          133.830853
+        ],
+        "rotation": [
+          0.48551258,
+          3.13107098,
+          1.84946003
+        ],
+        "bboxCenter": [
+          7.069083,
+          9.964491,
+          133.436218
+        ],
+        "bboxHalf": [
+          2.74977,
+          2.330537,
+          2.108272
+        ],
+        "overlaySupport": "NorthDJ Embedded 02-05"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 16 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -6.767085,
+          24.463048,
+          132.652317
+        ],
+        "rotation": [
+          0.1561277,
+          2.6465475,
+          1.75715595
+        ],
+        "bboxCenter": [
+          -4.561696,
+          23.841603,
+          133.633269
+        ],
+        "bboxHalf": [
+          3.027525,
+          2.016843,
+          2.603844
+        ],
+        "overlaySupport": "NorthDJ Embedded 06-04"
+      },
+      "supportAABBOverlapXYZ": [
+        5.544689999999999,
+        2.759908000000003,
+        3.5518288723436626
+      ],
+      "towardViewerStuds": 0.9548431630335585
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 05 Desk",
+      "family": "Desk",
+      "support": "NorthDJ Embedded 06-06",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 05 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -13.78644,
+          7.789377,
+          134.167983
+        ],
+        "rotation": [
+          0.26632719,
+          1.46419032,
+          -0.50412363
+        ],
+        "bboxCenter": [
+          -13.703973,
+          9.347567,
+          133.794269
+        ],
+        "bboxHalf": [
+          1.890721,
+          2.405555,
+          3.81571
+        ],
+        "overlaySupport": "NorthDJ Embedded 02-02"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 05 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          6.663703,
+          21.863554,
+          133.832537
+        ],
+        "rotation": [
+          -0.18174942,
+          3.28167452,
+          -0.17055222
+        ],
+        "bboxCenter": [
+          6.394044,
+          23.425603,
+          133.584128
+        ],
+        "bboxHalf": [
+          3.796944,
+          2.313523,
+          2.273686
+        ],
+        "overlaySupport": "NorthDJ Embedded 06-06"
+      },
+      "supportAABBOverlapXYZ": [
+        7.258825999999999,
+        3.388005999999997,
+        3.574125931260795
+      ],
+      "towardViewerStuds": 0.8489152910538849
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 19 Sofa",
+      "family": "Sofa",
+      "support": "NorthDJ Embedded 06-07",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 19 Sofa",
+        "family": "Sofa",
+        "robloxPosition": [
+          -21.950474,
+          14.711975,
+          132.527025
+        ],
+        "rotation": [
+          0.37270409,
+          2.45127466,
+          0.53972155
+        ],
+        "bboxCenter": [
+          -21.242482,
+          15.95098,
+          133.681035
+        ],
+        "bboxHalf": [
+          4.291262,
+          4.285304,
+          3.539554
+        ],
+        "overlaySupport": "NorthDJ Embedded 04-01"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 19 Sofa",
+        "family": "Sofa",
+        "robloxPosition": [
+          13.493639,
+          21.649214,
+          132.920799
+        ],
+        "rotation": [
+          0.18192715,
+          2.98801329,
+          0.13190046
+        ],
+        "bboxCenter": [
+          13.727545,
+          23.426211,
+          133.31538
+        ],
+        "bboxHalf": [
+          4.213561,
+          2.673156,
+          2.445423
+        ],
+        "overlaySupport": "NorthDJ Embedded 06-07"
+      },
+      "supportAABBOverlapXYZ": [
+        8.089599969934241,
+        4.021969999999996,
+        3.7286707252433757
+      ],
+      "towardViewerStuds": 0.9621139066507283
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 02 Desk",
+      "family": "Desk",
+      "support": "NorthDJ Embedded 07-03",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 02 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -27.60195,
+          8.417104,
+          134.268319
+        ],
+        "rotation": [
+          -0.35133028,
+          2.79662144,
+          -0.5942365
+        ],
+        "bboxCenter": [
+          -28.447347,
+          9.560799,
+          133.525564
+        ],
+        "bboxHalf": [
+          4.003838,
+          3.744665,
+          2.307527
+        ],
+        "overlaySupport": "NorthDJ Embedded 02-00"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 02 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -8.156774,
+          25.51213,
+          133.127713
+        ],
+        "rotation": [
+          0.16060533,
+          3.32340134,
+          -0.2427658
+        ],
+        "bboxCenter": [
+          -8.53612,
+          27.038385,
+          133.445615
+        ],
+        "bboxHalf": [
+          3.896466,
+          2.664403,
+          2.232535
+        ],
+        "overlaySupport": "NorthDJ Embedded 07-03"
+      },
+      "supportAABBOverlapXYZ": [
+        7.211134000000001,
+        3.9284699999999972,
+        3.204115994159622
+      ],
+      "towardViewerStuds": 0.8998610464042258
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 17 FilingCabinet",
+      "family": "FilingCabinet",
+      "support": "NorthDJ Embedded 07-05",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 17 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          -17.133059,
+          13.499454,
+          134.426558
+        ],
+        "rotation": [
+          -0.27983469,
+          3.56685592,
+          1.919754
+        ],
+        "bboxCenter": [
+          -15.046931,
+          12.386889,
+          133.637591
+        ],
+        "bboxHalf": [
+          3.101498,
+          2.512523,
+          2.421445
+        ],
+        "overlaySupport": "NorthDJ Embedded 03-02"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 17 FilingCabinet",
+        "family": "FilingCabinet",
+        "robloxPosition": [
+          0.315639,
+          26.742073,
+          134.306484
+        ],
+        "rotation": [
+          0.15478159,
+          3.57475489,
+          1.37331661
+        ],
+        "bboxCenter": [
+          2.485573,
+          27.398154,
+          133.270557
+        ],
+        "bboxHalf": [
+          3.030859,
+          2.024305,
+          2.494587
+        ],
+        "overlaySupport": "NorthDJ Embedded 07-05"
+      },
+      "supportAABBOverlapXYZ": [
+        5.447368,
+        2.868223999999998,
+        3.418165217251868
+      ],
+      "towardViewerStuds": 0.9715764403290734
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 04 Desk",
+      "family": "Desk",
+      "support": "NorthDJ Embedded 07-06",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 04 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -6.18389,
+          9.529666,
+          132.174844
+        ],
+        "rotation": [
+          -0.52775924,
+          4.42774181,
+          -2.02245567
+        ],
+        "bboxCenter": [
+          -6.589282,
+          9.622397,
+          133.724514
+        ],
+        "bboxHalf": [
+          2.261757,
+          3.664949,
+          2.223664
+        ],
+        "overlaySupport": "NorthDJ Embedded 02-03"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 04 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          8.712082,
+          25.375903,
+          133.468673
+        ],
+        "rotation": [
+          -0.18218162,
+          3.62037608,
+          -0.16517283
+        ],
+        "bboxCenter": [
+          8.47793,
+          26.954394,
+          133.301462
+        ],
+        "bboxHalf": [
+          3.901821,
+          2.089555,
+          3.097288
+        ],
+        "overlaySupport": "NorthDJ Embedded 07-06"
+      },
+      "supportAABBOverlapXYZ": [
+        7.23021,
+        3.6963937875207833,
+        4.20220599999999
+      ],
+      "towardViewerStuds": 0.9688389798884316
+    },
+    {
+      "name": "NorthDJ Chaotic front overlay 10 Desk",
+      "family": "Desk",
+      "support": "NorthDJ Embedded 08-04",
+      "before": {
+        "name": "NorthDJ Chaotic front overlay 10 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -0.035581,
+          8.180597,
+          133.676367
+        ],
+        "rotation": [
+          0.31421901,
+          3.68437804,
+          0.53185701
+        ],
+        "bboxCenter": [
+          0.661167,
+          9.625656,
+          133.704059
+        ],
+        "bboxHalf": [
+          3.98071,
+          3.01406,
+          3.221621
+        ],
+        "overlaySupport": "NorthDJ Embedded 02-04"
+      },
+      "after": {
+        "name": "NorthDJ Chaotic front overlay 10 Desk",
+        "family": "Desk",
+        "robloxPosition": [
+          -1.972623,
+          29.166835,
+          133.049215
+        ],
+        "rotation": [
+          0.19644168,
+          2.72664407,
+          0.03750744
+        ],
+        "bboxCenter": [
+          -1.917562,
+          30.734635,
+          133.385951
+        ],
+        "bboxHalf": [
+          3.769053,
+          2.228112,
+          3.001535
+        ],
+        "overlaySupport": "NorthDJ Embedded 08-04"
+      },
+      "supportAABBOverlapXYZ": [
+        7.078606,
+        3.899353999999999,
+        3.0652319999999804
+      ],
+      "towardViewerStuds": 0.9196376161307285
+    }
+  ],
+  "limits": "Bounding support volumes do not prove visible mesh contact or lighting; root must inspect actual Play."
+}

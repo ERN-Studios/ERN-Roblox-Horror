@@ -1,0 +1,12 @@
+{
+  "path": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+  "DoubleSidedPreserved": true,
+  "editorMatch": true,
+  "beforeSHA256": "2f6c8007a8472aefad700dac5511a0ad24e8ba1341e745c7ef5306142fb92058",
+  "cloneFidelityInheritedFromKit": true,
+  "sourceBytes": 10695,
+  "onlyRemovedRuntimeRenderFidelityWrite": true,
+  "afterSHA256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+  "changedAt": "2026-10-02T11:54:28Z",
+  "liveCloneFidelityStillRequiresPlay": true
+}
