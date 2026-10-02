@@ -1,0 +1,63 @@
+{
+  "rows": [
+    {
+      "editorHash": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "beforeHash": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    },
+    {
+      "editorHash": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "beforeHash": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    },
+    {
+      "editorHash": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "beforeHash": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    },
+    {
+      "editorHash": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "beforeHash": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    },
+    {
+      "editorHash": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "beforeHash": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    },
+    {
+      "exists": false,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing"
+    },
+    {
+      "exists": false,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art"
+    },
+    {
+      "editorHash": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "beforeHash": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "exists": true
+    }
+  ],
+  "placeId": 131311258779917,
+  "capturedAt": "2026-10-02T19:45:09Z",
+  "universeId": 10559217407
+}

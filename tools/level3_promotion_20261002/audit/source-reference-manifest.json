@@ -1,0 +1,407 @@
+{
+  "schema": "level3-promotion-reference-audit-v1",
+  "authority": "historical reference only; require fresh live Studio Source and editor source before every scoped write",
+  "source": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-lobby-access-spawn/after/scripts.json",
+  "scripts": [
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "class": "ModuleScript",
+      "sourceBytes": 1353,
+      "sourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorSourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "class": "ModuleScript",
+      "sourceBytes": 7439,
+      "sourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "editorSourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sourceBytes": 178031,
+      "sourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "editorSourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 437,
+      "sourceSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "editorSourceSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "class": "ModuleScript",
+      "sourceBytes": 75964,
+      "sourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorSourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Runtime",
+      "class": "ModuleScript",
+      "sourceBytes": 8712,
+      "sourceSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "editorSourceSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 14842,
+      "sourceSha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd",
+      "editorSourceSha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 19286,
+      "sourceSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorSourceSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 105403,
+      "sourceSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "editorSourceSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 70421,
+      "sourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "editorSourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 31538,
+      "sourceSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorSourceSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 202633,
+      "sourceSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "editorSourceSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 20901,
+      "sourceSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "editorSourceSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 187862,
+      "sourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "editorSourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 25364,
+      "sourceSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "editorSourceSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 42613,
+      "sourceSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorSourceSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 19427,
+      "sourceSha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "editorSourceSha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 19059,
+      "sourceSha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "editorSourceSha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 19430,
+      "sourceSha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "editorSourceSha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 25600,
+      "sourceSha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "editorSourceSha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "class": "ModuleScript",
+      "sourceBytes": 31504,
+      "sourceSha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "editorSourceSha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 47446,
+      "sourceSha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "editorSourceSha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 188782,
+      "sourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "editorSourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 21426,
+      "sourceSha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "editorSourceSha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 72634,
+      "sourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "editorSourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "class": "ModuleScript",
+      "sourceBytes": 21622,
+      "sourceSha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "editorSourceSha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 23744,
+      "sourceSha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "editorSourceSha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 102901,
+      "sourceSha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "editorSourceSha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 18364,
+      "sourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "editorSourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 10474,
+      "sourceSha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "editorSourceSha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 12529,
+      "sourceSha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "editorSourceSha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "class": "ModuleScript",
+      "sourceBytes": 8896,
+      "sourceSha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "editorSourceSha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "class": "LocalScript",
+      "sourceBytes": 44865,
+      "sourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "editorSourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "class": "LocalScript",
+      "sourceBytes": 33971,
+      "sourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "editorSourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "class": "LocalScript",
+      "sourceBytes": 19883,
+      "sourceSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "editorSourceSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "class": "LocalScript",
+      "sourceBytes": 10390,
+      "sourceSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "editorSourceSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "class": "LocalScript",
+      "sourceBytes": 59104,
+      "sourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorSourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 39946,
+      "sourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "editorSourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 46833,
+      "sourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "editorSourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "class": "LocalScript",
+      "sourceBytes": 6548,
+      "sourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "editorSourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "class": "LocalScript",
+      "sourceBytes": 21675,
+      "sourceSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "editorSourceSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "class": "LocalScript",
+      "sourceBytes": 10226,
+      "sourceSha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "editorSourceSha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "class": "LocalScript",
+      "sourceBytes": 6494,
+      "sourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "editorSourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 45552,
+      "sourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "editorSourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother",
+      "class": "LocalScript",
+      "sourceBytes": 6548,
+      "sourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "editorSourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "class": "LocalScript",
+      "sourceBytes": 59188,
+      "sourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "editorSourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 46887,
+      "sourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "editorSourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Table Hiding Client",
+      "class": "LocalScript",
+      "sourceBytes": 21976,
+      "sourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "editorSourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "sourceBytes": 2554,
+      "sourceSha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256",
+      "editorSourceSha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 CD Dev ESP",
+      "class": "LocalScript",
+      "sourceBytes": 6746,
+      "sourceSha256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "editorSourceSha256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "editorMatch": true
+    }
+  ]
+}

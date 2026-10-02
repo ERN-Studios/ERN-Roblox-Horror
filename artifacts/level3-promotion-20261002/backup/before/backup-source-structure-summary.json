@@ -1,0 +1,128 @@
+{
+  "task": "level3-promotion-20261002",
+  "phase": "before",
+  "captureId": "551b88e1-2e3a-4333-8157-00e622b7bc54",
+  "capturedAt": "2026-10-02T19:36:41Z",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "placeVersion": 2470,
+  "rootCount": 194,
+  "scriptCount": 228,
+  "nativeSHA256": "4e7c63222080c4fa6a9c9f2221feb158dd405fcc9cb4feacebfb04d3acd5f796",
+  "nativeBytes": 77463665,
+  "captureStartUnixMillis": 1790969801629,
+  "captureFinishedUnixMillis": 1790969814699,
+  "nativePlacePath": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion/before/before.rbxl",
+  "nativePlaceSHA256": "927669257a0305b094bcf2d7303b499a6853c50bff60d291dc739bc5cf1a0001",
+  "nativePlaceBytes": 51825054,
+  "nativePlaceMethod": "Roblox Studio Save Download a Copy; opened locally with official Lune 0.10.5",
+  "sourceCatalogSHA256": "3f626d0cf02dcf623aaa1789d37996c4400886d362268d30db3af797a7ee2ad5",
+  "sourceEditorConflicts": 0,
+  "nativePlaceSourceAndRootStructureVerified": true,
+  "strictCanonicalForestEquality": false,
+  "strictCanonicalRootMatches": 161,
+  "strictCanonicalRootMismatches": 33,
+  "expectedContentInstances": 391882,
+  "reopenedContentInstances": 391880,
+  "knownEngineOmissions": [
+    {
+      "path": "Workspace.StarterCharacter.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    },
+    {
+      "path": "Workspace.Dummy.Humanoid.Status",
+      "reason": "Archivable=false engine status"
+    }
+  ],
+  "capturedServiceClasses": [
+    "Chat",
+    "CollectionService",
+    "HttpService",
+    "JointsService",
+    "Lighting",
+    "LocalizationService",
+    "MaterialService",
+    "PathfindingService",
+    "PhysicsService",
+    "Players",
+    "ProximityPromptService",
+    "ReplicatedFirst",
+    "ReplicatedStorage",
+    "ServerScriptService",
+    "ServerStorage",
+    "SoundService",
+    "StarterGui",
+    "StarterPack",
+    "StarterPlayer",
+    "Teams",
+    "TestService",
+    "TextChatService",
+    "VoiceChatService",
+    "Workspace"
+  ],
+  "capturedRootCountByService": {
+    "Lighting": 5,
+    "MaterialService": 21,
+    "ReplicatedStorage": 33,
+    "ServerScriptService": 45,
+    "ServerStorage": 71,
+    "StarterPlayer": 3,
+    "TextChatService": 4,
+    "Workspace": 12
+  },
+  "unreadableServicePropertyLimits": 129,
+  "serviceReconstructionPerformed": false,
+  "scopedCanonicalRoots": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "descendants": 0,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "class": "ModuleScript",
+      "descendants": 0,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "descendants": 0,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems",
+      "class": "Folder",
+      "descendants": 14,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerStorage.Level6BlenderSource",
+      "class": "Folder",
+      "descendants": 130,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerStorage.Level6BlenderSourceRevision20261001",
+      "class": "Folder",
+      "descendants": 872,
+      "canonicalEqual": true
+    },
+    {
+      "path": "ServerStorage.Level6TextureImportReferences",
+      "class": "Folder",
+      "descendants": 0,
+      "canonicalEqual": true
+    },
+    {
+      "path": "Workspace.ServerLobby",
+      "class": "Model",
+      "descendants": 2904,
+      "canonicalEqual": false
+    }
+  ],
+  "limits": "All captured roots retain exact class/name/descendant counts and all 228 Source/editor baselines in the saved native place. Strict whole-forest serialization equality fails. Selected XML diagnostics show sibling ordering differences, one Level3Assets Bone.CFrame rotation change of approximately 2e-8 and editor Camera differences; other mismatched roots are not yet exhaustively property-compared. Complete Studio-native .rbxl and separate raw forest retained. No conversion/reconstruction, Studio write, gameplay or publish claim.",
+  "verifiedAtUTC": "2026-10-02T19:46:31.152994+00:00"
+}

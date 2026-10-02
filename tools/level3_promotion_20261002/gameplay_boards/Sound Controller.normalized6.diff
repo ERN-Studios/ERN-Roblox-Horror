@@ -1,0 +1,68 @@
+--- StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller
++++ normalized live6
+@@ -13,7 +13,7 @@
+ local player = Players.LocalPlayer
+ local random = Random.new()
+ 
+-local LEVEL = 3
++local LEVEL = 6
+ local WORLD_NAME = "Level 3 Generated World"
+ local STATE_FOLDER_NAME = "Level 3 State"
+ local REMOTES_FOLDER_NAME = "Level 3 Remotes"
+@@ -111,8 +111,8 @@
+ 
+ type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?, PitchEffect: PitchShiftSoundEffect?}
+ 
+--- LEVEL3_CD_PITCH_SHIFT_20260821
+--- LEVEL3_CD_PITCH_DOWN_20260821
++-- LEVEL6_CD_PITCH_SHIFT_20260821
++-- LEVEL6_CD_PITCH_DOWN_20260821
+ -- PitchShiftSoundEffect lowers pitch without changing song tempo or the fixed blackout timeline.
+ local CD_PITCH_EFFECT_NAME = "Level 3 CD Pitch Shift"
+ local CD_PITCH_BASES = {1.000, 0.985, 0.970, 0.950, 0.925, 0.890}
+@@ -356,8 +356,8 @@
+ 	if player:GetAttribute("Spectating") ~= true then return nil end
+ 	local userId = player:GetAttribute("SpectateTargetUserId")
+ 	local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
+-	if not watched or watched:GetAttribute("InRound") ~= true
+-		or watched:GetAttribute("Escaped") == true then return nil end
++	if not watched or watched:GetAttribute("Level3InRound") ~= true
++		or watched:GetAttribute("Level3Escaped") == true then return nil end
+ 	local character = watched.Character
+ 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ 	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
+@@ -372,9 +372,9 @@
+ -- world conditions (level, phase) still apply to everyone.
+ local function isActive(): boolean
+ 	local state = stateFolder()
+-	return workspace:GetAttribute("SelectedLevel") == LEVEL
+-		and ((player:GetAttribute("InRound") == true
+-				and player:GetAttribute("Escaped") ~= true)
++	return workspace:GetAttribute("Level3SelectedLevel") == LEVEL
++		and ((player:GetAttribute("Level3InRound") == true
++				and player:GetAttribute("Level3Escaped") ~= true)
+ 			or spectateSubject() ~= nil)
+ 		and (not state or state:GetAttribute("Level3_Phase") ~= "STOPPED")
+ end
+@@ -920,9 +920,9 @@
+ 	-- through before normal objective-generation filtering, which can be one
+ 	-- replication frame behind during the transition.
+ 	if payload.Type == "Sound" and payload.Cue == "PowerDown" then
+-		if workspace:GetAttribute("SelectedLevel") == LEVEL
+-			and ((player:GetAttribute("InRound") == true
+-				and player:GetAttribute("Escaped") ~= true) or spectateSubject() ~= nil) then
++		if workspace:GetAttribute("Level3SelectedLevel") == LEVEL
++			and ((player:GetAttribute("Level3InRound") == true
++				and player:GetAttribute("Level3Escaped") ~= true) or spectateSubject() ~= nil) then
+ 			playPowerDown()
+ 		end
+ 		return
+@@ -1110,7 +1110,7 @@
+ workspace.ChildRemoved:Connect(function(child)
+ 	if child == boundWorld then bindWorld(nil) end
+ end)
+-player:GetAttributeChangedSignal("InRound"):Connect(function()
++player:GetAttributeChangedSignal("Level3InRound"):Connect(function()
+ 	if isActive() then nextReaderBeep = os.clock() + 2.5 end
+ end)
+ 

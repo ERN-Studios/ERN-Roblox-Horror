@@ -1,0 +1,58 @@
+{
+  "comparison": "Exact XML property values with sibling order ignored and Ref referents mapped to class/name/duplicate index paths",
+  "roots": [
+    {
+      "root": "ServerStorage_Level3Assets",
+      "captureItems": 2417,
+      "nativePlaceItems": 2417,
+      "differentPropertyCounts": {
+        "CFrame": 1
+      },
+      "examples": [
+        {
+          "path": "(('Folder', 'Level3Assets', 1), ('Folder', 'EntityTemplates', 1), ('Model', 'MallManagerTemplate', 1), ('MeshPart', 'char1', 1), ('Bone', 'Hips', 1), ('Bone', 'Spine02', 1), ('Bone', 'Spine01', 1), ('Bone', 'Spine', 1), ('Bone', 'RightShoulder', 1), ('Bone', 'RightArm', 1))",
+          "property": "CFrame",
+          "captured": "('CoordinateFrame', (('name', 'CFrame'),), '', (('X', (), '0.0000005079039', ()), ('Y', (), '0.5724051', ()), ('Z', (), '0.0000026356097', ()), ('R00', (), '0.43002728', ()), ('R01', (), '0.08884397', ()), ('R02', (), '-0.8984339', ()), ('R10', (), '",
+          "native": "('CoordinateFrame', (('name', 'CFrame'),), '', (('X', (), '0.0000005079039', ()), ('Y', (), '0.5724051', ()), ('Z', (), '0.0000026356097', ()), ('R00', (), '0.43002728', ()), ('R01', (), '0.08884395', ()), ('R02', (), '-0.8984339', ()), ('R10', (), '"
+        }
+      ]
+    },
+    {
+      "root": "Workspace_Camera",
+      "captureItems": 1,
+      "nativePlaceItems": 1,
+      "differentPropertyCounts": {
+        "CFrame": 1,
+        "CameraType": 1,
+        "Focus": 1
+      },
+      "examples": [
+        {
+          "path": "(('Camera', 'Camera', 1),)",
+          "property": "CFrame",
+          "captured": "('CoordinateFrame', (('name', 'CFrame'),), '', (('X', (), '-33.658123', ()), ('Y', (), '39.9171', ()), ('Z', (), '-849.31976', ()), ('R00', (), '0', ()), ('R01', (), '0', ()), ('R02', (), '1', ()), ('R10', (), '0', ()), ('R11', (), '1', ()), ('R12', ",
+          "native": "('CoordinateFrame', (('name', 'CFrame'),), '', (('X', (), '-15.521202', ()), ('Y', (), '19.582048', ()), ('Z', (), '14.927472', ()), ('R00', (), '0.6077545', ()), ('R01', (), '0.42187148', ()), ('R02', (), '-0.67279935', ()), ('R10', (), '-0', ()), ("
+        },
+        {
+          "path": "(('Camera', 'Camera', 1),)",
+          "property": "CameraType",
+          "captured": "('token', (('name', 'CameraType'),), '6', ())",
+          "native": "('token', (('name', 'CameraType'),), '0', ())"
+        },
+        {
+          "path": "(('Camera', 'Camera', 1),)",
+          "property": "Focus",
+          "captured": "('CoordinateFrame', (('name', 'Focus'),), '', (('X', (), '-53.658123', ()), ('Y', (), '39.9171', ()), ('Z', (), '-849.31976', ()), ('R00', (), '1', ()), ('R01', (), '0', ()), ('R02', (), '0', ()), ('R10', (), '0', ()), ('R11', (), '1', ()), ('R12', (",
+          "native": "('CoordinateFrame', (('name', 'Focus'),), '', (('X', (), '-14.175319', ()), ('Y', (), '18.519342', ()), ('Z', (), '13.8974495', ()), ('R00', (), '1', ()), ('R01', (), '0', ()), ('R02', (), '0', ()), ('R10', (), '0', ()), ('R11', (), '1', ()), ('R12',"
+        }
+      ]
+    },
+    {
+      "root": "ServerStorage_HazmatBaselineRig_20260924",
+      "captureItems": 109,
+      "nativePlaceItems": 109,
+      "differentPropertyCounts": {},
+      "examples": []
+    }
+  ]
+}

@@ -1,0 +1,315 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Layout Generator live Source
++++ tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau
+@@ -8,15 +8,17 @@
+ -- overlapping doors or producing diagonal corridors.
+ 
+ local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
++-- Geometry metadata is the shared, SHA-pinned revised Blender art schema.
++local KitMetadata = require(game:GetService("ServerScriptService"):WaitForChild("Level 6 Systems"):WaitForChild("Level 6 Kit Metadata"))
+ local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+ 
+ local LayoutGenerator = {}
+ 
+-local VERSION = 2
++local VERSION = 6
+ local DISTRICT_COUNT = 3
+-local ROOMS_PER_DISTRICT = 8
++local ROOMS_PER_DISTRICT = 10
+ local GRID_ROWS = 2
+-local GRID_COLUMNS = 4
++local GRID_COLUMNS = 5
+ local MODULE_GOAL = 5
+ local ENTRY_AND_GATEWAY_LINKS = 4
+ local MAX_SEED = 2147483646
+@@ -51,7 +53,7 @@
+ 	ExtraLinksPerDistrict = 2,
+ 	MinimumModuleSeparation = 105,
+ 	MaximumStraightRunLinks = 3,
+-	MaximumVerticalRunLinks = 2,
++	MaximumVerticalRunLinks = 3,
+ 	ArrivalWidth = 64,
+ 	ArrivalDepth = 54,
+ 	ExitWidth = 58,
+@@ -260,8 +262,9 @@
+ 
+ -- Conservative footprint of the actual corridor kit: the 14-stud clear lane
+ -- plus both side walls, and the .04 floor seal. Endpoint rooms own the joins.
+-local function corridorBounds(a, b)
+-	local halfWidth = Configuration.CorridorWidth * .5 + Configuration.WallThickness
++local function corridorBounds(a, b, insertedRoom)
++	local halfWidth = math.max(Configuration.CorridorWidth * .5,
++		insertedRoom and insertedRoom.Width * .5 or 0) + Configuration.WallThickness
+ 	if math.abs(a.Z - b.Z) < .001 then
+ 		local left, right = if a.X < b.X then a else b, if a.X < b.X then b else a
+ 		return {MinX=left.X + left.W * .5 - .02, MaxX=right.X - right.W * .5 + .02,
+@@ -325,6 +328,11 @@
+ 			link.Id, link.A, link.B, link.Door, link.ThemeId,
+ 			link.SectionIndex, if link.Gateway then 1 else 0
+ 		))
++		if link.BlenderRoom then
++			table.insert(pieces, string.format("B:%s:%s:%.3f:%.3f:%.3f",
++				link.Id, link.BlenderRoom.Asset, link.BlenderRoom.StartDistance,
++				link.BlenderRoom.Width, link.BlenderRoom.PortalWidth))
++		end
+ 	end
+ 	local text = table.concat(pieces, ";")
+ 	local hash = 5381
+@@ -341,7 +349,9 @@
+ 	-- Align the gateways but omit the middle district's direct north-south
+ 	-- connection at this column. Players must turn between the two bridges.
+ 	local gatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
+-	local gatewayColumns = {gatewayColumn, gatewayColumn}
++	local secondGatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
++	if secondGatewayColumn == gatewayColumn then secondGatewayColumn = (secondGatewayColumn % (GRID_COLUMNS - 1)) + 1 end
++	local gatewayColumns = {gatewayColumn, secondGatewayColumn}
+ 	local exitRow = rng:NextInteger(1, GRID_ROWS)
+ 
+ 	local layout = {
+@@ -378,7 +388,7 @@
+ 		Z = rowZ[entryRow],
+ 		W = Tuning.ArrivalWidth,
+ 		D = Tuning.ArrivalDepth,
+-		H = 12,
++		H = 30,
+ 		Kind = "PartyHall",
+ 		Decor = "SparseWelcome",
+ 		Module = false,
+@@ -401,11 +411,11 @@
+ 	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
+ 		local widths = {}
+ 		local depths = {
+-			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
+-			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
++			Tuning.MinimumRoomDepth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomDepth - Tuning.MinimumRoomDepth) / 4)),
++			Tuning.MinimumRoomDepth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomDepth - Tuning.MinimumRoomDepth) / 4)),
+ 		}
+ 		for column = 1, GRID_COLUMNS do
+-			widths[column] = rng:NextInteger(Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth)
++			widths[column] = Tuning.MinimumRoomWidth + 4 * rng:NextInteger(0, math.floor((Tuning.MaximumRoomWidth - Tuning.MinimumRoomWidth) / 4))
+ 			sharedWidths[column] = math.max(sharedWidths[column] or 0, widths[column])
+ 		end
+ 		local gaps = {}
+@@ -446,7 +456,7 @@
+ 					D = depths[row],
+ 					H = rng:NextInteger(Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight),
+ 					Kind = definition.Kind,
+-					Decor = decors[slotNumber],
++					Decor = decors[((slotNumber - 1) % #decors) + 1],
+ 					Module = false,
+ 					ThemeId = definition.ThemeId,
+ 					SectionIndex = sectionIndex,
+@@ -549,28 +559,37 @@
+ 		return link
+ 	end
+ 
+-	-- A 2x4 district has ten possible edges. Keeping nine gives the original
+-	-- seven-edge spanning tree plus two loops. Choose the one missing edge in
+-	-- each district to break the arrival, bridge and Signal Hall sightlines.
+-	-- A three-loop Master override deliberately restores all ten edges.
+-	local omitted = {}
+-	if Tuning.ExtraLinksPerDistrict <= 2 then
+-		local entryCut = rng:NextInteger(1, GRID_COLUMNS - 1)
+-		omitted[1] = pairKey(slots[1][entryRow][entryCut].Id,
+-			slots[1][entryRow][entryCut + 1].Id)
+-		omitted[2] = pairKey(slots[2][1][gatewayColumn].Id,
+-			slots[2][GRID_ROWS][gatewayColumn].Id)
+-		omitted[3] = pairKey(slots[3][exitRow][GRID_COLUMNS - 1].Id,
+-			slots[3][exitRow][GRID_COLUMNS].Id)
+-	end
+-	layout.StraightRunRelaxed = Tuning.ExtraLinksPerDistrict == 3
+-		or Tuning.MaximumStraightRunLinks < 3 or Tuning.MaximumVerticalRunLinks < 2
++	-- A 2x5 district has thirteen grid edges. Two different horizontal cuts
++	-- retain eleven edges (two loops), force turns, and create useful dead ends.
++	-- The distinct bridge columns prevent a single north-south route through all districts.
++	local omitted = {{}, {}, {}}
++	for sectionIndex = 1, DISTRICT_COUNT do
++		local firstCut = rng:NextInteger(1, GRID_COLUMNS - 1)
++		local secondCut = rng:NextInteger(1, GRID_COLUMNS - 2)
++		if secondCut >= firstCut then secondCut += 1 end
++		local cuts = {firstCut, secondCut}
++		if sectionIndex == 1 then
++			cuts[entryRow] = rng:NextInteger(1, GRID_COLUMNS - 2)
++			if cuts[3 - entryRow] == cuts[entryRow] then
++				cuts[3 - entryRow] = (cuts[entryRow] % (GRID_COLUMNS - 1)) + 1
++			end
++		elseif sectionIndex == 3 then
++			cuts[exitRow] = GRID_COLUMNS - 1
++			cuts[3 - exitRow] = rng:NextInteger(1, GRID_COLUMNS - 2)
++		end
++		for row = 1, GRID_ROWS do
++			local cut = cuts[row]
++			omitted[sectionIndex][pairKey(slots[sectionIndex][row][cut].Id,
++				slots[sectionIndex][row][cut + 1].Id)] = true
++		end
++	end
++	layout.StraightRunRelaxed = false
+ 
+ 	local function neighbourSlots(sectionIndex, row, column)
+ 		local result = {}
+ 		local current = slots[sectionIndex][row][column]
+ 		local function allow(other)
+-			if pairKey(current.Id, other.Id) ~= omitted[sectionIndex] then
++			if not omitted[sectionIndex][pairKey(current.Id, other.Id)] then
+ 				table.insert(result, other)
+ 			end
+ 		end
+@@ -620,14 +639,14 @@
+ 				if column < GRID_COLUMNS then
+ 					local other = slots[sectionIndex][row][column + 1]
+ 					if not selectedPairs[pairKey(room.Id, other.Id)]
+-						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
++						and not omitted[sectionIndex][pairKey(room.Id, other.Id)] then
+ 						table.insert(unused, {room, other})
+ 					end
+ 				end
+ 				if row < GRID_ROWS then
+ 					local other = slots[sectionIndex][row + 1][column]
+ 					if not selectedPairs[pairKey(room.Id, other.Id)]
+-						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
++						and not omitted[sectionIndex][pairKey(room.Id, other.Id)] then
+ 						table.insert(unused, {room, other})
+ 					end
+ 				end
+@@ -815,6 +834,51 @@
+ 		end)(),
+ 		AmbientHVACRoomId = slots[1][3 - entryRow][GRID_COLUMNS].Id,
+ 	}
++	-- Three compact service pockets retain the main party room and clear center lanes.
++	layout.ServiceRooms = {}
++	for districtIndex, variant in ipairs({"BudgetArcade", "PartySupplyStore", "MaintenanceWorkshop"}) do
++		local choices = {}
++		for _, candidate in ipairs(layout.Districts[districtIndex].Rooms) do
++			if not candidate.Module and candidate.Role == "Room" then table.insert(choices, candidate) end
++		end
++		local selected = choices[rng:NextInteger(1, #choices)]
++		selected.ServiceVariant = variant
++		selected.ServicePocketWidth = 18
++		selected.ServicePocketDepth = 24
++		selected.ServicePocketSeed = rng:NextInteger(1, 2 ^ 30)
++		table.insert(layout.ServiceRooms, selected.Id)
++	end
++	-- Keep the original 32-room graph and five-CD rules intact. Three authored
++	-- two-portal rooms replace the middle of the long entry/district gateways.
++	-- These gateways are at least 38 studs long, leaving at least six studs of
++	-- ordinary corridor at both ends of each 24-stud section.
++	local insertRng = Random.new((seed + 167873) % MAX_SEED)
++	local sectionAssets = shuffled(insertRng,
++		{"RoomKitchenPrep", "RoomUtilityHall", "RoomStaffNook"})
++	layout.BlenderRooms = {}
++	layout.BlenderRoomFloorArea = 0
++	for index = 1, 3 do
++		local link = layout.GatewayLinks[index]
++		local a, b = layout.RoomById[link.A], layout.RoomById[link.B]
++		local gap = if math.abs(a.X - b.X) > math.abs(a.Z - b.Z)
++			then math.abs(a.X - b.X) - (a.W + b.W) * .5
++			else math.abs(a.Z - b.Z) - (a.D + b.D) * .5
++		assert(gap >= 36, "Level 3 gateway cannot fit a two-portal Blender room")
++		local width = assert(KitMetadata[sectionAssets[index]],
++			"Missing authored gateway room metadata").Size[1]
++		local inserted = {
++			Asset = sectionAssets[index], LinkId = link.Id,
++			StartDistance = 6 + insertRng:NextInteger(0, math.floor(gap - 36)),
++			Length = 24, Width = width, Height = 12, PortalWidth = 14,
++			PortalHeight = 10.5, SectionIndex = index,
++		}
++		link.BlenderRoom = inserted
++		table.insert(layout.BlenderRooms, inserted)
++		layout.BlenderRoomFloorArea += inserted.Width * inserted.Length
++	end
++	layout.RoomFloorArea = 0
++	for _, room in ipairs(layout.Rooms) do layout.RoomFloorArea += room.W * room.D end
++	assert(layout.RoomFloorArea >= 160072, "Level 3 cannot be smaller than current Level 3")
+ 	layout.LayoutHash = makeHash(layout)
+ 	return layout
+ end
+@@ -827,7 +891,7 @@
+ 	if type(layout) ~= "table" then return fail("layout is not a table") end
+ 	if layout.Version ~= VERSION then return fail("layout version is stale") end
+ 	if type(layout.Rooms) ~= "table" or #layout.Rooms ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT + 2 then
+-		return fail("layout must contain exactly 26 rooms")
++		return fail("layout must contain exactly 32 rooms")
+ 	end
+ 	local expectedLinks = DISTRICT_COUNT
+ 		* ((ROOMS_PER_DISTRICT - 1) + Tuning.ExtraLinksPerDistrict)
+@@ -888,7 +952,7 @@
+ 	end
+ 	for sectionIndex = 1, DISTRICT_COUNT do
+ 		if sectionCounts[sectionIndex] ~= ROOMS_PER_DISTRICT then
+-			return fail("every district must contain exactly eight rooms")
++			return fail("every district must contain exactly ten rooms")
+ 		end
+ 		if moduleCounts[sectionIndex] < 1 then
+ 			return fail("every district must contain at least one module")
+@@ -899,7 +963,7 @@
+ 		return fail("layout must contain exactly five module rooms")
+ 	end
+ 	if hideSpotTotal ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT then
+-		return fail("layout must request exactly 24 evenly distributed hide spots")
++		return fail("layout must request exactly 30 evenly distributed hide spots")
+ 	end
+ 
+ 	for index = 1, #layout.Rooms - 1 do
+@@ -918,6 +982,9 @@
+ 	local seenPairs = {}
+ 	local hiddenCount = 0
+ 	local gatewayCount = 0
++	local insertedCount = 0
++	local insertedAssets = {}
++	local insertedFloorArea = 0
+ 	local corridorFootprints = {}
+ 	local rebuiltAdjacency = {}
+ 	for roomId in pairs(seenRooms) do
+@@ -947,6 +1014,27 @@
+ 		if gap < Tuning.MinimumCorridorLength - 0.001 then
+ 			return fail("corridor is shorter than the configured minimum: " .. key)
+ 		end
++		local inserted = link.BlenderRoom
++		if inserted then
++			insertedCount += 1
++			if type(inserted) ~= "table" or inserted.LinkId ~= link.Id
++				or inserted.SectionIndex ~= insertedCount
++				or not link.Gateway or link.GatewayKind == "Exit"
++				or (inserted.Asset ~= "RoomKitchenPrep" and inserted.Asset ~= "RoomUtilityHall"
++					and inserted.Asset ~= "RoomStaffNook")
++				or insertedAssets[inserted.Asset]
++				or inserted.Length ~= 24 or inserted.Width ~= KitMetadata[inserted.Asset].Size[1]
++				or inserted.Width < 18 or inserted.Width > 26 or inserted.Height ~= 12
++				or inserted.PortalWidth ~= 14 or inserted.PortalHeight ~= 10.5
++				or type(inserted.StartDistance) ~= "number"
++				or inserted.StartDistance < 6 or inserted.StartDistance + inserted.Length > gap - 6
++				or type(layout.BlenderRooms) ~= "table"
++				or layout.BlenderRooms[insertedCount] ~= inserted then
++				return fail("authored gateway section is invalid: " .. key)
++			end
++			insertedAssets[inserted.Asset] = true
++			insertedFloorArea += inserted.Width * inserted.Length
++		end
+ 		table.insert(rebuiltAdjacency[a.Id], b.Id)
+ 		table.insert(rebuiltAdjacency[b.Id], a.Id)
+ 		if link.Door == "HiddenExit" then
+@@ -983,7 +1071,12 @@
+ 				return fail("internal link theme does not match its district")
+ 			end
+ 		end
+-		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b)})
++		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b, inserted)})
++	end
++	if insertedCount ~= 3 or type(layout.BlenderRooms) ~= "table"
++		or #layout.BlenderRooms ~= 3
++		or layout.BlenderRoomFloorArea ~= insertedFloorArea then
++		return fail("layout must contain three two-portal Blender gateway rooms")
+ 	end
+ 	if hiddenCount ~= 1 then return fail("layout must contain one hidden exit link") end
+ 	if gatewayCount ~= ENTRY_AND_GATEWAY_LINKS
+@@ -1044,6 +1137,11 @@
+ 	for roomId in pairs(seenRooms) do
+ 		if not reached[roomId] then return fail("whole graph is disconnected at " .. roomId) end
+ 	end
++	local deadEnds = 0
++	for _, room in ipairs(layout.Rooms) do
++		if room.Role == "Room" and #layout.Adjacency[room.Id] == 1 then deadEnds += 1 end
++	end
++	if deadEnds < 1 then return fail("layout requires a non-finale dead end") end
+ 	local straight, vertical = straightRuns(layout)
+ 	if layout.MaximumStraightRun ~= straight or layout.MaximumVerticalRun ~= vertical then
+ 		return fail("straight-run diagnostics are stale")

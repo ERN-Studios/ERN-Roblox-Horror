@@ -1,0 +1,5 @@
+{
+  "Checks": 19,
+  "Passed": true,
+  "Scope": "Exact public participant predicate/prompt callback with mocks; gameplay and full lifecycle unverified"
+}

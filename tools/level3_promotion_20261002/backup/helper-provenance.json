@@ -1,0 +1,43 @@
+{
+  "preparedOnly": true,
+  "liveCaptureStarted": false,
+  "reviewStarted": false,
+  "helpers": [
+    {
+      "file": "capture-readonly.luau",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/capture-readonly.luau",
+      "originalSHA256": "56bb00f2193a2b618fed7bf9524d5bfbea40b1fcdc475157506ccbb065cd30fe",
+      "preparedSHA256": "ecdf7b764b97d454da49432f99ba9c6d8587aaebc0d5120b6ce95bb17418eb5c"
+    },
+    {
+      "file": "receiver.py",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/receiver.py",
+      "originalSHA256": "249b6519f0af224f5493afd8273bb65004a2558960b3fe03d6aad4a249d72fad",
+      "preparedSHA256": "64ae560e526f9dee0fcf1e964b3e8af13019fdc823122eedd938584a1475e41f"
+    },
+    {
+      "file": "claude_review.py",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/claude_review.py",
+      "originalSHA256": "a2cbdd60f584e820224d1557e608d9b2bfc0893e3e609fd244a1e2006f89279f",
+      "preparedSHA256": "dd7af0b0d9c3f4b178065ae2708b7f1bef5d9f7dd7c5bd4b17d2a9133161e825"
+    },
+    {
+      "file": "pack_native_backup.luau",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/recovery/pack_native_backup.luau",
+      "originalSHA256": "42619b1ef256a1b22a862c2e9387fe9ff69cf987ff1c651afd1a24d4dcb4029d",
+      "preparedSHA256": "6f7559d46e96ae1dc5309e7a6bfef80609d9f5bd03debc51b701bfc5e12a22ea"
+    },
+    {
+      "file": "verify_native_recovery.luau",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/recovery/verify_native_recovery.luau",
+      "originalSHA256": "0eff36b027d3019bb83a98cbca4b2a9f266738f1cdcc3c0047a905410eff3927",
+      "preparedSHA256": "1d8a0a203913e30b3f0e7248c9d05125081d8fe43df883a5b5224649b9c6b69b"
+    },
+    {
+      "file": "service-property-schema.json",
+      "reusedFrom": "tools/lobby_access_spawn_20261002/service-property-schema.json",
+      "originalSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+      "preparedSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08"
+    }
+  ]
+}

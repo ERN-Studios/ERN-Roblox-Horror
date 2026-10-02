@@ -1,0 +1,149 @@
+{
+  "Checks": 11513,
+  "Passed": true,
+  "Scenarios": [
+    {
+      "Checks": 1322,
+      "Name": "cold public3 gets fresh60s after130s singleton warmup",
+      "Passed": true
+    },
+    {
+      "Checks": 1,
+      "Name": "Level1 starts immediately while shared job is cold",
+      "Passed": true
+    },
+    {
+      "Checks": 1,
+      "Name": "Level2 starts immediately while shared job is cold",
+      "Passed": true
+    },
+    {
+      "Checks": 1,
+      "Name": "already ready kit skips Ensure",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on stepout",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on departure",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on character",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on death",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on epoch",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on host",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on cancel",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on access",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "cold station cancels on retired",
+      "Passed": true
+    },
+    {
+      "Checks": 1307,
+      "Name": "competing cold Studio stations produce one world",
+      "Passed": true
+    },
+    {
+      "Checks": 9,
+      "Name": "Level1 can enter while public3 waits",
+      "Passed": true
+    },
+    {
+      "Checks": 9,
+      "Name": "caller replacement cannot fail a newer entry",
+      "Passed": true
+    },
+    {
+      "Checks": 11,
+      "Name": "all campaign continuers depart before kit ready",
+      "Passed": true
+    },
+    {
+      "Checks": 659,
+      "Name": "successful tube continuation cleans only after warm",
+      "Passed": true
+    },
+    {
+      "Checks": 20,
+      "Name": "warm failed stays bounded and late completion cannot launch cancelled party",
+      "Passed": true
+    },
+    {
+      "Checks": 6006,
+      "Name": "warm timeout stays bounded and late completion cannot launch cancelled party",
+      "Passed": true
+    },
+    {
+      "Checks": 46,
+      "Name": "reserved target1 discovery retains appropriate deadline",
+      "Passed": true
+    },
+    {
+      "Checks": 46,
+      "Name": "reserved target2 discovery retains appropriate deadline",
+      "Passed": true
+    },
+    {
+      "Checks": 657,
+      "Name": "reserved target3 discovery retains appropriate deadline",
+      "Passed": true
+    },
+    {
+      "Checks": 656,
+      "Name": "reserved warm retains arrival evidence for departed final carrier",
+      "Passed": true
+    },
+    {
+      "Checks": 655,
+      "Name": "reserved changed session cannot hijack warmed target",
+      "Passed": true
+    },
+    {
+      "Checks": 4,
+      "Name": "busy public warm accepts only its host cancel",
+      "Passed": true
+    }
+  ],
+  "Scope": "Offline virtual scheduler and mocked players only; actual Bake/Studio gameplay unverified",
+  "Sources": [
+    {
+      "Path": "ServerScriptService.GameManager",
+      "SHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+      "Syntax": "PASS"
+    },
+    {
+      "Path": "ServerScriptService.Level 3 Kit Warmup",
+      "SHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "Syntax": "PASS"
+    }
+  ]
+}

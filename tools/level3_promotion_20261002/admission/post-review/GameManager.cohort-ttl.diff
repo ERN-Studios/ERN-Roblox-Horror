@@ -1,0 +1,12 @@
+--- fresh installed GameManager 8e365508
++++ public3 cohort TTL candidate
+@@ -2305,7 +2305,8 @@
+  task.spawn(function()
+   local deadline = os.clock() + Loading.TimeoutSeconds
+   repeat
+-   local ok, stored = pcall(cohortMap.SetAsync, cohortMap, session.Id, snapshot, 120)
++   local cohortTTL = session.NextLevel == 3 and (Level3KitWarmup.TimeoutSeconds + 2 * Loading.TimeoutSeconds) or 120
++   local ok, stored = pcall(cohortMap.SetAsync, cohortMap, session.Id, snapshot, cohortTTL)
+    if ok and stored then write.Finished = true; return end
+    task.wait(1)
+   until os.clock() >= deadline

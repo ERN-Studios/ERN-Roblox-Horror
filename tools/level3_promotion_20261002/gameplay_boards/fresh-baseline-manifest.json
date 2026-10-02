@@ -1,0 +1,176 @@
+{
+  "sourceCatalog": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion/before/scripts.json",
+  "studioId": "c1e8b040-e549-408a-8a5b-7fe6905c2d55",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "scripts": [
+    {
+      "sourceBytes": 70421,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "sourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae"
+    },
+    {
+      "sourceBytes": 187862,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "sourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c"
+    },
+    {
+      "sourceBytes": 188782,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "sourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914"
+    },
+    {
+      "sourceBytes": 72634,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "sourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28"
+    },
+    {
+      "sourceBytes": 59104,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "sourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b"
+    },
+    {
+      "sourceBytes": 39946,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "sourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325"
+    },
+    {
+      "sourceBytes": 46833,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "sourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b"
+    },
+    {
+      "sourceBytes": 6548,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "sourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37"
+    },
+    {
+      "sourceBytes": 45552,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "sourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f"
+    },
+    {
+      "sourceBytes": 6548,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "sourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651"
+    },
+    {
+      "sourceBytes": 59188,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "sourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029"
+    },
+    {
+      "sourceBytes": 46887,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "sourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115"
+    },
+    {
+      "sourceBytes": 11926,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "sourceSha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7"
+    },
+    {
+      "sourceBytes": 118480,
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a",
+      "sourceSha256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a"
+    },
+    {
+      "sourceBytes": 204901,
+      "path": "ServerScriptService.ZyntraMonetization",
+      "editorMatch": true,
+      "class": "Script",
+      "editorSourceSha256": "f1e8b13d210ddd4e098bc2bed42e36fad4b5d043295f198663f5e89beaca059e",
+      "sourceSha256": "f1e8b13d210ddd4e098bc2bed42e36fad4b5d043295f198663f5e89beaca059e"
+    },
+    {
+      "sourceBytes": 17179,
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "editorMatch": true,
+      "class": "ModuleScript",
+      "editorSourceSha256": "c9824bc6d3959f9f500eb09f0217b7f3787acc0c089136b3c3154077e8df374f",
+      "sourceSha256": "c9824bc6d3959f9f500eb09f0217b7f3787acc0c089136b3c3154077e8df374f"
+    },
+    {
+      "sourceBytes": 178031,
+      "path": "ServerScriptService.GameManager",
+      "editorMatch": true,
+      "class": "Script",
+      "editorSourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "sourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "sourceBytes": 6494,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "sourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02"
+    },
+    {
+      "sourceBytes": 44865,
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "sourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735"
+    },
+    {
+      "sourceBytes": 37730,
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "editorMatch": true,
+      "class": "LocalScript",
+      "editorSourceSha256": "7c0af76bdc0195e5e538a76d1bf5601dea953e86a75b39e442009ebd6bfef7bc",
+      "sourceSha256": "7c0af76bdc0195e5e538a76d1bf5601dea953e86a75b39e442009ebd6bfef7bc"
+    },
+    {
+      "sourceBytes": 7262,
+      "path": "ServerScriptService.Crouch State Server",
+      "editorMatch": true,
+      "class": "Script",
+      "editorSourceSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "sourceSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c"
+    }
+  ]
+}

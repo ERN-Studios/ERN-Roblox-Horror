@@ -1,0 +1,12 @@
+{
+  "bytes": 182448,
+  "universeId": 10559217407,
+  "editorMatch": true,
+  "sourceSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+  "placeId": 131311258779917,
+  "ttl120": true,
+  "editorSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+  "class": "Script",
+  "path": "ServerScriptService.GameManager",
+  "capturedAtUTC": "2026-10-02T20:21:01Z"
+}

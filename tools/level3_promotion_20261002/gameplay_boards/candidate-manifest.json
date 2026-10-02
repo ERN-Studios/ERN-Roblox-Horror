@@ -1,0 +1,49 @@
+{
+  "studioId": "c1e8b040-e549-408a-8a5b-7fe6905c2d55",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "status": "Drafted locally; no Studio write",
+  "requiredCAS": "Root must resolve exact instance/class and compare current Source plus ScriptEditorService:GetEditorSource against exact baseline file inside scoped UpdateSourceAsync before write; changed baselines require fresh reconciliation.",
+  "changes": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "class": "LocalScript",
+      "baselineFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/capture-baseline/StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller.luau",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller.candidate.luau",
+      "baselineSHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "candidateSHA256": "52033d8e5480398a1e54fe44349c277659e0ea66d97f64e6cf826100a408061b",
+      "baselineSourceEditorMatch": true,
+      "reason": "Public client material-chunk diffuser synchronization, ceiling bounce, gateway glow blackout/fade and revised night grade; retain public lighting ownership and restoration. All eight tagged hidden-exit frames capture/watch client-local material chunks, including frames without lights."
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "baselineFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/capture-baseline/ServerScriptService.Level 3 Systems.Level 3 Objective Controller.luau",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Objective Controller.candidate.luau",
+      "baselineSHA256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "candidateSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "baselineSourceEditorMatch": true,
+      "reason": "First living survivor strictly beyond hall midpoint; CD material chunks restore and move with Y-basis carry/drop clones; revised CD player wording. Preserve public team notices/escape/rewards. Fade the separate reactive Blender hidden-wall skin on unlock; retain full-size collision proxy."
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "baselineFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/capture-baseline/ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller.luau",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller.candidate.luau",
+      "baselineSHA256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "candidateSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "baselineSourceEditorMatch": true,
+      "reason": "Far-end finale spawn .90-.98 with existing all-living-player minimum distance/volume gate, face/target hall runners, fixed configured pace, bounded existing retries; public arcade noise hook. Keep L3Manager death advice and public flags."
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "baselineFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/capture-baseline/ServerScriptService.LobbyReimaginedPreview.Builder.luau",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.LobbyReimaginedPreview.Builder.candidate.luau",
+      "baselineSHA256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "candidateSHA256": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+      "baselineSourceEditorMatch": true,
+      "reason": "Relocate original combined donation/purchase TOP SUPPORTERS renderer into R4 after cosmetic polish, preserving subscriptions with non-nil reparent and restoring original parent/pivot before failed-build teardown. Remove only exact requested mounted revision plaque creation."
+    }
+  ]
+}

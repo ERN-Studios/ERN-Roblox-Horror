@@ -1,0 +1,11 @@
+{
+  "name": "Level 3 Round Adapter",
+  "editorParity": true,
+  "operation": "edit",
+  "candidatePath": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau",
+  "candidateHash": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+  "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+  "className": "ModuleScript",
+  "beforeHash": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+  "editorHash": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+}

@@ -1,0 +1,27 @@
+--- ServerScriptService.LobbyReimaginedPreview.Builder fresh Edit baseline
++++ ServerScriptService.LobbyReimaginedPreview.Builder scoped guard-first candidate
+@@ -68,14 +68,19 @@
+ 	local existing = workspace:FindFirstChild(NAME)
+ 	if existing then
+ 		assert(existing:GetAttribute(OWNED) == true and existing:GetAttribute("Ready") == true, "Inspect conflicting preview first")
+-		local center = existing:GetAttribute("PreviewCenter")
+-		assert(typeof(center) == "Vector3", "Inspect R4 lobby center before relocating support board")
+-		local transfer = supportBoardTransfer(existing, center)
++		-- Existing Level 5/6 access protection must survive board-relocation failure.
++		require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(existing)
++		local transfer
+ 		local ok, failure = pcall(function()
++			local center = existing:GetAttribute("PreviewCenter")
++			assert(typeof(center) == "Vector3", "Inspect R4 lobby center before relocating support board")
++			transfer = supportBoardTransfer(existing, center)
+ 			applySupportBoardTransfer(transfer, existing)
+-			require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(existing)
+ 		end)
+-		if not ok then restoreSupportBoardTransfer(transfer); error(failure) end
++		if not ok then
++			restoreSupportBoardTransfer(transfer)
++			warn("[LobbyReimaginedPreview] Existing support-board relocation failed: " .. tostring(failure))
++		end
+ 		return existing
+ 	end
+ 	local manifest, kit = Bake.GetManifest(), Bake.Ensure()

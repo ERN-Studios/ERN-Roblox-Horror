@@ -1,0 +1,531 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter live Source
++++ tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.luau
+@@ -1,11 +1,13 @@
+ --!strict
+--- Adds the worn-party kit to the live Level 3 builder's generated world.
+--- Only named art proxies are hidden. The Level 2 slide, prompt anchors,
+--- invisible collision and unrelated Level 3 art stay with their live owner.
++-- Replaces the cloned builder's visible primitives with the Blender-authored kit.
++-- Legacy invisible collision, navigation and prompt anchors remain authoritative.
+ local ServerStorage = game:GetService("ServerStorage")
+ local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+ local Metadata = require(game:GetService("ServerScriptService"):WaitForChild("Level 6 Systems"):WaitForChild("Level 6 Kit Metadata"))
+ local Dressing = require(script.Parent:WaitForChild("Level 3 Worn Party Room Dressing"))
++local Balloons = require(script.Parent:WaitForChild("Level 3 Balloon Dressing"))
++local Crayon = require(script.Parent:WaitForChild("Level 3 Crayon Wall Art"))
++local Manager = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
+ local Adapter = {}
+ 
+ local function vector(a): Vector3 return Vector3.new(a[1], a[2], a[3]) end
+@@ -14,10 +16,18 @@
+     return Vector3.new(a.X*b.X, a.Y*b.Y, a.Z*b.Z)
+ end
+ local function theme(room): string
++    if room.Role == "Arrival" then return "Orange" end
+     if room.ThemeId == "OrangeBlackParty" then return "Orange" end
+     if room.ThemeId == "RedParty" then return "Red" end
+     if room.Role == "Exit" then return "Service" end
+     return "Beige"
++end
++local function floorAsset(room): string
++    -- The authored revision routes only these two floors away from their
++    -- inherited district palette. Exit walls remain red in the Blender scene.
++    if room.Role == "Arrival" then return "FloorDefault" end
++    if room.Role == "Exit" then return "FloorService" end
++    return "Floor" .. theme(room)
+ end
+ 
+ function Adapter.Apply(manifest)
+@@ -26,14 +36,12 @@
+     local kit = assert(ServerStorage:FindFirstChild("Level6BlenderKit"), "Blender kit is not installed")
+     for name in pairs(Metadata) do
+         local template = kit:FindFirstChild(name)
+-        assert(template and template:IsA("MeshPart"), "Missing Blender prefab " .. name)
+-        -- MeshPart class/kit membership is checked here; installer validates uploaded or opaque MeshContent.
++        assert(template and template:IsA("Model") and template:FindFirstChildWhichIsA("MeshPart", true),
++            "Missing multi-material Blender prefab " .. name)
+     end
+     local helper = {WorldOrigin=Configuration.WorldOrigin}
+     local counts = {Meshes=0, Triangles=0, CollisionBoxes=0, Tables=0, Chairs=0, Fixtures=0}
+     local legacy = world:GetDescendants()
+-    local slide = world:FindFirstChild("Level 2 Exit Slide Continuation")
+-    local waitingRoom = world:FindFirstChild("Escaped Player Waiting Room")
+     local statusSurface = manifest.DiscPlayer.StatusLabel:FindFirstAncestorOfClass("SurfaceGui")
+ 
+     helper.IsParticipant = function(player)
+@@ -42,6 +50,9 @@
+             and player:GetAttribute("InRound") == true
+             and player:GetAttribute("Escaped") ~= true
+             and player:GetAttribute("Spectating") ~= true
++    end
++    helper.OnNoise = function(player, position, strength)
++        if helper.IsParticipant(player) then Manager.ReportNoise(player, position, strength) end
+     end
+     helper.AssetSize = function(name) return vector(assert(Metadata[name], name).Size) end
+     helper.Place = function(name, worldCF, parent, options)
+@@ -50,21 +61,78 @@
+         local template = assert(kit:FindFirstChild(name), "Missing Blender prefab " .. name)
+         local scale = options.Scale or options.scale or Vector3.one
+         if type(scale) == "number" then scale = Vector3.one * scale end
+-        local mesh = template:Clone()
+-        mesh.Name = name
+-        mesh.Anchored = true
+-        mesh.CanCollide = false
+-        mesh.CanTouch = false
+-        mesh.CanQuery = false
+-        mesh.CastShadow = true
+-        mesh.Size = multiply(vector(data.Size), scale)
+-        mesh.CFrame = worldCF * CFrame.new(multiply(vector(data.Center), scale))
+-        mesh:SetAttribute("Level3_KitAsset", name)
+-        mesh:SetAttribute("Level3_KitPivot", worldCF)
+-        mesh:SetAttribute("Level3_KitScale", scale)
+-        mesh:SetAttribute("Level3_KitVisual", true)
+-        mesh.Parent = parent
+-        counts.Meshes += 1
++        -- The carrier is the authored family pivot. Existing CD and slot logic
++        -- requires a BasePart it can clone, weld, move, and fade. Its MeshPart
++        -- children retain their separate Blender materials and local UV scale.
++        local carrier = Instance.new("Part")
++        carrier.Name = name
++        carrier.Size = Vector3.new(.05, .05, .05)
++        carrier.CFrame = worldCF
++        carrier.Anchored = true
++        -- Reactive carriers start visible so the objective controller's
++        -- world-CD fade from 0 to 1 also fades all five material chunks.
++        carrier.Transparency = if options.Reactive == true then 0 else 1
++        carrier.CanCollide = false
++        carrier.CanTouch = false
++        carrier.CanQuery = false
++        carrier.CastShadow = false
++        carrier:SetAttribute("Level3_KitAsset", name)
++        carrier:SetAttribute("Level3_KitPivot", worldCF)
++        carrier:SetAttribute("Level3_KitScale", scale)
++        carrier:SetAttribute("Level3_KitVisual", true)
++        local templatePivot = template:GetPivot()
++        local visualParts = {}
++        local originalVariants = {}
++        for _, source in ipairs(template:GetDescendants()) do
++            if not source:IsA("MeshPart") then continue end
++            local visual = source:Clone()
++            local localCF = templatePivot:ToObjectSpace(source.CFrame)
++            visual.CFrame = worldCF * CFrame.new(multiply(localCF.Position, scale)) * localCF.Rotation
++            visual.Size = multiply(source.Size, scale)
++            visual.Anchored = options.Dynamic ~= true
++            visual.CanCollide = false
++            visual.CanTouch = false
++            visual.CanQuery = false
++            visual.CastShadow = true
++            visual:SetAttribute("Level3_KitVisualChunk", true)
++            visual.Parent = carrier
++            if options.Dynamic == true then
++                -- An explicit C0 survives cloning and moving a detached CD
++                -- carrier before the carry/drop model enters Workspace.
++                local weld = Instance.new("Weld")
++                weld.Part0 = carrier
++                weld.Part1 = visual
++                weld.C0 = carrier.CFrame:ToObjectSpace(visual.CFrame)
++                weld.C1 = CFrame.identity
++                weld.Parent = visual
++            end
++            table.insert(visualParts, visual)
++            originalVariants[visual] = visual.MaterialVariant
++        end
++        assert(#visualParts == data.ChunkCount, "Blender chunk count drifted for " .. name)
++        if options.Reactive == true then
++            carrier:GetPropertyChangedSignal("Transparency"):Connect(function()
++                for _, visual in ipairs(visualParts) do
++                    if visual.Parent then visual.Transparency = carrier.Transparency end
++                end
++            end)
++            carrier:GetPropertyChangedSignal("Color"):Connect(function()
++                for _, visual in ipairs(visualParts) do
++                    if visual.Parent then visual.Color = carrier.Color end
++                end
++            end)
++            carrier:GetPropertyChangedSignal("Material"):Connect(function()
++                for _, visual in ipairs(visualParts) do
++                    if visual.Parent then
++                        visual.Material = carrier.Material
++                        visual.MaterialVariant = if carrier.Material == Enum.Material.Neon
++                            then "" else originalVariants[visual]
++                    end
++                end
++            end)
++        end
++        carrier.Parent = parent
++        counts.Meshes += #visualParts
+         counts.Triangles += data.Triangles
+         if options.Collidable == true or options.collidable == true then
+             for index, box in ipairs(data.Colliders or {}) do
+@@ -81,43 +149,57 @@
+                 proxy.CanQuery = true
+                 proxy.CastShadow = false
+                 proxy:SetAttribute("Level3_BlenderCollision", true)
+-                proxy.Parent = mesh
++                proxy.Parent = carrier
+                 counts.CollisionBoxes += 1
+             end
+         end
+         for anchorName, position in pairs(data.Anchors or {}) do
+             local anchor = Instance.new("Attachment")
+             anchor.Name = anchorName
+-            anchor.CFrame = mesh.CFrame:ToObjectSpace(worldCF * CFrame.new(multiply(blender(position), scale)))
+-            anchor.Parent = mesh
+-        end
+-        return mesh
+-    end
+-
+-    local function hideVisual(part: BasePart)
+-        assert(not (slide and part:IsDescendantOf(slide)), "Refusing to hide the Level 2 slide")
+-        assert(not (waitingRoom and part:IsDescendantOf(waitingRoom)), "Refusing to hide the waiting room")
+-        if part:GetAttribute("Level3_LegacyTransparency") == nil then
+-            part:SetAttribute("Level3_LegacyTransparency", part.Transparency)
+-        end
+-        part.Transparency = 1
+-        part.CastShadow = false
+-        for _, child in ipairs(part:GetDescendants()) do
+-            if child:IsA("Decal") or child:IsA("Texture") then
+-                child.Transparency = 1
+-            elseif (child:IsA("SurfaceGui") or child:IsA("BillboardGui")) and child ~= statusSurface then
+-                child.Enabled = false
+-            end
+-        end
+-    end
+-
+-    local function centered(name, targetCF, targetSize, parent, color)
++            anchor.CFrame = CFrame.new(multiply(blender(position), scale))
++            anchor.Parent = carrier
++        end
++        return carrier
++    end
++
++    -- Keep the owned arrival tube, aperture seals and notice visible; the
++    -- Blender kit still replaces every other legacy room/corridor visual.
++    local arrivalTube
++    for _, child in ipairs(world:GetChildren()) do
++        if child:GetAttribute("Level3_Level2ExitTube") == true then arrivalTube = child break end
++    end
++    assert(arrivalTube, "Missing public Level 2 slide continuation")
++    local waitingRoom = world:FindFirstChild("Escaped Player Waiting Room")
++    for _, object in ipairs(legacy) do
++        if object:IsDescendantOf(arrivalTube)
++            or (waitingRoom and object:IsDescendantOf(waitingRoom)) then continue end
++        if object:IsA("BasePart") then
++            object:SetAttribute("Level3_LegacyTransparency", object.Transparency)
++            object.Transparency = 1
++            object.CastShadow = false
++        elseif object:IsA("Decal") or object:IsA("Texture") then
++            object.Transparency = 1
++        elseif object:IsA("SurfaceGui") or object:IsA("BillboardGui") then
++            object.Enabled = object == statusSurface
++        elseif object:IsA("Beam") or object:IsA("ParticleEmitter") or object:IsA("Trail") then
++            object.Enabled = false
++        end
++    end
++
++    local function centered(name, targetCF, targetSize, parent, color, reactive)
+         local data = Metadata[name]
+         local size = vector(data.Size)
+         local scale = Vector3.new(targetSize.X/size.X, targetSize.Y/size.Y, targetSize.Z/size.Z)
+         local pivot = targetCF * CFrame.new(-multiply(vector(data.Center), scale))
+-        local mesh = helper.Place(name, pivot, parent, {Scale=scale})
+-        if color then mesh.Color = color end
++        local mesh = helper.Place(name, pivot, parent, {Scale=scale, Reactive=reactive})
++        if color then
++            mesh.Color = color
++            if not reactive then
++                for _, visual in ipairs(mesh:GetChildren()) do
++                    if visual:IsA("MeshPart") then visual.Color = color end
++                end
++            end
++        end
+         return mesh
+     end
+ 
+@@ -135,7 +217,6 @@
+                 cf*CFrame.new(-length*.5 + width*(index-.5), 0, 0),
+                 Vector3.new(width+.012, proxy.Size.Y, thickness), parent)
+         end
+-        hideVisual(proxy)
+     end
+ 
+     -- Walls follow the exact colliders, so doors retain the 14 x 10.5 clear aperture.
+@@ -146,13 +227,7 @@
+         local visuals = Instance.new("Folder")
+         visuals.Name = "Blender Architecture"
+         visuals.Parent = model
+-        local oldFloor = model:FindFirstChild("Level 3 Room Floor")
+-        local oldCeiling = model:FindFirstChild("Level 3 Room Ceiling")
+-        assert(oldFloor and oldFloor:IsA("BasePart") and oldCeiling and oldCeiling:IsA("BasePart"),
+-            "Level 3 room shell is incomplete: " .. room.Id)
+-        hideVisual(oldFloor)
+-        hideVisual(oldCeiling)
+-        helper.Place("Floor" .. palette, CFrame.new(base), visuals,
++        helper.Place(floorAsset(room), CFrame.new(base), visuals,
+             {Scale=Vector3.new(room.W/80, 1, room.D/64)})
+         helper.Place("Ceiling", CFrame.new(base+Vector3.new(0, room.H-.5, 0)), visuals,
+             {Scale=Vector3.new(room.W/80, 1, room.D/64)})
+@@ -163,110 +238,138 @@
+                     wallSkin(part, palette, visuals)
+                 elseif part.Name == "Level 3 Structural Column" then
+                     centered("Wall"..palette, part.CFrame, part.Size, visuals)
+-                    hideVisual(part)
+                 elseif part.Name == "Level 3 Ceiling Beam" then
+                     centered("Lintel"..palette, part.CFrame, part.Size, visuals)
+-                    hideVisual(part)
+                 end
+             end
+         end
+     end
+ 
+     for _, corridor in ipairs(manifest.Corridors) do
+-        local palette = if corridor.DoorType == "HiddenExit" then "Service" else theme(corridor.A)
++        local palette = theme(corridor.A)
++        local floorName = if corridor.B.Role == "Exit" then "FloorService"
++            elseif corridor.A.Role == "Arrival" then "FloorDefault"
++            else "Floor" .. palette
+         local folder = Instance.new("Folder")
+         folder.Name = "Blender Corridor"
+         folder.Parent = corridor.Model
+-        for _, name in ipairs({"Level 3 Corridor Floor", "Level 3 Corridor Ceiling"}) do
+-            local old = corridor.Model:FindFirstChild(name)
+-            assert(old and old:IsA("BasePart"), "Missing Level 3 corridor shell: " .. name)
+-            hideVisual(old)
+-        end
+         local horizontal = math.abs(corridor.Forward.X) > .5
+-        local cf = CFrame.new(corridor.Center)
+-            * (if horizontal then CFrame.Angles(0, math.pi*.5, 0) else CFrame.identity)
+-        local sections = math.ceil(corridor.Length / 64)
+-        local length = corridor.Length / sections
+-        for index=1,sections do
+-            local panel = cf * CFrame.new(0, 0, -corridor.Length*.5 + length*(index-.5))
+-            helper.Place("Floor"..palette, panel, folder, {Scale=Vector3.new(corridor.Width/80, 1, (length+.02)/64)})
+-            helper.Place("Ceiling", panel*CFrame.new(0, corridor.Height, 0), folder,
+-                {Scale=Vector3.new(corridor.Width/80, 1, length/64)})
++        for _, segment in ipairs(corridor.Segments) do
++            local cf = CFrame.new(segment.Center)
++                * (if horizontal then CFrame.Angles(0, math.pi*.5, 0) else CFrame.identity)
++            local sections = math.ceil(segment.Length / 64)
++            local length = segment.Length / sections
++            for index=1,sections do
++                local panel = cf * CFrame.new(0, 0, -segment.Length*.5 + length*(index-.5))
++                helper.Place(floorName, panel, folder,
++                    {Scale=Vector3.new(corridor.Width/80, 1, length/64)})
++                helper.Place("Ceiling", panel*CFrame.new(0, corridor.Height, 0), folder,
++                    {Scale=Vector3.new(corridor.Width/80, 1, length/64)})
++            end
+         end
+         for _, part in ipairs(corridor.Model:GetChildren()) do
+             if part:IsA("BasePart") and part.Name == "Level 3 Corridor Wall" then
+                 wallSkin(part, palette, folder)
+             end
+         end
++        if corridor.BlenderRoom then
++            local inserted = corridor.BlenderRoom
++            local data = assert(Metadata[inserted.Asset], "Missing authored gateway room metadata")
++            assert(data.HasFlattenedFixtureVisuals == true
++                and data.HasIntegratedFixtureCollision == true
++                and data.Anchors and data.Anchors.JoinNorth and data.Anchors.JoinSouth,
++                "Authored gateway room must include both portals and integrated fixtures")
++            for _, portalName in ipairs({"JoinNorth", "JoinSouth"}) do
++                local portal = data.AnchorDetails and data.AnchorDetails[portalName]
++                assert(portal and portal.l6_port_width >= inserted.PortalWidth
++                    and portal.l6_port_height >= inserted.PortalHeight,
++                    "Authored gateway portal is too small for Manager navigation")
++            end
++            local sectionCenter = corridor.StartPoint
++                + corridor.Forward * (inserted.StartDistance + inserted.Length*.5)
++            -- lookAt's local -Z faces B. JoinSouth (+Z) faces A, while
++            -- JoinNorth (-Z) faces B on both horizontal and vertical links.
++            local sectionCF = CFrame.lookAt(sectionCenter, sectionCenter + corridor.Forward)
++            local section = helper.Place(inserted.Asset, sectionCF, folder, {Collidable=true})
++            section:SetAttribute("Level3_BlenderGatewayRoom", true)
++            section:SetAttribute("Level3_BlenderLinkId", inserted.LinkId)
++            section:SetAttribute("Level3_BlenderSectionIndex", inserted.SectionIndex)
++            for index, lightData in ipairs(data.Lights or {}) do
++                local position = lightData.positionXYZ
++                if position then
++                    local anchor = Instance.new("Attachment")
++                    anchor.Name = "Authored Ceiling Light " .. index
++                    anchor.CFrame = CFrame.new(blender(position))
++                    anchor.Parent = section
++                    local light = Instance.new("PointLight")
++                    light.Name = "Level 3 Authored Room Lamp"
++                    light.Color = Color3.new(table.unpack(lightData.colorRGB or {1,.9,.75}))
++                    light.Brightness = 1.8
++                    light.Range = 19
++                    light.Shadows = false
++                    light.Parent = anchor
++                end
++            end
++        end
+     end
+ 
+     local chairNames = {"ChairBlue", "ChairYellow", "ChairRed", "ChairGreen"}
+     for _, part in ipairs(legacy) do
+         if not part:IsA("BasePart") then continue end
+-        if (slide and part:IsDescendantOf(slide)) or (waitingRoom and part:IsDescendantOf(waitingRoom)) then continue end
+         if part:GetAttribute("Level3_TableCollision") == true then
+             local pivot = part.CFrame * CFrame.new(0, -3, 0)
+             helper.Place("FoldingTable", pivot, part.Parent)
+             counts.Tables += 1
+             -- Room Dressing adds the authored cups/plates to table tops.
+-        elseif part.Name == "Level 3 Vetted Folding Table" or part.Name == "Level 3 Folding Table"
+-            or part.Name:match("^Level 3 Party Tablecloth") then
+-            hideVisual(part)
+         elseif part.Name == "Level 3 Vetted Plastic Party Chair" or part.Name == "Level 3 Party Chair" then
+             local paletteIndex = (counts.Chairs % #chairNames) + 1
+             helper.Place(chairNames[paletteIndex], part.CFrame*CFrame.new(0, -2.28, 0)
+                 *CFrame.Angles(0, math.pi, 0), part.Parent)
+-            hideVisual(part)
+             counts.Chairs += 1
+         elseif part.Name == "Level 3 Fluorescent Frame" then
+             centered("FluorescentFrame", part.CFrame, Vector3.new(7.5,.3675,2.4), part.Parent)
+-            hideVisual(part)
+         elseif part.Name == "Level 3 Fluorescent Diffuser" then
+-            local skin = centered("FluorescentDiffuser", part.CFrame, Vector3.new(7.05,.155,2.05), part.Parent)
++            local skin = centered("FluorescentDiffuser", part.CFrame,
++                Vector3.new(7.05,.155,2.05), part.Parent, nil, true)
++            -- Preserve the original SurfaceLight rectangle and emission pose.
++            -- Authored mesh children are anchored and retain their Blender world transforms.
++            skin.Size = part.Size
++            skin.CFrame = part.CFrame
+             skin.Name = part.Name
+             skin.Color = part.Color
+             skin.Material = part.Material
+-            skin.Transparency = part.Transparency
++            skin.Transparency = part:GetAttribute("Level3_LegacyTransparency") or 0
+             if part:GetAttribute("Level3_SubtleFlicker") then skin:SetAttribute("Level3_SubtleFlicker", true) end
+-            for _, child in ipairs(part:GetChildren()) do if child:IsA("Light") then child.Parent = skin end end
+-            hideVisual(part)
++            for _, child in ipairs(part:GetChildren()) do
++                if child:IsA("Light") then
++                    -- A broad ceiling cone reaches wall art without adding daylight.
++                    if child:IsA("SurfaceLight") then child.Angle = math.max(child.Angle, 175) end
++                    child.Parent = skin
++                end
++            end
+             part.Name = "Legacy Hidden Fluorescent Anchor"
+             counts.Fixtures += 1
+         elseif part.Name == "PA Speaker Housing" then
+             centered("PASpeaker", part.CFrame*CFrame.Angles(0,math.pi,0), Vector3.new(1.75,2.3,1.21), part.Parent)
+-            hideVisual(part)
+         end
+     end
+ 
+     -- Actual authored discs replace PickupParts, so carry/drop/collection clones the Blender geometry.
+     for _, module in ipairs(manifest.Modules) do
+         local oldDisc = module.PickupParts[1]
+-        for _, object in ipairs(legacy) do
+-            if object:IsA("BasePart") and object:IsDescendantOf(module.Model) then
+-                hideVisual(object)
+-                -- The live runtime suite counts these ownership markers. Transfer
+-                -- them to the two new pickups and two persistent kit pieces.
+-                object:SetAttribute("Level3_CDPickupVisual", nil)
+-                object:SetAttribute("Level3_CDPersistentDisplay", nil)
+-            end
+-        end
+         local flatCF = oldDisc.CFrame * CFrame.Angles(0,0,-math.pi*.5)
+-        local disc = helper.Place("CD", flatCF, module.Model, {Scale=Vector3.one*1.65})
+-        local hub = helper.Place("CD", flatCF*CFrame.new(0,.002,0), module.Model, {Scale=Vector3.one*.31})
++        local disc = helper.Place("CD", flatCF, module.Model,
++            {Scale=Vector3.one*1.65, Dynamic=true, Reactive=true})
++        local hub = helper.Place("CD", flatCF*CFrame.new(0,.002,0), module.Model,
++            {Scale=Vector3.one*.31, Dynamic=true, Reactive=true})
+         disc:SetAttribute("Level3_CDBasis", "Y")
+         hub:SetAttribute("Level3_CDBasis", "Y")
+         disc:SetAttribute("Level3_CDPickupVisual", true)
+         hub:SetAttribute("Level3_CDPickupVisual", true)
+         module.PickupParts = {disc, hub}
+-        -- The new jewel-case mesh and the existing tabletop can occlude the
+-        -- original prompt ray. Collection still checks distance and round state.
+-        module.Prompt.RequiresLineOfSight = false
+         local case = helper.Place("CDCase", module.Core.CFrame*CFrame.new(0,-.09,0), module.Model,
+             {Scale=Vector3.new(2.45,1.25,2.18)})
+         case:SetAttribute("Level3_CDPersistentDisplay", true)
+-        local caseDisc = helper.Place("CD", module.Core.CFrame*CFrame.new(0,.10,0), module.Model,
+-            {Scale=Vector3.one*.70})
+-        caseDisc:SetAttribute("Level3_CDPersistentDisplay", true)
+     end
+ 
+     local player = manifest.DiscPlayer
+@@ -274,10 +377,7 @@
+     assert(cabinet and cabinet:IsA("BasePart"), "Missing player placement anchor")
+     local playerCF = cabinet.CFrame * CFrame.new(0,-1.95,0)
+     for _, object in ipairs(player.Model:GetDescendants()) do
+-        if object:IsA("BasePart") and object:GetAttribute("Level3_KitVisual") ~= true then
+-            if object ~= statusSurface.Parent then hideVisual(object) end
+-            object.CanCollide=false object.CanQuery=false
+-        end
++        if object:IsA("BasePart") then object.CanCollide=false object.CanQuery=false end
+     end
+     helper.Place("FoldingTable", playerCF, player.Model, {Scale=Vector3.new(.55,1,.8), Collidable=true})
+     helper.Place("CDPlayer", playerCF*CFrame.new(0,3.47,0), player.Model, {Scale=Vector3.one*1.55})
+@@ -299,13 +399,15 @@
+     end
+     for index, slot in ipairs(player.Slots) do
+         local slotCF = playerCF*CFrame.new((index-3)*.9,3.5,1.0)
+-        local disc = helper.Place("CD", slotCF, player.Model, {Scale=Vector3.one*.62})
+-        local hub = helper.Place("CD", slotCF*CFrame.new(0,.002,0), player.Model, {Scale=Vector3.one*.13})
++        local disc = helper.Place("CD", slotCF, player.Model,
++            {Scale=Vector3.one*.62, Reactive=true})
++        local hub = helper.Place("CD", slotCF*CFrame.new(0,.002,0), player.Model,
++            {Scale=Vector3.one*.13, Reactive=true})
+         disc.Transparency=1 hub.Transparency=1
+         slot.Disc=disc slot.Hub=hub
+         slot.Receiver.CFrame=slotCF
+         local indicator = centered("FluorescentDiffuser", playerCF*CFrame.new((index-3)*.9,3.65,1.23),
+-            Vector3.new(.16,.10,.05), player.Model)
++            Vector3.new(.16,.10,.05), player.Model, nil, true)
+         slot.Light.Parent=indicator
+         slot.Indicator=indicator
+     end
+@@ -315,23 +417,15 @@
+     local proxy = portal.Wall
+     local newWall = centered("WallRed", proxy.CFrame, proxy.Size, portal.Model)
+     newWall.Name = "Blender Concealed Exit Wall"
+-    newWall.CollisionFidelity=Enum.CollisionFidelity.Box
+-    newWall.CanCollide=true newWall.CanQuery=true
+-    newWall.Color = proxy.Color
+-    newWall.Material = proxy.Material
+     newWall:SetAttribute("Level3_HiddenExitWall", true)
+-    hideVisual(proxy)
+-    proxy.CanCollide=false proxy.CanQuery=false
+-    proxy:SetAttribute("Level3_HiddenExitWall", nil)
+-    portal.Wall=newWall
++    -- Retain the original full-size, invisible BasePart as the objective
++    -- controller's collision wall; the multi-material skin is visual only.
+     local newFrames={}
+     for _, frame in ipairs(portal.FrameParts) do
+-        local skin = centered("FluorescentDiffuser", frame.CFrame, frame.Size, portal.Model, frame.Color)
++        local skin = centered("FluorescentDiffuser", frame.CFrame, frame.Size,
++            portal.Model, frame.Color, true)
+         skin.Transparency=1 skin.Material=Enum.Material.Neon
+-        skin:SetAttribute("Level3_HiddenExitFrame", true)
+         for _, child in ipairs(frame:GetChildren()) do if child:IsA("Light") then child.Parent=skin end end
+-        hideVisual(frame)
+-        frame:SetAttribute("Level3_HiddenExitFrame", nil)
+         table.insert(newFrames,skin)
+     end
+     portal.FrameParts=newFrames
+@@ -341,16 +435,16 @@
+         local center=(left.Position+right.Position)*.5
+         centered("ServiceDoor", CFrame.new(center)*CFrame.Angles(0,-math.pi*.5,0),
+             Vector3.new(11.8,12.0,.62), manifest.FinalExit)
+-        hideVisual(left)
+-        hideVisual(right)
+     end
+ 
+     local dressing = Dressing.Apply(manifest, helper, {
+         WorldOrigin=Configuration.WorldOrigin, Seed=manifest.Layout.ResolvedSeed,
+-        IsParticipant=helper.IsParticipant, SoundIds=Configuration.Audio,
++        IsParticipant=helper.IsParticipant, OnNoise=helper.OnNoise,
+     })
++    local balloons = Balloons.ApplyBalloons(manifest, helper)
++    local crayon = Crayon.Apply(manifest)
+     manifest.VisualCleanup = dressing and dressing.Cleanup
+-    manifest.VisualReport = {Kit=counts, Dressing=dressing and dressing.Report}
++    manifest.VisualReport = {Kit=counts, Dressing=dressing and dressing.Report, Balloons=balloons.Report, Crayon=crayon}
+     manifest.KitHelper = helper
+     world:SetAttribute("Level3_BlenderApplied", true)
+     world:SetAttribute("Level3_BlenderMeshCount", counts.Meshes)

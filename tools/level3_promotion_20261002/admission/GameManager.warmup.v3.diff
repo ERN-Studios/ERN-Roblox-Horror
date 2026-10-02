@@ -1,0 +1,178 @@
+--- ServerScriptService.GameManager live Source
++++ /Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v3.luau
+@@ -28,6 +28,10 @@
+ -- while production ran another.
+ local Routing = require(script.Parent:WaitForChild("Round Completion Routing"))
+ local Loading = require(script.Parent:WaitForChild("Round Loading Runtime"))
++local Level3KitWarmup = require(script.Parent:WaitForChild("Level 3 Kit Warmup"))
++-- Session-owned Blender meshes warm once in the background; Level 1/2 boot and
++-- round deadlines do not wait for this job.
++Level3KitWarmup.Start()
+ -- FRIEND_BOOST_20260916. The module owns the friendship cache and the two lobby
+ -- attributes; GameManager only tells it when a party launches and hands it the
+ -- round roster at completion. Start() connects PlayerAdded/PlayerRemoving and
+@@ -1539,7 +1543,8 @@
+  stationIndex = math.floor(tonumber(stationIndex) or 0)
+  local station = lobbyStations[stationIndex]
+  if not station then return end
+- local previewCancel = station.previewQueue == true and requestedPrivacy == "cancel" and station.host == player
++ local previewCancel = (station.previewQueue == true or station.kitWarming == true)
++  and requestedPrivacy == "cancel" and station.host == player
+  if station.busy and not previewCancel then return end
+  if station.host ~= player or (not station.awaitingConfig and not previewCancel) then return end
+ 
+@@ -2182,8 +2187,29 @@
+  Warn = function(message) warn("[GameManager] entry worker failed: " .. message) end,
+ })
+ 
+-local function beginGroupLoading(group)
++local function beginGroupLoading(group, level, warmAllowed, originalDeadline)
++ if level == 3 then
++  local entryOwner = activeEntry
++  if not Level3KitWarmup.Status().Ready then
++   workspace:SetAttribute("RoundLoadingState", "warming")
++   workspace:SetAttribute("LoadStage", "LEVEL_3_PREPARING_ASSETS")
++   workspace:SetAttribute("RoundLoadingDeadline", nil)
++   fireGroup(group, "loadinggame", 3)
++  end
++  local ready, problem = Level3KitWarmup.Await(function()
++   return activeEntry == entryOwner and (not warmAllowed or warmAllowed() == true)
++  end)
++  if not ready then
++   -- A replaced caller cannot fail or tear down a newer entry.
++   if activeEntry == entryOwner then
++    recoverFailedEntry(nil, problem, IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or group)
++   end
++   return nil
++  end
++ end
+  activeEntry = loadingRuntime:Begin(group)
++ -- For reserved Level 1/2, target discovery keeps the original boot deadline.
++ if originalDeadline then activeEntry.Deadline = math.min(activeEntry.Deadline, originalDeadline) end
+  workspace:SetAttribute("RoundLoadingState", "loading")
+  workspace:SetAttribute("RoundLoadingToken", activeEntry.Token)
+  workspace:SetAttribute("RoundLoadingDeadline", workspace:GetServerTimeNow() + activeEntry:Remaining())
+@@ -2558,7 +2584,12 @@
+ 		return
+ 	end
+ 
+- local attempt = beginGroupLoading(continuing)
++ local attempt = beginGroupLoading(continuing, nextLevel, function()
++  if not canAccessLevel(nextLevel, livePlayers(continuing)) then return false end
++  for _, player in ipairs(continuing) do if player.Parent == Players then return true end end
++  return false
++ end)
++ if not attempt then return end
+  fireGroup(continuing, "loadinggame", nextLevel)
+  attempt.WorldWorkerDone = false
+  local cleaned = attempt:Run(function()
+@@ -3227,6 +3258,37 @@
+  end
+  if not canAccessLevel(station.level or 1, participants) then return end
+  station.busy = true
++ if station.level == 3 then
++  local epoch, host = station.admissionEpoch, station.host
++  local characters = {}
++  for _, player in ipairs(participants) do characters[player] = player.Character end
++  station.kitWarming = true
++  fireGroup(participants, "queueconfigclosed")
++  setStationDisplay(station, "PREPARING LEVEL 3", "STEP OUT TO CANCEL", station.color)
++  local ready, problem = Level3KitWarmup.Await(function()
++   if not station.busy or station.level ~= 3 or station.cancelRequested or station.revisionRetired
++    or station.admissionEpoch ~= epoch or station.host ~= host
++    or (IS_STUDIO and roundBusy) or not station.zone:IsDescendantOf(workspace) then return false end
++   for _, player in ipairs(participants) do
++    local character = player.Character
++    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
++    if player.Parent ~= Players or character ~= characters[player]
++     or not humanoid or humanoid.Health <= 0 or player:GetAttribute("InRound") == true
++     or not playerInsideZone(player, station, true) then return false end
++   end
++   return #participants > 0 and canAccessLevel(3, participants)
++  end)
++  station.kitWarming = nil
++  if not ready then
++   if problem ~= "ADMISSION_CANCELLED" then
++    warn("[GameManager] Level 3 queue prewarm: " .. tostring(problem))
++    setStationDisplay(station, "LEVEL 3 NOT READY", "STEP OUT AND TRY AGAIN", Color3.fromRGB(255,105,95))
++   end
++   fireGroup(participants, "lobbycancel")
++   station.busy = false
++   return
++  end
++ end
+  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
+  fireGroup(participants, "loadinggame", station.level or 1)
+ 
+@@ -3240,7 +3302,8 @@
+   end
+ 
+   roundBusy = true
+-  local attempt = beginGroupLoading(participants)
++  local attempt = beginGroupLoading(participants, station.level or 1)
++  if not attempt then station.busy = false; return end
+   clearGlowsticks()
+   assignGlowstickSlots(participants)
+   -- A round started from the lobby is never a continuation, whatever the last
+@@ -3842,11 +3905,11 @@
+ -- the round and everybody after them -- a later manual Continue, and every
+ -- player the 15-second countdown carried -- landed into roundBusy and was
+ -- initialised as a spectator.
+-local function stageArrivingParty(attempt)
++local function stageArrivingParty(attempt, startedAtOverride, expectedSession)
+  local cohortReads = {}
+  local arrivals = Loading.NewArrivalTracker(Routing.SelectArrivalSession)
+  local observedArrivals = 0
+- local startedAt = os.clock()
++ local startedAt = startedAtOverride or os.clock()
+  local firstArrivalAt = nil
+  local announced = nil
+  while attempt:IsOpen() do
+@@ -3857,6 +3920,10 @@
+   local entries = arrivalEntries()
+   arrivals:Observe(entries)
+   local group = Routing.SelectArrivalSession(entries)
++  if group and expectedSession and (group.SessionId ~= expectedSession.SessionId or group.Level ~= expectedSession.Level) then
++   attempt:Fail("ARRIVAL_SESSION_CHANGED")
++   return "abandon", nil
++  end
+   if group and not group.Final and group.Deadline then
+    local read = cohortReads[group.SessionId]
+    if not read then read = {Busy = false, NextAt = 0}; cohortReads[group.SessionId] = read end
+@@ -3910,13 +3977,34 @@
+  return "abandon", nil
+ end
+ 
++-- Inspect a server-trusted arrival before starting the entry watchdog. Until
++-- a target is known, preserve the former 60-second boot admission cutoff.
++local function reservedEntryTarget()
++ local startedAt = os.clock()
++ local originalDeadline = startedAt + Loading.TimeoutSeconds
++ while os.clock() < originalDeadline do
++  local group = Routing.SelectArrivalSession(arrivalEntries())
++  if group then return group, originalDeadline, startedAt end
++  task.wait(.2)
++ end
++ return nil
++end
++
+ if IS_RESERVED_ROUND_SERVER then
+  task.spawn(function()
+   -- Hold characters behind the loading screen until the source's result window
+   -- has closed and the whole cohort has landed, then generate exactly one
+   -- isolated world for that group.
+-  local attempt = beginGroupLoading({})
+-  local decision, group = stageArrivingParty(attempt)
++  local targetSession, originalDeadline, admissionStartedAt = reservedEntryTarget()
++  if not targetSession then recoverFailedEntry(nil, "ARRIVAL_LOAD_FAILED", Players:GetPlayers()); return end
++  local targetLevel = targetSession.Level
++  local attempt = beginGroupLoading({}, targetLevel, function() return not failedReservedEntry end,
++   targetLevel ~= 3 and originalDeadline or nil)
++  if not attempt then return end
++  -- PlayerAdded evidence remains live throughout prewarm, including members who
++  -- departed before later continuers arrived. The existing tracker owns that math.
++  local decision, group = stageArrivingParty(attempt, targetLevel ~= 3 and admissionStartedAt or nil,
++   targetLevel == 3 and targetSession or nil)
+   if decision ~= "admit" or not group then attempt:Fail("ARRIVAL_LOAD_FAILED"); return end
+ 
+   local participants = {}

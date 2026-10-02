@@ -1,0 +1,11 @@
+{
+  "name": "Level 3 Configuration",
+  "editorParity": true,
+  "operation": "edit",
+  "candidatePath": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.luau",
+  "candidateHash": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba",
+  "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+  "className": "ModuleScript",
+  "beforeHash": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+  "editorHash": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+}

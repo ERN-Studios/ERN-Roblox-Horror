@@ -1,0 +1,20 @@
+{
+  "task": "level3-promotion-20261002",
+  "pid": 44588,
+  "phase": "after",
+  "verifiedCommand": "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python tools/level3_promotion_20261002/backup/receiver_mcp.py --phase after --dest /Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion",
+  "healthBeforeStop": {
+    "task": "level3-promotion-20261002",
+    "port": 8913,
+    "captureSHA256": "809e8145cf8e2b59732bb530708a4702b82b907935c55dcc6dc6e1b93b220bd0",
+    "schemaSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+    "persistentStudioWrites": false,
+    "captureMode": "synchronous MCP, invocation-local markers",
+    "phase": "after",
+    "pid": 44588,
+    "destination": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion/after",
+    "frozenInMemory": true
+  },
+  "stoppedAtUTC": "2026-10-02T20:38:02.641225+00:00",
+  "reason": "Network capture unavailable; fresh direct Source capture/export complete. No future capture is running."
+}

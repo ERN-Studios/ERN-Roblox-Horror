@@ -1,0 +1,119 @@
+{
+  "schema": "level3-promotion-claude-review-v1",
+  "scope": "Read-only explicitly supplied code/facts, tools disabled; no Studio access",
+  "commandArguments": [
+    "--print",
+    "--safe-mode",
+    "--no-chrome",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--model",
+    "opus",
+    "--effort",
+    "max",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a read-only Roblox Luau code-security and game-behavior reviewer. Use only supplied code and facts. You have no tools and cannot inspect or mutate live applications. Distinguish tested facts from inference. Give concise concrete findings within the requested word limit. Do not disclose private internal reasoning."
+  ],
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "startedAtUTC": "2026-10-02T20:07:26.417816+00:00",
+  "finishedAtUTC": "2026-10-02T20:19:09.355491+00:00",
+  "requestedModel": "opus",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "reportedAssistantModels": [
+    "claude-opus-5-5"
+  ],
+  "requestedEffort": "max",
+  "strictEmptyMcpConfig": true,
+  "reportedTools": [],
+  "inputPrompt": "tools/level3_promotion_20261002/admission/claude-review/retry/prompt.md",
+  "inputPromptSHA256": "2d8cbf254619667378888e09a4979985f7e9937da011570fba67aff894a47312",
+  "elapsedSeconds": 702.931,
+  "hardTimeoutSeconds": 900,
+  "exitCode": 0,
+  "spawnedChildPID": 41099,
+  "cleanupTarget": "Only directly spawned owned Claude CLI PID",
+  "childExitConfirmed": true,
+  "timedOut": false,
+  "status": "success",
+  "result": {
+    "subtype": "success",
+    "is_error": false,
+    "result": "**Verdict: uncertain.** No proven blocker; kit wait precedes the fresh 60s Begin on all three paths. Static reading only; reported tests not re-run.\n\n**Depends on unreviewed code**\n- **Reserved warm ignores departures.** A member leaving mid-wait leaves the rest waiting out the bake before full-cohort staging rejects. Fix: add departure evidence to `warmAllowed`.\n- **Nil owner token.** At reserved boot `entryOwner` is nil, so a `failedReservedEntry` cancel calls recovery, possibly twice. Fix: compare a generation counter bumped by Begin and recover.\n- **Unconditional station cleanup.** After an epoch-change cancel, the stale thread clears `kitWarming`/`busy` and fires `lobbycancel` over any newer admission. Fix: release only if `admissionEpoch == epoch`; confirm `cancelRequested` resets.\n- **L3-only session pin.** A non-L3 target that later stages as Level 3 skips the kit wait. Fix: abandon that case.\n\n**Direct from helper**\n- **Latched failure.** One `Ensure()` error fails every later Level 3 request on that server, despite \"TRY AGAIN\". Fix: bounded retry.\n- `Level3KitError` replicates raw server error text to clients; publish a code instead.\n\n**Unverified:** MemoryStore cohort expiry must outlast the ~1300s worst case.",
+    "duration_ms": 701520,
+    "duration_api_ms": 701398,
+    "num_turns": 1,
+    "total_cost_usd": 1.4357080000000002,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4230,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 70093,
+      "output_tokens_details": {
+        "thinking_tokens": 69601
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4230,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 70093,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 4230,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4230
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 70093,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 4230,
+        "webSearchRequests": 0,
+        "costUSD": 1.4357080000000002,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 69601,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": []
+  },
+  "eventTypeCounts": {
+    "system": 487,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1
+  },
+  "rawInternalStreamSaved": false
+}

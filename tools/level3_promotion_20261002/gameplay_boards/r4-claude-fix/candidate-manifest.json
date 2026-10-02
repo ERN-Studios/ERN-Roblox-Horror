@@ -1,0 +1,20 @@
+{
+  "operation": "edit",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioId": "c1e8b040-e549-408a-8a5b-7fe6905c2d55",
+  "datamodelType": "Edit",
+  "targetPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+  "className": "ModuleScript",
+  "capturedAtUTC": "2026-10-02T20:19:46Z",
+  "beforeHash": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+  "beforeEditorHash": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+  "beforeSourceEditorParity": true,
+  "beforeSourceBytes": 13947,
+  "candidateHash": "16d1981727d1364e1da67c43d0647cc64d07d88fd3d9ada5a1599412c7ac0690",
+  "baselinePath": "tools/level3_promotion_20261002/gameplay_boards/r4-claude-fix/Builder.fresh.baseline.luau",
+  "candidatePath": "tools/level3_promotion_20261002/gameplay_boards/r4-claude-fix/Builder.guard-first.candidate.luau",
+  "scope": "Existing-model Build branch only: restart authoritative guard before protected board relocation; rollback/warn retains existing lobby on transfer failure",
+  "writeRequirements": "Root must recheck correct place/path/class, exact fresh Source and editor bodies inside scoped write; reread/reconcile concurrent changes. This agent has made no Studio write.",
+  "reviewReceipt": "tools/level3_promotion_20261002/gameplay_boards/claude-review/long/result/receipt.json"
+}

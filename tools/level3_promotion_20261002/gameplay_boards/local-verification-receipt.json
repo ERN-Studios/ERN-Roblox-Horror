@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-02T19:46:20.598340+00:00",
+  "studioWrites": false,
+  "syntaxCompile": {
+    "passed": true,
+    "candidateCount": 4
+  },
+  "mockedAlgorithmTests": {
+    "passed": true,
+    "caseCount": 18,
+    "source": "test_scoped_algorithms.luau",
+    "scope": "Extracted candidate bodies with fake dependencies; no live engine, gameplay, renderer, multiplayer, performance or DataStore pass"
+  },
+  "candidateSHA256": {
+    "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller": "52033d8e5480398a1e54fe44349c277659e0ea66d97f64e6cf826100a408061b",
+    "ServerScriptService.Level 3 Systems.Level 3 Objective Controller": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+    "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+    "ServerScriptService.LobbyReimaginedPreview.Builder": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799"
+  }
+}

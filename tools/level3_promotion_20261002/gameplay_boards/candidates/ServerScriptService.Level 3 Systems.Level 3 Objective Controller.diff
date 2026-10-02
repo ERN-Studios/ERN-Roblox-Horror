@@ -1,0 +1,129 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Objective Controller live baseline
++++ ServerScriptService.Level 3 Systems.Level 3 Objective Controller scoped candidate
+@@ -150,11 +150,13 @@
+ 						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
+ 					local along = offset:Dot(horizontalForward)
+ 					local lateral = (offset - horizontalForward * along).Magnitude
+-					-- Start the finale as the first survivor commits to the open exit hall.
+-					local entryProgress = 4
++					-- The first living survivor must pass strictly beyond 50% of this hall.
++					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
++					local entryProgress = hall.Length * (hall.HalfwayProgress
++						or Configuration.Layout.FinalHallHalfwayProgress or .50)
+ 					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
+ 					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
+-					if along >= entryProgress and along <= hall.Length + 2.5
++					if along > entryProgress and along <= hall.Length + 2.5
+ 						and insideHallWidth and insideHallHeight then
+ 						session.FinalHallCrossed[player] = character
+ 					end
+@@ -181,7 +183,7 @@
+ 	session.Manifest.World:SetAttribute("Level3_FinalHallChaseActive", true)
+ 	workspace:SetAttribute("Level3FinalHallChaseTriggered", true)
+ 	-- This must precede HuntActive so the Manager's synchronous Start selects the
+-	-- level-entry finale spawn rather than a normal hidden random-room spawn.
++	-- far-end finale spawn rather than a normal hidden random-room spawn.
+ 	workspace:SetAttribute("Level3FinalHallChaseActive", true)
+ 	workspace:SetAttribute("Level3MallManagerHuntActive", true)
+ end
+@@ -515,7 +517,16 @@
+ 	part.CastShadow = true
+ 	part.Transparency = 0
+ 	for _, object in ipairs(part:GetDescendants()) do
+-		if object:IsA("ProximityPrompt") or object:IsA("Light") then object:Destroy() end
++		if object:IsA("ProximityPrompt") or object:IsA("Light") then
++			object:Destroy()
++		elseif object:IsA("BasePart") and object:GetAttribute("Level3_KitVisualChunk") == true then
++			-- Carry/drop clones do not inherit the source carrier's fade listener.
++			-- Restore every material chunk after the world pickup has faded away.
++			object.Transparency = 0
++			object.CanCollide = false
++			object.CanTouch = false
++			object.CanQuery = false
++		end
+ 	end
+ end
+ 
+@@ -528,6 +539,20 @@
+ 	local hub = sourceHub:Clone()
+ 	assert(disc:IsA("BasePart") and hub:IsA("BasePart"), "Level 3 CD runtime clone produced invalid geometry")
+ 	return disc, hub
++end
++
++local function setDiscVisualCFrame(carrier: BasePart, targetCF: CFrame)
++	-- Carry/drop clones are positioned before parenting, when their internal
++	-- welds may not yet be in a simulated assembly. Move every material chunk
++	-- from its saved local offset so it cannot remain at the table position.
++	local offsets = {}
++	for _, object in ipairs(carrier:GetDescendants()) do
++		if object:IsA("BasePart") and object:GetAttribute("Level3_KitVisualChunk") == true then
++			offsets[object] = carrier.CFrame:ToObjectSpace(object.CFrame)
++		end
++	end
++	carrier.CFrame = targetCF
++	for object, localCF in pairs(offsets) do object.CFrame = targetCF * localCF end
+ end
+ 
+ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
+@@ -561,8 +586,8 @@
+ 			local carryCF = anchorPart.CFrame
+ 				* CFrame.new(spread, .05 + (slot % 2) * .08, anchorPart.Size.Z * .5 + .18 + slot * .018)
+ 				* CFrame.Angles(0, math.rad(90), fan)
+-			disc.CFrame = carryCF
+-			hub.CFrame = carryCF
++			setDiscVisualCFrame(disc, carryCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
++			setDiscVisualCFrame(hub, carryCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+ 			disc.Parent = model
+ 			hub.Parent = model
+ 			local torsoWeld = Instance.new("WeldConstraint")
+@@ -670,8 +695,8 @@
+ 	configureRuntimeDiscPart(disc, true, true)
+ 	configureRuntimeDiscPart(hub, true, false)
+ 	local dropCF = CFrame.new(position + Vector3.new(0, .16, 0)) * CFrame.Angles(0, 0, math.rad(90))
+-	disc.CFrame = dropCF
+-	hub.CFrame = dropCF
++	setDiscVisualCFrame(disc, dropCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
++	setDiscVisualCFrame(hub, dropCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+ 	disc.Parent = model
+ 	hub.Parent = model
+ 	model.PrimaryPart = disc
+@@ -933,11 +958,11 @@
+ 	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
+ 	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
+ 	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
+-		discPlayer.StatusLabel.Text = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
++		discPlayer.StatusLabel.Text = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
+ 	end
+ 	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
+ 		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
+-			then "EXIT SIGNAL RESTORED" else "INSERT CDS INTO VCR"
++			then "EXIT SIGNAL RESTORED" else "INSERT CARRIED CDS"
+ 	end
+ 	for slotNumber, slot in ipairs(discPlayer.Slots or {}) do
+ 		local active = slotNumber <= insertedCount
+@@ -958,8 +983,8 @@
+ 		slot.Light.Enabled = active
+ 	end
+ 	discPlayer.Prompt.ActionText = insertedCount >= session.ModuleGoal
+-		and "SIGNAL RESTORED" or "INSERT CDS INTO VCR"
+-	discPlayer.Prompt.ObjectText = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
++		and "SIGNAL RESTORED" or "INSERT CARRIED CDS"
++	discPlayer.Prompt.ObjectText = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
+ 	discPlayer.Prompt.Enabled = insertedCount < session.ModuleGoal
+ end
+ 
+@@ -1148,6 +1173,14 @@
+ 		portal.Wall.CanCollide = false
+ 		portal.Wall.CanTouch = false
+ 		portal.Wall.CanQuery = true
++	end
++	-- The revised Blender skin is separate from the full-size collision wall.
++	-- Its reactive carrier forwards this fade to every authored material chunk.
++	local visualWall = portal.VisualWall
++	if visualWall and visualWall.Parent then
++		playTween(session, visualWall, TweenInfo.new(0.60, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
++			Transparency = 1,
++		})
+ 	end
+ 	for _, framePart in ipairs(portal.FrameParts) do
+ 		if framePart and framePart.Parent then

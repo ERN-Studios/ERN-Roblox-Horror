@@ -1,0 +1,258 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Objective Controller
++++ normalized live6
+@@ -17,7 +17,17 @@
+ local RunService = game:GetService("RunService")
+ 
+ local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+-local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
++-- Preview announcements use only the Level 3 remote; no lobby/production broadcast.
++local TeamObjectives = { Announce = function(playerName, message)
++	local remotes = ReplicatedStorage:FindFirstChild(Configuration.RemotesFolderName)
++	local event = remotes and remotes:FindFirstChild(Configuration.ClientEventName)
++	if not (event and event:IsA("RemoteEvent")) then return end
++	for _, recipient in ipairs(Players:GetPlayers()) do
++		if recipient:GetAttribute("Level3InRound") == true then
++			event:FireClient(recipient, {Type="Alert", Title=message, Subtitle=playerName, Duration=3})
++		end
++	end
++end }
+ 
+ type AnyTable = {[any]: any}
+ 
+@@ -106,8 +116,8 @@
+ 
+ local function validSession(session: AnyTable): boolean
+ 	return liveSession(session)
+-		and workspace:GetAttribute("SelectedLevel") == 3
+-		and workspace:GetAttribute("RoundActive") == true
++		and workspace:GetAttribute("Level3SelectedLevel") == 6
++		and workspace:GetAttribute("Level3RoundActive") == true
+ end
+ 
+ local function livingCharacter(player: Player): (Model?, Humanoid?, BasePart?)
+@@ -124,8 +134,8 @@
+ local function validPlayer(player: Player, session: AnyTable): boolean
+ 	return validSession(session)
+ 		and player.Parent == Players
+-		and player:GetAttribute("InRound") == true
+-		and player:GetAttribute("Escaped") ~= true
++		and player:GetAttribute("Level3InRound") == true
++		and player:GetAttribute("Level3Escaped") ~= true
+ end
+ 
+ local function updateFinalHallChase(session: AnyTable)
+@@ -150,11 +160,13 @@
+ 						root.Position.X - hall.StartPoint.X, 0, root.Position.Z - hall.StartPoint.Z)
+ 					local along = offset:Dot(horizontalForward)
+ 					local lateral = (offset - horizontalForward * along).Magnitude
+-					-- Start the finale as the first survivor commits to the open exit hall.
+-					local entryProgress = 4
++					-- The first living survivor must pass strictly beyond 50% of this hall.
++					-- Character-scoped latching keeps deaths/rejoins from carrying a stale crossing.
++					local entryProgress = hall.Length * (hall.HalfwayProgress
++						or Configuration.Layout.FinalHallHalfwayProgress or .50)
+ 					local insideHallWidth = lateral <= hall.Width * .5 + 2.5
+ 					local insideHallHeight = math.abs(root.Position.Y - hall.FloorY) <= hall.Height + 6
+-					if along >= entryProgress and along <= hall.Length + 2.5
++					if along > entryProgress and along <= hall.Length + 2.5
+ 						and insideHallWidth and insideHallHeight then
+ 						session.FinalHallCrossed[player] = character
+ 					end
+@@ -181,7 +193,7 @@
+ 	session.Manifest.World:SetAttribute("Level3_FinalHallChaseActive", true)
+ 	workspace:SetAttribute("Level3FinalHallChaseTriggered", true)
+ 	-- This must precede HuntActive so the Manager's synchronous Start selects the
+-	-- level-entry finale spawn rather than a normal hidden random-room spawn.
++	-- far-end finale spawn rather than a normal hidden random-room spawn.
+ 	workspace:SetAttribute("Level3FinalHallChaseActive", true)
+ 	workspace:SetAttribute("Level3MallManagerHuntActive", true)
+ end
+@@ -222,13 +234,13 @@
+ 	if not liveSession(session) then return end
+ 	payload.Generation = session.Generation
+ 	if target then
+-		if target.Parent == Players and target:GetAttribute("InRound") == true then
++		if target.Parent == Players and target:GetAttribute("Level3InRound") == true then
+ 			session.ClientEvent:FireClient(target, payload)
+ 		end
+ 		return
+ 	end
+ 	for _, player in ipairs(Players:GetPlayers()) do
+-		if player:GetAttribute("InRound") == true then
++		if player:GetAttribute("Level3InRound") == true then
+ 			session.ClientEvent:FireClient(player, payload)
+ 		end
+ 	end
+@@ -292,18 +304,11 @@
+ 	sound:Play()
+ end
+ 
+-local function fireEscapeStatus(player: Player)
+-	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+-	local roundStatus = remotes and remotes:FindFirstChild("RoundStatus")
+-	if not roundStatus or not roundStatus:IsA("RemoteEvent") then return end
+-	for _, recipient in ipairs(Players:GetPlayers()) do
+-		if recipient:GetAttribute("InRound") == true then
+-			roundStatus:FireClient(recipient, "escape", player.Name)
+-		end
+-	end
+-end
+-
+--- L3_CD_BEACONS_20260921.
++local function fireEscapeStatus(_player: Player)
++	-- Preview Runtime observes Level3Escaped and returns only that developer to the lobby.
++end
++
++-- L6_CD_BEACONS_20260921.
+ --
+ -- The reader has to point at a CD the client may not hold: the source model
+ -- streams out at range and a disc dropped on a death across the mall may never
+@@ -475,7 +480,7 @@
+ 
+ local unlockExit: any
+ 
+--- LEVEL3_TEAM_CD_RELAY_20260822
++-- LEVEL6_TEAM_CD_RELAY_20260822
+ -- Every disc has exactly one authoritative state:
+ -- WORLD -> CARRIED -> INSERTED, with DROPPED as the recoverable death fallback.
+ local function heldIndices(session: AnyTable, player: Player): {number}
+@@ -515,7 +520,16 @@
+ 	part.CastShadow = true
+ 	part.Transparency = 0
+ 	for _, object in ipairs(part:GetDescendants()) do
+-		if object:IsA("ProximityPrompt") or object:IsA("Light") then object:Destroy() end
++		if object:IsA("ProximityPrompt") or object:IsA("Light") then
++			object:Destroy()
++		elseif object:IsA("BasePart") and object:GetAttribute("Level3_KitVisualChunk") == true then
++			-- Carry/drop clones do not inherit the source carrier's fade listener.
++			-- Restore every material chunk after the world pickup has faded away.
++			object.Transparency = 0
++			object.CanCollide = false
++			object.CanTouch = false
++			object.CanQuery = false
++		end
+ 	end
+ end
+ 
+@@ -528,6 +542,20 @@
+ 	local hub = sourceHub:Clone()
+ 	assert(disc:IsA("BasePart") and hub:IsA("BasePart"), "Level 3 CD runtime clone produced invalid geometry")
+ 	return disc, hub
++end
++
++local function setDiscVisualCFrame(carrier: BasePart, targetCF: CFrame)
++	-- Carry/drop clones are positioned before parenting, when their internal
++	-- welds may not yet be in a simulated assembly. Move every material chunk
++	-- from its saved local offset so it cannot remain at the table position.
++	local offsets = {}
++	for _, object in ipairs(carrier:GetDescendants()) do
++		if object:IsA("BasePart") and object:GetAttribute("Level3_KitVisualChunk") == true then
++			offsets[object] = carrier.CFrame:ToObjectSpace(object.CFrame)
++		end
++	end
++	carrier.CFrame = targetCF
++	for object, localCF in pairs(offsets) do object.CFrame = targetCF * localCF end
+ end
+ 
+ local function refreshPlayerCarryVisuals(session: AnyTable, player: Player)
+@@ -561,8 +589,8 @@
+ 			local carryCF = anchorPart.CFrame
+ 				* CFrame.new(spread, .05 + (slot % 2) * .08, anchorPart.Size.Z * .5 + .18 + slot * .018)
+ 				* CFrame.Angles(0, math.rad(90), fan)
+-			disc.CFrame = carryCF
+-			hub.CFrame = carryCF
++			setDiscVisualCFrame(disc, carryCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
++			setDiscVisualCFrame(hub, carryCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+ 			disc.Parent = model
+ 			hub.Parent = model
+ 			local torsoWeld = Instance.new("WeldConstraint")
+@@ -670,8 +698,8 @@
+ 	configureRuntimeDiscPart(disc, true, true)
+ 	configureRuntimeDiscPart(hub, true, false)
+ 	local dropCF = CFrame.new(position + Vector3.new(0, .16, 0)) * CFrame.Angles(0, 0, math.rad(90))
+-	disc.CFrame = dropCF
+-	hub.CFrame = dropCF
++	setDiscVisualCFrame(disc, dropCF * (if disc:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
++	setDiscVisualCFrame(hub, dropCF * (if hub:GetAttribute("Level3_CDBasis") == "Y" then CFrame.Angles(0,0,-math.pi*.5) else CFrame.identity))
+ 	disc.Parent = model
+ 	hub.Parent = model
+ 	model.PrimaryPart = disc
+@@ -933,11 +961,11 @@
+ 	discPlayer.Model:SetAttribute("Level3_CDInsertedCount", insertedCount)
+ 	discPlayer.Model:SetAttribute("Level3_CDGoal", session.ModuleGoal)
+ 	if discPlayer.StatusLabel and discPlayer.StatusLabel.Parent then
+-		discPlayer.StatusLabel.Text = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
++		discPlayer.StatusLabel.Text = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
+ 	end
+ 	if discPlayer.InstructionLabel and discPlayer.InstructionLabel.Parent then
+ 		discPlayer.InstructionLabel.Text = if insertedCount >= session.ModuleGoal
+-			then "EXIT SIGNAL RESTORED" else "INSERT CDS INTO VCR"
++			then "EXIT SIGNAL RESTORED" else "INSERT CARRIED CDS"
+ 	end
+ 	for slotNumber, slot in ipairs(discPlayer.Slots or {}) do
+ 		local active = slotNumber <= insertedCount
+@@ -958,8 +986,8 @@
+ 		slot.Light.Enabled = active
+ 	end
+ 	discPlayer.Prompt.ActionText = insertedCount >= session.ModuleGoal
+-		and "SIGNAL RESTORED" or "INSERT CDS INTO VCR"
+-	discPlayer.Prompt.ObjectText = string.format("ZYNTRA TV/VCR RELAY  %d/%d", insertedCount, session.ModuleGoal)
++		and "SIGNAL RESTORED" or "INSERT CARRIED CDS"
++	discPlayer.Prompt.ObjectText = string.format("BIRTHDAY CD PLAYER  %d/%d", insertedCount, session.ModuleGoal)
+ 	discPlayer.Prompt.Enabled = insertedCount < session.ModuleGoal
+ end
+ 
+@@ -1010,7 +1038,7 @@
+ end
+ 
+ 
+--- LEVEL3_COMPLETION_ESCAPE_GUIDE_DISABLED_20260824
++-- LEVEL6_COMPLETION_ESCAPE_GUIDE_DISABLED_20260824
+ -- The finale is deliberately lightless. These legacy marker helpers remain only
+ -- so older generated sessions can be normalized during cleanup; no active path calls them.
+ local function markNearestGuideFixture(container: Instance, target: Vector3): number
+@@ -1206,7 +1234,7 @@
+ 
+ 	session.Escaping[player] = true
+ 	session.EscapeOrdinal = (session.EscapeOrdinal or 0) + 1
+-	player:SetAttribute("Escaped", true)
++	player:SetAttribute("Level3Escaped", true)
+ 	root.AssemblyLinearVelocity = Vector3.zero
+ 	root.AssemblyAngularVelocity = Vector3.zero
+ 	local slots = {
+@@ -1352,8 +1380,8 @@
+ 		disconnect(levelConnection)
+ 		task.delay(3.0, fireIntro)
+ 	end
+-	roundConnection = workspace:GetAttributeChangedSignal("RoundActive"):Connect(scheduleWhenReady)
+-	levelConnection = workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(scheduleWhenReady)
++	roundConnection = workspace:GetAttributeChangedSignal("Level3RoundActive"):Connect(scheduleWhenReady)
++	levelConnection = workspace:GetAttributeChangedSignal("Level3SelectedLevel"):Connect(scheduleWhenReady)
+ 	table.insert(session.Connections, roundConnection)
+ 	table.insert(session.Connections, levelConnection)
+ 	scheduleWhenReady()
+@@ -1598,7 +1626,7 @@
+ 		session.State:SetAttribute("Level3_Phase", "STOPPED")
+ 		session.State:SetAttribute("Level3_EntryRoomId", "")
+ 		session.State:SetAttribute("Level3_FirstCDRoomId", "")
+-		-- L3_CD_BEACONS_20260921: a stale position outlives the round otherwise,
++		-- L6_CD_BEACONS_20260921: a stale position outlives the round otherwise,
+ 		-- and the reader would keep a needle on a disc that no longer exists.
+ 		for index in pairs(session.CDRecords or {}) do
+ 			session.State:SetAttribute(string.format("Level3_CD%dState", index), "")
+@@ -1624,6 +1652,15 @@
+ 
+ -- Studio-only deterministic hooks keep multiplayer lifecycle regressions testable
+ -- without exposing any client RemoteEvent or production bypass.
++function ObjectiveController.ReleaseParticipant(player: Player)
++	local session = activeSession
++	if not session then return end
++	dropHeldCDs(session, player, nil)
++	session.FinalHallCrossed[player] = nil
++	session.LastKnownPositions[player] = nil
++	session.LastGroundPositions[player] = nil
++end
++
+ function ObjectiveController.DebugCollectCD(player: Player, index: number): boolean
+ 	if not RunService:IsStudio() then return false end
+ 	local session = activeSession

@@ -1,0 +1,11 @@
+{
+  "name": "Level 3 World Builder",
+  "editorParity": true,
+  "operation": "edit",
+  "candidatePath": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.luau",
+  "candidateHash": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+  "targetPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+  "className": "ModuleScript",
+  "beforeHash": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+  "editorHash": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652"
+}

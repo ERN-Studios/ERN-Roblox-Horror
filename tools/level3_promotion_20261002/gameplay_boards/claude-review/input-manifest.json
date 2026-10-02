@@ -1,0 +1,105 @@
+{
+  "sourceCatalog": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion/before/scripts.json",
+  "candidateCount": 12,
+  "scope": "Critical functions/labelled excerpts; full bodies deliberately omitted",
+  "promptCharacters": 84367,
+  "approximateTokens": 21092,
+  "candidates": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.luau",
+      "sha": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "class": "ModuleScript",
+      "before": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau",
+      "sha": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "class": "ModuleScript",
+      "before": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.luau",
+      "sha": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "class": "ModuleScript",
+      "before": null,
+      "operation": "create"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.luau",
+      "sha": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "class": "ModuleScript",
+      "before": null,
+      "operation": "create"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.luau",
+      "sha": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "class": "ModuleScript",
+      "before": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.luau",
+      "sha": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba",
+      "class": "ModuleScript",
+      "before": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau",
+      "sha": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+      "class": "ModuleScript",
+      "before": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "file": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.luau",
+      "sha": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "class": "ModuleScript",
+      "before": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "operation": "edit"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller.candidate.luau",
+      "sha": "52033d8e5480398a1e54fe44349c277659e0ea66d97f64e6cf826100a408061b",
+      "class": "LocalScript",
+      "before": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Objective Controller.candidate.luau",
+      "sha": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "class": "ModuleScript",
+      "before": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller.candidate.luau",
+      "sha": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "class": "ModuleScript",
+      "before": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "operation": "edit"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "file": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.LobbyReimaginedPreview.Builder.candidate.luau",
+      "sha": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+      "class": "ModuleScript",
+      "before": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "operation": "edit"
+    }
+  ]
+}

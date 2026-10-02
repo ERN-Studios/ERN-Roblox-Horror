@@ -1,0 +1,147 @@
+{
+  "reviewedChanges": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "new": false,
+      "baselineSHA256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "candidateSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v3.luau"
+    },
+    {
+      "path": "ServerScriptService.Level 3 Kit Warmup",
+      "class": "ModuleScript",
+      "new": true,
+      "baselineSHA256": null,
+      "candidateSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/Level 3 Kit Warmup.ModuleScript.candidate.luau"
+    }
+  ],
+  "installedTask": {
+    "universeId": 10559217407,
+    "sceneChanged": false,
+    "sources": [
+      {
+        "bytes": 108609,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+        "new": false
+      },
+      {
+        "bytes": 47577,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+        "new": false
+      },
+      {
+        "bytes": 8896,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+        "new": true
+      },
+      {
+        "bytes": 12479,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+        "new": true
+      },
+      {
+        "bytes": 18304,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+        "new": false
+      },
+      {
+        "bytes": 19281,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba",
+        "new": false
+      },
+      {
+        "bytes": 32558,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+        "new": false
+      },
+      {
+        "bytes": 24266,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+        "new": false
+      },
+      {
+        "bytes": 45954,
+        "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+        "className": "LocalScript",
+        "editorMatch": true,
+        "sha256": "52033d8e5480398a1e54fe44349c277659e0ea66d97f64e6cf826100a408061b",
+        "new": false
+      },
+      {
+        "bytes": 72453,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+        "new": false
+      },
+      {
+        "bytes": 188320,
+        "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+        "new": false
+      },
+      {
+        "bytes": 13947,
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+        "new": false
+      },
+      {
+        "bytes": 182448,
+        "path": "ServerScriptService.GameManager",
+        "className": "Script",
+        "editorMatch": true,
+        "sha256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+        "new": false
+      },
+      {
+        "bytes": 2965,
+        "path": "ServerScriptService.Level 3 Kit Warmup",
+        "className": "ModuleScript",
+        "editorMatch": true,
+        "sha256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+        "new": true
+      }
+    ],
+    "nativeBeforeCaptureId": "551b88e1-2e3a-4333-8157-00e622b7bc54",
+    "installedAt": "2026-10-02T19:59:36Z",
+    "task": "level3-promotion-20261002",
+    "placeId": 131311258779917
+  },
+  "promptCharacters": 8433,
+  "approximateTokens": 2108,
+  "mockScenarios": 27,
+  "semanticMockChecks": 86,
+  "scope": "Warm changes only; no gameplay/transport/performance claim"
+}

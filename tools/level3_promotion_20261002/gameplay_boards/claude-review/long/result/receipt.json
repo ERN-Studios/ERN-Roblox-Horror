@@ -1,0 +1,124 @@
+{
+  "schema": "level3-promotion-claude-review-v1",
+  "scope": "Read-only explicitly supplied code/facts, tools disabled; no Studio access",
+  "commandArguments": [
+    "--print",
+    "--safe-mode",
+    "--no-chrome",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--model",
+    "opus",
+    "--effort",
+    "max",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a read-only Roblox Luau code-security and game-behavior reviewer. Use only supplied code and facts. You have no tools and cannot inspect or mutate live applications. Distinguish tested facts from inference. Give concise concrete findings within the requested word limit. Do not disclose private internal reasoning."
+  ],
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "startedAtUTC": "2026-10-02T20:07:17.296064+00:00",
+  "finishedAtUTC": "2026-10-02T20:18:03.515137+00:00",
+  "requestedModel": "opus",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "reportedAssistantModels": [
+    "claude-opus-5-5"
+  ],
+  "requestedEffort": "max",
+  "strictEmptyMcpConfig": true,
+  "reportedTools": [],
+  "inputPrompt": "tools/level3_promotion_20261002/gameplay_boards/claude-review/focused/prompt.md",
+  "inputPromptSHA256": "913e82e1d2d75fd76ec5e3c772706c04ebb091167c4b3a6cd2c70952a1c89097",
+  "elapsedSeconds": 646.215,
+  "hardTimeoutSeconds": 900,
+  "exitCode": 0,
+  "spawnedChildPID": 41065,
+  "cleanupTarget": "Only directly spawned owned Claude CLI PID",
+  "childExitConfirmed": true,
+  "timedOut": false,
+  "status": "success",
+  "result": {
+    "subtype": "success",
+    "is_error": false,
+    "result": "**Verdict: material fix (small) on the R4 re-entry path; nothing confirmed broken in the startup-once flow. Level 3 excerpts: uncertain, no confirmed defect.**\n\nScope: four supplied excerpts only; hashes not checked. Reported tests taken as stated, not re-run. Findings are source inference, not gameplay evidence.\n\n**R4 Builder**\n\n1. **Medium: `Module.Build`, existing-model path.** Trigger: re-entry when `PreviewCenter` is absent, the board is in neither R4 nor `ServerLobby` (mid lobby rebuild), or two lobby boards exist. Effect: the new asserts run outside the `pcall` and before `DevBayAccessGuard.Start(existing)`, which previously always ran; Build throws and the guard is not restarted. Fix: call `Start(existing)` first, then transfer under its own `pcall` and `warn`.\n2. **Medium, conditional: `PreviewCenter`.** The diff reads it but adds no write, and unchanged lines between hunks were not supplied. If nothing sets it, every re-entry fails. Fix: set it in the fresh path, or fall back to `vec(Bake.GetManifest().previewCenter)`.\n3. **Low: fresh path.** Any board assert destroys the whole R4 model, and startup builds once. Fix: make the transfer non-fatal, or confirm fail-closed is intended.\n4. **Low, uncertain: lobby rebuild while R4 persists.** `installed` short-circuits, so a board created by the rebuild stays in `ServerLobby` (two live renderers). If the rebuild recreates the `ZyntraDonationLeaderboard` values, R4's board goes silently stale and is never swapped. Fix: when both exist, destroy R4's copy and transfer the lobby's.\n\n**Level 3**\n\n5. **Medium, conditional: `configureRuntimeDiscPart(part, false, \u2026)`.** Trigger: unanchoring a clone of a disc placed without `Dynamic=true`. Effect: chunks stay anchored and unwelded, so the 0.05 carrier moves or falls without its visuals. Fix: require Dynamic placement, or set chunk `Anchored` and create welds there.\n6. **Low: `setDiscVisualCFrame`.** Offsets are recomputed from live CFrames each call: allocation plus cumulative float drift if run per frame. Fix: cache offsets once per clone.\n\n**Consistent in source**\n\n- Given the stated unrotated panel, the transfer lands it at (190, 37.15, -795) facing +X toward X=220, with a 0.5-stud gap between board back (-33.05) and wall face (-33.55).\n- Direct reparent never trips the renderer's nil-ancestry teardown, even while the model is unparented (connected clients would likely see remove/re-add).\n- Rollback order (restore, then destroy) is correct; polish passes run before the transfer.\n- `portal.Light` stays valid after reparenting; `unlockExit` tweens reach chunks only if `centered`'s last argument means Reactive.\n\n**Unverified**\n\n- Client call sites for `tryWatchKitFixture`, baseline capture and `clearKitFixtureWatchers`.\n- Any non-Reactive Light-bearing diffuser: first client sync hides its chunks.\n- Transparency or Size writes on disc clones; cloned collision proxies if discs are Collidable; `queryable` covers only a 0.05 cube.\n- Consumers of \"Mounted Revision Notice\"; whether `DevBayAccessGuard.Start` touches board descendants; exact name `ServerLobby`.\n- R4 occlusion, readability, replication.",
+    "duration_ms": 644457,
+    "duration_api_ms": 644359,
+    "num_turns": 1,
+    "total_cost_usd": 1.3443606000000001,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 10663,
+      "output_tokens": 67111,
+      "output_tokens_details": {
+        "thinking_tokens": 65859
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 67111,
+          "cache_read_input_tokens": 10663,
+          "cache_creation_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 67111,
+        "cacheReadInputTokens": 10663,
+        "cacheCreationInputTokens": 0,
+        "webSearchRequests": 0,
+        "costUSD": 1.3443606000000001,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 65859,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": []
+  },
+  "eventTypeCounts": {
+    "system": 442,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1
+  },
+  "rawInternalStreamSaved": false,
+  "systemEventSubtypeCounts": {
+    "init": 1,
+    "thinking_tokens": 441
+  },
+  "runnerProvenance": "Scoped copy of backup/claude_review.py; adds subtype counts without raw/internal content and root-authorized bounded timeout up to900s"
+}

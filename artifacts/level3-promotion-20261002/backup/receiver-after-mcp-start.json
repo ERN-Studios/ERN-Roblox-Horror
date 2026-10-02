@@ -1,0 +1,12 @@
+{
+  "captureMode": "synchronous MCP, invocation-local markers",
+  "captureSHA256": "809e8145cf8e2b59732bb530708a4702b82b907935c55dcc6dc6e1b93b220bd0",
+  "destination": "/Users/zeanjuul4/Documents/Roblox Studio Backups/20261002-level3-promotion/after",
+  "frozenInMemory": true,
+  "persistentStudioWrites": false,
+  "phase": "after",
+  "pid": 44588,
+  "port": 8913,
+  "schemaSHA256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08",
+  "task": "level3-promotion-20261002"
+}

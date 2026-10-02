@@ -1,0 +1,18 @@
+{
+  "scope": "Local syntax and extracted exact existing-model branch with mocked dependencies only",
+  "candidateSHA256": "16d1981727d1364e1da67c43d0647cc64d07d88fd3d9ada5a1599412c7ac0690",
+  "compiled": ["Builder.guard-first.candidate.luau", "../support-board-runtime-smoke.luau"],
+  "passedScenarioCount": 6,
+  "scenarios": [
+    "guard precedes valid re-entry transfer",
+    "missing center retains existing model and guard",
+    "missing or ambiguous board retains existing model and guard",
+    "failed apply restores transfer and retains guard",
+    "guard failure remains fail-closed",
+    "conflicting ownership remains fail-closed"
+  ],
+  "runner": "/tmp/level3-promotion-backup-lune-20261002/lune",
+  "script": "verify_fix.luau",
+  "notVerified": "Native guard, renderer, replication, visibility, physics, gameplay or publication",
+  "studioWritesByThisAgent": false
+}

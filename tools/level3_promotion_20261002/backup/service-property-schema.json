@@ -1,0 +1,1450 @@
+{
+  "Workspace": [
+    {
+      "name": "AirDensity",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "AirTurbulenceIntensity",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "AllowThirdPartySales",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "AuthorityMode",
+      "type": "AuthorityMode",
+      "category": "Enum"
+    },
+    {
+      "name": "AvatarUnificationMode",
+      "type": "AvatarUnificationMode",
+      "category": "Enum"
+    },
+    {
+      "name": "ClientAnimatorThrottling",
+      "type": "ClientAnimatorThrottlingMode",
+      "category": "Enum"
+    },
+    {
+      "name": "CurrentCamera",
+      "type": "Camera",
+      "category": "Class"
+    },
+    {
+      "name": "DistributedGameTime",
+      "type": "double",
+      "category": "Primitive"
+    },
+    {
+      "name": "EnableSLIMAvatars",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "ExpandedTerrain",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "FallHeightEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "FallenPartsDestroyHeight",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "FluidForces",
+      "type": "FluidForces",
+      "category": "Enum"
+    },
+    {
+      "name": "GlobalWind",
+      "type": "Vector3",
+      "category": "DataType"
+    },
+    {
+      "name": "Gravity",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "IKControlConstraintSupport",
+      "type": "IKControlConstraintSupport",
+      "category": "Enum"
+    },
+    {
+      "name": "ImprovedAnimationConstraint",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "ImprovedPhysicsReplication",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "LayeredClothingCacheOptimizations",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "LuauTypeCheckMode",
+      "type": "LuauTypeCheckMode",
+      "category": "Enum"
+    },
+    {
+      "name": "MapTVRemoteToGamepadKeycodes",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "MeshPartHeadsAndAccessories",
+      "type": "MeshPartHeadsAndAccessories",
+      "category": "Enum"
+    },
+    {
+      "name": "MeshStreamingAndImprovedLods",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "ModelStreamingBehavior",
+      "type": "ModelStreamingBehavior",
+      "category": "Enum"
+    },
+    {
+      "name": "NextGenerationReplication",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "PathfindingUseImprovedSearch",
+      "type": "PathfindingUseImprovedSearch",
+      "category": "Enum"
+    },
+    {
+      "name": "PhysicsSteppingMethod",
+      "type": "PhysicsSteppingMethod",
+      "category": "Enum"
+    },
+    {
+      "name": "PlayerCharacterDestroyBehavior",
+      "type": "PlayerCharacterDestroyBehavior",
+      "category": "Enum"
+    },
+    {
+      "name": "PlayerScriptsUseInputActionSystem",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "PredictiveStreamingMode",
+      "type": "PredictiveStreamingMode",
+      "category": "Enum"
+    },
+    {
+      "name": "PrimalPhysicsSolver",
+      "type": "PrimalPhysicsSolver",
+      "category": "Enum"
+    },
+    {
+      "name": "RejectCharacterDeletions",
+      "type": "RejectCharacterDeletions",
+      "category": "Enum"
+    },
+    {
+      "name": "RenderingCacheOptimizations",
+      "type": "RenderingCacheOptimizationMode",
+      "category": "Enum"
+    },
+    {
+      "name": "ReplicateInstanceDestroySetting",
+      "type": "ReplicateInstanceDestroySetting",
+      "category": "Enum"
+    },
+    {
+      "name": "Retargeting",
+      "type": "AnimatorRetargetingMode",
+      "category": "Enum"
+    },
+    {
+      "name": "SandboxedInstanceMode",
+      "type": "SandboxedInstanceMode",
+      "category": "Enum"
+    },
+    {
+      "name": "StreamOutBehavior",
+      "type": "StreamOutBehavior",
+      "category": "Enum"
+    },
+    {
+      "name": "StreamingAdaptiveRadius",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "StreamingEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "StreamingIntegrityMode",
+      "type": "StreamingIntegrityMode",
+      "category": "Enum"
+    },
+    {
+      "name": "StreamingMinRadius",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "StreamingTargetRadius",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "TouchEventsUseCollisionGroups",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "TouchesUseCollisionGroups",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "UseFixedSimulation",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "UseInputSink",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "UseNewLuauTypeSolver",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "ValidateEnabledProximityPrompt",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "AutoSimulate",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "GravityDirection",
+      "type": "Vector3",
+      "category": "DataType"
+    },
+    {
+      "name": "SimulationRate",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "Wind",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "WindDirection",
+      "type": "Vector3",
+      "category": "DataType"
+    },
+    {
+      "name": "LevelOfDetail",
+      "type": "ModelLevelOfDetail",
+      "category": "Enum"
+    },
+    {
+      "name": "ModelStreamingMode",
+      "type": "ModelStreamingMode",
+      "category": "Enum"
+    },
+    {
+      "name": "PrimaryPart",
+      "type": "BasePart",
+      "category": "Class"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "Lighting": [
+    {
+      "name": "Ambient",
+      "type": "Color3",
+      "category": "DataType"
+    },
+    {
+      "name": "Brightness",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "ColorShift_Bottom",
+      "type": "Color3",
+      "category": "DataType"
+    },
+    {
+      "name": "ColorShift_Top",
+      "type": "Color3",
+      "category": "DataType"
+    },
+    {
+      "name": "EnvironmentDiffuseScale",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "EnvironmentSpecularScale",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "ExposureCompensation",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "ExtendLightRangeTo120",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "FogColor",
+      "type": "Color3",
+      "category": "DataType"
+    },
+    {
+      "name": "FogEnd",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "FogStart",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "GeographicLatitude",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "GlobalShadows",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "LightingStyle",
+      "type": "LightingStyle",
+      "category": "Enum"
+    },
+    {
+      "name": "OutdoorAmbient",
+      "type": "Color3",
+      "category": "DataType"
+    },
+    {
+      "name": "Outlines",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "PrioritizeLightingQuality",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "ShadowSoftness",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "Technology",
+      "type": "Technology",
+      "category": "Enum"
+    },
+    {
+      "name": "TimeOfDay",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "SoundService": [
+    {
+      "name": "AcousticSimulationEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "AmbientReverb",
+      "type": "ReverbType",
+      "category": "Enum"
+    },
+    {
+      "name": "AudioApiByDefault",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "CharacterSoundsUseNewApi",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "DefaultListenerLocation",
+      "type": "ListenerLocation",
+      "category": "Enum"
+    },
+    {
+      "name": "DiffractionEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "DistanceFactor",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "DopplerScale",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "IsNewExpForAudioApiByDefault",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "ListenerCFrame",
+      "type": "CFrame",
+      "category": "DataType"
+    },
+    {
+      "name": "ListenerObject",
+      "type": "Instance",
+      "category": "Class"
+    },
+    {
+      "name": "ListenerType",
+      "type": "ListenerType",
+      "category": "Enum"
+    },
+    {
+      "name": "OcclusionEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "RespectFilteringEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "ReverbEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "RolloffScale",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "VolumetricAudio",
+      "type": "VolumetricAudio",
+      "category": "Enum"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "ReplicatedFirst": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "ReplicatedStorage": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "ServerScriptService": [
+    {
+      "name": "LoadStringEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "ServerStorage": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "StarterGui": [
+    {
+      "name": "ClipsDescendantsSupportsRotation",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "ResetPlayerGuiOnSpawn",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "RtlTextSupport",
+      "type": "RtlTextSupport",
+      "category": "Enum"
+    },
+    {
+      "name": "ScreenOrientation",
+      "type": "ScreenOrientation",
+      "category": "Enum"
+    },
+    {
+      "name": "ShowDevelopmentGui",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "StudioDefaultStyleSheet",
+      "type": "StyleSheet",
+      "category": "Class"
+    },
+    {
+      "name": "StudioInsertWidgetLayerCollectorAutoLinkStyleSheet",
+      "type": "StyleSheet",
+      "category": "Class"
+    },
+    {
+      "name": "VirtualCursorMode",
+      "type": "VirtualCursorMode",
+      "category": "Enum"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "StarterPack": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "StarterPlayer": [
+    {
+      "name": "AllowCustomAnimations",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "AutoJumpEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CameraMaxZoomDistance",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "CameraMinZoomDistance",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "CameraMode",
+      "type": "CameraMode",
+      "category": "Enum"
+    },
+    {
+      "name": "CharacterBreakJointsOnDeath",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterJumpHeight",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterJumpPower",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterMaxSlopeAngle",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterUseJumpPower",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterWalkSpeed",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "ClassicDeath",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CreateDefaultPlayerModule",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "DevCameraOcclusionMode",
+      "type": "DevCameraOcclusionMode",
+      "category": "Enum"
+    },
+    {
+      "name": "DevComputerCameraMovementMode",
+      "type": "DevComputerCameraMovementMode",
+      "category": "Enum"
+    },
+    {
+      "name": "DevComputerMovementMode",
+      "type": "DevComputerMovementMode",
+      "category": "Enum"
+    },
+    {
+      "name": "DevTouchCameraMovementMode",
+      "type": "DevTouchCameraMovementMode",
+      "category": "Enum"
+    },
+    {
+      "name": "DevTouchMovementMode",
+      "type": "DevTouchMovementMode",
+      "category": "Enum"
+    },
+    {
+      "name": "EnableDynamicHeads",
+      "type": "LoadDynamicHeads",
+      "category": "Enum"
+    },
+    {
+      "name": "EnableMouseLockOption",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "GameSettingsAvatar",
+      "type": "GameAvatarType",
+      "category": "Enum"
+    },
+    {
+      "name": "GameSettingsR15Collision",
+      "type": "R15CollisionType",
+      "category": "Enum"
+    },
+    {
+      "name": "HealthDisplayDistance",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "LoadCharacterAppearance",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "LuaCharacterController",
+      "type": "CharacterControlMode",
+      "category": "Enum"
+    },
+    {
+      "name": "NameDisplayDistance",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "PlaceAvatarRules",
+      "type": "Instance",
+      "category": "Class"
+    },
+    {
+      "name": "PlayerModuleStatus",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "UserEmotesEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "Teams": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "TextChatService": [
+    {
+      "name": "ChatTranslationFTUXShown",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "ChatTranslationToggleEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "ChatVersion",
+      "type": "ChatVersion",
+      "category": "Enum"
+    },
+    {
+      "name": "CreateDefaultCommands",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CreateDefaultTextChannels",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "HasSeenDeprecationDialog",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "IsLegacyChatDisabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "PlatformIntegratedChat",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "MaterialService": [
+    {
+      "name": "AsphaltName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "BasaltName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "BrickName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CardboardName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CarpetName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CeramicTilesName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "ClayRoofTilesName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CobblestoneName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "ConcreteName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CorrodedMetalName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "CrackedLavaName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "DiamondPlateName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "FabricName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "FoilName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "GlacierName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "GraniteName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "GrassName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "GroundName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "IceName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "LeafyGrassName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "LeatherName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "LimestoneName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "MarbleName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "MetalName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "MudName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "PavementName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "PebbleName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "PlasterName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "PlasticName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "RockName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "RoofShinglesName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "RubberName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SaltName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SandName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SandstoneName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SlateName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SmoothPlasticName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SnowName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "WoodName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "WoodPlanksName",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "LocalizationService": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "Chat": [
+    {
+      "name": "BubbleChatEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "IsAutoMigrated",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "LoadDefaultChat",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "Players": [
+    {
+      "name": "BanningEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "CharacterAutoLoads",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "MaxPlayersInternal",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "PreferredPlayersInternal",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "RespawnTime",
+      "type": "float",
+      "category": "Primitive"
+    },
+    {
+      "name": "UseStrafingAnimations",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "HttpService": [
+    {
+      "name": "HttpEnabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "PhysicsService": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "TestService": [
+    {
+      "name": "AutoRuns",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Description",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "ErrorCount",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "ExecuteWithStudioRun",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "IsPhysicsEnvironmentalThrottled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "IsSleepAllowed",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "NumberOfPlayers",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "SimulateSecondsLag",
+      "type": "double",
+      "category": "Primitive"
+    },
+    {
+      "name": "TestCount",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "ThrottlePhysicsToRealtime",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "Timeout",
+      "type": "double",
+      "category": "Primitive"
+    },
+    {
+      "name": "WarnCount",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "JointsService": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "CollectionService": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "ProximityPromptService": [
+    {
+      "name": "Enabled",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "MaxIndicatorsVisible",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "MaxPromptsVisible",
+      "type": "int",
+      "category": "Primitive"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "VoiceChatService": [
+    {
+      "name": "DefaultDistanceAttenuation",
+      "type": "VoiceChatDistanceAttenuationType",
+      "category": "Enum"
+    },
+    {
+      "name": "EnableDefaultVoice",
+      "type": "bool",
+      "category": "Primitive"
+    },
+    {
+      "name": "EnableVoiceVolumeControls",
+      "type": "RolloutState",
+      "category": "Enum"
+    },
+    {
+      "name": "UseAudioApi",
+      "type": "AudioApiRollout",
+      "category": "Enum"
+    },
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ],
+  "PathfindingService": [
+    {
+      "name": "Capabilities",
+      "type": "SecurityCapabilities",
+      "category": "DataType"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "category": "Primitive"
+    },
+    {
+      "name": "SourceAssetId",
+      "type": "int64",
+      "category": "Primitive"
+    }
+  ]
+}

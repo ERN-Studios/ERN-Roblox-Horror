@@ -1,0 +1,706 @@
+{
+  "capturedAtUTC": "2026-10-02T20:27:13.191641+00:00",
+  "scope": "Read-only Git inventory of owned task folders plus handoff README; exact stage proposal only, no index mutation",
+  "paths": [
+    {
+      "path": "artifacts/level3-promotion-20261002/README.md",
+      "gitStatus": "??",
+      "bytes": 5931
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/GameManager.warmup.diff",
+      "gitStatus": "??",
+      "bytes": 7552
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/GameManager.warmup.v2.diff",
+      "gitStatus": "??",
+      "bytes": 8276
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/GameManager.warmup.v3.diff",
+      "gitStatus": "??",
+      "bytes": 8595
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/Level 3 Kit Warmup.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 2965
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.baseline.luau",
+      "gitStatus": "??",
+      "bytes": 178031
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 181763
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v2.luau",
+      "gitStatus": "??",
+      "bytes": 182136
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v3.luau",
+      "gitStatus": "??",
+      "bytes": 182448
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake.ModuleScript.baseline.luau",
+      "gitStatus": "??",
+      "bytes": 10474
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.baseline.luau",
+      "gitStatus": "??",
+      "bytes": 20289
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.Round Completion Routing.ModuleScript.baseline.luau",
+      "gitStatus": "??",
+      "bytes": 75964
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/ServerScriptService.Round Loading Runtime.ModuleScript.baseline.luau",
+      "gitStatus": "??",
+      "bytes": 8712
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/baseline-manifest.json",
+      "gitStatus": "??",
+      "bytes": 1327
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/build-claude-retry.py",
+      "gitStatus": "??",
+      "bytes": 2799
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/build-claude-review.py",
+      "gitStatus": "??",
+      "bytes": 6151
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/candidate-manifest-v3.json",
+      "gitStatus": "??",
+      "bytes": 886
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/candidate-manifest.json",
+      "gitStatus": "??",
+      "bytes": 886
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/input-manifest.json",
+      "gitStatus": "??",
+      "bytes": 4974
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/prompt.md",
+      "gitStatus": "??",
+      "bytes": 16394
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/result/receipt.json",
+      "gitStatus": "??",
+      "bytes": 1839
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/result/response.md",
+      "gitStatus": "??",
+      "bytes": 1
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/retry/claude_review_long.py",
+      "gitStatus": "??",
+      "bytes": 4583
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/retry/input-manifest.json",
+      "gitStatus": "??",
+      "bytes": 5435
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/retry/prompt.md",
+      "gitStatus": "??",
+      "bytes": 8433
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/retry/result/receipt.json",
+      "gitStatus": "??",
+      "bytes": 4824
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/claude-review/retry/result/response.md",
+      "gitStatus": "??",
+      "bytes": 1241
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/compile-candidates.luau",
+      "gitStatus": "??",
+      "bytes": 719
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/compile-receipt.json",
+      "gitStatus": "??",
+      "bytes": 490
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/live-recheck-final.json",
+      "gitStatus": "??",
+      "bytes": 1085
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/GameManager.cohort-ttl.diff",
+      "gitStatus": "??",
+      "bytes": 593
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/ServerScriptService.GameManager.Script.candidate.v4.luau",
+      "gitStatus": "??",
+      "bytes": 182571
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/candidate-manifest.json",
+      "gitStatus": "??",
+      "bytes": 586
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/cohort-ttl-test-receipt.json",
+      "gitStatus": "??",
+      "bytes": 461
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/live-baseline.json",
+      "gitStatus": "??",
+      "bytes": 403
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/post-review/test-cohort-ttl.luau",
+      "gitStatus": "??",
+      "bytes": 4683
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/prepare-warmup-candidate.py",
+      "gitStatus": "??",
+      "bytes": 8750
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/test-warmup-admission.luau",
+      "gitStatus": "??",
+      "bytes": 20583
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/warmup-admission-test-receipt-v2.json",
+      "gitStatus": "??",
+      "bytes": 3699
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/warmup-admission-test-receipt.json",
+      "gitStatus": "??",
+      "bytes": 3566
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/warmup-candidate-manifest-v2.json",
+      "gitStatus": "??",
+      "bytes": 970
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/warmup-candidate-manifest-v3.json",
+      "gitStatus": "??",
+      "bytes": 970
+    },
+    {
+      "path": "tools/level3_promotion_20261002/admission/warmup-candidate-manifest.json",
+      "gitStatus": "??",
+      "bytes": 967
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/cold-kit-admission-review.md",
+      "gitStatus": "??",
+      "bytes": 6716
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/historical-wiring-audit.md",
+      "gitStatus": "??",
+      "bytes": 10993
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/live-layout-world-review.md",
+      "gitStatus": "??",
+      "bytes": 5913
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/lobby-supporters-preparation.md",
+      "gitStatus": "??",
+      "bytes": 5770
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/source-reference-manifest.json",
+      "gitStatus": "??",
+      "bytes": 18200
+    },
+    {
+      "path": "tools/level3_promotion_20261002/audit/warmup-claude-reconciliation.md",
+      "gitStatus": "??",
+      "bytes": 6292
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Configuration.luau",
+      "gitStatus": "??",
+      "bytes": 19286
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Layout_Generator.luau",
+      "gitStatus": "??",
+      "bytes": 42613
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Round_Adapter.luau",
+      "gitStatus": "??",
+      "bytes": 31538
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_World_Builder.luau",
+      "gitStatus": "??",
+      "bytes": 105403
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Worn_Party_Room_Dressing.raw.luau",
+      "gitStatus": "??",
+      "bytes": 19427
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Worn_Party_Visual_Adapter.raw.luau",
+      "gitStatus": "??",
+      "bytes": 19059
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level6BlenderRuntimeBake.luau",
+      "gitStatus": "??",
+      "bytes": 10474
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Balloon_Dressing.luau",
+      "gitStatus": "??",
+      "bytes": 12529
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Configuration.luau",
+      "gitStatus": "??",
+      "bytes": 19430
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Crayon_Wall_Art.luau",
+      "gitStatus": "??",
+      "bytes": 8896
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Kit_Metadata.luau",
+      "gitStatus": "??",
+      "bytes": 31504
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Layout_Generator.luau",
+      "gitStatus": "??",
+      "bytes": 47446
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Room_Dressing.luau",
+      "gitStatus": "??",
+      "bytes": 18364
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Visual_Adapter.luau",
+      "gitStatus": "??",
+      "bytes": 23744
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_World_Builder.luau",
+      "gitStatus": "??",
+      "bytes": 102901
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_Configuration.luau",
+      "gitStatus": "??",
+      "bytes": 19430
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_Layout_Generator.luau",
+      "gitStatus": "??",
+      "bytes": 47446
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_World_Builder.luau",
+      "gitStatus": "??",
+      "bytes": 102901
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidate-manifest-final.json",
+      "gitStatus": "??",
+      "bytes": 4708
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidate-manifest-v2.json",
+      "gitStatus": "??",
+      "bytes": 4708
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 471
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 12479
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.diff",
+      "gitStatus": "??",
+      "bytes": 12951
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.final.diff",
+      "gitStatus": "??",
+      "bytes": 12951
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.v2.diff",
+      "gitStatus": "??",
+      "bytes": 12951
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 584
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 19281
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.diff",
+      "gitStatus": "??",
+      "bytes": 2200
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.final.diff",
+      "gitStatus": "??",
+      "bytes": 2200
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.v2.diff",
+      "gitStatus": "??",
+      "bytes": 2200
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 468
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 8896
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.diff",
+      "gitStatus": "??",
+      "bytes": 9314
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.final.diff",
+      "gitStatus": "??",
+      "bytes": 9314
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.v2.diff",
+      "gitStatus": "??",
+      "bytes": 9314
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 593
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 47577
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.diff",
+      "gitStatus": "??",
+      "bytes": 13978
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.final.diff",
+      "gitStatus": "??",
+      "bytes": 13978
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.v2.diff",
+      "gitStatus": "??",
+      "bytes": 13978
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 584
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 32558
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.diff",
+      "gitStatus": "??",
+      "bytes": 2459
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.final.diff",
+      "gitStatus": "??",
+      "bytes": 2459
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.v2.diff",
+      "gitStatus": "??",
+      "bytes": 2459
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 584
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 108609
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.diff",
+      "gitStatus": "??",
+      "bytes": 12465
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.final.diff",
+      "gitStatus": "??",
+      "bytes": 12768
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.v2.diff",
+      "gitStatus": "??",
+      "bytes": 12768
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 617
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 18304
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.diff",
+      "gitStatus": "??",
+      "bytes": 2585
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.final.diff",
+      "gitStatus": "??",
+      "bytes": 2585
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.v2.diff",
+      "gitStatus": "??",
+      "bytes": 2585
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.json",
+      "gitStatus": "??",
+      "bytes": 620
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.luau",
+      "gitStatus": "??",
+      "bytes": 24266
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.diff",
+      "gitStatus": "??",
+      "bytes": 28565
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.final.diff",
+      "gitStatus": "??",
+      "bytes": 28565
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.v2.diff",
+      "gitStatus": "??",
+      "bytes": 28835
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-live-recheck.json",
+      "gitStatus": "??",
+      "bytes": 2427
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-test-receipt-v2.json",
+      "gitStatus": "??",
+      "bytes": 13443
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/layout-world-test-receipt.json",
+      "gitStatus": "??",
+      "bytes": 13443
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/public-dressing-gates-receipt.json",
+      "gitStatus": "??",
+      "bytes": 153
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/public-dressing-lifecycle-receipt.json",
+      "gitStatus": "??",
+      "bytes": 189
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/test-layout-world-candidates.luau",
+      "gitStatus": "??",
+      "bytes": 6980
+    },
+    {
+      "path": "tools/level3_promotion_20261002/public3/test-public-dressing-gates.luau",
+      "gitStatus": "??",
+      "bytes": 7844
+    }
+  ],
+  "stageProposal": [
+    "artifacts/level3-promotion-20261002/README.md",
+    "tools/level3_promotion_20261002/admission/GameManager.warmup.diff",
+    "tools/level3_promotion_20261002/admission/GameManager.warmup.v2.diff",
+    "tools/level3_promotion_20261002/admission/GameManager.warmup.v3.diff",
+    "tools/level3_promotion_20261002/admission/Level 3 Kit Warmup.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.baseline.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v2.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v3.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake.ModuleScript.baseline.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.baseline.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.Round Completion Routing.ModuleScript.baseline.luau",
+    "tools/level3_promotion_20261002/admission/ServerScriptService.Round Loading Runtime.ModuleScript.baseline.luau",
+    "tools/level3_promotion_20261002/admission/baseline-manifest.json",
+    "tools/level3_promotion_20261002/admission/build-claude-retry.py",
+    "tools/level3_promotion_20261002/admission/build-claude-review.py",
+    "tools/level3_promotion_20261002/admission/candidate-manifest-v3.json",
+    "tools/level3_promotion_20261002/admission/candidate-manifest.json",
+    "tools/level3_promotion_20261002/admission/claude-review/input-manifest.json",
+    "tools/level3_promotion_20261002/admission/claude-review/prompt.md",
+    "tools/level3_promotion_20261002/admission/claude-review/result/receipt.json",
+    "tools/level3_promotion_20261002/admission/claude-review/result/response.md",
+    "tools/level3_promotion_20261002/admission/claude-review/retry/claude_review_long.py",
+    "tools/level3_promotion_20261002/admission/claude-review/retry/input-manifest.json",
+    "tools/level3_promotion_20261002/admission/claude-review/retry/prompt.md",
+    "tools/level3_promotion_20261002/admission/claude-review/retry/result/receipt.json",
+    "tools/level3_promotion_20261002/admission/claude-review/retry/result/response.md",
+    "tools/level3_promotion_20261002/admission/compile-candidates.luau",
+    "tools/level3_promotion_20261002/admission/compile-receipt.json",
+    "tools/level3_promotion_20261002/admission/live-recheck-final.json",
+    "tools/level3_promotion_20261002/admission/post-review/GameManager.cohort-ttl.diff",
+    "tools/level3_promotion_20261002/admission/post-review/ServerScriptService.GameManager.Script.candidate.v4.luau",
+    "tools/level3_promotion_20261002/admission/post-review/candidate-manifest.json",
+    "tools/level3_promotion_20261002/admission/post-review/cohort-ttl-test-receipt.json",
+    "tools/level3_promotion_20261002/admission/post-review/live-baseline.json",
+    "tools/level3_promotion_20261002/admission/post-review/test-cohort-ttl.luau",
+    "tools/level3_promotion_20261002/admission/prepare-warmup-candidate.py",
+    "tools/level3_promotion_20261002/admission/test-warmup-admission.luau",
+    "tools/level3_promotion_20261002/admission/warmup-admission-test-receipt-v2.json",
+    "tools/level3_promotion_20261002/admission/warmup-admission-test-receipt.json",
+    "tools/level3_promotion_20261002/admission/warmup-candidate-manifest-v2.json",
+    "tools/level3_promotion_20261002/admission/warmup-candidate-manifest-v3.json",
+    "tools/level3_promotion_20261002/admission/warmup-candidate-manifest.json",
+    "tools/level3_promotion_20261002/audit/cold-kit-admission-review.md",
+    "tools/level3_promotion_20261002/audit/historical-wiring-audit.md",
+    "tools/level3_promotion_20261002/audit/live-layout-world-review.md",
+    "tools/level3_promotion_20261002/audit/lobby-supporters-preparation.md",
+    "tools/level3_promotion_20261002/audit/source-reference-manifest.json",
+    "tools/level3_promotion_20261002/audit/warmup-claude-reconciliation.md",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Configuration.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Layout_Generator.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Round_Adapter.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_World_Builder.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Worn_Party_Room_Dressing.raw.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_3_Systems__Level_3_Worn_Party_Visual_Adapter.raw.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level6BlenderRuntimeBake.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Balloon_Dressing.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Configuration.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Crayon_Wall_Art.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Kit_Metadata.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Layout_Generator.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Room_Dressing.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_Visual_Adapter.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/Level_6_Systems__Level_6_World_Builder.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_Configuration.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_Layout_Generator.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-baseline/normalized6_World_Builder.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidate-manifest-final.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidate-manifest-v2.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.json",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.luau",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.final.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.v2.diff",
+    "tools/level3_promotion_20261002/public3/layout-world-live-recheck.json",
+    "tools/level3_promotion_20261002/public3/layout-world-test-receipt-v2.json",
+    "tools/level3_promotion_20261002/public3/layout-world-test-receipt.json",
+    "tools/level3_promotion_20261002/public3/public-dressing-gates-receipt.json",
+    "tools/level3_promotion_20261002/public3/public-dressing-lifecycle-receipt.json",
+    "tools/level3_promotion_20261002/public3/test-layout-world-candidates.luau",
+    "tools/level3_promotion_20261002/public3/test-public-dressing-gates.luau",
+    "tools/level3_promotion_20261002/admission/git-stage-proposal.json"
+  ],
+  "limits": "Does not cover other agents backup/gameplay/install artifacts or final exported runtime mirrors. Root must inspect exact staged diff and add their explicitly verified paths separately. Historical candidate drafts remain provenance, not deployment authority."
+}

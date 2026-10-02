@@ -1,0 +1,23 @@
+{
+  "CandidateSHA256": "ac252224a6f7ed82ccfdbea950a063e4e3e8c70da53322bc912f89b8cab5ad88",
+  "Checks": 32,
+  "Levels": [
+    {
+      "Level": 1,
+      "Passed": true,
+      "TTL": 120
+    },
+    {
+      "Level": 2,
+      "Passed": true,
+      "TTL": 120
+    },
+    {
+      "Level": 3,
+      "Passed": true,
+      "TTL": 1320
+    }
+  ],
+  "Passed": true,
+  "Scope": "Offline exact cohort writer / actual pure routing and loading, virtual MemoryStore TTL only"
+}

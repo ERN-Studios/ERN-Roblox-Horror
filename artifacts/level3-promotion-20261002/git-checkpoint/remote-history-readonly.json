@@ -1,0 +1,8 @@
+{
+  "checkedAt": "2026-10-02T19:52:19.965225+00:00",
+  "head": "92c3b5825f647fcf0881c3790a5da7c316da7021",
+  "originMain": "de2e4de61e185b2a2b9951db87f132e1227b11c0",
+  "aheadBehind": "33\t264",
+  "history": "de2e4de Level 4 v3: starlight + neon lighting, theme wallpaper, Cinema 1 west side removed, camera occluders\n808207d Mirror Studio: script drift from other sessions (Level 6, lobby preview, Zyntra)\nf79e4f2 Level 4: massive facelift - Synthwave 80s-90s cinema lost in the Backrooms\n73e197c Mirror Studio: script drift from other sessions (Level 6 systems, Level 3, player scripts)\n",
+  "decision": "Remote history read only; no checkout, merge, reset, pull, or Studio sync. Concurrent .gitignore and unrelated assets preserved."
+}

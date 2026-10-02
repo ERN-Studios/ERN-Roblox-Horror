@@ -1,0 +1,115 @@
+--- StarterPlayer.StarterPlayerScripts.Level 3 Reader Client
++++ normalized live6
+@@ -15,7 +15,7 @@
+ 
+ local player = Players.LocalPlayer
+ 
+-local LEVEL = 3
++local LEVEL = 6
+ local WORLD_NAME = "Level 3 Generated World"
+ local STATE_FOLDER_NAME = "Level 3 State"
+ local REMOTES_FOLDER_NAME = "Level 3 Remotes"
+@@ -292,7 +292,7 @@
+ 	local panelHeight = READER_PANEL_HEIGHT
+ 	local compactLandscape = false
+ 
+-	-- C_L3_READER_UPPER_RIGHT_EVERYWHERE_20260921.
++	-- C_L6_READER_UPPER_RIGHT_EVERYWHERE_20260921.
+ 	-- The panel is now a CD reader and it is the first thing a player looks for,
+ 	-- so it takes ONE anchor on every form factor: UIDevice.TopRightPanel, the
+ 	-- same helper Level 1's objective column and Level 2's panel use on touch,
+@@ -608,9 +608,9 @@
+ ContextActionService:BindAction("Level3ToggleExitReader", function(_, inputState)
+ 	if inputState == Enum.UserInputState.Begin
+ 		and UserInputService:GetFocusedTextBox() == nil
+-		and workspace:GetAttribute("SelectedLevel") == LEVEL
+-		and player:GetAttribute("InRound") == true
+-		and player:GetAttribute("Escaped") ~= true then
++		and workspace:GetAttribute("Level3SelectedLevel") == LEVEL
++		and player:GetAttribute("Level3InRound") == true
++		and player:GetAttribute("Level3Escaped") ~= true then
+ 		setReaderHidden(not readerHidden)
+ 		return Enum.ContextActionResult.Sink
+ 	end
+@@ -706,8 +706,8 @@
+ 	if player:GetAttribute("Spectating") ~= true then return nil end
+ 	local userId = player:GetAttribute("SpectateTargetUserId")
+ 	local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
+-	if not watched or watched:GetAttribute("InRound") ~= true
+-		or watched:GetAttribute("Escaped") == true then return nil end
++	if not watched or watched:GetAttribute("Level3InRound") ~= true
++		or watched:GetAttribute("Level3Escaped") == true then return nil end
+ 	local character = watched.Character
+ 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ 	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
+@@ -725,9 +725,9 @@
+ -- teammate whose panel is the whole point. Being a spectator with a valid
+ -- subject is now its own way in; the world condition (level) still applies.
+ local function isActive(): boolean
+-	local levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
+-		and ((player:GetAttribute("InRound") == true
+-				and player:GetAttribute("Escaped") ~= true)
++	local levelActive = workspace:GetAttribute("Level3SelectedLevel") == LEVEL
++		and ((player:GetAttribute("Level3InRound") == true
++				and player:GetAttribute("Level3Escaped") ~= true)
+ 			or spectateSubject() ~= nil)
+ 	if RunService:IsStudio()
+ 		and player:GetAttribute("UIRegressionForceLevel3Reader") == true then
+@@ -863,7 +863,7 @@
+ local smoothedSignal = 0
+ local accumulated = 0
+ 
+--- L3_CD_READER_TARGET_20260921.
++-- L6_CD_READER_TARGET_20260921.
+ --
+ -- The reader points at the nearest disc a player can still PICK UP and says
+ -- whether one of them shares the room. Both answers come from server state
+@@ -910,7 +910,7 @@
+ 	end
+ 	return beacons
+ end
+--- L3_CD_READER_TARGET_END_20260921
++-- L6_CD_READER_TARGET_END_20260921
+ 
+ local function signedPlanarAngle(forward: Vector3, target: Vector3): number
+ 	local a = Vector3.new(forward.X, 0, forward.Z)
+@@ -1024,7 +1024,7 @@
+ 			-- EXACTLY this string, and nothing else in the row: it is the one
+ 			-- signal that says "stop walking and look up". ReduceFlashing takes
+ 			-- the pulse away and leaves the red at full strength instead of
+-			-- dimming it (C_L3_ROOM_BLINK_20260921).
++			-- dimming it (C_L6_ROOM_BLINK_20260921).
+ 			signalLabel.Text = "IN THIS ROOM"
+ 			signalLabel.TextColor3 = DANGER
+ 			if player:GetAttribute("ReduceFlashing") ~= true then
+@@ -1101,7 +1101,7 @@
+ -- cannot jump because a modal opened. All the smoothing stays with the tick,
+ -- which is the only caller that holds a real elapsed time.
+ local READER_STATE_ATTRIBUTES = {
+-	"InRound", "Escaped", "ZyntraDispatchClientActive", "Level3_Hiding",
++	"Level3InRound", "Level3Escaped", "ZyntraDispatchClientActive", "Level3_Hiding",
+ 	-- A spectate target change swaps whose reader this is, so it takes the panel
+ 	-- off the 0.10s tick and onto the same immediate path as the states above.
+ 	"Spectating", "SpectateTargetUserId",
+@@ -1126,7 +1126,7 @@
+ 		updateReader(0)
+ 	end
+ 	trackReaderConnection(
+-		workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(respond))
++		workspace:GetAttributeChangedSignal("Level3SelectedLevel"):Connect(respond))
+ 	for _, attribute in ipairs(READER_STATE_ATTRIBUTES) do
+ 		trackReaderConnection(
+ 			player:GetAttributeChangedSignal(attribute):Connect(respond))
+@@ -1168,9 +1168,9 @@
+ 		(if type(forced) == "boolean" then tostring(forced) else "none"),
+ 		tostring(toast.Visible),
+ 		tostring(UIDevice.IsTouch()),
+-		tostring(workspace:GetAttribute("SelectedLevel") == LEVEL),
+-		tostring(player:GetAttribute("InRound") == true),
+-		tostring(player:GetAttribute("Escaped") == true),
++		tostring(workspace:GetAttribute("Level3SelectedLevel") == LEVEL),
++		tostring(player:GetAttribute("Level3InRound") == true),
++		tostring(player:GetAttribute("Level3Escaped") == true),
+ 		tostring(player:GetAttribute("UIRegressionForceLevel3Reader") == true),
+ 		tostring(player:GetAttribute("ZyntraDispatchClientActive") == true),
+ 		tostring(player:GetAttribute("Level3_Hiding") == true),

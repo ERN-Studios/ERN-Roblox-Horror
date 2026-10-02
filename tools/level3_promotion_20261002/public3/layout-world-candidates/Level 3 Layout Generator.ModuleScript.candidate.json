@@ -1,0 +1,11 @@
+{
+  "name": "Level 3 Layout Generator",
+  "editorParity": true,
+  "operation": "edit",
+  "candidatePath": "tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau",
+  "candidateHash": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+  "targetPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+  "className": "ModuleScript",
+  "beforeHash": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+  "editorHash": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+}

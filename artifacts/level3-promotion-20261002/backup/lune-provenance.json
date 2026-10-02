@@ -1,0 +1,10 @@
+{
+  "releaseURL": "https://github.com/lune-org/lune/releases/tag/v0.10.5",
+  "downloadURL": "https://github.com/lune-org/lune/releases/download/v0.10.5/lune-0.10.5-macos-aarch64.zip",
+  "architecture": "macos-aarch64",
+  "archiveSHA256": "bdb94f47bc1d3af3e3fe796cfce9c7f406042d4aada9cc41a1c53836f3e3b411",
+  "binarySHA256": "e4cc1b42a45e5f6fbb9a3b66931f61a9864b540861d98c0b3fdae2cfd374fd4e",
+  "binaryPath": "/tmp/level3-promotion-backup-lune-20261002/lune",
+  "version": "lune 0.10.5",
+  "systemSettingsChanged": false
+}

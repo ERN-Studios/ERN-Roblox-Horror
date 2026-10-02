@@ -1,0 +1,94 @@
+--- ServerScriptService.LobbyReimaginedPreview.Builder live baseline
++++ ServerScriptService.LobbyReimaginedPreview.Builder scoped candidate
+@@ -25,17 +25,63 @@
+ 	label.Font = Enum.Font.GothamBold; label.TextScaled = true; label.Parent = gui
+ 	return label
+ end
++-- Move the original live renderer; its existing Value/attribute connections
++-- are closure-held and would not survive cloning just the display model.
++local function supportBoardTransfer(destination, center)
++    local installed = destination:FindFirstChild("ZyntraDonationLeaderboardBoard", true)
++    if installed then
++        assert(installed:IsA("Model"), "Inspect conflicting R4 support board")
++        return nil
++    end
++    local lobby = assert(workspace:FindFirstChild("ServerLobby"), "Original server lobby must precede R4")
++    local board
++    for _, descendant in ipairs(lobby:GetDescendants()) do
++        if descendant.Name == "ZyntraDonationLeaderboardBoard" then
++            assert(descendant:IsA("Model") and board == nil, "Inspect conflicting original support boards")
++            board = descendant
++        end
++    end
++    assert(board, "Original support board is not ready")
++    local panel = board:FindFirstChild("LeaderboardPanel")
++    assert(panel and panel:IsA("BasePart") and panel:FindFirstChild("DonationLeaderboardDisplay"),
++        "Inspect original support-board renderer before relocation")
++    return {
++        Board = board,
++        Parent = board.Parent,
++        Pivot = board:GetPivot(),
++        TargetPivot = CFrame.new(center + Vector3.new(-30, 7.15, -35) - panel.Position) * board:GetPivot(),
++    }
++end
++local function applySupportBoardTransfer(transfer, destination)
++    if not transfer then return end
++    transfer.Board:PivotTo(transfer.TargetPivot)
++    -- Never assign a nil direct Parent: the original renderer tears down on nil.
++    transfer.Board.Parent = destination
++end
++local function restoreSupportBoardTransfer(transfer)
++    if not transfer then return end
++    transfer.Board.Parent = transfer.Parent
++    transfer.Board:PivotTo(transfer.Pivot)
++end
+ function Module.Build()
+ 	assert(not RunService:IsClient(), "Server preview only")
+ 	local existing = workspace:FindFirstChild(NAME)
+ 	if existing then
+ 		assert(existing:GetAttribute(OWNED) == true and existing:GetAttribute("Ready") == true, "Inspect conflicting preview first")
+-		require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(existing)
++		local center = existing:GetAttribute("PreviewCenter")
++		assert(typeof(center) == "Vector3", "Inspect R4 lobby center before relocating support board")
++		local transfer = supportBoardTransfer(existing, center)
++		local ok, failure = pcall(function()
++			applySupportBoardTransfer(transfer, existing)
++			require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(existing)
++		end)
++		if not ok then restoreSupportBoardTransfer(transfer); error(failure) end
+ 		return existing
+ 	end
+ 	local manifest, kit = Bake.GetManifest(), Bake.Ensure()
+ 	local center = vec(manifest.previewCenter)
+ 	local model = Instance.new("Model"); model.Name = NAME; model.WorldPivot = CFrame.new(center)
++	local transfer
+ 	local ok, built = pcall(function()
+ 	model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+ 	model:SetAttribute(OWNED,true); model:SetAttribute("Ready",false)
+@@ -168,23 +214,20 @@
+ 			wall:SetAttribute("HologramFullSize",wall.Size); wall:SetAttribute("HologramFullCFrame",wall.CFrame)
+ 		end
+ 	end
+-	local notice=manifest.notice
+-	if notice then
+-		local host=part(signs,"Mounted Revision Notice",vec(notice.size),CFrame.new(center+vec(notice.position))*CFrame.Angles(0,notice.yaw,0),false)
+-		text(host,Enum.NormalId.Back,"LOBBY REVISION · DEV",Color3.fromRGB(192,244,223),Vector2.new(440,100))
+-	end
+ 	assert(not workspace:FindFirstChild(NAME), "Concurrent preview appeared; refusing overwrite")
+ 	-- Reuse the installed Blender furniture for dense reference end blockades.
+ 	local endPiles = require(script.Parent:WaitForChild("EndBlockades")).Add(model, kit, manifest)
+ 	local bayPolish = require(script.Parent:WaitForChild("LobbyPolishBays")).Add(model, kit, manifest)
+ 	require(script.Parent:WaitForChild("MaterialPolish")).Apply(model)
+ 	require(script.Parent:WaitForChild("LobbyPolishScene")).Apply(model)
++	transfer = supportBoardTransfer(model, center)
++	applySupportBoardTransfer(transfer, model)
+ 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
+ 	model.Parent = workspace
+ 	require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(model)
+ 	return model
+ 	end)
+-	if not ok then model:Destroy(); error(built) end
++	if not ok then restoreSupportBoardTransfer(transfer); model:Destroy(); error(built) end
+ 	return built
+ end
+ return Module

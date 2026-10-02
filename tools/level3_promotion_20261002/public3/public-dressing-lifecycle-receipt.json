@@ -1,0 +1,5 @@
+{
+  "Checks": 26,
+  "Passed": true,
+  "Scope": "Exact public participant predicate/prompt callback and owned cleanup/delay functions with mocks; gameplay and engine lifecycle unverified"
+}

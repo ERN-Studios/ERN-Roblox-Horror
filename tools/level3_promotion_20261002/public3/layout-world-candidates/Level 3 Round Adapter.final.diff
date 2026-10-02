@@ -1,0 +1,46 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Round Adapter live Source
++++ tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau
+@@ -15,6 +15,7 @@
+ local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+ local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
+ local WorldBuilder = require(script.Parent:WaitForChild("Level 3 World Builder"))
++local VisualAdapter = require(script.Parent:WaitForChild("Level 3 Worn Party Visual Adapter"))
+ local ObjectiveController = require(script.Parent:WaitForChild("Level 3 Objective Controller"))
+ local MusicSequenceController = require(script.Parent:WaitForChild("Level 3 Music Sequence Controller"))
+ local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
+@@ -531,6 +532,11 @@
+ 	HidingController.Stop()
+ 	stopMusicSequence()
+ 	stopObjectiveController()
++	if activeManifest and type(activeManifest.VisualCleanup) == "function" then
++		local ok, problem = pcall(activeManifest.VisualCleanup)
++		if not ok then warn("Level 3 visual cleanup: " .. tostring(problem)) end
++		activeManifest.VisualCleanup = nil
++	end
+ 	local levelState = state()
+ 	levelState:SetAttribute("Level3_Phase", "CLEANING")
+ 
+@@ -570,6 +576,12 @@
+ end
+ 
+ function Adapter.Build()
++	-- The server admission path prewarms the session-owned shared kit before its
++	-- normal loading deadline starts. Never bake 279 chunks inside that deadline.
++	local kit = ServerStorage:FindFirstChild("Level6BlenderKit")
++	assert(kit and kit:IsA("Folder") and kit:GetAttribute("Ready") == true
++		and kit:GetAttribute("BlenderSourceSHA256") == "d2eddfce3820a27f01cdd53b93b719ec8bf8d048b9313bc6cdf29610344acc6b",
++		"Level 3 revised Blender kit is not ready for public admission")
+ 	Adapter.Cleanup()
+ 	generation += 1
+ 
+@@ -639,6 +651,10 @@
+ 		local manifest = WorldBuilder.Build(layout, generation)
+ 		validateManifest(manifest)
+ 		activeManifest = manifest
++		local visualBegan = os.clock()
++		VisualAdapter.Apply(manifest)
++		validateManifest(manifest)
++		levelState:SetAttribute("Level3_VisualSeconds", math.round((os.clock() - visualBegan) * 100) / 100)
+ 		levelState:SetAttribute("Level3_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
+ 		-- A readback must never be able to fail a build.
+ 		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)

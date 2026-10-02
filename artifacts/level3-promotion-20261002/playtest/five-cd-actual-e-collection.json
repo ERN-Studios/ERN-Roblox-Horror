@@ -1,0 +1,105 @@
+{
+  "scope": "Actual native E prompt inputs; DEV Playtest repositions and entity pause, no forced CD/objective state",
+  "rows": [
+    {
+      "reposition": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"target\":{\"1\":6299.8798828125,\"3\":-101.52000427246094,\"2\":27.749998092651368},\"paused\":true,\"index\":1,\"root\":{\"1\":6292.6796875,\"3\":-101.52001190185547,\"2\":27.600000381469728}}"
+          }
+        ],
+        "isError": false
+      },
+      "actualEHeldResult": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"state\":\"CARRIED\",\"held\":1,\"index\":1,\"collected\":1,\"hp\":100,\"time\":\"2026-10-02T20:10:46Z\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "reposition": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"target\":{\"1\":6421.8798828125,\"3\":-78.47999572753906,\"2\":27.749998092651368},\"paused\":true,\"index\":2,\"root\":{\"1\":6414.6796875,\"3\":-78.4800033569336,\"2\":27.600000381469728}}"
+          }
+        ],
+        "isError": false
+      },
+      "actualEHeldResult": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"state\":\"CARRIED\",\"held\":2,\"index\":2,\"collected\":2,\"hp\":100,\"time\":\"2026-10-02T20:10:48Z\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "reposition": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"target\":{\"1\":6421.8798828125,\"3\":191.36000061035157,\"2\":27.749998092651368},\"paused\":true,\"index\":3,\"root\":{\"1\":6414.6796875,\"3\":191.36000061035157,\"2\":27.600000381469728}}"
+          }
+        ],
+        "isError": false
+      },
+      "actualEHeldResult": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"state\":\"CARRIED\",\"held\":3,\"index\":3,\"collected\":3,\"hp\":100,\"time\":\"2026-10-02T20:10:50Z\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "reposition": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"target\":{\"1\":6783.8798828125,\"3\":370.8800048828125,\"2\":27.749998092651368},\"paused\":true,\"index\":4,\"root\":{\"1\":6776.6796875,\"3\":370.8800354003906,\"2\":27.600000381469728}}"
+          }
+        ],
+        "isError": false
+      },
+      "actualEHeldResult": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"state\":\"CARRIED\",\"held\":4,\"index\":4,\"collected\":4,\"hp\":100,\"time\":\"2026-10-02T20:10:51Z\"}"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "reposition": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"target\":{\"1\":6539.6337890625,\"3\":699.47998046875,\"2\":27.749998092651368},\"paused\":true,\"index\":5,\"root\":{\"1\":6532.43359375,\"3\":699.47998046875,\"2\":27.600000381469728}}"
+          }
+        ],
+        "isError": false
+      },
+      "actualEHeldResult": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"state\":\"CARRIED\",\"held\":5,\"index\":5,\"collected\":5,\"hp\":100,\"time\":\"2026-10-02T20:10:53Z\"}"
+          }
+        ],
+        "isError": false
+      }
+    }
+  ]
+}

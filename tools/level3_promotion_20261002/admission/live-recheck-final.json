@@ -1,0 +1,31 @@
+{
+  "universeId": 10559217407,
+  "placeId": 131311258779917,
+  "helperAbsent": true,
+  "scripts": [
+    {
+      "bytes": 178031,
+      "path": "ServerScriptService.GameManager",
+      "editorSHA256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "editorMatch": true,
+      "sourceSHA256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "class": "Script"
+    },
+    {
+      "bytes": 8712,
+      "path": "ServerScriptService.Round Loading Runtime",
+      "editorSHA256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "editorMatch": true,
+      "sourceSHA256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "class": "ModuleScript"
+    },
+    {
+      "bytes": 75964,
+      "path": "ServerScriptService.Round Completion Routing",
+      "editorSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorMatch": true,
+      "sourceSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "class": "ModuleScript"
+    }
+  ]
+}

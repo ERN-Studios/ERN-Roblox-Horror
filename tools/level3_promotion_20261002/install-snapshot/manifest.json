@@ -1,0 +1,134 @@
+{
+  "task": "level3-promotion-20261002",
+  "payloadSHA256": "103a2de88f8548dd2725d1c86d2301e0996f0b9439c5e2ffce34222bafd42c42",
+  "installSHA256": "08e7472aab72622aa0d28e1201c01e0b843835d1a816a99fe709518bcb904fcc",
+  "sourceCount": 14,
+  "rows": [
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "candidateSHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 World Builder.ModuleScript.candidate.luau",
+      "candidateBytes": 108609
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "candidateSHA256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Layout Generator.ModuleScript.candidate.luau",
+      "candidateBytes": 47577
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art",
+      "className": "ModuleScript",
+      "new": true,
+      "baselineSHA256": null,
+      "candidateSHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Crayon Wall Art.ModuleScript.candidate.luau",
+      "candidateBytes": 8896
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing",
+      "className": "ModuleScript",
+      "new": true,
+      "baselineSHA256": null,
+      "candidateSHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Balloon Dressing.ModuleScript.candidate.luau",
+      "candidateBytes": 12479
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "candidateSHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.luau",
+      "candidateBytes": 18304
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "candidateSHA256": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Configuration.ModuleScript.candidate.luau",
+      "candidateBytes": 19281
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "candidateSHA256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Round Adapter.ModuleScript.candidate.luau",
+      "candidateBytes": 32558
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "candidateSHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Visual Adapter.ModuleScript.candidate.luau",
+      "candidateBytes": 24266
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "className": "LocalScript",
+      "new": false,
+      "baselineSHA256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "candidateSHA256": "52033d8e5480398a1e54fe44349c277659e0ea66d97f64e6cf826100a408061b",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller.candidate.luau",
+      "candidateBytes": 45954
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "candidateSHA256": "5474b27128d9d48deaa5503f4e340b138a06596534d87bff0a21d695ad2f39e8",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Objective Controller.candidate.luau",
+      "candidateBytes": 72453
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "candidateSHA256": "af5885402a9d42760e7ba059057d186a97395fab20819a8bd6e7aab481f7598d",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller.candidate.luau",
+      "candidateBytes": 188320
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "className": "ModuleScript",
+      "new": false,
+      "baselineSHA256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "candidateSHA256": "f5df8fc430d985722cd400cd69dc2af6db85b3f9e5a6043c72ee63c03b6c1799",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/gameplay_boards/candidates/ServerScriptService.LobbyReimaginedPreview.Builder.candidate.luau",
+      "candidateBytes": 13947
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "className": "Script",
+      "new": false,
+      "baselineSHA256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "candidateSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/ServerScriptService.GameManager.Script.candidate.v3.luau",
+      "candidateBytes": 182448
+    },
+    {
+      "path": "ServerScriptService.Level 3 Kit Warmup",
+      "className": "ModuleScript",
+      "new": true,
+      "baselineSHA256": null,
+      "candidateSHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/Level 3 Kit Warmup.ModuleScript.candidate.luau",
+      "candidateBytes": 2965
+    }
+  ]
+}

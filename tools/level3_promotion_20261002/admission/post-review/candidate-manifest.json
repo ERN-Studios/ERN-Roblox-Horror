@@ -1,0 +1,13 @@
+{
+  "changes": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "new": false,
+      "baselineSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+      "editorSHA256": "8e365508c1e42d9b50e28e8faa3d36ba72eb7b3ba667faf47e92d208262f0ef9",
+      "candidateSHA256": "ac252224a6f7ed82ccfdbea950a063e4e3e8c70da53322bc912f89b8cab5ad88",
+      "candidateFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level3_promotion_20261002/admission/post-review/ServerScriptService.GameManager.Script.candidate.v4.luau"
+    }
+  ]
+}

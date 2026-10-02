@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-10-02T19:48:58.944223+00:00",
+  "head": "92c3b5825f647fcf0881c3790a5da7c316da7021",
+  "dirtyTracked": " M .gitignore\n M assets/maps/vesper-cathedral/VesperCathedral.blend\n",
+  "remotes": "origin\thttps://github.com/ERN-Studios/ERN-Roblox-Horror.git (fetch)\norigin\thttps://github.com/ERN-Studios/ERN-Roblox-Horror.git (push)\n",
+  "unrelatedBlend": {
+    "path": "assets/maps/vesper-cathedral/VesperCathedral.blend",
+    "size": 1233146,
+    "mtime_ns": 1790631088224913835
+  },
+  "note": "Preserve concurrent .gitignore merge markers and unrelated Blender file; no reconciliation or Studio write."
+}

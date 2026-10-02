@@ -1,0 +1,431 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller
++++ normalized live6
+@@ -27,6 +27,8 @@
+ -- originals are never written to and stay the record of what was authored.
+ local function resolveTuning()
+ 	local merged = table.clone(Configuration.MallManager)
++	-- Reuse the Level 3 tuning namespace so both levels retain the same normal hunt rules.
++	-- Overlay returns a copy and never edits either level's frozen configuration.
+ 	merged.Normal = Master.Overlay(Configuration.MallManager.Normal, "L3Manager")
+ 	merged.Blackout = Master.Overlay(Configuration.MallManager.Blackout, "L3ManagerBlackout")
+ 	return merged
+@@ -76,7 +78,7 @@
+ local function stateFolder(): Folder
+ 	local existing = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
+ 	if existing and existing:IsA("Folder") then return existing end
+-	if existing then existing:Destroy() end
++	assert(existing == nil, "Refusing to replace an unowned Level 3 state folder")
+ 	local created = Instance.new("Folder")
+ 	created.Name = Configuration.StateFolderName
+ 	created.Parent = ReplicatedStorage
+@@ -107,8 +109,8 @@
+ 
+ local function validRound(session: any): boolean
+ 	return liveSession(session)
+-		and workspace:GetAttribute("SelectedLevel") == 3
+-		and workspace:GetAttribute("RoundActive") == true
++		and workspace:GetAttribute("Level3SelectedLevel") == 6
++		and workspace:GetAttribute("Level3RoundActive") == true
+ 		and workspace:GetAttribute("Level3MallManagerHuntActive") == true
+ 		and workspace:GetAttribute("EntityPaused") ~= true
+ end
+@@ -125,7 +127,9 @@
+ 	if not hardSnap and session.MotionAccumulator < interval then return end
+ 	session.MotionAccumulator = if hardSnap then 0 else session.MotionAccumulator % interval
+ 	session.MotionSequence += 1
+-	session.MotionRemote:FireAllClients(
++	for _, recipient in ipairs(Players:GetPlayers()) do
++		if recipient:GetAttribute("Level3InRound") == true then
++	session.MotionRemote:FireClient(recipient,
+ 		session.Model,
+ 		session.Generation,
+ 		session.SpawnSerial,
+@@ -134,13 +138,15 @@
+ 		session.Root.CFrame,
+ 		hardSnap == true
+ 	)
++		end
++	end
+ end
+ 
+ local function livingPlayer(player: Player, session: any): (Model?, Humanoid?, BasePart?)
+ 	if not validRound(session)
+ 		or player.Parent ~= Players
+-		or player:GetAttribute("InRound") ~= true
+-		or player:GetAttribute("Escaped") == true then
++		or player:GetAttribute("Level3InRound") ~= true
++		or player:GetAttribute("Level3Escaped") == true then
+ 		return nil, nil, nil
+ 	end
+ 	local character = player.Character
+@@ -175,28 +181,9 @@
+ 	local stateName = session.State
+ 	local activeProfile = profile(session)
+ 	if session.FinalHallChase and stateName == "CHASE" then
+-		-- The entrance can be over a thousand studs away. The fast approach
+-		-- still follows the maze and uses the normal collision sweep.
+-		if not insideFinalHall(session, session.Root.Position) then
+-			return Tuning.FinaleApproachSpeed
+-		end
+-		-- Lock the hall speed once, accounting for this layout's approach time.
+-		-- An uninterrupted sprint reaches the sensor about one second ahead.
+-		-- Do not keep adapting to the runner: stopping must still get them caught.
+-		if not session.FinaleHallSpeed then
+-			local targetRoot = session.Target and session.Target.Character
+-				and session.Target.Character:FindFirstChild("HumanoidRootPart")
+-			local exit = session.Manifest.EscapeTrigger
+-			if targetRoot and exit and insideFinalHall(session, targetRoot.Position) then
+-				local forward = session.Manifest.FinalHall.Forward
+-				local runnerRemaining = math.max(0, (exit.Position - targetRoot.Position):Dot(forward))
+-				local entityRemaining = math.max(0, (exit.Position - session.Root.Position):Dot(forward))
+-				local timeToExit = runnerRemaining / Tuning.PlayerRunSpeedReference + 1
+-				session.FinaleHallSpeed = math.clamp(entityRemaining / timeToExit,
+-					Tuning.PlayerRunSpeedReference, Tuning.PlayerRunSpeedReference * 1.5)
+-			end
+-		end
+-		return session.FinaleHallSpeed or activeProfile.ChaseSpeed
++		-- The finale starts ahead of the players and walks toward them.
++		-- Keep a fixed speed; the old catch-up calculation assumed a spawn behind them.
++		return Tuning.FinaleApproachSpeed
+ 	end
+ 	if stateName == "PATROL" or stateName == "PATROL_LISTEN" or stateName == "AWAKENING" then
+ 		return activeProfile.PatrolSpeed
+@@ -219,7 +206,7 @@
+ 	session.StateFolder:SetAttribute("Level3_MallManagerPathStatus", value)
+ end
+ 
+--- LEVEL3_MANAGER_GENUINE_PATH_VALIDATION_20260827
++-- LEVEL6_MANAGER_GENUINE_PATH_VALIDATION_20260827
+ -- Spawn selection only proves the spawn volume is clear. Reachability is
+ -- published only after the authoritative 5.25-stud volume contract accepts a
+ -- complete route (or a direct segment reaches the goal); a coarse PFS success
+@@ -256,11 +243,11 @@
+ 	session.Target = player
+ 	session.TargetTableAnchor = nil
+ 	if not player then stopChaseScream(session) end
+-	if old and old.Parent == Players and old:GetAttribute("BeingChased") == true then
+-		old:SetAttribute("BeingChased", false)
++	if old and old.Parent == Players and old:GetAttribute("Level3BeingChased") == true then
++		old:SetAttribute("Level3BeingChased", false)
+ 	end
+ 	if player and player.Parent == Players then
+-		player:SetAttribute("BeingChased", true)
++		player:SetAttribute("Level3BeingChased", true)
+ 	end
+ 	local userId = if player then player.UserId else 0
+ 	session.StateFolder:SetAttribute("Level3_MallManagerTargetUserId", userId)
+@@ -298,7 +285,7 @@
+ 	end
+ end
+ 
+--- LEVEL3_MANAGER_TABLE_CHECK_20260904
++-- LEVEL6_MANAGER_TABLE_CHECK_20260904
+ -- What the clients need to render a table check: which hiding table the Manager
+ -- is kneeling at (its Level3_HideTableIndex, 0 for none) and when the reaction
+ -- window closes, in workspace:GetServerTimeNow() terms so a client can compare
+@@ -659,7 +646,7 @@
+ 	end
+ 	local original = flat(position, floorY)
+ 	if not bestProjection then return original end
+-	-- LEVEL3_MANAGER_WAYPOINT_REVALIDATION_20260827
++	-- LEVEL6_MANAGER_WAYPOINT_REVALIDATION_20260827
+ 	-- The centreline is a preference, not a truth. A projection may only
+ 	-- replace its PFS waypoint when the whole lateral hop from the original
+ 	-- point to the projection passes the shared furniture-aware full-segment
+@@ -835,7 +822,7 @@
+ 	return CFrame.new(center), size
+ end
+ 
+--- LEVEL3_MANAGER_SHARED_FURNITURE_CLEARANCE_20260821
++-- LEVEL6_MANAGER_SHARED_FURNITURE_CLEARANCE_20260821
+ -- Pathfinding, direct-path shortcuts, waypoint lookahead, and local steering must
+ -- agree on the same inflated table-and-chair envelopes. These parts are
+ -- deliberately non-collidable, so physics overlap queries alone cannot see them.
+@@ -854,7 +841,7 @@
+ 	return exclusions
+ end
+ 
+--- LEVEL3_PERMANENT_FURNITURE_20260828
++-- LEVEL6_PERMANENT_FURNITURE_20260828
+ -- Furniture is permanent scene topology. It is never stripped, ghosted or made
+ -- collisionless, so every exclusion envelope guards physically present
+ -- furniture for the whole round and the Manager plans around all of it,
+@@ -1115,9 +1102,9 @@
+ 	return best
+ end
+ 
+--- LEVEL3_MANAGER_ROOM_AISLE_REPAIR_20260924
++-- LEVEL6_MANAGER_ROOM_AISLE_REPAIR_20260924
+ -- Both rings above are rectangles. Furniture can leave the body one narrow
+--- aisle that neither follows: on seed 1428587057, L3_S2_R05's only way to its
++-- aisle that neither follows: on seed 1428587057, L6_S2_R05's only way to its
+ -- south door is a 1.7-stud centre lane between two table envelopes, corner
+ -- columns block both rings, and PFS voxels route through an 8.6-stud column
+ -- gap the 10.5-stud sweep cannot pass. The finale Manager froze there for the
+@@ -1267,7 +1254,7 @@
+ 	end
+ 	return volumeClear(session, current, destination)
+ end
+--- LEVEL3_MANAGER_SAFE_GOAL_20260821
++-- LEVEL6_MANAGER_SAFE_GOAL_20260821
+ -- Room centers and sensed targets may land inside a banquet table's inflated
+ -- navigation envelope. Resolve them to the nearest reachable point on the
+ -- approach side so the graph fallback never orders the Manager back into the
+@@ -1295,7 +1282,7 @@
+ 	return false
+ end
+ 
+--- LEVEL3_MANAGER_WALL_HUG_GOAL_20260827
++-- LEVEL6_MANAGER_WALL_HUG_GOAL_20260827
+ -- The near rings keep a wall-hugging exposed player catchable. 4.2 sits inside
+ -- AttackRange (4.4) and clears the wall whenever the target root is >= ~1.05
+ -- studs from the face; 4.75 clears at the deepest physically possible hug
+@@ -1372,7 +1359,7 @@
+ 	end
+ 	local startId = nearestRoomId(session.Root.Position)
+ 	local goalId = nearestRoomId(finalGoal)
+-	-- LEVEL3_MANAGER_STRATEGIC_CACHE_20260827
++	-- LEVEL6_MANAGER_STRATEGIC_CACHE_20260827
+ 	-- While the goal room is unchanged and the Manager is still on the cached
+ 	-- room sequence, a moving target only replaces the final point; progress
+ 	-- through the sequence never resets because the player moved inside their
+@@ -1530,7 +1517,7 @@
+ 	end
+ end
+ 
+--- LEVEL3_MANAGER_PATH_PIPELINE_20260827
++-- LEVEL6_MANAGER_PATH_PIPELINE_20260827
+ -- One ComputeAsync in flight, ever; a hard request floor that applies to
+ -- forced recovery callers too (blackout: 0.20s, at most five requests per
+ -- second); and coalesced moving-goal updates. A successful route is always
+@@ -2042,16 +2029,22 @@
+ 	local selected: Player? = nil
+ 	local selectedRoot: BasePart? = nil
+ 	local bestDistance = math.huge
++	local selectedInFinalHall = false
+ 	for _, candidate in ipairs(Players:GetPlayers()) do
+ 		local _, _, candidateRoot = livingPlayer(candidate, session)
+ 		if candidateRoot then
+ 			local distance = planarDistance(session.Root.Position, candidateRoot.Position)
+-			if distance < bestDistance - .001
+-				or (math.abs(distance - bestDistance) <= .001
+-					and (not selected or candidate.UserId < selected.UserId)) then
++			-- During the finale, a nearby player in an adjacent room must not pull
++			-- the ambush away from runners in the exit lane. Normal hunts are unchanged.
++			local inFinalHall = session.FinalHallChase and insideFinalHall(session, candidateRoot.Position)
++			if (inFinalHall and not selectedInFinalHall)
++				or (inFinalHall == selectedInFinalHall and (distance < bestDistance - .001
++					or (math.abs(distance - bestDistance) <= .001
++						and (not selected or candidate.UserId < selected.UserId)))) then
+ 				selected = candidate
+ 				selectedRoot = candidateRoot
+ 				bestDistance = distance
++				selectedInFinalHall = inFinalHall
+ 			end
+ 		end
+ 	end
+@@ -2512,7 +2505,7 @@
+ 
+ local function beginAttack(session: any, player: Player)
+ 	if session.Attacking or os.clock() < session.AttackCooldownUntil then return end
+-	-- LEVEL3_MANAGER_WALL_HUG_ATTACK_20260827
++	-- LEVEL6_MANAGER_WALL_HUG_ATTACK_20260827
+ 	-- When the chase goal had to resolve away from the target (the target's
+ 	-- own clearance volume is blocked — pressed against a wall), the Manager
+ 	-- legitimately parks up to one resolved ring outside AttackRange. Initiate
+@@ -2683,7 +2676,7 @@
+ 	-- Navigation recovery only resets progress bookkeeping. It never rewinds,
+ 	-- teleports, or changes the rendered transform.
+ 	--
+-	-- LEVEL3_MANAGER_ESCALATION_SURVIVES_RECOVERY_20260827
++	-- LEVEL6_MANAGER_ESCALATION_SURVIVES_RECOVERY_20260827
+ 	-- This deliberately does NOT clear OverlapEscapeAttempts. Recovery fires
+ 	-- after ObstructionRecoveryAttempts refused steering frames — the very
+ 	-- frames the overlap ladder uses to escalate — so clearing it here made the
+@@ -2705,9 +2698,9 @@
+ 	publishPathStatus(session, "RECOVERY_REPATH")
+ end
+ 
+--- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+--- LEVEL3_MANAGER_OVERLAP_COMMIT_20260821
+--- LEVEL3_MANAGER_OVERLAP_LIFETIME_20260827
++-- LEVEL6_MANAGER_FURNITURE_NAV_20260821
++-- LEVEL6_MANAGER_OVERLAP_COMMIT_20260821
++-- LEVEL6_MANAGER_OVERLAP_LIFETIME_20260827
+ -- Commit to one side of a wide obstacle and explicitly walk out of an already
+ -- overlapping clearance volume. Every escape attempt has a fixed
+ -- AvoidanceCommitSeconds deadline and must earn a measurable blocker-count or
+@@ -2941,14 +2934,14 @@
+ 	return bestPosition, bestDirection
+ end
+ 
+--- LEVEL3_MANAGER_PROGRESS_TRACKER_20260827
++-- LEVEL6_MANAGER_PROGRESS_TRACKER_20260827
+ -- Stuck detection runs on every movement branch — waiting on a path, missing
+ -- waypoint, obstruction recovery and normal stepping alike. Progress means
+ -- route consumption (waypoint or strategic index advancing on the same route)
+ -- or genuinely closing on the active movement objective; raw displacement is
+ -- deliberately not a signal, so lateral circling cannot feed it.
+ --
+--- LEVEL3_MANAGER_CUMULATIVE_PROGRESS_20260827
++-- LEVEL6_MANAGER_CUMULATIVE_PROGRESS_20260827
+ -- Distance progress is measured with two fields, never one. ProgressBestDistance
+ -- is the raw closest approach to the current objective; ProgressCreditedDistance
+ -- is a checkpoint that only moves when a gain is actually credited. A single
+@@ -3156,7 +3149,7 @@
+ 	local acceleration = if session.Blackout then Tuning.BlackoutMovementAcceleration else Tuning.MovementAcceleration
+ 	local deceleration = if session.Blackout then Tuning.BlackoutMovementDeceleration else Tuning.MovementDeceleration
+ 	if session.FinalHallChase then
+-		-- Finish the fast approach promptly, including braking at the hall mouth.
++		-- Reach the fixed fast-walk pace promptly and brake within the attack range.
+ 		-- Every actual displacement still uses the unchanged physical sweep.
+ 		acceleration = math.max(acceleration, Tuning.FinaleApproachSpeed * 6)
+ 		deceleration = math.max(deceleration, Tuning.FinaleApproachSpeed * 12)
+@@ -3267,8 +3260,8 @@
+ 		disconnect(session.PathBlockedConnection)
+ 		session.PathBlockedConnection = nil
+ 		if session.Target and session.Target.Parent == Players
+-			and session.Target:GetAttribute("BeingChased") == true then
+-			session.Target:SetAttribute("BeingChased", false)
++			and session.Target:GetAttribute("Level3BeingChased") == true then
++			session.Target:SetAttribute("Level3BeingChased", false)
+ 		end
+ 		stopChaseScream(session)
+ 		stopWalkForCleanup(session)
+@@ -3290,9 +3283,9 @@
+ 		end
+ 	end
+ 	for _, player in ipairs(Players:GetPlayers()) do
+-		if player:GetAttribute("BeingChased") == true
+-			and workspace:GetAttribute("SelectedLevel") == 3 then
+-			player:SetAttribute("BeingChased", false)
++		if player:GetAttribute("Level3BeingChased") == true
++			and workspace:GetAttribute("Level3SelectedLevel") == 6 then
++			player:SetAttribute("Level3BeingChased", false)
+ 		end
+ 	end
+ 	resetPublishedState()
+@@ -3318,11 +3311,11 @@
+ 
+ local function eligibleSpawnPlayers(): {any}
+ 	local records = {}
+-	if workspace:GetAttribute("SelectedLevel") ~= 3 or workspace:GetAttribute("RoundActive") ~= true then
++	if workspace:GetAttribute("Level3SelectedLevel") ~= 6 or workspace:GetAttribute("Level3RoundActive") ~= true then
+ 		return records
+ 	end
+ 	for _, player in ipairs(Players:GetPlayers()) do
+-		if player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true then
++		if player:GetAttribute("Level3InRound") == true and player:GetAttribute("Level3Escaped") ~= true then
+ 			local character = player.Character
+ 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ 			local root = character and character:FindFirstChild("HumanoidRootPart")
+@@ -3400,25 +3393,35 @@
+ 	local records = eligibleSpawnPlayers()
+ 	if #records == 0 then return nil end
+ 	local hall = manifest.FinalHall
+-	local entry = manifest.MazeStart
+-	if type(hall) ~= "table" or not entry or not entry.Parent then return nil end
++	if type(hall) ~= "table" or not hall.Model or not hall.Model.Parent then return nil end
+ 	local state = stateFolder()
+ 	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+ 	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+-	-- The finale starts at the player's Level 3 entrance, never beside the exit.
+-	-- Try a few clear points just inside the arrival room, avoiding the spawn pad.
++	-- Start in the last ten percent of the actual final corridor and face its runners.
++	-- Preserve the normal minimum distance from EVERY eligible living participant.
++	-- If someone is already at the far end, bindManager retries until it is safe;
++	-- never relocate the reveal beside that player or back to the level entrance.
+ 	local position: Vector3? = nil
+ 	local overlap = spawnOverlapParams(records)
+-	for _, distance in ipairs({8, 12, 16, 20}) do
+-		local candidate = entry.Position + entry.CFrame.LookVector * distance
++	local preferred = math.clamp(tonumber(hall.SpawnProgress) or Tuning.FinalHallSpawnProgress, .90, .98)
++	for _, progress in ipairs({preferred, .95, .93, .90}) do
++		local candidate = hall.StartPoint:Lerp(hall.EndPoint, progress)
+ 		candidate = Vector3.new(candidate.X, hall.FloorY, candidate.Z)
+-		if spawnVolumeFits(candidate, overlap) then position = candidate; break end
+-	end
+-	if not position then
+-		warn("[Level 3 Mall Manager] level-entry finale spawn volume is blocked")
+-		return nil
+-	end
++		local nearestDistance = math.huge
++		for _, record in ipairs(records) do
++			nearestDistance = math.min(nearestDistance, planarDistance(candidate, record.Position))
++		end
++		if nearestDistance >= Tuning.SpawnMinimumDistance and spawnVolumeFits(candidate, overlap) then
++			position = candidate
++			break
++		end
++	end
++	if not position then return nil end
++	-- Face a runner in the exit lane before the first authoritative chase tick.
+ 	table.sort(records, function(a, b)
++		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
++		local bInHall = insideFinalHall({Manifest=manifest}, b.Position)
++		if aInHall ~= bInHall then return aInHall end
+ 		local aDistance = planarDistance(position, a.Position)
+ 		local bDistance = planarDistance(position, b.Position)
+ 		if math.abs(aDistance - bDistance) > .001 then return aDistance < bDistance end
+@@ -3440,8 +3443,7 @@
+ 		Cycle = cycle,
+ 		RoomId = nearestRoomId(position),
+ 		Random = random,
+-		-- The spawn volume was genuinely swept clear above; route reachability is
+-		-- proven later by the authoritative full-route sweep (markPathValidated).
++		-- Volume clearance is real; route reachability is still proved by the existing sweep.
+ 		SpawnClearanceValidated = true,
+ 		Visibility = spawnVisibilityCount(position, records),
+ 		NearestDistance = nearestDistance,
+@@ -3624,7 +3626,7 @@
+ 	end
+ 
+ 	for _, player in ipairs(Players:GetPlayers()) do
+-		if player:GetAttribute("BeingChased") == true then player:SetAttribute("BeingChased", false) end
++		if player:GetAttribute("Level3BeingChased") == true then player:SetAttribute("Level3BeingChased", false) end
+ 	end
+ 	local spawnDistance = spawnData.NearestDistance
+ 	local model, root, groundOffset = cloneManager(manifest, spawnData.Position,
+@@ -3758,7 +3760,7 @@
+ 		AttackCharacter = nil,
+ 		AttackCooldownUntil = 0,
+ 		AttackSerial = 0,
+-		-- Table check (LEVEL3_MANAGER_TABLE_CHECK_20260904). TargetAnchor is the
++		-- Table check (LEVEL6_MANAGER_TABLE_CHECK_20260904). TargetAnchor is the
+ 		-- table this sweep leg is aimed at; Anchor is the one being checked right
+ 		-- now. Both are cleared by Controller.Stop, along with the cue and the
+ 		-- replicated state, so nothing survives a round.
+@@ -3835,8 +3837,8 @@
+ 
+ 	local function roundChanged()
+ 		if not liveSession(session) then return end
+-		if workspace:GetAttribute("RoundActive") == true
+-			and workspace:GetAttribute("SelectedLevel") == 3
++		if workspace:GetAttribute("Level3RoundActive") == true
++			and workspace:GetAttribute("Level3SelectedLevel") == 6
+ 			and workspace:GetAttribute("Level3MallManagerHuntActive") == true then
+ 			session.ActivatedAt = os.clock() + Tuning.SpawnGraceSeconds
+ 			session.LastProgressAt = os.clock()
+@@ -3850,7 +3852,7 @@
+ 			dormant(session, "WAITING")
+ 		end
+ 	end
+-	table.insert(session.Connections, workspace:GetAttributeChangedSignal("RoundActive"):Connect(roundChanged))
++	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level3RoundActive"):Connect(roundChanged))
+ 	table.insert(session.Connections, workspace:GetAttributeChangedSignal("EntityPaused"):Connect(function()
+ 		if workspace:GetAttribute("EntityPaused") == true then dormant(session, "PAUSED") end
+ 	end))
+@@ -4293,4 +4295,13 @@
+ 	return Controller.GetSnapshot()
+ end
+ 
++-- Server-only arcade/mechanical noise hook; caller cannot target non-participants.
++function Controller.ReportNoise(player: Player, position: Vector3, strength: number?)
++	local session = activeSession
++	if not session or typeof(position) ~= "Vector3" then return end
++	local character, humanoid, root = livingPlayer(player, session)
++	if not character or not humanoid or not root or (root.Position-position).Magnitude > 24 then return end
++	session.WorldNoise = {Position=position, Time=os.clock(), Strength=math.clamp(tonumber(strength) or 1, .1, 1.5)}
++end
++
+ return Controller

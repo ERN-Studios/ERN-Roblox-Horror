@@ -1,0 +1,37 @@
+[
+  {
+    "path": "artifacts/level3-promotion-20261002/screenshots/lobby-actual-play.jpg",
+    "bytes": 373367,
+    "sha256": "96205b0b3d3b647d2e2d2cd667ae4b5c29a949822bd9b31d36f9349447bd3837",
+    "mimeType": "image/jpeg",
+    "provenance": "Unedited Studio MCP actual Play screen capture"
+  },
+  {
+    "path": "artifacts/level3-promotion-20261002/screenshots/lobby-after-level3-clear.jpg",
+    "bytes": 378389,
+    "sha256": "f85f1cdcb35150e1e47130ab23d6dd1580f03aeddb5751977b7bb7647a233480",
+    "mimeType": "image/jpeg",
+    "provenance": "Unedited Studio MCP actual Play screen capture"
+  },
+  {
+    "path": "artifacts/level3-promotion-20261002/screenshots/level3-normal-queue.jpg",
+    "bytes": 326202,
+    "sha256": "2150368bda7ba27b07c7a8dd7b912ef35a95eff26579f0c1f1ee1eab3c69db61",
+    "mimeType": "image/jpeg",
+    "provenance": "Unedited Studio MCP actual Play screen capture"
+  },
+  {
+    "path": "artifacts/level3-promotion-20261002/screenshots/level3-tube-arrival.jpg",
+    "bytes": 312329,
+    "sha256": "a99465451c8259a0524ce60994c9c9aed018359236e129cd3d33c35a004a16ea",
+    "mimeType": "image/jpeg",
+    "provenance": "Unedited Studio MCP actual Play screen capture"
+  },
+  {
+    "path": "artifacts/level3-promotion-20261002/screenshots/level3-cd-room-assisted-view.jpg",
+    "bytes": 454622,
+    "sha256": "4d437067df4ae90042c6697e6c05ecaee8fb42da08e1f3d7fad39d2a3fa1c72f",
+    "mimeType": "image/jpeg",
+    "provenance": "Unedited Studio MCP actual Play screen capture"
+  }
+]

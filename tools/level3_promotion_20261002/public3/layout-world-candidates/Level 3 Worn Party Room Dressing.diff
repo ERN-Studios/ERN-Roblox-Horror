@@ -1,0 +1,57 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing live Source
++++ tools/level3_promotion_20261002/public3/layout-world-candidates/Level 3 Worn Party Room Dressing.ModuleScript.candidate.luau
+@@ -235,24 +235,6 @@
+ 		return part
+ 	end
+ 
+-	local partyAmbienceDistricts = {}
+-	local function addAmbience(parent, position, key)
+-		local source = validSoundId(soundIds[key])
+-		if not source then return end
+-		local emitter = carrier(parent, position + V(0, 5, 0), "Level 3 Worn Party Ambience Emitter")
+-		local sound = Instance.new("Sound")
+-		sound.Name = key
+-		sound.SoundId = source
+-		sound.Looped = true
+-		sound.Volume = .10
+-		sound.RollOffMode = Enum.RollOffMode.InverseTapered
+-		sound.RollOffMinDistance = 12
+-		sound.RollOffMaxDistance = 86
+-		sound.Parent = emitter
+-		table.insert(sounds, sound)
+-		sound:Play()
+-	end
+-
+ 	local function navBox(parent,cf,size)
+ 		local blocker=carrier(parent,cf.Position,"Level 3 Service Furniture Nav Exclusion")
+ 		blocker.CFrame=cf*CFrame.new(0,5,0)
+@@ -278,12 +260,10 @@
+ 		prompt.ActionText=if kind=="breaker" then "Inspect" else "Try a credit"
+ 		prompt.HoldDuration=if kind=="breaker" then .65 else .35
+ 		prompt.MaxActivationDistance=8
+-		-- The authored cabinet and its invisible collision proxy sit between the
+-		-- player and this internal anchor; range and round checks still gate use.
+-		prompt.RequiresLineOfSight=false
++		prompt.RequiresLineOfSight=true
+ 		prompt.Enabled=type(participantCheck)=="function"
+ 		prompt.Parent=anchor
+-		local source=validSoundId(soundIds[if kind=="breaker" then "BreakerInspect" else "ArcadeCredit"])
++		local source=validSoundId(soundIds[if kind=="breaker" then "BreakerInspect" elseif kind=="claw" then "ClawMotor" else asset])
+ 		local sound
+ 		if source then
+ 			sound=Instance.new("Sound")
+@@ -351,14 +331,6 @@
+ 		local blocked=collectBlocked(roomModel,base)
+ 		local plan=Dress.Plan(room,blocked,room.ServicePocketSeed or seed+roomIndex*997)
+ 		local height=tonumber(room.H) or 12
+-		if plan.Variant == "BudgetArcade" then
+-			addAmbience(group, base, "BudgetArcadeAmbience")
+-		elseif plan.Variant == "MaintenanceWorkshop" then
+-			addAmbience(group, base, "MaintenanceWorkshopAmbience")
+-		elseif room.SectionIndex and room.SectionIndex > 0 and not partyAmbienceDistricts[room.SectionIndex] then
+-			partyAmbienceDistricts[room.SectionIndex] = true
+-			addAmbience(group, base, "PartyHallAmbience")
+-		end
+ 
+ 		-- Small table dressing rides the existing authoritative tabletop; never
+ 		-- create a new table, hide anchor, pickup socket or objective prompt here.

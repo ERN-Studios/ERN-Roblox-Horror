@@ -1,0 +1,23 @@
+--- capture-readonly.luau
++++ capture-readonly-mcp.luau
+@@ -1,4 +1,6 @@
+--- Read-only live snapshot. Existing HttpEnabled must already be enabled.
++-- Read-only synchronous MCP snapshot. Existing HttpEnabled must already be enabled.
++-- MCP has no global shared table. All status/baseline markers stay local to this invocation.
++local shared = {}
+ local HS = game:GetService("HttpService")
+ local SER = game:GetService("SerializationService")
+ local ENC = game:GetService("EncodingService")
+@@ -178,5 +180,10 @@
+ end
+ 
+ shared.__level3PromotionBackupRunning = true
+-task.spawn(run)
+-return "Level 3 promotion full-native read-only export started. Inspect shared.__level3PromotionBackupStatus; receiver will save fresh-source files."
++run()
++assert(type(shared.__level3PromotionBackupStatus)=="string" and shared.__level3PromotionBackupStatus:sub(1,8)=="complete",shared.__level3PromotionBackupStatus or "Synchronous capture did not complete")
++local receipt=assert(shared.__level3PromotionNativeRecovery,"Synchronous capture lacks receipt")
++return HS:JSONEncode({task="level3-promotion-20261002",status=shared.__level3PromotionBackupStatus,
++    captureId=receipt.captureId,nativeSHA256=receipt.nativeSHA256,nativeBytes=receipt.nativeBytes,
++    sourceCount=receipt.sourceCount,allPostsAcknowledged=receipt.allPostsAcknowledged,
++    diskRecoveryVerified=false,persistentStudioWrites=false,statusMarkers="local invocation only"})

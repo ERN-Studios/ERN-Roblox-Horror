@@ -1,0 +1,18 @@
+{
+  "Passed": true,
+  "Scope": "Exact syntax only, no Studio or gameplay claim",
+  "Sources": [
+    {
+      "Bytes": 182136,
+      "Path": "ServerScriptService.GameManager",
+      "SHA256": "ef52959c3d5a210dc015161dabbf65c3194bf497c1bcff896599e52b662f55e2",
+      "Syntax": "PASS"
+    },
+    {
+      "Bytes": 2965,
+      "Path": "ServerScriptService.Level 3 Kit Warmup",
+      "SHA256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "Syntax": "PASS"
+    }
+  ]
+}

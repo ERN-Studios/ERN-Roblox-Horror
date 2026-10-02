@@ -1,0 +1,694 @@
+{
+  "ArrivalFunctionSHA256": "7bd0d362d1d1e495090cb5efb9116e64f5d885ebf70fc3ce276eba48d4b2464e",
+  "Checks": 1349,
+  "Corridors": [
+    {
+      "Corridors": 37,
+      "Passed": true,
+      "Seed": 101
+    },
+    {
+      "Corridors": 37,
+      "Passed": true,
+      "Seed": 7331
+    }
+  ],
+  "Layouts": [
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-a3edfe64",
+      "Seed": 101
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-bf0d1553",
+      "Seed": 7331
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-51e7303b",
+      "Seed": 65537
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-e26cfbe1",
+      "Seed": 1900813
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c9a9788c",
+      "Seed": 104730
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-f288dcd3",
+      "Seed": 209459
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-6808b6f6",
+      "Seed": 314188
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-780051b1",
+      "Seed": 418917
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-728dc80c",
+      "Seed": 523646
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-cb7b2610",
+      "Seed": 628375
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-30989d26",
+      "Seed": 733104
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-55bb8e20",
+      "Seed": 837833
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-f659e5c0",
+      "Seed": 942562
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-53691c14",
+      "Seed": 1047291
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-0e8b8bf1",
+      "Seed": 1152020
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-d632d8b0",
+      "Seed": 1256749
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-1f3d9623",
+      "Seed": 1361478
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-cf2b2a62",
+      "Seed": 1466207
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-e367c175",
+      "Seed": 1570936
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-06d3ef42",
+      "Seed": 1675665
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-46848fbb",
+      "Seed": 1780394
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-10e6173a",
+      "Seed": 1885123
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-6caa84df",
+      "Seed": 1989852
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-cc2c0fef",
+      "Seed": 2094581
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-bd0091cd",
+      "Seed": 2199310
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-41449138",
+      "Seed": 2304039
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-34422223",
+      "Seed": 2408768
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-61247285",
+      "Seed": 2513497
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-a0a5b0b5",
+      "Seed": 2618226
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-db519529",
+      "Seed": 2722955
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-0623e842",
+      "Seed": 2827684
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c84bb181",
+      "Seed": 2932413
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-7c08e82d",
+      "Seed": 3037142
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-43b034ec",
+      "Seed": 3141871
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-16de7b40",
+      "Seed": 3246600
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c47e975f",
+      "Seed": 3351329
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-04fb5e68",
+      "Seed": 3456058
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-29eb1453",
+      "Seed": 3560787
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c04cc9f2",
+      "Seed": 3665516
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-5e4fff31",
+      "Seed": 3770245
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c8a8c470",
+      "Seed": 3874974
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-236874a9",
+      "Seed": 3979703
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-b0c6245f",
+      "Seed": 4084432
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-d348acc4",
+      "Seed": 4189161
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-b00e673f",
+      "Seed": 4293890
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-59d4650a",
+      "Seed": 4398619
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-9d9a9f50",
+      "Seed": 4503348
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c167967f",
+      "Seed": 4608077
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-521c646d",
+      "Seed": 4712806
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-eeabc610",
+      "Seed": 4817535
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-504f660f",
+      "Seed": 4922264
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-261a3868",
+      "Seed": 5026993
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-46f9a9b4",
+      "Seed": 5131722
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-d876d2e1",
+      "Seed": 5236451
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-fbe5d792",
+      "Seed": 5341180
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-d3670871",
+      "Seed": 5445909
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-cfabba27",
+      "Seed": 5550638
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-0ed29327",
+      "Seed": 5655367
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-464314af",
+      "Seed": 5760096
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-fac10c57",
+      "Seed": 5864825
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-02f4dc50",
+      "Seed": 5969554
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-f278651a",
+      "Seed": 6074283
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-f6526184",
+      "Seed": 6179012
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-77397ef0",
+      "Seed": 6283741
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-4ebaafcf",
+      "Seed": 6388470
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-1fe102fc",
+      "Seed": 6493199
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-18d6c99d",
+      "Seed": 6597928
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-78f2f994",
+      "Seed": 6702657
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-4322ecca",
+      "Seed": 6807386
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-8416bd8d",
+      "Seed": 6912115
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-22943cfa",
+      "Seed": 7016844
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-e2506265",
+      "Seed": 7121573
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-55b12b80",
+      "Seed": 7226302
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-74fc5511",
+      "Seed": 7331031
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-b0ad9808",
+      "Seed": 7435760
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-ed77b05b",
+      "Seed": 7540489
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-42789098",
+      "Seed": 7645218
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-91260917",
+      "Seed": 7749947
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-41f8ea29",
+      "Seed": 7854676
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-8642913e",
+      "Seed": 7959405
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-42d375dd",
+      "Seed": 8064134
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-b158681d",
+      "Seed": 8168863
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-58c8070f",
+      "Seed": 8273592
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-bc67180e",
+      "Seed": 8378321
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-12cd658a",
+      "Seed": 8483050
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-c33deb65",
+      "Seed": 8587779
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-adbebbc1",
+      "Seed": 8692508
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-5fbc711a",
+      "Seed": 8797237
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-5ef4838a",
+      "Seed": 8901966
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-4e0d01f7",
+      "Seed": 9006695
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-f9f78d92",
+      "Seed": 9111424
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-09802cb2",
+      "Seed": 9216153
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-00234200",
+      "Seed": 9320882
+    },
+    {
+      "Attempt": 2,
+      "Fallback": false,
+      "Hash": "L3-6-28eafd8f",
+      "Seed": 9425611
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-d68b19ae",
+      "Seed": 9530340
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-256c47d3",
+      "Seed": 9635069
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-e5b402e4",
+      "Seed": 9739798
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-4cc6b5ea",
+      "Seed": 9844527
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-015764d3",
+      "Seed": 9949256
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-1d17e806",
+      "Seed": 10053985
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-828d5eaa",
+      "Seed": 10158714
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-5be520c1",
+      "Seed": 10263443
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-0256029c",
+      "Seed": 10368172
+    },
+    {
+      "Attempt": 1,
+      "Fallback": false,
+      "Hash": "L3-6-bb44531c",
+      "Seed": 10472901
+    }
+  ],
+  "Passed": true,
+  "Scope": "Offline syntax and mocked geometry only; gameplay, engine RNG, and performance unverified",
+  "Syntax": [
+    {
+      "Bytes": 19281,
+      "Name": "Level 3 Configuration",
+      "Passed": true,
+      "SHA256": "c510b59dc310b719b127a2ff53e4ccf83a215a47ebb63a1b30e2a1d3ab8855ba"
+    },
+    {
+      "Bytes": 47577,
+      "Name": "Level 3 Layout Generator",
+      "Passed": true,
+      "SHA256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594"
+    },
+    {
+      "Bytes": 108609,
+      "Name": "Level 3 World Builder",
+      "Passed": true,
+      "SHA256": "507da2f517db2b31c2806db082244c5e07c299dd72e163d9223a29bd08d33ab2"
+    },
+    {
+      "Bytes": 24266,
+      "Name": "Level 3 Worn Party Visual Adapter",
+      "Passed": true,
+      "SHA256": "799f8de629fd3ebfa452d67242d3ef6548248f87a61e844ac060f26adedd24b9"
+    },
+    {
+      "Bytes": 18304,
+      "Name": "Level 3 Worn Party Room Dressing",
+      "Passed": true,
+      "SHA256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a"
+    },
+    {
+      "Bytes": 12479,
+      "Name": "Level 3 Balloon Dressing",
+      "Passed": true,
+      "SHA256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6"
+    },
+    {
+      "Bytes": 8896,
+      "Name": "Level 3 Crayon Wall Art",
+      "Passed": true,
+      "SHA256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911"
+    },
+    {
+      "Bytes": 32558,
+      "Name": "Level 3 Round Adapter",
+      "Passed": true,
+      "SHA256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1"
+    }
+  ]
+}

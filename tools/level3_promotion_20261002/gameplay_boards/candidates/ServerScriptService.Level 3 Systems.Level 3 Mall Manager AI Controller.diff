@@ -1,0 +1,141 @@
+--- ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller live baseline
++++ ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller scoped candidate
+@@ -175,28 +175,9 @@
+ 	local stateName = session.State
+ 	local activeProfile = profile(session)
+ 	if session.FinalHallChase and stateName == "CHASE" then
+-		-- The entrance can be over a thousand studs away. The fast approach
+-		-- still follows the maze and uses the normal collision sweep.
+-		if not insideFinalHall(session, session.Root.Position) then
+-			return Tuning.FinaleApproachSpeed
+-		end
+-		-- Lock the hall speed once, accounting for this layout's approach time.
+-		-- An uninterrupted sprint reaches the sensor about one second ahead.
+-		-- Do not keep adapting to the runner: stopping must still get them caught.
+-		if not session.FinaleHallSpeed then
+-			local targetRoot = session.Target and session.Target.Character
+-				and session.Target.Character:FindFirstChild("HumanoidRootPart")
+-			local exit = session.Manifest.EscapeTrigger
+-			if targetRoot and exit and insideFinalHall(session, targetRoot.Position) then
+-				local forward = session.Manifest.FinalHall.Forward
+-				local runnerRemaining = math.max(0, (exit.Position - targetRoot.Position):Dot(forward))
+-				local entityRemaining = math.max(0, (exit.Position - session.Root.Position):Dot(forward))
+-				local timeToExit = runnerRemaining / Tuning.PlayerRunSpeedReference + 1
+-				session.FinaleHallSpeed = math.clamp(entityRemaining / timeToExit,
+-					Tuning.PlayerRunSpeedReference, Tuning.PlayerRunSpeedReference * 1.5)
+-			end
+-		end
+-		return session.FinaleHallSpeed or activeProfile.ChaseSpeed
++		-- The finale starts ahead of the players and walks toward them.
++		-- Keep a fixed speed; the old catch-up calculation assumed a spawn behind them.
++		return Tuning.FinaleApproachSpeed
+ 	end
+ 	if stateName == "PATROL" or stateName == "PATROL_LISTEN" or stateName == "AWAKENING" then
+ 		return activeProfile.PatrolSpeed
+@@ -2042,16 +2023,22 @@
+ 	local selected: Player? = nil
+ 	local selectedRoot: BasePart? = nil
+ 	local bestDistance = math.huge
++	local selectedInFinalHall = false
+ 	for _, candidate in ipairs(Players:GetPlayers()) do
+ 		local _, _, candidateRoot = livingPlayer(candidate, session)
+ 		if candidateRoot then
+ 			local distance = planarDistance(session.Root.Position, candidateRoot.Position)
+-			if distance < bestDistance - .001
+-				or (math.abs(distance - bestDistance) <= .001
+-					and (not selected or candidate.UserId < selected.UserId)) then
++			-- During the finale, a nearby player in an adjacent room must not pull
++			-- the ambush away from runners in the exit lane. Normal hunts are unchanged.
++			local inFinalHall = session.FinalHallChase and insideFinalHall(session, candidateRoot.Position)
++			if (inFinalHall and not selectedInFinalHall)
++				or (inFinalHall == selectedInFinalHall and (distance < bestDistance - .001
++					or (math.abs(distance - bestDistance) <= .001
++						and (not selected or candidate.UserId < selected.UserId)))) then
+ 				selected = candidate
+ 				selectedRoot = candidateRoot
+ 				bestDistance = distance
++				selectedInFinalHall = inFinalHall
+ 			end
+ 		end
+ 	end
+@@ -3156,7 +3143,7 @@
+ 	local acceleration = if session.Blackout then Tuning.BlackoutMovementAcceleration else Tuning.MovementAcceleration
+ 	local deceleration = if session.Blackout then Tuning.BlackoutMovementDeceleration else Tuning.MovementDeceleration
+ 	if session.FinalHallChase then
+-		-- Finish the fast approach promptly, including braking at the hall mouth.
++		-- Reach the fixed fast-walk pace promptly and brake within the attack range.
+ 		-- Every actual displacement still uses the unchanged physical sweep.
+ 		acceleration = math.max(acceleration, Tuning.FinaleApproachSpeed * 6)
+ 		deceleration = math.max(deceleration, Tuning.FinaleApproachSpeed * 12)
+@@ -3400,25 +3387,35 @@
+ 	local records = eligibleSpawnPlayers()
+ 	if #records == 0 then return nil end
+ 	local hall = manifest.FinalHall
+-	local entry = manifest.MazeStart
+-	if type(hall) ~= "table" or not entry or not entry.Parent then return nil end
++	if type(hall) ~= "table" or not hall.Model or not hall.Model.Parent then return nil end
+ 	local state = stateFolder()
+ 	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+ 	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+-	-- The finale starts at the player's Level 3 entrance, never beside the exit.
+-	-- Try a few clear points just inside the arrival room, avoiding the spawn pad.
++	-- Start in the last ten percent of the actual final corridor and face its runners.
++	-- Preserve the normal minimum distance from EVERY eligible living participant.
++	-- If someone is already at the far end, bindManager retries until it is safe;
++	-- never relocate the reveal beside that player or back to the level entrance.
+ 	local position: Vector3? = nil
+ 	local overlap = spawnOverlapParams(records)
+-	for _, distance in ipairs({8, 12, 16, 20}) do
+-		local candidate = entry.Position + entry.CFrame.LookVector * distance
++	local preferred = math.clamp(tonumber(hall.SpawnProgress) or Tuning.FinalHallSpawnProgress, .90, .98)
++	for _, progress in ipairs({preferred, .95, .93, .90}) do
++		local candidate = hall.StartPoint:Lerp(hall.EndPoint, progress)
+ 		candidate = Vector3.new(candidate.X, hall.FloorY, candidate.Z)
+-		if spawnVolumeFits(candidate, overlap) then position = candidate; break end
+-	end
+-	if not position then
+-		warn("[Level 3 Mall Manager] level-entry finale spawn volume is blocked")
+-		return nil
+-	end
++		local nearestDistance = math.huge
++		for _, record in ipairs(records) do
++			nearestDistance = math.min(nearestDistance, planarDistance(candidate, record.Position))
++		end
++		if nearestDistance >= Tuning.SpawnMinimumDistance and spawnVolumeFits(candidate, overlap) then
++			position = candidate
++			break
++		end
++	end
++	if not position then return nil end
++	-- Face a runner in the exit lane before the first authoritative chase tick.
+ 	table.sort(records, function(a, b)
++		local aInHall = insideFinalHall({Manifest=manifest}, a.Position)
++		local bInHall = insideFinalHall({Manifest=manifest}, b.Position)
++		if aInHall ~= bInHall then return aInHall end
+ 		local aDistance = planarDistance(position, a.Position)
+ 		local bDistance = planarDistance(position, b.Position)
+ 		if math.abs(aDistance - bDistance) > .001 then return aDistance < bDistance end
+@@ -3440,8 +3437,7 @@
+ 		Cycle = cycle,
+ 		RoomId = nearestRoomId(position),
+ 		Random = random,
+-		-- The spawn volume was genuinely swept clear above; route reachability is
+-		-- proven later by the authoritative full-route sweep (markPathValidated).
++		-- Volume clearance is real; route reachability is still proved by the existing sweep.
+ 		SpawnClearanceValidated = true,
+ 		Visibility = spawnVisibilityCount(position, records),
+ 		NearestDistance = nearestDistance,
+@@ -4293,4 +4289,13 @@
+ 	return Controller.GetSnapshot()
+ end
+ 
++-- Server-only arcade/mechanical noise hook; caller cannot target non-participants.
++function Controller.ReportNoise(player: Player, position: Vector3, strength: number?)
++	local session = activeSession
++	if not session or typeof(position) ~= "Vector3" then return end
++	local character, humanoid, root = livingPlayer(player, session)
++	if not character or not humanoid or not root or (root.Position-position).Magnitude > 24 then return end
++	session.WorldNoise = {Position=position, Time=os.clock(), Strength=math.clamp(tonumber(strength) or 1, .1, 1.5)}
++end
++
+ return Controller
