@@ -1,0 +1,236 @@
+{
+  "captureAfter": "/private/tmp/lobby-endfix-after-20261002/scripts.json",
+  "captureBefore": "/private/tmp/lobby-endfix-before-20261002/scripts.json",
+  "beforeSources": 213,
+  "afterSources": 222,
+  "changedSources": [
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "class": "ModuleScript",
+      "sourceBytes": 7439,
+      "sourceSHA256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "editorSHA256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d",
+      "beforeSourceBytes": 6953,
+      "reason": "Adds Level4Usher death advice."
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sourceBytes": 171175,
+      "sourceSHA256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "editorSHA256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "beforeSourceBytes": 169980,
+      "reason": "Adds dev-only Level4 round generation and cleanup. LEVEL4_PUBLIC=false; public campaign remains levels1-3; existing revised preview admission/launch branches unchanged."
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "class": "Script",
+      "sourceBytes": 85817,
+      "sourceSHA256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "editorSHA256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "764b9f503e2f412089f274d778dccff3b9bdac4110848e68b40e5d81d24d8265",
+      "beforeSourceBytes": 85506,
+      "reason": "Concurrent Level1 fixture naming and grade saturation/cleanup updates, unrelated to lobby gate."
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 11490,
+      "sourceSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "editorSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "sourceEditorEqual": true,
+      "attribution": "task",
+      "beforeSourceSHA256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
+      "beforeSourceBytes": 11266,
+      "reason": "Scoped lobby builder installation update."
+    },
+    {
+      "path": "ServerScriptService.NoiseRegistry",
+      "class": "ModuleScript",
+      "sourceBytes": 2197,
+      "sourceSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "editorSHA256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+      "beforeSourceBytes": 1991,
+      "reason": "Adds reel/projector/breaker/door noise weights for Level4."
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "class": "ModuleScript",
+      "sourceBytes": 75964,
+      "sourceSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85",
+      "beforeSourceBytes": 75753,
+      "reason": "Adds explicit DevMaxLevel4 transport clamp while MaxLevel3 and NextLevel remain unchanged; no automatic Level3 continuation."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "class": "LocalScript",
+      "sourceBytes": 33971,
+      "sourceSHA256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "editorSHA256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+      "beforeSourceBytes": 33275,
+      "reason": "Adds Level4 refill and usher beam battery drain handling."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 13613,
+      "sourceSHA256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+      "editorSHA256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "ad90ef1e15980c95c81415a061132a06aa269f30acb0c64f729292fdb91d3663",
+      "beforeSourceBytes": 10823,
+      "reason": "Adds server-driven cinema power/round lighting grade with existing scoped ownership handling."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "class": "LocalScript",
+      "sourceBytes": 44865,
+      "sourceSHA256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "editorSHA256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a",
+      "beforeSourceBytes": 44350,
+      "reason": "Adds SelectedLevel4 noise reporting and carry speed factor handling."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "class": "LocalScript",
+      "sourceBytes": 6494,
+      "sourceSHA256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "editorSHA256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "edaf5fc171aadc2f74288e0d8198412c7d16f39d1c5b605a7c3f0b9ce13ae868",
+      "beforeSourceBytes": 6328,
+      "reason": "Adds Level4 authored cinema streaming support and payload range1..4; server still controls admission."
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "class": "Script",
+      "sourceBytes": 5744,
+      "sourceSHA256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+      "editorSHA256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "beforeSourceSHA256": "2b345d49783b3cbf425d56a1c32b8332f54f542273ac93cea581001dbccd47c2",
+      "beforeSourceBytes": 5030,
+      "reason": "Stands down while Level4 round lighting director owns fixtures; cleanup of round signal."
+    }
+  ],
+  "addedSources": [
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 4909,
+      "sourceSHA256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+      "editorSHA256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "class": "ModuleScript",
+      "sourceBytes": 13743,
+      "sourceSHA256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+      "editorSHA256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 34426,
+      "sourceSHA256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+      "editorSHA256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 5916,
+      "sourceSHA256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "editorSHA256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 30269,
+      "sourceSHA256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+      "editorSHA256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "class": "ModuleScript",
+      "sourceBytes": 11276,
+      "sourceSHA256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "editorSHA256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "class": "ModuleScript",
+      "sourceBytes": 67127,
+      "sourceSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "editorSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "sourceEditorEqual": true,
+      "attribution": "task",
+      "reason": "Added scoped lobby task controller."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "class": "LocalScript",
+      "sourceBytes": 35603,
+      "sourceSHA256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+      "editorSHA256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+      "sourceEditorEqual": true,
+      "attribution": "concurrent_other_developer",
+      "reason": "Added concurrent Level4 runtime module/controller; not authored or gameplay tested by this task."
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "class": "LocalScript",
+      "sourceBytes": 8306,
+      "sourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "editorSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "sourceEditorEqual": true,
+      "attribution": "task",
+      "reason": "Added scoped lobby task controller."
+    }
+  ],
+  "removedSources": [],
+  "allAfterEditorMatch": true,
+  "writesToStudio": false,
+  "scope": "Fresh captured source compatibility analysis; concurrent Level4 gameplay not tested."
+}

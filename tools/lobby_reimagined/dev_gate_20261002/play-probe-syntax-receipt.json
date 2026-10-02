@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "bytes": 4978,
+      "file": "play-probe-client-readonly.luau",
+      "passed": true,
+      "sha256": "5a400a8aa4a74b5fa7267f51dd7f424e07de1897f56df19d1c71d83b88063087"
+    },
+    {
+      "bytes": 1977,
+      "file": "play-probe-server-readonly.luau",
+      "passed": true,
+      "sha256": "2463557a0abebb91ee12b16bc563375e56cb76ab0665d28e9ff5d77206f483f7"
+    }
+  ],
+  "scope": "Exact read-only probe syntax only; not Studio Play"
+}

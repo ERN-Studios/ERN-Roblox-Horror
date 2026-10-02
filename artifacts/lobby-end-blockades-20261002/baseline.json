@@ -1,0 +1,58 @@
+{
+  "kitReady": true,
+  "scripts": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "editorSha256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
+      "class": "ModuleScript",
+      "sha256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
+      "same": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "editorSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "class": "ModuleScript",
+      "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "same": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "editorSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "class": "ModuleScript",
+      "sha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "same": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "editorSha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "class": "Script",
+      "sha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "same": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "editorSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "class": "Script",
+      "sha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "same": true
+    },
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "editorSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "class": "ModuleScript",
+      "sha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "same": true
+    },
+    {
+      "bytes": 169980,
+      "path": "ServerScriptService.GameManager",
+      "sha256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "class": "Script",
+      "editorSha256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "same": true
+    }
+  ],
+  "place": 131311258779917,
+  "roots": 12,
+  "universe": 10559217407
+}

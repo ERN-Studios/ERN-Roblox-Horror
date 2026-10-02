@@ -1,0 +1,10 @@
+{
+  "players": [],
+  "universeId": 10559217407,
+  "serverHasClientGateFolder": false,
+  "actualCallbackEvaluationError": "The current thread cannot require 'DevAccess' since 'DevAccess' has additional values for the Capabilities property: LoadUnownedAsset (and 3 more)",
+  "scope": "Read-only actual server access predicate and queue callback evaluation; no teleport, queue creation, spoofed participant or multiplayer claim",
+  "placeId": 131311258779917,
+  "modelReady": true,
+  "actualCallbacksEvaluated": false
+}

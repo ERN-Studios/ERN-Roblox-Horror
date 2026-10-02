@@ -1,0 +1,3252 @@
+{
+  "schema": "lobby-end-blockades-concurrent-native-source-audit.v1",
+  "createdAtUTC": "2026-10-02T08:09:33.909495+00:00",
+  "authorAgent": "/root/lobby_claude_review/concurrent_source_delta",
+  "scope": "Read-only audit of complete raw source-transfer catalogs and native metadata roots. No Studio/UI, Git staging/commit, runtime/source mutations, native deserialization or native pack audit.",
+  "verdict": "Source catalog integrity and exact delta classification pass; concurrent work gameplay, performance and publication readiness are unverified.",
+  "before": {
+    "captureId": "58cd72c4-1180-42f6-a54c-580a7b9c10ae",
+    "capturedAt": "2026-10-02T07:25:58Z",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "creatorId": 1039373905,
+    "placeVersion": 2470,
+    "rootCount": 189,
+    "scriptCount": 213,
+    "nativeBytes": 77062920,
+    "nativeParts": 103,
+    "nativeSHA256": "95ce4ceacd09ef5b31759031d4c1dfe9fb2fe3eed60f1afe30d51cdf02635294",
+    "sourceTransfer": {
+      "bytes": 9175878,
+      "chunkBytes": 750000,
+      "sha256": "e169fe7751d51860c0291c3cf4a290c84c4d914e4b81936c9cc014b72e7be145",
+      "parts": 13
+    },
+    "editorConflicts": [],
+    "directory": "/private/tmp/lobby-endfix-before-20261002",
+    "catalogFileSHA256": "e169fe7751d51860c0291c3cf4a290c84c4d914e4b81936c9cc014b72e7be145",
+    "sourceManifestFileSHA256": "b27f0f23329fd671c81f7d591e8de9ecff80789db54dfa7236c67946ba199fd6",
+    "metadataFileSHA256": "6ef6d174303e06e3700def55e3021e9f4860e2461ab3dd58cdc4199006502b5f",
+    "sourceTransferDecodedEqualsCatalog": true,
+    "allSourceBytesAndHashesValid": true,
+    "allEditorMatchAndHashesEqual": true,
+    "manifestMatchesCatalog": true
+  },
+  "after": {
+    "captureId": "a83b58b7-12df-4b10-b4d0-e32e20cb0cb8",
+    "capturedAt": "2026-10-02T08:03:13Z",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "creatorId": 1039373905,
+    "placeVersion": 2470,
+    "rootCount": 192,
+    "scriptCount": 222,
+    "nativeBytes": 77203427,
+    "nativeParts": 103,
+    "nativeSHA256": "93403e988f4f50bddfcdbb9c1b803e9b09ed6909982a9d52b244950c7b0e82a0",
+    "sourceTransfer": {
+      "bytes": 9413075,
+      "chunkBytes": 750000,
+      "sha256": "35d2697aaa672e9310256d7478d4306da9b6e17f79037daea69b71363b54986c",
+      "parts": 13
+    },
+    "editorConflicts": [],
+    "directory": "/private/tmp/lobby-endfix-after-20261002",
+    "catalogFileSHA256": "35d2697aaa672e9310256d7478d4306da9b6e17f79037daea69b71363b54986c",
+    "sourceManifestFileSHA256": "80ed2b415b58c42d06cd025fd5a1f0e03f37f3d61afa3d1d6f6432af34b853af",
+    "metadataFileSHA256": "58eeffbe4ad415c08e13769f56cb96e0a8049385b8ae354d9c77e1414cd1bb88",
+    "sourceTransferDecodedEqualsCatalog": true,
+    "allSourceBytesAndHashesValid": true,
+    "allEditorMatchAndHashesEqual": true,
+    "manifestMatchesCatalog": true
+  },
+  "counts": {
+    "beforeSources": 213,
+    "afterSources": 222,
+    "added": 9,
+    "removed": 0,
+    "changedExisting": 11,
+    "unchangedExisting": 202,
+    "classChanges": 0,
+    "ownedAdded": 2,
+    "ownedChanged": 1,
+    "ownedTotal": 3,
+    "unrelatedAdded": 7,
+    "unrelatedChanged": 10,
+    "unrelatedTotal": 17,
+    "expectedAfterOnlyOwnedTask": 215,
+    "extraConcurrentSources": 7
+  },
+  "deltas": [
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New cinema round tuning and contracts: four-switch power order, failing light phases, three reels/projectors, co-op breaker or solo fuse, hiding, Usher parameters, sounds and required tagged anchors.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+        "class": "ModuleScript",
+        "sourceBytes": 4909,
+        "sourceSha256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+        "editorSourceSha256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+        "editorMatch": true
+      },
+      "declarations": []
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New server cinema light-zone authority, power-up/failing/finale phases, zone dark/lit queries and lifecycle restoration.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "class": "ModuleScript",
+        "sourceBytes": 13743,
+        "sourceSha256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+        "editorSourceSha256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 36,
+          "text": "local function now()"
+        },
+        {
+          "line": 40,
+          "text": "local function remember(inst, props)"
+        },
+        {
+          "line": 47,
+          "text": "local function newZone(id)"
+        },
+        {
+          "line": 54,
+          "text": "local function zoneFor(id)"
+        },
+        {
+          "line": 58,
+          "text": "local function isStar(part)"
+        },
+        {
+          "line": 65,
+          "text": "local function collect(root)"
+        },
+        {
+          "line": 109,
+          "text": "local function publish()"
+        },
+        {
+          "line": 119,
+          "text": "local function applyZone(zone, on)"
+        },
+        {
+          "line": 143,
+          "text": "local function setStars(on)"
+        },
+        {
+          "line": 157,
+          "text": "local function transition(changes, lead)"
+        },
+        {
+          "line": 171,
+          "text": "local function allZones(on, lead)"
+        },
+        {
+          "line": 184,
+          "text": "local function cancelThreads()"
+        },
+        {
+          "line": 189,
+          "text": "local function playerZones()"
+        },
+        {
+          "line": 202,
+          "text": "local function darkFraction()"
+        },
+        {
+          "line": 209,
+          "text": "local function blinkLoop(mySession)"
+        },
+        {
+          "line": 249,
+          "text": "local function chooseDeadZones(avoid)"
+        },
+        {
+          "line": 269,
+          "text": "function LightDirector.Start(manifest, generation)"
+        },
+        {
+          "line": 285,
+          "text": "function LightDirector.Stop()"
+        },
+        {
+          "line": 306,
+          "text": "function LightDirector.PowerState()"
+        },
+        {
+          "line": 310,
+          "text": "function LightDirector.ZoneCount()"
+        },
+        {
+          "line": 314,
+          "text": "function LightDirector.SetEscalation(level)"
+        },
+        {
+          "line": 320,
+          "text": "function LightDirector.PowerUp(origin, onFailing)"
+        },
+        {
+          "line": 364,
+          "text": "function LightDirector.Finale(screens)"
+        },
+        {
+          "line": 389,
+          "text": "function LightDirector.ZoneAt(position)"
+        },
+        {
+          "line": 400,
+          "text": "function LightDirector.IsZoneOn(id)"
+        },
+        {
+          "line": 406,
+          "text": "function LightDirector.IsLit(position)"
+        },
+        {
+          "line": 413,
+          "text": "function LightDirector.IsDark(position)"
+        }
+      ]
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New server objective authority for breaker order, note/reel pickup and carry, projector holds, co-op/solo breaker, arcade keypad/battery prize, hiding and escape finale, with round start/stop lifecycle.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+        "class": "ModuleScript",
+        "sourceBytes": 34426,
+        "sourceSha256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+        "editorSourceSha256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 44,
+          "text": "local function now() return workspace:GetServerTimeNow() end"
+        },
+        {
+          "line": 46,
+          "text": "local function own(inst)"
+        },
+        {
+          "line": 51,
+          "text": "local function connect(signal, fn)"
+        },
+        {
+          "line": 57,
+          "text": "local function setState(name, value)"
+        },
+        {
+          "line": 61,
+          "text": "local function cue(target, payload)"
+        },
+        {
+          "line": 66,
+          "text": "local function liveCharacter(player)"
+        },
+        {
+          "line": 74,
+          "text": "local function participant(player)"
+        },
+        {
+          "line": 79,
+          "text": "local function roundLive()"
+        },
+        {
+          "line": 83,
+          "text": "function Objectives.LivingParticipants()"
+        },
+        {
+          "line": 91,
+          "text": "local function announce(player, detail)"
+        },
+        {
+          "line": 96,
+          "text": "local function canUse(player, prompt)"
+        },
+        {
+          "line": 106,
+          "text": "local function makePrompt(part, action, object, hold, distance)"
+        },
+        {
+          "line": 122,
+          "text": "local function sound(parent, id, volume, rolloff)"
+        },
+        {
+          "line": 136,
+          "text": "local function spark(part)"
+        },
+        {
+          "line": 152,
+          "text": "local function remember(part)"
+        },
+        {
+          "line": 156,
+          "text": "local function tweenTo(part, cf, t)"
+        },
+        {
+          "line": 161,
+          "text": "local function hinged(part, base, rotation)"
+        },
+        {
+          "line": 166,
+          "text": "local function floorBelow(position)"
+        },
+        {
+          "line": 176,
+          "text": "local function switchKey(model)"
+        },
+        {
+          "line": 180,
+          "text": "local function setSwitch(entry, down)"
+        },
+        {
+          "line": 188,
+          "text": "local function placeNote(text)"
+        },
+        {
+          "line": 242,
+          "text": "local function powerOn(player)"
+        },
+        {
+          "line": 253,
+          "text": "local function onSwitch(player, entry, prompt)"
+        },
+        {
+          "line": 279,
+          "text": "local function setupSwitches()"
+        },
+        {
+          "line": 308,
+          "text": "local function carriedCount(player)"
+        },
+        {
+          "line": 314,
+          "text": "local function refreshCarry(player)"
+        },
+        {
+          "line": 325,
+          "text": "local function reelModel(record)"
+        },
+        {
+          "line": 347,
+          "text": "local function placeReelInWorld(record, cf)"
+        },
+        {
+          "line": 361,
+          "text": "function Objectives.PickUp(player, record)"
+        },
+        {
+          "line": 386,
+          "text": "local function dropReels(player, position)"
+        },
+        {
+          "line": 400,
+          "text": "local function setupReels()"
+        },
+        {
+          "line": 418,
+          "text": "local function breakerEngaged()"
+        },
+        {
+          "line": 430,
+          "text": "local function setLever(down)"
+        },
+        {
+          "line": 438,
+          "text": "local function releaseHolder(reason)"
+        },
+        {
+          "line": 449,
+          "text": "function Objectives.BreakerHolder()"
+        },
+        {
+          "line": 453,
+          "text": "local function soloMode()"
+        },
+        {
+          "line": 457,
+          "text": "local function onMainBreaker(player, prompt)"
+        },
+        {
+          "line": 476,
+          "text": "local function onFuse(player, prompt)"
+        },
+        {
+          "line": 504,
+          "text": "local function setupBreaker()"
+        },
+        {
+          "line": 523,
+          "text": "local function startScreen(index)"
+        },
+        {
+          "line": 542,
+          "text": "local function finishThread(player, screenIndex)"
+        },
+        {
+          "line": 571,
+          "text": "local function setupProjectors()"
+        },
+        {
+          "line": 616,
+          "text": "local function escapePlayer(player)"
+        },
+        {
+          "line": 640,
+          "text": "function Objectives.StartFinale()"
+        },
+        {
+          "line": 654,
+          "text": "local function insideBox(part, position)"
+        },
+        {
+          "line": 662,
+          "text": "function Objectives.IsHidden(player)"
+        },
+        {
+          "line": 667,
+          "text": "local function updateHiding(player)"
+        },
+        {
+          "line": 681,
+          "text": "local function setupArcade()"
+        },
+        {
+          "line": 718,
+          "text": "local function openPrize(player)"
+        },
+        {
+          "line": 766,
+          "text": "local function bindPlayer(player)"
+        },
+        {
+          "line": 794,
+          "text": "local function heartbeat()"
+        },
+        {
+          "line": 837,
+          "text": "function Objectives.Start(m, generation, lightDirector, usher)"
+        },
+        {
+          "line": 891,
+          "text": "function Objectives.Stop()"
+        },
+        {
+          "line": 920,
+          "text": "function Objectives.Phase()"
+        }
+      ]
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New manual server-side anchor/zone/nav and live-state checks. No execution result is present in these source catalogs. The exact captured suite requires a Level 4 Usher Nav ModuleScript that the captured catalog lacks.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+        "class": "ModuleScript",
+        "sourceBytes": 5916,
+        "sourceSha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+        "editorSourceSha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 12,
+          "text": "local function check(report, ok, name, detail)"
+        },
+        {
+          "line": 17,
+          "text": "local function tagged(world, tag)"
+        },
+        {
+          "line": 25,
+          "text": "local function position(inst)"
+        },
+        {
+          "line": 30,
+          "text": "function Suite.Run()"
+        }
+      ]
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New server dark-zone/nav-graph enemy, noise/breaker targeting, flashlight stun, pre-grab shush/capture and unreliable client motion; supports nav markers if the optional nav ModuleScript is absent.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+        "class": "ModuleScript",
+        "sourceBytes": 30269,
+        "sourceSha256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+        "editorSourceSha256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 55,
+          "text": "local function now() return workspace:GetServerTimeNow() end"
+        },
+        {
+          "line": 57,
+          "text": "local function connect(signal, fn)"
+        },
+        {
+          "line": 63,
+          "text": "local function setState(name)"
+        },
+        {
+          "line": 73,
+          "text": "local function cellKey(x, z) return math.floor(x / CELL) .. \":\" .. math.floor(z / CELL) end"
+        },
+        {
+          "line": 77,
+          "text": "local function navFromMarkers()"
+        },
+        {
+          "line": 102,
+          "text": "local function loadNav()"
+        },
+        {
+          "line": 125,
+          "text": "local function nodeDark(i)"
+        },
+        {
+          "line": 135,
+          "text": "local function nearestNode(pos, darkOnly, maxRadius)"
+        },
+        {
+          "line": 160,
+          "text": "local function findPath(from, to)"
+        },
+        {
+          "line": 224,
+          "text": "local function bodyOf(player)"
+        },
+        {
+          "line": 232,
+          "text": "local function validRound()"
+        },
+        {
+          "line": 237,
+          "text": "local function huntable(player)"
+        },
+        {
+          "line": 245,
+          "text": "local function rayClear(from, to)"
+        },
+        {
+          "line": 256,
+          "text": "local function eyes() return position + Vector3.new(0, C.Height - 0.6, 0) end"
+        },
+        {
+          "line": 257,
+          "text": "local function chest() return position + Vector3.new(0, C.Height * 0.62, 0) end"
+        },
+        {
+          "line": 261,
+          "text": "local function buildProxy()"
+        },
+        {
+          "line": 285,
+          "text": "local function feetCFrame()"
+        },
+        {
+          "line": 291,
+          "text": "local function syncProxy(force)"
+        },
+        {
+          "line": 303,
+          "text": "local function placeAt(i)"
+        },
+        {
+          "line": 311,
+          "text": "local function hopTo(i, reason)"
+        },
+        {
+          "line": 337,
+          "text": "local function playersMinDistance(pos)"
+        },
+        {
+          "line": 347,
+          "text": "local function pickHopNode(around, minD, maxD, rng)"
+        },
+        {
+          "line": 362,
+          "text": "local function captureValid(record)"
+        },
+        {
+          "line": 372,
+          "text": "local function finishCapture(record, cancelled)"
+        },
+        {
+          "line": 393,
+          "text": "local function startCapture(player)"
+        },
+        {
+          "line": 437,
+          "text": "local function beamedBy()"
+        },
+        {
+          "line": 460,
+          "text": "local function setBeamers(list)"
+        },
+        {
+          "line": 474,
+          "text": "local function chooseTarget()"
+        },
+        {
+          "line": 516,
+          "text": "local function speedFor()"
+        },
+        {
+          "line": 522,
+          "text": "local function goTowards(goalPos)"
+        },
+        {
+          "line": 531,
+          "text": "local function think()"
+        },
+        {
+          "line": 672,
+          "text": "local function step(dt)"
+        },
+        {
+          "line": 702,
+          "text": "local function onZoneChanged(zoneId, on)"
+        },
+        {
+          "line": 748,
+          "text": "function Usher.Start(m, generation, lightDirector, objectiveController)"
+        },
+        {
+          "line": 793,
+          "text": "function Usher.Activate()"
+        },
+        {
+          "line": 806,
+          "text": "function Usher.Finale()"
+        },
+        {
+          "line": 817,
+          "text": "function Usher.Position()"
+        },
+        {
+          "line": 822,
+          "text": "function Usher.DebugPlace(pos)"
+        },
+        {
+          "line": 828,
+          "text": "function Usher.Stop()"
+        }
+      ]
+    },
+    {
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New GameManager Build/Cleanup adapter around the authored cinema, creating round state/remotes, collecting tagged anchors, compatibility markers and client visual, and starting/stopping the three systems.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.Level4RoundGenerator",
+        "class": "ModuleScript",
+        "sourceBytes": 11276,
+        "sourceSha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+        "editorSourceSha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 29,
+          "text": "local function ownedFolder(parent, name, className)"
+        },
+        {
+          "line": 39,
+          "text": "local function ensureRemotes()"
+        },
+        {
+          "line": 63,
+          "text": "local function resetState(folder)"
+        },
+        {
+          "line": 70,
+          "text": "local function isolateLevelOneRuntime()"
+        },
+        {
+          "line": 81,
+          "text": "local function restoreLevelOneRuntime()"
+        },
+        {
+          "line": 89,
+          "text": "local function destroyCompatibilityObjects()"
+        },
+        {
+          "line": 95,
+          "text": "local function tagged(world, tag)"
+        },
+        {
+          "line": 103,
+          "text": "local function bySlot(list)"
+        },
+        {
+          "line": 108,
+          "text": "local function partOf(inst)"
+        },
+        {
+          "line": 113,
+          "text": "local function collectManifest(world)"
+        },
+        {
+          "line": 162,
+          "text": "local function buildCompatibility(manifest)"
+        },
+        {
+          "line": 200,
+          "text": "local function publishUsherVisual(manifest)"
+        },
+        {
+          "line": 213,
+          "text": "function Generator.GetManifest()"
+        },
+        {
+          "line": 217,
+          "text": "function Generator.Cleanup()"
+        },
+        {
+          "line": 238,
+          "text": "function Generator.Build()"
+        }
+      ]
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "status": "added",
+      "scope": "task-owned",
+      "scopeSummary": "Task-owned V3 furniture/lens placement helper; classified by exact requested class/source/editor hash, not revalidated visually by this source-catalog audit.",
+      "before": null,
+      "after": {
+        "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+        "class": "ModuleScript",
+        "sourceBytes": 67127,
+        "sourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+        "editorSourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 6,
+          "text": "local function v(a) return Vector3.new(table.unpack(a)) end"
+        },
+        {
+          "line": 7,
+          "text": "function Module.Emit(plan, center, visuals, collisions, lighting, place)"
+        },
+        {
+          "line": 58,
+          "text": "function Module.Add(model, kit, manifest)"
+        }
+      ]
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "status": "added",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "New local objective/briefing/caption UI, zone transitions and film/finale presentation, keypad and interpolated Usher rig, with start/stop synchronization.",
+      "before": null,
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+        "class": "LocalScript",
+        "sourceBytes": 35603,
+        "sourceSha256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+        "editorSourceSha256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 36,
+          "text": "local function roundLive()"
+        },
+        {
+          "line": 39,
+          "text": "local function stateFolder() return ReplicatedStorage:FindFirstChild(STATE_NAME) end"
+        },
+        {
+          "line": 40,
+          "text": "local function st(name)"
+        },
+        {
+          "line": 44,
+          "text": "local function involved() return roundLive() and player:GetAttribute(\"InRound\") == true end"
+        },
+        {
+          "line": 45,
+          "text": "local function reduceFlashing() return player:GetAttribute(\"ReduceFlashing\") ~= false end"
+        },
+        {
+          "line": 46,
+          "text": "local function reduceShake() return player:GetAttribute(\"ReduceCameraShake\") == true end"
+        },
+        {
+          "line": 47,
+          "text": "local function captionsOn()"
+        },
+        {
+          "line": 50,
+          "text": "local function cinema() return workspace:FindFirstChild(MODEL_NAME) end"
+        },
+        {
+          "line": 52,
+          "text": "local function playSound(id, parent, volume)"
+        },
+        {
+          "line": 63,
+          "text": "local function playAt(id, position, volume)"
+        },
+        {
+          "line": 86,
+          "text": "local function label(parent, props)"
+        },
+        {
+          "line": 124,
+          "text": "local function say(text, color, seconds)"
+        },
+        {
+          "line": 143,
+          "text": "local function showTitle(text, sub, seconds)"
+        },
+        {
+          "line": 156,
+          "text": "local function chip(text, color, y)"
+        },
+        {
+          "line": 176,
+          "text": "local function nameOf(userId)"
+        },
+        {
+          "line": 181,
+          "text": "local function refreshPanel()"
+        },
+        {
+          "line": 222,
+          "text": "local function track(d)"
+        },
+        {
+          "line": 243,
+          "text": "local function watchModel()"
+        },
+        {
+          "line": 262,
+          "text": "local function zoneOn(id)"
+        },
+        {
+          "line": 268,
+          "text": "local function setNeon(part, on, dim)"
+        },
+        {
+          "line": 277,
+          "text": "local function setZoneLocal(id, on, fraction)"
+        },
+        {
+          "line": 285,
+          "text": "local function settleZone(id)"
+        },
+        {
+          "line": 295,
+          "text": "local function stutter(id, on, at)"
+        },
+        {
+          "line": 327,
+          "text": "local function repairZones()"
+        },
+        {
+          "line": 340,
+          "text": "local function rumble(seconds, strength)"
+        },
+        {
+          "line": 356,
+          "text": "local function powerUp(payload)"
+        },
+        {
+          "line": 374,
+          "text": "local function screenGui(part, name)"
+        },
+        {
+          "line": 391,
+          "text": "local function startFilm(part)"
+        },
+        {
+          "line": 422,
+          "text": "local function exitScreen(part)"
+        },
+        {
+          "line": 465,
+          "text": "local function rollCredits(seconds)"
+        },
+        {
+          "line": 500,
+          "text": "local function renderEntry() display.Text = (entered .. string.rep(\"-\", 4 - #entered)) end"
+        },
+        {
+          "line": 501,
+          "text": "local function closeKeypad() keypad.Visible = false; entered = \"\"; renderEntry(); keypadOrigin = nil end"
+        },
+        {
+          "line": 502,
+          "text": "local function submit()"
+        },
+        {
+          "line": 507,
+          "text": "local function press(key)"
+        },
+        {
+          "line": 559,
+          "text": "local function placeholderRig()"
+        },
+        {
+          "line": 608,
+          "text": "local function buildUsher()"
+        },
+        {
+          "line": 640,
+          "text": "local function destroyUsher()"
+        },
+        {
+          "line": 646,
+          "text": "local function setUsherAlpha(alpha)"
+        },
+        {
+          "line": 654,
+          "text": "local function quat(q)"
+        },
+        {
+          "line": 660,
+          "text": "local function animate(dt)"
+        },
+        {
+          "line": 702,
+          "text": "local function sampleAt(renderTime)"
+        },
+        {
+          "line": 718,
+          "text": "local function stepUsher(dt)"
+        },
+        {
+          "line": 740,
+          "text": "local function onClientEvent(payload)"
+        },
+        {
+          "line": 808,
+          "text": "local function briefing()"
+        },
+        {
+          "line": 829,
+          "text": "local function startRound()"
+        },
+        {
+          "line": 884,
+          "text": "local function stopRound()"
+        },
+        {
+          "line": 910,
+          "text": "local function sync()"
+        }
+      ]
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "status": "added",
+      "scope": "task-owned",
+      "scopeSummary": "Task-owned per-user L5/L6 client gate; classified by exact requested class/source/editor hash.",
+      "before": null,
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+        "class": "LocalScript",
+        "sourceBytes": 8306,
+        "sourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+        "editorSourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+        "editorMatch": true
+      },
+      "declarations": [
+        {
+          "line": 12,
+          "text": "local function allowed(level)"
+        },
+        {
+          "line": 21,
+          "text": "local function disconnect(list)"
+        },
+        {
+          "line": 25,
+          "text": "local function cleanup()"
+        },
+        {
+          "line": 40,
+          "text": "local function ready(model)"
+        },
+        {
+          "line": 45,
+          "text": "local function newPart(parent, name, size, frame, color, colliding)"
+        },
+        {
+          "line": 55,
+          "text": "local function sign(host, message, color, pixels)"
+        },
+        {
+          "line": 67,
+          "text": "local function mountGates(state)"
+        },
+        {
+          "line": 106,
+          "text": "local function bayLevel(instance, model)"
+        },
+        {
+          "line": 117,
+          "text": "local function hideBlocked(state, instance)"
+        },
+        {
+          "line": 134,
+          "text": "local function refresh()"
+        },
+        {
+          "line": 165,
+          "text": "local function observe(model)"
+        }
+      ]
+    },
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds L4Usher death title/cause/tip; existing entries remain unchanged.",
+      "before": {
+        "path": "ReplicatedStorage.DeathAdvice",
+        "class": "ModuleScript",
+        "sourceBytes": 6953,
+        "sourceSha256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d",
+        "editorSourceSha256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ReplicatedStorage.DeathAdvice",
+        "class": "ModuleScript",
+        "sourceBytes": 7439,
+        "sourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+        "editorSourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ReplicatedStorage.DeathAdvice\n+++ after/ReplicatedStorage.DeathAdvice\n@@ -93,6 +93,15 @@\n \t\tCause = \"The Mall Manager reached you.\",\n \t\tTip = \"Hide under a table, and leave it the moment it kneels to look.\",\n \t},\n+\t-- Level 4 Usher Controller.ModuleScript.lua startCapture. The Usher only\n+\t-- stands in the dark and whispers \"shhh\" (Usher.ShushSeconds) before the grab.\n+\t-- WHY THIS TIP: a flashlight beam on it freezes the windup and long enough\n+\t-- sends it away (Usher.StunSeconds); crouching in a hide zone hides you.\n+\tL4Usher = {\n+\t\tTitle = \"THE USHER SHUSHED YOU\",\n+\t\tCause = \"The Usher reached you in the dark.\",\n+\t\tTip = \"When you hear \\\"shhh\\\", shine your light on it or crouch and hide.\",\n+\t},\n \t-- Everything nothing marked: a void fall, a failed arrival placement\n \t-- (GameManager.Script.lua:913), or a kill site added without a mark. It says\n \t-- so and offers NOTHING, because there is nothing true to offer.\n",
+      "exactUnifiedDiffSHA256": "4f866884091cc067cd9359cab8a9622da4123b9b1dbfab0d47118e7b0ca88a2e",
+      "lineCounts": {
+        "before": 150,
+        "after": 159
+      }
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds Level4RoundGenerator to round generators; allows development ceiling Routing.DevMaxLevel only for nonempty parties whose Player members all pass existing DevAccess.IsAllowed while LEVEL4_PUBLIC=false. Adds Level 4 stale-runtime cleanup, compatibility-spawn handling, load stage and level4access briefing cue.",
+      "before": {
+        "path": "ServerScriptService.GameManager",
+        "class": "Script",
+        "sourceBytes": 169980,
+        "sourceSha256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+        "editorSourceSha256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ServerScriptService.GameManager",
+        "class": "Script",
+        "sourceBytes": 171175,
+        "sourceSha256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+        "editorSourceSha256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ServerScriptService.GameManager\n+++ after/ServerScriptService.GameManager\n@@ -139,18 +139,35 @@\n local LEVEL_GENERATORS = {\n  [2] = \"Level2Generator\",\n  [3] = \"Level3Generator\",\n+ [4] = \"Level4RoundGenerator\",\n }\n \n--- Rounds stop at Routing.MaxLevel. The Level 4 cinema is a developer-only\n--- walk-in preview (Level4PreviewAccess), not a round.\n-local function devCeiling(_group)\n+-- Rounds stop at Routing.MaxLevel for everyone. Level 4 \"Den Sidste\n+-- Forestilling\" (the cinema) is a round for developers only until\n+-- LEVEL4_PUBLIC is flipped: every member of the party must hold DevAccess.\n+local LEVEL4_PUBLIC = false\n+\n+local function groupIsDevelopers(group)\n+ local any = false\n+ for _, player in ipairs(group or {}) do\n+  if typeof(player) == \"Instance\" and player:IsA(\"Player\") then\n+   if not DevAccess.IsAllowed(player) then return false end\n+   any = true\n+  end\n+ end\n+ return any\n+end\n+\n+local function devCeiling(group)\n+ if LEVEL4_PUBLIC or groupIsDevelopers(group) then return Routing.DevMaxLevel end\n  return Routing.MaxLevel\n end\n \n-local function canAccessLevel(requestedLevel, _group)\n+local function canAccessLevel(requestedLevel, group)\n  local level = tonumber(requestedLevel)\n  if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n- return level <= Routing.MaxLevel\n+ if level <= Routing.MaxLevel then return true end\n+ return level <= devCeiling(group)\n end\n \n -- Always-on server authority for every developer command. Unlike the Level 1\n@@ -597,6 +614,12 @@\n   or selected == 3 then\n   stale[#stale + 1] = 3\n  end\n+ local cinema = workspace:FindFirstChild(\"Level 4 Cinema Blender\")\n+ if (cinema and cinema:FindFirstChild(\"Level 4 Round Runtime\") ~= nil)\n+  or (workspace:FindFirstChild(\"ElevatorSpawn\") and workspace.ElevatorSpawn:GetAttribute(\"Level4_CompatibilityMarker\") == true)\n+  or selected == 4 then\n+  stale[#stale + 1] = 4\n+ end\n  if #stale == 0 then return end\n \n  for _, level in ipairs(stale) do\n@@ -714,6 +737,7 @@\n local function freeElevatorFrame(player, pad)\n  local levelOne = pad:GetAttribute(\"Level2_CompatibilityMarker\") ~= true\n   and pad:GetAttribute(\"Level3_CompatibilityMarker\") ~= true\n+  and pad:GetAttribute(\"Level4_CompatibilityMarker\") ~= true\n  local forward = levelOne and Vector3.xAxis or pad.CFrame.LookVector\n  local side = levelOne and Vector3.zAxis or pad.CFrame.RightVector\n  local depth = pad.Size.X + 3 -- Level 1's emergency pad is 3 studs shorter than its floor.\n@@ -1493,6 +1517,7 @@\n   local levelStages = {\n    [2] = \"ENTERING_DRY_POOLROOMS\",\n    [3] = \"ENTERING_FORGOTTEN_MALL\",\n+   [4] = \"ENTERING_LAST_SHOW\",\n   }\n   workspace:SetAttribute(\"LoadStage\", levelStages[level] or \"GENERATING_WORLD\")\n   local ok, err = pcall(function()\n@@ -2858,6 +2883,11 @@\n   -- level3access is Level 3's own cue and must not be sent for another level.\n   -- The \"elevator\" ticks above already released the client's loading cover.\n   if activeLevel == 3 then fireGroup(participants, \"level3access\") end\n+ elseif activeLevel == 4 then\n+  -- The cinema has no ride: the party wakes in the dark foyer. The shared\n+  -- entry barrier already dropped the loading cover; the Level 4 client owns\n+  -- the briefing.\n+  fireGroup(participants, \"level4access\")\n  else\n   -- The party roster is frozen, so the circuit count is already known. Publish\n   -- it NOW so the cabin's maintenance poster lists every cable (count + colour)\n",
+      "exactUnifiedDiffSHA256": "3d3525001d021fe95bb6650c79dd19915e598cef5158e0345812a27cbc36c1a6",
+      "lineCounts": {
+        "before": 3830,
+        "after": 3860
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Changes Blender fixture mounting from Skin(LightFixture) to alternating Fixture(GridFixture/Fluorescent), and changes MongoGrade saturation for Blender mode to .08 with previous-saturation restoration on maze destruction. This is concurrent Level 1 work, not Level 4 or the lobby scope.",
+      "before": {
+        "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+        "class": "Script",
+        "sourceBytes": 85506,
+        "sourceSha256": "764b9f503e2f412089f274d778dccff3b9bdac4110848e68b40e5d81d24d8265",
+        "editorSourceSha256": "764b9f503e2f412089f274d778dccff3b9bdac4110848e68b40e5d81d24d8265",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+        "class": "Script",
+        "sourceBytes": 85817,
+        "sourceSha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+        "editorSourceSha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ServerScriptService.Level 1 Systems.MazeGenerator\n+++ after/ServerScriptService.Level 1 Systems.MazeGenerator\n@@ -1335,7 +1335,10 @@\n \t\t\tlight.Shadows = false -- shadows on hundreds of lights kills performance\n \t\t\tlight.Enabled = not isDead\n \t\t\tlight.Parent = panel\n-\t\t\tif blender then blender:Skin(panel, \"LightFixture\", true) end\n+\t\t\tif blender then\n+\t\t\t\tlocal style = ((x + z) / LIGHT_EVERY) % 2 == 0 and \"GridFixture\" or \"Fluorescent\"\n+\t\t\t\tblender:Fixture(panel, style)\n+\t\t\tend\n \n \t\t\tif not isDead then\n \t\t\t\ttable.insert(allLights, { panel = panel, light = light, pos = panel.Position })\n@@ -1923,7 +1926,13 @@\n -- color grade: desaturated, contrast-crushed, sickly warm tint\n local grade = Lighting:FindFirstChild(\"MongoGrade\") or Instance.new(\"ColorCorrectionEffect\")\n grade.Name = \"MongoGrade\"\n-grade.Saturation = -0.3\n+local previousSaturation = grade.Saturation\n+grade.Saturation = blender and .08 or -0.3\n+if blender then\n+\tmaze.Destroying:Connect(function()\n+\t\tif grade.Parent == Lighting and grade.Saturation == .08 then grade.Saturation = previousSaturation end\n+\tend)\n+end\n grade.Contrast = 0.12\n grade.Brightness = -0.02\n grade.TintColor = Color3.fromRGB(255, 243, 220)\n",
+      "exactUnifiedDiffSHA256": "56c59c378494e368ee967d8b220ecc449a738a5c82bc49cbf9b1cdf60c7479c4",
+      "lineCounts": {
+        "before": 2101,
+        "after": 2110
+      }
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "status": "changed",
+      "scope": "task-owned",
+      "scopeSummary": "Task-owned scoped hook calls EndBlockades.Add before Ready and includes AddedInstancedTriangles in model placement metadata.",
+      "before": {
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "class": "ModuleScript",
+        "sourceBytes": 11266,
+        "sourceSha256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
+        "editorSourceSha256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+        "class": "ModuleScript",
+        "sourceBytes": 11490,
+        "sourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+        "editorSourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ServerScriptService.LobbyReimaginedPreview.Builder\n+++ after/ServerScriptService.LobbyReimaginedPreview.Builder\n@@ -173,7 +173,9 @@\n \t\ttext(host,Enum.NormalId.Back,\"LOBBY REVISION \u00b7 DEV\",Color3.fromRGB(192,244,223),Vector2.new(440,100))\n \tend\n \tassert(not workspace:FindFirstChild(NAME), \"Concurrent preview appeared; refusing overwrite\")\n-\tmodel:SetAttribute(\"Ready\",true); model:SetAttribute(\"InstantiatedTriangles\",manifest.instantiatedTriangles)\n+\t-- Reuse the installed Blender furniture for dense reference end blockades.\n+\tlocal endPiles = require(script.Parent:WaitForChild(\"EndBlockades\")).Add(model, kit, manifest)\n+\tmodel:SetAttribute(\"Ready\",true); model:SetAttribute(\"InstantiatedTriangles\",manifest.instantiatedTriangles + endPiles:GetAttribute(\"AddedInstancedTriangles\"))\n \tmodel.Parent = workspace\n \treturn model\n \tend)\n",
+      "exactUnifiedDiffSHA256": "e17a58a9f9cd1a8371a5be55b2be678923147b2826c6fccbdfccfcef07de50cb",
+      "lineCounts": {
+        "before": 183,
+        "after": 185
+      }
+    },
+    {
+      "path": "ServerScriptService.NoiseRegistry",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds reel/projector/breaker/door loudness types for cinema objectives and Usher hearing.",
+      "before": {
+        "path": "ServerScriptService.NoiseRegistry",
+        "class": "ModuleScript",
+        "sourceBytes": 1991,
+        "sourceSha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+        "editorSourceSha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ServerScriptService.NoiseRegistry",
+        "class": "ModuleScript",
+        "sourceBytes": 2197,
+        "sourceSha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+        "editorSourceSha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ServerScriptService.NoiseRegistry\n+++ after/ServerScriptService.NoiseRegistry\n@@ -14,6 +14,12 @@\n \t-- twice as far as a sprint. Level 1 never emits this name, so its numbers\n \t-- above are exactly what they were.\n \tpump = 2.0,\n+\t-- Level 4 (the cinema). Rattling film reels carry like a sprint; a projector\n+\t-- being threaded, the breakers and a slammed door carry further.\n+\treel = 1.0,\n+\tprojector = 1.6,\n+\tbreaker = 1.4,\n+\tdoor = 0.8,\n }\n local DECAY = 5\n \n",
+      "exactUnifiedDiffSHA256": "f3d8f110c6a42f0732b02c759eebb477e6a81f08a6e9a84f744202660e6679e6",
+      "lineCounts": {
+        "before": 66,
+        "after": 72
+      }
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds DevMaxLevel=4; ClampLevelTo permits an explicit ceiling up to 4 and staged transport preserves levels through the dev ceiling. Public MaxLevel=3 and normal NextLevel remain unchanged in the diff.",
+      "before": {
+        "path": "ServerScriptService.Round Completion Routing",
+        "class": "ModuleScript",
+        "sourceBytes": 75753,
+        "sourceSha256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85",
+        "editorSourceSha256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "ServerScriptService.Round Completion Routing",
+        "class": "ModuleScript",
+        "sourceBytes": 75964,
+        "sourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+        "editorSourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/ServerScriptService.Round Completion Routing\n+++ after/ServerScriptService.Round Completion Routing\n@@ -45,6 +45,9 @@\n -- The campaign ends at Level 3. There is no Level 4, so the last level offers\n -- no Continue and no automatic route onward.\n Routing.MaxLevel = 3\n+-- Levels above MaxLevel exist for developers only (Level 4, the cinema round). They are\n+-- reachable through an explicit ceiling (GameManager devCeiling), never through NextLevel.\n+Routing.DevMaxLevel = 4\n Routing.PostWinSeconds = 15\n \n -- How long past the source server's decision deadline the destination keeps\n@@ -292,7 +295,7 @@\n \tif not requested then return 1 end\n \tlocal limit = tonumber(ceiling)\n \tif not limit or limit ~= limit then limit = Routing.MaxLevel end\n-\tlimit = math.clamp(math.floor(limit), 1, Routing.MaxLevel)\n+\tlimit = math.clamp(math.floor(limit), 1, Routing.DevMaxLevel)\n \treturn math.clamp(math.floor(requested), 1, limit)\n end\n \n@@ -509,7 +512,7 @@\n \t\t\t\t\tMembers = {},\n \t\t\t\t\t-- Transport preserves development levels but grants no access.\n \t\t\t\t\t-- GameManager checks the exact level flag and every arriving player.\n-\t\t\t\t\tLevel = Routing.ClampLevelTo(data.Level, Routing.MaxLevel),\n+\t\t\t\t\tLevel = Routing.ClampLevelTo(data.Level, Routing.DevMaxLevel),\n \t\t\t\t\tEntryMode = data.EntryMode,\n \t\t\t\t\tExpected = nil,\n \t\t\t\t\tDeadline = nil,\n",
+      "exactUnifiedDiffSHA256": "d5df4becc5002a9ba1094e146d0ef0c703d8ad6ae7f2f34de9bd48ff5654735b",
+      "lineCounts": {
+        "before": 1619,
+        "after": 1622
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds Level4_BatteryRefill attribute handling and extra drain while Level4_BeamingUsher is true.",
+      "before": {
+        "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+        "class": "LocalScript",
+        "sourceBytes": 33275,
+        "sourceSha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+        "editorSourceSha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+        "class": "LocalScript",
+        "sourceBytes": 33971,
+        "sourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+        "editorSourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/StarterPlayer.StarterPlayerScripts.FlashlightController\n+++ after/StarterPlayer.StarterPlayerScripts.FlashlightController\n@@ -761,12 +761,24 @@\n \tif active then battery = batteryMax() end\n end)\n \n+-- Level 4: a battery pack from the arcade prize case refills it (the server\n+-- counts pickups in Level4_BatteryRefill), and holding the beam on the Usher\n+-- costs extra (the server raises Level4_BeamingUsher while it is lit).\n+local USHER_DRAIN_PER_SEC = 3\n+local lastRefill = player:GetAttribute(\"Level4_BatteryRefill\") or 0\n+player:GetAttributeChangedSignal(\"Level4_BatteryRefill\"):Connect(function()\n+\tlocal count = player:GetAttribute(\"Level4_BatteryRefill\") or 0\n+\tif type(count) == \"number\" and count > lastRefill then battery = batteryMax() end\n+\tlastRefill = type(count) == \"number\" and count or 0\n+end)\n+\n -- drain while on, recharge while off; die at empty\n RunService.Heartbeat:Connect(function(dt)\n \tif player:GetAttribute(\"DevUnlimited\") == true then\n \t\tbattery = batteryMax() -- dev cheat (DevCheats, U key): never drains\n \telseif on then\n-\t\tbattery = battery - DRAIN_PER_SEC * dt\n+\t\tbattery = battery - (DRAIN_PER_SEC\n+\t\t\t+ (player:GetAttribute(\"Level4_BeamingUsher\") == true and USHER_DRAIN_PER_SEC or 0)) * dt\n \t\tif battery <= 0 then\n \t\t\tbattery = 0\n \t\t\tsetLights(false) -- (sets `on` false, so this fires once at the drain-out)\n",
+      "exactUnifiedDiffSHA256": "b043280d7ac29ce6a8184ea56083f466c3086bd5b4a599090ca72fe29251fdf2",
+      "lineCounts": {
+        "before": 833,
+        "after": 845
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Adds round power-state lighting grades, server-controlled stars and interpolated grade following.",
+      "before": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+        "class": "LocalScript",
+        "sourceBytes": 10823,
+        "sourceSha256": "ad90ef1e15980c95c81415a061132a06aa269f30acb0c64f729292fdb91d3663",
+        "editorSourceSha256": "ad90ef1e15980c95c81415a061132a06aa269f30acb0c64f729292fdb91d3663",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+        "class": "LocalScript",
+        "sourceBytes": 13613,
+        "sourceSha256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+        "editorSourceSha256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller\n+++ after/StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller\n@@ -21,8 +21,13 @@\n --   if mazeGrade then mazeGrade.Enabled = false end\n --   return\n --  end\n+-- Round mode (2026-10-02, \"Den Sidste Forestilling\"): while workspace Level4RoundActive is true the grade follows\n+-- the server's power state (ReplicatedStorage.\"Level 4 State\".Level4_PowerState): \"Off\" is real darkness (the\n+-- flashlight is the only light), \"PoweringUp\" ramps to the full grade over the wave (the \"woooow\"), \"Failing\" sits a\n+-- little darker, \"Finale\" is dark again. The stars only twinkle while the server has them on (Level4_StarsOn).\n local Players = game:GetService(\"Players\")\n local Lighting = game:GetService(\"Lighting\")\n+local ReplicatedStorage = game:GetService(\"ReplicatedStorage\")\n local RunService = game:GetService(\"RunService\")\n local CollectionService = game:GetService(\"CollectionService\")\n local TweenService = game:GetService(\"TweenService\")\n@@ -67,6 +72,37 @@\n \tColor = Color3.fromRGB(40, 20, 58),\n \tDecay = Color3.fromRGB(12, 6, 22),\n }\n+-- per power state: ambient, exposure, bloom intensity, and how fast the grade moves there (fraction per second)\n+local POWER_GRADES = {\n+\tPreview = { Ambient = AMBIENT, Exposure = EXPOSURE, Bloom = 0.85, Rate = 3 },\n+\tOff = { Ambient = Color3.fromRGB(5, 3, 8), Exposure = 0.15, Bloom = 0.5, Rate = 3 },\n+\tPoweringUp = { Ambient = AMBIENT, Exposure = EXPOSURE + 0.35, Bloom = 1.6, Rate = 0.35 },\n+\tOn = { Ambient = AMBIENT, Exposure = EXPOSURE, Bloom = 0.85, Rate = 0.5 },\n+\tFailing = { Ambient = Color3.fromRGB(30, 22, 40), Exposure = EXPOSURE - 0.1, Bloom = 0.85, Rate = 0.4 },\n+\tFinale = { Ambient = Color3.fromRGB(8, 5, 12), Exposure = 0.3, Bloom = 1.1, Rate = 1 },\n+}\n+local current = { Ambient = AMBIENT, Exposure = EXPOSURE, Bloom = 0.85 }\n+\n+local function roundLive()\n+\treturn workspace:GetAttribute(\"Level4RoundActive\") == true\n+end\n+\n+local function roundState()\n+\tlocal folder = ReplicatedStorage:FindFirstChild(\"Level 4 State\")\n+\treturn folder\n+end\n+\n+local function powerState()\n+\tlocal folder = roundLive() and roundState()\n+\tlocal power = folder and folder:GetAttribute(\"Level4_PowerState\")\n+\treturn POWER_GRADES[power] and power or \"Preview\"\n+end\n+\n+local function starsAllowed()\n+\tlocal folder = roundLive() and roundState()\n+\treturn not folder or folder:GetAttribute(\"Level4_StarsOn\") == true\n+end\n+\n local GRADE_EFFECT = { Brightness = -0.03, Contrast = 0.2, Saturation = 0.14, TintColor = Color3.fromRGB(244, 234, 255) }\n local BLOOM = { Intensity = 0.85, Size = 30, Threshold = 0.92 }\n local DEPTH = { FarIntensity = 0.08, FocusDistance = 14, InFocusRadius = 45, NearIntensity = 0 }\n@@ -190,6 +226,15 @@\n local function twinkle(now)\n \tlocal model = workspace:FindFirstChild(MODEL_NAME)\n \tif not model then return end\n+\tif not starsAllowed() then\n+\t\t-- the server switched the stars off: drop every local drift and hold them dark\n+\t\tfor p, state in starState do\n+\t\t\tif state.tween then state.tween:Cancel(); state.tween = nil end\n+\t\t\tif p.Parent then p.Transparency = 1 end\n+\t\tend\n+\t\ttable.clear(twinkleNext)\n+\t\treturn\n+\tend\n \tif model ~= twinkleModel then settleStars(false); twinkleModel = model end\n \tfor p, state in starState do\n \t\tif not p:IsDescendantOf(model) then\n@@ -228,10 +273,29 @@\n \tend\n end)\n \n+-- move the grade toward the power state's target (called every check)\n+local function follow(dt, snap)\n+\tlocal target = POWER_GRADES[powerState()]\n+\tlocal a = snap and 1 or math.clamp(target.Rate * dt, 0, 1)\n+\tcurrent.Ambient = current.Ambient:Lerp(target.Ambient, a)\n+\tcurrent.Exposure += (target.Exposure - current.Exposure) * a\n+\tcurrent.Bloom += (target.Bloom - current.Bloom) * a\n+\tGRADE.Ambient = current.Ambient\n+\tGRADE.ExposureCompensation = current.Exposure\n+\tbloom.Intensity = current.Bloom\n+\tif saved then\n+\t\tapplying = true\n+\t\tLighting.Ambient = current.Ambient\n+\t\tLighting.ExposureCompensation = current.Exposure\n+\t\tapplying = false\n+\tend\n+end\n+\n local lastCheck, lastApply = 0, 0\n local function step()\n \tlocal now = time()\n \tif now - lastCheck < CHECK_INTERVAL then return end\n+\tfollow(now - lastCheck, lastCheck == 0)\n \tlastCheck = now\n \tlocal want = inside()\n \tif want and not saved then\n",
+      "exactUnifiedDiffSHA256": "c7c74bf0c7e095aaf6b25b5842435db0177e93f1de224ecc241f274b80ae238c",
+      "lineCounts": {
+        "before": 260,
+        "after": 324
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Applies server-owned Level4_CarrySpeedFactor during Level 4 rounds; includes Level 4 in runtime noise reporting and refreshes speed on carry-factor changes.",
+      "before": {
+        "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+        "class": "LocalScript",
+        "sourceBytes": 44350,
+        "sourceSha256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a",
+        "editorSourceSha256": "35ecddcab0d51274e88069ca79a578425126bc2651a757a57c844c090f7eeb5a",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+        "class": "LocalScript",
+        "sourceBytes": 44865,
+        "sourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+        "editorSourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/StarterPlayer.StarterPlayerScripts.NoiseReporter\n+++ after/StarterPlayer.StarterPlayerScripts.NoiseReporter\n@@ -193,6 +193,10 @@\n \t-- stamina drain keyed off it are deliberately untouched: the potion is speed,\n \t-- not stamina, and the noise a player makes must not change with it.\n \tdesiredSpeed *= speedBoost()\n+\t-- Level 4: carried film reels weigh the carrier down. The server owns the\n+\t-- factor (Objective Controller); anything outside [0.5, 1) is ignored.\n+\tlocal carry = workspace:GetAttribute(\"SelectedLevel\") == 4 and player:GetAttribute(\"Level4_CarrySpeedFactor\")\n+\tif type(carry) == \"number\" and carry >= 0.5 and carry < 1 then desiredSpeed *= carry end\n \t-- Publish the intended speed separately from WalkSpeed. Deferred property\n \t-- signals can observe the slide controller's re-zero instead of this write;\n \t-- the attribute gives every movement lock an unambiguous restore target.\n@@ -391,8 +395,9 @@\n \t\t-- NoiseRegistry: EntityAI drains this remote during a Level 1 round, the\n \t\t-- live Pool Foam session drains it during a Level 2 one. Level 3's Mall\n \t\t-- Manager does not listen at all, so reporting there is pure traffic.\n+\t\t-- Level 4's Usher hears it too (its controller drains the remote).\n \t\tlocal level = workspace:GetAttribute(\"SelectedLevel\")\n-\t\tif inPreview() or not inRound() or (level ~= 1 and level ~= 2) then continue end\n+\t\tif inPreview() or not inRound() or (level ~= 1 and level ~= 2 and level ~= 4) then continue end\n \t\tlocal char, hum = currentChar()\n \t\tif not (char and hum and hum.Health > 0) then continue end\n \n@@ -750,6 +755,7 @@\n end\n player:GetAttributeChangedSignal(\"ZyntraSpeedBoostUntil\"):Connect(refreshSpeedBoost)\n player:GetAttributeChangedSignal(\"ZyntraSpeedBoostMultiplier\"):Connect(refreshSpeedBoost)\n+player:GetAttributeChangedSignal(\"Level4_CarrySpeedFactor\"):Connect(applySpeed)\n \n RunService.Heartbeat:Connect(function(dt)\n \t-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile\n",
+      "exactUnifiedDiffSHA256": "e9137c2738b921f8ae5d5d718c4e10c14d6ec62398ac6c2e337f94a75001ee46",
+      "lineCounts": {
+        "before": 985,
+        "after": 991
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Includes authored cinema in Level 4 streamed entry readiness and expands accepted entry payload level range from 1..3 to 1..4.",
+      "before": {
+        "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+        "class": "LocalScript",
+        "sourceBytes": 6328,
+        "sourceSha256": "edaf5fc171aadc2f74288e0d8198412c7d16f39d1c5b605a7c3f0b9ce13ae868",
+        "editorSourceSha256": "edaf5fc171aadc2f74288e0d8198412c7d16f39d1c5b605a7c3f0b9ce13ae868",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+        "class": "LocalScript",
+        "sourceBytes": 6494,
+        "sourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+        "editorSourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/StarterPlayer.StarterPlayerScripts.Round Entry Client\n+++ after/StarterPlayer.StarterPlayerScripts.Round Entry Client\n@@ -43,6 +43,9 @@\n \tif request.Level == 1 then\n \t\tinclude(workspace:FindFirstChild(\"Maze\"))\n \t\tinclude(workspace:FindFirstChild(\"Elevator\"))\n+\telseif request.Level == 4 then\n+\t\t-- the authored cinema (developer-only round, GameManager devCeiling)\n+\t\tinclude(workspace:FindFirstChild(\"Level 4 Cinema Blender\"))\n \telse\n \t\tinclude(workspace:FindFirstChild(\"Level \" .. request.Level .. \" Generated World\"))\n \tend\n@@ -63,7 +66,7 @@\n local function begin(payload)\n \tif type(payload) ~= \"table\" or type(payload.Token) ~= \"string\"\n \t\tor #payload.Token == 0 or #payload.Token > 128 or not finite(payload.Level)\n-\t\tor payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 3\n+\t\tor payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 4\n \t\tor typeof(payload.Character) ~= \"Instance\" or not payload.Character:IsA(\"Model\")\n \t\tor payload.Character ~= player.Character or typeof(payload.Position) ~= \"Vector3\"\n \t\tor not finite(payload.Position.X) or not finite(payload.Position.Y) or not finite(payload.Position.Z)\n",
+      "exactUnifiedDiffSHA256": "b224ed1e8885e2d283ca51093bd6c138b4f03516ab45f9ec362ae576e27618a6",
+      "lineCounts": {
+        "before": 146,
+        "after": 149
+      }
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "status": "changed",
+      "scope": "concurrent-unrelated",
+      "scopeSummary": "Suppresses cosmetic flicker during Level4RoundActive, cancels existing tweens and restores light brightness at handoff; disconnects the added round signal on destruction.",
+      "before": {
+        "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+        "class": "Script",
+        "sourceBytes": 5030,
+        "sourceSha256": "2b345d49783b3cbf425d56a1c32b8332f54f542273ac93cea581001dbccd47c2",
+        "editorSourceSha256": "2b345d49783b3cbf425d56a1c32b8332f54f542273ac93cea581001dbccd47c2",
+        "editorMatch": true
+      },
+      "after": {
+        "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+        "class": "Script",
+        "sourceBytes": 5744,
+        "sourceSha256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+        "editorSourceSha256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+        "editorMatch": true
+      },
+      "exactUnifiedDiff": "--- before/Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker\n+++ after/Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker\n@@ -3,7 +3,9 @@\n -- parts and every Light inside it) or a BasePart with the attribute outside such a Model (a light holder). Every few\n -- seconds a unit stutters and usually stays OFF for 0.3-4 s (12 %: a 6-15 s outage), so its area goes dark. With\n -- ReduceFlashing (anything but an explicit false: a profile that has not loaded yet never strobes) it fades out,\n--- holds and fades back instead. Written by tools/level4_blender/place.luau.\n+-- holds and fades back instead. During a Level 4 round (workspace Level4RoundActive) it stands down completely: the\n+-- server's Light Director owns every light then and the Level 4 Round Client renders it.\n+-- Written by tools/level4_blender/place.luau.\n local TweenService = game:GetService(\"TweenService\")\n local player = game:GetService(\"Players\").LocalPlayer\n local model = script.Parent\n@@ -12,6 +14,10 @@\n \n local function reduced()\n \treturn player == nil or player:GetAttribute(\"ReduceFlashing\") ~= false\n+end\n+\n+local function roundLive()\n+\treturn workspace:GetAttribute(\"Level4RoundActive\") == true\n end\n \n local function members(unit)\n@@ -57,6 +63,7 @@\n end\n \n local function event(unit, rng, state)\n+\tif roundLive() then return end\n \tlocal lights, lenses = members(unit)\n \tstate.lights, state.lenses = lights, lenses\n \tif #lights + #lenses == 0 then return end\n@@ -129,8 +136,17 @@\n for _, d in model:GetDescendants() do watch(d) end\n local added = model.DescendantAdded:Connect(watch)\n local removing = model.DescendantRemoving:Connect(stop)\n+-- a round starting mid-blink: hand the brightness back at once (neon is re-rendered by the round client)\n+local roundSignal = workspace:GetAttributeChangedSignal(\"Level4RoundActive\"):Connect(function()\n+\tif not roundLive() then return end\n+\tfor unit, state in running do\n+\t\tfor _, t in state.tweens do t:Cancel() end\n+\t\tfor _, e in state.lights or {} do e[1].Brightness = e[2] end\n+\tend\n+end)\n script.Destroying:Connect(function()\n \tadded:Disconnect()\n \tremoving:Disconnect()\n+\troundSignal:Disconnect()\n \tfor unit in running do stop(unit) end\n end)\n",
+      "exactUnifiedDiffSHA256": "f14c664bf3a6780e666ee8af97993087f00f72787097d5867ac418d1c7793c92",
+      "lineCounts": {
+        "before": 136,
+        "after": 152
+      }
+    }
+  ],
+  "unchangedRelevantAuthority": [
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "class": "ModuleScript",
+      "sourceBytes": 1353,
+      "sourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorSourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 12232,
+      "sourceSha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "editorSourceSha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 14689,
+      "sourceSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "editorSourceSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 11150,
+      "sourceSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "editorSourceSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 12317,
+      "sourceSha256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
+      "editorSourceSha256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 12341,
+      "sourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "editorSourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "sourceBytes": 20289,
+      "sourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "editorSourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "sourceBytes": 1217,
+      "sourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorSourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "sourceBytes": 4105,
+      "sourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "editorSourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "editorMatch": true
+    }
+  ],
+  "metadataRootDelta": {
+    "added": [
+      {
+        "path": "ServerScriptService.Level 4 Systems",
+        "index": 102,
+        "descendants": 5,
+        "service": "ServerScriptService",
+        "class": "Folder",
+        "name": "Level 4 Systems"
+      },
+      {
+        "path": "ServerScriptService.Level4RoundGenerator",
+        "index": 103,
+        "descendants": 0,
+        "service": "ServerScriptService",
+        "class": "ModuleScript",
+        "name": "Level4RoundGenerator"
+      },
+      {
+        "path": "ServerStorage.Level1BlenderKitV2",
+        "index": 173,
+        "descendants": 1815,
+        "service": "ServerStorage",
+        "class": "Folder",
+        "name": "Level1BlenderKitV2"
+      }
+    ],
+    "removed": [],
+    "changedDescendantCounts": [
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview",
+        "classBefore": "Folder",
+        "classAfter": "Folder",
+        "before": 4,
+        "after": 5
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts",
+        "classBefore": "StarterPlayerScripts",
+        "classAfter": "StarterPlayerScripts",
+        "before": 51,
+        "after": 53
+      }
+    ]
+  },
+  "publicationLimitations": [
+    "The full current place includes seventeen concurrent unrelated source deltas and a new ServerStorage.Level1BlenderKitV2 asset folder with 1,815 descendants. Publishing current Studio will include these; this lobby source review does not verify their gameplay, performance, lifecycle or asset fidelity.",
+    "The captured GameManager and Round Completion Routing differ from the owner-task initial baseline due to developer-only Level 4 round admission. The current L5/L6 developer authority and R4 QueueBridge sources remain exact byte matches; this is source evidence only.",
+    "New Level 4 Test Suite lines 73-74 requires sibling Level 4 Usher Nav ModuleScript. That path is absent in the complete 222-source capture, so the exact captured suite cannot return an all-green report in this captured state. Usher Controller lines 102-106 supports L4UsherNode marker fallback; the missing ModuleScript alone does not prove navigation or gameplay is broken. No test run was executed by this audit.",
+    "Native SHA/bytes/parts are metadata reported values only in this audit. Root is finalizing native concatenation and owns complete binary hash/packing/reopen verification; no incomplete native payload was audited.",
+    "Capture parity is historical at the given capture ID/time. A fresh Studio identity/source/editor readback is required before later scoped edits or final publication claims."
+  ],
+  "preservation": {
+    "unrelatedFilesModified": false,
+    "StudioMutations": false,
+    "GitStageOrCommit": false,
+    "onlyWrittenEvidence": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-end-blockades-20261002/review/concurrent-native/source-delta-audit.json"
+  },
+  "afterCompleteInventory": [
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "class": "ModuleScript",
+      "sourceBytes": 7439,
+      "sourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "editorSourceSha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "class": "ModuleScript",
+      "sourceBytes": 1353,
+      "sourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorSourceSha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.FlashlightProfiles",
+      "class": "ModuleScript",
+      "sourceBytes": 2505,
+      "sourceSha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "editorSourceSha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "class": "ModuleScript",
+      "sourceBytes": 5063,
+      "sourceSha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "editorSourceSha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "class": "ModuleScript",
+      "sourceBytes": 21208,
+      "sourceSha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "editorSourceSha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ProtectionClient",
+      "class": "ModuleScript",
+      "sourceBytes": 6906,
+      "sourceSha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "editorSourceSha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.SlideContinuationSafety",
+      "class": "ModuleScript",
+      "sourceBytes": 3945,
+      "sourceSha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "editorSourceSha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.UIDevice",
+      "class": "ModuleScript",
+      "sourceBytes": 99881,
+      "sourceSha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "editorSourceSha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.UIRegression",
+      "class": "ModuleScript",
+      "sourceBytes": 462049,
+      "sourceSha256": "b8599730960c091325f59176badeedaaa14084e2631f6bbb29678cdbc0c9dd63",
+      "editorSourceSha256": "b8599730960c091325f59176badeedaaa14084e2631f6bbb29678cdbc0c9dd63",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.UIStyle",
+      "class": "ModuleScript",
+      "sourceBytes": 10555,
+      "sourceSha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "editorSourceSha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraChallenges",
+      "class": "ModuleScript",
+      "sourceBytes": 6018,
+      "sourceSha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "editorSourceSha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "class": "ModuleScript",
+      "sourceBytes": 16706,
+      "sourceSha256": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0",
+      "editorSourceSha256": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyResearch",
+      "class": "ModuleScript",
+      "sourceBytes": 1496,
+      "sourceSha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "editorSourceSha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "class": "ModuleScript",
+      "sourceBytes": 38146,
+      "sourceSha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "editorSourceSha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDetectorVisual",
+      "class": "ModuleScript",
+      "sourceBytes": 13427,
+      "sourceSha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "editorSourceSha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraRecordsPage",
+      "class": "ModuleScript",
+      "sourceBytes": 15974,
+      "sourceSha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "editorSourceSha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkins",
+      "class": "ModuleScript",
+      "sourceBytes": 5823,
+      "sourceSha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "editorSourceSha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "editorMatch": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "class": "ModuleScript",
+      "sourceBytes": 19759,
+      "sourceSha256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "editorSourceSha256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.AvatarNormalize",
+      "class": "Script",
+      "sourceBytes": 2567,
+      "sourceSha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "editorSourceSha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Crouch State Server",
+      "class": "Script",
+      "sourceBytes": 7262,
+      "sourceSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "editorSourceSha256": "5c71d89c36daecb3f89c1c2f481f293ec8dd23171dd7cda70ce00e539602247c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.FlashlightSync",
+      "class": "Script",
+      "sourceBytes": 6163,
+      "sourceSha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "editorSourceSha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.FriendBoost",
+      "class": "ModuleScript",
+      "sourceBytes": 5413,
+      "sourceSha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "editorSourceSha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sourceBytes": 171175,
+      "sourceSha256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "editorSourceSha256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "class": "Script",
+      "sourceBytes": 15313,
+      "sourceSha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "editorSourceSha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "class": "ModuleScript",
+      "sourceBytes": 9763,
+      "sourceSha256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "editorSourceSha256": "43bea898d5e1eafc09fa9167ee518694fd016bbb7d92bce7679e15eb8c8b5f3d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAI",
+      "class": "Script",
+      "sourceBytes": 58731,
+      "sourceSha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "editorSourceSha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "class": "Script",
+      "sourceBytes": 9722,
+      "sourceSha256": "22f3bc9c317781856e6fce53b493236d4b670b074c0b3a8af59a98854fc895cc",
+      "editorSourceSha256": "22f3bc9c317781856e6fce53b493236d4b670b074c0b3a8af59a98854fc895cc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityKill",
+      "class": "Script",
+      "sourceBytes": 11569,
+      "sourceSha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "editorSourceSha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "class": "Script",
+      "sourceBytes": 85817,
+      "sourceSha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "editorSourceSha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "class": "Script",
+      "sourceBytes": 97783,
+      "sourceSha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "editorSourceSha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 12107,
+      "sourceSha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "editorSourceSha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 47083,
+      "sourceSha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "editorSourceSha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 37520,
+      "sourceSha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "editorSourceSha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 50965,
+      "sourceSha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "editorSourceSha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 16481,
+      "sourceSha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "editorSourceSha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 16193,
+      "sourceSha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "editorSourceSha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 99086,
+      "sourceSha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "editorSourceSha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 123871,
+      "sourceSha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "editorSourceSha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "class": "ModuleScript",
+      "sourceBytes": 17971,
+      "sourceSha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "editorSourceSha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "class": "ModuleScript",
+      "sourceBytes": 11278,
+      "sourceSha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "editorSourceSha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 691,
+      "sourceSha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "editorSourceSha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 41529,
+      "sourceSha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "editorSourceSha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 137281,
+      "sourceSha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "editorSourceSha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 7632,
+      "sourceSha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "editorSourceSha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 20023,
+      "sourceSha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "editorSourceSha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "class": "Script",
+      "sourceBytes": 21604,
+      "sourceSha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "editorSourceSha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 283839,
+      "sourceSha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "editorSourceSha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "class": "ModuleScript",
+      "sourceBytes": 8054,
+      "sourceSha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "editorSourceSha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "class": "ModuleScript",
+      "sourceBytes": 5828,
+      "sourceSha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "editorSourceSha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 19286,
+      "sourceSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorSourceSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 25364,
+      "sourceSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "editorSourceSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 42613,
+      "sourceSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorSourceSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 187862,
+      "sourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "editorSourceSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 20901,
+      "sourceSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "editorSourceSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 70421,
+      "sourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "editorSourceSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 31538,
+      "sourceSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorSourceSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 202633,
+      "sourceSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "editorSourceSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 105403,
+      "sourceSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "editorSourceSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 19427,
+      "sourceSha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "editorSourceSha256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 19059,
+      "sourceSha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "editorSourceSha256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 4909,
+      "sourceSha256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+      "editorSourceSha256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "class": "ModuleScript",
+      "sourceBytes": 13743,
+      "sourceSha256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+      "editorSourceSha256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 34426,
+      "sourceSha256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+      "editorSourceSha256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 5916,
+      "sourceSha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "editorSourceSha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 30269,
+      "sourceSha256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+      "editorSourceSha256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 12529,
+      "sourceSha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "editorSourceSha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 19430,
+      "sourceSha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "editorSourceSha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "class": "ModuleScript",
+      "sourceBytes": 8896,
+      "sourceSha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "editorSourceSha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 25600,
+      "sourceSha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "editorSourceSha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "class": "ModuleScript",
+      "sourceBytes": 31504,
+      "sourceSha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "editorSourceSha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 47446,
+      "sourceSha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "editorSourceSha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 188782,
+      "sourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "editorSourceSha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 21426,
+      "sourceSha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "editorSourceSha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 72634,
+      "sourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "editorSourceSha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "class": "ModuleScript",
+      "sourceBytes": 21622,
+      "sourceSha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "editorSourceSha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+      "class": "ModuleScript",
+      "sourceBytes": 18364,
+      "sourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "editorSourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sourceBytes": 23744,
+      "sourceSha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "editorSourceSha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 102901,
+      "sourceSha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "editorSourceSha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 10474,
+      "sourceSha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "editorSourceSha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level1BlenderPreviewAccess",
+      "class": "Script",
+      "sourceBytes": 6132,
+      "sourceSha256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "editorSourceSha256": "ea9d073f7a69699efcc371af59f8a9adaee4b28a699e35ad553abe951012feda",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level2Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 427,
+      "sourceSha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "editorSourceSha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 437,
+      "sourceSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "editorSourceSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV4",
+      "class": "ModuleScript",
+      "sourceBytes": 40432,
+      "sourceSha256": "f301ebcd739aa43ed686c905daaa58b842bb88ba6f0cd598d563795fb7d8a2c1",
+      "editorSourceSha256": "f301ebcd739aa43ed686c905daaa58b842bb88ba6f0cd598d563795fb7d8a2c1",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV5",
+      "class": "ModuleScript",
+      "sourceBytes": 72545,
+      "sourceSha256": "11bcd502d50630fa97fc52ad1f33e9d880c57de423e8d802e45b0b54e21d333b",
+      "editorSourceSha256": "11bcd502d50630fa97fc52ad1f33e9d880c57de423e8d802e45b0b54e21d333b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV6",
+      "class": "ModuleScript",
+      "sourceBytes": 84582,
+      "sourceSha256": "fedd1190c0c80dff435e90ba17054c89599948c5616d100eb13b8edb0d372a24",
+      "editorSourceSha256": "fedd1190c0c80dff435e90ba17054c89599948c5616d100eb13b8edb0d372a24",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4CinemaV7",
+      "class": "ModuleScript",
+      "sourceBytes": 112876,
+      "sourceSha256": "20b6717146f3ee48e36c54099f5ac57c540ba5c4d6f5118ee87a422ca66014f2",
+      "editorSourceSha256": "20b6717146f3ee48e36c54099f5ac57c540ba5c4d6f5118ee87a422ca66014f2",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4Expansion",
+      "class": "ModuleScript",
+      "sourceBytes": 36647,
+      "sourceSha256": "262b15148e0bb21c0ba3314a49e492e44d49eed76b82cf38cd920e49e0aaacb5",
+      "editorSourceSha256": "262b15148e0bb21c0ba3314a49e492e44d49eed76b82cf38cd920e49e0aaacb5",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4Generator",
+      "class": "ModuleScript",
+      "sourceBytes": 34952,
+      "sourceSha256": "2b21a5bec2868cb5e0e25ec43b4d66a80b3a2a9c591cde35991a369305a40140",
+      "editorSourceSha256": "2b21a5bec2868cb5e0e25ec43b4d66a80b3a2a9c591cde35991a369305a40140",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 11150,
+      "sourceSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "editorSourceSha256": "acd0d858769b3cd6bad39812a97e8b5b30da6d861e5f9214d7d9ffd44ac9322d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4Renovation",
+      "class": "ModuleScript",
+      "sourceBytes": 44537,
+      "sourceSha256": "3e52645dd98cbee42422a142da3821f5260e3410240081bfb52996fe613a52ec",
+      "editorSourceSha256": "3e52645dd98cbee42422a142da3821f5260e3410240081bfb52996fe613a52ec",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4RenovationBoot",
+      "class": "Script",
+      "sourceBytes": 1123,
+      "sourceSha256": "4af6266bb5146e3d30805249688196a1ca352e7dc622b87fbd6508986e37a227",
+      "editorSourceSha256": "4af6266bb5146e3d30805249688196a1ca352e7dc622b87fbd6508986e37a227",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "class": "ModuleScript",
+      "sourceBytes": 11276,
+      "sourceSha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "editorSourceSha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 12317,
+      "sourceSha256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
+      "editorSourceSha256": "b4f8fe4aeada5d9eb26e2d0e538889dd7dc10d52c53e5a42f63796831f20ea40",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 12232,
+      "sourceSha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "editorSourceSha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 14689,
+      "sourceSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "editorSourceSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "class": "Script",
+      "sourceBytes": 7124,
+      "sourceSha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "editorSourceSha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "sourceBytes": 1217,
+      "sourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorSourceSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 11490,
+      "sourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "editorSourceSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "class": "ModuleScript",
+      "sourceBytes": 67127,
+      "sourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "editorSourceSha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "class": "ModuleScript",
+      "sourceBytes": 20289,
+      "sourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "editorSourceSha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "class": "ModuleScript",
+      "sourceBytes": 12341,
+      "sourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "editorSourceSha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "sourceBytes": 24220,
+      "sourceSha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "editorSourceSha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.NoiseRegistry",
+      "class": "ModuleScript",
+      "sourceBytes": 2197,
+      "sourceSha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "editorSourceSha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.PlayerProtection",
+      "class": "ModuleScript",
+      "sourceBytes": 7408,
+      "sourceSha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "editorSourceSha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.PurchaseAlerts",
+      "class": "ModuleScript",
+      "sourceBytes": 6278,
+      "sourceSha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "editorSourceSha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.ReentryPlacement",
+      "class": "ModuleScript",
+      "sourceBytes": 4473,
+      "sourceSha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "editorSourceSha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "class": "ModuleScript",
+      "sourceBytes": 75964,
+      "sourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorSourceSha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Completion Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 135364,
+      "sourceSha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "editorSourceSha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Runtime",
+      "class": "ModuleScript",
+      "sourceBytes": 8712,
+      "sourceSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "editorSourceSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 15550,
+      "sourceSha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "editorSourceSha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.RouteMarkerService",
+      "class": "Script",
+      "sourceBytes": 12066,
+      "sourceSha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "editorSourceSha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.TeamObjectives",
+      "class": "ModuleScript",
+      "sourceBytes": 1228,
+      "sourceSha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "editorSourceSha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "class": "ModuleScript",
+      "sourceBytes": 118480,
+      "sourceSha256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a",
+      "editorSourceSha256": "325c1d220069976ff2a8205ef062837ffd74c9c3808b3a8d85fd270ff483417a",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraAnalytics",
+      "class": "ModuleScript",
+      "sourceBytes": 19089,
+      "sourceSha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "editorSourceSha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorSensing",
+      "class": "ModuleScript",
+      "sourceBytes": 1819,
+      "sourceSha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "editorSourceSha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "class": "Script",
+      "sourceBytes": 2562,
+      "sourceSha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "editorSourceSha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraMonetization",
+      "class": "Script",
+      "sourceBytes": 204565,
+      "sourceSha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
+      "editorSourceSha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "class": "LocalScript",
+      "sourceBytes": 9288,
+      "sourceSha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "editorSourceSha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "class": "Script",
+      "sourceBytes": 21612,
+      "sourceSha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "editorSourceSha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "class": "ModuleScript",
+      "sourceBytes": 7373,
+      "sourceSha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "editorSourceSha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "class": "ModuleScript",
+      "sourceBytes": 16492,
+      "sourceSha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "editorSourceSha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "class": "ModuleScript",
+      "sourceBytes": 84738,
+      "sourceSha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "editorSourceSha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "class": "ModuleScript",
+      "sourceBytes": 69618,
+      "sourceSha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "editorSourceSha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 5803,
+      "sourceSha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "editorSourceSha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 97093,
+      "sourceSha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "editorSourceSha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 5926,
+      "sourceSha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "editorSourceSha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 7391,
+      "sourceSha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "editorSourceSha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 58002,
+      "sourceSha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "editorSourceSha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "class": "ModuleScript",
+      "sourceBytes": 68535,
+      "sourceSha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "editorSourceSha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 9801,
+      "sourceSha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "editorSourceSha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 26598,
+      "sourceSha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "editorSourceSha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "class": "LocalScript",
+      "sourceBytes": 9372,
+      "sourceSha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "editorSourceSha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 167166,
+      "sourceSha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "editorSourceSha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "class": "ModuleScript",
+      "sourceBytes": 295599,
+      "sourceSha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "editorSourceSha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "class": "Script",
+      "sourceBytes": 2250,
+      "sourceSha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "editorSourceSha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "class": "ModuleScript",
+      "sourceBytes": 96252,
+      "sourceSha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "editorSourceSha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "class": "Script",
+      "sourceBytes": 6740,
+      "sourceSha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "editorSourceSha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "class": "ModuleScript",
+      "sourceBytes": 5736,
+      "sourceSha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "editorSourceSha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 42420,
+      "sourceSha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "editorSourceSha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 16436,
+      "sourceSha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "editorSourceSha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "class": "ModuleScript",
+      "sourceBytes": 95466,
+      "sourceSha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "editorSourceSha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "class": "LocalScript",
+      "sourceBytes": 8095,
+      "sourceSha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "editorSourceSha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "class": "LocalScript",
+      "sourceBytes": 28932,
+      "sourceSha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "editorSourceSha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "class": "LocalScript",
+      "sourceBytes": 6350,
+      "sourceSha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "editorSourceSha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "class": "LocalScript",
+      "sourceBytes": 27514,
+      "sourceSha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "editorSourceSha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 35774,
+      "sourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorSourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 126820,
+      "sourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorSourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 35774,
+      "sourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorSourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 126820,
+      "sourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorSourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 35774,
+      "sourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorSourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 126820,
+      "sourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorSourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 35774,
+      "sourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorSourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 126975,
+      "sourceSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "editorSourceSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+      "class": "ModuleScript",
+      "sourceBytes": 126820,
+      "sourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorSourceSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+      "class": "ModuleScript",
+      "sourceBytes": 35774,
+      "sourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorSourceSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+      "class": "ModuleScript",
+      "sourceBytes": 126975,
+      "sourceSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "editorSourceSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Project Mirror.IMPORTANT",
+      "class": "LocalScript",
+      "sourceBytes": 167,
+      "sourceSha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "editorSourceSha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.Project Mirror.Script",
+      "class": "Script",
+      "sourceBytes": 235,
+      "sourceSha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "editorSourceSha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "editorMatch": true
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls",
+      "class": "ModuleScript",
+      "sourceBytes": 4670,
+      "sourceSha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "editorSourceSha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacter.Animate",
+      "class": "LocalScript",
+      "sourceBytes": 28802,
+      "sourceSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "editorSourceSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "class": "LocalScript",
+      "sourceBytes": 1539,
+      "sourceSha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "editorSourceSha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "class": "LocalScript",
+      "sourceBytes": 300,
+      "sourceSha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "editorSourceSha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "class": "LocalScript",
+      "sourceBytes": 654,
+      "sourceSha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "editorSourceSha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Daily Rewards Client",
+      "class": "LocalScript",
+      "sourceBytes": 27402,
+      "sourceSha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "editorSourceSha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "class": "LocalScript",
+      "sourceBytes": 22809,
+      "sourceSha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "editorSourceSha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "class": "LocalScript",
+      "sourceBytes": 10390,
+      "sourceSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "editorSourceSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "class": "LocalScript",
+      "sourceBytes": 430,
+      "sourceSha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "editorSourceSha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "class": "LocalScript",
+      "sourceBytes": 33971,
+      "sourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "editorSourceSha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "class": "LocalScript",
+      "sourceBytes": 8742,
+      "sourceSha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "editorSourceSha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "class": "LocalScript",
+      "sourceBytes": 19378,
+      "sourceSha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "editorSourceSha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "class": "LocalScript",
+      "sourceBytes": 7476,
+      "sourceSha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
+      "editorSourceSha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "class": "LocalScript",
+      "sourceBytes": 10507,
+      "sourceSha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "editorSourceSha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 3462,
+      "sourceSha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "editorSourceSha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "class": "LocalScript",
+      "sourceBytes": 20263,
+      "sourceSha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "editorSourceSha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 5592,
+      "sourceSha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "editorSourceSha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "class": "LocalScript",
+      "sourceBytes": 13516,
+      "sourceSha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "editorSourceSha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "class": "LocalScript",
+      "sourceBytes": 18788,
+      "sourceSha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "editorSourceSha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP",
+      "class": "LocalScript",
+      "sourceBytes": 9656,
+      "sourceSha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "editorSourceSha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "class": "LocalScript",
+      "sourceBytes": 31003,
+      "sourceSha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "editorSourceSha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 40174,
+      "sourceSha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "editorSourceSha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 39946,
+      "sourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "editorSourceSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "class": "LocalScript",
+      "sourceBytes": 6548,
+      "sourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "editorSourceSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "class": "LocalScript",
+      "sourceBytes": 59104,
+      "sourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorSourceSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 46833,
+      "sourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "editorSourceSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "class": "LocalScript",
+      "sourceBytes": 21675,
+      "sourceSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "editorSourceSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 13613,
+      "sourceSha256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+      "editorSourceSha256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "class": "LocalScript",
+      "sourceBytes": 35603,
+      "sourceSha256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+      "editorSourceSha256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 CD Dev ESP",
+      "class": "LocalScript",
+      "sourceBytes": 6746,
+      "sourceSha256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "editorSourceSha256": "2e02ad322fa6e0ad155c4ce05d4223c81a45c88a6f16dc5d0c1a7f7f7e753d17",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "sourceBytes": 45552,
+      "sourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "editorSourceSha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother",
+      "class": "LocalScript",
+      "sourceBytes": 6548,
+      "sourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "editorSourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "class": "LocalScript",
+      "sourceBytes": 59188,
+      "sourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "editorSourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "class": "LocalScript",
+      "sourceBytes": 46887,
+      "sourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "editorSourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Table Hiding Client",
+      "class": "LocalScript",
+      "sourceBytes": 21976,
+      "sourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "editorSourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level1BlenderPreviewButton",
+      "class": "LocalScript",
+      "sourceBytes": 3100,
+      "sourceSha256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "editorSourceSha256": "5e2df99047fcda20118ac6e21a3a53bcf463f887619bc417351bd85822594461",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "class": "LocalScript",
+      "sourceBytes": 34389,
+      "sourceSha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "editorSourceSha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "class": "LocalScript",
+      "sourceBytes": 1620,
+      "sourceSha256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
+      "editorSourceSha256": "04c6832744aa6e8a0dd7434b73475cbb95cb6d90b651bf997cecb2fd0823952e",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "sourceBytes": 2509,
+      "sourceSha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "editorSourceSha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "class": "LocalScript",
+      "sourceBytes": 7021,
+      "sourceSha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "editorSourceSha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "class": "LocalScript",
+      "sourceBytes": 5033,
+      "sourceSha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "editorSourceSha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "class": "LocalScript",
+      "sourceBytes": 10226,
+      "sourceSha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "editorSourceSha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "class": "LocalScript",
+      "sourceBytes": 4105,
+      "sourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "editorSourceSha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "class": "LocalScript",
+      "sourceBytes": 39336,
+      "sourceSha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "editorSourceSha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "class": "LocalScript",
+      "sourceBytes": 10614,
+      "sourceSha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "editorSourceSha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "class": "LocalScript",
+      "sourceBytes": 44865,
+      "sourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "editorSourceSha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "class": "LocalScript",
+      "sourceBytes": 31713,
+      "sourceSha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "editorSourceSha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "class": "LocalScript",
+      "sourceBytes": 81067,
+      "sourceSha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "editorSourceSha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "class": "LocalScript",
+      "sourceBytes": 8306,
+      "sourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "editorSourceSha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "class": "LocalScript",
+      "sourceBytes": 6494,
+      "sourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "editorSourceSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "class": "LocalScript",
+      "sourceBytes": 20545,
+      "sourceSha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "editorSourceSha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "class": "LocalScript",
+      "sourceBytes": 265744,
+      "sourceSha256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+      "editorSourceSha256": "ea0e6f929f06cffa7b8e9ffc1b93a7ede1c6a6f8ed3cddd7ffb2acb82166db3c",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "class": "LocalScript",
+      "sourceBytes": 32796,
+      "sourceSha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "editorSourceSha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "class": "LocalScript",
+      "sourceBytes": 67153,
+      "sourceSha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "editorSourceSha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "class": "LocalScript",
+      "sourceBytes": 19883,
+      "sourceSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "editorSourceSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "class": "LocalScript",
+      "sourceBytes": 3388,
+      "sourceSha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "editorSourceSha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "class": "LocalScript",
+      "sourceBytes": 3216,
+      "sourceSha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "editorSourceSha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "editorMatch": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "class": "LocalScript",
+      "sourceBytes": 198511,
+      "sourceSha256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "editorSourceSha256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "class": "Script",
+      "sourceBytes": 7027,
+      "sourceSha256": "aad1a72872be1b1ef5b34657a1947bd67413f0ebbd3d877f91315ca2992f5c1b",
+      "editorSourceSha256": "aad1a72872be1b1ef5b34657a1947bd67413f0ebbd3d877f91315ca2992f5c1b",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "class": "Script",
+      "sourceBytes": 5744,
+      "sourceSha256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+      "editorSourceSha256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Preview.AutomaticDoors.AutomaticDoorMotion",
+      "class": "Script",
+      "sourceBytes": 2616,
+      "sourceSha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "editorSourceSha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Preview.OccasionalFixtureFlicker",
+      "class": "Script",
+      "sourceBytes": 1037,
+      "sourceSha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "editorSourceSha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema V9 QA.AutomaticDoors.AutomaticDoorMotion",
+      "class": "Script",
+      "sourceBytes": 2616,
+      "sourceSha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "editorSourceSha256": "75d4935b65b2f26c0ee4e4b7d22960acbd9c4b4e92e33391aa4d90eb7ea7f4d1",
+      "editorMatch": true
+    },
+    {
+      "path": "Workspace.Level 4 Cinema V9 QA.OccasionalFixtureFlicker",
+      "class": "Script",
+      "sourceBytes": 1037,
+      "sourceSha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "editorSourceSha256": "542f9c2bf3fc212332e4ade3ec33aa1db198bd58fda1540e9807e8f56b0fc247",
+      "editorMatch": true
+    }
+  ]
+}

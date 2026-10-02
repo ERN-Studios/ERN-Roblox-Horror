@@ -1,0 +1,400 @@
+{
+  "schema": "independent-codex-v3-delta-source-data-geometry-review",
+  "baselineV1SourceSHA256": "54ce897716c1c6b41132e0401739faa677a35ad2d02c60af350d1547890d1c69",
+  "candidateSourceSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+  "baselineV1PlanSHA256": "017220abbe517d1a26b06396808f6f09ff73587b2aa6bb2bb7c24795a659ff2f",
+  "candidatePlanSHA256": "c2135bf6f4b2d8a080d17b960fc98d57da2facf462522eac31b5d2c430992c4c",
+  "nonPLANSourceByteIdenticalToReviewedV1": true,
+  "nonPLANSourceSHA256": "ad49e0048554b432509af956f7a9d15c44c71a560bc3b75884880e87210cf523",
+  "nonPLANBytes": 3649,
+  "runtimeLiteralMatchesPlanJSON": true,
+  "base179PlacementsExactV1Restored": true,
+  "66ColliderDictionariesExactV1": true,
+  "allNamesUnique": true,
+  "overlayCount": 40,
+  "overlaysPerEnd": 20,
+  "overlayFamilyCounts": {
+    "Desk": 23,
+    "VinylBench": 9,
+    "FilingCabinet": 4,
+    "Sofa": 4
+  },
+  "newUniqueMeshes": 0,
+  "baseTriangles": 180840,
+  "overlayTriangles": 39772,
+  "totalExtraInstancedTriangles": 220612,
+  "all219ExactSerializedEightCornersTested": true,
+  "cornerCount": 1752,
+  "maxRadialCorner": 33.504233887308104,
+  "radialLimit": 33.55,
+  "minY": -4.5044362728674514e-07,
+  "northMinZ": 129.97855894706973,
+  "DJRearGuardBackFaceZ": 128.49,
+  "northGuardBackClearance": 1.4885589470697198,
+  "minimumOverlayBaseAABBOverlap": 2.1213401874337876,
+  "supportProofScope": "AABB volume intersection only; does NOT prove visible mesh contact or perceptual support",
+  "sourceReview": "PASS for offline source/data/geometry only",
+  "unverified": "Actual V3 visual density/chaos/support, physics traversal, multiplayer, performance and publication remain root checks",
+  "supportAABBChecks": [
+    {
+      "overlay": "South Chaotic front overlay 00 Desk",
+      "base": "South Embedded 05-02",
+      "overlapXYZ": [
+        4.857048747705253,
+        3.703301684894747,
+        3.6961846753405325
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 01 Desk",
+      "base": "South Embedded 04-08",
+      "overlapXYZ": [
+        7.26609445194817,
+        3.3974157519660224,
+        4.394596157713863
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 02 Desk",
+      "base": "South Embedded 03-05",
+      "overlapXYZ": [
+        6.863908747882758,
+        3.7367885676844175,
+        3.3143454324480786
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 03 Desk",
+      "base": "South Embedded 04-06",
+      "overlapXYZ": [
+        7.062123415793845,
+        3.5791430490524423,
+        3.508432476242888
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 04 Desk",
+      "base": "South Embedded 03-01",
+      "overlapXYZ": [
+        3.7777740888909648,
+        3.9588944854955876,
+        3.752530681652786
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 05 Desk",
+      "base": "South Embedded 06-03",
+      "overlapXYZ": [
+        6.964652171215798,
+        3.4876552922498476,
+        4.219271234993528
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 06 Desk",
+      "base": "South Embedded 05-04",
+      "overlapXYZ": [
+        6.755175376136181,
+        3.4054573588826145,
+        3.4064858984856983
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 07 Desk",
+      "base": "South Embedded 01-07",
+      "overlapXYZ": [
+        7.065675648435537,
+        3.889847962611743,
+        3.3018801834126634
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 08 Desk",
+      "base": "South Embedded 03-04",
+      "overlapXYZ": [
+        7.102707337267671,
+        3.4366790108867846,
+        3.5975920647047133
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 09 Desk",
+      "base": "South Embedded 01-01",
+      "overlapXYZ": [
+        7.161933159471175,
+        3.37190673439963,
+        4.409921219519049
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 10 Desk",
+      "base": "South Embedded 03-08",
+      "overlapXYZ": [
+        6.951426587377256,
+        3.453230833211485,
+        3.5090195168364744
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 11 Desk",
+      "base": "South Embedded 03-02",
+      "overlapXYZ": [
+        4.741027733211347,
+        4.170593672519054,
+        4.020693844960476
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 12 VinylBench",
+      "base": "South Embedded 01-05",
+      "overlapXYZ": [
+        6.04396867463571,
+        4.186444818662075,
+        2.755165579012669
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 13 VinylBench",
+      "base": "South Embedded 04-04",
+      "overlapXYZ": [
+        5.648492421145088,
+        3.882298076424412,
+        2.9854326304906067
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 14 VinylBench",
+      "base": "South Embedded 06-04",
+      "overlapXYZ": [
+        3.297361939166521,
+        3.938143763039527,
+        2.271925732946954
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 15 VinylBench",
+      "base": "South Embedded 02-03",
+      "overlapXYZ": [
+        6.1197838875829795,
+        4.111189055093629,
+        2.963097897475336
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 16 FilingCabinet",
+      "base": "South Embedded 02-08",
+      "overlapXYZ": [
+        5.358606113244761,
+        3.000118132911207,
+        2.9933183032768795
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 17 FilingCabinet",
+      "base": "South Embedded 02-04",
+      "overlapXYZ": [
+        5.019641231932127,
+        2.682881348828655,
+        2.9401151988653282
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 18 Sofa",
+      "base": "South Embedded 05-03",
+      "overlapXYZ": [
+        7.843939392019426,
+        4.102992048063427,
+        4.063716391897344
+      ]
+    },
+    {
+      "overlay": "South Chaotic front overlay 19 Sofa",
+      "base": "South Embedded 04-02",
+      "overlapXYZ": [
+        8.300550882993143,
+        4.575049834256006,
+        4.122635062022539
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 00 Desk",
+      "base": "NorthDJ Embedded 05-02",
+      "overlapXYZ": [
+        6.982852387299227,
+        3.417010066735159,
+        3.4870605501470777
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 01 Desk",
+      "base": "NorthDJ Embedded 04-06",
+      "overlapXYZ": [
+        7.0743627333329755,
+        3.431149744089863,
+        3.7618109562926634
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 02 Desk",
+      "base": "NorthDJ Embedded 02-00",
+      "overlapXYZ": [
+        7.056491045401337,
+        3.5978857870336496,
+        3.593313856315916
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 03 Desk",
+      "base": "NorthDJ Embedded 06-03",
+      "overlapXYZ": [
+        6.194148212731966,
+        3.722452172946433,
+        4.355002928678402
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 04 Desk",
+      "base": "NorthDJ Embedded 02-03",
+      "overlapXYZ": [
+        4.52351498391295,
+        3.653516122319412,
+        3.373211452638486
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 05 Desk",
+      "base": "NorthDJ Embedded 02-02",
+      "overlapXYZ": [
+        3.7814412302695573,
+        3.742995304209515,
+        4.132399242416568
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 06 Desk",
+      "base": "NorthDJ Embedded 01-04",
+      "overlapXYZ": [
+        7.220916958962995,
+        3.5603125538987546,
+        4.131719102697673
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 07 Desk",
+      "base": "NorthDJ Embedded 04-07",
+      "overlapXYZ": [
+        6.431037178545658,
+        4.119764119019713,
+        4.213642508535827
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 08 Desk",
+      "base": "NorthDJ Embedded 03-05",
+      "overlapXYZ": [
+        6.850125488003018,
+        3.831054100441012,
+        3.4567799931483023
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 09 Desk",
+      "base": "NorthDJ Embedded 06-06",
+      "overlapXYZ": [
+        3.108894859565104,
+        3.3880062667074498,
+        3.8466179828535587
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 10 Desk",
+      "base": "NorthDJ Embedded 02-04",
+      "overlapXYZ": [
+        7.321600008223676,
+        3.818271749585616,
+        4.2118182796057795
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 11 VinylBench",
+      "base": "NorthDJ Embedded 02-08",
+      "overlapXYZ": [
+        6.016643536483301,
+        3.960207036942144,
+        3.1759030289134103
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 12 VinylBench",
+      "base": "NorthDJ Embedded 04-05",
+      "overlapXYZ": [
+        5.91831995207553,
+        3.785698722849556,
+        3.2455171883867138
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 13 VinylBench",
+      "base": "NorthDJ Embedded 01-01",
+      "overlapXYZ": [
+        5.08905437023569,
+        4.184898455869401,
+        3.315538947605205
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 14 VinylBench",
+      "base": "NorthDJ Embedded 01-06",
+      "overlapXYZ": [
+        6.1130161225972,
+        4.368075843123311,
+        2.665254225610198
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 15 VinylBench",
+      "base": "NorthDJ Embedded 04-09",
+      "overlapXYZ": [
+        5.562715796527279,
+        4.169866885217502,
+        2.1213401874337876
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 16 FilingCabinet",
+      "base": "NorthDJ Embedded 02-05",
+      "overlapXYZ": [
+        5.171709058407778,
+        2.680665628477982,
+        2.850118804359056
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 17 FilingCabinet",
+      "base": "NorthDJ Embedded 03-02",
+      "overlapXYZ": [
+        5.517723745896117,
+        2.908345742000275,
+        3.527265105331395
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 18 Sofa",
+      "base": "NorthDJ Embedded 05-07",
+      "overlapXYZ": [
+        7.890891190099019,
+        3.7577077751276846,
+        3.6841320500274435
+      ]
+    },
+    {
+      "overlay": "NorthDJ Chaotic front overlay 19 Sofa",
+      "base": "NorthDJ Embedded 04-01",
+      "overlapXYZ": [
+        7.929931929362066,
+        4.159891331864989,
+        4.589134214961177
+      ]
+    }
+  ]
+}

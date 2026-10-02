@@ -1,0 +1,32 @@
+{
+  "scope": "Independent read-only Studio source/editor and authorization excerpts; no live gameplay proof",
+  "studioId": "0552e451-d540-464e-ad9f-478d00392f88",
+  "mutations": false,
+  "instances": {
+    "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime": {
+      "editorEqual": true,
+      "sha256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "excerpts": {
+        "local permissionAccumulator": "local permissionAccumulator = 0\nRunService.Heartbeat:Connect(function(dt)\n    if not playing then return end\n    permissionAccumulator += dt\n    if permissionAccumulator < 2 then return end\n    permissionAccumulator = 0\n    local rejected = {}\n    for player in pairs(participants) do\n        if not DevAccess.IsLevel6PreviewAllowed(player) then table.insert(rejected, player) end\n    end\n    for _, player in ipairs(rejected) do task.spawn(returnToLobby, player) end\nend)\ngame:BindToClose(function()\n    stopControllers()\nend)\nreturn Runtime\n",
+        "function Runtime.Join": "function Runtime.Join(player: Player): (boolean, string?)\n    if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)\n        or player:GetAttribute(\"InRound\") == true\n        or workspace:GetAttribute(\"ReservedRoundServer\") == true then\n        return false, \"PREVIEW_NOT_ALLOWED\"\n    end\n    if participants[player] then return true end\n    local manifest = activeManifest\n    local character = player.Character\n    local humanoid = character and character:FindFirstChildOfClass(\"Humanoid\")\n    local root = humanoid and humanoid.RootPart\n    if not manifest or stale or not root or root.Anchored or humanoid.Health <= 0\n        "
+      }
+    },
+    "ServerScriptService.Round Completion Routing": {
+      "editorEqual": true,
+      "sha256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85",
+      "excerpts": {
+        "Routing.MaxLevel =": "Routing.MaxLevel = 3\nRouting.PostWinSeconds = 15\n\n-- How long past the source server's decision deadline the destination keeps\n-- staging arrivals. This covers Roblox's own transport latency only; it is not\n-- a second decision window.\nRouting.TransportGraceSeconds = 6\n-- A destination must never hang on a deadline it cannot verify. Measured from\n-- the FIRST arrival, this bounds the staging window whatever the packet said.\nRouting.AdmissionLocalCapSeconds = 34\n-- With nobody at all on the destination, give the transport this long before\n-- concluding the party is never coming.\nRouting.AdmissionEmptySeconds = 40\n-- A pending attempt that neith",
+        "function Routing.NextLevel": "function Routing.NextLevel(level: number?): number?\n\tlocal current = tonumber(level)\n\tif not current then return nil end\n\tif current < 1 or current >= Routing.MaxLevel then return nil end\n\treturn current + 1\nend\n\nfunction Routing.OffersContinue(level: number?): boolean\n\treturn Routing.NextLevel(level) ~= nil\nend\n\nfunction Routing.ClampLevel(level: any): number\n\tlocal requested = tonumber(level)\n\tif not requested then return 1 end\n\treturn math.clamp(math.floor(requested), 1, Routing.MaxLevel)\nend\n\nfunction Routing.ClampLevelTo(level: any, ceiling: any): number\n\tlocal requested = tonumber(level)\n\tif not requested then return 1 end\n\tlocal limit ="
+      }
+    },
+    "ServerScriptService.GameManager": {
+      "editorEqual": true,
+      "sha256": "7e5939fabb1d98732a5bb2138eb5b0a7106e84aa5cb71ecee147ad949649ca9c",
+      "excerpts": {
+        "local function canAccessLevel": "local function canAccessLevel(requestedLevel, _group)\n local level = tonumber(requestedLevel)\n if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n return level <= Routing.MaxLevel\nend\n\n-- Always-on server authority for every developer command. Unlike the Level 1\n-- entity script, GameManager remains active in both levels.\nlocal devControl = remotes:WaitForChild(\"DevControl\")\nlocal NOCLIP_GROUP = \"DevNoclip\"\nlocal noclipState = {}\nlocal devControlRate = {}\nlocal DEV_CONTROL_WINDOW = 1\nlocal DEV_CONTROL_LIMIT = 12\n\nlocal function allowDevControl(player)\n local now = os.clock()\n local bucket = devControlRate[playe",
+        "local function playerInsideZone": "local function playerInsideZone(player, station, includeBusy)\n if station.revisionOwned and not (RunService:IsStudio() or DevAccess.IsLevel6PreviewAllowed(player)) then return false end\n if station.previewQueue then\n  local bridge = revisedQueueBridge()\n  if not bridge or not bridge.AllowsPreview(station, player) then return false end\n elseif station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end\n if inRound[player] or (station.busy and not includeBusy) then return false end\n local char = player.Character\n local hum = char and char:FindFirstChildOfClass(\"Humanoid\")\n local root = char and char:Fin",
+        "local function launchStation": "local function launchStation(station, participants)\n if station.previewQueue then\n  local bridge = revisedQueueBridge()\n  if not bridge or not bridge.LaunchPreviewGroup then return end\n  station.busy = true\n  setStationDisplay(station, \"STARTING DEV PREVIEW\", #participants .. \"/\" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. \" PLAYERS\", station.color)\n  -- Preview controllers own their stream/entry UI; never announce a campaign\n  -- loadinggame or create a reserved production server for levels4-6.\n  fireGroup(participants, \"queueconfigclosed\")\n  local ok, joined, problem = pcall(bridge.LaunchPreviewGroup, station, participants)\n  if no"
+      }
+    }
+  }
+}

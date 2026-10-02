@@ -1,0 +1,122 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "instances": [
+    {
+      "bytes": 1353,
+      "path": "ReplicatedStorage.DevAccess",
+      "editorSHA256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "excerpts": [],
+      "sourceSHA256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 171175,
+      "path": "ServerScriptService.GameManager",
+      "editorSHA256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "excerpts": {
+        "local function devCeiling": "local function devCeiling(group)\n if LEVEL4_PUBLIC or groupIsDevelopers(group) then return Routing.DevMaxLevel end\n return Routing.MaxLevel\nend\n\nlocal function canAccessLevel(requestedLevel, group)\n local level = tonumber(requestedLevel)\n if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n if level <= Routing.MaxLevel then return true end\n return level <= devCeiling(group)\nend\n\n-- Always-on server authority for every developer command. Unlike the Level 1\n-- entity script, GameManager remains active in both levels.\nlocal devControl = remotes:WaitForChild(\"DevControl\")\nlocal NOCLIP_GROUP = \"DevNoclip\"\nlocal noclipState = {}\nlocal devControlRate = {}\nlocal DEV_CONTROL_WINDOW = 1\nlocal DEV_CONTROL_LIMIT = 12\n\nlocal function allowDevControl(player)\n local now = os.clock()\n local bucket = devControlRate[player]\n if not bucket or now - bucket.startedAt >= DEV_CONTROL_WINDOW then\n  devControlRate[player] = {start",
+        "local function launchStation": "local function launchStation(station, participants)\n if station.previewQueue then\n  local bridge = revisedQueueBridge()\n  if not bridge or not bridge.LaunchPreviewGroup then return end\n  station.busy = true\n  setStationDisplay(station, \"STARTING DEV PREVIEW\", #participants .. \"/\" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. \" PLAYERS\", station.color)\n  -- Preview controllers own their stream/entry UI; never announce a campaign\n  -- loadinggame or create a reserved production server for levels4-6.\n  fireGroup(participants, \"queueconfigclosed\")\n  local ok, joined, problem = pcall(bridge.LaunchPreviewGroup, station, participants)\n  if not ok or joined ~= true then\n   warn(\"[R4 Preview Queue] \" .. tostring(if ok then problem else joined))\n   setStationDisplay(station, \"PREVIEW ENTRY FAILED\", \"STEP OUT AND TRY AGAIN\", Color3.fromRGB(255,105,95))\n   fireGroup(participants, \"lobbycancel\")\n   task.wait(2.5)\n  end\n  station.busy = false\n",
+        "local function canAccessLevel": "local function canAccessLevel(requestedLevel, group)\n local level = tonumber(requestedLevel)\n if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n if level <= Routing.MaxLevel then return true end\n return level <= devCeiling(group)\nend\n\n-- Always-on server authority for every developer command. Unlike the Level 1\n-- entity script, GameManager remains active in both levels.\nlocal devControl = remotes:WaitForChild(\"DevControl\")\nlocal NOCLIP_GROUP = \"DevNoclip\"\nlocal noclipState = {}\nlocal devControlRate = {}\nlocal DEV_CONTROL_WINDOW = 1\nlocal DEV_CONTROL_LIMIT = 12\n\nlocal function allowDevControl(player)\n local now = os.clock()\n local bucket = devControlRate[player]\n if not bucket or now - bucket.startedAt >= DEV_CONTROL_WINDOW then\n  devControlRate[player] = {startedAt = now, count = 1}\n  return true\n end\n if bucket.count >= DEV_CONTROL_LIMIT then return false end\n bucket.count += 1\n return true\nend\npcall(f",
+        "local function playerInsideZone": "local function playerInsideZone(player, station, includeBusy)\n if station.revisionOwned and not (RunService:IsStudio() or DevAccess.IsLevel6PreviewAllowed(player)) then return false end\n if station.previewQueue then\n  local bridge = revisedQueueBridge()\n  if not bridge or not bridge.AllowsPreview(station, player) then return false end\n elseif station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end\n if inRound[player] or (station.busy and not includeBusy) then return false end\n local char = player.Character\n local hum = char and char:FindFirstChildOfClass(\"Humanoid\")\n local root = char and char:FindFirstChild(\"HumanoidRootPart\")\n if player.Parent ~= Players or not (char and char.Parent and hum and hum.Health > 0\n  and root and root:IsA(\"BasePart\")) then return false end\n local zone = station.zone\n if not zone or not zone.Parent then return false end\n local p = zone.CFrame:PointToObjectSpace(r",
+        "local function groupIsDevelopers": "local function groupIsDevelopers(group)\n local any = false\n for _, player in ipairs(group or {}) do\n  if typeof(player) == \"Instance\" and player:IsA(\"Player\") then\n   if not DevAccess.IsAllowed(player) then return false end\n   any = true\n  end\n end\n return any\nend\n\nlocal function devCeiling(group)\n if LEVEL4_PUBLIC or groupIsDevelopers(group) then return Routing.DevMaxLevel end\n return Routing.MaxLevel\nend\n\nlocal function canAccessLevel(requestedLevel, group)\n local level = tonumber(requestedLevel)\n if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n if level <= Routing.MaxLevel then return true end\n return level <= devCeiling(group)\nend\n\n-- Always-on server authority for every developer command. Unlike the Level 1\n-- entity script, GameManager remains active in both levels.\nlocal devControl = remotes:WaitForChild(\"DevControl\")\nlocal NOCLIP_GROUP = \"DevNoclip\"\nlocal noclipState = {}\nlocal devControlRate =",
+        "local LEVEL4_PUBLIC": "local LEVEL4_PUBLIC = false\n\nlocal function groupIsDevelopers(group)\n local any = false\n for _, player in ipairs(group or {}) do\n  if typeof(player) == \"Instance\" and player:IsA(\"Player\") then\n   if not DevAccess.IsAllowed(player) then return false end\n   any = true\n  end\n end\n return any\nend\n\nlocal function devCeiling(group)\n if LEVEL4_PUBLIC or groupIsDevelopers(group) then return Routing.DevMaxLevel end\n return Routing.MaxLevel\nend\n\nlocal function canAccessLevel(requestedLevel, group)\n local level = tonumber(requestedLevel)\n if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end\n if level <= Routing.MaxLevel then return true end\n return level <= devCeiling(group)\nend\n\n-- Always-on server authority for every developer command. Unlike the Level 1\n-- entity script, GameManager remains active in both levels.\nlocal devControl = remotes:WaitForChild(\"DevControl\")\nlocal NOCLIP_GROUP = \"DevNoclip\"\nlocal noclipStat"
+      },
+      "sourceSHA256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90",
+      "class": "Script",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 75964,
+      "path": "ServerScriptService.Round Completion Routing",
+      "editorSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "excerpts": {
+        "function Routing.NextLevel": "function Routing.NextLevel(level: number?): number?\n\tlocal current = tonumber(level)\n\tif not current then return nil end\n\tif current < 1 or current >= Routing.MaxLevel then return nil end\n\treturn current + 1\nend\n\nfunction Routing.OffersContinue(level: number?): boolean\n\treturn Routing.NextLevel(level) ~= nil\nend\n\nfunction Routing.ClampLevel(level: any): number\n\tlocal requested = tonumber(level)\n\tif not requested then return 1 end\n\treturn math.clamp(math.floor(requested), 1, Routing.MaxLevel)\nend\n\nfunction Routing.ClampLevelTo(level: any, ceiling: any): number\n\tlocal requested = tonumber(level)\n\tif not requested then return 1 end\n\tlocal limit = tonumber(ceiling)\n\tif not limit or limit ~= limit then limit = Routing.MaxLevel end\n\tlimit = math.clamp(math.floor(limit), 1, Routing.DevMaxLevel)\n\treturn math.clamp(math.floor(requested), 1, limit)\nend\n\n-- There is deliberately no dev-ceiling version of NextLevel: finishing Level 3\n-- never contin",
+        "Routing.MaxLevel =": "Routing.MaxLevel = 3\n-- Levels above MaxLevel exist for developers only (Level 4, the cinema round). They are\n-- reachable through an explicit ceiling (GameManager devCeiling), never through NextLevel.\nRouting.DevMaxLevel = 4\nRouting.PostWinSeconds = 15\n\n-- How long past the source server's decision deadline the destination keeps\n-- staging arrivals. This covers Roblox's own transport latency only; it is not\n-- a second decision window.\nRouting.TransportGraceSeconds = 6\n-- A destination must never hang on a deadline it cannot verify. Measured from\n-- the FIRST arrival, this bounds the staging window whatever the packet said.\nRouting.AdmissionLocalCapSeconds = 34\n-- With nobody at all on the destination, give the transport this long before\n-- concluding the party is never coming.\nRouting.AdmissionEmptySeconds = 40\n-- A pending attempt that neither succeeds nor reports a failure has to end\n-- somewhere, or the settlement would wait on it f",
+        "Routing.DevMaxLevel =": "Routing.DevMaxLevel = 4\nRouting.PostWinSeconds = 15\n\n-- How long past the source server's decision deadline the destination keeps\n-- staging arrivals. This covers Roblox's own transport latency only; it is not\n-- a second decision window.\nRouting.TransportGraceSeconds = 6\n-- A destination must never hang on a deadline it cannot verify. Measured from\n-- the FIRST arrival, this bounds the staging window whatever the packet said.\nRouting.AdmissionLocalCapSeconds = 34\n-- With nobody at all on the destination, give the transport this long before\n-- concluding the party is never coming.\nRouting.AdmissionEmptySeconds = 40\n-- A pending attempt that neither succeeds nor reports a failure has to end\n-- somewhere, or the settlement would wait on it forever. These three numbers\n-- are one policy and are checked against each other by SettlementCoversTimeout:\n-- the watchdog sweeps on its interval, an attempt goes stale after the timeout,\n-- and an en"
+      },
+      "sourceSHA256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 12232,
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "editorSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "excerpts": {
+        "local function readyPlayer": "local function readyPlayer(player)\n\tif player.Parent ~= Players or not DevAccess.IsAllowed(player)\n\t\tor player:GetAttribute(\"InRound\") == true\n\t\tor workspace:GetAttribute(\"ReservedRoundServer\") == true then return nil end\n\tlocal character = player.Character\n\tlocal humanoid = character and character:FindFirstChildOfClass(\"Humanoid\")\n\tlocal root = humanoid and humanoid.RootPart\n\tif not root or not character:IsDescendantOf(workspace) or root.Anchored or humanoid.SeatPart\n\t\tor humanoid.Health <= 0 or humanoid:GetState() == Enum.HumanoidStateType.Dead then return nil end\n\treturn character, root\nend\n\nlocal function upright(position, look)\n\tlocal flat = Vector3.new(look.X, 0, look.Z)\n\treturn CFrame.lookAt(position, position + (if flat.Magnitude > 0.01 then flat else Vector3.zAxis))\nend\n\nlocal function stream(player, position)\n\tlocal ok, err = pcall(function() player:RequestStreamAroundAsync(position, 8) end)\n\tif not ok then warn(\"[Level5Preview",
+        "allowed = function": "allowed = function(player, _, station)\n    local lock = queueLocks[player]\n    return (if lock then bridge.ContextOwns(lock, player, station) else (nextUse[player] or 0) <= os.clock())\n     and readyPlayer(player) ~= nil\n   end,\n   ready = function()\n    local model, exit = readyPreview()\n    local prompt = exit and exit:FindFirstChild(RETURN_PROMPT)\n    if not model or not prompt or not prompt:IsA(\"ProximityPrompt\") or not prompt.Enabled\n     or not hasFloor(model, exit) then return nil end\n    return model, exit\n   end,\n   launch = function(context)\n    local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)\n    if not locked then return false, reason end\n    local model, exit = readyPreview()\n    local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)\n    if not model or not returnPrompt or not returnPrompt:IsA(\"ProximityPrompt\")\n     or not returnPrompt.Enabled or not hasFloor(model, exit) ",
+        "local function onEnter": "local function onEnter(player, prompt)\n\tif (nextUse[player] or 0) > os.clock() then return end\n\tlocal character, root = readyPlayer(player)\n\tlocal door = prompt.Parent\n\tif not character or not door or not door:IsA(\"BasePart\")\n  or not (door == liveDoor() or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end\n\tlocal model, exit = readyPreview()\n\tlocal returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)\n\tif not model or not returnPrompt or not returnPrompt:IsA(\"ProximityPrompt\")\n\t\tor not returnPrompt.Enabled or not hasFloor(model, exit) then\n\t\twarn(\"[Level5PreviewAccess] ready preview, return prompt or landing floor is missing\")\n\t\treturn\n\tend\n\tnextUse[player] = math.huge\n local r3Owner = beginR3Entry(door)\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, exit.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tif nowCharact"
+      },
+      "sourceSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f",
+      "class": "Script",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 14689,
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "editorSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "excerpts": {
+        "allowed = function": "allowed = function(player, _, station)\n    local lock = queueLocks[player]\n    return (if lock then bridge.ContextOwns(lock, player, station) else (nextUse[player] or 0) <= os.clock())\n     and playerReady(player) ~= nil\n   end,\n   ready = function()\n    local model, exit = previewReady()\n    local prompt = returnPrompt(exit)\n    if not model or not prompt or not prompt:IsA(\"ProximityPrompt\") or not prompt.Enabled\n     or not floorAt(model, exit.Position) then return nil end\n    return model, exit\n   end,\n   launch = function(context)\n    local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)\n    if not locked then return false, reason end\n    local model, exit = Runtime.EnsureWorld()\n    hookExit()\n    if not model or not exit or not floorAt(model, exit.Position) then return false, \"PREVIEW_NOT_READY\" end\n    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, po",
+        "local function onEnter": "local function onEnter(player, prompt)\n\tif (nextUse[player] or 0) > os.clock() or player:GetAttribute(\"Level6InRound\") == true then return end\n\tlocal character, root = playerReady(player)\n\tlocal door = prompt.Parent\n\tif not character or not door or not door:IsA(\"BasePart\")\n  or not (door == lobbyPart(\"Level6SealedDoor\") or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end\n\tnextUse[player] = math.huge\n local r3Owner = beginR3Entry(door)\n\tlocal previous = character:GetPivot()\n\tlocal ok, err = pcall(function()\n\t\tlocal model, exit = Runtime.EnsureWorld()\n\t\thookExit()\n\t\tif not model or not exit or not floorAt(model, exit.Position) then error(\"Preview landing floor unavailable\") end\n\t\tif not streamReady(player, exit.Position, MODEL_NAME) then error(\"Preview streaming confirmation timed out\") end\n\t\tlocal currentCharacter, currentRoot = playerReady(player)\n\t\tlocal currentModel, currentExit = previewReady()\n\t\tif c",
+        "local function playerReady": "local function playerReady(player)\n\tif player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)\n\t\tor player:GetAttribute(\"InRound\") == true\n\t\tor workspace:GetAttribute(\"ReservedRoundServer\") == true then return nil end\n\tlocal character = player.Character\n\tlocal humanoid = character and character:FindFirstChildOfClass(\"Humanoid\")\n\tlocal root = humanoid and humanoid.RootPart\n\tif not root or not character:IsDescendantOf(workspace) or root.Anchored\n\t\tor humanoid.SeatPart or humanoid.Health <= 0 then return nil end\n\treturn character, root\nend\nlocal function previewReady()\n\tlocal model = workspace:FindFirstChild(MODEL_NAME)\n\tif not model or not model:IsA(\"Model\") or model:GetAttribute(\"Level6Preview\") ~= true\n\t\tor model:GetAttribute(\"PreviewOnly\") ~= true or model:GetAttribute(\"Level6PreviewReady\") ~= true then return nil end\n\tlocal exit = model:FindFirstChild(EXIT_NAME, true)\n\tif not exit or not exit:IsA(\"BasePart\") then retur"
+      },
+      "sourceSHA256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "class": "Script",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 20289,
+      "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "editorSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "excerpts": {
+        "function Bridge.CommitPreviewGroup": "function Bridge.CommitPreviewGroup(context, entries, commit, rollback)\n    local state = contexts[context]\n    if not state or type(entries) ~= \"table\" or #entries ~= #state.players then return false, \"INVALID_COHORT\" end\n    for _, entry in ipairs(entries) do\n        if not Bridge.ValidateQueueAdmission(context, entry.player, entry.character) then return false, \"QUEUE_COHORT_CHANGED\" end\n    end\n    local nowModel, nowExit = state.callbacks.ready()\n    if nowModel ~= state.destinationModel or nowExit ~= state.destinationExit then return false, \"PREVIEW_WORLD_CHANGED\" end\n    state.committing = true\n    local moved = {}\n    local ok, problem = xpcall(function()\n        -- Freeze and validate everyone first, then release the whole cohort.\n        for _, entry in ipairs(entries) do\n            entry.root.AssemblyLinearVelocity = Vector3.zero\n            entry.root.AssemblyAngularVelocity = Vector3.zero\n            entry.character:PivotTo(e",
+        "function Bridge.AllowsPreview": "function Bridge.AllowsPreview(station, player, context)\n    local callbacks = liveLauncher(station)\n    if not callbacks or player:GetAttribute(\"Level6InRound\") == true then return false end\n    local previous = preparations[station]\n    if previous and not previous.active then return false end\n    local ok, allowed = pcall(callbacks.allowed, player, context, station)\n    return ok and allowed == true\nend\n\nfunction Bridge.ContextOwns(context, player, station)\n    local state = contexts[context]\n    return state ~= nil and state.active and state.station == station\n        and state.characters[player] ~= nil and state.characters[player] == player.Character\nend\n\nfunction Bridge.LockPreviewController(context, nextUse, locks, release)\n    local state = contexts[context]\n    if not state or not state.active then return false, \"INVALID_PREVIEW_CONTEXT\" end\n    for _, player in ipairs(state.players) do\n        if locks[player] or (nextUse[player",
+        "function Bridge.ValidateQueueAdmission": "function Bridge.ValidateQueueAdmission(context, player, character, requireZone)\n    local state = contexts[context]\n    if not state or not state.active or os.clock() > state.deadline then return nil end\n    local station = state.station\n    if not station.busy or station.cancelRequested or station.admissionEpoch ~= state.epoch\n        or state.characters[player] ~= character or not ownedStation(station)\n        or liveLauncher(station) ~= state.callbacks then return nil end\n    local root, humanoid = livingRoot(player, character)\n    if not root then return nil end\n    -- Once committed, Runtime.Join sets Level6InRound. Admission was already\n    -- checked for the whole frozen cohort; the living character is still checked.\n    if requireZone ~= false then\n        if not Bridge.AllowsPreview(station, player, context) or not insideZone(station, root) then return nil end\n    else\n        local ok, allowed = pcall(state.callbacks.allowed, p"
+      },
+      "sourceSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 21622,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "editorSHA256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "excerpts": {
+        "local permissionAccumulator": "local permissionAccumulator = 0\nRunService.Heartbeat:Connect(function(dt)\n    if not playing then return end\n    permissionAccumulator += dt\n    if permissionAccumulator < 2 then return end\n    permissionAccumulator = 0\n    local rejected = {}\n    for player in pairs(participants) do\n        if not DevAccess.IsLevel6PreviewAllowed(player) then table.insert(rejected, player) end\n    end\n    for _, player in ipairs(rejected) do task.spawn(returnToLobby, player) end\nend)\ngame:BindToClose(function()\n    stopControllers()\nend)\nreturn Runtime\n",
+        "function Runtime.Join": "function Runtime.Join(player: Player): (boolean, string?)\n    if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)\n        or player:GetAttribute(\"InRound\") == true\n        or workspace:GetAttribute(\"ReservedRoundServer\") == true then\n        return false, \"PREVIEW_NOT_ALLOWED\"\n    end\n    if participants[player] then return true end\n    local manifest = activeManifest\n    local character = player.Character\n    local humanoid = character and character:FindFirstChildOfClass(\"Humanoid\")\n    local root = humanoid and humanoid.RootPart\n    if not manifest or stale or not root or root.Anchored or humanoid.Health <= 0\n        or (root.Position - manifest.PreviewExit.Position).Magnitude > 18 then\n        return false, \"ARRIVAL_NOT_READY\"\n    end\n    local record = {Connections={}}\n    participants[player] = record\n    player:SetAttribute(\"Level6Escaped\", false)\n    player:SetAttribute(\"Level6InRound\", true)\n    player:Set"
+      },
+      "sourceSHA256": "f5f3f78b9319e459ab432a51d3bbbea054f8f5b086b1fe0e925f77a061db5eef",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 11490,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "editorSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "excerpts": [],
+      "sourceSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 67127,
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "editorSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "excerpts": [],
+      "sourceSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "class": "ModuleScript",
+      "sourceEditorEqual": true
+    },
+    {
+      "bytes": 8306,
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "editorSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "excerpts": [],
+      "sourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "class": "LocalScript",
+      "sourceEditorEqual": true
+    }
+  ]
+}

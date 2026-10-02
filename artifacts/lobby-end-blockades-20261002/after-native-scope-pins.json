@@ -1,0 +1,41 @@
+{
+  "schema": "lobby-endfix-exact-native-scope-v1",
+  "expectedBeforeNativeSHA256": "95ce4ceacd09ef5b31759031d4c1dfe9fb2fe3eed60f1afe30d51cdf02635294",
+  "expectedBeforeRootCount": 189,
+  "expectedAfterRootCount": 189,
+  "expectedBeforeSourceCount": 213,
+  "expectedAfterSourceCount": 215,
+  "sources": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "kind": "existing",
+      "candidateFile": "artifacts/lobby-end-blockades-20261002/Builder.candidate.luau",
+      "afterSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+      "afterBytes": 11490,
+      "beforeSHA256": "a4c4313b9291e412e860f1eb106d17851d25779108f1a900f9967f83e2fb9dcd"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "class": "ModuleScript",
+      "kind": "new",
+      "candidateFile": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.luau",
+      "afterSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+      "afterBytes": 67127
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "class": "LocalScript",
+      "kind": "new",
+      "candidateFile": "tools/lobby_reimagined/dev_gate_20261002/R4DevGateController.LocalScript.candidate.luau",
+      "afterSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+      "afterBytes": 8306
+    }
+  ],
+  "allowedExistingAttributeChanges": [
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "attribute": "InstalledSourceSHA256"
+    }
+  ]
+}

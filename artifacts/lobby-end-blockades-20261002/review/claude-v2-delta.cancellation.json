@@ -1,0 +1,6 @@
+{
+  "reason": "Root actual V2 visual check failed; candidate superseded by V3 before response",
+  "action": "Terminated only reviewer-owned obsolete CLI child process group with SIGTERM",
+  "noFinalResponse": true,
+  "noReviewPASSClaimed": true
+}

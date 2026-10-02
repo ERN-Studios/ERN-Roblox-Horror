@@ -1,0 +1,1 @@
+This is a bounded read-only model-availability probe, with tools disabled. Reply only: MODEL PROBE COMPLETE. Do not infer facts about Roblox code or the current Studio place. No source or candidate is supplied.

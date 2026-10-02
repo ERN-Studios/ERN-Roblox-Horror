@@ -1,0 +1,16 @@
+{
+  "reviewedReadOnly": true,
+  "guardReview": "PASS",
+  "scope": "Exact completion installer source/metadata; actual Studio run and gameplay handled by root",
+  "completionSHA256": "691553ee292dcd18ccee3e9340839a0baf1de2a7647b01315475b230dd723ae2",
+  "builderBaseline": {
+    "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+    "editorSha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+    "class": "ModuleScript",
+    "sha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+    "same": true
+  },
+  "candidateSHA256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+  "addSourcesMatch": true,
+  "decodedManifestPinned": true
+}

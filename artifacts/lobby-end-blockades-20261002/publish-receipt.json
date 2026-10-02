@@ -1,0 +1,26 @@
+{
+  "verified": true,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "creatorGroupId": 1039373905,
+  "version": 2495,
+  "publishedAtUTC": "2026-10-02T08:23:27Z",
+  "method": "Existing Studio File > Publish to Roblox",
+  "source": "native Studio publish state and CreatorOutput acknowledgment",
+  "nativeLogLines": [
+    "2026-10-02T08:23:06.487Z,13373.487305,6dcff000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInitiated state",
+    "2026-10-02T08:23:06.488Z,13373.488281,6dcff000,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing",
+    "2026-10-02T08:23:08.019Z,13375.019531,6d487000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishPreAssetsPublishing state",
+    "2026-10-02T08:23:08.019Z,13375.019531,6d487000,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress",
+    "2026-10-02T08:23:15.064Z,13382.064453,6d27b000,6,Info [FLog::CreatorOutput] Sent message to server to publish.",
+    "2026-10-02T08:23:27.398Z,13394.398438,6daf3000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInProgress state",
+    "2026-10-02T08:23:27.399Z,13394.399414,6daf3000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful",
+    "2026-10-02T08:23:27.423Z,13394.423828,f33e20c0,6,Info [FLog::CreatorOutput] Published new changes in \"BACKROOMS: STAY QUIET [CO-OP HORROR]\" to Roblox.",
+    "2026-10-02T08:23:27.741Z,13394.741211,f33e20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.",
+    "2026-10-02T08:23:27.742Z,13394.742188,f33e20c0,6,Info [FLog::CreatorOutput] \u2192 Add publish notes to v2495"
+  ],
+  "activeServerRestarted": false,
+  "accessSettingsChanged": false,
+  "publicationIncludesConcurrentAuthoritativeStudioWork": true,
+  "concurrentGameplayNotVerified": true
+}

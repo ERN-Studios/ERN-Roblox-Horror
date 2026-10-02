@@ -1,0 +1,42 @@
+{
+  "South": {
+    "pieces": 93,
+    "boundingMin": [
+      -32.932626,
+      0.0,
+      -137.050139
+    ],
+    "boundingMax": [
+      33.369172999999996,
+      34.09,
+      -127.15884799999999
+    ],
+    "maxHeights": 34.09
+  },
+  "NorthDJ": {
+    "pieces": 86,
+    "boundingMin": [
+      -32.9995,
+      0.0362969999999998,
+      130.246571
+    ],
+    "boundingMax": [
+      32.905772999999996,
+      34.09,
+      136.80809200000002
+    ],
+    "maxHeights": 34.09,
+    "closestToDJRearGuardClearance": 1.7565709999999797
+  },
+  "sourceSHA256": "54ce897716c1c6b41132e0401739faa677a35ad2d02c60af350d1547890d1c69",
+  "exactTransformedCornerBounds": true,
+  "uniqueNewMeshes": 0,
+  "extraTriangles": 180840,
+  "expectedCeilingLenses": 28,
+  "lightChange": "Only PreviewLighting Tunnel Lamp/Preview Fill=.55; no global Lighting changes.",
+  "originalLayerPreserved": true,
+  "verificationScope": "Offline measured geometry; actual Studio appearance/collision/play tests are pending root.",
+  "colliderCrossSection": "66 x2.08-stud columns at 2-stud spacing; outside-edge radius33.8 tops under shell with 0.08 overlap between adjacent blockers.",
+  "outerSideBlockerTopY": 8.12729962889171,
+  "colliderCount": 66
+}

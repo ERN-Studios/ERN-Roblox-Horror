@@ -1,0 +1,739 @@
+{
+  "verified": true,
+  "atUTC": "2026-10-02T08:29:46.187351+00:00",
+  "reviewedStagedPaths": 141,
+  "scopeOnly": true,
+  "independentReview": "lobby_dev_gate inspected133 exact staged/worktree blobs including current runtime Sources; no credentials/caches/native binaries/unrelated files; implementation whitespace clean; immutable diff/prompt warnings preserved.",
+  "finalRecordsReviewedByRoot": [
+    "TASK-RESULT.md",
+    "verify-after-checkpoint.py",
+    "publish-receipt.json",
+    "durable-native-backup-receipt.json",
+    "review/concurrent-native/native-scope-summary.json",
+    "review/concurrent-native/checkpoint-install-gate.json",
+    "review/concurrent-native/scoped-concurrent-native-preservation.json"
+  ],
+  "finalRuntimeSourceParity": "a015/4861/ec360 live Source equals editor/candidate/mirror before successful publish",
+  "newConcurrentNativeAudit": "actual reviewer PASS exact recorded deltas; zero unexplained saved property/source changes",
+  "nativeBackupCopies": "18files copied outsideGit with SHA256 equality",
+  "pythonAST": "PASS all scopedPythonfiles",
+  "publication": "native PublishSuccessful + Place published v2495",
+  "limitations": "Solo only; ordinary-account multiplayer, full developer Level5 launch, concurrent Level4 gameplay and stress/performance unverified",
+  "indexRows": [
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/AFTER-NATIVE-BACKUP.md",
+      "mode": "100644",
+      "blobOid": "00e5367d0895b350a910d21667fc61b59ba00365"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/Builder.candidate.luau",
+      "mode": "100644",
+      "blobOid": "93bf758b64e254075e70f06524da2d82c030f30e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/Builder.diff",
+      "mode": "100644",
+      "blobOid": "d353b708600ce5480d8f6d12033aa4fe50f309f5"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/TASK-RESULT.md",
+      "mode": "100644",
+      "blobOid": "be00bbf313ef1c206653d0cfb2491a80086976bf"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/actual-play-evidence.json",
+      "mode": "100644",
+      "blobOid": "a3153dfc3b8d9978ca2e84e45580baa860772364"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/after-helper-python-syntax-receipt.json",
+      "mode": "100644",
+      "blobOid": "9591a4abdd1e9851ae799dada3610f79d097330e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/after-helper-syntax-receipt.json",
+      "mode": "100644",
+      "blobOid": "d32c5809904bfa86a2fdbc1ec753c4af3b276c9f"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/after-native-scope-pins.json",
+      "mode": "100644",
+      "blobOid": "3ba277c47b34fbdafcc06372a1de66b9b3e58b55"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/apply-chaos-v3-cas.luau",
+      "mode": "100644",
+      "blobOid": "966c525c1ef0e17ae3f8516bae6e6e79ec805057"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/baseline.json",
+      "mode": "100644",
+      "blobOid": "303e671d19542bfbf09b737f3579539e84fc87c9"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/capture-after-readonly.luau",
+      "mode": "100644",
+      "blobOid": "365c00313445d9ef8237b15771e78a763b497eb4"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/capture-before-readonly.luau",
+      "mode": "100644",
+      "blobOid": "3fe5801c967faf0f3232281ad1ef6ca09da91b45"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/compile-after-helpers.luau",
+      "mode": "100644",
+      "blobOid": "abe8870ff169260c33146d614edfd35bf6fa9451"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/compile.luau",
+      "mode": "100644",
+      "blobOid": "c54f55150c58704ead71c2527a2e9dbbf9084424"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/complete-scoped-native.luau",
+      "mode": "100644",
+      "blobOid": "4bc9866632e8c6cd0fd50febd1da66d03d9c76c7"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/ASSESSMENT.md",
+      "mode": "100644",
+      "blobOid": "1e57b572a381703aa696a1354fd2962e8f45d4c9"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/concurrent-delta-manifest.json",
+      "mode": "100644",
+      "blobOid": "0bd423e5fa91ef2b794f61db9ef4f959a1aca8f4"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/fresh-access-test-receipt.json",
+      "mode": "100644",
+      "blobOid": "df6e0cb51685ad53f0013927a6167513158a69fa"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/fresh-live-critical-readback.json",
+      "mode": "100644",
+      "blobOid": "77669e973f3457e39d3c7eef1de2bdadd6b300d5"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/test-fresh-access-policy.luau",
+      "mode": "100644",
+      "blobOid": "9bb5caba56d67b89e9589ef63ac10e768e52607a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/concurrent-access-review/unrelated-source-diff.patch",
+      "mode": "100644",
+      "blobOid": "ab3bddd59f07377cd7a8c65875147a958bedd6c9"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/dev-gate-playtest/client-passive-scene.json",
+      "mode": "100644",
+      "blobOid": "ffc9dcbed268f49a9691b728accd8d08842c2d03"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/dev-gate-playtest/original-preview-prompts-client.json",
+      "mode": "100644",
+      "blobOid": "1f69154adb02e02904d00c501a5610beebb0ceca"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/dev-gate-playtest/original-preview-prompts-server.json",
+      "mode": "100644",
+      "blobOid": "9fdcb2ed17dd8db1d47e127c524cf8a83e748b1e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/dev-gate-playtest/passive-verification-receipt.json",
+      "mode": "100644",
+      "blobOid": "06f3124d30f579375e84c91b92817bd080abfca1"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/dev-gate-playtest/server-passive-capability-rejection.json",
+      "mode": "100644",
+      "blobOid": "85361343368b50cda07ea23da82458a107ef8bc4"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/durable-native-backup-receipt.json",
+      "mode": "100644",
+      "blobOid": "0cc50268937f90ca930fd80a1835266e082989a3"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/finalize-after-checkpoint.py",
+      "mode": "100644",
+      "blobOid": "63271fef76a90a433caa86e6fe91cafb022d43e7"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/finalize-before-checkpoint.py",
+      "mode": "100644",
+      "blobOid": "dcd5a0a1407615dec0f8a939bfa331715be480e4"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "93bf758b64e254075e70f06524da2d82c030f30e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.EndBlockades.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "dd72048b65a8c535edc014cdbe8b6e27b7077285"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.luau",
+      "mode": "100644",
+      "blobOid": "69f311d067e81e5a1885c19c39be2c797c6c4284"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ReplicatedStorage.DevAccess.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "4487acfe369c701f298dcb0abae84555bb86ee0f"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "mode": "100644",
+      "blobOid": "9ccdf46a41b712af1b8ffc9c28d036eef0a3681b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "mode": "100644",
+      "blobOid": "6ff8d0f6a8cff98c95a1b6de9e6846098aae1fb4"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "4d7adb4a26223f0c1409b780d468eac2e1686af9"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "afbee28c4906ccbfc728cb82627a4e5b93d3e48a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/fresh-source-before/ServerScriptService.LobbyReimaginedPreview.RuntimeBake.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "bc1d7b83a9bc7b4c16c882d1302c203e24194f6b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/install-scoped.luau",
+      "mode": "100644",
+      "blobOid": "f07d8dc424276279f9b3f9b3e0cd159f26e04dbf"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/installation-notes.json",
+      "mode": "100644",
+      "blobOid": "4909654af4123bc5d9758239d39b735143cd7f4a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-after/checkpoint-install-gate.json",
+      "mode": "100644",
+      "blobOid": "b9aa47e7ad3257071ccc694f220d6369c15b9a18"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-after/checkpoint-reuse-proof.json",
+      "mode": "100644",
+      "blobOid": "9fb96b2f19545089ed280aefa859b832d6f23756"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-after/fresh-source-manifest.json",
+      "mode": "100644",
+      "blobOid": "495e3f2c24f297c4123a2d2bdfa94c16074dc77e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-after/metadata.json",
+      "mode": "100644",
+      "blobOid": "ab73f50c2eeb36e13f1738ce8b3a91d468085e6f"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-after/native-recovery-reopen-verification.json",
+      "mode": "100644",
+      "blobOid": "fcedbc8bf4bbb3240cf47ebe1d9f5e47fc7476b2"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-before/checkpoint-install-gate.json",
+      "mode": "100644",
+      "blobOid": "7f31038111f63afeb8100e5c6e199301cd574887"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-before/checkpoint-reuse-proof.json",
+      "mode": "100644",
+      "blobOid": "3294193bf69ef1415664bd8239c2b99ca218261b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-before/metadata.json",
+      "mode": "100644",
+      "blobOid": "bfafea5c1643c773e4919808a0349818fd22ad6e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/native-before/native-recovery-reopen-verification.json",
+      "mode": "100644",
+      "blobOid": "7e76855feccce0351b0f7de10556317c2011814b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/publish-receipt.json",
+      "mode": "100644",
+      "blobOid": "6da5d41fc02ec36f8d415087e478361718d3d7c8"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/receiver-after.py",
+      "mode": "100644",
+      "blobOid": "277ba9b20152ae5a9965234be49eaf962540b24d"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/receiver-before.py",
+      "mode": "100644",
+      "blobOid": "b7c9c2a4290f5efd9f60d01edf4793733bf9fa1d"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-early-design.prompt.md",
+      "mode": "100644",
+      "blobOid": "c16f677b3e34e511bfc205597a8c53c97da4f4dc"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-early-design.receipt.json",
+      "mode": "100644",
+      "blobOid": "c814a019eb32e739fbc2e91fb8b11ce8330f644e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-concise.prompt.md",
+      "mode": "100644",
+      "blobOid": "d6d8b2ffb0b1815517c3462ff05e9b17643499a2"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-concise.receipt.json",
+      "mode": "100644",
+      "blobOid": "12ecf93d9e000ea47bd340b4cad9267299d682a3"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-concise.response.md",
+      "mode": "100644",
+      "blobOid": "38695eeafdbaab848eb4bc6c516e8169643edfc1"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-exact.prompt.md",
+      "mode": "100644",
+      "blobOid": "151a1d958a9f63b3eba9dcc365f84b527f93946a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-exact.receipt.json",
+      "mode": "100644",
+      "blobOid": "8c637156c6f35fd09eff250545300e07366b1821"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-final-exact.response.md",
+      "mode": "100644",
+      "blobOid": "7cc78926812e77bcf63f49dba370e79d36546523"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-opus-alias-verification.prompt.md",
+      "mode": "100644",
+      "blobOid": "fc9c8f5ed2a70048c6f2cf031d2ac0180e14b951"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-opus-alias-verification.receipt.json",
+      "mode": "100644",
+      "blobOid": "5a022c26b24e874f5bebcb323984263a013a3b0f"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-opus-alias-verification.response.md",
+      "mode": "100644",
+      "blobOid": "ae18c319d13de2a37de62b39fabbf07c0203c0c7"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v2-delta.cancellation.json",
+      "mode": "100644",
+      "blobOid": "8b322178521e83d6376665ac9f370ff547942293"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v2-delta.prompt.md",
+      "mode": "100644",
+      "blobOid": "da9d3604c2cd1d831b3130829e2b658246d31264"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v2-delta.receipt.json",
+      "mode": "100644",
+      "blobOid": "7c445b97533140f96695212f07c8ee8aa0453318"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta-brief.prompt.md",
+      "mode": "100644",
+      "blobOid": "2112ae250443004bf3ea0fc0c725fa928ca97119"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta-brief.receipt.json",
+      "mode": "100644",
+      "blobOid": "3d9fc7d20d41b2ff22a6f9b77dd3a183c01f00aa"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta-brief.response.md",
+      "mode": "100644",
+      "blobOid": "d3166452fb01efe66289c3b132b16f4af489ccfd"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta.prompt.md",
+      "mode": "100644",
+      "blobOid": "ec5790b02730a7ca5335633dc635b1e726e2ff6a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta.receipt.json",
+      "mode": "100644",
+      "blobOid": "720cea837693b9b13adea327e9c589f8232ebe17"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/codex-source-review.json",
+      "mode": "100644",
+      "blobOid": "5702534cf2139337ec5f9ace5ac9075a6347fb50"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/checkpoint-install-gate.json",
+      "mode": "100644",
+      "blobOid": "b9aa47e7ad3257071ccc694f220d6369c15b9a18"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/concurrent-delta-pins.json",
+      "mode": "100644",
+      "blobOid": "4b9e154c069e74bce02e978bb880114b1107d4e2"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/metadata-delta.json",
+      "mode": "100644",
+      "blobOid": "1e46e1a35b8acd73ef0916a4413ccd8a899b72ca"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/native-scope-summary.json",
+      "mode": "100644",
+      "blobOid": "4d06b2c0882210deb62666cd76104ac709ce2ab6"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/scoped-concurrent-native-preservation.json",
+      "mode": "100644",
+      "blobOid": "6dbb8b703780522457023baa1d2a6f32674ea8fe"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/concurrent-native/source-delta-audit.json",
+      "mode": "100644",
+      "blobOid": "14b99115cd10724db8584a7e7e11b87545a305aa"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/design-input-source-hashes.json",
+      "mode": "100644",
+      "blobOid": "8dd1bed3cc6ef01ac6154077121ada8fdbba164a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/Builder.candidate.luau",
+      "mode": "100644",
+      "blobOid": "93bf758b64e254075e70f06524da2d82c030f30e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/EndBlockades.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "b81cc0d51969970edce475a29b1802a47076b632"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/R4DevGateController.LocalScript.candidate.luau",
+      "mode": "100644",
+      "blobOid": "69f311d067e81e5a1885c19c39be2c797c6c4284"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/frozen-source-hashes.json",
+      "mode": "100644",
+      "blobOid": "67bf4a9fa48dd9215ef4caa004521d76b29b4e0b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/native-completion-guard-review.json",
+      "mode": "100644",
+      "blobOid": "34a40fdae540b9423f3392830b4b3e0325b4d022"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/run_readonly_claude_review.py",
+      "mode": "100644",
+      "blobOid": "fed8da075325d64cf93798b281f9d348adafe777"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v2-delta/EndBlockades.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "a8fa820cab9f528b756a8efcc43b7ffd164d3b69"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v2-delta/codex-v2-review.json",
+      "mode": "100644",
+      "blobOid": "4aa236c3bce1cabbcf7d7d7ab51378abf64d9168"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v2-delta/delta-evidence.json",
+      "mode": "100644",
+      "blobOid": "b1172923f756675d0774e5b22288c44059ac30fd"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v2-delta/plan.json",
+      "mode": "100644",
+      "blobOid": "3cbda935c2249e722c5a392d4771f96146d828a0"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v2-delta/verify_delta.py",
+      "mode": "100644",
+      "blobOid": "22b1c96cbcc25f1224243adac1490d9198a42cd1"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/EndBlockades.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "dd72048b65a8c535edc014cdbe8b6e27b7077285"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/cas-guard-review.json",
+      "mode": "100644",
+      "blobOid": "7beab07004ed4468866ae93dcc62079793c673fd"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/codex-v3-review.json",
+      "mode": "100644",
+      "blobOid": "43b8aa62b005868a0b77796adeee14811f318b9f"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/delta-evidence.json",
+      "mode": "100644",
+      "blobOid": "935007fe8a5d5040aee6b7a400b02409537fdf6b"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/plan.json",
+      "mode": "100644",
+      "blobOid": "4da2131c270a9a60df2bee5bc76d4038fbb013b9"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/south-viewer-clearance.json",
+      "mode": "100644",
+      "blobOid": "3a89cc1d0b2c371e110606163f5ab750ee35c49a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/review/v3-delta/verify_delta.py",
+      "mode": "100644",
+      "blobOid": "422e6ffffac210c613428cf70a3e29384414afff"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/ceiling-after.jpg",
+      "mode": "100644",
+      "blobOid": "79bbfa05003ddc05c43ec6866125ecfa60ea4baf"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/ceiling-before.jpg",
+      "mode": "100644",
+      "blobOid": "74235bcb8a24ab92be9865e37b1d83204e6c927e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/level6-dev-preview.jpg",
+      "mode": "100644",
+      "blobOid": "1f7c3c96a2422319e216cab876a0998d2c15eb60"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/north-after.jpg",
+      "mode": "100644",
+      "blobOid": "020821507f6a5ad33722a70cb06dad31ebb8e34e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/north-before.jpg",
+      "mode": "100644",
+      "blobOid": "323fdb49754e45f7fd0ab8dceeb69964a7cf6328"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/south-after.jpg",
+      "mode": "100644",
+      "blobOid": "a473456511300cd4f59001e7788a2ff7c2feafaf"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/screenshots/south-before.jpg",
+      "mode": "100644",
+      "blobOid": "1299de842649b6304f2c30ba8f721a4e2949f50a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/serve-completion.py",
+      "mode": "100644",
+      "blobOid": "f42c9c39603b315281348c84e1efea493b704e4a"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/serve-probes.py",
+      "mode": "100644",
+      "blobOid": "a675ab3ddc49441ec312423e7e9dc23c4f195edc"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/server-probe-native.luau",
+      "mode": "100644",
+      "blobOid": "acde349d9522796e591bbeed35ad192fe48b5277"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/syntax-receipt.json",
+      "mode": "100644",
+      "blobOid": "cfa2c77a4a2e3d6fd0adc0270367a31793e7c030"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/verified-studio-source-manifest.json",
+      "mode": "100644",
+      "blobOid": "067b6d27eeaee5ecff128e7117eea572e591d3ee"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/verify-after-checkpoint.py",
+      "mode": "100644",
+      "blobOid": "3ee4c5b6e0248482a592c018fa3ba8f401ca5c4e"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/verify-before-checkpoint.py",
+      "mode": "100644",
+      "blobOid": "3bddd3a5ff4478acf528a40490e3e86d31ad2a00"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/verify-endfix-concurrent-native.luau",
+      "mode": "100644",
+      "blobOid": "486b1312a1af8d1f891448704908957a911a7e91"
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/verify-endfix-scoped-native.luau",
+      "mode": "100644",
+      "blobOid": "2b3193f590ce9a5278b86d9c8314ad35c4dd9125"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/ACCESS-REVIEW.md",
+      "mode": "100644",
+      "blobOid": "a9699da98535747dabadabf19790a9bf07a6093d"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/PLAY-VERIFICATION.md",
+      "mode": "100644",
+      "blobOid": "ab27db43a8bfdbe49659149ef94389cdb07cfc00"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/R4DevGateController.LocalScript.candidate.luau",
+      "mode": "100644",
+      "blobOid": "69f311d067e81e5a1885c19c39be2c797c6c4284"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/compile-play-probes.luau",
+      "mode": "100644",
+      "blobOid": "57f0101720b667b6f8b5c08812f6fb4ac5ee6662"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/live-authority-readback.json",
+      "mode": "100644",
+      "blobOid": "fbf09df033881ba688f0603e564d7a575308bce5"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/play-probe-client-readonly.luau",
+      "mode": "100644",
+      "blobOid": "c8b6033e86f2f5520d3aa39d245a39eff45e2714"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/play-probe-server-readonly.luau",
+      "mode": "100644",
+      "blobOid": "102aeddaddeda99d2319e0de8c8d5059b5d09db2"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/play-probe-syntax-receipt.json",
+      "mode": "100644",
+      "blobOid": "3fdaf3e4c919f7205655637c1fcf59f3c6ee6e29"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/test-dev-gate.luau",
+      "mode": "100644",
+      "blobOid": "5237e5dc769b4e9c608064fb1d4d21f51cbd1733"
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/test-receipt.json",
+      "mode": "100644",
+      "blobOid": "66e21f3e84e5ed77d7ecae63d706561854278224"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "dd72048b65a8c535edc014cdbe8b6e27b7077285"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.v1.luau",
+      "mode": "100644",
+      "blobOid": "b81cc0d51969970edce475a29b1802a47076b632"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.v2.luau",
+      "mode": "100644",
+      "blobOid": "a8fa820cab9f528b756a8efcc43b7ffd164d3b69"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/actual-client-v1.json",
+      "mode": "100644",
+      "blobOid": "1f19432432ee95a794bc35d19f7a910d010f1228"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/actual-geometry-v1.json",
+      "mode": "100644",
+      "blobOid": "cdda72fdf5796bddcb0d2fc2525d3d6f3b6d09c0"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/actual-lighting-v1.json",
+      "mode": "100644",
+      "blobOid": "72357550ca54748f1ebaf0c9196b785a2495231b"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/build_chaos_v2.py",
+      "mode": "100644",
+      "blobOid": "74d1205a6b42ed8ae191eb780070534c5420fe86"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/build_chaos_v3.py",
+      "mode": "100644",
+      "blobOid": "f186aeb326fc567aa0ebc8481949011d991d946b"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/build_module.py",
+      "mode": "100644",
+      "blobOid": "09caef71145822139c756b605f63e3d2c5152710"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/build_plan.py",
+      "mode": "100644",
+      "blobOid": "7b8979439f03acd480c7feff587d0576c93e0ba6"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/emit_plan.ModuleScript.luau",
+      "mode": "100644",
+      "blobOid": "e9205e78c5b1de6118313daa43e2962bcaf74559"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/geometry-checks-v2.json",
+      "mode": "100644",
+      "blobOid": "9ce1479ab41d5b5ba0cab5c8fb50521abf1699f4"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/geometry-checks-v3.json",
+      "mode": "100644",
+      "blobOid": "ecd0868423df52743b6c27dc91784b635b54cfa7"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/geometry-checks.json",
+      "mode": "100644",
+      "blobOid": "8b1da5847bf60c8fc40b6a741ab0d5ca2e690312"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/geometry-checks.v1.json",
+      "mode": "100644",
+      "blobOid": "8b1da5847bf60c8fc40b6a741ab0d5ca2e690312"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/plan.json",
+      "mode": "100644",
+      "blobOid": "4da2131c270a9a60df2bee5bc76d4038fbb013b9"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/plan.v1.json",
+      "mode": "100644",
+      "blobOid": "0078f1845ea2d158672aa0a10c7a0cc77be895c2"
+    },
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/plan.v2.json",
+      "mode": "100644",
+      "blobOid": "3cbda935c2249e722c5a392d4771f96146d828a0"
+    }
+  ],
+  "receiptItself": "This small receipt added afterward and inspected separately.",
+  "finalScopedImplementationGitDiffCheck": {
+    "exitCode": 0,
+    "excludedOnlyImmutableEvidence": [
+      "*.diff",
+      "*.patch",
+      "*.prompt.md"
+    ],
+    "sourceEvidencePreserved": true
+  }
+}

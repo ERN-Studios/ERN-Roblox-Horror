@@ -1,0 +1,598 @@
+{
+  "schema": "lobby-r4-checkpoint-install-gate-v1",
+  "verified": true,
+  "captureId": "a83b58b7-12df-4b10-b4d0-e32e20cb0cb8",
+  "capturedAtUnix": 1790928235,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "groupId": 1039373905,
+  "nativeSHA256": "93403e988f4f50bddfcdbb9c1b803e9b09ed6909982a9d52b244950c7b0e82a0",
+  "nativeBytes": 77203427,
+  "nativePlaceSHA256": "c5d4bef761c6f9293eb2272ce75bfed528c926a602b7a7223e28a73740e49e6b",
+  "nativePlaceBytes": 77170759,
+  "rootCount": 192,
+  "sourceCount": 222,
+  "recoveryVerifiedAtUtc": "2026-10-02T08:21:23.050886+00:00",
+  "verification": {
+    "chunksConcatenateExactly": true,
+    "nativeForestDeserializes": true,
+    "placeReopens": true,
+    "canonicalForestEqual": true,
+    "exactSourceEditorParity": true,
+    "taskThreeSourcePinsExact": true,
+    "explicitConcurrentDeltasRecorded": true,
+    "remainingBaselineForestUnchanged": true,
+    "savedServiceSettingsUnchanged": true,
+    "concurrentGameplayVerified": false
+  },
+  "reusedAlreadyVerifiedNativePlace": true,
+  "reusedAlreadyVerifiedConcurrentAudit": true,
+  "concurrentManifestFile": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/lobby-end-blockades-20261002/review/concurrent-native/concurrent-delta-pins.json",
+  "concurrentManifestSHA256": "25cd7fe049494ee504b61d83c841134c7e1a7b5436493bff040ffd8d3a99afdf",
+  "taskSourcePinsSHA256": "47f410d71c5cb54f82cf7f219a1552132c91bb1e28acf0ae01132372cb6aeab1",
+  "files": [
+    {
+      "file": "metadata.json",
+      "bytes": 83447,
+      "sha256": "58eeffbe4ad415c08e13769f56cb96e0a8049385b8ae354d9c77e1414cd1bb88"
+    },
+    {
+      "file": "metadata.received.json",
+      "bytes": 59474,
+      "sha256": "2c76bd770b9f848492e06edd439e94d6242a67ce4158dd977cef4ce3eb2dcf8c"
+    },
+    {
+      "file": "scripts.json",
+      "bytes": 9413075,
+      "sha256": "35d2697aaa672e9310256d7478d4306da9b6e17f79037daea69b71363b54986c"
+    },
+    {
+      "file": "all-service-children.rbxm",
+      "bytes": 77203427,
+      "sha256": "93403e988f4f50bddfcdbb9c1b803e9b09ed6909982a9d52b244950c7b0e82a0"
+    },
+    {
+      "file": "AfterLobbyEndFix-AuthoritativeStudio.rbxl",
+      "bytes": 77170759,
+      "sha256": "c5d4bef761c6f9293eb2272ce75bfed528c926a602b7a7223e28a73740e49e6b"
+    },
+    {
+      "file": "checkpoint-reuse-proof.json",
+      "bytes": 1320,
+      "sha256": "24c8ae97e93f3248748b3b50cf56b9ddd02718cd2c27dee39e2f5218d58b152c"
+    },
+    {
+      "file": "native-recovery-reopen-verification.json",
+      "bytes": 83328,
+      "sha256": "faf9fda2d9982f62f484f59388b74b9b1baf0856c160271f3d0df3514676d071"
+    },
+    {
+      "file": "scoped-native-preservation.json",
+      "bytes": 2345906,
+      "sha256": "13563093de65efd56c7c6feee352300d80166c495ab5d29bf5d3e953cde38cbc"
+    },
+    {
+      "file": "native-part-00000.bin",
+      "bytes": 750000,
+      "sha256": "d52fbe0429bccec5cf98d19b82ba6fa4c7e175f7e784fdf4fc6cbaa37b09ef36"
+    },
+    {
+      "file": "native-part-00001.bin",
+      "bytes": 750000,
+      "sha256": "c8827cfc5821e13a70a09feab8424ccbf16e3a1aa626cd797d87c9eff0079cef"
+    },
+    {
+      "file": "native-part-00002.bin",
+      "bytes": 750000,
+      "sha256": "9f46670d391d837e5b80e722147bd2dcde6732d401e74286ed58b54fe40799d9"
+    },
+    {
+      "file": "native-part-00003.bin",
+      "bytes": 750000,
+      "sha256": "29ddb4ac27ff3240b0569d82befc1b3238299c27091162adcc941fcf271adcdb"
+    },
+    {
+      "file": "native-part-00004.bin",
+      "bytes": 750000,
+      "sha256": "9738e1988c4a2641e4bd53be213db1703c10943e5a29aae66a3404d3b7f9951d"
+    },
+    {
+      "file": "native-part-00005.bin",
+      "bytes": 750000,
+      "sha256": "89ddf93f6f3a3d2043d6500d7246e7a71bcf088e6ab28c0b9b9af09d84641eac"
+    },
+    {
+      "file": "native-part-00006.bin",
+      "bytes": 750000,
+      "sha256": "1c8d5a03d0388b6ccaba1bb8a24b22c93c7eb89d15ea2c9d376ec203770c30e3"
+    },
+    {
+      "file": "native-part-00007.bin",
+      "bytes": 750000,
+      "sha256": "7b65911bc27c31cffe388b7908835549d28fe5369f01e53fc24eecf9e3f138af"
+    },
+    {
+      "file": "native-part-00008.bin",
+      "bytes": 750000,
+      "sha256": "0f2148f028d994fbb4bfe9b74862a5f2a80fcffe70ad67bb86bfe0794e0fe5ec"
+    },
+    {
+      "file": "native-part-00009.bin",
+      "bytes": 750000,
+      "sha256": "10e0a8703976cae73c90508ae16a763347507afdebfdc695e153212def49c8e7"
+    },
+    {
+      "file": "native-part-00010.bin",
+      "bytes": 750000,
+      "sha256": "525cf43a3ce007d3f430d0ae40c0c6cf33affce39d19a7b63aa17f3d64debf92"
+    },
+    {
+      "file": "native-part-00011.bin",
+      "bytes": 750000,
+      "sha256": "01fbfd6a1c3f0d8d17fa300d933f7cb3f8da064b856619f83e8fe78db7c8db14"
+    },
+    {
+      "file": "native-part-00012.bin",
+      "bytes": 750000,
+      "sha256": "ec26ea1495a8812c3710e9adf61f6968bc770834c945bbc793aada1b0b2fa5a8"
+    },
+    {
+      "file": "native-part-00013.bin",
+      "bytes": 750000,
+      "sha256": "efa40be1ef06c1ba90273f07662439892a56f7643ef6b87901df1fd7acafebc9"
+    },
+    {
+      "file": "native-part-00014.bin",
+      "bytes": 750000,
+      "sha256": "129556d69c2994128c72c82cce4ffa2cec8690ee7c316ad3ecf38ab6ae747ac0"
+    },
+    {
+      "file": "native-part-00015.bin",
+      "bytes": 750000,
+      "sha256": "f64ce0574b83fcecc0aca85f42ff816d492203d883529a89bac231554a555afd"
+    },
+    {
+      "file": "native-part-00016.bin",
+      "bytes": 750000,
+      "sha256": "81f54fb2c49b29ffb10a6205eba50aa56c57ee99ff9e519d17b37b109a4fc60b"
+    },
+    {
+      "file": "native-part-00017.bin",
+      "bytes": 750000,
+      "sha256": "62fccf2974eed6588d12a04f3dfe0e7c6d95d897bcc8b955ab7fada3a91674bb"
+    },
+    {
+      "file": "native-part-00018.bin",
+      "bytes": 750000,
+      "sha256": "4307970c143d08e979e0c61f1c400162b860d0f9dcecb2353e8bd5872ac24675"
+    },
+    {
+      "file": "native-part-00019.bin",
+      "bytes": 750000,
+      "sha256": "5f1d6fa1edc8c2ea9266b949db015b092fd0466ab66217ad8708b30244e3fa2c"
+    },
+    {
+      "file": "native-part-00020.bin",
+      "bytes": 750000,
+      "sha256": "ee2c567731f7bd37ef96ca328a22c8268ae550b510bdcdcba357504136d290c7"
+    },
+    {
+      "file": "native-part-00021.bin",
+      "bytes": 750000,
+      "sha256": "5d05c76538c65d7b87523831c604a10dffdddb0a48ebd9b76ccef2e84c967837"
+    },
+    {
+      "file": "native-part-00022.bin",
+      "bytes": 750000,
+      "sha256": "4417797ee5054d543b6f7bb01ea16e8d2d3df507f18e56cf779e652ffdfec7e9"
+    },
+    {
+      "file": "native-part-00023.bin",
+      "bytes": 750000,
+      "sha256": "17bd5167e248a4cc826fd41e593220c2851fb7ff02bbfeaa07c49dcbd86fdcfc"
+    },
+    {
+      "file": "native-part-00024.bin",
+      "bytes": 750000,
+      "sha256": "301fae64f1daa5283956b73fb15fcb80e39cfddc52f13725345562c1c63ca783"
+    },
+    {
+      "file": "native-part-00025.bin",
+      "bytes": 750000,
+      "sha256": "ebf936fa1bc1b9c75c354db0639906fefb33a9f81752f6d9e501b23c4b141503"
+    },
+    {
+      "file": "native-part-00026.bin",
+      "bytes": 750000,
+      "sha256": "c038996b026f3a841d531c6e7260a52b522a7e391296f39488592549ce053c2b"
+    },
+    {
+      "file": "native-part-00027.bin",
+      "bytes": 750000,
+      "sha256": "8108f37ce1d42db62e199d26416a8db042a5ce0d8b2b483b3c5d64653fe1d1cc"
+    },
+    {
+      "file": "native-part-00028.bin",
+      "bytes": 750000,
+      "sha256": "bc6e098971a165c437c235ca3960601d60c47cb51794596d946f8af3aca7724d"
+    },
+    {
+      "file": "native-part-00029.bin",
+      "bytes": 750000,
+      "sha256": "26bd1cd9d933e931b82336bc6f9d32e65b4597a90b005858cb75fdb953b537a8"
+    },
+    {
+      "file": "native-part-00030.bin",
+      "bytes": 750000,
+      "sha256": "cb98012200d5efe3fcce97df6e9cb96a9b8ac5e3cd17b18c71e779bb2845b81a"
+    },
+    {
+      "file": "native-part-00031.bin",
+      "bytes": 750000,
+      "sha256": "414168059f9031240b342d6456f7f911e8061fba895c9dbf234272df0db48f26"
+    },
+    {
+      "file": "native-part-00032.bin",
+      "bytes": 750000,
+      "sha256": "4f711f68f02b5f2ce8648853a8a200c56751408a4e391a11a1d6e4489b73c348"
+    },
+    {
+      "file": "native-part-00033.bin",
+      "bytes": 750000,
+      "sha256": "4b37dffd8c745411e6e46c31b07404641adc1c213056c0e85c01bd47b233777f"
+    },
+    {
+      "file": "native-part-00034.bin",
+      "bytes": 750000,
+      "sha256": "442948ad468e2162d68b8230000f22ab9bff8a49acf7464ec801f4b3b117249b"
+    },
+    {
+      "file": "native-part-00035.bin",
+      "bytes": 750000,
+      "sha256": "2d6f231f15dea1be7b9456673de94112f99f7ea75f2e927a97310b22eeb8a23d"
+    },
+    {
+      "file": "native-part-00036.bin",
+      "bytes": 750000,
+      "sha256": "99d5d9052b89ce2edcc779bb21d96f071f16a1a8101ae3bece4536d279da0e82"
+    },
+    {
+      "file": "native-part-00037.bin",
+      "bytes": 750000,
+      "sha256": "01d85639eab551da5b5c6f859b45456e663dbd7980bd8de973c7841e0b42ac34"
+    },
+    {
+      "file": "native-part-00038.bin",
+      "bytes": 750000,
+      "sha256": "71d30e95433df5bca578338c1db50bba3e6e72f7d61234a02719e165b513a15d"
+    },
+    {
+      "file": "native-part-00039.bin",
+      "bytes": 750000,
+      "sha256": "2551ea95e13e354cc1c8461b888a4d0eeb148ea9ebde23ea8e77f1a662c7559d"
+    },
+    {
+      "file": "native-part-00040.bin",
+      "bytes": 750000,
+      "sha256": "fd0b3b69421417c8484b2dd5e15f8b8d8158a9b4fff0628838bafc8fc49f2a90"
+    },
+    {
+      "file": "native-part-00041.bin",
+      "bytes": 750000,
+      "sha256": "0c095678f772fe0aa9bae5b455f808f98930f7ed8fbcc85507a7f8bc91212c0e"
+    },
+    {
+      "file": "native-part-00042.bin",
+      "bytes": 750000,
+      "sha256": "dad0d6e6fe72bae1b6dc39890a6c9ac7d3832e5f6170cd531d704bbc0f52942e"
+    },
+    {
+      "file": "native-part-00043.bin",
+      "bytes": 750000,
+      "sha256": "cdd87958b90e21948d692e0e32d6f1eb78129b396a4100f31f38e781a9b7186f"
+    },
+    {
+      "file": "native-part-00044.bin",
+      "bytes": 750000,
+      "sha256": "dc560be434c42fac371566bde7554da94aa51ee589b26f1e8be1e3db0d884820"
+    },
+    {
+      "file": "native-part-00045.bin",
+      "bytes": 750000,
+      "sha256": "fd21db1e0b53a0910c98cc8a0f0e934e78f03c7fe02e3bfe6e3cfb2dfec1b77c"
+    },
+    {
+      "file": "native-part-00046.bin",
+      "bytes": 750000,
+      "sha256": "d988972e14bdd13fda5f3b1be3194f9fac9b89440170425992372c9a0b77b8fa"
+    },
+    {
+      "file": "native-part-00047.bin",
+      "bytes": 750000,
+      "sha256": "86850f2f133a5f19ff6f2ddb5b2e5b0eb957aafd0f699d84366be5e0cd972a5d"
+    },
+    {
+      "file": "native-part-00048.bin",
+      "bytes": 750000,
+      "sha256": "170f800d252d06ed22f23901b15c034ffb9ceefb6ac8453aba02f1779da465ae"
+    },
+    {
+      "file": "native-part-00049.bin",
+      "bytes": 750000,
+      "sha256": "e1d4b070d01e10cdcc441038f0e8f7ffdf1749d9ee8308ff94cb670b5cd8d18c"
+    },
+    {
+      "file": "native-part-00050.bin",
+      "bytes": 750000,
+      "sha256": "2c76d7604fdd87f8cdff321d499a78059bc25a138f6d3eeb0604a93795b8b691"
+    },
+    {
+      "file": "native-part-00051.bin",
+      "bytes": 750000,
+      "sha256": "d8acc07ebb248cc67c22791dd5b672f69fb21c5d095d51898753ec47e3ea21dc"
+    },
+    {
+      "file": "native-part-00052.bin",
+      "bytes": 750000,
+      "sha256": "63944193d58af9312d714ab21bb88ab5c052c2802d3d8a63cd32b4b625207b5f"
+    },
+    {
+      "file": "native-part-00053.bin",
+      "bytes": 750000,
+      "sha256": "4816aa0fc563cd9394ac040a6dd2aa8a6fde59ccb6c218dd8306be73510245f5"
+    },
+    {
+      "file": "native-part-00054.bin",
+      "bytes": 750000,
+      "sha256": "d0cea269b52d9230c6cd5c13145f104234d17b28bddc8079eeac69dac646ec60"
+    },
+    {
+      "file": "native-part-00055.bin",
+      "bytes": 750000,
+      "sha256": "410cb08e3af7412879cd9b64a0469e83c6596310851f3441a723a35e65293a88"
+    },
+    {
+      "file": "native-part-00056.bin",
+      "bytes": 750000,
+      "sha256": "52ee9168a6993d091620d3345d19cc01fc1380cbe05a3f5ef2ed18364ccf9dc2"
+    },
+    {
+      "file": "native-part-00057.bin",
+      "bytes": 750000,
+      "sha256": "fd698b424b8e033a254f3bebe5d06660400244081e3593f78e0f85de12e49ff2"
+    },
+    {
+      "file": "native-part-00058.bin",
+      "bytes": 750000,
+      "sha256": "aa2ae159675db10276c6814855201b55741d6ab2f89f1a757b42d32e39f7a2cc"
+    },
+    {
+      "file": "native-part-00059.bin",
+      "bytes": 750000,
+      "sha256": "fe4e3033d2edb6e526ff91f423ad627bbe3022ee0946d729271ee475b6ed442e"
+    },
+    {
+      "file": "native-part-00060.bin",
+      "bytes": 750000,
+      "sha256": "87c4eb206f02c7ee480284b95be48988754d7468987f5a7be73ce6f311fa5814"
+    },
+    {
+      "file": "native-part-00061.bin",
+      "bytes": 750000,
+      "sha256": "0fe57fcb022777a49a53edbf64a20fc600c414f71864860d0a7772c69eac664c"
+    },
+    {
+      "file": "native-part-00062.bin",
+      "bytes": 750000,
+      "sha256": "a143782f4c157830d8d0daf6ab4d69098de2c269bf6d08ab8ec1d7e505f6dd93"
+    },
+    {
+      "file": "native-part-00063.bin",
+      "bytes": 750000,
+      "sha256": "29ed0207c8a65dd89512ed04f26eb6bb43dd0a7d049856a3a537c9948a6627f1"
+    },
+    {
+      "file": "native-part-00064.bin",
+      "bytes": 750000,
+      "sha256": "dfdff486882fea0590130ba5b80502aef5da6b6afe641f7e1c5f16201d61a168"
+    },
+    {
+      "file": "native-part-00065.bin",
+      "bytes": 750000,
+      "sha256": "130a4931e495e79dcf4dd511bfe673adf3714252d7e7e6cee47427bbd3393504"
+    },
+    {
+      "file": "native-part-00066.bin",
+      "bytes": 750000,
+      "sha256": "ec4bfe1980ea7f12d0163c7e7966f8850f1fe61c8e454eac2476f60d981700db"
+    },
+    {
+      "file": "native-part-00067.bin",
+      "bytes": 750000,
+      "sha256": "46d3e285221fda644923ce132eeba05b930aea553d7856edc60ad4a71a2cf4d4"
+    },
+    {
+      "file": "native-part-00068.bin",
+      "bytes": 750000,
+      "sha256": "6f80d1ff98f72567dd278273f3405cfb5f4d2a4e08529ae7daabd52c3ca8fcca"
+    },
+    {
+      "file": "native-part-00069.bin",
+      "bytes": 750000,
+      "sha256": "8d807f9658da86a7c0b39375775d3077395aa5348b02b38a2f44b7197a42c92b"
+    },
+    {
+      "file": "native-part-00070.bin",
+      "bytes": 750000,
+      "sha256": "79a0fd42fb4c26199c9000f8ec21695d6c99f7c563139c0bdfc8fc52d8a03881"
+    },
+    {
+      "file": "native-part-00071.bin",
+      "bytes": 750000,
+      "sha256": "15f43d394a4e16820a0502e26895b46114e712ade96bd24cfe1a86ce1bf0a9ca"
+    },
+    {
+      "file": "native-part-00072.bin",
+      "bytes": 750000,
+      "sha256": "11bd11f0fd31a0d3f6801ea0d31dbbca85a8a7099fc500dd6dd3da3fdbcbefdd"
+    },
+    {
+      "file": "native-part-00073.bin",
+      "bytes": 750000,
+      "sha256": "9df45c519f34c63aa19589b950c727dc04f49e31fc212d7e8101674ba9ebb212"
+    },
+    {
+      "file": "native-part-00074.bin",
+      "bytes": 750000,
+      "sha256": "d7914d3f697a6c4ee851f0d70b05972771e6b292acd050deb0252240ad2d0fcc"
+    },
+    {
+      "file": "native-part-00075.bin",
+      "bytes": 750000,
+      "sha256": "994f57fd471ba3bf95a1ed64a404666ba85997c039b7f3249ae4bdac13da9d91"
+    },
+    {
+      "file": "native-part-00076.bin",
+      "bytes": 750000,
+      "sha256": "afe99da881b925161a39433080a99495fc5cb1acd59e443c27604bec5ed2b759"
+    },
+    {
+      "file": "native-part-00077.bin",
+      "bytes": 750000,
+      "sha256": "60e1a03bf7390c158bf0dc87e3f1cd42441fd8d7189b290cfc2f79fe285b1345"
+    },
+    {
+      "file": "native-part-00078.bin",
+      "bytes": 750000,
+      "sha256": "dfc3ac5619aa1fb4b4d5bbd5fcaf756673867eddc71b2a76489b44d99b06eb86"
+    },
+    {
+      "file": "native-part-00079.bin",
+      "bytes": 750000,
+      "sha256": "ac71a54c8a1cad7c63489ce6c2950031fcf093a929c8c2ea61c14ee091f82003"
+    },
+    {
+      "file": "native-part-00080.bin",
+      "bytes": 750000,
+      "sha256": "a86c0b77b15e6f7b87d7308584d13745442e47cee642b5f22a7eca7c20e6897e"
+    },
+    {
+      "file": "native-part-00081.bin",
+      "bytes": 750000,
+      "sha256": "bacbe99796862837f6506e1c106c48bd3c5e886d7ad0f4af72bd1a023e4a8a55"
+    },
+    {
+      "file": "native-part-00082.bin",
+      "bytes": 750000,
+      "sha256": "1dd4bcb66a61a6d66b9fa735fe8562dd0012c1d542ef303ca552847f242535b6"
+    },
+    {
+      "file": "native-part-00083.bin",
+      "bytes": 750000,
+      "sha256": "73be6997623a773cc219cd5996ce4e937e9bbf1382fd8c0737c6cf833fcc640b"
+    },
+    {
+      "file": "native-part-00084.bin",
+      "bytes": 750000,
+      "sha256": "2a666c2decdc93a7b037ee57ffad4748adcb87b759c8b6323742a8e8e6644a4e"
+    },
+    {
+      "file": "native-part-00085.bin",
+      "bytes": 750000,
+      "sha256": "687b78959dcc3f08c174493dab7f2d912aae3538b3cf44201e2bc62592d1d611"
+    },
+    {
+      "file": "native-part-00086.bin",
+      "bytes": 750000,
+      "sha256": "0c7d403f1490e76731c52e986a0f859d6ec90f57890afe4466a6430b688e90be"
+    },
+    {
+      "file": "native-part-00087.bin",
+      "bytes": 750000,
+      "sha256": "8a5244d84695ab5317b3a67f1141f58c1b846aaf0f33deb54250bc1c2ae812c5"
+    },
+    {
+      "file": "native-part-00088.bin",
+      "bytes": 750000,
+      "sha256": "32bd83443d457758a611174bad8664609538e28fdc2b9496ba8c41226fa46ea5"
+    },
+    {
+      "file": "native-part-00089.bin",
+      "bytes": 750000,
+      "sha256": "3ef6ceecade961a12a754c8a9b22332427928013a0211307705c6968a79a728a"
+    },
+    {
+      "file": "native-part-00090.bin",
+      "bytes": 750000,
+      "sha256": "a5d164a7d279c88cc73f60f82abadd5c75ccca7dc0083c5d527d162acfc723f1"
+    },
+    {
+      "file": "native-part-00091.bin",
+      "bytes": 750000,
+      "sha256": "47232839cd2e389c027725cf1578699a4d989dd2b3a7c2df7b416c77c7f11014"
+    },
+    {
+      "file": "native-part-00092.bin",
+      "bytes": 750000,
+      "sha256": "0328516e8aa3a0c4263c9b58ccd282a7d93546a03728331db0044fdc78893e41"
+    },
+    {
+      "file": "native-part-00093.bin",
+      "bytes": 750000,
+      "sha256": "ba2579c71d583e79d2453a266a69ae0d4bcbce74c1e2413bb79c1de634563321"
+    },
+    {
+      "file": "native-part-00094.bin",
+      "bytes": 750000,
+      "sha256": "88142f88b8cf2f36919f507f78a95f9a31fe7c5a4aeba29138c6593f1c9215ae"
+    },
+    {
+      "file": "native-part-00095.bin",
+      "bytes": 750000,
+      "sha256": "2ab4916e298c0f2419dae9e3352f1df9a72350904a92dbfe8474d54be80844c8"
+    },
+    {
+      "file": "native-part-00096.bin",
+      "bytes": 750000,
+      "sha256": "55cf41c197218a77f77af44f7defc6c6541338f4da579b853d07943f4926db4c"
+    },
+    {
+      "file": "native-part-00097.bin",
+      "bytes": 750000,
+      "sha256": "92f3e48badeb94dc4450b11f7cb7b1c438e85dae94f0e691565246d62bbdc493"
+    },
+    {
+      "file": "native-part-00098.bin",
+      "bytes": 750000,
+      "sha256": "4b8c41f22fbab7c2833e4379ce0a42837a98e8b3d1ad86e2e9b34ee3b3399b26"
+    },
+    {
+      "file": "native-part-00099.bin",
+      "bytes": 750000,
+      "sha256": "fd760069300317143d5572dfae468ab3ac4caa03030fe548964b166a588d1094"
+    },
+    {
+      "file": "native-part-00100.bin",
+      "bytes": 750000,
+      "sha256": "710cedcde3f59e3d5db918d1ef8ec4c975655dbcf926e97c783107afa7ecedd8"
+    },
+    {
+      "file": "native-part-00101.bin",
+      "bytes": 750000,
+      "sha256": "426e9314b66448afda595220cb697fe4b8b146a7f4b9a50a97342e739a3494ec"
+    },
+    {
+      "file": "native-part-00102.bin",
+      "bytes": 703427,
+      "sha256": "d40b4383572de0fcdb7d7e068d0fc1eb4036a9b38cf118cd0c05415d98595a28"
+    }
+  ],
+  "studioMarkerSetByThisScript": false,
+  "studioWrites": false,
+  "limits": [
+    "Exact native forest canonical equality and Sources after local .rbxl reopen. Full raw forest and captured service settings remain retained alongside recorded reconstruction limits. No Studio gameplay/publish claim.",
+    "Concurrent L4 gameplay, multiplayer and performance not verified by native/source comparison.",
+    "Captured L4 Test Suite expects missing Level 4 Usher Nav while controller has marker fallback; test mismatch is recorded, not repaired.",
+    "Capture records exact differences, not author identity; concurrent attribution comes from scoped write receipts and root task context."
+  ]
+}

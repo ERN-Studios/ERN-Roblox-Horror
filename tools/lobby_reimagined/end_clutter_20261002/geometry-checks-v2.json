@@ -1,0 +1,27 @@
+{
+  "schema": "lobby-r4-end-clutter-chaos-v2-verification",
+  "layoutRevision": 2,
+  "baselinePlanSHA256": "017220abbe517d1a26b06396808f6f09ff73587b2aa6bb2bb7c24795a659ff2f",
+  "planSHA256": "afe8d6562ebc1e5a8f7eba291734203aa3081810ecff2a85975702b688c79019",
+  "instances": 179,
+  "familyCountsPreserved": true,
+  "newMeshes": 0,
+  "instancedTriangles": 180840,
+  "reorientedEmbeddedPieces": 132,
+  "foregroundCrownWedgedChairsUnchanged": 47,
+  "attenuationCounts": {
+    "1": 127,
+    "0.1": 1,
+    "0.4": 1,
+    "0.7": 1,
+    "0.55": 1,
+    "0.85": 1
+  },
+  "exactSerializedCornerRadialMaximum": 33.54647513700379,
+  "archLimit": 33.55,
+  "northMinimumZ": 130.04999952988484,
+  "northDJRearClearance": 1.5599995298848341,
+  "collidersPreserved": true,
+  "sourceSHA256": "9f30a00d1a65f31b494ddc570d58958c8bec12aa3a5359ad760e1085e4f06fa8",
+  "verificationScope": "Offline exact geometry; no visual or gameplay pass implied."
+}

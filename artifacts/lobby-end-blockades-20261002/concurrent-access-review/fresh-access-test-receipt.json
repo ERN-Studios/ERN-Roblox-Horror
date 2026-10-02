@@ -1,0 +1,165 @@
+{
+  "actualGameplayVerified": false,
+  "cases": [
+    {
+      "name": "public campaign ceiling and next-level flow remain 1-3",
+      "passed": true
+    },
+    {
+      "name": "ordinary users retain campaign levels1-3 and cannot enter levels4-6",
+      "passed": true
+    },
+    {
+      "name": "general developer Level4 ceiling requires every actual party participant",
+      "passed": true
+    },
+    {
+      "name": "Zen keeps only the previously authorized Level6 preview expansion",
+      "passed": true
+    },
+    {
+      "name": "campaign admission cannot use developer ceiling to enter Level5 or Level6",
+      "passed": true
+    },
+    {
+      "name": "bad destination requests cannot gain access",
+      "passed": true
+    },
+    {
+      "name": "transport clamp retains Level4 only with explicit server developer ceiling",
+      "passed": true
+    },
+    {
+      "name": "exact shared predicates reject spoofed identity data",
+      "passed": true
+    },
+    {
+      "name": "exact Level5 readiness helper denies ordinary and Zen, accepts general developers",
+      "passed": true
+    },
+    {
+      "name": "exact Level6 readiness helper denies ordinary, preserves Zen/general developers",
+      "passed": true
+    },
+    {
+      "name": "exact preview readiness helpers reject round, reserved, dead and immobilized state",
+      "passed": true
+    },
+    {
+      "name": "fresh GameManager revised zone and preview launch branches are byte-identical",
+      "passed": true
+    },
+    {
+      "name": "all preexisting Level5/6 server preview authorities remain byte-identical",
+      "passed": true
+    }
+  ],
+  "compilations": [
+    {
+      "passed": true,
+      "path": "ReplicatedStorage.DeathAdvice",
+      "sha256": "1b43230281cba105e4d6c526994ec5faf7145c77bf8a7ff367851fc1a427d102"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.GameManager",
+      "sha256": "c372d9e9b41c716f3680fe5266f230a088312e94c192d99657614f74222a2b90"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "sha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "sha256": "fac4170f71c91301325b060fe7f9d6f6bc87650e12cd8ce4c9acdfee42c6cce0"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "sha256": "ed62eb8374346419082f64389a2936a960c9f38493ba1f9b45c28c2bb26d0cc9"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "sha256": "4b7e4704f65af62dd904ef4baf125652b4fe6dc9f442c5a5709dcad33c61b461"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "sha256": "f1499854f678f1de6153e9144f39044f7e3073fc590351df7294d4cce88151ff"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "sha256": "716831e206db4caf208056217d648b48f6f4be9cf5291bd5117dbbaf8306d18d"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "sha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "sha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "sha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.NoiseRegistry",
+      "sha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7"
+    },
+    {
+      "passed": true,
+      "path": "ServerScriptService.Round Completion Routing",
+      "sha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "sha256": "57fddc627f96056bfbce140d6110a9260dd3f703682e3e24dc3ec5e3f973eb91"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "sha256": "f293608a1049a1c982ea3e50a06e6aebf80907d1d56d0c572f8fae64931d285c"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "sha256": "c5b9f9c7f58fe8ce6f270a129720cc5626c49e6f0e69a16fe25bf936a6c44108"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "sha256": "00e9fd515fab1950b816adf6d15a794e7b28f12becdc334ec8ac0c9faf085735"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "sha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+    },
+    {
+      "passed": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "sha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02"
+    },
+    {
+      "passed": true,
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "sha256": "f69a91904d2fbbc417de4c3ca1a6961017a6bb1e31fe6793d04d9a4c07c3a080"
+    }
+  ],
+  "kind": "offline_exact_captured_policy_helpers_and_syntax",
+  "level4GameplayVerified": false,
+  "notes": "Mock Player/character state. Fresh Source/editor hashes read separately in live Studio. These are not runtime queue or multiplayer tests.",
+  "passed": true,
+  "sourceCapture": "/private/tmp/lobby-endfix-after-20261002/scripts.json",
+  "studioWrites": false
+}

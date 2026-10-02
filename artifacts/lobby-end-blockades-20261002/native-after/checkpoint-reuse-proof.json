@@ -1,0 +1,47 @@
+{
+  "schema": "lobby-r4-fresh-checkpoint-proof-v1",
+  "reused": false,
+  "checks": [
+    {
+      "passed": false,
+      "description": "Fresh full native forest SHA256 equals previous checkpoint"
+    },
+    {
+      "passed": false,
+      "description": "Fresh native byte length retained"
+    },
+    {
+      "passed": false,
+      "description": "Every native root path/class/order/descendant count retained"
+    },
+    {
+      "passed": false,
+      "description": "Every exact Source/class/editor receipt retained"
+    },
+    {
+      "passed": true,
+      "description": "Fresh complete services receipt unchanged"
+    },
+    {
+      "passed": true,
+      "description": "Fresh complete collisionGroups receipt unchanged"
+    },
+    {
+      "passed": true,
+      "description": "Fresh complete collisionMatrix receipt unchanged"
+    },
+    {
+      "passed": true,
+      "description": "Fresh complete materialOverrides receipt unchanged"
+    }
+  ],
+  "nativeForestReusedWithFreshHash": false,
+  "freshCapturedAt": "2026-10-02T08:03:13Z",
+  "previousCapturedAt": "2026-10-02T07:25:58Z",
+  "nativeSHA256": "93403e988f4f50bddfcdbb9c1b803e9b09ed6909982a9d52b244950c7b0e82a0",
+  "nativeBytes": 77203427,
+  "sourceCount": 222,
+  "editorConflicts": 0,
+  "studioWritesPerformed": false,
+  "nativeReconstructionNeeded": true
+}

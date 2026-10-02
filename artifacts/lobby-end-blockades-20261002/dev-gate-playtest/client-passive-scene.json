@@ -1,0 +1,273 @@
+{
+  "universeId": 10559217407,
+  "policyReadOK": false,
+  "avatar": {
+    "inRound": false,
+    "health": 100,
+    "position": [
+      -0.907487690448761,
+      32.99802017211914,
+      -858.8262329101562
+    ]
+  },
+  "placeId": 131311258779917,
+  "userId": 11374988579,
+  "gates": [
+    {
+      "shutters": [
+        {
+          "touch": false,
+          "anchored": true,
+          "backFaceRoadwardDot": 1,
+          "localTopY": 15.59999942779541,
+          "localBottomY": -9.5367431640625e-7,
+          "transparency": 0,
+          "name": "Coming Soon Shutter",
+          "position": [
+            191.39999389648438,
+            38.599998474121094,
+            -680
+          ],
+          "query": true,
+          "colliding": true,
+          "gateLocalPosition": [
+            0,
+            7.799999237060547,
+            0
+          ],
+          "size": [
+            20,
+            15.600000381469727,
+            0.3499999940395355
+          ]
+        }
+      ],
+      "mainHeaderTexts": [
+        "LEVEL 5"
+      ],
+      "mainHeaderSize": [
+        22.799999237060547,
+        2.680000066757202,
+        0.03999999910593033
+      ],
+      "previewAllowed": false,
+      "mounts": [
+        {
+          "touch": false,
+          "anchored": true,
+          "transparency": 0,
+          "name": "Status Mount",
+          "position": [
+            192.59999084472656,
+            49.86000061035156,
+            -675
+          ],
+          "query": false,
+          "colliding": false,
+          "gateLocalPosition": [
+            -5,
+            19.060001373291016,
+            1.1999969482421875
+          ],
+          "size": [
+            0.11999999731779099,
+            0.8500000238418579,
+            0.18000000715255737
+          ]
+        },
+        {
+          "touch": false,
+          "anchored": true,
+          "transparency": 0,
+          "name": "Status Mount",
+          "position": [
+            192.59999084472656,
+            49.86000061035156,
+            -685
+          ],
+          "query": false,
+          "colliding": false,
+          "gateLocalPosition": [
+            5,
+            19.060001373291016,
+            1.1999969482421875
+          ],
+          "size": [
+            0.11999999731779099,
+            0.8500000238418579,
+            0.18000000715255737
+          ]
+        }
+      ],
+      "enabledPromptCount": 0,
+      "promptCount": 0,
+      "mainHeaderPosition": [
+        192.8199920654297,
+        48,
+        -680
+      ],
+      "subtitles": [
+        {
+          "touch": false,
+          "headerTextGapY": 0.685002255439759,
+          "texts": [
+            {
+              "visible": true,
+              "text": "COMING SOON",
+              "textScaled": true
+            }
+          ],
+          "colliding": false,
+          "anchored": true,
+          "alwaysOnTop": false,
+          "face": "Back",
+          "lightInfluence": 0,
+          "transparency": 0,
+          "name": "Mounted Access Subtitle",
+          "position": [
+            192.86000061035156,
+            50.400001525878906,
+            -680
+          ],
+          "query": false,
+          "brightness": 1.149999976158142,
+          "gateLocalPosition": [
+            0,
+            19.60000228881836,
+            1.4600067138671875
+          ],
+          "size": [
+            14,
+            0.75,
+            0.07999999821186066
+          ]
+        }
+      ],
+      "labelCount": 8,
+      "hiddenLabelCount": 8,
+      "level": 5,
+      "mainHeaderPresent": true,
+      "gatePresent": true
+    },
+    {
+      "shutters": [],
+      "mainHeaderTexts": [
+        "LEVEL 6"
+      ],
+      "mainHeaderSize": [
+        22.799999237060547,
+        2.680000066757202,
+        0.03999999910593033
+      ],
+      "previewAllowed": true,
+      "mounts": [
+        {
+          "touch": false,
+          "anchored": true,
+          "transparency": 0,
+          "name": "Status Mount",
+          "position": [
+            247.40000915527344,
+            49.86000061035156,
+            -685
+          ],
+          "query": false,
+          "colliding": false,
+          "gateLocalPosition": [
+            -5,
+            19.060001373291016,
+            1.1999969482421875
+          ],
+          "size": [
+            0.11999999731779099,
+            0.8500000238418579,
+            0.18000000715255737
+          ]
+        },
+        {
+          "touch": false,
+          "anchored": true,
+          "transparency": 0,
+          "name": "Status Mount",
+          "position": [
+            247.40000915527344,
+            49.86000061035156,
+            -675
+          ],
+          "query": false,
+          "colliding": false,
+          "gateLocalPosition": [
+            5,
+            19.060001373291016,
+            1.1999969482421875
+          ],
+          "size": [
+            0.11999999731779099,
+            0.8500000238418579,
+            0.18000000715255737
+          ]
+        }
+      ],
+      "enabledPromptCount": 0,
+      "promptCount": 0,
+      "mainHeaderPosition": [
+        247.1800079345703,
+        48,
+        -680
+      ],
+      "subtitles": [
+        {
+          "touch": false,
+          "headerTextGapY": 0.685002255439759,
+          "texts": [
+            {
+              "visible": true,
+              "text": "DEV PREVIEW",
+              "textScaled": true
+            }
+          ],
+          "colliding": false,
+          "anchored": true,
+          "alwaysOnTop": false,
+          "face": "Back",
+          "lightInfluence": 0,
+          "transparency": 0,
+          "name": "Mounted Access Subtitle",
+          "position": [
+            247.13999938964844,
+            50.400001525878906,
+            -680
+          ],
+          "query": false,
+          "brightness": 1.149999976158142,
+          "gateLocalPosition": [
+            0,
+            19.60000228881836,
+            1.4600067138671875
+          ],
+          "size": [
+            14,
+            0.75,
+            0.07999999821186066
+          ]
+        }
+      ],
+      "labelCount": 8,
+      "hiddenLabelCount": 0,
+      "level": 6,
+      "mainHeaderPresent": true,
+      "gatePresent": true
+    }
+  ],
+  "localFolderPresent": true,
+  "localFolderOwned": true,
+  "playerName": "ZenMeister02",
+  "policyReadError": "The current thread cannot require 'DevAccess' since 'DevAccess' has additional values for the Capabilities property: LoadUnownedAsset (and 3 more)",
+  "folderLevel5Allowed": false,
+  "modelRevision": 4,
+  "scope": "Read-only actual Studio Client scene/prompt inspection; not a connected nondeveloper or multiplayer test",
+  "folderLevel6Allowed": true,
+  "blockers": [],
+  "modelReady": true,
+  "originalLobbyHasLocalGateFolder": false
+}

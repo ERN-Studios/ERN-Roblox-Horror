@@ -1,0 +1,141 @@
+{
+  "reviewer": "Codex independent read-only source/geometry review",
+  "checkedAtUTC": "2026-10-02T07:37:37.194134+00:00",
+  "candidateSourceReview": "PASS",
+  "candidateFiles": [
+    {
+      "source": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.luau",
+      "reviewSnapshot": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/EndBlockades.ModuleScript.luau",
+      "bytes": 54707,
+      "sha256": "54ce897716c1c6b41132e0401739faa677a35ad2d02c60af350d1547890d1c69"
+    },
+    {
+      "source": "tools/lobby_reimagined/dev_gate_20261002/R4DevGateController.LocalScript.candidate.luau",
+      "reviewSnapshot": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/R4DevGateController.LocalScript.candidate.luau",
+      "bytes": 8306,
+      "sha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+    },
+    {
+      "source": "artifacts/lobby-end-blockades-20261002/Builder.candidate.luau",
+      "reviewSnapshot": "artifacts/lobby-end-blockades-20261002/review/final-candidate-snapshot/Builder.candidate.luau",
+      "bytes": 11490,
+      "sha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494"
+    }
+  ],
+  "studioMutationPerformedByReviewer": false,
+  "gitStageOrCommitPerformedByReviewer": false,
+  "authorityPolicy": "Studio source/editor fresh baselines; per-level authorization remains L5 IsAllowed, L6 IsLevel6PreviewAllowed including Zen; client shutters are presentation only.",
+  "findings": [
+    {
+      "issue": "Original wide outer columns allowed a small jump near sidewalk.",
+      "resolution": "Final66narrow columns have8.1273minimum outer height; exact final hash54ce897 is reviewed.",
+      "status": "fixed in candidate"
+    },
+    {
+      "issue": "Initial crown left2+studs below archcrest.",
+      "resolution": "Final crown max localY34.09 with measured arch-corner checks.",
+      "status": "fixed in candidate; appearance unverified"
+    },
+    {
+      "issue": "Initial CAS installer accidentally embedded installer-only globals into Builder.",
+      "resolution": "e724 installer embeds exact frozen Builder4861; candidate equality verified independently.",
+      "status": "fixed before scoped source write"
+    }
+  ],
+  "installerGuardReview": {
+    "reviewedSHA256": "e724231ca8e831a4a395447dc3dd49de6c08e6e01a6c37e7a18112a51110e319",
+    "embeddedThreeSourceHashesMatch": true,
+    "identityClassSourceEditorPinsInsideUpdateSourceCallback": true,
+    "foreignNamesPreserved": true,
+    "guardNote": "Strengthen decoded manifest SHA linkage to expected17b68ef. On completion after partial source write, current Builder baseline is4861 rather than historicala4c."
+  },
+  "offlineEvidence": [
+    {
+      "file": "tools/lobby_reimagined/dev_gate_20261002/test-receipt.json",
+      "result": "14casesPASS; exact-source mock lifecycle/policy only"
+    },
+    {
+      "file": "tools/lobby_reimagined/end_clutter_20261002/geometry-checks.json",
+      "result": "179pieces/180840extra triangles/66blockers/28lenses; measured bounds only"
+    }
+  ],
+  "triangleAccounting": "398644 = manifest placements217804 + added furniture180840; this excludes other runtime shop/hologram meshes and is not a whole-scene Stats measurement.",
+  "releasePending": [
+    "Actual Studio build/eye-level appearance and both-end/DJ/approach collision Play checks.",
+    "Actual authorized preview flow and unauthorized gate presentation/admission checks.",
+    "Actual bounded runtime performance measurement, source/editor export parity, native after backup, exact staged diff/commit and successful publish."
+  ],
+  "completedClaudeReviews": [
+    {
+      "response": "artifacts/lobby-end-blockades-20261002/review/claude-final-exact.response.md",
+      "receipt": "artifacts/lobby-end-blockades-20261002/review/claude-final-exact.receipt.json",
+      "canonicalModel": "claude-opus-5-5",
+      "effort": "max",
+      "verdict": "PASS, source/measured geometry only",
+      "reviewVersion": "V1 exact snapshots; unchanged function/security body applies to V3, V3 PLAN delta review separate"
+    },
+    {
+      "response": "artifacts/lobby-end-blockades-20261002/review/claude-final-concise.response.md",
+      "receipt": "artifacts/lobby-end-blockades-20261002/review/claude-final-concise.receipt.json",
+      "canonicalModel": "claude-opus-5-5",
+      "effort": "max",
+      "verdict": "PASS, source/measured geometry only",
+      "reviewVersion": "V1 exact snapshots; unchanged function/security body applies to V3, V3 PLAN delta review separate"
+    }
+  ],
+  "claudeNonblockingReviewSynthesis": [
+    "Finish installation before any Play/build so WaitForChild EndBlockades dependency exists.",
+    "Actual Play should inspect South foreground walk-through,side slivers,jump clearance,28fixture lenses,shutter/subtitle backing,authorized route and unauthorized presentation/admission.",
+    "Geometry DJ1.7566clearance is measured to backfacez128.49, not centre128.4; no receipt correction required.",
+    "Runtime added triangle count excludes other existing hologram/shop meshes; total-scene performance remains an actual runtime check."
+  ],
+  "finalOriginalCandidateHashesRechecked": [
+    {
+      "path": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.luau",
+      "matchesReviewedSnapshot": true
+    },
+    {
+      "path": "tools/lobby_reimagined/dev_gate_20261002/R4DevGateController.LocalScript.candidate.luau",
+      "matchesReviewedSnapshot": true
+    },
+    {
+      "path": "artifacts/lobby-end-blockades-20261002/Builder.candidate.luau",
+      "matchesReviewedSnapshot": true
+    }
+  ],
+  "finalCheckedAtUTC": "2026-10-02T07:41:56.006639+00:00",
+  "reviewVersion": "Historical V1 exact-source review; candidate hashes/parity in this record refer to the displayed original timestamps. Helper data was subsequently revised; see currentVersionReview.",
+  "currentVersionReview": {
+    "version": "V3",
+    "helperSourceSHA256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+    "record": "artifacts/lobby-end-blockades-20261002/review/v3-delta/codex-v3-review.json",
+    "CodexVerdict": "PASS for offline source/data/geometry only",
+    "actualClaudeDeltaVerdict": "PASS on measured evidence digest only; not exact omitted rows/source/images",
+    "baseline179Restored": "Exact V1 dictionaries",
+    "overlays": 40,
+    "geometryEvidence": "artifacts/lobby-end-blockades-20261002/review/v3-delta/delta-evidence.json",
+    "v2": "Rejected by actual root visual check, superseded; obsolete CLI intentionally canceled without response",
+    "response": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta-brief.response.md",
+    "receipt": "artifacts/lobby-end-blockades-20261002/review/claude-v3-delta-brief.receipt.json",
+    "exactRowV3Run": "Timeout600s, no final response/PASS; receipt preserved",
+    "finalCurrentFileHashes": [
+      {
+        "path": "tools/lobby_reimagined/end_clutter_20261002/EndBlockades.ModuleScript.luau",
+        "sha256": "a0153febfe35686a6d71e7a1cae3881069486fcdfdf71e734d980b30bd76280d",
+        "matchesCurrentReviewedSnapshot": true
+      },
+      {
+        "path": "tools/lobby_reimagined/dev_gate_20261002/R4DevGateController.LocalScript.candidate.luau",
+        "sha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+        "matchesCurrentReviewedSnapshot": true
+      },
+      {
+        "path": "artifacts/lobby-end-blockades-20261002/Builder.candidate.luau",
+        "sha256": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
+        "matchesCurrentReviewedSnapshot": true
+      }
+    ],
+    "finalCheckedAtUTC": "2026-10-02T08:03:02.574017+00:00",
+    "triangleAccounting": "438416 nominal manifest placements217804 + furniture220612; excludes other existing runtime shop/hologram meshes and is not whole-scene Stats."
+  }
+}
