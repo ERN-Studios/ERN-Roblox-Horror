@@ -1,0 +1,10 @@
+{
+  "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+  "class": "LocalScript",
+  "baselineSha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+  "baselineBytes": 8742,
+  "candidateSha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984",
+  "candidateBytes": 9252,
+  "baseline": "tools/lobby_access_spawn_20261002/spawn/FriendBoostClient.LocalScript.baseline.luau",
+  "candidate": "tools/lobby_access_spawn_20261002/spawn/FriendBoostClient.LocalScript.candidate.luau"
+}

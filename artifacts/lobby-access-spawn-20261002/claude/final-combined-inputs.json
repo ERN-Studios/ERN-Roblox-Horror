@@ -1,0 +1,64 @@
+{
+  "schema": "lobby-access-spawn-claude-final-inputs-v1",
+  "promptSHA256": "a8d31cc85ab98543b2f23e71c2a184e30e80a698c19ad7f92bcaa8591d765c09",
+  "combinedManifestSHA256": "e6e967dd5e75c85f7e22ea11d2ba801df2d1262a8a4141f435f3b5a20af71199",
+  "candidateCount": 9,
+  "allExistingFreshBaselineMatch": true,
+  "liveCaptureId": "dd47c97b-033d-40a3-9ae3-f23d88cacab1",
+  "inputs": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.GameManager.Script.candidate.luau",
+      "bytes": 178031,
+      "sha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Bootstrap.Script.candidate.luau",
+      "bytes": 1951,
+      "sha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "file": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.LocalScript.candidate.luau",
+      "bytes": 2554,
+      "sha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "file": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Friend Boost Client.LocalScript.candidate.luau",
+      "bytes": 9252,
+      "sha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "file": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.candidate.luau",
+      "bytes": 15539,
+      "sha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42"
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.Level5PreviewAccess.Script.candidate.luau",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard.ModuleScript.candidate.luau",
+      "bytes": 5666,
+      "sha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "file": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.candidate.luau",
+      "bytes": 11926,
+      "sha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7"
+    }
+  ]
+}

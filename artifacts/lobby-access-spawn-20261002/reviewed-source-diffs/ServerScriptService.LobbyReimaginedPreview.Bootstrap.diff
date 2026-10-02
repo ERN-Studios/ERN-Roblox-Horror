@@ -1,0 +1,63 @@
+--- ServerScriptService.LobbyReimaginedPreview.Bootstrap [fresh Studio BEFORE]
++++ ServerScriptService.LobbyReimaginedPreview.Bootstrap [verified Studio AFTER]
+@@ -1,23 +1,38 @@
+--- Build after a DEV joins; ordinary public servers avoid the preview bake cost.
+-local Players = game:GetService("Players")
+-local RunService = game:GetService("RunService")
+-local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
+-local started = false
+-local attempts, retryAt = 0, 0
+-local function begin(player)
+-	if started or attempts >= 2 or os.clock() < retryAt or (not RunService:IsStudio() and not DevAccess.IsLevel6PreviewAllowed(player)) then return end
+-	started = true
+-	attempts += 1; script:SetAttribute("BuildAttempts",attempts)
+-	task.spawn(function()
+-		local began = os.clock()
+-		local ok, result = pcall(function() return require(script.Parent:WaitForChild("Builder")).Build() end)
+-		if ok then script:SetAttribute("PreviewReady",true); script:SetAttribute("BuildSeconds",os.clock()-began)
+-		else
+-			script:SetAttribute("PreviewError",tostring(result)); warn("[Isolated Lobby Preview] "..tostring(result))
+-			started = false; retryAt = os.clock()+30
+-			task.delay(30,function() for _,candidate in ipairs(Players:GetPlayers()) do begin(candidate) end end)
+-		end
+-	end)
++-- GameManager builds and validates the public revised lobby before loading characters.
++-- This script only reports bounded readiness; it never races a second Build transaction.
++if game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0 then
++ script:SetAttribute("PreviewReady", false)
++ script:SetAttribute("BuildStatus", "Reserved round server")
++ return
+ end
+-Players.PlayerAdded:Connect(begin)
+-for _,player in ipairs(Players:GetPlayers()) do begin(player) end
++local began, deadline = os.clock(), os.clock() + 60
++script:SetAttribute("BuildAttempts", 0)
++script:SetAttribute("BuildStatus", "Waiting for authoritative lobby startup")
++repeat
++ local model = workspace:FindFirstChild("LobbyReimaginedPreview")
++ local lobby = workspace:FindFirstChild("ServerLobby")
++ local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
++ if workspace:GetAttribute("LobbySpawnMigrationReady") == true and model and model:IsA("Model")
++  and model:GetAttribute("LobbyReimaginedOwned") == true and model:GetAttribute("Ready") == true
++  and spawn and spawn:IsA("SpawnLocation") and spawn:GetAttribute("LobbySpawnRevision") == 4
++  and spawn:GetAttribute("LobbySpawnFloorModelName") == model.Name then
++  script:SetAttribute("PreviewReady", true)
++  script:SetAttribute("PreviewError", nil)
++  script:SetAttribute("BuildSeconds", os.clock() - began)
++  script:SetAttribute("BuildStatus", "Public lobby ready")
++  return
++ end
++ local problem = workspace:GetAttribute("LobbySpawnMigrationError")
++ if type(problem) == "string" and problem ~= "" then
++  script:SetAttribute("PreviewReady", false)
++  script:SetAttribute("PreviewError", problem)
++  script:SetAttribute("BuildStatus", "Safe original spawn retained")
++  warn("[Lobby startup monitor] " .. problem)
++  return
++ end
++ task.wait(.1)
++until os.clock() >= deadline
++script:SetAttribute("PreviewReady", false)
++script:SetAttribute("PreviewError", "Authoritative revised lobby readiness timed out")
++script:SetAttribute("BuildStatus", "Readiness timeout")
++warn("[Lobby startup monitor] Authoritative revised lobby readiness timed out")

@@ -1,0 +1,16 @@
+{
+  "schema": "lobby-access-spawn-strict-nine-sources-scope-result-v1",
+  "verified": false,
+  "expectedFailure": true,
+  "exitCode": 1,
+  "scopeMode": "runtime-sources-only",
+  "beforeCaptureId": "dd47c97b-033d-40a3-9ae3-f23d88cacab1",
+  "afterCaptureId": "2a0eb6ad-aa1d-4580-8a4c-b60008064944",
+  "manifestSHA256": "e6e967dd5e75c85f7e22ea11d2ba801df2d1262a8a4141f435f3b5a20af71199",
+  "verifierSHA256": "35e7ce734361af9c6fd1762500962a56bc6005240d3767d6463b318efe576dba",
+  "reportedFailure": "Unrelated Source changed ServerScriptService.Level 1 Systems.MazeGenerator",
+  "output": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope:94: Unrelated Source changed ServerScriptService.Level 1 Systems.MazeGenerator\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope', Line 94\n[Stack End]\n",
+  "reason": "Authoritative Studio capture includes two concurrent Level 1 Source changes outside the nine task patches. Do not restore these from baseline. A separate exact-pinned comparison must account for them explicitly.",
+  "studioWritesPerformed": false,
+  "publicationClaim": false
+}

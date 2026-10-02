@@ -1,0 +1,49 @@
+{
+  "schema": "lobby-access-spawn-concurrent-scope-integrity-fixtures-v1",
+  "passed": true,
+  "cases": [
+    {
+      "name": "exact-nine-plus-two",
+      "expectedVerified": true,
+      "exitCode": 0,
+      "passed": true,
+      "stdout": "{\n  \"concurrentSourceChanges\": 2,\n  \"remainingNativeForestPreserved\": true,\n  \"servicePropertyDifferences\": 0,\n  \"taskSourceChanges\": 9,\n  \"verified\": true\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "reject-spawn-change",
+      "expectedVerified": false,
+      "exitCode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent:141: Native changes outside nine exact task Source patches and two exact concurrent Source changes\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent', Line 141\n[Stack End]\n\n"
+    },
+    {
+      "name": "reject-unrelated-geometry",
+      "expectedVerified": false,
+      "exitCode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent:141: Native changes outside nine exact task Source patches and two exact concurrent Source changes\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent', Line 141\n[Stack End]\n\n"
+    },
+    {
+      "name": "reject-service-gravity",
+      "expectedVerified": false,
+      "exitCode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent:159: Service-level properties changed outside this task: Workspace\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent', Line 159\n[Stack End]\n\n"
+    },
+    {
+      "name": "reject-wrong-concurrent-pin",
+      "expectedVerified": false,
+      "exitCode": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent:95: Concurrent after pin differs\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope_with_concurrent', Line 95\n[Stack End]\n\n"
+    }
+  ],
+  "verifierSHA256": "6a292a754d6739f5a11346fc6ab01dab54a3a41f6e10bdc776681a56946dff61",
+  "studioWritesPerformed": false,
+  "gameplayClaim": false
+}

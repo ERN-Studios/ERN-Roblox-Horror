@@ -1,0 +1,151 @@
+{
+  "at": "2026-10-02T15:24:43Z",
+  "universeId": 10559217407,
+  "wrapperCandidateSHA256": "a87238d2189715a54f2db02a0b75d1d534a7c04841ab938628735294515a01c6",
+  "caseCount": 14,
+  "scope": "Pure fake tables; no Studio instance, Source, property or global setting changes",
+  "placeId": 131311258779917,
+  "passed": true,
+  "results": [
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 9,
+      "name": "public-ready",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": true
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 9,
+      "name": "public-delayed-shop",
+      "waitIterations": 3,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0.15000000000000002,
+      "passed": true,
+      "success": true
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "reserved-no-revision-build",
+      "waitIterations": 0,
+      "revisedBuilds": 0,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "shop-missing-bounded-fallback",
+      "waitIterations": 400,
+      "revisedBuilds": 0,
+      "simulatedSeconds": 20.00000000000015,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "builder-missing-safe-fallback",
+      "waitIterations": 0,
+      "revisedBuilds": 0,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "build-fails-safe-fallback",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "unowned-model-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "not-ready-model-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 0,
+      "name": "unexpected-center-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 5,
+      "name": "missing-scatter-floor-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 1,
+      "name": "non-solid-floor-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 1,
+      "name": "steep-floor-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 1,
+      "name": "incorrect-floor-height-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    },
+    {
+      "oldBuilds": 1,
+      "solidFloorChecks": 9,
+      "name": "changed-canonical-pad-rejected",
+      "waitIterations": 0,
+      "revisedBuilds": 1,
+      "simulatedSeconds": 0,
+      "passed": true,
+      "success": false
+    }
+  ]
+}

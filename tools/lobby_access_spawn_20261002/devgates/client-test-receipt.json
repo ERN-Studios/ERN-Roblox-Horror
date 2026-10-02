@@ -1,0 +1,79 @@
+{
+  "accessSourceSHA256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f",
+  "candidateBytes": 15539,
+  "candidateSHA256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42",
+  "cases": [
+    {
+      "name": "actual fresh allowlist rejects ordinary IDs, strings, NaN, infinity and spoofed tables",
+      "passed": true
+    },
+    {
+      "name": "nondeveloper sees two opaque colliding shutters and only owned bay labels/prompts hidden",
+      "passed": true
+    },
+    {
+      "name": "both shared developers retain both normal preview routes without shutters",
+      "passed": true
+    },
+    {
+      "name": "Zen sees both preview openings without general developer command expansion",
+      "passed": true
+    },
+    {
+      "name": "missing or erroring access module fails closed",
+      "passed": true
+    },
+    {
+      "name": "late Ready publication creates exactly one owned folder",
+      "passed": true
+    },
+    {
+      "name": "revision3 or nonowned model remains untouched",
+      "passed": true
+    },
+    {
+      "name": "late top-level atomic model arrival builds gates",
+      "passed": true
+    },
+    {
+      "name": "late kiosk descendant is hidden and replicated Enabled true is suppressed locally",
+      "passed": true
+    },
+    {
+      "name": "a kiosk moved outside owned lobby restores visibility and releases its signal",
+      "passed": true
+    },
+    {
+      "name": "ten Ready reset cycles restore baseline and do not leak connections",
+      "passed": true
+    },
+    {
+      "name": "atomic streaming removal releases all owned signals; reappearance rebuilds cleanly",
+      "passed": true
+    },
+    {
+      "name": "conflicting folder is preserved and no foreign geometry or visibility changed",
+      "passed": true
+    },
+    {
+      "name": "both shutters fit measured aperture and road-facing mounted subtitle without road projection",
+      "passed": true
+    },
+    {
+      "name": "fallback ComingSoon display matches original red design and configured 70/30 fill",
+      "passed": true
+    },
+    {
+      "name": "fresh valid original ComingSoon layout is cloned without mutating original 90% display",
+      "passed": true
+    },
+    {
+      "name": "original layout containing a script is not cloned",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Offline exact-source syntax, current DevAccess policy and mocked client presentation/lifetime; not actual Studio Play or server-authority proof",
+  "serverSourcesChanged": false,
+  "testCount": 17
+}

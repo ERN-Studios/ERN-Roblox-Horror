@@ -1,0 +1,87 @@
+{
+  "nativeAfterCaptureId": "2a0eb6ad-aa1d-4580-8a4c-b60008064944",
+  "sources": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sourceBytes": 178031,
+      "sourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "editorSourceSha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.GameManager.Script.luau"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "sourceBytes": 1951,
+      "sourceSha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d",
+      "editorSourceSha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Bootstrap.Script.luau"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 14842,
+      "sourceSha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd",
+      "editorSourceSha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.Level6PreviewAccess.Script.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "sourceBytes": 2554,
+      "sourceSha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256",
+      "editorSourceSha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.LocalScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "class": "LocalScript",
+      "sourceBytes": 9252,
+      "sourceSha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984",
+      "editorSourceSha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.Friend Boost Client.LocalScript.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "class": "LocalScript",
+      "sourceBytes": 15539,
+      "sourceSha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42",
+      "editorSourceSha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.luau"
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "sourceBytes": 12258,
+      "sourceSha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43",
+      "editorSourceSha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.Level5PreviewAccess.Script.luau"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard",
+      "class": "ModuleScript",
+      "sourceBytes": 5666,
+      "sourceSha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6",
+      "editorSourceSha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard.ModuleScript.luau"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "class": "ModuleScript",
+      "sourceBytes": 11926,
+      "sourceSha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "editorSourceSha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7",
+      "editorMatch": true,
+      "exportFile": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau"
+    }
+  ],
+  "count": 9
+}

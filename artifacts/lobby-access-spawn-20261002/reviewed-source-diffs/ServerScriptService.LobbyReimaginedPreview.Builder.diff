@@ -1,0 +1,18 @@
+--- ServerScriptService.LobbyReimaginedPreview.Builder [fresh Studio BEFORE]
++++ ServerScriptService.LobbyReimaginedPreview.Builder [verified Studio AFTER]
+@@ -30,6 +30,7 @@
+ 	local existing = workspace:FindFirstChild(NAME)
+ 	if existing then
+ 		assert(existing:GetAttribute(OWNED) == true and existing:GetAttribute("Ready") == true, "Inspect conflicting preview first")
++		require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(existing)
+ 		return existing
+ 	end
+ 	local manifest, kit = Bake.GetManifest(), Bake.Ensure()
+@@ -180,6 +181,7 @@
+ 	require(script.Parent:WaitForChild("LobbyPolishScene")).Apply(model)
+ 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
+ 	model.Parent = workspace
++	require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(model)
+ 	return model
+ 	end)
+ 	if not ok then model:Destroy(); error(built) end

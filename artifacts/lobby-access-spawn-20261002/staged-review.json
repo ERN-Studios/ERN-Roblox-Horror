@@ -1,0 +1,1296 @@
+{
+  "stagedFiles": 214,
+  "onlyTaskPaths": true,
+  "allAddedArtifactsAndMirrors": true,
+  "diskMatchesEveryStagedGitBlob": true,
+  "freshNineSourcesPinnedByNativeScope": true,
+  "whitespaceCheckExit": 2,
+  "whitespaceOutputLines": 697,
+  "whitespaceNotes": "Exact authoritative Studio Source and historical baselines are preserved byte-for-byte; any preexisting Source whitespace is not silently reformatted.",
+  "files": [
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/after/backup-summary.json",
+      "gitBlob": "1633dc635fbe641b4bd28500543c1d065e338656",
+      "bytes": 1223,
+      "sha256": "c56e4a5339bf897f7e60e8e9caff1d516b72d1d77d5ef602369938c14f7bf5ab"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/after/durable-backup-receipt.json",
+      "gitBlob": "155b7576b2ba6872e6c002fa3dd0a3d05b108bf2",
+      "bytes": 24291,
+      "sha256": "145a58258eba4f0565cac662fbd46e7a25f4900439e43c4c7ab0304531c01f20"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/after/source-inventory.json",
+      "gitBlob": "ba1a84e5e3528fefec7c4c5f4cbfa0aafa671d11",
+      "bytes": 81442,
+      "sha256": "cb8f0e34c57fb8676670814d11047637908f29e371a3469f82aec685c44dd53e"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/before/backup-summary.json",
+      "gitBlob": "75da65b9e25010cbed316947a5cbfa75df543e94",
+      "bytes": 1225,
+      "sha256": "8e62a182d298e1bfd0714d9d14d86ae2055da43e74f559eaea6388e6ed4431e0"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/before/durable-backup-receipt.json",
+      "gitBlob": "a7736c5bb9cc32868a25b5bbd7f5f75ce99edf9d",
+      "bytes": 24294,
+      "sha256": "8774bb7000c300415d21b86466b5f5c4e529740c9f674d9aa7c4d8a647dd6dd0"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/before/source-inventory.json",
+      "gitBlob": "c5e2e8e6187c3d02ade6a53091cf9ef7a5334be7",
+      "bytes": 81080,
+      "sha256": "90a57b97c8cf28649b8c800a741486fb7b4873d66e79686b645f6cba6ed40ccc"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/concurrent-source-pins.json",
+      "gitBlob": "0bd95fc021648379ad8b813a1514ab5ebc2873eb",
+      "bytes": 1371,
+      "sha256": "d5160a4217479cfe646b2885928b667d38bd6f08887f4c9326e2ae6b40fe4d9e"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/concurrent-source-provenance.json",
+      "gitBlob": "73d8eb5ed628dc1a2a51290c4e0a3255ada102ed",
+      "bytes": 924,
+      "sha256": "b8c29b05b74e3c5aa44f6e83bc08d7f77ac9dfbcdbeaa7b5d6a9310179f9923a"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/frozen-tools-proof.concurrent.json",
+      "gitBlob": "e89aff98461d1505809e4434a9a1330f5a74ea11",
+      "bytes": 795,
+      "sha256": "1891753d1b50811a001a0bbc50af570fad1637527597b57b4d54a7bba9dab324"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/frozen-tools-proof.final.json",
+      "gitBlob": "93e796e14e82ad4e4db95bc922b1527ba025676e",
+      "bytes": 2357,
+      "sha256": "0cdedcc91f8c3c7ebb96137ff3c40f1b532f7b85e2e5ec91d78aa1120cdeddd5"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/frozen-tools-proof.initial.json",
+      "gitBlob": "f0ea62a983ddd352382ca64aa97ecbae0d2763d1",
+      "bytes": 1895,
+      "sha256": "b45766a0176aa87aa59f304d664d797d681efa38a6bf903d12640cb05a81d3b3"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/frozen-tools-proof.json",
+      "gitBlob": "dd5314d84c205284ce339d1734c219911ea0de7f",
+      "bytes": 1929,
+      "sha256": "c713b119040c4cbd5649d99c90afea00715fac24ffe29a1d4ae05b7ab3330dac"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/native-scope-fixtures.json",
+      "gitBlob": "d619469c4590b77ebfe200d5347851f58a3a491f",
+      "bytes": 2051,
+      "sha256": "d516901054ea1737bcd6ef9db3786550a41caf20cb2aaefd66a805ef58925547"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/native-scope-strict-nine-failure.json",
+      "gitBlob": "8235afccd6f5d2c9733e0aa77e77c675c542c516",
+      "bytes": 1182,
+      "sha256": "585f054833dc9a7f158be71bd0ecaee042a74b20b90b9d84fe9e92b9dab36423"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/native-scope-with-concurrent-fixtures.json",
+      "gitBlob": "5047f973b18c1d10cd83ce74a8ebf7bde0b9ad4a",
+      "bytes": 2608,
+      "sha256": "21ef244e910532d93973428b8b038a54d83e0f5a80c56c4aaf1fae2286f511f0"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/native-scope-with-concurrent.json",
+      "gitBlob": "723fe124edc9d5bb00b8093f2f50c6fd36a53806",
+      "bytes": 4944,
+      "sha256": "0fc1d136188bcfd75dd0e8c3a020aadbfe6b4d8302c5abf8e5529fe06b83a5f3"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/backup/recorded-service-properties-scope.json",
+      "gitBlob": "bf28f0300363a9b87a4e4956549f842b16299b0b",
+      "bytes": 1590,
+      "sha256": "483039f6675598dc7bf7f63a3913523565aeaafd4a243a8b64385222b185db49"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/ServerScriptService.GameManager.Script.luau",
+      "gitBlob": "0478f50fe7a37ba75e0751d6f0351803d6679178",
+      "bytes": 174786,
+      "sha256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/ServerScriptService.LobbyReimaginedPreview.Bootstrap.Script.luau",
+      "gitBlob": "72d288f89ee1e669fdad83e919a25c12dc4340a9",
+      "bytes": 1217,
+      "sha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau",
+      "gitBlob": "2de5d992c3d60c085806dc92881c4b3bd732a4ba",
+      "bytes": 11780,
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/ServerScriptService.LobbyReimaginedPreview.QueueBridge.ModuleScript.luau",
+      "gitBlob": "afbee28c4906ccbfc728cb82627a4e5b93d3e48a",
+      "bytes": 20289,
+      "sha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController.LocalScript.luau",
+      "gitBlob": "7a4b14b70c9e77b60d7335359b3ce769ba07bbfd",
+      "bytes": 4848,
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.luau",
+      "gitBlob": "69f311d067e81e5a1885c19c39be2c797c6c4284",
+      "bytes": 8306,
+      "sha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/baseline/manifest.json",
+      "gitBlob": "24dab5f4758f197a5c5432796468cbbf55267c42",
+      "bytes": 80019,
+      "sha256": "84ed4dfb8794704e2b954e08f483aeb3f6240d75bc803cecc702fe361e3ee323"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/compact.prompt.md",
+      "gitBlob": "bab70a0a339c5a28dcb96410155b0dd4511125a2",
+      "bytes": 22661,
+      "sha256": "02e74cf8fec278087e0b82270ac1000d21b2cd22c49fb242ba51ee283f8a81c1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/compact/receipt.json",
+      "gitBlob": "44203bd17ea4893ea545aadae1df72662a0ad469",
+      "bytes": 1884,
+      "sha256": "7e3319964bea8472e5261bbd9e69503a74aa8ef6b12acd16996b4c51810ec800"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/compact/response.md",
+      "gitBlob": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/compact/superseded.json",
+      "gitBlob": "f9b7c7b710227b26e743efa004e0f93c95ebd137",
+      "bytes": 346,
+      "sha256": "8c4bd296053309edf928b7b92c9c7cf9a27161745e94d03fc707b514693f8524"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/final-combined-inputs.json",
+      "gitBlob": "e49a8c2078f85b7a8d772157876c6cb78a4e95a4",
+      "bytes": 3250,
+      "sha256": "e793b16931d4e41c85c544f097c757ab11f3a76759a9a6822758d1c28c2528e7"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/final-combined.prompt.md",
+      "gitBlob": "9b9c02dbecff968daafa712ea329bc51b1ae2327",
+      "bytes": 33933,
+      "sha256": "a8d31cc85ab98543b2f23e71c2a184e30e80a698c19ad7f92bcaa8591d765c09"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/final-combined/receipt.json",
+      "gitBlob": "b807367425dc6697ab7f5b79f0d8ab22439d11b2",
+      "bytes": 1891,
+      "sha256": "67a87c0fc9e4512e4602876a75407e28b4e605d39b8a6ff9bf45a4563c58f222"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/final-combined/response.md",
+      "gitBlob": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/focused-auth.prompt.md",
+      "gitBlob": "9b9eac5038c2e64fed9eb5f7411e5e0ad1146d01",
+      "bytes": 1833,
+      "sha256": "e99fbc0eb1c16bab102d927d06465b1d42dbf15306b5eb9223383cc01eda2a10"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/focused-auth/codex-followup-closure.json",
+      "gitBlob": "0df215c389e95c908f67d93c4e1d43e2f4d9efa0",
+      "bytes": 2431,
+      "sha256": "44908ca552a370305bb49e3945b0ebe888ac59505a59d7ac16885d7794d437b1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/focused-auth/receipt.json",
+      "gitBlob": "157a789e642c712d7db2daeff8aec904028a780d",
+      "bytes": 4224,
+      "sha256": "18184fdfb749aa9be17e6ef0c33bbb1f4a0ff0dd1629f6b2cbe5e563f107e88f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/focused-auth/response.md",
+      "gitBlob": "796530f1a9c66e815c82f015fd106a5cbff8578a",
+      "bytes": 671,
+      "sha256": "de40ea2984e82b081e2e848d4180a89c319d9161bb645d0d43edd229e6c0e533"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/input-manifest.json",
+      "gitBlob": "6e61b5d74aadcfd56b5ecde4a7a982303225838f",
+      "bytes": 1796,
+      "sha256": "2a2f407d72ffc700b8a63dd7846e27e7a167851d4f08ca2cb9655b34c760fb8d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/integrated.prompt.md",
+      "gitBlob": "94c6dd84b95cdd0b2083d6aad6751a7b4125af33",
+      "bytes": 36222,
+      "sha256": "9c801b9e7fd8bace5fa242b3f77bdb81ddc1bb3c948caa2ee65111811b29cbcb"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/integrated/receipt.json",
+      "gitBlob": "85ff7c6dd3f4bceaea98009364a2b4dba24e101e",
+      "bytes": 1887,
+      "sha256": "af4d033b051f6728e37cca5bb509d0cd6f20db02e25cca040a4eff3fe4838777"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/claude/integrated/response.md",
+      "gitBlob": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/concurrent-studio/ServerScriptService.Level 1 Systems.BlenderRoomRenderer.ModuleScript.luau",
+      "gitBlob": "f30aa806640361b616cad37dd3d86e0076195032",
+      "bytes": 25881,
+      "sha256": "dabdd59272720c7db6c7cd52c706c2c083c2b0cd9cd06f8689c004098a355a3b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/concurrent-studio/ServerScriptService.Level 1 Systems.BlenderRoomRenderer.diff",
+      "gitBlob": "02e8386e980bb6cbdc8bdbc584b19e0f3910549e",
+      "bytes": 5494,
+      "sha256": "a8802e0ed8793d08dc6f7fb433964cf541705561c418e1f5488be1c1647290a6"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/concurrent-studio/ServerScriptService.Level 1 Systems.MazeGenerator.Script.luau",
+      "gitBlob": "9be0dbb835d8974bcf7a82241d0d5a5e6a1499bc",
+      "bytes": 86076,
+      "sha256": "5edccd07abf8e670f6459d50abac9324d74fd474a8f1e1c9cf2b38bf5c586a34"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/concurrent-studio/ServerScriptService.Level 1 Systems.MazeGenerator.diff",
+      "gitBlob": "ff2ccb259c6e58807a92a68e1b175d7e3667b3d3",
+      "bytes": 2447,
+      "sha256": "a75095441a7f5a5f347c9cfaf4c74fe54cf19abf5ad94f2cafe478b5980a406e"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/concurrent-studio/pins.json",
+      "gitBlob": "9ff1e251f31496053220df0a0d92b8dfdcfbc3a6",
+      "bytes": 1208,
+      "sha256": "88624bf7434130398206d505fe2c6cd9a0e1fb0f29ea063164ae127bc0ee7032"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/BlenderRoomRenderer.concurrent-after.luau",
+      "gitBlob": "f30aa806640361b616cad37dd3d86e0076195032",
+      "bytes": 25881,
+      "sha256": "dabdd59272720c7db6c7cd52c706c2c083c2b0cd9cd06f8689c004098a355a3b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/BlenderRoomRenderer.concurrent-before.luau",
+      "gitBlob": "ec933fe53316582c2fb9bba42d907b310bc35f3b",
+      "bytes": 23598,
+      "sha256": "2057890603a40e357999f685784a79442c4b62413f6a0f9b9eb5b7d6c14f0ea3"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/BlenderRoomRenderer.concurrent.diff",
+      "gitBlob": "f696ecdcba22b2c0993465b37b9534b926452f7f",
+      "bytes": 5401,
+      "sha256": "185af530a37bfc132e522b3939a9ca86b719c5c1b0426a121ccf210859778af9"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/GameManager-source-editor-proof.json",
+      "gitBlob": "201f96a783f03b3902818308bf525491cb67a0f5",
+      "bytes": 181440,
+      "sha256": "f2c13282d096f83834e677b3e80556e5b854d5a588ff5c0acf2cd814ea2a6032"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/GameManager.live.luau",
+      "gitBlob": "0478f50fe7a37ba75e0751d6f0351803d6679178",
+      "bytes": 174786,
+      "sha256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/GameManager.post-install.server.luau",
+      "gitBlob": "1765bacc28528c6772025cb4a9ee8cae125a1ef7",
+      "bytes": 178031,
+      "sha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/MazeGenerator.concurrent-after.luau",
+      "gitBlob": "9be0dbb835d8974bcf7a82241d0d5a5e6a1499bc",
+      "bytes": 86076,
+      "sha256": "5edccd07abf8e670f6459d50abac9324d74fd474a8f1e1c9cf2b38bf5c586a34"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/MazeGenerator.concurrent-before.luau",
+      "gitBlob": "6fd84f6ebce20dc1a13c9d80b15269c420523b00",
+      "bytes": 85817,
+      "sha256": "c508fa6646a5ba215b58af507632451248dee49b14bdeb659e4a5458d1404bca"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/MazeGenerator.concurrent.diff",
+      "gitBlob": "92338e90f9c069c1da3cc670e9d48031db0ca4d2",
+      "bytes": 2354,
+      "sha256": "96b55110587c0d8cbaef762608b297573369392bdc50237481241cb573258a25"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/README.md",
+      "gitBlob": "b7c212e86a403c139d53696f16b06d5ca9950552",
+      "bytes": 5479,
+      "sha256": "a7dc5fe7004feb0833c6805ef4a7b69f14f838a207742ac7a4bf43227cbd8aeb"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ReplicatedStorage__DevAccess.live.luau",
+      "gitBlob": "4487acfe369c701f298dcb0abae84555bb86ee0f",
+      "bytes": 1353,
+      "sha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ReplicatedStorage__DevAccess.post-install.server.luau",
+      "gitBlob": "4487acfe369c701f298dcb0abae84555bb86ee0f",
+      "bytes": 1353,
+      "sha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/RoundCompletionRouting.post-install.server.luau",
+      "gitBlob": "1de5e5666a41d17d8de248e8cf97ac7831b5a3be",
+      "bytes": 75964,
+      "sha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level5PreviewAccess.live.luau",
+      "gitBlob": "9ccdf46a41b712af1b8ffc9c28d036eef0a3681b",
+      "bytes": 12232,
+      "sha256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level5PreviewAccess.post-install.server.luau",
+      "gitBlob": "a39f2233c5507638b8d3dc5a770d7a895d401c80",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level6PreviewAccess.live.luau",
+      "gitBlob": "6ff8d0f6a8cff98c95a1b6de9e6846098aae1fb4",
+      "bytes": 14689,
+      "sha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level6PreviewAccess.post-install.server.luau",
+      "gitBlob": "1da6c160db8c5150ef37a33e859094a286366e36",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__LobbyReimaginedPreview__Builder.live.luau",
+      "gitBlob": "2de5d992c3d60c085806dc92881c4b3bd732a4ba",
+      "bytes": 11780,
+      "sha256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__LobbyReimaginedPreview__QueueBridge.live.luau",
+      "gitBlob": "afbee28c4906ccbfc728cb82627a4e5b93d3e48a",
+      "bytes": 20289,
+      "sha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__LobbyReimaginedPreview__QueueBridge.post-install.server.luau",
+      "gitBlob": "afbee28c4906ccbfc728cb82627a4e5b93d3e48a",
+      "bytes": 20289,
+      "sha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/StarterPlayer__StarterPlayerScripts__Level6PreviewTransport.live.luau",
+      "gitBlob": "2df9bedc742d763536deb9cf8a5aa92249f365f1",
+      "bytes": 2509,
+      "sha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/StarterPlayer__StarterPlayerScripts__LobbyReimaginedQueueController.live.luau",
+      "gitBlob": "7a4b14b70c9e77b60d7335359b3ce769ba07bbfd",
+      "bytes": 4848,
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/StarterPlayer__StarterPlayerScripts__R4DevGateController.live.luau",
+      "gitBlob": "69f311d067e81e5a1885c19c39be2c797c6c4284",
+      "bytes": 8306,
+      "sha256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/campaign-route-closure-test-receipt.json",
+      "gitBlob": "fb98a6d49efc1a0297f090815dccc5fafd9a44de",
+      "bytes": 1842,
+      "sha256": "4dcb03150db25aae0d201fd81a930a2cdf0ed12b6fa7cc132e63b4066a948433"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/client-test-first-mock-failure.json",
+      "gitBlob": "832349045d2e2b25c9ed2ffaeb01c83ecb91485a",
+      "bytes": 3273,
+      "sha256": "61d4ef1990c5d743f6e244fccd069035b83d1192ec710c66a8cb6355a7484ff7"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/coming-soon-template-live.json",
+      "gitBlob": "85cb6724f5f584c2edf3c7278e4b0f659c9a3bfe",
+      "bytes": 19180,
+      "sha256": "df4a45d9fda959b24d0415b41f8820af99061644393724755f728904696bf0bb"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-ceiling-kit-readonly.json",
+      "gitBlob": "08b14fe6d8950c4fcc2a6f31a2e90db495a06055",
+      "bytes": 17201,
+      "sha256": "718d1f03164a55018dadf57ab7079b83be67771e92beba9e0a7c02b3da77da19"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-ceiling-relative-frames.json",
+      "gitBlob": "6c2cdd8a017e47660f86df652c56e8ba355ec920",
+      "bytes": 8162,
+      "sha256": "6ccf403dd72dea3fa2d35a707b3d8d9f0cfcf0b424906da1c0446b450339224d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-source-diff-pins.json",
+      "gitBlob": "0bfe16b5c18def2af9eb5cafa16fa9f097600788",
+      "bytes": 957,
+      "sha256": "708ade9c00ffb88c801eb7ba992b50cc350979b0f5b2d253dc3c95b320368b96"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-source-review-checks.json",
+      "gitBlob": "08989b19dfbc254d04f20ab221c8b3faf910dd89",
+      "bytes": 496,
+      "sha256": "bd685355b359dd9d8003319f433350a3aa283fb3d661cdd1a74e90dacef2617d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-studio-review.json",
+      "gitBlob": "b7090e6c6b81e9c4154e1975b2965e4ee9928bfb",
+      "bytes": 1530,
+      "sha256": "4a64479d4a2d5ca6c41816f9eeda53837acbe2f49ce763c33adad7effe660410"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/concurrent-studio-review.md",
+      "gitBlob": "9d34c65285e5de6125074b9bbd398d0969edfbb2",
+      "bytes": 3578,
+      "sha256": "cccbca3b39f8c78a4e09462199d1ad677ed511dfbe2d2454f24ba6d43adb22c6"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/focused-auth-independent-closure.json",
+      "gitBlob": "55596af42ae6b3dc302ca7e4744305bc2d6d2a7f",
+      "bytes": 2305,
+      "sha256": "e138c4a31005b4df1cf8861c40d84f297424701712fbf459fe37647a55f8a28b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/focused-auth-independent-closure.md",
+      "gitBlob": "850d120c24f8b080eb7f1fa3580e389a195b3599",
+      "bytes": 7480,
+      "sha256": "7cb3eb1f4475783243ac3f8589207099eac7b5c3eb55751a78098c3e66d051ef"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/live-core-source-editor.json",
+      "gitBlob": "aaaa6b437cebb311c150c3f6e4d28af71e7d91da",
+      "bytes": 95762,
+      "sha256": "ff0f6d80ae35b039872faa5c984aeef0a5345550897b0b390cb9c68786a758b1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/live-security-source-editor.json",
+      "gitBlob": "18f9e7d3e5f13b7239a8e218a01706523a50576b",
+      "bytes": 65448,
+      "sha256": "7f32e8700daedbd5b2a2bf61efe85701f39cb654934bcb8a511268cb1ee4be22"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/post-install-server-GameManager.json",
+      "gitBlob": "dd175c2d319173c94895690838898b27044a6541",
+      "bytes": 184795,
+      "sha256": "80b730b1e84be95801fa1cdb5ac93f3f63c419ab5e05eee2ff243a2f1c6ed86d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/post-install-server-Routing.json",
+      "gitBlob": "42ba6425c0a376948acd3ba30c0f4893d0dc8d4f",
+      "bytes": 79747,
+      "sha256": "487604c42cab62a2026e8cb23a53344f1a285be781c62bca8f2f7f10034603b1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/post-install-server-auth.json",
+      "gitBlob": "60addd74075ae4501a52d5188a2562e3252a4e8a",
+      "bytes": 55882,
+      "sha256": "39e1e08f2bb6d3600aa3037b50d78ff129634d09c9e45b8769d46ef85563ddbe"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/post-install-server-source-hashes.json",
+      "gitBlob": "ae40e5c761acec4ef38c966f7aa5edfeba173b33",
+      "bytes": 793,
+      "sha256": "bc36b5cf4aa9c6ee905bbeff2747d58d4648fca004896f11736748fed9cec441"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/post-play-edit-source-editor-check.json",
+      "gitBlob": "87a9c38309b8d2a8ddb1f86e1f34ba0cbcff9459",
+      "bytes": 1095,
+      "sha256": "609b3916cf5a1711bd1451048d70c410194fd293a6cfb06e3ba835f4ae72fe64"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/revised-gate-geometry-live.json",
+      "gitBlob": "fe51488c7066f6687ef680d6bfaa4f7768ef205c",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/server-test-first-mock-failure.json",
+      "gitBlob": "2efe49d5f0a453e008202e34edc4ca5009f631b3",
+      "bytes": 2520,
+      "sha256": "ad0ef74296f0b892084afcf65ca4668fe582e027da449baa9beef9c8991ba6e5"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/source-hashes.json",
+      "gitBlob": "20f318784bbce9faee3e8d1b969e1176681dbc91",
+      "bytes": 2114,
+      "sha256": "0a85a51e421717d468b36722ce68ae97e6ff75dc7872eb60bd62e59fba94b12b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/test-campaign-route-closure.luau",
+      "gitBlob": "30db7da5e5a7795624ef1eb307571881df2c7cf5",
+      "bytes": 5537,
+      "sha256": "94d2cff260b48f53e8b1b642f3b2886d03883e2f306011dcd46ddd1785153b22"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/test-concurrent-source-review.luau",
+      "gitBlob": "9348962d46aea8460037197495bc6149f155bdfc",
+      "bytes": 2927,
+      "sha256": "4fa7e770e4356b4822d3d6732a1feb25d3e038582fe3137711d583b3e92f6c81"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.GameManager.Script.luau",
+      "gitBlob": "1765bacc28528c6772025cb4a9ee8cae125a1ef7",
+      "bytes": 178031,
+      "sha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.Level5PreviewAccess.Script.luau",
+      "gitBlob": "a39f2233c5507638b8d3dc5a770d7a895d401c80",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.Level6PreviewAccess.Script.luau",
+      "gitBlob": "1da6c160db8c5150ef37a33e859094a286366e36",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Bootstrap.Script.luau",
+      "gitBlob": "a2d44ec75d4ebff627063e51846cb498d62095c8",
+      "bytes": 1951,
+      "sha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.luau",
+      "gitBlob": "31561c075082004e864f182cbf8978a10907c543",
+      "bytes": 11926,
+      "sha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard.ModuleScript.luau",
+      "gitBlob": "dbfb386f0710cbb5fdee69c43d061d3b2d858754",
+      "bytes": 5666,
+      "sha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.Friend Boost Client.LocalScript.luau",
+      "gitBlob": "8ac5564341514c7267539a09dfb4a1caa9a6fd3e",
+      "bytes": 9252,
+      "sha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.LocalScript.luau",
+      "gitBlob": "3da64e6a32bc81dddf2bca9d39be33edeca1b1ee",
+      "bytes": 2554,
+      "sha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.luau",
+      "gitBlob": "a8acbfd45bff296cde24e65de410d11126d7967c",
+      "bytes": 15539,
+      "sha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/fresh-source-after/manifest.json",
+      "gitBlob": "2dca4fb3edc8625ba31d3b16a7496992b208c8c0",
+      "bytes": 4526,
+      "sha256": "86e1051160c779bc99395d5cd5df0795121c9b5980a14e0327698e3e9074b684"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/git-stale-lock-recovery.json",
+      "gitBlob": "6b9d0c8fbd75bba90fa4e8b396328a96979be935",
+      "bytes": 249,
+      "sha256": "e77c55c09991c9fde39e0b72a74a5faf4c743ce0f70d8a8d588fb782768ba071"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install-editor-v2-frozen-inputs.json",
+      "gitBlob": "1c23a0de0ebfc61a09e1f8f263c59120cbeba22e",
+      "bytes": 324,
+      "sha256": "a63bfe431a2c18750626ea552b2aac96bba2184219c9e020ac43754d92ac71e1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install-final-frozen-inputs.json",
+      "gitBlob": "9dd8862b7b27069d1ba75b4f8d29f3a5d1650dd1",
+      "bytes": 164,
+      "sha256": "8a0a95ab820bc304a4fa42ca766bdfa7967a861e508479a12299360546322cec"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install-frozen-inputs.json",
+      "gitBlob": "6f49f715dfe3c6268c03f7e6a9f0e1a275b4edc4",
+      "bytes": 500,
+      "sha256": "56da8e506d9e8b11340363114be05c32fc52b65e891ddb4982e413e77d955de6"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install/editor-v2/install-receipt.json",
+      "gitBlob": "58ed07050f8a1d91d1c6d2596f4406b42566802a",
+      "bytes": 430,
+      "sha256": "946150d7f6138f4d541e829691e3c259f710d89ed0c2cb68a79ed1e815ba10fc"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install/final-verification/install-receipt.json",
+      "gitBlob": "7643ebf83f96fa16d25f58c149029468398e240f",
+      "bytes": 262,
+      "sha256": "9d0126d3c9defa67af273d48ba3605e1c494ac2b54ab1376d48e3680cd06c1bf"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install/final-verification/post-publish-receipt.json",
+      "gitBlob": "48d6b2150f6fcd8a1c641b3f6813dbe103b5bc13",
+      "bytes": 304,
+      "sha256": "59f8937596c1b83a85f09b9085fb629b2498c544a622a022a4a989689f4c15d9"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install/final-verification/pre-publish-receipt.json",
+      "gitBlob": "7643ebf83f96fa16d25f58c149029468398e240f",
+      "bytes": 262,
+      "sha256": "9d0126d3c9defa67af273d48ba3605e1c494ac2b54ab1376d48e3680cd06c1bf"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/install/install-receipt.json",
+      "gitBlob": "b0e1d8a3ab455042bc8b718e30d1bbfbcaef15f8",
+      "bytes": 1923,
+      "sha256": "ac1b0888b1496a760ff5c98b947c748ea374843c9abf435e886fd059708bcb6f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/actual-play-summary.json",
+      "gitBlob": "dff2cbe09cf4b0c525054faf12b3d4a3e05fc3e5",
+      "bytes": 2338,
+      "sha256": "cc718adf9e7f8973edd1df998dd669fd027ef42e89dcbba194bc95650905fa2b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/dev-respawn-floor.json",
+      "gitBlob": "7ed67d8b5c0183b4655f4d53844840b4a8830b7a",
+      "bytes": 2709,
+      "sha256": "03b9f2be5dc4c8c35e865bbc197b8d3661b8f4be17091e097f78dcbd81f7a756"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/ordinary-initial-client.json",
+      "gitBlob": "34422286eafa6d042040945b0f3c387d6f9c1be0",
+      "bytes": 20455,
+      "sha256": "a83728f437c05987b7ff50bb6505fc753d9cd578ae7d99f51219e83ea4855b8a"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/ordinary-level5-server-ejection.json",
+      "gitBlob": "db39b1dc283e8f2663f5757abf8fa588f17f5fb9",
+      "bytes": 200,
+      "sha256": "e05b28fac859861ffff0144b3905b0339393a5db2a62bc61cfaea96d826270d3"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/ordinary-level6-server-ejection.json",
+      "gitBlob": "2352417b10cf720ab7c78b9acafaee282310ca28",
+      "bytes": 217,
+      "sha256": "b3770c7ac5e82668eafc3114a6f628baf26822afb7f0b943157795d19c4e1e94"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/ordinary-public-level1-countdown.json",
+      "gitBlob": "2ca8ee5fdb2b45b1d3cb2f4f9aea09df2d6190bc",
+      "bytes": 193,
+      "sha256": "49349e97b6e20d443105c60ad270209e0346a661801518a075255f9cfc1be588"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/playtests/ordinary-public-level1-host.json",
+      "gitBlob": "fb7c3e1ae20fa470d0a71f21e75c1b2209171e80",
+      "bytes": 162,
+      "sha256": "455af9c8d7f491752275c1fc55e5db930f354e9ed2442696259ae4689044893a"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/publication-receipt.json",
+      "gitBlob": "033fa851605048216df9b945c4a92818eec510f7",
+      "bytes": 2581,
+      "sha256": "842290b8556aaf9d7fd449cc4b621efc1e3c7bf3ebdb7e468c83b0be80316e84"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.GameManager.diff",
+      "gitBlob": "e00958b2665bf552a405f9179e348c676134b166",
+      "bytes": 4208,
+      "sha256": "4b7db6a0fa7cf5492de29ae714d025da8a6314ae2f721f7a2280fb7682d78899"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.Level5PreviewAccess.diff",
+      "gitBlob": "714c8fdf16caacefe9a9b6795a539dae887113cc",
+      "bytes": 882,
+      "sha256": "1673532c5eccaee39893f24594895c640b48c28f3f9b1e9109cce1b1e98e58f5"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.Level6PreviewAccess.diff",
+      "gitBlob": "006d964e9aade78ae523fc50e9ee904dc7f5db65",
+      "bytes": 920,
+      "sha256": "34383a3c5f09627a5b341ab31b6bbdb2d1b93a9136d82326cd2b5ebb5b10c599"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.LobbyReimaginedPreview.Bootstrap.diff",
+      "gitBlob": "b8eaf70923928cbaa338b0684ff942cca0a1868f",
+      "bytes": 3402,
+      "sha256": "6c69ce36c16f74a0a5cc0caea3d495ba83a54c8125d339b39a8edfe5398a9d1f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.LobbyReimaginedPreview.Builder.diff",
+      "gitBlob": "007d2596d92c1aa257a2705d7a6f2154646a7df5",
+      "bytes": 1007,
+      "sha256": "14f4c34e2a03673594bab3e00f8b85db2338cd1ee50e6e99d9e4913d335b9582"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard.diff",
+      "gitBlob": "b6271943103959129e223a7f44dc00bcee196eae",
+      "bytes": 5972,
+      "sha256": "c9655b98a62e30ae8bb932713059b7a8ba9f9c2f059714d94dce3d2d21f805d7"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/StarterPlayer.StarterPlayerScripts.Friend Boost Client.diff",
+      "gitBlob": "2e07eef0acf42a758a58a1b754026d8f1fb1e584",
+      "bytes": 1480,
+      "sha256": "6fbbc6c7dd9d469f653b471ec2b2c63128bdabb458b2c520a03f18cc203f9d0d"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.diff",
+      "gitBlob": "4e0c7f0d8c89127c8d22c000f7ac0e705d807b80",
+      "bytes": 567,
+      "sha256": "0831a40cdb4c79a6a115b62491a4c26d5c4521427c0c9467ccded7aa7be53838"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/reviewed-source-diffs/StarterPlayer.StarterPlayerScripts.R4DevGateController.diff",
+      "gitBlob": "22624739758ba11af3ee523c2695b7d26fcb7810",
+      "bytes": 9303,
+      "sha256": "921b00b6c665e5277514af7ce40ed292ba54a3be339ee81eb5f7e8a71c8617a2"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/dev-level6-opening.jpg",
+      "gitBlob": "8d4a12a15f3283cfd6ea60272e350995058c1c7d",
+      "bytes": 225941,
+      "sha256": "2e0e3d04612c855eb0e917829b448e856c33a07e75be811b397072a11560da4c"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/dev-level6-preview.jpg",
+      "gitBlob": "a7559d03e8785b0ac9904eccd951e21c229a8580",
+      "bytes": 102993,
+      "sha256": "8c712d2b408da638c906d12bf86e11535913c24d61e8c95fe52dbf2f2ce21c61"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/dev-new-lobby-spawn.jpg",
+      "gitBlob": "0bc965bca3d76f55e5eac956d98f63eab637c282",
+      "bytes": 247165,
+      "sha256": "5519d7891a9222ec064ab4f001fabad9eb74a22857bef94474ed189ce8e224f1"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/dev-return-new-lobby.jpg",
+      "gitBlob": "5c02a7239db247c000b7e2a51bc5674f3a402b06",
+      "bytes": 210274,
+      "sha256": "c439684bc3d372346fbbd52b5c3274f66c43ab1bf32e4e89e9c6ba68cf89df9c"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/ordinary-level5-coming-soon.jpg",
+      "gitBlob": "278ddc911aed2e569cc08dcddcdedba617fbc6c6",
+      "bytes": 213285,
+      "sha256": "de71b8d2658aaf1c1d52058c74ff29401d442c1e19f629c4a2e5fb1783443452"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/screenshots/ordinary-level6-coming-soon.jpg",
+      "gitBlob": "a849d1e0ac8e6e8d8439cb5fc7163498087517eb",
+      "bytes": 208672,
+      "sha256": "d896e656d653fe55d82ad9ce824f522d633a64a0366099dd42669af6aeaab230"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/README.md",
+      "gitBlob": "0e565efcd0d5c05e2eb125a485296d6c598af616",
+      "bytes": 6226,
+      "sha256": "c194da11f44678d4664bd08cd1ff98106dd3adecf370773469d35eae173bcf4f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/builder-and-bootstrap-source.json",
+      "gitBlob": "0bab0919a7a965b85c10dbb66b8191344b1f2b66",
+      "bytes": 15928,
+      "sha256": "fbad70f5239f70709c491a319de724804c621a8c4a8dec57cf35db26b2b96a86"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/candidate-baseline-sources.json",
+      "gitBlob": "5ebe7cd05c0e9e97be1869d198d4fc2c9a4af192",
+      "bytes": 202105,
+      "sha256": "fd047f72978d44106ce07bd07f13678a0e2be1ded4aced2b2d4379f7de59e7ee"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/friend-boost-baseline.json",
+      "gitBlob": "0d5996dbb8db62334a59796244703d4ae6a93d99",
+      "bytes": 579,
+      "sha256": "9f5168021f3e22c7ac4170f0ed2f04efc541b41555efc167d0c24cdc0f0d00a7"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/friend-boost-compile-result.json",
+      "gitBlob": "bb98fc1cf2c0be524ddec651a2b87714f5a98d0f",
+      "bytes": 224,
+      "sha256": "45fdfce908bd7ed68a1602f8d97e4f6304105de55e08227814b5a3f9aca5e779"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/level6-preview-transport.json",
+      "gitBlob": "97e2506a76242bc525d9b3ad36aa0305a7326186",
+      "bytes": 3105,
+      "sha256": "2e4dd394f1c65137f38008643e68cdfb04ae62357dbfc94c9c0cf9e81a9b2903"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/lobby-literal-hits.json",
+      "gitBlob": "434cd442a00e3ebcd89b3f00b085d0a35e320fa3",
+      "bytes": 72100,
+      "sha256": "160f467382931182ecda20cf22123bf74c45df178ab1c535c1623ff1370f7d78"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/preview-return-streaming-audit.json",
+      "gitBlob": "f81f2708912fd3e83fc62821b0d8604119e44c81",
+      "bytes": 12375,
+      "sha256": "fe1412850b9d5cb6f2c42c80c3567177a14bd7c720d44d0b640b74ff40174098"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/source-excerpts.json",
+      "gitBlob": "e187ff615ad547874b4b984d1ebfcba9bd2adbc6",
+      "bytes": 39002,
+      "sha256": "206655ac497b63b0155d844d1e869fdf2e83e0aea56a8eb7598ba719e6de3998"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/source-hashes.json",
+      "gitBlob": "3d70731c12d5befe6f5b43c8dc43a546cd26aa77",
+      "bytes": 3465,
+      "sha256": "f7d7019b31660b9651999f177e41b871015e1e3538ad8438a8c9bdae7c2468bf"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/spawn-audit/startup-mocked-fixtures-result.json",
+      "gitBlob": "2988de80ac2b30ef1afff17bad32caf4150a3cc2",
+      "bytes": 3648,
+      "sha256": "66241b80b1b1332f3aae070b1072ac60e59b329a57c519c8f37dd168ed4e8326"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/verification.md",
+      "gitBlob": "2fe811667a89c78272b452d4510c1e3b5a4056bc",
+      "bytes": 5669,
+      "sha256": "18ee8a920bfc1e1a5e7af8e1075d83eefc4a51bca693343bff519928b57fda9a"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/CONCURRENT_SCOPE.md",
+      "gitBlob": "38c6eac163ac31e48e9b41c1ed38d30ce6b97f5e",
+      "bytes": 2906,
+      "sha256": "0d9bb260bdfc547e252ef1fbb8e2ae7c41df3f0dbfe6b33af9af8e5e180e259f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/README.md",
+      "gitBlob": "993644bb0a80e71dc08abdcd1d8c6a1ddb998be7",
+      "bytes": 4677,
+      "sha256": "c688cc625766ff2e14bdbc5eac3947529ee23bc1e757212dfb543dd636c44655"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/build-main-lobby-edit.luau",
+      "gitBlob": "6d89b6002c78bf6dadb8eb62932057d0a00aef46",
+      "bytes": 3941,
+      "sha256": "a3e7de86d53b7f52dfd9d8660e8a5d2307e98510c3f281367490c1669ecfb2b6"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/capture-readonly.luau",
+      "gitBlob": "df259cb05442d5e02d5e22d32c3cc0bcfdd6e26a",
+      "bytes": 11728,
+      "sha256": "56bb00f2193a2b618fed7bf9524d5bfbea40b1fcdc475157506ccbb065cd30fe"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/claude_review.py",
+      "gitBlob": "d1362db64933681c73aa9479b0b31edb6fc38b0a",
+      "bytes": 4585,
+      "sha256": "a2cbdd60f584e820224d1557e608d9b2bfc0893e3e609fd244a1e2006f89279f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.GameManager.Script.candidate.luau",
+      "gitBlob": "1765bacc28528c6772025cb4a9ee8cae125a1ef7",
+      "bytes": 178031,
+      "sha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.GameManager.diff",
+      "gitBlob": "4a8b5de6d1f1d79862b184814eaf81699781bf75",
+      "bytes": 4189,
+      "sha256": "5a448a21111223f20a39f0de50a30c5b3139eab7ee80d2b584fe153142a171c0"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.Level5PreviewAccess.Script.candidate.luau",
+      "gitBlob": "a39f2233c5507638b8d3dc5a770d7a895d401c80",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.Level6PreviewAccess.Script.candidate.luau",
+      "gitBlob": "1da6c160db8c5150ef37a33e859094a286366e36",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.Level6PreviewAccess.diff",
+      "gitBlob": "08f152f252267bf4b68766b1465ab126f23fadfe",
+      "bytes": 901,
+      "sha256": "f8567b8134d01c671d0a4183225b3a4ee8d31beec36fbe7cec75153bd7928ab7"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Bootstrap.Script.candidate.luau",
+      "gitBlob": "a2d44ec75d4ebff627063e51846cb498d62095c8",
+      "bytes": 1951,
+      "sha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Bootstrap.diff",
+      "gitBlob": "179c335839b33d79c2a31ea0c04bf347f891c1d5",
+      "bytes": 3383,
+      "sha256": "e0d7f98ca9cc85fd8072d9a7c9d1b7c2a5cb77169afaa05e9447fbc464f96259"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Builder.ModuleScript.candidate.luau",
+      "gitBlob": "31561c075082004e864f182cbf8978a10907c543",
+      "bytes": 11926,
+      "sha256": "6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.Builder.diff",
+      "gitBlob": "9acb2df1b0b6a723d88faef61e39534a73dec60f",
+      "bytes": 988,
+      "sha256": "48138641f5dcfbfa6ca153ab22b40ac14be60555fb64f3641094c7c99cc3693d"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard.ModuleScript.candidate.luau",
+      "gitBlob": "dbfb386f0710cbb5fdee69c43d061d3b2d858754",
+      "bytes": 5666,
+      "sha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Friend Boost Client.LocalScript.candidate.luau",
+      "gitBlob": "8ac5564341514c7267539a09dfb4a1caa9a6fd3e",
+      "bytes": 9252,
+      "sha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Friend Boost Client.diff",
+      "gitBlob": "bf4077e3af5eada1ab607f3a9656287ffc6a4466",
+      "bytes": 1461,
+      "sha256": "28f373161371375502172be5a44c546d81b23cd94a09dcf3a8bf6daf531f270c"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.LocalScript.candidate.luau",
+      "gitBlob": "3da64e6a32bc81dddf2bca9d39be33edeca1b1ee",
+      "bytes": 2554,
+      "sha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.diff",
+      "gitBlob": "ddce6f30e4393562ccd6d1aeb0c5eb6ed67d36fb",
+      "bytes": 548,
+      "sha256": "73d6be2222d2d8cea35aedd11cd7945c6086baa38816dee33e9b2d6dbf1bdd70"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/StarterPlayer.StarterPlayerScripts.R4DevGateController.LocalScript.candidate.luau",
+      "gitBlob": "a8acbfd45bff296cde24e65de410d11126d7967c",
+      "bytes": 15539,
+      "sha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/combined/manifest.json",
+      "gitBlob": "b08f2f06e6b1a5f81fb8ff37c6a20c4c37ee4231",
+      "bytes": 5558,
+      "sha256": "e6e967dd5e75c85f7e22ea11d2ba801df2d1262a8a4141f435f3b5a20af71199"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/Builder.integration-fragment.luau",
+      "gitBlob": "38582051f7c0829b16dfcab2c78ac9fec2696b60",
+      "bytes": 416,
+      "sha256": "747a04a9129d957f53036f7b31d5bbf763532de52dbec2b1816d7aa8391bec7b"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/DevBayAccessGuard.ModuleScript.candidate.luau",
+      "gitBlob": "dbfb386f0710cbb5fdee69c43d061d3b2d858754",
+      "bytes": 5666,
+      "sha256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/Level5PreviewAccess.Script.candidate.luau",
+      "gitBlob": "a39f2233c5507638b8d3dc5a770d7a895d401c80",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/R4DevGateController.LocalScript.candidate.luau",
+      "gitBlob": "a8acbfd45bff296cde24e65de410d11126d7967c",
+      "bytes": 15539,
+      "sha256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/README.md",
+      "gitBlob": "f3f1ddf2a86192c6ab8205f5d55a053404743f98",
+      "bytes": 4409,
+      "sha256": "2aee1f6905e91d6a6ca0c471dc8e03f2be5a11379efff624813a3c1de244ddb0"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/candidate-manifest.json",
+      "gitBlob": "4e8ce7f5f1d553d06f046001626772ed8e8f6d67",
+      "bytes": 1175,
+      "sha256": "db99878bd8eeb6faa0404fa61b5793e98a0aa8977e0e6e5365e61eb19b19c08c"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/client-test-receipt.json",
+      "gitBlob": "45f0f1de8a775ea9f4267653e066b5fc7d5f0fb3",
+      "bytes": 2547,
+      "sha256": "2ab30fde9646948b94378dc73775842b04b4904c847ce72804009491323a26d0"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/mock-fixture.luau",
+      "gitBlob": "e68c7148579744742191ae483e98f6edc38a3fd0",
+      "bytes": 7909,
+      "sha256": "2b00f10521c91da1713f62fc8f662a446183589ebe2003fe68bea291a98b8160"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/server-test-receipt.json",
+      "gitBlob": "de14d6cd28f7b8649a67f143db1d0a004589a1fb",
+      "bytes": 2370,
+      "sha256": "510b1842764e9e3e153d041b495463403049c77896791b04cc1cd30307053f7f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/test-dev-gate.luau",
+      "gitBlob": "60a5a29d5a0f26b82194560d6da917b592eb7033",
+      "bytes": 19230,
+      "sha256": "42b27dd12e7d31052583862cdab2d2ed22077cdb3b482a60a593b0dbc3e69400"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/devgates/test-server-guard.luau",
+      "gitBlob": "5731b8b783c9d37627613f3b3f0b7cc5107e6dbd",
+      "bytes": 11420,
+      "sha256": "f9e401d380edac709c5f5911736e4d258f6651d886ffb866a2e02508e47e3f6a"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/input-manifest.json",
+      "gitBlob": "764bc011910115be72751d7f61705971252cdc80",
+      "bytes": 268,
+      "sha256": "3abd18c0adf25f26293da8bc717f45e790136c3b90e9f0c82f489460c35a678f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/install-builder-editor-followup.luau",
+      "gitBlob": "41f68cc797bf18a2b17bd392f1cc21a6f7c24330",
+      "bytes": 1934,
+      "sha256": "5cc15799a1b1b288fc760654473060f04e22f18200aee8ddc334cb4531aca918"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/install-scoped.luau",
+      "gitBlob": "aebe222cf5aa45c4a3250dc7c902c7ed36e3c5f4",
+      "bytes": 4111,
+      "sha256": "f2e0fed9b4da586f67d605441adae10f31270dc8375626eb2464873c14ea1a65"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/prepare_combined.py",
+      "gitBlob": "165a589f115ac0eeba5577eff73338afdda7106c",
+      "bytes": 4081,
+      "sha256": "680cb0a8b9cc4b75418f1dae18896cc47ee421c13ae37cb3be88dfad2185230b"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/receiver.py",
+      "gitBlob": "7190d5e40c7dd203f6190d7113d23d0967869f91",
+      "bytes": 3931,
+      "sha256": "249b6519f0af224f5493afd8273bb65004a2558960b3fe03d6aad4a249d72fad"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/recovery-provenance.json",
+      "gitBlob": "7463677f6352371ff190193c2d582cdc60cce6ff",
+      "bytes": 837,
+      "sha256": "0f31e7f1f68c4f3104f010e9c9ec3a7d2390f2b3ca8650533b4bd728b1ffca7a"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/recovery/assemble_native_backup.py",
+      "gitBlob": "c51875e6d72732f6e8a2c5d2e50865bbde9170f3",
+      "bytes": 4774,
+      "sha256": "1809a57bb38c81ab6bf2c4f018b7b2236a5ddd206ce87cb9e8142310170f24e0"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/recovery/pack_native_backup.luau",
+      "gitBlob": "891dff20dfa058dcedc9e887dc7ed8ba97707ac6",
+      "bytes": 5871,
+      "sha256": "42619b1ef256a1b22a862c2e9387fe9ff69cf987ff1c651afd1a24d4dcb4029d"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/recovery/verify_native_recovery.luau",
+      "gitBlob": "f20563058ec4baa5fb330dd3a74c5dd24a6e0a75",
+      "bytes": 6123,
+      "sha256": "0eff36b027d3019bb83a98cbca4b2a9f266738f1cdcc3c0047a905410eff3927"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/serve_install.py",
+      "gitBlob": "948b92c01fe099fe7dcaf4511ff8c01341630e5c",
+      "bytes": 2079,
+      "sha256": "9edb3bbcce0dac17a162651631c6acda386fecb3ee19350d92dcc773287f9775"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/service-property-schema.json",
+      "gitBlob": "2d7fd7ac6a3d6bfca2fe4123e5fa9d29704bd1d2",
+      "bytes": 29210,
+      "sha256": "f9b340d8ceb219d64226320a1a7b9af2f00e2fb2bd81b3355c100423bf82ac08"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Bootstrap.Script.baseline.luau",
+      "gitBlob": "72d288f89ee1e669fdad83e919a25c12dc4340a9",
+      "bytes": 1217,
+      "sha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Bootstrap.Script.candidate.luau",
+      "gitBlob": "a2d44ec75d4ebff627063e51846cb498d62095c8",
+      "bytes": 1951,
+      "sha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Bootstrap.scoped.diff",
+      "gitBlob": "1c0425759426e49acd533f0d3f19544fb1062b12",
+      "bytes": 3375,
+      "sha256": "a55d468adc4c3a5e1a92fe03eb63a90ca88b42f553c0ac4d9bbf8bb63bbcc037"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/FriendBoostClient.LocalScript.baseline.luau",
+      "gitBlob": "b7ecf42e1f059c2e738447cfa0b6a0452128015e",
+      "bytes": 8742,
+      "sha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/FriendBoostClient.LocalScript.candidate.luau",
+      "gitBlob": "8ac5564341514c7267539a09dfb4a1caa9a6fd3e",
+      "bytes": 9252,
+      "sha256": "cc1de5da96026536aa278e46aa0506bd0c0777816fcf93cf33d6bbf79bda0984"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/FriendBoostClient.scoped.diff",
+      "gitBlob": "3d54dd8ba4c8d63302d28d2c7095d35c29d0310f",
+      "bytes": 1453,
+      "sha256": "937dcd19a5d27e2ab11a69c28a904f6ce9e780527ea2a2a286a9540193000778"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/GameManager.Script.baseline.luau",
+      "gitBlob": "0478f50fe7a37ba75e0751d6f0351803d6679178",
+      "bytes": 174786,
+      "sha256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/GameManager.Script.candidate.luau",
+      "gitBlob": "121698f4bac5a0ec8d70b040fc1ed8d3fe9d28b3",
+      "bytes": 177944,
+      "sha256": "a87238d2189715a54f2db02a0b75d1d534a7c04841ab938628735294515a01c6"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/GameManager.scoped.diff",
+      "gitBlob": "01087925c78ed32529ef9d59b6369174e7fbf5e9",
+      "bytes": 3620,
+      "sha256": "94831b19f03e76cd4df1a1dffd455856df7c748a5060ea4d5b7b626a30a5f946"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewAccess.Script.baseline.luau",
+      "gitBlob": "6ff8d0f6a8cff98c95a1b6de9e6846098aae1fb4",
+      "bytes": 14689,
+      "sha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewAccess.Script.candidate.luau",
+      "gitBlob": "1da6c160db8c5150ef37a33e859094a286366e36",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewAccess.scoped.diff",
+      "gitBlob": "03c0adbb2849a82a5de3643ec84a44e089bbdfa2",
+      "bytes": 893,
+      "sha256": "dd48b2ca670b1fbbcced8b53172a1d0a7ac09455e6f93a0082433a621758ba5b"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewTransport.LocalScript.baseline.luau",
+      "gitBlob": "2df9bedc742d763536deb9cf8a5aa92249f365f1",
+      "bytes": 2509,
+      "sha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewTransport.LocalScript.candidate.luau",
+      "gitBlob": "3da64e6a32bc81dddf2bca9d39be33edeca1b1ee",
+      "bytes": 2554,
+      "sha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewTransport.scoped.diff",
+      "gitBlob": "397d4164c3536b27d4703689408938cb68428e5c",
+      "bytes": 540,
+      "sha256": "89ef05757d5e5685d62d2765e54721d2b4c130e8e802d32439794372e2c20416"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/buildLobby.wrapper.candidate.luau",
+      "gitBlob": "456c7632f2f27e560362affd11922f6da16bdc19",
+      "bytes": 3276,
+      "sha256": "a63d6bc332b3a2978c4fa0ce41c8ade61e2ce69413aac3794ee1165d3f59474f"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/candidate-manifest.json",
+      "gitBlob": "b7732416c02ca2b4a8c90f036f900eaaa66676c8",
+      "bytes": 2543,
+      "sha256": "56f8afe9ae6e6fd3cc573e2eeb6b88cac92baf754cec728999678731e6780180"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/friend-boost-candidate-manifest.json",
+      "gitBlob": "f05222310482de55b2ac27a06fe909f2128c08ff",
+      "bytes": 529,
+      "sha256": "3a94ec57ac5bb16c048d0d50793021f29c29cc2804fa5828659b702a5b9b53bb"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/prepare-spawn-candidates.py",
+      "gitBlob": "dd40bff25fdee5ba7090dd979353d2ef3e1a0874",
+      "bytes": 8634,
+      "sha256": "2dd5adee8b3aca82f1b8f5136b72b1ecc97cac0147e68b06298e45f92b83fa3a"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/spawn/startup-mocked-fixtures.luau",
+      "gitBlob": "e6dcd4cfccb296267e090a762bf17843f24b28b3",
+      "bytes": 9486,
+      "sha256": "e0cbd14191c0e979bf21016ad07c272caf12abe6eedd174bc43eca1059618d23"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/test_native_scope.luau",
+      "gitBlob": "a5bb7eb590493250d18aa4b734981feef143727b",
+      "bytes": 3853,
+      "sha256": "adad515f262f90849e5a52f60cd172a1ae3d8b3bbec32bddd1fef715aac90810"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/test_native_scope_with_concurrent.luau",
+      "gitBlob": "00c3a0623712d7dfe3152242bcf05bcaf56f98b5",
+      "bytes": 4797,
+      "sha256": "9a01dc69546aceb660931d92c3daa9545f5f2e49513ce90b0d47232b987e33d2"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/verify-final-live.luau",
+      "gitBlob": "6f1ed582ee83a2e084992636d3fb7f0a18cfac64",
+      "bytes": 1544,
+      "sha256": "b335de6727c61d1581febb1202d26628f08cbde0d63f7f4f255430f32cafc1e3"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/verify_backup.py",
+      "gitBlob": "96221ab1d88f664ce305f38c5ac3112b86606643",
+      "bytes": 4963,
+      "sha256": "b0956450c4adf5040205071cca0391a94cd83bfc6f6d8c8fb885d8b4b2ab0985"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/verify_native_scope.luau",
+      "gitBlob": "eb5e8b081f125cfed58d677da89c6c4ee957d081",
+      "bytes": 9881,
+      "sha256": "35e7ce734361af9c6fd1762500962a56bc6005240d3767d6463b318efe576dba"
+    },
+    {
+      "path": "tools/lobby_access_spawn_20261002/verify_native_scope_with_concurrent.luau",
+      "gitBlob": "0f7f99818bd1b3bc788debec59724bf77d8c04d4",
+      "bytes": 12255,
+      "sha256": "6a292a754d6739f5a11346fc6ab01dab54a3a41f6e10bdc776681a56946dff61"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+    "class": "LocalScript",
+    "candidateFile": "tools/lobby_access_spawn_20261002/devgates/R4DevGateController.LocalScript.candidate.luau",
+    "bytes": 15539,
+    "sourceSHA256": "a837a8fe73e73a53850d1caaa9ed076989c24dfd679e95c81b01665f8ff9ae42",
+    "baselineSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
+  },
+  {
+    "path": "ServerScriptService.Level5PreviewAccess",
+    "class": "Script",
+    "candidateFile": "tools/lobby_access_spawn_20261002/devgates/Level5PreviewAccess.Script.candidate.luau",
+    "bytes": 12258,
+    "sourceSHA256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43",
+    "baselineSHA256": "07659b8077f3dc58869113e3371b906bbead0408edbb8d84ad21d746f7ee420f"
+  },
+  {
+    "path": "ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard",
+    "class": "ModuleScript",
+    "candidateFile": "tools/lobby_access_spawn_20261002/devgates/DevBayAccessGuard.ModuleScript.candidate.luau",
+    "bytes": 5666,
+    "sourceSHA256": "d58b987f306d11501d9a8c757cb0ebed61e2333e721e73e54e1b287ac9affdc6",
+    "baselineSHA256": null
+  }
+]

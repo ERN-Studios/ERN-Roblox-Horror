@@ -1,0 +1,20 @@
+--- ServerScriptService.Level5PreviewAccess [fresh Studio BEFORE]
++++ ServerScriptService.Level5PreviewAccess [verified Studio AFTER]
+@@ -63,7 +63,7 @@
+ end
+ 
+ local function readyPlayer(player)
+-	if player.Parent ~= Players or not DevAccess.IsAllowed(player)
++	if player.Parent ~= Players or not DevAccess.IsLevel6PreviewAllowed(player)
+ 		or player:GetAttribute("InRound") == true
+ 		or workspace:GetAttribute("ReservedRoundServer") == true then return nil end
+ 	local character = player.Character
+@@ -260,7 +260,7 @@
+ 				boundedModel = model
+ 			end
+ 			for _, player in ipairs(Players:GetPlayers()) do
+-				if not DevAccess.IsAllowed(player) then
++				if not DevAccess.IsLevel6PreviewAllowed(player) then
+ 					local character = player.Character
+ 					local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ 					local root = humanoid and humanoid.RootPart

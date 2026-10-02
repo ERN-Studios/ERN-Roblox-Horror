@@ -1,0 +1,49 @@
+{
+  "schema": "independent-lobby-preview-route-proof-v1",
+  "generatedAtUTC": "2026-10-02T16:01:27.811494+00:00",
+  "conclusion": "Full installed server sources close Claude focused station/campaign authorization findings",
+  "sourceInferenceOnly": true,
+  "actualOrdinaryPlayerGameplayTestedByThisAgent": false,
+  "studioWritesByThisAgent": false,
+  "sourceEditorAndServerMatches": true,
+  "offlineTestReceipt": {
+    "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/campaign-route-closure-test-receipt.json",
+    "sha256": "4dcb03150db25aae0d201fd81a930a2cdf0ed12b6fa7cc132e63b4066a948433"
+  },
+  "report": {
+    "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/focused-auth-independent-closure.md",
+    "sha256": "7cb3eb1f4475783243ac3f8589207099eac7b5c3eb55751a78098c3e66d051ef"
+  },
+  "files": [
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/GameManager.post-install.server.luau",
+      "bytes": 178031,
+      "sha256": "cd045eee01354ea97fb49b35a78a31a968aab47a8cdd34cb34a3d16318416a11"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ReplicatedStorage__DevAccess.post-install.server.luau",
+      "bytes": 1353,
+      "sha256": "49b292d585f47604b84486585af39edf9915e08f3eaf7e253485769260e4b29f"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/RoundCompletionRouting.post-install.server.luau",
+      "bytes": 75964,
+      "sha256": "a6d7e8936fb026a8437932b49e97faff2a9617e625a8aaeee30675538217d00b"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level5PreviewAccess.post-install.server.luau",
+      "bytes": 12258,
+      "sha256": "914c4d5453712ad238373ec51218529e0b294dd9dc52907eb53b154265329f43"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__Level6PreviewAccess.post-install.server.luau",
+      "bytes": 14842,
+      "sha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd"
+    },
+    {
+      "path": "artifacts/lobby-access-spawn-20261002/devgate-audit/ServerScriptService__LobbyReimaginedPreview__QueueBridge.post-install.server.luau",
+      "bytes": 20289,
+      "sha256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674"
+    }
+  ]
+}

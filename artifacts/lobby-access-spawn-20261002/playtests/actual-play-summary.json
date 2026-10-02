@@ -1,0 +1,61 @@
+{
+  "recordedAt": "2026-10-02T16:14:25.181154+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "developerPlay": {
+    "identity": {
+      "name": "ZenMeister02",
+      "uid": 11374988579
+    },
+    "newLobbyInitialSpawn": true,
+    "health": 100,
+    "level5And6DevPreviewStatuses": true,
+    "level6ActualQueue121CreateParty": true,
+    "level6ActualMapReady": true,
+    "level6ReturnViaHeldE": {
+      "position": [
+        220,
+        32.92036819458008,
+        -860
+      ],
+      "health": 100
+    },
+    "actualHumanoidDeathRespawnNewLobby": true,
+    "nineSolidSpawnFloorRays": "PASS"
+  },
+  "ordinaryRealServerClientsPlay": {
+    "identity": {
+      "name": "Player1",
+      "uid": -1
+    },
+    "newLobbyWithoutAnyDevJoin": true,
+    "level5OpaqueWallProgressPercent": 70,
+    "level6OpaqueWallProgressPercent": 30,
+    "normalViewScreenshots": [
+      "ordinary-level5-coming-soon.jpg",
+      "ordinary-level6-coming-soon.jpg"
+    ],
+    "queueLabelsHidden": true,
+    "forcedLevel5ServerEntryEjected": true,
+    "forcedLevel6ServerEntryEjected": true,
+    "guardDeniedCount": 2,
+    "level1Queue101HostAndCreatePartyCountdown": true,
+    "leftPadToCancelBeforeLaunch": true
+  },
+  "unverified": [
+    "Mixed DEV and ordinary clients in same server",
+    "Production reserved-server teleport",
+    "Level5 end-to-end map preview launch",
+    "Forged ConfigureQueue remote test: MCP execution was blocked before FireServer; no attempted request reached server"
+  ],
+  "existingWarnings": [
+    "Three Level6 lazy-remotes/state WaitForChild infinite-yield warnings in lobby remain from existing client scripts; Level6 loads and returns successfully when preview initializes"
+  ],
+  "nativeEditSceneScope": "No geometry or canonical pad property edits; new lobby is rebuilt from persisted Blender raw source in each public server and canonical spawn is moved only after its verified floor is ready. Original lobby stays beside it.",
+  "editorBuildAttempts": {
+    "sceneCreated": false,
+    "spawnMoved": false,
+    "temporaryBuilderEditException": "Reverted to6154d95902fbe2d89976e6428fc38a69f25e91e78f5ad02afac50ef19a39fad7; fresh afterexport confirms source/editor parity",
+    "reason": "RuntimeBake/MaterialPolish correctly remain server-only and session-generated meshes are not deployment assets"
+  }
+}

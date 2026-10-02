@@ -1,0 +1,35 @@
+{
+  "schema": "lobby-access-spawn-recorded-service-properties-scope-v1",
+  "verified": true,
+  "beforeCaptureId": "dd47c97b-033d-40a3-9ae3-f23d88cacab1",
+  "afterCaptureId": "2a0eb6ad-aa1d-4580-8a4c-b60008064944",
+  "rows": [
+    {
+      "key": "services",
+      "equal": true,
+      "beforeCanonicalSHA256": "87be6ac66f682b31a1df40e784e47da09d0bc4d6456ed051fb52681394eb0a6b",
+      "afterCanonicalSHA256": "87be6ac66f682b31a1df40e784e47da09d0bc4d6456ed051fb52681394eb0a6b"
+    },
+    {
+      "key": "collisionGroups",
+      "equal": true,
+      "beforeCanonicalSHA256": "06fd8eec47f4bbb55218760caa01b230060509006ad8bd23303962b488b0c846",
+      "afterCanonicalSHA256": "06fd8eec47f4bbb55218760caa01b230060509006ad8bd23303962b488b0c846"
+    },
+    {
+      "key": "collisionMatrix",
+      "equal": true,
+      "beforeCanonicalSHA256": "a91183a443d524a1a500b0d43e7e200d1c0f35084b49bbc2b3ccc805637f41e0",
+      "afterCanonicalSHA256": "a91183a443d524a1a500b0d43e7e200d1c0f35084b49bbc2b3ccc805637f41e0"
+    },
+    {
+      "key": "materialOverrides",
+      "equal": true,
+      "beforeCanonicalSHA256": "5df55bab2bcf406059f289029b6064db9f0d9170d5580cfd9414e0a1a082dce8",
+      "afterCanonicalSHA256": "5df55bab2bcf406059f289029b6064db9f0d9170d5580cfd9414e0a1a082dce8"
+    }
+  ],
+  "serviceCount": 24,
+  "studioWritesPerformed": false,
+  "limits": "Exact comparison of all captured service properties, collision groups/matrix, and material overrides. The known 129 unreadable service-property limits remain explicit in native recovery receipts; no claim to have read those inaccessible values."
+}

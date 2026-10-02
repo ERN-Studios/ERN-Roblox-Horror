@@ -1,0 +1,8 @@
+{
+  "mazeSHA256": "5edccd07abf8e670f6459d50abac9324d74fd474a8f1e1c9cf2b38bf5c586a34",
+  "passed": true,
+  "rendererSHA256": "dabdd59272720c7db6c7cd52c706c2c083c2b0cd9cd06f8689c004098a355a3b",
+  "roomPrefabsChecked": 42,
+  "scalesChecked": 4,
+  "scope": "Exact changed-source compile; CeilingPieces dimensions/coverage/nonoverlap at four cell scales; read-only current native42 prefabs all satisfy unique slab/dimension/orientation assertions. Not Level1 runtime gameplay or performance proof."
+}

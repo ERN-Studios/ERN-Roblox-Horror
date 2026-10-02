@@ -1,0 +1,12 @@
+--- StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.baseline
++++ StarterPlayer.StarterPlayerScripts.Level6PreviewTransport.candidate
+@@ -34,7 +34,8 @@
+ 		return
+ 	end
+ 	if type(nonce) ~= "string" or typeof(target) ~= "Vector3"
+-		or (modelName ~= "Level 6 Generated World" and modelName ~= "ServerLobby") then return end
++		or (modelName ~= "Level 6 Generated World" and modelName ~= "ServerLobby"
++			and modelName ~= "LobbyReimaginedPreview") then return end
+ 	generation += 1
+ 	local token = generation
+ 	task.spawn(function()

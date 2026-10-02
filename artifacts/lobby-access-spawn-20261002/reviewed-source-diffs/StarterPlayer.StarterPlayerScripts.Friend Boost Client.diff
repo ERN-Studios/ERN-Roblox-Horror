@@ -1,0 +1,26 @@
+--- StarterPlayer.StarterPlayerScripts.Friend Boost Client [fresh Studio BEFORE]
++++ StarterPlayer.StarterPlayerScripts.Friend Boost Client [verified Studio AFTER]
+@@ -12,7 +12,7 @@
+ --
+ -- WHERE IT IS: the top-right panel, LOBBY ONLY (owner, 2026-09-17: never inside a
+ -- game). "Lobby" is read off the world, not off one flag: the chip shows only
+--- while the player's root is inside the ServerLobby model's bounding box AND no
++-- while the player's root is inside the selected lobby model's bounding box AND no
+ -- round flag is up (InRound, RoundActive, a round loading). A level server has
+ -- no ServerLobby at all; in Studio the lobby is parked away while a Level 2/3
+ -- round runs and a Level 1 maze is built far outside it (measured 2026-09-17:
+@@ -129,6 +129,14 @@
+ local lobbyBox = nil
+ local function lobbyBounds()
+ 	local lobby = workspace:FindFirstChild("ServerLobby")
++	local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
++	-- Follow only the server-selected, complete lobby; preserve the safe fallback.
++	if spawn and spawn:IsA("SpawnLocation")
++		and spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyReimaginedPreview" then
++		local revised = workspace:FindFirstChild("LobbyReimaginedPreview")
++		if revised and revised:IsA("Model") and revised:GetAttribute("LobbyReimaginedOwned") == true
++			and revised:GetAttribute("Ready") == true then lobby = revised end
++	end
+ 	if not lobby or not lobby:IsA("Model") then
+ 		lobbyBox = nil
+ 		return nil

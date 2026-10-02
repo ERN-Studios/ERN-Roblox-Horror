@@ -1,0 +1,7 @@
+{
+  "reason": "Final 9-source combined manifest became available while this older compact input ran. Parent requested final GM queue branch, Builder guard calls, FriendBoost selector and 300-second bounded review.",
+  "terminatedOnlyOwnedChildPID": 10869,
+  "runnerPID": 10847,
+  "failedReceiptPreserved": true,
+  "completedReviewClaim": false
+}

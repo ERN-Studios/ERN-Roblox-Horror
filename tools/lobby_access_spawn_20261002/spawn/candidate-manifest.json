@@ -1,0 +1,59 @@
+{
+  "mode": "file-only-candidates-no-Studio-mutation",
+  "studioId": "0552e451-d540-464e-ad9f-478d00392f88",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "canonicalSpawnPath": "Workspace.ServerLobby.LobbySpawn",
+  "targetPosition": [
+    220,
+    30.4,
+    -860
+  ],
+  "targetLookAt": [
+    220,
+    30.4,
+    -760
+  ],
+  "rows": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "baselineSha256": "7e4d34889d0900626a6717129f7310170872e307aa108ed1891c9d642f91cc4f",
+      "baselineBytes": 174786,
+      "candidateSha256": "a87238d2189715a54f2db02a0b75d1d534a7c04841ab938628735294515a01c6",
+      "candidateBytes": 177944,
+      "candidate": "tools/lobby_access_spawn_20261002/spawn/GameManager.Script.candidate.luau",
+      "baseline": "tools/lobby_access_spawn_20261002/spawn/GameManager.Script.baseline.luau"
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "class": "Script",
+      "baselineSha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "baselineBytes": 1217,
+      "candidateSha256": "b970fd6ae8c3971588b2920d95baada3f65f644b8cb39c0a008156360e08ff9d",
+      "candidateBytes": 1951,
+      "candidate": "tools/lobby_access_spawn_20261002/spawn/Bootstrap.Script.candidate.luau",
+      "baseline": "tools/lobby_access_spawn_20261002/spawn/Bootstrap.Script.baseline.luau"
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "baselineSha256": "bc8e8f0722f023e22f5daedffa9929d4232eef62a170d592c473a7852f48d8f3",
+      "baselineBytes": 14689,
+      "candidateSha256": "bfcfc43d291a1de6dee7d77de439e5828c4a5c65906ed4e2c2b586a2f6c7d7cd",
+      "candidateBytes": 14842,
+      "candidate": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewAccess.Script.candidate.luau",
+      "baseline": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewAccess.Script.baseline.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "class": "LocalScript",
+      "baselineSha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
+      "baselineBytes": 2509,
+      "candidateSha256": "e11e4ff9c49b3a105fc9077fe507b6147f72626d3503d746f439a801cdd1b256",
+      "candidateBytes": 2554,
+      "candidate": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewTransport.LocalScript.candidate.luau",
+      "baseline": "tools/lobby_access_spawn_20261002/spawn/Level6PreviewTransport.LocalScript.baseline.luau"
+    }
+  ]
+}

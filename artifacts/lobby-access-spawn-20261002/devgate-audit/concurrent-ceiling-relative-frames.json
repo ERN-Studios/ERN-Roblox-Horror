@@ -1,0 +1,716 @@
+[
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerES_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndS_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "Cross_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_13"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndE_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_05"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerNW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerNE_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndN_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerNE_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionESW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "Cross_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNSW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNEW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "StraightEW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionESW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerSW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerNW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_01"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndS_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNES_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "MaintenanceAlcove"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNEW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_14"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "StraightNS_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndN_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndE_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_07"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "StraightNS_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_11"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_10"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "DeadEndW_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "RecordsBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "StraightEW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "ElevatorArrival"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "OfficeRemnant"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerES_ColumnBay"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNES_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "CornerSW_Quiet"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "LowWall_03"
+  },
+  {
+    "relativeCFrame": [
+      0,
+      14.180000305175781,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "room": "JunctionNSW_Quiet"
+  }
+]

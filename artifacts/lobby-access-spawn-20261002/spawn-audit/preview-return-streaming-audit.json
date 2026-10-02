@@ -1,0 +1,113 @@
+{
+  "at": "2026-10-02T15:29:05Z",
+  "scripts": [
+    {
+      "contexts": [
+        {
+          "source": "\tlocal lobby = workspace:FindFirstChild(\"ServerLobby\")\n\tlocal pad = lobby and lobby:FindFirstChild(\"LobbySpawn\")\n\treturn pad and pad:IsA(\"BasePart\") and pad or nil\nend\n\n-- Server-side facts only; nothing a client sends can satisfy these.\nlocal function ready(player)\n\tif player.Parent ~= Players or not DevAccess.IsAllowed(player) then return nil end\n\tif player:GetAttribute(\"InRound\") == true or workspace:GetAttribute(\"ReservedRoundServer\") == true then return nil end\n\tlocal character = player.Character",
+          "line": 42
+        },
+        {
+          "source": "\nlocal function stream(player, position)\n\tlocal ok, err = pcall(function() player:RequestStreamAroundAsync(position, STREAM_TIMEOUT) end)\n\tif not ok then warn(\"[Level4PreviewAccess] streaming request failed:\", err) end\n\treturn ok\nend\n\nlocal function release(player)\n\tnextUse[player] = if player.Parent == Players then os.clock() + COOLDOWN else nil\nend",
+          "line": 74
+        },
+        {
+          "source": "\t\tor (root.Position - at).Magnitude > RETURN_REACH then return end\n\tlocal pad = liveSpawn()\n\tif not pad then\n\t\twarn(\"[Level4PreviewAccess] ServerLobby.LobbySpawn is missing; return refused\")\n\t\treturn\n\tend\n\tnextUse[player] = math.huge\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, pad.Position) then return end\n\t\t-- Streaming yields: re-read the player, avatar, prompt and live spawn.",
+          "line": 111
+        },
+        {
+          "source": "\tlocal ok, err = pcall(function()\n\t\tif not stream(player, pad.Position) then return end\n\t\t-- Streaming yields: re-read the player, avatar, prompt and live spawn.\n\t\tlocal nowCharacter, nowRoot = ready(player)\n\t\tpad = liveSpawn()\n\t\tat = promptPosition(prompt)\n\t\tif nowCharacter ~= character or not pad or not at or not prompt:IsDescendantOf(workspace)\n\t\t\tor (nowRoot.Position - at).Magnitude > RETURN_REACH then return end\n\t\tcharacter:PivotTo(upright(pad.Position + Vector3.new(0, SPAWN_LIFT, 0), pad.CFrame.LookVector))\n\tend)",
+          "line": 118
+        },
+        {
+          "source": "\t\t-- An errored request may leave the carpet unstreamed on the client.\n\t\tif not stream(player, ARRIVAL.Position) then return end\n\t\t-- Streaming yields: re-read the player, avatar and the exact live door.\n\t\tlocal nowCharacter, nowRoot = ready(player)\n\t\tif nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()\n\t\t\tor distanceToPart(door, nowRoot.Position) > DOOR_REACH or not model:IsDescendantOf(workspace) then return end\n\t\tcharacter:PivotTo(ARRIVAL)\n\tend)\n\trelease(player)\n\tif not ok then warn(\"[Level4PreviewAccess] entry failed:\", err) end",
+          "line": 210
+        },
+        {
+          "source": "\tend\n\tlocal spawn = liveSpawn()\n\tif not spawn then return end\n\tfor _, player in ipairs(Players:GetPlayers()) do\n\t\tif not DevAccess.IsAllowed(player) then\n\t\t\tlocal character = player.Character\n\t\t\tlocal humanoid = character and character:FindFirstChildOfClass(\"Humanoid\")\n\t\t\tlocal root = humanoid and humanoid.RootPart\n\t\t\tif root and humanoid.Health > 0 then\n\t\t\t\tlocal p = guardedFrame:PointToObjectSpace(root.Position)",
+          "line": 254
+        }
+      ],
+      "path": "ServerScriptService.Level4PreviewAccess",
+      "serverCallsClientStreamAck": false
+    },
+    {
+      "contexts": [
+        {
+          "source": "\tlocal lobby = workspace:FindFirstChild(\"ServerLobby\")\n\tlocal spawn = lobby and lobby:FindFirstChild(\"LobbySpawn\")\n\treturn spawn and spawn:IsA(\"BasePart\") and spawn or nil\nend\n\nlocal function readyPreview()\n\tlocal model = workspace:FindFirstChild(MODEL_NAME)\n\tif not (model and model:IsA(\"Model\") and model:GetAttribute(\"Level4Preview\") == true\n\t\tand model:GetAttribute(\"PreviewOnly\") == true\n\t\tand model:GetAttribute(\"Level4LayoutVersion\") == 4",
+          "line": 51
+        },
+        {
+          "source": "\nlocal function stream(player, position)\n\tlocal ok, err = pcall(function() player:RequestStreamAroundAsync(position, 8) end)\n\tif not ok then warn(\"[Level4V4PreviewAccess] streaming failed:\", err) end\n\treturn ok\nend\n\nlocal function release(player)\n\tnextUse[player] = if player.Parent == Players then os.clock() + COOLDOWN else nil\nend",
+          "line": 90
+        },
+        {
+          "source": "\t\tor (root.Position - exit.Position).Magnitude > 12 then return end\n\tlocal spawn = liveSpawn()\n\tif not spawn then return end\n\tnextUse[player] = math.huge\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, spawn.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tspawn = liveSpawn()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit or not spawn",
+          "line": 115
+        },
+        {
+          "source": "\tlocal ok, err = pcall(function()\n\t\tif not stream(player, spawn.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tspawn = liveSpawn()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit or not spawn\n\t\t\tor prompt.Parent ~= exit or (nowRoot.Position - exit.Position).Magnitude > 12 then return end\n\t\tcharacter:PivotTo(upright(spawn.Position + Vector3.new(0, 4, 0), spawn.CFrame.LookVector))\n\tend)\n\trelease(player)",
+          "line": 119
+        },
+        {
+          "source": "\tlocal ok, err = pcall(function()\n\t\tif not stream(player, exit.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreviewEntry()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit\n\t\t\tor prompt.Parent ~= door or not (door == liveDoor() or isR3Entry(door))\n\t\t\tor (nowRoot.Position - door.Position).Magnitude > 14\n\t\t\tor returnPrompt.Parent ~= exit or not returnPrompt.Enabled\n\t\t\tor not hasFloor(model, exit) then return end\n\t\tcharacter:PivotTo(upright(exit.Position, exit.CFrame.LookVector))",
+          "line": 147
+        },
+        {
+          "source": "\t\tlocal model = readyPreviewEntry()\n\t\tlocal spawn = liveSpawn()\n\t\tif model and spawn then\n\t\t\tif boundedModel ~= model then\n\t\t\t\tlocal size\n\t\t\t\tbounds, size = model:GetBoundingBox()\n\t\t\t\thalf = size * 0.5 + Vector3.new(8, 20, 8)\n\t\t\t\tboundedModel = model\n\t\t\tend\n\t\t\tfor _, player in ipairs(Players:GetPlayers()) do",
+          "line": 262
+        }
+      ],
+      "path": "ServerScriptService.Level4V4PreviewAccess",
+      "serverCallsClientStreamAck": false
+    },
+    {
+      "contexts": [
+        {
+          "source": "\tlocal lobby = workspace:FindFirstChild(\"ServerLobby\")\n\tlocal spawn = lobby and lobby:FindFirstChild(\"LobbySpawn\")\n\treturn spawn and spawn:IsA(\"BasePart\") and spawn or nil\nend\n\nlocal function readyPreview()\n\tlocal model = workspace:FindFirstChild(MODEL_NAME)\n\tif not (model and model:IsA(\"Model\") and model:GetAttribute(\"Level5Preview\") == true\n\t\tand model:GetAttribute(\"PreviewOnly\") == true\n\t\tand model:GetAttribute(\"Level5PreviewReady\") == true) then return nil end",
+          "line": 51
+        },
+        {
+          "source": "\nlocal function stream(player, position)\n\tlocal ok, err = pcall(function() player:RequestStreamAroundAsync(position, 8) end)\n\tif not ok then warn(\"[Level5PreviewAccess] streaming failed:\", err) end\n\treturn ok\nend\n\nlocal function release(player)\n\tnextUse[player] = if player.Parent == Players then os.clock() + COOLDOWN else nil\nend",
+          "line": 82
+        },
+        {
+          "source": "\t\tor (root.Position - exit.Position).Magnitude > 12 then return end\n\tlocal spawn = liveSpawn()\n\tif not spawn then return end\n\tnextUse[player] = math.huge\n\tlocal ok, err = pcall(function()\n\t\tif not stream(player, spawn.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tspawn = liveSpawn()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit or not spawn",
+          "line": 107
+        },
+        {
+          "source": "\tlocal ok, err = pcall(function()\n\t\tif not stream(player, spawn.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tspawn = liveSpawn()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit or not spawn\n\t\t\tor prompt.Parent ~= exit or (nowRoot.Position - exit.Position).Magnitude > 12 then return end\n\t\tcharacter:PivotTo(upright(spawn.Position + Vector3.new(0, 4, 0), spawn.CFrame.LookVector))\n\tend)\n\trelease(player)",
+          "line": 111
+        },
+        {
+          "source": "\tlocal ok, err = pcall(function()\n\t\tif not stream(player, exit.Position) then return end\n\t\tlocal nowCharacter, nowRoot = readyPlayer(player)\n\t\tlocal nowModel, nowExit = readyPreview()\n\t\tif nowCharacter ~= character or nowModel ~= model or nowExit ~= exit\n\t\t\tor prompt.Parent ~= door or not (door == liveDoor() or isR3Entry(door))\n\t\t\tor (nowRoot.Position - door.Position).Magnitude > 14\n\t\t\tor returnPrompt.Parent ~= exit or not returnPrompt.Enabled\n\t\t\tor not hasFloor(model, exit) then return end\n\t\tcharacter:PivotTo(upright(exit.Position, exit.CFrame.LookVector))",
+          "line": 139
+        },
+        {
+          "source": "\t\tlocal model = readyPreview()\n\t\tlocal spawn = liveSpawn()\n\t\tif model and spawn then\n\t\t\tif boundedModel ~= model then\n\t\t\t\tlocal size\n\t\t\t\tbounds, size = model:GetBoundingBox()\n\t\t\t\thalf = size * 0.5 + Vector3.new(8, 20, 8)\n\t\t\t\tboundedModel = model\n\t\t\tend\n\t\t\tfor _, player in ipairs(Players:GetPlayers()) do",
+          "line": 254
+        }
+      ],
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "serverCallsClientStreamAck": false
+    },
+    {
+      "contexts": [
+        {
+          "source": "end)\nlocal function streamReady(player, target, modelName)\n\tlocal token = {nonce = HttpService:GenerateGUID(false), expires = os.clock() + 22, ready = false}\n\tpending[player] = token\n\tlocal ok = pcall(function() player:RequestStreamAroundAsync(target, 8) end)\n\tif ok and player.Parent == Players then\n\t\ttransport:FireClient(player, token.nonce, target, modelName)\n\t\twhile pending[player] == token and not token.ready and os.clock() < token.expires\n\t\t\tand player.Parent == Players do task.wait(.1) end\n\tend",
+          "line": 92
+        },
+        {
+          "source": "\tlocal model, exit = previewReady()\n\tlocal spawn = lobbyPart(\"LobbySpawn\")\n\tif not character or not model or not exit or not spawn or player:GetAttribute(\"Level6InRound\") ~= true\n\t\tor not validReturnPrompt(prompt, exit) or (root.Position - exit.Position).Magnitude > 12 then return end\n\tnextUse[player] = math.huge\n\tlocal ok, err = pcall(function()\n\t\tlocal landing = spawn.Position + Vector3.new(0, 4, 0)\n\t\tif not streamReady(player, landing, \"ServerLobby\") then error(\"Lobby streaming confirmation timed out\") end\n\t\tlocal currentCharacter, currentRoot = playerReady(player)\n\t\tif currentCharacter ~= character or not exit.Parent or not validReturnPrompt(prompt, exit)",
+          "line": 206
+        },
+        {
+          "source": "\t\tlocal landing = spawn.Position + Vector3.new(0, 4, 0)\n\t\tif not streamReady(player, landing, \"ServerLobby\") then error(\"Lobby streaming confirmation timed out\") end\n\t\tlocal currentCharacter, currentRoot = playerReady(player)\n\t\tif currentCharacter ~= character or not exit.Parent or not validReturnPrompt(prompt, exit)\n\t\t\tor (currentRoot.Position - exit.Position).Magnitude > 12 or lobbyPart(\"LobbySpawn\") ~= spawn then return end\n\t\tRuntime.Leave(player)\n\t\troot.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero\n\t\tcharacter:PivotTo(upright(spawn.CFrame + Vector3.new(0, 4, 0)))\n\tend)\n\trelease(player)",
+          "line": 212
+        }
+      ],
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "serverCallsClientStreamAck": true
+    }
+  ]
+}

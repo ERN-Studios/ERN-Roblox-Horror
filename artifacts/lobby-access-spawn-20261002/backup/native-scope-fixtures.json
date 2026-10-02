@@ -1,0 +1,43 @@
+{
+  "schema": "lobby-access-spawn-native-scope-fixtures-v1",
+  "allPassed": true,
+  "fixtureCount": 4,
+  "verifierSHA256": "35e7ce734361af9c6fd1762500962a56bc6005240d3767d6463b318efe576dba",
+  "generatorSHA256": "adad515f262f90849e5a52f60cd172a1ae3d8b3bbec32bddd1fef715aac90810",
+  "runtimeSourcesOnlyMode": true,
+  "results": [
+    {
+      "case": "positive",
+      "expectedAccepted": true,
+      "accepted": true,
+      "passed": true,
+      "exitCode": 0,
+      "outputTail": "{\n  \"sourceChanges\": 9,\n  \"unrelatedNativeForestPreserved\": true,\n  \"verified\": true\n}\n"
+    },
+    {
+      "case": "spawn",
+      "expectedAccepted": false,
+      "accepted": false,
+      "passed": true,
+      "exitCode": 1,
+      "outputTail": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope:115: Native changes outside the nine exact runtime Source patches\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope', Line 115\n[Stack End]\n\n"
+    },
+    {
+      "case": "geometry",
+      "expectedAccepted": false,
+      "accepted": false,
+      "passed": true,
+      "exitCode": 1,
+      "outputTail": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope:115: Native changes outside the nine exact runtime Source patches\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope', Line 115\n[Stack End]\n\n"
+    },
+    {
+      "case": "service",
+      "expectedAccepted": false,
+      "accepted": false,
+      "passed": true,
+      "exitCode": 1,
+      "outputTail": "/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope:133: Service-level properties changed outside this task: Workspace\n[Stack Begin]\n    Script '[C]' - function 'assert'\n    Script '/private/tmp/lobby-access-spawn-tools-20261002/verify_native_scope', Line 133\n[Stack End]\n\n"
+    }
+  ],
+  "scope": "Offline synthetic integrity cases; no Studio gameplay or live comparison claim"
+}
