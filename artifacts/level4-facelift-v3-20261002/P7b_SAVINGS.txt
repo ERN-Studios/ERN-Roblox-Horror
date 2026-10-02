@@ -1,0 +1,47 @@
+P7b FINAL ACCEPTED OFFLINE DELIVERY
+Output: G:\Roblox\_local\l4facelift\v3\P7b\integ_final.blend
+Output SHA256: 2e960bea9e85eced9b4de32726a82c981efa23e2c4ff3ffaabd0827e95aefe01
+Placed triangles: 2,249,959 -> 2,186,104; saved 63,855 (2.8381%).
+Native unique mesh triangles: 964,411 -> 918,356; saved 46,055.
+Export unique chunk triangles: 982,835 -> 921,332; saved 61,503 (6.2577%).
+Native objects: 4,596 -> 4,580; saved 16 (14 pooled meshes, 2 entire litter props).
+Native lights: 260 -> 260; no unreachable-range deletions qualified.
+Native colliders: unchanged; 4,386 gathered records unchanged, 153 camera-boundary occluders retained; no unreachable deletion qualified.
+Export placement colliders under old/current rules: 4,405 -> 4,401; 4 fully contained prop boxes removed, 0 exact-adjacent merges.
+Estimated Roblox instances: 14,190 -> 13,924; saved 266 (1.87456%).
+Instance savings: 257 decorative MeshParts / 5 shared folders = 252 net Models; 2 hidden prop Models; 8 mesh/SurfaceAppearance instances; 4 collider Parts.
+Final export: 392 chunks, 1,850 prop placements, 1,556 architectural/scene boxes + 2,845 prop boxes, 254 new + 6 legacy lights, 76 signage carriers.
+Signage skip rule implemented; no carrier surface qualified for deletion in this delivery.
+Proof: 430 paired 1280x720 Workbench views; 310 actual-region views; all 24 integrated QA cameras; 161 informative region views / 158 distinct region eyes.
+Max changed pixels: 0.099392361111% (916/921600); threshold <=0.1% on EVERY view. New exact/near-magenta: 0/0. Failed views/errors: 0/0.
+Primary agent personally inspected all 27 final contact sheets, contact_01.jpg through contact_27.jpg. No new visible holes observed.
+Five stronger-view failures were repaired by retaining six whole originals (816 placed triangles restored); fresh source cull and all 430 render pairs repeated.
+Checks PASS: cull worker self-check, new instance rules and actual-source Luau placement checks, P8 pipeline/placement checks, Python compile, raw place.luau -O0 --null compile, all 392 binary chunk headers/indices/limits and star tags, actual make_place packet validation, saved-native geometry/protection audit.
+
+Per collection (placed triangle / object / light / collider removals):
+L4 A1: 462 / 0 / 0 / 0
+L4 HiddenService: 12,580 / 8 / 0 / 0
+L4 Props Lobby: 5,637 / 0 / 0 / 0
+L4 Concourse: 681 / 0 / 0 / 0
+L4 A2: 562 / 0 / 0 / 0
+L4 A3: 567 / 0 / 0 / 0
+L4 Shell: 366 / 0 / 0 / 0
+L4 Props Rooms: 6,849 / 0 / 0 / 0
+L4 Arcade: 95 / 0 / 0 / 0
+L4 C2: 554 / 2 / 0 / 0
+L4 C3: 558 / 2 / 0 / 0
+L4 C4: 442 / 1 / 0 / 0
+L4 Concession: 833 / 1 / 0 / 0
+L4 CentralFork: 468 / 0 / 0 / 0
+L4 Ceilings: 1,785 / 0 / 0 / 0
+L4 Detail: 28,720 / 0 / 0 / 0
+L4 Decay: 2,388 / 2 / 0 / 0
+L4 Restrooms: 234 / 0 / 0 / 0
+L4 Service: 74 / 0 / 0 / 0
+All remaining collections: zero removals. Full exact lists in report_delivery.json.
+
+Risks/limits: finite offline camera sampling and rendering cannot prove every runtime angle. Runtime Roblox camera/gameplay/multiplayer/performance checks were not run. Workbench geometry proof uses deterministic canonical triangle ordering with exact retained payload validation; it does not test Roblox lighting.
+Instance counts include current texture SurfaceAppearances and dump-estimated GUI descendants; unknown exit descendants are excluded. No live Studio count was measured.
+33 missing texture asset mappings are identical before/after and remain a separate integration issue. No new missing mapping was introduced.
+Repository layout changed after the integrated build; this delivery uses the frozen integrated layout and frozen metadata. Later layout changes require a new build, cull and proof.
+No git, Studio, publishing, GUI Blender, or master-blend writes were performed.

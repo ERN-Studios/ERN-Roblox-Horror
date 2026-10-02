@@ -12,17 +12,17 @@
 #     seats, tulip tables, cafe chairs, banquettes, queue stanchions, trash bins, the booth projectors and the
 #     glass of every flickering fixture; everything else is pooled plain meshes (lightboxes, marquees, sconces,
 #     EXIT signs, screens, drapes, ropes, litter, carpet wear).
-#   * collision is always mesh["l4_col"] (boxes in the mesh's local metres). Cinema seats carry NO l4_tags: the
-#     exporter drops the replaced A#_ChairSeat collider and hands its Level4V4Seat tag to the new box covering it
-#     most, which is box 0 (the seat block, >= 30 % overlap even on tipped seats), so the tagged count stays 1188.
+#   * collision is always mesh["l4_col"] (boxes in the mesh's local metres). Cinema seat box 0 is a Roblox Seat
+#     and carries the original layout tags (Level4V4Seat). The exporter drops the covered A#_ChairSeat collider
+#     without duplicating its tags, so the tagged count stays 1188, including the complete rear rows.
 #     Cafe chairs: obj["l4_seat"] = True + obj["l4_seat_box"] = 0 -> a Roblox Seat facing the chair front (-Y).
 #   * flicker: the fixture's glass is its own instanced prop (l4_attrs {"OccasionalFlicker": true}) with its light
 #     parented to it, so place.luau hosts the light in the Neon part and OccasionalFixtureFlicker blinks both.
 #   * lights go to "L4 Fixture Lights" with l4_range / l4_brightness (studs / Roblox brightness) and l4_pkg "D1".
 #   * decal carriers: every lightbox glass sits 0.01 studs behind the original PosterArt face, the marquee header
 #     panel and the EXIT face sit on the original label faces, so export_l4's carrier lift lands the original
-#     Decals / SurfaceGuis ("CINEMA n" amber, "EXIT" white) on them. None of those words is modelled here.
-#     CARRIER_SKIP leaves out the poster + title of the one empty lightbox.
+#     Decals / SurfaceGuis ("CINEMA n" amber, "EXIT" white) on them. Cinema 2 is modelled on the fork-tip marquee;
+#     CARRIER_SKIP leaves out its old occluded title and the poster + title of the one empty lightbox.
 #   * LIGHTS_SUPERSEDED: the original lights of the fixtures replaced here (export_l4 drops them from legacyLights;
 #     the build also deletes them from "L4 Lights").
 #   * dressing is split with package F (props_decay.py): F owns concourse popcorn/cup decals, loose cups, wear
@@ -65,6 +65,7 @@ LIGHTS_SUPERSEDED = [
 CARRIER_SKIP = [
     {"path": r"^Concourse/SouthPosterArt$", "at": [23215.0, 39.65, 99.07]},
     {"path": r"^Concourse/SouthPosterTitle$", "at": [23215.0, 30.18, 99.07]},
+    {"path": r"^Concourse/A2_Marquee$", "at": [23000.0, 47.5, -17.6]},
 ]
 OLD_PROPS = {"CinemaSeat", "HighTable", "CafeChair", "LobbyBench", "LobbySofa"}   # props.py assets replaced here
 DEAD_POSTER = ("Concourse/A2_PosterFrame", 22940)
@@ -86,7 +87,15 @@ def _dir(v):                    # Roblox direction -> Blender direction
 
 def _parts(rx):
     r = re.compile(rx)
-    return [(i, p) for i, p in enumerate(D1_P) if r.search(p["p"])]
+    return [(i, p) for i, p in enumerate(D1_P) if r.search(p["p"]) and not _removed(p)]
+
+
+def _removed(p):
+    """C1 and the two closed ground-floor west passages are no longer dressed."""
+    if p.get("removed") or p["p"].startswith(("Removed/", "C1/")):
+        return True
+    x, y, z = p["cf"][:3]
+    return y < 85 and ((x < 22676 and -239 <= z <= 0) or (x < 22647 and 0 <= z <= 98))
 
 
 def _R(p):
@@ -514,9 +523,9 @@ def _clear():
 # ---------------------------------------------------------------- floor-space checks (Roblox studs, XZ)
 class _Space:
     def __init__(self):
-        boxes = []
+        boxes = [(22623, -239, 22676, 0), (22623, 0, 22647, 98)]
         for p in D1_P:
-            if not p["cc"] or "Level4V4Floor" in (p.get("tags") or []):
+            if _removed(p) or not p["cc"] or "Level4V4Floor" in (p.get("tags") or []):
                 continue
             lo, hi = _aabb(p)
             if hi[1] > FLOOR + 0.2 and lo[1] < FLOOR + 6:
@@ -525,6 +534,8 @@ class _Space:
 
     def free(self, x, z, r):
         B = self.B
+        if x - r < 22623 or x + r > 23377 or z - r < -239 or z + r > 239:
+            return False
         return not np.any((B[:, 0] < x + r) & (B[:, 2] > x - r) & (B[:, 1] < z + r) & (B[:, 3] > z - r))
 
     def take(self, x, z, r):
@@ -758,7 +769,8 @@ def build_seats(m, rng):
             roll = rng.random()
             kind = "tipped" if roll < 0.05 else "broken" if roll < 0.06 else "std"
         base = _rb([c[0], p["cf"][1] - p["s"][1] / 2, c[2]])
-        o = _place(mesh[kind], "CinemaSeat", base, R, model="Seat", l4_src=i)
+        o = _place(mesh[kind], "CinemaSeat", base, R, model="Seat", l4_src=i,
+                   l4_seat_box=0, l4_tags=",".join(p.get("tags") or []))
         placed.append((o, kind))
     return placed
 
@@ -803,11 +815,11 @@ def build_banquettes(m, rng):
 
 
 def build_stanchions(m, rng, space):
-    """42 brass posts: 6 per station (two rows of 3) at the 4 corridor mouths and the 3 ticket windows,
+    """36 brass posts: 6 per station (two rows of 3) at C2-C4 mouths and the 3 ticket windows,
     30 % toppled; velvet ropes between neighbours (pooled), 2 of them lying on the floor."""
     post = a_stanchion(m)
     pv = [v.co.copy() for v in post.vertices]
-    stations = [((cx, -16.0), (0, 1), 3.0) for cx in (22649.0, 22883.0, 23117.0, 23351.0)]
+    stations = [((cx, -16.0), (0, 1), 3.0) for cx in (22883.0, 23117.0, 23351.0)]
     stations += [((wx, 128.5), (0, 1), 2.6) for wx in (22959.0, 22980.0, 23001.0)]
     posts = []
     for (cx, cz), (dx, dz), half in stations:
@@ -887,7 +899,7 @@ def build_bins(m, rng, space):
     cands = []
     for cx in (22649.0, 22883.0, 23117.0, 23351.0):
         cands += [(cx - 29.0, -18.0), (cx + 29.0, -18.0)]
-    cands += [(22842.0, 97.8), (22886.0, 97.8), (23046.0, 97.8), (23104.0, 97.8), (23190.0, 97.8), (23270.0, 97.8),
+    cands += [(22842.0, 97.8), (22886.0, 97.8), (23046.0, 97.8), (23104.0, 97.8), (23207.0, 97.8), (23270.0, 97.8),
               (22898.0, 76.0), (23102.0, 76.0)]
     out = []
     for x, z in cands:
@@ -990,12 +1002,15 @@ def build_marquees(m, rng):
     """80s marquee over each auditorium: a black glass header on the original marquee face (the original amber
     "CINEMA n" SurfaceGui is lifted onto it), a back-lit milk-plexi letter board below with black changeable
     letters (missing, crooked, one dropped on the carpet), chaser bulbs at 1-stud pitch round the whole box
-    (20 % dead; A3 is the dark one), a magenta top / cyan bottom neon edge, riveted brackets and conduit."""
+    (20 % dead; A3 is the dark one), a magenta top / cyan bottom neon edge, riveted brackets and conduit.
+    Cinema 2 is mounted in front of the fork tip, with its own amber heading and central support brackets."""
     out = []
     for i, mq in _parts(r"^Concourse/A\d_Marquee$"):
         aid = mq["p"].split("/")[1][:2]
         dark = aid == "A3"
         fc, nrm = _face(mq, "Back")
+        if aid == "A2":
+            fc = np.array((23000.0, 52.0, 42.4))
         R = _yaw(_dir(nrm))
         wall_d = 2.4                                         # face -> north wall plaster face
         W, B = 60.0, 1.2
@@ -1004,6 +1019,9 @@ def build_marquees(m, rng):
         a = D1Mesh("Marquee_" + aid)
         K = m["black"]
         a.box((0, 0.15, 0), (W, 0.3, 7.0), K)                                                     # header panel
+        if aid == "A2":
+            for verts, faces in _text_islands("CINEMA 2", 3.6, extrude=0.025):
+                a.add_geo(verts, faces, m["glow"], Matrix.Translation((0, -0.025, 0)))
         a.box((0, 0.03, -6.7), (W, 0.06, 5.2), m["deadglass"] if dark else m["board"])           # milk plexi
         a.box((0, 0.0, -3.8), (W, 0.3, 0.6), K, 0.04, 1)                                          # divider
         a.box((0, 1.5, zc), (W + 2 * B, 0.2, H + 2 * B), K)                                       # back pan
@@ -1035,15 +1053,16 @@ def build_marquees(m, rng):
                 Mt = Matrix.Translation((cxl, -0.03, zr + drop)) @ Matrix.Rotation(math.radians(tilt), 4, "Y") @ \
                     Matrix.Translation((-cxl, 0, 0))
                 a.add_geo(verts, faces, K, Mt)
-        for bx in (-26.0, 26.0):                                                                  # brackets
+        for bx in ((-8.0, 8.0) if aid == "A2" else (-26.0, 26.0)):                                  # fork mounts within its 20-stud tip
             for bz in (1.8, -6.5):
                 a.box((bx, (1.6 + wall_d) / 2, bz), (0.14, wall_d - 1.6 + 0.1, 1.4), m["iron"], 0.02, 1)
                 a.box((bx, (1.6 + wall_d) / 2, bz + 0.66), (0.9, wall_d - 1.6 + 0.1, 0.1), m["iron"])
             a.box((bx, wall_d - 0.05, -2.3), (1.3, 0.1, 10.5), m["iron"], 0.02, 1)                 # wall plate
         ct = zt + B
-        a.tube(_fillet([(28.0, 0.9, ct), (28.0, 0.9, ct + 0.8), (28.0, wall_d - 0.12, ct + 0.8),
-                        (28.0, wall_d - 0.12, 7.6)], 0.35), 0.1, m["iron"], seg=6)
-        a.box((28.0, wall_d - 0.2, 8.0), (0.8, 0.3, 0.8), m["iron"], 0.02, 1)
+        conduit_x, conduit_top = (8.0, 7.4) if aid == "A2" else (28.0, 8.0)
+        a.tube(_fillet([(conduit_x, 0.9, ct), (conduit_x, 0.9, ct + 0.8), (conduit_x, wall_d - 0.12, ct + 0.8),
+                        (conduit_x, wall_d - 0.12, conduit_top - 0.4)], 0.35), 0.1, m["iron"], seg=6)
+        a.box((conduit_x, wall_d - 0.2, conduit_top), (0.8, 0.3, 0.8), m["iron"], 0.02, 1)
         M = Matrix.Translation(_rb(fc)) @ R.to_4x4()
         out.append(_pool(a.finish(), "Marquee_" + aid, M, l4_src=i))
         if dark:
@@ -1307,7 +1326,7 @@ def build_dressing(m, rng, seats, space):
         while k < count and tries < count * 20:
             tries += 1
             x, z = rng.uniform(area[0], area[1]), rng.uniform(area[2], area[3])
-            if not space.free(x, z, 0.8):
+            if not space.free(x, z, 3.0 if kind == "bucket" else 0.8):
                 continue
             (_stub if kind == "stub" else _bucket)(lit, m, _rbs([x, fz, z]), rng)
             k += 1

@@ -2,20 +2,89 @@
 # Run slots.py first, then exec this file and call build_decay(). No build on import.
 # Coordinates are original Studio studs: Blender=((X-23000)*.28,-Z*.28,Y*.28).
 # Owns ONLY "L4 Decay" under "L4 Cinema". The layout and current scene are read-only.
+#
+# Facelift v3 (2026-10-01):
+#   * Floor litter is 3D (owner point 1): instanced props of the Meshy meshes L4A_LitterPopcornSpill / LitterCups /
+#     LitterPopcornPile / LitterPaper (meshy_specs.json; imported here when the mesh is missing and the GLB exists, else
+#     a procedural stand-in mesh "L4F_LitterProxy_<asset>" of the same size is used). Every placement carries
+#     obj["l4_prop"] = <asset> and obj["l4_col"] = "[]": NO collider. Clusters are ray-cast onto real floor (floor
+#     material, flat under the whole footprint, nothing inside the litter volume, not inside a solid, clear of walls
+#     and door swings). The flat popcorn/cup decals and the procedural loose cups are gone.
+#   * Nothing of F stands in DROP_ZONES (Cinema 1's west side, walled off and deleted) or on SURFACE_DROP (surfaces
+#     other packages delete or cut open: concession checker strip, staff-side checker, the new arcade/service doors).
+#   * Every decal is verified on its real surface before it is built (centre, corners and edge midpoints hit a surface at
+#     the decal plane, with a material that suits the decal), so nothing floats after a wall or ceiling change, and
+#     near-identical overlapping decals are thinned out. Ceiling leak stains remain only on the Service ceiling;
+#     clean starlight headliner decks carry no old ceiling-ring dressing.
 import bpy
 import bmesh as _fd_bmesh
+import json as _fd_json
 import math as _fd_math
 import os as _fd_os
 import random as _fd_random
 import collections as _fd_collections
 import numpy as _fd_np
-from mathutils import Vector as _FDVector
+from mathutils import Matrix as _FDMatrix, Vector as _FDVector
+from mathutils.bvhtree import BVHTree as _FDBVH
 
 _FD_HERE = r"G:\Roblox\MongoTV\tools\level4_blender"
 _FD_TEX = r"G:\Blender\Level4_Cinema\textures\pbr"
 _FD_S, _FD_OX = .28, 23000.0
 _FD_SEED = 40930
 _FD_UP = _fd_np.array((0., 1., 0.))
+
+# (x0, x1, y0, y1, z0, z1) studs. Cinema 1's west side is walled off at X 22676 and deleted (owner points 12/13).
+_FD_DROP_ZONES = (
+    ("C1", (22600., 22676.5, -1e4, 1e4, -260., -20.)),
+    ("C1NorthPassage", (22600., 22676.5, -1e4, 84., -21., .5)),
+    ("WestPassage", (22600., 22647.5, -1e4, 84., 0., 101.)),
+    ("CoreSouthGap", (22600., 22676.5, -1e4, 84., 97.5, 101.)),
+    ("A1WestEntry", (22670., 22690., 40., 56., -142., -118.)),
+)
+# Surfaces other packages delete or cut open: a decal there would float, or hang in a doorway.
+_FD_SURFACE_DROP = (
+    ("ConcessionChecker", (22888., 23054., 23.5, 24.4, 124.5, 132.5)),  # P1: carpet only (floor decals)
+    ("StaffChecker", (22878., 23122., 23.5, 24.4, 100.5, 125.5)),       # P3: carpet, counter 5 studs deep
+    ("ArcadeDoor", (23185., 23199., 23.5, 38.5, 97., 105.)),            # P1/P5: new arcade opening
+    ("ServiceDoor", (22852., 22876., 23.5, 37., 97., 105.)),            # P1/P5: narrowed service opening
+)
+_FD_NEW_DOORS = ((23187., 23197., 24., 37., 100., 102.), (22860., 22868., 24., 36., 100., 102.))
+
+_FD_LITTER = ("LitterPopcornSpill", "LitterCups", "LitterPopcornPile", "LitterPaper")
+_FD_LITTER_M = {"LitterPopcornSpill": .45, "LitterCups": .40, "LitterPopcornPile": .35, "LitterPaper": .40}
+_FD_FLOOR_SEMS = {"carpet", "carpet_arcade", "tile", "concrete", "wall_dark", "marble", "granite"}
+_FD_DENY = {"glass", "neon", "screen", "decal", "metal"}
+# name, rects (x0, x1, z0, z1), highest floor top considered, clusters, loose singles,
+# weights (PopcornSpill, Cups, PopcornPile, Paper)
+_FD_LITTER_ZONES = (
+    ("Lobby", ((22677, 23375, -19, 99),), 80, 14, 2, (2, 3, 2, 3)),
+    ("ConcessionFront", ((22884, 23116, 113.5, 142),), 30, 10, 1, (4, 3, 3, 1)),
+    ("Concession", ((22884, 23116, 142, 236),), 30, 6, 1, (3, 3, 2, 2)),
+    ("A1", ((22679, 22853, -237, -22),), 80, 12, 1, (3, 3, 4, 1)),
+    ("A2", ((22913, 23087, -237, -22),), 80, 12, 1, (3, 3, 4, 1)),
+    ("A3", ((23147, 23321, -237, -22),), 80, 12, 1, (3, 3, 4, 1)),
+    ("Arcade", ((23174, 23210, 116, 225),), 30, 8, 1, (.5, 3, .5, 4)),
+    ("C2", ((22856, 22910, -238, -21),), 80, 4, 1, (1, 3, 1, 3)),
+    ("C3", ((23090, 23144, -238, -21),), 80, 4, 1, (1, 3, 1, 3)),
+    ("C4", ((23324, 23376, -238, -21),), 80, 4, 1, (1, 3, 1, 3)),
+    ("Gallery", ((22677, 23374, -19, -1),), 100, 4, 0, (0, 2, 0, 5)),
+    ("Restrooms", ((23270, 23302, 126, 166), (23311, 23343, 126, 166)), 30, 3, 0, (0, 0, 0, 1)),
+    ("Service", ((22626, 22878, 103, 237),), 30, 4, 1, (0, 2, 0, 5)),
+)
+# Lobby props litter gathers around: name prefix, chance, cluster size range, ring (inner, outer) x footprint radius
+_FD_ANCHORS = (("LobbyTable", .9, (1, 3), (.2, 1.2)), ("StandingTable", .8, (1, 3), (.2, 1.3)),
+               ("WallCafeTable", .7, (1, 2), (.2, 1.3)), ("LobbyBench", 1., (2, 3), (.6, 1.6)),
+               ("LobbySofa", 1., (2, 3), (.6, 1.6)), ("TrashBin", .75, (2, 4), (1.2, 3.)),
+               ("QueueStanchion", .12, (1, 2), (1.5, 4.)))
+# Fixed piles kept from v2: zone, x, z, floor top, items, wet cartons (solid, with a collider)
+_FD_HEAPS = (("ConcessionFront", 22911, 136, 30, 3, False), ("Service", 22772, 166, 30, 2, True),
+             ("Lobby", 23369, 94, 30, 3, False), ("Lobby", 23023, 95, 30, 3, False),
+             ("Lobby", 23121, -16, 30, 3, False), ("Concession", 23113, 231, 30, 2, True),
+             ("Service", 22629, 232, 30, 1, True), ("Service", 22871, 209, 30, 2, True),
+             ("Arcade", 23198, 221, 30, 3, False), ("Gallery", 23043, -16, 100, 2, False),
+             ("Gallery", 23270, -16, 100, 2, False))
+_FD_CONE_SPOTS = ((23050, 83), (22780, 164), (22921, 144), (23312, 117))
+_FD_BUCKET_SPOT = (22774, 158)
 
 
 def _fd_b(p):
@@ -199,7 +268,15 @@ class _FDGeo:
     def object(self, name, coll, kind, collider=False):
         if not self.f:
             return None
-        me = bpy.data.meshes.new(name + "_Mesh")
+        o = bpy.data.objects.new(name, self.mesh(name + "_Mesh"))
+        coll.objects.link(o)
+        o["l4_pkg"], o["l4_kind"] = "F_decay", kind
+        if collider:
+            o["l4_collide"] = "bounds"
+        return o
+
+    def mesh(self, name):
+        me = bpy.data.meshes.new(name)
         me.from_pydata([_fd_b(p) for p in self.v], [], self.f)
         for m in self.mats:
             me.materials.append(m)
@@ -216,12 +293,7 @@ class _FDGeo:
         bm.to_mesh(me)
         bm.free()
         me.update()
-        o = bpy.data.objects.new(name, me)
-        coll.objects.link(o)
-        o["l4_pkg"], o["l4_kind"] = "F_decay", kind
-        if collider:
-            o["l4_collide"] = "bounds"
-        return o
+        return me
 
 
 def _fd_quad(c, u, v, width, height, mat, coll, name, kind):
@@ -229,15 +301,92 @@ def _fd_quad(c, u, v, width, height, mat, coll, name, kind):
     g = _FDGeo()
     g.poly([c + a * u * width / 2 + b * v * height / 2 for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))], mat,
            [(0, 0), (1, 0), (1, 1), (0, 1)])
-    return g.object(name, coll, kind)
+    o = g.object(name, coll, kind)
+    o["l4_decay_support"] = _fd_json.dumps([p.tolist() for p in (c, u, v)] + [width, height])
+    return o
 
 
 def _fd_cast(dg, origin, direction, distance):
-    hit, loc, n, _, obj, _ = bpy.context.scene.ray_cast(dg, _fd_b(origin),
-                                                     (direction[0], -direction[2], direction[1]), distance=distance * _FD_S)
+    """-> (hit studs, normal studs frame, object, face index) or None."""
+    hit, loc, n, fi, obj, _ = bpy.context.scene.ray_cast(dg, _fd_b(origin),
+                                                      (direction[0], -direction[2], direction[1]), distance=distance * _FD_S)
     if not hit:
         return None
-    return _fd_s(loc), _fd_np.array((n.x, n.z, -n.y)), obj
+    return _fd_s(loc), _fd_np.array((n.x, n.z, -n.y)), obj, fi
+
+
+_FD_SEMS = {}
+
+
+def _fd_sem(dg, obj, fi):
+    """l4_sem of the material on face `fi` of the evaluated object (None for non-mesh hits)."""
+    rec = _FD_SEMS.get(obj.name)
+    if rec is None:
+        ev = obj.evaluated_get(dg).data
+        rec = ()
+        if hasattr(ev, "polygons"):
+            mi = _fd_np.empty(len(ev.polygons), dtype=_fd_np.int32)
+            ev.polygons.foreach_get("material_index", mi)
+            rec = (mi, [s.material.get("l4_sem") if s.material else None for s in obj.material_slots])
+        _FD_SEMS[obj.name] = rec
+    if not rec or fi >= len(rec[0]):
+        return None
+    i = rec[0][fi]
+    return rec[1][i] if i < len(rec[1]) else None
+
+
+def _fd_in(p, zones):
+    return next((name for name, (x0, x1, y0, y1, z0, z1) in zones
+                 if x0 < p[0] < x1 and y0 < p[1] < y1 and z0 < p[2] < z1), None)
+
+
+def _fd_dropped(p):
+    return _fd_in(p, _FD_DROP_ZONES) or _fd_in(p, _FD_SURFACE_DROP)
+
+
+def _fd_sem_ok(kind, sem):
+    if kind == "peeling_wallpaper":
+        return sem in ("plaster", "wall_dark")           # wallpaper only, never panels, tile or glass
+    if kind in ("carpet_stains", "puddle_outline", "carpet_wear"):
+        return sem in _FD_FLOOR_SEMS
+    if kind == "water_streaks":
+        return sem is not None and sem not in _FD_DENY | {"velvet", "acoustic"}
+    return sem is not None and sem not in _FD_DENY
+
+
+def _fd_settled(dg, kind, p, u, v, w, h):
+    """Keep a quad only when its centre, corners and edge midpoints all have matching support behind the plane."""
+    p, u, v = (_fd_np.asarray(q, float) for q in (p, u, v))
+    n = _fd_np.cross(u, v)
+    n /= max(_fd_np.linalg.norm(n), 1.e-9)
+    corners = ((-1, -1), (1, -1), (1, 1), (-1, 1))
+    if _fd_dropped(p) or any(_fd_dropped(p + u * a * w / 2 + v * b * h / 2) for a, b in corners):
+        return False
+    for a, b in ((0, 0),) + corners + ((0, -1), (1, 0), (0, 1), (-1, 0)):
+        q = p + u * a * .995 * w / 2 + v * b * .995 * h / 2
+        hit = _fd_cast(dg, q + n * .6, -n, 1.)
+        ok = hit is not None and _fd_np.dot(hit[1], n) > .7 and abs(_fd_np.dot(hit[0] - q, n)) < .15
+        if not (ok and _fd_sem_ok(kind, _fd_sem(dg, hit[2], hit[3]))):
+            return False
+    return True
+
+
+def _fd_thin(rows, frac=.35):
+    """Drop a decal when more than `frac` of it lies on an already kept decal of the same kind and plane."""
+    groups, out = _fd_collections.defaultdict(list), []
+    for row in rows:
+        p, u, v, w, h = (_fd_np.asarray(q, float) if i < 3 else q for i, q in enumerate(row))
+        n = _fd_np.cross(u, v)
+        key = (tuple(_fd_np.round(n * 4).astype(int)), round(float(_fd_np.dot(p, n)) * 2))
+        cu, cv = float(_fd_np.dot(p, u)), float(_fd_np.dot(p, v))
+        mine = w * h
+        if any(max(0., min(cu + w / 2, ku + kw / 2) - max(cu - w / 2, ku - kw / 2)) *
+               max(0., min(cv + h / 2, kv + kh / 2) - max(cv - h / 2, kv - kh / 2)) > frac * min(mine, kw * kh)
+               for ku, kv, kw, kh in groups[key]):
+            continue
+        groups[key].append((cu, cv, w, h))
+        out.append(row)
+    return out
 
 
 def _fd_wall_hit(dg, pos, normal, reach=6):
@@ -327,7 +476,7 @@ def _fd_surface_plan(dg, ns, bases, crowns, rng):
                 hit = _fd_wall_hit(dg, pos, normal, 2)
                 if hit is not None:
                     plans["rising_damp"].append((hit, _fd_np.cross(_FD_UP, normal), _FD_UP, hi - lo, height))
-    # Exactly 200, weighted by crown-run length, with modest asymmetric dimensions.
+    # Up to 200 candidates, weighted by crown-run length, with modest asymmetric dimensions.
     for _ in range(4000):
         if len(plans["water_streaks"]) == 200:
             break
@@ -434,6 +583,7 @@ def _fd_peel(p, u, v, w, h, mat, backing, coll, idx, rng):
             g.poly([q - local_n * .006 for q in front[::-1]], backing, front_uv[::-1], smooth=True)
     o = g.object("L4F_Peel_%03d" % idx, coll, "peeling_wallpaper")
     o["l4_curl_studs"] = curl
+    o["l4_decay_support"] = _fd_json.dumps([p.tolist(), u.tolist(), v.tolist(), w, h])
     return o
 
 
@@ -514,36 +664,350 @@ def _fd_kernel(g, p, size, mat, rng):
                    normal=(rows[j][k] - p), smooth=True)
 
 
-def _fd_rubbish(x, fy, z, coll, idx, rng, mats, hero=False, cartons=False):
+def _fd_carton(x, fy, z, coll, idx, carton):
+    """Wet collapsed carton with skewed half-open flaps. Solid: its body (not the flaps) is a collider."""
     g = _FDGeo()
-    popcorn, paper, rim, straw, carton = mats
-    n = 130 if hero else rng.randint(8, 20)
-    rad = 3.4 if hero else 1.7
-    for _ in range(n):
-        a, r = rng.uniform(0, 6.28), rad * rng.random() ** .6
-        size = rng.uniform(.065, .14)
-        _fd_kernel(g, (x + r * _fd_math.cos(a), fy + size * .65 + max(0, 1 - r / rad) * (.62 if hero else .09),
-                       z + r * _fd_math.sin(a)), size, popcorn, rng)
-    for _ in range(5 if hero else 2):
-        yaw = rng.uniform(0, 6.28)
-        p = (x + rng.uniform(-rad * .7, rad * .7), fy + .46, z + rng.uniform(-rad * .7, rad * .7))
-        _fd_cup(g, p, yaw, paper, rim, collapsed=True)
-        end = _fd_np.array(p) + (.7, .02, .6)
-        g.tube(end, end + (1.2 * _fd_math.cos(yaw), .03, 1.2 * _fd_math.sin(yaw)), .025, .025, straw, n=5)
-    for _ in range(5):
-        xx, zz = x + rng.uniform(-rad, rad), z + rng.uniform(-rad, rad)
-        g.poly(((xx, fy + .04, zz), (xx + .45, fy + .06, zz + .07), (xx + .4, fy + .03, zz + .38),
-                (xx - .02, fy + .055, zz + .3)), rim, normal=(0, 1, 0))
-    if cartons:
-        # Wet carton has skewed flattened walls and half-open flaps.
-        g.box((x - .5, fy + .7, z), (2.7, 1.3, 1.9), carton)
-        for sg in (-1, 1):
-            g.poly(((x - 1.85, fy + 1.35, z + sg * .95), (x + .85, fy + 1.35, z + sg * .95),
-                    (x + .85, fy + .98, z + sg * 1.8), (x - 1.85, fy + 1.02, z + sg * 1.8)), carton)
-    height = max(p[1] for p in g.v) - fy
-    o = g.object("L4F_RubbishPile_%03d" % idx, coll, "rubbish", height >= 1.)
-    o["l4_height_studs"] = float(height)
+    g.box((x - .5, fy + .7, z), (2.7, 1.3, 1.9), carton)
+    for sg in (-1, 1):
+        g.poly(((x - 1.85, fy + 1.35, z + sg * .95), (x + .85, fy + 1.35, z + sg * .95),
+                (x + .85, fy + .98, z + sg * 1.8), (x - 1.85, fy + 1.02, z + sg * 1.8)), carton)
+    o = g.object("L4F_WetCarton_%02d" % idx, coll, "carton")
+    c = _fd_b((x - .5, fy + .7, z))
+    o["l4_col"] = _fd_json.dumps([[round(c[0], 4), round(c[1], 4), round(c[2], 4),
+                                   round(2.7 * _FD_S, 4), round(1.9 * _FD_S, 4), round(1.3 * _FD_S, 4)]])
     return o
+
+
+# ---------------------------------------------------------------- 3D floor litter
+def _fd_crumple(g, c, r, mat, rng):
+    """Crumpled paper ball: a jittered, faceted sphere."""
+    c = _fd_np.array(c, float)
+    lat, lon = 5, 8
+    rows = [[c + r * rng.uniform(.72, 1.12) * _fd_np.array((_fd_math.sin(t) * _fd_math.cos(a), .85 * _fd_math.cos(t),
+                                                            _fd_math.sin(t) * _fd_math.sin(a)))
+             for a in (2 * _fd_math.pi * (k + .5 * (i % 2)) / lon for k in range(lon))]
+            for i, t in ((i, _fd_math.pi * i / lat) for i in range(1, lat))]
+    top, bot = c + (0, r * .85, 0), c - (0, r * .8, 0)
+    for k in range(lon):
+        kk = (k + 1) % lon
+        for tri in ((top, rows[0][kk], rows[0][k]), (bot, rows[-1][k], rows[-1][kk])):
+            g.poly(tri, mat, normal=sum(tri) / 3 - c)
+        for j in range(lat - 2):
+            for tri in ((rows[j][k], rows[j][kk], rows[j + 1][kk]), (rows[j][k], rows[j + 1][kk], rows[j + 1][k])):
+                g.poly(tri, mat, normal=sum(tri) / 3 - c)
+
+
+def _fd_flat(g, c, yaw, w, d, mat, bend=.04):
+    """A ticket stub / torn flyer lying on the floor, creased once across the middle."""
+    c = _fd_np.array(c, float)
+    u = _fd_np.array((_fd_math.cos(yaw), 0, _fd_math.sin(yaw))) * w / 2
+    v = _fd_np.array((-_fd_math.sin(yaw), 0, _fd_math.cos(yaw))) * d / 2
+    m = _fd_np.array((0, bend, 0))
+    g.poly((c - u - v, c - v + m, c + v + m, c - u + v), mat, [(0, 0), (.5, 0), (.5, 1), (0, 1)], normal=(0, 1, 0))
+    g.poly((c - v + m, c + u - v, c + u + v, c + v + m), mat, [(.5, 0), (1, 0), (1, 1), (.5, 1)], normal=(0, 1, 0))
+
+
+def _fd_proxy_geo(asset, mats, rng):
+    """Procedural stand-in for a Meshy litter asset (built around stud X 23000, floor y 0; normalised later)."""
+    popcorn, paper, rim, straw = mats
+    g = _FDGeo()
+    o = _fd_np.array((_FD_OX, 0., 0.))
+
+    def kernels(n, cx, cz, rad, mound):
+        for _ in range(n):
+            a, r = rng.uniform(0, 2 * _fd_math.pi), rad * rng.random() ** .7
+            s = rng.uniform(.17, .25)
+            _fd_kernel(g, o + (cx + r * _fd_math.cos(a), s * .3 + mound * max(0., 1 - r / rad), cz + r * _fd_math.sin(a)),
+                       s, popcorn, rng)
+    if asset == "LitterPopcornSpill":
+        _fd_cup(g, o + (-.62, .36, 0.), 0., paper, rim, collapsed=True)          # tipped bucket, mouth towards +X
+        kernels(18, .85, 0., .6, .1)
+    elif asset == "LitterCups":
+        _fd_cup(g, o + (-.45, .34, -.3), .35, paper, rim, collapsed=True)
+        _fd_cup(g, o + (.15, .34, .45), 2.7, paper, rim, collapsed=True)
+        g.tube(o + (-.7, .03, .75), o + (.55, .03, .95), .03, .03, straw, n=5)
+        g.poly([o + (.75 + .36 * _fd_math.cos(a), .02, -.45 + .36 * _fd_math.sin(a))
+                for a in (2 * _fd_math.pi * k / 14 for k in range(14))], rim, normal=(0, 1, 0))
+    elif asset == "LitterPopcornPile":
+        kernels(24, 0., 0., .75, .3)
+    else:
+        _fd_crumple(g, o + (-.3, .27, .05), .32, rim, rng)
+        _fd_flat(g, o + (.35, .012, -.25), .5, .62, .26, rim)
+        _fd_flat(g, o + (.2, .02, .35), 2.1, .55, .24, paper, .03)
+        _fd_crumple(g, o + (.7, .1, .2), .12, straw, rng)                       # balled candy wrapper
+    return g
+
+
+def _fd_normalize(g, longest):
+    """Scale uniformly to `longest` studs on the longest axis; footprint centred on X 23000 / Z 0, bottom at y 0."""
+    v = _fd_np.array(g.v, float)
+    lo, hi = v.min(0), v.max(0)
+    c = _fd_np.array(((lo[0] + hi[0]) / 2, lo[1], (lo[2] + hi[2]) / 2))
+    g.v = [tuple(q) for q in (v - c) * (longest / max(hi - lo)) + (_FD_OX, 0., 0.)]
+
+
+def _fd_litter_meshes(mats):
+    """-> {asset: mesh}: the Meshy mesh L4A_<asset> (imported from its GLB when missing), else a stand-in mesh."""
+    path = _fd_os.path.join(_FD_HERE, "meshy_specs.json")
+    specs = {s["asset"]: s for s in _fd_json.load(open(path, encoding="utf-8")) if s["asset"] in _FD_LITTER}
+    need = [s for a, s in specs.items() if bpy.data.meshes.get("L4A_" + a) is None and _fd_os.path.isfile(s["glb"])]
+    if need:
+        imp = _fd_os.path.join(_FD_HERE, "import_meshy.py")
+        exec(compile(open(imp, encoding="utf-8").read(), imp, "exec"), {"SPEC": need, "__name__": "f_meshy", "__file__": imp})
+    out = {}
+    for i, a in enumerate(_FD_LITTER):
+        me = bpy.data.meshes.get("L4A_" + a)
+        if me is None:
+            g = _fd_proxy_geo(a, mats, _fd_random.Random(_FD_SEED + i))
+            _fd_normalize(g, _FD_LITTER_M[a] / _FD_S)
+            me = g.mesh("L4F_LitterProxy_" + a)
+            me["l4_asset"] = a
+        if not me.get("l4_litter_cleaned"):
+            bm = _fd_bmesh.new()
+            bm.from_mesh(me)
+            _fd_bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context="VERTS")
+            # UV corners survive welding; shared positions give the tiny kernels smooth normals at this budget.
+            _fd_bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=1.e-6)
+            bm.to_mesh(me)
+            bm.free()
+            me["l4_litter_cleaned"] = True
+        # Decimation can move the imported bottom below zero and grow its bounds. Refit THIS litter mesh only.
+        co = _fd_np.empty(len(me.vertices) * 3)
+        me.vertices.foreach_get("co", co)
+        co = co.reshape(-1, 3)
+        lo, hi = co.min(0), co.max(0)
+        base = _FDVector(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, lo[2]))
+        scale = _FD_LITTER_M[a] / max(hi - lo)
+        if base.length > 1.e-6 or abs(scale - 1.) > 1.e-6:
+            me.transform(_FDMatrix.Scale(scale, 4) @ _FDMatrix.Translation(-base))
+        if me.name.startswith("L4A_"):
+            me.shade_smooth()
+            me.set_sharp_from_angle(angle=_fd_math.radians(specs.get(a, {}).get("sharp_angle", 75)))
+        me["l4_col"] = "[]"
+        out[a] = me
+    return out
+
+
+def _fd_dims(me):
+    """(footprint radius, height) in studs of an asset mesh (metres, origin bottom-centre, Z up)."""
+    co = _fd_np.empty(len(me.vertices) * 3)
+    me.vertices.foreach_get("co", co)
+    co = co.reshape(-1, 3)
+    return float(_fd_np.hypot(co[:, 0], co[:, 1]).max() / _FD_S), float(co[:, 2].max() / _FD_S)
+
+
+class _FDSpots:
+    """Floor spots for loose litter: real floor material, flat under the whole footprint, an empty litter volume, not
+    inside a solid, clear of walls, door swings and the removed zones."""
+
+    def __init__(self, dg, ns, meshes=None):
+        self.dg = dg
+        self.meshes, self.geometry = meshes or {}, {}
+        root = bpy.data.collections["L4 Cinema"]
+        self.obstacles, boxes = [], []
+        for o in root.all_objects:
+            if o.type != "MESH" or o.hide_render or o.get("l4_kind") in ("litter", "puddle", "star", "stars"):
+                continue
+            sems = {m.get("l4_sem") for m in o.data.materials if m}
+            if sems and sems <= {"decal", "neon"}:
+                continue
+            ev = o.evaluated_get(dg)
+            v = _fd_np.array([ev.matrix_world @ _FDVector(p) for p in ev.bound_box])
+            self.obstacles.append(o)
+            boxes.append((v.min(0), v.max(0)))
+        self.ob_lo = _fd_np.array([b[0] for b in boxes])
+        self.ob_hi = _fd_np.array([b[1] for b in boxes])
+        idx = [i for i, p in enumerate(ns["P"]) if "Level4V4Floor" in (p.get("tags") or []) and ns["AXAL"][i]]
+        self.lo, self.hi = ns["LO"][idx], ns["HI"][idx]
+        doors = list(_FD_NEW_DOORS)
+        for i, p in enumerate(ns["P"]):
+            if "Level4V4Doorway" in (p.get("tags") or []) or (p["p"].startswith("AutomaticDoors/") and p["p"].endswith("_Leaf")):
+                lo, hi = ns["LO"][i], ns["HI"][i]
+                doors.append((lo[0], hi[0], lo[1], hi[1], lo[2], hi[2]))
+        self.swing = []
+        for x0, x1, y0, y1, z0, z1 in doors:            # a leaf as wide as the opening swings into either side
+            w = max(x1 - x0, z1 - z0)
+            ex, ez = (.8, w + 1.2) if x1 - x0 >= z1 - z0 else (w + 1.2, .8)
+            self.swing.append((x0 - ex, x1 + ex, y0 - 1.5, y0 + 4., z0 - ez, z1 + ez))
+        self.rejects = _fd_collections.Counter()
+
+    def floor_y(self, x, z, ymax):
+        m = (self.lo[:, 0] <= x) & (x <= self.hi[:, 0]) & (self.lo[:, 2] <= z) & (z <= self.hi[:, 2]) & (self.hi[:, 1] <= ymax)
+        return float(self.hi[m, 1].max()) if m.any() else None
+
+    def _no(self, why):
+        self.rejects[why] += 1
+
+    def spot(self, x, z, ymax, r, h):
+        """Floor height for a litter item of footprint radius r and height h at (x, z), or None."""
+        dg = self.dg
+        fe = self.floor_y(x, z, ymax)
+        if fe is None or _fd_dropped((x, fe + .05, z)) or any(
+                _fd_dropped((x + r * _fd_math.cos(a), fe + .05, z + r * _fd_math.sin(a)))
+                for a in (k * _fd_math.pi / 4 for k in range(8))):
+            return self._no("zone")
+        if any(x0 - r < x < x1 + r and y0 < fe < y1 and z0 - r < z < z1 + r for x0, x1, y0, y1, z0, z1 in self.swing):
+            return self._no("door swing")
+        hit = _fd_cast(dg, (x, fe + 1.3, z), (0, -1, 0), 2.)
+        if hit is None or hit[1][1] < .97 or abs(hit[0][1] - fe) > .35:
+            return self._no("covered")
+        if _fd_sem(dg, hit[2], hit[3]) not in _FD_FLOOR_SEMS:
+            return self._no("not floor")
+        fy = float(hit[0][1])
+        for k in range(9):                              # flat floor under the rim, nothing in the litter volume
+            a = k * _fd_math.pi / 4
+            px, pz = (x + r * _fd_math.cos(a), z + r * _fd_math.sin(a)) if k < 8 else (x, z)
+            q = _fd_cast(dg, (px, fy + h + .15, pz), (0, -1, 0), h + .5)
+            if q is None or q[1][1] < .95 or abs(q[0][1] - fy) > .12:
+                return self._no("footprint")
+        for k in range(8):                              # thin uprights between the rim samples: legs, poles, walls
+            a = (k + .5) * _fd_math.pi / 4
+            if _fd_cast(dg, (x, fy + .3, z), (_fd_math.cos(a), 0, _fd_math.sin(a)), r + .25):
+                return self._no("upright")
+        up = _fd_cast(dg, (x, fy + .04, z), (0, 1, 0), 9.)
+        if up is not None and (up[0][1] - fy < h + .25 or up[1][1] > .2):   # low overhang, or a back face: inside a solid
+            return self._no("overhead")
+        return fy
+
+    def clear_mesh(self, asset, x, fy, z, yaw, scale):
+        """Native triangle overlap catches thin seat arms/prop edges missed by the cheap footprint rays."""
+        me = self.meshes[asset]
+        M = _FDMatrix.Translation(_fd_b((x, fy, z))) @ _FDMatrix.Rotation(yaw, 4, "Z") @ _FDMatrix.Scale(scale, 4)
+        v = _fd_np.array([M @ p.co for p in me.vertices])
+        lo, hi = v.min(0), v.max(0)
+        ids = _fd_np.flatnonzero(((self.ob_hi > lo + 1.e-6) & (self.ob_lo < hi - 1.e-6)).all(1))
+        tree = None
+        for j in ids:
+            if self.ob_hi[j, 2] <= fy * _FD_S + .0005:
+                continue
+            if tree is None:
+                tree = _FDBVH.FromPolygons(v.tolist(), [p.vertices[:] for p in me.polygons], epsilon=0.)
+            o = self.obstacles[j]
+            if o.name not in self.geometry:
+                ev = o.evaluated_get(self.dg)
+                points = _fd_np.array([ev.matrix_world @ p.co for p in ev.data.vertices])
+                faces = [p.vertices[:] for p in ev.data.polygons]
+                self.geometry[o.name] = points, faces, _FDBVH.FromPolygons(points.tolist(), faces, epsilon=0.)
+            points, faces, other = self.geometry[o.name]
+            for _, face in tree.overlap(other):
+                if max(abs(points[i, 2] - fy * _FD_S) for i in faces[face]) >= .002:
+                    self._no("mesh overlap")
+                    return False
+            # Surface intersections miss a disconnected component wholly inside a solid (e.g. a stage).
+            inner = v[((v > self.ob_lo[j] + .001) & (v < self.ob_hi[j] - .001)).all(1)
+                      & (v[:, 2] > fy * _FD_S + .002)]
+            for p in inner:
+                near, normal, _, _ = other.find_nearest(_FDVector(p))
+                if near is not None and (_FDVector(p) - near).dot(normal) < -.001 and _fd_inside(other, p):
+                    self._no("inside solid")
+                    return False
+        return True
+
+
+def _fd_inside(tree, point):
+    """Two non-axis parity rays distinguish a closed solid from open decorative faces."""
+    for direction in ((_FDVector((1., .237, .171))).normalized(), (_FDVector((.137, 1., .193))).normalized()):
+        p, hits = _FDVector(point), 0
+        for _ in range(64):
+            hit, _, _, _ = tree.ray_cast(p, direction, 500.)
+            if hit is None:
+                break
+            hits += 1
+            p = hit + direction * .00005
+        else:
+            return False
+        if hits % 2 == 0:
+            return False
+    return True
+
+
+def _fd_cluster(spots, dims, x, z, ymax, n, mix, rng, taken, jitter=0.):
+    """Up to n litter items (asset, x, floor, z, yaw, radius, scale) around (x, z); [] when the first finds no spot."""
+    out = []
+    for i in range(n):
+        asset = rng.choices(_FD_LITTER, weights=mix)[0]
+        s = rng.uniform(.9, 1.1)
+        r, h = dims[asset][0] * s, dims[asset][1] * s
+        for _ in range(12 if i == 0 else 6):
+            if i == 0:
+                px, pz = x + rng.uniform(-jitter, jitter), z + rng.uniform(-jitter, jitter)
+            else:
+                b = out[rng.randrange(len(out))]
+                a, d = rng.uniform(0, 2 * _fd_math.pi), b[5] + r + rng.uniform(-.05, .6)
+                px, pz = b[1] + d * _fd_math.cos(a), b[3] + d * _fd_math.sin(a)
+            if any(_fd_math.hypot(px - q[1], pz - q[3]) < r + q[5] + .05 for q in taken + out):
+                continue
+            fy = spots.spot(px, pz, ymax, r, h)
+            if fy is not None:
+                yaw = rng.uniform(0, 2 * _fd_math.pi)
+                if spots.clear_mesh(asset, px, fy, pz, yaw, s):
+                    out.append((asset, px, fy, pz, yaw, r, s))
+                    break
+        else:
+            if i == 0:
+                return []
+    return out
+
+
+def _fd_plan_litter(spots, dims, rng, anchors):
+    """-> (clusters [(zone, kind, items)], cartons [(x, floor, z)]). Heaps first, then lobby props, then the zones."""
+    zones = {z[0]: z for z in _FD_LITTER_ZONES}
+    items, blockers, centres, clusters, cartons = [], [], [], [], []
+    # Cleaning props are built after the ray plans; reserve their footprints before scattering litter.
+    blockers.extend((None, x, 24., z, 0., 1.7, 1.) for x, z in _FD_CONE_SPOTS)
+    bx, bz = _FD_BUCKET_SPOT
+    blockers.append((None, bx, 24., bz, 0., 3., 1.))
+
+    def size(lo=1, hi=4):
+        return max(lo, min(hi, rng.choices((1, 2, 3, 4), (35, 40, 20, 5))[0]))
+
+    def add(zone, kind, x, z, n, jitter=0., spacing=4.):
+        if kind != "single" and sum(k != "single" for _, k, _ in clusters) >= 145:
+            return False
+        if any(_fd_math.hypot(x - cx, z - cz) < spacing for cx, cz in centres):
+            return False
+        got = _fd_cluster(spots, dims, x, z, zones[zone][2], n, zones[zone][5], rng, items + blockers, jitter)
+        if got:
+            items.extend(got)
+            centres.append((got[0][1], got[0][3]))
+            clusters.append((zone, kind, got))
+        return bool(got)
+
+    for zone, x, z, ymax, n, carton in _FD_HEAPS:
+        if carton:                                      # the carton stands on the site, its litter beside it
+            fy = spots.spot(x - .5, z, ymax, 1.9, 1.5)
+            if fy is not None:
+                cartons.append((x, fy, z))
+                blockers.append((None, x - .5, fy, z, 0., 2., 1.))
+            x += 2.8
+        add(zone, "heap", x, z, n, jitter=1.5, spacing=0.)
+    for name, o in anchors:
+        spec = next((a for a in _FD_ANCHORS if name.startswith(a[0])), None)
+        if spec is None or rng.random() > spec[1]:
+            continue
+        c = _fd_s(o.matrix_world.translation)
+        rad = max(o.dimensions.x, o.dimensions.y) / 2 / _FD_S
+        zone = next((zn for zn, rects, *_ in _FD_LITTER_ZONES if zn in ("Lobby", "ConcessionFront", "Concession")
+                     and any(x0 <= c[0] <= x1 and z0 <= c[2] <= z1 for x0, x1, z0, z1 in rects)), None)
+        if zone is None:
+            continue
+        for _ in range(8):
+            a, d = rng.uniform(0, 2 * _fd_math.pi), rad * rng.uniform(*spec[3])
+            if add(zone, "anchor:" + spec[0], c[0] + d * _fd_math.cos(a), c[2] + d * _fd_math.sin(a), size(*spec[2])):
+                break
+    for zone, rects, ymax, n_cl, n_one, mix in _FD_LITTER_ZONES:
+        area = [(x1 - x0) * (z1 - z0) for x0, x1, z0, z1 in rects]
+        for kind, target, spacing in (("cluster", n_cl, 4.), ("single", n_one, 2.5)):
+            got = 0
+            for _ in range(target * 80):
+                if got >= target:
+                    break
+                x0, x1, z0, z1 = rng.choices(rects, area)[0]
+                x, z = rng.uniform(x0, x1), rng.uniform(z0, z1)
+                if zone == "Lobby" and rng.random() < .6:   # litter drifts to the walls; the middle stays walkable
+                    z = rng.uniform(z0, z0 + 6) if rng.random() < .5 else rng.uniform(z1 - 6, z1)
+                got += add(zone, kind, x, z, size() if kind == "cluster" else 1, spacing=spacing)
+    return clusters, cartons
 
 
 def _fd_cone(x, fy, z, coll, idx, yellow, dark):
@@ -619,6 +1083,8 @@ def _fd_bucket(x, fy, z, coll, yellow, dark, steel, rng):
     for sg in (-1, 1):
         q = c + d * .3 + u * sg * .8 - v * .6
         g.tube(q - u * .09, q + u * .09, .18, .18, dark, n=10)
+    bottom = min(p[1] for p in g.v)
+    g.v = [(x, y + fy - bottom, z) for x, y, z in g.v]
     o = g.object("L4F_ToppledMopBucket", coll, "bucket", True)
     o["l4_prop"] = "ToppledMopBucket"
     return o
@@ -640,14 +1106,11 @@ def build_decay():
     for me in list(bpy.data.meshes):
         if me.name.startswith("L4F_") and me.users == 0:
             bpy.data.meshes.remove(me)
+    _FD_SEMS.clear()
     rng = _fd_random.Random(_FD_SEED)
-    bpy.context.view_layer.update()
-    dg = bpy.context.evaluated_depsgraph_get()
-    ns, bases, crowns = _fd_measured()
-    plans = _fd_surface_plan(dg, ns, bases, crowns, rng)
     mats = {name: _fd_decal(name, .82 if name == "rising_damp" else 1.) for name in
             ("water_streaks", "rising_damp", "ceiling_rings", "carpet_stains", "puddle_outline",
-             "peeling_wallpaper", "cobweb", "soot_plume", "popcorn_cups", "carpet_wear")}
+             "peeling_wallpaper", "cobweb", "soot_plume", "carpet_wear")}
     backing = _fd_paper_reverse()
     mats["peeling_wallpaper"].use_backface_culling = True
     backing.use_backface_culling = True
@@ -665,8 +1128,17 @@ def build_decay():
     popcorn = _fd_solid("Popcorn", (203, 178, 126), .9)
     straw = _fd_solid("Straw", (100, 175, 178), .72)
     carton = _fd_solid("WetCardboard", (76, 61, 43), .96)
-    rubbish_mats = (popcorn, paper, rim, straw, carton)
-    # All placements are planned against the fresh scene before our surfaces can intercept raycasts.
+    litter_me = _fd_litter_meshes((popcorn, paper, rim, straw))
+    dims = {a: _fd_dims(me) for a, me in litter_me.items()}
+    # Everything is planned against the fresh scene before any of our surfaces can intercept a ray.
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    ns, bases, crowns = _fd_measured()
+    plans = _fd_surface_plan(dg, ns, bases, crowns, rng)
+    planned = {k: len(v) for k, v in plans.items()}
+    for kind in list(plans):
+        plans[kind] = _fd_thin([row for row in plans[kind] if _fd_settled(dg, kind, *row)])
+    # ceilings.py reads this literal (zone, x, z, floor y, v2 ceiling y) to reserve its stained ceiling cells.
     leaks = [("Concourse", 23045, 80, 24.05, 60), ("Concourse", 22744, 83, 24.05, 60),
              ("Concourse", 23142, 18, 24.05, 60), ("Concourse", 23300, 81, 24.05, 60),
              ("Concession", 22928, 151, 24.05, 52), ("Concession", 23083, 203, 24.05, 52),
@@ -675,41 +1147,40 @@ def build_decay():
              ("Men", 23281, 142, 24.05, 40.5), ("Women", 23332, 142, 24.05, 40.5),
              ("Arcade", 23196, 213, 24.05, 52)]
     leak_plans = []
-    for zone, x, z, fy, cy in leaks:
+    for zone, x, z, fy, _ in leaks:
         floor = _fd_floor_hit(dg, x, fy, z)
-        if floor is None:
-            raise RuntimeError("F_decay roof leak has no verified floor: %s %.1f %.1f" % (zone, x, z))
-        ceil = _fd_cast(dg, (x, cy - 3, z), (0, 1, 0), 5)
-        if ceil is None or ceil[1][1] > -.6 or abs(ceil[0][1] - cy) > 2.1:
-            raise RuntimeError("F_decay roof leak has no verified ceiling: " + zone)
-        leak_plans.append((zone, x, z, floor, ceil[0][1], rng.uniform(4.8, 7.8)))
-    scatter = []
-    for zone, rect, count, fy in (("Concourse", (22626, 23374, -18, 98), 140, 24.05),
-                                 ("Concession", (22883, 23117, 128, 234), 60, 24.05)):
-        accepted = 0
-        for _ in range(count * 30):
-            if accepted == count:
-                break
-            x, z = rng.uniform(rect[0], rect[1]), rng.uniform(rect[2], rect[3])
-            # Most debris hugs an edge; the remaining clusters interrupt the empty expanse sparingly.
-            if accepted % 4 != 0:
-                z = rng.uniform(rect[2] + 1, rect[2] + 5) if accepted % 2 else rng.uniform(rect[3] - 5, rect[3] - 1)
-            f = _fd_floor_hit(dg, x, fy, z)
-            if f is not None:
-                scatter.append((zone, x, z, f, rng.uniform(1.8, 3.6)))
-                accepted += 1
-    # 54 actual aisle trails, using the measured top of each corresponding aisle tread.
-    treads = [i for i, p in enumerate(ns["P"]) if _fd_os.path.basename(p["p"]).find("AisleTread") >= 0]
-    if not treads:
-        treads = [i for i, p in enumerate(ns["P"]) if "Aisle" in p["p"] and "Tread" in p["p"]]
-    for i in treads[::max(1, len(treads) // 54)][:54]:
-        lo, hi = ns["LO"][i], ns["HI"][i]
-        x, z = (lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2
-        f = _fd_floor_hit(dg, x, hi[1], z)
-        if f is not None:
-            scatter.append(("Aisle", x, z, f, 2.3))
+        if floor is None or _fd_in((x, fy + 1, z), _FD_DROP_ZONES):
+            print("F_decay: roof leak skipped (no floor):", zone, x, z)
+            continue
+        dia = rng.uniform(4.8, 7.8)
+        stain = None
+        up = _fd_cast(dg, (x, floor + 6, z), (0, 1, 0), 90) if zone == "Service" else None
+        if up is not None and up[1][1] < -.9:          # Service keeps its stained fluorescent ceiling
+            p = (x, float(up[0][1]) - .017, z)
+            if _fd_settled(dg, "ceiling_rings", p, (1, 0, 0), (0, 0, 1), dia * 1.15, dia):
+                stain = p
+        ring = _fd_settled(dg, "puddle_outline", (x, floor + .018, z), (1, 0, 0), (0, 0, -1), dia * 1.25, dia * .98)
+        leak_plans.append((zone, x, z, floor, stain, ring, dia))
+    spots = _FDSpots(dg, ns, litter_me)
+    lobby = bpy.data.collections.get("L4 Props Lobby")
+    anchors = sorted(((o.name, o) for o in (lobby.all_objects if lobby else ()) if o.type in ("MESH", "EMPTY")),
+                     key=lambda t: t[0])
+    clusters, cartons = _fd_plan_litter(spots, dims, rng, anchors)
+    cleaning_floors = [_fd_floor_hit(dg, x, 24.05, z) for x, z in _FD_CONE_SPOTS]
+    bx, bz = _FD_BUCKET_SPOT
+    bucket_floor = _fd_floor_hit(dg, bx, 24.05, bz)
+    # A spilt-soda stain under some of the clusters, never on its own.
+    stains = []
+    for zone, kind, got in clusters:
+        if kind != "single" and rng.random() < .25:
+            _, x, fy, z = got[0][:4]
+            w = rng.uniform(1.8, 3.2)
+            row = ((x + .3, fy + .016, z), (1., 0., 0.), (0., 0., -1.), w * 1.2, w)
+            if _fd_settled(dg, "carpet_stains", *row):
+                stains.append(row)
+    # Worn desire lines from the street doors to the doors people actually used (C1 is gone; arcade door moved).
     lanes = [((23000., 226.), (23075., 101.))] + [((23075., 101.), p) for p in
-             ((22649., -21.), (22883., -21.), (23117., -21.), (23351., -21.), (23164., 101.), (23288., 101.), (22864., 101.))]
+             ((22883., -21.), (23117., -21.), (23351., -21.), (23192., 101.), (23288., 101.), (22864., 101.))]
     lane_plan = []
     lane_length = 0.
     for start, end in lanes:
@@ -723,8 +1194,7 @@ def build_decay():
             ll = min(16., ln - j * 16.)
             pos = a + d * (j * 16 + ll / 2)
             f = _fd_floor_hit(dg, pos[0], 24.05, pos[1])
-            # Avoid painting through a wall: both lateral edges and the centre must remain walkable.
-            if f is not None and all(_fd_floor_hit(dg, pos[0] + q * right[0], f, pos[1] + q * right[2]) is not None for q in (-3.6, 3.6)):
+            if f is not None and _fd_settled(dg, "carpet_wear", (pos[0], f + .017, pos[1]), right, along, 8., ll):
                 lane_plan.append(((pos[0], f + .017, pos[1]), right, along, 8., ll))
     # Build the mesh collection only after planning.
     for kind, rows in plans.items():
@@ -733,60 +1203,80 @@ def build_decay():
                 _fd_peel(p, u, v, w, h, mats[kind], backing, coll, idx, rng)
             else:
                 _fd_quad(p, u, v, w, h, mats[kind], coll, "L4F_%s_%04d" % (kind, idx), kind)
-    for idx, (zone, x, z, fy, cy, dia) in enumerate(leak_plans):
-        stain = _fd_quad((x, cy - .017, z), (1, 0, 0), (0, 0, 1), dia * 1.15, dia, mats["ceiling_rings"], coll,
+    for idx, (zone, x, z, fy, stain, ring, dia) in enumerate(leak_plans):
+        if stain is not None:
+            o = _fd_quad(stain, (1, 0, 0), (0, 0, 1), dia * 1.15, dia, mats["ceiling_rings"], coll,
                          "L4F_CeilingLeak_%02d_%s" % (idx, zone), "ceiling_rings")
-        stain["l4_leak_zone"] = zone
-        _fd_quad((x, fy + .018, z), (1, 0, 0), (0, 0, -1), dia * 1.25, dia * .98, mats["puddle_outline"], coll,
-                 "L4F_DarkLeakRing_%02d" % idx, "puddle_outline")
+            o["l4_leak_zone"] = zone
+        if ring:
+            _fd_quad((x, fy + .018, z), (1, 0, 0), (0, 0, -1), dia * 1.25, dia * .98, mats["puddle_outline"], coll,
+                     "L4F_DarkLeakRing_%02d" % idx, "puddle_outline")
         _fd_puddle(x, fy, z, dia, wet, coll, idx, rng)
-    for idx, (zone, x, z, fy, size) in enumerate(scatter):
-        o = _fd_quad((x, fy + .019, z), (1, 0, 0), (0, 0, -1), size, size * (1.6 if zone == "Aisle" else 1),
-                     mats["popcorn_cups"], coll, "L4F_PopcornScatter_%03d" % idx, "popcorn_scatter")
-        o["l4_scatter_zone"] = zone
-        if idx % 7 == 0:
-            _fd_quad((x + .35, fy + .016, z), (1, 0, 0), (0, 0, -1), size * 1.5, size * 1.2,
-                     mats["carpet_stains"], coll, "L4F_CarpetStain_%03d" % idx, "carpet_stains")
+    for idx, row in enumerate(stains):
+        _fd_quad(*row, mats["carpet_stains"], coll, "L4F_CarpetStain_%03d" % idx, "carpet_stains")
     for idx, row in enumerate(lane_plan):
         _fd_quad(*row, mats["carpet_wear"], coll, "L4F_WearLane_%03d" % idx, "carpet_wear")
-    heap_sites = [("Concession", 22911, 131, 24.05, True, False), ("Service", 22772, 166, 24.05, False, True),
-                  ("Concourse", 22629, 89, 24.05, False, False), ("Concourse", 23369, 94, 24.05, False, False),
-                  ("Concourse", 23023, 95, 24.05, False, False), ("Concourse", 23121, -16, 24.05, False, False),
-                  ("Concession", 23113, 231, 24.05, False, True), ("Service", 22629, 232, 24.05, False, True),
-                  ("Service", 22871, 209, 24.05, False, True), ("Arcade", 23247, 229, 24.05, False, False),
-                  ("Gallery", 23043, -16, 86., False, False), ("Gallery", 23270, -16, 86., False, False)]
-    for idx, (zone, x, z, fy, hero, cartons) in enumerate(heap_sites):
-        _fd_rubbish(x, fy, z, coll, idx, rng, rubbish_mats, hero, cartons)
-    # Individual loose paper cups. Standing cups are collidable; fallen cups are below the 1-stud rule.
-    for idx, (_, x, z, fy, _) in enumerate(scatter[:95]):
-        g = _FDGeo()
-        standing = idx % 11 == 0
-        _fd_cup(g, (x + .4, fy + (.06 if standing else .34), z + .4), rng.uniform(0, 6.28), paper, rim, not standing)
-        g.object("L4F_LooseCup_%03d" % idx, coll, "cup", standing)
-    for idx, (x, z) in enumerate(((23050, 83), (22780, 164), (22921, 144), (23312, 117))):
-        _fd_cone(x, 24.05, z, coll, idx, yellow, dark)
-    _fd_bucket(22774, 24.05, 158, coll, yellow, dark, steel, rng)
+    n = 0
+    litter_zone, litter_asset = _fd_collections.Counter(), _fd_collections.Counter()
+    for ci, (zone, kind, got) in enumerate(clusters):
+        for asset, x, fy, z, yaw, _, s in got:
+            o = bpy.data.objects.new("L4F_Litter_%03d_%s" % (n, asset), litter_me[asset])
+            o.matrix_world = (_FDMatrix.Translation(_fd_b((x, fy, z))) @ _FDMatrix.Rotation(yaw, 4, "Z")
+                              @ _FDMatrix.Scale(s, 4))
+            coll.objects.link(o)
+            o["l4_pkg"], o["l4_kind"] = "F_decay", "litter"
+            o["l4_prop"], o["l4_model"] = asset, asset
+            o["l4_col"] = "[]"                          # owner: floor litter has no collision
+            o["l4_litter_zone"], o["l4_litter_cluster"] = zone, ci
+            litter_zone[zone] += 1
+            litter_asset[asset] += 1
+            n += 1
+    for idx, (x, fy, z) in enumerate(cartons):
+        _fd_carton(x, fy, z, coll, idx, carton)
+    for idx, (x, z) in enumerate(_FD_CONE_SPOTS):
+        fy = cleaning_floors[idx]
+        if fy is not None:
+            _fd_cone(x, fy, z, coll, idx, yellow, dark)
+    bx, bz = _FD_BUCKET_SPOT
+    if bucket_floor is not None:
+        _fd_bucket(bx, bucket_floor, bz, coll, yellow, dark, steel, rng)
     _fd_puddle(22776, 24.05, 159, 5.6, wet, coll, 14, rng, "BucketSpill")
     bpy.context.view_layer.update()
-    stats = _fd_collections.Counter(o.get("l4_kind", "unknown") for o in coll.all_objects)
-    stats["objects"] = len(coll.all_objects)
-    stats["triangles"] = sum(sum(len(p.vertices) - 2 for p in o.data.polygons) for o in coll.all_objects if o.type == "MESH")
-    stats["colliders"] = sum(o.get("l4_collide") == "bounds" for o in coll.all_objects)
+    objs = list(coll.all_objects)
+    stats = _fd_collections.Counter(o.get("l4_kind", "unknown") for o in objs)
+    tris = lambda me: sum(len(p.vertices) - 2 for p in me.polygons)
+    unique = {o.data.name: o.data for o in objs if o.get("l4_prop")}
+    stats["objects"] = len(objs)
+    stats["triangles"] = sum(tris(o.data) for o in objs if not o.get("l4_prop")) + sum(map(tris, unique.values()))
+    stats["colliders"] = sum(o.get("l4_collide") == "bounds" or o.get("l4_col", "[]") != "[]" for o in objs)
     stats["roof_leaks"] = len(leak_plans)
     stats["damp_run_studs"] = round(sum(row[3] for row in plans["rising_damp"]))
     stats["desire_line_studs"] = round(lane_length)
     stats["placed_wear_studs"] = round(sum(row[4] for row in lane_plan))
-    assert stats["water_streaks"] == 200 and stats["peeling_wallpaper"] == 90, dict(stats)
-    assert stats["roof_leaks"] == 14 and stats["cone"] == 4 and stats["bucket"] == 1, dict(stats)
+    stats["litter_clusters"] = sum(k != "single" for _, k, _ in clusters)
+    stats["litter_singles"] = sum(k == "single" for _, k, _ in clusters)
+    stats["litter_meshes"] = ",".join(sorted(me.name for me in unique.values() if me.name.startswith(("L4A_Litter", "L4F_Litter"))))
+    print("F_decay planned decals:", planned)
+    stats["decal_candidates"] = planned
+    stats["decal_kept"] = {k: len(v) for k, v in plans.items()}
+    stats["litter_per_zone"] = dict(litter_zone)
+    stats["litter_per_asset"] = dict(litter_asset)
+    stats["lights"] = 0
+    print("F_decay litter per zone:", dict(litter_zone), "per asset:", dict(litter_asset),
+          "spot rejects:", dict(spots.rejects))
     assert stats["triangles"] <= 60000, "F_decay triangle budget exceeded"
-    for o in coll.all_objects:
+    if stats["litter_clusters"] < 100:
+        print("WARNING F_decay: only %d litter clusters found room" % stats["litter_clusters"])
+    for o in objs:
         assert o.type == "MESH" and o.data.uv_layers.active is not None, o.name
+        c = _fd_s(o.matrix_world @ (sum((_FDVector(v) for v in o.bound_box), _FDVector()) / 8))
+        assert not _fd_in(c, _FD_DROP_ZONES), "F_decay object in a removed zone: " + o.name
+        if o.get("l4_kind") == "litter":
+            assert not _fd_dropped(_fd_s(o.location) + (0, .05, 0)), o.name
+            assert o.get("l4_prop") and o["l4_col"] == o.data["l4_col"] == "[]" and not o.get("l4_collide"), o.name
+            continue
         assert all(-1.e-5 <= q <= 1.00001 for loop in o.data.uv_layers.active.data for q in loop.uv), o.name
-        if o.get("l4_kind") in ("cone", "bucket") or o.get("l4_height_studs", 0) >= 1.:
-            assert o.get("l4_collide") == "bounds", o.name
-        if o.get("l4_kind") in ("cup", "rubbish", "cone", "bucket"):
-            height = (max(v.co.z for v in o.data.vertices) - min(v.co.z for v in o.data.vertices)) / _FD_S
-            if height >= 1.:
-                assert o.get("l4_collide") == "bounds", o.name
+        if o.get("l4_kind") in ("cone", "bucket", "carton"):
+            assert o.get("l4_collide") == "bounds" or o.get("l4_col"), o.name
     print("F_decay:", dict(stats))
     return dict(stats)

@@ -1,9 +1,12 @@
-# Level 4 cinema: Blender -> Roblox export (run inside Blender: MCP exec, or `blender -b <blend> -P export_l4.py`).
+# Level 4 cinema: Blender -> Roblox export. Run through the machine-wide slot runner, using a copy:
+#   python G:/Roblox/_local/l4facelift/v3/blrun.py <copy.blend> export_l4.py
 # Writes <OUT>/chunks/cNNNNN.b64 + manifest.json. OUT = global L4_EXPORT_OUT, else env L4_EXPORT_OUT, else the
 # default below. exec() with L4_EXPORT_NO_RUN = True to get the functions without exporting.
+# L4_EXPORT_LAYOUT and L4_EXPORT_BUILD_DIR (globals, then environment) can freeze the layout and build metadata
+# used by a saved blend review; defaults remain this repository's layout and build scripts.
 #   * plain meshes under "L4 Cinema" are baked to world space and pooled per material (modifiers applied);
 #   * obj["l4_prop"] / obj["l4_door_leaf"] objects are instanced assets (one mesh per material) placed per object,
-#     so each becomes its own Model in Roblox;
+#     gameplay/solid props remain Models; single-mesh decorations share per-asset folders as bare MeshParts;
 #   * UVs: materials with l4_uv == "mesh" keep the mesh's own UVs as (u, 1 - v); all others are box-projected
 #     (world metres for pools, object metres for assets) / l4_tile, matching the Blender materials;
 #   * materials carry l4_tex / l4_normal / l4_rough / l4_metal (file names), l4_roblox, l4_emit, l4_uv;
@@ -13,12 +16,22 @@
 #         props_lobby/props_rooms/props_decay) is dropped only where the scene's own colliders cover >= 30 % of it (its tags and
 #         attributes move to the collider covering most of it, unless that object already carries the tag), so a
 #         prop with no collision of its own keeps the old boxes. Floors (Level4V4Floor) and walls (<= 3 studs thick,
-#         >= 8 on both other axes) are never dropped. Level4V4Doorway volumes export as non-colliding markers;
+#         >= 8 on both other axes) are protected unless a module explicitly lists the raw path in
+#         COLLIDERS_SUPERSEDED. Those obsolete colliders are dropped regardless of coverage/protection.
+#         Level4V4Doorway volumes export as non-colliding markers;
 #       - obj["l4_collide"] = "bounds": one box from the object's local bounds under its matrix (an OBB; exactly
 #         axis-aligned results get an identity rotation);
 #       - mesh["l4_col"] (or obj["l4_col"]) = JSON [[cx,cy,cz,sx,sy,sz], ...] in the mesh's local metres, under each
-#         placement's matrix; l4_col wins over l4_collide. (mesh or obj) l4_col_tags = JSON list parallel to l4_col,
+#         placement's matrix; l4_col wins over l4_collide, and an explicit empty l4_col ("[]") means NO collider even
+#         with l4_collide set (litter). (mesh or obj) l4_col_tags = JSON list parallel to l4_col,
 #         one tag string per box; when present it replaces obj l4_tags for the colliders;
+#       - camera occluders ("occ": True; make_place insets them, place.luau shows them black, see its header):
+#         a layout collider is one when its part is visible (t < 1), not Glass, not a Seat/door leaf, and at least
+#         OCC_MIN studs on every axis. Scene colliders are occluders when the object (or
+#         its mesh) has l4_occluder = True; such an object without l4_col / l4_collide gets a "bounds" box;
+#   * visual tags: a material's l4_tags ("A,B") go on every MeshPart of that material (styles), and an object
+#     without colliders that has l4_tags is pooled apart, so its chunks carry those tags (e.g. L4StarTwinkleA);
+#   * layout parts with "removed": true (layout_edits.py) are left out entirely;
 #       - a Seat: box index obj["l4_seat_box"], else (mesh or obj) l4_seat_col, else with obj["l4_seat"] = True the
 #         box with the largest local XY footprint. It faces l4_seat_front ("+Y"/"-Y"/"+X"/"-X", object-local) when
 #         set, else away from the tallest box rising above it (the back), else -Y. obj["l4_tags"] = "A,B" tags every
@@ -28,13 +41,14 @@
 #   * lights: every LIGHT object in the "L4 Fixture Lights" collection. POINT/SPOT/AREA -> PointLight/SpotLight/
 #     SurfaceLight shining along the object's -Z (Roblox Face = Bottom of the holder). l4_range (studs),
 #     l4_brightness, l4_shadows, l4_angle (SurfaceLight), l4_color (sRGB 0-255, else the light colour), l4_flicker
-#     (the holder gets OccasionalFlicker) on the object or the light data. A light parented to an l4_prop object
-#     (e.g. FlickerLens) records that placement, and Roblox puts it inside the prop's Neon part;
+#     (the holder gets OccasionalFlicker) on the object or the light data, l4_kind (-> "kind", Studio attribute
+#     L4Kind). A light parented to an l4_prop object (e.g. FlickerLens), or naming one in l4_host, records that
+#     placement, and Roblox puts its holder inside the prop's Model, so the prop's flicker drives it;
 #   * legacyLights: the original preview lights still in "L4 Lights" (lights_and_camera.build_lights; packages delete
-#     the ones whose fixture they replace), minus every module's LIGHTS_SUPERSEDED path regexes and the lights of
-#     cloned flicker fixtures. Studio clones them from the original preview with their exact properties;
-#   * flicker fixtures: layout parts with OccasionalFlicker = "true" whose object is still in the scene are not
-#     exported as meshes; Studio clones the original part with its light;
+#     the ones whose fixture they replace). Export preserves the lights still in the saved scene; make_place
+#     drops the ceiling ones; Studio clones the rest from the original preview with their exact properties;
+#   * the original OccasionalFlicker fixtures are no longer cloned (v3): an object still standing for one exports
+#     as plain geometry like everything else;
 #   * door leaves: l4_leaf_cf (12 numbers, Studio frame) / l4_leaf_size (studs) / l4_hinge_pos (Studio frame, any
 #     point on the hinge axis) when present; else the layout part (l4_src); else the leaf mesh bounds;
 #   * decal carriers (the original Decals / SurfaceGuis) move to 0.02 studs in front of the first new surface a ray
@@ -52,7 +66,8 @@ OX = 23000.0
 MAX_TRIS, MAX_SPAN = 20000, 1800.0
 C = np.array(((1, 0, 0), (0, 0, 1), (0, -1, 0)), dtype=np.float64)   # Blender (x,y,z) -> Roblox (x,z,-y)
 Cm = mathutils.Matrix(C.tolist())
-LAYOUT = json.load(open(os.path.join(HERE, "l4_layout.json")))
+LAYOUT_PATH = globals().get("L4_EXPORT_LAYOUT") or os.environ.get("L4_EXPORT_LAYOUT") or os.path.join(HERE, "l4_layout.json")
+LAYOUT = json.load(open(LAYOUT_PATH))
 DUMP = json.load(open(os.path.join(HERE, "l4_dump.json")))
 
 ROBLOX_MAT = {"carpet": "Carpet", "carpet_arcade": "Carpet", "velvet": "Fabric", "acoustic": "Fabric",
@@ -60,8 +75,8 @@ ROBLOX_MAT = {"carpet": "Carpet", "carpet_arcade": "Carpet", "velvet": "Fabric",
               "tile": "CeramicTiles", "ceiling": "SmoothPlastic", "wood": "Wood", "metal": "Metal",
               "concrete": "Concrete", "neon": "Neon", "glass": "Glass", "screen": "SmoothPlastic",
               "plastic": "SmoothPlastic", "prop": "SmoothPlastic"}
-FLICKER = {p["p"] for p in LAYOUT["parts"] if (p.get("at") or {}).get("OccasionalFlicker") == "true"}
 DOOR_PARTS = re.compile(r"^AutomaticDoors/(?!.*_Post$)")      # leaves + hardware: the door Models replace them
+OCC_MIN = 0.5                                                   # studs: thinner layout parts never occlude
 FACE_N = {"Front": (0, 0, -1), "Back": (0, 0, 1), "Right": (1, 0, 0), "Left": (-1, 0, 0),
           "Top": (0, 1, 0), "Bottom": (0, -1, 0)}
 PROBE, PROBE_INSIDE = 1.0, 3.0                                 # studs (place.luau adds the 0.02 gap)
@@ -125,7 +140,13 @@ def as_list(v):
 def tag_list(v):
     if not v:
         return []
-    return [t.strip() for t in (v.split(",") if isinstance(v, str) else list(v)) if t.strip()]
+    return list(dict.fromkeys(t.strip() for t in (re.split(r"[,|]", v) if isinstance(v, str) else list(v)) if t.strip()))
+
+
+def layout_occluder(p):
+    """The v3 camera rule for retained collidable layout parts; scene props opt in via l4_occluder."""
+    return (p["t"] < 1 and p["m"] != "Glass" and p["c"] != "Seat"
+            and not DOOR_PARTS.search(p["p"]) and min(p["s"]) >= OCC_MIN)
 
 
 # ---------------------------------------------------------------- replaced layout parts
@@ -138,8 +159,9 @@ def module_constant(path, name):
     return None
 
 
-def module_list(name, build_dir=HERE):
+def module_list(name, build_dir=None):
     """Every build module's `name` constant (a list, or one item), concatenated in BUILD_MODULES order."""
+    build_dir = build_dir or globals().get("L4_EXPORT_BUILD_DIR") or os.environ.get("L4_EXPORT_BUILD_DIR") or HERE
     out = []
     for fn in BUILD_MODULES:
         path = os.path.join(build_dir, fn)
@@ -149,8 +171,9 @@ def module_list(name, build_dir=HERE):
     return out
 
 
-def replaced_patterns(build_dir=HERE):
+def replaced_patterns(build_dir=None):
     """-> (compiled REPLACES regexes matched on the raw path, build_base.REPLACED matched on key(path))."""
+    build_dir = build_dir or globals().get("L4_EXPORT_BUILD_DIR") or os.environ.get("L4_EXPORT_BUILD_DIR") or HERE
     rx = [re.compile(r) if isinstance(r, str) else r for r in module_list("REPLACES", build_dir)]
     base = os.path.join(build_dir, "build_base.py")
     rep = module_constant(base, "REPLACED") if os.path.exists(base) else None
@@ -165,7 +188,9 @@ def protected(p):
 def prune_replaced(layout_cols, new_cols, is_replaced):
     """layout_cols: [(path, collider dict)]. Drops replaced, unprotected ones the new colliders cover by >= COVER
     of their volume, moving their tags and attributes to the new collider that covers most (a tag another box of
-    that object already carries is not added again, so tag counts survive). -> (kept dicts, stats)."""
+    that object already carries is not added again, so tag counts survive). Explicit COLLIDERS_SUPERSEDED paths
+    retire obsolete boxes even below COVER or when protected; doorway markers stay. -> (kept dicts, stats)."""
+    superseded = [re.compile(r) for r in module_list("COLLIDERS_SUPERSEDED")]
     if new_cols:
         lo_n, hi_n = map(np.array, zip(*(aabb(c["cf"], c["s"]) for c in new_cols)))
     src_tags = collections.defaultdict(set)
@@ -173,6 +198,9 @@ def prune_replaced(layout_cols, new_cols, is_replaced):
         src_tags[c.get("src")].update(c["tags"])
     kept, dropped, uncovered = [], 0, []
     for path, c in layout_cols:
+        if c.get("kind") != "Marker" and any(r.search(path) for r in superseded):
+            dropped += 1
+            continue
         if not is_replaced(path) or c.get("kind") == "Marker" or c.get("_protected"):
             kept.append(c)
             continue
@@ -214,6 +242,7 @@ def mat_info(m):
             "metal": m.get("l4_metal", "") if m else "", "tile": float(m.get("l4_tile", 1.0)) if m else 1.0,
             "alpha": float(m.get("l4_alpha", 1.0)) if m else 1.0, "roblox": rm,
             "emit": float(m.get("l4_emit", 0.0)) if m else 0.0, "uv": m.get("l4_uv", "box") if m else "box",
+            "tags": tag_list(m.get("l4_tags")) if m else [],
             # albedo multiplied by the colour in Blender: legacy "_n" detail maps, and slot(name, tint) copies
             "tinted": bool(tex) and (tex.endswith("_n.png") or bool(m.get("l4_slot") and re.search(r"_[0-9a-f]{6}(_uv)?$", name)))}
 
@@ -325,9 +354,12 @@ def object_colliders(o):
     me = o.data if o.type == "MESH" else None
     get = lambda k: o.get(k, me.get(k) if me is not None else None)
     raw = as_list(get("l4_col"))
+    occ = bool(get("l4_occluder"))
+    if raw is not None and not len(raw):
+        return []                               # explicit "[]": no collider (litter, switched-off Meshy boxes)
     if raw:
         boxes = [(np.array(b[:3], float), np.array(b[3:6], float)) for b in raw]
-    elif o.get("l4_collide") == "bounds":
+    elif o.get("l4_collide") == "bounds" or occ:
         bb = np.array([list(v) for v in o.bound_box])
         boxes = [((bb.min(0) + bb.max(0)) / 2, bb.max(0) - bb.min(0))]
     else:
@@ -346,7 +378,7 @@ def object_colliders(o):
     if per_box:                                 # per-box tags win; obj l4_tags would double-count them
         box_tags = [tag_list(per_box[i]) if i < len(per_box) else [] for i in range(len(boxes))]
     else:
-        tags = tag_list(o.get("l4_tags"))
+        tags = tag_list(get("l4_tags"))
         box_tags = [list(tags) if seat is None or i == seat else [] for i in range(len(boxes))]
     m0 = o.material_slots[0].material if o.material_slots else None
     phys = mat_info(m0)["roblox"] if m0 else "SmoothPlastic"
@@ -356,7 +388,8 @@ def object_colliders(o):
     for i, (c, s) in enumerate(boxes):
         cf, size = box_cf(Mw, c, s, front=front if i == seat else None)
         out.append({"cf": cf, "s": size, "sh": "Block", "m": "Fabric" if i == seat else phys,
-                    "tags": box_tags[i], "kind": "Seat" if i == seat else "Part", "src": o.name})
+                    "tags": box_tags[i], "kind": "Seat" if i == seat else "Part", "src": o.name,
+                    "occ": occ and i != seat})
     return out
 
 
@@ -385,6 +418,8 @@ def export_lights(placement_of):
              "shadows": bool(get("l4_shadows", False)), "name": o.name}
         if get("l4_flicker"):
             e["flicker"] = True
+        if get("l4_kind"):
+            e["kind"] = str(get("l4_kind"))
         if ld.type == "SPOT":
             e["angle"] = round(math.degrees(ld.spot_size), 2)
         elif ld.type == "AREA":
@@ -395,6 +430,8 @@ def export_lights(placement_of):
         p = o.parent
         while p is not None and not p.get("l4_prop"):
             p = p.parent
+        if p is None and o.get("l4_host") in placement_of:  # a lens host the light is not parented to
+            p = bpy.data.objects[o["l4_host"]]
         if p is not None and p.name in placement_of:
             e["prop"] = placement_of[p.name]
             e["propName"] = p.name
@@ -402,10 +439,10 @@ def export_lights(placement_of):
     return out
 
 
-def legacy_lights(superseded, cloned_hosts):
+def legacy_lights():
     """Original preview lights still standing in "L4 Lights" (build_lights; a package that replaces a fixture deletes
-    its light there), minus LIGHTS_SUPERSEDED paths and lights whose host is a cloned flicker fixture (the clone
-    carries them). -> [[light path, original host position]]; place.luau clones them from the original preview."""
+    its light there). Preserve the saved scene rather than reapplying later builder suppression rules.
+    -> [[light path, original host position]]; make_place drops the ceiling ones before place.luau clones them."""
     col = bpy.data.collections.get("L4 Lights")
     out = []
     for o in (col.all_objects if col else []):
@@ -413,15 +450,30 @@ def legacy_lights(superseded, cloned_hosts):
         if o.type != "LIGHT" or i is None:
             continue
         l = DUMP["lights"][int(i)]
-        host = (l["p"].rsplit("/", 1)[0], tuple(round(v, 2) for v in l["pos"]))
-        if host in cloned_hosts or any(r.search(l["p"]) for r in superseded):
-            continue
         out.append([l["p"], l["pos"]])
     return out
 
 
 def rb2b(v):
     return mathutils.Vector(((v[0] - OX) / K, -v[2] / K, v[1] / K))
+
+
+def culled_record(records, *, path=None, orig=None, box=None, collider=False):
+    """Only exact cull records from the verified scratch blend may suppress downstream instances."""
+    for record in records:
+        if (collider or box is not None) and record.get("approved_by") != "visibility_air_margin2":
+            continue
+        if path is not None:
+            if (record.get("path") == path and record.get("orig") is not None and orig is not None
+                    and np.allclose(record["orig"], orig, atol=1e-5, rtol=0)):
+                return True
+        elif (box is not None and box.get("kind", "Part") == "Part"
+              and not box.get("tags") and not box.get("at") and record.get("src") == box.get("src")
+              and record.get("cf") is not None and record.get("s") is not None
+              and np.allclose(record["cf"], box["cf"], atol=1e-5, rtol=0)
+              and np.allclose(record["s"], box["s"], atol=1e-5, rtol=0)):
+            return True
+    return False
 
 
 def lift_carrier(cf, s, face, dg, allowed):
@@ -473,10 +525,12 @@ def export(out=OUT):
     os.makedirs(os.path.join(out, "chunks"))
     dg = bpy.context.evaluated_depsgraph_get()
     manifest = {"version": 2, "studsPerMetre": K, "materials": {}, "chunks": [], "placements": []}
+    culled_carriers = as_list(bpy.context.scene.get("l4_culled_carriers")) or []
+    culled_colliders = as_list(bpy.context.scene.get("l4_culled_colliders")) or []
     mats = manifest["materials"]
     cid = [0]
 
-    def emit(P, N, U, mname, group, name):
+    def emit(P, N, U, mname, group, name, tags=()):
         box = mats.get(mname, {}).get("uv", "box") != "mesh"
         for p, n, u in split(P, N, U):
             pr = (p @ C.T) * K                          # studs, Roblox axes
@@ -498,6 +552,8 @@ def export(out=OUT):
                                        "verts": int(len(pv)), "center": [round(float(x), 4) for x in ctr],
                                        "size": [round(float(x), 4) for x in np.maximum(hi - lo, 0.05)],
                                        "name": name[:90]})
+            if tags:
+                manifest["chunks"][-1]["tags"] = list(tags)
             cid[0] += 1
 
     for m in bpy.data.materials:
@@ -506,24 +562,22 @@ def export(out=OUT):
     mats["None"] = mat_info(None)
 
     groups = collections.OrderedDict()
-    pooled = collections.defaultdict(list)
+    pooled = collections.defaultdict(list)               # (material, visual tags) -> triangle sets
     scene_cols = []
     allowed = set()
-    flicker_src = set()
     for o in visible_meshes():
         allowed.add(o.name)
-        if o.get("l4_path") in FLICKER and o.get("l4_src") is not None:
-            flicker_src.add(int(o["l4_src"]))
-            continue                                    # Studio clones these fixtures with their lights
         if o.get("l4_prop") or o.get("l4_door_leaf"):
             groups.setdefault(o.data.name, []).append(o)
             continue
         me, ev = mesh_of(o, dg)
+        cols = object_colliders(o)
+        vtags = () if cols else tuple(tag_list(o.get("l4_tags")))
         for mname, t in tris(o, me, True, mats).items():
-            pooled[mname].append(t)
+            pooled[(mname, vtags)].append(t)
         if ev:
             ev.to_mesh_clear()
-        scene_cols += object_colliders(o)
+        scene_cols += cols
 
     prop_cols, placement_of = [], {}
     for gi, (mesh_name, objs) in enumerate(groups.items()):
@@ -536,74 +590,98 @@ def export(out=OUT):
             loc, rot, sc = o.matrix_world.decompose()
             Rr = Cm @ rot.to_matrix() @ Cm.transposed()
             pl = {"group": gi, "name": o.name, "model": o.get("l4_model", o.name),
+                  "asset": str(o.get("l4_prop", mesh_name)),
                   "pos": [round(x * K, 4) for x in (Cm @ loc)],
                   "rot": [round(Rr[i][j], 6) for i in range(3) for j in range(3)],
                   "scale": [round(sc[0], 6), round(sc[2], 6), round(sc[1], 6)]}
             if o.get("l4_attrs"):
                 pl["attrs"] = json.loads(o["l4_attrs"])
+            tags = tag_list(o.get("l4_tags", o.data.get("l4_tags")))
+            if tags:
+                pl["tags"] = tags
+            if o.get("l4_seat") or o.get("l4_seat_box") is not None or o.get("l4_door"):
+                pl["gameplay"] = True
             idx = len(manifest["placements"])
             if o.get("l4_door_leaf"):
                 pl["door"] = door_info(o, pl)
             else:
                 placement_of[o.name] = idx
-                for c in object_colliders(o):
+                cols = object_colliders(o)
+                if cols:
+                    pl["hadColliders"] = True
+                    if any(c["kind"] == "Seat" for c in cols):
+                        pl["gameplay"] = True
+                for c in cols:
                     c["placement"] = idx
                     prop_cols.append(c)
             manifest["placements"].append(pl)
     print("instanced groups", len(groups), "chunks", cid[0], flush=True)
-    for mname, ts in pooled.items():
-        emit(*(np.concatenate(x) for x in zip(*ts)), mname, -1, "World_" + mname)
+    for (mname, vtags), ts in pooled.items():
+        emit(*(np.concatenate(x) for x in zip(*ts)), mname, -1, "World_" + mname, vtags)
     print("after pooling chunks", cid[0], flush=True)
 
-    # ---- layout colliders (minus covered replaced props) + scene colliders, markers, carriers, flicker fixtures
+    # ---- layout colliders (minus covered replaced props) + scene colliders, markers, carriers
     rx, rep = replaced_patterns()
     is_replaced = lambda path: any(r.search(path) for r in rx) or bool(rep and rep.search(key(path)))
     skip = [(re.compile(s["path"]), s.get("at")) for s in module_list("CARRIER_SKIP")]
-    skipped = lambda path, orig: any(r.search(path) and (at is None or np.allclose(at, orig, atol=0.1))
+    skipped = lambda path, orig: any(r.search(path) and (at is None or np.allclose(at, orig, atol=0.1, rtol=0))
                                      for r, at in skip)
-    layout_cols, carriers, flick, n_skip = [], [], [], 0
+
+    layout_cols, carriers, n_skip = [], [], 0
     for i, p in enumerate(LAYOUT["parts"]):
+        if p.get("removed"):
+            continue
         orig = DUMP["parts"][i]["cf"][:3] if i < len(DUMP["parts"]) else None
         tags = p.get("tags") or []
         at = {k: v for k, v in (p.get("at") or {}).items() if k not in ("OccasionalFlicker", "AutoDoorLeaf")}
-        if p["cc"] and not DOOR_PARTS.search(p["p"]):
+        cull_col = (culled_record(culled_colliders, path=p["p"], orig=orig, collider=True)
+                    and p["c"] != "Seat" and not tags and not at)
+        if p["cc"] and not DOOR_PARTS.search(p["p"]) and not cull_col:
+            shape = p.get("sh") or ("Block" if p["c"] != "WedgePart" else "Wedge")
             layout_cols.append((p["p"], {"cf": p["cf"], "s": p["s"], "m": p["m"], "tags": list(tags), "at": at,
-                                         "sh": p.get("sh") or ("Block" if p["c"] != "WedgePart" else "Wedge"),
-                                         "kind": "Seat" if p["c"] == "Seat" else "Part",
-                                         "_protected": protected(p)}))
+                                         "sh": shape, "kind": "Seat" if p["c"] == "Seat" else "Part",
+                                         "occ": layout_occluder(p), "_protected": protected(p)}))
         elif "Level4V4Doorway" in tags:
             layout_cols.append((p["p"], {"cf": p["cf"], "s": p["s"], "m": p["m"], "tags": list(tags), "at": at,
                                          "sh": "Block", "kind": "Marker"}))
         decs = [d for d in p.get("dec", []) if d[0] in ("Decal", "SurfaceGui")]
         if orig and decs and not p["p"].startswith("AutomaticDoors/"):
-            if skipped(p["p"], orig):
+            if skipped(p["p"], orig) or culled_record(culled_carriers, path=p["p"], orig=orig):
                 n_skip += 1
             else:
                 carriers.append({"path": DUMP["parts"][i]["p"], "orig": orig, "cf": p["cf"], "s": p["s"],
                                  "face": decs[0][1]})
-        if i in flicker_src and orig:                   # a flicker fixture still standing in the scene
-            flick.append({"path": p["p"], "orig": orig})
     kept, prune = prune_replaced(layout_cols, scene_cols + prop_cols, is_replaced)
     for c in kept:
         c.pop("_protected", None)
-    manifest["colliders"] = kept + scene_cols
+    manifest["colliders"] = kept + [c for c in scene_cols if not culled_record(culled_colliders, box=c)]
     manifest["propColliders"] = prop_cols
+    # Share the actual placement/inset rules rather than maintain a second box optimiser.
+    import importlib.util
+    place_spec = importlib.util.spec_from_file_location("l4_make_place", os.path.join(HERE, "make_place.py"))
+    place_rules = importlib.util.module_from_spec(place_spec)
+    place_spec.loader.exec_module(place_rules)
+    manifest["propColliders"] = [c for c in prop_cols if place_rules.gameplay_prop(manifest["placements"][c["placement"]])
+                                 or not culled_record(culled_colliders, box=c)]
+    manifest["propColliders"], manifest["instanceOptimisation"] = place_rules.optimise_prop_colliders(manifest)
+    prop_cols = manifest["propColliders"]
     moved = []
     for c in carriers:
         c["cf"], shift = lift_carrier(c["cf"], c["s"], c.pop("face"), dg, allowed)
         if abs(shift) > 1e-3:
             moved.append(round(shift, 3))
     manifest["carriers"] = carriers
-    manifest["flicker"] = flick
-    manifest["flickerPaths"] = sorted(FLICKER)
     manifest["lights"] = export_lights(placement_of)
-    superseded = [re.compile(r) for r in module_list("LIGHTS_SUPERSEDED")]
-    cloned = {(f["path"], tuple(round(v, 2) for v in f["orig"])) for f in flick}
-    manifest["legacyLights"] = legacy_lights(superseded, cloned)
+    compact = place_rules.bare_props(manifest)
+    manifest["instanceOptimisation"]["bareProps"] = sum(compact)
+    manifest["instanceOptimisation"]["decorativeFolders"] = len({p["asset"] for p, bare in zip(manifest["placements"], compact) if bare})
+    manifest["legacyLights"] = legacy_lights()
     manifest["replaces"] = [r.pattern for r in rx] + ([rep.pattern] if rep else [])
     manifest["prune"] = prune
     manifest["carriersMoved"] = len(moved)
     manifest["carriersSkipped"] = n_skip
+    n_occ = sum(bool(c.get("occ")) for c in manifest["colliders"] + prop_cols)
+    manifest["occluders"] = n_occ
     with open(os.path.join(out, "manifest.json"), "w") as fh:
         json.dump(manifest, fh)
     ch = manifest["chunks"]
@@ -611,7 +689,7 @@ def export(out=OUT):
           "placements", len(manifest["placements"]), "colliders", len(manifest["colliders"]),
           "(scene %d, seats %d)" % (len(scene_cols), sum(c["kind"] == "Seat" for c in manifest["colliders"] + prop_cols)),
           "propColliders", len(prop_cols), "carriers", len(carriers), "moved", len(moved),
-          "skipped", n_skip, "flicker", len(flick), "lights", len(manifest["lights"]),
+          "skipped", n_skip, "occluders", n_occ, "lights", len(manifest["lights"]),
           "legacyLights", len(manifest["legacyLights"]), "prune", json.dumps(prune), flush=True)
     return manifest
 

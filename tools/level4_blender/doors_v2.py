@@ -28,6 +28,18 @@
 #     the opening edge / mullion face, more than the leaf corner's swing radius, so the unanchored Leaf part never
 #     meets a wall collider.
 # EXIT boxes above the front exits are package D1's (props_lobby.py builds them on A#_ExitSign*), not repeated here.
+#
+# Facelift v3 (2026-10-01, owner points 8 + 11): the Arcade and Service openings no longer use the layout leaves.
+# THEMED holds one SINGLE leaf each (the 9-stud pair rule does not apply), in the openings package P1 cuts:
+#   * Arcade X 23187-23197, Y 24-37: full-height plum-black lacquer leaf, magenta + cyan neon edge inlay, big chrome
+#     porthole (the "sun") over a cyan synthwave-grid inlay, chrome push + kick plates; an "Arcade" neon-script
+#     marquee lightbox with chaser bulbs above the opening on the lobby face (ray-cast onto the final facade;
+#     the old Concourse/ArcadeDoorwaySign slab and its SurfaceGui are superseded: REPLACES + CARRIER_SKIP).
+#   * Service X 22860-22868, Y 24-36: plum-gunmetal steel leaf (stencil STAFF ONLY, wired-glass vision panel, lever,
+#     closer, kick plates) under a transom with a cyan neon outline on the lobby face and a louvre on the room face.
+# The span snaps to a Level4V4Doorway marker of l4_layout.json at that spot (P1's layout), else the spec coordinates.
+# Each sign carries one small sign-glow PointLight ("L4 Fixture Lights", l4_kind "sign"); the rest is P2's light plan.
+# Both doors stay double-acting PushDoors (they swing away from whoever pushes, OpenAngle 90).
 import bpy, bmesh, json, math, os, re
 from mathutils import Matrix, Vector
 
@@ -40,8 +52,10 @@ if "slot" not in globals():
 _L = json.load(open(os.path.join(HERE, "l4_layout.json")))
 _P, _OTHER = _L["parts"], _L["other"]
 
-# architecture objects (build_base l4_path) this module deletes: the old hinge posts; the new frames replace them
-REPLACES = [r"^AutomaticDoors/.*_Post$"]
+# architecture objects (build_base l4_path) this module deletes: the old hinge posts; the new frames replace them;
+# the old ARCADE sign slab over the closed-up opening (the marquee over the new door replaces it)
+REPLACES = [r"^AutomaticDoors/.*_Post$", r"^Concourse/ArcadeDoorwaySign$"]
+CARRIER_SKIP = [{"path": r"^Concourse/ArcadeDoorwaySign$", "at": None}]      # its "ARCADE" SurfaceGui
 
 # opening: (original leaves, span a0..a1 along the leaf axis, top Y, wall thickness, public side (axis, sign))
 OPENINGS = {
@@ -55,13 +69,18 @@ OPENINGS = {
     "SecretPoster": (("SecretPoster",), 86, 96, 36, 2, ("x", 1)),
     "Men_Restroom": (("Men_Restroom",), 23276, 23286, 36, 2, ("z", -1)),
     "Women_Restroom": (("Women_Restroom",), 23326, 23336, 36, 2, ("z", -1)),
-    "Arcade": (("ArcadeLeft", "ArcadeRight"), 23154, 23174, 36, 2, ("z", -1)),      # sidelights outside 23154/23174
-    "Service": (("ServiceLeft", "ServiceRight"), 22854, 22874, 36, 2, ("z", -1)),
     "MainEntry": (("MainEntryWest", "MainEntryEast"), 22988.3, 23011.7, 38, 0.8, ("z", -1)),
 }
 SINGLE = {"GalleryStair", "SecretPoster"}
+# themed single doors (v3): name -> (span X a0..a1, floor Y, top Y, wall plane Z, wall thickness, hinge end
+# (-1 = a0, +1 = a1), open angle). Public side is the concourse (-Z) for both.
+THEMED = {
+    "Arcade": ((23187.0, 23197.0), 24.0, 37.0, 101.0, 2.0, -1, 90.0),
+    "Service": ((22860.0, 22868.0), 24.0, 36.0, 101.0, 2.0, 1, 90.0),
+}
+SCRIPT_FONT = r"C:\Windows\Fonts\segoescb.ttf"
 # stencils on the public face of the _A leaf; the third booth repeats "2" (r8 D: duplicate numbers in the gallery)
-STENCIL = {"ServiceLeft": "STAFF ONLY", "ServiceRight": "STAFF ONLY", "GalleryStair": "STAFF ONLY",
+STENCIL = {"GalleryStair": "STAFF ONLY",
            "A1_BoothAccess": "BOOTH 1", "A2_BoothAccess": "BOOTH 2", "A3_BoothAccess": "BOOTH 2"}
 PAPER = {"MainEntryWest_B": 1, "MainEntryEast_A": 2}      # taped-up paper sheets on the inside of the glass
 
@@ -214,27 +233,37 @@ class Geo:
         bmesh.ops.recalc_face_normals(tb, faces=list(tb.faces))
         return self.absorb(tb, m, smooth=True)
 
-    def text(self, s, size, xc, zc, y, side, m):
-        """Flat text on the face y, readable from the `side` (+-Y) it faces, centred on (xc, zc)."""
+    def text(self, s, size, xc, zc, y, side, m, font=FONT, depth=0.0, fit=None, shear=0.0):
+        """Text on the face y, readable from the `side` (+-Y) it faces, centred on (xc, zc). depth > 0 extrudes it
+        from y out to y + side * depth; fit = (w, h) scales it down into that box, centred on its own bounds."""
         cu = bpy.data.curves.new("_c_txt", "FONT")
         cu.body = s
-        if os.path.exists(FONT):
-            cu.font = bpy.data.fonts.load(FONT, check_existing=True)
+        if os.path.exists(font):
+            cu.font = bpy.data.fonts.load(font, check_existing=True)
         cu.size, cu.resolution_u = size, 2
         cu.align_x, cu.align_y = "CENTER", "CENTER"
+        cu.shear = shear
+        cu.extrude = depth / 2
         ob = bpy.data.objects.new("_c_txt", cu)
         bpy.context.scene.collection.objects.link(ob)
         bpy.context.view_layer.update()
         me = bpy.data.meshes.new_from_object(ob.evaluated_get(bpy.context.evaluated_depsgraph_get()))
         bpy.data.objects.remove(ob)
         bpy.data.curves.remove(cu)
+        k, cx, cz = 1.0, 0.0, 0.0
+        if fit and me.vertices:
+            xs, zs = [v.co.x for v in me.vertices], [v.co.y for v in me.vertices]
+            k = min(1.0, fit[0] / (max(xs) - min(xs)), fit[1] / (max(zs) - min(zs)))
+            cx, cz = (max(xs) + min(xs)) / 2, (max(zs) + min(zs)) / 2
         sx = 1 if side < 0 else -1                        # the reader's right is +X on the -Y face
         tb = bmesh.new()
-        vs = [tb.verts.new((xc + sx * v.co.x, y, zc + v.co.y)) for v in me.vertices]
+        # (x, y, z) -> (sx x, side z, y) has determinant +1, so an extruded mesh keeps its outward normals
+        vs = [tb.verts.new((xc + sx * k * (v.co.x - cx), y + side * (v.co.z + depth / 2), zc + k * (v.co.y - cz)))
+              for v in me.vertices]
         for p in me.polygons:
             f = tb.faces.new([vs[i] for i in p.vertices])
             f.normal_update()
-            if f.normal.y * side < 0:
+            if not depth and f.normal.y * side < 0:
                 f.normal_flip()
         bpy.data.meshes.remove(me)
         return self.absorb(tb, m)
@@ -329,8 +358,8 @@ def pad(g, x0, x1, z0, z1, side, T, th, m_vinyl, m_button, hole=None, avoid=(), 
 
 
 # ------------------------------------------------------------------------------------------ leaves
-def _hinges(g, m):
-    for z in HINGE_Z:
+def _hinges(g, m, zs=HINGE_Z):
+    for z in zs:
         g.cyl((0, 0, z), 0.075, 0.5, m, seg=10)
         g.cyl((0, 0, z + 0.27), 0.05, 0.04, m, seg=10)              # finial
         g.box((0.02, -0.02, z - 0.25), (0.34, 0.02, z + 0.25), m)    # leaf half of the butt hinge, in the edge gap
@@ -409,10 +438,13 @@ def leaf_restroom(g, w, pub, sign):
     return T
 
 
-def leaf_steel(g, w, pub, stencil):
+def leaf_steel(g, w, pub, stencil, paint=None, kick=False):
     T = 0.1
-    paint = _m("STEEL_PAINTED")
+    paint = paint or _m("STEEL_PAINTED")
     sat = _m("CHROME_PITTED")
+    if kick:                                                           # satin kick plates, both faces
+        for side in (-1, 1):
+            g.box((HG + 0.05, side * T, ZB + 0.03), (w - 0.05, side * (T + 0.025), ZB + 1.2), sat, bev=0.008)
     glass = _m("GLASS_CLEAR", (175, 185, 180))
     xc = (HG + w) / 2
     hx0, hx1, hz0, hz1 = xc - 0.5, xc + 0.5, 4.95, 6.45
@@ -444,6 +476,72 @@ def leaf_steel(g, w, pub, stencil):
     if stencil:
         g.text(stencil, 0.42, xc, 4.2, pub * (T + 0.004), pub, _m("CMU_PAINT", (205, 200, 188)))
     return T
+
+
+ARC_HINGE_Z = (1.0, 4.7, 8.4, 11.7)
+ARC_PORT = (6.6, 1.45, 2.1)        # porthole centre z, glass radius (= square hole half), bezel outer radius
+ARC_FRAME, SVC_PAINT, SVC_FRAME = (30, 18, 34), (62, 46, 70), (40, 32, 46)   # plum-black / plum-gunmetal paints
+
+
+def leaf_arcade(g, w, zt):
+    """The arcade's single full-height leaf, the same on both faces (it swings both ways): plum-black lacquer,
+    magenta outer + cyan inner neon edge inlay, a big chrome porthole whose bottom sits on the horizon of a cyan
+    synthwave grid inlay (the porthole is the sun), chrome push plate at the free edge, chrome kick plate."""
+    T = 0.16
+    core = _m("STEEL_PAINTED", (36, 22, 42))
+    chrome = _m("CHROME_PITTED")
+    mag, cyan = _m("EMIT_MAGENTA"), _m("EMIT_CYAN")
+    glass = _m("GLASS_CLEAR", (135, 158, 165))
+    xc = (HG + w) / 2
+    zp, hs, rb = ARC_PORT
+    g.box((HG, -T, ZB), (w, T, zp - hs), core)                         # continuous painted skin around the hole
+    g.box((HG, -T, zp + hs), (w, T, zt), core)
+    g.box((HG, -T, zp - hs), (xc - hs, T, zp + hs), core)
+    g.box((xc + hs, -T, zp - hs), (w, T, zp + hs), core)
+    hz, gx0, gx1, gz0 = zp - rb, HG + 0.8, w - 0.8, 2.05                # grid: horizon z, x range, bottom z
+    for side in (-1, 1):
+        y = side * T
+
+        def strip(x0, x1, z0, z1, m, d=0.012):
+            g.box((x0, y, z0), (x1, y + side * d, z1), m)
+
+        def line(p0, p1, wd, m, d=0.012):                              # a rotated strip in the leaf face
+            (x0, z0), (x1, z1) = p0, p1
+            ln = math.hypot(x1 - x0, z1 - z0)
+            cx, cz = (x0 + x1) / 2, (z0 + z1) / 2
+            g.box((cx - ln / 2, y, cz - wd / 2), (cx + ln / 2, y + side * d, cz + wd / 2), m,
+                  rot=(-math.atan2(z1 - z0, x1 - x0), "Y"))
+
+        g.box((HG + 0.05, y, ZB + 0.03), (w - 0.05, y + side * 0.03, 1.4), chrome, bev=0.012)     # kick plate
+        for inset, wd, m in ((0.3, 0.08, mag), (0.5, 0.06, cyan)):      # edge inlay loops
+            x0, x1, z0, z1 = HG + inset, w - inset, 1.3 + inset, zt - inset
+            strip(x0, x1, z0, z0 + wd, m)
+            strip(x0, x1, z1 - wd, z1, m)
+            strip(x0, x0 + wd, z0 + wd, z1 - wd, m)
+            strip(x1 - wd, x1, z0 + wd, z1 - wd, m)
+        strip(gx0, gx1, hz - 0.035, hz + 0.035, mag)                    # horizon
+        for k in range(6):                                              # grid rows, closer towards the horizon
+            z = hz - 0.13 * 1.72 ** k
+            if z > gz0 + 0.1:
+                strip(gx0, gx1, z - 0.022, z + 0.022, cyan)
+        strip(gx0, gx1, gz0 - 0.022, gz0 + 0.022, cyan)
+        n = 11
+        for i in range(n):                                              # rays from the vanishing point
+            xb = gx0 + (gx1 - gx0) * i / (n - 1)
+            t0 = 0.13 / (hz - gz0)                                      # start at the first row, not in a knot
+            line((xc + (xb - xc) * t0, hz - 0.13), (xb, gz0), 0.044, cyan)
+        g.box((w - 1.42, y, 4.75), (w - 0.86, y + side * 0.03, 7.7), chrome, bev=0.012)          # push plate
+        yf = y
+        g.ring((xc, zp), hs, rb, yf - side * 0.01, yf + side * 0.06, chrome, seg=32, side=side)  # bezel
+        for k in range(12):                                             # bezel screws
+            t = 2 * math.pi * (k + 0.5) / 12
+            g.cyl((xc + (hs + rb) / 2 * math.cos(t), yf + side * 0.07, zp + (hs + rb) / 2 * math.sin(t)), 0.045,
+                  0.025, chrome, axis=(0, side, 0), seg=6, r2=0.02)
+        g.ring((xc, zp), rb + 0.12, rb + 0.22, yf - side * 0.002, yf + side * 0.012, mag, seg=32, side=side)
+    g.tube((xc, zp), hs, -(T + 0.07), T + 0.07, chrome, seg=32)
+    g.cyl((xc, 0, zp), hs, 0.03, glass, axis=(0, 1, 0), seg=32)
+    _hinges(g, chrome, ARC_HINGE_Z)
+    return T + 0.07
 
 
 def leaf_glass(g, w, pub, paper):
@@ -493,11 +591,15 @@ def leaf_poster(g, w, pub, z0, z1):
 
 def leaf_mesh(style, w, pub, var):
     """-> (mesh, visual half thickness). Assets are shared by every leaf with the same key."""
-    oneside = style in ("restroom", "steel", "glass", "poster")
+    oneside = style in ("restroom", "steel", "glass", "poster", "service")
     key = "L4A_Door2_%s_%d%s%s" % (style, round(w * 100), ("_p%d" % pub) if oneside else "",
                                     "".join("_%s" % re.sub(r"\W", "", str(v)) for v in var if v))
     g = Geo()
-    if style == "tufted":
+    if style == "arcade":
+        half = leaf_arcade(g, w, var[0])
+    elif style == "service":
+        half = leaf_steel(g, w, pub, "STAFF ONLY", paint=_m("STEEL_PAINTED", SVC_PAINT), kick=True)
+    elif style == "tufted":
         half = leaf_tufted(g, w, pub)
     elif style == "restroom":
         half = leaf_restroom(g, w, pub, var[0])
@@ -513,37 +615,43 @@ def leaf_mesh(style, w, pub, var):
 
 
 # ------------------------------------------------------------------------------------------ frames
-def frame_geo(op, L, H, D2, style, pub, bays, hinges, mullion):
+def frame_geo(op, L, H, D2, style, pub, bays, hinges, mullion, fmat=None, transom=True, stops=True,
+              hz=HINGE_Z, thr_d=None, grille=(-1, 1), pmat=None):
     """Opening-local studs: x along (0..L), y across (leaf plane 0), z up from the floor.
+    fmat / pmat override the frame / transom panel paint; transom=False: no transom bar/panels (full-height leaf under the head); stops=False
+    for a double-acting leaf; hz = hinge heights; thr_d = threshold half depth; grille = faces with a louvre.
     -> (frame Geo, transom Geo)."""
     f, t = Geo(), Geo()
-    mat = {"tufted": _m("STEEL_PAINTED", (30, 22, 28)), "restroom": _m("STEEL_PAINTED", (58, 50, 46)),
-           "steel": _m("STEEL_PAINTED"), "glass": _m("STEEL_PAINTED", (28, 28, 30))}[style]
+    mat = fmat or {"tufted": _m("STEEL_PAINTED", (30, 22, 28)), "restroom": _m("STEEL_PAINTED", (58, 50, 46)),
+                   "steel": _m("STEEL_PAINTED"), "glass": _m("STEEL_PAINTED", (28, 28, 30))}[style]
     hmat = _brass() if style == "tufted" else _m("CHROME_PITTED")
     top = H - 0.08 if op != "MainEntry" else H                          # under package A's head liner
     sy = -pub                                                           # stops sit on the non-public side
     for x0, x1 in ((0, JW), (L - JW, L)):
         f.box((x0, -D2, 0.06), (x1, D2, top), mat, bev=0.02)
     f.box((JW, -D2, top - 0.3), (L - JW, D2, top), mat, bev=0.02)       # head
-    f.box((JW, -D2, TR0), (L - JW, D2, TR1), mat, bev=0.02)             # transom bar
+    if transom:
+        f.box((JW, -D2, TR0), (L - JW, D2, TR1), mat, bev=0.02)         # transom bar
     faces = [JW, L - JW]
     if mullion:
         m0, m1 = L / 2 - MW / 2, L / 2 + MW / 2
         f.box((m0, -D2, 0.06), (m1, D2, top), mat, bev=0.03)
         f.cols.append(((m0, -D2, 0.0), (m1, D2, top)))
         faces += [m0, m1]
-    for x in faces:                                                     # jamb / mullion stops
-        s = 1 if x in (JW, L / 2 + MW / 2) else -1
-        f.box((x, sy * 0.3, 0.06), (x + s * 0.1, sy * 0.5, TR0), mat, bev=0.01)
-    f.box((JW, sy * 0.3, ZT), (L - JW, sy * 0.5, TR0), mat, bev=0.01)   # head stop
+    if stops:
+        for x in faces:                                                 # jamb / mullion stops
+            s = 1 if x in (JW, L / 2 + MW / 2) else -1
+            f.box((x, sy * 0.3, 0.06), (x + s * 0.1, sy * 0.5, TR0), mat, bev=0.01)
+        f.box((JW, sy * 0.3, ZT), (L - JW, sy * 0.5, TR0), mat, bev=0.01)   # head stop
     for u, d in hinges:                                                 # jamb halves of the butt hinges
         face = min(faces, key=lambda x: abs(x - u))
-        for z in HINGE_Z:
+        for z in hz:
             f.box((face, -0.02, z - 0.25), (u - d * 0.07, 0.02, z + 0.25), hmat)
     thr = _m("ALU_NOSING") if style != "glass" else mat
-    f.box((0, -min(D2 + 0.1, 0.65), 0), (L, min(D2 + 0.1, 0.65), 0.06), thr, bev=0.025)
+    td = thr_d or min(D2 + 0.1, 0.65)
+    f.box((0, -td, 0), (L, td, 0.06), thr, bev=0.025)
     # transom panels, one per bay
-    for b0, b1 in bays:
+    for b0, b1 in (bays if transom else ()):
         if style == "glass":
             gl = _m("GLASS_FROSTED", (150, 146, 128))
             t.box((b0, -0.03, TR1), (b1, 0.03, top), gl)
@@ -553,7 +661,8 @@ def frame_geo(op, L, H, D2, style, pub, bays, hinges, mullion):
                 t.box((b0, side * 0.03, TR1), (b1, side * 0.1, TR1 + 0.06), mat)
                 t.box((b0, side * 0.03, top - 0.36), (b1, side * 0.1, top - 0.3), mat)
             continue
-        pm = {"tufted": _m("WAINSCOT_LACQUER"), "restroom": _m("LAMINATE_WOOD"), "steel": _m("STEEL_PAINTED")}[style]
+        pm = pmat or {"tufted": _m("WAINSCOT_LACQUER"), "restroom": _m("LAMINATE_WOOD"),
+                      "steel": _m("STEEL_PAINTED")}[style]
         th = 0.12 if style == "tufted" else 0.1
         t.box((b0, -th, TR1), (b1, th, top - 0.3), pm, bev=0.015)
         hgt = top - 0.3 - TR1
@@ -566,7 +675,7 @@ def frame_geo(op, L, H, D2, style, pub, bays, hinges, mullion):
         elif style == "steel" and hgt > 1.0:                             # louvred transfer grille
             c, gw, gh = (b0 + b1) / 2, min(2.4, b1 - b0 - 0.8), min(1.4, hgt - 0.4)
             zc = TR1 + hgt / 2
-            for side in (-1, 1):
+            for side in grille:
                 y0, y1 = side * th, side * (th + 0.06)
                 t.box((c - gw / 2 - 0.08, y0, zc - gh / 2 - 0.08), (c + gw / 2 + 0.08, y1, zc - gh / 2), pm)
                 t.box((c - gw / 2 - 0.08, y0, zc + gh / 2), (c + gw / 2 + 0.08, y1, zc + gh / 2 + 0.08), pm)
@@ -652,6 +761,201 @@ def _col_boxes(cols, M):
     return out
 
 
+def _frame_objects(fcoll, op, fg, tg, M, stats, transom=True):
+    """Pooled frame (mesh l4_col boxes) + transom (one bounds collider, a solid panel: camera occluder) objects."""
+    cols = _col_boxes(fg.cols, M)
+    me = fg.finish("L4C_DoorFrame_" + op, M)
+    if cols:
+        me["l4_col"] = json.dumps(cols)
+    fo = bpy.data.objects.new("DoorFrame_" + op, me)
+    fcoll.objects.link(fo)
+    fo["l4_pkg"] = PKG
+    fo["l4_role"] = "door_frame"
+    stats["frame_colliders"] += len(cols)
+    stats["objects"] += 1
+    if not transom:
+        tg.bm.free()
+        return
+    me = tg.finish("L4C_DoorTransom_" + op, M)
+    to = bpy.data.objects.new("DoorTransom_" + op, me)
+    fcoll.objects.link(to)
+    to["l4_pkg"] = PKG
+    to["l4_collide"] = "bounds"
+    to["l4_occluder"] = True
+    stats["transom_colliders"] += 1
+    stats["objects"] += 1
+
+
+def _door(root, name, style, me, half, hinge_st, dvec, w, ang, zt, extra, stats):
+    """Collection "Door <name>": Empty DoorHinge_<name> on the hinge axis (Studio hinge_st, leaf towards dvec) and
+    the leaf DoorLeaf_<name> parented to it, with its Roblox collider l4_leaf_cf / l4_leaf_size / l4_hinge_pos."""
+    db = _rbdir(dvec)
+    stats["leaf_meshes"].add(me.name)
+    dc = bpy.data.collections.new("Door " + name)
+    root.children.link(dc)
+    emp = bpy.data.objects.new("DoorHinge_" + name, None)
+    emp.empty_display_type = "SINGLE_ARROW"
+    emp.empty_display_size = 0.6
+    emp.matrix_world = Matrix.Translation(_rb(*hinge_st)) @ Matrix.Rotation(math.atan2(db.y, db.x), 4, "Z")
+    dc.objects.link(emp)
+    lo = bpy.data.objects.new("DoorLeaf_" + name, me)
+    dc.objects.link(lo)
+    lo.parent = emp
+    lo.matrix_parent_inverse = Matrix.Identity(4)
+    lo.matrix_basis = Matrix.Identity(4)
+    for o in (emp, lo):
+        o["l4_door"] = name
+        o["l4_door_style"] = style
+        o["l4_open_angle"] = ang
+        o["l4_pkg"] = PKG
+        for k, v in extra.items():
+            o[k] = v
+    lo["l4_door_leaf"] = True
+    lo["l4_model"] = "Door_" + name
+    c = Vector(hinge_st) + dvec * ((HG + w) / 2) + Vector((0, (ZB + zt) / 2, 0))
+    lo["l4_leaf_cf"] = [round(v, 5) for v in _cf12(c, dvec)]
+    lo["l4_leaf_size"] = [round(w - HG, 4), round(zt - ZB, 4), round(max(0.4, 2 * half), 4)]
+    lo["l4_hinge_pos"] = [round(v, 5) for v in hinge_st]
+    stats["doors"] += 1
+    stats["leaf_colliders"] += 1
+    stats["objects"] += 2
+    return lo
+
+
+# ------------------------------------------------------------------------------------------ themed doors (v3)
+def _themed_span(name):
+    """-> (a0, a1, floor y, top y): the THEMED spec, snapped to a Level4V4Doorway marker of the layout on that wall
+    whose centre, width and top are each within 2 studs of it (P1's cut); else the spec itself."""
+    (a0, a1), y0, y1, plane = THEMED[name][:4]
+    for p in _P:
+        if "Level4V4Doorway" not in (p.get("tags") or []):
+            continue
+        R = [abs(v) for v in p["cf"][3:]]
+        ex = [sum(R[3 * i + j] * p["s"][j] for j in range(3)) / 2 for i in range(3)]
+        x, y, z = p["cf"][:3]
+        if (abs(z - plane) < 1.5 and ex[0] > ex[2] and abs(x - (a0 + a1) / 2) < 2 and abs(2 * ex[0] - (a1 - a0)) < 2
+                and abs(y + ex[1] - y1) < 2):
+            return x - ex[0], x + ex[0], y - ex[1], y + ex[1]
+    return a0, a1, y0, y1
+
+
+def _facade_z(x0, x1, y0, y1, plane, reach=6.0):
+    """Studio Z of the most proud surface on the concourse (-Z) side of the wall plane over x0..x1, y0..y1
+    (9 rays from the concourse towards +Z), or None when nothing is there."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    best = None
+    for x in (x0, (x0 + x1) / 2, x1):
+        for y in (y0, (y0 + y1) / 2, y1):
+            hit, loc = bpy.context.scene.ray_cast(dg, _rb(x, y, plane - reach), Vector((0, -1, 0)),
+                                                  distance=reach * S)[:2]
+            if hit:
+                best = -loc.y / S if best is None else min(best, -loc.y / S)
+    return best
+
+
+def _bulb(g, c, r, m):
+    tb = bmesh.new()
+    bmesh.ops.create_uvsphere(tb, u_segments=8, v_segments=5, radius=r, matrix=Matrix.Translation(Vector(c)))
+    g.absorb(tb, m, smooth=True)
+
+
+def marquee_arcade(g, xc, yb, z0):
+    """'Arcade' neon-script lightbox with chaser bulbs, in opening-local studs (+y = concourse): back on the facade
+    at y = yb, bottom at z0. -> (front y, top z)."""
+    W, Hs, D = 14.0, 4.2, 0.7
+    chrome = _m("CHROME_PITTED")
+    mag, cyan, warm = _m("EMIT_MAGENTA"), _m("EMIT_CYAN"), _m("EMIT_WARM")
+    dead = _m("GLASS_FROSTED", (96, 88, 84))
+    x0, x1, z1 = xc - W / 2, xc + W / 2, z0 + Hs
+    yf = yb + D
+    g.box((x0, yb, z0), (x1, yf, z1), _m("STEEL_PAINTED", (34, 16, 38)), bev=0.06)
+    for a, b, c, d in ((x0, x1, z0, z0 + 0.14), (x0, x1, z1 - 0.14, z1), (x0, x0 + 0.14, z0, z1),
+                       (x1 - 0.14, x1, z0, z1)):
+        g.box((a, yf - 0.02, c), (b, yf + 0.06, d), chrome, bev=0.02)                     # chrome bezel
+    g.box((x0 + 0.35, yf, z0 + 1.0), (x1 - 0.35, yf + 0.02, z1 - 1.0), _m("PLASTIC_BLACK"))   # dark face panel
+    for zr in (z0 + 0.5, z1 - 0.5):                                     # chaser bulbs, a few dead
+        n = 22
+        for i in range(n):
+            x = x0 + 0.6 + (W - 1.2) * i / (n - 1)
+            g.cyl((x, yf + 0.03, zr), 0.14, 0.06, chrome, axis=(0, 1, 0), seg=8)
+            _bulb(g, (x, yf + 0.14, zr), 0.12, dead if (i * 7 + round(zr)) % 11 in (3, 8) else warm)
+    zt = (z0 + z1) / 2 + 0.15
+    g.text("Arcade", 2.6, xc - 0.2, zt, yf + 0.02, 1, mag, font=SCRIPT_FONT, depth=0.08, fit=(W - 3.0, Hs - 2.3))
+    a = -0.035                                                          # cyan swoosh under the script
+    g.box((xc - 4.6, yf + 0.02, z0 + 1.12), (xc + 4.4, yf + 0.08, z0 + 1.24), cyan, rot=(a, "Y"))
+    g.box((xc + 4.6, yf + 0.02, z0 + 1.22), (xc + 5.3, yf + 0.08, z0 + 1.3), cyan, rot=(a, "Y"))
+    return yf, z1
+
+
+def _glow(cin, name, pos_st, rgb, rng, bright):
+    """The sign's own small glow: a shadowless PointLight in "L4 Fixture Lights" (P2 owns the light plan)."""
+    ld = bpy.data.lights.new("C_" + name, "POINT")
+    ld.color = tuple(_srgb2lin(c / 255) for c in rgb)
+    rm = rng * S
+    ld.energy = 2500.0 * max(0.2, bright) * (rm / 4.0) ** 2
+    ld.shadow_soft_size = 0.15
+    ld.use_custom_distance = True
+    ld.cutoff_distance = rm * 1.3
+    ld.use_shadow = False
+    o = bpy.data.objects.new("C_" + name, ld)
+    o.location = _rb(*pos_st)
+    _coll("L4 Fixture Lights", cin).objects.link(o)
+    o["l4_pkg"], o["l4_range"], o["l4_brightness"], o["l4_shadows"] = PKG, float(rng), float(bright), False
+    o["l4_color"] = list(rgb)
+    o["l4_kind"] = "sign"
+    return o
+
+
+def build_themed(cin, root, fcoll, stats):
+    """The v3 single doors (THEMED): Arcade (full-height leaf + marquee) and Service (steel leaf + transom)."""
+    for name, (_, _, _, plane, wall, hend, ang) in THEMED.items():
+        a0, a1, y0, y1 = _themed_span(name)
+        L, H = a1 - a0, y1 - y0
+        arcade = name == "Arcade"
+        M = Matrix(((S, 0, 0, (a0 - OX) * S), (0, S, 0, -plane * S), (0, 0, S, y0 * S), (0, 0, 0, 1)))  # +y = -Z
+        top = H - 0.08
+        zt = top - 0.36 if arcade else ZT
+        hc = 0.5                                                        # clears the collidable jamb at every angle
+        u, d = (hc, 1) if hend < 0 else (L - hc, -1)
+        w = L - hc - JW - 0.06
+        fg, tg = frame_geo(name, L, H, min(1.1, wall) / 2, "arcade" if arcade else "steel", 1, [(JW, L - JW)],
+                           [(u, d)], False, fmat=_m("STEEL_PAINTED", ARC_FRAME if arcade else SVC_FRAME),
+                           transom=not arcade, stops=False, hz=ARC_HINGE_Z if arcade else HINGE_Z, thr_d=wall / 2,
+                           grille=(-1,), pmat=_m("STEEL_PAINTED", SVC_PAINT))
+        depth = min(1.1, wall) / 2
+        fg.cols += [((x0, -depth, 0.06), (x1, depth, top)) for x0, x1 in ((0, JW), (L - JW, L))]
+        fg.cols += [((JW, -depth, top - 0.3), (L - JW, depth, top)),
+                    ((0, -wall / 2, 0), (L, wall / 2, 0.06))]
+        if not arcade:                                                  # cyan neon outline on the lobby face
+            cyan, x0, x1, z0, z1 = _m("EMIT_CYAN"), JW + 0.3, L - JW - 0.3, TR1 + 0.3, top - 0.6
+            for a, b, c, e in ((x0, x1, z0, z0 + 0.07), (x0, x1, z1 - 0.07, z1), (x0, x0 + 0.07, z0, z1),
+                               (x1 - 0.07, x1, z0, z1)):
+                tg.box((a, 0.1, c), (b, 0.112, e), cyan)
+        _frame_objects(fcoll, name, fg, tg, M, stats, transom=not arcade)
+        hinge_st = [a0 + u, y0, plane]
+        dvec = Vector((d, 0, 0))
+        lpub = 1 if d > 0 else -1                                       # leaf-local side facing the concourse
+        me, half = leaf_mesh("arcade" if arcade else "service", w, lpub, (round(zt, 3),))
+        _door(root, name, "arcade" if arcade else "steel", me, half, hinge_st, dvec, w, ang, zt, {}, stats)
+        if arcade:                                                      # marquee on the lobby face
+            sx0, sx1, sz0 = a0 + L / 2 - 7.0, a0 + L / 2 + 7.0, y1 + 2.3
+            fz = _facade_z(sx0, sx1, sz0, sz0 + 4.2, plane)
+            fz = fz if fz is not None and fz > plane - wall / 2 - 1.5 else plane - wall / 2 - 0.22
+            g = Geo()
+            yb = plane - fz + 0.01
+            marquee_arcade(g, L / 2, yb, sz0 - y0)
+            so = bpy.data.objects.new("DoorSign_Arcade", g.finish("L4C_DoorSign_Arcade", M))
+            fcoll.objects.link(so)
+            so["l4_pkg"] = PKG
+            so["l4_collide"] = "bounds"
+            stats["objects"] += 1
+            stats["sign_face_z"] = round(fz, 3)
+            _glow(cin, "ArcadeMarqueeGlow", (a0 + L / 2, sz0 - 0.6, fz - 1.8), (255, 70, 205), 8, 0.25)
+        else:
+            _glow(cin, "ServiceSignGlow", (a0 + L / 2, y0 + (TR1 + top) / 2, plane - 2.2), (70, 225, 255), 5, 0.2)
+        stats["lights"] += 1
+
+
 def build_doors_v2():
     removed = _clear()
     cin = bpy.data.collections["L4 Cinema"]
@@ -711,30 +1015,14 @@ def build_doors_v2():
             if op == "MainEntry":                                         # round the pulls of each pair
                 for xc in ((L / 2 - MW / 2) / 2, (L / 2 + MW / 2 + L) / 2):
                     chain_and_lock(fg, xc, pub * 0.45, 3.9)
-            cols = _col_boxes(fg.cols, M)
-            me = fg.finish("L4C_DoorFrame_" + op, M)
-            if cols:
-                me["l4_col"] = json.dumps(cols)
-            fo = bpy.data.objects.new("DoorFrame_" + op, me)
-            fcoll.objects.link(fo)
-            fo["l4_pkg"] = PKG
-            fo["l4_role"] = "door_frame"
-            stats["frame_colliders"] += len(cols)
-            me = tg.finish("L4C_DoorTransom_" + op, M)
-            to = bpy.data.objects.new("DoorTransom_" + op, me)
-            fcoll.objects.link(to)
-            to["l4_pkg"] = PKG
-            to["l4_collide"] = "bounds"
-            stats["transom_colliders"] += 1
-            stats["objects"] += 2
+            _frame_objects(fcoll, op, fg, tg, M, stats)
         at_all = [hinge_at.get(n, {}) for n in orig]
         for name, k, u, d, w in specs:
             lf, at = leaves[k], at_all[k]
             dvec = A * d                                                  # Studio, hinge -> free edge
             hinge_st = [0, y0, 0]
             hinge_st[ax], hinge_st[2 - ax] = a0 + u, plane
-            db = _rbdir(dvec)
-            lpub = 1 if _rbdir(pub_st).dot(Vector((0, 0, 1)).cross(db)) > 0 else -1
+            lpub = 1 if _rbdir(pub_st).dot(Vector((0, 0, 1)).cross(_rbdir(dvec))) > 0 else -1
             if style == "poster":
                 var = (lf["cf"][1] - lf["s"][1] / 2 - y0, lf["cf"][1] + lf["s"][1] / 2 - y0)
             elif style == "restroom":
@@ -746,47 +1034,22 @@ def build_doors_v2():
             else:
                 var = ()
             me, half = leaf_mesh(style, w, lpub, var)
-            stats["leaf_meshes"].add(me.name)
-            dc = bpy.data.collections.new("Door " + name)
-            root.children.link(dc)
-            emp = bpy.data.objects.new("DoorHinge_" + name, None)
-            emp.empty_display_type = "SINGLE_ARROW"
-            emp.empty_display_size = 0.6
-            emp.matrix_world = Matrix.Translation(_rb(*hinge_st)) @ Matrix.Rotation(math.atan2(db.y, db.x), 4, "Z")
-            dc.objects.link(emp)
-            lo = bpy.data.objects.new("DoorLeaf_" + name, me)
-            dc.objects.link(lo)
-            lo.parent = emp
-            lo.matrix_parent_inverse = Matrix.Identity(4)
-            lo.matrix_basis = Matrix.Identity(4)
             ang = float(at.get("OpenAngle", 95))
             if name.endswith("_B"):
                 ang = -ang                                                # the partner swings mirrored
-            for o in (emp, lo):
-                o["l4_door"] = name
-                o["l4_door_style"] = style
-                o["l4_open_angle"] = ang
-                o["l4_pkg"] = PKG
-                if at.get("FixedOpenAngle"):
-                    o["l4_fixed_open_angle"] = float(at["FixedOpenAngle"])
-                if at.get("NonBlockingWhenOpen"):
-                    o["l4_nonblocking_open"] = True
-            lo["l4_door_leaf"] = True
+            extra = {}
+            if at.get("FixedOpenAngle"):
+                extra["l4_fixed_open_angle"] = float(at["FixedOpenAngle"])
+            if at.get("NonBlockingWhenOpen"):
+                extra["l4_nonblocking_open"] = True
+            lo = _door(root, name, style, me, half, hinge_st, dvec, w, ang, ZT, extra, stats)
             lo["l4_src"] = li[k]
-            lo["l4_model"] = "Door_" + name
             if style == "poster":                                         # the original collider carries the poster
                 lo["l4_leaf_cf"] = list(lf["cf"])
                 lo["l4_leaf_size"] = list(lf["s"])
                 lo["l4_decals"] = 1
                 lo["l4_attrs"] = json.dumps({"ConcealedEntrance": True})
-            else:
-                c = Vector(hinge_st) + dvec * ((HG + w) / 2) + Vector((0, (ZB + ZT) / 2, 0))
-                lo["l4_leaf_cf"] = [round(v, 5) for v in _cf12(c, dvec)]
-                lo["l4_leaf_size"] = [round(w - HG, 4), ZT - ZB, round(max(0.4, 2 * half), 4)]
-            lo["l4_hinge_pos"] = [round(v, 5) for v in hinge_st]
-            stats["doors"] += 1
-            stats["leaf_colliders"] += 1
-            stats["objects"] += 2
+    build_themed(cin, root, fcoll, stats)
     # triangles as placed (instanced leaves count once per door)
     for o in list(fcoll.objects) + [o for o in root.all_objects if o.type == "MESH"]:
         o.data.calc_loop_triangles()

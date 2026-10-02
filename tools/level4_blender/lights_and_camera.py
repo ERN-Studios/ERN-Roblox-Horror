@@ -1,5 +1,5 @@
 # Level 4 cinema, Blender rebuild - lights from the Studio dump, world, and a preview-render helper.
-import bpy, json, math, os
+import ast, bpy, json, math, os, re
 from mathutils import Matrix, Vector
 
 HERE = r"G:\Roblox\MongoTV\tools\level4_blender"
@@ -23,7 +23,16 @@ def build_lights():
     else:
         c = bpy.data.collections.new("L4 Lights")
         bpy.data.collections["L4 Cinema"].children.link(c)
+    # The final ceiling package owns these fixtures. Read its literal export list without running its builder.
+    tree = ast.parse(open(os.path.join(HERE, "ceilings.py"), encoding="utf-8").read())
+    superseded = [re.compile(p) for n in tree.body if isinstance(n, ast.Assign)
+                  and any(isinstance(t, ast.Name) and t.id == "LIGHTS_SUPERSEDED" for t in n.targets)
+                  for p in ast.literal_eval(n.value)]
+    removed, count = [], 0
     for i, l in enumerate(D["lights"]):
+        if any(p.search(l["p"]) for p in superseded):
+            removed.append(l["p"])
+            continue
         col = tuple(srgb2lin(v / 255.0) for v in l["col"])
         rng = (l.get("rng") or 16) * S
         if l["c"] == "SpotLight":
@@ -46,7 +55,9 @@ def build_lights():
         o["l4_light"] = 1
         o["l4_src_light"] = i
         c.objects.link(o)
-    return len(D["lights"])
+        count += 1
+    print("L4 legacy ceiling lights omitted:", removed)
+    return count
 
 
 def world():
@@ -55,13 +66,13 @@ def world():
     sc.world = w
     w.use_nodes = True
     bg = w.node_tree.nodes.get("Background")
-    bg.inputs["Color"].default_value = (0.03, 0.018, 0.015, 1)
-    bg.inputs["Strength"].default_value = 8.0
+    bg.inputs["Color"].default_value = (0.025, 0.028, 0.04, 1)
+    bg.inputs["Strength"].default_value = 0.12
     sc.render.engine = "BLENDER_EEVEE"
     sc.render.resolution_x, sc.render.resolution_y = 1280, 720
     sc.view_settings.view_transform = "AgX"
     sc.view_settings.look = "AgX - Medium High Contrast"
-    sc.view_settings.exposure = 1.6
+    sc.view_settings.exposure = 0.0
     try:
         sc.eevee.use_raytracing = True
     except Exception:

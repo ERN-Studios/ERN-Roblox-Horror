@@ -24,7 +24,9 @@ SLOTS = {
     # moodboard slots (filled once the owner picks a direction)
     "CARPET_LOBBY":     ("carpet_lobby", 4.0, (90, 20, 30), 0.95, 0, "Carpet", "carpet"),
     "CARPET_ARCADE":    ("carpet_arcade", 3.0, (40, 10, 50), 0.95, 0, "Carpet", "carpet"),
-    "WALLPAPER_MAIN":   ("wallpaper_main", 2.4, (120, 60, 50), 0.8, 0, "Plaster", "plaster"),
+    # v3 (2026-10-01): ONE dark synthwave wallpaper everywhere a wall shows plaster/wallpaper (owner: "ensartet",
+    # not red). Near-black plum paper with magenta triangles + cyan squiggles, 4 pattern repeats per 1.2 m tile.
+    "WALLPAPER_MAIN":   ("wallpaper_synth", 1.2, (30, 18, 34), 0.85, 0, "Fabric", "plaster"),
     # fixed slots
     "CARPET_AUD":       ("carpet_aud", 2.2, (70, 14, 22), 0.95, 0, "Carpet", "carpet"),
     "CARPET_STAFF":     ("carpet_staff", 1.8, (120, 100, 60), 0.95, 0, "Carpet", "carpet"),
@@ -62,6 +64,12 @@ SLOTS = {
     # owner picked moodboard F "Synthwave Grid" (2026-09-30): magenta + cyan neon language
     "EMIT_MAGENTA":     (None, 1.0, (255, 40, 200), 0.5, 0, "Neon", "neon"),
     "EMIT_CYAN":        (None, 1.0, (40, 230, 255), 0.5, 0, "Neon", "neon"),
+    "EMIT_ORANGE":      (None, 1.0, (255, 120, 40), 0.5, 0, "Neon", "neon"),
+    # v3 (2026-10-01): boarded-up main entrance, starlight headliner ceilings
+    "BOARD_WEATHERED":  ("board_weathered", 1.2, (120, 105, 90), 0.85, 0, "Wood", "wood"),
+    "HEADLINER":        ("headliner_suede", 1.0, (10, 10, 14), 0.95, 0, "Fabric", "fabric"),
+    "EMIT_STAR":        (None, 1.0, (255, 244, 225), 0.5, 0, "Neon", "neon"),
+    "EMIT_STAR_COOL":   (None, 1.0, (220, 232, 255), 0.5, 0, "Neon", "neon"),
 }
 ALPHA = {"GLASS_CLEAR": 0.25, "GLASS_FROSTED": 0.6, "MIRROR": 0.9}
 
@@ -83,13 +91,18 @@ def slot(name, tint=None, uv="box"):
     stem, tile, rgb, rough, metal, rmat, sem = SLOTS[name]
     rgb = tuple(tint) if tint else rgb
     mname = "L4S_" + name + ("" if not tint else "_%02x%02x%02x" % rgb) + ("" if uv == "box" else "_uv")
+    # Rebuild old master-blend materials when a slot changes or previously missing maps arrive.
+    sig = repr(("world_box_v1", SLOTS[name], rgb, uv, tuple(os.path.exists(os.path.join(TEX, stem + "_" + k + ".png"))
+                                         for k in ("albedo", "normal", "rough", "metal")) if stem else ()))
     m = bpy.data.materials.get(mname)
-    if m:
+    if m and m.get("l4_slot_config") == sig:
         return m
-    m = bpy.data.materials.new(mname)
+    m = m or bpy.data.materials.new(mname)
     m.use_nodes = True
     nt = m.node_tree
-    b = nt.nodes["Principled BSDF"]
+    nt.nodes.clear()
+    b = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    nt.links.new(b.outputs["BSDF"], nt.nodes.new("ShaderNodeOutputMaterial").inputs["Surface"])
     lin = [_srgb2lin(c / 255) for c in rgb]
     b.inputs["Base Color"].default_value = (*lin, 1)
     b.inputs["Roughness"].default_value = rough
@@ -104,14 +117,37 @@ def slot(name, tint=None, uv="box"):
                 vec = nt.nodes.new("ShaderNodeVectorMath"); vec.operation = "SCALE"
                 vec.inputs["Scale"].default_value = 1.0 / tile
                 nt.links.new(geo.outputs["Position"], vec.inputs[0])
-                src = vec.outputs["Vector"]
+                # Native BOX picks a LOCAL normal axis. With world Position that stretches rotated
+                # wall panels into stripes. Pick the WORLD face axis explicitly, matching export_l4.box_uv.
+                pos = nt.nodes.new("ShaderNodeSeparateXYZ")
+                nt.links.new(vec.outputs["Vector"], pos.inputs[0])
+                normal = nt.nodes.new("ShaderNodeVectorMath"); normal.operation = "ABSOLUTE"
+                nt.links.new(geo.outputs["True Normal"], normal.inputs[0])
+                axes = nt.nodes.new("ShaderNodeSeparateXYZ")
+                nt.links.new(normal.outputs["Vector"], axes.inputs[0])
+                planes = []
+                for i, j in ((1, 2), (0, 2), (0, 1)):
+                    xy = nt.nodes.new("ShaderNodeCombineXYZ")
+                    nt.links.new(pos.outputs[i], xy.inputs[0]); nt.links.new(pos.outputs[j], xy.inputs[1])
+                    planes.append(xy.outputs[0])
+                yzmax = nt.nodes.new("ShaderNodeMath"); yzmax.operation = "MAXIMUM"
+                nt.links.new(axes.outputs[1], yzmax.inputs[0]); nt.links.new(axes.outputs[2], yzmax.inputs[1])
+                less = nt.nodes.new("ShaderNodeMath"); less.operation = "LESS_THAN"
+                nt.links.new(axes.outputs[1], less.inputs[0]); nt.links.new(axes.outputs[2], less.inputs[1])
+                yz = nt.nodes.new("ShaderNodeMixRGB")
+                nt.links.new(less.outputs[0], yz.inputs[0])
+                nt.links.new(planes[1], yz.inputs[1]); nt.links.new(planes[2], yz.inputs[2])
+                less = nt.nodes.new("ShaderNodeMath"); less.operation = "LESS_THAN"
+                nt.links.new(axes.outputs[0], less.inputs[0]); nt.links.new(yzmax.outputs[0], less.inputs[1])
+                xyz = nt.nodes.new("ShaderNodeMixRGB")
+                nt.links.new(less.outputs[0], xyz.inputs[0])
+                nt.links.new(planes[0], xyz.inputs[1]); nt.links.new(yz.outputs[0], xyz.inputs[2])
+                src = xyz.outputs[0]
             else:
                 src = nt.nodes.new("ShaderNodeTexCoord").outputs["UV"]
 
             def tex(im):
                 t = nt.nodes.new("ShaderNodeTexImage"); t.image = im
-                if uv == "box":
-                    t.projection = "BOX"; t.projection_blend = 0.1
                 nt.links.new(src, t.inputs["Vector"])
                 return t
             if maps["albedo"]:
@@ -148,6 +184,7 @@ def slot(name, tint=None, uv="box"):
             pass
     m.diffuse_color = (*lin, alpha)
     m["l4_slot"] = name
+    m["l4_slot_config"] = sig
     m["l4_sem"] = sem
     m["l4_roblox"] = rmat
     m["l4_color"] = list(rgb)

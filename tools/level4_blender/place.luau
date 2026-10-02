@@ -1,18 +1,36 @@
 -- Builds Workspace."Level 4 Cinema Blender" from the uploaded Blender meshes (export_l4.py / make_place.py).
 -- Runs as a background task in the plugin VM (Studio Edit); progress in shared.__l4place.
 -- The Studio layout is reproduced 6000 studs east of the original preview, which is left untouched:
---   World     pooled architecture MeshParts (visual only, no collision)
---   Props     one Model per prop (seats, cabinets, tables ...), with its own colliders (propColliders)
+--   World     pooled architecture MeshParts (visual only, no collision); CollectionService tags from the material
+--             (style tags) and from the chunk (objects pooled with their own l4_tags), e.g. L4StarTwinkleA/B/C
+--   Props     gameplay/solid props remain Models; single-mesh decorative props share per-asset Folders
 --   Doors     one Model per door: anchored hinge + unanchored collider leaf + welded visual meshes
---   Collision invisible parts: the layout's collidable parts (minus replaced props the new colliders cover),
---             the new geometry's colliders, Seats, and non-colliding tagged markers (Level4V4Doorway)
+--   Collision the layout's collidable parts (minus replaced props the new colliders cover), the new geometry's
+--             colliders, Seats, and non-colliding tagged markers (Level4V4Doorway). Invisible, except occluders
 --   Signage   invisible carriers holding the original posters' Decals and signs' SurfaceGuis
---   Lights    the exported fixture lights on invisible holders (or inside their prop's Neon lens part), plus
---             the original preview lights the manifest lists as surviving (legacyLights), cloned exactly;
---             a manifest without either clones every original light as before
---   Fixtures / Level4V4Exit  cloned from the original preview
---   OccasionalFixtureFlicker  a client-side (RunContext Client) flicker for every BasePart with a truthy
---             OccasionalFlicker attribute: flicker lenses, flicker holders and the cloned original fixtures
+--   Lights    the exported lights on invisible holders (a prop's lights: holders inside that prop's Model), plus
+--             the original preview lights the placement file lists (legacyLights: never ceiling ones), cloned
+--   Level4V4Exit  cloned from the original preview (the preview access script teleports onto it)
+--   OccasionalFixtureFlicker  the one place lights flicker (client script, FLICKER_SOURCE below)
+-- The original preview's ceiling Fixtures and their lights are no longer cloned (v3, owner: "overlaps").
+--
+-- Camera occluders (v3, owner: "I can see through the roof / the walls"). Poppercam only stops at parts with
+-- CanCollide = true and Transparency < 0.25, and every visual mesh here is CanCollide = false while the colliders
+-- were invisible, so the camera passed through everything. A collider the placement file flags as an occluder is
+-- now drawn: Transparency 0, Color OCCLUDER_COLOR (8,8,8), CastShadow false, CanQuery true, CanTouch false, named
+-- "Occluder", keeping its tags and attributes, with SmoothPlastic material. make_place.py has already inset it
+-- 0.1 stud on every axis (both faces) so it hides inside the visual surface; an axis that would drop below 0.3 stud
+-- keeps its original size and the whole thin collider stays invisible. Which colliders qualify (export_l4.py):
+-- collidable visible layout parts (Transparency < 1), except Glass / door leaves and anything thinner than 0.5 stud,
+-- and Blender colliders explicitly flagged l4_occluder. Non-occluder colliders stay invisible.
+-- Signage carriers and legacyLights are filtered in make_place.py: no removed C1 zone / closed A1 west entry signs,
+-- no original ceiling lights; CARRIER_MOVE there supports path + original centre -> new layout CFrame overrides.
+--
+-- Flicker: a unit is a Model with a truthy OccasionalFlicker attribute (FlickerLens / NeonFlicker props: their
+-- Neon parts and every Light inside them) or a BasePart with it outside such a Model (a light holder). Every few
+-- seconds a unit stutters and usually stays OFF for 0.3-4 s (12 %: a 6-15 s outage), long enough for its area to go
+-- dark. With ReduceFlashing (anything but an explicit false, so a profile that has not loaded never strobes) it
+-- fades out over 1.5 s, holds and fades back instead. Lights go off through Brightness, lenses go matte and dark.
 -- The model carries BoundsCenter / BoundsSize (Vector3) for client zone checks (Level 4 Lighting Controller).
 local AS = game:GetService("AssetService")
 local HS = game:GetService("HttpService")
@@ -22,55 +40,145 @@ local NAME = "Level 4 Cinema Blender"
 local OLD_NAME = "Level 4 Cinema Preview"
 local SHIFT = Vector3.new(6000, 0, 0)                 -- new model = original layout + SHIFT
 local ORIGIN = Vector3.new(23000, 0, 0) + SHIFT       -- Blender origin in Studio space
+local OCCLUDER_COLOR = Color3.fromRGB(8, 8, 8)
 local PUSH_DOOR_SOURCE = __PUSH_DOOR_SOURCE__
 local FLICKER_SOURCE = [==[
--- Level 4 cinema (Blender build): flickering fixtures. Runs on every client (RunContext Client): a blink costs no
--- replication, and parts that stream in join. Any BasePart in this model with a truthy OccasionalFlicker attribute
--- is a fixture: every few seconds its lights stutter off in a short burst and its lens, if visible, goes dark.
--- Written by tools/level4_blender/place.luau.
+-- Level 4 cinema (Blender build): flickering lights. Runs on every client (RunContext Client): a blink costs no
+-- replication, and parts that stream in join. A unit is a Model with a truthy OccasionalFlicker attribute (its Neon
+-- parts and every Light inside it) or a BasePart with the attribute outside such a Model (a light holder). Every few
+-- seconds a unit stutters and usually stays OFF for 0.3-4 s (12 %: a 6-15 s outage), so its area goes dark. With
+-- ReduceFlashing (anything but an explicit false: a profile that has not loaded yet never strobes) it fades out,
+-- holds and fades back instead. Written by tools/level4_blender/place.luau.
+local TweenService = game:GetService("TweenService")
+local player = game:GetService("Players").LocalPlayer
 local model = script.Parent
 local running = {}
+local FADE = 1.5
 
-local function burst(part, rng)
-	local lights = {}
-	for _, l in part:GetChildren() do
-		if l:IsA("Light") then table.insert(lights, { l, l.Enabled }) end
-	end
-	local visible = part.Transparency < 1
-	local material, color = part.Material, part.Color
-	for _ = 1, rng:NextInteger(1, 5) do
-		for _, e in lights do e[1].Enabled = false end
-		if visible then
-			part.Material = Enum.Material.SmoothPlastic
-			part.Color = color:Lerp(Color3.new(0, 0, 0), 0.8)
+local function reduced()
+	return player == nil or player:GetAttribute("ReduceFlashing") ~= false
+end
+
+local function members(unit)
+	local lights, lenses = {}, {}
+	local list = unit:GetDescendants()
+	table.insert(list, unit)
+	for _, d in list do
+		if d:IsA("Light") then
+			table.insert(lights, { d, d.Brightness })
+		elseif d:IsA("BasePart") and d.Material == Enum.Material.Neon and d.Transparency < 1 then
+			table.insert(lenses, { d, d.Color })
 		end
-		task.wait(rng:NextNumber(0.04, 0.16))
-		for _, e in lights do e[1].Enabled = e[2] end
-		if visible then part.Material, part.Color = material, color end
-		task.wait(rng:NextNumber(0.03, 0.3))
+	end
+	return lights, lenses
+end
+
+local function set(lights, lenses, on)
+	for _, e in lights do e[1].Brightness = if on then e[2] else 0 end
+	for _, e in lenses do
+		e[1].Material = if on then Enum.Material.Neon else Enum.Material.SmoothPlastic
+		e[1].Color = if on then e[2] else e[2]:Lerp(Color3.new(0, 0, 0), 0.85)
 	end
 end
 
-local function watch(part)
-	if not (part:IsA("BasePart") and part:GetAttribute("OccasionalFlicker")) then return end
-	local token = {}
-	running[part] = token
-	task.spawn(function()
+local function fade(state, lights, lenses, on)
+	local info = TweenInfo.new(FADE, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+	local function tween(part, goals)
+		local t = TweenService:Create(part, info, goals)
+		table.insert(state.tweens, t)
+		t:Play()
+	end
+	for _, e in lights do tween(e[1], { Brightness = if on then e[2] else 0 }) end
+	for _, e in lenses do      -- stays Neon: a near-black Neon tube reads as dead without a material snap
+		e[1].Material = Enum.Material.Neon
+		tween(e[1], { Color = if on then e[2] else e[2]:Lerp(Color3.new(0, 0, 0), 0.9) })
+	end
+	task.wait(FADE)
+	table.clear(state.tweens)
+end
+
+local function offTime(rng)
+	return if rng:NextNumber() < 0.12 then rng:NextNumber(6, 15) else rng:NextNumber(0.3, 4)
+end
+
+local function event(unit, rng, state)
+	local lights, lenses = members(unit)
+	state.lights, state.lenses = lights, lenses
+	if #lights + #lenses == 0 then return end
+	local function slow()
+		fade(state, lights, lenses, false)
+		task.wait(offTime(rng))
+		fade(state, lights, lenses, true)
+	end
+	if reduced() then slow(); return end
+	for _ = 1, rng:NextInteger(1, 4) do                   -- the stutter
+		if reduced() then slow(); return end
+		set(lights, lenses, false)
+		task.wait(rng:NextNumber(0.04, 0.16))
+		if reduced() then slow(); return end
+		set(lights, lenses, true)
+		task.wait(rng:NextNumber(0.03, 0.25))
+	end
+	if rng:NextNumber() < 0.7 then                         -- and usually it gives out for a while
+		set(lights, lenses, false)
+		task.wait(offTime(rng))
+		for _ = 1, rng:NextInteger(0, 2) do                -- a catch or two on the way back
+			if reduced() then slow(); return end
+			set(lights, lenses, true)
+			task.wait(rng:NextNumber(0.04, 0.12))
+			if reduced() then slow(); return end
+			set(lights, lenses, false)
+			task.wait(rng:NextNumber(0.05, 0.2))
+		end
+	end
+	if reduced() then fade(state, lights, lenses, true); return end
+	set(lights, lenses, true)
+end
+
+local function unitOf(d)
+	if not d:GetAttribute("OccasionalFlicker") then return nil end
+	if d:IsA("Model") then return d end
+	if not d:IsA("BasePart") then return nil end
+	local owner = d:FindFirstAncestorWhichIsA("Model")
+	if owner and owner ~= model and owner:GetAttribute("OccasionalFlicker") then return nil end   -- the Model is the unit
+	return d
+end
+
+local function watch(d)
+	local unit = unitOf(d)
+	if not unit or running[unit] then return end
+	local state = { tweens = {} }
+	running[unit] = state
+	state.thread = task.spawn(function()
 		local rng = Random.new()
-		-- a quarter of the fixtures are dying (a stutter every 1-4 s), the rest act up every 5-18 s
+		-- a quarter of the units are dying (an episode every 2-6 s), the rest act up every 6-20 s
 		local dying = rng:NextNumber() < 0.25
-		local lo, hi = if dying then 1 else 5, if dying then 4 else 18
+		local lo, hi = if dying then 2 else 6, if dying then 6 else 20
 		task.wait(rng:NextNumber(0, hi))
-		while running[part] == token and part:IsDescendantOf(model) do
-			burst(part, rng)
+		while running[unit] == state and unit:IsDescendantOf(model) do
+			event(unit, rng, state)
 			task.wait(rng:NextNumber(lo, hi))
 		end
 	end)
 end
 
+local function stop(unit)
+	local state = running[unit]
+	if not state then return end
+	running[unit] = nil
+	if state.thread then task.cancel(state.thread) end
+	for _, t in state.tweens do t:Cancel() end
+	set(state.lights or {}, state.lenses or {}, true)
+end
+
 for _, d in model:GetDescendants() do watch(d) end
-model.DescendantAdded:Connect(watch)
-model.DescendantRemoving:Connect(function(d) running[d] = nil end)
+local added = model.DescendantAdded:Connect(watch)
+local removing = model.DescendantRemoving:Connect(stop)
+script.Destroying:Connect(function()
+	added:Disconnect()
+	removing:Disconnect()
+	for unit in running do stop(unit) end
+end)
 ]==]
 
 local function fetch()
@@ -133,9 +241,10 @@ local function invisible(part)
 	part.CanTouch = false
 end
 
--- c = {cf12 (layout frame), size, shape, material, tags, kind, attributes?}; kind: "Part" | "Seat" | "Marker"
+-- c = {cf12 (layout frame), size, shape, material, tags, kind, occluder, attributes?}
+-- kind: "Part" | "Seat" | "Marker"; occluder = true: a camera occluder (see the header; size already inset)
 local function makeCollider(c, parent)
-	local cfT, size, shape, mat, tags, kind, attrs = c[1], c[2], c[3], c[4], c[5], c[6] or "Part", c[7]
+	local cfT, size, shape, mat, tags, kind, occ, attrs = c[1], c[2], c[3], c[4], c[5], c[6] or "Part", c[7], c[8]
 	local part
 	if kind == "Seat" then
 		part = Instance.new("Seat")
@@ -153,6 +262,12 @@ local function makeCollider(c, parent)
 	part.CanQuery = kind ~= "Marker"
 	part.CanTouch = kind == "Seat"                    -- a Seat seats whoever touches it
 	part.Material = enumItem(Enum.Material, mat, Enum.Material.SmoothPlastic)
+	if occ == true and kind == "Part" and math.min(size[1], size[2], size[3]) >= 0.3 then
+		part.Name = "Occluder"
+		part.Transparency = 0
+		part.Color = OCCLUDER_COLOR
+		part.Material = Enum.Material.SmoothPlastic
+	end
 	for _, tag in ipairs(tags or {}) do CS:AddTag(part, tag) end
 	if type(attrs) == "table" then
 		for k, v in pairs(attrs) do part:SetAttribute(k, v) end
@@ -161,55 +276,33 @@ local function makeCollider(c, parent)
 	return part
 end
 
--- the face of `part` whose outward normal is closest to a world direction
-local FACES = {
-	{ Enum.NormalId.Right, Vector3.xAxis }, { Enum.NormalId.Left, -Vector3.xAxis },
-	{ Enum.NormalId.Top, Vector3.yAxis }, { Enum.NormalId.Bottom, -Vector3.yAxis },
-	{ Enum.NormalId.Back, Vector3.zAxis }, { Enum.NormalId.Front, -Vector3.zAxis },
-}
-local function faceToward(part, dir)
-	local d = part.CFrame:VectorToObjectSpace(dir)
-	local best, bestDot = Enum.NormalId.Bottom, -math.huge
-	for _, f in FACES do
-		if d:Dot(f[2]) > bestDot then best, bestDot = f[1], d:Dot(f[2]) end
-	end
-	return best
-end
-
--- l = {type, pos, rot, color, range, brightness, shadows, angle?, size?, prop?, name}; shines along -Y of rot
+-- l = {type, pos, rot, color, range, brightness, shadows, angle?, size?, prop?, flicker?, kind?, name}; shines
+-- along -Y of rot. A prop's light sits on its holder inside the prop's Model, so the prop's flicker unit switches it.
 local function makeLight(l, folder, placed)
-	local cf = cf12({ l.pos[1], l.pos[2], l.pos[3], table.unpack(l.rot) }, SHIFT)
 	local light = Instance.new(l.type)
 	light.Color = Color3.new(l.color[1], l.color[2], l.color[3])
 	light.Range = l.range
 	light.Brightness = l.brightness
 	light.Shadows = l.shadows == true
-	if l.angle and not light:IsA("PointLight") then light.Angle = l.angle end
-	local model = l.prop and placed[l.prop]
-	local host
-	if model then                                  -- inside the prop's lens, so OccasionalFixtureFlicker dims both
-		for _, d in ipairs(model:GetChildren()) do
-			if d:IsA("BasePart") and d.Material == Enum.Material.Neon then host = d; break end
-		end
+	if not light:IsA("PointLight") then
+		light.Face = Enum.NormalId.Bottom
+		if l.angle then light.Angle = l.angle end
 	end
-	if host then
-		if not light:IsA("PointLight") then light.Face = faceToward(host, -cf.UpVector) end
-	else
-		host = Instance.new("Part")
-		host.Name = l.name or l.type
-		host.Size = if l.size then vec(l.size) else Vector3.new(0.2, 0.2, 0.2)
-		host.CFrame = cf
-		invisible(host)
-		host.CanCollide = false
-		host.CanQuery = false
-		if not light:IsA("PointLight") then light.Face = Enum.NormalId.Bottom end
-		if l.flicker then host:SetAttribute("OccasionalFlicker", true) end
-		host.Parent = model or folder
-	end
+	local host = Instance.new("Part")
+	host.Name = l.name or l.type
+	host.Size = if l.size then vec(l.size) else Vector3.new(0.2, 0.2, 0.2)
+	host.CFrame = cf12({ l.pos[1], l.pos[2], l.pos[3], table.unpack(l.rot) }, SHIFT)
+	invisible(host)
+	host.CanCollide = false
+	host.CanQuery = false
+	if l.flicker then host:SetAttribute("OccasionalFlicker", true) end
+	if l.kind then host:SetAttribute("L4Kind", l.kind) end
 	light.Parent = host
+	host.Parent = (l.prop and placed[l.prop]) or folder
 end
 
--- an original light on an invisible holder with its parent's frame and size
+-- an original light on an invisible holder with its parent's frame and size; legacy lights never consume
+-- the six hero shadow slots controlled by ceilings.py's final lighting pass
 local function cloneLight(l, folder)
 	local host = l.Parent
 	local holder = Instance.new("Part")
@@ -224,7 +317,9 @@ local function cloneLight(l, folder)
 	invisible(holder)
 	holder.CanCollide = false
 	holder.CanQuery = false
-	l:Clone().Parent = holder
+	local copy = l:Clone()
+	copy.Shadows = false
+	copy.Parent = holder
 	holder.Parent = folder
 end
 
@@ -255,7 +350,7 @@ local function run()
 	model:SetAttribute("Level4Preview", true)
 	model:SetAttribute("PreviewOnly", true)
 	model:SetAttribute("Level4LayoutVersion", 4)
-	model:SetAttribute("Level4Revision", 9)
+	model:SetAttribute("Level4Revision", 10)
 	model:SetAttribute("Level4PreviewReady", false)
 	model:SetAttribute("Level4Source", "Blender")
 	model:SetAttribute("SourceBlend", "G:/Blender/Level4_Cinema/Level4_Cinema.blend")
@@ -264,12 +359,12 @@ local function run()
 		local f = Instance.new("Folder"); f.Name = n; f.Parent = model; return f
 	end
 	local world, props, doors, collision = folder("World"), folder("Props"), folder("Doors"), folder("Collision")
-	local signage, lights, fixtures = folder("Signage"), folder("Lights"), folder("Fixtures")
+	local signage, lights = folder("Signage"), folder("Lights")
 
 	-- one template per chunk
 	local templates, byGroup = {}, {}
 	for i, c in ipairs(data.chunks) do
-		local id, group, matName, size = c[1], c[2], c[3], c[4]
+		local id, group, matName, size, chunkTags = c[1], c[2], c[3], c[4], c[6]
 		local st = data.styles[matName] or data.styles["None"]
 		local part
 		for _, f in ipairs({Enum.CollisionFidelity.Box, Enum.CollisionFidelity.Default}) do
@@ -284,6 +379,8 @@ local function run()
 		part.CanQuery = false
 		part.CanTouch = false
 		styleMesh(part, st)
+		for _, tag in ipairs(st.tags or {}) do CS:AddTag(part, tag) end
+		for _, tag in ipairs(chunkTags or {}) do CS:AddTag(part, tag) end
 		templates[i] = {part = part, size = vec(size), center = vec(c[5])}
 		if group >= 0 then
 			byGroup[group] = byGroup[group] or {}
@@ -302,23 +399,38 @@ local function run()
 	-- props and doors
 	local doorCount = 0
 	local placed = {}                                  -- placement index -> prop Model (lights, prop colliders)
+	local decorativeFolders = {}
 	for pi, p in ipairs(data.placements) do
 		local group, pos, r, s, modelName, objName, attrs, door = p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]
 		local cf = CFrame.new(ORIGIN.X + pos[1], ORIGIN.Y + pos[2], ORIGIN.Z + pos[3],
 			r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9])
 		local scale = vec(s)
-		local m = Instance.new("Model")
-		m.Name = modelName
-		if type(attrs) == "table" then
+		local bare, propTags = p[9] == true, p[10]
+		local decorativeAsset = p[11] or modelName
+		local m
+		if bare then
+			assert(not door and (not attrs or next(attrs) == nil) and #byGroup[group] == 1, "invalid decorative placement")
+			m = decorativeFolders[decorativeAsset]
+			if not m then
+				m = Instance.new("Folder")
+				m.Name = decorativeAsset
+				m.Parent = props
+				decorativeFolders[decorativeAsset] = m
+			end
+		else
+			m = Instance.new("Model")
+			m.Name = modelName
+		end
+		if not bare and type(attrs) == "table" then
 			for k, v in pairs(attrs) do m:SetAttribute(k, v) end
 		end
 		local meshes = {}
-		local flicker = m:GetAttribute("OccasionalFlicker")
 		for _, t in ipairs(byGroup[group]) do
 			local part = t.part:Clone()
 			part.Size = t.size * scale
 			part.CFrame = cf * CFrame.new(t.center * scale)
-			if flicker and part.Material == Enum.Material.Neon then part:SetAttribute("OccasionalFlicker", flicker) end
+			if bare then part.Name = objName end
+			for _, tag in ipairs(propTags or {}) do CS:AddTag(part, tag) end
 			part.Parent = m
 			table.insert(meshes, part)
 		end
@@ -387,7 +499,7 @@ local function run()
 			pcall(function() m.ModelStreamingMode = Enum.ModelStreamingMode.Atomic end)   -- hinge + leaf arrive together
 			m.PrimaryPart = leaf
 			m.Parent = doors
-		else
+		elseif not bare then
 			m.PrimaryPart = meshes[1]
 			m.Parent = props
 			placed[pi] = m
@@ -401,7 +513,7 @@ local function run()
 	-- colliders of the props go into their Models
 	for _, c in ipairs(data.propColliders or {}) do
 		local m = placed[c[1]]
-		if m then makeCollider({ c[2], c[3], c[4], c[5], c[6], c[7] }, m) end
+		if m then makeCollider({ c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9] }, m) end
 	end
 
 	-- invisible collision
@@ -434,47 +546,26 @@ local function run()
 		end
 	end
 
-	-- flicker fixtures (the original parts, with their lights)
-	local flickerSet = {}
-	for _, f in ipairs(data.fixtures) do
-		local src = original(f[1], f[2])
-		if src then
-			flickerSet[src] = true
-			local clone = src:Clone()
-			clone.CFrame = src.CFrame + SHIFT
-			clone.Parent = fixtures
-		end
-	end
 	local lightCount, legacyCount, legacyMissing = 0, 0, 0
 	for li, l in ipairs(data.lights or {}) do
 		makeLight(l, lights, placed)
 		lightCount += 1
 		if li % 100 == 0 then task.wait() end
 	end
-	if data.legacyLights then
-		-- the original lights whose fixtures survived the facelift, by light path + original host position
-		local originalLights = {}
-		for _, l in ipairs(old:GetDescendants()) do
-			if l:IsA("Light") and l.Parent:IsA("BasePart") then
-				originalLights[key(pathOf(l, old), l.Parent.Position)] = l
-			end
+	-- the original lights the placement file keeps (never ceiling ones), by light path + original host position
+	local originalLights = {}
+	for _, l in ipairs(old:GetDescendants()) do
+		if l:IsA("Light") and l.Parent:IsA("BasePart") then
+			originalLights[key(pathOf(l, old), l.Parent.Position)] = l
 		end
-		for _, e in ipairs(data.legacyLights) do
-			local l = originalLights[key(e[1], vec(e[2]))]
-			if l then
-				cloneLight(l, lights)
-				legacyCount += 1
-			else
-				legacyMissing += 1
-			end
-		end
-	elseif lightCount == 0 then
-		-- a manifest from before exported lights: every original light
-		for _, l in ipairs(old:GetDescendants()) do
-			if l:IsA("Light") and not flickerSet[l.Parent] then
-				cloneLight(l, lights)
-				legacyCount += 1
-			end
+	end
+	for _, e in ipairs(data.legacyLights or {}) do
+		local l = originalLights[key(e[1], vec(e[2]))]
+		if l then
+			cloneLight(l, lights)
+			legacyCount += 1
+		else
+			legacyMissing += 1
 		end
 	end
 
@@ -510,9 +601,13 @@ local function run()
 	model:SetAttribute("PartCount", #model:GetDescendants())
 	model.Parent = workspace
 	model:SetAttribute("Level4PreviewReady", true)
-	shared.__l4place = string.format("done world=%d props=%d doors=%d colliders=%d propColliders=%d signage=%d(missing %d) lights=%d legacyLights=%d(missing %d) fixtures=%d",
-		#world:GetChildren(), #props:GetChildren(), doorCount, #collision:GetChildren(), #(data.propColliders or {}),
-		#signage:GetChildren(), missing, lightCount, legacyCount, legacyMissing, #fixtures:GetChildren())
+	local occluders = 0
+	for _, part in ipairs(collision:GetChildren()) do
+		if part.Name == "Occluder" then occluders += 1 end
+	end
+	shared.__l4place = string.format("done world=%d props=%d doors=%d colliders=%d occluders=%d propColliders=%d signage=%d(missing %d) lights=%d legacyLights=%d(missing %d)",
+		#world:GetChildren(), #props:GetChildren(), doorCount, #collision:GetChildren(), occluders,
+		#(data.propColliders or {}), #signage:GetChildren(), missing, lightCount, legacyCount, legacyMissing)
 end
 
 task.spawn(function()

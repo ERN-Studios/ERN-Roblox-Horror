@@ -1,5 +1,10 @@
 # Level 4 facelift, package D2: Blender props for the restrooms, concession, service and arcade
 # (r8.md A4-A7 "B" rows plus the section D decay dressing that belongs to those rooms).
+# v3 (2026-10-01, owner points 5/7/8/9/11/14): the concession counter is 5 studs deep (Z 108-113 including its nosing) on carpet; the
+# arcade is one hall between two solid wallpapered side walls (X 23172 / 23212, Z 102-238, the side spaces are
+# closed voids) lined wall to wall with cabinets; the restrooms have white tile straight up to the wallpaper and
+# wall-hung urinals with modelled flush valves; the service room is wallpapered; staff lockers stand at the east
+# end of the projection gallery.
 #
 # Run order (headless or MCP):  exec(slots.py) ; exec(props_rooms.py) ; build_rooms_props()
 # build_rooms_props() is idempotent. Every run it
@@ -42,11 +47,13 @@ D2_OTHER = D2_LAYOUT["other"]
 MESHY_SPECS = os.path.join(HERE, "meshy_specs.json")
 MESHY_USED = ("ArcadeUprightA", "ArcadeUprightB", "ArcadeRacing", "Pinball", "ToiletFlush", "Urinal",
               "PopcornMachine", "SodaFountain")
+MESHY_OPTIONAL = ("LockerBank", "SupplyCabinet")    # a proxy stands in until the GLB has been imported
 
 REPLACES = [
-    # restrooms
+    # restrooms (the tile cap and the plaster above the tiles are rebuilt here: white tile up to the wallpaper)
     r"^Restrooms/(Men|Women)_Stall(Side|Header|Door|Hinge|Latch)$",
     r"^Restrooms/(Men|Women)_(MirrorFrame|MirrorGlass|TrashBin|Sign)$",
+    r"^Restrooms/(Men|Women)_(Back)?(TealStripe|UpperPlaster)$",
     r"^Restrooms/(Men|Women)_(Sink|Toilet)/",
     # concession
     r"^Concession/Counter(Top|Plinth|PanelSeam|TopWornFrontLip|Trim)?$",
@@ -62,6 +69,7 @@ REPLACES = [
     r"^Arcade/Prize(Counter|Glass|Shelf|Box|SideDoor|DoorHandle)$",
     r"^Arcade/ArcadeStool(Seat|Stem)$",
     # service
+    r"^Service/Service(North|South|East|West)WallFinish$",
     r"^Service/(StorageShelf|StorageUpright|ShelfLip)$",
     r"^Service/StockBox/",
     r"^Service/(CartonHandSlot|CartonPackingTape|FilmTin)$",
@@ -532,7 +540,7 @@ def _clear():
             bpy.data.objects.remove(o, do_unlink=True)
             gone += 1
     for me in list(bpy.data.meshes):
-        if me.users == 0 and (me.name.startswith("L4D2_") or me.get("l4_asset") in OLD_PROPS):
+        if (me.name.startswith("L4D2_") and me.users == int(me.use_fake_user)) or (me.users == 0 and me.get("l4_asset") in OLD_PROPS):
             bpy.data.meshes.remove(me)
     for ld in list(bpy.data.lights):
         if ld.users == 0 and ld.name.startswith("L4D2_"):
@@ -541,16 +549,39 @@ def _clear():
 
 
 def _meshy():
-    """-> {asset: mesh}; imports the missing Meshy meshes (fake users keep them in the blend)."""
-    need = [s for s in json.load(open(MESHY_SPECS)) if s["asset"] in MESHY_USED and not bpy.data.meshes.get("L4A_" + s["asset"])]
+    """-> {asset: mesh}; imports the missing Meshy meshes whose GLB exists (fake users keep them in the blend).
+    MESHY_OPTIONAL assets without a GLB get a proxy box (L4D2_Proxy_<asset>, rebuilt every run)."""
+    used = MESHY_USED + MESHY_OPTIONAL
+    need = [s for s in json.load(open(MESHY_SPECS)) if s["asset"] in used and not bpy.data.meshes.get("L4A_" + s["asset"])
+            and os.path.isfile(s["glb"])]
     if need:
         exec(open(os.path.join(HERE, "import_meshy.py")).read(), {"SPEC": need, "__name__": "d2_meshy"})
     out = {}
-    for a in MESHY_USED:
+    for a in used:
         me = bpy.data.meshes.get("L4A_" + a)
+        if me is None and a in MESHY_OPTIONAL:
+            me = _proxy_cabinet(a)
         assert me is not None, "Meshy mesh L4A_%s missing" % a
         out[a] = me
     return out
+
+
+def _proxy_cabinet(asset):
+    """Stand-in for a Meshy locker/cabinet (0.9 x 0.45 x 1.8 m, front -Y, origin bottom centre)."""
+    a = RMesh("Proxy_" + asset)
+    w, d, h = 0.9 / S, 0.45 / S, 1.8 / S
+    body = _t("STEEL_PAINTED", (70, 40, 66) if asset == "LockerBank" else (84, 88, 90))
+    a.box((0, 0, h / 2 + 0.2), (w, d, h - 0.4), body, 0.04)
+    a.box((0, 0, 0.1), (w - 0.1, d - 0.1, 0.2), slot("PLASTIC_BLACK"))
+    n = 3 if asset == "LockerBank" else 2
+    for k in range(1, n):
+        a.box((-w / 2 + w * k / n, -d / 2 - 0.01, h / 2 + 0.2), (0.04, 0.02, h - 0.6), slot("PLASTIC_BLACK"))
+    for k in range(n):
+        a.box((-w / 2 + w * (k + 0.5) / n + 0.25, -d / 2 - 0.04, h * 0.55), (0.08, 0.06, 0.5), slot("CHROME_PITTED"))
+    a.col((0, 0, h / 2), (w, d, h))
+    me = a.finish(False)
+    me["l4_asset"] = asset + "Proxy"
+    return me
 
 
 def _mdims(me):
@@ -579,7 +610,7 @@ def _mats():
         water=slot("GLASS_CLEAR", (18, 20, 22)), paper=_t("PORCELAIN", (226, 222, 208)),
         magenta=slot("EMIT_MAGENTA"), cyan=slot("EMIT_CYAN"), warm=slot("EMIT_WARM"),
         board=slot("EMIT_WARM", (255, 240, 214)), amber=slot("EMIT_AMBER"),
-        formica=slot("FORMICA_SPECKLE"), checker=slot("CHECKER_VCT"), checker_red=_t("CHECKER_VCT", (150, 24, 30)),
+        formica=slot("FORMICA_SPECKLE"),
         marble=slot("MARBLE_BLACK"), brass=slot("BRASS_AGED"), burgundy=_t("STEEL_PAINTED", (78, 18, 28)),
         lacquer=slot("WAINSCOT_LACQUER"), plum=_t("PORCELAIN", (46, 16, 44)), plum_dk=_t("STEEL_PAINTED", (26, 12, 26)),
         sign_m=_t("PORCELAIN", (24, 84, 104)), sign_w=_t("PORCELAIN", (128, 30, 88)),
@@ -619,6 +650,7 @@ def _mats():
         sickly=slot("EMIT_COOL", (211, 235, 162)),
         cart_yellow=_t("PORCELAIN", (220, 170, 20)), bag=_t("PLASTIC_BLACK", (50, 50, 52)),
         mop=_t("CARPET_STAFF", (140, 130, 110)),
+        wallpaper=slot("WALLPAPER_MAIN"), damp=slot("WALLPAPER_MAIN", (16, 11, 12)),
     )
 
 
@@ -783,9 +815,10 @@ def _mirror(m, name, L, H, rng, cracked):
 
 def build_restrooms(m, rng, meshy):
     objs = []
-    t_me, u_me = meshy["ToiletFlush"], meshy["Urinal"]
+    t_me, u_me = meshy["ToiletFlush"], _urinal_body(meshy["Urinal"])
     tlo, thi = _mdims(t_me)
-    u_yaw, u_back = _flat_back_yaw(u_me)
+    ulo, uhi = _mdims(u_me)
+    u_back = uhi[1]
     doors = {p["p"].split("/")[1].split("_")[0] + "%.0f" % p["cf"][0]: p for _, p in _parts(r"^Restrooms/(Men|Women)_StallDoor$")}
     for room in ROOMS:
         nm = room["name"]
@@ -795,7 +828,8 @@ def build_restrooms(m, rng, meshy):
             pl, pr = P[2 * bi], P[2 * bi + 1]
             # side panels (layout StallSide colliders stay; they are protected walls)
             for pc in (pl, pr):
-                mb.rbox((pc - 0.15, PANEL_Y[0], STALL_Z + 0.2), (pc + 0.15, PANEL_Y[1], RZ1 - 0.12), m["teal"], 0.06, 1)
+                # Match retained .5-stud StallSide boxes so their opaque insets stay behind every visible face.
+                mb.rbox((pc - 0.25, PANEL_Y[0], STALL_Z), (pc + 0.25, PANEL_Y[1], RZ1 - 0.12), m["teal"], 0.06, 1)
                 for zb in (156.0, 163.0):                                          # wall-side U brackets
                     mb.rbox((pc - 0.26, PANEL_Y[0] + 1.0, RZ1 - 0.5), (pc + 0.26, PANEL_Y[0] + 1.5, RZ1), m["chrome"], 0.03)
                     mb.rbox((pc - 0.26, PANEL_Y[1] - 1.5, RZ1 - 0.5), (pc + 0.26, PANEL_Y[1] - 1.0, RZ1), m["chrome"], 0.03)
@@ -873,7 +907,7 @@ def build_restrooms(m, rng, meshy):
         mb.rcol((tx0, 28.4, bz0 + 0.2), (tx1, 31.6, bz1 - 0.2))
         mb.rbox((tf - 0.03, 28.05, bz0 + 0.8), (tf + 0.03, 28.6, bz1 - 0.8), m["paper"])               # towel tongue
         mb.rbox((tf - 0.02, 30.4, bz0 + 0.9), (tf + 0.02, 30.9, bz1 - 0.9), m["black"])                # sight window
-        # --- teal bullnose cap along the wainscot top, missing tiles, fallen shards
+        # --- white tile wear and fallen shards; no coloured tile cap
         _tile_trim(mb, m, room, rng)
         # --- round pictogram sign over the door (vestibule side)
         _pictogram(mb, m, (room["door"][0] + room["door"][1]) / 2, 38.5, 124.0, nm)
@@ -881,8 +915,9 @@ def build_restrooms(m, rng, meshy):
     # --- urinals + privacy screen (men's east wall)
     ux = 23301.68
     for k, uz in enumerate((136.2, 140.4, 144.6)):
-        Mu = _M((ux - u_back * FIX_SCALE, FLOOR + 0.7, uz), "-X", ang=u_yaw, scale=FIX_SCALE)
+        Mu = _M((ux - u_back * FIX_SCALE, FLOOR + 0.7, uz), "-X", scale=FIX_SCALE)
         objs.append(_place(u_me, "Men_Urinal%d" % (k + 1), Mu, model="Men_Urinal%d" % (k + 1)))
+        objs.append(_urinal_pipes(m, k + 1, Mu, u_back))
     sc = RMesh("UrinalScreen")
     sc.rbox((ux - 3.3, 25.3, 142.36), (ux - 0.12, 32.2, 142.64), m["teal"], 0.06, 1)
     sc.rbox((ux - 0.35, 25.6, 142.2), (ux, 31.9, 142.8), m["chrome"], 0.03)
@@ -892,17 +927,39 @@ def build_restrooms(m, rng, meshy):
     return [o for o in objs if o]
 
 
-def _flat_back_yaw(me):
-    """-> (extra yaw deg that turns a wall-hung Meshy fixture so its flat back faces +Y, back distance studs)."""
-    co = np.array([v.co[:] for v in me.vertices])[:, :2]
-    best, best_a, back = -1, 0.0, 0.0
-    for a in range(0, 360, 1):
-        c, s = math.cos(math.radians(a)), math.sin(math.radians(a))
-        y = co[:, 0] * s + co[:, 1] * c
-        n = int((y > y.max() - 0.012).sum())
-        if n > best:
-            best, best_a, back = n, float(a), float(y.max()) / S
-    return best_a, back
+def _urinal_body(source):
+    """Meshy was squared -37.75deg into a side-facing frame. Undo it and replace its tilted chrome plumbing.
+    Ceramic ends at 0.9673m; the separate chrome components begin at 0.9872m (verified asset preview)."""
+    me = source.copy()
+    me.use_fake_user = False
+    me.name = "L4D2_UrinalCorrected"
+    bm = bmesh.new(); bm.from_mesh(me)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z > 0.975], context="VERTS")
+    bmesh.ops.rotate(bm, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(37.75), 3, "Z"), verts=bm.verts)
+    bm.to_mesh(me); bm.free()
+    me["l4_asset"] = "UrinalStraight"
+    co = np.array([v.co[:] for v in me.vertices]); lo, hi = co.min(0), co.max(0)
+    me["l4_col"] = json.dumps([[float(v) for v in (*(lo + hi) / 2, *(hi - lo))]])
+    return me
+
+
+def _urinal_pipes(m, index, placement, back):
+    """Straight vertical flush pipe and horizontal supply, ending at the mounting plane (not through it)."""
+    mb = RMesh("UrinalPipes%d" % index)
+    x, y, z0, zv = -0.06766 / S, 0.14219 / S, 0.960 / S, 1.22 / S
+    chrome = m["chrome"]
+    mb.cyl((x, y, (z0 + zv) / 2), 0.065, zv - z0, chrome, seg=10)
+    for z in (z0 + 0.08, zv - 0.3):
+        mb.cyl((x, y, z), 0.1, 0.16, chrome, seg=10)
+    mb.cyl((x, y, zv), 0.14, 0.42, chrome, seg=12)
+    mb.cyl((x, y, zv + 0.24), 0.18, 0.08, chrome, seg=12)
+    # Supply is perfectly horizontal. Escutcheon's outer end is exactly the wall plane.
+    mb.cyl((x, (y + back - 0.06) / 2, zv), 0.065, back - 0.06 - y, chrome, axis="Y", seg=10)
+    mb.cyl((x, back - 0.03, zv), 0.15, 0.06, chrome, axis="Y", seg=12)
+    mb.cyl((x - 0.25, y, zv - 0.05), 0.055, 0.5, chrome, axis="X", seg=8)
+    mb.cyl((x - 0.5, y, zv - 0.05), 0.085, 0.1, chrome, axis="X", seg=8)
+    mb.col((x, y, (z0 + zv) / 2), (0.22, 0.22, zv - z0))
+    return _pool(mb, "Men_UrinalPipes%d" % index, placement)
 
 
 def _stall_door(m, name, hinge, R, dw, rng):
@@ -926,7 +983,7 @@ def _stall_door(m, name, hinge, R, dw, rng):
 
 
 def _tile_trim(mb, m, room, rng):
-    """Teal bullnose cap on the wainscot top, clusters of missing wall tiles (mortar showing) and their shards."""
+    """Clusters of missing white wall tiles (mortar showing) and their shards; no cap or trim line."""
     x0, x1 = room["x0"], room["x1"]
     d0, d1 = room["door"]
     y = 31.95
@@ -934,11 +991,6 @@ def _tile_trim(mb, m, room, rng):
             ((x0, RZ1), (x1, RZ1), "-Z"), ((x0, RZ0), (d0, RZ0), "+Z"), ((d1, RZ0), (x1, RZ0), "+Z")]
     TILE = 0.1 / S                         # TILE_CREAM: 12 tiles per 1.2 m repeat, grid on the Blender origin
     for (ax, az), (bx, bz), face in runs:
-        if face in ("+X", "-X") and abs(ax - room["sink_x"]) < 0.1:         # the mirror covers 130.5-150.5
-            mb.tube([_B(ax, y, az), _B(ax, y, 130.4)], 0.13, m["tile_teal"], seg=8)
-            mb.tube([_B(ax, y, 150.6), _B(bx, y, bz)], 0.13, m["tile_teal"], seg=8)
-        else:
-            mb.tube([_B(ax, y, az), _B(bx, y, bz)], 0.13, m["tile_teal"], seg=8)
         xw = face in ("+X", "-X")                        # wall along Z
         u_a, u_b, off = (az, bz, 0.0) if xw else (ax, bx, OX)
         nrm = {"+X": (1, 0, 0), "-X": (-1, 0, 0), "+Z": (0, -1, 0), "-Z": (0, 1, 0)}[face]   # Blender normal
@@ -992,7 +1044,12 @@ def _pictogram(mb, m, x, y, z, kind):
 
 
 # ================================================================ concession (r8 A4)
-CX0, CX1, CZ0, CZ1 = 22890.0, 23050.0, 108.0, 125.0      # counter block
+# Owner v3 point 5: the counter keeps its back (staff) edge at Z 108 and is 5 studs deep; the customer side in front
+# is the room's carpet (layout Concession_RedCarpet). Point 7: no checker floor behind it, the carpet runs through.
+# COLLIDERS_SUPERSEDED names the old wide layout boxes for P8; the new collider is exactly 5 studs deep.
+CX0, CX1, CZ0, CZ1 = 22890.0, 23050.0, 108.0, 112.5      # counter block
+COLLIDERS_SUPERSEDED = [r"^Concession/Counter(Top|Plinth|PanelSeam|TopWornFrontLip|Trim)?$",
+                         r"^Concession/PopcornCase/"]  # both Meshy machines replace the old deep case collision
 CTOP = 28.5
 WALL_Z = 102.02                                           # back wall face (skins)
 ARC_Z0, ARC_K = 169.0, 0.001325                           # curved marquee soffit: z = ARC_Z0 + ARC_K (x - 23000)^2
@@ -1006,7 +1063,7 @@ def _counter(m, rng):
     # body, kick recess, collider (the layout Counter block)
     mb.rbox((CX0 + 0.05, 24.75, CZ0 + 0.1), (CX1 - 0.05, 28.1, CZ1 - 0.02), m["plum_dk"])
     mb.rbox((CX0 + 0.3, FLOOR, CZ0 + 0.4), (CX1 - 0.3, 24.75, CZ1 - 0.5), m["black"])
-    mb.rcol((CX0, FLOOR, CZ0), (CX1, 28.1, CZ1))
+    mb.rcol((CX0 - 0.3, FLOOR, CZ0), (CX1 + 0.3, CTOP, CZ1 + 0.5))
     # vertical ribbed front (flutes 0.6 pitch), chrome pinstripe battens every 8 studs
     L = CX1 - CX0
     mb.grid(int(L / 0.6) * 4, 1, lambda u, v: _B(CX0 + L * u, 24.75 + 3.0 * v,
@@ -1024,31 +1081,25 @@ def _counter(m, rng):
     mb.tube([_B(CX0 + 0.4, 24.38, CZ1 - 0.35), _B(x_lit, 24.38, CZ1 - 0.35)], 0.07, m["magenta"], seg=6)
     mb.tube([_B(x_lit + 0.2, 24.38, CZ1 - 0.35), _B(CX1 - 0.4, 24.38, CZ1 - 0.35)], 0.07, m["neon_dead"], seg=6)
     # formica top with a chrome bullnose
-    mb.rbox((CX0 - 0.3, 28.1, CZ0 - 0.3), (CX1 + 0.3, CTOP, CZ1 + 0.3), m["formica"], 0.04)
-    mb.tube([_B(CX0 - 0.3, 28.3, CZ1 + 0.3), _B(CX1 + 0.3, 28.3, CZ1 + 0.3)], 0.22, m["chrome"], seg=10)
+    mb.rbox((CX0 - 0.3, 28.1, CZ0), (CX1 + 0.3, CTOP, CZ1 + 0.28), m["formica"], 0.04)
+    mb.tube([_B(CX0 - 0.3, 28.3, CZ1 + 0.28), _B(CX1 + 0.3, 28.3, CZ1 + 0.28)], 0.22, m["chrome"], seg=10)
     for x in (CX0 - 0.3, CX1 + 0.3):
-        mb.tube([_B(x, 28.3, CZ0 - 0.3), _B(x, 28.3, CZ1 + 0.3)], 0.22, m["chrome"], seg=10)
+        mb.tube([_B(x, 28.3, CZ0 + 0.22), _B(x, 28.3, CZ1 + 0.28)], 0.22, m["chrome"], seg=10)
     # sneeze guards (3) and napkin / straw dispensers
+    zg = CZ1 - 1.1                                                            # sneeze-guard post line
     for x0, x1 in ((22924.0, 22944.0), (22966.5, 22978.5), (22990.0, 23010.0)):
         for x in (x0, x1):
-            mb.cyl(_B(x, CTOP + 1.85, 123.9), 0.12, 3.7, m["chrome"], seg=10)
-        mb.tube([_B(x0, 32.3, 123.9), _B(x1, 32.3, 123.9)], 0.1, m["chrome"], seg=8)
-        mb.grid(1, 1, lambda u, v: _B(x0 + 0.15 + (x1 - x0 - 0.3) * u, 29.5 + 2.7 * v, 123.2 + 1.3 * v), m["glass"], smooth=False)
-        mb.rcol((x0 - 0.15, CTOP, 123.1), (x1 + 0.15, 32.45, 124.6))
+            mb.cyl(_B(x, CTOP + 1.85, zg), 0.12, 3.7, m["chrome"], seg=10)
+        mb.tube([_B(x0, 32.3, zg), _B(x1, 32.3, zg)], 0.1, m["chrome"], seg=8)
+        mb.grid(1, 1, lambda u, v: _B(x0 + 0.15 + (x1 - x0 - 0.3) * u, 29.5 + 2.7 * v, zg - 0.7 + 1.3 * v), m["glass"], smooth=False)
+        mb.rcol((x0 - 0.15, CTOP, zg - 0.8), (x1 + 0.15, 32.45, zg + 0.7))
+    zn = CZ1 - 2.0                                                            # napkin / straw dispensers
     for x in (22949.0, 23013.5):
-        mb.rbox((x - 0.6, CTOP, 122.6), (x + 0.6, CTOP + 1.3, 123.4), m["chrome"], 0.08, 1)
-        mb.rbox((x - 0.45, CTOP + 0.3, 123.39), (x + 0.45, CTOP + 1.0, 123.42), m["paper"])
-        mb.cyl(_B(x + 1.3, CTOP + 0.9, 123.0), 0.38, 1.8, m["frost"], seg=12)
-        mb.cyl(_B(x + 1.3, CTOP + 0.05, 123.0), 0.42, 0.1, m["chrome"], seg=12)
-        mb.rcol((x - 0.6, CTOP, 122.6), (x + 1.75, CTOP + 1.8, 123.45))
-    # staff side floor: checker VCT with a red border (behind the counter and round its west end)
-    for (x0, x1, z0, z1) in ((22880.2, CX1, WALL_Z + 0.03, CZ0), (22880.2, CX0, CZ0, CZ1 + 0.3)):
-        y = FLOOR + 0.07
-        mb.poly([_B(x0, y, z0), _B(x1, y, z0), _B(x1, y, z1), _B(x0, y, z1)], m["checker"], face=(0, 0, 1))
-    y = FLOOR + 0.075
-    for (x0, x1, z0, z1) in ((22880.2, CX1, CZ0 - 0.6, CZ0), (CX1 - 0.6, CX1, WALL_Z + 0.03, CZ0),
-                             (CX0 - 0.6, CX0, CZ0, CZ1 + 0.3), (22880.2, CX0, CZ1 - 0.3, CZ1 + 0.3)):
-        mb.poly([_B(x0, y, z0), _B(x1, y, z0), _B(x1, y, z1), _B(x0, y, z1)], m["checker_red"], face=(0, 0, 1))
+        mb.rbox((x - 0.6, CTOP, zn - 0.4), (x + 0.6, CTOP + 1.3, zn + 0.4), m["chrome"], 0.08, 1)
+        mb.rbox((x - 0.45, CTOP + 0.3, zn + 0.39), (x + 0.45, CTOP + 1.0, zn + 0.42), m["paper"])
+        mb.cyl(_B(x + 1.3, CTOP + 0.9, zn), 0.38, 1.8, m["frost"], seg=12)
+        mb.cyl(_B(x + 1.3, CTOP + 0.05, zn), 0.42, 0.1, m["chrome"], seg=12)
+        mb.rcol((x - 0.6, CTOP, zn - 0.42), (x + 1.75, CTOP + 1.8, zn + 0.45))
     return _pool(mb, "Concession_Counter")
 
 
@@ -1111,7 +1162,7 @@ def _arc(m, rng):
     obj = _pool(mb, "Concession_Arc")
     for i, (x, rgb, b) in enumerate(((22915.0, (255, 40, 200), 0.75), (22975.0, (40, 230, 255), 0.75),
                                      (23035.0, (255, 40, 200), 0.75), (23095.0, (255, 40, 200), 0.35))):
-        _light("ArcNeon%d" % i, (x, 48.6, _arc_z(x)), rgb, 30, b)
+        _light("ArcNeon%d" % i, (x, 48.6, _arc_z(x)), rgb, 30, b, host=obj)
     return obj
 
 
@@ -1270,9 +1321,9 @@ def _popcorn(m, rng, meshy):
     me = meshy["PopcornMachine"]
     lo, hi = _mdims(me)
     sc = 1.1
-    X0, X1, Z0, Z1, YT = 22898.8, 22919.2, 111.8, 120.6, 38.8
+    X0, X1, Z0, Z1, YT = 22898.8, 22919.2, CZ0 + 0.6, CZ1 - 0.4, 38.8
     objs = []
-    zc = 115.4
+    zc = CZ0 + 2.6                                       # machine depth 3.3: back 108.9, front 112.3
     for k, x in enumerate((22903.4, 22914.6)):
         M = _M((x, CTOP, zc), "+Z", scale=sc)
         if k == 0:
@@ -1285,35 +1336,37 @@ def _popcorn(m, rng, meshy):
             objs.append(_place(me, "PopcornMachine2", M, model="PopcornMachine2", l4_col="[]"))
     mb = RMesh("PopcornStation")
     xm = (22903.4 + 22914.6) / 2
-    mb.rbox((xm - 1.5, CTOP, 112.6), (xm + 1.5, CTOP + 3.2, 118.2), m["chrome"], 0.1, 1)        # warmer cabinet
-    mb.rbox((xm - 1.3, CTOP + 0.4, 118.19), (xm + 1.3, CTOP + 2.8, 118.23), m["glass"])
-    mb.rbox((xm - 1.2, CTOP + 0.45, 113.0), (xm + 1.2, CTOP + 1.3, 117.9), m["popcorn"], 0.2, 1)
+    zw0, zw1 = CZ0 + 1.0, CZ1 - 0.8                                                            # 109.0 .. 112.2
+    mb.rbox((xm - 1.5, CTOP, zw0), (xm + 1.5, CTOP + 3.2, zw1), m["chrome"], 0.1, 1)            # warmer cabinet
+    mb.rbox((xm - 1.3, CTOP + 0.4, zw1 - 0.01), (xm + 1.3, CTOP + 2.8, zw1 + 0.03), m["glass"])
+    mb.rbox((xm - 1.2, CTOP + 0.45, zw0 + 0.4), (xm + 1.2, CTOP + 1.3, zw1 - 0.3), m["popcorn"], 0.2, 1)
     # west end: butter / topping pump dispenser on a stainless stand; east end: nested bucket stacks + bags
-    mb.rbox((X0 + 0.2, CTOP, 113.4), (X0 + 2.2, CTOP + 1.6, 116.8), m["chrome"], 0.08, 1)
-    for k, z in enumerate((114.3, 115.9)):
+    mb.rbox((X0 + 0.2, CTOP, CZ0 + 1.2), (X0 + 2.2, CTOP + 1.6, CZ1 - 0.6), m["chrome"], 0.08, 1)
+    for k, z in enumerate((CZ0 + 2.0, CZ0 + 3.5)):
         mb.cyl(_B(X0 + 1.2, CTOP + 2.6, z), 0.55, 2.0, m["butter"], seg=12)
         mb.cyl(_B(X0 + 1.2, CTOP + 3.75, z), 0.35, 0.3, m["black"], seg=10)
         mb.cyl(_B(X0 + 1.2, CTOP + 4.2, z), 0.08, 0.6, m["chrome"], seg=6)
         mb.tube([_B(X0 + 1.2, CTOP + 4.45, z), _B(X0 + 1.2, CTOP + 4.45, z + 0.9), _B(X0 + 1.2, CTOP + 4.1, z + 1.0)], 0.06, m["chrome"], seg=6)
-    for k, (x, z, n) in enumerate(((X1 - 1.4, 114.2, 9), (X1 - 1.4, 116.6, 6), (X1 - 3.4, 118.9, 4))):
+    for k, (x, z, n) in enumerate(((X1 - 1.4, CZ0 + 1.6, 9), (X1 - 1.4, CZ0 + 3.7, 6), (22896.0, CZ0 + 2.2, 4))):
         h = 1.3 + 0.28 * n
         mb.lathe([(0, 0), (0.62, 0), (0.95, h), (0.98, h + 0.06), (0, h + 0.06)], m["bucket"], seg=14, c=_B(x, CTOP, z))
         for j in range(n):
             mb.cyl(_B(x, CTOP + 1.3 + 0.28 * j, z), 0.97, 0.05, m["cup_rim"], seg=14)
-    mb.rbox((X1 - 3.2, CTOP, 112.2), (X1 - 0.3, CTOP + 0.5, 113.4), m["kraft"], 0.03)                  # bag bundle
-    mb.rbox((X1 - 3.0, CTOP + 0.5, 112.3), (X1 - 0.5, CTOP + 0.9, 113.3), m["kraft"], 0.03)
+    mb.rbox((22891.0, CTOP, CZ0 + 0.4), (22893.9, CTOP + 0.5, CZ0 + 1.6), m["kraft"], 0.03)            # bag bundle
+    mb.rbox((22891.2, CTOP + 0.5, CZ0 + 0.5), (22893.7, CTOP + 0.9, CZ0 + 1.5), m["kraft"], 0.03)
+    mb.rcol((22891.0, CTOP, CZ0 + 0.4), (22897.0, CTOP + 2.5, CZ0 + 3.2))
     # spilled heap: on the counter in front of the machines, over the nosing and on the carpet below
     for k in range(320):
-        if k < 190:
-            x, z, y = rng.gauss(22906.0, 3.2), 119.2 + abs(rng.gauss(0, 1.8)), CTOP
+        if k < 150:
+            x, z, y = rng.gauss(22905.0, 3.0), CZ1 - 0.7 + abs(rng.gauss(0, 0.5)), CTOP
             if z > CZ1 + 0.2:
                 continue
         else:
-            x, z, y = rng.gauss(22908.0, 4.0), CZ1 + 0.5 + abs(rng.gauss(0, 2.2)), FLOOR + 0.05
+            x, z, y = rng.gauss(22906.0, 4.0), CZ1 + 0.6 + abs(rng.gauss(0, 2.2)), FLOOR + 0.05
         h = 0.075 * rng.uniform(0.7, 1.3)
         rot = Matrix.Rotation(rng.uniform(0, 6.28), 3, "Z") @ Matrix.Rotation(rng.uniform(0, 6.28), 3, "X")
         mb.octa(_B(x, y + h * 0.8, z), (h, h * 0.9, h * 0.8), rot, m["popcorn"])
-    mb.rbox((22901.0, CTOP, 119.4), (22904.5, CTOP + 0.35, 121.0), m["popcorn"], 0.15, 1)         # the heap core
+    mb.rbox((22901.0, CTOP, CZ1 - 0.6), (22904.5, CTOP + 0.35, CZ1 + 0.1), m["popcorn"], 0.15, 1)  # the heap core
     objs.append(_pool(mb, "PopcornStation", wn=False))
     _light("PopcornKettle", (22903.4, 35.8, zc), (255, 190, 120), 12, 0.6)
     return objs
@@ -1322,24 +1375,25 @@ def _popcorn(m, rng, meshy):
 def _soda(m, rng, meshy):
     me = meshy["SodaFountain"]
     lo, hi = _mdims(me)
-    sc = 1.25
-    zc = 122.3 + lo[1] * sc                                    # front (drip tray, local -Y) at z 122.3
+    sc = 1.15                                                  # 4.3 deep: fits the 5-stud counter
+    zc = (CZ1 - 0.1) + lo[1] * sc                              # front (drip tray, local -Y) at z 112.9
     objs = [_place(me, "SodaFountain", _M((23025.0, CTOP, zc), "+Z", scale=sc), model="SodaFountain")]
     mb = RMesh("SodaCups")
-    for x, n, lid in ((23016.6, 11, False), (23017.9, 8, True), (23033.4, 13, False)):
+    zcup = CZ0 + 1.3
+    for x, n, lid in ((23016.6, 11, False), (23017.9, 8, True), (23030.6, 13, False)):
         # a nested cup stack is one tall tapered tube with rolled rims
         h = 0.35 * n + 0.9
         mb.lathe([(0, 0), (0.32, 0), (0.44, h), (0.46, h + 0.05), (0, h + 0.05)], m["cup"] if not lid else m["chrome"],
-                 seg=12, c=_B(x, CTOP, 120.8))
+                 seg=12, c=_B(x, CTOP, zcup))
         for k in range(n):
-            mb.cyl(_B(x, CTOP + 0.9 + 0.35 * k, 120.8), 0.44, 0.05, m["cup_rim"], seg=12)
-        mb.rcol((x - 0.46, CTOP, 120.34), (x + 0.46, CTOP + h + 0.05, 121.26))
+            mb.cyl(_B(x, CTOP + 0.9 + 0.35 * k, zcup), 0.44, 0.05, m["cup_rim"], seg=12)
+        mb.rcol((x - 0.46, CTOP, zcup - 0.46), (x + 0.46, CTOP + h + 0.05, zcup + 0.46))
     # toppled cups + sticky stain
     for k in range(4):
-        x, z = 23019.0 + rng.uniform(-2, 2), 123.2 + rng.uniform(-0.6, 0.8)
+        x, z = 23018.8 + rng.uniform(-1.6, 1.6), CZ1 - 0.9 + rng.uniform(-0.4, 0.4)
         with mb.at(Matrix.Translation(_B(x, CTOP + 0.4, z)) @ Matrix.Rotation(rng.uniform(0, 6.28), 4, "Z") @ Matrix.Rotation(math.pi / 2, 4, "Y")):
             mb.lathe([(0, -0.45), (0.3, -0.45), (0.4, 0.45), (0, 0.45)], m["cup"], seg=10)
-    pts = [_B(23024.0 + math.cos(t) * rng.uniform(1.2, 2.2) * 1.6, CTOP + 0.012, 123.4 + math.sin(t) * rng.uniform(0.5, 1.0))
+    pts = [_B(23024.0 + math.cos(t) * rng.uniform(1.2, 2.2) * 1.6, CTOP + 0.012, CZ1 - 0.6 + math.sin(t) * rng.uniform(0.3, 0.6))
            for t in [2 * math.pi * k / 11 for k in range(11)]]
     mb.poly(pts, m["sticky"], face=(0, 0, 1))
     objs.append(_pool(mb, "SodaCups", wn=False))
@@ -1347,10 +1401,10 @@ def _soda(m, rng, meshy):
 
 
 def _candy(m, rng):
-    """Curved-glass candy showcase on the counter (x 23033-23049, z 109-119), dusty trays, six faded boxes."""
+    """Curved-glass candy showcase on the counter (x 23033-23049, 4.5 deep), dusty trays, six faded boxes."""
     mb = RMesh("CandyCase")
-    X0, X1, ZB, ZF = 23033.0, 23049.0, 109.0, 119.0
-    yb, yv, rr = CTOP + 0.7, 32.4, 2.5
+    X0, X1, ZB, ZF = 23033.0, 23049.0, CZ0 + 0.4, CZ1 - 0.1
+    yb, yv, rr = CTOP + 0.7, 33.4, 1.5
     yt = yv + rr
     mb.rbox((X0, CTOP, ZB), (X1, yb, ZF), m["lacquer"], 0.06, 1)                                  # base
     mb.rbox((X0 - 0.03, CTOP, ZF - 0.1), (X1 + 0.03, CTOP + 0.18, ZF + 0.05), m["chrome"], 0.03)
@@ -1377,10 +1431,11 @@ def _candy(m, rng):
     for k, (bx, by) in enumerate(boxes):
         col = m["candy%d" % (k % 3)]
         w, h, d = rng.uniform(1.6, 2.4), rng.uniform(0.9, 1.3), rng.uniform(0.4, 0.6)
-        with mb.at(Matrix.Translation(_B(bx, by + h / 2, 114.5 + rng.uniform(-1, 1))) @ Matrix.Rotation(rng.uniform(-0.3, 0.3), 4, "Z")):
+        h = min(h, yt - 0.2 - by)                                                              # under the glass top
+        with mb.at(Matrix.Translation(_B(bx, by + h / 2, (ZB + ZF) / 2 + rng.uniform(-0.5, 0.5))) @ Matrix.Rotation(rng.uniform(-0.3, 0.3), 4, "Z")):
             mb.box((0, 0, 0), (w, d, h), col, 0.03)
     mb.rcol((X0, CTOP, ZB), (X1, yt + 0.1, ZF))
-    _light("CandyCase", (23041.0, 34.6, 110.0), (255, 190, 120), 10, 0.3)
+    _light("CandyCase", (23041.0, 34.6, ZB + 0.6), (255, 190, 120), 10, 0.3)
     return _pool(mb, "CandyCase", wn=False)
 
 
@@ -1398,9 +1453,9 @@ def _register(mb, m, x, z, open_drawer):
     y = CTOP
     mb.rbox((x - 1.8, y, z - 1.7), (x + 1.8, y + 0.9, z + 1.7), m["register"], 0.08, 1)          # drawer box
     if open_drawer:
-        mb.rbox((x - 1.6, y + 0.1, z - 3.4), (x + 1.6, y + 0.75, z - 1.7), m["register"], 0.04)
+        mb.rbox((x - 1.6, y + 0.1, z - 2.3), (x + 1.6, y + 0.75, z - 1.7), m["register"], 0.04)
         for k in range(5):
-            mb.rbox((x - 1.5 + k * 0.62, y + 0.72, z - 3.3), (x - 1.0 + k * 0.62, y + 0.76, z - 2.4), m["black"])
+            mb.rbox((x - 1.5 + k * 0.62, y + 0.72, z - 2.2), (x - 1.0 + k * 0.62, y + 0.76, z - 2.0), m["black"])
         mb.rbox((x - 1.5, y + 0.72, z - 2.3), (x + 1.5, y + 0.76, z - 1.8), m["black"])
     # sloped keyboard: low edge on the operator side (z - 1.6, h 1.1) rising to (z + 0.2, h 1.8)
     za, zb, ya, yb = z - 1.6, z + 0.2, y + 1.1, y + 1.8
@@ -1423,7 +1478,7 @@ def _register(mb, m, x, z, open_drawer):
     mb.rbox((x + 0.4, y + 3.3, z + 1.3), (x + 1.6, y + 3.8, z + 1.5), m["register"], 0.04)
     mb.rbox((x + 0.55, y + 3.4, z + 1.5), (x + 1.45, y + 3.7, z + 1.52), m["vfd"])
     mb.cyl(_B(x - 1.1, y + 2.55, z + 0.9), 0.3, 0.6, m["paper"], axis="X", seg=10)
-    mb.rcol((x - 1.8, y, z - (3.4 if open_drawer else 1.7)), (x + 1.8, y + 2.6, z + 1.7))
+    mb.rcol((x - 1.8, y, z - (2.3 if open_drawer else 1.7)), (x + 1.8, y + 2.6, z + 1.7))
 
 
 def build_concession(m, rng, meshy):
@@ -1433,128 +1488,157 @@ def build_concession(m, rng, meshy):
     objs += _soda(m, rng, meshy)
     objs.append(_candy(m, rng))
     mb = RMesh("Registers")
-    _register(mb, m, 22962.0, 119.0, False)
-    _register(mb, m, 22983.0, 119.0, True)
+    _register(mb, m, 22962.0, CZ0 + 2.3, False)
+    _register(mb, m, 22983.0, CZ0 + 2.3, True)
     objs.append(_pool(mb, "Registers"))
     # counter kick glow lights (west + middle lit; the east end is the dead stretch)
     for i, x in enumerate((22920.0, 22975.0)):
-        _light("CounterKick%d" % i, (x, 24.4, 127.8), (255, 40, 200), 8, 0.25)
+        _light("CounterKick%d" % i, (x, 24.4, CZ1 + 2.8), (255, 40, 200), 8, 0.25)
     return [o for o in objs if o]
 
 
-# ================================================================ arcade (r8 A5)
-AL_WALL, AR_WALL = 23172.0, 23212.0            # false alcove wall faces (left faces +X, right faces -X)
-AW_TOP = 42.0                                  # alcove wall height (the flicker tube / ceiling neon stay visible)
-AL_Z, AR_Z = (131.0, 216.0), (117.0, 216.0)    # alcove wall extents (returns at both ends)
-AL_BACK, AR_BACK = 23156.2, 23227.8            # store wall faces behind the dead space
+# ================================================================ arcade (r8 A5; owner v3 point 8)
+# One hall between two solid side walls. The side spaces behind them (X 23122-23172 / 23212-23259) are closed voids
+# filled by the walls' colliders (obj l4_occluder: the pipeline makes them opaque camera blockers). Cabinets line
+# both walls from the front wall to the prize counter; the single door is centred on the hall at X 23192 (P5).
+AL_WALL, AR_WALL = 23172.0, 23212.0            # side wall faces (left faces +X, right faces -X)
+A_ROOM = (23122.0, 23259.0)                    # the arcade room's own inner wall faces
+AZ0, AZ1, A_TOP = 102.0, 238.0, 52.0           # front / back wall faces, roof underside
+A_WALL_T = 0.6                                 # visible wall slab thickness
+LINE = {"L": (102.3, 221.6), "R": (102.3, 221.3)}   # cabinet runs; the ticket terminal / gumball close each run
 # screen glass of the Meshy uprights (local metres, measured by ray profile): (y0, z0) -> (y1, z1), half width
 SCREENS = {"ArcadeUprightA": ((-0.150, 1.18), (-0.035, 1.58), 0.22),
            "ArcadeUprightB": ((-0.115, 1.16), (0.045, 1.60), 0.28)}
 CRT = [(40, 230, 255), (255, 40, 200), (120, 150, 255), (60, 255, 170), (255, 170, 60)]        # glow light colours
 CRT_FACE = [(24, 96, 128), (112, 18, 92), (44, 56, 136), (24, 112, 76), (124, 76, 26)]         # dim neon screen faces
+NEON_RGB = {"magenta": (255, 40, 200), "cyan": (40, 230, 255)}
 
 
-def _slots():
-    out = []
-    for i, p in _parts(r"^Arcade/Arcade(Left|Right)\d+_Body$"):
-        lo, hi = _aabb(p)
-        side = "L" if "/ArcadeLeft" in p["p"] else "R"
-        out.append((side, int(re.search(r"(\d+)_Body$", p["p"]).group(1)), lo[2], hi[2]))
-    return sorted(out)
+def _arcade_wall(mb, m, rng, side, flick):
+    """One solid side wall: wallpaper slab up to the roof, black lacquer skirting with a chrome cap line, a lacquer
+    channel carrying a magenta and a cyan neon line above the cabinets, and a cyan cove line under a lacquer cornice.
+    The lines run in eight segments with a few dead; segment flick["key"] = (side, line, index) is left out and
+    returned in flick["out"] so the caller can build it as a flicker lens."""
+    face = 1 if side == "L" else -1
+    xw = AL_WALL if side == "L" else AR_WALL
+
+    def X(o):
+        return xw + face * o
+
+    def rb(o0, o1, y0, y1, z0, z1, mat, bev=0.0):
+        xa, xb = sorted((X(o0), X(o1)))
+        mb.rbox((xa, y0, z0), (xb, y1, z1), mat, bev)
+    rb(-A_WALL_T, 0.0, FLOOR, A_TOP, AZ0, AZ1, m["wallpaper"])
+    rb(0.0, 0.16, FLOOR, FLOOR + 1.3, AZ0, AZ1, m["lacquer"], 0.03)
+    rb(0.0, 0.06, FLOOR + 1.3, FLOOR + 1.42, AZ0, AZ1, m["chrome"])
+    rb(0.0, 0.1, 33.9, 35.9, AZ0, AZ1, m["lacquer"], 0.03)
+    rb(0.0, 0.4, A_TOP - 1.3, A_TOP, AZ0, AZ1, m["lacquer"], 0.05)
+    rb(0.38, 0.44, A_TOP - 1.3, A_TOP - 1.18, AZ0, AZ1, m["chrome"])
+    n = 8
+    for li, (y, col, r) in enumerate(((34.45, "magenta", 0.06), (35.35, "cyan", 0.06), (A_TOP - 1.6, "cyan", 0.05))):
+        for k in range(n):
+            z0 = AZ0 + 0.5 + (AZ1 - AZ0 - 1.0) * k / n + 0.1
+            z1 = AZ0 + 0.5 + (AZ1 - AZ0 - 1.0) * (k + 1) / n - 0.1
+            pts = [_B(X(0.2), y, z0), _B(X(0.2), y, z1)]
+            if (side, li, k) == flick["key"]:
+                flick["out"] = (pts, r, col, (X(1.2), y, (z0 + z1) / 2))
+                continue
+            dead = rng.random() < 0.12
+            mb.tube(pts, r, m["neon_dead"] if dead else m[col], seg=6)
+            for z in (z0 + 0.25, z1 - 0.25):                                # standoff clips
+                rb(0.08, 0.24, y - 0.08, y + 0.08, z - 0.05, z + 0.05, m["chrome"])
+    void = (A_ROOM[0], AL_WALL) if side == "L" else (AR_WALL, A_ROOM[1])
+    mb.rcol((void[0], FLOOR, AZ0), (void[1], A_TOP, AZ1))
+    for z, col in ((125.0, "magenta"), (165.0, "cyan"), (205.0, "magenta")):
+        c = col if side == "L" else ("cyan" if col == "magenta" else "magenta")
+        _light("ArcadeWall%s%.0f" % (side, z), (X(1.4), 35.0, z), NEON_RGB[c], 18, 0.35)
 
 
-def _alcove_wall(mb, m, rng, axis, c, a0, a1, face, flick_out):
-    """One alcove wall run on the plane axis == c ('x' or 'z'), from a0 to a1 along the other axis, facing
-    face (+1/-1 along axis). Lower zone: dark mirror panels in chrome frames; band: chrome rail + magenta neon;
-    upper zone: matte black with a cyan neon grid; top cap."""
-    def P(u, y, o=0.0):                       # u along the run, y height, o offset out of the face
-        return _B(c + face * o, y, u) if axis == "x" else _B(u, y, c + face * o)
-
-    def rb(u0, u1, y0, y1, o0, o1, mat, bev=0.0):
-        lo = (c + face * o0, y0, u0) if axis == "x" else (u0, y0, c + face * o0)
-        hi = (c + face * o1, y1, u1) if axis == "x" else (u1, y1, c + face * o1)
-        mb.rbox(tuple(min(a, b) for a, b in zip(lo, hi)), tuple(max(a, b) for a, b in zip(lo, hi)), mat, bev)
-    nrm = (face, 0, 0) if axis == "x" else (0, -face, 0)
-    L = a1 - a0
-    rb(a0, a1, FLOOR, AW_TOP, -0.5, 0.0, m["black"])                       # wall body
-    rb(a0, a1, FLOOR, FLOOR + 0.6, 0.0, 0.08, m["rubber"])                 # base
-    n = max(1, int(round(L / 5.5)))
-    for k in range(n):                                                     # mirror panels
-        u0, u1 = a0 + L * k / n + 0.18, a0 + L * (k + 1) / n - 0.18
-        rb(u0, u1, FLOOR + 0.8, 33.3, 0.02, 0.05, m["mirror_dk"])
-    for k in range(n + 1):                                                 # chrome mullions
-        u = a0 + L * k / n
-        rb(u - 0.18, u + 0.18, FLOOR + 0.6, 33.5, 0.0, 0.12, m["chrome"], 0.03)
-    rb(a0, a1, FLOOR + 0.6, FLOOR + 0.8, 0.0, 0.1, m["chrome"])
-    rb(a0, a1, 33.3, 33.7, 0.0, 0.14, m["chrome"], 0.03)
-    mb.tube([P(a0 + 0.2, 34.05, 0.1), P(a1 - 0.2, 34.05, 0.1)], 0.07, m["magenta"], seg=6)
-    rb(a0, a1, 34.4, 34.6, 0.0, 0.1, m["chrome"])
-    # neon grid on the upper zone: horizontals every 2.4, verticals every ~5.5 (a few dead)
-    for y in (36.0, 38.4, 40.8):
-        mb.tube([P(a0 + 0.3, y, 0.06), P(a1 - 0.3, y, 0.06)], 0.045, m["cyan"], seg=5)
-    nv = max(1, int(round(L / 5.5)))
-    for k in range(nv + 1):
-        u = a0 + L * k / nv
-        u = min(max(u, a0 + 0.3), a1 - 0.3)
-        dead = rng.random() < 0.18
-        mb.tube([P(u, 34.9, 0.06), P(u, 41.6, 0.06)], 0.045, m["neon_dead"] if dead else m["cyan"], seg=5)
-    rb(a0, a1, AW_TOP - 0.3, AW_TOP, 0.0, 0.2, m["chrome"], 0.04)           # cap
-    rb(a0 - 0.02, a1 + 0.02, AW_TOP, AW_TOP + 0.15, -0.55, 0.25, m["black"])
-    flick_out.append((axis, c, face, a0, a1))
+def _arcade_run(side, rng, width):
+    """-> kinds filling the run: upright runs (A/B, rarely the same twice), pinball pairs/trios and twin racing
+    cabinets (never in the first 14 studs, so the deep seats stand clear of the entrance)."""
+    z0, z1 = LINE[side]
+    L = z1 - z0
+    seq, tot, special = [], 0.0, rng.random() < 0.5
+    cur = rng.choice(("ArcadeUprightA", "ArcadeUprightB"))
+    while tot < L:
+        for _ in range(rng.randint(3, 6)):
+            seq.append(cur)
+            tot += width[cur] + 0.15
+            if rng.random() < 0.75:
+                cur = "ArcadeUprightB" if cur == "ArcadeUprightA" else "ArcadeUprightA"
+        if tot > 14.0:
+            kind = "ArcadeRacing" if special else "Pinball"
+            for _ in range(2 if special else rng.randint(2, 3)):
+                seq.append(kind)
+                tot += width[kind] + 0.15
+            special = not special
+    while sum(width[k] + 0.15 for k in seq) > L:
+        seq.pop()
+    if seq and seq[-1] == "ArcadeRacing" and seq.count("ArcadeRacing") % 2:   # no orphaned twin seat
+        seq.pop()
+    for kind in sorted(("ArcadeUprightA", "ArcadeUprightB"), key=width.get):
+        while sum(width[k] + 0.15 for k in seq) + width[kind] + 0.15 <= L:
+            seq.append(kind)
+    return seq
 
 
 def build_arcade(m, rng, meshy):
     objs = []
-    slots = _slots()
-    dims = {a: _mdims(meshy[a]) for a in ("ArcadeUprightA", "ArcadeUprightB", "Pinball", "ArcadeRacing")}
-    width = {a: d[1][0] - d[0][0] for a, d in dims.items()}
+    kinds_all = ("ArcadeUprightA", "ArcadeUprightB", "Pinball", "ArcadeRacing")
+    dims = {a: _mdims(meshy[a]) for a in kinds_all}
+    vertices = {a: np.array([v.co[:] for v in meshy[a].vertices]) / S for a in kinds_all}
+    width = {a: d[1][0] - d[0][0] + 0.04 * (d[1][1] - d[0][1]) for a, d in dims.items()}
     scr = RMesh("ArcadeScreens")
-    alt = 0
-    ends = {"L": (min(n for s, n, *_ in slots if s == "L"), max(n for s, n, *_ in slots if s == "L")),
-            "R": (min(n for s, n, *_ in slots if s == "R"), max(n for s, n, *_ in slots if s == "R"))}
-    special = {("L", ends["L"][0]): (0, "Pinball"), ("L", ends["L"][1]): (2, "ArcadeRacing"),
-               ("R", ends["R"][0]): (0, "ArcadeRacing"), ("R", ends["R"][1]): (2, "Pinball")}
-    askew = ("R", 4, 1)
-    uprights = []
-    for side, num, z0, z1 in slots:
-        kinds = []
-        for k in range(3):
-            sp = special.get((side, num))
-            if sp and sp[0] == k:
-                kinds.append(sp[1])
-            else:
-                kinds.append("ArcadeUprightA" if alt % 2 == 0 else "ArcadeUprightB")
-                alt += 1 if rng.random() < 0.8 else 0
-        tot = sum(width[k] for k in kinds)
-        gap = (z1 - z0 - tot) / 4
-        z = z0 + gap
-        for k, kind in enumerate(kinds):
-            w = width[kind]
-            zc = z + w / 2
-            z += w + gap
+    uprights, placed = [], {"L": [], "R": []}
+    for side in ("L", "R"):
+        seq = _arcade_run(side, rng, width)
+        z0, z1 = LINE[side]
+        angles = [max(-1.5, min(1.5, rng.gauss(0, 0.7))) for _ in seq]
+        face = 1 if side == "L" else -1
+        # Pack actual rotated silhouettes with an 0.08stud joining seam. Mesh and collision share the
+        # slight width adjustment; using vertices also accounts for racing seats' irregular outlines.
+        projections = [(-face * vertices[kind][:, 0] * math.cos(math.radians(a)),
+                         face * vertices[kind][:, 1] * math.sin(math.radians(a)))
+                       for kind, a in zip(seq, angles)]
+        seam = 0.08
+        available = z1 - z0 - seam * (len(seq) - 1)
+        stretch = 1.0
+        for _ in range(4):
+            span = [np.ptp(x * stretch + y) for x, y in projections]
+            stretch *= available / sum(span)
+        assert 0.98 <= stretch <= 1.15, "arcade packing must preserve cabinet proportions"
+        extents = [(float(p.min()), float(p.max())) for x, y in projections for p in [x * stretch + y]]
+        z = z0
+        xw = AL_WALL if side == "L" else AR_WALL
+        for i, kind in enumerate(seq):
+            edge0, edge1 = extents[i]
+            zc = z - edge0
+            z += edge1 - edge0 + seam
             lo, hi = dims[kind]
-            if side == "L":
-                pos, facing = (AL_WALL + hi[1] + 0.05, FLOOR, zc), "+X"
-            else:
-                pos, facing = (AR_WALL - hi[1] - 0.05, FLOOR, zc), "-X"
-            ang = 0.0
-            if (side, num, k) == askew:                                     # pulled out and turned
-                pos = (pos[0] - 1.4, FLOOR, zc)
-                ang = 11.0
-            M = _M(pos, facing, ang=ang)
-            name = "Arcade%s%d_%d" % ("Left" if side == "L" else "Right", num, k + 1)
+            ang = angles[i]
+            off = 0.04 + (hi[0] - lo[0]) * stretch / 2 * abs(math.sin(math.radians(ang))) + rng.uniform(0, 0.05)
+            pos = (xw + face * (hi[1] + off), FLOOR, zc)
+            M = _M(pos, "+X" if side == "L" else "-X", ang=ang) @ Matrix.Diagonal((stretch, 1, 1, 1))
+            name = "Arcade%s_%02d" % ("Left" if side == "L" else "Right", i + 1)
             objs.append(_place(meshy[kind], name, M, model=name, attrs={"ArcadeCabinet": True}))
+            placed[side].append((kind, zc, xw + face * (hi[1] - lo[1] + off)))   # (kind, z, front line x)
             if kind in SCREENS:
-                uprights.append((M, kind))
-    # screens: 70 % glowing CRT quads, the rest dead (dark glass), two of the dead ones cracked
+                uprights.append((M, kind, side))
+    # screens: ~78 % glowing CRT quads, the rest dead (dark glass), two of the dead ones cracked
     order = list(range(len(uprights)))
     rng.shuffle(order)
-    ndead = int(round(len(uprights) * 0.3))
+    ndead = int(round(len(uprights) * 0.22))
     dead = set(order[:ndead])
     cracked = set(order[:2])
     lit = [i for i in range(len(uprights)) if i not in dead]
-    surface = set(lit[::max(1, len(lit) // 4)][:4])
-    for i, (M, kind) in enumerate(uprights):
+    surface, marquee = set(), set()
+    for side in ("L", "R"):                                                  # three glowing CRTs light each aisle
+        ls = [i for i in lit if uprights[i][2] == side]
+        pick = [ls[int(len(ls) * f)] for f in (0.15, 0.5, 0.85)] if ls else []
+        surface |= set(pick)
+        marquee |= set(pick[1:2])
+    for i, (M, kind, side) in enumerate(uprights):
         (y0, z0), (y1, z1), hw = SCREENS[kind]
         d = Vector((0, y1 - y0, z1 - z0)).normalized()
         nrm = Vector((0, -d.z, d.y))                                        # toward the viewer (-Y, up)
@@ -1574,72 +1658,31 @@ def build_arcade(m, rng, meshy):
                     tvec = (e - cx).normalized()
                     side_v = tvec.cross(nrm).normalized() * 0.006
                     scr.poly([cx - side_v, cx + side_v, e + side_v, e - side_v], m["crack"], face=nrm)
-        if i in surface:                                                     # four working CRTs illuminate their aisle
+        if i in surface:
             pos = M @ ((c0 + c1) / 2 + nrm * 0.025)
             direction = M.to_3x3() @ nrm
             _light("ArcadeCRT%d" % i, (pos.x / S + OX, pos.z / S, -pos.y / S), CRT[i % len(CRT)],
                    9, 0.3, kind="AREA", direction=direction, size=(2 * hw / S, (c1 - c0).length / S), energy_k=0.08)
-            if i in sorted(surface)[:2]:                                     # two marquee boxes; the others only emit
-                pos = M @ Vector((0, -0.24, 1.94))
-                _light("ArcadeMarquee%d" % i, (pos.x / S + OX, pos.z / S, -pos.y / S), CRT[i % len(CRT)],
-                       8, 0.22, kind="AREA", direction=M.to_3x3() @ Vector((0, -1, 0)),
-                       size=(2 * hw / S, 0.55), energy_k=0.08)
+        if i in marquee:                                                     # one marquee box glows per side
+            pos = M @ Vector((0, -0.24, 1.94))
+            _light("ArcadeMarquee%d" % i, (pos.x / S + OX, pos.z / S, -pos.y / S), CRT[i % len(CRT)],
+                   8, 0.22, kind="AREA", direction=M.to_3x3() @ Vector((0, -1, 0)),
+                   size=(2 * hw / S, 0.55), energy_k=0.08)
     objs.append(_pool(scr, "ArcadeScreens", wn=False))
-    # false alcove walls + returns, dead-space fillers (colliders)
-    wall = RMesh("ArcadeAlcoveWalls")
-    fl = []
-    _alcove_wall(wall, m, rng, "x", AL_WALL, AL_Z[0], AL_Z[1], 1, fl)
-    _alcove_wall(wall, m, rng, "x", AR_WALL, AR_Z[0], AR_Z[1], -1, fl)
-    _alcove_wall(wall, m, rng, "z", AL_Z[0], AL_BACK, AL_WALL, -1, fl)
-    _alcove_wall(wall, m, rng, "z", AL_Z[1], AL_BACK, AL_WALL, 1, fl)
-    _alcove_wall(wall, m, rng, "z", AR_Z[0], AR_WALL, AR_BACK, -1, fl)
-    _alcove_wall(wall, m, rng, "z", AR_Z[1], AR_WALL, AR_BACK, 1, fl)
-    wall.rcol((AL_BACK, FLOOR, AL_Z[0] - 0.5), (AL_WALL, AW_TOP, AL_Z[1] + 0.5))
-    wall.rcol((AR_WALL, FLOOR, AR_Z[0] - 0.5), (AR_BACK, AW_TOP, AR_Z[1] + 0.5))
-    objs.append(_pool(wall, "ArcadeAlcoveWalls", wn=False))
-    for i, (x, z) in enumerate(((AL_WALL + 5.0, 175.0), (AR_WALL - 5.0, 160.0))):
-        _light("AlcoveGrid%d" % i, (x, 40.0, z), (40, 230, 255), 16, 0.3)
-    # A failed grid segment leaves a dark patch on the right wall.
-    fk = RMesh("AlcoveGridFlicker")
-    fk.tube([_B(AR_WALL - 0.06, 38.4 + 1.2, 190.0), _B(AR_WALL - 0.06, 38.4 + 1.2, 201.0)], 0.05, m["neon_dead"], seg=5)
-    objs.append(_pool(fk, "AlcoveGrid_Dead", wn=False))
-    objs += _arcade_piers(m, rng)
+    # the two solid side walls (+ their void colliders); one neon segment flickers
+    wall = RMesh("ArcadeSideWalls")
+    flick = {"key": ("R", 0, 5), "out": None}
+    for side in ("L", "R"):
+        _arcade_wall(wall, m, rng, side, flick)
+    objs.append(_pool(wall, "ArcadeSideWalls", wn=False, l4_occluder=True))
+    if flick["out"]:
+        pts, r, col, lpos = flick["out"]
+        lens = RMesh("ArcadeWallNeonFlicker")
+        lens.tube(pts, r, m[col], seg=6)
+        _flicker(lens, "ArcadeWallNeon_Flicker", NEON_RGB[col], 16, 0.4, lpos)
     objs += _prize(m, rng)
-    objs += _arcade_dressing(m, rng)
+    objs += _arcade_dressing(m, rng, placed)
     return [o for o in objs if o]
-
-
-def _arcade_piers(m, rng):
-    mb = RMesh("ArcadePiers")
-    for i, p in _parts(r"^Arcade/ArcadeStonePier$"):
-        lo, hi = _aabb(p)
-        lo2, hi2 = (lo[0] - 0.12, FLOOR, lo[2] - 0.12), (hi[0] + 0.12, 52.0, hi[2] + 0.12)
-        mb.rbox(lo2, hi2, m["marble"], 0.08, 1)
-        mb.rbox((lo2[0] - 0.12, FLOOR, lo2[2] - 0.12), (hi2[0] + 0.12, FLOOR + 1.1, hi2[2] + 0.12), m["black"], 0.05, 1)
-        mb.rbox((lo2[0] - 0.14, FLOOR + 1.1, lo2[2] - 0.14), (hi2[0] + 0.14, FLOOR + 1.3, hi2[2] + 0.14), m["brass"], 0.03)
-        for y in (48.6, 49.4):
-            mb.rbox((lo2[0] - 0.1, y, lo2[2] - 0.1), (hi2[0] + 0.1, y + 0.25, hi2[2] + 0.1), m["brass"], 0.03)
-        # cracks: zig-zag gold/black veins on the four faces
-        cx, cz = (lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2
-        hx, hz = (hi2[0] - lo2[0]) / 2, (hi2[2] - lo2[2]) / 2
-        for f, (nx, nz) in enumerate(((1, 0), (-1, 0), (0, 1), (0, -1))):
-            for _ in range(2):
-                y, u = rng.uniform(27, 46), rng.uniform(-0.7, 0.7)
-                pts = []
-                for k in range(6):
-                    pts.append((u, y))
-                    y += rng.uniform(1.0, 2.6)
-                    u = max(-0.9, min(0.9, u + rng.uniform(-0.45, 0.45)))
-                for (ua, ya), (ub, yb) in zip(pts, pts[1:]):
-                    def W(uu, yy):
-                        if nx:
-                            return _B(cx + nx * (hx + 0.01), yy, cz + uu * hz)
-                        return _B(cx + uu * hx, yy, cz + nz * (hz + 0.01))
-                    w = 0.035
-                    face = (nx, -nz, 0)
-                    mb.poly([W(ua - w, ya), W(ub - w, yb), W(ub + w, yb), W(ua + w, ya)], m["vein"], face=face)
-        mb.rcol((lo2[0] - 0.12, FLOOR, lo2[2] - 0.12), (hi2[0] + 0.12, 52.0, hi2[2] + 0.12))
-    return [_pool(mb, "ArcadePiers")]
 
 
 def _plush(mb, m, c, s, col, rng, yaw=0.0):
@@ -1721,24 +1764,26 @@ def _prize(m, rng):
         mb.prism([(sx - 23180.0, sy - 49.6) for sx, sy in star], 0.0, 0.3, m["brass"])
     mb.rcol((23174.0, 28.4, SZ0), (23210.0, 47.8, SZ1))
     objs.append(_pool(mb, "ArcadePrize", wn=False))
-    # staff door pair with vision panels on the rear wall (the old PrizeSideDoor opening, x 23211-23225)
+    # staff door on the right side wall behind the prize counter (the rear-wall pair now opens into the void)
     dr = RMesh("ArcadeStaffDoor")
-    dz = 237.65
-    dr.rbox((23210.6, FLOOR, dz - 0.35), (23225.4, 37.5, dz), m["steel"], 0.04)                  # hollow-metal frame
-    for x0, x1 in ((23211.1, 23218.0), (23218.0, 23224.9)):
-        dr.rbox((x0 + 0.05, FLOOR + 0.1, dz - 0.3), (x1 - 0.05, 37.0, dz - 0.34), m["door_red"])
-        dr.rbox((x0 + 1.4, 30.0, dz - 0.36), (x1 - 1.4, 34.5, dz - 0.35), m["glass_wire"])        # vision panel
-        dr.rbox((x0 + 1.2, 29.8, dz - 0.37), (x1 - 1.2, 34.7, dz - 0.36), m["steel"])
-        dr.rbox((x0 + 0.5, 28.2, dz - 0.6), (x1 - 0.5, 28.6, dz - 0.4), m["chrome"], 0.08)       # push bar
-        dr.rbox((x0 + 0.1, FLOOR + 0.1, dz - 0.36), (x1 - 0.1, FLOOR + 1.6, dz - 0.35), m["chrome"])  # kick plate
-    dr.rcol((23210.6, FLOOR, dz - 0.6), (23225.4, 37.5, dz))
+    dx, dz0, dz1 = AR_WALL, 229.2, 236.8
+    dr.rbox((dx - 0.35, FLOOR, dz0), (dx, 37.5, dz1), m["steel"], 0.04)                         # hollow-metal frame
+    dr.rbox((dx - 0.34, FLOOR + 0.1, dz0 + 0.5), (dx - 0.3, 37.0, dz1 - 0.5), m["door_red"])
+    dr.rbox((dx - 0.36, 30.0, 231.6), (dx - 0.35, 34.5, 234.4), m["glass_wire"])                # vision panel
+    dr.rbox((dx - 0.37, 29.8, 231.4), (dx - 0.36, 34.7, 234.6), m["steel"])
+    dr.rbox((dx - 0.6, 28.2, dz0 + 1.0), (dx - 0.4, 28.6, dz1 - 1.0), m["chrome"], 0.08)        # push bar
+    dr.rbox((dx - 0.36, FLOOR + 0.1, dz0 + 0.6), (dx - 0.35, FLOOR + 1.6, dz1 - 0.6), m["chrome"])  # kick plate
+    dr.rbox((dx - 0.38, 35.3, 231.3), (dx - 0.37, 36.2, 234.7), m["placard"])
+    co, faces = _text_geo("STAFF ONLY", 0.5, 0)
+    dr.add_geo(co, faces, m["black"], Matrix.Translation(_B(dx - 0.39, 35.75, 233.0)) @ Matrix.Rotation(-math.pi / 2, 4, "Z"))
+    dr.rcol((dx - 0.6, FLOOR, dz0), (dx, 37.5, dz1))
     objs.append(_pool(dr, "ArcadeStaffDoor", wn=False))
-    # gumball machine
+    # gumball machine closes the right cabinet run
     gb = RMesh("Gumball")
-    gx, gz = 23216.5, 221.0
+    gx, gz = AR_WALL - 1.35, LINE["R"][1] + 1.6
     gb.lathe([(0, 0), (1.1, 0), (1.1, 0.2), (0.35, 0.5), (0.25, 2.6), (0.55, 2.8), (0.62, 3.6), (0.3, 3.7), (0, 3.7)],
              m["red_enamel"], seg=16, c=_B(gx, FLOOR, gz))
-    gb.box(_B(gx, 27.1, gz - 0.62), (0.5, 0.12, 0.6), m["chrome"], 0.03)                          # coin mech
+    gb.box(_B(gx - 0.62, 27.1, gz), (0.12, 0.5, 0.6), m["chrome"], 0.03)                          # coin mech
     gb.sphere(_B(gx, 29.05, gz), 1.25, m["glass"], seg=16, rings=10)
     for k in range(40):
         a, b_, r = rng.uniform(0, 6.28), rng.uniform(-1.2, 0.2), rng.uniform(0, 0.95)
@@ -1746,16 +1791,17 @@ def _prize(m, rng):
     gb.lathe([(0, 0), (0.55, 0), (0.5, 0.35), (0.15, 0.5), (0, 0.55)], m["red_enamel"], seg=14, c=_B(gx, 30.2, gz))
     gb.rcol((gx - 1.25, FLOOR, gz - 1.25), (gx + 1.25, 30.8, gz + 1.25))
     objs.append(_pool(gb, "Gumball", wn=False))
-    # redemption terminal (ticket eater) facing the aisle (+X)
+    # redemption terminal (ticket eater) closes the left run, facing the aisle (+X)
     rt = RMesh("RedemptionTerminal")
-    with rt.at(Matrix.Translation(_B(23167.0, FLOOR, 226.0)) @ Matrix.Rotation(math.pi / 2, 4, "Z")):
+    tz = LINE["L"][1] + 1.3
+    with rt.at(Matrix.Translation(_B(AL_WALL + 0.85, FLOOR, tz)) @ Matrix.Rotation(math.pi / 2, 4, "Z")):
         rt.box((0, 0, 2.2), (1.9, 1.6, 4.4), m["black"], 0.12, 2)
         rt.box((0, -0.3, 4.85), (2.1, 1.0, 0.9), m["magenta"])                                      # lit header
         rt.box((0, -0.82, 3.5), (1.3, 0.05, 0.9), m["crt0"])
         rt.box((0, -0.84, 2.3), (0.9, 0.08, 0.25), m["chrome"], 0.03)                               # ticket slot
         rt.box((0, -0.86, 2.3), (0.7, 0.04, 0.06), m["black"])
         rt.box((0, -0.9, 1.4), (1.3, 0.2, 0.5), m["chrome"], 0.05)                                 # receipt tray
-    rt.rcol((23166.0, FLOOR, 225.0), (23168.0, FLOOR + 5.4, 227.0))
+    rt.rcol((AL_WALL, FLOOR, tz - 1.05), (AL_WALL + 1.75, FLOOR + 5.4, tz + 1.05))
     objs.append(_pool(rt, "RedemptionTerminal", wn=False))
     return objs
 
@@ -1778,10 +1824,12 @@ def _stool(mb, m, x, z, tipped, rng):
         mb.rcol((x - 1.9, FLOOR, z - 1.9), (x + 1.9, FLOOR + 1.9, z + 1.9))
 
 
-def _arcade_dressing(m, rng):
+def _arcade_dressing(m, rng, placed):
     mb = RMesh("ArcadeDressing")
-    for x, z, tip in ((23180.5, 151.5, False), (23203.8, 194.0, False), (23181.0, 205.5, False), (23191.0, 172.0, True)):
-        _stool(mb, m, x, z, tip, rng)
+    for side in ("L", "R"):
+        candidates = [p for p in placed[side] if p[0].startswith("ArcadeUpright") and 140 < p[1] < 210]
+        for kind, z, front in candidates[::max(1, len(candidates) // 2)][:2]:
+            _stool(mb, m, front + (1.5 if side == "L" else -1.5), z, False, rng)
     # redemption-ticket streamers: folded strips on the carpet near the prize counter and the cabinet fronts
     spots = [(rng.uniform(23177, 23207), rng.uniform(215, 223.5)) for _ in range(40)]
     spots += [(rng.uniform(23176.5, 23180), rng.uniform(133, 214)) for _ in range(20)]
@@ -2427,6 +2475,41 @@ def _extinguisher_cabinets(m):
 
 
 
+def _room_wallpaper(m):
+    mb = RMesh("RoomWallpaper")
+    for _, p in _parts(r"^Service/Service(North|South|East|West)WallFinish$|^Restrooms/(Men|Women)_(Back)?UpperPlaster$"):
+        lo, hi = _aabb(p)
+        if p["p"].startswith("Restrooms/"):
+            # White wainscot ends at 31.5; replacing the old stripe with paper makes the two surfaces meet.
+            lo[1] = 31.5
+        mb.rbox(tuple(lo), tuple(hi), m["wallpaper"])
+    for _, p in _parts(r"^Restrooms/RestroomEntryWall(_Header)?$"):
+        lo, hi = _aabb(p)
+        lo[1], hi[1] = max(31.5, lo[1]), min(40.5, hi[1])
+        lo[2], hi[2] = RZ0 - 0.02, RZ0
+        if hi[1] > lo[1]:
+            mb.rbox(tuple(lo), tuple(hi), m["wallpaper"])
+    return _pool(mb, "RoomWallpaper", wn=False)
+
+
+def build_gallery_lockers(meshy):
+    objs = []
+    # GalleryFloor top is 86 (its datum is 85), with the carpet at 86.065. East wall face X23376.
+    # Against the end wall, these leave the entire approach and the core stair route clear.
+    z = -17.5
+    for i, kind in enumerate(("LockerBank", "LockerBank", "LockerBank", "SupplyCabinet")):
+        me = meshy[kind]
+        lo, hi = _mdims(me)
+        width = hi[0] - lo[0]
+        zc = z + width / 2
+        assert zc + width / 2 < -1.5, "gallery cabinets must stay clear of the south wall"
+        pos = (23376.0 - hi[1] - 0.06, 86.065, zc)
+        name = "Gallery_%s%d" % (kind, i + 1)
+        objs.append(_place(me, name, _M(pos, "-X"), model=name))
+        z += width + 0.2
+    return objs
+
+
 def build_service(m, rng):
     objs = [_racks(m, rng)]
     objs += _cartons(m, rng)
@@ -2447,6 +2530,8 @@ def build_rooms_props(seed=1990):
     m = _mats()
     meshy = _meshy()
     counts = {"deleted": gone}
+    counts["wallpaper"] = int(_room_wallpaper(m) is not None)
+    counts["gallery_lockers"] = len(build_gallery_lockers(meshy))
     counts["restrooms"] = len(build_restrooms(m, rng, meshy))
     counts["concession"] = len(build_concession(m, rng, meshy))
     counts["arcade"] = len(build_arcade(m, rng, meshy))
@@ -2473,6 +2558,7 @@ def stats():
     lights = [o for o in bpy.data.collections[LCOLL].objects if o.get("l4_pkg") == PKG] if bpy.data.collections.get(LCOLL) else []
     return {"objects": len(objs), "instanced": len(inst), "pooled": len(pooled),
             "tris": sum(tri(o.data) for o in objs),
+            "tris_unique": sum(tri(me) for me in {o.data for o in objs}),
             "tris_instanced": sum(t * n for t, n in per_asset.values()),
             "tris_pooled": sum(tri(o.data) for o in pooled),
             "per_asset_tris": {k: v for k, v in sorted(per_asset.items())},

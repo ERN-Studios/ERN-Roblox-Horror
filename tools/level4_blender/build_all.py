@@ -1,14 +1,17 @@
 # Level 4 facelift: the whole Blender build in one run.
-#   blender -b <blend> --python-exit-code 1 -P build_all.py -- <out.blend>
+#   python G:/Roblox/_local/l4facelift/v3/blrun.py <copy.blend> build_all.py <out.blend>
 #   exec(open(r"G:\Roblox\MongoTV\tools\level4_blender\build_all.py").read(), {"OUT_BLEND": r"<out.blend>"})
 # Runs every step whose file exists, in order:
 #   build_base (l4_layout.json is precomputed) -> lights_and_camera.build_lights (the original lights, "L4 Lights";
 #   the packages delete the ones whose fixture they replace, export_l4 drops LIGHTS_SUPERSEDED) -> slots ->
 #   Meshy import (meshy_specs.json + import_meshy.py; only assets whose mesh "L4A_<asset>" is missing, all of them
 #   with FORCE_MESHY = True) -> props (it wipes "L4 Props" and makes the MarbleColumns arch_detail replaces) ->
-#   arch_detail.build_detailing -> props_lobby -> props_rooms -> ceilings.build_ceilings (its fallen tiles ray-cast
-#   down onto the final props) -> props_decay.build_decay (needs the ceilings) -> doors_v2 (else doors), then saves a
-#   copy to the output path (none given: nothing is saved).
+#   arch_detail.build_detailing -> props_lobby -> props_rooms -> doors_v2 (else doors) -> ceilings.build_ceilings
+#   (after all neon, including doors; its fallen tiles ray-cast onto the final props) -> props_decay.build_decay
+#   (needs the ceilings) -> optional LAST: the ceilings module's lighting pass (FINAL_PASS: the first of its names
+#   that ceilings.py defines; it rebalances every light the other steps made, neon and door neon included),
+#   then saves a copy to the output path (none given:
+#   nothing is saved). The pass runs in the namespace the ceilings step left, so it sees that build's state.
 # Each step is exec'd in a copy of slots.py's namespace (slot(), SLOTS) with __name__ = "l4_build_all"; its build
 # function is called unless the file already calls it at top level, so a module that builds on exec and one guarded
 # by `if __name__ == "__main__"` both run once. A failing step stops the run before anything is saved, unless
@@ -18,7 +21,7 @@ import ast, json, os, sys, time, traceback
 import bpy
 
 HERE = r"G:\Roblox\MongoTV\tools\level4_blender"
-MASTER = os.path.normcase(r"G:\Blender\Level4_Cinema\Level4_Cinema.blend")
+MASTER = os.path.normcase(os.path.realpath(r"G:\Blender\Level4_Cinema\Level4_Cinema.blend"))
 STEPS = [   # (file, build functions: the first one the module defines is called)
     ("build_base.py", ()),
     ("lights_and_camera.py", ("build_lights",)),
@@ -28,12 +31,13 @@ STEPS = [   # (file, build functions: the first one the module defines is called
     ("arch_detail.py", ("build_detailing",)),
     ("props_lobby.py", ("build_props_lobby", "build_lobby_props", "build")),
     ("props_rooms.py", ("build_rooms_props", "build_props_rooms", "build_room_props", "build")),
-    ("ceilings.py", ("build_ceilings",)),     # after the props: its fallen tiles ray-cast onto what stands below
-    ("props_decay.py", ("build_decay",)),
     ("doors_v2.py", ("build_doors_v2", "build_doors", "build")),
     ("doors.py", ()),                          # only when doors_v2.py does not exist
+    ("ceilings.py", ("build_ceilings",)),        # after all neon; fallen tiles ray-cast onto what stands below
+    ("props_decay.py", ("build_decay",)),       # needs the ceilings
 ]
 CORE = ("build_base.py", "lights_and_camera.py", "slots.py")   # never skipped past, even with KEEP_GOING
+FINAL_PASS = ("ceilings.py", ("final_lighting_pass", "lighting_pass", "rebalance_lights"))
 
 
 def top_level_calls(src):
@@ -79,9 +83,10 @@ def out_path():
 
 def build_all(out=None):
     assert os.path.exists(os.path.join(HERE, "l4_layout.json")), "l4_layout.json missing: run layout_edits.py"
-    if out and os.path.normcase(os.path.abspath(out)) == MASTER and not globals().get("ALLOW_MASTER"):
-        raise RuntimeError("build_all will not overwrite the master blend (set ALLOW_MASTER = True to mean it)")
-    base, t0, failed = {}, time.time(), []
+    if out and (os.path.normcase(os.path.realpath(out)) == MASTER or
+                (os.path.exists(out) and os.path.exists(MASTER) and os.path.samefile(out, MASTER))):
+        raise RuntimeError("build_all will not overwrite the master blend or an alias of it")
+    base, t0, failed, spaces = {}, time.time(), [], {}
     for fn, funcs in STEPS:
         if not os.path.exists(os.path.join(HERE, fn)):
             continue
@@ -101,6 +106,19 @@ def build_all(out=None):
             continue
         if fn == "slots.py":
             base = {k: v for k, v in ns.items() if k not in ("__name__", "__file__")}
+        spaces[fn] = ns
+    fn, names = FINAL_PASS
+    f = next((spaces[fn][n] for n in names if spaces.get(fn) and callable(spaces[fn].get(n))), None)
+    if f:
+        t = time.time()
+        try:
+            f()
+        except Exception:
+            if not (globals().get("KEEP_GOING") or os.environ.get("L4_BUILD_KEEP_GOING")):
+                raise
+            traceback.print_exc()
+            failed.append(fn + " " + f.__name__)
+        print("build_all: %-22s %6.1f s (%s, final pass)" % (fn, time.time() - t, f.__name__), flush=True)
     if out:
         os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
         bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(out), copy=True)

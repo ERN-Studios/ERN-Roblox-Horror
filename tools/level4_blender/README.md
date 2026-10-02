@@ -79,3 +79,39 @@ Pieces (each owns one collection; see the header of each file):
   the interior grade while inside the model's BoundsCenter/BoundsSize; RoundUI stands down on the client
   attribute `Level4LightingOwned`.
 Design plan and research: G:\Roblox\_local\l4facelift\r7.md (Roblox PBR/lighting/collision) and r8.md (element plan).
+
+## Facelift v3 (2026-10-02): the owner's 15-point list
+
+What changed (brief + per-point decisions: `artifacts/level4-facelift-v3-20261002/BRIEF.md`):
+- Lighting: a Rolls-Royce starlight headliner everywhere except the Service room (stars = pooled Neon quads tagged
+  `L4StarTwinkleA/B/C`, twinkled by the Level 4 Lighting Controller), neon as the main light, ~15 % of neon groups
+  blinking hard off (`OccasionalFlicker`), the original preview's ceiling fixtures/lights no longer cloned (the
+  "overlaps"). Gains in `make_place.py` (`LIGHT_GAIN` 2.7, star fill x5/3 brightness, longer reach, auditorium star
+  fills hung at Y 80); controller grade `AMBIENT` (46,36,60), `EXPOSURE` 0.9, Atmosphere density 0.1 — all tuned in
+  a Studio play test.
+- One theme wallpaper (`WALLPAPER_MAIN` -> `wallpaper_synth`, dark plum with faded magenta/cyan triangles) on every
+  plaster/wall surface; theme carpet on the gallery floor and core stair; concession checker floors/backsplash gone.
+- Cinema 1's west side (C1, the passages beside the core) removed and sealed (`Shell/C1BlockWall*`), A1's west entry
+  closed; projection booth front supports removed; counter 5 studs deep; arcade side walls solid with machines wall to
+  wall and ONE centred door; ONE service door; restroom teal cap gone, urinals turned; gallery north wall curved like
+  the south; CINEMA 2 marquee on the V-wall; the street entrance boarded up after a break-in; Meshy lockers at the
+  gallery's east end; 264 Meshy litter props (no colliders) instead of the flat popcorn decals.
+- Camera: Poppercam only stops at CanCollide parts with transparency < 0.25, so occluder colliders (visible layout
+  walls/floors/roofs + Blender objects flagged `l4_occluder`) are now black, opaque, inset 0.1 stud inside the visual
+  surface (`make_place.py` / `place.luau`). Verified in play: the camera stays under the restroom ceiling and in front
+  of walls.
+- `cull_hidden.py` (default visibility mode) removes geometry no camera position can see, proven per run by >= 150
+  before/after Workbench renders with a magenta world (no new magenta, <= 0.1 % changed pixels per view). Pipeline:
+  `build_all.py -> cull_hidden.py -> export_l4.py -> make_place.py`; see `G:\Roblox\_local\l4facelift\v3\final2\run.sh`.
+
+Studio import changed (2026-10-02): the MCP `execute_luau` thread now has no Network capability, no `shared`
+between calls and may not create Scripts under Workspace, so `serve.py` + `upload.luau` + `place.luau` no longer
+run as-is. Use instead (the model must already exist; its `OccasionalFixtureFlicker` and `Doors.PushDoors` scripts
+are kept and updated through ScriptEditorService):
+```
+python studio_upload.py [export_dir] --reuse results_v3a.jsonl   # chunks in the code payload; identical chunks reused by hash
+python make_place.py                                             # after --tex-requests / upload_image / --tex-merge
+python place_driver.py [export_dir]                              # stages the packet, then place_phases.luau: templates, placements, rest
+```
+Blender master: `G:\Blender\Level4_Cinema\Level4_Cinema.blend` = the v3 build (un-culled); v2 kept as
+`Level4_Cinema_v2.blend`. `results_v2.jsonl` / `results_v3a.jsonl` hold the earlier mesh uploads.

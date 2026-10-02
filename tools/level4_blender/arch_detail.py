@@ -57,12 +57,13 @@ REPLACES = [
     r"^A\d/A\d_WallCove$",
     r"^Concourse/\w+Doorway(DeepJamb|DeepHeader|Frame_Head|Frame_Jamb)$",
     r"^A\d/A\d_(Entry|Exit|BoothDoor)Frame_(Head|Jamb)$",
-    r"^HiddenService/(A\d_GalleryBoothFrame|ConcealedPosterFrame)_(Head|Jamb)$",
+    r"^HiddenService/ConcealedPosterFrame_(Head|Jamb)$",
     r"^Restrooms/(Men|Women)_Door(Jamb|Lintel)$",
     r"^C\d/C\d_StairA\d(East|West)_(AmberRiser|Handrail|LandingRail)$",
     r"^HiddenService/(EastFlight_AmberNosing|EastFlight_WallHandrail|WestFlight_WallHandrail)$",
     r"^A\d/A\d_(StepDot|CrossAisleEdge)$",
     r"^CentralFork/Orange(ForkCove|CornerJoint)$",
+    r"^HiddenService/GalleryNorthCove$",
 ]
 _REP = re.compile("|".join(REPLACES))
 # build_base.py REPLACED: parts modelled as props elsewhere (matched on the path with digits collapsed)
@@ -96,6 +97,25 @@ NEON = np.array([m == "Neon" for m in MAT])
 # place (pilasters, cornices, casings); emissive strips, props, door leaves and rails do not.
 BLOCK = VIS & ~PROP & ~DOORP & ~NEON & ~RAIL
 EXTRA = []                                  # generated solids (casings, plinths) that also block trims
+VIS_OK = np.array([not x.startswith("Removed/") for x in PATH])    # layout_edits tombstones (index-aligned dump)
+
+# v3 owner points 12/13: Cinema 1's west side is walled off at X 22676 and everything behind it is removed from the
+# layout. Nothing of this package may stand there, whether or not the layout in hand still has those parts:
+# trims are cut out of these boxes (free()), and every builder skips sources inside them. (lo, hi) in studs.
+REMOVED_ZONES = [
+    (np.array([22600.0, -50.0, -260.0]), np.array([22676.0, 400.0, -21.0])),    # C1 + its stair/return corridor
+    (np.array([22600.0, -50.0, -21.0]), np.array([22676.0, 84.9, 0.0])),        # north passage under the gallery
+    (np.array([22600.0, -50.0, 0.0]), np.array([22647.0, 84.9, 98.0])),         # west passage beside the core
+    (np.array([22646.0, -50.0, 98.0]), np.array([22676.0, 84.9, 99.75])),       # strip south of the core (sealed)
+]
+CLOSED_OPENINGS = {"A1_EntryWest"}          # A1's west side entry is walled up (no casing on either face)
+
+
+def in_removed(lo, hi=None, tol=0.05):
+    """True when the point lo (hi None) is inside, or the box lo..hi overlaps, a removed zone (beyond tol)."""
+    if hi is None:
+        return any(np.all(lo > zl) and np.all(lo < zh) for zl, zh in REMOVED_ZONES)
+    return any(np.all(lo < zh - tol) and np.all(hi > zl + tol) for zl, zh in REMOVED_ZONES)
 
 
 def _box_of(rx):
@@ -170,7 +190,7 @@ def free(a, s, c, h, h0, h1, y0, y1, depth, skip=(), minlen=0.5, mask=None):
                 cuts.append((run - 0.1, t - 0.1)); run = None
         if run is not None:
             cuts.append((run - 0.1, min(h1, HI[j, h])))
-    for elo, ehi in EXTRA:
+    for elo, ehi in EXTRA + REMOVED_ZONES:
         if np.all(elo < hi - 1e-3) and np.all(ehi > lo + 1e-3):
             cuts.append((elo[h], ehi[h]))
     return _sub((h0, h1), cuts, minlen)
@@ -858,7 +878,7 @@ def build_baseboards(m, faces, floors):
         # external corners: extend past a free end so the boards meet
         for end, dirn in ((x0, -1), (x1, 1)):
             q = np.zeros(3); q[a] = c + s * 0.06; q[1] = fy + 0.2; q[h] = end + dirn * 0.06
-            if not occupied(q):
+            if not occupied(q) and not in_removed(q):
                 if dirn < 0:
                     x0 -= prof[1][0]
                 else:
@@ -1053,7 +1073,8 @@ def _band_frame(g, m, O, T, Nn, s0, s1, y0, y1, th, staff):
 
 # ---- door casings (B2.5)
 def _markers():
-    return [i for i in range(N) if "Level4V4Doorway" in (P[i].get("tags") or [])]
+    return [i for i in range(N) if "Level4V4Doorway" in (P[i].get("tags") or []) and NAME[i] not in CLOSED_OPENINGS
+            and VIS_OK[i]]
 
 
 def _leaves_in(i):
@@ -1096,6 +1117,11 @@ def build_casings(m):
                     fj = HI[j, a] if s > 0 else LO[j, a]
                     if s * (fj - c) < 1.2 and s * (fj - face) > 0:
                         face = fj
+            lo, hi = np.zeros(3), np.zeros(3)                  # this face's casing footprint
+            lo[a], hi[a] = sorted((face, face + s * 0.6))
+            lo[1], hi[1], lo[h], hi[h] = y0, y1 + 1.0, h0 - 1.0, h1 + 1.0
+            if in_removed(lo, hi):
+                continue
             # the concourse (open) side of the south portals gets the stepped portal casing
             conc = re.match(r"(Restrooms|Arcade|Concessions|Service)Doorway$", name) and s < 0
             if name == "SecretPosterEntry":
@@ -1108,15 +1134,19 @@ def build_casings(m):
                 style = "casing"
             prof = CASE_PROF[style]
             W = prof[-1][0]
-            # head casing stops short of a sign above the opening
+            # head casing stops short of a sign above the opening. Only parts whose bottom is at or above the
+            # opening head count: a wall beside the jamb (bottom at the floor) used to give a negative head room,
+            # which mirrored the profile into a flat sheet up to 72 studs wide (v3 owner point 12: the thin
+            # "wall" X 22602-22738 at Z 2 was GalleryStairEntry's casing measured against CoreEast).
             head_room = W
             lo, hi = np.zeros(3), np.zeros(3)
             lo[a], hi[a] = sorted((face, face + s * max(u for _, u in prof)))
             lo[1], hi[1] = y1 + 0.01, y1 + W
             lo[h], hi[h] = h0 - W, h1 + W
-            above = VIS & ~MINE & ~DOORP & np.all(LO < hi - 1e-3, 1) & np.all(HI > lo + 1e-3, 1)
+            above = VIS & ~MINE & ~DOORP & np.all(LO < hi - 1e-3, 1) & np.all(HI > lo + 1e-3, 1) & (LO[:, 1] >= y1 - 0.05)
             for j in np.nonzero(above)[0]:
                 head_room = min(head_room, LO[j, 1] - y1 - 0.06)
+            head_room = max(head_room, 0.3)
             if head_room < W:
                 prof = [(w * head_room / W, u) for w, u in prof]
                 W = head_room
@@ -1187,6 +1217,8 @@ def build_nosings(m):
     for k, i in enumerate(fl):
         fy = HI[i, 1]
         if HI[i, 1] - LO[i, 1] < 0.4 and not re.search(r"Tread|Tier|Landing|Aisle|TopWalk", NAME[i]):
+            continue
+        if in_removed(CEN[i]):
             continue
         for a, s in ((0, -1), (0, 1), (2, -1), (2, 1)):
             h = 2 - a
@@ -1269,7 +1301,7 @@ def build_nosings(m):
 def build_handrails(m):
     g = Geo()
     n_br = 0
-    for i in [i for i in range(N) if RAIL[i]]:
+    for i in [i for i in range(N) if RAIL[i] and not in_removed(CEN[i])]:
         R, hs = ROT[i], HSZ[i]
         la = int(np.argmax(hs))
         ax = R[:, la]
@@ -1386,6 +1418,8 @@ def _reeds(g, m, xs, z, s, y0, y1, r):
 def _pilaster(g, m, x0, x1, z, s, dims):
     """Reeded 80s-deco pilaster on the plane Z = z facing s. dims: plinth depth, shaft depth, reeds, tops."""
     pd, sd, nreed, rr, ytop, ycap = dims
+    # The A1 end capital/plinth must finish on the new lobby boundary, never overhang into C1.
+    x0 = max(x0, LOBBY_WEST_X + 0.5) if x0 < LOBBY_WEST_X + 0.5 and z < 0 else x0
     def zz(u0, u1):
         return sorted((z + s * u0, z + s * u1))
     za, zb = zz(-0.1, pd)
@@ -1412,13 +1446,25 @@ def _pilaster(g, m, x0, x1, z, s, dims):
     EXTRA.append((np.array([x0 - 0.25, 24.0, min(za, zb) - 0.2]), np.array([x1 + 0.25, 28.3, max(za, zb) + 0.2])))
 
 
+LOBBY_WEST_X = 22676.0                         # the lobby's west wall plane: block wall (v3) + the core's east face
+
+
+def _lobby_west(i):
+    """Walls whose east face is the lobby's west end (Z -21..99): the C1 block wall and the maintenance core. The
+    facade neon pair runs along them so the north facade, the block wall, the core and the south facade read as one
+    continuous wall (v3 points 12/13)."""
+    return bool(VIS[i] and VIS_OK[i] and AXAL[i] and abs(HI[i, 0] - LOBBY_WEST_X) < 0.35 and HI[i, 0] - LO[i, 0] <= 4.5
+                and LO[i, 2] > -22.5 and HI[i, 2] < 100.5 and LO[i, 1] < 50 and HI[i, 1] > 56)
+
+
 def build_wall_neon(m):
     """The facade neon pair continues along the corridor walls and the concourse end walls, on slim black
     channels. Emissive only (plus flicker): the corridors' light comes from the ceiling fixtures."""
     g = Geo()
     sel = [i for i in range(N) if HI[i, 1] - LO[i, 1] > 20 and (
         re.search(r"^C\d/C\d_((West|East)Cladding|Separator)$", PATH[i])
-        or (PATH[i] == "Shell/ShellSide" and zone_at(CEN[i, 0], np.clip(CEN[i, 2], -19, 99), "") == "Concourse"))]
+        or (PATH[i] == "Shell/ShellSide" and zone_at(CEN[i, 0], np.clip(CEN[i, 2], -19, 99), "") == "Concourse")
+        or _lobby_west(i))]
     for i in sel:
         a = 0 if HI[i, 0] - LO[i, 0] < HI[i, 2] - LO[i, 2] else 2
         h = 2 - a
@@ -1426,6 +1472,8 @@ def build_wall_neon(m):
         if PATH[i] == "Shell/ShellSide":
             h0, h1 = max(h0, -20.0), min(h1, 100.0)
         for s, c in ((-1, LO[i, a]), (1, HI[i, a])):
+            if _lobby_west(i) and s < 0:                     # the core / block wall: lobby face only
+                continue
             if not free(a, s, c, h, h0, h1, 39, 41, 0.3, skip={i}):
                 continue
             for col, yc in FAC_NEON:
@@ -1473,17 +1521,248 @@ def build_south_facade(m):
         _pilaster(g, m, LO[i, 0], HI[i, 0], z, s, (0.95, 0.45, 5, 0.26, 55.5, 53.4))
     xs = [22624.0] + [v for i in pil for v in (LO[i, 0], HI[i, 0])] + [23376.0]
     for bx0, bx1 in zip(xs[0::2], xs[1::2]):                 # bays between pilasters and the wall ends
-        acoustic_panels(g, m, z, s, bx0, bx1, 28.3, 55.3, FAC_JOINTS + _channels(), _holes(z, bx0, bx1))
-        facade_neon(g, m, z, s, bx0 + 0.75, bx1 - 0.75, _keepouts(z, s, bx0, bx1, 28.5, 55.2), "s%d" % bx0)
-    x0, x1 = 22624.0, 23376.0
-    # frieze: glossy black band between brass beads, then the housed cove cornice
-    g.wall_sweep(2, s, z, 0, x0, x1, [(0, 55.3), (0.06, 55.3), (0.06, 57.4), (0, 57.4)], m["lac"])
-    for yb in (55.4, 57.4):
-        g.wall_sweep(2, s, z, 0, x0, x1, [(0, yb - 0.12), (0.1, yb - 0.1), (0.14, yb - 0.04), (0.14, yb + 0.04),
-                                          (0.1, yb + 0.1), (0, yb + 0.12)], m["brass"])
-    O, T, Nn, s0, s1, org = wall_frame(2, s, z, 0, x0, x1)
-    cove_run(g, m, O, T, Nn, s0, s1, 60.0, "scove", org=org)
+        for bx0, bx1 in zone_cut(2, s, z, 0, bx0, bx1, 24.0, 60.0):
+            acoustic_panels(g, m, z, s, bx0, bx1, 28.3, 55.3, FAC_JOINTS + _channels(), _holes(z, bx0, bx1))
+            facade_neon(g, m, z, s, bx0 + 0.75, bx1 - 0.75, _keepouts(z, s, bx0, bx1, 28.5, 55.2), "s%d" % bx0)
+    for x0, x1 in zone_cut(2, s, z, 0, 22624.0, 23376.0, 24.0, 60.0):
+        # frieze: glossy black band between brass beads, then the housed cove cornice
+        g.wall_sweep(2, s, z, 0, x0, x1, [(0, 55.3), (0.06, 55.3), (0.06, 57.4), (0, 57.4)], m["lac"])
+        for yb in (55.4, 57.4):
+            g.wall_sweep(2, s, z, 0, x0, x1, [(0, yb - 0.12), (0.1, yb - 0.1), (0.14, yb - 0.04), (0.14, yb + 0.04),
+                                              (0.1, yb + 0.1), (0, yb + 0.12)], m["brass"])
+        O, T, Nn, s0, s1, org = wall_frame(2, s, z, 0, x0, x1)
+        cove_run(g, m, O, T, Nn, s0, s1, 60.0, "scove_%d" % int(x0), org=org)
     emit("Facade_South", g)
+
+
+def zone_cut(a, s, c, h, h0, h1, y0, y1, depth=0.6):
+    """[h0, h1] minus the removed zones, on the strip in front of the wall plane (axis a, coordinate c, facing s)."""
+    lo, hi = np.empty(3), np.empty(3)
+    lo[a], hi[a] = (c, c + depth) if s > 0 else (c - depth, c)
+    lo[1], hi[1], lo[h], hi[h] = y0, y1, h0, h1
+    return _sub((h0, h1), [(zl[h], zh[h]) for zl, zh in REMOVED_ZONES
+                           if np.all(zl < hi - 1e-3) and np.all(zh > lo + 1e-3)], 0.5)
+
+
+def build_c1_block_facade(m):
+    """Finish the new west closure with the neighbouring wallpaper panels and neon pair."""
+    g = Geo()
+    x, z0, z1 = LOBBY_WEST_X, -21.0, 0.0
+    g.box((x, 24, z0), (x + 0.10, 28.3, z1), m["lac"])
+    for y0, y1 in _sub((28.3, 85), FAC_JOINTS + _channels(), 0.5):
+        for a, b in modules(z0, z1, 0):
+            g.box((x, y0 + 0.06, a + 0.06), (x + PANEL_DEPTH, y1 - 0.06, b - 0.06), m["paper"], e=0.025)
+    g.wall_sweep(0, 1, x, 2, z0, z1, [(u, y + 24) for u, y in PROF_BASE], m["lac"])
+    emit("C1BlockFacade", g)
+    # build_wall_neon supplies the lines on this exact face and on the adjoining core wall.
+    o = area_light((x + 2, 51, -19), (x + 2, 51, -2), (210, 80, 230), 180,
+                   "C1ClosureNeonWash", rng=24, bright=0.85, face=(-0.12, -1, 0))
+    o["l4_kind"] = "neon_detail"           # keep the scoped practical in P2's final budget pass
+    o.data.use_shadow = False
+
+
+def build_gallery_north(m):
+    """Reflect the 24 south curve modules into the north wall, returning into untouched booth frames.
+
+    The three door/sign alcoves stay on the original wall plane. Their original leaves, frames and signage
+    therefore keep their CFrames and their full clear openings; the new panels terminate beside each frame.
+    """
+    g, glow = Geo(), Geo()
+    paper, dark, orange = m["paper"], m["lac"], slot("EMIT_ORANGE")
+    heads = sorted([i for i in range(N) if re.match(r"HiddenService/A\d_GalleryBoothFrame_Head$", PATH[i])],
+                   key=lambda i: LO[i, 0])
+    alcoves = [(LO[i, 0] - 1.2, HI[i, 0] + 16.2) for i in heads]
+    pieces = []
+    for i in range(N):
+        if not re.match(r"HiddenService/GalleryCurve(Panel|Cove|CoveJoint|Valence|Skirting|Backer)$", PATH[i]):
+            continue
+        center, ax, hs = CEN[i].copy(), ROT[i].T.copy(), HSZ[i].copy()
+        center[2] = -19 - center[2]          # south inner wall Z=0 -> north inner wall Z=-19
+        ax[:, 2] *= -1
+        kind = NAME[i].removeprefix("GalleryCurve")
+        # Cut along the actual local length axis, rather than rescaling a rotated world bounding box.
+        ta = int(np.argmax(hs * (np.abs(ax[:, 0]) > 0.5)))
+        if abs(ax[ta, 0]) < 0.5:             # the small cove-joint cubes
+            if any(a < center[0] < b for a, b in alcoves):
+                continue
+            glow.box(hs, None, orange, axes=ax, center=center)
+            continue
+        ends = sorted((center[0] - ax[ta, 0] * hs[ta], center[0] + ax[ta, 0] * hs[ta]))
+        for a, b in _sub(ends, alcoves, 0.08):
+            tt = sorted(((a - center[0]) / ax[ta, 0], (b - center[0]) / ax[ta, 0]))
+            ctr = center + ax[ta] * sum(tt) / 2
+            half = hs.copy(); half[ta] = (tt[1] - tt[0]) / 2
+            target = glow if kind in ("Cove", "CoveJoint") else g
+            target.box(half, None, orange if kind in ("Cove", "CoveJoint") else paper if kind in ("Panel", "Valence") else dark,
+                       axes=ax, center=ctr)
+            extent = np.abs(ax).T @ half
+            if kind in ("Panel", "Valence", "Backer"):
+                g.cols.append((ctr - extent, ctr + extent))
+            if kind == "Panel":
+                pieces.append((a, b, center, ax[ta]))
+    # Vertical panel returns and skirting are attached to the existing north wall beside the booth frames.
+    for a, b in alcoves:
+        for x in (a, b):
+            edge = next((c + t * ((x - c[0]) / t[0]) for aa, bb, c, t in pieces
+                         if abs(aa - x) < 0.02 or abs(bb - x) < 0.02), None)
+            if edge is None:
+                continue
+            z = edge[2] + 0.5
+            lo, hi = np.array([x - 0.12, 86, -19]), np.array([x + 0.12, 96.2, z])
+            g.box(lo, hi, paper); g.cols.append((lo, hi))
+            g.box((x - 0.14, 86, -19), (x + 0.14, 88, z + 0.08), dark)
+        # The cove rises over the frame, follows the alcove wall, and returns onto the curve.
+        pts = []
+        for x in (a, b):
+            edge = next((c + t * ((x - c[0]) / t[0]) for aa, bb, c, t in pieces
+                         if abs(aa - x) < 0.02 or abs(bb - x) < 0.02), np.array([x, 0, -18.8]))
+            pts.append((x, 96.6, edge[2] + 0.3))
+        glow.tube([pts[0], (a, 97.8, -18.35), (b, 97.8, -18.35), pts[1]], 0.14, orange, seg=6)
+    # The short end sections retain the same original north wall, with the new cove at curve height.
+    for a, b in ((22624, 22700), (23352, 23376)):
+        glow.box((a, 96.4, -18.5), (b, 96.8, -18.2), orange)
+    for x in (22700, 23352):
+        edge = next((c + t * ((x - c[0]) / t[0]) for aa, bb, c, t in pieces
+                     if abs(aa - x) < 0.15 or abs(bb - x) < 0.15), None)
+        if edge is not None:
+            z = edge[2] + 0.5
+            lo, hi = np.array([x - 0.12, 86, -19]), np.array([x + 0.12, 99, z])
+            g.box(lo, hi, paper); g.cols.append((lo, hi))
+            g.box((x - 0.14, 86, -19), (x + 0.14, 88, z + 0.08), dark)
+            glow.box((x - 0.2, 96.4, -18.35), (x + 0.2, 96.8, z - 0.2), orange)
+    # Decorative rotated panels use world-AABB collision boxes; keep them invisible.
+    # The retained straight GalleryNorth wall behind the curve blocks the camera.
+    emit("GalleryNorthCurve", g)
+    emit("GalleryNorthCurveNeon", glow)
+    for n, x in enumerate((22670, 22800, 22930, 23060, 23190, 23320)):
+        o = area_light((x - 15, 95.8, -12.5), (x + 15, 95.8, -12.5), (255, 120, 40), 45,
+                       "GalleryNorthOrange%d" % n, rng=18, bright=0.8, face=(0, -0.35, -1))
+        o["l4_kind"] = "gallery_cove"
+        o.data.use_shadow = False
+    STATS["gallery_north_modules"] = 24
+
+
+def build_main_entry_boards(m):
+    """Owner point 2: the welded street entry is fully boarded on BOTH faces.
+
+    Boards outside Z 239 are intentional: the owner explicitly requested an exterior skin too.
+    Six overlapping sheets per face cover all the glass (X 22976..23024, Y 24..38), including the
+    transom. Cracks and the pried brace are surface damage; the plywood behind remains opaque.
+    """
+    wood = slot("BOARD_WEATHERED")
+    sheet_mats = [wood] * 3             # the weathered albedo already contains the variation
+    sheets, braces, damage, litter = Geo(), Geo(), Geo(), Geo()
+    x0, x1, y0, y1 = 22975.65, 23024.35, 24.0, 38.15
+    sheet_w = (x1 - x0) / 6
+    coverage = []
+
+    def solid(g, lo, hi, mat, e=0.0):
+        g.box(lo, hi, mat, e=e)
+        g.cols.append((np.asarray(lo, float), np.asarray(hi, float)))
+
+    def nail(g, x, y, z, s):
+        # Low-poly, rust-dark nail heads with a narrow central metal highlight.
+        g.tube([(x, y, z), (x, y, z + s * 0.035)], 0.07, m["steel"], seg=6)
+        g.tube([(x, y, z + s * 0.035), (x, y, z + s * 0.044)], 0.028, m["chrome"], seg=4)
+
+    for side, (s, za, zb) in enumerate(((-1, 237.30, 237.55), (1, 239.45, 239.70))):
+        face_z = za if s < 0 else zb
+        for k in range(6):
+            xa = max(x0, x0 + sheet_w * k - 0.04)
+            xb = min(x1, x0 + sheet_w * (k + 1) + 0.04)
+            # No bevel on the sheet envelope: even a grazing ray cannot see between sheets.
+            solid(sheets, (xa, y0, za), (xb, y1, zb), sheet_mats[(k + side) % 3])
+            coverage.append((side, xa, xb, y0, y1))
+            # Thin inset scores read as plywood joints without cutting the opaque sheets.
+            if k:
+                damage.box((xa + 0.03, y0 + 0.03, face_z + min(0, s * 0.006)),
+                           (xa + 0.06, y1 - 0.03, face_z + max(0, s * 0.006)), m["black"])
+            for xx in (xa + 0.40, xb - 0.40):
+                for yy in (24.65, 37.45):
+                    nail(damage, xx, yy, face_z, s)
+
+        for row, yy in enumerate((26.3, 30.9, 35.4)):
+            for k in range(3):
+                xa, xb = x0 + (x1 - x0) * k / 3, x0 + (x1 - x0) * (k + 1) / 3
+                znear, zfar = sorted((face_z + s * 0.018, face_z + s * 0.29))
+                if row == 1 and k == 1 and side == 0:
+                    # One end still nailed to the inner face; the freed end hangs down and out.
+                    a = np.array([xa + 0.10, yy + 0.20, face_z + s * 0.18])
+                    b = np.array([xb - 0.30, yy - 3.85, face_z + s * 0.92])
+                    T = _n(b - a)
+                    U = _n(Y - T * np.dot(Y, T))
+                    Nn = _n(np.cross(T, U))
+                    start = len(braces.v)
+                    braces.box((np.linalg.norm(b - a) / 2, 0.52, 0.135), None, wood, e=0.025,
+                               axes=(T, U, Nn), center=(a + b) / 2)
+                    verts = np.array(braces.v[start:])
+                    braces.cols.append((verts.min(axis=0), verts.max(axis=0)))
+                    nail(damage, a[0] + 0.35, a[1] - 0.08, a[2] + s * 0.14, s)
+                    # Empty screw hole where the far end was pried away.
+                    damage.tube([(xb - 0.65, yy, face_z), (xb - 0.65, yy, face_z + s * 0.008)],
+                                0.055, m["black"], seg=6)
+                else:
+                    solid(braces, (xa + 0.025, yy - 0.49, znear), (xb - 0.025, yy + 0.49, zfar),
+                          sheet_mats[(row + k) % 3], e=0.025)
+                    for xx in (xa + 0.65, xb - 0.65):
+                        nail(damage, xx, yy, face_z + s * 0.30, s)
+
+        # Split/cracked plywood: a branching dark fissure and lifted wooden splinter; no through-hole.
+        zz = face_z + s * 0.013
+        crack = [(22996.2, 37.5), (22996.8, 36.65), (22996.35, 35.9),
+                 (22997.3, 34.7), (22997.0, 33.85), (22997.75, 32.9)]
+        for (ax, ay), (bx, by) in zip(crack, crack[1:]):
+            damage.tube([(ax, ay, zz), (bx, by, zz)], 0.024, m["black"], seg=3)
+        damage.tube([(22997.3, 34.7, zz), (22998.45, 34.95, zz), (22999.1, 34.45, zz)],
+                    0.018, m["black"], seg=3)
+        # A wafer of veneer kicked off the crack, with actual depth and shadow.
+        q = [(22996.4, 35.85, zz + s * 0.01), (22997.2, 34.72, zz + s * 0.10),
+             (22997.7, 35.05, zz + s * 0.23)]
+        damage.face(damage.vs(q), sheet_mats[0], AXV[2] * s)
+
+    # Coverage self-check is part of the builder: damage must never expose glass between sheets.
+    for side in (0, 1):
+        spans = sorted((a, b) for si, a, b, low, high in coverage if si == side)
+        assert spans[0][0] <= 22976 and spans[-1][1] >= 23024
+        assert all(a <= last + 1e-6 for (_, last), (a, _) in zip(spans, spans[1:]))
+    sheet_obj = emit("MainEntry_Boards_Sheets", sheets)
+    sheet_obj["l4_occluder"] = True
+    sheet_obj["l4_note"] = "Owner point 2: intentional exterior boards beyond Z 239; both faces fully opaque"
+    emit("MainEntry_Boards_Braces", braces)
+    emit("MainEntry_Boards_Damage", damage)
+
+    # A small, grounded trail of thick triangular glass shards on the INSIDE floor: no colliders.
+    rng = random.Random("L4_main_entry_breakin")
+    glass = slot("GLASS_FROSTED", tint=(160, 184, 200))
+    for k in range(18):
+        cx = 22998.7 + rng.uniform(-3.7, 3.7)
+        cz = 235.9 - rng.uniform(0.0, 3.3)
+        ang, r = rng.random() * math.tau, rng.uniform(0.22, 0.64)
+        tri = [(cx + r * math.cos(ang + t), cz + r * math.sin(ang + t)) for t in (0, 2.2, 4.15)]
+        bot = litter.vs([(x, 24.025, z) for x, z in tri])
+        top = litter.vs([(x, 24.047 + (0.015 if j == 0 else 0), z) for j, (x, z) in enumerate(tri)])
+        litter.face(top, glass, Y)
+        litter.face(bot, glass, -Y)
+        for j in range(3):
+            nj = (j + 1) % 3
+            litter.face([bot[j], bot[nj], top[nj], top[j]], m["chrome"] if j == 0 else glass)
+    # Dropped pry bar beside the glass; floor litter likewise has no collider.
+    litter.tube([(23003.8, 24.09, 234.0), (23003.6, 24.09, 234.3), (23002.2, 24.09, 236.8),
+                 (23002.3, 24.13, 237.05), (23002.55, 24.14, 237.03)], 0.065, m["steel"], seg=6)
+    emit("MainEntry_BreakinLitter", litter)
+    # A surviving cyan entrance edge is the practical light on the boarded face and broken glass.
+    glow = Geo()
+    for a, b in ((22976, 22988), (23000, 23012), (23012, 23024)):
+        glow.box((a, 38.45, 237.15), (b, 38.85, 237.75), m["black"])
+        glow.tube([(a + 0.1, 38.7, 237.2), (b - 0.1, 38.7, 237.2)], 0.06, m["cyan"], seg=6)
+    emit("MainEntry_Boards_Neon", glow)
+    o = area_light((22978, 38, 234.5), (23022, 38, 234.5), (120, 206, 255), 60,
+                   "MainEntryBoardNeonWash", rng=22, bright=0.85, face=(0, -0.25, 1))
+    o["l4_kind"] = "neon_detail"
+    o.data.use_shadow = False
+    STATS["main_entry_board_sheets"] = 12
+    STATS["main_entry_braces"] = 18
+    STATS["main_entry_glass_shards"] = 18
 
 
 # ---- columns (A1 ConcourseColumn)
@@ -1564,8 +1843,9 @@ def restyle_architecture():
 
 
 # ---- 0.3 defect 1: bevelled architecture boxes
+# Gallery sealing walls meet edge-to-edge: chamfering both boxes opens a slit into the void.
 _NOBEVEL = re.compile(r"BaseSlab|Roof|Ceiling|Carpet|Apron|Runner$|_Tile$|Checker_|ThresholdTile|GroundJoint"
-                      r"|WallFinish|FlushSkin|Concrete$|GalleryFloor")
+                      r"|WallFinish|FlushSkin|Concrete$|GalleryFloor|Gallery(North|South|East|West)")
 
 
 def _chamfer_box_mesh(name, sx, sy, sz, e):
@@ -1621,7 +1901,8 @@ def build_detailing(bevel=True):
         lambda: build_north_facades(m), lambda: build_south_facade(m), lambda: build_casings(m),
         lambda: build_baseboards(m, faces, floors), lambda: build_bands(m), lambda: build_crowns(m, runs),
         lambda: build_concourse_coves(m, runs), lambda: build_wall_coves(m), lambda: build_nosings(m),
-        lambda: build_handrails(m), lambda: build_columns(m), lambda: build_wall_neon(m), restyle_architecture]
+        lambda: build_handrails(m), lambda: build_columns(m), lambda: build_wall_neon(m),
+        lambda: build_c1_block_facade(m), lambda: build_gallery_north(m), lambda: build_main_entry_boards(m), restyle_architecture]
     if bevel:
         steps.append(bevel_architecture)
     times = []
@@ -1636,9 +1917,11 @@ def build_detailing(bevel=True):
 
 
 if __name__ == "__main__":                 # plain-Python self-check of the layout analysis and the neon states
+    assert all(_NOBEVEL.search("HiddenService/Gallery" + side) for side in ("North", "South", "East", "West"))
     walls, floors, ceils = classify()
     faces = wall_faces(walls)
-    assert 250 <= len(walls) <= 300 and len(faces) > 300, (len(walls), len(faces))
+    assert 200 <= len(walls) <= 350 and len(faces) > 250, (len(walls), len(faces))
+    assert all(VIS_OK[i] and NAME[i] not in CLOSED_OPENINGS for i in _markers())
     st = neon_states(4000, "selfcheck")
     assert st == neon_states(4000, "selfcheck")
     dead, fl = st.count("dead") / 4000, st.count("flicker") / 4000

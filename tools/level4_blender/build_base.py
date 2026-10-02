@@ -7,6 +7,10 @@ from mathutils import Matrix, Vector
 
 HERE = r"G:\Roblox\MongoTV\tools\level4_blender"
 TEX = r"G:\Blender\Level4_Cinema\textures"
+# build_all executes this stage before slots.py; keep its PBR texture globals separate from the legacy ones.
+_slot_ns = {}
+exec(compile(open(os.path.join(HERE, "slots.py"), encoding="utf-8").read(), "slots.py", "exec"), _slot_ns)
+slot = _slot_ns["slot"]
 S = 0.28                      # metres per stud
 OX = 23000.0                  # Studio X of the Blender origin
 C = Matrix(((1, 0, 0), (0, 0, -1), (0, 1, 0)))   # Roblox (Y-up) -> Blender (Z-up), a proper rotation
@@ -269,9 +273,23 @@ def build():
         o = bpy.data.objects.new(p["p"].rsplit("/", 1)[-1], unit_mesh(mname, fn))
         o.matrix_world = cf_matrix(p["cf"])
         o.scale = dims(p["s"])
-        mat = material(semantic(p), p["col"], 1.0 - p["t"])
+        sem = semantic(p)
+        # Owner v3: unify plain wall finishes, preserving horizontal slabs/floors that the old semantic
+        # heuristic also calls plaster. Acoustic / velvet panels, ceramic tiles, metal and glass stay intact.
+        is_wall = sem in ("plaster", "wall_dark") and not FLOORY.search(p["p"].rsplit("/", 1)[-1]) and p["s"][1] > min(p["s"][0], p["s"][2])
+        if p["p"] == "Concession/BackWainscot":
+            mat = slot("WAINSCOT_LACQUER")
+        elif is_wall:
+            mat = slot("WALLPAPER_MAIN")
+        elif top == "HiddenService" and sem == "carpet":
+            # The gallery, stair treads, landings and ground runner form one continuous staff route.
+            mat = slot("CARPET_LOBBY")
+        else:
+            mat = material(sem, p["col"], 1.0 - p["t"])
         o["l4_src"] = idx                  # index into l4_dump.json parts
         o["l4_path"] = p["p"]
+        if p["p"].startswith("Shell/C1BlockWall"):
+            o["l4_occluder"] = True         # v3 new solid closure also blocks the player camera
         if "dec" in p:
             o["l4_decals"] = 1             # posters/signs: Studio re-applies the original Decals/SurfaceGuis
         c.objects.link(o)

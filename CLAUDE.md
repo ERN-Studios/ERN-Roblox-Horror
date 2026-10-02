@@ -511,3 +511,17 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   **RoundUI's applyPlayerLighting returns early on it** (no new top-level local; RoundUI is at the 200-register
   limit).
 - Normal maps DO work on EditableMesh-uploaded meshes (tested 2026-09-30 against an imported mesh).
+
+### Added 2026-10-02 - Level 4 facelift v3 (owner's 15 points)
+
+- `Workspace."Level 4 Cinema Blender"` is the v3 build: starlight ceilings + neon light (gains in
+  `tools/level4_blender/make_place.py`, grade in the Level 4 Lighting Controller), one theme wallpaper, Cinema 1's west
+  side removed, single arcade/service doors, boarded street entrance, 3D litter. Details: tools/level4_blender/README.md
+  "Facelift v3" and `artifacts/level4-facelift-v3-20261002/`.
+- **Poppercam only occludes on CanCollide parts with transparency < 0.25**: the cinema's occluder colliders are now
+  black and opaque, inset 0.1 stud inside the visual walls. A client-side `LocalTransparencyModifier` on them (e.g. a
+  debug "hide occluders" toggle) silently turns camera occlusion off again.
+- **Studio MCP sandbox (2026-10-02)**: `execute_luau` has no Network capability (no HttpService, no HttpEnabled),
+  no `shared`/`_G` between calls, background `task.spawn` work dies with the call, and Scripts cannot be created or
+  reparented under Workspace/ServerStorage; `UpdateSourceAsync` on existing scripts and `AssetService:CreateAssetAsync`
+  still work, and a 1.2 MB code payload is accepted. Level 4 imports use `studio_upload.py` + `place_driver.py`.

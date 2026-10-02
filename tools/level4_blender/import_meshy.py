@@ -1,13 +1,15 @@
 # Level 4 cinema: import a Meshy image-to-3D GLB as a prop asset (Blender 5.2).
 #   exec(open(r"G:\Roblox\MongoTV\tools\level4_blender\import_meshy.py").read(), {"SPEC": spec})  # spec or [specs]
-#   blender -b <blend> -P import_meshy.py -- spec.json
+#   python G:/Roblox/_local/l4facelift/v3/blrun.py <copy.blend> import_meshy.py spec.json
 #   python import_meshy.py            # no Blender: self-test of the pure maths
 #
 # SPEC: glb (path), asset (name), dims (x, y, z metres; None = free axis), tris (triangle budget).
 #   Optional: fit "contain" (uniform, fits inside dims) | "stretch" (per axis), yaw_deg (added after
 #   auto_square; use multiples of 90 to fix the front), auto_square (True: turn the smallest amount that
 #   squares the footprint), tex_size 1024, sem "prop" (export ROBLOX_MAT key), col_slices 1,
-#   col_axis "z", sharp_angle 40 (hard edges when decimation drops the GLB normals), tex_dir.
+#   col_axis "z", sharp_angle 40 (hard edges when decimation drops the GLB normals), tex_dir,
+#   collide True (False, or col_slices 0: NO collider at all, e.g. floor litter; the mesh gets l4_col = "[]", which
+#   export_l4 honours even when a placement also sets l4_collide = "bounds").
 #
 # Result, same conventions as props.py: mesh "L4A_<asset>" (metres, origin bottom-centre, front -Y,
 # up +Z, fake user, l4_asset=<asset>) with ONE material "L4A_<asset>" whose 1024 px maps are written to
@@ -15,8 +17,8 @@
 # the same suffixes make_pbr.py uses for the architecture sets.
 # The material carries l4_sem/l4_color/l4_tex/l4_tile/l4_alpha like pmat() plus l4_uv="mesh" and
 # l4_normal/l4_rough/l4_metal (file names); the mesh carries l4_col = JSON [[cx,cy,cz,sx,sy,sz], ...]
-# collision boxes in the same frame. export_l4.py box-projects UVs and ignores the extra maps and
-# l4_col until it is patched to read them. A preview object (+ wire "_COL") lands in the
+# collision boxes in the same frame. export_l4.py preserves mesh UVs, PBR maps and these boxes (an explicit
+# empty l4_col suppresses bounds collision). A preview object (+ wire "_COL" only when there are boxes) lands in the
 # "L4 Meshy Assets" collection, outside "L4 Cinema", so the exporter never picks it up.
 import json, math, os, re, sys
 import numpy as np
@@ -29,7 +31,7 @@ except ImportError:
 
 TEX = r"G:\Blender\Level4_Cinema\textures"
 DEFAULTS = {"fit": "contain", "yaw_deg": 0.0, "auto_square": True, "tex_size": 1024, "sem": "prop",
-            "col_slices": 1, "col_axis": "z", "sharp_angle": 40.0, "tex_dir": TEX}
+            "col_slices": 1, "col_axis": "z", "sharp_angle": 40.0, "tex_dir": TEX, "collide": True}
 STAGE = "L4 Meshy Assets"
 
 
@@ -124,7 +126,19 @@ def _selftest():
     b = slab_boxes(tall, 3)
     assert len(b) == 3 and np.allclose([x[5] for x in b], 1), b                          # no gap mid-height
     assert np.allclose(b[0][4], 2) and np.allclose(b[2][4], 0.01), b                     # floor only in slab 0
+    assert slab_boxes(tall, 0) == []
+    assert collision_boxes(tall, dict(DEFAULTS, collide=False)) == []   # litter, regardless of slice count
+    assert collision_boxes(tall, dict(DEFAULTS, col_slices=0)) == []
+    assert collision_boxes(tall, dict(DEFAULTS, collide=False, col_slices=3)) == []
+    assert collision_boxes(tall, dict(DEFAULTS, col_slices=3)) == b
     print("import_meshy self-test ok")
+
+
+def collision_boxes(tri, sp):
+    """The asset's l4_col boxes; none when sp["collide"] is False or col_slices is 0."""
+    if not sp["collide"] or not sp["col_slices"]:
+        return []
+    return slab_boxes(tri, sp["col_slices"], "xyz".index(sp["col_axis"]))
 
 
 # ---------------------------------------------------------------- Blender side
@@ -332,7 +346,7 @@ def run(spec):
     if me.uv_layers:
         me.uv_layers.active_index = 0
 
-    boxes = slab_boxes(_tris(me), sp["col_slices"], "xyz".index(sp["col_axis"]))
+    boxes = collision_boxes(_tris(me), sp)
 
     # ---- take over the asset name; objects already placed with the old mesh switch to the new one
     for stale in (name, name + "_COL"):
@@ -362,11 +376,12 @@ def run(spec):
     old = bpy.data.meshes.get(name + "_COL")
     if old:
         bpy.data.meshes.remove(old)
-    wire = bpy.data.objects.new(name + "_COL", _box_mesh(name + "_COL", boxes))
-    wire.parent = o
-    wire.display_type = "WIRE"
-    wire.hide_render = True
-    stage.objects.link(wire)
+    if boxes:
+        wire = bpy.data.objects.new(name + "_COL", _box_mesh(name + "_COL", boxes))
+        wire.parent = o
+        wire.display_type = "WIRE"
+        wire.hide_render = True
+        stage.objects.link(wire)
 
     for k in ("meshes", "materials", "images"):  # drop what the import left behind, nothing older;
                                                  # meshes first: joined-away meshes still hold the material

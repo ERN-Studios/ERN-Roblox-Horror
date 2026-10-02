@@ -29,9 +29,9 @@
       "studioPath": "ReplicatedStorage.ZyntraConfig",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 16708,
-      "sha256": "b5f8fbc9b0373d1b039cc57b5380267a02c922cb6f4e22876396ba91f8a3e811",
-      "status": "updated"
+      "bytes": 16706,
+      "sha256": "ac7e4d559adf3d6af1c9f6fc677a0036782bad9926e71caa94cab53c37393ac0",
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.FlashlightProfiles",
@@ -157,9 +157,9 @@
       "studioPath": "ReplicatedStorage.ZyntraSkinsPage",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraSkinsPage.ModuleScript.lua",
-      "bytes": 19438,
-      "sha256": "2dd92ce9389f57917a26ff6b608f6314d492c0ad99c5b7d312c5c4d5620d3bc1",
-      "status": "created"
+      "bytes": 19759,
+      "sha256": "4e1f7847cfb2f7758de645ddfaa3e637527a0c0e77ff610a11dad13db8d38561",
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.NoiseRegistry",
@@ -181,9 +181,9 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 159281,
-      "sha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a",
-      "status": "updated"
+      "bytes": 163203,
+      "sha256": "7dc0483fc2cbbc4dd835b56531bbd565cbdf30c347f3fc9fa4950e207aa8cc5d",
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.AvatarNormalize",
@@ -293,9 +293,9 @@
       "studioPath": "ServerScriptService.LobbyShopDisplay",
       "className": "ModuleScript",
       "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
-      "bytes": 22048,
-      "sha256": "bf18ca625f28689b93289613500efcf35dc2d3b4dd0c5dc6778d9c77e1702c6c",
-      "status": "unchanged"
+      "bytes": 24220,
+      "sha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.RouteMarkerService",
@@ -429,8 +429,8 @@
       "studioPath": "ServerScriptService.Level4V4PreviewAccess",
       "className": "Script",
       "file": "ServerScriptService/Level4V4PreviewAccess.Script.lua",
-      "bytes": 8127,
-      "sha256": "46987ec2b0938ea6c6ec4385103bd136886adf0d7ae3522857c4b5305d780253",
+      "bytes": 10629,
+      "sha256": "2628089773ec0ca8610b8d01925a0d96ca25d39db8be4c687ccdf7809cb6abe8",
       "status": "synced"
     },
     {
@@ -445,9 +445,9 @@
       "studioPath": "ServerScriptService.Level5PreviewAccess",
       "className": "Script",
       "file": "ServerScriptService/Level5PreviewAccess.Script.lua",
-      "bytes": 8042,
-      "sha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504",
-      "status": "created"
+      "bytes": 10544,
+      "sha256": "323d5d2504b1595048eccc7228b8c9054f9e5ec4d27b32aff5f884c2ceeacc8d",
+      "status": "synced"
     },
     {
       "studioPath": "Workspace.Level 4 Cinema V9 QA.OccasionalFixtureFlicker",
@@ -549,9 +549,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 197826,
-      "sha256": "0a9f2669a16d18124acd22a4606ea5a0f8a0e086e63e0960fb4878b3e1ff8356",
-      "status": "updated"
+      "bytes": 198511,
+      "sha256": "38d8b710ca5aa8f41aa2016a0bdb0a900a469b6a855f4bb9fe419d85227fd1c9",
+      "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
@@ -1597,8 +1597,8 @@
       "studioPath": "ServerScriptService.Level6PreviewAccess",
       "className": "Script",
       "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
-      "bytes": 8135,
-      "sha256": "46e8b13509414f41e46f20ee0b57a2cd074831b85dae4543626c30e97f8ed2d9",
+      "bytes": 10762,
+      "sha256": "fa071896a9ac231399d09da41bc3ea26771e174c2ad37bc7ae2b6c5de5217651",
       "status": "synced"
     },
     {
@@ -1630,7 +1630,7 @@
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Layout Generator.ModuleScript.lua",
       "bytes": 47446,
-      "sha256": "5b95d2e19c68457804258154e0b5a6f0fb0b9e73261df70513da15bd83c12b88",
+      "sha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
       "status": "synced"
     },
     {
@@ -1669,16 +1669,16 @@
       "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Visual Adapter.ModuleScript.lua",
-      "bytes": 23194,
-      "sha256": "e41b585ceebc5f814341659610a8360de321650f233a7275de842cb056fbc3bb",
+      "bytes": 23744,
+      "sha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 World Builder.ModuleScript.lua",
-      "bytes": 92349,
-      "sha256": "248d9254bc9d0c6a836cbb46a2d5481d55a07bcc5a70a9042e7fe465441c7c58",
+      "bytes": 102901,
+      "sha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
       "status": "synced"
     },
     {
@@ -1717,8 +1717,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Lighting Controller.LocalScript.lua",
-      "bytes": 44030,
-      "sha256": "54f9901db65584de073e2f7beda26ee542f48de8b7fc889acc45080bb7784886",
+      "bytes": 45552,
+      "sha256": "a86f26c822210ecfbcfacff25fbfbd0eb0facc2d900c3e4b6b9745b6aa2a442f",
       "status": "synced"
     },
     {
@@ -1757,24 +1757,24 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level6PreviewTransport.LocalScript.lua",
-      "bytes": 1361,
-      "sha256": "3621ec9cb5adf11e955ec317e59dca226e3b3d0563f7b6587c34a92ebef9941c",
+      "bytes": 2509,
+      "sha256": "54b077653b1f593b2cfdbb522159c26ce9c1dbb6bef2a2618826b23a189b37fe",
       "status": "synced"
     },
     {
       "studioPath": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
       "className": "Script",
       "file": "Workspace/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
-      "bytes": 4363,
-      "sha256": "6c8caea7b0e3cc71ddf3b755fabcae602ecbe273c91a2d1ab6f6e2a70f3c5e47",
+      "bytes": 4489,
+      "sha256": "1794ea0c31e8cfffe7066fbe936b8beeec902c4916176e6dd3d127906d92d425",
       "status": "synced"
     },
     {
       "studioPath": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
       "className": "Script",
       "file": "Workspace/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
-      "bytes": 1837,
-      "sha256": "1a6938ae27487d1e8d864ce1991038823e5152f6435a58146f8d6d3ff5ef21eb",
+      "bytes": 5030,
+      "sha256": "2b345d49783b3cbf425d56a1c32b8332f54f542273ac93cea581001dbccd47c2",
       "status": "synced"
     },
     {
@@ -1805,8 +1805,48 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
-      "bytes": 6816,
-      "sha256": "10c2907186b269d907d019b1fae74038ac956d7d90c0ed2e2ad544c7a68b7392",
+      "bytes": 10823,
+      "sha256": "ad90ef1e15980c95c81415a061132a06aa269f30acb0c64f729292fdb91d3663",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/RuntimeBake.ModuleScript.lua",
+      "bytes": 8508,
+      "sha256": "c022cdb69d117c1654e398881dee6bd1621d9945e0e6747f3059185b65b07c5d",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/Builder.ModuleScript.lua",
+      "bytes": 11114,
+      "sha256": "1b2f45d140545009a82cca7f5f9400453d3860cd1bc0aa2e4fb39ef96ec97338",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "className": "Script",
+      "file": "ServerScriptService/LobbyReimaginedPreview/Bootstrap.Script.lua",
+      "bytes": 1217,
+      "sha256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/QueueBridge.ModuleScript.lua",
+      "bytes": 3598,
+      "sha256": "19efa5af64c7097c08be95875ea5c6aa040dface8da09670cd9b702e9b0437fa",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/LobbyReimaginedQueueController.LocalScript.lua",
+      "bytes": 4105,
+      "sha256": "7f33b95af12201c32bad76974fd0c768e89d7ef2722482e2c908dd00152870f7",
       "status": "synced"
     }
   ]

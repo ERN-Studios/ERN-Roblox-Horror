@@ -77,7 +77,8 @@ end
 local function swing(d, open, side)
 	d.open = open
 	if open and d.nonBlocking then d.leaf.CanCollide = false end
-	d.hinge.AngularSpeed = if open then 3.2 else 1.1
+	-- Keep wider single leaves near the old half-leaf tip speed (studs/second).
+	d.hinge.AngularSpeed = if open then math.min(3.2, 14 / d.width) else math.min(1.1, 7 / d.width)
 	-- a player on the positive side pushes the leaf to the negative side, and vice versa
 	d.hinge.TargetAngle = if open then (d.fixed or d.angle * -side) else 0
 end

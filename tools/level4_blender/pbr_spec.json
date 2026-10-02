@@ -28,5 +28,8 @@
  "screen_perf":      {"src": "../../artifacts/level4-facelift-20260930/textures/tex_screen_perf.jpg",      "strength": 3.0, "rough_base": 0.9, "rough_var": 0.03},
  "rubber_black":     {"src": "../../artifacts/level4-facelift-20260930/textures/tex_rubber_black.jpg",     "strength": 3.0, "rough_base": 0.8, "rough_var": 0.05},
  "plastic_black":    {"src": "../../artifacts/level4-facelift-20260930/textures/tex_plastic_black.jpg",    "strength": 2.0, "rough_base": 0.55, "rough_var": 0.08},
- "porcelain":        {"src": "../../artifacts/level4-facelift-20260930/textures/tex_porcelain.jpg",        "strength": 1.0, "rough_base": 0.15, "rough_var": 0.05}
+ "porcelain":        {"src": "../../artifacts/level4-facelift-20260930/textures/tex_porcelain.jpg",        "strength": 1.0, "rough_base": 0.15, "rough_var": 0.05},
+ "wallpaper_synth":  {"src": "../../artifacts/level4-facelift-20260930/textures/tex_wallpaper_synth.jpg",  "strength": 3.0, "rough_base": 0.85, "rough_var": 0.05},
+ "board_weathered":  {"src": "../../artifacts/level4-facelift-20260930/textures/tex_board_weathered.jpg",  "strength": 6.0, "rough_base": 0.8, "rough_var": 0.1},
+ "headliner_suede":  {"src": "../../artifacts/level4-facelift-20260930/textures/tex_headliner_suede.jpg",  "strength": 2.0, "rough_base": 0.95, "rough_var": 0.03, "blur": 1.5}
 }
