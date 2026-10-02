@@ -1,0 +1,7 @@
+{
+  "recordedAtUTC": "2026-10-02T20:42:44.991010+00:00",
+  "pid": 39387,
+  "verifiedArgv": "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python tools/level3_promotion_20261002/serve_install.py",
+  "sigtermSent": true,
+  "reason": "Task-owned pinned installer no longer needed after verified live export and local commit."
+}

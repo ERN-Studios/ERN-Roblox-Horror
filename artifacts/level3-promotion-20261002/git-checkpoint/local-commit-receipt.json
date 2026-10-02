@@ -1,0 +1,17 @@
+{
+  "task": "level3-promotion-20261002",
+  "recordedAtUTC": "2026-10-02T20:42:44.991010+00:00",
+  "localCommit": "52b2c0e567cabd88e0670837035d3df992a0f699",
+  "parent": "92c3b5825f647fcf0881c3790a5da7c316da7021",
+  "changedPathCount": 283,
+  "verifiedMirrorCount": 14,
+  "stagingEmptyAfterCommit": true,
+  "unrelatedDirtyFilesPreserved": [
+    ".gitignore",
+    "assets/maps/vesper-cathedral/VesperCathedral.blend"
+  ],
+  "gitHubPushPerformed": false,
+  "robloxPublicationVerified": false,
+  "nativeAfterBackupVerified": false,
+  "publicationBlocker": "Native CUA pipe failed; explicit user approval for AppleScript alternative UI method is pending."
+}
