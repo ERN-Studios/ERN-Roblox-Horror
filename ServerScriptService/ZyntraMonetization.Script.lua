@@ -2940,7 +2940,8 @@ local reentryAttempts = {}
 local function reentryEligible(player)
 	if not player.Parent then return false end
 	if player:GetAttribute("InRound") ~= true then return false end
-	if workspace:GetAttribute("RoundActive") ~= true then return false end
+	if workspace:GetAttribute("RoundActive") ~= true
+		and player:GetAttribute("Level6PlaygroundPreview") ~= true then return false end   -- Level 6 runs on the lobby server
 	if player:GetAttribute("ZyntraReentryUsed") == true then return false end
 	-- GameManager's OnInvoke also refuses an escapee, so this has to as well:
 	-- these conditions gate the AUTO-use after a purchase, and every condition

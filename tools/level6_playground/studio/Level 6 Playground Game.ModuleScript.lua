@@ -34,6 +34,8 @@ local CONFIG = {
 	SightRange = 75, CatchDistance = 5.2, HideRadius = 4.5, HiddenSpotRange = 9,
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 15, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 4.3,   -- the length of the kill cam
+	PartyDownSeconds = 15,     -- the window after the last player falls, as in every other level
+	ReentryGraceSeconds = 8,   -- a re-entered player is not seen for this long
 	GrabDistance = 3.6,   -- how far in front of its victim it stands for the kill cam
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
 	EyeHeight = 2.6,   -- eyes above the root
@@ -58,6 +60,13 @@ if not event then
 end
 
 local returnHandler = nil      -- set by Level6PreviewAccess: sends a player back to the lobby
+-- The round-status remote every level's death, spectate and re-entry UI listens to (GameManager owns it).
+local roundStatus = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
+local DEATH_CAUSE = "Unknown"
+do
+	local ok, advice = pcall(function() return require(ReplicatedStorage:WaitForChild("DeathAdvice", 5)) end)
+	if ok and type(advice) == "table" and type(advice.Unknown) == "string" then DEATH_CAUSE = advice.Unknown end
+end
 local session = nil
 
 function Game.SetReturnHandler(fn)
@@ -443,7 +452,7 @@ function Session:perceive()
 	local best, bestDist = nil, math.huge
 	for player, state in pairs(self.players) do
 		local root = rootOf(player)
-		if root and not state.caught then
+		if root and not state.caught and os.clock() >= (state.graceUntil or 0) then
 			local seen, dist = self:sees(root, params)
 			if seen and dist < bestDist then best, bestDist = player, dist end
 			local speed = flat(root.AssemblyLinearVelocity).Magnitude
@@ -490,20 +499,99 @@ function Session:catch(player)
 	self:say(pick("kill"), true)
 	task.delay(CONFIG.CaughtReturnDelay, function()
 		if held and held.Parent then held.Anchored = false end
-		if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
-			returnHandler(player, "caught")
-		end
-		Game.RemovePlayer(player)
+		-- "then you die": the body drops where it was held and the round's usual death flow takes over
+		-- (spectate, the PARTY DOWN card, Emergency Re-entry). playerDied runs off the humanoid.
+		local humanoid = held and held.Parent and held.Parent:FindFirstChildOfClass("Humanoid")
+		if humanoid and humanoid.Health > 0 then humanoid.Health = 0 else self:playerDied(player) end
 	end)
-	local left = 0
-	for _, s in pairs(self.players) do if not s.caught then left += 1 end end
-	if left == 0 then
-		broadcast(self, "lost")
-		self.phase = "over"
-		task.delay(CONFIG.CaughtReturnDelay + 0.2, function() broadcast(self, "say", "l6_win") end)   -- not over the kill cam
-	elseif self.active then
+	if self:living() > 0 and self.active then
 		task.delay(CONFIG.CaughtReturnDelay + 0.4, function() if self.active then self:say("l6_found_other", true) end end)
 	end
+end
+
+-- Players still on their feet: neither caught nor out through the exit.
+function Session:living()
+	local n = 0
+	for _, state in pairs(self.players) do
+		if not state.caught and not state.escaped then n += 1 end
+	end
+	return n
+end
+
+-- Every death in the level lands here once, whether the doll did it or the player reset. Same events on the
+-- same remote GameManager uses for its own rounds, so RoundUI, the spectate band and the store behave as in
+-- any level: "death" to the party, and "partydown" with its 15 seconds when nobody is left standing.
+function Session:playerDied(player)
+	local state = self.players[player]
+	if not state or state.dead then return end
+	state.caught, state.dead = true, true
+	if self.chase == player then self.chase = nil end
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	for other in pairs(self.players) do
+		if other.Parent == Players then
+			roundStatus:FireClient(other, "death", player.Name, root and root.Position or nil, DEATH_CAUSE)
+		end
+	end
+	if self:living() == 0 and not self.wipedAt then
+		self.wipedAt = os.clock()
+		self.interrupt = true
+		for other in pairs(self.players) do
+			if other.Parent == Players then
+				roundStatus:FireClient(other, "partydown", CONFIG.PartyDownSeconds, player.Name, DEATH_CAUSE)
+			end
+		end
+	end
+end
+
+-- The 15 seconds after the last player falls. True when somebody re-entered and the round goes on.
+function Session:wipeWindow()
+	self:pose("Idle")
+	while self.active and self.wipedAt and os.clock() - self.wipedAt < CONFIG.PartyDownSeconds do
+		self.anim.speed = 0
+		task.wait(0.2)
+		if self:count() == 0 then break end
+	end
+	if self.active and not self.wipedAt and self:living() > 0 then return true end
+	broadcast(self, "lost")
+	broadcast(self, "say", "l6_win")
+	return false
+end
+
+-- Emergency Re-entry (ServerStorage.Level6Reentry, reached through GameManager's ZyntraReentry): one per
+-- player per round, back in the round body at the level's entrance with a few seconds the doll cannot see.
+function Session:reenter(player, free)
+	local state = self.players[player]
+	if not self.active or not state or not state.dead or state.reentering then return false end
+	if not free and player:GetAttribute("ZyntraReentryUsed") == true then return false end
+	state.reentering = true
+	local load = ServerStorage:FindFirstChild("LoadGameplayCharacter")
+	local previous = player.Character
+	local ok, loaded = pcall(function() return load ~= nil and load:Invoke(player) end)
+	state.reentering = nil
+	local character = player.Character
+	if not ok or loaded ~= true or not character or character == previous
+		or not self.active or self.players[player] ~= state then return false end
+	local root = character:WaitForChild("HumanoidRootPart", 5)
+	if not root then return false end
+	root.AssemblyLinearVelocity = Vector3.zero
+	-- the level's entrance, where a party arrives: not home base, where the doll counts
+	local entrance = self.info.model:FindFirstChild("Level6Exit", true)
+	local at = entrance and entrance:IsA("BasePart") and entrance.Position or self.info.spawn
+	character:PivotTo(CFrame.new(at + Vector3.new(0, 3.5, 0)))
+	state.caught, state.dead, state.dunked = false, false, false
+	state.graceUntil = os.clock() + CONFIG.ReentryGraceSeconds
+	if not free then player:SetAttribute("ZyntraReentryUsed", true) end
+	local wasWiped = self.wipedAt ~= nil
+	self.wipedAt = nil
+	for other in pairs(self.players) do
+		if other.Parent == Players then
+			roundStatus:FireClient(other, "reentry", player.Name)
+			if wasWiped then roundStatus:FireClient(other, "partydownclear") end
+		end
+	end
+	event:FireClient(player, "joined", self.round, self.dunks, self:target(), self.phase)
+	return true
 end
 
 -- ---------------------------------------------------------------------------------------
@@ -634,6 +722,7 @@ function Session:seekPhase()
 	while self.active and self.phase == "seek" do
 		task.wait(0.15)
 		if self:count() == 0 then result = "empty"; break end
+		if self.wipedAt then result = "wiped"; break end
 		local seen = self:perceive()
 		if self.phase ~= "seek" then result = "lost"; break end
 		if seen then
@@ -754,6 +843,9 @@ function Session:escapePhase()
 	while self.active and self.phase == "escape" and os.clock() < deadline do
 		task.wait(0.15)
 		if self:count() == 0 then break end
+		if self.wipedAt then
+			if self:wipeWindow() then deadline = os.clock() + CONFIG.EscapeSeconds else break end
+		end
 		self:perceive()
 		for player, state in pairs(self.players) do
 			local root = rootOf(player)
@@ -791,6 +883,10 @@ function Session:run()
 		if not self.active or self:count() == 0 then break end
 		local result = self:seekPhase()
 		if result == "won" then self:escapePhase(); break end
+		if result == "wiped" then
+			if self:wipeWindow() then continue end   -- somebody re-entered: it counts again
+			break
+		end
 		if result == "empty" or result == "lost" or self.phase == "over" then break end
 		broadcast(self, "roundover", result)
 		-- let whatever it is saying finish; "I'll count again" only when the time simply ran out
@@ -808,6 +904,16 @@ end
 function Session:finish()
 	self.active = false
 	self.phase = "over"
+	for player in pairs(self.players) do
+		if player.Parent == Players then
+			roundStatus:FireClient(player, "partydownclear")
+			if returnHandler and player:GetAttribute(IN_PREVIEW) == true then
+				task.spawn(returnHandler, player, "over")
+			end
+			event:FireClient(player, "left")
+		end
+	end
+	table.clear(self.players)
 	if self.heartbeat then self.heartbeat:Disconnect() end
 	if self.child then self.child:Destroy() end
 	self.info.model:SetAttribute("Level6Enraged", nil)
@@ -856,10 +962,46 @@ local function ownRoundCamera(player)
 	}
 end
 
+-- Deaths are read off the humanoid, so a reset or a fall counts the same as the doll's catch.
+local lifeWatch = {}
+local function watchLife(player)
+	if lifeWatch[player] then return end
+	local function hook(character)
+		local humanoid = character:WaitForChild("Humanoid", 5)
+		if not humanoid then return end
+		humanoid.Died:Connect(function()
+			local s = session
+			if s and s.players[player] and player.Character == character then s:playerDied(player) end
+		end)
+	end
+	lifeWatch[player] = player.CharacterAdded:Connect(function(character) task.spawn(hook, character) end)
+	if player.Character then task.spawn(hook, player.Character) end
+end
+
+do
+	local old = ServerStorage:FindFirstChild("Level6Reentry")
+	if old then old:Destroy() end
+	local reentry = Instance.new("BindableFunction")
+	reentry.Name = "Level6Reentry"
+	reentry.OnInvoke = function(player, free)
+		local s = session
+		if not s or typeof(player) ~= "Instance" or not player:IsA("Player") then return false, "UNAVAILABLE" end
+		if free == true then
+			local ok, DevAccess = pcall(function() return require(ReplicatedStorage:WaitForChild("DevAccess", 5)) end)
+			if not ok or not DevAccess.IsAllowed(player) then return false, "UNAVAILABLE" end
+		end
+		if s:reenter(player, free == true) then return true end
+		return false, "UNAVAILABLE"
+	end
+	reentry.Parent = ServerStorage
+end
+
 function Game.AddPlayer(player)
 	local info = map()
 	if not info then return false, "MAP_NOT_READY" end
 	ownRoundCamera(player)
+	watchLife(player)
+	player:SetAttribute("ZyntraReentryUsed", false)
 	if not CONFIG.EntityEnabled then
 		event:FireClient(player, "paused")
 		return true
@@ -880,10 +1022,18 @@ function Game.RemovePlayer(player)
 	local s = session
 	if not s or not s.players[player] then return end
 	s.players[player] = nil
+	if lifeWatch[player] then lifeWatch[player]:Disconnect(); lifeWatch[player] = nil end
 	if player.Parent == Players then event:FireClient(player, "left") end
 	if s:count() == 0 then
 		s.active = false
 		s.interrupt = true
+	elseif s:living() == 0 and not s.wipedAt and s.active then
+		-- the last one standing LEFT rather than fell: the watchers still get their window, with no name on it
+		s.wipedAt = os.clock()
+		s.interrupt = true
+		for other in pairs(s.players) do
+			if other.Parent == Players then roundStatus:FireClient(other, "partydown", CONFIG.PartyDownSeconds, nil, DEATH_CAUSE) end
+		end
 	end
 end
 

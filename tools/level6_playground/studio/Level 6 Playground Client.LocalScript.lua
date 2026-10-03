@@ -200,7 +200,10 @@ end
 -- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
-local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.0675, 0.45    -- owner: 1.2 / 0.45 far too loud; down 70%, then another 50% (2026-10-03)
+local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.12, 0.45
+-- Owner, 2026-10-03: copies on several PA horns arrive at different distances and the track sounded like an
+-- echo. The song is ONE quiet, non-positional track, the same for everybody; nothing hangs on the horns.
+local MUSIC_ON_HORNS = false
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
@@ -255,7 +258,7 @@ local function musicTick(dt)
 	local props = model and model:FindFirstChild("Props")
 	local cam = workspace.CurrentCamera
 	local near = {}
-	if props and cam then
+	if props and cam and MUSIC_ON_HORNS then
 		local all = {}
 		for _, h in ipairs(props:GetChildren()) do
 			if h.Name == "pa_speaker" then all[#all + 1] = h end
@@ -291,9 +294,28 @@ local function musicTick(dt)
 	end
 end
 
+-- A sound Roblox has not approved (moderation pending or refused) exists as an instance and plays nothing.
+-- The effects are checked once in the background; a refused one reports "not there", so its caller's
+-- fallback is heard instead of silence.
+local refused = {}
+task.spawn(function()
+	local voice = counter:WaitForChild("Voice", 30)
+	if not voice then return end
+	for _, key in ipairs({"l6_chase_shriek", "l6_chase_loop", "l6_rage_scream", "l6_rage_loop", "l6_kill_grab", "l6_kill_breath"}) do
+		local sound = voice:FindFirstChild(key)
+		if sound then
+			pcall(function()
+				game:GetService("ContentProvider"):PreloadAsync({sound}, function(_, status)
+					if status ~= Enum.AssetFetchStatus.Success then refused[key] = true end
+				end)
+			end)
+		end
+	end
+end)
+
 local function oneShot(key, volume)
 	local voice = counter:FindFirstChild("Voice")
-	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
+	local source = AUDIO_ENABLED and not refused[key] and voice and voice:FindFirstChild(key)
 	if not source then return end
 	local o = source:Clone()
 	o.Parent = audio
@@ -848,10 +870,13 @@ killCam = function()
 		black.Parent = cover
 		cover.Parent = player:WaitForChild("PlayerGui")
 		task.spawn(function()
+			-- Dead in the level now, not sent home: the cover holds until the spectate view (or the lobby,
+			-- for a player who left) owns the screen, and the spectate controller owns the camera from there.
 			local t0 = os.clock()
-			while player:GetAttribute(IN_PREVIEW) == true and os.clock() - t0 < 9 do task.wait(0.1) end
-			task.wait(0.8)
-			cam.CameraType = Enum.CameraType.Custom
+			while player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Spectating") ~= true
+				and os.clock() - t0 < 2.5 do task.wait(0.1) end
+			task.wait(0.4)
+			if player:GetAttribute("Spectating") ~= true then cam.CameraType = Enum.CameraType.Custom end
 			pulse(black, "BackgroundTransparency", 0, 1, 1.2)
 			task.wait(1.3)
 			cover:Destroy()
@@ -876,6 +901,7 @@ killCam = function()
 	if gauge then gauge.Enabled = false end
 	task.delay(DURATION + 6, function()
 		horror.killing = false
+		countLabel.Text = ""
 		objective(nil)
 		for item in pairs(shown) do
 			if item ~= card then item.Visible = true end

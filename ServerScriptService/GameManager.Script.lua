@@ -93,7 +93,7 @@ if not zyntraReentry then
  zyntraReentry.Name = "ZyntraReentry"
  zyntraReentry.Parent = ServerStorage
 end
-zyntraReentry.OnInvoke = function() return false end
+zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
 
 local remotes = RS:WaitForChild("Remotes")
 local status = remotes:WaitForChild("RoundStatus")
@@ -1155,9 +1155,9 @@ local function onCharacter(player, char)
   player.CameraMode = Enum.CameraMode.Classic
   player.CameraMinZoomDistance = 8
   player.CameraMaxZoomDistance = 18
-  if not inRound[player] then
+  if not inRound[player] and player:GetAttribute("Level6PlaygroundPreview") ~= true then
    task.delay(3, function()
-    if player.Parent and not inRound[player] then loadLobbyCharacter(player) end
+    if player.Parent and not inRound[player] and player:GetAttribute("Level6PlaygroundPreview") ~= true then loadLobbyCharacter(player) end
    end)
   end
  end)
@@ -2149,7 +2149,7 @@ recoverFailedEntry = function(attempt, reason, arrivals)
  workspace:SetAttribute("RoundActive", false)
  workspace:SetAttribute("RoundLoadingState", "failed")
  workspace:SetAttribute("LoadStage", "WORLD_ERROR")
- zyntraReentry.OnInvoke = function() return false end
+ zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
  for _, player in ipairs(livePlayers(group)) do
   loadingFailures[player] = reason
   player:SetAttribute("RoundLoadingError", reason == "LOADING_TIMEOUT" and "timeout" or "failed")
@@ -3005,7 +3005,7 @@ playRound = function(participants)
  local function sendWipedPartyHome()
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", false)
-  zyntraReentry.OnInvoke = function() return false end
+  zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
 	closeRoundLifecycle()
   fireGroup(participants, "lose", 0, 0, #participants)
   task.wait(5)
@@ -3120,7 +3120,7 @@ playRound = function(participants)
  clearPartyDown()
  workspace:SetAttribute("PostWinIntermissionActive", result == "win")
  workspace:SetAttribute("RoundActive", false)
- zyntraReentry.OnInvoke = function() return false end
+ zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
  if result ~= "win" then
   workspace:SetAttribute("LightMode", "NORMAL")
   workspace:SetAttribute("FlickerBoost", 0)
@@ -3420,7 +3420,7 @@ local function launchBlenderPreview(player)
     warn("[Level 1 Blender Preview] " .. tostring(problem))
     workspace:SetAttribute("RoundActive", false)
     workspace:SetAttribute("PostWinIntermissionActive", false)
-    zyntraReentry.OnInvoke = function() return false end
+    zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
     local recovered, recoveryError = pcall(returnGroupToLobby, participants)
     if not recovered then warn("[Level 1 Blender Preview] recovery failed: " .. tostring(recoveryError)) end
    end
@@ -3502,7 +3502,7 @@ do
      warn("[Level 2 Blender Preview] " .. tostring(problem))
      workspace:SetAttribute("RoundActive", false)
      workspace:SetAttribute("PostWinIntermissionActive", false)
-     zyntraReentry.OnInvoke = function() return false end
+     zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
      local recovered, recoveryError = pcall(returnGroupToLobby, participants)
      if not recovered then warn("[Level 2 Blender Preview] recovery failed: " .. tostring(recoveryError)) end
     end

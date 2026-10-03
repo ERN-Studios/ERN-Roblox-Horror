@@ -3194,7 +3194,7 @@ end)
 
 local function updateReentry()
 	local inRound = player:GetAttribute("InRound") == true
-	local roundActive = workspace:GetAttribute("RoundActive") == true
+	local roundActive = workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true
 	local used = player:GetAttribute("ZyntraReentryUsed") == true
 	if not inRound or not roundActive then reentryDismissed = false end
 	local shouldShow = inRound and roundActive and reentryDead and not used and not reentryDismissed

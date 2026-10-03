@@ -5074,7 +5074,7 @@ do
 	function pd.refresh()
 		if not pd.frame.Visible then return end
 		local eligible = player:GetAttribute("InRound") == true
-			and workspace:GetAttribute("RoundActive") == true
+			and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 			and player:GetAttribute("ZyntraReentryUsed") ~= true
 		local credits = tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0
 		pd.reentry.Visible = eligible
@@ -5097,7 +5097,7 @@ do
 			pd.free.Text = busy and "RESPAWNING..." or "FREE RESPAWN  //  DEV"
 			pd.free.Active = pd.armed and not busy
 				and player:GetAttribute("InRound") == true
-				and workspace:GetAttribute("RoundActive") == true
+				and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 			pd.free.Selectable = pd.free.Active
 		end
 	end

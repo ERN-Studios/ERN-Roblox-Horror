@@ -282,7 +282,7 @@ end
 
 local function chipAvailable()
 	return player:GetAttribute("InRound") == true
-		and workspace:GetAttribute("RoundActive") == true
+		and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 		and alive()
 		and player:GetAttribute("Spectating") ~= true
 		and player:GetAttribute("Escaped") ~= true
@@ -338,7 +338,7 @@ end
 
 local function openCard()
 	if shade.Visible or player:GetAttribute("InRound") ~= true
-		or workspace:GetAttribute("RoundActive") ~= true then return end
+		or not (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true) then return end
 	stopHold()
 	-- The card RENDERS the shared latch rather than clearing it: a request that
 	-- is already in flight (held down, then died) must not become a second one.

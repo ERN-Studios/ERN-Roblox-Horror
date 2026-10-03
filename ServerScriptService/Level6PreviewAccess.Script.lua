@@ -20,6 +20,12 @@ function Runtime.Leave(player, died)
 	player:SetAttribute(IN_PREVIEW, nil)
 	if was then player:SetAttribute("InRound", false) end
 	Playground.RemovePlayer(player)
+	if was and player.Parent == Players then
+		-- the same word GameManager sends a player it stands back up in the lobby: RoundUI clears its round state on it
+		local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+		local status = remotes and remotes:FindFirstChild("RoundStatus")
+		if status then status:FireClient(player, "lobby") end
+	end
 	if was and not died and player.Parent == Players then
 		-- Back into the player's own avatar at the lobby spawn. A death is respawned by GameManager.
 		task.spawn(function()
@@ -30,8 +36,6 @@ function Runtime.Leave(player, died)
 end
 function Runtime.Join(player)
 	player:SetAttribute(IN_PREVIEW, true)
-	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-	if humanoid then humanoid.Died:Once(function() Runtime.Leave(player, true) end) end
 	local ok, reason = Playground.AddPlayer(player)
 	if not ok then player:SetAttribute(IN_PREVIEW, nil) end
 	return ok, reason
@@ -47,6 +51,17 @@ if not transport then
 	transport.Parent = ReplicatedStorage
 end
 assert(transport:IsA("RemoteEvent"), "Level6PreviewTransport has wrong class")
+-- Back to lobby from inside the level (the exit chip and the spectate band's button send this on the round
+-- remote; GameManager only answers it inside its own rounds).
+do
+	local status = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
+	status.OnServerEvent:Connect(function(player, message)
+		if message == "leaveround" and player:GetAttribute(IN_PREVIEW) == true then
+			status:FireClient(player, "leaveack")
+			Runtime.Leave(player)
+		end
+	end)
+end
 -- A live level is played in the round body: the hazmat StarterCharacter with InRound set, which is what
 -- the first-person camera and its C toggle, the flashlight, sprint and the hidden lobby HUD all key on.
 function Runtime.Suit(player, frame)
@@ -66,7 +81,6 @@ function Runtime.Suit(player, frame)
 	if not humanoid or not root or player:GetAttribute(IN_PREVIEW) ~= true then return end
 	root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
 	character:PivotTo(frame)
-	humanoid.Died:Once(function() Runtime.Leave(player, true) end)
 	transport:FireClient(player, "ArrivalFacing", frame, MODEL_NAME)
 end
 local pending, nextUse = {}, {}

@@ -121,7 +121,10 @@ local function livingOthers()
 	for _, p in ipairs(Players:GetPlayers()) do
 		-- only players still ACTIVE in the maze: alive and not escaped (escapees
 		-- sit parked in the safe room — nothing to watch there)
-		if p ~= player and p:GetAttribute("Escaped") ~= true then
+		-- In Level 6 (lobby server) only the others in the level, never somebody standing in the lobby.
+		if p ~= player and p:GetAttribute("Escaped") ~= true
+			and (player:GetAttribute("Level6PlaygroundPreview") ~= true
+				or p:GetAttribute("Level6PlaygroundPreview") == true) then
 			local char = p.Character
 			local hum = char and char:FindFirstChildOfClass("Humanoid")
 			if hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then
@@ -340,7 +343,7 @@ UIDevice.Changed:Connect(function()
 end)
 
 local function startSpectate()
-	if spectating or not workspace:GetAttribute("RoundActive") then return end
+	if spectating or not (workspace:GetAttribute("RoundActive") or player:GetAttribute("Level6PlaygroundPreview") == true) then return end
 	spectating = true
 	-- Publish the state. "Spectating" was already being READ by the Level 2
 	-- Slidemouth client and (now) by the movement cluster, but nothing had ever
