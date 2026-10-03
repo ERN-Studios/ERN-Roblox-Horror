@@ -1628,100 +1628,95 @@ local shopDetail = {Order = {}, Items = {}}
 --      product NAME on one line at its 18px face; below it the card is mostly
 --      icon, so the page takes one full-width column and scrolls instead.
 table.insert(layoutHooks, function(fit)
-	-- THE SAME THREE TIERS the upgrade cards use (see the note above them), and
-	-- the icon is why this page needed them most: at the authored 76px it and its
-	-- paddings are 118 of the 188px a portrait phone's column has to spend, so the
-	-- copy got a third of the card and four wrapped lines of 12px type. Row 3 is
-	-- the authored card -- 14/76/18, copyLeft 104, copyInset 118 -- unchanged.
+	-- SHOP_GRID_20261003 (owner, after the UI concepts: "card grid with item art and
+	-- price, a detail pane and one BUY button"). This replaces the list of wide
+	-- cards. Every tier is now the same page: a GRID of small cards -- art, name,
+	-- price chip -- and ONE detail pane that carries the description and the only
+	-- purchase button. The three faces are the same three tiers the upgrade cards
+	-- use; the phone face borrows the heavier type and the 44px chip.
 	local face = ({
-		{Pad = 10, Icon = 52, IconTop = 12, Title = 14, Desc = 11, Lead = 10, Foot = 8},
-		{Pad = 14, Icon = 64, IconTop = 16, Title = 16, Desc = 12, Lead = 16, Foot = 12},
-		{Pad = 14, Icon = 76, IconTop = 18, Title = 18, Desc = 12, Lead = 16, Foot = 12},
+		{Pad = 8, Art = 52, Title = 13, Chip = 12, Min = 124},
+		{Pad = 10, Art = 68, Title = 14, Chip = 13, Min = 140},
+		{Pad = 12, Art = 84, Title = 15, Chip = 13, Min = 150},
 	})[(fit.Compact and fit.Touch) and 1 or (fit.Touch and 2 or 3)]
-	-- The copy column starts after the icon (pad + icon + pad) and ends at the
-	-- card's own right pad. Stated once here, so the measurement and the
-	-- placement below cannot disagree about where the text goes.
-	local copyLeft = face.Pad * 2 + face.Icon
-	local copyInset = copyLeft + face.Pad
-	local buyHeight = math.max(fit.Tap, 38)
+	local chipHeight = math.max(fit.Tap, 34)
+	local GAP = 10
 
-	-- LIST + DETAIL at the pointer tier (shop-research.md findings 2, 5 and 7).
-	-- A shop has to let a player compare items before spending, and six cards
-	-- carrying four wrapped lines of 12px copy each is a grid, not a browser. So
-	-- at a pointer device with room for it the page splits: the cards become a
-	-- LIST on the left and the selected item gets a pane of its own on the right,
-	-- with the big icon, the live price and the description broken into lines.
-	--
-	-- TOUCH KEEPS THE CARD LIST EXACTLY AS IT IS. Two panes on a handheld is two
-	-- unreadable columns, and the engine owns the bottom corners a detail pane
-	-- would sit in. 760 is the measured floor for the split: 46% of it still
-	-- gives the list a 343px column, which is wider than the one-column card a
-	-- 375px phone already reads.
-	local twoPane = not fit.Touch and fit.ContentWidth >= 760
-	local listWidth = twoPane and math.floor((fit.ContentWidth - 14) * 0.46)
-		or fit.ContentWidth
-	shopScroll.Size = twoPane
-		and UDim2.fromOffset(listWidth, fit.ContentHeight)
-		or UDim2.fromScale(1, 1)
-	if shopDetail.apply then
-		shopDetail.apply(fit, twoPane, listWidth + 14, fit.ContentWidth - listWidth - 14)
+	-- WHERE THE PANE GOES. Beside the grid while the page is wide enough to give
+	-- both a readable column (every landscape phone is); under it on a portrait
+	-- phone. The pane itself refuses a box it cannot lay out, and PaneOpen
+	-- reports what it decided, so the cards know whether a press can select.
+	local side = fit.ContentWidth >= 500
+	local gridWidth, gridHeight
+	if side then
+		local paneWidth = math.clamp(math.floor(fit.ContentWidth * 0.40), 232, 430)
+		gridWidth, gridHeight = fit.ContentWidth - paneWidth - GAP, fit.ContentHeight
+		if shopDetail.apply then
+			shopDetail.apply(fit, gridWidth + GAP, 0, paneWidth, fit.ContentHeight)
+		end
+	else
+		local paneHeight = math.clamp(math.floor(fit.ContentHeight * 0.36), 150, 240)
+		gridWidth, gridHeight = fit.ContentWidth, fit.ContentHeight - paneHeight - GAP
+		if shopDetail.apply then
+			shopDetail.apply(fit, 0, gridHeight + GAP, fit.ContentWidth, paneHeight)
+		end
 	end
+	if not shopDetail.PaneOpen then gridWidth, gridHeight = fit.ContentWidth, fit.ContentHeight end
+	shopScroll.Position = UDim2.new()
+	shopScroll.Size = UDim2.fromOffset(gridWidth, gridHeight)
 	for _, entry in ipairs(productCards) do
-		-- The row is only a pick target where there is a pane for it to fill.
+		-- The card is only a pick target where there is a pane for it to fill.
 		-- SetEnabled takes Selectable and Modal down with Active, so a gamepad
 		-- cannot land on an overlay that does nothing.
-		UIDevice.SetEnabled(entry.Pick, twoPane)
+		UIDevice.SetEnabled(entry.Pick, shopDetail.PaneOpen == true)
 	end
 
-	local twoUpWidth = math.floor(listWidth * 0.5) - 8
-	local twoUp = true
+	-- AS MANY COLUMNS AS THE FACE'S MINIMUM CARD ALLOWS, then the cards share the
+	-- row exactly. 8px of the scroll frame is the scroll bar's own lane.
+	local usable = gridWidth - 8
+	local columns = math.max(1, math.floor((usable + GAP) / (face.Min + GAP)))
+	local cellWidth = math.floor((usable - (columns - 1) * GAP) / columns)
+	local copyWidth = math.max(48, cellWidth - face.Pad * 2)
+	-- ONE cell size for the whole grid, so the name box is the TALLEST name's
+	-- measured height at this width (C_SHOP_CARD_MEASURED_20260830 still holds:
+	-- nothing in the card is a constant the copy could outgrow).
+	local nameHeight = face.Title + 4
 	for _, entry in ipairs(productCards) do
-		if textWidthFor(entry.Heading.Text, face.Title, entry.Heading.Font)
-			> twoUpWidth - copyInset then
-			twoUp = false
-			break
-		end
-	end
-	local cellWidth = twoUp and twoUpWidth or (listWidth - 8)
-	local copyWidth = math.max(48, cellWidth - copyInset)
-	-- The icon's own bottom edge. A card is never shorter than the icon standing
-	-- beside its copy.
-	local bodyBottom = face.IconTop + face.Icon
-	for _, entry in ipairs(productCards) do
-		-- The icon is SIZED here rather than at build, because its width is what
-		-- sets copyLeft. Its UICorner keeps the authored 38px radius: the engine
-		-- clamps CornerRadius to half the smaller side, so the same corner draws a
-		-- circle at 76, at 64 and at 52 and nothing here has to restate it.
-		entry.Icon.Size = UDim2.fromOffset(face.Icon, face.Icon)
-		entry.Icon.Position = UDim2.fromOffset(face.Pad, face.IconTop)
 		entry.Heading.TextSize = face.Title
-		entry.Desc.TextSize = face.Desc
-		-- Measured at the label's OWN face, not a repeated literal, so a face
-		-- change cannot leave the box sized for the other one.
-		local titleHeight = math.max(22, textHeightFor(entry.Heading.Text,
-			face.Title, entry.Heading.Font, copyWidth))
-		local descHeight = math.max(14, textHeightFor(entry.Desc.Text,
-			face.Desc, entry.Desc.Font, copyWidth))
-		-- MEASURED at copyWidth, but SIZED against the cell's own width, the way
-		-- the authored card was. The grid resolves 0.5 of the canvas itself and
-		-- may land a pixel either side of the width measured here; an offset
-		-- width would hang that pixel outside the card.
-		if entry.Tag then
-			entry.Tag.Position = UDim2.fromOffset(copyLeft, 10)
-			entry.Tag.Size = UDim2.new(1, -copyInset, 0, 18)
-		end
-		entry.Heading.Position = UDim2.fromOffset(copyLeft, entry.Top)
-		entry.Heading.Size = UDim2.new(1, -copyInset, 0, titleHeight)
-		entry.Desc.Position = UDim2.fromOffset(copyLeft, entry.Top + titleHeight + 6)
-		entry.Desc.Size = UDim2.new(1, -copyInset, 0, descHeight)
-		entry.Buy.Size = UDim2.new(1, -face.Pad * 2, 0, buyHeight)
-		entry.Buy.Position = UDim2.new(0, face.Pad, 1, -(buyHeight + face.Foot))
-		bodyBottom = math.max(bodyBottom, entry.Top + titleHeight + 6 + descHeight)
+		nameHeight = math.max(nameHeight, textHeightFor(entry.Heading.Text,
+			face.Title, entry.Heading.Font, copyWidth) + TEXT_FIT_SLACK)
 	end
-	local cellHeight = bodyBottom + face.Lead + buyHeight + face.Foot
-	shopGrid.CellSize = twoUp
-		and UDim2.new(0.5, -8, 0, cellHeight)
-		or UDim2.new(1, -8, 0, cellHeight)
+	local tagHeight = 14
+	local artTop = face.Pad + tagHeight + 2
+	local nameTop = artTop + face.Art + 6
+	for _, entry in ipairs(productCards) do
+		if entry.Tag then
+			-- "PERMANENT PASS" is wider than a phone card; the pane says it in full.
+			if entry.Tag.Name == "PassTag" then entry.Tag.Text = "PASS" end
+			entry.Tag.TextXAlignment = Enum.TextXAlignment.Center
+			entry.Tag.Position = UDim2.fromOffset(face.Pad, face.Pad - 2)
+			entry.Tag.Size = UDim2.new(1, -face.Pad * 2, 0, tagHeight)
+		end
+		-- A rounded TILE, not the old circle: the art is the card now.
+		entry.Icon.Size = UDim2.fromOffset(face.Art, face.Art)
+		entry.Icon.Position = UDim2.new(0.5, -math.floor(face.Art / 2), 0, artTop)
+		local rounding = entry.Icon:FindFirstChildOfClass("UICorner")
+		if rounding then rounding.CornerRadius = UDim.new(0, 12) end
+		entry.Heading.TextXAlignment = Enum.TextXAlignment.Center
+		entry.Heading.TextYAlignment = Enum.TextYAlignment.Top
+		entry.Heading.Position = UDim2.fromOffset(face.Pad, nameTop)
+		entry.Heading.Size = UDim2.new(1, -face.Pad * 2, 0, nameHeight)
+		-- The description lives in the pane. Hidden means MEASURABLY hidden: the
+		-- regression sweep reads the label's own Visible flag.
+		entry.Desc.Visible = false
+		entry.Desc.Size = UDim2.fromOffset(0, 0)
+		entry.Buy.TextSize = face.Chip
+		entry.Buy.Size = UDim2.new(1, -face.Pad * 2, 0, chipHeight)
+		entry.Buy.Position = UDim2.new(0, face.Pad, 1, -(chipHeight + face.Pad))
+	end
+	shopGrid.CellPadding = UDim2.fromOffset(GAP, GAP)
+	shopGrid.CellSize = UDim2.fromOffset(cellWidth,
+		nameTop + nameHeight + 8 + chipHeight + face.Pad)
 end)
 
 local function makeProductCard(key, item, kind)
@@ -1867,7 +1862,16 @@ local function makeProductCard(key, item, kind)
 		end
 	end
 	productPurchase[key] = requestPurchase
-	buy.Activated:Connect(requestPurchase)
+	-- SHOP_GRID_20261003: where the detail pane is drawn it holds the ONE purchase
+	-- button, and the chip on the card is the price -- pressing it selects, like
+	-- the rest of the card. Without a pane (it refused its box) the chip buys.
+	buy.Activated:Connect(function()
+		if shopDetail.PaneOpen and shopDetail.select then
+			shopDetail.select(key)
+		else
+			requestPurchase()
+		end
+	end)
 	return card
 end
 
@@ -2019,9 +2023,8 @@ do
 	buy.BackgroundColor3 = Color3.fromRGB(21, 55, 53)
 	outline(buy, COLORS.accent, 0.2, 1.5)
 
-	local geom = {Visible = false, Left = 0, Width = 0, Height = 0, Tap = 32}
+	local geom = {Visible = false, Left = 0, Top = 0, Width = 0, Height = 0, Tap = 32}
 	local selected = nil
-	local PAD = 24
 
 	local function setContentVisible(on)
 		for _, node in ipairs(frame:GetDescendants()) do
@@ -2037,62 +2040,100 @@ do
 		-- invisible frame still resolves an AbsoluteSize. A pane that only turned
 		-- its own Visible off would leave eight labels claiming boxes that are not
 		-- on screen.
-		if not geom.Visible or geom.Width < 240 or geom.Height < 170 then
+		-- SHOP_GRID_20261003: the pane is on every tier now, so it has to lay out in
+		-- a landscape phone's 124px of height and a portrait phone's 290px of width.
+		-- Below 220x108 there is no arrangement of an icon, a name and a 44px button
+		-- that reads, and the page falls back to cards that buy on their own chip.
+		if not geom.Visible or geom.Width < 220 or geom.Height < 108 then
 			frame.Visible = false
 			frame.Size = UDim2.fromOffset(0, 0)
 			setContentVisible(false)
+			shopDetail.PaneOpen = false
 			return
 		end
+		shopDetail.PaneOpen = true
 		frame.Visible = true
 		setContentVisible(true)
-		frame.Position = UDim2.fromOffset(geom.Left, 0)
+		frame.Position = UDim2.fromOffset(geom.Left, geom.Top)
 		frame.Size = UDim2.fromOffset(geom.Width, geom.Height)
 
-		-- The enlarged image, but never so large it takes the pane's own height.
-		local iconSize = math.clamp(math.floor(geom.Height * 0.22), 72, 128)
+		-- COMPACT is a short or narrow pane: tighter padding, a smaller icon and
+		-- one face down. SHORT (a landscape phone) drops the kind line and the
+		-- separate price too -- the button and the card's chip both say the price.
+		local compact = geom.Height < 250 or geom.Width < 300
+		local short = geom.Height < 150
+		local PAD = compact and 10 or 24
+		local iconSize = compact and math.clamp(math.floor(geom.Height * 0.32), 40, 72)
+			or math.clamp(math.floor(geom.Height * 0.22), 72, 128)
 		icon.Size = UDim2.fromOffset(iconSize, iconSize)
 		icon.Position = UDim2.fromOffset(PAD, PAD)
-		monogram.TextSize = math.max(16, math.floor(iconSize * 0.28))
-		local copyLeft = PAD + iconSize + 18
+		monogram.TextSize = math.max(12, math.floor(iconSize * 0.28))
+		local copyLeft = PAD + iconSize + (compact and 10 or 18)
 		local copyWidth = math.max(60, geom.Width - copyLeft - PAD)
 
+		local buyHeight = math.max(geom.Tap, 44)
+		local buyTop = geom.Height - PAD - buyHeight
+		buy.Size = UDim2.fromOffset(geom.Width - PAD * 2, buyHeight)
+		buy.Position = UDim2.fromOffset(PAD, buyTop)
+
+		kind.Visible = not short
 		kind.Position = UDim2.fromOffset(copyLeft, PAD + 2)
 		kind.Size = UDim2.fromOffset(copyWidth, 16)
-		local nameFace = geom.Width >= 440 and 28 or 22
+		local nameTop = short and PAD or (PAD + 22)
+		local nameFace = compact and 16 or (geom.Width >= 440 and 28 or 22)
 		name.TextSize = nameFace
 		-- TEXT_FIT_SLACK for the reason the header carries it: this box is chosen
 		-- with GetTextSize and re-measured by the regression with
 		-- GetTextBoundsAsync, and the two do not agree to the pixel.
 		local nameHeight = math.max(nameFace + 8,
 			textHeightFor(name.Text, nameFace, name.Font, copyWidth) + TEXT_FIT_SLACK)
-		name.Position = UDim2.fromOffset(copyLeft, PAD + 22)
+		name.Position = UDim2.fromOffset(copyLeft, nameTop)
 		name.Size = UDim2.fromOffset(copyWidth, nameHeight)
-		price.Position = UDim2.fromOffset(copyLeft, PAD + 26 + nameHeight)
+		local priceTop = nameTop + nameHeight + 4
+		-- "IN YOUR ACCOUNT" at the authored 20px is 168px, wider than a compact
+		-- pane's copy column: step the face down, and if even that does not fit the
+		-- line goes -- the button below already says OWNED or the price.
+		local priceFace = 20
+		if textWidthFor(price.Text, priceFace, price.Font) + TEXT_FIT_SLACK > copyWidth then priceFace = 14 end
+		price.TextSize = priceFace
+		price.Visible = not short and priceTop + 26 <= buyTop - 4
+			and textWidthFor(price.Text, priceFace, price.Font) + TEXT_FIT_SLACK <= copyWidth
+		price.Position = UDim2.fromOffset(copyLeft, priceTop)
 		price.Size = UDim2.fromOffset(copyWidth, 26)
 
-		local buyHeight = math.max(geom.Tap, 44)
-		buy.Size = UDim2.fromOffset(geom.Width - PAD * 2, buyHeight)
-		buy.Position = UDim2.fromOffset(PAD, geom.Height - PAD - buyHeight)
+		-- WHAT YOU GET takes whatever is left between the header block and the
+		-- button, whole lines only: a bullet that does not fit is not drawn.
+		local headerBottom = math.max(PAD + iconSize, price.Visible and (priceTop + 26) or (nameTop + nameHeight))
+		local noteRoom = not compact
+		note.Visible = noteRoom
 		note.Size = UDim2.fromOffset(geom.Width - PAD * 2, 18)
-		note.Position = UDim2.fromOffset(PAD, geom.Height - PAD - buyHeight - 24)
-
-		local listTop = math.max(PAD + iconSize + 20, PAD + 26 + nameHeight + 32)
-		getTitle.Position = UDim2.fromOffset(PAD, listTop)
-		getTitle.Size = UDim2.fromOffset(geom.Width - PAD * 2, 16)
+		note.Position = UDim2.fromOffset(PAD, buyTop - 24)
+		local listTop = headerBottom + (compact and 10 or 20)
+		local listBottom = buyTop - (noteRoom and 30 or 8)
 		local bulletWidth = geom.Width - PAD * 2
-		local used = 0
+		local room = listBottom - (listTop + 22)
+		local used, shown = 0, 0
 		for _, row in ipairs(bullets:GetChildren()) do
 			if row:IsA("TextLabel") then
 				local rowHeight = math.max(16,
 					textHeightFor(row.Text, row.TextSize, row.Font, bulletWidth) + TEXT_FIT_SLACK)
 				row.Size = UDim2.fromOffset(bulletWidth, rowHeight)
-				used += rowHeight + 6
+				local fits = used + rowHeight <= room
+				row.Visible = fits
+				if fits then
+					used += rowHeight + 6
+					shown += 1
+				else
+					room = -1   -- nothing after the first line that does not fit
+				end
 			end
 		end
-		local room = geom.Height - PAD - buyHeight - 30 - (listTop + 22)
+		getTitle.Visible = shown > 0
+		bullets.Visible = shown > 0
+		getTitle.Position = UDim2.fromOffset(PAD, listTop)
+		getTitle.Size = UDim2.fromOffset(geom.Width - PAD * 2, 16)
 		bullets.Position = UDim2.fromOffset(PAD, listTop + 22)
-		bullets.Size = UDim2.fromOffset(bulletWidth,
-			math.max(0, math.min(math.max(0, used - 6), room)))
+		bullets.Size = UDim2.fromOffset(bulletWidth, math.max(0, used - 6))
 	end
 
 	-- ". " and nothing cleverer. A full stop with no space after it is a decimal
@@ -2164,9 +2205,9 @@ do
 	shopDetail.priceChanged = function(key)
 		if selected == key then render() end
 	end
-	shopDetail.apply = function(fit, twoPane, left, width)
-		geom.Visible = twoPane
-		geom.Left, geom.Width, geom.Height = left, width, fit.ContentHeight
+	shopDetail.apply = function(fit, left, top, width, height)
+		geom.Visible = true
+		geom.Left, geom.Top, geom.Width, geom.Height = left, top, width, height
 		geom.Tap = fit.Tap
 		layoutDetail()
 	end
