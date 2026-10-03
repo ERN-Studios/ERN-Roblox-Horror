@@ -39,27 +39,27 @@ def collection(name):
 # ---- materials ---------------------------------------------------------------------------
 PALETTE = {
     # padded vinyl, slightly dirty 90s primaries
-    # (a touch more saturated than the concept art, on the owner's request)
-    'yellow': (0.96, 0.72, 0.02), 'red': (0.80, 0.045, 0.04), 'blue': (0.03, 0.15, 0.74),
-    'green': (0.06, 0.55, 0.13), 'purple': (0.36, 0.09, 0.58), 'pink': (0.95, 0.17, 0.50),
-    'cyan': (0.03, 0.58, 0.80), 'orange': (0.97, 0.36, 0.03), 'navy': (0.02, 0.04, 0.26),
+    # the concept art's deep, dusty colours, a little more saturated on the owner's request (linear RGB)
+    'yellow': (0.66, 0.38, 0.01), 'red': (0.40, 0.02, 0.015), 'blue': (0.015, 0.04, 0.30),
+    'green': (0.025, 0.21, 0.04), 'purple': (0.13, 0.03, 0.23), 'pink': (0.56, 0.07, 0.21),
+    'cyan': (0.02, 0.25, 0.38), 'orange': (0.64, 0.15, 0.01), 'navy': (0.008, 0.012, 0.075),
     # floor
-    'mat_green': (0.10, 0.50, 0.17), 'mat_blue': (0.06, 0.15, 0.62), 'concrete': (0.36, 0.33, 0.29),
+    'mat_green': (0.03, 0.14, 0.042), 'mat_blue': (0.014, 0.03, 0.16), 'concrete': (0.20, 0.19, 0.17),
     # shell
-    'wall_yellow': (0.90, 0.66, 0.05), 'wall_blue': (0.04, 0.12, 0.50), 'wall_red': (0.70, 0.07, 0.05),
-    'wall_white': (0.72, 0.70, 0.64), 'deck': (0.42, 0.41, 0.38), 'steel': (0.20, 0.20, 0.21),
+    'wall_yellow': (0.60, 0.38, 0.03), 'wall_blue': (0.02, 0.05, 0.22), 'wall_red': (0.36, 0.03, 0.02),
+    'wall_white': (0.42, 0.41, 0.37), 'deck': (0.10, 0.10, 0.10), 'steel': (0.07, 0.07, 0.075),
     'duct': (0.55, 0.56, 0.57), 'pipe_red': (0.45, 0.06, 0.05),
     # props
     'white': (0.82, 0.80, 0.75), 'black': (0.02, 0.02, 0.02), 'counter': (0.80, 0.24, 0.10),
     'stainless': (0.55, 0.56, 0.58), 'paper': (0.85, 0.83, 0.74), 'wood': (0.45, 0.30, 0.16),
     'lamp_off': (0.30, 0.30, 0.28),
     # zone floors and walls
-    'floor_pink': (0.62, 0.30, 0.34), 'snack_a': (0.72, 0.30, 0.08), 'snack_b': (0.74, 0.62, 0.40),
+    'floor_pink': (0.36, 0.13, 0.15), 'snack_a': (0.45, 0.13, 0.03), 'snack_b': (0.50, 0.38, 0.20),
     'floor_purple': (0.20, 0.09, 0.30), 'arcade_carpet': (0.06, 0.03, 0.13), 'arcade_carpet2': (0.14, 0.04, 0.20),
-    'carpet': (0.33, 0.26, 0.12), 'wall_staff': (0.62, 0.50, 0.12), 'ceiling_tile': (0.55, 0.52, 0.40),
-    'mat_pink': (0.80, 0.40, 0.50), 'mat_mint': (0.36, 0.68, 0.55), 'inflate_a': (0.36, 0.56, 0.20),
-    'inflate_b': (0.66, 0.62, 0.20), 'wall_pink': (0.70, 0.32, 0.38), 'wall_purple': (0.24, 0.11, 0.36),
-    'column': (0.78, 0.74, 0.62), 'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
+    'carpet': (0.20, 0.15, 0.08), 'wall_staff': (0.55, 0.42, 0.10), 'ceiling_tile': (0.45, 0.42, 0.32),
+    'mat_pink': (0.50, 0.16, 0.24), 'mat_mint': (0.14, 0.40, 0.30), 'inflate_a': (0.03, 0.14, 0.042),
+    'inflate_b': (0.014, 0.03, 0.16), 'wall_pink': (0.42, 0.13, 0.16), 'wall_purple': (0.12, 0.04, 0.20),
+    'column': (0.55, 0.52, 0.42), 'ballsea': (0.5, 0.5, 0.5), 'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
 }
 ROUGH = {'stainless': 0.3, 'duct': 0.4, 'steel': 0.55, 'deck': 0.6, 'concrete': 0.9}
 VINYL = ['yellow', 'red', 'blue', 'green', 'purple', 'pink', 'cyan', 'orange']
@@ -282,6 +282,16 @@ HOME = (236, 214)                   # where the child counts
 ENTRANCE_X = (54, 78)               # main doors in the south wall
 EXIT_X = (576, 588)                 # emergency exit in the north wall, inside STAFF
 SIGNS, LIGHTS, HIDE = [], [], []
+PROPS = []      # hero meshes from ReplicatedStorage.Level6PropKit: (name, x, y, z, yaw degrees, longest side, collide)
+BOARDS = []     # textured panels: (centre, width, height, facing, texture key, self-lit)
+
+
+def prop(name, x, y, z=0.35, yaw=0, size=10, collide=True):
+    PROPS.append([name, x, y, z, yaw, size, 1 if collide else 0])
+
+
+def board(pos, w, h, facing, tex, lit=False):
+    BOARDS.append([list(pos), w, h, facing, tex, 1 if lit else 0])
 
 
 def in_rect(x, y, r, pad=0):
@@ -815,16 +825,9 @@ def picnic_table(b, x, y, top, along_x=True):
 
 
 def playhouse(b, px, py, mat, roof, door='north'):
-    """10 x 10 house with one doorway and a window."""
-    w = 10
-    sides = {'south': ((px, py), (px + w, py)), 'north': ((px, py + w), (px + w, py + w)),
-             'west': ((px, py), (px, py + w)), 'east': ((px + w, py), (px + w, py + w))}
-    for name, (a, c) in sides.items():
-        mid = (px + w / 2) if name in ('south', 'north') else (py + w / 2)
-        wall_run(b, a, c, 8.5, mat, t=0.6, z0=0.35, openings=[(mid - 2, mid + 2, 6.2)] if name == door else ())
-    b.box((px - 0.8, py - 0.8, 8.5), (px + w + 0.8, py + w + 0.8, 9.2), 'white')
-    b.box((px + 1.2, py + 1.2, 9.2), (px + w - 1.2, py + w - 1.2, 11.6), roof)
-    HIDE.append(('playhouse', px + w / 2, py + w / 2, 1))
+    """A plastic playhouse from the prop kit (10 x 10 footprint); still a hiding spot."""
+    prop('playhouse', px + 5, py + 5, yaw=180 if door == 'south' else 0, size=11)
+    HIDE.append(('playhouse', px + 5, py + 5, 1))
 
 
 def build_reception():
@@ -880,11 +883,10 @@ def build_snack_shack():
         s.box((x1 - 7, y, 0), (x1 - 4, y + 2, 16), 'wall_yellow')
     s.box((x1 - 6.5, y0 + 2, 0), (x1 - 4.5, y1 - 2, 4.2), 'white')
     s.box((x1 - 9.5, y0 + 2, 4.2), (x1 - 3.4, y1 - 2, 4.7), 'counter')
-    for y in range(y0 + 8, y1 - 16, 26):
-        s.box((1, y, 9.5), (1.5, y + 16, 14.5), 'black')
     s.box((2, y0 + 4, 0), (9, y1 - 4, 4.4), 'stainless')
     s.box((2, y0 + 14, 4.4), (7, y0 + 22, 8.5), 'stainless')
-    s.box((2, y0 + 70, 4.4), (7, y0 + 77, 9.5), 'red')               # slush machine
+    prop('slush_machine', 5, y0 + 72, z=4.4, yaw=90, size=5.5, collide=False)
+    prop('slush_machine', 5, y0 + 44, z=4.4, yaw=90, size=5.5, collide=False)
     s.box((x1 + 2, y0 - 12, 0), (x1 + 9, y0 - 3, 11), 'stainless')   # drinks fridge
     s.box((x1 + 8.6, y0 - 11.4, 1), (x1 + 9.1, y0 - 3.6, 10.4), 'black')
     for y in (y0 + 20, y0 + 60, y0 + 100):
@@ -903,9 +905,8 @@ def build_snack_shack():
         t.cyl((px, py, 3.9), (px, py, 4.0), 1.1, 'paper', 8, True)
     t.finish()
     sign((x1 + 4.2, 210, 18.6), 60, 4.6, '+x', 'SNACK SHACK', (250, 205, 30), (200, 25, 25))
-    sign((1.7, 166, 12), 15, 4, '+x', 'HOT DOG  2.50\nPIZZA  3.00', (30, 25, 20), (255, 235, 180))
-    sign((1.7, 192, 12), 15, 4, '+x', 'SLUSH  1.75\nPOPCORN  1.50', (30, 25, 20), (255, 235, 180))
-    sign((1.7, 218, 12), 15, 4, '+x', 'BIRTHDAY\nPARTY PACKS', (30, 25, 20), (255, 235, 180))
+    for y in (y0 + 20, y0 + 60, y0 + 100):
+        board((1.65, y, 12), 24, 5.2, '+x', 'menu_boards', lit=True)
     HIDE.extend([('counter', 8, 176, 1), ('counter', 8, 244, 1)])
 
 
@@ -952,13 +953,9 @@ def build_party_rooms():
 
 
 def cabinet(b, x, y, facing, mat, lit=False):
-    """Arcade cabinet 6 wide; facing +1 looks toward +y, -1 toward -y."""
-    f = facing
-    b.box((x, min(y, y + 6 * f), 0.35), (x + 6, max(y, y + 6 * f), 11), mat)
-    b.box((x, min(y + 6 * f, y + 9 * f), 0.35), (x + 6, max(y + 6 * f, y + 9 * f), 5.2), mat)
-    ys = y + 6 * f
-    b.box((x + 0.6, min(ys, ys + 0.4 * f), 5.8), (x + 5.4, max(ys, ys + 0.4 * f), 9.6), 'lamp_magenta' if lit else 'black')
-    b.box((x + 0.3, min(y, y + 6.4 * f), 11), (x + 5.7, max(y, y + 6.4 * f), 13), 'yellow')
+    """Arcade cabinet from the prop kit, 6 wide; facing +1 looks toward +y, -1 toward -y."""
+    prop('arcade_cabinet_a' if mat in ('navy', 'purple', 'black', 'blue') else 'arcade_cabinet_b', x + 3, y + 4.5 * facing,
+         yaw=0 if facing < 0 else 180, size=12.5)
 
 
 def build_arcade():
@@ -972,9 +969,8 @@ def build_arcade():
         cabinet(a, x0 + 30 + n * 16, 356, 1, ('black', 'purple', 'blue')[n % 3], lit=(n == 1))
     a.box((x0 + 100, 336, 0.35), (x0 + 122, 346, 3.6), 'navy')        # air hockey
     a.box((x0 + 101, 337, 3.6), (x0 + 121, 345, 3.9), 'white')
-    a.box((x0 + 12, 336, 0.35), (x0 + 20, 344, 4), 'red')             # claw machine
-    a.box((x0 + 12, 336, 4), (x0 + 20, 344, 11), 'glass')
-    a.box((x0 + 12, 336, 11), (x0 + 20, 344, 12.4), 'red')
+    prop('claw_machine', x0 + 16, 340, yaw=180, size=12)
+    prop('claw_machine', x0 + 132, 392, yaw=0, size=12)
     a.finish()
     light('L6_Arcade_0', (x0 + 77, y1 - 12, 9), 'POINT', 3500, (1.0, 0.2, 0.8))
     light('L6_Arcade_1', (x0 + 49, 366, 9), 'POINT', 2500, (1.0, 0.2, 0.8))
@@ -985,16 +981,7 @@ def build_arcade():
     p.box((x0 + 8, 352, 0.35), (x1 - 8, 358, 4.6), 'pink')            # glass-fronted counter
     p.box((x0 + 7, 351, 4.6), (x1 - 7, 359, 5.0), 'yellow')
     p.box((x0 + 9, 351.6, 1), (x1 - 9, 352, 4.2), 'glass')
-    for row in range(5):                                             # shelves of plush toys on the wall
-        z = 2 + row * 2.8
-        p.box((x0 + 6, y1 - 4.5, z), (x1 - 6, y1 - 0.8, z + 0.3), 'wood')
-        for n in range(11):
-            px = x0 + 10 + n * 8
-            mat = VINYL[(n + row * 3) % len(VINYL)]
-            p.ball((px, y1 - 2.6, z + 1.4), 1.1, mat)
-            p.ball((px, y1 - 2.6, z + 2.6), 0.75, mat)
-    for px in (x0 + 4, x1 - 4):
-        p.box((px - 0.3, y1 - 4.5, 0.35), (px + 0.3, y1 - 0.8, 16), 'wood')
+    board(((x0 + x1) / 2, y1 - 0.7, 8.6), x1 - x0 - 12, 13.5, '-y', 'prize_wall')
     wall_run(p, (x1, y0), (x1, y1), 14, 'wall_pink')
     p.finish()
     sign(((x0 + x1) / 2, y1 - 0.9, 17), 40, 4.5, '-y', 'PRIZES', (230, 90, 150), (255, 255, 255))
@@ -1050,18 +1037,14 @@ def build_staff_only():
                     s.box((cx + 1.5, cy + 8.5, 0.35), (cx + 10.5, cy + 11, 0.7), 'steel')
                     for z in (4, 8):
                         s.box((cx + 1.5, cy + 8.5, z), (cx + 10.5, cy + 11, z + 0.3), 'steel')
-                    for n, mat in enumerate(('wood', 'white', 'orange')):
-                        hx = cx + 3 + n * 3
-                        s.ball((hx, cy + 9.6, 9.9), 1.5, mat)
-                        s.ball((hx - 0.9, cy + 9.6, 11.2), 0.5, mat)
-                        s.ball((hx + 0.9, cy + 9.6, 11.2), 0.5, mat)
+                    for n, head in enumerate(('mascot_head_bear', 'mascot_head_dog', 'mascot_head_chicken')):
+                        prop(head, cx + 3 + n * 3, cy + 9.6, z=8.3, yaw=180, size=3.4, collide=False)
                 elif kind == 2:                                      # bags of balls
                     for bx, by in ((cx + 3, cy + 3), (cx + 6.5, cy + 3.5), (cx + 4.5, cy + 7)):
                         s.cyl((bx, by, 0.35), (bx, by, 4.2), 1.7, 'paper', 8, True)
                         s.ball((bx, by, 4.6), 1.5, BALL_COLOURS[int(bx + by) % 5])
                 else:                                                # mop bucket and folded nets
-                    s.box((cx + 2, cy + 2, 0.35), (cx + 5, cy + 5, 2.6), 'yellow')
-                    s.cyl((cx + 3.5, cy + 3.5, 2.6), (cx + 5.5, cy + 2.5, 7.5), 0.15, 'wood', 4)
+                    prop('mop_bucket', cx + 3.5, cy + 3.5, yaw=35, size=6, collide=False)
                     s.box((cx + 6, cy + 6, 0.35), (cx + 10, cy + 10, 1.6), 'navy')
                 HIDE.append(('staff_nook', cx + 6, cy + 6, 1))
     s.box((x0 - 0.6, y0 - 0.6, ceil), (x1, y1, ceil + 0.8), 'ceiling_tile')
@@ -1094,13 +1077,16 @@ def build_ball_ocean():
                  ((x0, y0), (x0, y0 + 40))):
         n.face([(a[0], a[1], top), (c[0], c[1], top), (c[0], c[1], 16), (a[0], a[1], 16)], 'net_blue')
     n.finish()
-    balls = Builder('BallOcean_Balls', zones_col)                     # almost empty: a few dozen left behind
+    sea = Builder('BallOcean_Surface', zones_col)                     # one textured sheet, so it reads as full
+    sea.box((x0 + 1.5, y0 + 1.5, 0.35), (x1 - 1.5, y1 - 1.5, 2.3), 'ballsea')
+    sea.finish()
+    balls = Builder('BallOcean_Balls', zones_col)                     # real balls only on top, near the edges
     spread = random.Random(7)
     for _ in range(64):
-        balls.ball((spread.uniform(x0 + 5, x1 - 5), spread.uniform(y0 + 5, y1 - 5), 0.9), 0.55, spread.choice(BALL_COLOURS))
+        balls.ball((spread.uniform(x0 + 5, x1 - 5), spread.uniform(y0 + 5, y1 - 5), 2.5), 0.6, spread.choice(BALL_COLOURS))
     for cx, cy in ((x0 + 8, y1 - 8), (x1 - 9, y0 + 9)):               # swept into two corners
         for _ in range(18):
-            balls.ball((cx + spread.uniform(-5, 5), cy + spread.uniform(-5, 5), spread.uniform(0.9, 1.9)), 0.55,
+            balls.ball((cx + spread.uniform(-5, 5), cy + spread.uniform(-5, 5), spread.uniform(2.5, 3.3)), 0.6,
                        spread.choice(BALL_COLOURS))
     balls.finish()
     sign(((x0 + x1) / 2, y0 - 1.7, 7.5), 34, 3.6, '-y', 'BALL OCEAN', (20, 60, 190), (255, 255, 255))
@@ -1127,15 +1113,7 @@ def build_toddler_town():
                                          (x0 + 96, 'purple', 'yellow'), (x0 + 116, 'orange', 'blue'))):
         playhouse(t, px, y1 - 22, mat, roof, door='south')          # the little street along the north fence
     t.box((x0 + 4, y0 + 2.4, 0.35), (x0 + 64, y0 + 3.6, 11), 'blue')  # painted farm-animal panel
-    t.box((x0 + 4, y0 + 3.6, 0.35), (x0 + 64, y0 + 3.8, 4.2), 'green')
-    for cx, rad, mat in ((x0 + 16, 3.2, 'pink'), (x0 + 34, 3.4, 'white'), (x0 + 52, 2.8, 'yellow')):
-        t.cyl((cx, y0 + 3.6, 5.4), (cx, y0 + 4.0, 5.4), rad, mat, 12, True)
-        t.cyl((cx + rad * 0.8, y0 + 3.6, 7.6), (cx + rad * 0.8, y0 + 4.1, 7.6), rad * 0.55, mat, 10, True)
-    t.box((x0 + 78, y0 + 8, 0.35), (x0 + 90, y0 + 20, 8), 'purple')   # tiny castle with a slide
-    for tx, ty in ((x0 + 78, y0 + 8), (x0 + 88, y0 + 8), (x0 + 78, y0 + 18), (x0 + 88, y0 + 18)):
-        t.box((tx, ty, 8), (tx + 2, ty + 2, 10), 'yellow')
-    for k in range(8):
-        t.box((x0 + 90 + k * 1.8, y0 + 10, 0.35), (x0 + 91.8 + k * 1.8, y0 + 18, 7.2 - k * 0.85), 'red')
+    board((x0 + 34, y0 + 3.7, 5.9), 58, 10, '+y', 'animal_mural')
     for k in range(6):                                               # caterpillar crawl tunnel
         t.cyl((x0 + 22 + k * 5, y0 + 34, 2.9), (x0 + 26.6 + k * 5, y0 + 34, 2.9), 2.6, cols[k % 4], 10)
     t.ball((x0 + 19.5, y0 + 34, 3.2), 3.0, 'green')
@@ -1158,55 +1136,22 @@ def build_toddler_town():
     HIDE.extend([('softblock', x0 + 36, y0 + 34, 1), ('toddler_pool', x0 + 124, y0 + 18, 1.2)])
 
 
-def bouncy_castle(b, cx, cy, w, mat1, mat2, sag=1.0):
-    hw = w / 2
-    b.box((cx - hw, cy - hw, 0.35), (cx + hw, cy + hw, 3.4 * sag + 0.35), mat1)
-    tower = 22 * sag
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            tx, ty = cx + sx * (hw - 4), cy + sy * (hw - 4)
-            b.cyl((tx, ty, 3.4 * sag), (tx, ty, tower), 3.8, mat2, 10, True)
-            b.cyl((tx, ty, tower), (tx, ty, tower + 3 * sag), 2.8, mat1, 10, True)
-            b.cyl((tx, ty, tower + 3 * sag), (tx, ty, tower + 6 * sag), 1.4, mat1, 8, True)
-    for z in (7 * sag, 11 * sag):
-        b.cyl((cx - hw + 4, cy + hw - 4, z), (cx + hw - 4, cy + hw - 4, z), 1.9, mat2, 8)
-        b.cyl((cx + hw - 4, cy - hw + 4, z), (cx + hw - 4, cy + hw - 4, z), 1.9, mat2, 8)
-        b.cyl((cx - hw + 4, cy - hw + 4, z), (cx + hw - 4, cy - hw + 4, z), 1.9, mat2, 8)
-    b.box((cx - hw - 7, cy - 6, 0.35), (cx - hw, cy + 6, 1.9 * sag + 0.35), mat2)        # step up on the west side
-    HIDE.append(('inflatable', cx + hw - 9, cy, 3.4 * sag + 1))
-
-
 def build_inflatables():
     f = Builder('Inflatables', zones_col)
     x0, y0, x1, y1 = INFLATE
     wall_run(f, (x0 - 6, y0), (x0 - 6, y1), 18, 'inflate_a', openings=[(54, 100, 15), (196, 240, 15)])
-    bouncy_castle(f, 554, 248, 60, 'red', 'yellow')
-    bouncy_castle(f, 556, 44, 52, 'blue', 'red', sag=0.45)            # the one that has nearly gone flat
-    f.cyl((530, 78, 2.2), (572, 86, 2.6), 3.4, 'red', 10, True)       # one of its towers, lying down
-    # giant inflatable slide in the middle
-    for (ya, za), (yb, zb) in zip([(118 + n * 4.5, 26 - n * 2.1) for n in range(12)], [(118 + (n + 1) * 4.5, 26 - (n + 1) * 2.1) for n in range(12)]):
-        f.face([(532, ya, za), (572, ya, za), (572, yb, zb), (532, yb, zb)], 'yellow', True)
-    for x in (530, 574):
-        f.cyl((x, 118, 28.5), (x, 172, 3.4), 2.6, 'blue', 10, True)
-    f.box((530, 100, 0.35), (574, 118, 26), 'red')
-    for n in range(8):
-        f.box((574, 100 + n * 2.2, 0.35), (582, 102.2 + n * 2.2, 3.2 + n * 3.2), 'yellow')   # steps up the side
-    f.box((528, 172, 0.35), (576, 186, 2.2), 'blue')                 # landing pad
-    # the green dinosaur
-    f.cyl((530, 206, 7), (548, 206, 7), 6, 'green', 10, True)
-    f.cyl((546, 206, 9), (552, 206, 19), 3.2, 'green', 8, True)
-    f.ball((554, 206, 21), 4.6, 'green')
-    f.cyl((530, 206, 6), (518, 206, 2.4), 2.6, 'green', 8, True)
-    for lx in (534, 544):
-        for ly in (202, 210):
-            f.cyl((lx, ly, 0.35), (lx, ly, 4), 1.7, 'green', 8, True)
-    f.ball((556.6, 204.2, 22.6), 0.9, 'white')
-    for bx, by in ((516, 30), (516, 262)):                           # blowers that stopped
-        f.box((bx, by, 0.35), (bx + 5, by + 5, 4.4), 'stainless')
-        f.cyl((bx + 5, by + 2.5, 2.4), (bx + 12, by + 2.5, 2.0), 1.3, 'navy', 8)
+    f.box((x0 + 2, 100, 0.35), (x0 + 8, 106, 0.6), 'navy')            # a stray landing mat
     f.finish()
+    prop('bouncy_castle', 556, 250, yaw=90, size=44)
+    prop('inflatable_slide', 556, 150, yaw=90, size=34)
+    prop('deflated_castle', 554, 52, yaw=30, size=46, collide=False)   # the one that has gone flat
+    prop('deflated_castle', 528, 100, yaw=200, size=26, collide=False)
+    prop('inflatable_dino', 532, 206, yaw=-60, size=20)
+    prop('blower_fan', 520, 34, yaw=40, size=5)
+    prop('blower_fan', 520, 268, yaw=140, size=5)
+    prop('blower_fan', 522, 120, yaw=90, size=5)
     sign((x0 - 6.9, 148, 14.6), 44, 4, '-x', 'INFLATABLES', (120, 180, 70), (255, 255, 255))
-    HIDE.extend([('inflatable', 552, 110, 1), ('softblock', 540, 214, 1)])
+    HIDE.extend([('inflatable', 573, 250, 3), ('inflatable', 552, 110, 1), ('softblock', 540, 214, 1)])
 
 
 def build_home_base():
@@ -1316,7 +1261,7 @@ stats = {
     'prims': [[n, k, [round(float(v), 3) for v in d], m] for n, k, d, m in PRIMS],
     'empties': [[o.name, [round(c, 3) for c in o.location]] for o in bpy.data.objects if o.type == 'EMPTY'],
     'lights': [[o.name, [round(c, 3) for c in o.location]] for o in bpy.data.objects if o.type == 'LIGHT'],
-    'signs': SIGNS,
+    'signs': SIGNS, 'props': PROPS, 'boards': BOARDS,
     'palette': {k: list(v) for k, v in PALETTE.items()},
 }))
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT / 'blend' / 'Level6_IndoorPlayground.blend'))
