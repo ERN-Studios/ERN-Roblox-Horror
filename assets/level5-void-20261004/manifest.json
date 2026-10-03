@@ -1,0 +1,92 @@
+[
+  {
+    "name": "l5_ambience.mp3",
+    "seconds": 22.047347,
+    "loop": true,
+    "prompt": "Vast empty concrete hall room tone, soft airy low drone and faint distant hum, very calm. Constant sparse texture with no events, no fade in or out, seamless loop. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_depth_wind.mp3",
+    "seconds": 15.046531,
+    "loop": true,
+    "prompt": "Deep slow wind rising out of a bottomless pit, sub-heavy and hollow, soft distant air movement. Steady seamless loop, no gust impacts or fade in or out. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_plate_down.mp3",
+    "seconds": 1.044898,
+    "loop": false,
+    "prompt": "One heavy stone pressure plate sinking under a foot, soft weighty thunk followed by a short low resonant tone. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_plate_up.mp3",
+    "seconds": 1.044898,
+    "loop": false,
+    "prompt": "One stone pressure plate rising back into place, a light short stone scrape and restrained click. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_plate_hum.mp3",
+    "seconds": 5.041633,
+    "loop": true,
+    "prompt": "Steady resonant low hum of an activated stone mechanism, slightly glassy overtones, restrained and constant. Seamless loop with no onset or ending. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_gate_open.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "An enormous stone slab door grinding upward with a deep soft rumble, then a weighty subdued boom around halfway through, leaving the remaining time for long cavernous reverb to decay. Massive but quiet, no explosive attack. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_gate_close.mp3",
+    "seconds": 3.030204,
+    "loop": false,
+    "prompt": "An enormous stone slab door dropping shut: short low stone grind followed by a weighty muffled slam, leaving room for a spacious decaying echo. Subdued, no loud crash. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_ball_roll.mp3",
+    "seconds": 3.030204,
+    "loop": true,
+    "prompt": "A heavy solid rubber ball rolling continuously over rough plaster, dry continuous low granular rumble. Constant speed, no bounce, no impacts. Seamless loop with no onset or fade. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_ball_hit.mp3",
+    "seconds": 0.522449,
+    "loop": false,
+    "prompt": "A single dull heavy solid rubber ball bump against stone, short muffled low impact, no bounce sequence. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_ball_fall.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "An object dropping away into a bottomless abyss: descending airy whoosh recedes further and further away, fading to silence with a long diffuse tail. No landing impact. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_player_fall.mp3",
+    "seconds": 3.030204,
+    "loop": false,
+    "prompt": "A body falling through open air, only soft muffled rushing wind building gradually as it accelerates. No vocalizations, no scream, no impact. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_respawn.mp3",
+    "seconds": 1.515102,
+    "loop": false,
+    "prompt": "A soft reversed breathy air swell suggesting waking up, made entirely of filtered air noise, gently rising then dissolving. No human breathing or vocal sound. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_section_tone.mp3",
+    "seconds": 3.030204,
+    "loop": false,
+    "prompt": "One distant hollow bell-like resonant tone in a huge empty room, eerie but gentle, muted strike early followed by spacious long decay. A single isolated sound effect, no melody. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_finish.mp3",
+    "seconds": 5.041633,
+    "loop": false,
+    "prompt": "A slow warm swelling resonant sound-design tone, gradually brightens and settles softly into a restful stable resonance, relief and bright light, then decays. One continuous isolated texture, no tune, no chords or musical progression. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_edge_creak.mp3",
+    "seconds": 2.037551,
+    "loop": false,
+    "prompt": "One narrow beam creaking faintly under weight in a huge silent room, subtle dry strained creak with a delicate spacious echo. No break or snap. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  }
+]
