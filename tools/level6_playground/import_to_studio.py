@@ -30,12 +30,12 @@ SURFACE = {
     'arcade_carpet': ('Carpet', 0, True), 'arcade_carpet2': ('Carpet', 0, True), 'floor_purple': ('Carpet', 0, True),
     'floor_pink': ('SmoothPlastic', 0, True), 'snack_a': ('SmoothPlastic', 0, True), 'snack_b': ('SmoothPlastic', 0, True),
     'wall_staff': ('Plaster', 0, True), 'wall_pink': ('Plaster', 0, True), 'wall_purple': ('Plaster', 0, True),
-    'ceiling_tile': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
+    'ceiling_tile': ('Plaster', 0, True), 'ballsea': ('SmoothPlastic', 0, True), 'column': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
     'net_yellow': ('SmoothPlastic', 0.5, True), 'net_black': ('SmoothPlastic', 0.75, True),
 }
 EXTRA_RGB = {'lamp_magenta': (255, 40, 200), 'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
              'net_blue': (20, 40, 150), 'net_yellow': (215, 170, 30), 'net_black': (12, 12, 12)}
-NO_COLLIDE = ('Ceiling_', 'BallOcean_Balls', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
+NO_COLLIDE = ('Ceiling_', 'BallOcean_Balls', 'BallOcean_Surface', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
 TEXTURES = json.loads((Path(__file__).with_name('textures.json')).read_text())
 
 # Signs (SurfaceGuis) are listed by the build script and arrive in prims.json as data['signs'].
@@ -139,6 +139,10 @@ local function texture(p, id, face, studs, colour, transparency)
 	t.Parent = p
 end
 local SIDES = {Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}
+local VINYL = {yellow = true, red = true, blue = true, green = true, purple = true, pink = true, cyan = true, orange = true, navy = true}
+local function tint(c, k)
+	return Color3.new(math.min(c.R * k, 1), math.min(c.G * k, 1), math.min(c.B * k, 1))
+end
 local function decorate(p, owner, mat)
 	if string.sub(mat, 1, 4) == "net_" then
 		local colour = p.Color
@@ -147,17 +151,32 @@ local function decorate(p, owner, mat)
 		-- public knotted-net image (Creator Store decal 81104945973317); the cords are dark, so no tint
 		texture(p, TEX.net, Enum.NormalId.Front, 5)
 		texture(p, TEX.net, Enum.NormalId.Back, 5)
-	elseif not TEX.foam_seams then
-		-- the overlay images below only exist once the experience has been granted access to them
-		return
 	elseif owner == "Floor_FoamTiles" then
-		texture(p, TEX.foam_seams, Enum.NormalId.Top, 12)
-	elseif owner == "Frame_Decks" or owner == "Frame_SoftSteps" then
-		texture(p, TEX.padding, Enum.NormalId.Top, 12)
-	elseif owner == "Frame_Panels" or owner == "ToddlerTown" or owner == "BallOcean" or owner == "Inflatables" then
-		texture(p, TEX.padding, Enum.NormalId.Front, 5)
-		texture(p, TEX.padding, Enum.NormalId.Back, 5)
-	elseif owner == "Walls" or owner == "SnackShack" or owner == "PartyRooms" or owner == "StaffOnly" or owner == "Reception" then
+		-- a neutral grey mat photo tinted with the tile's own colour
+		texture(p, TEX.foam_mat, Enum.NormalId.Top, 12, tint(p.Color, 1.9))
+	elseif owner == "BallOcean_Surface" then
+		texture(p, TEX.ballpit, Enum.NormalId.Top, 13)
+		for _, face in ipairs(SIDES) do texture(p, TEX.ballpit, face, 13) end
+	elseif mat == "wall_staff" then
+		for _, face in ipairs(SIDES) do texture(p, TEX.wallpaper_staff, face, 11) end
+	elseif mat == "carpet" then
+		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12)
+	elseif mat == "ceiling_tile" then
+		texture(p, TEX.ceiling_tiles, Enum.NormalId.Bottom, 8)
+	elseif mat == "arcade_carpet" or mat == "arcade_carpet2" then
+		texture(p, TEX.arcade_carpet, Enum.NormalId.Top, 12)
+	elseif owner == "PartyRooms" and (mat == "wall_blue" or mat == "wall_purple") then
+		for _, face in ipairs(SIDES) do texture(p, TEX.party_wall, face, 9, nil, 0.25) end
+	elseif owner == "Ceiling_Structure" and mat == "deck" and p.Size.X > 100 then
+		texture(p, TEX.roof_deck, Enum.NormalId.Bottom, 16, Color3.fromRGB(150, 150, 150))
+	elseif owner == "Walls" then
+		for _, face in ipairs(SIDES) do texture(p, TEX.block_wall, face, 14, tint(p.Color, 1.7)) end
+	elseif VINYL[mat] and owner ~= "Frame_Posts" and owner ~= "Frame_Beams" and owner ~= "BallOcean_Balls" and owner ~= "Toddler_Balls" then
+		-- padded vinyl: the same grey photo, tinted
+		local c = tint(p.Color, 1.8)
+		texture(p, TEX.vinyl_pad, Enum.NormalId.Top, 7, c)
+		for _, face in ipairs(SIDES) do texture(p, TEX.vinyl_pad, face, 7, c) end
+	elseif owner == "SnackShack" or owner == "Reception" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.grime, face, 36, nil, 0.15) end
 	end
 end
@@ -321,6 +340,45 @@ for line in string.gmatch(SIGNS, "[^\\n]+") do
 	gui.Parent = p
 	p.Parent = signs
 end
+local kit = game:GetService("ReplicatedStorage"):FindFirstChild("Level6PropKit")
+local props = folder("Props")
+local missing = {}
+for line in string.gmatch(PROPS, "[^\n]+") do
+	local f = string.split(line, ",")
+	local template = kit and kit:FindFirstChild(f[1])
+	if template then
+		local m = template:Clone()
+		local longest = math.max(m.Size.X, m.Size.Y, m.Size.Z)
+		m.Size = m.Size * (tonumber(f[6]) / longest)
+		m.Anchored, m.CanCollide, m.CanTouch = true, f[7] == "1", false
+		local base = O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4]))
+		m.CFrame = CFrame.new(base + Vector3.new(0, m.Size.Y / 2, 0)) * CFrame.Angles(0, math.rad(tonumber(f[5])), 0)
+		m.Parent = props
+	else
+		missing[f[1]] = true
+	end
+end
+local boards = folder("Boards")
+for line in string.gmatch(BOARDS, "[^\n]+") do
+	local f = string.split(line, "|")
+	local c, dir = nums(f[1]), nums(f[4])
+	local out = Vector3.new(dir[1], dir[2], dir[3])
+	local at = O + Vector3.new(c[1], c[2], c[3]) + out * 0.12
+	local p = Instance.new("Part")
+	p.Name, p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = "Board_" .. f[5], true, false, false, false
+	p.Size = Vector3.new(tonumber(f[2]), tonumber(f[3]), 0.2)
+	p.Color, p.Material = Color3.fromRGB(20, 20, 20), Enum.Material.SmoothPlastic
+	p.CFrame = CFrame.lookAt(at, at + out)
+	local gui = Instance.new("SurfaceGui")
+	gui.Face, gui.SizingMode, gui.PixelsPerStud = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 30
+	gui.LightInfluence = f[6] == "1" and 0 or 1
+	if f[6] == "1" then gui.Brightness = 1.6 end
+	local image = Instance.new("ImageLabel")
+	image.Size, image.BackgroundTransparency, image.Image = UDim2.fromScale(1, 1), 1, TEX[f[5]]
+	image.Parent = gui
+	gui.Parent = p
+	p.Parent = boards
+end
 -- Level6PreviewAccess lands developers on Level6Exit and mounts its RETURN TO LOBBY prompt there.
 local spawn = anchors:FindFirstChild("L6_Anchor_Spawn")
 local exit = Instance.new("Part")
@@ -337,7 +395,9 @@ model:SetAttribute("Ready", true)
 local count = 0
 for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then count += 1 end end
 local cf, size = model:GetBoundingBox()
-return string.format("parts %d, centre (%.0f, %.0f, %.0f), size (%.0f, %.0f, %.0f)", count, cf.X, cf.Y, cf.Z, size.X, size.Y, size.Z)
+local miss = {}
+for name in pairs(missing) do miss[#miss + 1] = name end
+return string.format("parts %d, centre (%.0f, %.0f, %.0f), size (%.0f, %.0f, %.0f), kit props missing: %s", count, cf.X, cf.Y, cf.Z, size.X, size.Y, size.Z, table.concat(miss, " "))
 '''
 
 
@@ -380,6 +440,10 @@ def main():
         else:
             continue
         rows.append(','.join([kind, owner, mat] + [format(v, 'g') for v in nums]))
+    props = '\n'.join(','.join([name] + [format(v, 'g') for v in (*to_roblox(x, y, z), -yaw, size, collide)])
+                      for name, x, y, z, yaw, size, collide in data.get('props', []))
+    boards = '\n'.join('|'.join([','.join(format(v, 'g') for v in to_roblox(*c)), format(w, 'g'), format(h, 'g'),
+                                 ','.join(map(str, facing[f])), tex, str(lit)]) for c, w, h, f, tex, lit in data.get('boards', []))
     anchors = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['empties'])
     lights = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['lights'])
     print(f'{len(rows)} parts in {math.ceil(len(rows) / CHUNK)} calls', flush=True)
@@ -401,7 +465,7 @@ return "fresh model"
         body = '\n'.join(rows[start:start + CHUNK])
         print(start, studio.luau(prelude + f'local DATA = [==[\n{body}\n]==]\n' + BUILD), flush=True)
     print(studio.luau(prelude + f'local ANCHORS = [==[\n{anchors}\n]==]\nlocal LIGHTS = [==[\n{lights}\n]==]\n'
-                      f'local SIGNS = [==[\n{signs}\n]==]\n' + FINISH))
+                      f'local SIGNS = [==[\n{signs}\n]==]\nlocal PROPS = [==[\n{props}\n]==]\nlocal BOARDS = [==[\n{boards}\n]==]\n' + FINISH))
 
 
 if __name__ == '__main__':
