@@ -870,7 +870,8 @@ RunService.Heartbeat:Connect(function(dt)
 	local lobbySteps = not inRound and LOBBY_FOOTSTEP_SOUND ~= ""
 	if hum and root and (lobbySteps
 		or (inRound and workspace:GetAttribute("SelectedLevel") ~= 2
-			and player:GetAttribute("Level6PlaygroundPreview") ~= true)) then -- Level 6 has its own steps
+			and (player:GetAttribute("Level6PlaygroundPreview") ~= true -- Level 6 has its own steps
+				or player:GetAttribute("Level5VoidRound") == true))) then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed

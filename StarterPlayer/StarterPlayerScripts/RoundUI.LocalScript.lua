@@ -961,7 +961,7 @@ local function refreshQueuePanel()
  queuePrivacyStroke.Color = friendsOnly and Color3.fromRGB(255, 202, 95) or Color3.fromRGB(120, 255, 175)
  queueStationLabel.Text = queueStation and ("STATION " .. queueStation .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
  local modes = queueShade:GetAttribute("QueueLaunchModes")
- local trial = modes == "trial,preview" or modes == "trial"
+ local trial = modes == "trial,preview"   -- "trial" alone is a public host: the ordinary CREATE PARTY
  queueSubmit.Text = queueSubmitting and (trial and "STARTING..." or "CREATING PARTY...") or (trial and "TRIAL ROUND" or "CREATE PARTY")
  queueSubmit.Active = not queueSubmitting
  queueSubmit.AutoButtonColor = not queueSubmitting

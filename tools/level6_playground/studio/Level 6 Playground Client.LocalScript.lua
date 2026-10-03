@@ -352,7 +352,7 @@ local function movementTick(on)
 			local s = root:FindFirstChild("L6Loop_l6_step_player")
 			local v = root.AssemblyLinearVelocity
 			local speed = Vector3.new(v.X, 0, v.Z).Magnitude
-			if on and plr:GetAttribute(IN_PREVIEW) == true and speed > 3 and math.abs(v.Y) < 6 then
+			if on and (plr:GetAttribute(IN_PREVIEW) == true and plr:GetAttribute("Level5VoidRound") ~= true) and speed > 3 and math.abs(v.Y) < 6 then
 				s = s or loopOn(root, "l6_step_player", plr == player and 0.3 or 0.5, 8, 70)
 				if s then
 					s.PlaybackSpeed = math.clamp(speed / 14, 0.75, 1.7)     -- running sounds like running
@@ -485,7 +485,7 @@ task.spawn(function()
 		local dt = task.wait(0.05)
 		for name, bed in pairs(beds) do
 			local s = audio:FindFirstChild("L6Loop_" .. bed[1])
-			local want = horror[name] and player:GetAttribute(IN_PREVIEW) == true
+			local want = horror[name] and (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 			if want and not s then
 				s = loopOn(audio, bed[1], 0)
 				if s then s:Play() end
@@ -582,7 +582,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	elseif kind == "left" then
 		vignette.ImageTransparency = 1
 		task.delay(3, function()
-			if player:GetAttribute(IN_PREVIEW) ~= true then
+			if (player:GetAttribute(IN_PREVIEW) ~= true or player:GetAttribute("Level5VoidRound") == true) then
 				countLabel.Text, statusLabel.Text, hintLabel.Text, timerLabel.Text = "", "", "", ""
 				markerMode = nil
 				objective(nil)
@@ -645,7 +645,7 @@ local function applyLighting(on)
 end
 
 local function inside()
-	return player:GetAttribute(IN_PREVIEW) == true
+	return (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 end
 
 -- marker, music and the red finale
@@ -661,7 +661,7 @@ task.spawn(function()
 		local dt = now - last
 		last = now
 		local model = workspace:FindFirstChild(MODEL_NAME)
-		local on = model ~= nil and player:GetAttribute(IN_PREVIEW) == true
+		local on = model ~= nil and (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 		local target = on and markerMode and model:GetAttribute(markerMode == "post" and "HomePosition" or "ExitPosition")
 		if target then
 			markerPart.Position = target + Vector3.new(0, markerMode == "post" and 16 or 9, 0)
@@ -887,7 +887,7 @@ killCam = function()
 			-- Dead in the level now, not sent home: the cover holds until the spectate view (or the lobby,
 			-- for a player who left) owns the screen, and the spectate controller owns the camera from there.
 			local t0 = os.clock()
-			while player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Spectating") ~= true
+			while (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true) and player:GetAttribute("Spectating") ~= true
 				and os.clock() - t0 < 2.5 do task.wait(0.1) end
 			task.wait(0.4)
 			if player:GetAttribute("Spectating") ~= true then cam.CameraType = Enum.CameraType.Custom end

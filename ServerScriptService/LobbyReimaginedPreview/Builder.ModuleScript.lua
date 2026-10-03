@@ -200,10 +200,10 @@ function Module.Build()
 		local kiosk = CFrame.new(center+vec(item.kioskPosition))*CFrame.Angles(0,item.kioskYaw,0)
 		local control = part(station,"Queue Kiosk Control",Vector3.new(1,1,1),kiosk*CFrame.new(vec(item.controlLocalPosition)),false)
 		local statusHost = part(station,"Queue Status",vec(item.statusLocalSize),kiosk*CFrame.new(vec(item.statusLocalPosition)),false)
-		local title = text(statusHost,Enum.NormalId[item.statusFace or "Back"],item.level<=3 and "STEP ON PAD" or "DEV PARTY QUEUE",Color3.fromRGB(192,255,242),Vector2.new(1000,330))
+		local title = text(statusHost,Enum.NormalId[item.statusFace or "Back"],"STEP ON PAD",Color3.fromRGB(192,255,242),Vector2.new(1000,330))
 		title.Name="QueueTitle";title.Position=UDim2.fromScale(0,.05);title.Size=UDim2.fromScale(1,.42)
 		local sub=title:Clone();sub.Name="QueueSubtitle";sub.Position=UDim2.fromScale(0,.5);sub.Size=UDim2.fromScale(1,.4)
-		sub.Text=item.level<=3 and "CHOOSE 1–6 PLAYERS" or "CHOOSE 1–6 · DEV ACCESS";sub.Parent=title.Parent
+		sub.Text="CHOOSE 1–6 PLAYERS";sub.Parent=title.Parent
 		local bayFloor=bays[item.level].ChamberFloor
 		local toward=Vector3.new(bayFloor.Position.X,base.Position.Y,bayFloor.Position.Z)
 		local zone=part(bays[item.level],"QueueZone"..displayIndex,Vector3.new(14.82,1,14.82),CFrame.lookAt(base.Position,toward),false)
@@ -252,6 +252,108 @@ function Module.Build()
 		solid(cinemaRow)
 		solid(visuals:FindFirstChild("Reference End Furniture Piles"))
 		solid(bayPolish:FindFirstChild("Theme Furniture") or model:FindFirstChild("Theme Furniture", true))
+	end
+	-- LEVEL5_BAY_20261004. The Level 5 bay as a small void room, to match the level behind it (owner request).
+	--   The suburb house fronts (BayDecorLevel5) are hidden, not deleted. The wall gets a plaster lining in the
+	--   five room colours, one thin panel in front of each wall collider; the floor a black disc; and the set
+	--   below (the stair to the lit doorway, the monoliths, the balls) comes from tools/level5_void/build_bay.py,
+	--   which builds it in Blender and writes the table between the markers. Bay-local: z toward the entrance.
+	do
+		local SET = {
+			-- LEVEL5_BAY_SET_BEGIN (generated; edit build_bay.py, not this table)
+			{n="Step", c="rose", s={9,0.8,1.7}, p={0,0.4,-18.45}},
+			{n="Step", c="blue", s={9,1.6,1.7}, p={0,0.8,-20.15}},
+			{n="Step", c="amber", s={9,2.4,1.7}, p={0,1.2,-21.85}},
+			{n="Step", c="mint", s={9,3.2,1.7}, p={0,1.6,-23.55}},
+			{n="Step", c="violet", s={9,4,1.9}, p={0,2,-25.35}},
+			{n="Door", c="black", s={6,11,0.4}, p={0,9.5,-26.55}, m="SmoothPlastic"},
+			{n="DoorPost", c="violet", s={1,15,1}, p={-3.5,7.5,-26.55}},
+			{n="DoorPost", c="violet", s={1,15,1}, p={3.5,7.5,-26.55}},
+			{n="DoorLintel", c="violet", s={8,1.1,1}, p={0,15.55,-26.55}},
+			{n="Orb", c="orb", s={2.2,2.2,2.2}, p={0,17.4,-22}, ball=true, ghost=true, m="Neon", light={30,1.3}},
+			{n="OrbRod", c="black", s={0.2,3.5,0.2}, p={0,20.25,-22}, ghost=true, m="Metal"},
+			{n="Monolith", c="rose", s={3.2,13,3.2}, p={-8.2,6.5,-23.4}},
+			{n="Monolith", c="mint", s={2.6,8.5,2.6}, p={-11.6,4.25,-20.6}},
+			{n="Monolith", c="amber", s={3,10.5,3}, p={8,5.25,-23.6}},
+			{n="Monolith", c="blue", s={2.4,6,2.4}, p={11.4,3,-20.8}},
+			{n="Bench", c="rose", s={2.6,1.7,8}, p={-22.6,0.85,0}},
+			{n="Bench", c="blue", s={2.6,1.7,8}, p={22.6,0.85,0}},
+			{n="Monolith", c="amber", s={1.8,9,1.8}, p={-23.2,4.5,-5.6}},
+			{n="Monolith", c="mint", s={1.8,9,1.8}, p={23.2,4.5,5.6}},
+			{n="Ball", c="sphere", s={1.6,1.6,1.6}, p={2.8,2.4,-20.15}, ball=true},
+			{n="Ball", c="sphere", s={3,3,3}, p={-5.6,1.5,-18.9}, ball=true},
+			{n="Ball", c="sphere", s={2,2,2}, p={11.4,7,-20.8}, ball=true},
+			{n="Ball", c="sphere", s={1.4,1.4,1.4}, p={-22.6,2.4,2.4}, ball=true},
+			-- LEVEL5_BAY_SET_END
+		}
+		local COLOURS = {
+			rose = Color3.fromRGB(224, 150, 200), blue = Color3.fromRGB(92, 150, 200), amber = Color3.fromRGB(228, 180, 88),
+			mint = Color3.fromRGB(150, 216, 182), violet = Color3.fromRGB(164, 134, 214), black = Color3.fromRGB(4, 4, 5),
+			sphere = Color3.fromRGB(26, 38, 120), orb = Color3.fromRGB(255, 255, 250),
+		}
+		local ORDER = {"rose", "blue", "amber", "mint", "violet"}
+		local pads = model:FindFirstChild("PreviewQueuePads")
+		local bay = pads and pads:FindFirstChild("QueueBay_Level5")
+		local floor = bay and bay:FindFirstChild("ChamberFloor")
+		local signs = model:FindFirstChild("LevelGateSigns")
+		local header = signs and signs:FindFirstChild("LEVEL 5 Door Header")
+		if floor and header then
+			local top = floor.Position + Vector3.new(0, math.min(floor.Size.X, floor.Size.Y, floor.Size.Z) / 2, 0)
+			local toward = ((header.Position - floor.Position) * Vector3.new(1, 0, 1)).Unit
+			local frame = CFrame.lookAt(top, top - toward)                    -- +Z is the entrance
+			local plaster = game:GetService("MaterialService"):FindFirstChild("L5 Void Plaster") ~= nil
+			local set = Instance.new("Folder")
+			set.Name = "Level5VoidBay"
+			set:SetAttribute("LobbyReimaginedOwned", true)
+			set.Parent = model
+			local function piece(name, size, cf, colour, material, collide)
+				local part = Instance.new("Part")
+				part.Name, part.Size, part.CFrame, part.Color = name, size, cf, colour
+				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, collide, false, collide
+				part.Material = material
+				if material == Enum.Material.Plaster and plaster then part.MaterialVariant = "L5 Void Plaster" end
+				part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+				part:SetAttribute("LobbyReimaginedOwned", true)
+				part.Parent = set
+				return part
+			end
+			local old = visuals:FindFirstChild("BayDecorLevel5")
+			for _, d in ipairs(old and old:GetDescendants() or {}) do
+				if d:IsA("BasePart") then d.Transparency, d.CanCollide, d.CanQuery, d.CastShadow = 1, false, false, false end
+			end
+			for _, wall in ipairs(model:GetDescendants()) do
+				if wall:IsA("BasePart") and wall.Name == "Bay Wall" and wall.Size.Y > 21 then
+					local at = frame:PointToObjectSpace(wall.Position)
+					local radius = math.sqrt(at.X * at.X + at.Z * at.Z)
+					if radius > 26 and radius < 30 and math.abs(at.Y - 11) < 3 then
+						local inward = (top - wall.Position) * Vector3.new(1, 0, 1)
+						local share = (math.atan2(at.X, -at.Z) + math.pi) / (2 * math.pi)        -- 0..1 round the bay, the entrance at both ends
+						local colour = COLOURS[ORDER[math.clamp(math.floor(share * 5) + 1, 1, 5)]]
+						piece("Lining", Vector3.new(wall.Size.X + 0.16, wall.Size.Y, 0.12),
+							wall.CFrame + inward.Unit * 0.42, colour, Enum.Material.Plaster, false)
+					end
+				end
+			end
+			local disc = piece("VoidFloor", Vector3.new(0.05, 55.8, 55.8), frame * CFrame.new(0, 0.045, 0) * CFrame.Angles(0, 0, math.pi / 2),
+				COLOURS.black, Enum.Material.SmoothPlastic, false)
+			disc.Shape = Enum.PartType.Cylinder
+			disc.Reflectance = 0.06
+			for _, row in ipairs(SET) do
+				local part = piece(row.n, Vector3.new(row.s[1], row.s[2], row.s[3]), frame * CFrame.new(row.p[1], row.p[2], row.p[3]),
+					COLOURS[row.c], Enum.Material[row.m or (row.ball and "SmoothPlastic" or "Plaster")], not row.ghost)
+				if row.ball then
+					part.Shape = Enum.PartType.Ball
+					if row.c == "sphere" then part.Reflectance = 0.25 end
+				end
+				if row.light then
+					local glow = Instance.new("PointLight")
+					glow.Range, glow.Brightness, glow.Shadows = row.light[1], row.light[2], false
+					glow.Color = Color3.fromRGB(255, 250, 240)
+					glow.Parent = part
+					part.CastShadow = false
+				end
+			end
+		end
 	end
 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
 	model.Parent = workspace

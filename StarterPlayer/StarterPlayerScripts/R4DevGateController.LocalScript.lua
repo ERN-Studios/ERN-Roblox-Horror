@@ -12,7 +12,7 @@ local accessOK, access = pcall(function()
 end)
 local function allowed(level)
 	if not accessOK or type(access) ~= "table" then return false end
-	local predicate = level == 6 and access.IsLevel6Allowed or access.IsLevel6PreviewAllowed   -- Level 6 is public
+	local predicate = level == 6 and access.IsLevel6Allowed or access.IsLevel5Allowed   -- both are public; the flags in DevAccess close them again
 	if type(predicate) ~= "function" then return false end
 	local ok, result = pcall(predicate, player)
 	return ok and result == true
@@ -266,7 +266,7 @@ local function mountGates(state)
 		end
 		local status = newPart(container, "Mounted Access Subtitle", Vector3.new(14, .75, .08),
 			gate * CFrame.new(0, 19.6, 1.46), Color3.fromRGB(20, 24, 22), false)
-		sign(status, if permissions[level] then "DEV PREVIEW" else "COMING SOON",
+		sign(status, if permissions[level] then "NOW OPEN" else "COMING SOON",
 			if permissions[level] then cyan else amber, Vector2.new(900, 80))
 		if permissions[level] then continue end
 		-- Door clear opening is 19.9 x 15.6 studs; the shutter overlaps its jambs .05 each side.

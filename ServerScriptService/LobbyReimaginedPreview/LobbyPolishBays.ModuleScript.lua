@@ -7,8 +7,8 @@ local THEME = {
 	[1] = "OFFICE BACKROOMS · START HERE",
 	[2] = "POOLROOMS",
 	[3] = "MALL BACKROOMS",
-	[4] = "90s CINEMA · DEV ONLY",
-	[5] = "QUIET SUBURBS",
+	[4] = "90s CINEMA",
+	[5] = "THE VOID ROOMS",
 	[6] = "MALL PARTY",
 }
 -- Local coordinates use the bay's existing yaw: +Z is the entrance.
@@ -27,9 +27,7 @@ local PROPS = {
 	{level=4, family="VinylBench", name="Cinema Waiting Bench B", position={21,.8,0}, yaw=math.pi/2},
 	{level=4, family="Desk", name="Cinema Check Desk", position={0,.8,-18}, yaw=math.pi},
 	{level=4, family="CRTMonitor", name="Cinema Check Monitor", position={0,4.009,-18.35}, yaw=math.pi},
-	{level=5, family="Sofa", name="Suburb Waiting Sofa", position={-21,.8,0}, yaw=-math.pi/2},
-	{level=5, family="VinylBench", name="Suburb Waiting Bench", position={21,.8,0}, yaw=math.pi/2},
-	{level=5, family="RolledCarpet", name="Suburb Moving Carpet", position={17,.8,-18}, yaw=0},
+	-- Level 5's bay is dressed by Builder (LEVEL5_BAY_20261004): the suburb sofa, bench and carpet are gone.
 	{level=6, family="VinylBench", name="Mall Waiting Bench A", position={-21,.8,0}, yaw=-math.pi/2},
 	{level=6, family="VinylBench", name="Mall Waiting Bench B", position={21,.8,0}, yaw=math.pi/2},
 	{level=6, family="R4PartyChair", name="Mall Spare Party Chair", position={-15,.76,-19.5}, yaw=0},
@@ -119,9 +117,7 @@ function Module.Add(model, kit, manifest)
 		local ribbon = part(root, "Level" .. level .. " Theme Ribbon", Vector3.new(21.8,.86,.055),
 			header.CFrame * CFrame.new(0,-1.95,.08), Color3.fromRGB(30,34,29))
 		text(ribbon, Enum.NormalId.Back, THEME[level], cream, Vector2.new(1100,90), 230, 1.05)
-		local instruction = if level <= 3 then "STEP ON A PAD · CHOOSE 1–6 PLAYERS"
-			elseif level == 4 then "DEV ONLY · TRIAL OR MAP PREVIEW"
-			else "DEV ACCESS REQUIRED · PARTY QUEUE"
+		local instruction = "STEP ON A PAD · CHOOSE 1–6 PLAYERS"   -- every level is public since 2026-10-04
 		local board = part(root, "Level" .. level .. " Queue Instruction", Vector3.new(19.1,.92,.055),
 			header.CFrame * CFrame.new(0,-3.4,.08), Color3.fromRGB(30,34,29))
 		text(board, Enum.NormalId.Back, instruction, Color3.fromRGB(204,229,214), Vector2.new(1150,88), 160, 1)

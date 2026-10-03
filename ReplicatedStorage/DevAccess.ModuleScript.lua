@@ -35,11 +35,21 @@ function DevAccess.IsLevel6PreviewAllowed(subject)
 	return type(subject) == "number" and subject == 11374988579
 end
 
--- Level 6 (Indoor Playground) is open to every player since 2026-10-03. Level 5 and the developer
--- commands still go through the allowlist above.
+-- Level 6 (Indoor Playground) is open to every player since 2026-10-03.
 DevAccess.Level6Public = true
 function DevAccess.IsLevel6Allowed(subject)
 	return DevAccess.Level6Public == true or DevAccess.IsLevel6PreviewAllowed(subject)
+end
+
+-- Levels 4 and 5 are open to every player since 2026-10-04 (owner: "make sure all levels are accessible for
+-- the public now"). The developer commands still go through the allowlist above.
+DevAccess.Level4Public = true
+DevAccess.Level5Public = true
+function DevAccess.IsLevel4Allowed(subject)
+	return DevAccess.Level4Public == true or DevAccess.IsAllowed(subject)
+end
+function DevAccess.IsLevel5Allowed(subject)
+	return DevAccess.Level5Public == true or DevAccess.IsLevel6PreviewAllowed(subject)
 end
 
 function DevAccess.IsLevel3TimelineOwner(subject)

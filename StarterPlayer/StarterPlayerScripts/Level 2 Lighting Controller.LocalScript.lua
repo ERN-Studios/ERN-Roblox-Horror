@@ -122,6 +122,18 @@ local function apply()
 		grade.TintColor = Color3.fromRGB(247, 242, 222)
 		bloom.Intensity = .085
 	end
+	if workspace:GetAttribute("Level2BlenderPreviewActive") == true then
+		-- The Poolrooms preview is lit like its approved Blender review:
+		-- lighter and more neutral cream than the live level.
+		Lighting.Brightness = 2.2
+		Lighting.ExposureCompensation = .2
+		Lighting.Ambient = Color3.fromRGB(126, 124, 112)
+		Lighting.OutdoorAmbient = Color3.fromRGB(118, 120, 110)
+		Lighting.EnvironmentDiffuseScale = .8
+		grade.Brightness = .01
+		grade.Contrast = .06
+		grade.TintColor = Color3.fromRGB(252, 250, 242)
+	end
 	bloom.Size = 24
 	bloom.Threshold = 1.35
 	lastApplied = os.clock()

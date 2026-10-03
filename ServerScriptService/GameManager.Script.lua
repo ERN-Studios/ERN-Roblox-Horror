@@ -150,7 +150,8 @@ local LEVEL_GENERATORS = {
 -- Rounds stop at Routing.MaxLevel for everyone. Level 4 "Den Sidste
 -- Forestilling" (the cinema) is a round for developers only until
 -- LEVEL4_PUBLIC is flipped: every member of the party must hold DevAccess.
-local LEVEL4_PUBLIC = false
+-- Flipped on 2026-10-04 (owner: every level is open to the public). The map preview stays a developer tool.
+local LEVEL4_PUBLIC = true
 
 local function groupIsDevelopers(group)
  local any = false
@@ -1259,7 +1260,7 @@ local function revisedQueueIdleSubtitle(station)
   if bridge and bridge.IsPreviewPreparing and bridge.IsPreviewPreparing(station) then
    return "PREPARING PREVIEW WORLD  •  PLEASE WAIT"
   end
-  return "TRIAL ROUND OR MAP PREVIEW  •  DEV ACCESS"
+  return "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS"
  end
  if not station.previewQueue then return "ENTER TO HOST  •  CHOOSE 1-6 PLAYERS" end
  local bridge = revisedQueueBridge()
@@ -1267,13 +1268,15 @@ local function revisedQueueIdleSubtitle(station)
   return "PREPARING PREVIEW WORLD  •  PLEASE WAIT"
  end
  if station.level == 6 then return "HIDE AND SEEK  •  1-6 PLAYERS" end
- return "DEV PARTY QUEUE  •  AUTHORIZED ACCESS"
+ if station.level == 5 then return "THE VOID ROOMS  •  1-6 PLAYERS" end
+ return "PARTY QUEUE  •  1-6 PLAYERS"
 end
 
 local function playerInsideZone(player, station, includeBusy)
- -- Public revision queues stay open; both unfinished bays require real DEV authorization.
+ -- Levels 5 and 6 are public (DevAccess.Level5Public / Level6Public); the allowlist decides if either flag is cleared.
  if station.revisionOwned and station.level >= 5
-  and not (station.level == 6 and DevAccess.IsLevel6Allowed(player) or DevAccess.IsLevel6PreviewAllowed(player)) then return false end
+  and not ((station.level == 6 and DevAccess.IsLevel6Allowed(player)) or (station.level == 5 and DevAccess.IsLevel5Allowed(player))
+   or DevAccess.IsLevel6PreviewAllowed(player)) then return false end
  if station.previewQueue then
   local bridge = revisedQueueBridge()
   if not (bridge and bridge.AllowsPreview(station, player))
@@ -3267,7 +3270,7 @@ local function launchStation(station, participants)
   local bridge = revisedQueueBridge()
   if not bridge or not bridge.LaunchPreviewGroup then return end
   station.busy = true
-  setStationDisplay(station, "STARTING DEV PREVIEW", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
+  setStationDisplay(station, "STARTING LEVEL " .. tostring(station.level), #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
   -- Preview controllers own their stream/entry UI; never announce a campaign
   -- loadinggame or create a reserved production server for levels4-6.
   fireGroup(participants, "queueconfigclosed")

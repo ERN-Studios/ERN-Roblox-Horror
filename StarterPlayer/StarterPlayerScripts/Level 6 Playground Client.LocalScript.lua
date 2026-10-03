@@ -83,6 +83,9 @@ markerPart.Transparency, markerPart.Size = 1, Vector3.new(1, 1, 1)
 local marker = Instance.new("BillboardGui")
 marker.Name, marker.AlwaysOnTop, marker.LightInfluence, marker.MaxDistance = "Level6MarkerGui", true, 0, 2000
 marker.Size, marker.Enabled, marker.Adornee = UDim2.fromOffset(90, 90), false, markerPart
+-- The round body is a fresh character (entry and every re-entry): a gui that resets on spawn was destroyed
+-- there, which is why the post marker stopped showing once Level 6 became a live round.
+marker.ResetOnSpawn = false
 marker.Parent = player:WaitForChild("PlayerGui")
 local markerRing = Instance.new("Frame")
 markerRing.AnchorPoint, markerRing.Position, markerRing.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0), UDim2.fromScale(0.62, 0.62)
@@ -168,8 +171,11 @@ local function sound(name, id, volume, looped)
 	s.Parent = audio
 	return s
 end
+-- Owner, 2026-10-03: the level was far too loud. GENERAL scales every effect and loop; the doll (its voice,
+-- its PA copies and its footsteps) is only halved; the music takes the general cut and then half again.
+local GENERAL, ENTITY, MUSIC = 0.35, 0.5, 0.5
 local SFX = {
-	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8), -- dunk
+	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8 * GENERAL), -- dunk
 }
 local counter = ReplicatedStorage:WaitForChild("Level6Counter")
 local function childModel()
@@ -200,7 +206,10 @@ end
 -- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
-local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.0675, 0.45    -- owner: 1.2 / 0.45 far too loud; down 70%, then another 50% (2026-10-03)
+local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.12, 0.45
+-- Owner, 2026-10-03: copies on several PA horns arrive at different distances and the track sounded like an
+-- echo. The song is ONE quiet, non-positional track, the same for everybody; nothing hangs on the horns.
+local MUSIC_ON_HORNS = false
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
@@ -250,12 +259,12 @@ local function musicTick(dt)
 	local talking = speaking ~= nil or next(paCopies) ~= nil
 	local goal = talking and DUCK or 1
 	music.level += math.clamp(goal - music.level, -dt * 1.6, dt * 0.7)
-	bed.Volume = BED_VOLUME * music.level
+	bed.Volume = BED_VOLUME * GENERAL * MUSIC * music.level
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
 	local cam = workspace.CurrentCamera
 	local near = {}
-	if props and cam then
+	if props and cam and MUSIC_ON_HORNS then
 		local all = {}
 		for _, h in ipairs(props:GetChildren()) do
 			if h.Name == "pa_speaker" then all[#all + 1] = h end
@@ -291,15 +300,34 @@ local function musicTick(dt)
 	end
 end
 
+-- A sound Roblox has not approved (moderation pending or refused) exists as an instance and plays nothing.
+-- The effects are checked once in the background; a refused one reports "not there", so its caller's
+-- fallback is heard instead of silence.
+local refused = {}
+task.spawn(function()
+	local voice = counter:WaitForChild("Voice", 30)
+	if not voice then return end
+	for _, key in ipairs({"l6_chase_shriek", "l6_chase_loop", "l6_rage_scream", "l6_rage_loop", "l6_kill_grab", "l6_kill_breath"}) do
+		local sound = voice:FindFirstChild(key)
+		if sound then
+			pcall(function()
+				game:GetService("ContentProvider"):PreloadAsync({sound}, function(_, status)
+					if status ~= Enum.AssetFetchStatus.Success then refused[key] = true end
+				end)
+			end)
+		end
+	end
+end)
+
 local function oneShot(key, volume)
 	local voice = counter:FindFirstChild("Voice")
-	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
+	local source = AUDIO_ENABLED and not refused[key] and voice and voice:FindFirstChild(key)
 	if not source then return end
 	local o = source:Clone()
 	o.Parent = audio
 	o.Ended:Once(function() o:Destroy() end)
 	o:Play()
-	soft(o, volume)
+	soft(o, volume * GENERAL)
 	return true
 end
 
@@ -309,6 +337,7 @@ local function loopOn(parent, key, volume, minDistance, maxDistance)
 	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
 	if not source then return nil end
 	local s = source:Clone()
+	volume *= (key == "l6_doll_walk" or key == "l6_doll_run") and ENTITY or GENERAL
 	s.Name, s.Looped, s.Volume = "L6Loop_" .. key, true, volume
 	if minDistance then
 		s.RollOffMode, s.RollOffMinDistance, s.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, minDistance, maxDistance
@@ -323,7 +352,7 @@ local function movementTick(on)
 			local s = root:FindFirstChild("L6Loop_l6_step_player")
 			local v = root.AssemblyLinearVelocity
 			local speed = Vector3.new(v.X, 0, v.Z).Magnitude
-			if on and plr:GetAttribute(IN_PREVIEW) == true and speed > 3 and math.abs(v.Y) < 6 then
+			if on and (plr:GetAttribute(IN_PREVIEW) == true and plr:GetAttribute("Level5VoidRound") ~= true) and speed > 3 and math.abs(v.Y) < 6 then
 				s = s or loopOn(root, "l6_step_player", plr == player and 0.3 or 0.5, 8, 70)
 				if s then
 					s.PlaybackSpeed = math.clamp(speed / 14, 0.75, 1.7)     -- running sounds like running
@@ -392,7 +421,7 @@ local function say(key, paOnly)
 		s:Destroy()
 	end)
 	s:Play()
-	soft(s, level)
+	soft(s, level * ENTITY)
 	-- the same line over the hall's PA: the nearest ceiling horns, thin and echoing
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
@@ -417,7 +446,7 @@ local function say(key, paOnly)
 			pa.Ended:Once(function() paCopies[pa] = nil; pa:Destroy() end)
 			task.delay(32, function() paCopies[pa] = nil; if pa.Parent then pa:Destroy() end end)
 			pa:Play()
-			soft(pa, 0.5)
+			soft(pa, 0.5 * ENTITY)
 		end
 	end
 end
@@ -451,12 +480,12 @@ event.OnClientEvent:Connect(function(kind, a, b)
 end)
 -- The beds under a chase and under the finale. They fade in and out; nothing else in the level loops this loud.
 task.spawn(function()
-	local beds = {chase = {"l6_chase_loop", 0.55}, rage = {"l6_rage_loop", 0.5}}
+	local beds = {chase = {"l6_chase_loop", 0.55 * GENERAL}, rage = {"l6_rage_loop", 0.5 * GENERAL}}
 	while true do
 		local dt = task.wait(0.05)
 		for name, bed in pairs(beds) do
 			local s = audio:FindFirstChild("L6Loop_" .. bed[1])
-			local want = horror[name] and player:GetAttribute(IN_PREVIEW) == true
+			local want = horror[name] and (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 			if want and not s then
 				s = loopOn(audio, bed[1], 0)
 				if s then s:Play() end
@@ -474,16 +503,23 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		hintLabel.Text = "Free roam: hide and seek is paused."
 		objective(nil)
 	elseif kind == "joined" then
-		dunkLabel.Text = string.format("TAGS %d / %d", b or 0, c or 0)
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b or 0, c or 0)
 		hintLabel.Text = ""
-		objective("HIDE!", "It is counting. Find a hiding place.")
+		-- joining (or re-entering) while it is already searching: the post marker is the objective right away
+		if d == "seek" then
+			dunked = false
+			markerMode = "post"
+			objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
+		else
+			objective("HIDE!", "It is counting. Find a hiding place.")
+		end
 		-- the music waits for the first count (the welcome plays in quiet); a late joiner gets it straight away
 		music.wanted = (a or 0) >= 2 or d == "seek" or d == "between" or d == "escape"
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
-		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
 		markerMode = nil
 		music.wanted = true
 		objective("HIDE!", "It is counting. Find a hiding place.")
@@ -499,17 +535,17 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
 		hintLabel.Text = ""
 		markerMode = "post"
-		objective("TOUCH THE POST", "Sneak to the yellow post. Do not let it see you.")
+		objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "timer" then
 		timerLabel.Text = string.format("%d:%02d", a // 60, a % 60)
 	elseif kind == "dunk" then
-		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
-		if (b or 0) < (c or 3) then changeTrack("l6_music", (b or 0) + 1) end
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
+		if (b or 0) < (c or 3) then changeTrack("l6_music", math.min((b or 0) + 1, 3)) end
 		if a == player.DisplayName then
 			dunked = true
 			markerMode = nil
-			objective("TAGGED!", "Hide again until it goes back to count.", Color3.fromRGB(120, 255, 150))
+			objective("TAGGED!", "Hide until everyone alive has touched the post.", Color3.fromRGB(120, 255, 150))
 		end
 		status(string.upper(a) .. " TAGGED THE POST!", 2.5, Color3.fromRGB(120, 255, 150))
 	elseif kind == "chase" then
@@ -546,7 +582,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	elseif kind == "left" then
 		vignette.ImageTransparency = 1
 		task.delay(3, function()
-			if player:GetAttribute(IN_PREVIEW) ~= true then
+			if (player:GetAttribute(IN_PREVIEW) ~= true or player:GetAttribute("Level5VoidRound") == true) then
 				countLabel.Text, statusLabel.Text, hintLabel.Text, timerLabel.Text = "", "", "", ""
 				markerMode = nil
 				objective(nil)
@@ -609,7 +645,7 @@ local function applyLighting(on)
 end
 
 local function inside()
-	return player:GetAttribute(IN_PREVIEW) == true
+	return (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 end
 
 -- marker, music and the red finale
@@ -625,7 +661,7 @@ task.spawn(function()
 		local dt = now - last
 		last = now
 		local model = workspace:FindFirstChild(MODEL_NAME)
-		local on = model ~= nil and player:GetAttribute(IN_PREVIEW) == true
+		local on = model ~= nil and (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 		local target = on and markerMode and model:GetAttribute(markerMode == "post" and "HomePosition" or "ExitPosition")
 		if target then
 			markerPart.Position = target + Vector3.new(0, markerMode == "post" and 16 or 9, 0)
@@ -848,10 +884,13 @@ killCam = function()
 		black.Parent = cover
 		cover.Parent = player:WaitForChild("PlayerGui")
 		task.spawn(function()
+			-- Dead in the level now, not sent home: the cover holds until the spectate view (or the lobby,
+			-- for a player who left) owns the screen, and the spectate controller owns the camera from there.
 			local t0 = os.clock()
-			while player:GetAttribute(IN_PREVIEW) == true and os.clock() - t0 < 9 do task.wait(0.1) end
-			task.wait(0.8)
-			cam.CameraType = Enum.CameraType.Custom
+			while (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true) and player:GetAttribute("Spectating") ~= true
+				and os.clock() - t0 < 2.5 do task.wait(0.1) end
+			task.wait(0.4)
+			if player:GetAttribute("Spectating") ~= true then cam.CameraType = Enum.CameraType.Custom end
 			pulse(black, "BackgroundTransparency", 0, 1, 1.2)
 			task.wait(1.3)
 			cover:Destroy()
@@ -876,6 +915,7 @@ killCam = function()
 	if gauge then gauge.Enabled = false end
 	task.delay(DURATION + 6, function()
 		horror.killing = false
+		countLabel.Text = ""
 		objective(nil)
 		for item in pairs(shown) do
 			if item ~= card then item.Visible = true end

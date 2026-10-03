@@ -92,6 +92,7 @@ function Module.Start(model)
 				if record.bay.Parent ~= pads or record.floor.Parent ~= record.bay
 					or record.header.Parent ~= signs then continue end
 				if record.level == 6 and DevAccess.IsLevel6Allowed(player) then continue end   -- Level 6 is public
+				if record.level == 5 and DevAccess.IsLevel5Allowed(player) then continue end   -- and Level 5 since 2026-10-04
 				local inside, gate = insideProtectedBay(record, root.Position)
 				if not inside then continue end
 				-- Let the seat release before moving so a welded chair is never moved with a player.
