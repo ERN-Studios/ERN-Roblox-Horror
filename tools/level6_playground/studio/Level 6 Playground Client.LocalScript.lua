@@ -300,7 +300,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		dunkLabel.Text = string.format("TAGS %d / %d", b or 0, c or 0)
 		hintLabel.Text = ""
 		objective("HIDE!", "It is counting. Find a hiding place.")
-		musicWanted = d ~= nil and d ~= "starting"
+		-- the music waits for the first count (the welcome plays in quiet); a late joiner gets it straight away
+		musicWanted = (a or 0) >= 2 or d == "seek" or d == "between" or d == "escape"
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
