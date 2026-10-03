@@ -771,9 +771,50 @@ end
 
 -- ---------------------------------------------------------------------------------------
 -- public API
+-- Level 6 is played like every other round: locked first person. GameManager only does this for
+-- its own rounds, so the level sets it on entry and hands the lobby camera back on the way out.
+local cameraWatch = {}
+local function setRoundCamera(player, inLevel)
+	if player.Parent ~= Players then return end
+	if inLevel then
+		player.CameraMode = Enum.CameraMode.LockFirstPerson
+		player.CameraMinZoomDistance, player.CameraMaxZoomDistance = 0.5, 0.5
+	else
+		player.CameraMode = Enum.CameraMode.Classic
+		player.CameraMaxZoomDistance = 18 -- max first: a minimum above the old maximum is refused
+		player.CameraMinZoomDistance = 8
+	end
+end
+local function ownRoundCamera(player)
+	setRoundCamera(player, true)
+	if cameraWatch[player] then return end
+	local function release()
+		for _, connection in ipairs(cameraWatch[player] or {}) do connection:Disconnect() end
+		cameraWatch[player] = nil
+	end
+	cameraWatch[player] = {
+		player:GetAttributeChangedSignal(IN_PREVIEW):Connect(function()
+			if player:GetAttribute(IN_PREVIEW) ~= true then
+				setRoundCamera(player, false)
+				release()
+			end
+		end),
+		-- A respawn inside the level runs GameManager's onCharacter, which resets to the lobby camera.
+		player.CharacterAdded:Connect(function()
+			task.defer(function()
+				if player:GetAttribute(IN_PREVIEW) == true then setRoundCamera(player, true) end
+			end)
+		end),
+		player.AncestryChanged:Connect(function()
+			if player.Parent ~= Players then release() end
+		end),
+	}
+end
+
 function Game.AddPlayer(player)
 	local info = map()
 	if not info then return false, "MAP_NOT_READY" end
+	ownRoundCamera(player)
 	if not CONFIG.EntityEnabled then
 		event:FireClient(player, "paused")
 		return true
