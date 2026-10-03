@@ -300,6 +300,62 @@ local function oneShot(key, volume)
 	o.Ended:Once(function() o:Destroy() end)
 	o:Play()
 	soft(o, volume)
+	return true
+end
+
+-- footsteps and room tone: looping sounds made for this level (assets/level6-sfx-elevenlabs)
+local function loopOn(parent, key, volume, minDistance, maxDistance)
+	local voice = counter:FindFirstChild("Voice")
+	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
+	if not source then return nil end
+	local s = source:Clone()
+	s.Name, s.Looped, s.Volume = "L6Loop_" .. key, true, volume
+	if minDistance then
+		s.RollOffMode, s.RollOffMinDistance, s.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, minDistance, maxDistance
+	end
+	s.Parent = parent
+	return s
+end
+local function movementTick(on)
+	for _, plr in ipairs(Players:GetPlayers()) do
+		local root = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+		if root then
+			local s = root:FindFirstChild("L6Loop_l6_step_player")
+			local v = root.AssemblyLinearVelocity
+			local speed = Vector3.new(v.X, 0, v.Z).Magnitude
+			if on and plr:GetAttribute(IN_PREVIEW) == true and speed > 3 and math.abs(v.Y) < 6 then
+				s = s or loopOn(root, "l6_step_player", plr == player and 0.3 or 0.5, 8, 70)
+				if s then
+					s.PlaybackSpeed = math.clamp(speed / 14, 0.75, 1.7)     -- running sounds like running
+					if not s.IsPlaying then s:Play() end
+				end
+			elseif s and s.IsPlaying then
+				s:Stop()
+			end
+		end
+	end
+	local child = on and childModel()
+	local root = child and child:FindFirstChild("Root")
+	if root then
+		local anim = child:GetAttribute("Anim")
+		local want = (anim == "Run_Chase" and "l6_doll_run") or (anim == "Walk_Wander" and "l6_doll_walk") or nil
+		for _, key in ipairs({"l6_doll_walk", "l6_doll_run"}) do
+			local s = root:FindFirstChild("L6Loop_" .. key)
+			if key == want then
+				s = s or loopOn(root, key, key == "l6_doll_run" and 1 or 0.8, 14, 170)
+				if s and not s.IsPlaying then s:Play() end
+			elseif s and s.IsPlaying then
+				s:Stop()
+			end
+		end
+	end
+	local tone = audio:FindFirstChild("L6Loop_l6_ambience")
+	if on then
+		tone = tone or loopOn(audio, "l6_ambience", 0.16)
+		if tone and not tone.IsPlaying then tone:Play() end
+	elseif tone and tone.IsPlaying then
+		tone:Stop()
+	end
 end
 
 -- A tag on the post: the tape stops with the CD-change sound and starts again, faster and lower each time.
@@ -366,13 +422,17 @@ local function say(key, paOnly)
 	end
 end
 local dunked = false
-event.OnClientEvent:Connect(function(kind, a)
+event.OnClientEvent:Connect(function(kind, a, b)
 	if kind == "say" then
 		say(a)
 	elseif kind == "pa" then
 		say(a, true)
 	elseif kind == "dunk" or kind == "escaped" then
-		SFX.ping:Play()
+		if not oneShot("l6_tag", 0.5) then SFX.ping:Play() end
+	elseif kind == "chase" and a then
+		oneShot("l6_sting_spotted", 0.45)                 -- it has seen you
+	elseif kind == "caught" then
+		oneShot("l6_catch", b and 0.8 or 0.3)             -- loud for the one who was caught
 	end
 end)
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
@@ -559,6 +619,7 @@ task.spawn(function()
 			setMusic("l6_music", music.stage)
 		end
 		musicTick(dt)
+		movementTick(on)
 
 		-- the red finale: no red wash over the picture. The hall goes dark and only the ceiling fixtures stay on,
 		-- as tight red spotlights; every other lamp fades out. Eases in over about four seconds.
@@ -715,7 +776,7 @@ local function clip(name)
 end
 
 -- studs per second at which each travelling clip's feet match the floor
-local STRIDE = {Walk_Wander = 5.1, Run_Chase = 11.5}
+local STRIDE = {Walk_Wander = 7.1, Run_Chase = 16}
 local TWITCH_OVER = {Idle = true, Walk_Wander = true, Run_Chase = true}
 local FADE = 0.16
 local rigs = setmetatable({}, {__mode = "k"})

@@ -705,7 +705,7 @@ def build_frame():
             pad(zb, z + 5, FRAME_VINYL[(int(x0) // 12 + int(y0) // 12 + k) % len(FRAME_VINYL)])
             net(z + 5, zt)
         elif kind == 'arch':
-            pad(z + 7.6, zt, 'red', 1.2)
+            pad(z + 9.2, zt, 'red', 1.2)        # high enough for the 8.2-stud doll to walk in
 
     for k in range(NZ):
         for i in range(-1, NX):

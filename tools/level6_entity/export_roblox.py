@@ -10,7 +10,7 @@ import bpy, os, json, math
 from mathutils import Matrix, Vector
 
 ROOT = os.path.abspath("artifacts/level6-entity-20261003")
-STUDS_PER_METRE = 4.5   # 1.3 m doll -> 5.85 studs, a Roblox avatar's height
+STUDS_PER_METRE = 6.3   # 1.3 m doll -> 8.2 studs: 40% taller than an avatar (owner, 2026-10-03)
 bpy.ops.wm.open_mainfile(filepath=os.path.join(ROOT, "blend", "counter_animated.blend"))
 scene = bpy.context.scene
 arm = bpy.data.objects["CounterRig"]; mesh = bpy.data.objects["CounterDoll"]

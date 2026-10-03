@@ -31,11 +31,11 @@ local CONFIG = {
 	TagsToWin = 3,
 	DunkRadius = 7, DunkSafeDistance = 22,
 	WalkSpeed = 9, ChaseSpeed = 20, EscapeChaseSpeed = 24,   -- it is furious once the exit opens
-	SightRange = 75, CatchDistance = 4.2, HideRadius = 4.5, HiddenSpotRange = 6,
+	SightRange = 75, CatchDistance = 5.2, HideRadius = 4.5, HiddenSpotRange = 9,
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 2.2,
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
-	EyeHeight = 1.8,   -- eyes above the root
+	EyeHeight = 2.6,   -- eyes above the root
 	SpottedPause = 0.9,
 	IntroSilence = 5,  -- seconds of quiet after the players arrive, before the PA chime
 }
@@ -313,7 +313,7 @@ function Session:feet()
 end
 
 function Session:path(to)
-	local path = PathfindingService:CreatePath({AgentRadius = 2, AgentHeight = 6, AgentCanJump = true,
+	local path = PathfindingService:CreatePath({AgentRadius = 2, AgentHeight = 8, AgentCanJump = true,
 		AgentCanClimb = false, WaypointSpacing = 5})
 	local ok = pcall(function() path:ComputeAsync(self:feet(), to) end)
 	if not ok or path.Status ~= Enum.PathStatus.Success then return nil end
@@ -347,6 +347,13 @@ end
 
 function Session:walkTo(pos, speed, phase)
 	local points = self:path(pos)
+	if not points then
+		-- the 8-stud doll cannot get into a playhouse or behind a counter: go and stand next to it instead
+		for _, off in ipairs({Vector3.new(0, 0, 7), Vector3.new(7, 0, 0), Vector3.new(-7, 0, 0), Vector3.new(0, 0, -7)}) do
+			points = self:path(pos + off)
+			if points then break end
+		end
+	end
 	if not points then
 		-- unreachable by navmesh: glide straight if it is close, otherwise give up on this goal
 			if (pos - self:feet()).Magnitude > 24 then return false end
@@ -806,5 +813,96 @@ function Game.State()
 end
 
 Players.PlayerRemoving:Connect(function(player) Game.RemovePlayer(player) end)
+
+-- ---------------------------------------------------------------------------------------
+-- The Level 6 queue bay in the lobby is dressed like the level: the Playland sign, the rules, a playhouse,
+-- soft blocks, ball bags and loose balls. Added to the bay, nothing of the lobby is moved or removed; the
+-- lobby is built at run time, so this waits for it (and dresses it again if the lobby is rebuilt).
+local function dressLobbyBay(lobby)
+	local pads = lobby:FindFirstChild("PreviewQueuePads")
+	local bay = pads and pads:FindFirstChild("QueueBay_Level6")
+	local floor = bay and bay:FindFirstChild("ChamberFloor")
+	local signs = lobby:FindFirstChild("LevelGateSigns")
+	local header = signs and signs:FindFirstChild("LEVEL 6 Door Header")
+	if not floor or not header or bay:FindFirstChild("Level6BayDressing") then return end
+	local folder = Instance.new("Folder")
+	folder.Name = "Level6BayDressing"
+	local top = floor.Position.Y + math.min(floor.Size.X, floor.Size.Y, floor.Size.Z) / 2
+	local C = Vector3.new(floor.Position.X, top, floor.Position.Z)
+	local f = Vector3.new(C.X - header.Position.X, 0, C.Z - header.Position.Z).Unit   -- from the door into the bay
+	local r = Vector3.new(-f.Z, 0, f.X)
+	local kit = ReplicatedStorage:FindFirstChild("Level6PropKit")
+	local function at(a, b, y) return C + f * a + r * b + Vector3.new(0, y or 0, 0) end
+	local function face(pos, yaw) return CFrame.lookAt(pos, pos - f) * CFrame.Angles(0, math.rad(yaw or 0), 0) end
+	local function prop(name, a, b, yaw, size)
+		local template = kit and kit:FindFirstChild(name)
+		if not template then return end
+		local m = template:Clone()
+		m.Size = m.Size * (size / math.max(m.Size.X, m.Size.Y, m.Size.Z))
+		m.Anchored, m.CanCollide, m.CanTouch = true, true, false
+		m.CFrame = face(at(a, b, m.Size.Y / 2), (yaw or 0) + 180)
+		m.Parent = folder
+	end
+	local function block(a, b, size, color, yaw)
+		local p = Instance.new("Part")
+		p.Anchored, p.Size, p.Color, p.Material = true, size, color, Enum.Material.SmoothPlastic
+		p.CFrame = face(at(a, b, size.Y / 2), yaw)
+		for _, side in ipairs({Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Top}) do
+			local tx = Instance.new("Texture")
+			tx.Texture, tx.Face, tx.StudsPerTileU, tx.StudsPerTileV, tx.Color3 = "rbxassetid://107384724475398", side, 7, 7, color
+			tx.Parent = p
+		end
+		p.Parent = folder
+	end
+	local function ball(a, b, color)
+		local p = Instance.new("Part")
+		p.Shape = Enum.PartType.Ball
+		p.Anchored, p.CanCollide, p.Size, p.Color, p.Material = true, false, Vector3.one * 1.2, color, Enum.Material.SmoothPlastic
+		p.Position = at(a, b, 0.6)
+		p.Parent = folder
+	end
+	local function board(a, b, y, w, h, image)
+		local p = Instance.new("Part")
+		p.Anchored, p.CanCollide, p.Size, p.Color = true, false, Vector3.new(w, h, 0.25), Color3.fromRGB(30, 30, 30)
+		p.CFrame = face(at(a, b, y), 0)
+		local gui = Instance.new("SurfaceGui")
+		gui.Face, gui.SizingMode, gui.PixelsPerStud, gui.LightInfluence = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 40, 1
+		local img = Instance.new("ImageLabel")
+		img.Size, img.BackgroundTransparency, img.Image = UDim2.fromScale(1, 1), 1, image
+		img.Parent = gui
+		gui.Parent = p
+		p.Parent = folder
+	end
+	local RED, YEL, BLU, GRN = Color3.fromRGB(190, 40, 35), Color3.fromRGB(235, 175, 25), Color3.fromRGB(35, 70, 190), Color3.fromRGB(45, 150, 60)
+	board(25.6, 0, 10.5, 18, 6, "rbxassetid://134636294375228")      -- FUN FACTORY PLAYLAND on the back wall
+	board(22.5, -14, 7.5, 5, 7.5, "rbxassetid://94808318000202")     -- play rules
+	board(22.5, 14, 7.5, 6, 6, "rbxassetid://97061078157196")        -- home base
+	prop("playhouse", 21, 0, 0, 9)
+	prop("fake_plant", -21, -8.5, 30, 7)
+	prop("fake_plant", -21, 8.5, 200, 7)
+	prop("ball_bag", 17, -19.5, 40, 6)
+	prop("ball_bag", 17, 19.5, 150, 6.5)
+	block(20, -9, Vector3.new(4, 3, 4), RED, 15)
+	block(20, -9.2, Vector3.new(3, 6, 3), BLU, 40)
+	block(20, 9, Vector3.new(5, 3, 4), YEL, -20)
+	block(16.5, 11, Vector3.new(3, 3, 3), GRN, 30)
+	local cols = {RED, YEL, BLU, GRN}
+	for i, pos in ipairs({{-14, -3}, {-6, 2.5}, {2, -1.5}, {9, 3}, {14, -2}, {23, -5}, {24, 5}, {-17, 4}, {12, -23}, {12, 23},
+		{-12, 24}, {-12, -24}, {0, 0.5}, {19, -15}}) do
+		ball(pos[1], pos[2], cols[i % 4 + 1])
+	end
+	folder.Parent = bay
+end
+task.spawn(function()
+	while true do
+		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+		if lobby and lobby:GetAttribute("Ready") == true then
+			local ok, err = pcall(dressLobbyBay, lobby)
+			if not ok then warn("[Level6] lobby bay dressing: " .. tostring(err)) end
+		end
+		task.wait(5)
+	end
+end)
+
 
 return Game
