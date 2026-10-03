@@ -227,6 +227,32 @@ function Module.Build()
 	require(script.Parent:WaitForChild("LobbyPolishScene")).Apply(model)
 	transfer = supportBoardTransfer(model, center)
 	applySupportBoardTransfer(transfer, model)
+	-- LOBBY_COLLISION_20261004 (reported by the other developer: "a lot of things in the lobby have no collision"
+	-- and "the Level 4 cinema bay objects do not fit").
+	--   The manifest's colliders cover the architecture; the bay furniture, the cinema seat row and the furniture
+	--   piles at the tunnel ends were visuals only, so players walked through them. Their MeshParts carry Box
+	--   collision fidelity, so turning CanCollide on gives each piece its own box and nothing wider.
+	--   The cinema seat row is a straight 26.3-stud piece against a round wall of inner radius 27.84: at
+	--   23.5 studs out its corners sat at 28.89 and showed through the wall. 1.5 studs toward the bay's
+	--   centre puts them at 27.58.
+	do
+		local function solid(root)
+			if not root then return end
+			for _, d in ipairs(root:IsA("BasePart") and {root} or root:GetDescendants()) do
+				if d:IsA("BasePart") and d.Transparency < 0.9 then d.CanCollide = true end
+			end
+		end
+		local cinemaRow = visuals:FindFirstChild("BayDecorLevel4")
+		local rowPart = cinemaRow and (cinemaRow:IsA("BasePart") and cinemaRow or cinemaRow:FindFirstChildWhichIsA("BasePart", true))
+		if rowPart then
+			local bayCentre = center + Vector3.new(63, 0.4, 0)
+			local inward = (bayCentre - rowPart.Position) * Vector3.new(1, 0, 1)
+			if inward.Magnitude > 22.5 then rowPart.CFrame += inward.Unit * 1.5 end
+		end
+		solid(cinemaRow)
+		solid(visuals:FindFirstChild("Reference End Furniture Piles"))
+		solid(bayPolish:FindFirstChild("Theme Furniture") or model:FindFirstChild("Theme Furniture", true))
+	end
 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
 	model.Parent = workspace
 	require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(model)
