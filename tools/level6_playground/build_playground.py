@@ -801,9 +801,7 @@ BALL_COLOURS = ('red', 'yellow', 'blue', 'green', 'orange')
 
 
 def planter(b, x, y):
-    b.cyl((x, y, 0.35), (x, y, 3.2), 1.8, 'pot', 8, True)
-    b.ball((x, y, 5.4), 2.6, 'plant')
-    b.ball((x + 1.2, y + 0.6, 7.2), 1.7, 'plant')
+    prop('fake_plant', x, y, yaw=(x * 7 + y * 3) % 360, size=8.5, collide=False)
 
 
 def picnic_table(b, x, y, top, along_x=True):
@@ -812,16 +810,16 @@ def picnic_table(b, x, y, top, along_x=True):
     legs = ((x + 2, y + 0.5, x + 3, y + d - 0.5), (x + w - 3, y + 0.5, x + w - 2, y + d - 0.5)) if along_x else \
         ((x + 0.5, y + 2, x + w - 0.5, y + 3), (x + 0.5, y + d - 3, x + w - 0.5, y + d - 2))
     for x0, y0, x1, y1 in legs:
-        b.box((x0, y0, 0.35), (x1, y1, 3.4), 'steel')
+        b.box((x0, y0, 0.35), (x1, y1, 3.4), 'black')
     for off in (-5, d + 2) if along_x else (-5, w + 2):
         if along_x:
             b.box((x, y + off, 2.0), (x + w, y + off + 3, 2.4), top)
-            b.box((x + 2, y + off + 1, 0.35), (x + 3, y + off + 2, 2.0), 'steel')
-            b.box((x + w - 3, y + off + 1, 0.35), (x + w - 2, y + off + 2, 2.0), 'steel')
+            b.box((x + 2, y + off + 1, 0.35), (x + 3, y + off + 2, 2.0), 'black')
+            b.box((x + w - 3, y + off + 1, 0.35), (x + w - 2, y + off + 2, 2.0), 'black')
         else:
             b.box((x + off, y, 2.0), (x + off + 3, y + d, 2.4), top)
-            b.box((x + off + 1, y + 2, 0.35), (x + off + 2, y + 3, 2.0), 'steel')
-            b.box((x + off + 1, y + d - 3, 0.35), (x + off + 2, y + d - 2, 2.0), 'steel')
+            b.box((x + off + 1, y + 2, 0.35), (x + off + 2, y + 3, 2.0), 'black')
+            b.box((x + off + 1, y + d - 3, 0.35), (x + off + 2, y + d - 2, 2.0), 'black')
     HIDE.append(('table', x + w / 2, y + d / 2, 0.6))
 
 
@@ -875,39 +873,38 @@ def build_reception():
 def build_snack_shack():
     s = Builder('SnackShack', zones_col)
     x0, y0, x1, y1 = 0, 150, 40, 270
-    s.box((0, y0, 0), (1, y1, 22), 'wall_yellow')
-    s.box((0, y0, 16), (x1 - 4, y1, 22), 'wall_yellow')
-    for n in range(12):                                              # striped awning
-        ya = y0 + n * 10
-        s.box((x1 - 4, ya, 13.6), (x1 + 4, ya + 10, 15.6), 'red' if n % 2 == 0 else 'white')
-    for y in (y0, y0 + 39, y0 + 79, y1 - 2):
-        s.box((x1 - 7, y, 0), (x1 - 4, y + 2, 16), 'wall_yellow')
-    s.box((x1 - 6.5, y0 + 2, 0), (x1 - 4.5, y1 - 2, 4.2), 'white')
-    s.box((x1 - 9.5, y0 + 2, 4.2), (x1 - 3.4, y1 - 2, 4.7), 'counter')
-    s.box((2, y0 + 4, 0), (9, y1 - 4, 4.4), 'stainless')
-    s.box((2, y0 + 14, 4.4), (7, y0 + 22, 8.5), 'stainless')
-    prop('slush_machine', 5, y0 + 72, z=4.4, yaw=90, size=5.5, collide=False)
-    prop('slush_machine', 5, y0 + 44, z=4.4, yaw=90, size=5.5, collide=False)
-    s.box((x1 + 2, y0 - 12, 0), (x1 + 9, y0 - 3, 11), 'stainless')   # drinks fridge
-    s.box((x1 + 8.6, y0 - 11.4, 1), (x1 + 9.1, y0 - 3.6, 10.4), 'black')
-    for y in (y0 + 20, y0 + 60, y0 + 100):
-        s.box((6, y - 5, 15.2), (22, y - 4, 15.4), 'lamp_warm')
-        s.box((6, y + 4, 15.2), (22, y + 5, 15.4), 'lamp_warm')
-        light(f'L6_SnackBar_{y}', (14, y, 15.0), energy=9000, color=(1.0, 0.78, 0.40), size=(14, 9))
+    s.box((0, y0, 0), (1, y1, 24), 'wall_yellow')                    # back wall
+    s.box((0, y0 - 2, 0), (x1, y0, 24), 'navy')                      # side returns
+    s.box((0, y1, 0), (x1, y1 + 2, 24), 'navy')
+    s.box((x1 - 2, y0 - 2, 15), (x1, y1 + 2, 24), 'navy')            # the fascia above the opening
+    s.box((0, y0, 15), (x1 - 2, y1, 15.6), 'wall_white')             # ceiling of the bar
+    for n in range(8):                                               # counter front: yellow and red panels
+        ya = y0 + n * 15
+        s.box((x1 - 5, ya, 0), (x1 - 3.4, ya + 15, 4.4), 'wall_yellow' if n % 3 else 'wall_red')
+    s.box((x1 - 8, y0, 4.4), (x1 - 2.6, y1, 4.9), 'stainless')       # counter top
+    s.box((2, y0 + 4, 0), (9, y1 - 4, 4.4), 'stainless')             # back counter
+    s.box((2, y0 + 12, 4.4), (8, y0 + 24, 11), 'stainless')          # fridge
+    s.box((2, y0 + 30, 4.4), (7, y0 + 37, 8), 'stainless')           # oven
+    s.box((x1 - 7.5, y0 + 20, 4.9), (x1 - 4.5, y0 + 24, 7.2), 'black')   # till
+    s.box((x1 - 7.5, y0 + 86, 4.9), (x1 - 4.5, y0 + 90, 6.4), 'red')     # napkin box
+    prop('slush_machine', x1 - 6, y0 + 106, z=4.9, yaw=-90, size=5.5, collide=False)
+    prop('slush_machine', 5, y0 + 72, z=4.4, yaw=-90, size=5.5, collide=False)
+    for n, y in enumerate((y0 + 20, y0 + 60, y0 + 100)):
+        s.box((10, y - 0.4, 15.1), (30, y + 0.4, 15.4), 'lamp_warm')     # tubes on the bar's ceiling
+        light(f'L6_SnackBar_{n}', (20, y, 13.5), energy=9000, color=(1.0, 0.78, 0.40), size=(14, 9))
+        board((1.65, y, 11.5), 26, 5.4, '+x', 'menu_boards', lit=True)
+    s.cyl((x1 + 6, y1 - 6, 0.35), (x1 + 6, y1 - 6, 5.2), 2.0, 'black', 10, True)   # bin
     for px, py in ((46, 138), (46, 284), (144, 138), (144, 284)):
         planter(s, px, py)
-    s.box((150, 196, 0.35), (154, 204, 5), 'steel')                  # bin
     s.finish()
     t = Builder('PartyTables', zones_col)
     for n, ty in enumerate((146, 178, 210, 242)):
-        picnic_table(t, 70, ty, ('red', 'blue', 'yellow', 'green')[n])
-        picnic_table(t, 108, ty + 8, ('blue', 'red', 'green', 'yellow')[n])
+        picnic_table(t, 70, ty, ('red', 'blue')[n % 2])
+        picnic_table(t, 108, ty + 8, ('blue', 'red')[n % 2])
     for px, py in ((76, 149), (84, 150.5), (116, 189), (90, 214), (120, 252), (126, 250)):   # a party never cleared
         t.cyl((px, py, 3.9), (px, py, 4.0), 1.1, 'paper', 8, True)
     t.finish()
-    sign((x1 + 4.2, 210, 18.6), 60, 4.6, '+x', 'SNACK SHACK', (250, 205, 30), (200, 25, 25))
-    for y in (y0 + 20, y0 + 60, y0 + 100):
-        board((1.65, y, 12), 24, 5.2, '+x', 'menu_boards', lit=True)
+    sign((x1 + 0.2, 210, 19.5), 60, 4.6, '+x', 'SNACK SHACK', (250, 205, 30), (200, 25, 25))
     HIDE.extend([('counter', 8, 176, 1), ('counter', 8, 244, 1)])
 
 
@@ -1041,6 +1038,10 @@ def build_staff_only():
                     for n, head in enumerate(('mascot_head_bear', 'mascot_head_dog', 'mascot_head_chicken')):
                         prop(head, cx + 3 + n * 3, cy + 9.6, z=8.3, yaw=180, size=3.4, collide=False)
                 elif kind == 2:                                      # bags of balls
+                    prop('ball_bag', cx + 3, cy + 3, yaw=10, size=7.5)
+                    prop('ball_bag', cx + 6.5, cy + 4, yaw=80, size=6.5)
+                    prop('ball_bag', cx + 4.5, cy + 7.5, yaw=200, size=7)
+                elif kind == 99:
                     for bx, by in ((cx + 3, cy + 3), (cx + 6.5, cy + 3.5), (cx + 4.5, cy + 7)):
                         s.cyl((bx, by, 0.35), (bx, by, 4.2), 1.7, 'paper', 8, True)
                         s.ball((bx, by, 4.6), 1.5, BALL_COLOURS[int(bx + by) % 5])
@@ -1140,19 +1141,20 @@ def build_toddler_town():
 def build_inflatables():
     f = Builder('Inflatables', zones_col)
     x0, y0, x1, y1 = INFLATE
-    wall_run(f, (x0 - 6, y0), (x0 - 6, y1), 18, 'inflate_a', openings=[(54, 100, 15), (196, 240, 15)])
     f.box((x0 + 2, 100, 0.35), (x0 + 8, 106, 0.6), 'navy')            # a stray landing mat
     f.finish()
-    prop('bouncy_castle', 556, 250, yaw=90, size=44)
-    prop('inflatable_slide', 556, 150, yaw=90, size=34)
-    prop('deflated_castle', 554, 52, yaw=30, size=46, collide=False)   # the one that has gone flat
-    prop('deflated_castle', 528, 100, yaw=200, size=26, collide=False)
-    prop('inflatable_dino', 532, 206, yaw=-60, size=20)
-    prop('blower_fan', 520, 34, yaw=40, size=5)
-    prop('blower_fan', 520, 268, yaw=140, size=5)
-    prop('blower_fan', 522, 120, yaw=90, size=5)
-    sign((x0 - 6.9, 148, 14.6), 44, 4, '-x', 'INFLATABLES', (120, 180, 70), (255, 255, 255))
-    HIDE.extend([('inflatable', 573, 250, 3), ('inflatable', 552, 110, 1), ('softblock', 540, 214, 1)])
+    prop('bouncy_castle', 562, 262, yaw=90, size=40)
+    prop('bouncy_castle', 566, 96, yaw=90, size=34)
+    prop('inflatable_slide', 560, 196, yaw=90, size=34)
+    prop('inflatable_slide', 568, 34, yaw=90, size=28)
+    prop('deflated_castle', 548, 146, yaw=30, size=44, collide=False)  # the ones that have gone flat
+    prop('deflated_castle', 524, 226, yaw=200, size=26, collide=False)
+    prop('deflated_castle', 530, 60, yaw=100, size=30, collide=False)
+    prop('inflatable_dino', 528, 180, yaw=-60, size=17)
+    for bx, by, yaw in ((520, 34, 40), (522, 268, 140), (524, 120, 90), (518, 200, 20)):
+        prop('blower_fan', bx, by, yaw=yaw, size=5)
+    sign((x1 - 0.9, 150, 26), 60, 5, '-x', 'INFLATABLES', (120, 180, 70), (255, 255, 255))
+    HIDE.extend([('inflatable', 573, 262, 3), ('inflatable', 552, 110, 1), ('softblock', 540, 214, 1)])
 
 
 def build_home_base():
@@ -1176,6 +1178,27 @@ def build_home_base():
     HIDE.append(('home', hx, hy - 4, 1))
 
 
+def build_hall_litter():
+    b = Builder('Hall_SoftBlocks', zones_col)
+    spots = ((306, 250, 'yellow', 7, 4, 4), (318, 262, 'red', 5, 5, 3), (300, 180, 'blue', 4, 4, 8), (312, 150, 'green', 6, 4, 3),
+             (500, 300, 'red', 5, 5, 5), (496, 150, 'yellow', 6, 4, 3), (180, 250, 'blue', 5, 5, 4), (268, 300, 'green', 7, 4, 3),
+             (160, 150, 'red', 4, 4, 4), (420, 316, 'yellow', 6, 5, 3), (322, 300, 'blue', 4, 4, 4))
+    for x, y, mat, w, d, h in spots:
+        b.box((x, y, 0.35), (x + w, y + d, 0.35 + h), mat)
+        HIDE.append(('softblock', x + w / 2, y + d + 2.5, 1))
+    b.finish()
+    balls = Builder('Hall_Balls', zones_col)
+    spread = random.Random(21)
+    n = 0
+    while n < 90:
+        x, y = spread.uniform(160, 596), spread.uniform(4, 320)
+        if in_rect(x, y, BALL, 2) or in_rect(x, y, STAFF, 2) or in_rect(x, y, TODDLER, 2) or in_rect(x, y, (SX, SY, SX + NX * C, SY + NY * C)):
+            continue
+        balls.ball((x, y, 0.95), 0.6, spread.choice(BALL_COLOURS))
+        n += 1
+    balls.finish()
+
+
 # ==========================================================================================
 # Assemble
 # ==========================================================================================
@@ -1192,6 +1215,7 @@ build_ball_ocean()
 build_toddler_town()
 build_inflatables()
 build_home_base()
+build_hall_litter()
 
 anchors_col = collection('L6_Anchors')
 for name, loc in (('Spawn', (66, 20, 3)), ('Exit', ((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 6, 3)),
