@@ -499,6 +499,7 @@ WEST_DOORS, EAST_DOORS = (2, 7, 12), (7,)
 # (storey, cell, cell) bays left open so a slide, tube or bridge can be entered
 PASSAGES = {
     (2, (3, -1), (3, 0)), (2, (9, -1), (9, 0)),             # tube slides south into Ball Ocean
+    (2, (-1, 6), (0, 6)),                                   # red tube slide west into the hall
     (1, (6, -1), (6, 0)),                                   # open green slide into Ball Ocean
     (2, (8, 6), (9, 6)), (2, (8, 7), (9, 7)),               # top of the wave slide
     (1, (4, 5), (4, 6)), (1, (4, 10), (4, 11)),             # crawl tube, storey 1
@@ -691,9 +692,9 @@ def build_frame():
     pads.finish()
     arches.finish()
     for n, (j, k) in enumerate(((1, 1), (4, 2), (5, 1), (9, 2), (10, 1), (13, 2), (0, 2), (8, 1))):   # bubble-window panels on the hall side
-        prop('tube_window_panel', SX - 0.7, SY + j * C + 6, z=k * H + 0.6, yaw=90, size=8.6, collide=False)
+        prop('tube_window_panel', SX - 0.7, SY + j * C + 6, z=k * H + 0.6, yaw=-90, size=8.6, collide=False)
     for n, (i, k) in enumerate(((1, 1), (4, 2), (7, 1), (10, 2))):                                      # and facing Ball Ocean
-        prop('tube_window_panel', SX + i * C + 6, SY - 0.7, z=k * H + 0.6, yaw=0, size=8.6, collide=False)
+        prop('tube_window_panel', SX + i * C + 6, SY - 0.7, z=k * H + 0.6, yaw=180, size=8.6, collide=False)
     for j in WEST_DOORS:
         sign((SX - 0.8, SY + j * C + 6, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40))
     sign((SX - 1.0, SY + NY * C / 2, 26), 46, 4.5, '-x', 'THE BIG FRAME', (255, 200, 20), (180, 20, 20))
@@ -774,6 +775,15 @@ def build_frame():
         sl.tube(path, 3.1, cols, 12)
         for p in path[4::4]:
             sl.cyl((p[0], p[1], 0.35), (p[0], p[1], p[2] - 3.0), 0.35, 'steel', 5)
+    wy = SY + 6 * C + C / 2                                            # the big red tube slide out into the hall
+    path = [(SX + 3, wy, 23.3), (SX - 4, wy, 23.0)]
+    for n in range(1, 13):
+        t = n / 12
+        path.append((SX - 4 - 40 * t, wy + 10 * math.sin(t * math.pi / 2) ** 2, 23.0 - 19.4 * t ** 0.85))
+    path.append((path[-1][0] - 6, path[-1][1] + 1, 3.4))
+    sl.tube(path, 3.2, ['red', 'red', 'yellow', 'red', 'blue'], 12)
+    for q in path[4::4]:
+        sl.cyl((q[0], q[1], 0.35), (q[0], q[1], q[2] - 3.1), 0.35, 'steel', 5)
     cx, cy = SX + SPIRAL[0] * C + C / 2, SY + SPIRAL[1] * C + C / 2      # spiral tube in its own shaft
     path = [(cx + 5.2 * math.cos(math.pi + a), cy + 5.2 * math.sin(math.pi + a), 23.4 - 20.2 * (a / (math.pi * 5)))
             for a in [n * math.pi / 8 for n in range(0, 41)]]
