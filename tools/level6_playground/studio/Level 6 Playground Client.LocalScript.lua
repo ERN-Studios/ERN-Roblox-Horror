@@ -181,7 +181,9 @@ local function stopVoice()
 	if speaking then speaking:Destroy(); speaking = nil end
 end
 -- One line at a time: a new line cuts the old one off, as the server only sends a line that should win.
-local function say(key)
+-- `paOnly`: a hall announcement (the chime, the welcome): the ceiling horns and a quiet copy everywhere,
+-- not the doll's own mouth
+local function say(key, paOnly)
 	if not AUDIO_ENABLED then return end
 	local voice = counter:FindFirstChild("Voice")
 	local source = voice and voice:FindFirstChild(key)
@@ -189,7 +191,12 @@ local function say(key)
 	stopVoice()
 	local child = childModel()
 	local s = source:Clone()
-	s.Parent = (child and child:FindFirstChild("Root")) or audio
+	if paOnly then
+		s.RollOffMode, s.Volume = Enum.RollOffMode.Linear, 0.35
+		s.Parent = audio                      -- heard wherever you are, under the horns
+	else
+		s.Parent = (child and child:FindFirstChild("Root")) or audio
+	end
 	speaking = s
 	s.Ended:Once(function()
 		if speaking == s then speaking = nil end
@@ -226,6 +233,8 @@ local dunked = false
 event.OnClientEvent:Connect(function(kind, a)
 	if kind == "say" then
 		say(a)
+	elseif kind == "pa" then
+		say(a, true)
 	elseif kind == "dunk" or kind == "escaped" then
 		SFX.ping:Play()
 	end

@@ -37,6 +37,7 @@ local CONFIG = {
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
 	EyeHeight = 1.8,   -- eyes above the root
 	SpottedPause = 0.9,
+	IntroSilence = 5,  -- seconds of quiet after the players arrive, before the PA chime
 }
 
 local Game = {}
@@ -466,6 +467,19 @@ function Session:countPhase()
 	self:goHome("count")
 	if not self.active then return end
 	self.phase = "count"
+	if self.round == 1 then
+		-- the welcome: quiet for a few seconds once everyone is in, the PA chime, then its announcement
+		task.wait(CONFIG.IntroSilence)
+		for _, key in ipairs({"l6_pa_chime", "l6_intro"}) do
+			local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
+			local sound = voice and voice:FindFirstChild("Voice") and voice.Voice:FindFirstChild(key)
+			if sound and self.active and self.phase == "count" then
+				broadcast(self, "pa", key)
+				task.wait((sound:GetAttribute("Seconds") or 3) + 0.4)
+			end
+		end
+		if not self.active or self.phase ~= "count" then return end
+	end
 	self:pose("Count_Start")
 	task.wait(0.8)                        -- hands go up before the first number
 	if not self.active or self.phase ~= "count" then return end
