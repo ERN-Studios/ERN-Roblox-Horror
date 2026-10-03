@@ -200,7 +200,7 @@ end
 -- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
-local HORN_VOLUME, BED_VOLUME, DUCK = 0.5, 0.14, 0.3      -- the horns hang 30+ studs up, so they need the level
+local HORN_VOLUME, BED_VOLUME, DUCK = 1.2, 0.45, 0.45    -- owner could not hear it at 0.5 / 0.14; the horns hang 30+ studs up
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
@@ -208,7 +208,7 @@ local function dressMusic(m, stage)
 	local st = MUSIC_STAGES[stage] or MUSIC_STAGES[1]
 	m.Looped, m.PlaybackSpeed = true, st.speed
 	local eq = Instance.new("EqualizerSoundEffect")
-	eq.LowGain, eq.MidGain, eq.HighGain = -6, 0, -7
+	eq.LowGain, eq.MidGain, eq.HighGain = -3, 0, -4
 	eq.Parent = m
 	if st.octave ~= 1 then
 		local shift = Instance.new("PitchShiftSoundEffect")
