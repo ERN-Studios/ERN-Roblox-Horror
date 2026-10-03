@@ -44,6 +44,19 @@ Developer preview only, entered from the Level 6 queue bays in the R4 lobby (or 
 5. Caught players are returned to the lobby; if everyone is caught the party has lost. The session resets
    when the last player leaves.
 
+Audio: the child's voice is `AudioTextToSpeech` on each client (VoiceId 1, pitched up). Roblox's text filter
+rejects long runs of numbers and every utterance costs one request (budget 1 + 6 x players per minute), so it
+says the count in four short bursts (1-5, 6-10, 13-15, 19-20), then "Ready or not. Here I come!" and "Found
+you!". Stings reuse SoundController's ids (spot, chase, jumpscare, death, alert, hum).
+
+Textures: the net is the public Creator Store decal 81104945973317 (image 82491821601855). The floor seams,
+padding and grime overlays are the user's own uploads; a group-owned experience may only use them after
+"Share access" (Output: click the "doesn't have access permission ... Click to share access" line, then
+Share access). That was done for this universe on 2026-10-03. New uploads need it again.
+
+Multiplayer tests: toolbar mode "Server & Clients". `DevAccess.IsLevel6PreviewAllowed` admits Studio test
+players (negative UserIds, Studio only) so they can use the dev-only queue bays.
+
 Client: `StarterPlayerScripts."Level 6 Playground Client"` (HUD, night lighting while
 `Level6PlaygroundPreview` is set, slide ride, the child's limb animation). RoundUI stands down while the
 client-local attribute `Level6PlaygroundLightingOwned` is true.

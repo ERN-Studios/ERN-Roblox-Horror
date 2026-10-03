@@ -25,6 +25,7 @@ local CONFIG = {
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 1.2,
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 2.2,
 	HipHeight = 3.1,
+	VoiceLeadSeconds = 0.6,
 }
 
 local Game = {}
@@ -318,6 +319,8 @@ function Session:perceive()
 			end
 			if dist <= CONFIG.CatchDistance and math.abs(root.Position.Y - self.root.Position.Y) < 5 then
 				self:catch(player)
+				-- a caught player must not be handed back as the next chase target
+				if best == player then best, bestDist = nil, math.huge end
 			end
 		end
 	end
@@ -360,8 +363,9 @@ function Session:countPhase()
 	self.phase = "count"
 	self.anim.pose = "count"
 	self.anim.speed = 0
-	broadcast(self, "round", self.round, self.dunks, self:target())
 	local seconds = CONFIG.CountSeconds[math.min(self.round, #CONFIG.CountSeconds)]
+	broadcast(self, "round", self.round, self.dunks, self:target(), seconds)
+	task.wait(CONFIG.VoiceLeadSeconds)   -- a breath before the first number
 	local beat = seconds / CONFIG.CountTo
 	for n = 1, CONFIG.CountTo do
 		if not self.active or self.phase ~= "count" then return end

@@ -156,9 +156,13 @@ local function decorate(p, owner, mat)
 	if string.sub(mat, 1, 4) == "net_" then
 		local colour = p.Color
 		-- a faint tinted sheet keeps the net readable even before (or without) the cord texture
-		p.Transparency = owner == "Frame_RoofNet" and 0.85 or 0.62
-		texture(p, TEX.net, Enum.NormalId.Front, 8, colour)
-		texture(p, TEX.net, Enum.NormalId.Back, 8, colour)
+		p.Transparency = owner == "Frame_RoofNet" and 0.97 or 0.9
+		-- public knotted-net image (Creator Store decal 81104945973317); the cords are dark, so no tint
+		texture(p, TEX.net, Enum.NormalId.Front, 5)
+		texture(p, TEX.net, Enum.NormalId.Back, 5)
+	elseif not TEX.foam_seams then
+		-- the overlay images below only exist once the experience has been granted access to them
+		return
 	elseif owner == "Floor_FoamTiles" then
 		texture(p, TEX.foam_seams, Enum.NormalId.Top, 12)
 	elseif owner == "Frame_Decks" or owner == "Frame_SoftSteps" then

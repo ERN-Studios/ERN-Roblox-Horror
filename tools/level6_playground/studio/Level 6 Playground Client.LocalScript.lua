@@ -95,7 +95,89 @@ local function pulse(frame, prop, from, to, seconds)
 	TweenService:Create(frame, TweenInfo.new(seconds, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {[prop] = to}):Play()
 end
 
+-- ---------------------------------------------------------------------------------------
+-- audio: the child's voice is Roblox text-to-speech (one request per count, so the per-experience
+-- request budget is never an issue); the stings reuse sounds the experience already owns.
+local SoundService = game:GetService("SoundService")
+local audio = Instance.new("Folder")
+audio.Name = "Level6PlaygroundAudio"
+audio.Parent = SoundService
+local function sound(name, id, volume, looped)
+	local s = Instance.new("Sound")
+	s.Name, s.SoundId, s.Volume, s.Looped = name, id, volume, looped == true
+	s.Parent = audio
+	return s
+end
+local SFX = {
+	hum = sound("Hum", "rbxassetid://92576512092725", 0.25, true),          -- fluorescent hum
+	spot = sound("Spot", "rbxassetid://82272419363488", 0.9),               -- it has seen you
+	chase = sound("Chase", "rbxassetid://79246919959914", 0.7, true),       -- while it is after you
+	caught = sound("Caught", "rbxassetid://140233243543479", 1),            -- you were found
+	otherCaught = sound("OtherCaught", "rbxassetid://113822157484898", 0.5),
+	alarm = sound("Alarm", "rbxassetid://118863512220494", 0.35, true),     -- exit open
+	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8), -- dunk
+}
+local voice = Instance.new("AudioTextToSpeech")
+voice.Name, voice.VoiceId, voice.Pitch, voice.Volume = "ChildVoice", "1", 7, 1.4
+voice.Parent = audio
+local voiceOut = Instance.new("AudioDeviceOutput")
+voiceOut.Parent = audio
+local voiceWire = Instance.new("Wire")
+voiceWire.SourceInstance, voiceWire.TargetInstance = voice, voiceOut
+voiceWire.Parent = audio
+local voiceToken = 0
+-- Speak `text`; when `seconds` is given the speech is stretched or squeezed to last about that long.
+local function say(text, seconds)
+	voiceToken += 1
+	local token = voiceToken
+	task.spawn(function()
+		pcall(function() voice:Pause() end)
+		voice.Text = text
+		local ok, status = pcall(function() return voice:LoadAsync() end)
+		if token ~= voiceToken or not ok or status ~= Enum.AssetFetchStatus.Success then return end
+		local length = voice.TimeLength
+		voice.PlaybackSpeed = (seconds and length > 0) and math.clamp(length / seconds, 0.7, 1.6) or 1
+		voice.TimePosition = 0
+		voice:Play()
+	end)
+end
+-- Roblox's text filter rejects long runs of numbers (they read as personal information), and every
+-- utterance is one request against a per-minute budget, so the child says the count in a few short
+-- bursts and mouths the rest. Key = the number the burst starts on; value = text, numbers covered.
+local COUNT_BURSTS = {
+	[1] = {"one, two, three, four, five.", 5},
+	[6] = {"six, seven, eight, nine, ten.", 5},
+	[13] = {"thirteen, fourteen, fifteen.", 3},
+	[19] = {"nineteen, twenty!", 2},
+}
+local countBeat = 1
+local function stopEncounterAudio()
+	SFX.chase:Stop(); SFX.alarm:Stop()
+end
+
 local dunked = false
+event.OnClientEvent:Connect(function(kind, a, b, c, d)
+	if kind == "round" then
+		countBeat = (d or 20) / 20
+	elseif kind == "count" then
+		local burst = COUNT_BURSTS[a]
+		if burst then say(burst[1], burst[2] * countBeat) end
+	elseif kind == "go" then
+		say("Ready or not. Here I come!")
+	elseif kind == "chase" then
+		if a then SFX.spot:Play(); SFX.chase:Play() else SFX.chase:Stop() end
+	elseif kind == "caught" then
+		stopEncounterAudio()
+		if b then SFX.caught:Play(); say("Found you!") else SFX.otherCaught:Play() end
+	elseif kind == "dunk" then
+		SFX.ping:Play()
+	elseif kind == "won" then
+		SFX.alarm:Play()
+	elseif kind == "escaped" or kind == "left" or kind == "lost" or kind == "roundover" then
+		stopEncounterAudio()
+		if kind == "escaped" then SFX.ping:Play() end
+	end
+end)
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	if kind == "joined" then
 		dunkLabel.Text = string.format("DUNKS %d / %d", b or 0, c or 0)
@@ -205,8 +287,14 @@ local function refresh()
 	local on = inside()
 	gui.Enabled = on
 	applyLighting(on)
-	if not on then
+	if on then
+		if not SFX.hum.IsPlaying then SFX.hum:Play() end
+	else
 		vignette.ImageTransparency = 1
+		SFX.hum:Stop()
+		stopEncounterAudio()
+		voiceToken += 1
+		pcall(function() voice:Pause() end)
 	end
 end
 player:GetAttributeChangedSignal(IN_PREVIEW):Connect(refresh)
