@@ -1,0 +1,58 @@
+[
+ {
+  "key": "l6_pa_chime",
+  "file": "l6_pa_chime.mp3",
+  "seconds": 3.02,
+  "megabytes": 0.07,
+  "source": "Clear,_resonant_melo_#4-1791032589923.mp3",
+  "use": "PA bell before an announcement; plays 5 s after everyone has spawned in"
+ },
+ {
+  "key": "l6_intro",
+  "file": "l6_intro.mp3",
+  "seconds": 27.01,
+  "megabytes": 0.45,
+  "source": "ElevenLabs_2026-10-03T13_05_13_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "use": "The doll's welcome over the PA, straight after the bell: Hi guys, you are finally here ... let's begin, good luck"
+ },
+ {
+  "key": "l6_music_1",
+  "file": "l6_music_1.mp3",
+  "seconds": 120.03,
+  "megabytes": 2.9,
+  "source": "Tubes_and_Ball_Pits_2026-10-03T130848.mp3",
+  "use": "Music stage 1: cheerful play-centre loop, from the start of the game"
+ },
+ {
+  "key": "l6_music_2",
+  "file": "l6_music_2.mp3",
+  "seconds": 180.04,
+  "megabytes": 4.34,
+  "source": "Uncanny_Playzone_2026-10-03T130945.mp3",
+  "use": "Music stage 2: the same idea gone sour, after the first tag"
+ },
+ {
+  "key": "l6_music_3",
+  "file": "l6_music_3.mp3",
+  "seconds": 240.04,
+  "megabytes": 5.78,
+  "source": "Muzak_for_the_Empty_Playzone_2026-10-03T131235.mp3",
+  "use": "Music stage 3: sinister, after the second tag"
+ },
+ {
+  "key": "l6_pa_off",
+  "file": "l6_pa_off.mp3",
+  "seconds": 3.02,
+  "megabytes": 0.07,
+  "source": "Clear,_resonant_melo_#3-1791033352824.mp3",
+  "use": "PA outro melody: plays when an announcement ends"
+ },
+ {
+  "key": "l6_track_change",
+  "file": "l6_track_change.mp3",
+  "seconds": 3.02,
+  "megabytes": 0.07,
+  "source": "CD_track_being_chang_#1-1791033437396.mp3",
+  "use": "CD track change: plays between music stages when the song changes"
+ }
+]
