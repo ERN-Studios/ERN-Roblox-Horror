@@ -1,0 +1,77 @@
+-- ╔══════════════════════════════════════════════════════════════════════╗
+-- ║  LEVEL 2 — SUNKEN LEISURE COMPLEX — WHERE TO TWEAK WHAT              ║
+-- ╚══════════════════════════════════════════════════════════════════════╝
+--
+-- The whole level is generated fresh each round from a seed. Nothing about
+-- the world is hand-placed, so every tweak is a value in one of the files
+-- below, all sitting next to this README in "Level 2 Systems".
+--
+-- ── THE FILES ───────────────────────────────────────────────────────────
+--  Level 2 Configuration        ← 95% of tweaks happen HERE (see below)
+--  Level 2 Layout Generator     ← how the floor plan is carved (BSP)
+--  Level 2 World Builder        ← how the plan becomes parts/water/slides
+--  Level 2 Objective Controller ← pumps → drains → pressure doors → escape
+--  Level 2 Round Adapter        ← Build/Cleanup, lobby parking, terrain
+--  Level 2 Pool Foam Configuration ← entity balance + animation/audio slots
+--  Level 2 Pool Foam Controller ← two-entity scare director and cleanup
+--  Pool Foam Proxy/Animation/Navigator/Observer modules ← replaceable art,
+--                                  movement, and server-validated observation
+--  (ServerScriptService.Level2Generator is just the doorway GameManager
+--   calls — never needs editing.)
+--
+-- ── QUICK TWEAKS (all in Level 2 Configuration) ─────────────────────────
+--  World size            ComplexExtent (1400). Bigger = more halls.
+--  Room sizes            MinimumLeafSize / MaximumSplitDepth / EarlyStopChance
+--  Exit room size        ExitHallMinimumWidth / ExitHallMinimumDepth — the
+--                        floor for the hall the exit flume launches from.
+--                        Costs generation attempts only; the comment beside
+--                        them carries the measured cost. ExitHallMaximumShellGap
+--                        keeps that hall against the east shell so the flume's
+--                        level lead-in stays short.
+--  Water depths          ShallowPoolDepth / DeepPoolDepth / SlidePoolDepth
+--  Ceiling heights       WallHeight / SlideHallHeight / GrandSlideHallHeight
+--  Colors                Configuration.Colors (tiles) / KidsColors (3 kids
+--                        colors) / SlideColors (flume plastic)
+--  Brightness of lights  CeilingPanelBrightness (skylights are real sunlight)
+--  Slides                SlidesPerHall / SlideTubeRadius
+--  Kids wing size        KidsAreaRoomCount
+--
+-- ── TESTING A SPECIFIC LAYOUT ───────────────────────────────────────────
+--  Set workspace attribute "Level2Seed" to any number >= 1 BEFORE launching
+--  a round: same seed = identical world every time.
+--  Set it to 0 — or clear it — for a fresh random map every round. 0, a
+--  negative value, and anything that is not a number all mean OFF. A round
+--  NEVER writes its random pick back into the attribute.
+--  ReplicatedStorage["Level 2 State"] shows which mode a round used:
+--  Level2_SeedPinned true/false, and Level2_ResolvedSeed for what it built.
+--  Dev keys (whitelisted): B esp+fast queue · V noclip fly · J dev phone.
+--
+-- ── SUNLIGHT / MOOD ─────────────────────────────────────────────────────
+--  StarterPlayerScripts."Level 2 Lighting Controller" owns the in-round
+--  look (brightness, fog, tint). The sun is REAL: it comes through the
+--  glass sky roof and the skylight slots (both CastShadow = false), so if
+--  a room feels dark, first check its ceiling slots, then raise Ambient
+--  in the lighting controller.
+--
+-- ── SOUND ───────────────────────────────────────────────────────────────
+--  StarterPlayerScripts."Level 2 Sound Controller" plays everything.
+--  Asset ids go into ReplicatedStorage["Level 2 Sound Library"] as
+--  StringValue values — paste the id, done. Empty slot = silent. Cues the
+--  server already fires: "Level 2 Pump Start", "Level 2 Drain Rush",
+--  "Level 2 Pressure Door", "Level 2 Slide Rush".
+--  Level 1 has the same setup: "Level 1 Sound Controller" +
+--  ReplicatedStorage["Level 1 Sound Library"].
+--
+-- ── HOSTILE ENTITY STATUS ───────────────────────────────────────────────
+--  Level 2 owns two Pool Foam entities. They begin as still props in separate
+--  Kids Area rooms, move only while unobserved, and escalate with the pumps.
+--  Until final rigs exist, two distinct temporary proxies are generated.
+--  Drop PoolFoamPrimaryTemplate and PoolFoamSecondaryTemplate Models directly
+--  under ServerStorage.Level2Assets to replace them on the next Level 2 load.
+--  Full art/API instructions live in README - LEVEL 2 POOL FOAM.
+--
+-- ── IF SOMETHING BREAKS ─────────────────────────────────────────────────
+--  Use the current safety snapshot or source history for recovery. Do not
+--  restore retired poolrooms/valve/blackout scripts into the active rewrite.
+
+return {}

@@ -1,0 +1,286 @@
+local RunService = game:GetService("RunService")
+
+-- Blender action mapping. Empty slots are safe: the controller falls back to a
+-- compatible clip until the exported action has received its Roblox asset id.
+local ANIMATION_IDS = {
+	Watch = "92831421568704",              -- Blender v10: zero-origin, seamless loop
+	Walk = "121187609243437",              -- Blender v10: restrained, zero-origin, seamless loop
+	Run = "90840395594409",                -- Blender v10: predatory jog, zero-origin, seamless loop
+	Howl = "102035504530432",              -- Blender v10: first-sight howl
+	YellFromRun = "132425538759403",       -- Blender v10: chase/pit howl with normalized origin
+	Lunge = "70970124497806",              -- Blender v10: neutral-to-lunge
+	LungeFromRun = "132839013239254",      -- Blender v10: chase-to-lunge with normalized origin
+	Kill = "94135265462008",               -- Blender v10: hunched ground-pin knockout
+}
+
+local WALK_ANIM_SPEED = 9
+local RUN_ANIM_SPEED = 15
+local ANIM_SPEED_MIN = 0.08
+local ANIM_SPEED_MAX = 2.5
+local LOCOMOTION_FADE = 0.25
+local ACTION_FADE = 0.12
+local SPEED_SMOOTH_SECONDS = 0.10
+local MOVE_ENTER_SPEED = 0.55
+local MOVE_EXIT_SPEED = 0.18
+
+local entity = workspace:WaitForChild("Entity", 30)
+if not entity then
+	warn("[EntityAnimations] Entity was not found")
+	return
+end
+
+local humanoid = entity:WaitForChild("Humanoid", 10)
+local root = entity:WaitForChild("HumanoidRootPart", 10)
+if not humanoid or not root then
+	warn("[EntityAnimations] Humanoid or HumanoidRootPart was not found")
+	return
+end
+
+local animator = humanoid:FindFirstChildOfClass("Animator")
+if not animator then
+	animator = Instance.new("Animator")
+	animator.Parent = humanoid
+end
+
+for _, oldTrack in ipairs(animator:GetPlayingAnimationTracks()) do
+	-- A round restart replaces this controller's tracks, not other animation
+	-- owners' tracks on the imported rig.
+	if oldTrack.Animation and oldTrack.Animation.Parent == script then oldTrack:Stop(ACTION_FADE) end
+end
+
+local ownedAnimations = {}
+local function loadTrack(name, id, looped, priority)
+	if id == "" then return nil end
+	local animation = Instance.new("Animation")
+	animation.Name = name
+	animation.AnimationId = "rbxassetid://" .. id
+	animation.Parent = script
+	local ok, track = pcall(function()
+		return animator:LoadAnimation(animation)
+	end)
+	if not ok then
+		warn("[EntityAnimations] Could not load " .. name .. ": " .. tostring(track))
+		animation:Destroy()
+		return nil
+	end
+	table.insert(ownedAnimations, animation)
+	track.Name = name
+	track.Looped = looped
+	track.Priority = priority
+	return track
+end
+
+local tracks = {
+	Watch = loadTrack("Watch", ANIMATION_IDS.Watch, true, Enum.AnimationPriority.Idle),
+	Walk = loadTrack("Walk", ANIMATION_IDS.Walk, true, Enum.AnimationPriority.Movement),
+	Run = loadTrack("Run_Chase", ANIMATION_IDS.Run, true, Enum.AnimationPriority.Movement),
+	Howl = loadTrack("Yell_Howl", ANIMATION_IDS.Howl, false, Enum.AnimationPriority.Action4),
+	YellFromRun = loadTrack("Yell_FromRun", ANIMATION_IDS.YellFromRun, false, Enum.AnimationPriority.Action4),
+	Lunge = loadTrack("Lunge", ANIMATION_IDS.Lunge, false, Enum.AnimationPriority.Action4),
+	LungeFromRun = loadTrack("Lunge_FromRun", ANIMATION_IDS.LungeFromRun, false, Enum.AnimationPriority.Action4),
+	Kill = loadTrack("Kill_GroundPinPunch", ANIMATION_IDS.Kill, false, Enum.AnimationPriority.Action4),
+}
+
+local function releaseTracks()
+	-- Stop changes playback; Destroy releases each loaded controller-owned
+	-- track from the reused Animator, including clips that never played.
+	for _, track in pairs(tracks) do
+		if track.IsPlaying then track:Stop(ACTION_FADE) end
+		track:Destroy()
+	end
+	for _, animation in ipairs(ownedAnimations) do animation:Destroy() end
+	table.clear(tracks)
+	table.clear(ownedAnimations)
+end
+
+if not tracks.Walk or not tracks.Run then
+	warn("[EntityAnimations] Walk/Run ids must be valid for locomotion")
+	releaseTracks()
+	return
+end
+
+local currentLocomotion = nil
+local currentAction = nil
+local actionSerial = 0
+local actionEndConnection = nil
+local killCaptureId = nil
+local gaitPhase = nil
+local smoothedSpeed = 0
+local moving = false
+local closed = false
+local connections = {}
+local events = {}
+local function connect(signal, callback)
+	local connection = signal:Connect(callback)
+	table.insert(connections, connection)
+	return connection
+end
+
+local function captureGaitPhase()
+	local track = currentLocomotion and tracks[currentLocomotion]
+	if (currentLocomotion == "Walk" or currentLocomotion == "Run") and track and track.Length > 0 then
+		gaitPhase = (track.TimePosition / track.Length) % 1
+	end
+end
+
+local function stopLocomotion(fade)
+	captureGaitPhase()
+	for _, name in ipairs({ "Watch", "Walk", "Run" }) do
+		local track = tracks[name]
+		if track and track.IsPlaying then track:Stop(fade) end
+	end
+	currentLocomotion = nil
+end
+
+local function switchLocomotion(name, speed)
+	local track = tracks[name]
+	if not track then return end
+	if currentLocomotion == name and track.IsPlaying then
+		track:AdjustSpeed(speed or 1)
+		return
+	end
+	captureGaitPhase()
+	for _, other in ipairs({ "Watch", "Walk", "Run" }) do
+		if other ~= name then
+			local track = tracks[other]
+			if track and track.IsPlaying then track:Stop(LOCOMOTION_FADE) end
+		end
+	end
+	currentLocomotion = name
+	-- The current v10 walk and predatory jog share the same authored foot cycle.
+	-- Align normalized phase after Play so crossfades do not restart the stride.
+	if not track.IsPlaying then track:Play(LOCOMOTION_FADE, 1, speed or 1)
+	else track:AdjustWeight(1, LOCOMOTION_FADE); track:AdjustSpeed(speed or 1) end
+	if (name == "Walk" or name == "Run") and gaitPhase and track.Length > 0 then
+		track.TimePosition = gaitPhase * track.Length
+	end
+end
+
+local function playAction(track)
+	if closed or not track then return end
+	-- A late howl/lunge notification must never replace the captured kill clip.
+	if workspace:GetAttribute("EntityKillActive") == true and track ~= tracks.Kill then return end
+	if currentAction == track and track.IsPlaying then return end
+	actionSerial += 1
+	local thisSerial = actionSerial
+	if actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end
+	if currentAction and currentAction ~= track and currentAction.IsPlaying then
+		currentAction:Stop(ACTION_FADE)
+	end
+	stopLocomotion(ACTION_FADE)
+	-- Idle stays beneath the Action4 layer so its final fade cannot expose the
+	-- rig's bind pose for a frame before locomotion resumes.
+	switchLocomotion("Watch", 1)
+	currentAction = track
+	actionEndConnection = track.Ended:Once(function()
+		if not closed and currentAction == track and actionSerial == thisSerial then
+			currentAction = nil
+			actionEndConnection = nil
+		end
+	end)
+	track:Play(ACTION_FADE, 1, 1)
+end
+
+local function bindEvent(name, callback)
+	local old = entity:FindFirstChild(name)
+	if old and old:IsA("BindableEvent") then old:Destroy() end
+	local event = Instance.new("BindableEvent")
+	event.Name = name
+	event.Parent = entity
+	connect(event.Event, callback)
+	table.insert(events, event)
+	return event
+end
+
+bindEvent("PlayHowl", function()
+	playAction(tracks.Howl)
+end)
+
+bindEvent("PlayYell", function()
+	playAction(tracks.YellFromRun or tracks.Howl)
+end)
+
+bindEvent("PlayKill", function(captureId)
+	if type(captureId) ~= "string" or workspace:GetAttribute("EntityKillActive") ~= true
+		or workspace:GetAttribute("EntityKillCaptureId") ~= captureId then return end
+	if killCaptureId == captureId then return end
+	killCaptureId = captureId
+	playAction(tracks.Kill)
+end)
+
+bindEvent("CancelKill", function(captureId)
+	if killCaptureId ~= captureId then return end
+	killCaptureId = nil
+	if currentAction == tracks.Kill then
+		actionSerial += 1
+		if actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end
+		if currentAction and currentAction.IsPlaying then currentAction:Stop(ACTION_FADE) end
+		currentAction = nil
+	end
+end)
+
+connect(workspace:GetAttributeChangedSignal("EntityLunge"), function()
+	playAction(tracks.LungeFromRun or tracks.Lunge)
+end)
+
+local function cleanup()
+	if closed then return end
+	closed = true
+	actionSerial += 1
+	if actionEndConnection then actionEndConnection:Disconnect(); actionEndConnection = nil end
+	for _, connection in ipairs(connections) do connection:Disconnect() end
+	table.clear(connections)
+	releaseTracks()
+	for _, event in ipairs(events) do event:Destroy() end
+	table.clear(events)
+end
+-- One stable, explicitly owned handoff. GameManager invokes it while this
+-- Script is still enabled; deferred teardown signals may otherwise be lost.
+local release = script:FindFirstChild("ReleaseAnimations")
+if release then
+	assert(release:IsA("BindableFunction") and release:GetAttribute("OwnerSystem") == "Level1EntityAnimation",
+		"ReleaseAnimations is owned by another system")
+else
+	release = Instance.new("BindableFunction")
+	release.Name = "ReleaseAnimations"
+	release:SetAttribute("OwnerSystem", "Level1EntityAnimation")
+	release.Parent = script
+end
+release.OnInvoke = cleanup
+connect(entity.AncestryChanged, function()
+	if not entity:IsDescendantOf(workspace) then cleanup() end
+end)
+connect(entity.Destroying, cleanup)
+connect(script.Destroying, cleanup)
+connect(script:GetPropertyChangedSignal("Enabled"), function() if not script.Enabled then cleanup() end end)
+
+connect(RunService.Heartbeat, function(dt)
+	if closed then return end
+	if humanoid.Health <= 0 then
+		cleanup()
+		return
+	end
+
+	local velocity = root.AssemblyLinearVelocity
+	local horizontalSpeed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+	if root.Anchored or workspace:GetAttribute("EntityPaused") == true then horizontalSpeed = 0 end
+	local alpha = 1 - math.exp(-math.clamp(dt, 0, 0.25) / SPEED_SMOOTH_SECONDS)
+	smoothedSpeed += (horizontalSpeed - smoothedSpeed) * alpha
+	if moving then moving = smoothedSpeed > MOVE_EXIT_SPEED
+	else moving = smoothedSpeed >= MOVE_ENTER_SPEED end
+	-- Ended fires after the action's fade completes. Keep its ownership until
+	-- then; locomotion must not resume during a kill or a fading one-shot.
+	if currentAction or workspace:GetAttribute("EntityKillActive") == true then return end
+	local aiState = workspace:GetAttribute("EntityState")
+
+	if not moving then
+		switchLocomotion("Watch", 1)
+	elseif aiState == "CHASE" then
+		switchLocomotion("Run", math.clamp(smoothedSpeed / RUN_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))
+	else
+		-- TRACK/SEARCH is intentionally a fast walk after sight is lost.
+		switchLocomotion("Walk", math.clamp(smoothedSpeed / WALK_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))
+	end
+end)
+
+print("[EntityAnimations] Transition controller active")

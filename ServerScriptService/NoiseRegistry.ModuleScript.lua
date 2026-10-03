@@ -1,0 +1,72 @@
+-- NoiseRegistry
+-- PASTE INTO: ServerScriptService → Insert Object → ModuleScript → rename to "NoiseRegistry"
+
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+local NoiseRegistry = {}
+
+local LOUDNESS = {
+	sprint = 1.0,
+	walk = 0.45,
+	crouch = 0.0,
+	relay = 1.35, -- metal release + electrical snap from a fuse extraction
+	-- Level 2's pump motor: a running machine, not a footstep. Loudness scales
+	-- both the score and the audible range in GetBest, so this carries about
+	-- twice as far as a sprint. Level 1 never emits this name, so its numbers
+	-- above are exactly what they were.
+	pump = 2.0,
+	-- Level 4 (the cinema). Rattling film reels carry like a sprint; a projector
+	-- being threaded, the breakers and a slammed door carry further.
+	reel = 1.0,
+	projector = 1.6,
+	breaker = 1.4,
+	door = 0.8,
+}
+local DECAY = 5
+
+local sounds = {}
+
+function NoiseRegistry.Add(position, stateName, sourcePlayer)
+	local loud = LOUDNESS[stateName]
+	if not loud or loud <= 0 then return end
+
+	table.insert(sounds, {
+		pos = position,
+		loudness = loud,
+		t = os.clock(),
+		SourcePlayer = sourcePlayer, -- nil for pump/relay and existing unowned world sounds
+	})
+end
+
+function NoiseRegistry.Prune()
+	local now = os.clock()
+	for i = #sounds, 1, -1 do
+		if now - sounds[i].t > DECAY then
+			table.remove(sounds, i)
+		end
+	end
+end
+
+-- One global list serves every level, and only one level is ever live, so the
+-- level tearing its round down drops the whole list. Level 2's Pool Foam
+-- controller calls this from Controller.Stop; nothing else does. Level 1 has no
+-- teardown hook and does not need one — DECAY empties the list on its own.
+function NoiseRegistry.Clear()
+	table.clear(sounds)
+end
+
+function NoiseRegistry.GetBest(fromPos, maxRange)
+	local best, bestScore = nil, 0
+	for _, s in ipairs(sounds) do
+		if s.SourcePlayer and PlayerProtection.IsActive(s.SourcePlayer) then continue end
+		local dist = (s.pos - fromPos).Magnitude
+		if dist < maxRange * s.loudness then
+			local score = s.loudness / math.max(dist, 1)
+			if score > bestScore then
+				best, bestScore = s, score
+			end
+		end
+	end
+	return best
+end
+
+return NoiseRegistry

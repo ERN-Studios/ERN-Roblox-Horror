@@ -1,0 +1,614 @@
+--!strict
+-- Level 6 Hiding Controller
+-- Server-authoritative under-table hiding with prompt validation, occupancy,
+-- character restoration, and lifecycle cleanup.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+
+local Configuration = require(script.Parent:WaitForChild("Level 6 Configuration"))
+local Tuning = Configuration.Hiding
+local TableCheckTuning = Configuration.TableCheck
+
+local Controller = {}
+local activeSession: any = nil
+
+-- Slot 1 sits on the anchor's -X side, slot 2 on +X, both inside the 8.6-stud
+-- hide volume. Body pose, camera point and exit lane all use the same number so
+-- two occupants never share a spot.
+-- ponytail: two lanes hard-coded, matching HideOccupantCap = 2. A larger cap
+-- needs a real lane layout here, not another sign flip.
+local function slotLateral(slot: number): number
+	return (if slot % 2 == 1 then -1 else 1) * Tuning.HideOccupantLateralOffset
+end
+
+local function disconnect(connection: RBXScriptConnection?)
+	if connection and connection.Connected then connection:Disconnect() end
+end
+
+local function liveSession(session: any): boolean
+	local world = session and session.World
+	return activeSession == session
+		and session.Active == true
+		and world ~= nil
+		and world:IsA("Model")
+		and world.Parent == workspace
+		and world:GetAttribute("Level6_Generation") == session.Generation
+end
+
+local function roundAllowsHiding(session: any): boolean
+	return liveSession(session)
+		and session.FurnitureSuspended ~= true
+		and workspace:GetAttribute("Level6SelectedLevel") == 6
+		and workspace:GetAttribute("Level6RoundActive") == true
+end
+
+local function promptFor(anchor: BasePart): ProximityPrompt?
+	local prompt = anchor:FindFirstChild("HideUnderTablePrompt")
+	return if prompt and prompt:IsA("ProximityPrompt") then prompt else nil
+end
+
+local function characterState(player: Player): (Model?, Humanoid?, BasePart?)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not character or not character.Parent or not humanoid or humanoid.Health <= 0
+		or not root or not root:IsA("BasePart") then
+		return nil, nil, nil
+	end
+	return character, humanoid, root
+end
+
+-- Model:PivotTo moves the model's WorldPivot, and the gameplay rig is authored
+-- with its pivot on the floor, 3.49 studs under the HumanoidRootPart. A raw
+-- PivotTo(anchor) therefore parked the whole body ON the tabletop while the hide
+-- camera sat under it. Place the ROOT on the target, which is what
+-- HiddenRootHeight and ExitVerticalOffset are both measured against.
+local function pivotRootTo(character: Model, root: BasePart, target: CFrame)
+	character:PivotTo(target * root.CFrame:ToObjectSpace(character:GetPivot()))
+end
+
+local function eligible(player: Player, session: any): (Model?, Humanoid?, BasePart?)
+	if not roundAllowsHiding(session)
+		or player.Parent ~= Players
+		or player:GetAttribute("Level6InRound") ~= true
+		or player:GetAttribute("Level6Escaped") == true then
+		return nil, nil, nil
+	end
+	return characterState(player)
+end
+
+local function updateHiddenCount(session: any)
+	local count = 0
+	for _ in pairs(session.HiddenPlayers) do count += 1 end
+	local state = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
+	if state and state:IsA("Folder") then state:SetAttribute("Level6_HiddenPlayers", count) end
+	workspace:SetAttribute("Level6HiddenPlayers", count)
+end
+
+-- Level6_HideOccupiedUserId names the FIRST occupant and stays the only
+-- occupancy attribute on the anchor: hide anchors are Level6_PermanentFurniture
+-- and the furniture audit treats every other attribute on them as identity, so
+-- a second one would read as furniture being tampered with. Anything the
+-- clients need beyond "someone is under there" is published in the state folder.
+local function occupantsOf(session: any, anchor: BasePart): {Player}
+	return session.Occupants[anchor] or {}
+end
+
+-- A CD still lying on its table (state WORLD, the
+-- Objective Controller publishes it on the module model) owns the E prompt:
+-- HIDE stands down so TAKE is the one thing the table offers, and it comes
+-- back the moment the CD is CARRIED / DROPPED / INSERTED. The anchor carries
+-- no new attribute (it is Level6_PermanentFurniture; the audit would read
+-- one as tampering), so the link is kept in the session.
+local function cdOnTable(session: any, anchor: BasePart): boolean
+	local model = session.CDOnAnchor and session.CDOnAnchor[anchor]
+	return model ~= nil and model.Parent ~= nil and model:GetAttribute("Level6_CDState") == "WORLD"
+end
+
+local function refreshPrompt(session: any, anchor: BasePart)
+	local prompt = promptFor(anchor)
+	if not prompt then return end
+	local occupants = occupantsOf(session, anchor)
+	anchor:SetAttribute("Level6_HideOccupiedUserId",
+		if #occupants > 0 then (occupants[1] :: Player).UserId else 0)
+	prompt.Enabled = roundAllowsHiding(session) and #occupants < Tuning.HideOccupantCap
+		and not cdOnTable(session, anchor)
+end
+
+local function refreshPrompts(session: any)
+	for _, anchor in ipairs(session.Anchors) do
+		if anchor.Parent then refreshPrompt(session, anchor) end
+	end
+end
+
+-- The hidden character stays replicated and visible. Only physical collision is
+-- suppressed while its anchored rig is folded inside the table; transparency,
+-- textures, particles, and lights are deliberately untouched.
+local function captureCollisionState(character: Model): {any}
+	local saved = {}
+	for _, object in ipairs(character:GetDescendants()) do
+		if object:IsA("BasePart") then
+			table.insert(saved, {
+				Object=object,
+				CanCollide=object.CanCollide,
+				CanTouch=object.CanTouch,
+				CanQuery=object.CanQuery,
+			})
+		end
+	end
+	return saved
+end
+
+local function suppressCollision(saved: {any})
+	for _, record in ipairs(saved) do
+		local object = record.Object
+		if object and object.Parent and object:IsA("BasePart") then
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = false
+		end
+	end
+end
+
+local function restoreCollision(saved: {any})
+	for _, record in ipairs(saved) do
+		local object = record.Object
+		if object and object.Parent and object:IsA("BasePart") then
+			object.CanCollide = record.CanCollide
+			object.CanTouch = record.CanTouch
+			object.CanQuery = record.CanQuery
+		end
+	end
+end
+
+local function releasePlayer(session: any, player: Player, moveOutside: boolean): boolean
+	local record = session.HiddenPlayers[player]
+	if not record then
+		if player.Parent == Players then
+			player:SetAttribute("Level6_Hiding", false)
+			player:SetAttribute("Level6_HideTableIndex", 0)
+			player:SetAttribute("Level6_HideCameraPosition", nil)
+		end
+		return false
+	end
+
+	local character = record.Character
+	if record.HideTrack then
+		record.HideTrack:Stop(0)
+		record.HideTrack:Destroy()
+		record.HideTrack = nil
+	end
+	if record.HideAnimation then record.HideAnimation:Destroy() end
+	player:SetAttribute("Level6_HideAnimationId", nil)
+	local humanoid = record.Humanoid
+	local root = record.Root
+	if moveOutside and character and character.Parent and root and root.Parent then
+		pivotRootTo(character, root, record.ExitCFrame)
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+	end
+
+	restoreCollision(record.CollisionState)
+	if humanoid and humanoid.Parent then
+		humanoid.AutoRotate = record.AutoRotate
+		humanoid.WalkSpeed = record.WalkSpeed
+		humanoid.JumpPower = record.JumpPower
+		humanoid.JumpHeight = record.JumpHeight
+		humanoid.DisplayDistanceType = record.DisplayDistanceType
+	end
+	if root and root.Parent then
+		root.Anchored = record.RootAnchored
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+	end
+
+	session.HiddenPlayers[player] = nil
+	local occupants = session.Occupants[record.Anchor]
+	if occupants then
+		local index = table.find(occupants, player)
+		if index then table.remove(occupants, index) end
+	end
+	if player.Parent == Players then
+		player:SetAttribute("Level6_Hiding", false)
+		player:SetAttribute("Level6_HideTableIndex", 0)
+		player:SetAttribute("Level6_HideGeneration", 0)
+		player:SetAttribute("Level6_HideCameraPosition", nil)
+	end
+	if record.Anchor and record.Anchor.Parent then refreshPrompt(session, record.Anchor) end
+	updateHiddenCount(session)
+	return true
+end
+
+local function releaseAll(session: any, moveOutside: boolean)
+	local players = {}
+	for player in pairs(session.HiddenPlayers) do table.insert(players, player) end
+	for _, player in ipairs(players) do releasePlayer(session, player, moveOutside) end
+end
+
+local function tryEnter(session: any, player: Player, anchor: BasePart): (boolean, string)
+	if not roundAllowsHiding(session) then return false, "ROUND_INACTIVE" end
+	if not session.AnchorSet[anchor] or not anchor.Parent or not anchor:IsDescendantOf(session.World) then
+		return false, "INVALID_TABLE"
+	end
+	if session.HiddenPlayers[player] then return false, "ALREADY_HIDDEN" end
+	local occupants = session.Occupants[anchor]
+	if not occupants then return false, "INVALID_TABLE" end
+	if #occupants >= Tuning.HideOccupantCap then return false, "OCCUPIED" end
+	-- The server refuses too; a client can fire a prompt it cannot see.
+	if cdOnTable(session, anchor) then return false, "CD_ON_TABLE" end
+	local now = os.clock()
+	if now - (session.LastAction[player] or -math.huge) < Tuning.ActionCooldownSeconds then
+		return false, "COOLDOWN"
+	end
+	local character, humanoid, root = eligible(player, session)
+	if not character or not humanoid or not root then return false, "INELIGIBLE" end
+	if (root.Position - anchor.Position).Magnitude > Tuning.PromptMaxDistance + Tuning.ServerDistanceSlack then
+		return false, "TOO_FAR"
+	end
+
+	-- Lowest free lane, so a released occupant's slot is reused rather than
+	-- leaving a permanent gap under a table that still looks half empty.
+	local usedSlots: {[number]: boolean} = {}
+	for _, occupant in ipairs(occupants) do
+		local occupantRecord = session.HiddenPlayers[occupant]
+		if occupantRecord then usedSlots[occupantRecord.Slot] = true end
+	end
+	local slot: number? = nil
+	for candidate = 1, Tuning.HideOccupantCap do
+		if not usedSlots[candidate] then slot = candidate break end
+	end
+	if not slot then return false, "OCCUPIED" end
+
+	session.LastAction[player] = now
+	local lateral = slotLateral(slot)
+	local localPosition = anchor.CFrame:PointToObjectSpace(root.Position)
+	local exitSide = if localPosition.Z >= 0 then 1 else -1
+	local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
+	local exitCFrame = anchor.CFrame
+		* CFrame.new(lateral, Tuning.ExitVerticalOffset, exitSide * Tuning.ExitOffsetZ)
+		* sideRotation
+	-- The lateral offset is applied in ANCHOR space, before the facing rotation,
+	-- so slot 1 is always the same physical side of the table no matter which
+	-- way the player crawled in from.
+	local hiddenCFrame = anchor.CFrame * CFrame.new(lateral, 0, 0) * sideRotation
+	local cameraPosition = anchor.CFrame:PointToWorldSpace(Vector3.new(lateral, -0.45, 0))
+	local collisionState = captureCollisionState(character)
+	local record = {
+		Player=player, Character=character, Humanoid=humanoid, Root=root, Anchor=anchor,
+		Slot=slot,
+		Generation=session.Generation, ExitCFrame=exitCFrame, CollisionState=collisionState,
+		AutoRotate=humanoid.AutoRotate, WalkSpeed=humanoid.WalkSpeed,
+		JumpPower=humanoid.JumpPower, JumpHeight=humanoid.JumpHeight,
+		DisplayDistanceType=humanoid.DisplayDistanceType, RootAnchored=root.Anchored,
+	}
+	-- Reserve first; no yield occurs between reservation and the replicated state edge.
+	session.HiddenPlayers[player] = record
+	table.insert(occupants, player)
+	refreshPrompt(session, anchor)
+
+	pivotRootTo(character, root, hiddenCFrame)
+	root.AssemblyLinearVelocity = Vector3.zero
+	root.AssemblyAngularVelocity = Vector3.zero
+	root.Anchored = true
+	humanoid.AutoRotate = false
+	humanoid.WalkSpeed = 0
+	humanoid.JumpPower = 0
+	humanoid.JumpHeight = 0
+	humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+	suppressCollision(collisionState)
+
+	-- Hiding does not end the Manager's chase; the AI owns BeingChased.
+	player:SetAttribute("Level6_HideGeneration", session.Generation)
+	player:SetAttribute("Level6_HideTableIndex",
+		tonumber(anchor:GetAttribute("Level6_HideTableIndex")) or 0)
+	-- Replicated before the state edge so the local camera cannot spend one
+	-- visible frame above the tabletop.
+	player:SetAttribute("Level6_HideCameraPosition", cameraPosition)
+	player:SetAttribute("Level6_Hiding", true)
+	updateHiddenCount(session)
+	-- The server has already teleported/reserved the player. The server-created
+	-- Animator replicates this hold to every observer; clients retain a pose
+	-- fallback until this particular track has loaded and gained full weight.
+	task.spawn(function()
+		local animator = humanoid:FindFirstChildOfClass("Animator")
+		local id = Tuning.HoldAnimationId
+		if not animator or type(id) ~= "string" or not id:match("^rbxassetid://%d+$") then return end
+		local animation = Instance.new("Animation")
+		animation.Name = "TableHideBlenderHold"
+		animation.AnimationId = id
+		local ok, track = pcall(function() return animator:LoadAnimation(animation) end)
+		if not ok or session.HiddenPlayers[player] ~= record or humanoid.Health <= 0 then
+			if ok then track:Destroy() end
+			animation:Destroy()
+			if not ok then warn("[TableHide] Hold load failed; using crouch fallback", track) end
+			return
+		end
+		record.HideAnimation = animation
+		record.HideTrack = track
+		track.Looped = true
+		track.Priority = Enum.AnimationPriority.Action
+		player:SetAttribute("Level6_HideAnimationId", id)
+		track:Play(0, 1, 1)
+	end)
+	return true, "HIDDEN"
+end
+
+local function bindPlayer(session: any, player: Player)
+	player:SetAttribute("Level6_Hiding", false)
+	player:SetAttribute("Level6_HideTableIndex", 0)
+	player:SetAttribute("Level6_HideGeneration", 0)
+	player:SetAttribute("Level6_HideCameraPosition", nil)
+	table.insert(session.Connections, player.CharacterRemoving:Connect(function(character)
+		local record = session.HiddenPlayers[player]
+		if record and record.Character == character then releasePlayer(session, player, false) end
+	end))
+	table.insert(session.Connections, player.CharacterAdded:Connect(function(character)
+		if not liveSession(session) then return end
+		player:SetAttribute("Level6_Hiding", false)
+		player:SetAttribute("Level6_HideTableIndex", 0)
+		player:SetAttribute("Level6_HideGeneration", 0)
+		player:SetAttribute("Level6_HideCameraPosition", nil)
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			table.insert(session.Connections, humanoid.Died:Connect(function()
+				releasePlayer(session, player, false)
+			end))
+		end
+	end))
+	table.insert(session.Connections, player:GetAttributeChangedSignal("Level6Escaped"):Connect(function()
+		if player:GetAttribute("Level6Escaped") == true then releasePlayer(session, player, false) end
+	end))
+	table.insert(session.Connections, player:GetAttributeChangedSignal("Level6InRound"):Connect(function()
+		if player:GetAttribute("Level6InRound") ~= true then releasePlayer(session, player, false) end
+	end))
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		table.insert(session.Connections, humanoid.Died:Connect(function()
+			releasePlayer(session, player, false)
+		end))
+	end
+end
+
+function Controller.IsHidden(player: Player, generation: number?): boolean
+	local session = activeSession
+	if not session or not liveSession(session) then return false end
+	if generation ~= nil and session.Generation ~= generation then return false end
+	local record = session.HiddenPlayers[player]
+	return record ~= nil
+		and record.Generation == session.Generation
+		and record.Character == player.Character
+		and record.Anchor ~= nil
+		and record.Anchor.Parent ~= nil
+		and player:GetAttribute("Level6_Hiding") == true
+end
+
+-- The Manager routes to the authoritative table record, never a client-supplied
+-- index or an old character's hiding attributes.
+function Controller.GetAnchor(player: Player, generation: number?): BasePart?
+	if not Controller.IsHidden(player, generation) then return nil end
+	return activeSession.HiddenPlayers[player].Anchor
+end
+
+function Controller.SetFurnitureSuspended(active: boolean): boolean
+	local session = activeSession
+	if not session or not liveSession(session) then return false end
+	session.FurnitureSuspended = active == true
+	if session.FurnitureSuspended then releaseAll(session, true) end
+	refreshPrompts(session)
+	return true
+end
+
+function Controller.Stop()
+	local session = activeSession
+	if not session then
+		for _, player in ipairs(Players:GetPlayers()) do
+			player:SetAttribute("Level6_Hiding", false)
+			player:SetAttribute("Level6_HideTableIndex", 0)
+			player:SetAttribute("Level6_HideGeneration", 0)
+			player:SetAttribute("Level6_HideCameraPosition", nil)
+		end
+		workspace:SetAttribute("Level6HiddenPlayers", 0)
+		return
+	end
+	activeSession = nil
+	session.Active = false
+	releaseAll(session, true)
+	for _, connection in ipairs(session.Connections) do disconnect(connection) end
+	for _, anchor in ipairs(session.Anchors) do
+		if anchor.Parent then
+			local prompt = promptFor(anchor)
+			if prompt then prompt.Enabled = false end
+			anchor:SetAttribute("Level6_HideOccupiedUserId", 0)
+		end
+	end
+	local state = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
+	if state and state:IsA("Folder") then state:SetAttribute("Level6_HiddenPlayers", 0) end
+	workspace:SetAttribute("Level6HiddenPlayers", 0)
+end
+
+function Controller.Start(manifest: any, generation: number)
+	Controller.Stop()
+	assert(type(manifest) == "table" and manifest.World and manifest.World:IsA("Model")
+		and manifest.World.Parent == workspace, "Level 6 hiding requires a live world")
+	assert(manifest.World:GetAttribute("Level6_Generation") == generation,
+		"Level 6 hiding generation mismatch")
+	assert(type(manifest.HideTables) == "table" and #manifest.HideTables > 0,
+		"Level 6 hiding requires authored table anchors")
+
+	local remotes = ReplicatedStorage:WaitForChild(Configuration.RemotesFolderName)
+	local request = remotes:WaitForChild(Configuration.HideRequestEventName)
+	assert(request:IsA("RemoteEvent"), "Level 6 hide request remote is missing")
+
+	local session: any = {
+		Active=true, Generation=generation, Manifest=manifest, World=manifest.World,
+		FurnitureSuspended=false,
+		Anchors={}, AnchorSet={}, Occupants={}, HiddenPlayers={}, LastAction={}, Connections={},
+		-- Set by FlushAnchor. A flushed player is refused by the Mall Manager's
+		-- attack checks until this clock, so being found is a head start.
+		FlushImmuneUntil={},
+	}
+	activeSession = session
+	for _, anchor in ipairs(manifest.HideTables) do
+		assert(anchor:IsA("BasePart") and anchor:IsDescendantOf(manifest.World)
+			and anchor:GetAttribute("Level6_HideTableAnchor") == true,
+			"Level 6 hide table anchor is invalid")
+		local prompt = promptFor(anchor)
+		assert(prompt, "Level 6 hide table is missing its prompt")
+		table.insert(session.Anchors, anchor)
+		session.AnchorSet[anchor] = true
+		-- Every valid anchor owns a list from the start, so "no list" means
+		-- "not one of ours" everywhere below instead of "empty".
+		session.Occupants[anchor] = {}
+		table.insert(session.Connections, (prompt :: ProximityPrompt).Triggered:Connect(function(player)
+			tryEnter(session, player, anchor)
+		end))
+	end
+
+	-- Each CD socket shares the room's first table with a hide anchor. Its
+	-- collection prompt owns E while the CD is still WORLD; every other table
+	-- keeps its normal hide rules. Link all five by their shared footprint and
+	-- re-evaluate the hide prompt when the CD changes state.
+	session.CDOnAnchor = {}
+	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
+		"Level 6 hiding requires all CD modules")
+	for _, module in ipairs(manifest.Modules) do
+		local model = module.Model
+		assert(model and model:IsA("Model") and model:IsDescendantOf(manifest.World),
+			"Level 6 hiding CD model is missing from the world")
+		local at = model:GetPivot().Position
+		local matchedAnchor: BasePart? = nil
+		for _, anchor in ipairs(session.Anchors) do
+			local d = anchor.Position - at
+			if Vector3.new(d.X, 0, d.Z).Magnitude <= 3 then
+				assert(matchedAnchor == nil and session.CDOnAnchor[anchor] == nil,
+					"Level 6 CD tables must have unique hide anchors")
+				matchedAnchor = anchor
+			end
+		end
+		assert(matchedAnchor, "Level 6 CD table has no hide anchor: " .. tostring(module.Index))
+		local anchor = matchedAnchor :: BasePart
+		session.CDOnAnchor[anchor] = model
+		table.insert(session.Connections, model:GetAttributeChangedSignal("Level6_CDState"):Connect(function()
+			if anchor.Parent then refreshPrompt(session, anchor) end
+		end))
+	end
+
+	table.insert(session.Connections, (request :: RemoteEvent).OnServerEvent:Connect(function(player, command)
+		if command ~= "EXIT" then return end
+		local now = os.clock()
+		if now - (session.LastAction[player] or -math.huge) < Tuning.ActionCooldownSeconds then return end
+		session.LastAction[player] = now
+		releasePlayer(session, player, true)
+	end))
+	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level6RoundActive"):Connect(function()
+		if workspace:GetAttribute("Level6RoundActive") ~= true then releaseAll(session, true) end
+		refreshPrompts(session)
+	end))
+	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level6SelectedLevel"):Connect(function()
+		if workspace:GetAttribute("Level6SelectedLevel") ~= 6 then releaseAll(session, true) end
+		refreshPrompts(session)
+	end))
+	table.insert(session.Connections, Players.PlayerAdded:Connect(function(player) bindPlayer(session, player) end))
+	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
+		releasePlayer(session, player, false)
+		session.LastAction[player] = nil
+		session.FlushImmuneUntil[player] = nil
+	end))
+	for _, player in ipairs(Players:GetPlayers()) do bindPlayer(session, player) end
+	refreshPrompts(session)
+	updateHiddenCount(session)
+	return session
+end
+
+-- How many players are under one anchor right now. 0 also covers "not a live
+-- anchor of the running session", which is what every caller wants.
+-- This opt-in AI view does not change occupancy, capacity or voluntary exit.
+local function aiOccupant(session: any, player: Player, anchor: BasePart): boolean
+	local record = session.HiddenPlayers[player]
+	return record ~= nil and record.Generation == session.Generation
+		and record.Anchor == anchor and record.Character == player.Character
+		and not PlayerProtection.IsActive(player, record.Character)
+end
+
+function Controller.OccupantCount(anchor: BasePart, excludeProtected: boolean?): number
+	local session = activeSession
+	if not session or not liveSession(session) then return 0 end
+	if not excludeProtected then return #occupantsOf(session, anchor) end
+	local count = 0
+	for _, player in ipairs(occupantsOf(session, anchor)) do
+		if aiOccupant(session, player, anchor) then count += 1 end
+	end
+	return count
+end
+
+-- Anchors holding at least one hidden player, in authored anchor order so the
+-- Mall Manager's candidate list is deterministic for a given seed.
+function Controller.GetOccupiedAnchors(generation: number?, excludeProtected: boolean?): {BasePart}
+	local result = {}
+	local session = activeSession
+	if not session or not liveSession(session) then return result end
+	if generation ~= nil and session.Generation ~= generation then return result end
+	for _, anchor in ipairs(session.Anchors) do
+		if anchor.Parent and Controller.OccupantCount(anchor, excludeProtected) > 0 then
+			table.insert(result, anchor)
+		end
+	end
+	return result
+end
+
+-- Compatibility for older callers: a Manager inspection never moves hidden
+-- players. Only their EXIT request, death/leave, or world teardown releases them.
+function Controller.FlushAnchor(_anchor: BasePart, _awayFrom: Vector3?): {Player}
+	return {}
+end
+
+function Controller.IsFlushImmune(player: Player): boolean
+	local session = activeSession
+	if not session or not liveSession(session) then return false end
+	local expiry = session.FlushImmuneUntil[player]
+	return expiry ~= nil and workspace:GetServerTimeNow() < expiry
+end
+
+function Controller.GetSnapshot()
+	local session = activeSession
+	if not session then return nil end
+	local occupied = 0
+	for _, occupants in pairs(session.Occupants) do
+		if #occupants > 0 then occupied += 1 end
+	end
+	return {
+		Generation=session.Generation,
+		HiddenCount=(function()
+			local count = 0
+			for _ in pairs(session.HiddenPlayers) do count += 1 end
+			return count
+		end)(),
+		TableCount=#session.Anchors,
+		OccupiedCount=occupied,
+		OccupantCap=Tuning.HideOccupantCap,
+	}
+end
+
+function Controller.DebugEnter(player: Player, anchor: BasePart): (boolean, string)
+	assert(RunService:IsStudio(), "DebugEnter is Studio-only")
+	local session = activeSession
+	if not session then return false, "NOT_RUNNING" end
+	return tryEnter(session, player, anchor)
+end
+
+function Controller.DebugExit(player: Player): boolean
+	assert(RunService:IsStudio(), "DebugExit is Studio-only")
+	local session = activeSession
+	return session ~= nil and releasePlayer(session, player, true)
+end
+
+function Controller.ReleaseParticipant(player: Player): boolean
+	local session = activeSession
+	return session ~= nil and releasePlayer(session, player, true)
+end
+
+return Controller
