@@ -626,7 +626,8 @@ function Session:seekPhase()
 					self.dunks += 1
 					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
 					self.noise = home
-					self:say(pick("dunk"), true)
+					-- the winning tag belongs to the angry line alone
+					if self.dunks < self:target() then self:say(pick("dunk"), true) end
 				end
 			end
 		end
@@ -661,9 +662,11 @@ function Session:escapePhase()
 	light.Parent = beacon
 	beacon.Parent = self.info.model
 	local deadline = os.clock() + CONFIG.EscapeSeconds
+	self.pauseUntil = nil
 	local brain = task.spawn(function()
 		while self.active and self.phase == "escape" do
 			-- frenzy: the child goes straight for whoever is nearest
+			self.interrupt = false          -- seekPhase and catch() leave this set, and follow() will not move while it is
 			local nearest, nd = nil, math.huge
 			for player, state in pairs(self.players) do
 				local root = rootOf(player)
@@ -673,13 +676,18 @@ function Session:escapePhase()
 				end
 			end
 			if nearest then
-				local points = self:path(nearest.Position - Vector3.new(0, 3, 0))
+				local goal = nearest.Position - Vector3.new(0, 3, 0)
+				local close = nd < 30 and math.abs(nearest.Position.Y - self.root.Position.Y) < 5
+				local points = self:path(goal)
+				if not points and close then points = {self:feet(), goal} end   -- no route on the navmesh: go straight at them
 				if points then
+					-- only the first stretch, then plan again, so it keeps up with a running player
 					local short = {points[1]}
-					for i = 2, math.min(#points, 5) do short[#short + 1] = points[i] end
+					for i = 2, math.min(#points, 4) do short[#short + 1] = points[i] end
 					self:follow(short, CONFIG.EscapeChaseSpeed, "escape")
 				else
-					task.wait(0.3)
+					self:pose("Idle")
+					task.wait(0.25)
 				end
 			else
 				task.wait(0.3)
@@ -728,7 +736,12 @@ function Session:run()
 		if result == "won" then self:escapePhase(); break end
 		if result == "empty" or result == "lost" or self.phase == "over" then break end
 		broadcast(self, "roundover", result)
-		self:say("l6_round_again", true)
+		-- let whatever it is saying finish; "I'll count again" only when the time simply ran out
+		if os.clock() < self.voiceUntil then task.wait(math.min(self.voiceUntil - os.clock(), 4)) end
+		if result == "timeup" then
+			local seconds = self:say("l6_round_again", true)
+			task.wait((seconds or 2) + 0.3)
+		end
 	end
 	self:finish()
 end

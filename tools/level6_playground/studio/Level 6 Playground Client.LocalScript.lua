@@ -176,9 +176,12 @@ local function childModel()
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	return model and model:FindFirstChild("Level 6 Counting Child")
 end
-local speaking = nil
+local speaking = nil      -- the line the doll is saying now
+local paCopies = {}       -- and its copies on the ceiling horns
 local function stopVoice()
 	if speaking then speaking:Destroy(); speaking = nil end
+	for pa in pairs(paCopies) do pa:Destroy() end
+	table.clear(paCopies)
 end
 -- One line at a time: a new line cuts the old one off, as the server only sends a line that should win.
 -- Every one-shot fades in over a few hundredths of a second and out over its last 0.15 s, so nothing clicks
@@ -194,31 +197,100 @@ local function soft(s, volume)
 	end
 end
 
--- the hall's music: one looping track, quiet and thin like ceiling speakers; the reversed tape in the finale
-local MUSIC_VOLUME = 0.22
-local musicNow, musicKey, musicWanted = nil, nil, false
-local function setMusic(key)
-	if musicKey == key then return end
-	musicKey = key
-	local old = musicNow
-	musicNow = nil
-	if old then
-		TweenService:Create(old, TweenInfo.new(1.5), {Volume = 0}):Play()
-		task.delay(1.6, function() old:Destroy() end)
+-- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
+-- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
+-- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
+local HORN_VOLUME, BED_VOLUME, DUCK = 0.16, 0.05, 0.3
+local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
+local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
+
+local function dressMusic(m, stage)
+	local st = MUSIC_STAGES[stage] or MUSIC_STAGES[1]
+	m.Looped, m.PlaybackSpeed = true, st.speed
+	local eq = Instance.new("EqualizerSoundEffect")
+	eq.LowGain, eq.MidGain, eq.HighGain = -10, 0, -10
+	eq.Parent = m
+	if st.octave ~= 1 then
+		local shift = Instance.new("PitchShiftSoundEffect")
+		shift.Octave = st.octave
+		shift.Parent = m
 	end
+end
+
+local function dropMusic(seconds)
+	local old = {music.bed}
+	for _, h in pairs(music.horns) do old[#old + 1] = h end
+	music.bed, music.horns = nil, {}
+	for _, o in ipairs(old) do
+		TweenService:Create(o, TweenInfo.new(seconds), {Volume = 0}):Play()
+		task.delay(seconds + 0.1, function() o:Destroy() end)
+	end
+end
+
+local function setMusic(key, stage)
+	stage = stage or 1
+	if music.key == key and music.stage == stage then return end
+	music.key, music.stage = key, stage
+	dropMusic(1.2)
 	local voice = counter:FindFirstChild("Voice")
 	local source = key and AUDIO_ENABLED and voice and voice:FindFirstChild(key)
 	if not source then return end
-	local m = source:Clone()
-	m.Looped, m.Volume = true, 0
-	local eq = Instance.new("EqualizerSoundEffect")
-	eq.LowGain, eq.MidGain, eq.HighGain = -8, 0, -10
-	eq.Parent = m
-	m.Parent = audio
-	m:Play()
-	TweenService:Create(m, TweenInfo.new(2.5), {Volume = MUSIC_VOLUME}):Play()
-	musicNow = m
+	local bed = source:Clone()
+	dressMusic(bed, stage)
+	bed.Volume = 0
+	bed.Parent = audio
+	bed:Play()
+	music.bed, music.level = bed, 0          -- the tick below fades it up and hangs copies on the horns
 end
+
+local function musicTick(dt)
+	local bed = music.bed
+	if not bed then return end
+	-- duck under any line that is playing
+	local talking = speaking ~= nil or next(paCopies) ~= nil
+	local goal = talking and DUCK or 1
+	music.level += math.clamp(goal - music.level, -dt * 1.6, dt * 0.7)
+	bed.Volume = BED_VOLUME * music.level
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	local props = model and model:FindFirstChild("Props")
+	local cam = workspace.CurrentCamera
+	local near = {}
+	if props and cam then
+		local all = {}
+		for _, h in ipairs(props:GetChildren()) do
+			if h.Name == "pa_speaker" then all[#all + 1] = h end
+		end
+		table.sort(all, function(x, y) return (x.Position - cam.CFrame.Position).Magnitude < (y.Position - cam.CFrame.Position).Magnitude end)
+		for i = 1, math.min(#all, 4) do near[all[i]] = true end
+	end
+	for horn, m in pairs(music.horns) do
+		if not near[horn] or not horn.Parent then
+			music.horns[horn] = nil
+			TweenService:Create(m, TweenInfo.new(0.8), {Volume = 0}):Play()
+			task.delay(0.9, function() m:Destroy() end)
+		end
+	end
+	local voice = counter:FindFirstChild("Voice")
+	local source = voice and voice:FindFirstChild(music.key)
+	for horn in pairs(near) do
+		local m = music.horns[horn]
+		if not m and source then
+			m = source:Clone()
+			dressMusic(m, music.stage)
+			m.Volume = 0
+			m.RollOffMode, m.RollOffMinDistance, m.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 30, 170
+			m.Parent = horn
+			m.TimePosition = bed.TimePosition
+			m:Play()
+			music.horns[horn] = m
+		end
+		if m then
+			m.Volume += math.clamp(HORN_VOLUME * music.level - m.Volume, -dt * 0.5, dt * 0.12)
+			if math.abs(m.TimePosition - bed.TimePosition) > 0.25 then m.TimePosition = bed.TimePosition end
+		end
+	end
+end
+
 local function oneShot(key, volume)
 	local voice = counter:FindFirstChild("Voice")
 	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
@@ -228,6 +300,17 @@ local function oneShot(key, volume)
 	o.Ended:Once(function() o:Destroy() end)
 	o:Play()
 	soft(o, volume)
+end
+
+-- A tag on the post: the tape stops with the CD-change sound and starts again, faster and lower each time.
+local function changeTrack(key, stage)
+	music.key, music.pending = nil, true
+	dropMusic(0.25)
+	oneShot("l6_track_change", 0.75)
+	task.delay(2.4, function()
+		music.pending = false
+		if music.wanted and music.key == nil then setMusic(key, stage) end
+	end)
 end
 
 -- `paOnly`: a hall announcement (the chime, the welcome): the ceiling horns and a quiet copy everywhere,
@@ -274,8 +357,9 @@ local function say(key, paOnly)
 			echo.DecayTime, echo.WetLevel, echo.DryLevel = 2.6, -4, -2
 			echo.Parent = pa
 			pa.Parent = horns[i]
-			pa.Ended:Once(function() pa:Destroy() end)
-			task.delay(30, function() if pa.Parent then pa:Destroy() end end)
+			paCopies[pa] = true
+			pa.Ended:Once(function() paCopies[pa] = nil; pa:Destroy() end)
+			task.delay(32, function() paCopies[pa] = nil; if pa.Parent then pa:Destroy() end end)
 			pa:Play()
 			soft(pa, 0.5)
 		end
@@ -301,14 +385,14 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		hintLabel.Text = ""
 		objective("HIDE!", "It is counting. Find a hiding place.")
 		-- the music waits for the first count (the welcome plays in quiet); a late joiner gets it straight away
-		musicWanted = (a or 0) >= 2 or d == "seek" or d == "between" or d == "escape"
+		music.wanted = (a or 0) >= 2 or d == "seek" or d == "between" or d == "escape"
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
 		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
 		markerMode = nil
-		musicWanted = true
+		music.wanted = true
 		objective("HIDE!", "It is counting. Find a hiding place.")
 		status("ROUND " .. tostring(a) .. "  ·  HIDE!", 3, Color3.fromRGB(255, 230, 90))
 		hintLabel.Text = ""
@@ -328,6 +412,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		timerLabel.Text = string.format("0:%02d", a)
 	elseif kind == "dunk" then
 		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
+		if (b or 0) < (c or 3) then changeTrack("l6_music", (b or 0) + 1) end
 		if a == player.DisplayName then
 			dunked = true
 			markerMode = nil
@@ -375,6 +460,7 @@ end)
 
 -- ---------------------------------------------------------------------------------------
 -- lighting: dim warehouse night, cold fluorescent pools, a little haze
+local finale = 0      -- 0 = normal hall, 1 = fully red; eases over a few seconds (the tick near the end drives it)
 local LOOK = {
 	Ambient = Color3.fromRGB(74, 76, 82), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
 	ClockTime = 0, FogColor = Color3.fromRGB(62, 66, 68), FogStart = 0, FogEnd = 520,   -- a grey haze, not black
@@ -415,7 +501,9 @@ local function applyLighting(on)
 		player:SetAttribute(LIGHTING_OWNED, nil)
 	end
 	if on then
-		for k, v in pairs(LOOK) do Lighting[k] = v end
+		for k, v in pairs(LOOK) do
+			if not (k == "ExposureCompensation" and finale > 0) then Lighting[k] = v end
+		end
 		-- other controllers put the lobby's Atmosphere back; with a black sky it swallows the whole hall
 		for _, a in ipairs(Lighting:GetChildren()) do
 			if a:IsA("Atmosphere") and a.Density ~= 0 then a.Density = 0 end
@@ -427,12 +515,17 @@ local function inside()
 	return player:GetAttribute(IN_PREVIEW) == true
 end
 
--- marker and red finale, a few times a second
-local RED = Color3.fromRGB(255, 22, 14)
-local litBefore = setmetatable({}, {__mode = "k"})
+-- marker, music and the red finale
+local RED = Color3.fromRGB(255, 14, 8)
+local litBefore = setmetatable({}, {__mode = "k"})     -- light or lamp -> {colour, brightness}
+local FINALE_FOLDERS = {"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}
 task.spawn(function()
+	local last = os.clock()
 	while true do
-		task.wait(0.2)
+		task.wait(0.1)
+		local now = os.clock()
+		local dt = now - last
+		last = now
 		local model = workspace:FindFirstChild(MODEL_NAME)
 		local on = model ~= nil and player:GetAttribute(IN_PREVIEW) == true
 		local target = on and markerMode and model:GetAttribute(markerMode == "post" and "HomePosition" or "ExitPosition")
@@ -450,29 +543,55 @@ task.spawn(function()
 			marker.Enabled = false
 			markerPart.Parent = nil
 		end
-		-- the red finale: every working light in the hall, and the tubes themselves
+
 		local enraged = on and model:GetAttribute("Level6Enraged") == true
-		if enraged and musicKey == "l6_music" then oneShot("l6_track_change", 0.7) end
-		setMusic(on and musicWanted and (enraged and "l6_music_reversed" or "l6_music") or nil)
-		if model and (enraged or next(litBefore)) then
-			for _, folderName in ipairs({"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}) do
+		-- music: the tape, the tape backwards in the finale, nothing outside a round
+		if not (on and music.wanted) then
+			setMusic(nil)
+		elseif enraged then
+			if music.key == "l6_music" then changeTrack("l6_music_reversed", 1)
+			elseif music.key == nil and not music.pending then setMusic("l6_music_reversed", 1) end
+		elseif music.key == nil and not music.pending then
+			setMusic("l6_music", music.stage)
+		end
+		musicTick(dt)
+
+		-- the red finale: the white tubes die down and come back deep red over about four seconds, then throb
+		finale = math.clamp(finale + (enraged and dt / 4 or -dt / 2), 0, 1)
+		if model and (finale > 0 or next(litBefore)) then
+			local dip = math.sin(math.min(finale, 1) * math.pi)            -- 0 -> 1 -> 0: the lights sag in the middle of the change
+			local throb = 1 + 0.22 * math.sin(now * 2.2) * finale
+			local strength = (1 - 0.75 * dip) * throb
+			local colour = function(c) return c:Lerp(RED, finale * finale) end
+			for _, folderName in ipairs(FINALE_FOLDERS) do
 				local folder = model:FindFirstChild(folderName)
 				if folder then
 					for _, d in ipairs(folder:GetDescendants()) do
 						local isLight = d:IsA("Light")
-						local isLamp = d:IsA("BasePart") and d.Material == Enum.Material.Neon
-						if isLight or isLamp then
-							if enraged then
-								if litBefore[d] == nil then litBefore[d] = d.Color end
-								d.Color = RED
-							elseif litBefore[d] ~= nil then
-								d.Color = litBefore[d]; litBefore[d] = nil
+						if isLight or (d:IsA("BasePart") and d.Material == Enum.Material.Neon) then
+							local before = litBefore[d]
+							if finale > 0 then
+								if before == nil then
+									before = {d.Color, isLight and d.Brightness or 0}
+									litBefore[d] = before
+								end
+								d.Color = colour(before[1])
+								if isLight then d.Brightness = before[2] * strength * (1 + 0.6 * finale) end
+							elseif before ~= nil then
+								d.Color = before[1]
+								if isLight then d.Brightness = before[2] end
+								litBefore[d] = nil
 							end
 						end
 					end
 				end
 			end
-			if grade then grade.TintColor = enraged and Color3.fromRGB(255, 120, 110) or Color3.fromRGB(238, 245, 255) end
+			if grade then
+				grade.TintColor = Color3.fromRGB(238, 245, 255):Lerp(Color3.fromRGB(255, 96, 84), finale)
+				grade.Contrast = -0.17 + 0.3 * finale          -- the grey haze goes; blacks come back
+				grade.Saturation = 0.08 - 0.2 * finale
+			end
+			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.55 * finale
 		end
 	end
 end)
@@ -486,8 +605,9 @@ local function refresh()
 		vignette.ImageTransparency = 1
 		stopVoice()
 		markerMode = nil
-		musicWanted = false
+		music.wanted = false
 		setMusic(nil)
+		music.stage = 1
 		objective(nil)
 	end
 	-- the lobby track must not follow the player in here (LobbyMusicController only knows real rounds)
