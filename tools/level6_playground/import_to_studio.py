@@ -160,7 +160,7 @@ local function decorate(p, owner, mat)
 	elseif mat == "wall_staff" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.wallpaper_staff, face, 11) end
 	elseif mat == "floor_pink" then
-		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12, Color3.fromRGB(235, 120, 110))
+		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12, Color3.fromRGB(150, 70, 62))
 	elseif mat == "carpet" then
 		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12)
 	elseif mat == "ceiling_tile" then
@@ -294,13 +294,13 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 		light.Shadows, light.Face, light.Angle = false, Enum.NormalId.Bottom, 170
 		light.Range, light.Brightness, light.Color = 70, 0.6, Color3.fromRGB(255, 240, 215)
 	elseif string.find(f[1], "SnackBar") then
-		light.Range, light.Brightness, light.Color = 34, 0.75, Color3.fromRGB(255, 214, 140)
+		light.Range, light.Brightness, light.Color = 30, 0.38, Color3.fromRGB(255, 214, 140)
 	elseif string.find(f[1], "PartyBlock") then
-		light.Range, light.Brightness, light.Color = 40, 1.4, Color3.fromRGB(235, 242, 255)
+		light.Range, light.Brightness, light.Color = 34, 0.8, Color3.fromRGB(235, 240, 250)
 	elseif string.find(f[1], "Arcade") then
 		light.Range, light.Brightness, light.Color = 34, 2.2, Color3.fromRGB(255, 50, 200)
 	elseif string.find(f[1], "Staff") then
-		light.Range, light.Brightness, light.Color = 20, 1.0, Color3.fromRGB(255, 205, 110)
+		light.Range, light.Brightness, light.Color = 26, 1.1, Color3.fromRGB(255, 214, 130)
 	elseif string.find(f[1], "Reception") then
 		light.Range, light.Brightness, light.Color = 60, 1.4, Color3.fromRGB(255, 235, 215)
 	else

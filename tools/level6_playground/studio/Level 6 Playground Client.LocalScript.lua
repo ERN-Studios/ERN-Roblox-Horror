@@ -217,8 +217,8 @@ end)
 -- ---------------------------------------------------------------------------------------
 -- lighting: dim warehouse night, cold fluorescent pools, a little haze
 local LOOK = {
-	Ambient = Color3.fromRGB(64, 66, 72), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
-	ClockTime = 0, FogColor = Color3.fromRGB(34, 37, 38), FogStart = 30, FogEnd = 420,   -- a grey haze, not black
+	Ambient = Color3.fromRGB(46, 48, 54), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
+	ClockTime = 0, FogColor = Color3.fromRGB(46, 50, 52), FogStart = 0, FogEnd = 560,   -- a grey haze, not black
 	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0,
 }
 local saved = nil
@@ -255,6 +255,10 @@ local function applyLighting(on)
 	end
 	if on then
 		for k, v in pairs(LOOK) do Lighting[k] = v end
+		-- other controllers put the lobby's Atmosphere back; with a black sky it swallows the whole hall
+		for _, a in ipairs(Lighting:GetChildren()) do
+			if a:IsA("Atmosphere") and a.Density ~= 0 then a.Density = 0 end
+		end
 	end
 end
 

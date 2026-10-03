@@ -46,7 +46,7 @@ PALETTE = {
     # floor
     'mat_green': (0.03, 0.14, 0.042), 'mat_blue': (0.014, 0.03, 0.16), 'concrete': (0.20, 0.19, 0.17),
     # shell
-    'wall_yellow': (0.60, 0.38, 0.03), 'wall_blue': (0.02, 0.05, 0.22), 'wall_red': (0.36, 0.03, 0.02),
+    'wall_yellow': (0.42, 0.26, 0.02), 'wall_blue': (0.02, 0.05, 0.22), 'wall_red': (0.36, 0.03, 0.02),
     'wall_white': (0.42, 0.41, 0.37), 'deck': (0.10, 0.10, 0.10), 'steel': (0.07, 0.07, 0.075),
     'duct': (0.55, 0.56, 0.57), 'pipe_red': (0.45, 0.06, 0.05),
     # props
@@ -54,7 +54,7 @@ PALETTE = {
     'stainless': (0.55, 0.56, 0.58), 'paper': (0.85, 0.83, 0.74), 'wood': (0.45, 0.30, 0.16),
     'lamp_off': (0.30, 0.30, 0.28),
     # zone floors and walls
-    'floor_pink': (0.17, 0.05, 0.05), 'snack_a': (0.45, 0.13, 0.03), 'snack_b': (0.50, 0.38, 0.20),
+    'floor_pink': (0.17, 0.05, 0.05), 'snack_a': (0.22, 0.05, 0.02), 'snack_b': (0.30, 0.22, 0.11),
     'floor_purple': (0.20, 0.09, 0.30), 'arcade_carpet': (0.06, 0.03, 0.13), 'arcade_carpet2': (0.14, 0.04, 0.20),
     'carpet': (0.20, 0.15, 0.08), 'wall_staff': (0.55, 0.42, 0.10), 'ceiling_tile': (0.45, 0.42, 0.32),
     'mat_pink': (0.50, 0.16, 0.24), 'mat_mint': (0.14, 0.40, 0.30), 'inflate_a': (0.03, 0.14, 0.042),
@@ -463,7 +463,7 @@ def build_ceiling():
             if in_rect(x, y, PARTY, 2) or in_rect(x, y, STAFF, 2):
                 continue                                   # those blocks have their own low ceilings
             z = HALL_Z - 9
-            on = (ix * 7 + iy * 3) % 6 != 0
+            on = (ix * 7 + iy * 3) % 11 != 0
             fx.box((x - 5, y - 1.6, z), (x + 5, y + 1.6, z + 0.8), 'wall_white')
             for oy in (-0.8, 0.8):
                 fx.box((x - 4.7, y + oy - 0.3, z - 0.25), (x + 4.7, y + oy + 0.3, z), 'lamp_on' if on else 'lamp_off')
@@ -635,7 +635,7 @@ def build_frame():
                 if k and (void(k, i, j) or stairwell(k, i, j)):
                     continue
                 x, y, z = SX + i * C, SY + j * C, k * H
-                mat = FRAME_VINYL[(i * 3 + j * 5 + k * 2) % len(FRAME_VINYL)]
+                mat = FRAME_VINYL[(i * 3 + j * 5 + k * 2) % len(FRAME_VINYL)] if (i * 7 + j * 3 + k) % 5 == 0 else ('navy', 'mat_blue')[(i + j) % 2]
                 if k == 0:
                     decks.box((x + 0.15, y + 0.15, 0.35), (x + C - 0.15, y + C - 0.15, 0.95), mat)
                 else:
@@ -943,10 +943,10 @@ def build_party_rooms():
     for n, (bx, by, mat) in enumerate(((20, 320, 'red'), (58, 334, 'yellow'), (96, 318, 'blue'), (132, 330, 'green'),
                                        (150, 320, 'pink'))):                          # balloons gone soft on the floor
         p.ball((bx, by, 1.2), 1.1, mat)
-    for x in (24, 72, 120, 160):
-        p.box((x - 5, 324, ceil - 0.5), (x + 5, 328, ceil - 0.05), 'lamp_on' if x in (72, 160) else 'lamp_off')
-    light('L6_PartyBlock_0', (72, 326, ceil - 1.5), energy=7000, color=(0.92, 0.95, 1.0), size=(10, 4))
-    light('L6_PartyBlock_1', (160, 326, ceil - 1.5), energy=7000, color=(0.92, 0.95, 1.0), size=(10, 4))
+    for n, x in enumerate((24, 72, 120, 160)):
+        p.box((x - 5, 324, ceil - 0.5), (x + 5, 328, ceil - 0.05), 'lamp_on' if x != 120 else 'lamp_off')
+        if x != 120:
+            light(f'L6_PartyBlock_{n}', (x, 326, ceil - 1.5), energy=7000, color=(0.92, 0.95, 1.0), size=(10, 4))
     p.box((0.8, 318, 0.35), (1.4, 334, 11), 'wall_red')                               # restroom doors at the far end
     p.finish()
     sign((84, y0 - 0.9, 13.4), 60, 3.6, '-y', 'PARTY ROOMS', (120, 60, 170), (255, 255, 255))
