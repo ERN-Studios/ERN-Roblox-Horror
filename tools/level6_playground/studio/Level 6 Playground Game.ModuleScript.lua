@@ -28,14 +28,14 @@ local CONFIG = {
 	-- the recorded count for each round (22.9, 21.2, 19.2, 15.9 s); the last one repeats
 	CountLines = {"l6_count_slow", "l6_count_medium", "l6_count_fast", "l6_count_frantic"},
 	SeekSeconds = 75,
-	DunksPerPlayer = 2, MinDunks = 3, MaxDunks = 8,
+	TagsToWin = 3,
 	DunkRadius = 7, DunkSafeDistance = 22,
-	WalkSpeed = 9, ChaseSpeed = 20, EscapeChaseSpeed = 18,
+	WalkSpeed = 9, ChaseSpeed = 20, EscapeChaseSpeed = 24,   -- it is furious once the exit opens
 	SightRange = 75, CatchDistance = 4.2, HideRadius = 4.5, HiddenSpotRange = 6,
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 2.2,
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
-	EyeHeight = 1.4,   -- eyes above the root
+	EyeHeight = 1.8,   -- eyes above the root
 	SpottedPause = 0.9,
 }
 
@@ -104,10 +104,17 @@ local VOICE = {
 	found = {"l6_found_1", "l6_found_2", "l6_found_3"},
 	dunk = {"l6_dunk_1", "l6_dunk_2", "l6_dunk_3"},
 	exit = {"l6_exit_1", "l6_exit_2"},
+	-- the lines for when it has lost; until the owner records l6_angry_*, the exit lines stand in
+	angry = {"l6_angry_1", "l6_angry_2", "l6_angry_3"},
 }
 local lastLine = {}
 local function pick(group)
 	local list = VOICE[group]
+	if group == "angry" then
+		local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
+		voice = voice and voice:FindFirstChild("Voice")
+		if not (voice and voice:FindFirstChild(list[1])) then list = VOICE.exit end
+	end
 	local i = math.random(#list)
 	if #list > 1 and i == lastLine[group] then i = i % #list + 1 end
 	lastLine[group] = i
@@ -252,7 +259,7 @@ end
 function Session:target()
 	local n = 0
 	for _ in pairs(self.players) do n += 1 end
-	return math.clamp(n * CONFIG.DunksPerPlayer, CONFIG.MinDunks, CONFIG.MaxDunks)
+	return CONFIG.TagsToWin        -- the same for any party size: three tags on the post open the exit
 end
 
 function Session:count()
@@ -341,7 +348,7 @@ function Session:walkTo(pos, speed, phase)
 	local points = self:path(pos)
 	if not points then
 		-- unreachable by navmesh: glide straight if it is close, otherwise give up on this goal
-		if (pos - self:feet()).Magnitude > 24 then return false end
+			if (pos - self:feet()).Magnitude > 24 then return false end
 		points = {self:feet(), pos}
 	end
 	return self:follow(points, speed, phase)
@@ -626,7 +633,8 @@ end
 function Session:escapePhase()
 	self.phase = "escape"
 	broadcast(self, "won", self.dunks)
-	self:say(pick("exit"), true)
+	self.info.model:SetAttribute("Level6Enraged", true)   -- the client turns every light deep red
+	self:say(pick("angry"), true)
 	local exit = self.info.exit
 	local beacon = Instance.new("Part")
 	beacon.Name, beacon.Anchored, beacon.CanCollide, beacon.CanQuery, beacon.CanTouch = "ExitBeacon", true, false, false, false
@@ -716,6 +724,7 @@ function Session:finish()
 	self.phase = "over"
 	if self.heartbeat then self.heartbeat:Disconnect() end
 	if self.child then self.child:Destroy() end
+	self.info.model:SetAttribute("Level6Enraged", nil)
 	if session == self then session = nil end
 end
 

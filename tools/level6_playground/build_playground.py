@@ -309,8 +309,30 @@ def light(name, pos, kind='AREA', energy=9000, color=(1.0, 0.94, 0.82), size=(11
     lights_col.objects.link(obj)
 
 
+SIGN_ART = {   # first words of the text -> (texture key, width / height)
+    'FUN FACTORY': ('sign_playland', 3), 'SNACK SHACK': ('sign_snack', 3), 'ARCADE': ('sign_arcade', 3),
+    'PRIZES': ('sign_prizes', 3), 'PARTY ROOMS': ('sign_party', 3), 'THE BIG FRAME': ('sign_frame', 3),
+    'BALL OCEAN': ('sign_ball', 3), 'TODDLER TOWN': ('sign_toddler', 3), 'INFLATABLES': ('sign_inflatables', 3),
+    'STAFF ONLY': ('sign_staff', 3), 'RECEPTION': ('sign_reception', 3), 'PLAY ZONE': ('sign_playzone', 3),
+    'NO ADULTS': ('sign_noadults', 3), 'EXIT': ('sign_exit', 3), 'BIRTHDAYS': ('sign_birthdays', 3),
+    'HOME BASE': ('sign_home', 1), "UNDER 5": ('sign_under5', 1), 'PLAY RULES': ('sign_rules', 2 / 3),
+    'PARTY\nROOM': ('sign_partyroom', 2 / 3),
+}
+
+
 def sign(pos, w, h, facing, text, bg, fg):
-    SIGNS.append([list(pos), w, h, facing, text, list(bg), list(fg)])
+    tex = ''
+    for start, (key, aspect) in SIGN_ART.items():
+        if text.startswith(start):
+            tex = key
+            if aspect >= 1:
+                h = max(h, min(w / aspect, 7.5))
+                w = h * aspect
+            else:
+                w = max(w, 3.2)
+                h = w / aspect
+            break
+    SIGNS.append([list(pos), w, h, facing, text, list(bg), list(fg), tex])
 
 
 def wall_run(b, a, c, height, mat, openings=(), t=1.5, z0=0):
@@ -938,11 +960,21 @@ def build_party_rooms():
     door_cols = ('wall_red', 'wall_yellow', 'wall_red', 'wall_yellow')
     for n, (a, b) in enumerate(rooms):
         mid = (a + b) / 2
+        fx = mid - 14                                                                 # a second door, shut, per room
         for side in (-4.6, 4):                                                        # blue door frame
             p.box((mid + side, 338.9, 0.35), (mid + side + 0.6, 340, 11), 'blue')
         p.box((mid - 4.6, 338.9, 10.5), (mid + 4.6, 340, 11.1), 'blue')
         p.box((mid + 4, 331.2, 0.35), (mid + 4.6, 339, 10.3), door_cols[n])           # door standing open
-        fx = mid - 14                                                                 # a second door, shut, per room
+        p.box((mid + 3.85, 331.2, 0.35), (mid + 4.0, 339, 1.5), 'stainless')               # kick plate and handle
+        p.cyl((mid + 3.7, 332.4, 5.0), (mid + 3.7, 333.6, 5.0), 0.16, 'stainless', 6)
+        p.box((fx - 3.6, 338.85, 0.35), (fx + 3.6, 339.0, 1.5), 'stainless')
+        p.cyl((fx + 2.4, 338.8, 5.0), (fx + 3.3, 338.8, 5.0), 0.16, 'stainless', 6)
+        p.box((fx - 1.2, 338.8, 6.2), (fx + 1.2, 338.98, 8.4), 'paper')                    # a notice taped to the shut door
+        for k in range(9):                                                                # bunting across the room
+            bx = a + 3 + k * (b - a - 6) / 8
+            p.box((bx - 0.7, 352, 12.6 - abs(k - 4) * 0.25), (bx + 0.7, 352.15, 14.2 - abs(k - 4) * 0.25),
+                  ('red', 'yellow', 'blue', 'green')[k % 4])
+        p.cyl((a + 2, 352.07, 14.6), (b - 2, 352.07, 13.2), 0.05, 'white', 3)
         p.box((fx - 3.6, 339.0, 0.35), (fx + 3.6, 339.4, 10.3), door_cols[(n + 1) % 4])
         for side in (-4.2, 3.6):
             p.box((fx + side, 338.9, 0.35), (fx + side + 0.6, 340, 11), 'blue')
@@ -967,29 +999,43 @@ def build_party_rooms():
     for n, (bx, by, mat) in enumerate(((20, 334, 'red'), (58, 336, 'yellow'), (96, 333, 'blue'), (132, 335, 'green'),
                                        (150, 336, 'pink'), (70, 330, 'blue'), (112, 337, 'yellow'))):   # balloons gone soft
         p.ball((bx, by, 1.5), 1.2, mat)
+    p.box((x0, 338.6, 0.35), (x1, 339.25, 1.3), 'navy')                              # skirting along the blue wall
+    for n in range(14):                                                               # streamers and cups left on the floor
+        sx, sy = 12 + n * 11.5, 330 + (n * 7) % 8
+        p.box((sx, sy, 0.36), (sx + 3.2, sy + 0.35, 0.42), ('yellow', 'red', 'pink', 'cyan')[n % 4])
+        if n % 3 == 0:
+            p.cyl((sx + 5, sy + 2, 0.36), (sx + 5, sy + 2, 1.1), 0.4, 'paper', 6, True)
     p.finish()
     sign((84, 339.1, 19), 60, 3.6, '-y', 'PARTY ROOMS', (120, 60, 170), (255, 255, 255))
 
 
 def cabinet(b, x, y, facing, mat, lit=False):
-    """Arcade cabinet from the prop kit, 6 wide; facing +1 looks toward +y, -1 toward -y."""
-    prop('arcade_cabinet_a' if mat in ('navy', 'purple', 'black', 'blue') else 'arcade_cabinet_b', x + 3, y + 4.5 * facing,
-         yaw=0 if facing < 0 else 180, size=12.5)
+    """Arcade cabinet from the prop kit (about 6.6 studs tall); facing +1: the screen looks toward +y, -1 toward -y."""
+    prop('arcade_cabinet_a' if mat in ('navy', 'purple', 'black', 'blue') else 'arcade_cabinet_b', x + 1.6, y + 1.8 * facing,
+         yaw=180 if facing < 0 else 0, size=6.6)
+
+
+def claw_machine(b, x, y, facing):
+    """Claw machine from the kit, 7.2 studs tall, with the glass box the generated model lacks."""
+    prop('claw_machine', x, y, yaw=180 if facing < 0 else 0, size=7.2)
+    b.box((x - 2.5, y - 1.65, 3.5), (x + 2.5, y + 1.65, 6.2), 'glass')
 
 
 def build_arcade():
     a = Builder('Arcade', zones_col)
     x0, y0, x1, y1 = ARCADE
     wall_run(a, (x0, y0), (x0, y1), 14, 'wall_purple', openings=[(346, 372, 14)])
-    for n in range(11):                                              # cabinets along the north wall
-        cabinet(a, x0 + 8 + n * 11, y1 - 1, -1, ('navy', 'red', 'purple', 'black', 'blue')[n % 5], lit=(n == 6))
-    for n in range(5):                                               # island row, back to back
-        cabinet(a, x0 + 30 + n * 16, 356, -1, ('purple', 'navy', 'red')[n % 3])
-        cabinet(a, x0 + 30 + n * 16, 356, 1, ('black', 'purple', 'blue')[n % 3], lit=(n == 1))
+    for n in range(17):                                              # cabinets along the north wall
+        if n not in (15,):
+            cabinet(a, x0 + 6 + n * 7.6, y1 - 1, -1, ('navy', 'red', 'purple', 'black', 'blue')[n % 5], lit=(n == 6))
+    for n in range(9):                                               # island row, back to back
+        cabinet(a, x0 + 28 + n * 8, 358, -1, ('purple', 'navy', 'red')[n % 3])
+        cabinet(a, x0 + 28 + n * 8, 358, 1, ('black', 'purple', 'blue')[n % 3], lit=(n == 1))
     a.box((x0 + 100, 336, 0.35), (x0 + 122, 346, 3.6), 'navy')        # air hockey
     a.box((x0 + 101, 337, 3.6), (x0 + 121, 345, 3.9), 'white')
-    prop('claw_machine', x0 + 16, 340, yaw=180, size=12)
-    prop('claw_machine', x0 + 132, 392, yaw=0, size=12)
+    claw_machine(a, x0 + 14, 342, 1)
+    claw_machine(a, x0 + 21, 342, 1)
+    claw_machine(a, x0 + 124, 396, -1)
     a.finish()
     light('L6_Arcade_0', (x0 + 77, y1 - 12, 9), 'POINT', 3500, (1.0, 0.2, 0.8))
     light('L6_Arcade_1', (x0 + 49, 366, 9), 'POINT', 2500, (1.0, 0.2, 0.8))
@@ -1088,8 +1134,7 @@ def build_staff_only():
     ex = x0 + entry[0] * STAFF_C
     s.box((ex + 10.5, y0 - 8, 0.35), (ex + 11.1, y0 - 0.6, 10.3), 'steel')             # staff door left open
     s.finish()
-    sign((ex + 6, y0 - 0.75, 11.8), 9, 1.8, '-y', 'STAFF ONLY', (245, 240, 220), (180, 20, 20))
-    sign(((x0 + x1) / 2, y0 - 0.8, 18), 60, 4, '-y', 'STAFF ONLY · NO ENTRY', (200, 170, 40), (60, 30, 10))
+    sign((ex + 6, y0 - 0.75, 12.2), 9, 3, '-y', 'STAFF ONLY', (245, 240, 220), (180, 20, 20))   # on the door frame
     sign(((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 1.3, 12.6), 5.4, 0.9, '-y', 'EXIT', (200, 15, 10), (255, 245, 235))
     return ex + 6
 
@@ -1251,6 +1296,16 @@ build_toddler_town()
 build_inflatables()
 build_home_base()
 build_hall_litter()
+pa = Builder('PA_Mounts', shell_col)
+for hx in range(60, HALL_X, 120):
+    for hy in (50, 150, 250, 330):
+        if in_rect(hx, hy, (PARTY[0], 340, PARTY[2], PARTY[3]), 2) or in_rect(hx, hy, STAFF, 2):
+            continue
+        prop('pa_speaker', hx + 10, hy + 10, z=HALL_Z - 12.5, yaw=0, size=4.2, collide=False)
+        pa.cyl((hx + 10, hy + 10, HALL_Z - 8.6), (hx + 10, hy + 10, HALL_Z - 4.6), 0.12, 'steel', 4)
+prop('pa_speaker', STAFF[0] + 30, STAFF[1] + 40, z=8.6, yaw=0, size=3.2, collide=False)     # one in the staff corridors
+prop('pa_speaker', 86, 372, z=11.4, yaw=0, size=3.2, collide=False)                         # and one in a party room
+pa.finish()
 
 anchors_col = collection('L6_Anchors')
 for name, loc in (('Spawn', (66, 20, 3)), ('Exit', ((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 6, 3)),

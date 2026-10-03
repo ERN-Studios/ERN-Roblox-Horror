@@ -45,6 +45,62 @@ local countLabel = label("Count", UDim2.fromScale(0.7, 0.18), UDim2.fromScale(0.
 local statusLabel = label("Status", UDim2.fromScale(0.8, 0.07), UDim2.fromScale(0.5, 0.33), 44, Color3.fromRGB(255, 255, 255))
 local hintLabel = label("Hint", UDim2.fromScale(0.8, 0.045), UDim2.fromScale(0.5, 0.9), 28, Color3.fromRGB(230, 230, 230))
 local dunkLabel = label("Dunks", UDim2.fromScale(0.24, 0.05), UDim2.fromScale(0.86, 0.08), 32, Color3.fromRGB(120, 255, 150))
+
+-- the objective card: one big instruction and one short line under it, like the other levels' objective panels
+local card = Instance.new("Frame")
+card.Name = "Objective"
+card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 58), UDim2.fromScale(0.34, 0.1)
+card.BackgroundColor3, card.BackgroundTransparency, card.BorderSizePixel = Color3.fromRGB(12, 12, 16), 0.25, 0
+card.Visible = false
+card.Parent = gui
+do
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 12); corner.Parent = card
+	local stroke = Instance.new("UIStroke"); stroke.Thickness, stroke.Color = 2, Color3.fromRGB(255, 205, 40); stroke.Name = "Edge"; stroke.Parent = card
+	local limit = Instance.new("UISizeConstraint"); limit.MinSize, limit.MaxSize = Vector2.new(280, 74), Vector2.new(560, 110); limit.Parent = card
+end
+local function cardLabel(name, y, h, size, color)
+	local l = Instance.new("TextLabel")
+	l.Name, l.BackgroundTransparency = name, 1
+	l.Position, l.Size = UDim2.fromScale(0.04, y), UDim2.fromScale(0.92, h)
+	l.Font, l.TextScaled, l.TextColor3, l.Text = Enum.Font.FredokaOne, true, color, ""
+	local limit = Instance.new("UITextSizeConstraint"); limit.MaxTextSize = size; limit.Parent = l
+	l.Parent = card
+	return l
+end
+local cardTitle = cardLabel("Title", 0.08, 0.5, 40, Color3.fromRGB(255, 220, 60))
+local cardLine = cardLabel("Line", 0.58, 0.34, 22, Color3.fromRGB(235, 235, 235))
+local function objective(title, line, color)
+	card.Visible = title ~= nil
+	cardTitle.Text, cardLine.Text = title or "", line or ""
+	cardTitle.TextColor3 = color or Color3.fromRGB(255, 220, 60)
+	card.Edge.Color = color or Color3.fromRGB(255, 205, 40)
+end
+
+-- the marker you can see through walls: on the post while you still have to tag it, on the exit once it is open
+local markerPart = Instance.new("Part")
+markerPart.Name, markerPart.Anchored, markerPart.CanCollide, markerPart.CanQuery, markerPart.CanTouch = "Level6Marker", true, false, false, false
+markerPart.Transparency, markerPart.Size = 1, Vector3.new(1, 1, 1)
+local marker = Instance.new("BillboardGui")
+marker.Name, marker.AlwaysOnTop, marker.LightInfluence, marker.MaxDistance = "Level6MarkerGui", true, 0, 2000
+marker.Size, marker.Enabled, marker.Adornee = UDim2.fromOffset(90, 90), false, markerPart
+marker.Parent = player:WaitForChild("PlayerGui")
+local markerRing = Instance.new("Frame")
+markerRing.AnchorPoint, markerRing.Position, markerRing.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0), UDim2.fromScale(0.62, 0.62)
+markerRing.BackgroundColor3, markerRing.BackgroundTransparency = Color3.fromRGB(255, 215, 40), 0.15
+markerRing.Parent = marker
+do
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(1, 0); corner.Parent = markerRing
+	local stroke = Instance.new("UIStroke"); stroke.Thickness, stroke.Color = 3, Color3.new(1, 1, 1); stroke.Parent = markerRing
+end
+local markerIcon = Instance.new("TextLabel")
+markerIcon.BackgroundTransparency, markerIcon.Size = 1, UDim2.fromScale(1, 1)
+markerIcon.Font, markerIcon.TextScaled, markerIcon.TextColor3, markerIcon.Text = Enum.Font.FredokaOne, true, Color3.fromRGB(30, 20, 0), "!"
+markerIcon.Parent = markerRing
+local markerText = Instance.new("TextLabel")
+markerText.BackgroundTransparency, markerText.Position, markerText.Size = 1, UDim2.fromScale(0, 0.64), UDim2.fromScale(1, 0.36)
+markerText.Font, markerText.TextScaled, markerText.TextColor3, markerText.TextStrokeTransparency = Enum.Font.FredokaOne, true, Color3.new(1, 1, 1), 0.2
+markerText.Parent = marker
+local markerMode = nil     -- nil, "post" or "exit"
 local timerLabel = label("Timer", UDim2.fromScale(0.16, 0.045), UDim2.fromScale(0.14, 0.08), 30, Color3.fromRGB(255, 255, 255))
 
 local flash = Instance.new("Frame")
@@ -140,6 +196,31 @@ local function say(key)
 		s:Destroy()
 	end)
 	s:Play()
+	-- the same line over the hall's PA: the nearest ceiling horns, thin and echoing
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	local props = model and model:FindFirstChild("Props")
+	local cam = workspace.CurrentCamera
+	if props and cam then
+		local horns = {}
+		for _, h in ipairs(props:GetChildren()) do
+			if h.Name == "pa_speaker" then horns[#horns + 1] = h end
+		end
+		table.sort(horns, function(x, y) return (x.Position - cam.CFrame.Position).Magnitude < (y.Position - cam.CFrame.Position).Magnitude end)
+		for i = 1, math.min(#horns, 5) do
+			local pa = source:Clone()
+			pa.Volume, pa.RollOffMode, pa.RollOffMinDistance, pa.RollOffMaxDistance = 0.5, Enum.RollOffMode.InverseTapered, 30, 190
+			local eq = Instance.new("EqualizerSoundEffect")
+			eq.LowGain, eq.MidGain, eq.HighGain = -22, 2, -8
+			eq.Parent = pa
+			local echo = Instance.new("ReverbSoundEffect")
+			echo.DecayTime, echo.WetLevel, echo.DryLevel = 2.6, -4, -2
+			echo.Parent = pa
+			pa.Parent = horns[i]
+			pa.Ended:Once(function() pa:Destroy() end)
+			task.delay(30, function() if pa.Parent then pa:Destroy() end end)
+			pa:Play()
+		end
+	end
 end
 local dunked = false
 event.OnClientEvent:Connect(function(kind, a)
@@ -153,16 +234,20 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	if kind == "paused" then
 		countLabel.Text, statusLabel.Text, dunkLabel.Text, timerLabel.Text = "", "", "", ""
 		hintLabel.Text = "Free roam: hide and seek is paused."
+		objective(nil)
 	elseif kind == "joined" then
-		dunkLabel.Text = string.format("DUNKS %d / %d", b or 0, c or 0)
-		hintLabel.Text = "It counts at HOME BASE. Hide before it reaches twenty."
+		dunkLabel.Text = string.format("TAGS %d / %d", b or 0, c or 0)
+		hintLabel.Text = ""
+		objective("HIDE!", "It is counting. Find a hiding place.")
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
-		dunkLabel.Text = string.format("DUNKS %d / %d", b, c)
+		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
+		markerMode = nil
+		objective("HIDE!", "It is counting. Find a hiding place.")
 		status("ROUND " .. tostring(a) .. "  ·  HIDE!", 3, Color3.fromRGB(255, 230, 90))
-		hintLabel.Text = "Hide anywhere: houses, tubes, under tables, in the balls. Stay still."
+		hintLabel.Text = ""
 		timerLabel.Text = ""
 	elseif kind == "count" then
 		countLabel.Text = childSays(a)
@@ -171,14 +256,20 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	elseif kind == "go" then
 		countLabel.Text = "READY OR NOT . . ."
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
-		hintLabel.Text = "While it is away, run and touch HOME BASE to dunk. One dunk each per round."
+		hintLabel.Text = ""
+		markerMode = "post"
+		objective("TOUCH THE POST", "Sneak to the yellow post. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "timer" then
 		timerLabel.Text = string.format("0:%02d", a)
 	elseif kind == "dunk" then
-		dunkLabel.Text = string.format("DUNKS %d / %d", b, c)
-		if a == player.DisplayName then dunked = true end
-		status(string.upper(a) .. " DUNKED!", 2.5, Color3.fromRGB(120, 255, 150))
+		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
+		if a == player.DisplayName then
+			dunked = true
+			markerMode = nil
+			objective("TAGGED!", "Hide again until it goes back to count.", Color3.fromRGB(120, 255, 150))
+		end
+		status(string.upper(a) .. " TAGGED THE POST!", 2.5, Color3.fromRGB(120, 255, 150))
 	elseif kind == "chase" then
 		vignette.ImageTransparency = a and 0.35 or 1
 		if a then status("IT SEES YOU. RUN!", 2, Color3.fromRGB(255, 60, 60)) end
@@ -195,8 +286,10 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status(a == "alldunked" and "Everyone dunked! It is counting again . . ." or "Time's up. It goes back to count . . .", 3)
 	elseif kind == "won" then
 		countLabel.Text = ""
-		status("THE EXIT IS OPEN! RUN TO THE GREEN LIGHT!", 6, Color3.fromRGB(120, 255, 150))
-		hintLabel.Text = "Emergency exit: far corner, by the arcade. It is angry now."
+		status("IT LOST. NOW IT IS ANGRY.", 5, Color3.fromRGB(255, 70, 60))
+		hintLabel.Text = ""
+		markerMode = "exit"
+		objective("RUN TO THE EXIT!", "The red door inside STAFF ONLY. It is angry and fast.", Color3.fromRGB(255, 70, 60))
 		timerLabel.Text = ""
 	elseif kind == "escaped" then
 		vignette.ImageTransparency = 1
@@ -209,6 +302,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		task.delay(3, function()
 			if player:GetAttribute(IN_PREVIEW) ~= true then
 				countLabel.Text, statusLabel.Text, hintLabel.Text, timerLabel.Text = "", "", "", ""
+				markerMode = nil
+				objective(nil)
 			end
 		end)
 	end
@@ -268,6 +363,54 @@ local function inside()
 	return player:GetAttribute(IN_PREVIEW) == true
 end
 
+-- marker and red finale, a few times a second
+local RED = Color3.fromRGB(255, 22, 14)
+local litBefore = setmetatable({}, {__mode = "k"})
+task.spawn(function()
+	while true do
+		task.wait(0.2)
+		local model = workspace:FindFirstChild(MODEL_NAME)
+		local on = model ~= nil and player:GetAttribute(IN_PREVIEW) == true
+		local target = on and markerMode and model:GetAttribute(markerMode == "post" and "HomePosition" or "ExitPosition")
+		if target then
+			markerPart.Position = target + Vector3.new(0, markerMode == "post" and 16 or 9, 0)
+			markerPart.Parent = workspace
+			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			local dist = root and (root.Position - target).Magnitude or 200
+			local px = math.clamp(250 - dist * 0.85, 80, 250)      -- grows as you get close
+			marker.Size = UDim2.fromOffset(px, px)
+			markerText.Text = (markerMode == "post" and "TOUCH" or "EXIT") .. "  " .. math.floor(dist / 3.6 + 0.5) .. " m"
+			markerRing.BackgroundColor3 = markerMode == "post" and Color3.fromRGB(255, 215, 40) or Color3.fromRGB(255, 70, 60)
+			marker.Enabled = true
+		else
+			marker.Enabled = false
+			markerPart.Parent = nil
+		end
+		-- the red finale: every working light in the hall, and the tubes themselves
+		local enraged = on and model:GetAttribute("Level6Enraged") == true
+		if model and (enraged or next(litBefore)) then
+			for _, folderName in ipairs({"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}) do
+				local folder = model:FindFirstChild(folderName)
+				if folder then
+					for _, d in ipairs(folder:GetDescendants()) do
+						local isLight = d:IsA("Light")
+						local isLamp = d:IsA("BasePart") and d.Material == Enum.Material.Neon
+						if isLight or isLamp then
+							if enraged then
+								if litBefore[d] == nil then litBefore[d] = d.Color end
+								d.Color = RED
+							elseif litBefore[d] ~= nil then
+								d.Color = litBefore[d]; litBefore[d] = nil
+							end
+						end
+					end
+				end
+			end
+			if grade then grade.TintColor = enraged and Color3.fromRGB(255, 120, 110) or Color3.fromRGB(238, 245, 255) end
+		end
+	end
+end)
+
 local function refresh()
 	local on = inside()
 	gui.Enabled = on
@@ -276,6 +419,8 @@ local function refresh()
 	else
 		vignette.ImageTransparency = 1
 		stopVoice()
+		markerMode = nil
+		objective(nil)
 	end
 	-- the lobby track must not follow the player in here (LobbyMusicController only knows real rounds)
 	local lobbyMusic = SoundService:FindFirstChild("ZyntraLobbyMusic")
@@ -369,7 +514,7 @@ local function clip(name)
 end
 
 -- studs per second at which each travelling clip's feet match the floor
-local STRIDE = {Walk_Wander = 4.2, Run_Chase = 9.5}
+local STRIDE = {Walk_Wander = 5.1, Run_Chase = 11.5}
 local TWITCH_OVER = {Idle = true, Walk_Wander = true, Run_Chase = true}
 local FADE = 0.16
 local rigs = setmetatable({}, {__mode = "k"})

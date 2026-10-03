@@ -138,6 +138,7 @@ local function texture(p, id, face, studs, colour, transparency)
 	t.Transparency = transparency or 0
 	t.Parent = p
 end
+local KIT = game:GetService("ReplicatedStorage"):FindFirstChild("Level6PropKit")
 local SIDES = {Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}
 local VINYL = {yellow = true, red = true, blue = true, green = true, purple = true, pink = true, cyan = true, orange = true, navy = true}
 local function tint(c, k)
@@ -212,8 +213,21 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 	elseif kind == "c" or kind == "t" then
 		local a, b = O + Vector3.new(n[1], n[2], n[3]), O + Vector3.new(n[4], n[5], n[6])
 		local cf, len = along(a, b)
-		local p = part(owner, mat, Enum.PartType.Cylinder)
-		p.Size = Vector3.new(len, n[7] * 2, n[7] * 2)
+		local p
+		local tubeMesh = kind == "t" and KIT and KIT:FindFirstChild("tube_segment")
+		if tubeMesh then
+			-- a real hollow tube section with a joint flange, tinted like the padding
+			p = tubeMesh:Clone()
+			p.Name, p.Anchored, p.CanTouch = mat, true, false
+			p.Color, p.Material = MAT[mat][1], Enum.Material.SmoothPlastic
+			p.Size = Vector3.new(len * 1.06, n[7] * 2.18, n[7] * 2.18)
+			local skin = Instance.new("SurfaceAppearance")
+			skin.ColorMap, skin.Color = TEX.vinyl_pad, tint(MAT[mat][1], 1.5)
+			skin.Parent = p
+		else
+			p = part(owner, mat, Enum.PartType.Cylinder)
+			p.Size = Vector3.new(len, n[7] * 2, n[7] * 2)
+		end
 		p.CFrame = cf
 		if kind == "t" then
 			-- the tube is only a shell to look at; an invisible trough inside is what you ride
@@ -334,7 +348,16 @@ for line in string.gmatch(SIGNS, "[^\\n]+") do
 	local gui = Instance.new("SurfaceGui")
 	gui.Face, gui.SizingMode = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud
 	gui.PixelsPerStud, gui.LightInfluence = 40, 1
+	local art = f[8] and f[8] ~= "" and TEX[f[8]]
+	if art then
+		p.Color = Color3.fromRGB(30, 30, 30)
+		local image = Instance.new("ImageLabel")
+		image.Size, image.BackgroundTransparency, image.Image = UDim2.fromScale(1, 1), 1, art
+		image.ImageColor3 = Color3.fromRGB(215, 215, 215)
+		image.Parent = gui
+	end
 	local label = Instance.new("TextLabel")
+	label.Visible = not art
 	label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
 	label.Text = string.gsub(f[5], "\\\\n", "\\n")
 	label.TextScaled, label.Font = true, Enum.Font.FredokaOne
@@ -358,6 +381,7 @@ for line in string.gmatch(PROPS, "[^\\n]+") do
 		local longest = math.max(m.Size.X, m.Size.Y, m.Size.Z)
 		m.Size = m.Size * (tonumber(f[6]) / longest)
 		m.Anchored, m.CanCollide, m.CanTouch = true, f[7] == "1", false
+		if f[1] == "pa_speaker" then m.Color, m.Material = Color3.fromRGB(150, 150, 140), Enum.Material.Metal end
 		local base = O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4]))
 		m.CFrame = CFrame.new(base + Vector3.new(0, m.Size.Y / 2, 0)) * CFrame.Angles(0, math.rad(tonumber(f[5])), 0)
 		m.Parent = props
@@ -395,6 +419,8 @@ local at = Vector3.new(spawn.Position.X, O.Y + 0.35 + 3.05, spawn.Position.Z)
 exit.CFrame = CFrame.lookAt(at, at + Vector3.xAxis)
 exit.Parent = model
 model:SetAttribute("Source", "tools/level6_playground")
+model:SetAttribute("HomePosition", anchors.L6_Anchor_HomeBase.Position)   -- for the client's see-through marker
+model:SetAttribute("ExitPosition", anchors.L6_Anchor_Exit.Position)
 model:SetAttribute("Level6Preview", true)
 model:SetAttribute("PreviewOnly", true)
 model:SetAttribute("Level6PreviewReady", true)
@@ -424,7 +450,7 @@ def main():
     facing = {'+x': (1, 0, 0), '-x': (-1, 0, 0), '+y': (0, 0, -1), '-y': (0, 0, 1)}
     signs = '\n'.join('|'.join([','.join(format(v, 'g') for v in to_roblox(*c)), format(w, 'g'), format(h, 'g'),
                                 ','.join(map(str, facing[f])), text.replace('\n', '\\n'), ','.join(map(str, bg)),
-                                ','.join(map(str, fg))]) for c, w, h, f, text, bg, fg in data['signs'])
+                                ','.join(map(str, fg)), tex]) for c, w, h, f, text, bg, fg, tex in data['signs'])
 
     rows = []
     for owner, kind, d, mat in data['prims']:
