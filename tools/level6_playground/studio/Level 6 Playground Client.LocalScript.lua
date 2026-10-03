@@ -200,7 +200,7 @@ end
 -- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
-local HORN_VOLUME, BED_VOLUME, DUCK = 0.16, 0.05, 0.3
+local HORN_VOLUME, BED_VOLUME, DUCK = 0.5, 0.14, 0.3      -- the horns hang 30+ studs up, so they need the level
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
@@ -208,7 +208,7 @@ local function dressMusic(m, stage)
 	local st = MUSIC_STAGES[stage] or MUSIC_STAGES[1]
 	m.Looped, m.PlaybackSpeed = true, st.speed
 	local eq = Instance.new("EqualizerSoundEffect")
-	eq.LowGain, eq.MidGain, eq.HighGain = -10, 0, -10
+	eq.LowGain, eq.MidGain, eq.HighGain = -6, 0, -7
 	eq.Parent = m
 	if st.octave ~= 1 then
 		local shift = Instance.new("PitchShiftSoundEffect")
@@ -278,14 +278,14 @@ local function musicTick(dt)
 			m = source:Clone()
 			dressMusic(m, music.stage)
 			m.Volume = 0
-			m.RollOffMode, m.RollOffMinDistance, m.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 30, 170
+			m.RollOffMode, m.RollOffMinDistance, m.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 55, 220
 			m.Parent = horn
 			m.TimePosition = bed.TimePosition
 			m:Play()
 			music.horns[horn] = m
 		end
 		if m then
-			m.Volume += math.clamp(HORN_VOLUME * music.level - m.Volume, -dt * 0.5, dt * 0.12)
+			m.Volume += math.clamp(HORN_VOLUME * music.level - m.Volume, -dt * 1.2, dt * 0.35)
 			if math.abs(m.TimePosition - bed.TimePosition) > 0.25 then m.TimePosition = bed.TimePosition end
 		end
 	end
@@ -306,7 +306,7 @@ end
 local function changeTrack(key, stage)
 	music.key, music.pending = nil, true
 	dropMusic(0.25)
-	oneShot("l6_track_change", 0.75)
+	oneShot("l6_track_change", 0.2)
 	task.delay(2.4, function()
 		music.pending = false
 		if music.wanted and music.key == nil then setMusic(key, stage) end
