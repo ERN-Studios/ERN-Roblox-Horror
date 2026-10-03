@@ -1,10 +1,11 @@
--- Developer-only entry to the imported Level 5 Quiet Suburbs preview; same
--- door/exit/return method as Level4V4PreviewAccess (the cinema).
+-- Developer-only entry to Level 5, the void rooms (tools/level5_void; the Quiet
+-- Suburbs map it replaced was removed on 2026-10-03). Same door/exit/return
+-- method as Level4V4PreviewAccess (the cinema).
 -- The prompts are UI; every teleport is authorized again on the server.
 local Players = game:GetService("Players")
 local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
 
-local MODEL_NAME = "Level 5 Quiet Suburbs"
+local MODEL_NAME = "Level 5 Void"
 local EXIT_NAME = "Level5Exit"
 local ENTER_PROMPT = "Level5DeveloperPreviewPrompt"
 local RETURN_PROMPT = "Level5DeveloperPreviewReturnPrompt"
@@ -291,3 +292,72 @@ local function watchR3Lobby(model)
 end
 workspace.ChildAdded:Connect(watchR3Lobby)
 watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))
+
+
+-- LEVEL5_VOID_20261003. Two things the map itself cannot do.
+--   A FALL IS NOT A DEATH: there is no bottom to land on, so a body that drops
+--   well below a section's lowest walkway is stood back up at that section's
+--   entrance (the `Checkpoints` the generator wrote: x range, entry, lowest height).
+--   THE FINISH: the lit doorway at the bottom of the last room returns the
+--   player to the lobby spawn, the same landing RETURN TO LOBBY uses.
+do
+	local HttpService = game:GetService("HttpService")
+	local FALL_MARGIN = 45
+	local cache = setmetatable({}, { __mode = "k" })
+	local function checkpoints(model)
+		local found = cache[model]
+		if found == nil then
+			local value = model:FindFirstChild("Checkpoints")
+			local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
+			found = ok and type(decoded) == "table" and decoded or false
+			cache[model] = found
+		end
+		return found or nil
+	end
+	local busy = setmetatable({}, { __mode = "k" })
+	task.spawn(function()
+		while true do
+			task.wait(0.2)
+			local model = readyPreview()
+			local origin = model and model:GetAttribute("Origin")
+			local list = model and checkpoints(model)
+			local finish = model and model:FindFirstChild("Level5Finish")
+			if typeof(origin) == "Vector3" and list then
+				for _, player in ipairs(Players:GetPlayers()) do
+					local character, root = readyPlayer(player)
+					if character and not busy[player] then
+						local at = root.Position - origin
+						local last = list[#list]
+						if at.X > -60 and at.X < last.x1 + 60 and math.abs(at.Z) < 200 then
+							-- the section whose room (or the dark corridor leading into it) this body is in
+							local section = list[1]
+							for _, row in ipairs(list) do
+								if at.X >= row.x0 - 46 then section = row end
+							end
+							if at.Y < section.low - FALL_MARGIN then
+								root.AssemblyLinearVelocity = Vector3.zero
+								root.AssemblyAngularVelocity = Vector3.zero
+								character:PivotTo(upright(origin + Vector3.new(section.entry[1], section.entry[2] + 3.5, section.entry[3]), Vector3.xAxis))
+							elseif finish and finish:IsA("BasePart") and (root.Position - finish.Position).Magnitude < 7 then
+								local spawn = liveSpawn()
+								if spawn then
+									busy[player] = true
+									task.spawn(function()
+										pcall(function()
+											stream(player, spawn.Position)
+											local nowCharacter = readyPlayer(player)
+											if nowCharacter == character then
+												character:PivotTo(upright(spawn.Position + Vector3.new(0, 4, 0), spawn.CFrame.LookVector))
+											end
+										end)
+										busy[player] = nil
+									end)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+end

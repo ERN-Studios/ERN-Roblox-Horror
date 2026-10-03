@@ -429,7 +429,8 @@ local function applyPlayerLighting()
  local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
  local inRevisedLobby = revisedLobbyLighting.contains(inMaze)
  if not inRevisedLobby then revisedLobbyLighting.restore() end
- if player:GetAttribute("Level4LightingOwned") == true or player:GetAttribute("Level6PlaygroundLightingOwned") == true then
+ if player:GetAttribute("Level4LightingOwned") == true or player:GetAttribute("Level6PlaygroundLightingOwned") == true
+  or player:GetAttribute("Level5LightingOwned") == true then
   -- the Level 4 cinema preview and the Level 6 playground grade themselves (Level 4 Lighting Controller); stand down while it owns it
   revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false

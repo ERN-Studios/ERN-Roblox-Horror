@@ -1,88 +1,69 @@
--- Level 5 map preview: one per-client lighting owner, with exact restoration
--- of each property it changes. No Level 4 objects, terrain or cloud changes.
+-- Level 5, the void rooms: one per-client lighting owner while the local character is inside the map's
+-- bounds, with exact restoration of each property it changes.
+--
+-- The look depends on there being NO light that the level's own lamps do not make: the rooms are lit by
+-- PointLights at walkway height and above, and everything below them has to fall to black. So inside the
+-- bounds the sky's contribution and the lobby's atmosphere are taken out. RoundUI stands down while
+-- `Level5LightingOwned` is set (the same arrangement as the Level 4 cinema).
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
-local LIGHTING_KEYS = {
-	"ClockTime", "Brightness", "Ambient", "OutdoorAmbient", "ColorShift_Top",
-	"ColorShift_Bottom", "GlobalShadows", "EnvironmentDiffuseScale",
-	"EnvironmentSpecularScale", "ExposureCompensation", "FogColor", "FogStart", "FogEnd",
+local MODEL_NAME = "Level 5 Void"
+local WANT = {
+	ClockTime = 0, Brightness = 0, Ambient = Color3.new(0, 0, 0), OutdoorAmbient = Color3.new(0, 0, 0),
+	EnvironmentDiffuseScale = 0, EnvironmentSpecularScale = 0, ExposureCompensation = 0.55,
+	FogColor = Color3.new(0, 0, 0), FogStart = 0, FogEnd = 100000, GlobalShadows = true,
 }
-local AIR_KEYS = {"Density", "Offset", "Haze", "Glare", "Color", "Decay"}
-local snapshot, airSnapshot, air = nil, nil, nil
-local stateConnection = nil
-local watchedState = nil
-local pending = false
+local snapshot, airDensity, air = nil, nil, nil
+local grade = nil
+
+local function inside()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	local centre, size = model and model:GetAttribute("BoundsCenter"), model and model:GetAttribute("BoundsSize")
+	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if typeof(centre) ~= "Vector3" or typeof(size) ~= "Vector3" or not root then return false end
+	local offset = root.Position - centre
+	return math.abs(offset.X) <= size.X / 2 + 30 and math.abs(offset.Z) <= size.Z / 2 + 30
+		and math.abs(offset.Y) <= size.Y / 2 + 200
+end
 
 local function restore()
 	if snapshot then
 		for property, value in pairs(snapshot) do Lighting[property] = value end
+		snapshot = nil
 	end
-	if airSnapshot and air and air.Parent == Lighting then
-		for property, value in pairs(airSnapshot) do air[property] = value end
-	end
-	snapshot, airSnapshot, air = nil, nil, nil
+	if air and airDensity and air.Parent == Lighting then air.Density = airDensity end
+	air, airDensity = nil, nil
+	if grade then grade:Destroy(); grade = nil end
+	player:SetAttribute("Level5LightingOwned", nil)
 end
 
-local function sync()
-	local state = ReplicatedStorage:FindFirstChild("Level 5 State")
-	local world = workspace:FindFirstChild("Level 5 Generated World")
-	local owns = world ~= nil and workspace:GetAttribute("SelectedLevel") == 5
-		and workspace:GetAttribute("Level5LightingOwnedByController") == true
-		and player:GetAttribute("InRound") == true
-		and state ~= nil and state:GetAttribute("Level5_MapOnly") == true
-	if not owns then restore(); return end
+local function own()
 	if not snapshot then
 		snapshot = {}
-		for _, property in ipairs(LIGHTING_KEYS) do snapshot[property] = Lighting[property] end
+		for property in pairs(WANT) do snapshot[property] = Lighting[property] end
 		air = Lighting:FindFirstChildOfClass("Atmosphere")
-		if air then
-			airSnapshot = {}
-			for _, property in ipairs(AIR_KEYS) do airSnapshot[property] = air[property] end
-		end
+		airDensity = air and air.Density or nil
+		grade = Instance.new("ColorCorrectionEffect")
+		grade.Name = "Level5VoidGrade"
+		grade.Saturation, grade.Contrast, grade.Brightness = 0.08, -0.06, 0
+		grade.Parent = Lighting
+		player:SetAttribute("Level5LightingOwned", true)
 	end
-	for _, property in ipairs(LIGHTING_KEYS) do
-		local value = state:GetAttribute("Lighting_" .. property)
-		if value ~= nil then Lighting[property] = value end
+	for property, value in pairs(WANT) do
+		if Lighting[property] ~= value then Lighting[property] = value end
 	end
-	if air and air.Parent == Lighting then
-		for _, property in ipairs(AIR_KEYS) do
-			local value = state:GetAttribute("Atmosphere_" .. property)
-			if value ~= nil then air[property] = value end
-		end
-	end
+	if air and air.Parent == Lighting and air.Density ~= 0 then air.Density = 0 end
+	local lobby = Lighting:FindFirstChild("LobbyLocalGrade")
+	if lobby and lobby:IsA("ColorCorrectionEffect") and lobby.Enabled then lobby.Enabled = false end
 end
 
-local function queueSync()
-	if pending then return end
-	pending = true
-	task.defer(function()
-		pending = false
-		sync()
-	end)
-end
-
-local function watchState()
-	local state = ReplicatedStorage:FindFirstChild("Level 5 State")
-	if state == watchedState then return end
-	if stateConnection then stateConnection:Disconnect(); stateConnection = nil end
-	watchedState = state
-	if state then stateConnection = state.AttributeChanged:Connect(queueSync) end
-	queueSync()
-end
-
-workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(queueSync)
-workspace:GetAttributeChangedSignal("Level5LightingOwnedByController"):Connect(queueSync)
-player:GetAttributeChangedSignal("InRound"):Connect(queueSync)
-workspace.ChildAdded:Connect(function(child)
-	if child.Name == "Level 5 Generated World" then queueSync() end
+local elapsed = 0
+RunService.Heartbeat:Connect(function(dt)
+	elapsed += dt
+	if elapsed < 0.2 then return end
+	elapsed = 0
+	if inside() then own() elseif snapshot then restore() end
 end)
-workspace.ChildRemoved:Connect(function(child)
-	if child.Name == "Level 5 Generated World" then queueSync() end
-end)
-ReplicatedStorage.ChildAdded:Connect(watchState)
-ReplicatedStorage.ChildRemoved:Connect(watchState)
 script.Destroying:Connect(restore)
-watchState()
-queueSync()
