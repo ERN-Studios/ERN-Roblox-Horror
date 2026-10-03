@@ -556,13 +556,11 @@ task.spawn(function()
 		end
 		musicTick(dt)
 
-		-- the red finale: the white tubes die down and come back deep red over about four seconds, then throb
+		-- the red finale: no red wash over the picture. The hall goes dark and only the ceiling fixtures stay on,
+		-- as tight red spotlights; every other lamp fades out. Eases in over about four seconds.
 		finale = math.clamp(finale + (enraged and dt / 4 or -dt / 2), 0, 1)
 		if model and (finale > 0 or next(litBefore)) then
-			local dip = math.sin(math.min(finale, 1) * math.pi)            -- 0 -> 1 -> 0: the lights sag in the middle of the change
-			local throb = 1 + 0.22 * math.sin(now * 2.2) * finale
-			local strength = (1 - 0.75 * dip) * throb
-			local colour = function(c) return c:Lerp(RED, finale * finale) end
+			local ease = finale * finale * (3 - 2 * finale)
 			for _, folderName in ipairs(FINALE_FOLDERS) do
 				local folder = model:FindFirstChild(folderName)
 				if folder then
@@ -572,14 +570,24 @@ task.spawn(function()
 							local before = litBefore[d]
 							if finale > 0 then
 								if before == nil then
-									before = {d.Color, isLight and d.Brightness or 0}
+									before = {d.Color, isLight and d.Brightness or 0, d:IsA("SpotLight") and d.Angle or 0}
 									litBefore[d] = before
 								end
-								d.Color = colour(before[1])
-								if isLight then d.Brightness = before[2] * strength * (1 + 0.6 * finale) end
+								if d:IsA("SpotLight") then              -- the ceiling fixtures: red cones straight down
+									d.Color = before[1]:Lerp(RED, ease)
+									d.Angle = before[3] + (62 - before[3]) * ease
+									d.Brightness = before[2] * (1 + 2.2 * ease)
+								elseif isLight then                     -- room and bar lights go out
+									d.Brightness = before[2] * (1 - ease)
+								elseif folderName == "Ceiling_Fixtures" then
+									d.Color = before[1]:Lerp(RED, ease)  -- the tubes themselves glow red
+								else
+									d.Color = before[1]:Lerp(Color3.fromRGB(25, 22, 20), ease)
+								end
 							elseif before ~= nil then
 								d.Color = before[1]
 								if isLight then d.Brightness = before[2] end
+								if d:IsA("SpotLight") then d.Angle = before[3] end
 								litBefore[d] = nil
 							end
 						end
@@ -587,11 +595,11 @@ task.spawn(function()
 				end
 			end
 			if grade then
-				grade.TintColor = Color3.fromRGB(238, 245, 255):Lerp(Color3.fromRGB(255, 96, 84), finale)
-				grade.Contrast = -0.17 + 0.3 * finale          -- the grey haze goes; blacks come back
-				grade.Saturation = 0.08 - 0.2 * finale
+				grade.TintColor = Color3.fromRGB(238, 245, 255)   -- never tinted: the red comes from the lamps only
+				grade.Contrast = -0.17 + 0.25 * ease              -- the grey haze goes, so the dark between the pools is dark
+				grade.Saturation = 0.08
 			end
-			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.55 * finale
+			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.5 * ease
 		end
 	end
 end)
