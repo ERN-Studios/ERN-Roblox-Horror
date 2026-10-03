@@ -1,0 +1,683 @@
+-- DevCheats (whitelisted developers only)
+--
+--   B = toggle ESP + 3-second lobby queue
+--   V = toggle noclip fly (WASD + mouse, Space up, Ctrl down; on touch and
+--       gamepad the thumbstick flies and the jump button climbs)
+--   P = pause / resume hostile entities
+--   I = toggle immunity to the Entity's yell push-back
+--   U = toggle unlimited battery + stamina
+--   C = toggle third-person gameplay camera
+--
+-- The Zyntra phone fires the same toggle functions through DevCheatCommand, so
+-- keyboard and phone state can never drift apart. Server-affecting commands are
+-- validated again by GameManager through the shared DevAccess whitelist.
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+local RS = game:GetService("ReplicatedStorage")
+local CollectionService = game:GetService("CollectionService")
+
+local player = Players.LocalPlayer
+local DevAccess = require(RS:WaitForChild("DevAccess"))
+if not DevAccess.IsAllowed(player) then return end
+
+local playerScripts = player:WaitForChild("PlayerScripts")
+local commandEvent = playerScripts:FindFirstChild("DevCheatCommand")
+if not commandEvent then
+	commandEvent = Instance.new("BindableEvent")
+	commandEvent.Name = "DevCheatCommand"
+	commandEvent.Parent = playerScripts
+end
+if not commandEvent:IsA("BindableEvent") then
+	warn("[DevCheats] PlayerScripts.DevCheatCommand must be a BindableEvent")
+	return
+end
+
+local remotes = RS:WaitForChild("Remotes")
+local devControl = remotes:FindFirstChild("DevControl")
+local function fireDev(command, value)
+	if not devControl then devControl = remotes:FindFirstChild("DevControl") end
+	if devControl then
+		devControl:FireServer(command, value)
+		return true
+	end
+	warn("[DevCheats] DevControl is missing; server-backed developer cheats are unavailable")
+	return false
+end
+
+local function requestedState(current, requested)
+	if typeof(requested) == "boolean" then return requested end
+	return not current
+end
+
+local entityPaused = workspace:GetAttribute("EntityPaused") == true
+local pushImmune = player:GetAttribute("DevPushImmune") == true
+local unlimitedOn = false
+local fastQueueOn = player:GetAttribute("DevFastQueue") == true
+local thirdPersonOn = false
+
+-- ESP (highlight through walls)
+-- LEVEL3_CD_DEV_ESP_20260821
+local COLORS = {
+	Fuse = Color3.fromRGB(255, 220, 60),
+	FuseRelay = Color3.fromRGB(255, 190, 55),
+	FuseBox = Color3.fromRGB(80, 160, 255),
+	Lever = Color3.fromRGB(180, 90, 255),
+	Exit = Color3.fromRGB(60, 255, 130),
+	Entity = Color3.fromRGB(255, 45, 45),
+	Level2Entity = Color3.fromRGB(255, 70, 45),
+	MallManager = Color3.fromRGB(255, 60, 205),
+	Level3CD = Color3.fromRGB(35, 230, 255),
+	-- DEV_ESP_L4_20261002: Level 4 (the cinema), keyed by the server's L4ESPKind attribute
+	Reel = Color3.fromRGB(255, 205, 60),
+	Note = Color3.fromRGB(240, 240, 255),
+	Power = Color3.fromRGB(80, 160, 255),
+	Breaker = Color3.fromRGB(255, 120, 40),
+	Projector = Color3.fromRGB(180, 90, 255),
+	ArcadeCode = Color3.fromRGB(60, 255, 220),
+	PrizeCase = Color3.fromRGB(60, 255, 220),
+	Battery = Color3.fromRGB(120, 255, 90),
+	Exit = Color3.fromRGB(60, 255, 130),
+	Usher = Color3.fromRGB(255, 45, 45),
+}
+local L4_ESP_LABELS = {
+	Reel = "FILM REEL", Note = "NOTE", Power = "POWER", Breaker = "MAIN BREAKER", Projector = "PROJECTOR",
+	ArcadeCode = "HI-SCORE CODE", PrizeCase = "PRIZE CASE", Battery = "BATTERY", Exit = "EXIT", Usher = "USHER",
+}
+
+-- Preserve the old developer behavior: ESP starts enabled, while every other
+-- cheat starts disabled. B now deliberately synchronizes ESP and fast queue.
+local espOn = true
+
+local function publishState(attribute, enabled)
+	player:SetAttribute(attribute, enabled)
+end
+
+publishState("DevCheatEsp", espOn)
+publishState("DevCheatFastQueue", fastQueueOn)
+publishState("DevCheatNoclip", false)
+publishState("DevCheatEntityPaused", entityPaused)
+publishState("DevCheatPushImmune", pushImmune)
+publishState("DevCheatUnlimited", unlimitedOn)
+publishState("DevCheatThirdPerson", thirdPersonOn)
+player:SetAttribute("DevEspEnabled", espOn)
+player:SetAttribute("DevUnlimited", nil)
+
+local function tag(instance, color)
+	if instance:FindFirstChild("DevESP") then return end
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "DevESP"
+	highlight.FillColor = color
+	highlight.FillTransparency = 0.55
+	highlight.OutlineColor = color
+	highlight.OutlineTransparency = 0
+	highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	highlight.Enabled = espOn
+	highlight.Adornee = instance
+	highlight.Parent = instance
+end
+
+-- A through-walls name tag for the Level 4 objects (a marker part may be invisible, so a highlight alone is not
+-- enough). Refreshes its text every pass.
+local function espLabel(instance, color, text)
+	local adornee = instance:IsA("BasePart") and instance
+		or (instance:IsA("Model") and (instance.PrimaryPart or instance:FindFirstChildWhichIsA("BasePart", true)))
+	if not adornee then return end
+	local gui = instance:FindFirstChild("DevESPLabel")
+	if not gui then
+		gui = Instance.new("BillboardGui")
+		gui.Name = "DevESPLabel"
+		gui.AlwaysOnTop = true
+		gui.LightInfluence = 0
+		gui.Size = UDim2.fromOffset(150, 22)
+		gui.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
+		gui.MaxDistance = 10000
+		local text = Instance.new("TextLabel")
+		text.Name = "Text"
+		text.Size = UDim2.fromScale(1, 1)
+		text.BackgroundColor3 = Color3.fromRGB(5, 12, 16)
+		text.BackgroundTransparency = 0.3
+		text.Font = Enum.Font.GothamBold
+		text.TextSize = 13
+		text.Parent = gui
+		gui.Parent = instance
+	end
+	gui.Adornee = adornee
+	gui.Enabled = espOn
+	gui.Text.Text = text
+	gui.Text.TextColor3 = color
+end
+
+-- DEV_PLAYER_ESP_20260910: local presentation; positions are authorized by the server.
+local setPlayerEsp
+do
+	local enabled = false
+	local stopped = false
+	local records = {}
+	local connections = {}
+	local queryElapsed = 0
+	local latestSnapshot = -math.huge
+	local playerGui = player:WaitForChild("PlayerGui")
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "DevPlayerESP"
+	gui.ResetOnSpawn = false
+	gui.IgnoreGuiInset = true
+	gui.DisplayOrder = 30
+	gui.Enabled = false
+	gui.Parent = playerGui
+	local remote = devControl or remotes:WaitForChild("DevControl")
+
+	local function clear()
+		for _, record in pairs(records) do record.Label:Destroy() end
+		table.clear(records)
+	end
+
+	local function finiteVector(value)
+		return typeof(value) == "Vector3"
+			and value.X == value.X and value.Y == value.Y and value.Z == value.Z
+			and math.abs(value.X) < 1e7 and math.abs(value.Y) < 1e7 and math.abs(value.Z) < 1e7
+	end
+
+	local function receive(command, snapshot)
+		if stopped or not enabled or command ~= "playerEsp" then return end
+		if type(snapshot) ~= "table" or type(snapshot.At) ~= "number"
+			or snapshot.At ~= snapshot.At or type(snapshot.Players) ~= "table" then return end
+		local age = workspace:GetServerTimeNow() - snapshot.At
+		if age < -.5 or age > 1.5 or snapshot.At < latestSnapshot then return end
+		latestSnapshot = snapshot.At
+		local seen = {}
+		for _, entry in ipairs(snapshot.Players) do
+			if type(entry) ~= "table" or type(entry.UserId) ~= "number"
+				or not finiteVector(entry.Position) then continue end
+			local subject = Players:GetPlayerByUserId(entry.UserId)
+			if not subject or seen[subject] then continue end
+			seen[subject] = true
+			local record = records[subject]
+			if not record then
+				local label = Instance.new("TextLabel")
+				label.Name = "Player_" .. tostring(subject.UserId)
+				label.AnchorPoint = Vector2.new(.5, 1)
+				label.Size = UDim2.fromOffset(210, 38)
+				label.BackgroundColor3 = Color3.fromRGB(5, 17, 20)
+				label.BackgroundTransparency = .25
+				label.BorderSizePixel = 0
+				label.Font = Enum.Font.GothamBold
+				label.TextSize = 13
+				label.TextWrapped = true
+				label.RichText = false
+				label.Visible = false
+				label.Parent = gui
+				record = {Label = label}
+				records[subject] = record
+			end
+			record.Position = entry.Position
+			record.Label.Text = "@" .. subject.Name
+				.. (entry.Alive == true and "" or "\nDEAD")
+			record.Label.TextColor3 = entry.Alive == true
+				and Color3.fromRGB(95, 255, 185) or Color3.fromRGB(185, 190, 195)
+		end
+		for subject, record in pairs(records) do
+			if not seen[subject] then record.Label:Destroy(); records[subject] = nil end
+		end
+	end
+
+	setPlayerEsp = function(requested)
+		if stopped then return end
+		enabled = requestedState(enabled, requested)
+		gui.Enabled = enabled
+		publishState("DevCheatPlayerEsp", enabled)
+		queryElapsed = 0
+		if enabled then fireDev("playerEsp", true) else clear() end
+	end
+	publishState("DevCheatPlayerEsp", false)
+	connections[#connections + 1] = remote.OnClientEvent:Connect(receive)
+	connections[#connections + 1] = RunService.Heartbeat:Connect(function(deltaTime)
+		if stopped or not enabled then return end
+		queryElapsed += deltaTime
+		if queryElapsed >= .5 then
+			queryElapsed = 0
+			fireDev("playerEsp", true)
+		end
+		-- Missing replies never leave an apparently current location on screen.
+		if workspace:GetServerTimeNow() - latestSnapshot > 1.5 then clear() end
+	end)
+	connections[#connections + 1] = RunService.RenderStepped:Connect(function()
+		if stopped or not enabled then return end
+		local camera = workspace.CurrentCamera
+		for subject, record in pairs(records) do
+			local label = record.Label
+			label.Visible = false
+			if camera and subject.Parent == Players then
+				local point, onScreen = camera:WorldToViewportPoint(record.Position + Vector3.new(0, 3, 0))
+				label.Visible = onScreen and point.Z > 0
+				if label.Visible then
+					local viewport = camera.ViewportSize
+					label.Position = UDim2.fromOffset(
+						math.clamp(point.X, math.min(105, viewport.X * .5), math.max(105, viewport.X - 105)),
+						math.clamp(point.Y, math.min(38, viewport.Y), math.max(38, viewport.Y)))
+				end
+			end
+		end
+	end)
+	connections[#connections + 1] = Players.PlayerRemoving:Connect(function(subject)
+		local record = records[subject]
+		if record then record.Label:Destroy(); records[subject] = nil end
+	end)
+	connections[#connections + 1] = script.Destroying:Connect(function()
+		stopped = true
+		for _, connection in ipairs(connections) do connection:Disconnect() end
+		clear()
+		gui:Destroy()
+		publishState("DevCheatPlayerEsp", false)
+	end)
+end
+-- END_DEV_PLAYER_ESP_20260910
+
+local function setEsp(requested)
+	local enabled = requestedState(espOn, requested)
+	espOn = enabled
+	for _, descendant in ipairs(workspace:GetDescendants()) do
+		if (descendant.Name == "DevESP" and descendant:IsA("Highlight"))
+			or (descendant.Name == "DevESPLabel" and descendant:IsA("BillboardGui")) then
+			descendant.Enabled = enabled
+		end
+	end
+	player:SetAttribute("DevEspEnabled", enabled)
+	publishState("DevCheatEsp", enabled)
+	print("[DevCheats] ESP " .. (enabled and "ON" or "OFF"))
+end
+
+local level3CDs = {}
+
+local function trackLevel3CD(instance)
+	if instance:IsA("Model") and typeof(instance:GetAttribute("Level3_CDIndex")) == "number" then
+		level3CDs[instance] = true
+	end
+end
+
+for _, descendant in ipairs(workspace:GetDescendants()) do
+	trackLevel3CD(descendant)
+end
+workspace.DescendantAdded:Connect(trackLevel3CD)
+CollectionService:GetInstanceRemovedSignal("L4DevESP"):Connect(function(instance)
+	for _, name in ipairs({"DevESP", "DevESPLabel"}) do
+		local old = instance:FindFirstChild(name)
+		if old then old:Destroy() end
+	end
+end)
+
+task.spawn(function()
+	while true do
+		local items = workspace:FindFirstChild("PuzzleItems")
+		if items then
+			for _, child in ipairs(items:GetChildren()) do
+				-- the circuit build renames stations to FuseBox_01 / Lever_03 etc.
+				-- — strip the numeric suffix so ESP still recognizes them
+				local base = child.Name:match("^(.-)_%d+$") or child.Name
+				local color = COLORS[base]
+				if color then tag(child, color) end
+			end
+		end
+		local entity = workspace:FindFirstChild("Entity")
+		if entity then tag(entity, COLORS.Entity) end
+		for _, levelTwoEntity in ipairs(CollectionService:GetTagged("Level2HostileEntity")) do
+			if levelTwoEntity:IsA("Model") and levelTwoEntity:IsDescendantOf(workspace) then
+				tag(levelTwoEntity, COLORS.Level2Entity)
+			end
+		end
+		-- The Mall Manager only exists during Level 3's blackout hunt. Its server
+		-- runtime model already carries this replicated tag, so the same loop works
+		-- for late spawns, cleanup, and repeated song cycles without a name search.
+		for _, mallManager in ipairs(CollectionService:GetTagged("Level3HostileEntity")) do
+			if mallManager:IsA("Model") and mallManager:IsDescendantOf(workspace) then
+				tag(mallManager, COLORS.MallManager)
+			end
+		end
+		-- DEV_ESP_L4_20261002: the round's objectives (server-tagged) and the Usher (this client's drawn rig)
+		for _, item in ipairs(CollectionService:GetTagged("L4DevESP")) do
+			if item:IsDescendantOf(workspace) then
+				local kind = item:GetAttribute("L4ESPKind")
+				local color = COLORS[kind] or COLORS.Exit
+				tag(item, color)
+				espLabel(item, color, L4_ESP_LABELS[kind] or tostring(kind))
+			end
+		end
+		local usher = workspace:FindFirstChild("Level4UsherLocal")
+		if usher then
+			tag(usher, COLORS.Usher)
+			local levelFour = RS:FindFirstChild("Level 4 State")
+			local usherState = levelFour and levelFour:GetAttribute("Level4_UsherState")
+			espLabel(usher, COLORS.Usher, "USHER" .. (usherState and ("  " .. string.upper(tostring(usherState))) or ""))
+		end
+		for levelThreeCD in pairs(level3CDs) do
+			if not levelThreeCD:IsDescendantOf(workspace) then
+				level3CDs[levelThreeCD] = nil
+			else
+				local cdState = levelThreeCD:GetAttribute("Level3_CDState")
+				local sourceAlreadyTaken = levelThreeCD:GetAttribute("Level3_CDSource") == true
+					and levelThreeCD:GetAttribute("Level3_Collected") == true
+				local hiddenState = cdState == "INSERTED" or cdState == "EMPTY"
+				if sourceAlreadyTaken or hiddenState then
+					local oldHighlight = levelThreeCD:FindFirstChild("DevESP")
+					if oldHighlight then oldHighlight:Destroy() end
+				else
+					-- WORLD, CARRIED, and DROPPED discs remain useful in the dev view.
+					tag(levelThreeCD, COLORS.Level3CD)
+				end
+			end
+		end
+		task.wait(0.5)
+	end
+end)
+
+local function setFastQueue(requested)
+	local enabled = requestedState(fastQueueOn, requested)
+	if enabled == fastQueueOn then return end
+	fastQueueOn = enabled
+	publishState("DevCheatFastQueue", enabled)
+	fireDev("fastQueue", enabled)
+	print("[DevCheats] 3-second lobby queue " .. (enabled and "ON" or "OFF"))
+end
+
+local function setEntityPaused(requested)
+	local enabled = requestedState(entityPaused, requested)
+	if enabled == entityPaused then return end
+	entityPaused = enabled
+	publishState("DevCheatEntityPaused", enabled)
+	fireDev("pauseEntity", enabled)
+	print("[DevCheats] Entities " .. (enabled and "PAUSED" or "resumed"))
+end
+
+local function setPushImmune(requested)
+	local enabled = requestedState(pushImmune, requested)
+	if enabled == pushImmune then return end
+	pushImmune = enabled
+	publishState("DevCheatPushImmune", enabled)
+	fireDev("immunePush", enabled)
+	print("[DevCheats] Yell push-back immunity " .. (enabled and "ON" or "OFF"))
+end
+
+local function setUnlimited(requested)
+	local enabled = requestedState(unlimitedOn, requested)
+	if enabled == unlimitedOn then return end
+	unlimitedOn = enabled
+	player:SetAttribute("DevUnlimited", enabled or nil)
+	publishState("DevCheatUnlimited", enabled)
+	print("[DevCheats] Unlimited battery + stamina " .. (enabled and "ON" or "OFF"))
+end
+
+-- Noclip fly
+local flying = false
+local FLY_SPEED = 90
+local collisionOriginal = {}
+local noclipAdded = nil
+local humanoidOriginal = nil
+
+local function disablePart(part)
+	if not part:IsA("BasePart") then return end
+	if collisionOriginal[part] == nil then
+		collisionOriginal[part] = part.CanCollide
+	end
+	part.CanCollide = false
+end
+
+local function applyLocalNoclip(character)
+	for _, part in ipairs(character:GetDescendants()) do disablePart(part) end
+end
+
+local function startFlying()
+	if flying then return true end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (character and humanoid and root) then return false end
+	-- Do not snapshot AutoRotate/PlatformStand in the middle of a slide
+	-- ragdoll. Waiting for its normal get-up avoids restoring a permanently
+	-- non-rotating developer character when fly mode is later disabled.
+	if character:GetAttribute("Level2_ForcedSliding") == true then
+		warn("[DevCheats] Finish the slide before enabling noclip fly")
+		return false
+	end
+
+	flying = true
+	collisionOriginal = {}
+	humanoidOriginal = {
+		autoRotate = humanoid.AutoRotate,
+		anchored = root.Anchored,
+		fallingDown = humanoid:GetStateEnabled(Enum.HumanoidStateType.FallingDown),
+		ragdoll = humanoid:GetStateEnabled(Enum.HumanoidStateType.Ragdoll),
+	}
+	-- Anchor the root while flying. Zeroing velocity in PreSimulation does not
+	-- stop gravity being applied during the physics step that follows, so the
+	-- character sank a little every frame and the solver fought every PivotTo.
+	-- That reads in game as "drifts downward and moves far slower than
+	-- FLY_SPEED". Anchored, PivotTo is exact and nothing pulls back.
+	root.Anchored = true
+	humanoid.PlatformStand = false
+	humanoid.AutoRotate = false
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+	humanoid:ChangeState(Enum.HumanoidStateType.Flying)
+	applyLocalNoclip(character)
+	noclipAdded = character.DescendantAdded:Connect(disablePart)
+	fireDev("noclip", true)
+	publishState("DevCheatNoclip", true)
+	print("[DevCheats] Noclip fly ON")
+	return true
+end
+
+local function stopFlying()
+	if not flying then
+		publishState("DevCheatNoclip", false)
+		return
+	end
+	flying = false
+	fireDev("noclip", false)
+	if noclipAdded then noclipAdded:Disconnect(); noclipAdded = nil end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	for part, original in pairs(collisionOriginal) do
+		if part.Parent then part.CanCollide = original end
+	end
+	collisionOriginal = {}
+	if root then
+		root.Anchored = humanoidOriginal ~= nil and humanoidOriginal.anchored == true
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+	end
+	if humanoid then
+		humanoid.PlatformStand = false
+		humanoid.AutoRotate = humanoidOriginal and humanoidOriginal.autoRotate ~= false
+		humanoid:SetStateEnabled(
+			Enum.HumanoidStateType.FallingDown,
+			not humanoidOriginal or humanoidOriginal.fallingDown
+		)
+		humanoid:SetStateEnabled(
+			Enum.HumanoidStateType.Ragdoll,
+			not humanoidOriginal or humanoidOriginal.ragdoll
+		)
+		humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+	end
+	humanoidOriginal = nil
+	publishState("DevCheatNoclip", false)
+	print("[DevCheats] Noclip fly OFF")
+end
+
+local function setFlying(requested)
+	local enabled = requestedState(flying, requested)
+	if enabled then startFlying() else stopFlying() end
+end
+
+RunService.PreSimulation:Connect(function(deltaTime)
+	if not flying then return end
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not (root and humanoid) then return end
+
+	humanoid.PlatformStand = false
+	humanoid.AutoRotate = false
+	applyLocalNoclip(character)
+
+	local camera = workspace.CurrentCamera
+	if not camera then return end
+	local move = Vector3.zero
+	if UIS:IsKeyDown(Enum.KeyCode.W) then move += camera.CFrame.LookVector end
+	if UIS:IsKeyDown(Enum.KeyCode.S) then move -= camera.CFrame.LookVector end
+	if UIS:IsKeyDown(Enum.KeyCode.D) then move += camera.CFrame.RightVector end
+	if UIS:IsKeyDown(Enum.KeyCode.A) then move -= camera.CFrame.RightVector end
+	if UIS:IsKeyDown(Enum.KeyCode.Space) then move += Vector3.new(0, 1, 0) end
+	if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then move -= Vector3.new(0, 1, 0) end
+
+	-- Touch and gamepad have no WASD, and this loop zeroes velocity every frame,
+	-- so without this branch a developer who toggles fly on a phone is frozen
+	-- solid until they toggle it back off.
+	--
+	-- Humanoid.MoveDirection is whatever the active control scheme produced, but
+	-- it is flattened onto the ground plane. Re-project it through the camera's
+	-- full basis so pushing the thumbstick forward while looking up climbs,
+	-- exactly the way W does on a keyboard.
+	if move.Magnitude == 0 then
+		local direction = humanoid.MoveDirection
+		if direction.Magnitude > 0 then
+			local flatLook = Vector3.new(camera.CFrame.LookVector.X, 0, camera.CFrame.LookVector.Z)
+			local flatRight = Vector3.new(camera.CFrame.RightVector.X, 0, camera.CFrame.RightVector.Z)
+			if flatLook.Magnitude > 1e-3 and flatRight.Magnitude > 1e-3 then
+				move += camera.CFrame.LookVector * direction:Dot(flatLook.Unit)
+					+ camera.CFrame.RightVector * direction:Dot(flatRight.Unit)
+			else
+				-- Camera pointing straight up or down: fall back to the raw stick.
+				move += direction
+			end
+		end
+		-- Jump is the only other control guaranteed to exist on every device.
+		if humanoid.Jump then move += Vector3.new(0, 1, 0) end
+	end
+
+	if move.Magnitude > 0 then move = move.Unit end
+
+	-- Re-assert the anchor: a respawn or a server-side reset can clear it.
+	if not root.Anchored then root.Anchored = true end
+	if move.Magnitude > 0 then
+		character:PivotTo(character:GetPivot() + move * FLY_SPEED * math.min(deltaTime, 1 / 20))
+	end
+end)
+
+-- Third-person only changes Roblox's player camera constraints. It deliberately
+-- leaves CameraType/CameraSubject alone so kill and spectate cameras keep control.
+local function applyPerspective()
+	local inRound = player:GetAttribute("InRound") == true
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	if inRound and humanoid and humanoid.Health <= 0 then return end
+
+	if inRound then
+		if thirdPersonOn then
+			player.CameraMode = Enum.CameraMode.Classic
+			-- Force the camera out immediately. A 0.5 minimum leaves it at the
+			-- first-person zoom until the player manually scrolls backwards.
+			player.CameraMaxZoomDistance = 14
+			player.CameraMinZoomDistance = 6
+		else
+			player.CameraMode = Enum.CameraMode.LockFirstPerson
+			player.CameraMinZoomDistance = 0.5
+			player.CameraMaxZoomDistance = 0.5
+		end
+	else
+		-- Lobby players always keep their normal third-person avatar camera.
+		player.CameraMode = Enum.CameraMode.Classic
+		player.CameraMaxZoomDistance = 18
+		player.CameraMinZoomDistance = 8
+	end
+end
+
+local function reapplyPerspectiveSoon()
+	task.defer(applyPerspective)
+	task.delay(0.25, applyPerspective)
+end
+
+local function setThirdPerson(requested)
+	local enabled = requestedState(thirdPersonOn, requested)
+	thirdPersonOn = enabled
+	publishState("DevCheatThirdPerson", enabled)
+	applyPerspective()
+	print("[DevCheats] Third-person camera " .. (enabled and "ON" or "OFF"))
+end
+
+player.CharacterAdded:Connect(function()
+	if flying then stopFlying() end
+	reapplyPerspectiveSoon()
+end)
+player:GetAttributeChangedSignal("InRound"):Connect(reapplyPerspectiveSoon)
+
+-- Server-backed state can also change during round cleanup or when another
+-- whitelisted developer uses the global pause toggle. Mirror those acknowledgements
+-- so the phone always describes what the server is actually doing.
+workspace:GetAttributeChangedSignal("EntityPaused"):Connect(function()
+	entityPaused = workspace:GetAttribute("EntityPaused") == true
+	publishState("DevCheatEntityPaused", entityPaused)
+end)
+player:GetAttributeChangedSignal("DevFastQueue"):Connect(function()
+	fastQueueOn = player:GetAttribute("DevFastQueue") == true
+	publishState("DevCheatFastQueue", fastQueueOn)
+end)
+player:GetAttributeChangedSignal("DevPushImmune"):Connect(function()
+	pushImmune = player:GetAttribute("DevPushImmune") == true
+	publishState("DevCheatPushImmune", pushImmune)
+end)
+
+local function dispatchCommand(command, requested)
+	if command == "esp" then
+		setEsp(requested)
+	elseif command == "playerEsp" then
+		setPlayerEsp(requested)
+	elseif command == "fastQueue" then
+		setFastQueue(requested)
+	elseif command == "noclip" then
+		setFlying(requested)
+	elseif command == "pauseEntity" then
+		setEntityPaused(requested)
+	elseif command == "immunePush" then
+		setPushImmune(requested)
+	elseif command == "unlimited" then
+		setUnlimited(requested)
+	elseif command == "thirdPerson" then
+		setThirdPerson(requested)
+	elseif command == "freeRespawn" then
+		-- DEV_FREE_RESPAWN_20260914: server-validated; the DEV row gates availability.
+		fireDev("freeRespawn", true)
+	elseif command == "level2PumpPair" then
+		-- One server-owned sequence: first available lever now, second in 5s.
+		fireDev("level2PumpPair", true)
+	elseif command == "level3PreBlackout" then
+		-- Timeline seeking is server-authoritative; GameManager verifies the
+		-- timeline owner and reports back via the DevLevel3Timeline* attributes.
+		fireDev("level3PreBlackout", true)
+	else
+		warn("[DevCheats] Unknown command: " .. tostring(command))
+	end
+end
+
+commandEvent.Event:Connect(dispatchCommand)
+
+UIS.InputBegan:Connect(function(input, processed)
+	if processed then return end
+	if input.KeyCode == Enum.KeyCode.B then
+		local enabled = not (espOn and fastQueueOn)
+		setEsp(enabled)
+		setFastQueue(enabled)
+	elseif input.KeyCode == Enum.KeyCode.V then
+		setFlying()
+	elseif input.KeyCode == Enum.KeyCode.P then
+		setEntityPaused()
+	elseif input.KeyCode == Enum.KeyCode.I then
+		setPushImmune()
+	elseif input.KeyCode == Enum.KeyCode.U then
+		setUnlimited()
+	elseif input.KeyCode == Enum.KeyCode.C then
+		setThirdPerson()
+	end
+end)
+
+reapplyPerspectiveSoon()

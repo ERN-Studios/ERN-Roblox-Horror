@@ -337,6 +337,87 @@ lobbyGrade.Brightness = 0.02
 lobbyGrade.TintColor = Color3.fromRGB(255, 242, 188)
 lobbyGrade.Parent = Lighting
 
+-- Only the owned R4 lobby has its own enclosed-night client pass. Preserve
+-- atmosphere values while here; never carry this pass into an active level.
+local revisedLobbyLighting = {active=false, atmospheres={}}
+revisedLobbyLighting.values = {
+ ColorShift_Top=Color3.new(0,0,0), ColorShift_Bottom=Color3.new(0,0,0),
+ Ambient=Color3.fromRGB(30,32,30), OutdoorAmbient=Color3.fromRGB(0,0,0),
+ Brightness=.6, ClockTime=0, FogColor=Color3.fromRGB(30,32,30), FogStart=0, FogEnd=100000,
+}
+function revisedLobbyLighting.contains(inMaze)
+ if inMaze or player:GetAttribute("Level6InRound") == true then return false end
+ local model = workspace:FindFirstChild("LobbyReimaginedPreview")
+ if not model or not model:IsA("Model") or model.Parent ~= workspace
+  or model:GetAttribute("LobbyReimaginedOwned") ~= true or model:GetAttribute("Ready") ~= true
+  or model:GetAttribute("LobbyVisualRevision") ~= 4 then return false end
+ local center = model:GetAttribute("PreviewCenter")
+ local character = player.Character
+ local root = character and character:FindFirstChild("HumanoidRootPart")
+ if typeof(center) ~= "Vector3" or not root or not root:IsA("BasePart") then return false end
+ local point = root.Position-center
+ -- Authored R4 tube plus six circular bays. The original lobby is outside
+ -- these bounds even at its nearest bay; distant level previews stay excluded.
+ return math.abs(point.X) <= 100 and math.abs(point.Z) <= 144 and point.Y >= -5 and point.Y <= 45
+end
+function revisedLobbyLighting.restore()
+ -- A nonparticipant can leave R4 while another party keeps the old global
+ -- level markers set. Restore only our own pass before those guards return.
+ local globalsOwned = player:GetAttribute("Level4LightingOwned") == true
+  or player:GetAttribute("InRound") == true or player:GetAttribute("Level6InRound") == true
+ if not globalsOwned and revisedLobbyLighting.lighting then
+  for property, baseline in pairs(revisedLobbyLighting.lighting) do
+   if Lighting[property] == revisedLobbyLighting.applied[property] then Lighting[property] = baseline end
+  end
+  revisedLobbyLighting.lighting=nil; revisedLobbyLighting.applied=nil
+ end
+ -- Level4 captures the current atmosphere at entry, then restores that
+ -- snapshot on exit. Keep our pre-R4 density pending through its ownership;
+ -- otherwise its saved zero would leak into the original lobby on return.
+ local atmosphereOwned = player:GetAttribute("Level4LightingOwned") == true
+  or (player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 2
+   and workspace:FindFirstChild("Level 2 Generated World") ~= nil
+   and workspace:GetAttribute("Level2LightingOwnedByController") == true)
+ if not atmosphereOwned then
+  for atmosphere, density in pairs(revisedLobbyLighting.atmospheres) do
+   -- Restore only our zero; preserve a later nonzero controller/server value.
+   if atmosphere.Parent == Lighting and atmosphere.Density == 0 then atmosphere.Density = density end
+   revisedLobbyLighting.atmospheres[atmosphere]=nil
+  end
+ end
+ local grade = revisedLobbyLighting.grade
+ if grade then
+  lobbyGrade.TintColor=grade.tint; lobbyGrade.Contrast=grade.contrast
+  lobbyGrade.Brightness=grade.brightness; lobbyGrade.Saturation=grade.saturation
+ end
+ revisedLobbyLighting.grade=nil; revisedLobbyLighting.active=false
+end
+function revisedLobbyLighting.apply(mazeGrade)
+ if not revisedLobbyLighting.lighting then
+  revisedLobbyLighting.lighting={}; revisedLobbyLighting.applied={}
+  for property in pairs(revisedLobbyLighting.values) do revisedLobbyLighting.lighting[property]=Lighting[property] end
+ end
+ if not revisedLobbyLighting.active then
+  revisedLobbyLighting.grade={tint=lobbyGrade.TintColor,contrast=lobbyGrade.Contrast,
+   brightness=lobbyGrade.Brightness,saturation=lobbyGrade.Saturation}
+  revisedLobbyLighting.active=true
+ end
+ local atmosphere=Lighting:FindFirstChildOfClass("Atmosphere")
+ if atmosphere then
+  local saved=revisedLobbyLighting.atmospheres[atmosphere]
+  if saved == nil or atmosphere.Density ~= 0 then revisedLobbyLighting.atmospheres[atmosphere]=atmosphere.Density end
+  atmosphere.Density=0
+ end
+ for property, value in pairs(revisedLobbyLighting.values) do
+  Lighting[property]=value
+  -- Record engine-normalized readback (e.g. Float32 brightness .600000023).
+  revisedLobbyLighting.applied[property]=Lighting[property]
+ end
+ lobbyGrade.TintColor=Color3.new(1,1,1); lobbyGrade.Contrast=.12
+ lobbyGrade.Brightness=0; lobbyGrade.Saturation=0; lobbyGrade.Enabled=true
+ if mazeGrade then mazeGrade.Enabled=false end
+end
+
 local function applyPlayerLighting()
  local inMaze = player:GetAttribute("InRound") == true
  local mazeGrade = Lighting:FindFirstChild("MongoGrade")
@@ -346,8 +427,11 @@ local function applyPlayerLighting()
  local levelSixWorld = workspace:FindFirstChild("Level 6 Generated World")
  local isLevelTwo = levelTwoWorld ~= nil and (selectedLevel == 2 or inMaze)
  local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
- if player:GetAttribute("Level4LightingOwned") == true then
-  -- the Level 4 cinema preview grades itself (Level 4 Lighting Controller); stand down while it owns it
+ local inRevisedLobby = revisedLobbyLighting.contains(inMaze)
+ if not inRevisedLobby then revisedLobbyLighting.restore() end
+ if player:GetAttribute("Level4LightingOwned") == true or player:GetAttribute("Level6PlaygroundLightingOwned") == true then
+  -- the Level 4 cinema preview and the Level 6 playground grade themselves (Level 4 Lighting Controller); stand down while it owns it
+  revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
   return
@@ -359,18 +443,26 @@ local function applyPlayerLighting()
   -- Level 6 runs as a separate preview round, so InRound remains false. Let
   -- its own client controller keep the mall at night instead of restoring the
   -- lobby's 14:00 daylight every half-second.
+  revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
   return
  end
+ if inRevisedLobby then
+  revisedLobbyLighting.apply(mazeGrade)
+  return
+ end
+
  if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
   -- The dedicated mall controller owns and restores this grade. Never let the
   -- Level 1 darkness reassert itself over Level 3.
+  revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
   return
  end
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
+  revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
   return
@@ -544,8 +636,18 @@ queueClose.TextSize = 24
 queueClose.BackgroundColor3 = Color3.fromRGB(76, 38, 38)
 queueCloseStroke.Color = Color3.fromRGB(255, 138, 120)
 queueCloseStroke.Transparency = 0.35
-local queueHint = queueText("CancelHint", "STEP OUT OF THE SQUARE TO CANCEL", UDim2.new(0.08, 0, 1, -23), UDim2.new(0.84, 0, 0, 16), 14, Color3.fromRGB(125, 137, 126))
+local queueHint = queueText("CancelHint", "STEP OFF THE PAD TO CANCEL", UDim2.new(0.08, 0, 1, -23), UDim2.new(0.84, 0, 0, 16), 14, Color3.fromRGB(125, 137, 126))
 queueHint.TextXAlignment = Enum.TextXAlignment.Center
+-- LEVEL4_QUEUE_CHOICE_20261002: a Level 4 bay in the new lobby offers TRIAL ROUND (the real round) and MAP PREVIEW
+-- (the map with no entity). The server lists the modes in queuehost's 4th argument; the shade carries them as the
+-- attribute QueueLaunchModes ("trial,preview" splits the submit row into two buttons). A do-block: no new local.
+do
+ local preview, previewStroke = queueButton("MapPreview", "MAP PREVIEW", UDim2.new(0.51, 0, 1, -78), UDim2.new(0.39, 0, 0, 50))
+ preview.Modal = true
+ preview.Visible = false
+ preview.BackgroundColor3 = Color3.fromRGB(38, 62, 96)
+ previewStroke.Color = Color3.fromRGB(125, 205, 255)
+end
 
 local function applyQueueDeviceLayout()
  local queueLayout = UIDevice.Layout()
@@ -719,8 +821,20 @@ local function applyQueueDeviceLayout()
     queuePrivacyButton.Size = UDim2.new(1, -20, 0, h)
    end},
    {Height = 48, Gap = 6, MinGap = 4, Control = queueSubmit, Apply = function(y, h)
-    queueSubmit.Position = UDim2.new(0, 10, 0, y)
-    queueSubmit.Size = UDim2.new(1, -20, 0, h)
+    local preview = queuePanel:FindFirstChild("MapPreview")
+    if preview and queueShade:GetAttribute("QueueLaunchModes") == "trial,preview" then
+     queueSubmit.TextSize = math.min(queueSubmit.TextSize, 15)
+     queueSubmit.Position = UDim2.new(0, 10, 0, y)
+     queueSubmit.Size = UDim2.new(0.5, -13, 0, h)
+     preview.TextSize = queueSubmit.TextSize
+     preview.Position = UDim2.new(0.5, 3, 0, y)
+     preview.Size = UDim2.new(0.5, -13, 0, h)
+     preview.Visible = true
+    else
+     queueSubmit.Position = UDim2.new(0, 10, 0, y)
+     queueSubmit.Size = UDim2.new(1, -20, 0, h)
+     if preview then preview.Visible = false end
+    end
    end},
    {Height = 12, Gap = 4, MinGap = 3, Optional = true, Control = queueHint,
     Apply = function(y, h)
@@ -770,7 +884,7 @@ local function applyQueueDeviceLayout()
   queuePrivacyButton.TextSize = 18
   queueSubmit.TextSize = 21
   queueHint.TextSize = 14
-  queueHint.Text = "STEP OUT OF THE SQUARE TO CANCEL"
+  queueHint.Text = "STEP OFF THE PAD TO CANCEL"
 
   layoutQueueRows(queueHeight, 7, 6, {
    {Height = 38, Gap = 16, MinGap = 8, Control = queueTitle, Apply = function(y, h)
@@ -805,8 +919,20 @@ local function applyQueueDeviceLayout()
     queuePrivacyButton.Size = UDim2.new(0.80, 0, 0, h)
    end},
    {Height = 50, Gap = 20, MinGap = 8, Control = queueSubmit, Apply = function(y, h)
-    queueSubmit.Position = UDim2.new(0.10, 0, 0, y)
-    queueSubmit.Size = UDim2.new(0.80, 0, 0, h)
+    local preview = queuePanel:FindFirstChild("MapPreview")
+    if preview and queueShade:GetAttribute("QueueLaunchModes") == "trial,preview" then
+     queueSubmit.TextSize = 17
+     queueSubmit.Position = UDim2.new(0.10, 0, 0, y)
+     queueSubmit.Size = UDim2.new(0.39, 0, 0, h)
+     preview.TextSize = 17
+     preview.Position = UDim2.new(0.51, 0, 0, y)
+     preview.Size = UDim2.new(0.39, 0, 0, h)
+     preview.Visible = true
+    else
+     queueSubmit.Position = UDim2.new(0.10, 0, 0, y)
+     queueSubmit.Size = UDim2.new(0.80, 0, 0, h)
+     if preview then preview.Visible = false end
+    end
    end},
    {Height = 16, Gap = 5, MinGap = 4, Optional = true, Control = queueHint,
     Apply = function(y, h)
@@ -833,10 +959,19 @@ local function refreshQueuePanel()
  queuePrivacyButton.TextColor3 = friendsOnly and Color3.fromRGB(255, 218, 125) or Color3.fromRGB(125, 255, 178)
  queuePrivacyStroke.Color = friendsOnly and Color3.fromRGB(255, 202, 95) or Color3.fromRGB(120, 255, 175)
  queueStationLabel.Text = queueStation and ("STATION " .. queueStation .. "  •  YOU ARE THE HOST") or "YOU ARE THE HOST"
- queueSubmit.Text = queueSubmitting and "CREATING PARTY..." or "CREATE PARTY"
+ local modes = queueShade:GetAttribute("QueueLaunchModes")
+ local trial = modes == "trial,preview" or modes == "trial"
+ queueSubmit.Text = queueSubmitting and (trial and "STARTING..." or "CREATING PARTY...") or (trial and "TRIAL ROUND" or "CREATE PARTY")
  queueSubmit.Active = not queueSubmitting
  queueSubmit.AutoButtonColor = not queueSubmitting
  queueSubmit.BackgroundColor3 = queueSubmitting and Color3.fromRGB(42, 50, 44) or Color3.fromRGB(42, 105, 70)
+ local preview = queuePanel:FindFirstChild("MapPreview")
+ if preview then
+  preview.Text = queueSubmitting and "STARTING..." or "MAP PREVIEW"
+  preview.Active = not queueSubmitting
+  preview.AutoButtonColor = not queueSubmitting
+  preview.BackgroundColor3 = queueSubmitting and Color3.fromRGB(40, 46, 56) or Color3.fromRGB(38, 62, 96)
+ end
 end
 
 queueMinus.Activated:Connect(function()
@@ -854,18 +989,6 @@ queuePrivacyButton.Activated:Connect(function()
  queuePrivacyValue = queuePrivacyValue == "public" and "friends" or "public"
  refreshQueuePanel()
 end)
-queueSubmit.Activated:Connect(function()
- if queueSubmitting or not queueStation then return end
- queueSubmitting = true
- refreshQueuePanel()
- queueRemote:FireServer(queueStation, queueSizeValue, queuePrivacyValue)
- task.delay(3, function()
-  if queueShade.Visible and queueSubmitting then
-   queueSubmitting = false
-   refreshQueuePanel()
-  end
- end)
-end)
 -- AUDIT_FIX_20260924: the party panel was the one modal with no controller
 -- path. Nothing was selected, so the stick walked the host out of the square
 -- (which cancels the party), A jumped and B did nothing. A gamepad opening now
@@ -873,6 +996,30 @@ end)
 -- selection left inside -- a stale one keeps dispatchAudio.inputBlocked() true.
 -- A do-block: this chunk is at the 200-local limit.
 do
+ -- LEVEL4_QUEUE_CHOICE_20261002: both launch buttons share one submit; the mode rides as ConfigureQueue's 4th
+ -- argument ("trial" / "preview", nil on stations that offer no choice -- the server keeps today's behaviour).
+ local function submitQueue(mode)
+  if queueSubmitting or not queueStation then return end
+  queueSubmitting = true
+  refreshQueuePanel()
+  queueRemote:FireServer(queueStation, queueSizeValue, queuePrivacyValue, mode)
+  task.delay(3, function()
+   if queueShade.Visible and queueSubmitting then
+    queueSubmitting = false
+    refreshQueuePanel()
+   end
+  end)
+ end
+ queueSubmit.Activated:Connect(function()
+  local modes = queueShade:GetAttribute("QueueLaunchModes")
+  submitQueue((modes == "trial,preview" or modes == "trial") and "trial" or (modes == "preview" and "preview" or nil))
+ end)
+ local mapPreview = queuePanel:FindFirstChild("MapPreview")
+ if mapPreview then mapPreview.Activated:Connect(function() submitQueue("preview") end) end
+ queueShade:GetAttributeChangedSignal("QueueLaunchModes"):Connect(function()
+  applyQueueDeviceLayout()
+  refreshQueuePanel()
+ end)
  local function cancelHostedQueue()
   if queueSubmitting or not queueStation then return end
   local stationToCancel = queueStation
@@ -893,6 +1040,7 @@ do
     return Enum.ContextActionResult.Sink
    end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
   else
+   queueShade:SetAttribute("QueueLaunchModes", nil)
    ContextActionService:UnbindAction("QueueHostClose")
    if navigation.SelectedObject and navigation.SelectedObject:IsDescendantOf(queueShade) then
     navigation.SelectedObject = nil
@@ -4410,6 +4558,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueSizeValue = math.clamp(math.floor(tonumber(b) or 6), 1, 6)
 		queuePrivacyValue = c == "friends" and "friends" or "public"
 		queueSubmitting = false
+		queueShade:SetAttribute("QueueLaunchModes", (d == "trial,preview" or d == "trial" or d == "preview") and d or nil)
 		refreshQueuePanel()
 		queueShade.Visible = true
 		setMsg("")
@@ -4457,8 +4606,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local maximum = math.clamp(math.floor(tonumber(d) or 6), 1, 6)
 		local privacyText = e == "friends" and "FRIENDS ONLY" or "PUBLIC"
 		local stationText = stationNumber and ("STATION " .. stationNumber .. "  •  ") or ""
+		local modeText = f == "trial" and "  •  TRIAL ROUND" or (f == "preview" and "  •  MAP PREVIEW" or "")
 		setMsg(stationText .. "GAME BEGINS IN " .. tostring(a) .. string.char(10)
-			.. count .. "/" .. maximum .. " READY  •  " .. privacyText, Color3.fromRGB(120, 255, 175))
+			.. count .. "/" .. maximum .. " READY  •  " .. privacyText .. modeText, Color3.fromRGB(120, 255, 175))
 		label.Size = UDim2.new(0, 700, 0, 92)
 
 	elseif ev == "lobbycancel" then

@@ -1,0 +1,993 @@
+-- NoiseReporter
+-- PASTE INTO: StarterPlayer → StarterPlayerScripts → Insert Object → LocalScript → rename to "NoiseReporter"
+-- Shift = sprint (loud); Ctrl / gamepad L3 / touch SNEAK = crouch (silent).
+
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local remotes = RS:WaitForChild("Remotes")
+local remote = remotes:WaitForChild("ReportNoise")
+local glowstickRemote = remotes:WaitForChild("DropGlowstick")
+local crouchRemote = remotes:WaitForChild("SetCrouching")
+local player = Players.LocalPlayer
+local DevAccess = require(RS:WaitForChild("DevAccess"))
+local UIDevice = require(RS:WaitForChild("UIDevice"))
+local devAllowed = DevAccess.IsAllowed(player)
+local previewAllowed = DevAccess.IsLevel6PreviewAllowed(player)
+-- Level6 preview participates in local movement only; public progression attributes stay untouched.
+local function inPreview() return previewAllowed and player:GetAttribute("Level6InRound") == true end
+local function inRound() return player:GetAttribute("InRound") == true or inPreview() end
+local function isHiding()
+	return player:GetAttribute(if inPreview() then "Level6_Hiding" else "Level3_Hiding") == true
+end
+local function isEscaped()
+	return player:GetAttribute(if inPreview() then "Level6Escaped" else "Escaped") == true
+end
+local vitalRemote = remotes:WaitForChild("RoundStatus")
+local lastVitalReport = -math.huge
+
+local WALK_SPEED, SPRINT_SPEED, CROUCH_SPEED = 16, 26, 8
+
+-- loudness per movement state, 0..1 (server owns the real values)
+local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
+
+local state = "walk"
+local sprinting, crouching = false, false
+local shiftSprintHeld, touchSprintHeld, gamepadSprintHeld = false, false, false
+local windowFocused = true
+local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
+local lastPublishedCrouch: boolean? = nil
+local crouchRequestSerial = 0
+local GLOWSTICK_COOLDOWN = 5
+local lastGlowstickDrop = -math.huge
+local currentChar
+-- Forward-declared exactly like currentChar above: the death/respawn reset a
+-- few lines down has to clear the touch SNEAK toggle, and the toggle itself is
+-- built later with the rest of the touch cluster.
+local showSneakEngaged
+
+local function dropGlowstick()
+	-- ButtonX also exits a Level 3 table. Never let that one press spawn a
+	-- glowstick underneath the table while the hide controller is releasing us.
+	if inPreview() or not inRound() or isHiding()
+		or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
+	local char, hum = currentChar()
+	if not (char and hum and hum.Health > 0) then return end
+	lastGlowstickDrop = os.clock()
+	glowstickRemote:FireServer()
+end
+
+-- stamina: sprint is limited, drains while sprinting, recovers otherwise
+local STAMINA_BASE     = 100
+local SPRINT_DRAIN     = 16   -- ~6s of sprint on a full bar
+local STAMINA_RECHARGE = 10   -- recovers while not sprinting
+local STAMINA_RECOVER  = 25   -- must reach this after exhaustion before sprinting again
+local function staminaMax()
+	if inPreview() then return STAMINA_BASE end
+	return STAMINA_BASE * math.max(1, tonumber(player:GetAttribute("ZyntraStaminaMultiplier")) or 1)
+end
+local stamina, exhausted = staminaMax(), false
+
+-- ADRENALINE: existing entities publish BeingChased; Level 2's pipe giant has
+-- its own chase mark so Pool Foam cannot clear the giant's stamina boost.
+-- Read the combined state only; never write either server-owned chase mark.
+local ADRENALINE_MUL    = 3
+local ADRENALINE_LINGER = 4   -- seconds the boost outlives the LAST active chase
+local adrenalineUntil = 0
+local function chaseActive()
+	if inPreview() then return player:GetAttribute("Level6BeingChased") == true end
+	return player:GetAttribute("BeingChased") == true
+		or (workspace:GetAttribute("SelectedLevel") == 2
+			and player:GetAttribute("Level2_PoolSlideChased") == true)
+end
+local wasChased = chaseActive()
+local function updateChaseAdrenaline()
+	local chased = chaseActive()
+	if wasChased and not chased then
+		adrenalineUntil = os.clock() + ADRENALINE_LINGER
+	end
+	wasChased = chased
+end
+player:GetAttributeChangedSignal("BeingChased"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level6BeingChased"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level6InRound"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level2_PoolSlideChased"):Connect(updateChaseAdrenaline)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(updateChaseAdrenaline)
+local function adrenalized()
+	return chaseActive() or os.clock() < adrenalineUntil
+end
+
+-- dev cheat (DevCheats toggles the local DevUnlimited attribute): stamina never drains
+local function devUnlimited() return player:GetAttribute("DevUnlimited") == true end
+
+currentChar = function()
+	local char = player.Character
+	return char, char and char:FindFirstChild("Humanoid")
+end
+
+local CROUCH_BLOCKED_STATES = {
+	[Enum.HumanoidStateType.Dead] = true,
+	[Enum.HumanoidStateType.FallingDown] = true,
+	[Enum.HumanoidStateType.Freefall] = true,
+	[Enum.HumanoidStateType.Jumping] = true,
+	[Enum.HumanoidStateType.Climbing] = true,
+	[Enum.HumanoidStateType.Physics] = true,
+	[Enum.HumanoidStateType.PlatformStanding] = true,
+	[Enum.HumanoidStateType.Ragdoll] = true,
+	[Enum.HumanoidStateType.Seated] = true,
+	[Enum.HumanoidStateType.Swimming] = true,
+}
+
+local function movementAvailable()
+	if not inRound() or isEscaped()
+		or isHiding()
+		or player:GetAttribute("Spectating") == true
+		or player:GetAttribute("ZyntraStoreOpen") == true
+		or player:GetAttribute("DevPhoneOpen") == true
+		or player:GetAttribute("ZyntraReentryOpen") == true
+		or player:GetAttribute("QueueModalOpen") == true then
+		return false
+	end
+	local character, humanoid = currentChar()
+	return character ~= nil and humanoid ~= nil and humanoid.Health > 0
+end
+
+local function crouchAllowed()
+	if not movementAvailable() or (player:GetAttribute("Level6PlaygroundPreview") ~= true
+		and workspace:GetAttribute(if inPreview() then "Level6RoundActive" else "RoundActive") ~= true) then return false end
+	local character, humanoid = currentChar()
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	return character ~= nil and humanoid ~= nil and root ~= nil
+		and root:IsA("BasePart") and not root.Anchored
+		and character:GetAttribute("Level2_ForcedSliding") ~= true
+		and character:GetAttribute("Level2_RagdollServerActive") ~= true
+		and CROUCH_BLOCKED_STATES[humanoid:GetState()] ~= true
+end
+
+local function publishCrouch(active)
+	active = active == true
+	-- Local prediction removes a network round-trip from the owner's camera and
+	-- pose. Other clients deliberately ignore this local-only attribute and use
+	-- the server-owned Crouching attribute below.
+	player:SetAttribute("LocalCrouching", active)
+	if lastPublishedCrouch == active then return end
+	lastPublishedCrouch = active
+	crouchRequestSerial += 1
+	crouchRemote:FireServer(active, crouchRequestSerial)
+end
+
+-- Speed Potion (ZYNTRA_SPEED_POTION_20260916). Forward-declared like currentChar
+-- above so applySpeed can use it while the body stays below, beside the speeds
+-- it scales -- which is also what keeps it inside the block the offline
+-- controller test lifts out of this file (applySpeed down to refreshCrouch).
+local speedBoost
+
+local function applySpeed()
+	local character, hum = currentChar()
+	if not hum then return end
+	local desiredSpeed
+	if not inRound() then
+		-- Lobby sprint is unlimited: it uses the regular sprint speed without
+		-- touching the level stamina/exhaustion state.
+		state = sprinting and "sprint" or "walk"
+		desiredSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
+		character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+		hum.WalkSpeed = desiredSpeed
+		return
+	end
+
+	if crouching then
+		state = "crouch"
+		desiredSpeed = CROUCH_SPEED
+	elseif sprinting and stamina > 0 and not exhausted then
+		state = "sprint"
+		desiredSpeed = SPRINT_SPEED
+	else
+		state = "walk"
+		desiredSpeed = WALK_SPEED
+	end
+	-- ONE multiplier, applied after the movement state has chosen its speed, so
+	-- crouch/walk/sprint all scale (8/16/26 -> 8.8/17.6/28.6) from the single
+	-- existing writer instead of a competing WalkSpeed loop. `state` and the
+	-- stamina drain keyed off it are deliberately untouched: the potion is speed,
+	-- not stamina, and the noise a player makes must not change with it.
+	desiredSpeed *= speedBoost()
+	-- Level 4: carried film reels weigh the carrier down. The server owns the
+	-- factor (Objective Controller); anything outside [0.5, 1) is ignored.
+	local carry = workspace:GetAttribute("SelectedLevel") == 4 and player:GetAttribute("Level4_CarrySpeedFactor")
+	if type(carry) == "number" and carry >= 0.5 and carry < 1 then desiredSpeed *= carry end
+	-- Publish the intended speed separately from WalkSpeed. Deferred property
+	-- signals can observe the slide controller's re-zero instead of this write;
+	-- the attribute gives every movement lock an unambiguous restore target.
+	character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+	-- The hide controller and the Level 2 slide own physical movement while
+	-- these locks are active. Keep their restore target current without fighting
+	-- their authoritative WalkSpeed = 0 writes.
+	if isHiding()
+		or character:GetAttribute("Level2_ForcedSliding") == true
+		or character:GetAttribute("Level2_RagdollServerActive") == true then
+		return
+	end
+	hum.WalkSpeed = desiredSpeed
+end
+
+-- The SERVER owns the boost: ZyntraMonetization consumes the potion and then
+-- writes ZyntraSpeedBoostUntil (a workspace server clock) and
+-- ZyntraSpeedBoostMultiplier on the Player. This only reads them, and refuses
+-- anything outside [1, 1.5] so a stray write can never become a speed hack.
+-- Order matters: everything cheap and local is checked before the clock, so a
+-- player with no boost -- the normal case, every frame -- costs two lookups.
+function speedBoost()
+	if inPreview() or not inRound() then return 1 end
+	local expires = player:GetAttribute("ZyntraSpeedBoostUntil")
+	-- NaN fails every comparison, so `expires > 0` rejects it along with 0/nil.
+	if type(expires) ~= "number" or not (expires > 0) then return 1 end
+	if expires <= workspace:GetServerTimeNow() then return 1 end
+	local multiplier = player:GetAttribute("ZyntraSpeedBoostMultiplier")
+	if type(multiplier) ~= "number" or not (multiplier >= 1 and multiplier <= 1.5) then return 1 end
+	return multiplier
+end
+
+local function refreshCrouch()
+	local requested = keyboardCrouchHeld or controllerCrouchToggled or touchSneakToggled
+	crouching = requested and crouchAllowed()
+	publishCrouch(crouching)
+	applySpeed()
+end
+
+local function cancelCrouch()
+	keyboardCrouchHeld = false
+	controllerCrouchToggled = false
+	if showSneakEngaged then
+		showSneakEngaged(false)
+	else
+		touchSneakToggled = false
+	end
+	crouching = false
+	publishCrouch(false)
+	applySpeed()
+end
+
+-- Server acknowledgements keep the owner's predicted pose/speed honest when a
+-- request is rejected (for example because another server system anchored the
+-- root in the same frame). Replicated false transitions also cover later
+-- server-side cancellation without waiting for another local input.
+crouchRemote.OnClientEvent:Connect(function(acceptedState, responseSerial)
+	if typeof(acceptedState) ~= "boolean" or typeof(responseSerial) ~= "number" then return end
+	-- A lifecycle clear carries the latest request the server had processed when
+	-- it happened. If we have since issued a newer transition, that older clear
+	-- is stale and the response to our newer request is the one that decides.
+	if responseSerial ~= crouchRequestSerial then return end
+	if acceptedState == false and (crouching or keyboardCrouchHeld
+		or controllerCrouchToggled or touchSneakToggled) then
+		cancelCrouch()
+	end
+end)
+
+-- The ONE definition of "the player is asking to sprint", across all three input
+-- families. Every place that used to spell out `shiftSprintHeld or
+-- touchSprintHeld` reads this instead, so a fourth source can never again be
+-- added to one of them and missed in the other three -- which is exactly how
+-- gamepad players ended up unable to sprint at all.
+local function sprintRequested()
+	return shiftSprintHeld or touchSprintHeld or gamepadSprintHeld
+end
+
+local function keyboardSprintHeld()
+	-- Physical key state remains reliable when a Roblox core control (such as
+	-- Shift Lock) consumes the event before this script sees it.
+	if not windowFocused then return false end
+	return UIS:IsKeyDown(Enum.KeyCode.LeftShift)
+		or UIS:IsKeyDown(Enum.KeyCode.RightShift)
+end
+
+local function gamepadSprintDown()
+	-- The physical read behind the ButtonL2 latch, and it exists for the same
+	-- reason keyboardSprintHeld does: InputEnded is not guaranteed. A trigger
+	-- held while the window loses focus, or while the controller is unplugged,
+	-- never sends its release. Heartbeat repairs this in the lobby AND a round.
+	-- Every connected slot, not just Gamepad1: InputBegan latches on whichever
+	-- pad the press came from, so a repair that only ever asked Gamepad1 would
+	-- clear a Gamepad2 player's latch on every frame. An unplugged
+	-- controller is simply absent from this list, which is the release the
+	-- missing InputEnded never sent.
+	if not windowFocused then return false end
+	for _, gamepad in ipairs(UIS:GetConnectedGamepads()) do
+		if UIS:IsGamepadButtonDown(gamepad, Enum.KeyCode.ButtonL2) then return true end
+	end
+	return false
+end
+
+local function keyboardCrouchHeldNow()
+	-- Releasing one Control key must not stand up while the other remains held.
+	return UIS:IsKeyDown(Enum.KeyCode.LeftControl)
+		or UIS:IsKeyDown(Enum.KeyCode.RightControl)
+end
+
+local function refreshSprint()
+	sprinting = sprintRequested()
+	applySpeed()
+end
+
+UIS.WindowFocusReleased:Connect(function()
+	windowFocused = false
+	shiftSprintHeld, gamepadSprintHeld = false, false
+	refreshSprint()
+end)
+UIS.WindowFocused:Connect(function()
+	windowFocused = true -- the next Heartbeat reads the current hardware state
+end)
+
+UIS.InputBegan:Connect(function(input, processed)
+	-- Hold-to-sprint on the LEFT TRIGGER. ButtonA stays Roblox's own jump,
+	-- ButtonL3 is crouch and ButtonX is the glowstick; L2 was unused across the
+	-- whole project. Read before the `processed` gate for the same reason Shift
+	-- is: this is a movement modifier, not a UI action, and a core control that
+	-- claimed the press must not silently disable sprinting.
+	if input.KeyCode == Enum.KeyCode.ButtonL2 then
+		gamepadSprintHeld = true
+		refreshSprint()
+		return
+	end
+	local isSprintKey = input.KeyCode == Enum.KeyCode.LeftShift
+		or input.KeyCode == Enum.KeyCode.RightShift
+	if isSprintKey then
+		-- Never bind gameplay shortcuts while typing, but accept Shift even when a
+		-- Roblox core action marked it processed.
+		if UIS:GetFocusedTextBox() then return end
+		shiftSprintHeld = true
+		refreshSprint()
+		return
+	end
+	if processed then return end
+	if input.KeyCode == Enum.KeyCode.Space and crouching then
+		cancelCrouch()
+	elseif (input.KeyCode == Enum.KeyCode.LeftControl
+		or input.KeyCode == Enum.KeyCode.RightControl) and crouchAllowed() then
+		keyboardCrouchHeld = true
+		refreshCrouch()
+	elseif input.KeyCode == Enum.KeyCode.ButtonL3
+		and (controllerCrouchToggled or crouchAllowed()) then
+		controllerCrouchToggled = not controllerCrouchToggled
+		refreshCrouch()
+	elseif inRound() and (input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX) then
+		dropGlowstick()
+	end
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
+		-- Releasing one Shift key must not cancel the other.
+		shiftSprintHeld = keyboardSprintHeld()
+		refreshSprint()
+	elseif input.KeyCode == Enum.KeyCode.ButtonL2 then
+		gamepadSprintHeld = false
+		refreshSprint()
+	elseif input.KeyCode == Enum.KeyCode.LeftControl
+		or input.KeyCode == Enum.KeyCode.RightControl then
+		keyboardCrouchHeld = keyboardCrouchHeldNow()
+		refreshCrouch()
+	end
+end)
+
+player.CharacterAdded:Connect(function()
+	task.wait(0.5)
+	-- The immediate CharacterAdded UI hook below already clears the old avatar's
+	-- touch latch. Preserve a new RUN tap made during this startup delay instead
+	-- of silently turning it off while leaving the button lit.
+	shiftSprintHeld = keyboardSprintHeld()
+	gamepadSprintHeld = gamepadSprintDown()
+	sprinting = sprintRequested()
+	keyboardCrouchHeld, controllerCrouchToggled, crouching = false, false, false
+	lastPublishedCrouch = nil
+	-- The touch SNEAK latch and its lit ring go with the crouch they stand for,
+	-- or the button reads "sneaking" over a character that is standing up.
+	if showSneakEngaged then showSneakEngaged(false) end
+	publishCrouch(false)
+	applySpeed()
+end)
+
+-- report at 5Hz, only while actually moving
+task.spawn(function()
+	while task.wait(0.2) do
+		-- Level 1's Entity and Level 2's Pool Foam both hear the shared
+		-- NoiseRegistry: EntityAI drains this remote during a Level 1 round, the
+		-- live Pool Foam session drains it during a Level 2 one. Level 3's Mall
+		-- Manager does not listen at all, so reporting there is pure traffic.
+		-- Level 4's Usher hears it too (its controller drains the remote).
+		local level = workspace:GetAttribute("SelectedLevel")
+		if inPreview() or not inRound() or (level ~= 1 and level ~= 2 and level ~= 4)
+			or player:GetAttribute("Level6PlaygroundPreview") == true then continue end -- nothing in the playground listens
+		local char, hum = currentChar()
+		if not (char and hum and hum.Health > 0) then continue end
+
+		local root = char:FindFirstChild("HumanoidRootPart")
+		if not root then continue end
+
+		-- only make noise if actually in motion
+		if root.AssemblyLinearVelocity.Magnitude < 2 then continue end
+
+		local loud = LOUDNESS[state]
+		if loud > 0 then
+			remote:FireServer(state)
+		end
+	end
+end)
+
+-- ── stamina bar ───────────────────────────────────────────
+-- Matches the rest of the HUD: near-black translucent backdrop, rounded corners,
+-- white fill that blushes red as it empties (same white→red as the battery).
+-- Bottom-centre, slim; fades IN when you spend stamina, fades OUT when full.
+local BAR_W, BAR_H  = 300, 14
+local STA_FULL      = Color3.fromRGB(235, 235, 235) -- fill at full stamina
+local STA_EMPTY     = Color3.fromRGB(230, 80, 60)   -- fill near empty / exhausted
+local BAR_BG_ALPHA  = 0.6   -- backdrop transparency when shown
+local BAR_FADE      = 5     -- how fast the bar fades in / out
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "StaminaGui"
+gui.ResetOnSpawn = false
+-- Roblox's TouchGui sits at DisplayOrder 5. This cluster used to sit at the
+-- default 0, which put our JUMP button UNDERNEATH Roblox's own -- two jump
+-- buttons stacked to within nine pixels, with the ungated default one taking
+-- every tap. We now own the jump control outright and draw above the default.
+gui.DisplayOrder = 60
+-- Keep the container alive in the lobby for the mobile RUN button. The actual
+-- stamina bar remains fully hidden there, and the level-only controls are
+-- hidden explicitly by updateRoundState().
+gui.Enabled = true
+gui.Parent = player:WaitForChild("PlayerGui")
+
+-- Compact touch control cluster. Keyboard/controller paths remain unchanged.
+-- RUN and JUMP form the right column; POV sits above the upright flashlight
+-- immediately to their left, keeping the camera-dragging area clear.
+-- Form factor, not last input, and re-read on every UIDevice.Changed rather
+-- than captured once at load.
+local function touchControls() return UIDevice.IsTouch() end
+
+-- C_LIVE_CONTROL_RECTS_20260831. Every button this file builds registers its
+-- own rectangle with UIDevice, so `Zones.Controls` is the union of what is
+-- ACTUALLY drawn instead of a 168x290 block guessed at the display's corner.
+-- The guess was 290px tall; the real stack on a landscape phone starts far
+-- lower, and every objective readout was being pushed toward screen centre to
+-- dodge a rectangle that was mostly empty.
+local function makeTouchButton(name, text)
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.AnchorPoint = Vector2.new(1, 1)
+	button.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+	button.BackgroundTransparency = 0.04
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = false
+	button.Font = Enum.Font.GothamBold
+	button.Text = text
+	button.TextColor3 = Color3.fromRGB(235, 238, 232)
+	button.TextSize = 17
+	button.TextWrapped = true
+	button.Visible = touchControls()
+	button.ZIndex = 20
+	button.Parent = gui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(1, 0)
+	corner.Parent = button
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(75, 94, 83)
+	stroke.Transparency = 0.28
+	stroke.Thickness = 1
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	stroke.Parent = button
+	return button, stroke
+end
+
+local touchRunButton, runStroke = makeTouchButton("TouchRunHold", "RUN  »")
+local touchJumpButton = makeTouchButton("TouchJump", "JUMP  ↑")
+local touchPOVButton, povStroke = makeTouchButton("TouchPOV", "POV\n1ST")
+local touchGlowButton = makeTouchButton("TouchDropGlowstick", "DROP\nGLOW")
+touchPOVButton.TextSize = 13
+touchPOVButton.Visible = touchControls() and devAllowed
+touchGlowButton.TextSize = 12
+-- Touch crouch. Same helper, same column, same layout pass as the rest of the
+-- cluster. The label is constant: the engaged state is carried by the stroke
+-- and tint below, the way POV carries its own, and NO key glyph is shown --
+-- LeftControl stays a keyboard-only affordance.
+local touchSneakButton, sneakStroke = makeTouchButton("TouchSneakHold", "SNEAK")
+touchSneakButton:SetAttribute("SneakEngaged", false)
+
+-- Registered AFTER all five exist, so the union is never partial.
+for _, entry in ipairs({
+	{"TouchRunHold", touchRunButton}, {"TouchJump", touchJumpButton},
+	{"TouchPOV", touchPOVButton}, {"TouchDropGlowstick", touchGlowButton},
+	{"TouchSneakHold", touchSneakButton},
+}) do
+	UIDevice.RegisterControlRect(entry[1], entry[2])
+end
+
+-- The whole cluster is laid out from UIDevice's control PLAN, so every other HUD
+-- element in the game can avoid exactly the rectangle these buttons occupy. The
+-- flashlight toggle takes its slot from the same plan (it used to sit
+-- bottom-left, inside the movement thumbstick's activation region).
+--
+-- C_SHORT_SCREEN_CLUSTER_20260831 -- WHAT SHIPPED BROKEN.
+--
+-- The edge / buttonSize / gap arithmetic used to live here, a second copy of it
+-- lived in FlashlightController, and a third lived in UIDevice to build the
+-- reserved rectangle from. All three agreed on a vertical stack 242px tall. On a
+-- 568x320 landscape phone the safe area is 262px tall, so the cluster owned the
+-- screen and the objective readout -- which needs 56px above it -- abandoned the
+-- safe right edge and drew itself in the middle of the display instead.
+--
+-- The arrangement is now UIDevice's decision, because UIDevice is the only place
+-- that knows what has to fit above it, and this file positions whatever it is
+-- handed. On a screen with room the plan is the column, unchanged to the pixel.
+-- On a short landscape screen it is a row along the bottom edge, sized to the
+-- daylight between the thumbstick's activation region and the safe right edge,
+-- which reserves 67px instead of 242.
+local function placeTouchControl(button, slot, bottomOverride)
+	button.Position = UDim2.new(1, -slot.Right, 1, -(bottomOverride or slot.Bottom))
+	button.Size = UDim2.fromOffset(slot.Width, slot.Height)
+	if slot.TextSize then button.TextSize = slot.TextSize end
+end
+
+local function applyTouchControlLayout()
+	if not touchControls() then return end
+	local layout = UIDevice.Layout()
+	local plan = layout.ControlPlan
+	local slots = plan.Slots
+
+	-- In a round our JUMP owns the thumb-nearest slot and Roblox's is suppressed.
+	-- In the LOBBY the default jump is restored (it is the only jump there) and it
+	-- occupies roughly that same slot, so RUN -- the one control the lobby leaves
+	-- usable -- lifts clear of the engine's button rather than sitting on it.
+	-- Measured through BottomOffsetFor, because the lift converts an ABSOLUTE
+	-- edge into this gui's own bottom-relative offsets and the gui is inset to
+	-- the safe area, not to the display.
+	local runBottom = slots.TouchRunHold.Bottom
+	if not inRound() then
+		runBottom = math.max(runBottom,
+			UIDevice.BottomOffsetFor(gui, layout.Zones.Jump.Top) + plan.Gap)
+	end
+	local lift = runBottom - slots.TouchRunHold.Bottom
+
+	placeTouchControl(touchJumpButton, slots.TouchJump)
+	placeTouchControl(touchRunButton, slots.TouchRunHold, runBottom)
+	-- SNEAK stacks directly above RUN in the COLUMN, so it inherits the lobby
+	-- lift and can never land on it. In the ROW it sits beside RUN instead and
+	-- takes no lift: it is hidden in the lobby, and lifting it there would push a
+	-- hidden button into the readout's headroom for no one's benefit.
+	local sneakBottom = slots.TouchSneakHold.Bottom
+	if plan.Mode == "column" then sneakBottom += lift end
+	placeTouchControl(touchSneakButton, slots.TouchSneakHold, sneakBottom)
+	placeTouchControl(touchPOVButton, slots.TouchPOV)
+	placeTouchControl(touchGlowButton, slots.TouchDropGlowstick)
+end
+
+applyTouchControlLayout()
+UIDevice.Changed:Connect(applyTouchControlLayout)
+
+-- This game draws its own JUMP, with round/death/hiding gating the default
+-- control knows nothing about, so Roblox's is suppressed while ours is the
+-- owner. Ownership is per-round, NOT permanent: the cluster deliberately
+-- provides no jump in the lobby, and suppressing the default there as well
+-- would leave a touch player in the tunnel hub with no way to jump at all.
+-- updateRoundState below re-evaluates this on every state change.
+
+local touchSprintToggled = false
+local function showRunEnabled(enabled)
+	touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
+	touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
+	runStroke.Color = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(220, 228, 218)
+	touchRunButton.Text = enabled and "RUN  ON" or "RUN  »"
+end
+
+-- SNEAK is a TOGGLE, not a hold like RUN, and deliberately so: crouch-silent is
+-- a SUSTAINED stealth state -- you hold it for a whole corridor while the
+-- Entity sweeps past -- so a hold-to-crouch button would pin the very thumb the
+-- player needs on the thumbstick to steer, leaving a touch player able to be
+-- silent OR moving but never both. RUN can be hold-shaped because a sprint is a
+-- burst; sneaking is not. Tap to enter crouch, tap again to leave it.
+showSneakEngaged = function(engaged)
+	touchSneakToggled = engaged
+	touchSneakButton.BackgroundTransparency = engaged and 0.25 or 0.52
+	touchSneakButton.TextColor3 = engaged and Color3.fromRGB(150, 205, 255)
+		or Color3.fromRGB(235, 238, 232)
+	sneakStroke.Color = engaged and Color3.fromRGB(150, 205, 255)
+		or Color3.fromRGB(220, 228, 218)
+	-- The supported way to observe the toggle from outside this script (the UI
+	-- regression suite reads it instead of reaching for a local).
+	touchSneakButton:SetAttribute("SneakEngaged", engaged)
+end
+
+-- Tap once to sprint, tap again to stop. A held GUI touch no longer steals
+-- the phone/tablet camera finger, so players can steer and look around freely.
+touchRunButton.Activated:Connect(function()
+	touchSprintToggled = not touchSprintToggled
+	touchSprintHeld = touchSprintToggled
+	showRunEnabled(touchSprintToggled)
+	refreshSprint()
+end)
+
+-- Drives the SAME `crouching` upvalue the LeftControl path drives, through the
+-- SAME applySpeed(), so speed and LOUDNESS.crouch stay in exactly one place.
+touchSneakButton.Activated:Connect(function()
+	if not crouchAllowed() and not touchSneakToggled then return end
+	showSneakEngaged(not touchSneakToggled)
+	refreshCrouch()
+end)
+
+touchJumpButton.Activated:Connect(function()
+	if not inRound() then return end
+	local character, hum = currentChar()
+	if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
+	if hum and hum.Health > 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then
+		if crouching then cancelCrouch() end
+		hum.Jump = true
+		hum:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+end)
+
+touchGlowButton.Activated:Connect(dropGlowstick)
+
+local function firstPersonEnabled()
+	return player:GetAttribute("DevCheatThirdPerson") ~= true
+end
+
+local function refreshPOVButton()
+	local firstPerson = firstPersonEnabled()
+	touchPOVButton.Text = firstPerson and "POV\n3RD" or "POV\n1ST"
+	touchPOVButton.TextColor3 = firstPerson and Color3.fromRGB(130, 220, 255)
+		or Color3.fromRGB(235, 238, 232)
+	povStroke.Color = firstPerson and Color3.fromRGB(130, 220, 255)
+		or Color3.fromRGB(220, 228, 218)
+end
+
+touchPOVButton.Activated:Connect(function()
+	if not (devAllowed and inRound()) then return end
+	local command = player:WaitForChild("PlayerScripts"):FindFirstChild("DevCheatCommand")
+	if command and command:IsA("BindableEvent") then
+		command:Fire("thirdPerson")
+	end
+end)
+player:GetAttributeChangedSignal("DevCheatThirdPerson"):Connect(refreshPOVButton)
+refreshPOVButton()
+
+player.CharacterAdded:Connect(function()
+	touchSprintToggled = false
+	touchSprintHeld = false
+	showRunEnabled(false)
+	task.delay(0.75, refreshPOVButton)
+end)
+
+local staBg = Instance.new("Frame")
+staBg.AnchorPoint = Vector2.new(0.5, 1)
+staBg.Position = UDim2.new(0.5, 0, 1, -22)
+staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
+-- The rectangle the objective readout will occupy on this device, asked for at
+-- the WIDEST footprint any level declares. Read from UIDevice.ObjectivePanelSize
+-- rather than copied out of it, so a level that grows its panel moves the bar out
+-- of the way instead of quietly ending up underneath it.
+local function objectiveReserve()
+	local width, height = 0, 0
+	for _, size in pairs(UIDevice.ObjectivePanelSize) do
+		width = math.max(width, size.X)
+		height = math.max(height, size.Y)
+	end
+	return UIDevice.TopRightPanel(width, height)
+end
+
+-- The fixed 300px bar overflowed a 375-wide portrait screen and sat on top of
+-- the movement zone. It is now capped to the safe width and lifted into the
+-- content band on touch.
+local function applyStaminaLayout()
+	local layout = UIDevice.Layout()
+	staBg.AnchorPoint = Vector2.new(0.5, 1)
+	if not layout.IsTouch then
+		staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
+		staBg.Position = UDim2.new(0.5, 0, 1, -22)
+		return
+	end
+	-- On touch the bar lives in the lane BETWEEN the two movement zones. A
+	-- landscape phone leaves only about 65 vertical pixels clear above the
+	-- controls -- not enough to share with the alert banner -- but the corridor
+	-- down the middle is free at any height.
+	local corridor = layout.Corridor
+	-- Both branches place an ABSOLUTE centre and an ABSOLUTE bottom, and both are
+	-- converted. The X used to be written straight in as a gui offset (and in
+	-- portrait as a 0.5 scale of the GUI, which is the housing's centre rather
+	-- than the safe area's whenever a device has a horizontal inset).
+	local centre, bottom
+	if corridor.Width >= 120 then
+		staBg.Size = UDim2.new(0, math.min(BAR_W, corridor.Width), 0, BAR_H)
+		centre = (corridor.Left + corridor.Right) * .5
+		bottom = layout.Display.Bottom - 18
+	else
+		-- Portrait, or a SHORT landscape screen where the cluster now spans the
+		-- bottom edge and closes the corridor entirely. Fall back to the safe
+		-- band -- but keep out of the objective readout, which since
+		-- C_OBJECTIVE_ALWAYS_THE_SAFE_EDGE_20260831 genuinely owns the upper-right
+		-- corner and is a full 101px tall there. A 300px bar centred on a 568px
+		-- screen reaches x 434 and the readout starts at 312, so the two crossed:
+		-- the stamina bar was drawn straight through the objective text.
+		--
+		-- Capped only when the two actually share a band. In portrait the bar sits
+		-- hundreds of pixels below the readout and keeps its full width.
+		bottom = layout.SafeBottom - 10
+		local right = layout.Safe.Right
+		local reserve = objectiveReserve()
+		if reserve.Height > 0 and bottom > reserve.Top and bottom - BAR_H < reserve.Bottom then
+			right = math.min(right, reserve.Left - 8)
+		end
+		local lane = math.max(0, right - layout.Safe.Left)
+		staBg.Size = UDim2.new(0, math.min(BAR_W, lane), 0, BAR_H)
+		centre = (layout.Safe.Left + right) * .5
+	end
+	staBg.Position = UDim2.new(0, select(1, UIDevice.LocalOffset(gui, centre, 0)),
+		1, -UIDevice.BottomOffsetFor(gui, bottom))
+end
+staBg.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
+staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
+staBg.BorderSizePixel = 0
+staBg.Parent = gui
+local bgc = Instance.new("UICorner"); bgc.CornerRadius = UDim.new(1, 0); bgc.Parent = staBg
+
+local staFill = Instance.new("Frame")
+staFill.AnchorPoint = Vector2.new(0, 0.5)
+staFill.Position = UDim2.new(0, 2, 0.5, 0)
+staFill.Size = UDim2.new(1, -4, 1, -4)
+staFill.BackgroundColor3 = STA_FULL
+staFill.BackgroundTransparency = 1
+staFill.BorderSizePixel = 0
+staFill.Parent = staBg
+local fc = Instance.new("UICorner"); fc.CornerRadius = UDim.new(0, 4); fc.Parent = staFill
+applyStaminaLayout()
+UIDevice.Changed:Connect(applyStaminaLayout)
+
+local barShown = 0 -- eased 0–1 visibility
+local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the first frame to write
+
+-- The boost STARTS as an attribute change, but it ENDS when a server timestamp
+-- passes and nothing fires at all. The in-round loop below watches this edge
+-- rather than adding a second WalkSpeed loop just to count six seconds down.
+local boostActive = false
+local function refreshSpeedBoost()
+	boostActive = speedBoost() > 1
+	applySpeed()
+end
+player:GetAttributeChangedSignal("ZyntraSpeedBoostUntil"):Connect(refreshSpeedBoost)
+player:GetAttributeChangedSignal("ZyntraSpeedBoostMultiplier"):Connect(refreshSpeedBoost)
+player:GetAttributeChangedSignal("Level4_CarrySpeedFactor"):Connect(applySpeed)
+
+RunService.Heartbeat:Connect(function(dt)
+	-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile
+	-- physical holds without changing the independent touch RUN toggle.
+	if player:GetAttribute("Spectating") == true then
+		local id = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+		local hum = watched and watched.Character and watched.Character:FindFirstChildOfClass("Humanoid")
+		local value = watched and watched:GetAttribute("SpectateStamina")
+		local valid = watched and watched:GetAttribute("InRound") == true
+			and watched:GetAttribute("Escaped") ~= true and hum and hum.Health > 0
+			and type(value) == "number"
+		staBg.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
+		if valid then
+			local frac = math.clamp(value, 0, 1)
+			local layout = UIDevice.Layout()
+			local corridor = layout.Corridor
+			local useCorridor = layout.IsTouch and corridor.Width >= 240
+			local centre = useCorridor and (corridor.Left + corridor.Right) * .5
+				or (layout.SafeLeft + layout.SafeRight) * .5
+			local bottom = layout.IsTouch and (useCorridor and layout.Display.Bottom - 18 or layout.SafeBottom)
+				or layout.Display.Bottom - 20
+			local width = useCorridor and corridor.Width or layout.SafeRight - layout.SafeLeft
+			staBg.Size = UDim2.fromOffset(math.min(BAR_W, width), BAR_H)
+			staBg.Position = UDim2.fromOffset(UIDevice.LocalOffset(gui, centre, bottom - 92))
+			staFill.Size = UDim2.new(frac, -4, 1, -4)
+			staFill.BackgroundColor3 = STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * .85)
+			local want = frac < .999 and 1 or 0
+			barShown += (want - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
+			staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
+			staFill.BackgroundTransparency = 1 - barShown
+		end
+		-- Force the own-body display to refresh when spectating ends.
+		lastFrac = -1
+		return
+	end
+	local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
+	local physicalTrigger = gamepadSprintDown()
+	if shiftSprintHeld ~= physicalShift or gamepadSprintHeld ~= physicalTrigger then
+		shiftSprintHeld, gamepadSprintHeld = physicalShift, physicalTrigger
+		refreshSprint() -- also repairs the in-round state used by stamina/noise
+	end
+	if not inRound() then
+		stamina = staminaMax()
+		exhausted = false
+
+		-- Lobby sprint is unlimited and self-healing. Keep input state as the source
+		-- of truth and repair WalkSpeed if avatar loading or a core script restores
+		-- Roblox's default speed while the player is still holding RUN.
+		sprinting = sprintRequested()
+		state = sprinting and "sprint" or "walk"
+		local character, hum = currentChar()
+		local desiredSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
+		if character and hum and hum.Health > 0 then
+			if character:GetAttribute("Level2_DesiredWalkSpeed") ~= desiredSpeed then
+				character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+			end
+			if hum.WalkSpeed ~= desiredSpeed then hum.WalkSpeed = desiredSpeed end
+		end
+
+		-- Lobby stamina never moves, so these three used to be written on every
+		-- single lobby frame. Compare before writing instead. Deliberately NOT
+		-- through lastFrac/lastExhausted: those are the in-round bar's dirty
+		-- cache, and priming them to 1/false here would make the first in-round
+		-- frame (frac is exactly 1, stamina is reset just above) skip the block
+		-- that repairs staFill's Size and BackgroundColor3 -- leaving last
+		-- round's stale narrow red bar behind the moment anything shows the bar
+		-- at full stamina.
+		if player:GetAttribute("Stamina") ~= 1 then player:SetAttribute("Stamina", 1) end
+		barShown = 0
+		if staBg.BackgroundTransparency ~= 1 then staBg.BackgroundTransparency = 1 end
+		if staFill.BackgroundTransparency ~= 1 then staFill.BackgroundTransparency = 1 end
+		return
+	end
+	local char = player.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	local moving = root
+		and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude > 2
+	if (speedBoost() > 1) ~= boostActive then refreshSpeedBoost() end
+
+	if devUnlimited() then
+		stamina = staminaMax() -- dev cheat: never drains
+		exhausted = false
+	elseif state == "sprint" and moving
+		and not (char and char:GetAttribute("Level2_ForcedSliding") == true) then
+		-- adrenaline: the Entity is (or was just) on you → stamina lasts 3x longer
+		stamina = stamina - (SPRINT_DRAIN / (adrenalized() and ADRENALINE_MUL or 1)) * dt
+		if stamina <= 0 then
+			stamina = 0
+			exhausted = true
+			applySpeed() -- drop out of sprint
+		end
+	else
+		stamina = math.min(staminaMax(), stamina + STAMINA_RECHARGE * dt)
+		if exhausted and stamina >= STAMINA_RECOVER then
+			exhausted = false
+			applySpeed() -- sprint available again if shift still held
+		end
+	end
+
+	local frac = stamina / staminaMax()
+	if not inPreview() and os.clock() - lastVitalReport >= .25 then
+		lastVitalReport = os.clock()
+		vitalRemote:FireServer("spectatevital", {Key = "Stamina", Value = math.clamp(frac, 0, 1)})
+	end
+	if exhausted ~= lastExhausted or math.abs(frac - lastFrac) > 0.001 then
+		lastFrac, lastExhausted = frac, exhausted
+		-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
+		player:SetAttribute("Stamina", frac)
+
+		-- bar: width + white→red colour (solid red while exhausted), fade with use
+		staFill.Size = UDim2.new(frac, -4, 1, -4)
+		staFill.BackgroundColor3 = exhausted and STA_EMPTY
+			or STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * 0.85)
+	end
+	local wantShown = (frac < 0.999) and 1 or 0
+	barShown = barShown + (wantShown - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
+	if math.abs(wantShown - barShown) < 0.002 then
+		barShown = wantShown -- settled; stop re-dirtying the GUI every frame
+	else
+		staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
+		staFill.BackgroundTransparency = 1 - barShown
+	end
+end)
+
+-- Every state in which the movement cluster must not be usable. Hiding alone is
+-- not enough: a TextButton left Active keeps swallowing taps through a
+-- transparent background, so all four go through UIDevice.SetInteractive, which
+-- clears Active/Selectable/Modal as well as Visible.
+local function controlsAvailable()
+	if not touchControls() then return false end
+	return movementAvailable()
+end
+
+-- A modal owns the screen whether or not a round is running. `controlsAvailable`
+-- answers false out of a round for a different reason -- there is no round --
+-- and the RUN exception below rides on that, so the lobby's RUN button stayed
+-- live and Active underneath the Zyntra terminal, competing with a modal that
+-- now uses the whole safe area. Stated separately so the exception cannot
+-- swallow it.
+local function modalOwnsScreen()
+	return player:GetAttribute("ZyntraStoreOpen") == true
+		or player:GetAttribute("DevPhoneOpen") == true
+		or player:GetAttribute("ZyntraReentryOpen") == true
+		or player:GetAttribute("QueueModalOpen") == true
+end
+
+local wasRoundActive = inRound()
+local function updateRoundState()
+	applyStaminaLayout()
+	local active = inRound()
+	local usable = controlsAvailable()
+	if not movementAvailable() and (crouching or keyboardCrouchHeld
+		or controllerCrouchToggled or touchSneakToggled) then
+		cancelCrouch()
+	end
+	gui.Enabled = true
+	-- RUN stays available in the lobby (it is how a player sprints to a station)
+	-- but is gated on every other unavailable state once a round starts -- and,
+	-- in or out of a round, on no modal owning the screen.
+	UIDevice.SetInteractive(touchRunButton,
+		touchControls() and (usable or not active) and not modalOwnsScreen())
+	UIDevice.SetInteractive(touchJumpButton, usable)
+	-- SNEAK is a level-only control: there is nothing to crouch away from in the
+	-- lobby, and applySpeed() ignores crouch out of a round anyway.
+	UIDevice.SetInteractive(touchSneakButton, usable)
+	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
+	UIDevice.SetInteractive(touchGlowButton, usable and not inPreview())
+	-- Own the jump control only while in a round. In the lobby the default
+	-- touch jump comes back, because that is the only jump there is there.
+	UIDevice.SuppressDefaultJump(touchControls() and active)
+	-- The RUN slot depends on whether the engine's jump button is showing.
+	applyTouchControlLayout()
+	-- Stamina is only meaningful while the player is the one running. Dead,
+	-- escaped or spectating, the bar is stale information sitting in the same
+	-- band as the spectate caption, so it stands down with the controls.
+	staBg.Visible = active
+		and not isEscaped()
+		and player:GetAttribute("Spectating") ~= true
+	if not active then
+		lastGlowstickDrop = -math.huge
+		-- Reset level-only latches once on the round→lobby transition. Ordinary
+		-- lobby UI/layout refreshes must not switch RUN off underneath the player.
+		if wasRoundActive then
+			-- The touch latch is a UI toggle and is dropped. Shift and the left
+			-- trigger are PHYSICAL holds, so a player who leaves a round still
+			-- holding one keeps sprinting in the lobby instead of stopping dead
+			-- until they let go and press again.
+			shiftSprintHeld, touchSprintHeld = keyboardSprintHeld(), false
+			sprinting = sprintRequested()
+			cancelCrouch()
+			touchSprintToggled = false
+			showRunEnabled(false)
+		end
+		applySpeed()
+	elseif not isHiding() then
+		-- The hiding controller restores the speed it captured on entry. Reapply
+		-- the CURRENT aggregate input state on exit so crouch -> hide -> stand
+		-- cannot leave the player stuck at the old 8-stud crouch speed.
+		applySpeed()
+	end
+	wasRoundActive = active
+end
+player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
+player:GetAttributeChangedSignal("Level6InRound"):Connect(updateRoundState)
+for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Level6Escaped", "Level6_Hiding", "Spectating",
+	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen"}) do
+	player:GetAttributeChangedSignal(attribute):Connect(updateRoundState)
+end
+UIDevice.Changed:Connect(updateRoundState)
+local function bindLife(character)
+	local humanoid = character:WaitForChild("Humanoid", 8)
+	if humanoid then
+		humanoid.Died:Connect(updateRoundState)
+		humanoid.StateChanged:Connect(function(_, newState)
+			if crouching and CROUCH_BLOCKED_STATES[newState] then cancelCrouch() end
+		end)
+	end
+	local function cancelForLevel2Lock()
+		if crouching and (character:GetAttribute("Level2_ForcedSliding") == true
+			or character:GetAttribute("Level2_RagdollServerActive") == true) then
+			cancelCrouch()
+		end
+	end
+	character:GetAttributeChangedSignal("Level2_ForcedSliding"):Connect(cancelForLevel2Lock)
+	character:GetAttributeChangedSignal("Level2_RagdollServerActive"):Connect(cancelForLevel2Lock)
+	updateRoundState()
+end
+if player.Character then task.spawn(bindLife, player.Character) end
+player.CharacterAdded:Connect(bindLife)
+updateRoundState()
+-- Client-local readiness: all gameplay input and lifecycle handlers are wired.
+player:SetAttribute("RoundEntryControlsReady", true)

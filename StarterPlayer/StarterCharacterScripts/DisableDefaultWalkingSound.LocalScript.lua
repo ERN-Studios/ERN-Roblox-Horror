@@ -1,0 +1,5 @@
+-- Compatibility marker.
+-- SoundController now switches the Roblox Running sound dynamically:
+-- enabled in the lobby, muted only while InRound so custom level footsteps can
+-- play without being doubled. Keeping this script inert avoids two competing
+-- writers on HumanoidRootPart.Running.Volume.

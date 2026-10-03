@@ -1,0 +1,7 @@
+-- First Entry Guide -- RETIRED 2026-09-24 (Trello PuuOYhmH, owner request).
+--
+-- The one-time "LEVEL 1 START HERE" trail and pad marker are removed from the
+-- lobby; this script now does nothing. Its TRY AGAIN mode went on 2026-09-22
+-- and Field Notes are retired -- neither belongs back here. ZyntraFirstLogin is
+-- still published by ZyntraMonetization (analytics reads it). The last working
+-- source is in git at 8e623de.
