@@ -30,8 +30,8 @@ SURFACE = {
     'arcade_carpet': ('Carpet', 0, True), 'arcade_carpet2': ('Carpet', 0, True), 'floor_purple': ('Carpet', 0, True),
     'floor_pink': ('SmoothPlastic', 0, True), 'snack_a': ('SmoothPlastic', 0, True), 'snack_b': ('SmoothPlastic', 0, True),
     'wall_staff': ('Plaster', 0, True), 'wall_pink': ('Plaster', 0, True), 'wall_purple': ('Plaster', 0, True),
-    'ceiling_tile': ('Plaster', 0, True), 'ballsea': ('SmoothPlastic', 0, True), 'column': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
-    'net_yellow': ('SmoothPlastic', 0.5, True), 'net_black': ('SmoothPlastic', 0.75, True),
+    'ceiling_tile': ('Plaster', 0, True), 'ballsea': ('SmoothPlastic', 0, True), 'column': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('Fabric', 0.6, True),
+    'net_yellow': ('Fabric', 0.5, True), 'net_black': ('Fabric', 0.75, True),
 }
 EXTRA_RGB = {'lamp_magenta': (255, 40, 200), 'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
              'net_blue': (20, 40, 150), 'net_yellow': (215, 170, 30), 'net_black': (12, 12, 12)}
