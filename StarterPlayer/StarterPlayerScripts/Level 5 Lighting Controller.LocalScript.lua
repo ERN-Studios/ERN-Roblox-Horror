@@ -164,6 +164,46 @@ task.spawn(function()
 		end
 	end)
 
+	-- FOOTSTEPS_20261004: the level's own steps (boots on rough plaster), a walk loop and a run loop that only
+	-- sound while the body is on the ground and moving, and a landing after every jump.
+	local STEP_VOLUME = 0.3
+	local walkLoop, runLoop = clip("l5_steps_walk", true), clip("l5_steps_run", true)
+	local landed = setmetatable({}, {__mode = "k"})
+	local function hookLanding(character)
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if not humanoid or landed[humanoid] then return end
+		landed[humanoid] = true
+		humanoid.StateChanged:Connect(function(_, state)
+			if state == Enum.HumanoidStateType.Landed and inLevel() then oneShot("l5_land", 0.32) end
+		end)
+	end
+	-- AMBIENT_20261004: now and then something far off in the hall. Each plays once from a random point well
+	-- away from the listener, so it has a direction and never the same one twice.
+	local AMBIENT = {"l5_amb_knock", "l5_amb_door", "l5_amb_groan", "l5_amb_gust", "l5_amb_ball", "l5_amb_steps",
+		"l5_amb_chime", "l5_amb_drip", "l5_amb_hum", "l5_amb_breath"}
+	local nextAmbient, lastAmbient = os.clock() + 10 + math.random() * 10, nil
+	local function ambientAt(position)
+		local name
+		repeat name = AMBIENT[math.random(#AMBIENT)] until name ~= lastAmbient
+		lastAmbient = name
+		local angle, distance = math.random() * math.pi * 2, 45 + math.random() * 70
+		local holder = Instance.new("Part")
+		holder.Name = "Level5Ambient"
+		holder.Anchored, holder.CanCollide, holder.CanQuery, holder.CanTouch = true, false, false, false
+		holder.Transparency = 1
+		holder.Size = Vector3.one
+		holder.Position = position + Vector3.new(math.cos(angle) * distance, -30 + math.random() * 50, math.sin(angle) * distance)
+		holder.Parent = workspace
+		local sound = clip(name, false, holder)
+		if not sound then holder:Destroy() return end
+		sound.Volume = 0.45 + math.random() * 0.3
+		sound.PlaybackSpeed = 0.92 + math.random() * 0.16
+		sound.RollOffMode, sound.RollOffMinDistance, sound.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 30, 260
+		sound:Play()
+		sound.Ended:Once(function() holder:Destroy() end)
+		task.delay(12, function() if holder.Parent then holder:Destroy() end end)
+	end
+
 	local rolling = setmetatable({}, {__mode = "k"})
 	local nextCreak = os.clock() + 8
 	local down = RaycastParams.new()
@@ -181,9 +221,33 @@ task.spawn(function()
 		local model = workspace:FindFirstChild(MODEL_NAME)
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
-		if not on or not model or not root then
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if not on or not model or not root or not humanoid then
 			if fall and fall.IsPlaying then fall:Stop() end
+			for _, loop in ipairs({walkLoop, runLoop}) do
+				if loop and loop.IsPlaying then loop:Stop(); loop.Volume = 0 end
+			end
 			continue
+		end
+		hookLanding(character)
+		do
+			local velocity = root.AssemblyLinearVelocity
+			local flat = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+			local grounded = humanoid.FloorMaterial ~= Enum.Material.Air and humanoid.Health > 0
+			local running = humanoid.WalkSpeed > 20
+			for loop, wanted in pairs({[walkLoop or false] = not running, [runLoop or false] = running}) do
+				if loop then
+					local target = (grounded and flat > 2 and wanted) and STEP_VOLUME or 0
+					loop.Volume += (target - loop.Volume) * 0.5
+					loop.PlaybackSpeed = math.clamp(flat / (running and 26 or 16), 0.6, 1.15)   -- a crouched walk steps slower
+					if target > 0 and not loop.IsPlaying then loop:Play()
+					elseif target == 0 and loop.IsPlaying and loop.Volume < 0.01 then loop:Stop() end
+				end
+			end
+		end
+		if os.clock() > nextAmbient then
+			nextAmbient = os.clock() + 14 + math.random() * 20
+			ambientAt(root.Position)
 		end
 		-- the listener's own fall: the rush starts once the drop is real, and the server's "fell" cuts it
 		if fall then

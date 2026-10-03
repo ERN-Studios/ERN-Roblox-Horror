@@ -88,5 +88,83 @@
     "seconds": 2.037551,
     "loop": false,
     "prompt": "One narrow beam creaking faintly under weight in a huge silent room, subtle dry strained creak with a delicate spacious echo. No break or snap. For Level 5: the void rooms, huge empty single-colour pastel halls over a bottomless black drop. Dreamlike, lonely, uneasy, quiet and restrained. No music, no rhythm, no voices, no speech, no jump scare."
+  },
+  {
+    "name": "l5_steps_walk.mp3",
+    "seconds": 6.034286,
+    "loop": true,
+    "prompt": "Calm walking, 2 evenly spaced steps per second, alternating rubber boot thuds with subtle grit. Continuous seamless loop, no fades. Rubber hazmat boots on dry rough painted plaster/concrete ledges in a huge empty hall. Close dry foley, only a faint large-room reverb tail. Steady level. No music, voice, breathing, cloth rustle or ambience."
+  },
+  {
+    "name": "l5_steps_run.mp3",
+    "seconds": 5.041633,
+    "loop": true,
+    "prompt": "Running, about 3.3 evenly spaced steps per second, alternating harder heavier rubber boot impacts with subtle grit. Continuous seamless loop, no fades. Rubber hazmat boots on dry rough painted plaster/concrete ledges in a huge empty hall. Close dry foley, only a faint large-room reverb tail. Steady level. No music, voice, breathing, cloth rustle or ambience."
+  },
+  {
+    "name": "l5_land.mp3",
+    "seconds": 0.626939,
+    "loop": false,
+    "prompt": "One two-footed jump landing, both boots together as one solid thud with slight grit. Immediate impact and short decay, no extra steps or bounce. Rubber hazmat boots on dry rough painted plaster/concrete ledges in a huge empty hall. Close dry foley, only a faint large-room reverb tail. Steady level. No music, voice, breathing, cloth rustle or ambience."
+  },
+  {
+    "name": "l5_amb_knock.mp3",
+    "seconds": 3.030204,
+    "loop": false,
+    "prompt": "Two slow dull knocks on a hollow wall somewhere far off, at the beginning and about one second later; only the echo remains afterwards. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_door.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "A heavy door closing very far away, one subdued deep boom early, followed by a long receding echo. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_groan.mp3",
+    "seconds": 5.041633,
+    "loop": false,
+    "prompt": "The building itself settling: one low slow structural groan, softly bending plaster and distant beams, rising early then settling away. Mechanical architecture, no creature. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_gust.mp3",
+    "seconds": 5.041633,
+    "loop": false,
+    "prompt": "One soft gust of air passing through the distant hall, gently rising and fading, airy and diffuse, then a lingering reverberant tail. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_ball.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "A rubber ball bouncing a few times far away, diminishing hollow rubber impacts with intervals getting closer together, finishing early enough for echoes to decay, then silence. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_steps.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "Four unhurried footsteps of someone else very far away on plaster, soft dull separated footfalls, then they stop and only fading hall echo remains. No other human sounds. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_chime.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "One faint glassy high tone ringing out like a softly touched wine glass far away. One delicate ping early followed by a long natural shimmering decay. No melody. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_drip.mp3",
+    "seconds": 3.030204,
+    "loop": false,
+    "prompt": "Two single water drops falling into a deep distant space, separated sparse plinks near the start with hollow spacious echo, then only the decaying tail. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_hum.mp3",
+    "seconds": 6.034286,
+    "loop": false,
+    "prompt": "A distant electrical hum gently swelling once and slowly dying away. Low restrained transformer resonance, no tune, ending in a long quiet hall decay. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_amb_breath.mp3",
+    "seconds": 4.04898,
+    "loop": false,
+    "prompt": "One long slow exhale made entirely of diffuse filtered air, as if the empty room itself breathed out. A distant soft air release, gently swelling then dissolving. Absolutely no human voice character, mouth sound or human breathing. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
   }
 ]
