@@ -516,7 +516,8 @@ local function inside()
 end
 
 -- marker, music and the red finale
-local RED = Color3.fromRGB(255, 14, 8)
+-- not a pure red: pure red light turns the blue and green floor black
+local RED = Color3.fromRGB(255, 40, 28)
 local litBefore = setmetatable({}, {__mode = "k"})     -- light or lamp -> {colour, brightness}
 local FINALE_FOLDERS = {"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}
 task.spawn(function()
@@ -575,8 +576,9 @@ task.spawn(function()
 								end
 								if d:IsA("SpotLight") then              -- the ceiling fixtures: red cones straight down
 									d.Color = before[1]:Lerp(RED, ease)
-									d.Angle = before[3] + (62 - before[3]) * ease
-									d.Brightness = before[2] * (1 + 2.2 * ease)
+									d.Angle = before[3] + (85 - before[3]) * ease
+									-- low on purpose: the yellow and red padding reflects red far more than the floor does
+									d.Brightness = before[2] + (0.2 - before[2]) * ease
 								elseif isLight then                     -- room and bar lights go out
 									d.Brightness = before[2] * (1 - ease)
 								elseif folderName == "Ceiling_Fixtures" then
@@ -596,10 +598,10 @@ task.spawn(function()
 			end
 			if grade then
 				grade.TintColor = Color3.fromRGB(238, 245, 255)   -- never tinted: the red comes from the lamps only
-				grade.Contrast = -0.17 + 0.25 * ease              -- the grey haze goes, so the dark between the pools is dark
+				grade.Contrast = -0.17 + 0.22 * ease              -- the grey haze goes, so the dark between the pools is dark
 				grade.Saturation = 0.08
 			end
-			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.5 * ease
+			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.2 * ease
 		end
 	end
 end)
