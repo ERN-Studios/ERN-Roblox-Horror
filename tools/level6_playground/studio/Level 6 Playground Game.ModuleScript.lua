@@ -30,13 +30,14 @@ local CONFIG = {
 	SeekSeconds = 75,
 	TagsToWin = 3,
 	DunkRadius = 7, DunkSafeDistance = 22,
-	WalkSpeed = 9, ChaseSpeed = 20, EscapeChaseSpeed = 24,   -- it is furious once the exit opens
+	WalkSpeed = 9, ChaseSpeed = 40, EscapeChaseSpeed = 24,   -- seen = as good as dead (owner, 2026-10-03); furious once the exit opens
 	SightRange = 75, CatchDistance = 5.2, HideRadius = 4.5, HiddenSpotRange = 9,
-	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
-	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 2.2,
+	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 15, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
+	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 4.3,   -- the length of the kill cam
+	GrabDistance = 3.6,   -- how far in front of its victim it stands for the kill cam
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
 	EyeHeight = 2.6,   -- eyes above the root
-	SpottedPause = 0.9,
+	SpottedPause = 0.7,
 	IntroSilence = 5,  -- seconds of quiet after the players arrive, before the PA chime
 }
 
@@ -107,14 +108,17 @@ local VOICE = {
 	exit = {"l6_exit_1", "l6_exit_2"},
 	-- the lines for when it has lost; until the owner records l6_angry_*, the exit lines stand in
 	angry = {"l6_angry_1", "l6_angry_2", "l6_angry_3"},
+	sprint = {"l6_sprint_1", "l6_sprint_2"},          -- shrieked as it starts to run at you
+	kill = {"l6_kill_1", "l6_kill_2", "l6_kill_3"},   -- whispered in the kill cam
 }
+local FALLBACK = {angry = "exit", sprint = "spot", kill = "found"}   -- until a group's lines are installed
 local lastLine = {}
 local function pick(group)
 	local list = VOICE[group]
-	if group == "angry" then
+	if FALLBACK[group] then
 		local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
 		voice = voice and voice:FindFirstChild("Voice")
-		if not (voice and voice:FindFirstChild(list[1])) then list = VOICE.exit end
+		if not (voice and voice:FindFirstChild(list[1])) then list = VOICE[FALLBACK[group]] end
 	end
 	local i = math.random(#list)
 	if #list > 1 and i == lastLine[group] then i = i % #list + 1 end
@@ -465,11 +469,27 @@ function Session:catch(player)
 	for other in pairs(self.players) do
 		if other ~= player then event:FireClient(other, "caught", player.DisplayName, false) end
 	end
-	self.pauseUntil = os.clock() + 1.6
+	-- The kill cam: the victim is held where they stand, the doll squares up in front of them with its
+	-- arms out, and their client pulls the camera into its face. They leave when the screen cuts to black.
+	local held = rootOf(player)
+	if held then
+		held.AssemblyLinearVelocity = Vector3.zero
+		held.Anchored = true
+		local feet = self:feet()
+		-- at chase speed it is usually standing on top of them by now: back off the way it came
+		local to = flat(held.Position - feet)
+		if to.Magnitude < 0.5 then to = flat(self.root.CFrame.LookVector) end
+		if to.Magnitude < 0.1 then to = Vector3.zAxis end
+		local stand = Vector3.new(held.Position.X, feet.Y, held.Position.Z) - to.Unit * CONFIG.GrabDistance
+		self:place(self:surface(stand), to)
+	end
+	self.pauseUntil = os.clock() + CONFIG.CaughtReturnDelay
+	self.killUntil = os.clock() + CONFIG.CaughtReturnDelay + 0.5
 	self.interrupt = true
 	self:pose("Catch")
-	self:say(pick("found"), true)
+	self:say(pick("kill"), true)
 	task.delay(CONFIG.CaughtReturnDelay, function()
+		if held and held.Parent then held.Anchored = false end
 		if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
 			returnHandler(player, "caught")
 		end
@@ -480,9 +500,9 @@ function Session:catch(player)
 	if left == 0 then
 		broadcast(self, "lost")
 		self.phase = "over"
-		task.delay(1.8, function() broadcast(self, "say", "l6_win") end)
+		task.delay(CONFIG.CaughtReturnDelay + 0.2, function() broadcast(self, "say", "l6_win") end)   -- not over the kill cam
 	elseif self.active then
-		task.delay(2.0, function() if self.active then self:say("l6_found_other", true) end end)
+		task.delay(CONFIG.CaughtReturnDelay + 0.4, function() if self.active then self:say("l6_found_other", true) end end)
 	end
 end
 
@@ -566,14 +586,15 @@ function Session:seekBrain(deadline)
 				end
 				local target = root.Position - Vector3.new(0, 3, 0)
 				local direct = (target - self:feet()).Magnitude < 28 and os.clock() - (self.lastSeen or 0) < 0.4
-				local points = direct and {self:feet(), target} or self:path(target)
+				-- no route is no obstacle: it comes straight through whatever is in the way
+				local points = direct and {self:feet(), target} or self:path(target) or {self:feet(), target}
 				if points then
 					-- re-plan often while chasing; only the first stretch of the route is used
 					local short = {points[1]}
 					for i = 2, math.min(#points, 5) do short[#short + 1] = points[i] end
 					local started = os.clock()
 					self.interrupt = false
-					task.delay(0.6, function() if os.clock() - started >= 0.55 then self.interrupt = true end end)
+					task.delay(0.35, function() if os.clock() - started >= 0.3 then self.interrupt = true end end)
 					self:follow(short, CONFIG.ChaseSpeed, "seek")
 				else
 					task.wait(0.2)
@@ -628,7 +649,7 @@ function Session:seekPhase()
 					local feet = self:feet()
 					local to = rootOf(seen)
 					if to then self:place(feet, flat(to.Position - feet)) end
-					self:say(pick("spot"), true)
+					self:say(pick("sprint"), true)
 					self.nextChaseLine = os.clock() + 4
 				end
 			end
@@ -779,6 +800,8 @@ function Session:run()
 			task.wait((seconds or 2) + 0.3)
 		end
 	end
+	-- a kill cam is looking at the doll: it stays until that is over
+	while os.clock() < (self.killUntil or 0) do task.wait(0.1) end
 	self:finish()
 end
 

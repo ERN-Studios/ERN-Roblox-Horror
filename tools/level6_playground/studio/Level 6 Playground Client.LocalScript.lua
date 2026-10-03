@@ -421,7 +421,9 @@ local function say(key, paOnly)
 		end
 	end
 end
+local killCam = function() end   -- assigned below, once the doll's rig code exists
 local dunked = false
+local horror = {chase = false, rage = false}
 event.OnClientEvent:Connect(function(kind, a, b)
 	if kind == "say" then
 		say(a)
@@ -429,10 +431,41 @@ event.OnClientEvent:Connect(function(kind, a, b)
 		say(a, true)
 	elseif kind == "dunk" or kind == "escaped" then
 		if not oneShot("l6_tag", 0.5) then SFX.ping:Play() end
-	elseif kind == "chase" and a then
-		oneShot("l6_sting_spotted", 0.45)                 -- it has seen you
+	elseif kind == "chase" then
+		if a and not oneShot("l6_chase_shriek", 0.9) then oneShot("l6_sting_spotted", 0.45) end   -- it has seen you
+		horror.chase = a == true
 	elseif kind == "caught" then
-		oneShot("l6_catch", b and 0.8 or 0.3)             -- loud for the one who was caught
+		if b then
+			horror.chase = false
+			if not oneShot("l6_kill_grab", 1) then oneShot("l6_catch", 0.8) end
+			task.delay(1.3, function() oneShot("l6_kill_breath", 0.9) end)
+		else
+			oneShot("l6_catch", 0.3)
+		end
+	elseif kind == "won" then
+		oneShot("l6_rage_scream", 1)                      -- it lost, and it is not taking it well
+		horror.rage = true
+	elseif kind == "left" or kind == "lost" or kind == "escaped" or kind == "joined" then
+		horror.chase, horror.rage = false, false
+	end
+end)
+-- The beds under a chase and under the finale. They fade in and out; nothing else in the level loops this loud.
+task.spawn(function()
+	local beds = {chase = {"l6_chase_loop", 0.55}, rage = {"l6_rage_loop", 0.5}}
+	while true do
+		local dt = task.wait(0.05)
+		for name, bed in pairs(beds) do
+			local s = audio:FindFirstChild("L6Loop_" .. bed[1])
+			local want = horror[name] and player:GetAttribute(IN_PREVIEW) == true
+			if want and not s then
+				s = loopOn(audio, bed[1], 0)
+				if s then s:Play() end
+			end
+			if s then
+				s.Volume += math.clamp((want and bed[2] or 0) - s.Volume, -dt * 0.6, dt * 0.9)
+				if not want and s.Volume <= 0.01 then s:Destroy() end
+			end
+		end
 	end
 end)
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
@@ -484,9 +517,10 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		if a then status("IT SEES YOU. RUN!", 2, Color3.fromRGB(255, 60, 60)) end
 	elseif kind == "caught" then
 		if b then
-			pulse(flash, "BackgroundTransparency", 0, 1, 2)
-			countLabel.Text = "FOUND YOU!"
-			status("You were found. Back to the lobby . . .", 3, Color3.fromRGB(255, 80, 80))
+			vignette.ImageTransparency = 1
+			countLabel.Text = ""
+			objective(nil)
+			killCam()
 		else
 			status("It found " .. tostring(a) .. ".", 3, Color3.fromRGB(255, 120, 120))
 		end
@@ -505,7 +539,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		countLabel.Text = "LEVEL 6 CLEARED"
 		status("You got out.", 4, Color3.fromRGB(120, 255, 150))
 	elseif kind == "lost" then
-		countLabel.Text = "EVERYONE WAS FOUND"
+		countLabel.Text = horror.killing and "" or "EVERYONE WAS FOUND"
 		markerMode = nil
 		objective(nil)
 		timerLabel.Text = ""
@@ -795,6 +829,94 @@ local function rigOf(child)
 		nextTwitch = os.clock() + 3, twitchT = nil}
 	rigs[child] = rig
 	return rig
+end
+
+-- Kill cam: the camera is torn off the player, turned onto the doll's face and dragged into it while the
+-- field of view closes; then the screen cuts to black and stays black until the lobby has them back.
+killCam = function()
+	local child = childModel()
+	local rig = child and rigOf(child)
+	local dollRoot = child and child:FindFirstChild("Root")
+	local cam = workspace.CurrentCamera
+	local function blackout()
+		-- its own frame: the red hit flash is still fading on the shared one
+		local black = Instance.new("Frame")
+		black.Name, black.Size, black.BorderSizePixel = "KillBlack", UDim2.fromScale(1, 1), 0
+		black.BackgroundColor3, black.ZIndex = Color3.new(0, 0, 0), 60
+		local cover = Instance.new("ScreenGui")
+		cover.Name, cover.IgnoreGuiInset, cover.ResetOnSpawn, cover.DisplayOrder = "Level6KillCover", true, false, 900
+		black.Parent = cover
+		cover.Parent = player:WaitForChild("PlayerGui")
+		task.spawn(function()
+			local t0 = os.clock()
+			while player:GetAttribute(IN_PREVIEW) == true and os.clock() - t0 < 9 do task.wait(0.1) end
+			task.wait(0.8)
+			cam.CameraType = Enum.CameraType.Custom
+			pulse(black, "BackgroundTransparency", 0, 1, 1.2)
+			task.wait(1.3)
+			cover:Destroy()
+		end)
+	end
+	if not (rig and dollRoot and cam) then
+		pulse(flash, "BackgroundTransparency", 0, 1, 0.5)
+		task.delay(3.4, blackout)
+		return
+	end
+	local DURATION, TURN = 3.7, 0.3
+	-- nothing on screen but the doll: the level HUD and the flashlight gauge come back with the lobby
+	horror.killing = true
+	local shown = {}
+	for _, item in ipairs(gui:GetChildren()) do
+		if item:IsA("GuiObject") and item ~= flash and item.Visible then
+			shown[item] = true
+			item.Visible = false
+		end
+	end
+	local gauge = player.PlayerGui:FindFirstChild("FlashlightPopup")
+	if gauge then gauge.Enabled = false end
+	task.delay(DURATION + 6, function()
+		horror.killing = false
+		objective(nil)
+		for item in pairs(shown) do
+			if item ~= card then item.Visible = true end
+		end
+	end)
+	local startCF, startFov = cam.CFrame, cam.FieldOfView
+	cam.CameraType = Enum.CameraType.Scriptable
+	pulse(flash, "BackgroundTransparency", 0.35, 1, 0.5)   -- the hit
+	local t0 = os.clock()
+	local connection
+	connection = RunService.RenderStepped:Connect(function()
+		local t = os.clock() - t0
+		if t >= DURATION or not child.Parent then
+			connection:Disconnect()
+			cam.FieldOfView = startFov
+			blackout()
+			return
+		end
+		-- a Scriptable camera un-hides the first-person body, and the camera starts inside it
+		local own = player.Character
+		if own then
+			for _, part in ipairs(own:GetDescendants()) do
+				if part:IsA("BasePart") or part:IsA("Decal") then part.LocalTransparencyModifier = 1 end
+			end
+		end
+		local face = rig.bones.Head.TransformedWorldCFrame.Position + Vector3.new(0, 0.22, 0)   -- its eyes, not its chin
+		local toward = dollRoot.CFrame.LookVector
+		-- held at arm's length for a moment, then dragged in faster and faster
+		local pull = math.clamp((t - 0.9) / (DURATION - 0.9), 0, 1)
+		pull = pull * pull * pull
+		local hold = face + toward * 3.1 + Vector3.new(0, -0.5, 0)
+		local close = face + toward * 0.85
+		local grab = math.clamp(t / TURN, 0, 1)
+		grab = 1 - (1 - grab) * (1 - grab)
+		local position = startCF.Position:Lerp(hold, grab):Lerp(close, pull)
+		local tremble = (0.03 + 0.1 * pull) * (player:GetAttribute("ReduceCameraShake") == true and 0.2 or 1)
+		position += Vector3.new(math.noise(t * 21, 0.5) * tremble, math.noise(0.5, t * 23) * tremble, 0)
+		local aim = CFrame.lookAt(position, face)
+		cam.CFrame = CFrame.new(position) * startCF.Rotation:Lerp(aim.Rotation, grab)
+		cam.FieldOfView = startFov + (34 - startFov) * pull
+	end)
 end
 
 -- frame position -> two frame indices and the blend between them

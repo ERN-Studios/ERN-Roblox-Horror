@@ -3,16 +3,16 @@
  "hall_studs": [
   600,
   400,
-  60
+  46
  ],
  "frame_cells": [
   12,
   14,
   3
  ],
- "primitives": 6726,
- "objects": 35,
- "triangles": 81422,
+ "primitives": 7991,
+ "objects": 50,
+ "triangles": 176286,
  "hide_spots": {
   "punchbag": 9,
   "tube": 2,
@@ -24,11 +24,11 @@
   "staff_nook": 12,
   "ballpit": 4,
   "playhouse": 5,
-  "softblock": 2,
+  "softblock": 13,
   "toddler_pool": 1,
-  "inflatable": 3,
+  "inflatable": 2,
   "home": 1
  },
- "signs": 31,
+ "signs": 25,
  "authoring": "Blender Z up, 1 BU = 1 Roblox stud"
 }

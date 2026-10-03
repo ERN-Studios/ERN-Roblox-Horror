@@ -25,6 +25,9 @@ SURFACE = {
     'duct': ('Metal', 0, True), 'pipe_red': ('Metal', 0, True), 'stainless': ('Metal', 0, True),
     'wood': ('Wood', 0, True), 'lamp_on': ('Neon', 0, True), 'lamp_warm': ('Neon', 0, True),
     'exit_sign': ('Neon', 0, True), 'lamp_magenta': ('Neon', 0, True), 'glass': ('Glass', 0.55, True),
+    **{k: ('Fabric', 0, False) for k in ('plush_brown', 'plush_tan', 'plush_pink', 'plush_white', 'plush_blue',
+       'plush_yellow', 'plush_green', 'plush_purple', 'plush_orange', 'plush_black', 'plush_red', 'plush_teal')},
+    'shelf_wood': ('Wood', 0, True),
     'mat_pink': ('Rubber', 0, True), 'mat_mint': ('Rubber', 0, True), 'inflate_a': ('Rubber', 0, True),
     'inflate_b': ('Rubber', 0, True), 'navy': ('Rubber', 0, True), 'carpet': ('Carpet', 0, True),
     'arcade_carpet': ('Carpet', 0, True), 'arcade_carpet2': ('Carpet', 0, True), 'floor_purple': ('Carpet', 0, True),
@@ -396,9 +399,28 @@ for line in string.gmatch(PROPS, "[^\\n]+") do
 			local glass = Instance.new("Part")
 			glass.Name, glass.Anchored, glass.CanCollide, glass.CanTouch, glass.CanQuery = "Glass", true, false, false, false
 			glass.Material, glass.Transparency, glass.Color = Enum.Material.Glass, 0.6, Color3.fromRGB(190, 225, 240)
-			glass.Size = Vector3.new(m.Size.X * 0.9, m.Size.Y * 0.4, m.Size.Z * 0.9)
-			glass.CFrame = m.CFrame * CFrame.new(0, m.Size.Y * 0.14, 0)
+			-- Measured on the mesh: the cabinet top is at 40% of the height and 84% x 94% of the bounding box,
+			-- the canopy starts at 86%. The first version was 90% of the full width and stuck out of the sides.
+			local sx, sy, sz = m.Size.X, m.Size.Y, m.Size.Z
+			local gx, gz, lo, hi = sx * 0.84, sz * 0.94, -0.10 * sy, 0.36 * sy
+			glass.Transparency = 0.78
+			glass.Size = Vector3.new(gx, hi - lo, gz)
+			glass.CFrame = m.CFrame * CFrame.new(0, (lo + hi) / 2, 0)
 			glass.Parent = props
+			local t = sx * 0.035
+			local function frame(size, offset)
+				local bar = Instance.new("Part")
+				bar.Name, bar.Anchored, bar.CanCollide, bar.CanTouch, bar.CanQuery = "GlassFrame", true, false, false, false
+				bar.Material, bar.Color = Enum.Material.Metal, Color3.fromRGB(28, 28, 32)
+				bar.Size, bar.CFrame = size, m.CFrame * CFrame.new(offset)
+				bar.Parent = props
+			end
+			for _, cx in ipairs({-1, 1}) do
+				for _, cz in ipairs({-1, 1}) do
+					frame(Vector3.new(t, hi - lo, t), Vector3.new(cx * (gx - t) / 2, (lo + hi) / 2, cz * (gz - t) / 2))
+				end
+			end
+			frame(Vector3.new(gx + t, t, gz + t), Vector3.new(0, hi, 0))   -- the plate the canopy sits on
 		end
 	else
 		missing[f[1]] = true

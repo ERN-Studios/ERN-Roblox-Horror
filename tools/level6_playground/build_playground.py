@@ -38,6 +38,12 @@ def collection(name):
 
 # ---- materials ---------------------------------------------------------------------------
 PALETTE = {
+    # plush toys on the prize shelves (fabric, never collide)
+    'plush_brown': (0.20, 0.09, 0.03), 'plush_tan': (0.52, 0.33, 0.14), 'plush_pink': (0.80, 0.22, 0.40),
+    'plush_white': (0.85, 0.83, 0.78), 'plush_blue': (0.06, 0.22, 0.65), 'plush_yellow': (0.85, 0.60, 0.03),
+    'plush_green': (0.06, 0.42, 0.10), 'plush_purple': (0.30, 0.10, 0.55), 'plush_orange': (0.85, 0.25, 0.02),
+    'plush_black': (0.015, 0.015, 0.02), 'plush_red': (0.60, 0.03, 0.03), 'plush_teal': (0.03, 0.42, 0.42),
+    'shelf_wood': (0.30, 0.17, 0.08),
     # padded vinyl, slightly dirty 90s primaries
     # the concept art's deep, dusty colours, a little more saturated on the owner's request (linear RGB)
     'yellow': (0.66, 0.38, 0.01), 'red': (0.40, 0.02, 0.015), 'blue': (0.015, 0.04, 0.30),
@@ -1067,11 +1073,142 @@ def build_arcade():
     p.box((x0 + 8, 352, 0.35), (x1 - 8, 358, 4.6), 'pink')            # glass-fronted counter
     p.box((x0 + 7, 351, 4.6), (x1 - 7, 359, 5.0), 'yellow')
     p.box((x0 + 9, 351.6, 1), (x1 - 9, 352, 4.2), 'glass')
-    board(((x0 + x1) / 2, y1 - 0.7, 8.6), x1 - x0 - 12, 13.5, '-y', 'prize_wall')
+    prize_shelves(p, x0 + 6, x1 - 6, y1 - 0.5)
     wall_run(p, (x1, y0), (x1, y1), 14, 'wall_pink')
     p.finish()
     sign(((x0 + x1) / 2, y1 - 0.9, 17), 40, 4.5, '-y', 'PRIZES', (230, 90, 150), (255, 255, 255))
     HIDE.append(('counter', (x0 + x1) / 2, 364, 1))
+
+
+def prize_shelves(p, xa, xb, wall_y):
+    """A real shelf unit along the prize wall with 3D toys on it (owner: the photo board was a stretched picture).
+    Everything faces -y, into the room. Toys are balls, boxes and cylinders so they import as native parts."""
+    rng = random.Random(6061)
+    depth, back = 2.8, wall_y - 0.25
+    front = back - depth
+    levels = [1.6, 4.9, 8.2, 11.5]
+    p.box((xa, back, 0.35), (xb, wall_y, 15.2), 'shelf_wood')                      # back panel
+    for z in levels:
+        p.box((xa, front, z - 0.3), (xb, back, z), 'shelf_wood')                   # shelf board
+        p.box((xa, front - 0.05, z - 0.55), (xb, front + 0.12, z - 0.3), 'pink')   # price rail
+    p.box((xa, front, 14.8), (xb, back, 15.2), 'shelf_wood')
+    n_bays = 6
+    for k in range(n_bays + 1):
+        x = xa + (xb - xa) * k / n_bays
+        p.box((x - 0.25, front, 0.35), (x + 0.25, back, 15.2), 'shelf_wood')       # uprights
+    plush = ['plush_brown', 'plush_tan', 'plush_pink', 'plush_white', 'plush_blue', 'plush_yellow',
+             'plush_green', 'plush_purple', 'plush_orange', 'plush_red', 'plush_teal']
+
+    def eyes(cx, fy, z, gap, r=0.07):
+        for sx in (-1, 1):
+            p.ball((cx + sx * gap, fy, z), r, 'plush_black')
+
+    def bear(cx, cy, z, s, col, ear='ball', panda=False):
+        limb = 'plush_black' if panda else col
+        p.ball((cx, cy, z + 0.80 * s), 0.80 * s, col)                               # body
+        p.ball((cx, cy - 0.10 * s, z + 1.95 * s), 0.60 * s, col)                    # head
+        p.ball((cx, cy - 0.62 * s, z + 1.85 * s), 0.24 * s, 'plush_white' if not panda else col)   # muzzle
+        p.ball((cx, cy - 0.84 * s, z + 1.90 * s), 0.08 * s, 'plush_black')          # nose
+        eyes(cx, cy - 0.62 * s, z + 2.12 * s, 0.22 * s, 0.11 * s if panda else 0.07 * s)
+        for sx in (-1, 1):
+            if ear == 'ball':
+                p.ball((cx + sx * 0.42 * s, cy - 0.05 * s, z + 2.48 * s), 0.22 * s, limb)
+            else:                                                                   # bunny ears
+                p.cyl((cx + sx * 0.25 * s, cy, z + 2.35 * s), (cx + sx * 0.32 * s, cy, z + 3.35 * s), 0.14 * s, col, 6, True)
+            p.ball((cx + sx * 0.78 * s, cy - 0.20 * s, z + 1.10 * s), 0.30 * s, limb)   # arms
+            p.ball((cx + sx * 0.45 * s, cy - 0.65 * s, z + 0.32 * s), 0.34 * s, limb)   # feet
+        if not panda and ear == 'ball':
+            p.ball((cx, cy - 0.70 * s, z + 0.85 * s), 0.38 * s, 'plush_white')      # tummy patch
+
+    def duck(cx, cy, z, s, col):
+        p.ball((cx, cy, z + 0.65 * s), 0.65 * s, col)
+        p.ball((cx, cy - 0.35 * s, z + 1.45 * s), 0.42 * s, col)
+        p.cbox((cx, cy - 0.85 * s, z + 1.38 * s), (0.34 * s, 0.36 * s, 0.14 * s), 'plush_orange')
+        eyes(cx, cy - 0.70 * s, z + 1.58 * s, 0.17 * s)
+        p.ball((cx, cy + 0.60 * s, z + 0.85 * s), 0.25 * s, col)                    # tail
+
+    def frog(cx, cy, z, s):
+        p.ball((cx, cy, z + 0.55 * s), 0.72 * s, 'plush_green')
+        p.ball((cx, cy - 0.55 * s, z + 0.50 * s), 0.40 * s, 'plush_yellow')
+        for sx in (-1, 1):
+            p.ball((cx + sx * 0.34 * s, cy - 0.25 * s, z + 1.22 * s), 0.24 * s, 'plush_white')
+            p.ball((cx + sx * 0.34 * s, cy - 0.45 * s, z + 1.24 * s), 0.10 * s, 'plush_black')
+            p.ball((cx + sx * 0.70 * s, cy - 0.35 * s, z + 0.22 * s), 0.26 * s, 'plush_green')
+
+    def dino(cx, cy, z, s, col):
+        p.ball((cx, cy, z + 0.70 * s), 0.70 * s, col)
+        p.ball((cx - 0.55 * s, cy - 0.25 * s, z + 1.55 * s), 0.42 * s, col)         # head on a short neck
+        p.ball((cx - 0.30 * s, cy - 0.10 * s, z + 1.15 * s), 0.34 * s, col)
+        for k, r in enumerate((0.42, 0.30, 0.20, 0.12)):
+            p.ball((cx + (0.65 + 0.38 * k) * s, cy, z + (0.50 - 0.09 * k) * s), r * s, col)   # tail
+        for k in range(4):
+            p.cbox((cx + (-0.25 + 0.32 * k) * s, cy, z + (1.45 - 0.12 * abs(k - 1)) * s), (0.16 * s, 0.10 * s, 0.30 * s), 'plush_yellow')
+        eyes(cx - 0.62 * s, cy - 0.62 * s, z + 1.66 * s, 0.14 * s)
+        for sx in (-1, 1):
+            p.ball((cx + sx * 0.40 * s, cy - 0.50 * s, z + 0.25 * s), 0.26 * s, col)
+
+    def robot(cx, cy, z, s, col):
+        p.cbox((cx, cy, z + 0.75 * s), (1.1 * s, 0.8 * s, 1.1 * s), col)
+        p.cbox((cx, cy, z + 1.75 * s), (0.8 * s, 0.7 * s, 0.7 * s), 'stainless')
+        p.cyl((cx, cy, z + 2.1 * s), (cx, cy, z + 2.55 * s), 0.05 * s, 'black', 5, True)
+        p.ball((cx, cy, z + 2.6 * s), 0.12 * s, 'plush_red')
+        eyes(cx, cy - 0.36 * s, z + 1.80 * s, 0.18 * s, 0.10 * s)
+        p.cbox((cx, cy - 0.41 * s, z + 0.85 * s), (0.6 * s, 0.04 * s, 0.4 * s), 'plush_yellow')
+        for sx in (-1, 1):
+            p.cbox((cx + sx * 0.70 * s, cy, z + 0.80 * s), (0.22 * s, 0.3 * s, 0.8 * s), 'stainless')
+            p.cbox((cx + sx * 0.30 * s, cy, z + 0.10 * s), (0.34 * s, 0.5 * s, 0.2 * s), 'black')
+
+    def rings(cx, cy, z, s):
+        p.cyl((cx, cy, z), (cx, cy, z + 2.0 * s), 0.10 * s, 'plush_white', 6, True)
+        for k, col in enumerate(('plush_red', 'plush_orange', 'plush_yellow', 'plush_green', 'plush_blue')):
+            p.cyl((cx, cy, z + (0.02 + 0.36 * k) * s), (cx, cy, z + (0.34 + 0.36 * k) * s), (0.85 - 0.13 * k) * s, col, 10, True)
+        p.ball((cx, cy, z + 2.05 * s), 0.22 * s, 'plush_purple')
+
+    def blocks(cx, cy, z, s):
+        cols = rng.sample(['plush_red', 'plush_blue', 'plush_yellow', 'plush_green', 'plush_orange', 'plush_purple'], 3)
+        p.cbox((cx - 0.42 * s, cy, z + 0.40 * s), (0.8 * s, 0.8 * s, 0.8 * s), cols[0])
+        p.cbox((cx + 0.42 * s, cy, z + 0.40 * s), (0.8 * s, 0.8 * s, 0.8 * s), cols[1])
+        p.cbox((cx, cy - 0.05 * s, z + 1.20 * s), (0.8 * s, 0.8 * s, 0.8 * s), cols[2])
+
+    def beach_ball(cx, cy, z, s, col):
+        p.ball((cx, cy, z + 0.80 * s), 0.80 * s, col)
+        p.cyl((cx, cy, z + 0.70 * s), (cx, cy, z + 0.90 * s), 0.815 * s, 'plush_white', 10, True)   # equator band
+
+    kinds = ['bear', 'bear', 'bunny', 'duck', 'frog', 'dino', 'panda', 'robot', 'rings', 'blocks', 'ball']
+    last = None
+    for z in levels:
+        x = xa + 1.9
+        while x < xb - 1.6:
+            kind = rng.choice([k for k in kinds if k != last])
+            last = kind
+            s = rng.uniform(0.92, 1.12)
+            cy = (front + back) / 2 + rng.uniform(-0.25, 0.35)
+            cx = x + rng.uniform(-0.2, 0.2)
+            if abs((cx - xa) % ((xb - xa) / n_bays)) < 1.3 or abs((cx - xa) % ((xb - xa) / n_bays) - (xb - xa) / n_bays) < 1.3:
+                x += 1.4                                                            # not through an upright
+                continue
+            col = rng.choice(plush)
+            if kind == 'bear':
+                bear(cx, cy, z, s, rng.choice(['plush_brown', 'plush_tan', 'plush_pink', 'plush_blue', 'plush_purple', 'plush_white']))
+            elif kind == 'bunny':
+                bear(cx, cy, z, s * 0.95, rng.choice(['plush_pink', 'plush_white', 'plush_blue', 'plush_tan']), ear='long')
+            elif kind == 'panda':
+                bear(cx, cy, z, s, 'plush_white', panda=True)
+            elif kind == 'duck':
+                duck(cx, cy, z, s * 1.1, 'plush_yellow')
+            elif kind == 'frog':
+                frog(cx, cy, z, s * 1.1)
+            elif kind == 'dino':
+                dino(cx, cy, z, s, rng.choice(['plush_green', 'plush_teal', 'plush_purple', 'plush_orange']))
+            elif kind == 'robot':
+                robot(cx, cy, z, s, rng.choice(['plush_red', 'plush_blue', 'plush_teal']))
+            elif kind == 'rings':
+                rings(cx, cy, z, s)
+            elif kind == 'blocks':
+                blocks(cx, cy, z, s)
+            else:
+                beach_ball(cx, cy, z, s, col)
+            x += rng.uniform(3.0, 3.6)
 
 
 STAFF_C, STAFF_NX, STAFF_NY = 12, 13, 8
