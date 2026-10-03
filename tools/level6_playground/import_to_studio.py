@@ -139,6 +139,8 @@ local function texture(p, id, face, studs, colour, transparency)
 	t.Parent = p
 end
 local KIT = game:GetService("ReplicatedStorage"):FindFirstChild("Level6PropKit")
+-- one moulded mesh per slide (Level6Slides.glb); when it is there, the segment parts are only invisible colliders
+local SLIDEKIT = game:GetService("ReplicatedStorage"):FindFirstChild("Level6SlideKit")
 local SIDES = {Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}
 local VINYL = {yellow = true, red = true, blue = true, green = true, purple = true, pink = true, cyan = true, orange = true, navy = true}
 local function tint(c, k)
@@ -252,7 +254,7 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 				wall.Parent = parent
 			end
 		end
-		p.Parent = parent
+		if kind == "t" and SLIDEKIT then p:Destroy() else p.Parent = parent end
 	elseif kind == "q" then
 		local p0 = O + Vector3.new(n[1], n[2], n[3])
 		local u = O + Vector3.new(n[4], n[5], n[6]) - p0
@@ -271,6 +273,10 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 			p.CFrame = cf
 		end
 		decorate(p, owner, mat)
+		if owner == "Frame_WaveSlide" and SLIDEKIT then      -- the moulded chute is what you see; this is what you ride
+			p.Transparency = 1
+			p:ClearAllChildren()
+		end
 		p.Parent = parent
 	elseif kind == "s" then
 		local p = part(owner, mat, Enum.PartType.Ball)
@@ -398,6 +404,25 @@ for line in string.gmatch(PROPS, "[^\\n]+") do
 		missing[f[1]] = true
 	end
 end
+if SLIDEKIT then
+	local slides = folder("Slides")
+	for line in string.gmatch(SLIDES, "[^\\n]+") do
+		local f = string.split(line, ",")
+		local template = SLIDEKIT:FindFirstChild(f[1])
+		if template then
+			local m = template:Clone()
+			m.Anchored, m.CanCollide, m.CanTouch, m.CanQuery = true, false, false, false
+			-- moulded, glossy plastic in one solid colour
+			m.Material, m.Reflectance = Enum.Material.SmoothPlastic, 0.22
+			m.Color = Color3.fromRGB(tonumber(f[5]), tonumber(f[6]), tonumber(f[7]))
+			m.TextureID = ""
+			m.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4])))
+			m.Parent = slides
+		else
+			missing[f[1]] = true
+		end
+	end
+end
 local boards = folder("Boards")
 for line in string.gmatch(BOARDS, "[^\\n]+") do
 	local f = string.split(line, "|")
@@ -486,6 +511,7 @@ def main():
                       for name, x, y, z, yaw, size, collide in data.get('props', []))
     boards = '\n'.join('|'.join([','.join(format(v, 'g') for v in to_roblox(*c)), format(w, 'g'), format(h, 'g'),
                                  ','.join(map(str, facing[f])), tex, str(lit)]) for c, w, h, f, tex, lit in data.get('boards', []))
+    slides = '\n'.join(','.join([name] + [format(v, 'g') for v in (*to_roblox(*c), *rgb)]) for name, c, size, rgb in data.get('slides', []))
     anchors = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['empties'])
     lights = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['lights'])
     print(f'{len(rows)} parts in {math.ceil(len(rows) / CHUNK)} calls', flush=True)
@@ -507,7 +533,7 @@ return "fresh model"
         body = '\n'.join(rows[start:start + CHUNK])
         print(start, studio.luau(prelude + f'local DATA = [==[\n{body}\n]==]\n' + BUILD), flush=True)
     print(studio.luau(prelude + f'local ANCHORS = [==[\n{anchors}\n]==]\nlocal LIGHTS = [==[\n{lights}\n]==]\n'
-                      f'local SIGNS = [==[\n{signs}\n]==]\nlocal PROPS = [==[\n{props}\n]==]\nlocal BOARDS = [==[\n{boards}\n]==]\n' + FINISH))
+                      f'local SIGNS = [==[\n{signs}\n]==]\nlocal SLIDES = [==[\n{slides}\n]==]\nlocal PROPS = [==[\n{props}\n]==]\nlocal BOARDS = [==[\n{boards}\n]==]\n' + FINISH))
 
 
 if __name__ == '__main__':

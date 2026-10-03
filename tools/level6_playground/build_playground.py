@@ -139,6 +139,8 @@ PRIMS = []
 
 # ---- mesh builder ------------------------------------------------------------------------
 TUBE_COLOURS = ['red', 'yellow', 'green', 'blue']
+SLIDES = []      # every slide and crawl tube, for the moulded-plastic meshes: (kind, path, radius, colour, arc)
+SLIDE_RGB = {'red': (214, 30, 22), 'yellow': (246, 188, 16), 'green': (36, 158, 58), 'blue': (26, 88, 214)}
 
 
 class Builder:
@@ -210,6 +212,7 @@ class Builder:
         # owner: each tube is ONE solid colour (never striped, never black); the tubes differ from each other
         mats = TUBE_COLOURS[Builder.tubes % len(TUBE_COLOURS)]
         Builder.tubes += 1
+        SLIDES.append(('tube', [tuple(q) for q in path], r, mats, (0.0, 360.0)))
         closed = (a1 - a0) >= 359.9
         steps = n if closed else n + 1
         rings = []
@@ -783,12 +786,14 @@ def build_frame():
         pts.append((ax1 - t * 52, max(20.3 - 19.2 * t + 1.1 * math.sin(t * math.pi * 3) * (1 - t), 1.0)))
     for lane in range(3):
         ya, yb = y0 + lane * lane_w, y0 + (lane + 1) * lane_w
+        SLIDES.append(('chute', [(px, (ya + yb) / 2, pz) for px, pz in pts], 3.0, ('yellow', 'red', 'blue')[lane], (213.0, 327.0)))
         for (xa, za), (xb, zb) in zip(pts, pts[1:]):
             wave.face([(xa, ya, za), (xa, yb, za), (xb, yb, zb), (xb, ya, zb)], ('yellow', 'red', 'blue')[lane], True)
             for yy in (ya, yb):
                 wave.face([(xa, yy, za), (xb, yy, zb), (xb, yy, zb + 1.3), (xa, yy, za + 1.3)], 'green')
     gx = SX + 6 * C + 1                                                # open green slide, storey 1 -> Ball Ocean
     gpts = [(SY + 0.5 - 30 * (n / 12), max(10.35 - 9.2 * (n / 12), 1.4)) for n in range(13)]
+    SLIDES.append(('chute', [(gx + 5, py, pz) for py, pz in gpts], 6.0, 'green', (215.0, 325.0)))
     for (ya, za), (yb, zb) in zip(gpts, gpts[1:]):
         wave.face([(gx, ya, za), (gx + 10, ya, za), (gx + 10, yb, zb), (gx, yb, zb)], 'green', True)
         for xx in (gx, gx + 10):
@@ -1320,6 +1325,89 @@ prop('pa_speaker', STAFF[0] + 30, STAFF[1] + 40, z=8.6, yaw=0, size=3.2, collide
 prop('pa_speaker', 86, 372, z=11.4, yaw=0, size=3.2, collide=False)                         # and one in a party room
 pa.finish()
 
+# ---- slides as single moulded pieces --------------------------------------------------------------
+import bmesh
+slide_col = collection('L6_SlideMeshes')
+
+
+def smooth_path(points, step=1.5):
+    """Catmull-Rom through the authored points, resampled about every `step` studs."""
+    pts = [Vector(q) for q in points]
+    out = []
+    for i in range(len(pts) - 1):
+        p0, p1, p2, p3 = pts[max(i - 1, 0)], pts[i], pts[i + 1], pts[min(i + 2, len(pts) - 1)]
+        n = max(1, math.ceil((p2 - p1).length / step))
+        for k in range(n):
+            t = k / n
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+                              (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t))
+    out.append(pts[-1])
+    return out
+
+
+def moulded(name, kind, points, r, arc, wall=0.28, sides=20):
+    path = smooth_path(points)
+    closed = arc[1] - arc[0] >= 359.9
+    steps = sides if closed else sides + 1
+    bm = bmesh.new()
+    rings = []                                   # per path point: (outer ring, inner ring)
+    for i, q in enumerate(path):
+        t = (path[min(i + 1, len(path) - 1)] - path[max(i - 1, 0)]).normalized()
+        side = t.cross(Vector((0, 0, 1)))
+        side = side.normalized() if side.length > 1e-4 else Vector((1, 0, 0))
+        up = side.cross(t).normalized()
+        flare = 1.0
+        if closed and kind == 'tube':            # the mouth opens out like a trumpet at both ends
+            edge = min(i, len(path) - 1 - i)
+            flare = 1.0 + 0.2 * max(0.0, 1 - edge / 4.0) ** 2
+        centre = q
+        if not closed:                           # a trough: its bottom sits on the riding surface
+            centre = q + up * (r - 0.12)
+        outer, inner = [], []
+        for k in range(steps):
+            a = math.radians(arc[0] + (arc[1] - arc[0]) * k / sides)
+            d = math.cos(a) * side + math.sin(a) * up
+            outer.append(bm.verts.new(centre + d * (r * flare + wall)))
+            inner.append(bm.verts.new(centre + d * (r * flare)))
+        rings.append((outer, inner))
+    for (o0, i0), (o1, i1) in zip(rings, rings[1:]):
+        for k in range(sides if closed else sides):
+            k2 = (k + 1) % steps
+            bm.faces.new((o0[k], o0[k2], o1[k2], o1[k]))
+            bm.faces.new((i0[k], i1[k], i1[k2], i0[k2]))
+        if not closed:                           # the two lips
+            for k in (0, steps - 1):
+                bm.faces.new((o0[k], o1[k], i1[k], i0[k]))
+    for o, i in (rings[0], rings[-1]):           # wall thickness at both ends
+        for k in range(sides if closed else sides):
+            k2 = (k + 1) % steps
+            bm.faces.new((o[k], i[k], i[k2], o[k2]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    for f in bm.faces:
+        f.smooth = True
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new(name, me)
+    slide_col.objects.link(ob)
+    xs, ys, zs = zip(*[tuple(v.co) for v in me.vertices])
+    centre = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, (min(zs) + max(zs)) / 2)
+    size = (max(xs) - min(xs), max(ys) - min(ys), max(zs) - min(zs))
+    return ob, centre, size, sum(len(pl.vertices) - 2 for pl in me.polygons)
+
+
+SLIDE_ROWS = []
+for n, (kind, points, r, colour, arc) in enumerate(SLIDES):
+    name = 'slide_%02d' % (n + 1)
+    ob, centre, size, tris = moulded(name, kind, points, r, arc)
+    SLIDE_ROWS.append([name, [round(c, 3) for c in centre], [round(c, 3) for c in size], list(SLIDE_RGB[colour])])
+    print('L6 SLIDE', name, kind, colour, 'tris', tris, 'size', [round(c, 1) for c in size])
+(OUT / 'export').mkdir(exist_ok=True)
+bpy.ops.object.select_all(action='DESELECT')
+for ob in slide_col.objects:
+    ob.select_set(True)
+bpy.ops.export_scene.gltf(filepath=str(OUT / 'export' / 'Level6Slides.glb'), export_format='GLB', use_selection=True, export_apply=True)
+
 anchors_col = collection('L6_Anchors')
 for name, loc in (('Spawn', (66, 20, 3)), ('Exit', ((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 6, 3)),
                   ('EntitySpawn', (HOME[0], HOME[1] + 6, 3)), ('HomeBase', (HOME[0], HOME[1], 3))):
@@ -1389,7 +1477,7 @@ stats = {
     'prims': [[n, k, [round(float(v), 3) for v in d], m] for n, k, d, m in PRIMS],
     'empties': [[o.name, [round(c, 3) for c in o.location]] for o in bpy.data.objects if o.type == 'EMPTY'],
     'lights': [[o.name, [round(c, 3) for c in o.location]] for o in bpy.data.objects if o.type == 'LIGHT'],
-    'signs': SIGNS, 'props': PROPS, 'boards': BOARDS,
+    'signs': SIGNS, 'props': PROPS, 'boards': BOARDS, 'slides': SLIDE_ROWS,
     'palette': {k: list(v) for k, v in PALETTE.items()},
 }))
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT / 'blend' / 'Level6_IndoorPlayground.blend'))
