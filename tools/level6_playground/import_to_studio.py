@@ -1,0 +1,407 @@
+"""Build the Level 6 playground in the open Studio place from export/prims.json, as native Parts.
+
+    python3 tools/level6_playground/import_to_studio.py [--dry]
+
+Talks to Studio through its own MCP proxy (StudioMCP, stdio JSON-RPC), so the geometry never passes
+through a chat. Every call is one execute_luau; the first one replaces any earlier copy of the model.
+Blender (x, y, z) studs become Roblox (x - 300, z, -(y - 200)) + ORIGIN.
+"""
+import json, math, subprocess, sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+EXPORT = ROOT / 'artifacts' / 'level6-playground-20261002' / 'export'
+STUDIO_MCP = '/Applications/RobloxStudio.app/Contents/MacOS/StudioMCP'
+MODEL_NAME = 'Level 6 Indoor Playground'
+ORIGIN = (52000, 100, 0)
+PLACE_HINT = 'BACKROOMS'
+CHUNK = 1200
+
+# material key -> (Enum.Material, transparency, can collide)
+SURFACE = {
+    'mat_green': ('Rubber', 0, True), 'mat_blue': ('Rubber', 0, True), 'concrete': ('Concrete', 0, True),
+    'wall_yellow': ('Plaster', 0, True), 'wall_blue': ('Plaster', 0, True), 'wall_red': ('Plaster', 0, True),
+    'wall_white': ('Plaster', 0, True), 'deck': ('Metal', 0, True), 'steel': ('Metal', 0, True),
+    'duct': ('Metal', 0, True), 'pipe_red': ('Metal', 0, True), 'stainless': ('Metal', 0, True),
+    'wood': ('Wood', 0, True), 'lamp_on': ('Neon', 0, True), 'lamp_warm': ('Neon', 0, True),
+    'exit_sign': ('Neon', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
+    'net_yellow': ('SmoothPlastic', 0.5, True), 'net_black': ('SmoothPlastic', 0.75, True),
+}
+EXTRA_RGB = {'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
+             'net_blue': (20, 40, 150), 'net_yellow': (215, 170, 30), 'net_black': (12, 12, 12)}
+NO_COLLIDE = ('Ceiling_', 'BallPit_Balls', 'Stray_Balls', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
+TEXTURES = json.loads((Path(__file__).with_name('textures.json')).read_text())
+
+# Signs as SurfaceGuis: (blender centre x, y, z), width, height, facing (blender axis), text, background, text colour
+SIGNS = [
+    ((262, 212.0, 11), 6.6, 4.0, '-y', 'HOME BASE\n1, 2, 3 . . . 20', (245, 240, 220), (200, 30, 30)),
+    ((299.2, 98, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
+    ((299.2, 194, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
+    ((299.2, 302, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
+    ((299.0, 200, 26), 40, 4.5, '-x', 'NO ADULTS ON UPPER LEVEL', (255, 200, 20), (180, 20, 20)),
+    ((200.5, 129.1, 6.5), 7, 4, '+y', "UNDER 5's\nONLY", (255, 210, 30), (20, 40, 160)),
+    ((255.5, 129.1, 6.5), 7, 4, '+y', 'NO SHOES\nNO FOOD', (255, 210, 30), (20, 40, 160)),
+    ((1.7, 163, 12), 11.5, 3.5, '+x', 'HOT DOG  2.50\nPIZZA  3.00', (30, 25, 20), (255, 235, 180)),
+    ((1.7, 185, 12), 11.5, 3.5, '+x', 'SLUSH  1.75\nPOPCORN  1.50', (30, 25, 20), (255, 235, 180)),
+    ((1.7, 207, 12), 11.5, 3.5, '+x', 'BIRTHDAY\nPARTY PACKS', (30, 25, 20), (255, 235, 180)),
+    ((24, 200, 19), 60, 4.8, '+x', 'SNACK SHACK', (250, 205, 30), (200, 25, 25)),
+    ((120, 329.6, 18), 30, 4, '-y', 'PARTY ROOMS · RESTROOMS', (20, 50, 170), (255, 255, 255)),
+    ((548, 398.3, 16.2), 5.6, 2.2, '-y', 'EXIT', (200, 15, 10), (255, 245, 235)),
+    ((258, 383.6, 14.5), 72, 4, '-y', 'GAME ZONE', (40, 10, 70), (255, 60, 200)),
+    ((300, 399.0, 40), 140, 12, '-y', 'FUN FACTORY PLAYLAND', (250, 205, 30), (200, 25, 25)),
+    ((0.9, 60, 30), 90, 9, '+x', 'BIRTHDAYS · PLAY · FUN!', (20, 50, 170), (255, 220, 40)),
+    ((236 + 6, 330 - 0.2, 5.6), 4.0, 2.0, '-y', 'NO PEEKING', (255, 255, 255), (20, 20, 20)),
+]
+
+
+def srgb(v):
+    v = max(0.0, min(1.0, v))
+    return round(255 * (12.92 * v if v <= 0.0031308 else 1.055 * v ** (1 / 2.4) - 0.055))
+
+
+def to_roblox(x, y, z):
+    return (round(x - 300, 3), round(z, 3), round(-(y - 200), 3))
+
+
+class Studio:
+    def __init__(self):
+        self.proc = subprocess.Popen([STUDIO_MCP], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                     stderr=subprocess.DEVNULL, text=True, bufsize=1)
+        self.next_id = 0
+        self.request('initialize', {'protocolVersion': '2024-11-05', 'capabilities': {},
+                                    'clientInfo': {'name': 'level6-import', 'version': '1'}})
+        self.send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
+        text = self.call('list_roblox_studios', {})
+        studios = json.loads(text)['studios']
+        match = [s for s in studios if PLACE_HINT in s['name']]
+        if len(match) != 1:
+            raise SystemExit(f'expected one Studio with {PLACE_HINT!r}, found: {[s["name"] for s in studios]}')
+        self.studio_id = match[0]['id']
+        print('studio:', match[0]['name'], flush=True)
+
+    def send(self, msg):
+        self.proc.stdin.write(json.dumps(msg) + '\n')
+        self.proc.stdin.flush()
+
+    def request(self, method, params):
+        self.next_id += 1
+        self.send({'jsonrpc': '2.0', 'id': self.next_id, 'method': method, 'params': params})
+        while True:
+            line = self.proc.stdout.readline()
+            if not line:
+                raise SystemExit('StudioMCP closed the pipe')
+            try:
+                msg = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if msg.get('id') == self.next_id:
+                if 'error' in msg:
+                    raise SystemExit(f'{method}: {msg["error"]}')
+                return msg['result']
+
+    def call(self, tool, args):
+        res = self.request('tools/call', {'name': tool, 'arguments': args})
+        text = '\n'.join(c.get('text', '') for c in res.get('content', []) if c.get('type') == 'text')
+        if res.get('isError'):
+            raise SystemExit(f'{tool} failed: {text[:600]}')
+        return text
+
+    def luau(self, code):
+        return self.call('execute_luau', {'studio_id': self.studio_id, 'datamodel_type': 'Edit', 'code': code})
+
+
+PRELUDE = '''
+local NAME = %s
+local O = Vector3.new(%d, %d, %d)
+local model = workspace:FindFirstChild(NAME)
+local MAT = {%s}
+local NOCOLLIDE = {%s}
+local folders = {}
+local function folder(name)
+	local f = folders[name]
+	if not f then
+		f = model:FindFirstChild(name)
+		if not f then f = Instance.new("Folder"); f.Name = name; f.Parent = model end
+		folders[name] = f
+	end
+	return f
+end
+local function loose(name)
+	for _, prefix in ipairs(NOCOLLIDE) do if name:sub(1, #prefix) == prefix then return true end end
+	return false
+end
+local function part(owner, mat, shape)
+	local p = Instance.new("Part")
+	local m = MAT[mat]
+	p.Anchored = true
+	p.Color, p.Material, p.Transparency = m[1], m[2], m[3]
+	p.CanCollide = m[4] and not loose(owner)
+	p.CanTouch = false
+	p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+	if shape then p.Shape = shape end
+	p.Name = mat
+	return p
+end
+local TEX = {%s}
+local function texture(p, id, face, studs, colour, transparency)
+	local t = Instance.new("Texture")
+	t.Texture, t.Face = id, face
+	t.StudsPerTileU, t.StudsPerTileV = studs, studs
+	t.Color3 = colour or Color3.new(1, 1, 1)
+	t.Transparency = transparency or 0
+	t.Parent = p
+end
+local SIDES = {Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}
+local function decorate(p, owner, mat)
+	if string.sub(mat, 1, 4) == "net_" then
+		local colour = p.Color
+		-- a faint tinted sheet keeps the net readable even before (or without) the cord texture
+		p.Transparency = owner == "Frame_RoofNet" and 0.85 or 0.62
+		texture(p, TEX.net, Enum.NormalId.Front, 8, colour)
+		texture(p, TEX.net, Enum.NormalId.Back, 8, colour)
+	elseif owner == "Floor_FoamTiles" then
+		texture(p, TEX.foam_seams, Enum.NormalId.Top, 12)
+	elseif owner == "Frame_Decks" or owner == "Frame_SoftSteps" then
+		texture(p, TEX.padding, Enum.NormalId.Top, 12)
+	elseif owner == "Frame_Panels" or owner == "ToddlerCorner" then
+		texture(p, TEX.padding, Enum.NormalId.Front, 5)
+		texture(p, TEX.padding, Enum.NormalId.Back, 5)
+	elseif owner == "Walls" or owner == "SnackBar" or owner == "PartyBlock" or owner == "Hall_Columns" then
+		for _, face in ipairs(SIDES) do texture(p, TEX.grime, face, 36, nil, 0.15) end
+	end
+end
+local function along(a, b)
+	local d = b - a
+	local up = math.abs(d.Unit.Y) > 0.99 and Vector3.xAxis or Vector3.yAxis
+	local right = d.Unit
+	local z = right:Cross(up).Unit
+	return CFrame.fromMatrix((a + b) / 2, right, z:Cross(right).Unit, z), d.Magnitude
+end
+'''
+
+BUILD = '''
+local made = 0
+for line in string.gmatch(DATA, "[^\\n]+") do
+	local f = string.split(line, ",")
+	local kind, owner, mat = f[1], f[2], f[3]
+	local n = {}
+	for i = 4, #f do n[i - 3] = tonumber(f[i]) end
+	local parent = folder(owner)
+	if kind == "b" then
+		local p = part(owner, mat)
+		p.Size = Vector3.new(n[4], n[5], n[6])
+		p.CFrame = CFrame.new(O + Vector3.new(n[1], n[2], n[3]))
+		decorate(p, owner, mat)
+		p.Parent = parent
+	elseif kind == "c" or kind == "t" then
+		local a, b = O + Vector3.new(n[1], n[2], n[3]), O + Vector3.new(n[4], n[5], n[6])
+		local cf, len = along(a, b)
+		local p = part(owner, mat, Enum.PartType.Cylinder)
+		p.Size = Vector3.new(len, n[7] * 2, n[7] * 2)
+		p.CFrame = cf
+		if kind == "t" then
+			-- the tube is only a shell to look at; an invisible trough inside is what you ride
+			p.CanCollide = false
+			p.CastShadow = false
+			local r = n[7]
+			local floor = part(owner, mat)
+			floor.Name = "TubeFloor"
+			floor.Transparency = 1
+			floor.CanCollide = true
+			floor.Size = Vector3.new(len + 0.6, 1, r * 1.3)
+			floor.CFrame = cf * CFrame.new(0, -r * 0.75 - 0.5, 0)
+			if owner == "Frame_Slides" then floor:SetAttribute("L6Slide", true) end
+			floor.Parent = parent
+			for _, side in ipairs({-1, 1}) do
+				local wall = part(owner, mat)
+				wall.Name = "TubeWall"
+				wall.Transparency = 1
+				wall.CanCollide = true
+				wall.Size = Vector3.new(len + 0.6, r * 1.3, 0.4)
+				wall.CFrame = cf * CFrame.new(0, -r * 0.2, side * r * 0.72)
+				wall.Parent = parent
+			end
+		end
+		p.Parent = parent
+	elseif kind == "q" then
+		local p0 = O + Vector3.new(n[1], n[2], n[3])
+		local u = O + Vector3.new(n[4], n[5], n[6]) - p0
+		local v = O + Vector3.new(n[7], n[8], n[9]) - p0
+		local p = part(owner, mat)
+		local normal = u.Unit:Cross(v.Unit)
+		local cf = CFrame.fromMatrix(p0 + (u + v) / 2, u.Unit, v.Unit, normal)
+		if owner == "Frame_WaveSlide" and mat ~= "green" then
+			-- slide lanes get real thickness below the riding surface and are marked for the slide client
+			if normal.Y < 0 then normal = -normal end
+			p.Size = Vector3.new(u.Magnitude, v.Magnitude, 0.8)
+			p.CFrame = cf + -normal * 0.4
+			p:SetAttribute("L6Slide", true)
+		else
+			p.Size = Vector3.new(u.Magnitude, v.Magnitude, 0.15)
+			p.CFrame = cf
+		end
+		decorate(p, owner, mat)
+		p.Parent = parent
+	elseif kind == "s" then
+		local p = part(owner, mat, Enum.PartType.Ball)
+		p.Size = Vector3.one * n[4] * 2
+		p.CFrame = CFrame.new(O + Vector3.new(n[1], n[2], n[3]))
+		p.CastShadow = false
+		p.Parent = parent
+	end
+	made += 1
+end
+return "made " .. made
+'''
+
+FINISH = '''
+local anchors = folder("Anchors")
+for line in string.gmatch(ANCHORS, "[^\\n]+") do
+	local f = string.split(line, ",")
+	local p = Instance.new("Part")
+	p.Name, p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = f[1], true, false, false, false
+	p.Transparency, p.Size = 1, Vector3.new(2, 2, 2)
+	p.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4])))
+	local kind = string.match(f[1], "^L6_Hide_(.-)_%d+$")
+	if kind then p:SetAttribute("HideKind", kind) end
+	p.Parent = anchors
+end
+local lights = folder("Lights")
+for line in string.gmatch(LIGHTS, "[^\\n]+") do
+	local f = string.split(line, ",")
+	local p = Instance.new("Part")
+	p.Name, p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = f[1], true, false, false, false
+	p.Transparency, p.Size = 1, Vector3.new(1, 1, 1)
+	p.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4])))
+	local light = Instance.new("PointLight")
+	light.Shadows = false
+	if string.find(f[1], "Troffer") then
+		light.Range, light.Brightness, light.Color = 60, 1.6, Color3.fromRGB(255, 240, 210)
+	elseif string.find(f[1], "SnackBar") then
+		light.Range, light.Brightness, light.Color = 38, 1.8, Color3.fromRGB(255, 200, 110)
+	elseif string.find(f[1], "PartyBlock") then
+		light.Range, light.Brightness, light.Color = 40, 1.4, Color3.fromRGB(235, 242, 255)
+	else
+		light.Range, light.Brightness, light.Color = 26, 1.1, Color3.fromRGB(255, 225, 170)
+	end
+	light.Parent = p
+	p.Parent = lights
+end
+local signs = folder("Signs")
+local function nums(s)
+	local t = {}
+	for v in string.gmatch(s, "[^,]+") do t[#t + 1] = tonumber(v) end
+	return t
+end
+for line in string.gmatch(SIGNS, "[^\\n]+") do
+	local f = string.split(line, "|")
+	local c, dir, bg, fg = nums(f[1]), nums(f[4]), nums(f[6]), nums(f[7])
+	local w, h = tonumber(f[2]), tonumber(f[3])
+	local out = Vector3.new(dir[1], dir[2], dir[3])
+	local at = O + Vector3.new(c[1], c[2], c[3]) + out * 0.15
+	local p = Instance.new("Part")
+	p.Name, p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = "Sign", true, false, false, false
+	p.Size = Vector3.new(w, h, 0.2)
+	p.Color, p.Material = Color3.fromRGB(bg[1], bg[2], bg[3]), Enum.Material.SmoothPlastic
+	p.CFrame = CFrame.lookAt(at, at + out)
+	local gui = Instance.new("SurfaceGui")
+	gui.Face, gui.SizingMode = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud
+	gui.PixelsPerStud, gui.LightInfluence = 40, 1
+	local label = Instance.new("TextLabel")
+	label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
+	label.Text = string.gsub(f[5], "\\\\n", "\\n")
+	label.TextScaled, label.Font = true, Enum.Font.FredokaOne
+	label.TextColor3 = Color3.fromRGB(fg[1], fg[2], fg[3])
+	local pad = Instance.new("UIPadding")
+	pad.PaddingLeft, pad.PaddingRight = UDim.new(0.04, 0), UDim.new(0.04, 0)
+	pad.PaddingTop, pad.PaddingBottom = UDim.new(0.08, 0), UDim.new(0.08, 0)
+	pad.Parent = label
+	label.Parent = gui
+	gui.Parent = p
+	p.Parent = signs
+end
+-- Level6PreviewAccess lands developers on Level6Exit and mounts its RETURN TO LOBBY prompt there.
+local spawn = anchors:FindFirstChild("L6_Anchor_Spawn")
+local exit = Instance.new("Part")
+exit.Name, exit.Anchored, exit.CanCollide, exit.CanTouch, exit.CanQuery = "Level6Exit", true, false, false, false
+exit.Transparency, exit.Size = 1, Vector3.new(4, 1, 4)
+local at = Vector3.new(spawn.Position.X, O.Y + 0.35 + 3.05, spawn.Position.Z)
+exit.CFrame = CFrame.lookAt(at, at + Vector3.xAxis)
+exit.Parent = model
+model:SetAttribute("Source", "tools/level6_playground")
+model:SetAttribute("Level6Preview", true)
+model:SetAttribute("PreviewOnly", true)
+model:SetAttribute("Level6PreviewReady", true)
+model:SetAttribute("Ready", true)
+local count = 0
+for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then count += 1 end end
+local cf, size = model:GetBoundingBox()
+return string.format("parts %d, centre (%.0f, %.0f, %.0f), size (%.0f, %.0f, %.0f)", count, cf.X, cf.Y, cf.Z, size.X, size.Y, size.Z)
+'''
+
+
+def main():
+    data = json.loads((EXPORT / 'prims.json').read_text())
+    mats = {}
+    for key, rgb in data['palette'].items():
+        material, transparency, collide = SURFACE.get(key, ('SmoothPlastic', 0, True))
+        mats[key] = (tuple(srgb(c) for c in rgb), material, transparency, collide)
+    for key, rgb in EXTRA_RGB.items():
+        material, transparency, collide = SURFACE[key]
+        mats[key] = (rgb, material, transparency, collide)
+    mat_lua = ', '.join(f'{k} = {{Color3.fromRGB({c[0]}, {c[1]}, {c[2]}), Enum.Material.{m}, {t}, {str(col).lower()}}}'
+                        for k, (c, m, t, col) in mats.items())
+    tex_lua = ', '.join(f'{k} = {json.dumps(v)}' for k, v in TEXTURES.items())
+    prelude = PRELUDE % (json.dumps(MODEL_NAME), *ORIGIN, mat_lua, ', '.join(json.dumps(n) for n in NO_COLLIDE), tex_lua)
+    facing = {'+x': (1, 0, 0), '-x': (-1, 0, 0), '+y': (0, 0, -1), '-y': (0, 0, 1)}
+    signs = '\n'.join('|'.join([','.join(format(v, 'g') for v in to_roblox(*c)), format(w, 'g'), format(h, 'g'),
+                                ','.join(map(str, facing[f])), text.replace('\n', '\\n'), ','.join(map(str, bg)),
+                                ','.join(map(str, fg))]) for c, w, h, f, text, bg, fg in SIGNS)
+
+    rows = []
+    for owner, kind, d, mat in data['prims']:
+        if mat not in mats:
+            raise SystemExit(f'no surface for material {mat}')
+        if kind == 'b':
+            x0, y0, z0, x1, y1, z1 = d
+            centre = to_roblox((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2)
+            nums = [*centre, round(abs(x1 - x0), 3), round(abs(z1 - z0), 3), round(abs(y1 - y0), 3)]
+            if min(nums[3:]) < 0.01:
+                continue
+        elif kind in ('c', 't'):
+            if math.dist(d[0:3], d[3:6]) < 0.01:
+                continue
+            nums = [*to_roblox(*d[0:3]), *to_roblox(*d[3:6]), d[6]]
+        elif kind == 'q':
+            nums = [*to_roblox(*d[0:3]), *to_roblox(*d[3:6]), *to_roblox(*d[6:9])]
+        elif kind == 's':
+            nums = [*to_roblox(*d[0:3]), d[3]]
+        else:
+            continue
+        rows.append(','.join([kind, owner, mat] + [format(v, 'g') for v in nums]))
+    anchors = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['empties'])
+    lights = '\n'.join(','.join([name] + [format(v, 'g') for v in to_roblox(*loc)]) for name, loc in data['lights'])
+    print(f'{len(rows)} parts in {math.ceil(len(rows) / CHUNK)} calls', flush=True)
+    if '--dry' in sys.argv:
+        return
+
+    studio = Studio()
+    print(studio.luau(f'''
+local NAME = {json.dumps(MODEL_NAME)}
+local old = workspace:FindFirstChild(NAME)
+if old then old:Destroy() end
+local model = Instance.new("Model")
+model.Name = NAME
+model:SetAttribute("Ready", false)
+model.Parent = workspace
+return "fresh model"
+'''), flush=True)
+    for start in range(0, len(rows), CHUNK):
+        body = '\n'.join(rows[start:start + CHUNK])
+        print(start, studio.luau(prelude + f'local DATA = [==[\n{body}\n]==]\n' + BUILD), flush=True)
+    print(studio.luau(prelude + f'local ANCHORS = [==[\n{anchors}\n]==]\nlocal LIGHTS = [==[\n{lights}\n]==]\n'
+                      f'local SIGNS = [==[\n{signs}\n]==]\n' + FINISH))
+
+
+if __name__ == '__main__':
+    main()
