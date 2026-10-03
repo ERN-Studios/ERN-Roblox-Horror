@@ -217,12 +217,12 @@ end)
 -- ---------------------------------------------------------------------------------------
 -- lighting: dim warehouse night, cold fluorescent pools, a little haze
 local LOOK = {
-	Ambient = Color3.fromRGB(34, 34, 44), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
-	ClockTime = 0, FogColor = Color3.fromRGB(12, 12, 18), FogStart = 40, FogEnd = 330,
-	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.25,
+	Ambient = Color3.fromRGB(46, 47, 54), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
+	ClockTime = 0, FogColor = Color3.fromRGB(26, 28, 30), FogStart = 60, FogEnd = 520,   -- a grey haze, not black
+	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.45,
 }
 local saved = nil
-local grade = nil
+local grade, bloom = nil, nil
 local function applyLighting(on)
 	if on and not saved then
 		saved = {}
@@ -233,9 +233,13 @@ local function applyLighting(on)
 		end
 		grade = Instance.new("ColorCorrectionEffect")
 		grade.Name = "Level6PlaygroundGrade"
-		grade.Saturation, grade.Contrast, grade.Brightness = -0.12, 0.18, 0.02
-		grade.TintColor = Color3.fromRGB(235, 240, 255)
+		grade.Saturation, grade.Contrast, grade.Brightness = 0.16, 0.14, 0.02
+		grade.TintColor = Color3.fromRGB(255, 250, 238)
 		grade.Parent = Lighting
+		bloom = Instance.new("BloomEffect")       -- the tubes glow into the haze
+		bloom.Name = "Level6PlaygroundBloom"
+		bloom.Intensity, bloom.Size, bloom.Threshold = 0.55, 30, 1.35
+		bloom.Parent = Lighting
 		player:SetAttribute(LIGHTING_OWNED, true)
 	elseif not on and saved then
 		for k, v in pairs(saved) do
@@ -246,6 +250,7 @@ local function applyLighting(on)
 		end
 		saved = nil
 		if grade then grade:Destroy(); grade = nil end
+		if bloom then bloom:Destroy(); bloom = nil end
 		player:SetAttribute(LIGHTING_OWNED, nil)
 	end
 	if on then

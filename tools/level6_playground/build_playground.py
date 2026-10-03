@@ -16,7 +16,7 @@ SEED = 6
 rng = random.Random(SEED)
 
 # ---- dimensions (studs) ------------------------------------------------------------------
-HALL_X, HALL_Y, HALL_Z = 600, 400, 60       # warehouse shell
+HALL_X, HALL_Y, HALL_Z = 600, 400, 46       # warehouse shell
 TILE = 12                                   # foam puzzle-mat tile
 C, H = 12, 10                               # play-frame cell and storey height
 NX, NY, NZ = 22, 26, 3                      # play-frame cells; decks at z = 10 and 20, net roof at 30
@@ -39,13 +39,14 @@ def collection(name):
 # ---- materials ---------------------------------------------------------------------------
 PALETTE = {
     # padded vinyl, slightly dirty 90s primaries
-    'yellow': (0.92, 0.72, 0.05), 'red': (0.74, 0.07, 0.06), 'blue': (0.05, 0.16, 0.62),
-    'green': (0.10, 0.50, 0.16), 'purple': (0.33, 0.12, 0.50), 'pink': (0.90, 0.22, 0.50),
-    'cyan': (0.05, 0.55, 0.72), 'orange': (0.93, 0.38, 0.05), 'navy': (0.03, 0.05, 0.22),
+    # (a touch more saturated than the concept art, on the owner's request)
+    'yellow': (0.96, 0.72, 0.02), 'red': (0.80, 0.045, 0.04), 'blue': (0.03, 0.15, 0.74),
+    'green': (0.06, 0.55, 0.13), 'purple': (0.36, 0.09, 0.58), 'pink': (0.95, 0.17, 0.50),
+    'cyan': (0.03, 0.58, 0.80), 'orange': (0.97, 0.36, 0.03), 'navy': (0.02, 0.04, 0.26),
     # floor
-    'mat_green': (0.16, 0.52, 0.24), 'mat_blue': (0.12, 0.20, 0.58), 'concrete': (0.36, 0.33, 0.29),
+    'mat_green': (0.10, 0.50, 0.17), 'mat_blue': (0.06, 0.15, 0.62), 'concrete': (0.36, 0.33, 0.29),
     # shell
-    'wall_yellow': (0.86, 0.66, 0.10), 'wall_blue': (0.07, 0.17, 0.60), 'wall_red': (0.66, 0.10, 0.08),
+    'wall_yellow': (0.90, 0.66, 0.05), 'wall_blue': (0.04, 0.12, 0.50), 'wall_red': (0.70, 0.07, 0.05),
     'wall_white': (0.72, 0.70, 0.64), 'deck': (0.42, 0.41, 0.38), 'steel': (0.20, 0.20, 0.21),
     'duct': (0.55, 0.56, 0.57), 'pipe_red': (0.45, 0.06, 0.05),
     # props
@@ -58,7 +59,7 @@ PALETTE = {
     'carpet': (0.33, 0.26, 0.12), 'wall_staff': (0.62, 0.50, 0.12), 'ceiling_tile': (0.55, 0.52, 0.40),
     'mat_pink': (0.80, 0.40, 0.50), 'mat_mint': (0.36, 0.68, 0.55), 'inflate_a': (0.36, 0.56, 0.20),
     'inflate_b': (0.66, 0.62, 0.20), 'wall_pink': (0.70, 0.32, 0.38), 'wall_purple': (0.24, 0.11, 0.36),
-    'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
+    'column': (0.78, 0.74, 0.62), 'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
 }
 ROUGH = {'stainless': 0.3, 'duct': 0.4, 'steel': 0.55, 'deck': 0.6, 'concrete': 0.9}
 VINYL = ['yellow', 'red', 'blue', 'green', 'purple', 'pink', 'cyan', 'orange']
@@ -416,8 +417,8 @@ def build_walls():
     w.box((EXIT_X[0] + 3, HALL_Y - 1.2, 12.2), (EXIT_X[1] - 3, HALL_Y - 0.6, 13.0), 'exit_sign')
     w.finish()
     sign((66, 0.4, 16), 22, 3.5, '+y', 'FUN FACTORY PLAYLAND', (250, 205, 30), (200, 25, 25))
-    sign((300, 399.0, 44), 150, 11, '-y', 'FUN FACTORY PLAYLAND', (250, 205, 30), (200, 25, 25))
-    sign((0.9, 215, 34), 110, 9, '+x', 'BIRTHDAYS · PLAY · FUN!', (20, 50, 170), (255, 220, 40))
+    sign((300, 399.0, 32), 120, 9, '-y', 'FUN FACTORY PLAYLAND', (250, 205, 30), (200, 25, 25))
+    sign((0.9, 215, 30), 90, 7, '+x', 'BIRTHDAYS · PLAY · FUN!', (20, 50, 170), (255, 220, 40))
 
 
 def build_ceiling():
@@ -443,28 +444,37 @@ def build_ceiling():
     for x in range(30, HALL_X, 60):
         m.cyl((x, 4, HALL_Z - 8.5), (x, HALL_Y - 4, HALL_Z - 8.5), 0.35, 'pipe_red', 5)
     m.finish()
+    # twin-tube fluorescent fixtures on a regular grid; most still work, a few are dead
     fx = Builder('Ceiling_Fixtures', shell_col)
-    lit = {(75, 75), (25, 175), (25, 225), (225, 225), (275, 175), (225, 75), (375, 225), (425, 75), (375, 25),
-           (575, 125), (525, 225), (175, 275), (325, 325), (475, 175), (125, 125), (275, 325)}
     n = 0
-    for x in range(25, HALL_X, 50):
-        for y in range(25, HALL_Y, 50):
+    for ix, x in enumerate(range(20, HALL_X, 40)):
+        for iy, y in enumerate(range(20, HALL_Y, 40)):
             if in_rect(x, y, PARTY, 2) or in_rect(x, y, STAFF, 2):
                 continue                                   # those blocks have their own low ceilings
-            z = HALL_Z - 13
-            on = (x, y) in lit
-            fx.box((x - 6, y - 2, z), (x + 6, y + 2, z + 1.2), 'wall_white')
-            fx.box((x - 5.6, y - 1.6, z - 0.12), (x + 5.6, y + 1.6, z), 'lamp_on' if on else 'lamp_off')
-            for ox in (-5, 5):
-                fx.cyl((x + ox, y, z + 1.2), (x + ox, y, HALL_Z - 4.6), 0.08, 'steel', 3)
+            z = HALL_Z - 9
+            on = (ix * 7 + iy * 3) % 6 != 0
+            fx.box((x - 5, y - 1.6, z), (x + 5, y + 1.6, z + 0.8), 'wall_white')
+            for oy in (-0.8, 0.8):
+                fx.box((x - 4.7, y + oy - 0.3, z - 0.25), (x + 4.7, y + oy + 0.3, z), 'lamp_on' if on else 'lamp_off')
+            for ox in (-4, 4):
+                fx.cyl((x + ox, y, z + 0.8), (x + ox, y, HALL_Z - 4.6), 0.08, 'steel', 3)
             if on:
-                light(f'L6_Troffer_{n:02d}', (x, y, z - 0.4), energy=26000)
+                light(f'L6_Troffer_{n:03d}', (x, y, z - 0.4), energy=26000)
                 n += 1
     fx.finish()
+    # building columns: cream steel wrapped in safety padding up to head height, like the concept art
     col = Builder('Hall_Columns', shell_col)
-    for gx, gy in ((200, 150), (200, 290), (300, 290), (300, 150), (160, 215), (490, 150), (490, 250)):
-        col.box((gx - 1, gy - 1, 0), (gx + 1, gy + 1, HALL_Z - 7), 'steel')
-        col.box((gx - 1.8, gy - 1.8, 0.35), (gx + 1.8, gy + 1.8, 9), 'blue' if (gx + gy) % 100 else 'yellow')
+    frame_rect = (SX - 6, SY - 6, SX + NX * C + 6, SY + NY * C + 6)
+    n = 0
+    for gx in range(100, HALL_X, 100):
+        for gy in (60, 160, 260, 340):
+            if any(in_rect(gx, gy, r, 4) for r in (frame_rect, PARTY, STAFF, ARCADE, PRIZES, BALL, TODDLER, (0, 132, 60, 288))):
+                continue
+            if abs(gx - HOME[0]) < 30 and abs(gy - HOME[1]) < 30:
+                continue
+            col.box((gx - 1.3, gy - 1.3, 0), (gx + 1.3, gy + 1.3, HALL_Z - 6), 'column')
+            col.box((gx - 2.1, gy - 2.1, 0.35), (gx + 2.1, gy + 2.1, 10.5), 'yellow' if n % 3 else 'blue')
+            n += 1
     col.finish()
 
 

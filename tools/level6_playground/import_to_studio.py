@@ -19,7 +19,7 @@ CHUNK = 1200
 
 # material key -> (Enum.Material, transparency, can collide)
 SURFACE = {
-    'mat_green': ('Rubber', 0, True), 'mat_blue': ('Rubber', 0, True), 'concrete': ('Concrete', 0, True),
+    'mat_green': ('SmoothPlastic', 0, True), 'mat_blue': ('SmoothPlastic', 0, True), 'concrete': ('Concrete', 0, True),
     'wall_yellow': ('Plaster', 0, True), 'wall_blue': ('Plaster', 0, True), 'wall_red': ('Plaster', 0, True),
     'wall_white': ('Plaster', 0, True), 'deck': ('Metal', 0, True), 'steel': ('Metal', 0, True),
     'duct': ('Metal', 0, True), 'pipe_red': ('Metal', 0, True), 'stainless': ('Metal', 0, True),
@@ -267,7 +267,11 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 	local light = Instance.new("PointLight")
 	light.Shadows = false
 	if string.find(f[1], "Troffer") then
-		light.Range, light.Brightness, light.Color = 60, 1.6, Color3.fromRGB(255, 240, 210)
+		-- a cone straight down: pools of light on the floor, the roof stays dark
+		light:Destroy()
+		light = Instance.new("SpotLight")
+		light.Shadows, light.Face, light.Angle = false, Enum.NormalId.Bottom, 150
+		light.Range, light.Brightness, light.Color = 60, 2.6, Color3.fromRGB(255, 240, 215)
 	elseif string.find(f[1], "SnackBar") then
 		light.Range, light.Brightness, light.Color = 38, 1.8, Color3.fromRGB(255, 200, 110)
 	elseif string.find(f[1], "PartyBlock") then
