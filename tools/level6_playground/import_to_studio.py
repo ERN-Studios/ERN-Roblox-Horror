@@ -156,7 +156,7 @@ local function decorate(p, owner, mat)
 		-- a neutral grey mat photo tinted with the tile's own colour
 		texture(p, TEX.foam_mat, Enum.NormalId.Top, 12, tint(p.Color, 1.05))
 	elseif owner == "BallOcean_Surface" then
-		texture(p, TEX.ballpit, Enum.NormalId.Top, 13)
+		texture(p, TEX.ballpit, Enum.NormalId.Top, 7)      -- the printed balls match the loose ones in size
 		for _, face in ipairs(SIDES) do texture(p, TEX.ballpit, face, 13) end
 	elseif mat == "wall_staff" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.wallpaper_staff, face, 11) end
@@ -220,9 +220,9 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 			p = tubeMesh:Clone()
 			p.Name, p.Anchored, p.CanTouch = mat, true, false
 			p.Color, p.Material = MAT[mat][1], Enum.Material.SmoothPlastic
-			p.Size = Vector3.new(len * 1.06, n[7] * 2.18, n[7] * 2.18)
+			p.Size = Vector3.new(len * 1.12, n[7] * 2.18, n[7] * 2.18)     -- overlap, so bends do not open gaps
 			local skin = Instance.new("SurfaceAppearance")
-			skin.ColorMap, skin.Color = TEX.vinyl_pad, tint(MAT[mat][1], 1.5)
+			skin.ColorMap, skin.Color = TEX.vinyl_pad, Color3.fromRGB(38, 38, 42)
 			skin.Parent = p
 		else
 			p = part(owner, mat, Enum.PartType.Cylinder)
@@ -385,6 +385,15 @@ for line in string.gmatch(PROPS, "[^\\n]+") do
 		local base = O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4]))
 		m.CFrame = CFrame.new(base + Vector3.new(0, m.Size.Y / 2, 0)) * CFrame.Angles(0, math.rad(tonumber(f[5])), 0)
 		m.Parent = props
+		if f[1] == "claw_machine" then
+			-- the generated model has no glass: a pane box round the prize area, fitted to the placed mesh
+			local glass = Instance.new("Part")
+			glass.Name, glass.Anchored, glass.CanCollide, glass.CanTouch, glass.CanQuery = "Glass", true, false, false, false
+			glass.Material, glass.Transparency, glass.Color = Enum.Material.Glass, 0.6, Color3.fromRGB(190, 225, 240)
+			glass.Size = Vector3.new(m.Size.X * 0.9, m.Size.Y * 0.4, m.Size.Z * 0.9)
+			glass.CFrame = m.CFrame * CFrame.new(0, m.Size.Y * 0.14, 0)
+			glass.Parent = props
+		end
 	else
 		missing[f[1]] = true
 	end
