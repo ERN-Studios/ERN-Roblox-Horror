@@ -413,9 +413,12 @@ if SLIDEKIT then
 			local m = template:Clone()
 			m.Anchored, m.CanCollide, m.CanTouch, m.CanQuery = true, false, false, false
 			-- moulded, glossy plastic in one solid colour
-			m.Material, m.Reflectance = Enum.Material.SmoothPlastic, 0.22
+			m.Material, m.Reflectance = Enum.Material.SmoothPlastic, 0
 			m.Color = Color3.fromRGB(tonumber(f[5]), tonumber(f[6]), tonumber(f[7]))
 			m.TextureID = ""
+			local gloss = Instance.new("SurfaceAppearance")      -- plain colour, very low roughness: the shine
+			gloss.ColorMap, gloss.RoughnessMap, gloss.Color = TEX.gloss_white, TEX.gloss_rough, m.Color
+			gloss.Parent = m
 			m.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4])))
 			m.Parent = slides
 		else
