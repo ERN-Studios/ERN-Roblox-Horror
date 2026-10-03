@@ -42,7 +42,7 @@ earlier single-hall build is `build_playground_v1_single_hall.py`. The notes bel
 
 `Level6PreviewAccess` calls `AddPlayer`/`RemovePlayer` and supplies the return-to-lobby handler.
 
-1. The child stands at Home Base and counts to 20 (20, 16, 13 then 10 seconds per round).
+1. The child stands at Home Base, covers its eyes and counts to 20 (a faster recording each round).
 2. It then walks to hide spots (nearer ones first), pauses to look, investigates running players and chases
    anyone it can see. A player inside a hide spot is only spotted within 6 studs, or when moving fast nearby.
 3. While it is 22+ studs from home, a player touching the post scores a dunk (once per player per round).
@@ -52,10 +52,11 @@ earlier single-hall build is `build_playground_v1_single_hall.py`. The notes bel
 5. Caught players are returned to the lobby; if everyone is caught the party has lost. The session resets
    when the last player leaves.
 
-Audio: the child's voice is `AudioTextToSpeech` on each client (VoiceId 1, pitched up). Roblox's text filter
-rejects long runs of numbers and every utterance costs one request (budget 1 + 6 x players per minute), so it
-says the count in four short bursts (1-5, 6-10, 13-15, 19-20), then "Ready or not. Here I come!" and "Found
-you!". Stings reuse SoundController's ids (spot, chase, jumpscare, death, alert, hum).
+The child is The Counter, a rigged doll with ten clips and 38 recorded lines: `tools/level6_entity/README.md`.
+Count times are the recordings' lengths (22.9, 21.2, 19.2, 15.9 s). It walks at 9, chases at 20, and stops
+for 0.9 s to point and speak when it first sees someone. Level 6 plays no sound borrowed from another level:
+only the recorded voice (3D, from the doll) and a dunk ping; the lobby music group is muted while inside.
+Chase and catch stings are still to be made.
 
 Textures: the net is the public Creator Store decal 81104945973317 (image 82491821601855). The floor seams,
 padding and grime overlays are the user's own uploads; a group-owned experience may only use them after

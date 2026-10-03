@@ -1,4 +1,4 @@
--- Level 6 Indoor Playground, client side: hide-and-seek HUD, the counting child's limb animation,
+-- Level 6 Indoor Playground, client side: hide-and-seek HUD, the counting child's animation and voice,
 -- the hall's lighting while you are inside, and the slide ride.
 -- Server side: ServerScriptService."Level 6 Playground Game" (events on ReplicatedStorage.Level6Playground.Event).
 local Players = game:GetService("Players")
@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
 
 local player = Players.LocalPlayer
 local IN_PREVIEW = "Level6PlaygroundPreview"
@@ -96,15 +97,15 @@ local function pulse(frame, prop, from, to, seconds)
 end
 
 -- ---------------------------------------------------------------------------------------
--- audio: the child's voice is Roblox text-to-speech (one request per count, so the per-experience
--- request budget is never an issue); the stings reuse sounds the experience already owns.
+-- audio: the child's voice is the recorded lines in ReplicatedStorage.Level6Counter.Voice, played from
+-- the doll itself so you can hear where it is. Nothing here may reuse another level's sounds: the first
+-- version borrowed Level 1's spot scream, chase loop, jumpscare and alert, and the owner rejected that.
 local SoundService = game:GetService("SoundService")
 local audio = Instance.new("Folder")
 audio.Name = "Level6PlaygroundAudio"
 audio.Parent = SoundService
--- Paused 2026-10-03 on the owner's request while new sounds are made: with this false every Level 6
--- sound is created silent and the child's voice is never requested. Set it back to true to restore them.
-local AUDIO_ENABLED = false
+-- With this false every Level 6 sound is created silent and the child never speaks.
+local AUDIO_ENABLED = true
 local function sound(name, id, volume, looped)
 	local s = Instance.new("Sound")
 	s.Name, s.SoundId, s.Volume, s.Looped = name, AUDIO_ENABLED and id or "", AUDIO_ENABLED and volume or 0, looped == true
@@ -112,74 +113,40 @@ local function sound(name, id, volume, looped)
 	return s
 end
 local SFX = {
-	hum = sound("Hum", "rbxassetid://92576512092725", 0.25, true),          -- fluorescent hum
-	spot = sound("Spot", "rbxassetid://82272419363488", 0.9),               -- it has seen you
-	chase = sound("Chase", "rbxassetid://79246919959914", 0.7, true),       -- while it is after you
-	caught = sound("Caught", "rbxassetid://140233243543479", 1),            -- you were found
-	otherCaught = sound("OtherCaught", "rbxassetid://113822157484898", 0.5),
-	alarm = sound("Alarm", "rbxassetid://118863512220494", 0.35, true),     -- exit open
 	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8), -- dunk
 }
-local voice = Instance.new("AudioTextToSpeech")
-voice.Name, voice.VoiceId, voice.Pitch, voice.Volume = "ChildVoice", "1", 7, 1.4
-voice.Parent = audio
-local voiceOut = Instance.new("AudioDeviceOutput")
-voiceOut.Parent = audio
-local voiceWire = Instance.new("Wire")
-voiceWire.SourceInstance, voiceWire.TargetInstance = voice, voiceOut
-voiceWire.Parent = audio
-local voiceToken = 0
--- Speak `text`; when `seconds` is given the speech is stretched or squeezed to last about that long.
-local function say(text, seconds)
+local counter = ReplicatedStorage:WaitForChild("Level6Counter")
+local function childModel()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	return model and model:FindFirstChild("Level 6 Counting Child")
+end
+local speaking = nil
+local function stopVoice()
+	if speaking then speaking:Destroy(); speaking = nil end
+end
+-- One line at a time: a new line cuts the old one off, as the server only sends a line that should win.
+local function say(key)
 	if not AUDIO_ENABLED then return end
-	voiceToken += 1
-	local token = voiceToken
-	task.spawn(function()
-		pcall(function() voice:Pause() end)
-		voice.Text = text
-		local ok, status = pcall(function() return voice:LoadAsync() end)
-		if token ~= voiceToken or not ok or status ~= Enum.AssetFetchStatus.Success then return end
-		local length = voice.TimeLength
-		voice.PlaybackSpeed = (seconds and length > 0) and math.clamp(length / seconds, 0.7, 1.6) or 1
-		voice.TimePosition = 0
-		voice:Play()
+	local voice = counter:FindFirstChild("Voice")
+	local source = voice and voice:FindFirstChild(key)
+	if not source then return end
+	stopVoice()
+	local child = childModel()
+	local s = source:Clone()
+	s.Parent = (child and child:FindFirstChild("Root")) or audio
+	speaking = s
+	s.Ended:Once(function()
+		if speaking == s then speaking = nil end
+		s:Destroy()
 	end)
+	s:Play()
 end
--- Roblox's text filter rejects long runs of numbers (they read as personal information), and every
--- utterance is one request against a per-minute budget, so the child says the count in a few short
--- bursts and mouths the rest. Key = the number the burst starts on; value = text, numbers covered.
-local COUNT_BURSTS = {
-	[1] = {"one, two, three, four, five.", 5},
-	[6] = {"six, seven, eight, nine, ten.", 5},
-	[13] = {"thirteen, fourteen, fifteen.", 3},
-	[19] = {"nineteen, twenty!", 2},
-}
-local countBeat = 1
-local function stopEncounterAudio()
-	SFX.chase:Stop(); SFX.alarm:Stop()
-end
-
 local dunked = false
-event.OnClientEvent:Connect(function(kind, a, b, c, d)
-	if kind == "round" then
-		countBeat = (d or 20) / 20
-	elseif kind == "count" then
-		local burst = COUNT_BURSTS[a]
-		if burst then say(burst[1], burst[2] * countBeat) end
-	elseif kind == "go" then
-		say("Ready or not. Here I come!")
-	elseif kind == "chase" then
-		if a then SFX.spot:Play(); SFX.chase:Play() else SFX.chase:Stop() end
-	elseif kind == "caught" then
-		stopEncounterAudio()
-		if b then SFX.caught:Play(); say("Found you!") else SFX.otherCaught:Play() end
-	elseif kind == "dunk" then
+event.OnClientEvent:Connect(function(kind, a)
+	if kind == "say" then
+		say(a)
+	elseif kind == "dunk" or kind == "escaped" then
 		SFX.ping:Play()
-	elseif kind == "won" then
-		SFX.alarm:Play()
-	elseif kind == "escaped" or kind == "left" or kind == "lost" or kind == "roundover" then
-		stopEncounterAudio()
-		if kind == "escaped" then SFX.ping:Play() end
 	end
 end)
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
@@ -295,14 +262,13 @@ local function refresh()
 	gui.Enabled = on
 	applyLighting(on)
 	if on then
-		if not SFX.hum.IsPlaying then SFX.hum:Play() end
 	else
 		vignette.ImageTransparency = 1
-		SFX.hum:Stop()
-		stopEncounterAudio()
-		voiceToken += 1
-		pcall(function() voice:Pause() end)
+		stopVoice()
 	end
+	-- the lobby track must not follow the player in here (LobbyMusicController only knows real rounds)
+	local lobbyMusic = SoundService:FindFirstChild("ZyntraLobbyMusic")
+	if lobbyMusic and lobbyMusic:IsA("SoundGroup") then lobbyMusic.Volume = on and 0 or 1 end
 end
 player:GetAttributeChangedSignal(IN_PREVIEW):Connect(refresh)
 refresh()
@@ -356,43 +322,127 @@ RunService.RenderStepped:Connect(function(dt)
 end)
 
 -- ---------------------------------------------------------------------------------------
--- the counting child's limbs (server publishes Pose/Speed attributes on the model)
-local function motorsOf(child)
-	local m = {}
-	for _, d in ipairs(child:GetDescendants()) do
-		if d:IsA("Motor6D") and d.Part1 then m[d.Part1.Name] = d end
+-- the counting child: the server publishes Anim / AnimSerial / Speed on the model, the clips are JSON in
+-- ReplicatedStorage.Level6Counter.Clips (one quaternion per bone per frame, written by tools/level6_entity).
+local clips = {}
+local function clip(name)
+	local c = clips[name]
+	if c == nil then
+		c = false
+		local folder = counter:FindFirstChild("Clips")
+		local value = folder and folder:FindFirstChild(name)
+		local ok, data = pcall(function() return HttpService:JSONDecode(value.Value) end)
+		if ok and data then
+			local tracks = {}
+			for bone, q in pairs(data.bones) do
+				local frames = table.create(data.frames)
+				for f = 0, data.frames - 1 do
+					local i = f * 4
+					frames[f + 1] = CFrame.new(0, 0, 0, q[i + 1] / 10000, q[i + 2] / 10000, q[i + 3] / 10000, q[i + 4] / 10000)
+				end
+				tracks[bone] = frames
+			end
+			local hips = nil
+			if data.hips then
+				hips = table.create(data.frames)
+				for f = 0, data.frames - 1 do
+					local i = f * 3
+					hips[f + 1] = Vector3.new(data.hips[i + 1], data.hips[i + 2], data.hips[i + 3]) / 1000
+				end
+			end
+			c = {frames = data.frames, fps = data.fps, loop = data.loop, tracks = tracks, hips = hips}
+		end
+		clips[name] = c
 	end
-	return m
+	return c or nil
 end
+
+-- studs per second at which each travelling clip's feet match the floor
+local STRIDE = {Walk_Wander = 4.2, Run_Chase = 9.5}
+local TWITCH_OVER = {Idle = true, Walk_Wander = true, Run_Chase = true}
+local FADE = 0.16
 local rigs = setmetatable({}, {__mode = "k"})
-local clock = 0
-RunService.Heartbeat:Connect(function(dt)
-	clock += dt
-	local model = workspace:FindFirstChild(MODEL_NAME)
-	local child = model and model:FindFirstChild("Level 6 Counting Child")
-	if not child then return end
-	local m = rigs[child]
-	if not m then m = motorsOf(child); rigs[child] = m end
-	if not (m.ArmL and m.ArmR and m.LegL and m.LegR and m.Head) then rigs[child] = nil; return end
-	local pose = child:GetAttribute("Pose") or "walk"
-	local speed = child:GetAttribute("Speed") or 0
-	if pose == "count" then
-		m.ArmL.Transform = CFrame.Angles(math.rad(150), 0, math.rad(25))
-		m.ArmR.Transform = CFrame.Angles(math.rad(135), 0, math.rad(-35))
-		m.Head.Transform = CFrame.Angles(math.rad(30), 0, math.sin(clock * 1.7) * 0.08)
-		m.LegL.Transform, m.LegR.Transform = CFrame.new(), CFrame.new()
-		return
+
+local function rigOf(child)
+	local rig = rigs[child]
+	if rig then return rig end
+	local body = child:FindFirstChild("Body")
+	if not body then return nil end
+	local bones = {}
+	for _, d in ipairs(body:GetDescendants()) do
+		if d:IsA("Bone") then bones[d.Name] = d end
 	end
-	local swing = math.clamp(speed / 14, 0, 1.6)
-	local phase = clock * (5 + speed * 0.45)
-	m.ArmL.Transform = CFrame.Angles(math.sin(phase) * 0.7 * swing - 0.15, 0, math.rad(6))
-	m.ArmR.Transform = CFrame.Angles(-math.sin(phase) * 0.8 * swing - 0.1, 0, math.rad(-8))
-	m.LegL.Transform = CFrame.Angles(-math.sin(phase) * 0.6 * swing, 0, 0)
-	m.LegR.Transform = CFrame.Angles(math.sin(phase) * 0.6 * swing, 0, 0)
-	local twitch = (math.noise(clock * 3, 1.7) > 0.42) and math.noise(clock * 40, 3.1) * 0.6 or 0
-	if pose == "look" then
-		m.Head.Transform = CFrame.Angles(0, math.sin(clock * 2.4) * 0.9, 0.25 + twitch)
+	if not bones.Hips or not bones.Head then return nil end   -- still streaming in
+	rig = {bones = bones, last = {}, from = {}, fade = 1, t = 0, name = nil, serial = nil,
+		nextTwitch = os.clock() + 3, twitchT = nil}
+	rigs[child] = rig
+	return rig
+end
+
+-- frame position -> two frame indices and the blend between them
+local function at(c, t)
+	local f = t * c.fps
+	local last = c.frames - 1
+	if c.loop then f = f % last else f = math.min(f, last) end
+	local i = math.floor(f)
+	return i + 1, math.min(i + 2, c.frames), f - i
+end
+
+RunService.RenderStepped:Connect(function(dt)
+	local child = childModel()
+	local rig = child and rigOf(child)
+	if not rig then return end
+	local name = child:GetAttribute("Anim") or "Idle"
+	local serial = child:GetAttribute("AnimSerial") or 0
+	if name ~= rig.name or serial ~= rig.serial then
+		rig.from = table.clone(rig.last)
+		rig.fade = 0
+		rig.name, rig.serial, rig.t = name, serial, 0
+	end
+	local c = clip(name)
+	if not c then return end
+	local stride = STRIDE[name]
+	local rate = stride and math.clamp((child:GetAttribute("Speed") or 0) / stride, 0.6, 2.1) or 1
+	rig.t += dt * rate
+	rig.fade = math.min(1, rig.fade + dt / FADE)
+	local i0, i1, a = at(c, rig.t)
+
+	-- the extra head twitch, at uneven moments, over the clips that leave the head free
+	local twitch, t0, t1, ta = nil, nil, nil, nil
+	if TWITCH_OVER[name] then
+		if rig.twitchT == nil and os.clock() > rig.nextTwitch then rig.twitchT = 0 end
+		if rig.twitchT ~= nil then
+			twitch = clip("Head_Twitch")
+			rig.twitchT += dt
+			if not twitch or rig.twitchT * twitch.fps >= twitch.frames - 1 then
+				twitch, rig.twitchT = nil, nil
+				rig.nextTwitch = os.clock() + 1.5 + math.random() * 4.5
+			else
+				t0, t1, ta = at(twitch, rig.twitchT)
+			end
+		end
 	else
-		m.Head.Transform = CFrame.Angles(math.sin(phase * 0.5) * 0.05, 0, math.rad(12) + twitch)
+		rig.twitchT = nil
+	end
+
+	for boneName, bone in pairs(rig.bones) do
+		local frames = (twitch and twitch.tracks[boneName]) or c.tracks[boneName]
+		local target
+		if twitch and twitch.tracks[boneName] then
+			target = frames[t0]:Lerp(frames[t1], ta)
+		elseif frames then
+			target = frames[i0]:Lerp(frames[i1], a)
+		else
+			target = CFrame.identity
+		end
+		if boneName == "Hips" and c.hips then
+			target = CFrame.new(c.hips[i0]:Lerp(c.hips[i1], a)) * target
+		end
+		if rig.fade < 1 then
+			local from = rig.from[boneName]
+			if from then target = from:Lerp(target, rig.fade) end
+		end
+		bone.Transform = target
+		rig.last[boneName] = target
 	end
 end)

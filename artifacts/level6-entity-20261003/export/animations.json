@@ -1,0 +1,120 @@
+{
+ "rig": "Meshy 24-bone humanoid",
+ "heightMetres": 1.281,
+ "triangles": 10394,
+ "clips": [
+  {
+   "name": "Idle",
+   "file": "Counter_Anim_Idle.fbx",
+   "frames": 121,
+   "fps": 30,
+   "seconds": 4.0,
+   "loop": true,
+   "bones": "all",
+   "robloxPriority": "Idle",
+   "use": "Standing still, slow sway, two head twitches."
+  },
+  {
+   "name": "Count_Start",
+   "file": "Counter_Anim_Count_Start.fbx",
+   "frames": 25,
+   "fps": 30,
+   "seconds": 0.8,
+   "loop": false,
+   "bones": "all",
+   "robloxPriority": "Action",
+   "use": "Raises both hands over its eyes."
+  },
+  {
+   "name": "Count_Loop",
+   "file": "Counter_Anim_Count_Loop.fbx",
+   "frames": 61,
+   "fps": 30,
+   "seconds": 2.0,
+   "loop": true,
+   "bones": "all",
+   "robloxPriority": "Action",
+   "use": "Hands over eyes, nods once per second while it counts."
+  },
+  {
+   "name": "Count_End",
+   "file": "Counter_Anim_Count_End.fbx",
+   "frames": 46,
+   "fps": 30,
+   "seconds": 1.5,
+   "loop": false,
+   "bones": "all",
+   "robloxPriority": "Action",
+   "use": "Hands drop, head snaps up and twitches: ready or not."
+  },
+  {
+   "name": "Walk_Wander",
+   "file": "Counter_Anim_Walk_Wander.fbx",
+   "frames": 121,
+   "fps": 30,
+   "seconds": 4.0,
+   "loop": true,
+   "bones": "all",
+   "robloxPriority": "Movement",
+   "use": "Stiff walk while searching, head scans and twitches."
+  },
+  {
+   "name": "Search_Look",
+   "file": "Counter_Anim_Search_Look.fbx",
+   "frames": 106,
+   "fps": 30,
+   "seconds": 3.5,
+   "loop": false,
+   "bones": "all",
+   "robloxPriority": "Action",
+   "use": "Stops at a hiding spot, leans in, looks left then right."
+  },
+  {
+   "name": "Spotted",
+   "file": "Counter_Anim_Spotted.fbx",
+   "frames": 31,
+   "fps": 30,
+   "seconds": 1.0,
+   "loop": false,
+   "bones": "all",
+   "robloxPriority": "Action",
+   "use": "Sees a player: jolts upright, head snaps over, points."
+  },
+  {
+   "name": "Run_Chase",
+   "file": "Counter_Anim_Run_Chase.fbx",
+   "frames": 39,
+   "fps": 30,
+   "seconds": 1.267,
+   "loop": true,
+   "bones": "all",
+   "robloxPriority": "Movement",
+   "use": "Sprint with both arms reaching forward."
+  },
+  {
+   "name": "Catch",
+   "file": "Counter_Anim_Catch.fbx",
+   "frames": 37,
+   "fps": 30,
+   "seconds": 1.2,
+   "loop": false,
+   "bones": "all",
+   "robloxPriority": "Action4",
+   "use": "Lunge and grab with a shaking head, for the catch."
+  },
+  {
+   "name": "Head_Twitch",
+   "file": "Counter_Anim_Head_Twitch.fbx",
+   "frames": 15,
+   "fps": 30,
+   "seconds": 0.467,
+   "loop": false,
+   "bones": [
+    "neck",
+    "Head"
+   ],
+   "robloxPriority": "Action2",
+   "use": "Head and neck only, to layer over anything."
+  }
+ ]
+}

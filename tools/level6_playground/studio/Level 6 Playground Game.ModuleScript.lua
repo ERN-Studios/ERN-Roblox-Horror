@@ -1,6 +1,10 @@
 -- Level 6 Indoor Playground: hide and seek with the counting child.
 --
 -- Level6PreviewAccess calls AddPlayer/RemovePlayer as players enter and leave the map.
+-- The child is "The Counter", a skinned porcelain doll: its mesh is baked on the server from
+-- ServerStorage.Level6CounterSource, its clips and voice lines live in ReplicatedStorage.Level6Counter
+-- (pipeline: tools/level6_entity). The server only publishes Anim / AnimSerial / Speed on the model and
+-- says which line to speak; the Level 6 Playground Client moves the bones and plays the sound.
 -- Each round: the child faces Home Base and counts to 20 out loud; when it finishes it searches
 -- the hide spots and chases anyone it sees. While it is away, players score by "dunking" the home
 -- post (once per player per round). Enough dunks opens the emergency exit; reaching it clears the
@@ -9,26 +13,30 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local PathfindingService = game:GetService("PathfindingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
+local AssetService = game:GetService("AssetService")
+local HttpService = game:GetService("HttpService")
 
 local MODEL_NAME = "Level 6 Indoor Playground"
 local IN_PREVIEW = "Level6PlaygroundPreview"
 local CLEARED = "Level6PlaygroundCleared"
 
 local CONFIG = {
-	-- Paused 2026-10-03 on the owner's request: with this false nobody counts, seeks or chases and the
-	-- map is a free-roam preview. Set it back to true to bring the hide-and-seek round back.
-	EntityEnabled = false,
+	-- With this false nobody counts, seeks or chases and the map is a free-roam preview.
+	EntityEnabled = true,
 	CountTo = 20,
-	CountSeconds = {20, 16, 13, 10},  -- per round; the last value repeats
+	-- the recorded count for each round (22.9, 21.2, 19.2, 15.9 s); the last one repeats
+	CountLines = {"l6_count_slow", "l6_count_medium", "l6_count_fast", "l6_count_frantic"},
 	SeekSeconds = 75,
 	DunksPerPlayer = 2, MinDunks = 3, MaxDunks = 8,
 	DunkRadius = 7, DunkSafeDistance = 22,
-	WalkSpeed = 13, ChaseSpeed = 21, EscapeChaseSpeed = 18,
+	WalkSpeed = 9, ChaseSpeed = 20, EscapeChaseSpeed = 18,
 	SightRange = 75, CatchDistance = 4.2, HideRadius = 4.5, HiddenSpotRange = 6,
-	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 1.2,
+	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 4, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 2.2,
-	HipHeight = 3.1,
-	VoiceLeadSeconds = 0.6,
+	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
+	EyeHeight = 1.4,   -- eyes above the root
+	SpottedPause = 0.9,
 }
 
 local Game = {}
@@ -86,71 +94,128 @@ end
 
 -- ---------------------------------------------------------------------------------------
 -- the child
-local SKIN = Color3.fromRGB(205, 190, 178)
-local function newPart(model, name, size, color, shape)
-	local p = Instance.new("Part")
-	p.Name, p.Size, p.Color = name, size, color
-	p.Material = Enum.Material.SmoothPlastic
-	p.CanCollide, p.CanTouch, p.CanQuery, p.Massless = false, false, false, true
-	p.Anchored = false
-	if shape then p.Shape = shape end
-	p.Parent = model
-	return p
+local VOICE = {
+	ready = {"l6_ready_1", "l6_ready_2", "l6_ready_3"},
+	search = {"l6_search_1", "l6_search_2", "l6_search_3", "l6_search_4", "l6_search_5", "l6_search_6", "l6_search_7", "l6_search_8"},
+	check = {"l6_check_1", "l6_check_2", "l6_check_3"},
+	spot = {"l6_spot_1", "l6_spot_2", "l6_spot_3"},
+	chase = {"l6_chase_1", "l6_chase_2", "l6_chase_3"},
+	lost = {"l6_lost_1", "l6_lost_2"},
+	found = {"l6_found_1", "l6_found_2", "l6_found_3"},
+	dunk = {"l6_dunk_1", "l6_dunk_2", "l6_dunk_3"},
+	exit = {"l6_exit_1", "l6_exit_2"},
+}
+local lastLine = {}
+local function pick(group)
+	local list = VOICE[group]
+	local i = math.random(#list)
+	if #list > 1 and i == lastLine[group] then i = i % #list + 1 end
+	lastLine[group] = i
+	return list[i]
 end
 
-local function joint(part0, part1, c0, c1)
-	local m = Instance.new("Motor6D")
-	m.Part0, m.Part1, m.C0, m.C1 = part0, part1, c0, c1 or CFrame.new()
-	m.Parent = part0
-	return m
-end
-
-local function buildChild()
+-- The doll's mesh cannot be uploaded from a session, so it is rebuilt here once per server from the
+-- staged source and baked to session content, the same way the lobby's RuntimeBake does.
+local function buildDollTemplate()
+	local source = ServerStorage:FindFirstChild("Level6CounterSource")
+	if not source then error("ServerStorage.Level6CounterSource is missing") end
+	local function load(key)
+		local parts, i = {}, 1
+		while true do
+			local sv = source:FindFirstChild(key .. "_" .. i)
+			if not sv then break end
+			parts[#parts + 1] = sv.Value; i += 1
+		end
+		return HttpService:JSONDecode(table.concat(parts))
+	end
+	local V, UV, N, T, W, bones = load("V"), load("UV"), load("N"), load("T"), load("W"), load("B")
+	local em = AssetService:CreateEditableMesh()
+	local vid, uid, nid, bid, byName = {}, {}, {}, {}, {}
+	for i = 1, #V, 3 do vid[#vid + 1] = em:AddVertex(Vector3.new(V[i], V[i + 1], V[i + 2]) / 1000) end
+	for i = 1, #UV, 2 do uid[#uid + 1] = em:AddUV(Vector2.new(UV[i], UV[i + 1]) / 10000) end
+	for i = 1, #N, 3 do nid[#nid + 1] = em:AddNormal(Vector3.new(N[i], N[i + 1], N[i + 2]) / 1000) end
+	for i = 1, #T, 9 do
+		local f = em:AddTriangle(vid[T[i] + 1], vid[T[i + 1] + 1], vid[T[i + 2] + 1])
+		em:SetFaceUVs(f, {uid[T[i + 3] + 1], uid[T[i + 4] + 1], uid[T[i + 5] + 1]})
+		em:SetFaceNormals(f, {nid[T[i + 6] + 1], nid[T[i + 7] + 1], nid[T[i + 8] + 1]})
+		if i % 18000 == 1 then task.wait() end
+	end
+	for i, b in ipairs(bones) do
+		bid[i] = em:AddBone({Name = b.name, CFrame = CFrame.new(b.pos[1], b.pos[2], b.pos[3]), Virtual = false})
+		byName[b.name] = bid[i]
+	end
+	for i, b in ipairs(bones) do
+		if b.parent then em:SetBoneParent(bid[i], byName[b.parent]) end
+	end
+	local i, v = 1, 1
+	while i <= #W do
+		local n = W[i]; i += 1
+		local ids, ws = {}, {}
+		for k = 1, n do ids[k] = bid[W[i] + 1]; ws[k] = W[i + 1] / 1000; i += 2 end
+		em:SetVertexBones(vid[v], ids); em:SetVertexBoneWeights(vid[v], ws)
+		v += 1
+	end
+	local ok, result, content = pcall(AssetService.CreateDataModelContentAsync, AssetService, Content.fromObject(em))
+	em:Destroy()
+	if not ok or result ~= Enum.CreateContentResult.Success then error("doll bake failed: " .. tostring(result)) end
+	local body = AssetService:CreateMeshPartAsync(content, {CollisionFidelity = Enum.CollisionFidelity.Box})
+	body.Name = "Body"
+	body.Color, body.Material = Color3.new(1, 1, 1), Enum.Material.SmoothPlastic
+	body.TextureID = source:GetAttribute("Texture") or ""
+	body.CanCollide, body.CanTouch, body.CanQuery, body.Massless, body.Anchored = false, false, false, true, false
+	local made = {}
+	for _, b in ipairs(bones) do
+		local bone = Instance.new("Bone")
+		bone.Name = b.name
+		local pos = Vector3.new(b.pos[1], b.pos[2], b.pos[3])
+		made[b.name] = {bone = bone, pos = pos}
+		if b.parent then
+			bone.CFrame = CFrame.new(pos - made[b.parent].pos); bone.Parent = made[b.parent].bone
+		else
+			bone.CFrame = CFrame.new(pos); bone.Parent = body
+		end
+	end
 	local model = Instance.new("Model")
 	model.Name = "Level 6 Counting Child"
 	local root = Instance.new("Part")
 	root.Name, root.Size, root.Transparency = "Root", Vector3.new(1.5, 1.5, 1.5), 1
 	root.Anchored, root.CanCollide, root.CanTouch, root.CanQuery = true, false, false, false
 	root.Parent = model
+	body.CFrame = root.CFrame
+	body.Parent = model
+	-- a Weld with explicit offsets: a WeldConstraint takes its offset when it first becomes active, which is
+	-- after the clone's root has already been moved, and the body then stays at the world origin
+	local weld = Instance.new("Weld")
+	weld.Part0, weld.Part1, weld.C0, weld.C1 = root, body, CFrame.identity, CFrame.identity
+	weld.Parent = root
+	local glow = Instance.new("PointLight")   -- just enough to read the face in the dark hall
+	glow.Color, glow.Range, glow.Brightness, glow.Shadows = Color3.fromRGB(255, 225, 190), 9, 0.55, false
+	glow.Parent = root
 	model.PrimaryPart = root
+	CONFIG.HipHeight = -(source:GetAttribute("FeetY") or -CONFIG.HipHeight)
+	return model
+end
 
-	local torso = newPart(model, "Torso", Vector3.new(2.1, 2.5, 1.3), Color3.fromRGB(240, 200, 70))
-	local stripe = newPart(model, "Stripe", Vector3.new(2.15, 0.5, 1.35), Color3.fromRGB(210, 40, 60))
-	local head = newPart(model, "Head", Vector3.new(3.5, 3.5, 3.5), SKIN, Enum.PartType.Ball)
-	local hat1 = newPart(model, "Hat1", Vector3.new(0.5, 1.9, 1.9), Color3.fromRGB(220, 40, 60), Enum.PartType.Cylinder)
-	local hat2 = newPart(model, "Hat2", Vector3.new(0.6, 1.2, 1.2), Color3.fromRGB(250, 210, 40), Enum.PartType.Cylinder)
-	local hat3 = newPart(model, "Hat3", Vector3.new(0.7, 0.55, 0.55), Color3.fromRGB(40, 120, 230), Enum.PartType.Cylinder)
-	local eyeL = newPart(model, "EyeL", Vector3.new(0.75, 0.75, 0.75), Color3.new(0, 0, 0), Enum.PartType.Ball)
-	local eyeR = newPart(model, "EyeR", Vector3.new(0.55, 0.55, 0.55), Color3.new(0, 0, 0), Enum.PartType.Ball)
-	local glintL = newPart(model, "GlintL", Vector3.new(0.18, 0.18, 0.18), Color3.new(1, 1, 1), Enum.PartType.Ball)
-	local glintR = newPart(model, "GlintR", Vector3.new(0.16, 0.16, 0.16), Color3.new(1, 1, 1), Enum.PartType.Ball)
-	glintL.Material, glintR.Material = Enum.Material.Neon, Enum.Material.Neon
-	local mouth = newPart(model, "Mouth", Vector3.new(1.9, 0.32, 0.4), Color3.fromRGB(25, 5, 5))
-	local teeth = newPart(model, "Teeth", Vector3.new(1.7, 0.12, 0.42), Color3.fromRGB(235, 230, 210))
-	local armL = newPart(model, "ArmL", Vector3.new(0.45, 5.8, 0.45), SKIN)
-	local armR = newPart(model, "ArmR", Vector3.new(0.45, 6.3, 0.45), SKIN)
-	local legL = newPart(model, "LegL", Vector3.new(0.65, 2.6, 0.65), Color3.fromRGB(40, 60, 140))
-	local legR = newPart(model, "LegR", Vector3.new(0.65, 2.6, 0.65), Color3.fromRGB(40, 60, 140))
-
-	local m = {}
-	-- hunched: the torso leans forward and the head hangs out in front of it
-	m.torso = joint(root, torso, CFrame.new(0, 1.2, 0) * CFrame.Angles(math.rad(-22), 0, 0))
-	joint(torso, stripe, CFrame.new(0, 0.3, 0))
-	m.head = joint(torso, head, CFrame.new(0, 2.6, -0.5))
-	joint(head, hat1, CFrame.new(0.3, 1.6, 0) * CFrame.Angles(0, 0, math.rad(80)))
-	joint(head, hat2, CFrame.new(0.42, 2.1, 0) * CFrame.Angles(0, 0, math.rad(80)))
-	joint(head, hat3, CFrame.new(0.55, 2.55, 0) * CFrame.Angles(0, 0, math.rad(80)))
-	joint(head, eyeL, CFrame.new(-0.65, 0.35, -1.55))
-	joint(head, eyeR, CFrame.new(0.7, 0.2, -1.6))
-	joint(eyeL, glintL, CFrame.new(0.1, 0.1, -0.33))
-	joint(eyeR, glintR, CFrame.new(0.08, 0.08, -0.25))
-	joint(head, mouth, CFrame.new(0, -0.75, -1.5) * CFrame.Angles(0, 0, math.rad(4)))
-	joint(mouth, teeth, CFrame.new(0, 0.1, -0.02))
-	m.armL = joint(torso, armL, CFrame.new(-1.35, 1.0, 0), CFrame.new(0, 2.8, 0))
-	m.armR = joint(torso, armR, CFrame.new(1.35, 1.0, 0), CFrame.new(0, 3.05, 0))
-	m.legL = joint(root, legL, CFrame.new(-0.55, 0, 0), CFrame.new(0, 1.2, 0))
-	m.legR = joint(root, legR, CFrame.new(0.55, 0, 0), CFrame.new(0, 1.2, 0))
-	return model, root, m, {glintL, glintR}
+local dollTemplate = nil   -- nil = not tried yet, false = the bake failed on this server
+local function buildChild()
+	if dollTemplate == nil then
+		local ok, built = pcall(buildDollTemplate)
+		if not ok then warn("[Level6] counting child: " .. tostring(built)) end
+		dollTemplate = ok and built or false
+	end
+	if dollTemplate then
+		local model = dollTemplate:Clone()
+		return model, model.PrimaryPart
+	end
+	-- last resort so the round still runs: a plain pale block
+	local model = Instance.new("Model")
+	model.Name = "Level 6 Counting Child"
+	local root = Instance.new("Part")
+	root.Name, root.Size, root.Color = "Root", Vector3.new(1.6, 4.8, 1), Color3.fromRGB(225, 215, 205)
+	root.Anchored, root.CanCollide, root.CanTouch, root.CanQuery = true, false, false, false
+	root.Parent = model
+	model.PrimaryPart = root
+	return model, root
 end
 
 -- ---------------------------------------------------------------------------------------
@@ -173,9 +238,10 @@ local function newSession(info)
 	s.dunks = 0
 	s.phase = "starting"
 	s.checked = {}
-	s.anim = {speed = 0, pose = "walk", t = 0}
-	local model, root, motors, glints = buildChild()
-	s.child, s.root, s.motors, s.glints = model, root, motors, glints
+	s.anim = {speed = 0, name = "Idle", serial = 0}
+	s.voiceUntil = 0
+	local model, root = buildChild()
+	s.child, s.root = model, root
 	local home = info.home
 	root.CFrame = CFrame.lookAt(home + Vector3.new(0, CONFIG.HipHeight - 3 + 0.35, 4), home + Vector3.new(0, CONFIG.HipHeight - 3 + 0.35, 0))
 	model.Parent = info.model
@@ -195,14 +261,36 @@ function Session:count()
 	return n
 end
 
--- Motor6D.Transform does not replicate, so the limbs are animated by the Level 6 Playground Client.
--- The server only publishes the pose and a rounded speed as attributes on the model.
+-- Bone.Transform does not replicate, so the Level 6 Playground Client plays the clips. The server only
+-- publishes which clip, a serial that restarts it, and a rounded speed, as attributes on the model.
 function Session:animate(dt)
 	local a = self.anim
+	local child = self.child
 	local speed = math.floor(a.speed + 0.5)
-	if self.child:GetAttribute("Pose") ~= a.pose then self.child:SetAttribute("Pose", a.pose) end
-	if self.child:GetAttribute("Speed") ~= speed then self.child:SetAttribute("Speed", speed) end
-	self.child:SetAttribute("Chasing", self.chase ~= nil)
+	if child:GetAttribute("Anim") ~= a.name then child:SetAttribute("Anim", a.name) end
+	if child:GetAttribute("AnimSerial") ~= a.serial then child:SetAttribute("AnimSerial", a.serial) end
+	if child:GetAttribute("Speed") ~= speed then child:SetAttribute("Speed", speed) end
+	child:SetAttribute("Chasing", self.chase ~= nil)
+end
+
+-- Stand still and play a clip from its first frame.
+function Session:pose(name)
+	self.anim.name = name
+	self.anim.serial += 1
+	self.anim.speed = 0
+end
+
+-- Speak one recorded line (ReplicatedStorage.Level6Counter.Voice). Chatter gives way to a line that is
+-- still playing; `force` cuts it off. Returns the line's length in seconds, or nil when it was skipped.
+function Session:say(key, force)
+	if not force and os.clock() < self.voiceUntil then return nil end
+	local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
+	voice = voice and voice:FindFirstChild("Voice")
+	local sound = voice and voice:FindFirstChild(key)
+	local seconds = sound and sound:GetAttribute("Seconds") or 2
+	self.voiceUntil = os.clock() + seconds + 0.5
+	broadcast(self, "say", key)
+	return seconds
 end
 
 function Session:place(pos, face)
@@ -238,6 +326,7 @@ function Session:follow(points, speed, phase)
 			local dist = delta.Magnitude
 			local step = speed * dt
 			self.anim.speed = speed
+			self.anim.name = speed >= 15 and "Run_Chase" or "Walk_Wander"
 			if dist <= step then
 				self:place(goal, flat(delta))
 				break
@@ -263,7 +352,7 @@ function Session:goHome(phase)
 	local stand = home + Vector3.new(0, 0.35 - 3, 4)
 	self:walkTo(stand, CONFIG.WalkSpeed * 1.4, phase)
 	self:place(stand, home - stand)
-	self.anim.speed = 0
+	self:pose("Idle")
 end
 
 -- ---------------------------------------------------------------------------------------
@@ -274,8 +363,8 @@ function Session:rayParams()
 		if p.Character then exclude[#exclude + 1] = p.Character end
 	end
 	local model = self.info.model
-	for _, name in ipairs({"Frame_Nets", "Frame_BridgeNets", "Frame_RoofNet", "Signs", "BallPit_Balls", "Stray_Balls",
-		"Toddler_Balls", "Lights", "Anchors", "Frame_Rollers"}) do
+	for _, name in ipairs({"Frame_Nets", "Frame_BridgeNets", "Frame_RoofNet", "BallOcean_Nets", "Signs", "BallOcean_Balls",
+		"Toddler_Balls", "Lights", "Anchors", "Frame_Rollers", "Frame_Lamps", "Ceiling_Fixtures"}) do
 		local f = model:FindFirstChild(name)
 		if f then exclude[#exclude + 1] = f end
 	end
@@ -295,7 +384,7 @@ function Session:hidden(pos)
 end
 
 function Session:sees(root, params)
-	local eye = self.root.Position + Vector3.new(0, 3.2, 0)
+	local eye = self.root.Position + Vector3.new(0, CONFIG.EyeHeight, 0)
 	local to = root.Position + Vector3.new(0, 1.5, 0)
 	local delta = to - eye
 	local dist = delta.Magnitude
@@ -340,6 +429,9 @@ function Session:catch(player)
 		if other ~= player then event:FireClient(other, "caught", player.DisplayName, false) end
 	end
 	self.pauseUntil = os.clock() + 1.6
+	self.interrupt = true
+	self:pose("Catch")
+	self:say(pick("found"), true)
 	task.delay(CONFIG.CaughtReturnDelay, function()
 		if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
 			returnHandler(player, "caught")
@@ -351,6 +443,9 @@ function Session:catch(player)
 	if left == 0 then
 		broadcast(self, "lost")
 		self.phase = "over"
+		task.delay(1.8, function() broadcast(self, "say", "l6_win") end)
+	elseif self.active then
+		task.delay(2.0, function() if self.active then self:say("l6_found_other", true) end end)
 	end
 end
 
@@ -364,21 +459,23 @@ function Session:countPhase()
 	self:goHome("count")
 	if not self.active then return end
 	self.phase = "count"
-	self.anim.pose = "count"
-	self.anim.speed = 0
-	local seconds = CONFIG.CountSeconds[math.min(self.round, #CONFIG.CountSeconds)]
+	self:pose("Count_Start")
+	task.wait(0.8)                        -- hands go up before the first number
+	if not self.active or self.phase ~= "count" then return end
+	self:pose("Count_Loop")
+	local seconds = self:say(CONFIG.CountLines[math.min(self.round, #CONFIG.CountLines)], true) or 20
 	broadcast(self, "round", self.round, self.dunks, self:target(), seconds)
-	task.wait(CONFIG.VoiceLeadSeconds)   -- a breath before the first number
-	local beat = seconds / CONFIG.CountTo
+	local beat = seconds / CONFIG.CountTo   -- the numbers on the HUD keep pace with the recording
 	for n = 1, CONFIG.CountTo do
 		if not self.active or self.phase ~= "count" then return end
 		broadcast(self, "count", n, CONFIG.CountTo)
-		-- a child's counting: uneven, with a held breath before the last few
-		local wait = beat * (0.75 + math.random() * 0.5) + ((n >= CONFIG.CountTo - 2) and beat * 0.6 or 0)
-		task.wait(wait)
+		task.wait(beat)
 	end
+	self:pose("Count_End")
+	local ready = self:say(pick("ready"), true) or 2
 	broadcast(self, "go")
-	self.anim.pose = "walk"
+	task.wait(math.min(ready, 1.6))       -- it sets off while it is still talking
+	self:pose("Idle")
 end
 
 function Session:chooseSpot()
@@ -405,7 +502,7 @@ function Session:seekBrain(deadline)
 	while self.active and self.phase == "seek" and os.clock() < deadline do
 		self.interrupt = false
 		if self.pauseUntil and os.clock() < self.pauseUntil then
-			self.anim.speed = 0
+			self.anim.speed = 0             -- holding a Spotted or Catch pose
 			task.wait(0.1)
 		elseif self.chase then
 			local player = self.chase
@@ -413,6 +510,10 @@ function Session:seekBrain(deadline)
 			if not root or not self.players[player] or self.players[player].caught then
 				self.chase = nil
 			else
+				if os.clock() > (self.nextChaseLine or 0) then
+					self.nextChaseLine = os.clock() + 6 + math.random() * 4
+					self:say(pick("chase"))
+				end
 				local target = root.Position - Vector3.new(0, 3, 0)
 				local direct = (target - self:feet()).Magnitude < 28 and os.clock() - (self.lastSeen or 0) < 0.4
 				local points = direct and {self:feet(), target} or self:path(target)
@@ -431,19 +532,23 @@ function Session:seekBrain(deadline)
 		elseif self.noise then
 			local at = self.noise
 			self.noise = nil
-			self.anim.pose = "walk"
 			self:walkTo(at - Vector3.new(0, 3, 0), CONFIG.WalkSpeed * 1.25, "seek")
 		else
 			local option = self:chooseSpot()
-			self.anim.pose = "walk"
-			self:walkTo(option.spot - Vector3.new(0, 0.5, 0), CONFIG.WalkSpeed, "seek")
+			if os.clock() > (self.nextSearchLine or 0) then
+				self.nextSearchLine = os.clock() + 9 + math.random() * 8
+				self:say(pick("search"))
+			end
+			local arrived = self:walkTo(option.spot - Vector3.new(0, 0.5, 0), CONFIG.WalkSpeed, "seek")
 			self.checked[option.i] = true
-			if self.active and self.phase == "seek" and not self.chase then
-				self.anim.pose = "look"
-				self.anim.speed = 0
+			if arrived and self.active and self.phase == "seek" and not self.chase then
+				self:pose("Search_Look")
 				local untilT = os.clock() + CONFIG.CheckPause
 				while os.clock() < untilT and not self.chase and self.phase == "seek" do task.wait(0.1) end
-				self.anim.pose = "walk"
+				if not self.chase and self.phase == "seek" and math.random() < 0.55 then self:say(pick("check")) end
+			elseif not arrived and not self.chase then
+				self:pose("Idle")
+				task.wait(0.2)
 			end
 		end
 	end
@@ -462,9 +567,20 @@ function Session:seekPhase()
 		if self.phase ~= "seek" then result = "lost"; break end
 		if seen then
 			if self.chase ~= seen then
+				local first = self.chase == nil
 				self.chase = seen
 				self.interrupt = true
 				event:FireClient(seen, "chase", true)
+				if first and not (self.pauseUntil and os.clock() < self.pauseUntil) then
+					-- it stops dead, points and says so before it runs: the player's head start
+					self.pauseUntil = os.clock() + CONFIG.SpottedPause
+					self:pose("Spotted")
+					local feet = self:feet()
+					local to = rootOf(seen)
+					if to then self:place(feet, flat(to.Position - feet)) end
+					self:say(pick("spot"), true)
+					self.nextChaseLine = os.clock() + 4
+				end
 			end
 			self.lastSeen = os.clock()
 		elseif self.chase and os.clock() - (self.lastSeen or 0) > CONFIG.LoseSightSeconds then
@@ -473,6 +589,7 @@ function Session:seekPhase()
 			local root = rootOf(lost)
 			if root then self.noise = root.Position end
 			if lost.Parent == Players then event:FireClient(lost, "chase", false) end
+			self:say(pick("lost"), true)
 		end
 		-- dunks
 		local feet = self:feet()
@@ -488,6 +605,7 @@ function Session:seekPhase()
 					self.dunks += 1
 					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
 					self.noise = home
+					self:say(pick("dunk"), true)
 				end
 			end
 		end
@@ -508,6 +626,7 @@ end
 function Session:escapePhase()
 	self.phase = "escape"
 	broadcast(self, "won", self.dunks)
+	self:say(pick("exit"), true)
 	local exit = self.info.exit
 	local beacon = Instance.new("Part")
 	beacon.Name, beacon.Anchored, beacon.CanCollide, beacon.CanQuery, beacon.CanTouch = "ExitBeacon", true, false, false, false
@@ -555,6 +674,7 @@ function Session:escapePhase()
 				state.escaped = true
 				player:SetAttribute(CLEARED, true)
 				event:FireClient(player, "escaped", player.DisplayName, true)
+				event:FireClient(player, "say", "l6_escaped")
 				task.delay(1.5, function()
 					if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
 						returnHandler(player, "escaped")
@@ -586,6 +706,7 @@ function Session:run()
 		if result == "won" then self:escapePhase(); break end
 		if result == "empty" or result == "lost" or self.phase == "over" then break end
 		broadcast(self, "roundover", result)
+		self:say("l6_round_again", true)
 	end
 	self:finish()
 end
