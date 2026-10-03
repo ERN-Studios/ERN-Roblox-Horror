@@ -271,7 +271,7 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 		light:Destroy()
 		light = Instance.new("SpotLight")
 		light.Shadows, light.Face, light.Angle = false, Enum.NormalId.Bottom, 150
-		light.Range, light.Brightness, light.Color = 60, 2.6, Color3.fromRGB(255, 240, 215)
+		light.Range, light.Brightness, light.Color = 60, 0.85, Color3.fromRGB(255, 240, 215)
 	elseif string.find(f[1], "SnackBar") then
 		light.Range, light.Brightness, light.Color = 38, 1.8, Color3.fromRGB(255, 200, 110)
 	elseif string.find(f[1], "PartyBlock") then
