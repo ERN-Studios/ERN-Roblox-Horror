@@ -1,0 +1,268 @@
+[
+ {
+  "file": "l6_count_slow__count_to_twenty_slow.mp3",
+  "script": "One... two... three... (to twenty), slow",
+  "seconds": 22.91,
+  "source": "ElevenLabs_2026-10-03T07_31_01_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_count_slow"
+ },
+ {
+  "file": "l6_count_medium__count_to_twenty_impatient.mp3",
+  "script": "Count to twenty, a little impatient",
+  "seconds": 21.16,
+  "source": "ElevenLabs_2026-10-03T07_32_55_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_count_medium"
+ },
+ {
+  "file": "l6_count_fast__count_to_twenty_rushed_with_giggle.mp3",
+  "script": "Count to twenty, rushed, one giggle",
+  "seconds": 19.15,
+  "source": "ElevenLabs_2026-10-03T07_34_12_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_count_fast"
+ },
+ {
+  "file": "l6_count_frantic__count_to_twenty_breathless.mp3",
+  "script": "Count to twenty, gabbled and breathless",
+  "seconds": 15.88,
+  "source": "ElevenLabs_2026-10-03T07_35_57_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_count_frantic"
+ },
+ {
+  "file": "l6_ready_1__ready_or_not_here_i_come.mp3",
+  "script": "Ready or not... here I come!",
+  "seconds": 3.55,
+  "source": "ElevenLabs_2026-10-03T07_37_03_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_ready_1"
+ },
+ {
+  "file": "l6_ready_2__ready_or_not_im_coming_to_find_you.mp3",
+  "script": "Ready or not... I'm coming to find you.",
+  "seconds": 5.56,
+  "source": "ElevenLabs_2026-10-03T07_38_17_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_ready_2"
+ },
+ {
+  "file": "l6_ready_3__twenty_no_more_hiding.mp3",
+  "script": "Twenty! ...No more hiding.",
+  "seconds": 4.44,
+  "source": "ElevenLabs_2026-10-03T07_41_14_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_ready_3"
+ },
+ {
+  "file": "l6_search_1__where_are_youuuu.mp3",
+  "script": "Where are youuuu?",
+  "seconds": 4.36,
+  "source": "ElevenLabs_2026-10-03T07_42_17_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_1"
+ },
+ {
+  "file": "l6_search_2__come_out_come_out_wherever_you_are.mp3",
+  "script": "Come out, come out... wherever you are.",
+  "seconds": 3.55,
+  "source": "ElevenLabs_2026-10-03T07_42_42_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_2"
+ },
+ {
+  "file": "l6_search_3__i_can_hear_you_breathing.mp3",
+  "script": "I can hear you breathing.",
+  "seconds": 2.77,
+  "source": "ElevenLabs_2026-10-03T07_43_09_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_3"
+ },
+ {
+  "file": "l6_search_4__are_you_in_here.mp3",
+  "script": "Are you in here?",
+  "seconds": 1.65,
+  "source": "ElevenLabs_2026-10-03T07_43_30_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_4"
+ },
+ {
+  "file": "l6_search_5__youre_not_very_good_at_this.mp3",
+  "script": "You're not very good at this.",
+  "seconds": 2.19,
+  "source": "ElevenLabs_2026-10-03T07_44_03_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_5"
+ },
+ {
+  "file": "l6_search_6__i_know_all_the_hiding_places.mp3",
+  "script": "I know all the hiding places.",
+  "seconds": 2.77,
+  "source": "ElevenLabs_2026-10-03T07_45_08_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_6"
+ },
+ {
+  "file": "l6_search_7__dont_move_its_more_fun_if_you_dont_move.mp3",
+  "script": "Don't move. It's more fun... if you don't move.",
+  "seconds": 4.44,
+  "source": "ElevenLabs_2026-10-03T07_45_30_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_7"
+ },
+ {
+  "file": "l6_search_8__getting_warmer.mp3",
+  "script": "Getting warmer...",
+  "seconds": 1.57,
+  "source": "ElevenLabs_2026-10-03T07_45_52_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_search_8"
+ },
+ {
+  "file": "l6_check_1__not_here.mp3",
+  "script": "Not here.",
+  "seconds": 1.41,
+  "source": "ElevenLabs_2026-10-03T07_56_53_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_check_1"
+ },
+ {
+  "file": "l6_check_2__hmm_empty.mp3",
+  "script": "Hmm... empty.",
+  "seconds": 2.27,
+  "source": "ElevenLabs_2026-10-03T07_57_08_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_check_2"
+ },
+ {
+  "file": "l6_check_3__i_thought_i_smelled_you.mp3",
+  "script": "I thought I smelled you.",
+  "seconds": 3.32,
+  "source": "ElevenLabs_2026-10-03T07_57_42_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_check_3"
+ },
+ {
+  "file": "l6_spot_1__i_see_you.mp3",
+  "script": "I see you!",
+  "seconds": 1.65,
+  "source": "ElevenLabs_2026-10-03T07_58_28_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_spot_1"
+ },
+ {
+  "file": "l6_spot_2__there_you_are.mp3",
+  "script": "There you are.",
+  "seconds": 1.57,
+  "source": "ElevenLabs_2026-10-03T07_58_41_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_spot_2"
+ },
+ {
+  "file": "l6_spot_3__found_one.mp3",
+  "script": "Found one!",
+  "seconds": 1.31,
+  "source": "ElevenLabs_2026-10-03T07_58_56_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_spot_3"
+ },
+ {
+  "file": "l6_chase_1__dont_run_thats_not_the_game.mp3",
+  "script": "Don't run! That's not the game!",
+  "seconds": 3.32,
+  "source": "ElevenLabs_2026-10-03T07_59_11_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_chase_1"
+ },
+ {
+  "file": "l6_chase_2__you_have_to_stay_still.mp3",
+  "script": "You have to stay still!",
+  "seconds": 2.43,
+  "source": "ElevenLabs_2026-10-03T07_59_28_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_chase_2"
+ },
+ {
+  "file": "l6_chase_3__come_back.mp3",
+  "script": "Come back!",
+  "seconds": 1.65,
+  "source": "ElevenLabs_2026-10-03T07_59_41_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_chase_3"
+ },
+ {
+  "file": "l6_lost_1__where_did_you_go.mp3",
+  "script": "Where did you go?",
+  "seconds": 1.57,
+  "source": "ElevenLabs_2026-10-03T07_59_56_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_lost_1"
+ },
+ {
+  "file": "l6_lost_2__thats_not_fair.mp3",
+  "script": "That's not fair.",
+  "seconds": 1.96,
+  "source": "ElevenLabs_2026-10-03T08_00_13_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_lost_2"
+ },
+ {
+  "file": "l6_found_1__found_you.mp3",
+  "script": "Found you!",
+  "seconds": 1.31,
+  "source": "ElevenLabs_2026-10-03T08_00_36_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_found_1"
+ },
+ {
+  "file": "l6_found_2__got_you.mp3",
+  "script": "Got you.",
+  "seconds": 1.15,
+  "source": "ElevenLabs_2026-10-03T08_00_50_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_found_2"
+ },
+ {
+  "file": "l6_found_3__youre_it_forever.mp3",
+  "script": "You're it... forever.",
+  "seconds": 2.77,
+  "source": "ElevenLabs_2026-10-03T08_01_25_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_found_3"
+ },
+ {
+  "file": "l6_found_other__one_down.mp3",
+  "script": "One down.",
+  "seconds": 1.23,
+  "source": "ElevenLabs_2026-10-03T08_01_40_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_found_other"
+ },
+ {
+  "file": "l6_dunk_1__no_thats_cheating.mp3",
+  "script": "No! That's cheating!",
+  "seconds": 2.43,
+  "source": "ElevenLabs_2026-10-03T08_01_57_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_dunk_1"
+ },
+ {
+  "file": "l6_dunk_2__who_touched_my_post.mp3",
+  "script": "Who touched my post?",
+  "seconds": 2.12,
+  "source": "ElevenLabs_2026-10-03T08_02_12_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_dunk_2"
+ },
+ {
+  "file": "l6_dunk_3__stop_doing_that.mp3",
+  "script": "Stop doing that!",
+  "seconds": 2.12,
+  "source": "ElevenLabs_2026-10-03T08_02_28_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_dunk_3"
+ },
+ {
+  "file": "l6_round_again__fine_ill_count_again_faster.mp3",
+  "script": "Fine. I'll count again... faster.",
+  "seconds": 3.32,
+  "source": "ElevenLabs_2026-10-03T08_02_41_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_round_again"
+ },
+ {
+  "file": "l6_exit_1__youre_not_allowed_to_leave.mp3",
+  "script": "You're not allowed to leave.",
+  "seconds": 2.35,
+  "source": "ElevenLabs_2026-10-03T08_03_03_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_exit_1"
+ },
+ {
+  "file": "l6_exit_2__the_door_stays_shut.mp3",
+  "script": "The door stays shut!",
+  "seconds": 2.27,
+  "source": "ElevenLabs_2026-10-03T08_03_18_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_exit_2"
+ },
+ {
+  "file": "l6_escaped__come_back_and_play_please.mp3",
+  "script": "Come back and play... please.",
+  "seconds": 3.24,
+  "source": "ElevenLabs_2026-10-03T08_04_18_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_escaped"
+ },
+ {
+  "file": "l6_win__i_win_lets_play_again.mp3",
+  "script": "I win. Let's play again.",
+  "seconds": 2.85,
+  "source": "ElevenLabs_2026-10-03T08_04_43_Demonic child for level 6 _gen_sp100_s50_sb75_v4.mp3",
+  "key": "l6_win"
+ }
+]

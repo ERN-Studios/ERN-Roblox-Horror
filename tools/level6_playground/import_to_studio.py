@@ -24,34 +24,21 @@ SURFACE = {
     'wall_white': ('Plaster', 0, True), 'deck': ('Metal', 0, True), 'steel': ('Metal', 0, True),
     'duct': ('Metal', 0, True), 'pipe_red': ('Metal', 0, True), 'stainless': ('Metal', 0, True),
     'wood': ('Wood', 0, True), 'lamp_on': ('Neon', 0, True), 'lamp_warm': ('Neon', 0, True),
-    'exit_sign': ('Neon', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
+    'exit_sign': ('Neon', 0, True), 'lamp_magenta': ('Neon', 0, True), 'glass': ('Glass', 0.55, True),
+    'mat_pink': ('Rubber', 0, True), 'mat_mint': ('Rubber', 0, True), 'inflate_a': ('Rubber', 0, True),
+    'inflate_b': ('Rubber', 0, True), 'navy': ('Rubber', 0, True), 'carpet': ('Carpet', 0, True),
+    'arcade_carpet': ('Carpet', 0, True), 'arcade_carpet2': ('Carpet', 0, True), 'floor_purple': ('Carpet', 0, True),
+    'floor_pink': ('SmoothPlastic', 0, True), 'snack_a': ('SmoothPlastic', 0, True), 'snack_b': ('SmoothPlastic', 0, True),
+    'wall_staff': ('Plaster', 0, True), 'wall_pink': ('Plaster', 0, True), 'wall_purple': ('Plaster', 0, True),
+    'ceiling_tile': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('SmoothPlastic', 0.6, True),
     'net_yellow': ('SmoothPlastic', 0.5, True), 'net_black': ('SmoothPlastic', 0.75, True),
 }
-EXTRA_RGB = {'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
+EXTRA_RGB = {'lamp_magenta': (255, 40, 200), 'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
              'net_blue': (20, 40, 150), 'net_yellow': (215, 170, 30), 'net_black': (12, 12, 12)}
-NO_COLLIDE = ('Ceiling_', 'BallPit_Balls', 'Stray_Balls', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
+NO_COLLIDE = ('Ceiling_', 'BallOcean_Balls', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
 TEXTURES = json.loads((Path(__file__).with_name('textures.json')).read_text())
 
-# Signs as SurfaceGuis: (blender centre x, y, z), width, height, facing (blender axis), text, background, text colour
-SIGNS = [
-    ((262, 212.0, 11), 6.6, 4.0, '-y', 'HOME BASE\n1, 2, 3 . . . 20', (245, 240, 220), (200, 30, 30)),
-    ((299.2, 98, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
-    ((299.2, 194, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
-    ((299.2, 302, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40)),
-    ((299.0, 200, 26), 40, 4.5, '-x', 'NO ADULTS ON UPPER LEVEL', (255, 200, 20), (180, 20, 20)),
-    ((200.5, 129.1, 6.5), 7, 4, '+y', "UNDER 5's\nONLY", (255, 210, 30), (20, 40, 160)),
-    ((255.5, 129.1, 6.5), 7, 4, '+y', 'NO SHOES\nNO FOOD', (255, 210, 30), (20, 40, 160)),
-    ((1.7, 163, 12), 11.5, 3.5, '+x', 'HOT DOG  2.50\nPIZZA  3.00', (30, 25, 20), (255, 235, 180)),
-    ((1.7, 185, 12), 11.5, 3.5, '+x', 'SLUSH  1.75\nPOPCORN  1.50', (30, 25, 20), (255, 235, 180)),
-    ((1.7, 207, 12), 11.5, 3.5, '+x', 'BIRTHDAY\nPARTY PACKS', (30, 25, 20), (255, 235, 180)),
-    ((24, 200, 19), 60, 4.8, '+x', 'SNACK SHACK', (250, 205, 30), (200, 25, 25)),
-    ((120, 329.6, 18), 30, 4, '-y', 'PARTY ROOMS · RESTROOMS', (20, 50, 170), (255, 255, 255)),
-    ((548, 398.3, 16.2), 5.6, 2.2, '-y', 'EXIT', (200, 15, 10), (255, 245, 235)),
-    ((258, 383.6, 14.5), 72, 4, '-y', 'GAME ZONE', (40, 10, 70), (255, 60, 200)),
-    ((300, 399.0, 40), 140, 12, '-y', 'FUN FACTORY PLAYLAND', (250, 205, 30), (200, 25, 25)),
-    ((0.9, 60, 30), 90, 9, '+x', 'BIRTHDAYS · PLAY · FUN!', (20, 50, 170), (255, 220, 40)),
-    ((236 + 6, 330 - 0.2, 5.6), 4.0, 2.0, '-y', 'NO PEEKING', (255, 255, 255), (20, 20, 20)),
-]
+# Signs (SurfaceGuis) are listed by the build script and arrive in prims.json as data['signs'].
 
 
 def srgb(v):
@@ -167,10 +154,10 @@ local function decorate(p, owner, mat)
 		texture(p, TEX.foam_seams, Enum.NormalId.Top, 12)
 	elseif owner == "Frame_Decks" or owner == "Frame_SoftSteps" then
 		texture(p, TEX.padding, Enum.NormalId.Top, 12)
-	elseif owner == "Frame_Panels" or owner == "ToddlerCorner" then
+	elseif owner == "Frame_Panels" or owner == "ToddlerTown" or owner == "BallOcean" or owner == "Inflatables" then
 		texture(p, TEX.padding, Enum.NormalId.Front, 5)
 		texture(p, TEX.padding, Enum.NormalId.Back, 5)
-	elseif owner == "Walls" or owner == "SnackBar" or owner == "PartyBlock" or owner == "Hall_Columns" then
+	elseif owner == "Walls" or owner == "SnackShack" or owner == "PartyRooms" or owner == "StaffOnly" or owner == "Reception" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.grime, face, 36, nil, 0.15) end
 	end
 end
@@ -234,7 +221,7 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 		local p = part(owner, mat)
 		local normal = u.Unit:Cross(v.Unit)
 		local cf = CFrame.fromMatrix(p0 + (u + v) / 2, u.Unit, v.Unit, normal)
-		if owner == "Frame_WaveSlide" and mat ~= "green" then
+		if owner == "Frame_WaveSlide" and math.abs(normal.Y) > 0.3 then   -- lanes, not the upright side rails
 			-- slide lanes get real thickness below the riding surface and are marked for the slide client
 			if normal.Y < 0 then normal = -normal end
 			p.Size = Vector3.new(u.Magnitude, v.Magnitude, 0.8)
@@ -285,6 +272,12 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 		light.Range, light.Brightness, light.Color = 38, 1.8, Color3.fromRGB(255, 200, 110)
 	elseif string.find(f[1], "PartyBlock") then
 		light.Range, light.Brightness, light.Color = 40, 1.4, Color3.fromRGB(235, 242, 255)
+	elseif string.find(f[1], "Arcade") then
+		light.Range, light.Brightness, light.Color = 34, 2.2, Color3.fromRGB(255, 50, 200)
+	elseif string.find(f[1], "Staff") then
+		light.Range, light.Brightness, light.Color = 20, 1.0, Color3.fromRGB(255, 205, 110)
+	elseif string.find(f[1], "Reception") then
+		light.Range, light.Brightness, light.Color = 60, 1.4, Color3.fromRGB(255, 235, 215)
 	else
 		light.Range, light.Brightness, light.Color = 26, 1.1, Color3.fromRGB(255, 225, 170)
 	end
@@ -360,7 +353,7 @@ def main():
     facing = {'+x': (1, 0, 0), '-x': (-1, 0, 0), '+y': (0, 0, -1), '-y': (0, 0, 1)}
     signs = '\n'.join('|'.join([','.join(format(v, 'g') for v in to_roblox(*c)), format(w, 'g'), format(h, 'g'),
                                 ','.join(map(str, facing[f])), text.replace('\n', '\\n'), ','.join(map(str, bg)),
-                                ','.join(map(str, fg))]) for c, w, h, f, text, bg, fg in SIGNS)
+                                ','.join(map(str, fg))]) for c, w, h, f, text, bg, fg in data['signs'])
 
     rows = []
     for owner, kind, d, mat in data['prims']:

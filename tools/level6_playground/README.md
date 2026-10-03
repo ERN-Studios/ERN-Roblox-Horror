@@ -21,6 +21,14 @@ Developer preview only, entered from the Level 6 queue bays in the R4 lobby (or 
 
 ## Map
 
+**v2 (2026-10-03): one hall, nine fixed zones**, following `artifacts/level6-playground-20261002/concepts/10_map_overview.png`:
+Reception (south-west, entrance and spawn), Snack Shack with picnic tables (west wall), Party Rooms (north-west
+block with its own ceiling), Arcade and Prizes (north wall), Staff Only (north-east Backrooms corridors, the
+emergency exit is inside), The Big Frame (12 x 14 cells, three storeys), Ball Ocean (south of the frame, about 100
+balls only), Toddler Town, Inflatables (east) and Home Base in the middle. Stairs, passages and zone props are
+authored by hand; the frame maze and staff corridors use fixed seeds. Signs are listed in the build script. The
+earlier single-hall build is `build_playground_v1_single_hall.py`. The notes below describe shared conventions.
+
 - Hall 600 x 400 x 60 studs at Studio X = 52000 (Blender (x, y, z) -> Roblox (x - 300 + 52000, z + 100, 200 - y)).
 - Play frame 22 x 26 cells of 12 studs, three storeys (decks at 10 and 20), 18 soft-step flights, a maze per
   storey with every cell reachable. `PASSAGES` in the build script opens the bays where slides, crawl tubes and
