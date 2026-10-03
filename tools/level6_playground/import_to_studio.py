@@ -159,6 +159,8 @@ local function decorate(p, owner, mat)
 		for _, face in ipairs(SIDES) do texture(p, TEX.ballpit, face, 13) end
 	elseif mat == "wall_staff" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.wallpaper_staff, face, 11) end
+	elseif mat == "floor_pink" then
+		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12, Color3.fromRGB(235, 120, 110))
 	elseif mat == "carpet" then
 		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12)
 	elseif mat == "ceiling_tile" then
@@ -169,7 +171,7 @@ local function decorate(p, owner, mat)
 		for _, face in ipairs(SIDES) do texture(p, TEX.party_wall, face, 9, nil, 0.25) end
 	elseif owner == "Ceiling_Structure" and mat == "deck" and p.Size.X > 100 then
 		texture(p, TEX.roof_deck, Enum.NormalId.Bottom, 16, Color3.fromRGB(150, 150, 150))
-	elseif owner == "Walls" then
+	elseif owner == "Walls" or (owner == "Reception" and mat == "wall_yellow") or owner == "Inflatables" then
 		for _, face in ipairs(SIDES) do texture(p, TEX.block_wall, face, 14, tint(p.Color, 1.1)) end
 	elseif VINYL[mat] and owner ~= "Frame_Posts" and owner ~= "Frame_Beams" and owner ~= "BallOcean_Balls" and owner ~= "Toddler_Balls" then
 		-- padded vinyl: the same grey photo, tinted
@@ -289,10 +291,10 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 		-- a cone straight down: pools of light on the floor, the roof stays dark
 		light:Destroy()
 		light = Instance.new("SpotLight")
-		light.Shadows, light.Face, light.Angle = false, Enum.NormalId.Bottom, 150
-		light.Range, light.Brightness, light.Color = 60, 0.85, Color3.fromRGB(255, 240, 215)
+		light.Shadows, light.Face, light.Angle = false, Enum.NormalId.Bottom, 170
+		light.Range, light.Brightness, light.Color = 70, 0.6, Color3.fromRGB(255, 240, 215)
 	elseif string.find(f[1], "SnackBar") then
-		light.Range, light.Brightness, light.Color = 38, 1.8, Color3.fromRGB(255, 200, 110)
+		light.Range, light.Brightness, light.Color = 34, 0.75, Color3.fromRGB(255, 214, 140)
 	elseif string.find(f[1], "PartyBlock") then
 		light.Range, light.Brightness, light.Color = 40, 1.4, Color3.fromRGB(235, 242, 255)
 	elseif string.find(f[1], "Arcade") then
@@ -322,7 +324,8 @@ for line in string.gmatch(SIGNS, "[^\\n]+") do
 	local p = Instance.new("Part")
 	p.Name, p.Anchored, p.CanCollide, p.CanTouch, p.CanQuery = "Sign", true, false, false, false
 	p.Size = Vector3.new(w, h, 0.2)
-	p.Color, p.Material = Color3.fromRGB(bg[1], bg[2], bg[3]), Enum.Material.SmoothPlastic
+	-- printed boards, not screens: dusty, and lit only by the room
+	p.Color, p.Material = Color3.fromRGB(bg[1] * 0.55, bg[2] * 0.55, bg[3] * 0.55), Enum.Material.SmoothPlastic
 	p.CFrame = CFrame.lookAt(at, at + out)
 	local gui = Instance.new("SurfaceGui")
 	gui.Face, gui.SizingMode = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud
@@ -331,7 +334,7 @@ for line in string.gmatch(SIGNS, "[^\\n]+") do
 	label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
 	label.Text = string.gsub(f[5], "\\\\n", "\\n")
 	label.TextScaled, label.Font = true, Enum.Font.FredokaOne
-	label.TextColor3 = Color3.fromRGB(fg[1], fg[2], fg[3])
+	label.TextColor3 = Color3.fromRGB(fg[1] * 0.75, fg[2] * 0.75, fg[3] * 0.75)
 	local pad = Instance.new("UIPadding")
 	pad.PaddingLeft, pad.PaddingRight = UDim.new(0.04, 0), UDim.new(0.04, 0)
 	pad.PaddingTop, pad.PaddingBottom = UDim.new(0.08, 0), UDim.new(0.08, 0)

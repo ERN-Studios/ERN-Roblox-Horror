@@ -54,7 +54,7 @@ PALETTE = {
     'stainless': (0.55, 0.56, 0.58), 'paper': (0.85, 0.83, 0.74), 'wood': (0.45, 0.30, 0.16),
     'lamp_off': (0.30, 0.30, 0.28),
     # zone floors and walls
-    'floor_pink': (0.36, 0.13, 0.15), 'snack_a': (0.45, 0.13, 0.03), 'snack_b': (0.50, 0.38, 0.20),
+    'floor_pink': (0.17, 0.05, 0.05), 'snack_a': (0.45, 0.13, 0.03), 'snack_b': (0.50, 0.38, 0.20),
     'floor_purple': (0.20, 0.09, 0.30), 'arcade_carpet': (0.06, 0.03, 0.13), 'arcade_carpet2': (0.14, 0.04, 0.20),
     'carpet': (0.20, 0.15, 0.08), 'wall_staff': (0.55, 0.42, 0.10), 'ceiling_tile': (0.45, 0.42, 0.32),
     'mat_pink': (0.50, 0.16, 0.24), 'mat_mint': (0.14, 0.40, 0.30), 'inflate_a': (0.03, 0.14, 0.042),
@@ -63,6 +63,7 @@ PALETTE = {
 }
 ROUGH = {'stainless': 0.3, 'duct': 0.4, 'steel': 0.55, 'deck': 0.6, 'concrete': 0.9}
 VINYL = ['yellow', 'red', 'blue', 'green', 'purple', 'pink', 'cyan', 'orange']
+FRAME_VINYL = ['yellow', 'red', 'blue', 'green', 'blue', 'red']   # the frame keeps to the four primaries, like the concept art
 MATS = {}
 
 
@@ -400,11 +401,11 @@ def build_walls():
                 else:
                     w.box((fixed, a, z0), (fixed + inward, b, z1), mat)
 
-    run('y', -2, [('wall_pink', 'wall_yellow'), ('wall_yellow', 'wall_white'), ('wall_yellow', 'wall_yellow'),
+    run('y', -2, [('wall_yellow', 'wall_yellow'), ('wall_yellow', 'wall_white'), ('wall_yellow', 'wall_yellow'),
                   ('wall_blue', 'wall_white')], 2)
     run('y', HALL_X, [('inflate_a', 'wall_white'), ('wall_blue', 'wall_white'), ('wall_yellow', 'wall_white'),
                       ('wall_staff', 'wall_white')], 2)
-    run('x', -2, [('wall_pink', 'wall_yellow'), ('wall_yellow', 'wall_white'), ('wall_blue', 'wall_white'),
+    run('x', -2, [('wall_yellow', 'wall_yellow'), ('wall_yellow', 'wall_white'), ('wall_blue', 'wall_white'),
                   ('wall_blue', 'wall_white'), ('inflate_a', 'wall_white')], 2,
         openings=[(ENTRANCE_X[0], ENTRANCE_X[1], 13)])
     run('x', HALL_Y, [('wall_blue', 'wall_blue'), ('wall_purple', 'wall_blue'), ('wall_purple', 'wall_red'),
@@ -634,7 +635,7 @@ def build_frame():
                 if k and (void(k, i, j) or stairwell(k, i, j)):
                     continue
                 x, y, z = SX + i * C, SY + j * C, k * H
-                mat = VINYL[(i * 3 + j * 5 + k * 2) % len(VINYL)]
+                mat = FRAME_VINYL[(i * 3 + j * 5 + k * 2) % len(FRAME_VINYL)]
                 if k == 0:
                     decks.box((x + 0.15, y + 0.15, 0.35), (x + C - 0.15, y + C - 0.15, 0.95), mat)
                 else:
@@ -670,7 +671,7 @@ def build_frame():
         if kind == 'net':
             net(zb, zt, 'net_yellow' if (int(x0) + int(y0) + k) % 5 == 0 else 'net_blue')
         elif kind == 'panel':
-            pad(zb, z + 5, VINYL[(int(x0) // 12 + int(y0) // 12 + k) % len(VINYL)])
+            pad(zb, z + 5, FRAME_VINYL[(int(x0) // 12 + int(y0) // 12 + k) % len(FRAME_VINYL)])
             net(z + 5, zt)
         elif kind == 'arch':
             pad(z + 7.6, zt, 'red', 1.2)
@@ -703,7 +704,7 @@ def build_frame():
         rise = (k + 1) * H + 0.35 - z
         for n in range(5):
             s.box((x + n * 2.4, y + 0.8, z), (x + (n + 1) * 2.4, y + C - 0.8, z + rise * (n + 1) / 5),
-                  VINYL[(n + i + j) % len(VINYL)])
+                  FRAME_VINYL[(n + i + j) % len(FRAME_VINYL)])
     s.finish()
 
     f = Builder('Frame_PlayFeatures', frame_col)
@@ -720,14 +721,14 @@ def build_frame():
     for k, i, j in ((1, 2, 2), (1, 7, 12), (2, 5, 3), (2, 1, 12), (2, 10, 9)):      # roller squeezes
         x, y, z = SX + (i + 1) * C, SY + j * C, k * H
         for m, zz in enumerate((2.0, 4.3, 6.6, 8.6)):
-            rollers.cyl((x, y + 1, z + zz), (x, y + C - 1, z + zz), 1.05, VINYL[(m + i) % len(VINYL)], 8, True)
+            rollers.cyl((x, y + 1, z + zz), (x, y + C - 1, z + zz), 1.05, FRAME_VINYL[(m + i) % len(FRAME_VINYL)], 8, True)
     rollers.finish()
     ax0, ay0 = SX + ATRIUM[0] * C, SY + ATRIUM[1] * C
     ax1, ay1 = SX + (ATRIUM[2] + 1) * C, SY + (ATRIUM[3] + 1) * C
     f.tube([(ax0 + 6, ay0 - 1, 13.2)] + [(ax0 + 6, ay0 + t, 13.2) for t in range(0, int(ay1 - ay0) + 1, 6)] +
            [(ax0 + 6, ay1 + 1, 13.2)], 2.9, ['red', 'yellow', 'blue', 'green'], 10)
     f.tube([(ax0 - 1, ay1 - 6, 23.2)] + [(ax0 + t, ay1 - 6, 23.2) for t in range(0, int(ax1 - ax0) + 1, 6)] +
-           [(ax1 + 1, ay1 - 6, 23.2)], 2.9, ['cyan', 'purple', 'orange', 'pink'], 10)
+           [(ax1 + 1, ay1 - 6, 23.2)], 2.9, ['blue', 'yellow', 'red', 'green'], 10)
     by = ay0 + 30
     f.box((ax0, by - 2.5, 19.65), (ax1, by + 2.5, 20.35), 'yellow')
     f.finish()
@@ -771,7 +772,7 @@ def build_frame():
     path = [(cx + 5.2 * math.cos(math.pi + a), cy + 5.2 * math.sin(math.pi + a), 23.4 - 20.2 * (a / (math.pi * 5)))
             for a in [n * math.pi / 8 for n in range(0, 41)]]
     path.append((path[-1][0] - 5, path[-1][1] - 5, 3.0))
-    sl.tube(path, 2.7, ['purple', 'yellow', 'cyan', 'red'], 10)
+    sl.tube(path, 2.7, ['blue', 'yellow', 'green', 'red'], 10)
     sl.cyl((cx, cy, 0.9), (cx, cy, 26), 0.6, 'steel', 8)
     sl.finish()
 
@@ -833,8 +834,8 @@ def playhouse(b, px, py, mat, roof, door='north'):
 def build_reception():
     r = Builder('Reception', zones_col)
     x0, y0, x1, y1 = RECEPTION
-    wall_run(r, (x0, y1), (x1, y1), 20, 'wall_pink', openings=[(58, 96, 14)])
-    wall_run(r, (x1, y0), (x1, y1), 20, 'wall_pink', openings=[(34, 76, 14)])
+    wall_run(r, (x0, y1), (x1, y1), 20, 'wall_yellow', openings=[(58, 96, 14)])
+    wall_run(r, (x1, y0), (x1, y1), 20, 'wall_yellow', openings=[(34, 76, 14)])
     r.box((96, 30, 0.35), (132, 36, 4.6), 'wood')                    # L-shaped desk facing the doors
     r.box((94, 29, 4.6), (134, 37, 5.1), 'yellow')
     r.box((126, 36, 0.35), (132, 62, 4.6), 'wood')
