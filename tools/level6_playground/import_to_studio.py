@@ -304,7 +304,7 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 	elseif string.find(f[1], "Arcade") then
 		light.Range, light.Brightness, light.Color = 34, 2.2, Color3.fromRGB(255, 50, 200)
 	elseif string.find(f[1], "Staff") then
-		light.Range, light.Brightness, light.Color = 26, 1.1, Color3.fromRGB(255, 214, 130)
+		light.Range, light.Brightness, light.Color = 20, 0.4, Color3.fromRGB(255, 220, 150)
 	elseif string.find(f[1], "Reception") then
 		light.Range, light.Brightness, light.Color = 60, 1.4, Color3.fromRGB(255, 235, 215)
 	else

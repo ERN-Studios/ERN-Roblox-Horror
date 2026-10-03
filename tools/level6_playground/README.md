@@ -38,6 +38,17 @@ earlier single-hall build is `build_playground_v1_single_hall.py`. The notes bel
   downhill speed.
 - 120 hide spots (`Anchors/L6_Hide_<kind>_<n>`, attribute `HideKind`), `L6_Anchor_HomeBase`, `L6_Anchor_Exit`.
 
+**v3 look (2026-10-03):** the concept images are the target. Hero props are MeshParts in
+`ReplicatedStorage.Level6PropKit` (18 Meshy models joined by `tools/level6_props/build_kit.py` and uploaded with
+Studio's File > Import); the builder places them with `prop(...)` and printed panels with `board(...)`. Surfaces use
+the Codex textures in `textures.json` (foam mat, vinyl, block wall, roof deck, Backrooms wallpaper, carpets, ceiling
+tiles, ball sea, menu boards, prize wall, mural), tinted with the part colour. Ambient and Fog have no visible effect
+under this place's Realistic lighting, and the lobby's Atmosphere blacks the hall out if it is left on: the dusty
+grey air is ExposureCompensation 0.4 plus a ColorCorrection with Contrast -0.17, set by the client script.
+Review shots are in `artifacts/level6-playground-20261002/review-v3/`. To review silently, set
+`Level6PlaygroundPreview` on the player from the server instead of queueing (no round, no voice), move the character
+to each viewpoint so the area streams in, and capture Studio's window with `screencapture -l <id>`.
+
 ## Round (`ServerScriptService."Level 6 Systems"."Level 6 Playground Game"`)
 
 `Level6PreviewAccess` calls `AddPlayer`/`RemovePlayer` and supplies the return-to-lobby handler.
