@@ -631,6 +631,13 @@ function Session:seekPhase()
 				end
 			end
 		end
+		-- Studio only: setting Level6DevTag on the map model scores one tag, to play the finale through in a test
+		if RunService:IsStudio() and self.info.model:GetAttribute("Level6DevTag") then
+			self.info.model:SetAttribute("Level6DevTag", nil)
+			self.dunks += 1
+			broadcast(self, "dunk", "TEST", self.dunks, self:target())
+			if self.dunks < self:target() then self:say(pick("dunk"), true) end
+		end
 		if self.dunks >= self:target() then result = "won"; break end
 		if allDunked then result = "alldunked"; break end
 		local left = math.max(0, math.ceil(deadline - os.clock()))
