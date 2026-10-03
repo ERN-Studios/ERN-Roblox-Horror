@@ -343,7 +343,7 @@ end
 local kit = game:GetService("ReplicatedStorage"):FindFirstChild("Level6PropKit")
 local props = folder("Props")
 local missing = {}
-for line in string.gmatch(PROPS, "[^\n]+") do
+for line in string.gmatch(PROPS, "[^\\n]+") do
 	local f = string.split(line, ",")
 	local template = kit and kit:FindFirstChild(f[1])
 	if template then
@@ -359,7 +359,7 @@ for line in string.gmatch(PROPS, "[^\n]+") do
 	end
 end
 local boards = folder("Boards")
-for line in string.gmatch(BOARDS, "[^\n]+") do
+for line in string.gmatch(BOARDS, "[^\\n]+") do
 	local f = string.split(line, "|")
 	local c, dir = nums(f[1]), nums(f[4])
 	local out = Vector3.new(dir[1], dir[2], dir[3])
