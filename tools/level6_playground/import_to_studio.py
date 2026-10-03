@@ -153,7 +153,7 @@ local function decorate(p, owner, mat)
 		texture(p, TEX.net, Enum.NormalId.Back, 5)
 	elseif owner == "Floor_FoamTiles" then
 		-- a neutral grey mat photo tinted with the tile's own colour
-		texture(p, TEX.foam_mat, Enum.NormalId.Top, 12, tint(p.Color, 1.9))
+		texture(p, TEX.foam_mat, Enum.NormalId.Top, 12, tint(p.Color, 1.05))
 	elseif owner == "BallOcean_Surface" then
 		texture(p, TEX.ballpit, Enum.NormalId.Top, 13)
 		for _, face in ipairs(SIDES) do texture(p, TEX.ballpit, face, 13) end
@@ -170,10 +170,10 @@ local function decorate(p, owner, mat)
 	elseif owner == "Ceiling_Structure" and mat == "deck" and p.Size.X > 100 then
 		texture(p, TEX.roof_deck, Enum.NormalId.Bottom, 16, Color3.fromRGB(150, 150, 150))
 	elseif owner == "Walls" then
-		for _, face in ipairs(SIDES) do texture(p, TEX.block_wall, face, 14, tint(p.Color, 1.7)) end
+		for _, face in ipairs(SIDES) do texture(p, TEX.block_wall, face, 14, tint(p.Color, 1.1)) end
 	elseif VINYL[mat] and owner ~= "Frame_Posts" and owner ~= "Frame_Beams" and owner ~= "BallOcean_Balls" and owner ~= "Toddler_Balls" then
 		-- padded vinyl: the same grey photo, tinted
-		local c = tint(p.Color, 1.8)
+		local c = tint(p.Color, 1.2)
 		texture(p, TEX.vinyl_pad, Enum.NormalId.Top, 7, c)
 		for _, face in ipairs(SIDES) do texture(p, TEX.vinyl_pad, face, 7, c) end
 	elseif owner == "SnackShack" or owner == "Reception" then
