@@ -49,6 +49,15 @@ Review shots are in `artifacts/level6-playground-20261002/review-v3/`. To review
 `Level6PlaygroundPreview` on the player from the server instead of queueing (no round, no voice), move the character
 to each viewpoint so the area streams in, and capture Studio's window with `screencapture -l <id>`.
 
+**v4 (2026-10-03, afternoon):** signs are printed artwork (Codex, `artifacts/.../signs_v1`, keys `sign_*` in
+`textures.json`; `SIGN_ART` in the builder maps a sign's first words to its image and fixes the aspect). Slide tubes
+are the kit's hollow `tube_segment` mesh, scaled per segment, with a tinted SurfaceAppearance. `pa_speaker` horns hang
+under the roof; the client plays every voice line from the doll and from the five nearest horns. The round needs three
+tags on the post (`TagsToWin`), shows an objective card and a see-through marker (model attributes `HomePosition` /
+`ExitPosition`), and on the last tag the server sets `Level6Enraged` on the model: the client turns every light deep
+red and the doll chases at 24. Angry lines `l6_angry_1..3` are picked when they exist in `Level6Counter.Voice`; until
+then the exit lines stand in. The doll is avatar height (`STUDS_PER_METRE = 4.5` in `tools/level6_entity`).
+
 ## Round (`ServerScriptService."Level 6 Systems"."Level 6 Playground Game"`)
 
 `Level6PreviewAccess` calls `AddPlayer`/`RemovePlayer` and supplies the return-to-lobby handler.
