@@ -1,0 +1,9 @@
+
+STDERR:
+level1_team_prompts_server:
+
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:53: attempt to index nil with 'Announce'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:53 function announceTeam
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:126
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:232

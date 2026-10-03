@@ -181,6 +181,55 @@ local function stopVoice()
 	if speaking then speaking:Destroy(); speaking = nil end
 end
 -- One line at a time: a new line cuts the old one off, as the server only sends a line that should win.
+-- Every one-shot fades in over a few hundredths of a second and out over its last 0.15 s, so nothing clicks
+-- or sounds cut off.
+local function soft(s, volume)
+	local length = s:GetAttribute("Seconds") or s.TimeLength
+	s.Volume = 0
+	TweenService:Create(s, TweenInfo.new(0.06), {Volume = volume}):Play()
+	if length and length > 0.4 then
+		task.delay(length - 0.18, function()
+			if s.Parent then TweenService:Create(s, TweenInfo.new(0.16), {Volume = 0}):Play() end
+		end)
+	end
+end
+
+-- the hall's music: one looping track, quiet and thin like ceiling speakers; the reversed tape in the finale
+local MUSIC_VOLUME = 0.22
+local musicNow, musicKey, musicWanted = nil, nil, false
+local function setMusic(key)
+	if musicKey == key then return end
+	musicKey = key
+	local old = musicNow
+	musicNow = nil
+	if old then
+		TweenService:Create(old, TweenInfo.new(1.5), {Volume = 0}):Play()
+		task.delay(1.6, function() old:Destroy() end)
+	end
+	local voice = counter:FindFirstChild("Voice")
+	local source = key and AUDIO_ENABLED and voice and voice:FindFirstChild(key)
+	if not source then return end
+	local m = source:Clone()
+	m.Looped, m.Volume = true, 0
+	local eq = Instance.new("EqualizerSoundEffect")
+	eq.LowGain, eq.MidGain, eq.HighGain = -8, 0, -10
+	eq.Parent = m
+	m.Parent = audio
+	m:Play()
+	TweenService:Create(m, TweenInfo.new(2.5), {Volume = MUSIC_VOLUME}):Play()
+	musicNow = m
+end
+local function oneShot(key, volume)
+	local voice = counter:FindFirstChild("Voice")
+	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
+	if not source then return end
+	local o = source:Clone()
+	o.Parent = audio
+	o.Ended:Once(function() o:Destroy() end)
+	o:Play()
+	soft(o, volume)
+end
+
 -- `paOnly`: a hall announcement (the chime, the welcome): the ceiling horns and a quiet copy everywhere,
 -- not the doll's own mouth
 local function say(key, paOnly)
@@ -191,8 +240,9 @@ local function say(key, paOnly)
 	stopVoice()
 	local child = childModel()
 	local s = source:Clone()
+	local level = s.Volume
 	if paOnly then
-		s.RollOffMode, s.Volume = Enum.RollOffMode.Linear, 0.35
+		level = 0.35
 		s.Parent = audio                      -- heard wherever you are, under the horns
 	else
 		s.Parent = (child and child:FindFirstChild("Root")) or audio
@@ -203,6 +253,7 @@ local function say(key, paOnly)
 		s:Destroy()
 	end)
 	s:Play()
+	soft(s, level)
 	-- the same line over the hall's PA: the nearest ceiling horns, thin and echoing
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
@@ -215,7 +266,7 @@ local function say(key, paOnly)
 		table.sort(horns, function(x, y) return (x.Position - cam.CFrame.Position).Magnitude < (y.Position - cam.CFrame.Position).Magnitude end)
 		for i = 1, math.min(#horns, 5) do
 			local pa = source:Clone()
-			pa.Volume, pa.RollOffMode, pa.RollOffMinDistance, pa.RollOffMaxDistance = 0.5, Enum.RollOffMode.InverseTapered, 30, 190
+			pa.RollOffMode, pa.RollOffMinDistance, pa.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 30, 190
 			local eq = Instance.new("EqualizerSoundEffect")
 			eq.LowGain, eq.MidGain, eq.HighGain = -22, 2, -8
 			eq.Parent = pa
@@ -226,6 +277,7 @@ local function say(key, paOnly)
 			pa.Ended:Once(function() pa:Destroy() end)
 			task.delay(30, function() if pa.Parent then pa:Destroy() end end)
 			pa:Play()
+			soft(pa, 0.5)
 		end
 	end
 end
@@ -248,12 +300,14 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		dunkLabel.Text = string.format("TAGS %d / %d", b or 0, c or 0)
 		hintLabel.Text = ""
 		objective("HIDE!", "It is counting. Find a hiding place.")
+		musicWanted = d ~= nil and d ~= "starting"
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
 		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
 		markerMode = nil
+		musicWanted = true
 		objective("HIDE!", "It is counting. Find a hiding place.")
 		status("ROUND " .. tostring(a) .. "  ·  HIDE!", 3, Color3.fromRGB(255, 230, 90))
 		hintLabel.Text = ""
@@ -292,7 +346,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		end
 	elseif kind == "roundover" then
 		vignette.ImageTransparency = 1
-		status(a == "alldunked" and "Everyone dunked! It is counting again . . ." or "Time's up. It goes back to count . . .", 3)
+		status(a == "alldunked" and "Everyone tagged the post! It is counting again . . ." or "Time's up. It goes back to count . . .", 3)
 	elseif kind == "won" then
 		countLabel.Text = ""
 		status("IT LOST. NOW IT IS ANGRY.", 5, Color3.fromRGB(255, 70, 60))
@@ -397,6 +451,8 @@ task.spawn(function()
 		end
 		-- the red finale: every working light in the hall, and the tubes themselves
 		local enraged = on and model:GetAttribute("Level6Enraged") == true
+		if enraged and musicKey == "l6_music" then oneShot("l6_track_change", 0.7) end
+		setMusic(on and musicWanted and (enraged and "l6_music_reversed" or "l6_music") or nil)
 		if model and (enraged or next(litBefore)) then
 			for _, folderName in ipairs({"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}) do
 				local folder = model:FindFirstChild(folderName)
@@ -429,6 +485,8 @@ local function refresh()
 		vignette.ImageTransparency = 1
 		stopVoice()
 		markerMode = nil
+		musicWanted = false
+		setMusic(nil)
 		objective(nil)
 	end
 	-- the lobby track must not follow the player in here (LobbyMusicController only knows real rounds)

@@ -1,0 +1,15 @@
+
+STDERR:
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py", line 318, in <module>
+    main()
+    ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py", line 314, in main
+    verify(*build_geometry(binary, args.builder), geometry_only=args.geometry_only)
+            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py", line 207, in build_geometry
+    raise AssertionError(result.stdout + result.stderr)
+AssertionError: /var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:159: attempt to index nil with 'Atomic'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:159 function makeArrivalElevator
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:346

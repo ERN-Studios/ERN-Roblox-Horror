@@ -1,0 +1,3 @@
+L2 tile face culling: 965 checks passed; 31 fixtures; 1198 textures before, 826 after (31.1% removed across the fixtures)
+
+STDERR:

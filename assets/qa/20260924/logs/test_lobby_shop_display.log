@@ -1,0 +1,7 @@
+
+STDERR:
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_lobby_shop_display.py", line 119, in <module>
+    assert len(BOX_IDS) == 8, f"expected 8 product textures, found {len(BOX_IDS)}"
+           ^^^^^^^^^^^^^^^^^
+AssertionError: expected 8 product textures, found 10

@@ -470,7 +470,7 @@ function Session:countPhase()
 	if self.round == 1 then
 		-- the welcome: quiet for a few seconds once everyone is in, the PA chime, then its announcement
 		task.wait(CONFIG.IntroSilence)
-		for _, key in ipairs({"l6_pa_chime", "l6_intro"}) do
+		for _, key in ipairs({"l6_pa_chime", "l6_intro", "l6_pa_off"}) do
 			local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
 			local sound = voice and voice:FindFirstChild("Voice") and voice.Voice:FindFirstChild(key)
 			if sound and self.active and self.phase == "count" then
