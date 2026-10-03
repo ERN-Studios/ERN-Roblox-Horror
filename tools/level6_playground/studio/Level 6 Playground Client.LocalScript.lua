@@ -83,6 +83,9 @@ markerPart.Transparency, markerPart.Size = 1, Vector3.new(1, 1, 1)
 local marker = Instance.new("BillboardGui")
 marker.Name, marker.AlwaysOnTop, marker.LightInfluence, marker.MaxDistance = "Level6MarkerGui", true, 0, 2000
 marker.Size, marker.Enabled, marker.Adornee = UDim2.fromOffset(90, 90), false, markerPart
+-- The round body is a fresh character (entry and every re-entry): a gui that resets on spawn was destroyed
+-- there, which is why the post marker stopped showing once Level 6 became a live round.
+marker.ResetOnSpawn = false
 marker.Parent = player:WaitForChild("PlayerGui")
 local markerRing = Instance.new("Frame")
 markerRing.AnchorPoint, markerRing.Position, markerRing.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0), UDim2.fromScale(0.62, 0.62)
@@ -168,8 +171,11 @@ local function sound(name, id, volume, looped)
 	s.Parent = audio
 	return s
 end
+-- Owner, 2026-10-03: the level was far too loud. GENERAL scales every effect and loop; the doll (its voice,
+-- its PA copies and its footsteps) is only halved; the music takes the general cut and then half again.
+local GENERAL, ENTITY, MUSIC = 0.35, 0.5, 0.5
 local SFX = {
-	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8), -- dunk
+	ping = sound("Ping", "rbxasset://sounds/electronicpingshort.wav", 0.8 * GENERAL), -- dunk
 }
 local counter = ReplicatedStorage:WaitForChild("Level6Counter")
 local function childModel()
@@ -253,7 +259,7 @@ local function musicTick(dt)
 	local talking = speaking ~= nil or next(paCopies) ~= nil
 	local goal = talking and DUCK or 1
 	music.level += math.clamp(goal - music.level, -dt * 1.6, dt * 0.7)
-	bed.Volume = BED_VOLUME * music.level
+	bed.Volume = BED_VOLUME * GENERAL * MUSIC * music.level
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
 	local cam = workspace.CurrentCamera
@@ -321,7 +327,7 @@ local function oneShot(key, volume)
 	o.Parent = audio
 	o.Ended:Once(function() o:Destroy() end)
 	o:Play()
-	soft(o, volume)
+	soft(o, volume * GENERAL)
 	return true
 end
 
@@ -331,6 +337,7 @@ local function loopOn(parent, key, volume, minDistance, maxDistance)
 	local source = AUDIO_ENABLED and voice and voice:FindFirstChild(key)
 	if not source then return nil end
 	local s = source:Clone()
+	volume *= (key == "l6_doll_walk" or key == "l6_doll_run") and ENTITY or GENERAL
 	s.Name, s.Looped, s.Volume = "L6Loop_" .. key, true, volume
 	if minDistance then
 		s.RollOffMode, s.RollOffMinDistance, s.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, minDistance, maxDistance
@@ -414,7 +421,7 @@ local function say(key, paOnly)
 		s:Destroy()
 	end)
 	s:Play()
-	soft(s, level)
+	soft(s, level * ENTITY)
 	-- the same line over the hall's PA: the nearest ceiling horns, thin and echoing
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
@@ -439,7 +446,7 @@ local function say(key, paOnly)
 			pa.Ended:Once(function() paCopies[pa] = nil; pa:Destroy() end)
 			task.delay(32, function() paCopies[pa] = nil; if pa.Parent then pa:Destroy() end end)
 			pa:Play()
-			soft(pa, 0.5)
+			soft(pa, 0.5 * ENTITY)
 		end
 	end
 end
@@ -473,7 +480,7 @@ event.OnClientEvent:Connect(function(kind, a, b)
 end)
 -- The beds under a chase and under the finale. They fade in and out; nothing else in the level loops this loud.
 task.spawn(function()
-	local beds = {chase = {"l6_chase_loop", 0.55}, rage = {"l6_rage_loop", 0.5}}
+	local beds = {chase = {"l6_chase_loop", 0.55 * GENERAL}, rage = {"l6_rage_loop", 0.5 * GENERAL}}
 	while true do
 		local dt = task.wait(0.05)
 		for name, bed in pairs(beds) do
@@ -496,16 +503,23 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		hintLabel.Text = "Free roam: hide and seek is paused."
 		objective(nil)
 	elseif kind == "joined" then
-		dunkLabel.Text = string.format("TAGS %d / %d", b or 0, c or 0)
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b or 0, c or 0)
 		hintLabel.Text = ""
-		objective("HIDE!", "It is counting. Find a hiding place.")
+		-- joining (or re-entering) while it is already searching: the post marker is the objective right away
+		if d == "seek" then
+			dunked = false
+			markerMode = "post"
+			objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
+		else
+			objective("HIDE!", "It is counting. Find a hiding place.")
+		end
 		-- the music waits for the first count (the welcome plays in quiet); a late joiner gets it straight away
 		music.wanted = (a or 0) >= 2 or d == "seek" or d == "between" or d == "escape"
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
-		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
 		markerMode = nil
 		music.wanted = true
 		objective("HIDE!", "It is counting. Find a hiding place.")
@@ -521,17 +535,17 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
 		hintLabel.Text = ""
 		markerMode = "post"
-		objective("TOUCH THE POST", "Sneak to the yellow post. Do not let it see you.")
+		objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "timer" then
 		timerLabel.Text = string.format("%d:%02d", a // 60, a % 60)
 	elseif kind == "dunk" then
-		dunkLabel.Text = string.format("TAGS %d / %d", b, c)
-		if (b or 0) < (c or 3) then changeTrack("l6_music", (b or 0) + 1) end
+		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
+		if (b or 0) < (c or 3) then changeTrack("l6_music", math.min((b or 0) + 1, 3)) end
 		if a == player.DisplayName then
 			dunked = true
 			markerMode = nil
-			objective("TAGGED!", "Hide again until it goes back to count.", Color3.fromRGB(120, 255, 150))
+			objective("TAGGED!", "Hide until everyone alive has touched the post.", Color3.fromRGB(120, 255, 150))
 		end
 		status(string.upper(a) .. " TAGGED THE POST!", 2.5, Color3.fromRGB(120, 255, 150))
 	elseif kind == "chase" then

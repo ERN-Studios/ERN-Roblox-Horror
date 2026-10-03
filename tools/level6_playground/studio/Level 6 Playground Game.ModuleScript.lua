@@ -271,9 +271,9 @@ local function newSession(info)
 end
 
 function Session:target()
-	local n = 0
-	for _ in pairs(self.players) do n += 1 end
-	return CONFIG.TagsToWin        -- the same for any party size: three tags on the post open the exit
+	-- Owner, 2026-10-03: the objective is that EVERY living player touches the post in the same search.
+	-- The target is therefore the number of players still alive, and a tag only lasts for its round.
+	return math.max(1, self:living())
 end
 
 function Session:count()
@@ -509,6 +509,15 @@ function Session:catch(player)
 	end
 end
 
+-- Living players who have touched the post in this search.
+function Session:tagged()
+	local n = 0
+	for _, state in pairs(self.players) do
+		if state.dunked and not state.caught and not state.escaped then n += 1 end
+	end
+	return n
+end
+
 -- Players still on their feet: neither caught nor out through the exit.
 function Session:living()
 	local n = 0
@@ -601,6 +610,7 @@ function Session:countPhase()
 	self.round += 1
 	self.checked = {}
 	for _, state in pairs(self.players) do state.dunked = false end
+	self.dunks = 0
 	self:goHome("count")
 	if not self.active then return end
 	self.phase = "count"
@@ -762,7 +772,7 @@ function Session:seekPhase()
 				if root and flat(root.Position - home).Magnitude <= CONFIG.DunkRadius
 					and flat(feet - home).Magnitude >= CONFIG.DunkSafeDistance then
 					state.dunked = true
-					self.dunks += 1
+					self.dunks = self:tagged()
 					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
 					self.noise = home
 					-- the winning tag belongs to the angry line alone
@@ -773,12 +783,15 @@ function Session:seekPhase()
 		-- Studio only: setting Level6DevTag on the map model scores one tag, to play the finale through in a test
 		if RunService:IsStudio() and self.info.model:GetAttribute("Level6DevTag") then
 			self.info.model:SetAttribute("Level6DevTag", nil)
-			self.dunks += 1
+			for _, state in pairs(self.players) do
+				if not state.caught and not state.escaped then state.dunked = true end
+			end
+			self.dunks = self:tagged()
 			broadcast(self, "dunk", "TEST", self.dunks, self:target())
-			if self.dunks < self:target() then self:say(pick("dunk"), true) end
 		end
-		if self.dunks >= self:target() then result = "won"; break end
-		if allDunked then result = "alldunked"; break end
+		-- a player caught after tagging no longer counts either way: the tally is always of the living
+		self.dunks = self:tagged()
+		if self:living() > 0 and self.dunks >= self:target() then result = "won"; break end
 		local left = math.max(0, math.ceil(deadline - os.clock()))
 		if left ~= lastTimer then lastTimer = left; broadcast(self, "timer", left) end
 		if left <= 0 then result = "timeup"; break end
