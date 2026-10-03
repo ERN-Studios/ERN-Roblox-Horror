@@ -690,6 +690,10 @@ def build_frame():
     nets.finish()
     pads.finish()
     arches.finish()
+    for n, (j, k) in enumerate(((1, 1), (4, 2), (5, 1), (9, 2), (10, 1), (13, 2), (0, 2), (8, 1))):   # bubble-window panels on the hall side
+        prop('tube_window_panel', SX - 0.7, SY + j * C + 6, z=k * H + 0.6, yaw=90, size=8.6, collide=False)
+    for n, (i, k) in enumerate(((1, 1), (4, 2), (7, 1), (10, 2))):                                      # and facing Ball Ocean
+        prop('tube_window_panel', SX + i * C + 6, SY - 0.7, z=k * H + 0.6, yaw=0, size=8.6, collide=False)
     for j in WEST_DOORS:
         sign((SX - 0.8, SY + j * C + 6, 9.2), 10, 2.6, '-x', 'PLAY ZONE  ▶', (215, 30, 30), (255, 220, 40))
     sign((SX - 1.0, SY + NY * C / 2, 26), 46, 4.5, '-x', 'THE BIG FRAME', (255, 200, 20), (180, 20, 20))

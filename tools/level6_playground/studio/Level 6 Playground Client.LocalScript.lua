@@ -219,7 +219,7 @@ end)
 local LOOK = {
 	Ambient = Color3.fromRGB(74, 76, 82), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
 	ClockTime = 0, FogColor = Color3.fromRGB(62, 66, 68), FogStart = 0, FogEnd = 520,   -- a grey haze, not black
-	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.8,
+	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.4,
 }
 local saved = nil
 local grade, bloom = nil, nil
@@ -235,7 +235,7 @@ local function applyLighting(on)
 		grade.Name = "Level6PlaygroundGrade"
 		-- Ambient and Fog do nothing visible under this place's Realistic lighting: the dusty grey air is
 		-- exposure up plus a grade that lifts the blacks
-		grade.Saturation, grade.Contrast, grade.Brightness = 0.04, -0.2, 0
+		grade.Saturation, grade.Contrast, grade.Brightness = 0.08, -0.17, -0.01
 		grade.TintColor = Color3.fromRGB(238, 245, 255)
 		grade.Parent = Lighting
 		bloom = Instance.new("BloomEffect")       -- the tubes glow into the haze
