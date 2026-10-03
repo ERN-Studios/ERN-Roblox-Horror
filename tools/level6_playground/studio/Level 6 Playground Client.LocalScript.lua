@@ -217,9 +217,9 @@ end)
 -- ---------------------------------------------------------------------------------------
 -- lighting: dim warehouse night, cold fluorescent pools, a little haze
 local LOOK = {
-	Ambient = Color3.fromRGB(46, 48, 54), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
-	ClockTime = 0, FogColor = Color3.fromRGB(46, 50, 52), FogStart = 0, FogEnd = 560,   -- a grey haze, not black
-	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0,
+	Ambient = Color3.fromRGB(74, 76, 82), OutdoorAmbient = Color3.fromRGB(0, 0, 0), Brightness = 0,
+	ClockTime = 0, FogColor = Color3.fromRGB(62, 66, 68), FogStart = 0, FogEnd = 520,   -- a grey haze, not black
+	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.15,
 }
 local saved = nil
 local grade, bloom = nil, nil

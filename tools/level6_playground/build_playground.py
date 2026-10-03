@@ -21,7 +21,7 @@ TILE = 12                                   # foam puzzle-mat tile
 C, H = 12, 10                               # play-frame cell and storey height
 NX, NY, NZ = 22, 26, 3                      # play-frame cells; decks at z = 10 and 20, net roof at 30
 SX, SY = 300, 44                            # play-frame south-west corner
-POST_R, BEAM_R = 0.55, 0.42
+POST_R, BEAM_R = 0.85, 0.5
 
 # ---- scene reset -------------------------------------------------------------------------
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -44,10 +44,10 @@ PALETTE = {
     'green': (0.025, 0.21, 0.04), 'purple': (0.13, 0.03, 0.23), 'pink': (0.56, 0.07, 0.21),
     'cyan': (0.02, 0.25, 0.38), 'orange': (0.64, 0.15, 0.01), 'navy': (0.008, 0.012, 0.075),
     # floor
-    'mat_green': (0.03, 0.14, 0.042), 'mat_blue': (0.014, 0.03, 0.16), 'concrete': (0.20, 0.19, 0.17),
+    'mat_green': (0.055, 0.17, 0.05), 'mat_blue': (0.03, 0.055, 0.23), 'concrete': (0.20, 0.19, 0.17),
     # shell
     'wall_yellow': (0.42, 0.26, 0.02), 'wall_blue': (0.02, 0.05, 0.22), 'wall_red': (0.36, 0.03, 0.02),
-    'wall_white': (0.42, 0.41, 0.37), 'deck': (0.10, 0.10, 0.10), 'steel': (0.07, 0.07, 0.075),
+    'wall_white': (0.42, 0.41, 0.37), 'deck': (0.16, 0.16, 0.16), 'steel': (0.10, 0.10, 0.105),
     'duct': (0.55, 0.56, 0.57), 'pipe_red': (0.45, 0.06, 0.05),
     # props
     'white': (0.82, 0.80, 0.75), 'black': (0.02, 0.02, 0.02), 'counter': (0.80, 0.24, 0.10),
@@ -55,11 +55,11 @@ PALETTE = {
     'lamp_off': (0.30, 0.30, 0.28),
     # zone floors and walls
     'floor_pink': (0.17, 0.05, 0.05), 'snack_a': (0.22, 0.05, 0.02), 'snack_b': (0.30, 0.22, 0.11),
-    'floor_purple': (0.20, 0.09, 0.30), 'arcade_carpet': (0.06, 0.03, 0.13), 'arcade_carpet2': (0.14, 0.04, 0.20),
+    'floor_purple': (0.26, 0.21, 0.15), 'arcade_carpet': (0.06, 0.03, 0.13), 'arcade_carpet2': (0.14, 0.04, 0.20),
     'carpet': (0.20, 0.15, 0.08), 'wall_staff': (0.55, 0.42, 0.10), 'ceiling_tile': (0.45, 0.42, 0.32),
-    'mat_pink': (0.50, 0.16, 0.24), 'mat_mint': (0.14, 0.40, 0.30), 'inflate_a': (0.03, 0.14, 0.042),
-    'inflate_b': (0.014, 0.03, 0.16), 'wall_pink': (0.42, 0.13, 0.16), 'wall_purple': (0.12, 0.04, 0.20),
-    'column': (0.55, 0.52, 0.42), 'ballsea': (0.5, 0.5, 0.5), 'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
+    'mat_pink': (0.50, 0.16, 0.24), 'mat_mint': (0.14, 0.40, 0.30), 'inflate_a': (0.055, 0.17, 0.05),
+    'inflate_b': (0.03, 0.055, 0.23), 'wall_pink': (0.42, 0.13, 0.16), 'wall_purple': (0.12, 0.04, 0.20),
+    'column': (0.55, 0.52, 0.42), 'room_wall': (0.62, 0.56, 0.46), 'ballsea': (0.5, 0.5, 0.5), 'plant': (0.06, 0.26, 0.08), 'pot': (0.36, 0.16, 0.08), 'glass': (0.55, 0.75, 0.85),
 }
 ROUGH = {'stainless': 0.3, 'duct': 0.4, 'steel': 0.55, 'deck': 0.6, 'concrete': 0.9}
 VINYL = ['yellow', 'red', 'blue', 'green', 'purple', 'pink', 'cyan', 'orange']
@@ -344,11 +344,9 @@ MISSING_TILES = {(22, 20), (22, 21), (14, 13), (26, 25), (26, 26), (16, 24), (40
 def tile_surface(i, j):
     x, y = i * TILE + 6, j * TILE + 6
     alt = (i + j) % 2
-    if in_rect(x, y, RECEPTION):
-        return 'other', 'floor_pink'
     if in_rect(x, y, (0, 132, 60, 288)):
         return 'other', ('snack_a', 'snack_b')[alt]
-    if in_rect(x, y, PARTY):
+    if in_rect(x, y, (PARTY[0], 340, PARTY[2], PARTY[3])):
         return 'other', 'floor_purple'
     if in_rect(x, y, ARCADE) or in_rect(x, y, PRIZES):
         return 'other', ('arcade_carpet', 'arcade_carpet2')[alt]
@@ -460,7 +458,7 @@ def build_ceiling():
     n = 0
     for ix, x in enumerate(range(20, HALL_X, 40)):
         for iy, y in enumerate(range(20, HALL_Y, 40)):
-            if in_rect(x, y, PARTY, 2) or in_rect(x, y, STAFF, 2):
+            if in_rect(x, y, (PARTY[0], 340, PARTY[2], PARTY[3]), 2) or in_rect(x, y, STAFF, 2):
                 continue                                   # those blocks have their own low ceilings
             z = HALL_Z - 9
             on = (ix * 7 + iy * 3) % 11 != 0
@@ -832,19 +830,18 @@ def playhouse(b, px, py, mat, roof, door='north'):
 def build_reception():
     r = Builder('Reception', zones_col)
     x0, y0, x1, y1 = RECEPTION
-    wall_run(r, (x0, y1), (x1, y1), 20, 'wall_yellow', openings=[(58, 96, 14)])
-    wall_run(r, (x1, y0), (x1, y1), 20, 'wall_yellow', openings=[(34, 76, 14)])
-    r.box((96, 30, 0.35), (132, 36, 4.6), 'wood')                    # L-shaped desk facing the doors
+    r.box((96, 30, 0.35), (132, 36, 4.6), 'blue')                    # L-shaped desk facing the doors
     r.box((94, 29, 4.6), (134, 37, 5.1), 'yellow')
-    r.box((126, 36, 0.35), (132, 62, 4.6), 'wood')
+    r.box((126, 36, 0.35), (132, 62, 4.6), 'blue')
     r.box((124, 36, 4.6), (134, 64, 5.1), 'yellow')
     r.box((104, 32, 5.1), (110, 35, 8.0), 'black')                   # till and monitor
     r.box((116, 31, 5.1), (121, 34, 6.2), 'stainless')
-    for n in range(5):                                               # turnstiles in the east opening
-        y = 36 + n * 9.5
-        r.box((x1 - 6, y, 0.35), (x1 + 6, y + 1.2, 4.4), 'stainless')
-        if n < 4:
-            r.box((x1 - 0.3, y + 1.2, 3.2), (x1 + 0.3, y + 9.5, 3.8), 'red')
+    for n in range(4):                                               # turnstiles between the desk and the hall
+        y = 66 + n * 8
+        r.box((128, y, 0.35), (133, y + 1.6, 4.6), 'stainless')
+        if n < 3:
+            r.cyl((130.5, y + 1.6, 3.6), (130.5, y + 6.2, 3.0), 0.22, 'stainless', 6)
+            r.cyl((130.5, y + 1.6, 3.6), (132.5, y + 5.4, 4.4), 0.22, 'stainless', 6)
     for n in range(4):                                               # rope barrier to the desk
         x = 62 + n * 9
         r.cyl((x, 22, 0.35), (x, 22, 4.2), 0.35, 'stainless', 6, True)
@@ -861,11 +858,10 @@ def build_reception():
     r.box((8, 10, 0.35), (12, 88, 2.4), 'red')                       # bench
     for px, py in ((20, 100), (140, 6), (140, 100)):
         planter(r, px, py)
-    r.box((114, y1 - 1.1, 5), (128, y1 - 0.8, 12), 'paper')          # rules board
+    r.box((0.9, 96, 5), (1.2, 112, 13), 'paper')                     # rules board on the west wall
     r.finish()
     sign((113, 28.4, 3), 14, 2.4, '-y', 'RECEPTION', (255, 210, 30), (20, 40, 160))
-    sign((121, y1 - 1.3, 8.5), 13, 6.4, '-y', 'PLAY RULES\n1. SOCKS ON\n2. NO RUNNING\n3. NO HIDING', (245, 240, 220), (30, 30, 30))
-    sign((x1 + 1.1, 55, 16.5), 30, 3.2, '+x', 'RECEPTION  ·  WAY OUT', (255, 210, 30), (200, 25, 25))
+    sign((1.3, 104, 9), 15, 7.4, '+x', 'PLAY RULES\n1. SOCKS ON\n2. NO RUNNING\n3. NO HIDING', (245, 240, 220), (30, 30, 30))
     light('L6_Reception_0', (75, 55, 46), energy=20000)
     HIDE.extend([('counter', 112, 44, 1), ('cubby_bench', 16, 50, 1)])
 
@@ -912,18 +908,28 @@ def build_party_rooms():
     p = Builder('PartyRooms', zones_col)
     x0, y0, x1, y1 = PARTY
     ceil = 16
-    wall_run(p, (x0, y0), (x1, y0), ceil, 'wall_purple', openings=[(146, 170, 12)])   # facade onto the hall
-    wall_run(p, (x1, y0), (x1, y1), ceil, 'wall_purple')
-    p.box((x0, y0, ceil), (x1 + 0.75, y1, ceil + 0.8), 'wall_white')                  # low ceiling
     rooms = [(4, 42), (46, 84), (88, 126), (130, 170)]
-    wall_run(p, (x0, 340), (x1, 340), ceil, 'wall_blue', openings=[((a + b) / 2 - 4, (a + b) / 2 + 4, 10.5) for a, b in rooms])
+    doors = [((a + b) / 2 - 4, (a + b) / 2 + 4, 10.5) for a, b in rooms]
+    wall_run(p, (x0, 340), (x1, 340), 26, 'wall_blue', openings=doors)                # the long blue wall
+    wall_run(p, (x1, 340), (x1, y1), ceil, 'wall_blue')
+    p.box((x0, 340.75, ceil), (x1 + 0.75, y1, ceil + 0.8), 'wall_white')              # the rooms' ceiling
     for a, b in rooms[1:]:
-        wall_run(p, (a - 2, 340), (a - 2, y1), ceil, 'wall_blue')
-    door_cols = ('wall_red', 'wall_yellow', 'wall_blue', 'wall_red')
+        wall_run(p, (a - 2, 340.75), (a - 2, y1), ceil, 'room_wall')
+    p.box((x0 + 0.1, 340.8, 0.35), (x0 + 0.5, y1, ceil), 'room_wall')
+    p.box((x0, y1 - 0.6, 0.35), (x1, y1 - 0.2, ceil), 'room_wall')
+    door_cols = ('wall_red', 'wall_yellow', 'wall_red', 'wall_yellow')
     for n, (a, b) in enumerate(rooms):
         mid = (a + b) / 2
-        p.box((mid + 4, 332.4, 0.35), (mid + 4.6, 340, 10.3), door_cols[n])           # door standing open
-        p.box((mid - 9, 339.0, 5.4), (mid - 6, 339.25, 9), 'paper')
+        for side in (-4.6, 4):                                                        # blue door frame
+            p.box((mid + side, 338.9, 0.35), (mid + side + 0.6, 340, 11), 'blue')
+        p.box((mid - 4.6, 338.9, 10.5), (mid + 4.6, 340, 11.1), 'blue')
+        p.box((mid + 4, 331.2, 0.35), (mid + 4.6, 339, 10.3), door_cols[n])           # door standing open
+        fx = mid - 14                                                                 # a second door, shut, per room
+        p.box((fx - 3.6, 339.0, 0.35), (fx + 3.6, 339.4, 10.3), door_cols[(n + 1) % 4])
+        for side in (-4.2, 3.6):
+            p.box((fx + side, 338.9, 0.35), (fx + side + 0.6, 340, 11), 'blue')
+        p.box((fx - 4.2, 338.9, 10.5), (fx + 4.2, 340, 11.1), 'blue')
+        p.box((mid + 6, 339.0, 5.4), (mid + 8.4, 339.25, 8.6), 'paper')
         p.box((mid - 9, 372, 3.4), (mid + 9, 380, 3.9), 'paper')                      # party table with a cloth
         p.box((mid - 8, 373, 0.35), (mid + 8, 379, 3.4), ('pink', 'cyan', 'yellow', 'pink')[n])
         for side in (368, 381.5):
@@ -935,19 +941,16 @@ def build_party_rooms():
             p.ball((bx, by, bz), 1.5, ('red', 'yellow', 'blue', 'green')[(n + k) % 4])
             p.cyl((bx, by, 0.4), (bx, by, bz - 1.4), 0.05, 'white', 3)
         p.box((a + 2, y1 - 1.0, 12.4), (b - 2, y1 - 0.8, 13.6), ('pink', 'cyan', 'yellow', 'green')[n])   # banner
+        p.box((mid - 5, 358, ceil - 0.5), (mid + 5, 362, ceil - 0.05), 'lamp_warm' if n != 2 else 'lamp_off')
+        if n != 2:
+            light(f'L6_PartyBlock_{n}', (mid, 360, ceil - 1.5), energy=7000, color=(1.0, 0.9, 0.75), size=(10, 4))
         HIDE.append(('table', mid, 376, 0.6))
-        sign((mid - 7.5, 339.1, 7.2), 2.8, 3.4, '-y', f'PARTY\nROOM\n{n + 1}', (245, 240, 220), (30, 30, 30))
-    for n, (bx, by, mat) in enumerate(((20, 320, 'red'), (58, 334, 'yellow'), (96, 318, 'blue'), (132, 330, 'green'),
-                                       (150, 320, 'pink'))):                          # balloons gone soft on the floor
-        p.ball((bx, by, 1.2), 1.1, mat)
-    for n, x in enumerate((24, 72, 120, 160)):
-        p.box((x - 5, 324, ceil - 0.5), (x + 5, 328, ceil - 0.05), 'lamp_on' if x != 120 else 'lamp_off')
-        if x != 120:
-            light(f'L6_PartyBlock_{n}', (x, 326, ceil - 1.5), energy=7000, color=(0.92, 0.95, 1.0), size=(10, 4))
-    p.box((0.8, 318, 0.35), (1.4, 334, 11), 'wall_red')                               # restroom doors at the far end
+        sign((mid + 7.2, 338.85, 7), 2.6, 3.2, '-y', f'PARTY\nROOM\n{n + 1}', (245, 240, 220), (30, 30, 30))
+    for n, (bx, by, mat) in enumerate(((20, 334, 'red'), (58, 336, 'yellow'), (96, 333, 'blue'), (132, 335, 'green'),
+                                       (150, 336, 'pink'), (70, 330, 'blue'), (112, 337, 'yellow'))):   # balloons gone soft
+        p.ball((bx, by, 1.5), 1.2, mat)
     p.finish()
-    sign((84, y0 - 0.9, 13.4), 60, 3.6, '-y', 'PARTY ROOMS', (120, 60, 170), (255, 255, 255))
-    sign((1.5, 326, 12.4), 12, 1.8, '+x', 'RESTROOMS', (245, 240, 220), (30, 30, 30))
+    sign((84, 339.1, 19), 60, 3.6, '-y', 'PARTY ROOMS', (120, 60, 170), (255, 255, 255))
 
 
 def cabinet(b, x, y, facing, mat, lit=False):

@@ -30,12 +30,12 @@ SURFACE = {
     'arcade_carpet': ('Carpet', 0, True), 'arcade_carpet2': ('Carpet', 0, True), 'floor_purple': ('Carpet', 0, True),
     'floor_pink': ('SmoothPlastic', 0, True), 'snack_a': ('SmoothPlastic', 0, True), 'snack_b': ('SmoothPlastic', 0, True),
     'wall_staff': ('Plaster', 0, True), 'wall_pink': ('Plaster', 0, True), 'wall_purple': ('Plaster', 0, True),
-    'ceiling_tile': ('Plaster', 0, True), 'ballsea': ('SmoothPlastic', 0, True), 'column': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('Fabric', 0.6, True),
+    'ceiling_tile': ('Plaster', 0, True), 'room_wall': ('Plaster', 0, True), 'ballsea': ('SmoothPlastic', 0, True), 'column': ('Plaster', 0, True), 'plant': ('Grass', 0, True), 'net_blue': ('Fabric', 0.6, True),
     'net_yellow': ('Fabric', 0.5, True), 'net_black': ('Fabric', 0.75, True),
 }
 EXTRA_RGB = {'lamp_magenta': (255, 40, 200), 'lamp_on': (255, 240, 205), 'lamp_warm': (255, 205, 120), 'exit_sign': (235, 30, 20),
              'net_blue': (20, 40, 150), 'net_yellow': (215, 170, 30), 'net_black': (12, 12, 12)}
-NO_COLLIDE = ('Ceiling_', 'BallOcean_Balls', 'BallOcean_Surface', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
+NO_COLLIDE = ('Ceiling_', 'BallOcean_Balls', 'BallOcean_Surface', 'Hall_Balls', 'Toddler_Balls', 'Frame_Lamps', 'Frame_Rollers')
 TEXTURES = json.loads((Path(__file__).with_name('textures.json')).read_text())
 
 # Signs (SurfaceGuis) are listed by the build script and arrive in prims.json as data['signs'].
@@ -167,8 +167,12 @@ local function decorate(p, owner, mat)
 		texture(p, TEX.ceiling_tiles, Enum.NormalId.Bottom, 8)
 	elseif mat == "arcade_carpet" or mat == "arcade_carpet2" then
 		texture(p, TEX.arcade_carpet, Enum.NormalId.Top, 12)
-	elseif owner == "PartyRooms" and (mat == "wall_blue" or mat == "wall_purple") then
-		for _, face in ipairs(SIDES) do texture(p, TEX.party_wall, face, 9, nil, 0.25) end
+	elseif mat == "room_wall" then
+		for _, face in ipairs(SIDES) do texture(p, TEX.party_wall, face, 9, Color3.fromRGB(215, 205, 190)) end
+	elseif mat == "floor_purple" then
+		texture(p, TEX.carpet_staff, Enum.NormalId.Top, 12, Color3.fromRGB(200, 190, 175))
+	elseif owner == "PartyRooms" and mat == "wall_blue" then
+		for _, face in ipairs(SIDES) do texture(p, TEX.block_wall, face, 14, tint(p.Color, 1.1)) end
 	elseif owner == "Ceiling_Structure" and mat == "deck" and p.Size.X > 100 then
 		texture(p, TEX.roof_deck, Enum.NormalId.Bottom, 16, Color3.fromRGB(150, 150, 150))
 	elseif owner == "Walls" or (owner == "Reception" and mat == "wall_yellow") or owner == "Inflatables" then
@@ -296,7 +300,7 @@ for line in string.gmatch(LIGHTS, "[^\\n]+") do
 	elseif string.find(f[1], "SnackBar") then
 		light.Range, light.Brightness, light.Color = 30, 0.38, Color3.fromRGB(255, 214, 140)
 	elseif string.find(f[1], "PartyBlock") then
-		light.Range, light.Brightness, light.Color = 34, 0.8, Color3.fromRGB(235, 240, 250)
+		light.Range, light.Brightness, light.Color = 30, 0.9, Color3.fromRGB(255, 232, 196)
 	elseif string.find(f[1], "Arcade") then
 		light.Range, light.Brightness, light.Color = 34, 2.2, Color3.fromRGB(255, 50, 200)
 	elseif string.find(f[1], "Staff") then
