@@ -58,6 +58,15 @@ local POTION_SECONDS = (ITEMS.SpeedPotion and ITEMS.SpeedPotion.DurationSeconds)
 local PANEL_WIDTH = 300
 local PAD_X, PAD_TOP, PAD_BOTTOM = 12, 22, UIStyle.Pad.Bottom
 local ROW_HEIGHT, ROW_GAP = 30, UIStyle.Pad.RowGap
+-- HOTBAR_20261003 (owner, after the UI concepts: "a four-slot hotbar with key
+-- hints"). On a pointer device the four items are SLOTS side by side -- key
+-- hint top-left, count or timer in the middle, name underneath -- instead of a
+-- list of rows. The strip stands where the list stood (right of the torch
+-- gauge, 92px up) and is no taller than one of its rows was wide, so it keeps
+-- clear of everything the list was measured clear of. Touch is unchanged: it
+-- takes its geometry from the control plan.
+local SLOT_WIDTH, SLOT_HEIGHT, SLOT_GAP = 72, 58, 6
+local slotWidth = SLOT_WIDTH   -- widened in applyLayout when a gamepad's key hint is wider
 local ROW_PAD, NAME_WIDTH, COLUMN_GAP = 10, 96, 8
 local TEXT_HEIGHT, KEY_HEIGHT = 18, 18
 local CAPTION_HEIGHT, CAPTION_GAP, CAPTION_SECONDS = 22, 6, 2
@@ -410,7 +419,8 @@ local function computeStates()
 			Enabled = available and enabled, Lit = enabled, Live = false,
 			Title = "Route Markers", Short = "MARKER",
 			Detail = stored .. " STORED · " .. placed .. "/" .. MAX_MARKERS .. " PLACED",
-			ShortDetail = placed .. "/" .. MAX_MARKERS}
+			ShortDetail = placed .. "/" .. MAX_MARKERS,
+			SlotDetail = "x" .. stored .. " " .. placed .. "/" .. MAX_MARKERS}
 	end
  do -- Server-published snapshot; the client never determines danger.
   local now=workspace:GetServerTimeNow()
@@ -442,27 +452,28 @@ local function placePointer(states)
 	end
 	panel.Visible = shown > 0
 	if shown == 0 then return end
-	local height = PAD_TOP + shown * ROW_HEIGHT + (shown - 1) * ROW_GAP + PAD_BOTTOM
-	-- The desktop torch ends at x84. Stamina sits near bottom 22. The panel
-	-- starts at x98 and ends 92px above the bottom, away from both, and grows
-	-- UPWARD from there -- never through the safe area's own top.
-	local rightmost = math.max(layout.Safe.Left + 8, layout.Safe.Right - PANEL_WIDTH - 8)
+	local width = PAD_X * 2 + shown * slotWidth + (shown - 1) * SLOT_GAP
+	local height = PAD_TOP + SLOT_HEIGHT + PAD_BOTTOM
+	-- The desktop torch ends at x84. Stamina sits near bottom 22. The strip
+	-- starts at x98 and ends 92px above the bottom, away from both -- the same
+	-- anchor the list had, never through the safe area's own top.
+	local rightmost = math.max(layout.Safe.Left + 8, layout.Safe.Right - width - 8)
 	local left = math.clamp(gui.AbsolutePosition.X + 98, layout.Safe.Left + 8, rightmost)
 	local lowest = math.min(layout.Safe.Bottom - 8, layout.Safe.Top + 8 + height)
 	local bottom = math.clamp(gui.AbsolutePosition.Y + gui.AbsoluteSize.Y - 92,
 		lowest, layout.Safe.Bottom - 8)
-	panel.Size = UDim2.fromOffset(PANEL_WIDTH, height)
+	panel.Size = UDim2.fromOffset(width, height)
 	panel.Position = UIDevice.LocalPosition(gui, left, bottom)
 	local rank = 0
 	for index, row in ipairs(ROWS) do
 		if states[index].Visible then
+			row.Button.Size = UDim2.fromOffset(slotWidth, SLOT_HEIGHT)
+			row.Button.Position = UIDevice.LocalPosition(gui,
+				left + PAD_X + rank * (slotWidth + SLOT_GAP), bottom - PAD_BOTTOM)
 			rank += 1
-			row.Button.Size = UDim2.fromOffset(PANEL_WIDTH - PAD_X * 2, ROW_HEIGHT)
-			row.Button.Position = UIDevice.LocalPosition(gui, left + PAD_X,
-				bottom - PAD_BOTTOM - (rank - 1) * (ROW_HEIGHT + ROW_GAP))
 		end
 	end
-	caption.Size = UDim2.fromOffset(PANEL_WIDTH, CAPTION_HEIGHT)
+	caption.Size = UDim2.fromOffset(math.max(width, 220), CAPTION_HEIGHT)
 	caption.Position = UIDevice.LocalPosition(gui, left, bottom + CAPTION_GAP + CAPTION_HEIGHT)
 end
 
@@ -522,10 +533,10 @@ local function refresh()
 				button.TextTransparency = faded
 			else
 				button.Text = ""
-				row.Name.Text = state.Title
+				row.Name.Text = state.Short
 				row.Name.TextColor3 = state.Live and UIStyle.Color.Live or UIStyle.Color.Title
 				row.Name.TextTransparency = faded
-				row.Readout.Text = state.Detail
+				row.Readout.Text = state.SlotDetail or state.ShortDetail
 				row.Readout.TextColor3 = state.Lit and UIStyle.Color.Body or UIStyle.Color.Muted
 				row.Readout.TextTransparency = faded
 			end
@@ -557,6 +568,13 @@ function applyLayout()
 			else UIDevice.UnregisterControlRect(row.Button) end
 		end
 	end
+	slotWidth = SLOT_WIDTH
+	for _, row in ipairs(ROWS) do
+		local binding = UIDevice.Binding(row.Keyboard, row.Gamepad)
+		if binding ~= "" then
+			slotWidth = math.max(slotWidth, keyChipWidth("[" .. binding .. "]") + 8)
+		end
+	end
 	for index, row in ipairs(ROWS) do
 		local button = row.Button
 		local binding = UIDevice.Binding(row.Keyboard, row.Gamepad)
@@ -567,9 +585,19 @@ function applyLayout()
 			row.Chip.Text = "[" .. binding .. "]"
 			row.Chip.Size = UDim2.fromOffset(keyChipWidth(row.Chip.Text), KEY_HEIGHT)
 		end
-		local reserved = row.Chip.Visible and (row.Chip.Size.X.Offset + COLUMN_GAP) or 0
-		row.Readout.Size = UDim2.new(1,
-			-(ROW_PAD + NAME_WIDTH + COLUMN_GAP + ROW_PAD + reserved), 0, TEXT_HEIGHT)
+		-- The slot's three parts: key hint top-left, count or timer centred,
+		-- the short name along the bottom.
+		row.Chip.AnchorPoint = Vector2.new(0, 0)
+		row.Chip.Position = UDim2.fromOffset(4, 4)
+		row.Readout.AnchorPoint = Vector2.new(.5, .5)
+		row.Readout.Position = UDim2.new(.5, 0, .5, 6)
+		row.Readout.Size = UDim2.new(1, -8, 0, TEXT_HEIGHT)
+		row.Readout.TextXAlignment = Enum.TextXAlignment.Center
+		row.Name.AnchorPoint = Vector2.new(.5, 1)
+		row.Name.Position = UDim2.new(.5, 0, 1, -3)
+		row.Name.Size = UDim2.new(1, -8, 0, 14)
+		row.Name.TextXAlignment = Enum.TextXAlignment.Center
+		row.Name.TextSize = 11
 		if control then
 			local slot = layout.ControlPlan.Slots[row.Key]
 			if index == 1 then
@@ -584,7 +612,9 @@ function applyLayout()
 				button.AnchorPoint = Vector2.new(1, 1)
 				button.Size = UDim2.fromOffset(slot.Width, slot.Height)
 				button.Position = UDim2.new(1, -slot.Right, 1, -slot.Bottom)
-				button.TextSize = 10
+				-- UI concepts, direction C on phones: a heavier, larger label where the
+				-- slot can carry it (56px and up); the 44px floor keeps the old face.
+				button.TextSize = slot.Width >= 56 and 12 or 10
 			end
 			button.BackgroundColor3 = TOUCH_CHIP
 			button.BackgroundTransparency = 0
