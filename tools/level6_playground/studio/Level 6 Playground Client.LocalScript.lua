@@ -200,7 +200,7 @@ end
 -- The hall's music comes out of the PA: a copy on each of the nearest ceiling horns, kept in step with a very
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
-local HORN_VOLUME, BED_VOLUME, DUCK = 0.36, 0.135, 0.45    -- owner: 1.2 / 0.45 was far too loud, down 70% (2026-10-03)
+local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.0675, 0.45    -- owner: 1.2 / 0.45 far too loud; down 70%, then another 50% (2026-10-03)
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
