@@ -1,0 +1,183 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-03",
+  "destination": "artifacts/level6-playground-20261002/textures_v3",
+  "generation_failures": [],
+  "dimension_validation": "All 16 PNGs decode and match requested dimensions. Square generations resized using macOS sips; landscape outputs 1536x1024.",
+  "seamless_quality_failures": [
+    "wallpaper_staff.png",
+    "carpet_staff.png",
+    "ballpit.png",
+    "foam_mat.png",
+    "vinyl_pad.png",
+    "inflatable_stripes.png",
+    "roof_deck.png",
+    "block_wall.png",
+    "party_wall.png"
+  ],
+  "seamless_notes": "2x2 thumbnail repeat review found visible boundary discontinuities or doubled edge seams in listed textures. These files are retained as generated drafts, not certified seamless. Ceiling and arcade carpet showed no obvious seams at thumbnail scale; full-resolution engine verification not performed.",
+  "studio": "Read-only context inspection of place 131311258779917; no Studio writes or publication, task requests local texture generation only.",
+  "repository": "Pre-existing unrelated tracked/untracked changes preserved. HEAD 52bd4d7, origin/main de2e4de after fetch; divergence 43 local / 264 remote. No reconciliation or push.",
+  "prompts": [
+    {
+      "file": "wallpaper_staff.png",
+      "prompt": "Create wallpaper_staff.png, 1024x1024 PNG. Game surface texture, photorealistic material, flat orthographic straight-on surface filling frame edge to edge. Seamless tile in BOTH axes, opposite edges matching pattern and tone. Classic Backrooms mustard-yellow wallpaper, faint SMALL repeating damask/floral motif, subtle irregular water stains and aged grime. Match the mustard corridor wallpaper material of user reference 1, but evenly diffusely lit for a game texture, no baked room lighting. No perspective, no vignette, no border, no text, no objects, no floor or ceiling. Surface only.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-8ea11013-9f3b-46a9-b9b0-9930500013a2.png",
+      "sha256": "d69d521d7a7877016163061ca35181ca0c957ba0f7106a4a4711c6b024c26fc3",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "carpet_staff.png",
+      "prompt": "Create carpet_staff.png, 1024x1024 PNG. Seamless top-down worn brown-olive commercial loop carpet, dense small loop fibers, ground-in dirt and modest irregular wear, like staff-only corridor floor. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. If seamless, precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-3e50c001-8b50-4119-9f50-5dccafe9660e.png",
+      "sha256": "a552507d58945ae74fe7cf5114f55e15e2d8f6d9b5e5476c338377a50dc74f02",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "ceiling_tiles.png",
+      "prompt": "Create ceiling_tiles.png, 1024x1024 PNG. Seamless suspended office ceiling seen orthographically from below: exactly 2 by 2 square acoustic tiles, fine speckle texture in a thin metal grid, yellowed cream, one faint stain. Grid repeats continuously at image edges. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-ab2942e8-055a-45e6-8ea1-ed2543fed819.png",
+      "sha256": "0768ed40fbf10ed3dbf757add1fbc92ed2315d294bb0ce7cb471f41ca0555675",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "ballpit.png",
+      "prompt": "Create ballpit.png, 1024x1024 PNG. Seamless top-down densely packed dusty plastic play balls, red yellow blue green and a few orange, filling frame completely with about 12 balls across. Soft even light, subtle volume, no pit border, no floor. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-d41a74f4-a4a7-4083-a618-0e2cf98511b1.png",
+      "sha256": "d8434ac463ebf23f7d918b3827113e4568d0464143aef544da116dc747c8b53f",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "foam_mat.png",
+      "prompt": "Create foam_mat.png, 1024x1024 PNG. Seamless top-down ONE square EVA foam puzzle floor mat in neutral light grey for engine tinting. Fine pebbled foam grain, interlocking jigsaw teeth visible along all four edges as dark seam lines, scuff marks dirt faint footprints. Image is a single mat repeat cell including matching edge seams; no isolated product outline or background. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-784a2fe1-5dc3-489a-97ee-bef29393c1ca.png",
+      "sha256": "3ed39891a911e9df1b60832e1354c8af9e5024aad5361471ca5f6460980818ca",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "vinyl_pad.png",
+      "prompt": "Create vinyl_pad.png, 1024x1024 PNG. Seamless neutral light grey padded vinyl soft-play safety padding for engine tinting, glossy with subtle soft wrinkles, one stitched horizontal seam and one stitched vertical seam, scuffs grime. Neutral grey only. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-66c74cae-5a29-4d4f-b1a0-eb9dc7ea8e8f.png",
+      "sha256": "88948bf33e693c8d6ca7e384e4680fcde1c714073fed926acfb3837c2b0b6c45",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "inflatable_stripes.png",
+      "prompt": "Create inflatable_stripes.png, 1024x1024 PNG. Seamless bouncy-castle PVC with wide vertical stripes red yellow blue repeating, glossy, stitched seams between stripes, soft puffed wrinkles, dusty. Stripe repeat precisely matches across left/right and top/bottom. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-56fe7d5d-e00e-42f0-a309-c6bd3b7c4572.png",
+      "sha256": "b8a337858a694c85f895f4d9b08e6849099e7400f609a56ab02488dfca5919f6",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "tarp_deflated.png",
+      "prompt": "Create tarp_deflated.png, 1024x1024 PNG. Top-down surface of a deflated bouncy castle lying crumpled, filling entire frame edge to edge with heavy folds and wrinkles of glossy red yellow blue PVC, dusty. No surrounding floor, no people. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-ed80c16c-be02-4f12-b271-d861d2f4acd7.png",
+      "sha256": "43794cfbda12cc1e42b4f756a4d6b02f0e214d046417d2cfe5b6cac73f3063f3",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "menu_boards.png",
+      "prompt": "Create menu_boards.png. 1536x1024 landscape. Exactly THREE 1990s snack-bar backlit menu panels side by side filling whole frame, thin dark frame lines only between panels. Hot dogs, pizza slices, slush drinks, popcorn and nachos with small price lists, faded food photos. Invented brand 'Giggle Bites'. Warm yellow backlit surface glow, uniform exposure. Readable example prices HOT DOG $1.50, PIZZA SLICE $2.00, SLUSH $1.25, POPCORN $1.00, NACHOS $2.50. No real logos, no surrounding room. Game surface asset for abandoned 1990s indoor soft-play Backrooms, slightly aged and dirty. Flat orthographic surface only, fills frame edge to edge, evenly lit except specified intrinsic backlight, no perspective, vignette or outer border.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-e628a309-e9a2-44e3-b645-8dce2194b597.png",
+      "sha256": "116b847e80770fbc9b6927b82cff331a0b885f23ac5ae4251a440b0f3d001f80",
+      "pixel_size": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "file": "arcade_carpet.png",
+      "prompt": "Create arcade_carpet.png, 1024x1024 PNG. Seamless top-down 1990s arcade carpet, near-black navy base with neon confetti pattern of squiggles triangles zigzags dots in magenta cyan yellow purple. Worn carpet fibers, slightly dirty, pattern distributed evenly. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-8323df19-926e-4d3e-ab17-6e9feb8ff950.png",
+      "sha256": "648d39cb30898ef31c099476575cbd4f602966154797000cc8aec88c749766d5",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "arcade_screen.png",
+      "prompt": "Create arcade_screen.png, 1024x1024 PNG. A glowing CRT arcade attract screen texture, 1990s pixel-art space shooter with the exact words INSERT COIN, scanlines, magenta and cyan glow. Screen content fills frame edge to edge, no cabinet, no bezel, orthographic. Pixel spaceships and stars. Game texture for abandoned 1990s indoor soft-play Backrooms. Flat orthographic screen surface only, fills whole frame, no perspective, vignette, border.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-da8d81f7-bc44-45dc-96d5-d86c22182d35.png",
+      "sha256": "6f27a0b0b88809ef08b5b99c817c280d408b76336fa326a7ed71494db3dc7be3",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "animal_mural.png",
+      "prompt": "Create animal_mural.png. 1536x1024 landscape. Faded hand-painted nursery wall mural of cartoon farm animals: cow pig sheep chicken duck on green hills under blue sky with a sun, peeling paint and slightly unsettling smiles. Painting fills whole frame edge to edge. No text. Photorealistic painted game surface for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills whole frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-3cb88b75-c3b9-4a20-9b87-dbae70ab2f37.png",
+      "sha256": "d05bf6b03b3ab4aeb0c9493f7cc69b27a1bdcacc9769a332e1fb096c771f11fa",
+      "pixel_size": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "file": "prize_wall.png",
+      "prompt": "Create prize_wall.png. 1536x1024 landscape. Straight-on orthographic prize wall: exactly four wooden shelves packed with cheap colourful plush toys, bears bunnies dinosaurs ducks against pink pegboard, dusty. Display fills whole frame, evenly lit, no surrounding room. Photorealistic game surface asset for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills whole frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-ca8e81f2-8bbe-477a-9636-959f6ddc9f97.png",
+      "sha256": "ff3825203b60e091c563b81fdb3e06a581b21bd570d510984773a5aac63db94e",
+      "pixel_size": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "file": "roof_deck.png",
+      "prompt": "Create roof_deck.png, 1024x1024 PNG. Seamless underside of corrugated steel warehouse roof deck, parallel ribs dark grey-brown, dust and rust streaks. Flat straight-on material surface, ribs parallel and evenly spaced, no roof structure beyond surface. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-ee7e7659-1d90-4519-b388-f7768a751bc0.png",
+      "sha256": "74e3a62bf4e3532cee09e9ca24f081cdba8849b99b6d3955797b94737eb1ae69",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "block_wall.png",
+      "prompt": "Create block_wall.png, 1024x1024 PNG. Seamless painted concrete block CMU wall neutral off-white for tinting: exactly 3 courses visible, staggered masonry bonds, chipped paint scuffs grime near bottom. Opposite edges must match in both axes; bottom grime modest enough to wrap without tonal break. No floor. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-5d5445c8-d8e3-41dd-b040-abec5d931c1a.png",
+      "sha256": "aece7c38941618e6fd5c9d1e0a7769202ebe82056b7e44faf7df259a08cbf909",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "file": "party_wall.png",
+      "prompt": "Create party_wall.png, 1024x1024 PNG. Seamless faded pastel birthday-room wallpaper, pale lilac with small balloons stars confetti in pink yellow turquoise, 1990s style, slightly stained. Photorealistic game material for abandoned 1990s indoor soft-play Backrooms. Flat orthographic surface only, fills frame edge to edge, evenly diffuse lit, no perspective, vignette, border or text. Precisely match opposite edges in both axes.",
+      "original_path": "/Users/zeanjuul4/.codex/generated_images/01a10150-afd8-7fe2-a409-3c853f160fca/exec-9046cfe7-dcbb-4777-82b2-b5b940e7773c.png",
+      "sha256": "7503dea1bc31c808df0e5a4ea35e51304be7600419aba7ac6ca5e4e7fb3f5b1d",
+      "pixel_size": [
+        1024,
+        1024
+      ]
+    }
+  ]
+}
