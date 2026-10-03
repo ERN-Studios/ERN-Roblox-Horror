@@ -733,6 +733,10 @@ def build_frame():
            [(ax1 + 1, ay1 - 6, 23.2)], 2.9, ['blue', 'yellow', 'red', 'green'], 10)
     by = ay0 + 30
     f.box((ax0, by - 2.5, 19.65), (ax1, by + 2.5, 20.35), 'yellow')
+    f.tube([(SX - 3.4, SY + t, 13.4) for t in range(18, 67, 6)], 3.0, ['blue', 'yellow', 'red', 'green'], 10)
+    f.tube([(SX - 3.4, SY + t, 23.4) for t in range(96, 151, 6)], 3.0, ['red', 'blue', 'yellow'], 10)
+    f.ball((SX - 3.4, SY + 16, 13.4), 3.3, 'yellow')
+    f.ball((SX - 3.4, SY + 152, 23.4), 3.3, 'yellow')
     f.finish()
     HIDE.extend([('tube', ax0 + 6, ay0 + 30, 11.2), ('tube', ax0 + 30, ay1 - 6, 21.2), ('under_slide', ax1 - 14, ay0 + 12, 1)])
     bn = Builder('Frame_BridgeNets', frame_col)
@@ -1016,6 +1020,8 @@ def build_staff_only():
         stack.append(nxt)
     for extra in (((4, 3), (5, 3)), ((8, 2), (8, 3)), ((10, 5), (11, 5)), ((1, 5), (1, 6)), ((6, 6), (7, 6))):
         opened.add(extra)                                            # a few loops so it is not one long snake
+    for j in range(0, STAFF_NY - 2):
+        opened.add(((entry[0], j), (entry[0], j + 1)))               # the long corridor in from the door
     wall_run(s, (x0, y0), (x1, y0), ceil, 'wall_staff', t=1.2,
              openings=[(x0 + entry[0] * STAFF_C + 1.5, x0 + entry[0] * STAFF_C + 10.5, 10.5)])
     wall_run(s, (x0, y0), (x0, y1), ceil, 'wall_staff', t=1.2)
@@ -1026,7 +1032,19 @@ def build_staff_only():
                 wall_run(s, (cx + STAFF_C, cy), (cx + STAFF_C, cy + STAFF_C), ceil, 'wall_staff', t=1.0)
             if j + 1 < STAFF_NY and ((i, j), (i, j + 1)) not in opened:
                 wall_run(s, (cx, cy + STAFF_C), (cx + STAFF_C, cy + STAFF_C), ceil, 'wall_staff', t=1.0)
-            lit = (i * 3 + j * 5) % 4 == 0
+            lit = (i * 3 + j * 5) % 4 == 0 or (i == entry[0] and j % 2 == 0)
+            if i == entry[0] and 1 <= j <= STAFF_NY - 2:             # shelving down the long corridor
+                for sx in ((cx + 0.7, cx + 2.7),) + (((cx + 9.3, cx + 11.3),) if j % 2 else ()):
+                    for z in (0.5, 4.0, 7.5):
+                        s.box((sx[0], cy + 1, z), (sx[1], cy + 11, z + 0.25), 'steel')
+                    for yy in (cy + 1, cy + 10.7):
+                        s.box((sx[0], yy, 0.35), (sx[1], yy + 0.3, 11), 'steel')
+                    mid = (sx[0] + sx[1]) / 2
+                    head = ('mascot_head_bear', 'mascot_head_dog', 'mascot_head_chicken')[j % 3]
+                    prop(head, mid, cy + 3.2, z=7.75, yaw=90 if sx[0] < cx + 5 else -90, size=3.0, collide=False)
+                    s.box((sx[0] + 0.2, cy + 6, 4.25), (sx[1] - 0.2, cy + 9.5, 6.4), ('blue', 'red', 'yellow', 'green')[j % 4])
+                    s.box((sx[0] + 0.2, cy + 2, 0.75), (sx[1] - 0.2, cy + 5.5, 3.2), ('yellow', 'green', 'blue', 'red')[j % 4])
+                    s.ball((mid, cy + 8, 1.6), 0.85, BALL_COLOURS[j % 5])
             s.box((cx + 3, cy + 4, ceil - 0.5), (cx + 9, cy + 8, ceil - 0.05), 'lamp_warm' if lit else 'lamp_off')
             if lit:
                 light(f'L6_Staff_{i}_{j}', (cx + 6, cy + 6, ceil - 1.2), 'POINT', 1100, (1.0, 0.82, 0.45))
