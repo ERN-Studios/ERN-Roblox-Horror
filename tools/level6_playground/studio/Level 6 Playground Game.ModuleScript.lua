@@ -15,6 +15,9 @@ local IN_PREVIEW = "Level6PlaygroundPreview"
 local CLEARED = "Level6PlaygroundCleared"
 
 local CONFIG = {
+	-- Paused 2026-10-03 on the owner's request: with this false nobody counts, seeks or chases and the
+	-- map is a free-roam preview. Set it back to true to bring the hide-and-seek round back.
+	EntityEnabled = false,
 	CountTo = 20,
 	CountSeconds = {20, 16, 13, 10},  -- per round; the last value repeats
 	SeekSeconds = 75,
@@ -600,6 +603,10 @@ end
 function Game.AddPlayer(player)
 	local info = map()
 	if not info then return false, "MAP_NOT_READY" end
+	if not CONFIG.EntityEnabled then
+		event:FireClient(player, "paused")
+		return true
+	end
 	if not session or not session.active then
 		session = newSession(info)
 		session.players[player] = {dunked = false}

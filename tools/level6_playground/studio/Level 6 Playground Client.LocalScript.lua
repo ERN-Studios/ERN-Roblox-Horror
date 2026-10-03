@@ -102,9 +102,12 @@ local SoundService = game:GetService("SoundService")
 local audio = Instance.new("Folder")
 audio.Name = "Level6PlaygroundAudio"
 audio.Parent = SoundService
+-- Paused 2026-10-03 on the owner's request while new sounds are made: with this false every Level 6
+-- sound is created silent and the child's voice is never requested. Set it back to true to restore them.
+local AUDIO_ENABLED = false
 local function sound(name, id, volume, looped)
 	local s = Instance.new("Sound")
-	s.Name, s.SoundId, s.Volume, s.Looped = name, id, volume, looped == true
+	s.Name, s.SoundId, s.Volume, s.Looped = name, AUDIO_ENABLED and id or "", AUDIO_ENABLED and volume or 0, looped == true
 	s.Parent = audio
 	return s
 end
@@ -128,6 +131,7 @@ voiceWire.Parent = audio
 local voiceToken = 0
 -- Speak `text`; when `seconds` is given the speech is stretched or squeezed to last about that long.
 local function say(text, seconds)
+	if not AUDIO_ENABLED then return end
 	voiceToken += 1
 	local token = voiceToken
 	task.spawn(function()
@@ -179,7 +183,10 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	end
 end)
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
-	if kind == "joined" then
+	if kind == "paused" then
+		countLabel.Text, statusLabel.Text, dunkLabel.Text, timerLabel.Text = "", "", "", ""
+		hintLabel.Text = "Free roam: hide and seek is paused."
+	elseif kind == "joined" then
 		dunkLabel.Text = string.format("DUNKS %d / %d", b or 0, c or 0)
 		hintLabel.Text = "It counts at HOME BASE. Hide before it reaches twenty."
 		if d == "seek" then status("It is already looking. HIDE.", 4, Color3.fromRGB(255, 90, 90)) end
