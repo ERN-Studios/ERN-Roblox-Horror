@@ -222,7 +222,7 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 			p.Color, p.Material = MAT[mat][1], Enum.Material.SmoothPlastic
 			p.Size = Vector3.new(len * 1.12, n[7] * 2.18, n[7] * 2.18)     -- overlap, so bends do not open gaps
 			local skin = Instance.new("SurfaceAppearance")
-			skin.ColorMap, skin.Color = TEX.vinyl_pad, Color3.fromRGB(38, 38, 42)
+			skin.ColorMap, skin.Color = TEX.vinyl_pad, tint(MAT[mat][1], 1.5)
 			skin.Parent = p
 		else
 			p = part(owner, mat, Enum.PartType.Cylinder)

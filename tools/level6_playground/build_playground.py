@@ -138,7 +138,11 @@ PRIMS = []
 
 
 # ---- mesh builder ------------------------------------------------------------------------
+TUBE_COLOURS = ['red', 'yellow', 'green', 'blue']
+
+
 class Builder:
+    tubes = 0
     """Accumulates one mesh object; faces carry a material and get box-projected UVs."""
 
     def __init__(self, name, col):
@@ -203,7 +207,9 @@ class Builder:
     def tube(self, path, r, mats, n=10, a0=0.0, a1=360.0):
         """Sweep along a polyline. a0..a1 (degrees, 270 = straight down) opens it into a chute."""
         path = [Vector(p) for p in path]
-        mats = 'black'                       # owner: each slide is one solid black tube, not striped
+        # owner: each tube is ONE solid colour (never striped, never black); the tubes differ from each other
+        mats = TUBE_COLOURS[Builder.tubes % len(TUBE_COLOURS)]
+        Builder.tubes += 1
         closed = (a1 - a0) >= 359.9
         steps = n if closed else n + 1
         rings = []
@@ -759,8 +765,8 @@ def build_frame():
     f.box((ax0, by - 2.5, 19.65), (ax1, by + 2.5, 20.35), 'yellow')
     f.tube([(SX - 3.4, SY + t, 13.4) for t in range(18, 67, 6)], 3.0, ['blue', 'yellow', 'red', 'green'], 10)
     f.tube([(SX - 3.4, SY + t, 23.4) for t in range(96, 151, 6)], 3.0, ['red', 'blue', 'yellow'], 10)
-    f.ball((SX - 3.4, SY + 16, 13.4), 3.3, 'black')
-    f.ball((SX - 3.4, SY + 152, 23.4), 3.3, 'black')
+    f.ball((SX - 3.4, SY + 16, 13.4), 3.3, 'yellow')
+    f.ball((SX - 3.4, SY + 152, 23.4), 3.3, 'yellow')
     f.finish()
     HIDE.extend([('tube', ax0 + 6, ay0 + 30, 11.2), ('tube', ax0 + 30, ay1 - 6, 21.2), ('under_slide', ax1 - 14, ay0 + 12, 1)])
     bn = Builder('Frame_BridgeNets', frame_col)
