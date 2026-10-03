@@ -557,6 +557,25 @@ local function loadGameplayCharacter(player, allowed, loadRecord)
  return ok
 end
 
+do -- Level 6 runs outside this script's rounds but wears the round body: same two loads, same gate.
+ local function expose(name, handler)
+  local old = ServerStorage:FindFirstChild(name)
+  if old then old:Destroy() end
+  local bindable = Instance.new("BindableFunction")
+  bindable.Name = name
+  bindable.OnInvoke = handler
+  bindable.Parent = ServerStorage
+ end
+ expose("LoadGameplayCharacter", function(player)
+  if typeof(player) ~= "Instance" or not player:IsA("Player") or inRound[player] then return false end
+  return loadGameplayCharacter(player, function() return player.Parent == Players and not inRound[player] end)
+ end)
+ expose("LoadLobbyCharacter", function(player)
+  if typeof(player) ~= "Instance" or not player:IsA("Player") then return false end
+  return loadLobbyCharacter(player)
+ end)
+end
+
 -- CharacterAutoLoads is off, so a player whose load fails has no Character at
 -- all and `player.CharacterAdded:Wait()` never fires -- no timeout, no error.
 -- The round-start loops are serial, so ONE failed load used to park the whole
@@ -1089,7 +1108,7 @@ local function placeOnLevelEntry(player, char, useSlideResume)
 end
 
 local function onCharacter(player, char)
- if inRound[player] then
+ if inRound[player] or player:GetAttribute("Level6PlaygroundPreview") == true then
   player.CameraMode = Enum.CameraMode.LockFirstPerson
   player.CameraMinZoomDistance = 0.5
   player.CameraMaxZoomDistance = 0.5
@@ -1124,7 +1143,7 @@ local function onCharacter(player, char)
      if humanoid then humanoid.Health = 0 end
     end
    end
-  else
+  elseif player:GetAttribute("Level6PlaygroundPreview") ~= true then -- Level 6 places its own round body
    scatterAt(char, lobbySpawn, false)
   end
  end)

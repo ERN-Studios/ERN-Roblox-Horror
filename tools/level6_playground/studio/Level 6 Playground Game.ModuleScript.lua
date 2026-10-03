@@ -362,10 +362,32 @@ function Session:walkTo(pos, speed, phase)
 	return self:follow(points, speed, phase)
 end
 
+-- The visible surface under a point. Home base is a raised disc, so the hall's floor height put the
+-- doll's feet inside it while it counted.
+function Session:surface(pos)
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	local ignore = {self.child}
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Character then table.insert(ignore, player.Character) end
+	end
+	for _ = 1, 6 do
+		params.FilterDescendantsInstances = ignore
+		local hit = workspace:Raycast(pos + Vector3.new(0, 5, 0), Vector3.new(0, -10, 0), params)
+		if not hit then break end
+		if hit.Instance.Transparency < 0.9 and hit.Normal.Y > 0.7 then
+			return Vector3.new(pos.X, hit.Position.Y, pos.Z)
+		end
+		table.insert(ignore, hit.Instance)
+	end
+	return pos
+end
+
 function Session:goHome(phase)
 	local home = self.info.home
 	local stand = home + Vector3.new(0, 0.35 - 3, 4)
 	self:walkTo(stand, CONFIG.WalkSpeed * 1.4, phase)
+	stand = self:surface(stand)
 	self:place(stand, home - stand)
 	self:pose("Idle")
 end
