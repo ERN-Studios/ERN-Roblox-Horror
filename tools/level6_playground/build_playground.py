@@ -1169,16 +1169,13 @@ def build_ball_ocean():
                  ((x0, y0), (x0, y0 + 40))):
         n.face([(a[0], a[1], top), (c[0], c[1], top), (c[0], c[1], 16), (a[0], a[1], 16)], 'net_blue')
     n.finish()
-    sea = Builder('BallOcean_Surface', zones_col)                     # one textured sheet, so it reads as full
-    sea.box((x0 + 1.5, y0 + 1.5, 0.35), (x1 - 1.5, y1 - 1.5, 2.3), 'ballsea')
-    sea.finish()
-    balls = Builder('BallOcean_Balls', zones_col)                     # real balls only on top, near the edges
+    balls = Builder('BallOcean_Balls', zones_col)                     # owner: the pit is EMPTY, only a few loose balls on its floor
     spread = random.Random(7)
     for _ in range(64):
-        balls.ball((spread.uniform(x0 + 5, x1 - 5), spread.uniform(y0 + 5, y1 - 5), 2.5), 0.6, spread.choice(BALL_COLOURS))
+        balls.ball((spread.uniform(x0 + 5, x1 - 5), spread.uniform(y0 + 5, y1 - 5), 0.95), 0.6, spread.choice(BALL_COLOURS))
     for cx, cy in ((x0 + 8, y1 - 8), (x1 - 9, y0 + 9)):               # swept into two corners
         for _ in range(18):
-            balls.ball((cx + spread.uniform(-5, 5), cy + spread.uniform(-5, 5), spread.uniform(2.5, 3.3)), 0.6,
+            balls.ball((cx + spread.uniform(-5, 5), cy + spread.uniform(-5, 5), spread.uniform(0.95, 1.9)), 0.6,
                        spread.choice(BALL_COLOURS))
     balls.finish()
     sign(((x0 + x1) / 2, y0 - 1.7, 7.5), 34, 3.6, '-y', 'BALL OCEAN', (20, 60, 190), (255, 255, 255))
