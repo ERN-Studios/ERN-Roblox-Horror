@@ -1,0 +1,94 @@
+{
+  "tool": "mcp__codex_apps__elevenlabs_creative_run_flow_nodes",
+  "model": "eleven_text_to_sound_v2",
+  "flow_id": "cH1VpszRhH83uBkUAg7E",
+  "generated_at": "2026-10-03",
+  "files": [
+    {
+      "name": "l6_step_player.mp3",
+      "duration": 4,
+      "loop": true,
+      "prompt": "Steady walking footsteps of one person in sneakers on soft rubber foam play mats, about two steps per second, dry, close, quiet squeak of rubber. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Steady seamless loop, consistent level and rhythm, no fade in or fade out.",
+      "node_id": "7rVFXpvctUbWbcQcu1ee",
+      "generation_id": "4nPlcuyGdh01LfRZbcvz",
+      "session_id": "at3VrBOgw3ipuE8Y3KHz",
+      "afinfo_duration_seconds": 4.04898,
+      "sha256": "ffb050fe284018e2e2ea079cc5bc807066e4a43a4979d8990dc3130549f26489",
+      "bytes": 82371
+    },
+    {
+      "name": "l6_doll_walk.mp3",
+      "duration": 4,
+      "loop": true,
+      "prompt": "Slow heavy footsteps of a large porcelain doll walking on rubber mats: hollow ceramic clacks, about 1.5 steps per second, with a faint creak of ball joints between steps. Unsettling, dry. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Steady seamless loop, consistent level and rhythm, no fade in or fade out.",
+      "node_id": "NeaFAOU08WvrbolbshBV",
+      "generation_id": "uoYqHzKsAfqEa9Wcjk3A",
+      "session_id": "bzi5Ic9pHwdQzlTh8Sw5",
+      "afinfo_duration_seconds": 4.04898,
+      "sha256": "9d341b1647ff2bc5b22664795bc182e4ea4ab3dbb7160d45977ea94c1d1fa573",
+      "bytes": 82371
+    },
+    {
+      "name": "l6_doll_run.mp3",
+      "duration": 3,
+      "loop": true,
+      "prompt": "A large porcelain doll sprinting on rubber mats: rapid hollow ceramic clattering footsteps, about five steps per second, joints rattling, frantic. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Steady seamless loop, consistent level and rhythm, no fade in or fade out.",
+      "node_id": "IJ2JhiJF1xWqelhMCUDS",
+      "generation_id": "E3uZckGWZ1Q2uh3m1VSu",
+      "session_id": "hEEgXzdsBZNgyjlbS5NE",
+      "afinfo_duration_seconds": 3.030204,
+      "sha256": "6fd34f4fa1bbd2d582945853736bb68f53ac7010f402b0edc5dbdf9aeb768e81",
+      "bytes": 66071
+    },
+    {
+      "name": "l6_sting_spotted.mp3",
+      "duration": 2,
+      "loop": false,
+      "prompt": "Horror sting when a monster spots you: a sharp detuned toy piano and music-box stab with a reversed swell into it, short. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Short dry decay, ending cleanly.",
+      "node_id": "SxG5XzOvJDDPXBsfYMGd",
+      "generation_id": "sI8Hy38SAQT8eL6JUWBD",
+      "session_id": "wqHCQlNQYVFc0Nbd0Kyp",
+      "afinfo_duration_seconds": 2.037551,
+      "sha256": "14a353ad2b0ecd18874f63e36d9dacfc408dff7024ab7c5ff72d1cdf06503a80",
+      "bytes": 50188
+    },
+    {
+      "name": "l6_catch.mp3",
+      "duration": 3,
+      "loop": false,
+      "prompt": "Jumpscare hit: a loud distorted toy-box crash with a porcelain crack and a low boom, then quick silence. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Short dry decay, ending cleanly.",
+      "node_id": "ziSMbp6fbuezvIzUuSXD",
+      "generation_id": "n0B3PA5jBbsjcwnRAzvE",
+      "session_id": "JN1YkTY9E6zIUPhxE6HD",
+      "afinfo_duration_seconds": 3.030204,
+      "sha256": "33c358e4e0a0c3a28a150f214c6c396591bc10e82fab2f559834a336f1ee68ec",
+      "bytes": 66071
+    },
+    {
+      "name": "l6_tag.mp3",
+      "duration": 1.5,
+      "loop": false,
+      "prompt": "A cheerful but slightly out-of-tune toy xylophone success chime, three rising notes. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Short dry decay, ending cleanly.",
+      "node_id": "mszYoJnUx9s7S5HGQL7t",
+      "generation_id": "Nq3GyMj0QAbDlqgWPB15",
+      "session_id": "Ii3Ms8lxTCYYcBcD8HJS",
+      "afinfo_duration_seconds": 1.515102,
+      "sha256": "8253b0b95da2e486fc57704b0bc9ecc326d6d5ec4f24dd43b04c8fc6f8c9a488",
+      "bytes": 41829
+    },
+    {
+      "name": "l6_ambience.mp3",
+      "duration": 20,
+      "loop": true,
+      "prompt": "Room tone of a huge empty warehouse play centre at night: low ventilation hum, faint fluorescent tube buzz, an occasional distant plastic ball rolling. Very quiet and even. Abandoned 1990s indoor soft-play centre. Isolated sound effect, no music track, no voices. Clean start and end; all decay contained within clip. Steady seamless loop, consistent level and rhythm, no fade in or fade out.",
+      "node_id": "yabOC8OQHWtmVb8LeEIX",
+      "generation_id": "K9dPcZbv5bMnpbfi8J3u",
+      "session_id": "oQGcPo4XYNfyerO81CQA",
+      "afinfo_duration_seconds": 20.035918,
+      "sha256": "177772203f1243f74d79e09c115dd42ab9d64cf29df0e59de16802f7c6fb5029",
+      "bytes": 338162
+    }
+  ],
+  "verification": "MP3 format and decoding checked; durations measured using afinfo. No listening or in-game verification performed. Original generated MP3 bytes preserved.",
+  "scope": "Local audio asset generation only; no Studio changes, Roblox upload or publication."
+}
