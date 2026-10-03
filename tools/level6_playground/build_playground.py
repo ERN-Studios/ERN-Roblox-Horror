@@ -994,6 +994,16 @@ def build_party_rooms():
         p.box((mid - 5, 358, ceil - 0.5), (mid + 5, 362, ceil - 0.05), 'lamp_warm' if n != 2 else 'lamp_off')
         if n != 2:
             light(f'L6_PartyBlock_{n}', (mid, 360, ceil - 1.5), energy=7000, color=(1.0, 0.9, 0.75), size=(10, 4))
+        board((mid, y1 - 0.75, 8.2), 15, 5, '-y', 'sign_birthdays')                      # banner on the back wall
+        for k, (px, py, mat) in enumerate(((a + 5, 392, 'red'), (a + 8, 394, 'blue'), (b - 6, 391, 'yellow'), (b - 9, 394, 'green'))):
+            p.box((px, py, 0.35), (px + 2.4, py + 2.4, 2.4 + (k % 2)), mat)                # presents
+            p.box((px + 1.0, py - 0.02, 0.35), (px + 1.4, py + 2.42, 2.45 + (k % 2)), 'white')
+        for k in range(6):                                                                # chairs pushed back from the table
+            cx2 = mid - 7.5 + k * 3
+            p.box((cx2, 365.5, 0.35), (cx2 + 2, 367.5, 2.2), ('red', 'blue', 'yellow')[k % 3])
+            p.box((cx2, 365.5, 2.2), (cx2 + 2, 365.9, 4.6), ('red', 'blue', 'yellow')[k % 3])
+        for k, (bx, by, bz) in enumerate(((a + 6, 356, 13.5), (b - 6, 358, 12.5), (mid - 5, 388, 13), (mid + 6, 386, 14))):
+            p.ball((bx, by, bz), 1.5, ('pink', 'yellow', 'cyan', 'red')[(n + k) % 4])           # balloons on the ceiling
         HIDE.append(('table', mid, 376, 0.6))
         sign((mid + 7.2, 338.85, 7), 2.6, 3.2, '-y', f'PARTY\nROOM\n{n + 1}', (245, 240, 220), (30, 30, 30))
     for n, (bx, by, mat) in enumerate(((20, 334, 'red'), (58, 336, 'yellow'), (96, 333, 'blue'), (132, 335, 'green'),
@@ -1017,8 +1027,8 @@ def cabinet(b, x, y, facing, mat, lit=False):
 
 def claw_machine(b, x, y, facing):
     """Claw machine from the kit, 7.2 studs tall, with the glass box the generated model lacks."""
-    prop('claw_machine', x, y, yaw=180 if facing < 0 else 0, size=7.2)
-    b.box((x - 2.5, y - 1.65, 3.5), (x + 2.5, y + 1.65, 6.2), 'glass')
+    prop('claw_machine', x, y, yaw=90 if facing < 0 else -90, size=7.2)   # this model's front is its +x side
+    b.box((x - 1.65, y - 2.5, 3.5), (x + 1.65, y + 2.5, 6.2), 'glass')
 
 
 def build_arcade():

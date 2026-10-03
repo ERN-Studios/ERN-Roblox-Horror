@@ -41,8 +41,8 @@ local function label(name, size, pos, textSize, color)
 	return l
 end
 
-local countLabel = label("Count", UDim2.fromScale(0.7, 0.18), UDim2.fromScale(0.5, 0.2), 110, Color3.fromRGB(255, 235, 120))
-local statusLabel = label("Status", UDim2.fromScale(0.8, 0.07), UDim2.fromScale(0.5, 0.33), 44, Color3.fromRGB(255, 255, 255))
+local countLabel = label("Count", UDim2.fromScale(0.7, 0.16), UDim2.fromScale(0.5, 0.33), 100, Color3.fromRGB(255, 235, 120))
+local statusLabel = label("Status", UDim2.fromScale(0.8, 0.07), UDim2.fromScale(0.5, 0.45), 44, Color3.fromRGB(255, 255, 255))
 local hintLabel = label("Hint", UDim2.fromScale(0.8, 0.045), UDim2.fromScale(0.5, 0.9), 28, Color3.fromRGB(230, 230, 230))
 local dunkLabel = label("Dunks", UDim2.fromScale(0.24, 0.05), UDim2.fromScale(0.86, 0.08), 32, Color3.fromRGB(120, 255, 150))
 
