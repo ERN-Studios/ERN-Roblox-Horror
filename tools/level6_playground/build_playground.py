@@ -1099,9 +1099,18 @@ def build_staff_only():
         opened.add(extra)                                            # a few loops so it is not one long snake
     for j in range(0, STAFF_NY - 2):
         opened.add(((entry[0], j), (entry[0], j + 1)))               # the long corridor in from the door
-    wall_run(s, (x0, y0), (x1, y0), ceil, 'wall_staff', t=1.2,
-             openings=[(x0 + entry[0] * STAFF_C + 1.5, x0 + entry[0] * STAFF_C + 10.5, 10.5)])
-    wall_run(s, (x0, y0), (x0, y1), ceil, 'wall_staff', t=1.2)
+    # The way in is on the west wall, facing the arcade and prize counter, in plain view from the hall
+    # (owner, 2026-10-03: it used to sit in the narrow walkway behind the frame). The south wall is solid.
+    door = (0, 1)                                                    # the cell behind the doorway
+    dy0, dy1 = y0 + door[1] * STAFF_C + 1.5, y0 + door[1] * STAFF_C + 10.5
+    opened.add(((0, 0), (0, 1)))
+    opened.add(((0, 1), (1, 1)))                                     # straight on from the door ...
+    opened.add(((1, 1), (2, 1)))                                     # ... into the long shelved corridor
+    wall_run(s, (x0, y0), (x1, y0), ceil, 'wall_staff', t=1.2)
+    wall_run(s, (x0, y0), (x0, y1), ceil, 'wall_staff', t=1.2, openings=[(dy0, dy1, 10.5)])
+    for fy in (dy0 - 0.5, dy1):                                      # steel door frame
+        s.box((x0 - 0.9, fy, 0.35), (x0 + 0.9, fy + 0.5, 10.9), 'steel')
+    s.box((x0 - 0.9, dy0 - 0.5, 10.5), (x0 + 0.9, dy1 + 0.5, 10.9), 'steel')
     for i in range(STAFF_NX):
         for j in range(STAFF_NY):
             cx, cy = x0 + i * STAFF_C, y0 + j * STAFF_C
@@ -1110,7 +1119,7 @@ def build_staff_only():
             if j + 1 < STAFF_NY and ((i, j), (i, j + 1)) not in opened:
                 wall_run(s, (cx, cy + STAFF_C), (cx + STAFF_C, cy + STAFF_C), ceil, 'wall_staff', t=1.0)
             lit = (i * 3 + j * 5) % 4 == 0 or (i == entry[0] and j % 2 == 0)
-            if i == entry[0] and 1 <= j <= STAFF_NY - 2:             # shelving down the long corridor
+            if i == entry[0] and 1 <= j <= STAFF_NY - 2 and j != door[1]:   # shelving down the long corridor (not across the way in)
                 for sx in ((cx + 0.7, cx + 2.7),) + (((cx + 9.3, cx + 11.3),) if j % 2 else ()):
                     for z in (0.5, 4.0, 7.5):
                         s.box((sx[0], cy + 1, z), (sx[1], cy + 11, z + 0.25), 'steel')
@@ -1127,7 +1136,7 @@ def build_staff_only():
                 light(f'L6_Staff_{i}_{j}', (cx + 6, cy + 6, ceil - 1.2), 'POINT', 1100, (1.0, 0.82, 0.45))
             exits = sum(1 for a, b in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1))
                         if (min((i, j), (a, b)), max((i, j), (a, b))) in opened)
-            if exits == 1 and (i, j) not in (entry, exit_cell):      # dead ends are storage
+            if exits == 1 and (i, j) not in (entry, exit_cell, door, (0, 0), (1, 1)):   # dead ends are storage
                 kind = (i + j) % 4
                 if kind == 0:                                        # stacked soft-play blocks
                     for n, mat in enumerate(('blue', 'yellow', 'red')):
@@ -1153,9 +1162,9 @@ def build_staff_only():
                 HIDE.append(('staff_nook', cx + 6, cy + 6, 1))
     s.box((x0 - 0.6, y0 - 0.6, ceil), (x1, y1, ceil + 0.8), 'ceiling_tile')
     ex = x0 + entry[0] * STAFF_C
-    s.box((ex + 10.5, y0 - 8, 0.35), (ex + 11.1, y0 - 0.6, 10.3), 'steel')             # staff door left open
+    s.box((x0 - 8.6, dy1, 0.35), (x0 - 0.9, dy1 + 0.6, 10.3), 'steel')                # staff door left open, swung into the hall
     s.finish()
-    sign((ex + 6, y0 - 0.75, 12.2), 9, 3, '-y', 'STAFF ONLY', (245, 240, 220), (180, 20, 20))   # on the door frame
+    sign((x0 - 1.0, (dy0 + dy1) / 2, 12.3), 9, 3, '-x', 'STAFF ONLY', (245, 240, 220), (180, 20, 20))   # on the door frame
     sign(((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 1.3, 12.6), 5.4, 0.9, '-y', 'EXIT', (200, 15, 10), (255, 245, 235))
     return ex + 6
 
@@ -1280,7 +1289,7 @@ def build_hall_litter():
     b = Builder('Hall_SoftBlocks', zones_col)
     spots = ((306, 250, 'yellow', 7, 4, 4), (318, 262, 'red', 5, 5, 3), (300, 180, 'blue', 4, 4, 8), (312, 150, 'green', 6, 4, 3),
              (500, 300, 'red', 5, 5, 5), (496, 150, 'yellow', 6, 4, 3), (180, 250, 'blue', 5, 5, 4), (268, 300, 'green', 7, 4, 3),
-             (160, 150, 'red', 4, 4, 4), (420, 316, 'yellow', 6, 5, 3), (322, 300, 'blue', 4, 4, 4))
+             (160, 150, 'red', 4, 4, 4), (404, 300, 'yellow', 6, 5, 3), (322, 300, 'blue', 4, 4, 4))
     for x, y, mat, w, d, h in spots:
         b.box((x, y, 0.35), (x + w, y + d, 0.35 + h), mat)
         HIDE.append(('softblock', x + w / 2, y + d + 2.5, 1))
