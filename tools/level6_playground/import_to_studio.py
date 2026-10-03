@@ -412,14 +412,12 @@ if SLIDEKIT then
 		if template then
 			local m = template:Clone()
 			m.Anchored, m.CanCollide, m.CanTouch, m.CanQuery = true, false, false, false
-			-- moulded, glossy plastic in one solid colour
-			m.Material, m.Reflectance = Enum.Material.SmoothPlastic, 0
-			m.Color = Color3.fromRGB(tonumber(f[5]), tonumber(f[6]), tonumber(f[7]))
-			m.TextureID = ""
-			local gloss = Instance.new("SurfaceAppearance")      -- plain colour, very low roughness: the shine
-			gloss.ColorMap, gloss.RoughnessMap, gloss.Color = TEX.gloss_white, TEX.gloss_rough, m.Color
-			gloss.Parent = m
-			m.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4])))
+			-- moulded plastic: the colour and its long white highlights are painted into the mesh's vertex colours
+			m.Material, m.Reflectance, m.Color, m.TextureID = Enum.Material.SmoothPlastic, 0.06, Color3.new(1, 1, 1), ""
+			for _, c in ipairs(m:GetChildren()) do if c:IsA("SurfaceAppearance") then c:Destroy() end end
+			-- Studio's importer hands meshes back turned half a turn about the vertical axis (the kit props showed
+			-- the same); without this every slide runs backwards, mouth in the air
+			m.CFrame = CFrame.new(O + Vector3.new(tonumber(f[2]), tonumber(f[3]), tonumber(f[4]))) * CFrame.Angles(0, math.pi, 0)
 			m.Parent = slides
 		else
 			missing[f[1]] = true

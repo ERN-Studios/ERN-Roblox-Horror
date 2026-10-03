@@ -446,6 +446,9 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("You got out.", 4, Color3.fromRGB(120, 255, 150))
 	elseif kind == "lost" then
 		countLabel.Text = "EVERYONE WAS FOUND"
+		markerMode = nil
+		objective(nil)
+		timerLabel.Text = ""
 	elseif kind == "left" then
 		vignette.ImageTransparency = 1
 		task.delay(3, function()

@@ -1345,11 +1345,34 @@ def smooth_path(points, step=1.5):
     return out
 
 
-def moulded(name, kind, points, r, arc, wall=0.28, sides=20):
+def srgb_to_linear(c):
+    c = c / 255.0
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def gloss(rgb, a, inner):
+    """Vertex colour for ring angle `a` (degrees, 90 = up): the plastic's colour with the long white highlights
+    and the darker underside of a shiny moulded slide painted in, so it reads as glossy under any lighting."""
+    def bump(centre, width):
+        d = (a - centre + 180) % 360 - 180
+        return math.exp(-(d / width) ** 2)
+    if inner:      # the riding surface of a trough, or the inside of a tube mouth
+        shade = 0.72 + 0.2 * max(0.0, -math.sin(math.radians(a)))
+        white = 0.7 * bump(248, 9) + 0.3 * bump(300, 12)
+    else:
+        shade = 0.55 + 0.45 * (0.5 + 0.5 * math.sin(math.radians(a)))
+        white = 0.9 * bump(64, 11) + 0.35 * bump(128, 16) + 0.18 * bump(20, 10)
+    white = min(white, 0.92)
+    lin = [srgb_to_linear(c) * shade for c in rgb]
+    return (*[v + (1.0 - v) * white for v in lin], 1.0)
+
+
+def moulded(name, kind, points, r, arc, rgb, wall=0.32, sides=32):
     path = smooth_path(points)
     closed = arc[1] - arc[0] >= 359.9
     steps = sides if closed else sides + 1
     bm = bmesh.new()
+    tint = {}                                    # vertex -> painted colour
     rings = []                                   # per path point: (outer ring, inner ring)
     for i, q in enumerate(path):
         t = (path[min(i + 1, len(path) - 1)] - path[max(i - 1, 0)]).normalized()
@@ -1367,8 +1390,11 @@ def moulded(name, kind, points, r, arc, wall=0.28, sides=20):
         for k in range(steps):
             a = math.radians(arc[0] + (arc[1] - arc[0]) * k / sides)
             d = math.cos(a) * side + math.sin(a) * up
+            deg = arc[0] + (arc[1] - arc[0]) * k / sides
             outer.append(bm.verts.new(centre + d * (r * flare + wall)))
             inner.append(bm.verts.new(centre + d * (r * flare)))
+            tint[outer[-1]] = gloss(rgb, deg, False)
+            tint[inner[-1]] = gloss(rgb, deg, True)
         rings.append((outer, inner))
     for (o0, i0), (o1, i1) in zip(rings, rings[1:]):
         for k in range(sides if closed else sides):
@@ -1383,10 +1409,14 @@ def moulded(name, kind, points, r, arc, wall=0.28, sides=20):
             k2 = (k + 1) % steps
             bm.faces.new((o[k], i[k], i[k2], o[k2]))
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    layer = bm.loops.layers.float_color.new('Col')
     for f in bm.faces:
         f.smooth = True
+        for loop in f.loops:
+            loop[layer] = tint[loop.vert]
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
+    me.materials.append(SLIDE_MAT)
     bm.free()
     ob = bpy.data.objects.new(name, me)
     slide_col.objects.link(ob)
@@ -1396,17 +1426,31 @@ def moulded(name, kind, points, r, arc, wall=0.28, sides=20):
     return ob, centre, size, sum(len(pl.vertices) - 2 for pl in me.polygons)
 
 
+SLIDE_MAT = bpy.data.materials.new('L6_SlidePlastic')       # so the exporter writes the painted colours
+SLIDE_MAT.use_nodes = True
+_attr = SLIDE_MAT.node_tree.nodes.new('ShaderNodeVertexColor')
+_attr.layer_name = 'Col'
+_bsdf = next(n for n in SLIDE_MAT.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+SLIDE_MAT.node_tree.links.new(_attr.outputs['Color'], _bsdf.inputs['Base Color'])
+_bsdf.inputs['Roughness'].default_value = 0.12
 SLIDE_ROWS = []
 for n, (kind, points, r, colour, arc) in enumerate(SLIDES):
     name = 'slide_%02d' % (n + 1)
-    ob, centre, size, tris = moulded(name, kind, points, r, arc)
+    ob, centre, size, tris = moulded(name, kind, points, r, arc, SLIDE_RGB[colour])
     SLIDE_ROWS.append([name, [round(c, 3) for c in centre], [round(c, 3) for c in size], list(SLIDE_RGB[colour])])
     print('L6 SLIDE', name, kind, colour, 'tris', tris, 'size', [round(c, 1) for c in size])
 (OUT / 'export').mkdir(exist_ok=True)
 bpy.ops.object.select_all(action='DESELECT')
 for ob in slide_col.objects:
     ob.select_set(True)
-bpy.ops.export_scene.gltf(filepath=str(OUT / 'export' / 'Level6Slides.glb'), export_format='GLB', use_selection=True, export_apply=True)
+for ob in slide_col.objects:
+    ob.data.color_attributes.active_color = ob.data.color_attributes['Col']
+    ob.data.color_attributes.render_color_index = 0
+_kw = dict(filepath=str(OUT / 'export' / 'Level6Slides.glb'), export_format='GLB', use_selection=True, export_apply=True)
+try:
+    bpy.ops.export_scene.gltf(export_vertex_color='ACTIVE', export_all_vertex_colors=True, **_kw)
+except TypeError:
+    bpy.ops.export_scene.gltf(**_kw)
 
 anchors_col = collection('L6_Anchors')
 for name, loc in (('Spawn', (66, 20, 3)), ('Exit', ((EXIT_X[0] + EXIT_X[1]) / 2, HALL_Y - 6, 3)),
