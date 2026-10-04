@@ -4674,6 +4674,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local launchingLevel = announcedLevel
 			or workspace:GetAttribute("SelectedLevel") or 1
 		applyLoadingPalette(launchingLevel)
+		player:SetAttribute("LoadingLevel", launchingLevel)        -- for the level loading cover (Lobby Loading Screen)
 		loadingTitle.Text = "> ENTERING ANOMALOUS SPACE"
 		loadingClock = 0
 		loadingBaseText = "PREPARING YOUR PARTY"

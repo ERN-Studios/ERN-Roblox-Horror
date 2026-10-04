@@ -938,3 +938,13 @@ weight and button size on phones, no noise meter.
   `PlayerGui.HelpButton:SetAttribute("Toggle", x)`, `PlayerGui.HelpPanel:SetAttribute("Topic", n)`; set
   `workspace.DevShowWelcome` on the CLIENT within the first seconds of play. VirtualInputManager is not
   available to `execute_luau`.
+- **Level loading cover** (`LEVEL_LOADING_20261004`, the block at the end of `ReplicatedFirst."Lobby Loading
+  Screen"`; push with `tools/push_loading_screen.py`): the lobby cover's layout in each level's colours (`LEVELS`:
+  1 amber, 2 cyan, 3 orange, 4 magenta, 5 rose, 6 yellow; 0 = level not known yet). ROUNDS: it stands over
+  RoundUI's `RoundGui.LevelLoading` for as long as that is visible (RoundUI publishes the client attribute
+  `LoadingLevel` on the `loading` event), then one bounded fetch (2.5 s) and a quiet-queue wait (1.5 s); on a
+  reserved round server it is up from the first frame. LIVE levels 5 and 6: raised on the rising edge of
+  `Level6PlaygroundPreview` (`Level5VoidRound` picks 5), held for body in the level, model settled, ground under
+  the feet, the level's assets (cap 8 s) and a quiet queue. Client attribute `LevelLoadingOpen`; it prints
+  `[LevelLoading] level N covered for X s`. Measured in Studio: Level 6 9.9 s on a cold cache, Level 1 16.2 s.
+  The level's game does not wait for it (the Level 6 doll starts counting behind the cover).

@@ -484,3 +484,290 @@ for _, child in ipairs(cover:GetDescendants()) do
 end
 task.wait(0.65)
 gui:Destroy()
+
+---------------------------------------------------------------------------
+-- LEVEL_LOADING_20261004 (owner: "make sure a similar loading screen happens for every level, timed with the
+-- load speed", "and change its colour scheme a little with the level you are in").
+--
+-- The same cover as the lobby's - kicker, title, bar, status, detail, tip - in each level's own colours, raised
+-- for every way into a level and dropped by what has really loaded, not by a timer:
+--   ROUNDS (Levels 1-4, GameManager): it stands over RoundUI's own cover (`RoundGui.LevelLoading`) for exactly
+--     as long as that is up - the server drops it when the world is built and the party is released - and
+--     preloads whatever of the level has reached this client meanwhile. On a reserved round server it is up
+--     from the first frame, before RoundUI exists. RoundUI publishes the level as the attribute `LoadingLevel`.
+--   LIVE LEVELS (5 and 6, on the lobby server): raised when the level marks the player, held until the body is
+--     in the level, the model has stopped arriving, there is ground under the feet, the level's meshes and
+--     textures are fetched and the request queue has gone quiet.
+-- Every wait has a cap, so nobody is ever held behind it. Client attribute `LevelLoadingOpen` while it is up.
+---------------------------------------------------------------------------
+do
+	local LEVELS = {
+		[0] = {name = "ENTERING ANOMALOUS SPACE", kicker = "ZYNTRA  //  DESCENT", accent = Color3.fromRGB(111, 255, 214), ink = Color3.fromRGB(6, 11, 12),
+			tip = "Noise attracts it. Walk. Crouch. Stay quiet."},
+		[1] = {name = "LEVEL 1  ·  THE OFFICE", kicker = "ZYNTRA  //  DESCENT 01", accent = Color3.fromRGB(236, 198, 84), ink = Color3.fromRGB(13, 11, 4),
+			tip = "Noise attracts it. Walk. Crouch. Stay quiet."},
+		[2] = {name = "LEVEL 2  ·  THE POOLROOMS", kicker = "ZYNTRA  //  DESCENT 02", accent = Color3.fromRGB(105, 222, 238), ink = Color3.fromRGB(3, 9, 12),
+			tip = "Start the pumps. Watch the water."},
+		[3] = {name = "LEVEL 3  ·  THE MALL", kicker = "ZYNTRA  //  DESCENT 03", accent = Color3.fromRGB(255, 150, 72), ink = Color3.fromRGB(13, 7, 3),
+			tip = "Under a table is safe, until it checks."},
+		[4] = {name = "LEVEL 4  ·  THE CINEMA", kicker = "ZYNTRA  //  DESCENT 04", accent = Color3.fromRGB(255, 84, 212), ink = Color3.fromRGB(10, 4, 14),
+			tip = "The power is out. Your flashlight is all you have."},
+		[5] = {name = "LEVEL 5  ·  THE VOID ROOMS", kicker = "ZYNTRA  //  DESCENT 05", accent = Color3.fromRGB(244, 160, 198), ink = Color3.fromRGB(11, 5, 9),
+			tip = "Everyone on the plate. Do not fall."},
+		[6] = {name = "LEVEL 6  ·  THE PLAYGROUND", kicker = "ZYNTRA  //  DESCENT 06", accent = Color3.fromRGB(255, 212, 64), ink = Color3.fromRGB(13, 5, 4),
+			tip = "It is counting. Find a place to hide."},
+	}
+	local LIVE_MODELS = {[5] = "Level 5 Void", [6] = "Level 6 Indoor Playground"}
+	local playerGui = player:WaitForChild("PlayerGui")
+	local up = nil                                  -- the cover on screen, or nil
+
+	local function raise(level)
+		local style = LEVELS[level] or LEVELS[0]
+		local screen = Instance.new("ScreenGui")
+		screen.Name, screen.IgnoreGuiInset, screen.ResetOnSpawn, screen.DisplayOrder = "LevelLoadingGui", true, false, 99990
+		screen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		local sheet = Instance.new("Frame")
+		sheet.Name, sheet.Size, sheet.BackgroundColor3, sheet.BorderSizePixel, sheet.Active = "Cover", UDim2.fromScale(1, 1), style.ink, 0, true
+		sheet.Parent = screen
+		local function line(name, text, font, size, colour, position)
+			local l = Instance.new("TextLabel")
+			l.Name, l.BackgroundTransparency, l.Font, l.Text, l.TextSize, l.TextColor3 = name, 1, font, text, size, colour
+			l.AnchorPoint, l.Position, l.Size, l.TextWrapped = Vector2.new(0.5, 0.5), position, UDim2.new(0.9, 0, 0, size + 10), true
+			l.Parent = sheet
+			return l
+		end
+		local kick = line("Kicker", style.kicker, Enum.Font.RobotoMono, 14, style.accent, UDim2.fromScale(0.5, 0.36))
+		local name = line("Title", style.name, Enum.Font.GothamBlack, 40, Color3.fromRGB(236, 244, 240), UDim2.fromScale(0.5, 0.44))
+		name.Size, name.TextScaled = UDim2.new(0.9, 0, 0, 96), true
+		local limit = Instance.new("UITextSizeConstraint")
+		limit.MaxTextSize, limit.MinTextSize = 40, 20
+		limit.Parent = name
+		local rail = Instance.new("Frame")
+		rail.Name, rail.AnchorPoint, rail.Position, rail.Size = "Track", Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.56), UDim2.new(0.5, 0, 0, 6)
+		rail.BackgroundColor3, rail.BorderSizePixel = style.accent:Lerp(style.ink, 0.82), 0
+		rail.Parent = sheet
+		local railLimit = Instance.new("UISizeConstraint")
+		railLimit.MinSize, railLimit.MaxSize = Vector2.new(220, 6), Vector2.new(560, 6)
+		railLimit.Parent = rail
+		local bar = Instance.new("Frame")
+		bar.Name, bar.Size, bar.BackgroundColor3, bar.BorderSizePixel = "Fill", UDim2.fromScale(0, 1), style.accent, 0
+		bar.Parent = rail
+		local state = line("Status", "CONNECTING", Enum.Font.RobotoMono, 15, style.accent:Lerp(Color3.new(1, 1, 1), 0.55), UDim2.new(0.5, 0, 0.56, 28))
+		local note = line("Detail", "", Enum.Font.RobotoMono, 13, style.accent:Lerp(style.ink, 0.45), UDim2.new(0.5, 0, 0.56, 52))
+		local hint = line("Tip", style.tip, Enum.Font.Gotham, 14, style.accent:Lerp(style.ink, 0.4), UDim2.new(0.5, 0, 1, -40))
+		screen.Parent = playerGui
+		player:SetAttribute("LevelLoadingOpen", true)
+		local self = {level = level, shown = 0, target = 0, open = true, startedAt = os.clock()}
+		task.spawn(function()                          -- the bar eases toward the measured value and never runs ahead of it
+			while self.open do
+				local dt = RunService.RenderStepped:Wait()
+				self.shown += (self.target - self.shown) * math.min(1, dt * 8)
+				bar.Size = UDim2.fromScale(self.shown, 1)
+			end
+		end)
+		function self.stage(text, fraction, detailText)
+			state.Text, note.Text = text, detailText or ""
+			if fraction and fraction > self.target then self.target = fraction end
+		end
+		function self.restyle(toLevel)
+			local to = LEVELS[toLevel]
+			if not to or toLevel == self.level then return end
+			self.level = toLevel
+			local swap = TweenInfo.new(0.35)
+			TweenService:Create(sheet, swap, {BackgroundColor3 = to.ink}):Play()
+			TweenService:Create(bar, swap, {BackgroundColor3 = to.accent}):Play()
+			TweenService:Create(rail, swap, {BackgroundColor3 = to.accent:Lerp(to.ink, 0.82)}):Play()
+			kick.Text, kick.TextColor3, name.Text, hint.Text = to.kicker, to.accent, to.name, to.tip
+			state.TextColor3, note.TextColor3, hint.TextColor3 = to.accent:Lerp(Color3.new(1, 1, 1), 0.55), to.accent:Lerp(to.ink, 0.45), to.accent:Lerp(to.ink, 0.4)
+		end
+		function self.drop()
+			if not self.open then return end
+			self.target = 1
+			task.wait(0.2)
+			self.open = false
+			sheet.Active = false
+			player:SetAttribute("LevelLoadingOpen", false)
+			local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+			TweenService:Create(sheet, fade, {BackgroundTransparency = 1}):Play()
+			for _, child in ipairs(sheet:GetDescendants()) do
+				if child:IsA("TextLabel") then TweenService:Create(child, fade, {TextTransparency = 1}):Play()
+				elseif child:IsA("Frame") then TweenService:Create(child, fade, {BackgroundTransparency = 1}):Play() end
+			end
+			task.delay(0.65, function() screen:Destroy() end)
+			print(string.format("[LevelLoading] level %s covered for %.1f s", tostring(self.level), os.clock() - self.startedAt))
+		end
+		return self
+	end
+
+	-- Fetch everything `roots` reference that is not fetched yet; `report(done, total)` as it goes. Stops at `cap`.
+	local seen, carriers = {}, {}
+	local function fetch(roots, cap, report)
+		local fresh = census(roots, seen, carriers)
+		if fresh == 0 then return 0 end
+		local work = {}
+		for _, instance in ipairs(carriers) do
+			for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
+				local ok, value = pcall(function() return instance[property] end)
+				if ok and seen[value] == "pending" then table.insert(work, instance) break end
+			end
+		end
+		local done, cursor, running, deadline = 0, 1, 0, os.clock() + cap
+		local function settle(id)
+			if seen[id] == "pending" then
+				seen[id] = "ok"
+				done += 1
+				if report then report(math.min(done, fresh), fresh) end
+			end
+		end
+		for _ = 1, WORKERS do
+			running += 1
+			task.spawn(function()
+				while cursor <= #work and os.clock() < deadline do
+					local batch = table.move(work, cursor, math.min(#work, cursor + BATCH - 1), 1, {})
+					cursor += BATCH
+					pcall(function() ContentProvider:PreloadAsync(batch, function(id) settle(id) end) end)
+					for _, instance in ipairs(batch) do
+						for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
+							local ok, value = pcall(function() return instance[property] end)
+							if ok then settle(value) end
+						end
+					end
+				end
+				running -= 1
+			end)
+		end
+		while running > 0 and os.clock() < deadline do task.wait(0.1) end
+		for id, value in pairs(seen) do if value == "pending" then seen[id] = "ok" end end      -- past the cap: not asked for again
+		return fresh
+	end
+	local function quiet(cap, hold)                  -- the request queue has stayed empty for `hold` seconds
+		local began, calm = os.clock(), nil
+		while os.clock() - began < cap do
+			if ContentProvider.RequestQueueSize == 0 then
+				calm = calm or os.clock()
+				if os.clock() - calm >= hold then return end
+			else
+				calm = nil
+			end
+			task.wait(0.1)
+		end
+	end
+	local function roundCover()
+		local round = playerGui:FindFirstChild("RoundGui")
+		local frame = round and round:FindFirstChild("LevelLoading")
+		return frame ~= nil and frame:IsA("GuiObject") and frame.Visible and round.Enabled
+	end
+	local function announced()
+		return tonumber(player:GetAttribute("LoadingLevel")) or tonumber(workspace:GetAttribute("SelectedLevel")) or 0
+	end
+	local function levelWorlds()                     -- everything in the workspace that is not a lobby or a body
+		local list = {}
+		for _, child in ipairs(workspace:GetChildren()) do
+			if child.Name ~= REVISED_LOBBY and child.Name ~= ORIGINAL_LOBBY and not Players:GetPlayerFromCharacter(child)
+				and (child:IsA("Model") or child:IsA("Folder")) and child.Name ~= LIVE_MODELS[5] and child.Name ~= LIVE_MODELS[6] then
+				table.insert(list, child)
+			end
+		end
+		return list
+	end
+
+	-- A GameManager round. `joined` = this is a reserved round server and RoundUI's cover has not come up yet.
+	local function coverRound(joined)
+		local cover = raise(joined and 0 or announced())
+		up = cover
+		cover.stage("PREPARING YOUR PARTY", 0.08, "The server is building the level.")
+		local began = os.clock()
+		if joined then                                -- wait for the round's own cover (or for the round itself)
+			while os.clock() - began < 60 and not roundCover() and player:GetAttribute("InRound") ~= true do task.wait(0.1) end
+		end
+		local lastFetch = 0
+		while roundCover() and os.clock() - began < 150 do
+			cover.restyle(announced())
+			local waited = os.clock() - began
+			cover.stage("BUILDING THE LEVEL", 0.1 + 0.55 * (1 - math.exp(-waited / 9)), "The server is building the level.")
+			if os.clock() - lastFetch > 1.5 then        -- whatever of it is here already
+				lastFetch = os.clock()
+				task.spawn(fetch, levelWorlds(), 6, nil)
+			end
+			task.wait(0.15)
+		end
+		cover.restyle(announced())
+		-- the round has let us in: one bounded pass over what arrived, then out
+		cover.stage("LOADING THE LEVEL", 0.7, "Meshes, textures, decals and materials.")
+		fetch(levelWorlds(), 2.5, function(done, total)
+			cover.stage(string.format("LOADING THE LEVEL  %d / %d", done, total), 0.7 + 0.25 * done / math.max(1, total), "Meshes, textures, decals and materials.")
+		end)
+		cover.stage("FINISHING TEXTURES", 0.97)
+		quiet(1.5, 0.4)
+		cover.stage("LEVEL READY", 1)
+		cover.drop()
+		up = nil
+	end
+
+	-- Level 5 or 6: the level is a place on this server; the body is moved there.
+	local function coverLive(level)
+		local cover = raise(level)
+		up = cover
+		local function still() return player:GetAttribute("Level6PlaygroundPreview") == true end
+		local function root()
+			local character = player.Character
+			return character and character:IsDescendantOf(workspace) and character:FindFirstChild("HumanoidRootPart") or nil
+		end
+		cover.stage("ENTERING THE LEVEL", 0.08, "Waiting for your character.")
+		local began = os.clock()
+		local model
+		while still() and os.clock() - began < 14 do    -- the body is in the level (the levels stand far from the lobby)
+			model = workspace:FindFirstChild(LIVE_MODELS[level])
+			local part = root()
+			if model and part and (part.Position - model:GetPivot().Position).Magnitude < 3000
+				and player:GetAttribute("InRound") == true then break end
+			task.wait(0.1)
+		end
+		if model and still() then
+			cover.stage("STREAMING THE LEVEL", 0.25, "Receiving the level from the server.")
+			local last, arrivals = os.clock(), 0
+			local watch = model.DescendantAdded:Connect(function() last = os.clock() arrivals += 1 end)
+			local from = os.clock()
+			while still() and os.clock() - last < SETTLE_SECONDS and os.clock() - from < 5 do
+				if arrivals > 0 then cover.stage("STREAMING THE LEVEL", 0.25 + 0.1 * math.min(1, (os.clock() - from) / 3), string.format("Receiving the level from the server (%d).", arrivals)) end
+				task.wait(0.1)
+			end
+			watch:Disconnect()
+			cover.stage("PLACING YOU IN THE LEVEL", 0.4, "Waiting for the floor under you.")
+			from = os.clock()
+			local params = RaycastParams.new()
+			params.FilterType, params.FilterDescendantsInstances, params.RespectCanCollide = Enum.RaycastFilterType.Include, {model}, true
+			while still() and os.clock() - from < 5 do
+				local part = root()
+				local hit = part and workspace:Raycast(part.Position + Vector3.yAxis * 2, Vector3.new(0, -18, 0), params)
+				if hit then break end
+				task.wait(0.1)
+			end
+			cover.stage("LOADING THE LEVEL", 0.45, "Meshes, textures, decals and materials.")
+			fetch({model}, 8, function(done, total)
+				cover.stage(string.format("LOADING THE LEVEL  %d / %d", done, total), 0.45 + 0.5 * done / math.max(1, total), "Meshes, textures, decals and materials.")
+			end)
+			cover.stage("FINISHING TEXTURES", 0.97)
+			quiet(2.5, 0.6)
+		end
+		cover.stage("LEVEL READY", 1)
+		cover.drop()
+		up = nil
+	end
+
+	if workspace:GetAttribute("ReservedRoundServer") == true then task.spawn(coverRound, true) end
+	local wasLive = player:GetAttribute("Level6PlaygroundPreview") == true
+	while true do
+		task.wait(0.1)
+		local live = player:GetAttribute("Level6PlaygroundPreview") == true
+		if not up then
+			if roundCover() then
+				task.spawn(coverRound, false)
+			elseif live and not wasLive then
+				task.wait(0.15)                          -- Level 5 sets its own marker next to the shared one
+				task.spawn(coverLive, player:GetAttribute("Level5VoidRound") == true and 5 or 6)
+			end
+		end
+		wasLive = live
+	end
+end
