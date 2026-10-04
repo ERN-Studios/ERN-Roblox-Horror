@@ -860,3 +860,8 @@ weight and button size on phones, no noise meter.
 - **Prompt plates fill a ring, not a bar** (`HOLD_RING_20261004` in Found Footage HUD): the key is a round badge;
   `Plate.Hold` holds a dim circle and two clipped half-windows (`First`, `Second`) whose UIStroke carries a
   UIGradient that is rotated (0..180, then 180..360). Keep the ring's size even or the halves show a seam.
+- **Level 5 has no checkpoints; a fall is a death** (owner, 2026-10-04, supersedes the "a fall is not a death"
+  notes above). A body 40 studs below its stretch gets `Health = 0`; any death (a Reset too) fires `"died"` to
+  the client (black cover, YOU FELL) and `Void.Leave` returns the player to the lobby 3 s later. `model.Checkpoints`
+  and `record.cp` remain only to know which room a player has reached (plates, room names); `"checkpoint"` is sent
+  for a new room only. There is no spectating or re-entry in Level 5.

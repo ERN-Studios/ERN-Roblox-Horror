@@ -305,9 +305,9 @@ watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))
 -- LEVEL5_VOID_20261004. The level's own rules (the map is static; tools/level5_void/import_level5.py builds it).
 --   ROUND BODY: Void.Join marks the player, Void.Suit loads the hazmat round body after the queue has committed
 --   (the queue validates the lobby character through its commit), Void.Leave puts the lobby avatar back.
---   CHECKPOINTS: every wide landing is one (`Checkpoints`, in route order). A FALL IS NOT A DEATH: there is no
---   bottom to land on, so a body that drops well below the stretch after its last checkpoint is stood back up
---   on that checkpoint. A real death (Reset) respawns the round body there too.
+--   NO CHECKPOINTS (owner, 2026-10-04): A FALL IS A DEATH. A body that drops well below the stretch it was on is
+--   killed, and any death (a Reset too) ends that player's run: back to the lobby. The `Checkpoints` list is
+--   still read, but only to know which room a player has reached (the plates and the room names need it).
 --   PLATES: the door out of a room opens while every member of a party who has not passed it yet stands on the
 --   room's plate. A party is one queue launch; members ahead of the door do not count, members behind it do.
 --   The plate grows with the number of players in the room, so they all fit.
@@ -396,12 +396,10 @@ do
 		character:PivotTo(frame)
 		event:FireClient(player, "arrive", frame)
 		humanoid.Died:Once(function()
-			task.wait(2.5)
-			local record = members[player]
-			local model = readyPreview()
-			local list = model and checkpoints(model)
-			if record and list and player.Parent == Players and player.Character == character then
-				loadRoundBody(player, checkpointFrame(model, list[record.cp]))
+			event:FireClient(player, "died")
+			task.wait(3)
+			if members[player] and player.Parent == Players and player.Character == character then
+				Void.Leave(player)                      -- no second try: the run is over
 			end
 		end)
 	end
@@ -569,7 +567,7 @@ do
 					if math.abs(at.X - row.x) < 11 and math.abs(at.Z - row.z) < 13 and math.abs(at.Y - 3 - row.y) < 7 then
 						local newSection = SECTION[row.sec] ~= SECTION[list[record.cp].sec]
 						record.cp = index
-						event:FireClient(player, "checkpoint", index, #list, row.sec, newSection)
+						if newSection then event:FireClient(player, "checkpoint", index, #list, row.sec, true) end
 						if newSection and row.sec == "mint" then achieve(player, "L5Mint") end
 						if newSection and row.sec == "coral" then achieve(player, "L5Coral") end
 					end
@@ -578,10 +576,9 @@ do
 				local section = SECTION[row.sec]
 				inSection[section] = (inSection[section] or 0) + 1
 				if at.Y < row.low - FALL_MARGIN then
-					root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
-					character:PivotTo(checkpointFrame(model, row))
-					event:FireClient(player, "fell")
 					record.fell = true
+					local humanoid = character:FindFirstChildOfClass("Humanoid")
+					if humanoid then humanoid.Health = 0 end       -- the Died hook sends them home
 				elseif finish and finish:IsA("BasePart") and (root.Position - finish.Position).Magnitude < 7 and not leaving[player] then
 					leaving[player] = true
 					event:FireClient(player, "finish")

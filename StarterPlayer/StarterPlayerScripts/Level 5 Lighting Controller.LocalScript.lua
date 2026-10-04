@@ -145,16 +145,15 @@ task.spawn(function()
 	local ambience, wind, fall = clip("l5_ambience", true), clip("l5_depth_wind", true), clip("l5_player_fall")
 	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP"}
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
-		if what == "fell" then
+		if what == "died" then
+			-- no checkpoints (owner, 2026-10-04): a fall or any other death ends the run; black until the lobby
 			if fall then fall:Stop() end
-			oneShot("l5_respawn", 0.4)
-			flash(Color3.new(0, 0, 0), 0.7)
+			flash(Color3.new(0, 0, 0), 4.5)
+			say("YOU FELL", 3)
 		elseif what == "checkpoint" then
 			if d then
 				oneShot("l5_section_tone", 0.4)
 				say(NAMES[c] or "", 3.2)
-			else
-				say("CHECKPOINT", 1.8)
 			end
 		elseif what == "arrive" then
 			say("ROSE   ·   STAY ON THE LEDGES", 4)
@@ -265,7 +264,7 @@ task.spawn(function()
 			nextAmbient = os.clock() + 14 + math.random() * 20
 			ambientAt(root.Position)
 		end
-		-- the listener's own fall: the rush starts once the drop is real, and the server's "fell" cuts it
+		-- the listener's own fall: the rush starts once the drop is real, and the server's "died" cuts it
 		if fall then
 			if root.AssemblyLinearVelocity.Y < -70 then
 				if not fall.IsPlaying then fall.Volume = 0.45; fall:Play() end
