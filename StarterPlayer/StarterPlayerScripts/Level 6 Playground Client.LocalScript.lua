@@ -207,9 +207,12 @@ end
 -- quiet bed that is heard everywhere. It drops right down while the doll is talking. Every tag on the post
 -- restarts the tape a little faster and lower (MUSIC_STAGES); the finale plays it backwards.
 local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.12, 0.45
--- Owner, 2026-10-03: copies on several PA horns arrive at different distances and the track sounded like an
--- echo. The song is ONE quiet, non-positional track, the same for everybody; nothing hangs on the horns.
-local MUSIC_ON_HORNS = false
+-- Owner, 2026-10-04: the music belongs on the PA. (On 2026-10-03 it was taken off the horns because it sounded
+-- like an echo: the copies ran up to a quarter of a second apart and the non-positional track played under them.
+-- Now the horns are the only thing heard, the plain track is a silent clock for them, and a copy that drifts more
+-- than 0.05 s is pulled back.) The tape played backwards in the finale is louder than the music ever is.
+local MUSIC_ON_HORNS = true
+local REVERSED_GAIN = 2.2
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
 local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
 
@@ -260,7 +263,7 @@ local function musicTick(dt)
 	local goal = talking and DUCK or 1
 	if workspace:GetAttribute("Level6Party") == true then goal = 0 end      -- the party room has its own music
 	music.level += math.clamp(goal - music.level, -dt * 1.6, dt * 0.7)
-	bed.Volume = BED_VOLUME * GENERAL * MUSIC * music.level
+	bed.Volume = MUSIC_ON_HORNS and 0 or BED_VOLUME * GENERAL * MUSIC * music.level
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local props = model and model:FindFirstChild("Props")
 	local cam = workspace.CurrentCamera
@@ -295,8 +298,10 @@ local function musicTick(dt)
 			music.horns[horn] = m
 		end
 		if m then
-			m.Volume += math.clamp(HORN_VOLUME * music.level - m.Volume, -dt * 1.2, dt * 0.35)
-			if math.abs(m.TimePosition - bed.TimePosition) > 0.25 then m.TimePosition = bed.TimePosition end
+			local gain = music.key == "l6_music_reversed" and REVERSED_GAIN or 1
+			-- four horns at this level are about as loud as the single quiet track the owner settled on
+			m.Volume += math.clamp(HORN_VOLUME * GENERAL * MUSIC * gain * music.level - m.Volume, -dt * 1.2, dt * 0.35)
+			if math.abs(m.TimePosition - bed.TimePosition) > 0.05 then m.TimePosition = bed.TimePosition end
 		end
 	end
 end
@@ -498,19 +503,24 @@ task.spawn(function()
 		end
 	end
 end)
+local function touched(count, target)
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	local wins, needed = model and model:GetAttribute("Level6Wins") or 0, model and model:GetAttribute("Level6WinsNeeded") or 3
+	return string.format("TOUCHED %d / %d   ·   ROUNDS %d / %d", count or 0, target or 0, wins, needed)
+end
 event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	if kind == "paused" then
 		countLabel.Text, statusLabel.Text, dunkLabel.Text, timerLabel.Text = "", "", "", ""
 		hintLabel.Text = "Free roam: hide and seek is paused."
 		objective(nil)
 	elseif kind == "joined" then
-		dunkLabel.Text = string.format("TOUCHED %d / %d", b or 0, c or 0)
+		dunkLabel.Text = touched(b, c)
 		hintLabel.Text = ""
 		-- joining (or re-entering) while it is already searching: the post marker is the objective right away
 		if d == "seek" then
 			dunked = false
 			markerMode = "post"
-			objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
+			objective("TOUCH THE POST", "Everyone alive must touch the yellow post, three searches in a row. Do not let it see you.")
 		else
 			objective("HIDE!", "It is counting. Find a hiding place.")
 		end
@@ -520,7 +530,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 	elseif kind == "round" then
 		dunked = false
 		countLabel.Text = ""
-		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
+		dunkLabel.Text = touched(b, c)
 		markerMode = nil
 		music.wanted = true
 		objective("HIDE!", "It is counting. Find a hiding place.")
@@ -536,15 +546,18 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
 		hintLabel.Text = ""
 		markerMode = "post"
-		objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
+		objective("TOUCH THE POST", "Everyone alive must touch the yellow post, three searches in a row. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "party" then
 		if a then status("PARTY MODE  ·  30 SECONDS", 5, Color3.fromRGB(255, 64, 176)) else status("Back to hiding.", 3, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "timer" then
 		timerLabel.Text = string.format("%d:%02d", a // 60, a % 60)
 	elseif kind == "dunk" then
-		dunkLabel.Text = string.format("TOUCHED %d / %d", b, c)
-		if (b or 0) < (c or 3) then changeTrack("l6_music", math.min((b or 0) + 1, 3)) end
+		dunkLabel.Text = touched(b, c)
+	elseif kind == "roundwon" then
+		-- every living player touched the post in this search: one of the three it takes. The tape winds up a stage.
+		status(string.format("EVERYONE TOUCHED THE POST   ·   %d / %d", a or 0, b or 3), 4, Color3.fromRGB(255, 220, 60))
+		if (a or 0) < (b or 3) then changeTrack("l6_music", math.min((a or 0) + 1, 3)) end
 		if a == player.DisplayName then
 			dunked = true
 			markerMode = nil
@@ -699,6 +712,12 @@ task.spawn(function()
 		finale = math.clamp(finale + (enraged and dt / 4 or -dt / 2), 0, 1)
 		if model and (finale > 0 or next(litBefore)) then
 			local ease = finale * finale * (3 - 2 * finale)
+			-- Owner, 2026-10-04: the red comes and goes. It swells up, fades out, and the hall is dark for a moment
+			-- before the next swell (about a quarter of each 3.6 s cycle). With ReduceFlashing it only dips halfway.
+			local swell = math.clamp((math.sin(os.clock() * 2 * math.pi / 3.6) + 0.75) / 1.75, 0, 1)
+			swell = swell * swell * (3 - 2 * swell)
+			if player:GetAttribute("ReduceFlashing") == true then swell = 0.5 + 0.5 * swell end
+			local pulsedRed = Color3.fromRGB(20, 6, 5):Lerp(RED, swell)
 			for _, folderName in ipairs(FINALE_FOLDERS) do
 				local folder = model:FindFirstChild(folderName)
 				if folder then
@@ -715,11 +734,11 @@ task.spawn(function()
 									d.Color = before[1]:Lerp(RED, ease)
 									d.Angle = before[3] + (85 - before[3]) * ease
 									-- low on purpose: the yellow and red padding reflects red far more than the floor does
-									d.Brightness = before[2] + (0.2 - before[2]) * ease
+									d.Brightness = before[2] + (0.2 * swell - before[2]) * ease
 								elseif isLight then                     -- room and bar lights go out
 									d.Brightness = before[2] * (1 - ease)
 								elseif folderName == "Ceiling_Fixtures" then
-									d.Color = before[1]:Lerp(RED, ease)  -- the tubes themselves glow red
+									d.Color = before[1]:Lerp(pulsedRed, ease)  -- the tubes themselves glow red, and go dark with the light
 								else
 									d.Color = before[1]:Lerp(Color3.fromRGB(25, 22, 20), ease)
 								end

@@ -824,3 +824,10 @@ weight and button size on phones, no noise meter.
   a generated set as AI slop; keep new badges in this style.
 - **Still to do by hand**: the 16 new Roblox badges have to be created on the Creator Dashboard (5 free per day,
   then 100 Robux each) and their ids pasted over the 0s in `Badges`.
+- **Level 6, 2026-10-04 (owner corrections)**: the level is won over `RoundsToWin = 3` searches in each of which every
+  living player touches the post (`self.wins`, model attributes `Level6Wins` / `Level6WinsNeeded`, event
+  `roundwon`; a completed search that is not the third ends as `alldunked` and it counts again). One search had
+  been enough since the target became "all alive": that was a regression. The music is on the PA horns again
+  (`MUSIC_ON_HORNS = true`): the plain track is a silent clock, copies are resynced past 0.05 s, horn volume is
+  `HORN_VOLUME * GENERAL * MUSIC`, and the reversed tape plays at `REVERSED_GAIN` 2.2. The red finale light swells
+  and goes dark for about a quarter of each 3.6 s cycle (halved dip under `ReduceFlashing`).

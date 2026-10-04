@@ -33,6 +33,9 @@ local CONFIG = {
 	WalkSpeed = 9, ChaseSpeed = 40, EscapeChaseSpeed = 24,   -- seen = as good as dead (owner, 2026-10-03); furious once the exit opens
 	SightRange = 75, CatchDistance = 5.2, HideRadius = 4.5, HiddenSpotRange = 9,
 	NoiseSpeed = 18, NoiseRange = 45, LoseSightSeconds = 15, CheckPause = 3.3,   -- CheckPause = the Search_Look clip
+	-- Owner, 2026-10-04: the level is won over THREE searches in each of which every living player touches the
+	-- post. (For a while one such search was enough: that was a mistake made when the target became 'all alive'.)
+	RoundsToWin = 3,
 	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 4.3,   -- the length of the kill cam
 	PartyDownSeconds = 15,     -- the window after the last player falls, as in every other level
 	ReentryGraceSeconds = 8,   -- a re-entered player is not seen for this long
@@ -271,6 +274,9 @@ local function newSession(info)
 	s.active = true
 	s.round = 0
 	s.dunks = 0
+	s.wins = 0               -- searches in which every living player touched the post
+	info.model:SetAttribute("Level6Wins", 0)
+	info.model:SetAttribute("Level6WinsNeeded", CONFIG.RoundsToWin)
 	s.phase = "starting"
 	s.checked = {}
 	s.anim = {speed = 0, name = "Idle", serial = 0}
@@ -798,7 +804,7 @@ function Session:seekPhase()
 					achieve(player, "L6HomeFree")
 					self.noise = home
 					-- the winning tag belongs to the angry line alone
-					if self.dunks < self:target() then self:say(pick("dunk"), true) end
+					if self.dunks < self:target() or (self.wins or 0) + 1 < CONFIG.RoundsToWin then self:say(pick("dunk"), true) end
 				end
 			end
 		end
@@ -813,7 +819,13 @@ function Session:seekPhase()
 		end
 		-- a player caught after tagging no longer counts either way: the tally is always of the living
 		self.dunks = self:tagged()
-		if self:living() > 0 and self.dunks >= self:target() then result = "won"; break end
+		if self:living() > 0 and self.dunks >= self:target() then
+			self.wins = (self.wins or 0) + 1
+			self.info.model:SetAttribute("Level6Wins", self.wins)
+			broadcast(self, "roundwon", self.wins, CONFIG.RoundsToWin)
+			result = self.wins >= CONFIG.RoundsToWin and "won" or "alldunked"
+			break
+		end
 		local left = math.max(0, math.ceil(deadline - clock()))
 		if left ~= lastTimer then lastTimer = left; broadcast(self, "timer", left) end
 		if left <= 0 then result = "timeup"; break end
