@@ -97,6 +97,75 @@ for _, name in ipairs({"LobbyDJTrack", "LobbyDJStartedAt", "LobbyDJTracks"}) do 
 for _, name in ipairs({"InRound", "LobbyMusicEnabled"}) do player:GetAttributeChangedSignal(name):Connect(applyTrack) end
 task.defer(applyTrack)
 
+-- party lights ------------------------------------------------------------------------------------------------
+-- PARTY_LIGHTS_20261004 (owner): while a track is on, the lobby's own lamps go to party mode, in time with it.
+-- Every Light in the lobby model takes a colour from the track's palette (synthwave: magenta, cyan, violet;
+-- eurodance adds yellow, green and red), neighbours get different ones, and the whole pattern steps on every
+-- second beat of the track's tempo, counted from the server's start time so all clients agree. Brightness swells
+-- gently on the beat. Colours glide (no hard cuts: at most about 1.2 changes a second), and with ReduceFlashing
+-- the pattern steps once every eight beats with no pulse. Stopping the music puts every lamp back exactly.
+do
+	local RunService = game:GetService("RunService")
+	local PALETTES = {
+		SYNTHWAVE = {Color3.fromRGB(255, 64, 176), Color3.fromRGB(70, 230, 255), Color3.fromRGB(150, 90, 255), Color3.fromRGB(255, 120, 60)},
+		EURODANCE = {Color3.fromRGB(255, 64, 176), Color3.fromRGB(70, 230, 255), Color3.fromRGB(255, 220, 60), Color3.fromRGB(90, 255, 130),
+			Color3.fromRGB(255, 70, 70), Color3.fromRGB(150, 90, 255)},
+	}
+	local lamps, lampsFor = nil, nil
+	local function collect()
+		local lobby = workspace:FindFirstChild("LobbyReimaginedPreview")
+		if not lobby or lobby:GetAttribute("Ready") ~= true then return nil end
+		if lamps and lampsFor == lobby then return lamps end
+		lamps, lampsFor = {}, lobby
+		for _, d in ipairs(lobby:GetDescendants()) do
+			if d:IsA("Light") and d.Enabled and d.Brightness > 0 then
+				local host = d.Parent
+				local at = host and host:IsA("BasePart") and host.Position or (host and host:IsA("Attachment") and host.WorldPosition) or Vector3.zero
+				table.insert(lamps, {light = d, colour = d.Color, brightness = d.Brightness,
+					slot = math.floor(at.Z / 22) + math.floor(at.X / 30) * 3})
+			end
+		end
+		return lamps
+	end
+	local function restore()
+		for _, lamp in ipairs(lamps or {}) do
+			if lamp.light.Parent then lamp.light.Color, lamp.light.Brightness = lamp.colour, lamp.brightness end
+		end
+		lamps, lampsFor = nil, nil
+	end
+	local active, elapsed = false, 0
+	RunService.Heartbeat:Connect(function(dt)
+		elapsed += dt
+		if elapsed < 1 / 20 then return end
+		elapsed = 0
+		local entry = tracks()[workspace:GetAttribute("LobbyDJTrack") or 0]
+		local on = entry ~= nil and workspace:GetAttribute("ReservedRoundServer") ~= true and player:GetAttribute("InRound") ~= true
+		if not on then
+			if active then active = false; restore() end
+			return
+		end
+		local list = collect()
+		if not list then return end
+		active = true
+		local calm = player:GetAttribute("ReduceFlashing") == true
+		local palette = PALETTES[entry.Genre] or PALETTES.SYNTHWAVE
+		local beats = (workspace:GetServerTimeNow() - (workspace:GetAttribute("LobbyDJStartedAt") or 0)) * (entry.Bpm or 110) / 60
+		local stride = calm and 8 or 2                               -- beats per colour step
+		local step, within = math.floor(beats / stride), (beats / stride) % 1
+		local glide = math.clamp(within / 0.35, 0, 1)                 -- the first third of a step is the change
+		local pulse = calm and 1 or 0.86 + 0.24 * (0.5 + 0.5 * math.cos((beats % 1) * math.pi * 2))
+		for _, lamp in ipairs(list) do
+			local light = lamp.light
+			if light.Parent then
+				local from = palette[(lamp.slot + step - 1) % #palette + 1]
+				local to = palette[(lamp.slot + step) % #palette + 1]
+				light.Color = from:Lerp(to, glide)
+				light.Brightness = lamp.brightness * pulse
+			end
+		end
+	end)
+end
+
 -- the DJ's hands ----------------------------------------------------------------------------------------------
 -- Whoever is marked LobbyDJMode is posed here, on every client: arms out over the decks, the right hand
 -- scratching in bursts, the left riding a fader, the head nodding. There are no animation assets. Each frame,

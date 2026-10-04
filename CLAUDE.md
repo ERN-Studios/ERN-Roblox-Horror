@@ -779,3 +779,7 @@ weight and button size on phones, no noise meter.
 - **Gallery**: `artifacts/gallery-20261004/` holds the competitor research and the raw in-game captures of all six
   levels; the finished 1920x1080 images are in `~/Desktop/Backrooms Stay Quiet - Gallery/`. `/tmp/shots.sh`-style
   capture needs the luau and the shell to agree on a wall-clock time (`DateTime.now()`), not on a sleep.
+- **Lobby party lights** (`PARTY_LIGHTS_20261004` in Lobby DJ Client): while `LobbyDJTrack` is on, every Light in the
+  lobby model takes a colour from the track's palette and the pattern steps every second beat of the track's `Bpm`
+  (in the server's TRACKS), counted from `LobbyDJStartedAt`; brightness swells on the beat. Colours glide, and
+  `ReduceFlashing` slows it to one step per eight beats with no pulse. Stopping restores every lamp exactly.

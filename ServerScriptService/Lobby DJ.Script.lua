@@ -15,11 +15,11 @@ local HttpService = game:GetService("HttpService")
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 
 local TRACKS = {
-	{Title = "Neon Transit", Genre = "SYNTHWAVE", Id = 100118588472977},
-	{Title = "Midnight Mall", Genre = "SYNTHWAVE", Id = 91861536067818},
-	{Title = "VHS Sunrise", Genre = "SYNTHWAVE", Id = 121661472960006},
-	{Title = "Level Up 96", Genre = "EURODANCE", Id = 127095326589213},
-	{Title = "Hands Up Arcade", Genre = "EURODANCE", Id = 129281139879903},
+	{Title = "Neon Transit", Genre = "SYNTHWAVE", Id = 100118588472977, Bpm = 108},
+	{Title = "Midnight Mall", Genre = "SYNTHWAVE", Id = 91861536067818, Bpm = 96},
+	{Title = "VHS Sunrise", Genre = "SYNTHWAVE", Id = 121661472960006, Bpm = 118},
+	{Title = "Level Up 96", Genre = "EURODANCE", Id = 127095326589213, Bpm = 138},
+	{Title = "Hands Up Arcade", Genre = "EURODANCE", Id = 129281139879903, Bpm = 142},
 }
 local PROMPT_NAME = "LobbyDJPrompt"
 local REACH = 26
