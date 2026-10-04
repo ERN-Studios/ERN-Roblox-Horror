@@ -318,7 +318,7 @@ do
 	local TweenService = game:GetService("TweenService")
 	local FALL_MARGIN, GATE_TRAVEL, GATE_HOLD = 40, 13.4, 8
 	local BALL_RETURN = 35
-	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6}
+	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6, orange = 7, crimson = 8, teal = 9, ivory = 10}
 	local SOUND_IDS = {
 		-- filled by tools/level5_void/install_sounds.py (ReplicatedStorage.Level5Void.Sounds carries the same)
 	}

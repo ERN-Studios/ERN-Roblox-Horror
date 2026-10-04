@@ -143,7 +143,8 @@ task.spawn(function()
 	end
 
 	local ambience, wind, fall = clip("l5_ambience", true), clip("l5_depth_wind", true), clip("l5_player_fall")
-	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP"}
+	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP",
+		orange = "ORANGE   ·   THE SPIRAL", crimson = "CRIMSON   ·   THE RING", teal = "TEAL   ·   THE PILLARS", ivory = "IVORY   ·   THE TOWER"}
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
 		if what == "died" then
 			-- no checkpoints (owner, 2026-10-04): a fall or any other death ends the run; black until the lobby

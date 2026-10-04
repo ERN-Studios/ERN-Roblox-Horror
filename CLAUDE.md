@@ -954,3 +954,23 @@ weight and button size on phones, no noise meter.
   script pulled with `mac_pull_from_studio.py`, every local file, `.gitignore` = both sides of an old unfinished
   merge) was then pushed over `main`. Pushes of this repo need `http.postBuffer` 1048576000 and HTTP/1.1.
 - **Lobby backdrop image** is uploaded: `rbxassetid://89904369379943` (`IMAGE` in `INFINITE_END_20261004`).
+
+### Added 2026-10-05 - Level 5 v3: harder, ten rooms
+
+- **Every existing room is harder**: caps (`SHARE`) rose 62%, blue 74%, amber 82%, mint 87%, violet 90%, coral 92% of
+  the walking reach, every gap longer (`LONGER`) and every ledge narrower (`WIDER`, beams never under 2 studs).
+  Plazas keep their size (`'Plaza'`).
+- **Coral is a pass-through room now** (west wall, north wall, half the east side, to a ledge and door high in the
+  east wall), and four rooms follow, each a different shape:
+  **ORANGE** the double spiral (one arm in to an island, its twin out again, climbing all the way; spaced by arc
+  length, not by angle, or the middle knots up), **CRIMSON** the ring (17 single blocks half round a 60-stud
+  pillar, up and down; the other half of the ring is there with a piece missing), **TEAL** the field (only the
+  tops of 2.8-stud pillars, `dense=3` monoliths around them), **IVORY** the tower (a stair fixed to a column,
+  three times round, three treads missing in every six; `STACKED` exempts it from `no_crossing`; the finish is
+  the doorway in the column at the top). 10 rooms, 9 plates, 4130 studs, 171 jumps.
+- **Walked at walking speed, 171 of 171**: `python3 tools/level5_void/run_walk.py rose blue ...` runs
+  `walker.luau` one room per call (a call longer than about two minutes answers "Request timeout" but keeps
+  running). Rooms must be walked in order in one life: the server kills a body 40 studs under the lowest point
+  of the room it last reached. `Humanoid:MoveTo` stops about a stud short of its target, so the walker's arrival
+  tolerance is 1.25 studs (0.75 produced timeouts that looked like stuck steps).
+- Server `SECTION` and the client's `NAMES` list the four new rooms; nothing else in the scripts changed.
