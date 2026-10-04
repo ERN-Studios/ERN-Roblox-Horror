@@ -572,6 +572,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 			vignette.ImageTransparency = 1
 			countLabel.Text = ""
 			objective(nil)
+			markerMode = nil            -- nothing floats over its face
 			killCam()
 		else
 			status("It found " .. tostring(a) .. ".", 3, Color3.fromRGB(255, 120, 120))
@@ -889,22 +890,26 @@ local function rigOf(child)
 	return rig
 end
 
--- Kill cam: the camera is torn off the player, turned onto the doll's face and dragged into it while the
--- field of view closes; then the screen cuts to black and stays black until the lobby has them back.
+-- Kill cam (KILL_CHOKE_20261004, owner: "it grabs the person, chokes them and brings them closer to the face
+-- until it goes black and that is when the player dies"). The doll plays `Choke` (tools/level6_entity/
+-- build_choke.py): both hands shoot out to the throat, it lifts, then folds its arms and leans in. The victim's
+-- camera HANGS ON THE TWO HAND BONES, just above and behind them, looking at its face - so the hands are at the
+-- bottom of the view the whole time and the pull toward the face is the doll's own arms. Sight goes in pulses
+-- and then for good; the screen is black before the server kills the body (`CaughtReturnDelay`).
 killCam = function()
 	local child = childModel()
 	local rig = child and rigOf(child)
 	local dollRoot = child and child:FindFirstChild("Root")
 	local cam = workspace.CurrentCamera
+	local cover = Instance.new("ScreenGui")
+	cover.Name, cover.IgnoreGuiInset, cover.ResetOnSpawn, cover.DisplayOrder = "Level6KillCover", true, false, 900
+	local black = Instance.new("Frame")
+	black.Name, black.Size, black.BorderSizePixel = "KillBlack", UDim2.fromScale(1, 1), 0
+	black.BackgroundColor3, black.BackgroundTransparency, black.ZIndex = Color3.new(0, 0, 0), 1, 60
+	black.Parent = cover
+	cover.Parent = player:WaitForChild("PlayerGui")
 	local function blackout()
-		-- its own frame: the red hit flash is still fading on the shared one
-		local black = Instance.new("Frame")
-		black.Name, black.Size, black.BorderSizePixel = "KillBlack", UDim2.fromScale(1, 1), 0
-		black.BackgroundColor3, black.ZIndex = Color3.new(0, 0, 0), 60
-		local cover = Instance.new("ScreenGui")
-		cover.Name, cover.IgnoreGuiInset, cover.ResetOnSpawn, cover.DisplayOrder = "Level6KillCover", true, false, 900
-		black.Parent = cover
-		cover.Parent = player:WaitForChild("PlayerGui")
+		black.BackgroundTransparency = 0
 		task.spawn(function()
 			-- Dead in the level now, not sent home: the cover holds until the spectate view (or the lobby,
 			-- for a player who left) owns the screen, and the spectate controller owns the camera from there.
@@ -918,12 +923,13 @@ killCam = function()
 			cover:Destroy()
 		end)
 	end
-	if not (rig and dollRoot and cam) then
+	local left, right = rig and rig.bones.LeftHand, rig and rig.bones.RightHand
+	if not (rig and dollRoot and cam and left and right) then
 		pulse(flash, "BackgroundTransparency", 0, 1, 0.5)
-		task.delay(3.4, blackout)
+		task.delay(4.2, blackout)
 		return
 	end
-	local DURATION, TURN = 3.7, 0.3
+	local DURATION, GRAB, DARK_FROM, DARK_FULL = 4.9, 0.32, 3.0, 4.7
 	-- nothing on screen but the doll: the level HUD and the flashlight gauge come back with the lobby
 	horror.killing = true
 	local shown = {}
@@ -944,13 +950,28 @@ killCam = function()
 		end
 	end)
 	local startCF, startFov = cam.CFrame, cam.FieldOfView
+	local calm = player:GetAttribute("ReduceCameraShake") == true
+	local steady = player:GetAttribute("ReduceFlashing") == true
 	cam.CameraType = Enum.CameraType.Scriptable
 	pulse(flash, "BackgroundTransparency", 0.35, 1, 0.5)   -- the hit
 	local t0 = os.clock()
+	local hushed = {}
 	local connection
 	connection = RunService.RenderStepped:Connect(function()
 		local t = os.clock() - t0
-		if t >= DURATION or not child.Parent then
+		-- the exit chip and the REC frame belong to other scripts that keep switching themselves on: off, every frame
+		local done = t >= DURATION or not child.Parent
+		for _, name in ipairs({"RoundExitGui", "FoundFootageHUD"}) do
+			local other = player.PlayerGui:FindFirstChild(name)
+			if other and other:IsA("ScreenGui") then
+				if not done then
+					if other.Enabled then other.Enabled = false; hushed[other] = true end
+				elseif hushed[other] then
+					other.Enabled = true
+				end
+			end
+		end
+		if done then
 			connection:Disconnect()
 			cam.FieldOfView = startFov
 			blackout()
@@ -964,20 +985,26 @@ killCam = function()
 			end
 		end
 		local face = rig.bones.Head.TransformedWorldCFrame.Position + Vector3.new(0, 0.22, 0)   -- its eyes, not its chin
-		local toward = dollRoot.CFrame.LookVector
-		-- held at arm's length for a moment, then dragged in faster and faster
-		local pull = math.clamp((t - 0.9) / (DURATION - 0.9), 0, 1)
-		pull = pull * pull * pull
-		local hold = face + toward * 3.1 + Vector3.new(0, -0.5, 0)
-		local close = face + toward * 0.85
-		local grab = math.clamp(t / TURN, 0, 1)
+		local hands = (left.TransformedWorldCFrame.Position + right.TransformedWorldCFrame.Position) / 2
+		local toward = dollRoot.CFrame.LookVector                   -- from the doll to its victim
+		local pull = math.clamp((t - 1.6) / 2.8, 0, 1)
+		-- the eyes sit above the throat it is holding, a little behind the hands; less behind as it draws them in
+		local eye = hands + Vector3.new(0, 0.62, 0) + toward * (1.0 - 0.6 * pull)
+		local grab = math.clamp(t / GRAB, 0, 1)
 		grab = 1 - (1 - grab) * (1 - grab)
-		local position = startCF.Position:Lerp(hold, grab):Lerp(close, pull)
-		local tremble = (0.03 + 0.1 * pull) * (player:GetAttribute("ReduceCameraShake") == true and 0.2 or 1)
-		position += Vector3.new(math.noise(t * 21, 0.5) * tremble, math.noise(0.5, t * 23) * tremble, 0)
-		local aim = CFrame.lookAt(position, face)
+		local position = startCF.Position:Lerp(eye, grab)
+		local tremble = (0.02 + 0.05 * pull) * (calm and 0.2 or 1)
+		position += Vector3.new(math.noise(t * 17, 0.5) * tremble, math.noise(0.5, t * 19) * tremble, 0)
+		-- the head is forced back and rolls as the air goes
+		local aim = CFrame.lookAt(position, face + Vector3.new(0, -0.25 * (1 - pull), 0))
+			* CFrame.Angles(0, 0, math.rad((calm and 1.5 or 5) * math.sin(t * 2.3) * (0.3 + 0.7 * pull)))
 		cam.CFrame = CFrame.new(position) * startCF.Rotation:Lerp(aim.Rotation, grab)
-		cam.FieldOfView = startFov + (34 - startFov) * pull
+		cam.FieldOfView = startFov + (78 - startFov) * grab + (62 - 78) * pull
+		-- sight: it dims on every heartbeat, a little more each time, and then does not come back
+		local dark = math.clamp((t - DARK_FROM) / (DARK_FULL - DARK_FROM), 0, 1)
+		dark = dark * dark * (3 - 2 * dark)
+		local beat = steady and 0 or math.max(0, math.sin(t * 7.2)) ^ 3 * 0.28 * math.clamp((t - 0.8) / 1.2, 0, 1)
+		black.BackgroundTransparency = 1 - math.clamp(dark + beat * (1 - dark), 0, 1)
 	end)
 end
 

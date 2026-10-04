@@ -879,3 +879,24 @@ weight and button size on phones, no noise meter.
 - **No RETURN TO LOBBY prompt at the Level 6 start** (owner, 2026-10-04): `hookExit` still mounts the prompt (the
   queue's `ready` check needs it present and Enabled) but sets `MaxActivationDistance = 0`. The `HOLD L - LOBBY`
   chip of Round Exit Client is untouched.
+
+### Added 2026-10-04 (evening) - Level 6 kill cam: the choke
+
+- **`Choke` clip** (`tools/level6_entity/build_choke.py`, 5 s, not looping): both hands to the throat, lift, then
+  the elbows fold and the body leans in. `Session:catch` plays it (`CaughtReturnDelay` 5.0, `GrabDistance` 2.7)
+  and lifts and draws in the anchored victim for onlookers. The client's `killCam` (`KILL_CHOKE_20261004`) hangs
+  the camera on the two hand bones (0.62 above, 1.0 -> 0.4 behind), looking at the face; sight dims in pulses
+  and is black from 4.7 s; the body dies at 5.0. The marker, the exit chip, the REC frame and the dev ESP stand
+  down for it, and the `L6Caught` achievement fires after the death so its toast is not over the face.
+- **`Session:follow` rechecks `interrupt` after its Heartbeat wait.** Before, a catch that landed during the wait
+  was followed by one more step: the doll moved off the spot `catch` put it on and `Run_Chase` replaced the grab
+  pose, so every catch that ended a chase (all of them, since "seen = dead") played the kill in the running pose.
+- **ZyntraMonetization's late badge award** called the local `awardBadge` 800 lines above its definition (nil at
+  that point: "attempt to call a nil value" on every profile load with achievements). It goes through
+  `achievementApi.award` now.
+- **Studio crashed once on 2026-10-04** (`RBXCRASH` in the log); it reopens on the place with
+  `open "roblox-studio:1+launchmode:edit+task:EditPlace+placeId:131311258779917+universeId:10559217407"` and
+  comes back with a NEW MCP studio id (`list_roblox_studios`). An `execute_luau` call that is still running
+  when a script switches the camera to Scriptable gets the camera type reset when the call ends.
+- **Timed screenshots**: `screencapture -R x,y,w,h` of just the viewport takes about 0.4 s; the full 2560x1440
+  screen takes about 2 s, too slow to catch a 5 s sequence.

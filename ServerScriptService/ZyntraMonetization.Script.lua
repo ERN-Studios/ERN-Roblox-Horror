@@ -2257,7 +2257,7 @@ local function loadProfile(player, loadState)
 		local loaded = sessions[player]
 		for key, on in pairs(loaded and loaded.data.Achievements or {}) do
 			if on == true and sessions[player] == loaded then
-				awardBadge(player, key)
+				achievementApi.award(player, key)        -- awardBadge is a local defined further down: reach it through the table
 				task.wait(0.4)
 			end
 		end
@@ -3088,6 +3088,7 @@ end
 -- Achievements Client reads for its panel and its unlock toast) and then tries the Roblox badge, which does
 -- nothing while the key's id is 0. Other server scripts unlock through ServerStorage.ZyntraAchievement:Fire(
 -- player, key): it is a BindableEvent, so no client can reach it.
+achievementApi.award = awardBadge
 function achievementApi.publish(player)
 	local session = sessions[player]
 	if not session then return end

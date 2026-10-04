@@ -69,7 +69,8 @@ RunService.Heartbeat:Connect(function(dt)
 	elapsed += dt
 	if elapsed < 0.15 then return end
 	elapsed = 0
-	local active = on and inLevel(player)
+	-- not during the kill cam: the outline and its tint would be all the victim sees of the doll
+	local active = on and inLevel(player) and player.PlayerGui:FindFirstChild("Level6KillCover") == nil
 	holder.Parent = active and workspace.CurrentCamera or nil
 	local wanted = {}
 	if active then

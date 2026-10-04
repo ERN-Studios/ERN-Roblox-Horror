@@ -36,10 +36,10 @@ local CONFIG = {
 	-- Owner, 2026-10-04: the level is won over THREE searches in each of which every living player touches the
 	-- post. (For a while one such search was enough: that was a mistake made when the target became 'all alive'.)
 	RoundsToWin = 3,
-	ExitRadius = 11, CaughtReturnDelay = 4.3,   -- the length of the kill cam
+	ExitRadius = 11, CaughtReturnDelay = 5.0,   -- the length of the kill cam (the `Choke` clip)
 	PartyDownSeconds = 15,     -- the window after the last player falls, as in every other level
 	ReentryGraceSeconds = 8,   -- a re-entered player is not seen for this long
-	GrabDistance = 3.6,   -- how far in front of its victim it stands for the kill cam
+	GrabDistance = 2.7,   -- how far in front of its victim it stands for the kill cam: its arms reach 2 studs
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
 	EyeHeight = 2.6,   -- eyes above the root
 	SpottedPause = 0.7,
@@ -363,6 +363,10 @@ function Session:follow(points, speed, phase)
 			if not self.active or self.phase ~= phase or self.interrupt then return false end
 			local dt = RunService.Heartbeat:Wait()
 			if self.partyOn then self:hold(); continue end
+			-- A catch can land during that wait. Without this check the loop took one more step: it moved the doll
+			-- off the spot catch() had just stood it on and put the run clip back over the grab, so every catch
+			-- that ended a chase played the kill in the running pose.
+			if not self.active or self.phase ~= phase or self.interrupt then return false end
 			local feet = self:feet()
 			local delta = goal - feet
 			local dist = delta.Magnitude
@@ -491,7 +495,6 @@ function Session:perceive()
 end
 
 function Session:catch(player)
-	achieve(player, "L6Caught")
 	local state = self.players[player]
 	if not state or state.caught then return end
 	state.caught = true
@@ -517,14 +520,30 @@ function Session:catch(player)
 	self.pauseUntil = clock() + CONFIG.CaughtReturnDelay
 	self.killUntil = clock() + CONFIG.CaughtReturnDelay + 0.5
 	self.interrupt = true
-	self:pose("Catch")
+	self:pose("Choke")
 	self:say(pick("kill"), true)
+	-- what the others see: the body is lifted off the floor by the throat and drawn in to its face
+	if held then
+		local from, started = held.CFrame, os.clock()
+		local inward = flat(self.root.Position - held.Position)
+		inward = inward.Magnitude > 0.1 and inward.Unit or Vector3.zero
+		task.spawn(function()
+			while held.Parent and held.Anchored and os.clock() - started < CONFIG.CaughtReturnDelay do
+				local t = os.clock() - started
+				local lift = math.clamp((t - 0.3) / 1.3, 0, 1)
+				local pull = math.clamp((t - 1.6) / 2.8, 0, 1)
+				held.CFrame = from + Vector3.new(0, 1.4 * lift * lift * (3 - 2 * lift), 0) + inward * (1.1 * pull * pull * (3 - 2 * pull))
+				task.wait()
+			end
+		end)
+	end
 	task.delay(CONFIG.CaughtReturnDelay, function()
 		if held and held.Parent then held.Anchored = false end
 		-- "then you die": the body drops where it was held and the round's usual death flow takes over
 		-- (spectate, the PARTY DOWN card, Emergency Re-entry). playerDied runs off the humanoid.
 		local humanoid = held and held.Parent and held.Parent:FindFirstChildOfClass("Humanoid")
 		if humanoid and humanoid.Health > 0 then humanoid.Health = 0 else self:playerDied(player) end
+		achieve(player, "L6Caught")          -- after the kill cam: its toast would sit over the doll's face
 	end)
 	if self:living() > 0 and self.active then
 		task.delay(CONFIG.CaughtReturnDelay + 0.4, function() if self.active then self:say("l6_found_other", true) end end)
