@@ -192,7 +192,8 @@ task.spawn(function()
 		local step = clip(name)
 		if not step then return end
 		-- owner, 2026-10-04: 70% quieter than the first mix (was 0.42 running / 0.3 walking, landing 0.32)
-		step.Volume = (running and 0.126 or 0.09) * (0.85 + math.random() * 0.3) * math.clamp(flat / 12, 0.5, 1)
+		-- and again the same day, "by a lot": another 70% off (now 0.038 running / 0.027 walking, landing 0.03)
+		step.Volume = (running and 0.038 or 0.027) * (0.85 + math.random() * 0.3) * math.clamp(flat / 12, 0.5, 1)
 		step.PlaybackSpeed = 0.94 + math.random() * 0.12
 		step:Play()
 		step.Ended:Once(function() step:Destroy() end)
@@ -203,7 +204,7 @@ task.spawn(function()
 		if not humanoid or landed[humanoid] then return end
 		landed[humanoid] = true
 		humanoid.StateChanged:Connect(function(_, state)
-			if state == Enum.HumanoidStateType.Landed and inLevel() then oneShot("l5_land", 0.096) end
+			if state == Enum.HumanoidStateType.Landed and inLevel() then oneShot("l5_land", 0.03) end
 		end)
 	end
 	-- AMBIENT_20261004: now and then something far off in the hall. Each plays once from a random point well
