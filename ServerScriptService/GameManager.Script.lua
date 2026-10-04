@@ -121,7 +121,7 @@ Players.CharacterAutoLoads = false
 workspace:SetAttribute("GenerateWorld", false)
 workspace:SetAttribute("RoundActive", false)
 workspace:SetAttribute("PostWinIntermissionActive", false)
-workspace:SetAttribute("Level1BlenderPreviewActive", false)
+workspace:SetAttribute("Level1BlenderActive", false)
 workspace:SetAttribute("Level2BlenderPreviewActive", false)
 
 -- A station launch creates a reserved server of this same place. Reserved servers
@@ -1710,7 +1710,7 @@ local function cleanupLevelOneWorld()
  workspace:SetAttribute("EntityObjectiveTarget", nil)
  workspace:SetAttribute("EntityObjectiveStage", nil)
  workspace:SetAttribute("ExitPos", nil)
- workspace:SetAttribute("Level1BlenderPreviewActive", false)
+ workspace:SetAttribute("Level1BlenderActive", false)
  workspace:SetAttribute("Level2BlenderPreviewActive", false)
  workspace:SetAttribute("Level1BlenderRoomCount", nil)
 
@@ -2500,7 +2500,7 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 	postWinSerial += 1
 	-- NO_LEVEL3_CONTINUE_20260923: the campaign chain, for EVERY party. Level 3
 	-- offers no Continue, developers included.
-	local nextLevel = workspace:GetAttribute("Level1BlenderPreviewActive") ~= true and workspace:GetAttribute("Level2BlenderPreviewActive") ~= true and Routing.NextLevel(activeLevel) or nil
+	local nextLevel = workspace:GetAttribute("Level2BlenderPreviewActive") ~= true and Routing.NextLevel(activeLevel) or nil
 	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
 	local roster = Routing.NewRoster((function()
 		local members = {}
@@ -3142,7 +3142,7 @@ playRound = function(participants)
   Analytics.Outcome(participant, activeLevel, nil)
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
-   if result == "win" and workspace:GetAttribute("Level1BlenderPreviewActive") ~= true and workspace:GetAttribute("Level2BlenderPreviewActive") ~= true then
+   if result == "win" and workspace:GetAttribute("Level2BlenderPreviewActive") ~= true then
     local facts = runFacts[participant]
     local run = facts and facts.EscapedAt and runStartWall and {
      Seconds = facts.EscapedAt - runStartWall,
@@ -3382,78 +3382,8 @@ local function launchStation(station, participants)
  station.busy = false
 end
 
--- A facelift preview runs the real Level 1 loop in its own reserved server.
--- Only Studio uses a local round; published public lobbies stay lightweight.
+-- Developer preview launches (Level 2 Poolrooms) lock per player while a launch is in flight.
 local developerPreviewLaunching = {}
-local function blenderPreviewReady()
- local folder = script.Parent:FindFirstChild("Level 1 Systems")
- local renderer = folder and folder:FindFirstChild("BlenderRoomRenderer")
- if not renderer or not renderer:IsA("ModuleScript") then return false end
- local ok, ready = pcall(function() return require(renderer).IsReady() end)
- return ok and ready == true
-end
-local function canLaunchBlenderPreview(player)
- if not player or player.Parent ~= Players or not DevAccess.IsAllowed(player) then return false, "DEVELOPER_ONLY" end
- if IS_RESERVED_ROUND_SERVER or roundBusy or (activeEntry and activeEntry:IsOpen())
-  or developerPreviewLaunching[player] then return false, "ROUND_BUSY" end
- local character = player.Character
- local humanoid = character and character:FindFirstChildOfClass("Humanoid")
- if player:GetAttribute("InRound") == true or not humanoid or humanoid.Health <= 0 then return false, "ROUND_BUSY" end
- if not blenderPreviewReady() then return false, "PREVIEW_NOT_READY" end
- return true
-end
-local function launchBlenderPreview(player)
- local allowed, reason = canLaunchBlenderPreview(player)
- if not allowed then return false, reason end
- developerPreviewLaunching[player] = true
- local participants = {player}
- if IS_STUDIO then
-  roundBusy = true
-  workspace:SetAttribute("Level1BlenderPreviewActive", true)
-  task.spawn(function()
-   local ok, problem = pcall(function()
-    fireGroup(participants, "loadinggame", 1)
-    local attempt = beginGroupLoading(participants)
-    clearGlowsticks()
-    assignGlowstickSlots(participants)
-    roundEntryMode = nil
-    if prepareGroupLoading(attempt, participants, 1, false) then playRound(participants) end
-   end)
-   if not ok then
-    warn("[Level 1 Blender Preview] " .. tostring(problem))
-    workspace:SetAttribute("RoundActive", false)
-    workspace:SetAttribute("PostWinIntermissionActive", false)
-    zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
-    local recovered, recoveryError = pcall(returnGroupToLobby, participants)
-    if not recovered then warn("[Level 1 Blender Preview] recovery failed: " .. tostring(recoveryError)) end
-   end
-   workspace:SetAttribute("Level1BlenderPreviewActive", false)
-   developerPreviewLaunching[player] = nil
-   if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
-  end)
-  return true
- end
- local ok, problem = pcall(function()
-  local options = Instance.new("TeleportOptions")
-  options.ShouldReserveServer = true
-  local packet = Routing.ArrivalPacket({Ceiling = Routing.MaxLevel, Level = 1,
-   SessionId = game.JobId .. ":level1blender:" .. tostring(player.UserId) .. ":" .. tostring(os.clock()),
-   Expected = 1, Final = true, GlowstickSlots = {[tostring(player.UserId)] = 1}})
-  packet.Level1BlenderPreview = true
-  options:SetTeleportData(packet)
-  TeleportService:TeleportAsync(game.PlaceId, participants, options)
- end)
- developerPreviewLaunching[player] = nil
- if not ok then warn("[Level 1 Blender Preview] " .. tostring(problem)); return false, "TELEPORT_FAILED" end
- return true
-end
-local blenderPreviewLaunch = ServerStorage:FindFirstChild("Level1BlenderPreviewLaunch")
-if not blenderPreviewLaunch then
- blenderPreviewLaunch = Instance.new("BindableFunction")
- blenderPreviewLaunch.Name = "Level1BlenderPreviewLaunch"
- blenderPreviewLaunch.Parent = ServerStorage
-end
-if blenderPreviewLaunch:IsA("BindableFunction") then blenderPreviewLaunch.OnInvoke = launchBlenderPreview end
 
 -- Level 2 uses the shared round adapter; only its layout/world pair changes.
 local function level2BlenderPreviewReady()
@@ -4132,26 +4062,6 @@ if IS_RESERVED_ROUND_SERVER then
    return
   end
   local selectedLevel = Routing.ClampLevelTo(group.Level, devCeiling(participants))
-
-  -- TeleportData only selects a variant after the actual arriving players
-  -- pass developer authority here. A spoofed marker never opens this preview.
-  local blenderPreview = false
-  for _, entry in ipairs(arrivalEntries()) do
-   if type(entry.Data) == "table" and entry.Data.RoundSessionId == group.SessionId
-    and entry.Data.Level1BlenderPreview == true then blenderPreview = true end
-  end
-  if blenderPreview then
-   local allowed = selectedLevel == 1 and blenderPreviewReady()
-   for _, player in ipairs(participants) do
-    if not DevAccess.IsAllowed(player) then allowed = false end
-   end
-   if not allowed then
-    attempt:SetMembers(participants)
-    attempt:Fail("LEVEL_ACCESS_DENIED")
-    return
-   end
-   workspace:SetAttribute("Level1BlenderPreviewActive", true)
-  end
 
   local level2BlenderPreview = false
   for _, entry in ipairs(arrivalEntries()) do

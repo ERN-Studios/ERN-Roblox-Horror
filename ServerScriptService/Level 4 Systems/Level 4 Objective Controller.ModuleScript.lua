@@ -165,6 +165,39 @@ local function spark(part)
 	task.delay(2, function() if emitter.Parent then emitter:Destroy() end end)
 end
 
+-- FINDABILITY_20261003: a slow glint rising off a loose reel or the note. Particles are drawn in the world, so walls hide
+-- them and nothing lights up through a wall; they fade in and out rather than flash. Dies with its model.
+local function glint(part)
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Name = "L4Glint"
+	emitter.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+	emitter.Color = ColorSequence.new(Color3.fromRGB(255, 236, 190))
+	emitter.LightEmission = 1
+	emitter.LightInfluence = 0
+	-- tuned in a Studio dark-phase play test 2026-10-04: smaller/dimmer read as a single stray spark
+	emitter.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.4, 0.75),
+		NumberSequenceKeypoint.new(1, 0) })
+	emitter.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.35, 0.15),
+		NumberSequenceKeypoint.new(1, 1) })
+	emitter.Brightness = 2
+	emitter.Lifetime = NumberRange.new(1.8, 2.6)
+	emitter.Speed = NumberRange.new(0.2, 0.6)
+	emitter.SpreadAngle = Vector2.new(180, 180)
+	emitter.Acceleration = Vector3.new(0, 1.4, 0)   -- rises over seat backs and shelf edges whatever the part's orientation
+	-- 4/s left most dark-phase captures without a single sparkle in view (Studio QA 2026-10-04)
+	emitter.Rate = 9
+	emitter.Parent = part
+	return emitter
+end
+
+-- sets a model's lowest point on a surface height (its bounding box measured in world terms, any orientation)
+local function seatOn(model, surfaceY)
+	local cf, size = model:GetBoundingBox()
+	local half = (math.abs(cf.RightVector.Y) * size.X + math.abs(cf.UpVector.Y) * size.Y
+		+ math.abs(cf.LookVector.Y) * size.Z) / 2
+	model:PivotTo(model:GetPivot() + Vector3.new(0, surfaceY - (cf.Position.Y - half), 0))
+end
+
 local function remember(part)
 	if part and not restoreCFrames[part] then restoreCFrames[part] = part.CFrame end
 end
@@ -205,15 +238,21 @@ local function setSwitch(entry, down)
 	tweenTo(entry.Handle, down and hinged(entry.Handle, base, CFrame.Angles(math.rad(-65), 0, 0)) or base, 0.16)
 end
 
-local function placeNote(text)
+local function placeNote(text, order)
 	local spots = manifest.NoteSpots
 	if #spots == 0 then return end
-	-- spots near an entry spawn first (the power must come on fairly quickly)
+	-- the configured service-room spots; without them, spots near an entry spawn (the power must come on fairly quickly)
 	local near = {}
 	for _, spot in ipairs(spots) do
-		for _, spawn in ipairs(manifest.EntrySpawns) do
-			if (spot.Position - spawn.Position).Magnitude <= Configuration.Sequence.NoteMaxDistance then
-				near[#near + 1] = spot; break
+		if table.find(Configuration.Sequence.NoteSpots or {}, spot.Name) then near[#near + 1] = spot end
+	end
+	if #near == 0 then
+		warn("[Level 4] none of Configuration.Sequence.NoteSpots exists; the note falls back to a spot near the entry")
+		for _, spot in ipairs(spots) do
+			for _, spawn in ipairs(manifest.EntrySpawns) do
+				if (spot.Position - spawn.Position).Magnitude <= Configuration.Sequence.NoteMaxDistance then
+					near[#near + 1] = spot; break
+				end
 			end
 		end
 	end
@@ -263,8 +302,45 @@ local function placeNote(text)
 		label.Parent = gui
 	end
 	label.Text = text
+	-- FINDABILITY_20261003: bigger paper on its surface, a glint, and a prompt that shows the note on screen and keeps
+	-- the order in the reader's objective panel
+	local scale = Configuration.Sequence.NoteScale or 1
+	if scale ~= 1 then note:ScaleTo(note:GetScale() * scale) end
+	local tweak = (Configuration.SpotTweaks or {})[spot.Name] or {}
+	-- Yaw turns the sheet within its own plane (after the tilt), so a propped note's writing reads upright
+	note:PivotTo(spot.CFrame * CFrame.new(tweak.Offset or Vector3.zero) * CFrame.Angles(math.rad(-(tweak.Tilt or 0)), 0, 0)
+		* CFrame.Angles(0, math.rad(tweak.Yaw or 0), 0))
+	seatOn(note, spot.Position.Y + spot.Size.Y / 2)
+	if paper then
+		glint(paper)
+		-- the note is needed while the cinema is dark: a small warm pool of light makes the sheet read from across the
+		-- room (no L4Zone on its holder, so the Light Director never switches it)
+		local glowConfig = Configuration.Sequence.NoteGlow
+		if glowConfig then
+			-- a little in front of the written face (the sheet's +Y), so the sheet itself is lit, not only its surroundings
+			local mount = Instance.new("Attachment")
+			mount.Name = "L4NoteGlowMount"
+			mount.Position = Vector3.new(0, glowConfig.Lift or 1.2, 0)
+			mount.Parent = paper
+			local glow = Instance.new("PointLight")
+			glow.Name = "L4NoteGlow"
+			glow.Color = glowConfig.Color or Color3.fromRGB(255, 226, 170)
+			glow.Range = glowConfig.Range or 8
+			glow.Brightness = glowConfig.Brightness or 1
+			glow.Shadows = false
+			glow.Parent = mount
+		end
+		local prompt = makePrompt(paper, "Read", "Note", 0, Configuration.Sequence.NotePromptDistance)
+		prompt.Exclusivity = Enum.ProximityPromptExclusivity.AlwaysShow   -- a reel can lie right next to the note
+		connect(prompt.Triggered, function(player)
+			if not canUse(player, prompt) then return end
+			player:SetAttribute("Level4_NoteOrder", order)
+			cue(player, { Type = "Note", Text = text })
+		end)
+	end
 	note.Parent = runtime
 	own(note)
+	manifest.NotePosition = spot.Position   -- setupReels keeps reels off the note (it runs right after)
 	setState("Level4_NotePosition", spot.Position)
 end
 
@@ -383,7 +459,7 @@ local function setupSwitches()
 	sequenceProgress = 0
 	setState("Level4_SequenceGoal", #sequence)
 	setState("Level4_SequenceProgress", 0)
-	placeNote("POWER\n" .. table.concat(sequence, "  >  ") .. "\n\n- in this order -")
+	placeNote("POWER\n" .. table.concat(sequence, "  >  ") .. "\n\n- in this order -", table.concat(sequence, " > "))
 end
 
 -- ---------------------------------------------------------------- 2. reels
@@ -419,9 +495,14 @@ local function reelModel(record)
 		can.Material = Enum.Material.Metal
 		can.Parent = model
 		model.PrimaryPart = can
+		model:SetAttribute("L4RestRoll", 90)   -- the disc's axis is X: roll it to lie flat (the template already does)
 	end
 	model.Name = "L4FilmReel_" .. record.Id
-	local scale = Configuration.Reels.Scale or 1
+	-- the locked prize reel keeps the template size: a scaled can does not fit between the prize case's glass shelves;
+	-- a crowded spot can ask for a size of its own (Configuration.SpotTweaks)
+	local tweak = record.Spot and (Configuration.SpotTweaks or {})[record.Spot.Name]
+	local scale = (record.Locked and record.State == "WORLD") and 1 or (Configuration.Reels.Scale or 1)
+	if record.State == "WORLD" and tweak and tweak.Scale then scale = tweak.Scale end
 	if scale ~= 1 then model:ScaleTo(model:GetScale() * scale) end
 	for _, d in ipairs(model:GetDescendants()) do
 		if d:IsA("BasePart") then d.CanCollide = false; d.CanQuery = false; d.CanTouch = false; d.Massless = true end
@@ -431,17 +512,25 @@ local function reelModel(record)
 	return model
 end
 
-local REEL_LIFT = 0.35 * (Configuration.Reels.Scale or 1)
+-- the top face of a reel spot marker (the marker sits just under the surface it marks)
+local function spotSurface(spot)
+	local tweak = (Configuration.SpotTweaks or {})[spot.Name]
+	return spot.CFrame * CFrame.new(0, spot.Size.Y / 2, 0) * CFrame.new(tweak and tweak.Offset or Vector3.zero)
+end
 
-local function placeReelInWorld(record, cf)
+-- surface: a CFrame ON the surface (position + yaw). FINDABILITY_20261003: the film can lies flat and rests on the
+-- surface by its bounding box -- it used to stand on edge with ~40% of it sunk into the counter/shelf/seat below.
+local function placeReelInWorld(record, surface)
 	if record.Model then record.Model:Destroy() end
 	local model = reelModel(record)
-	model:PivotTo(cf)
+	model:PivotTo(surface * CFrame.Angles(0, 0, math.rad(model:GetAttribute("L4RestRoll") or 0)))
+	seatOn(model, surface.Position.Y)
 	for _, d in ipairs(model:GetDescendants()) do if d:IsA("BasePart") then d.Anchored = true end end
 	model.Parent = runtime
 	own(model)
 	record.Model = model
 	local part = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
+	glint(part)
 	record.Prompt = makePrompt(part, "Pick up", "Film reel", 0.4, Configuration.Reels.PromptDistance)
 	record.Prompt.Enabled = not record.Locked
 	connect(record.Prompt.Triggered, function(player) Objectives.PickUp(player, record) end)
@@ -484,10 +573,21 @@ local function dropReels(player, position)
 			-- no floor under the drop (a fall into the void): the reel goes home, it can never be lost
 			local base = position and floorBelow(position)
 			if base then
-				placeReelInWorld(r, CFrame.new(base + Vector3.new((dropped - 1) * 1.6 * (Configuration.Reels.Scale or 1), REEL_LIFT, 0)) * CFrame.Angles(0, math.random() * 6.28, math.rad(90)))
+				-- each further reel a step around the first, on the floor under its own spot
+				local angle = (dropped - 1) * 2.1
+				local offset = dropped > 1 and Vector3.new(math.cos(angle), 0, math.sin(angle)) * 2.4 * (Configuration.Reels.Scale or 1)
+					or Vector3.zero
+				if offset ~= Vector3.zero then
+					local params = RaycastParams.new()
+					params.FilterType = Enum.RaycastFilterType.Include
+					params.FilterDescendantsInstances = { manifest.World:FindFirstChild("Collision") or manifest.World }
+					if workspace:Raycast(position, offset, params) then offset = Vector3.zero end   -- never through a wall
+				end
+				base = floorBelow(position + offset) or base
+				placeReelInWorld(r, CFrame.new(base) * CFrame.Angles(0, math.random() * 6.28, 0))
 			else
 				r.State = "WORLD"
-				placeReelInWorld(r, r.Spot.CFrame * CFrame.new(0, REEL_LIFT, 0) * CFrame.Angles(0, 0, math.rad(90)))
+				placeReelInWorld(r, spotSurface(r.Spot))
 			end
 		end
 	end
@@ -498,12 +598,34 @@ local function setupReels()
 	table.clear(reels)
 	local spots = table.clone(manifest.ReelSpots)
 	local rng = Random.new()
-	for i = 1, math.min(Configuration.Reels.Goal, #spots) do
-		local j = rng:NextInteger(1, #spots)
-		local spot = table.remove(spots, j)
+	for i = #spots, 2, -1 do
+		local j = rng:NextInteger(1, i)
+		spots[i], spots[j] = spots[j], spots[i]
+	end
+	-- FINDABILITY_20261003: random spots, but at most MaxHard hard ones (topped up from the rest on a smaller map)
+	local goal = Configuration.Reels.Goal
+	local maxHard = Configuration.Reels.MaxHard or goal
+	local chosen, hard = {}, 0
+	local note = manifest.NotePosition
+	for _, spot in ipairs(spots) do
+		if #chosen >= goal then break end
+		local isHard = table.find(Configuration.Reels.HardSpots or {}, spot.Name) ~= nil
+		local onNote = note and (spot.Position - note).Magnitude < 5   -- the cafe reel spot is 1.7 studs from the note's
+		if not onNote and (not isHard or hard < maxHard) then
+			chosen[#chosen + 1] = spot
+			if isHard then hard += 1 end
+		end
+	end
+	for _, spot in ipairs(spots) do
+		if #chosen >= goal then break end
+		if not table.find(chosen, spot) then chosen[#chosen + 1] = spot end
+	end
+	for i, spot in ipairs(chosen) do
 		local record = { Id = i, State = "WORLD", Spot = spot, Locked = spot:GetAttribute("Locked") == true }
 		reels[i] = record
-		placeReelInWorld(record, spot.CFrame * CFrame.new(0, REEL_LIFT, 0) * CFrame.Angles(0, 0, math.rad(90)))
+		placeReelInWorld(record, spotSurface(spot))
+		-- a reel never waits in one of the zones that stay dark for the whole Failing phase (chosen at power-up)
+		if manifest.ProtectedLightPoints then table.insert(manifest.ProtectedLightPoints, spot.Position) end
 	end
 	setState("Level4_ReelGoal", #reels)
 	setState("Level4_ReelsCollected", 0)
@@ -763,7 +885,7 @@ function Objectives.StartFinale()
 	espTag(manifest.ExitScreen, "Exit")
 	if manifest.ExitScreen then setState("Level4_ExitPosition", manifest.ExitScreen.Position) end
 	if Usher then Usher.Finale() end
-	cue(nil, { Type = "Finale", Credits = Configuration.Finale.CreditsSeconds })
+	cue(nil, { Type = "Finale" })
 end
 
 local function insideBox(part, position, depthSlack)
@@ -819,7 +941,8 @@ local function setupArcade()
 		label.Font = Enum.Font.Arcade
 		label.TextColor3 = Color3.fromRGB(80, 255, 230)
 		label.TextScaled = true
-		label.Text = "HI-SCORE\n1. ZEN  " .. arcadeCode .. "0\n2. KRL  41210\n3. ???  00000"
+		-- owner 2026-10-03: only the four digits that count are shown as the high score
+		label.Text = "HI-SCORE\n\nZEN  " .. arcadeCode
 		label.Parent = gui
 	end
 	local prompt = makePrompt(keypad, "Enter code", "Prize case", 0, Configuration.Bonus.KeypadDistance)
@@ -947,7 +1070,7 @@ local function heartbeat()
 			end
 			if (r.State == "WORLD" or r.State == "DROPPED") and not (r.Model and r.Model.Parent) then
 				r.State = "WORLD"
-				placeReelInWorld(r, r.Spot.CFrame * CFrame.new(0, REEL_LIFT, 0) * CFrame.Angles(0, 0, math.rad(90)))
+				placeReelInWorld(r, spotSurface(r.Spot))
 			end
 		end
 		-- prompts follow the breaker state for clarity
@@ -1043,6 +1166,7 @@ function Objectives.Stop()
 		player:SetAttribute("Level4_CarrySpeedFactor", nil)
 		player:SetAttribute("Level4_Hidden", nil)
 		player:SetAttribute("Level4_BatteryRefill", nil)
+		player:SetAttribute("Level4_NoteOrder", nil)
 		local character = player.Character
 		if character then
 			for _, child in ipairs(character:GetChildren()) do

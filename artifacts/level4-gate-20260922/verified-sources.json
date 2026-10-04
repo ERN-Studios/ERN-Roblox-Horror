@@ -1,0 +1,39 @@
+{
+  "placeId": 131311258779917,
+  "baselinePlaceVersion": 1986,
+  "published": false,
+  "scripts": [
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "instance": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sha256": "bb3d96e6ffcefde36d22f20b6ffd0ca125d70e765dc088f114a0d0531f7d4bd2",
+      "bytes": 160153,
+      "sourceEditorParity": true
+    },
+    {
+      "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+      "instance": "ServerScriptService.TunnelLobbyBuilder",
+      "class": "ModuleScript",
+      "sha256": "98a7d70dbaba096d2411711e36088b5bcc17452cbd047c18364bf0bdc4269e09",
+      "bytes": 103347,
+      "sourceEditorParity": true
+    },
+    {
+      "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
+      "instance": "ServerScriptService.Round Completion Routing",
+      "class": "ModuleScript",
+      "sha256": "db1cffcde94a4ac139b223ecedcbddc4c67b3227590c1980a1b0d4c99872db07",
+      "bytes": 77013,
+      "sourceEditorParity": true
+    },
+    {
+      "file": "ServerScriptService/Level4GateAccess.Script.lua",
+      "instance": "ServerScriptService.Level4GateAccess",
+      "class": "Script",
+      "sha256": "7363338a0422d1d4a2b0b0d3a0f123878a22370ace464fd45d47a3b945aefb61",
+      "bytes": 2857,
+      "sourceEditorParity": true
+    }
+  ]
+}

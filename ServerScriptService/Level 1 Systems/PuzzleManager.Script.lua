@@ -120,10 +120,11 @@ local function previewWireHits(a, b, box)
 	return true
 end
 
-local function previewWirePlan(a, b, boxes)
+local function previewWirePlan(a, b, boxes, padding)
+	padding = padding or 4
 	local nearby = {}
-	local minX, maxX = math.min(a.X, b.X) - 4, math.max(a.X, b.X) + 4
-	local minZ, maxZ = math.min(a.Z, b.Z) - 4, math.max(a.Z, b.Z) + 4
+	local minX, maxX = math.min(a.X, b.X) - padding, math.max(a.X, b.X) + padding
+	local minZ, maxZ = math.min(a.Z, b.Z) - padding, math.max(a.Z, b.Z) + padding
 	for _, box in ipairs(boxes) do
 		if box.maxX >= minX and box.minX <= maxX and box.maxZ >= minZ and box.minZ <= maxZ
 			and math.min(a.Y, b.Y) - .05 <= box.maxY and math.max(a.Y, b.Y) + .05 >= box.minY then
@@ -314,7 +315,7 @@ local function canUsePrompt(player, prompt, model)
 		return false
 	end
 
-	-- relay prompts hang off an Attachment on the cabinet door; box and lever
+	-- relay prompts hang off an Attachment on the relay body; box and lever
 	-- prompts sit directly on a BasePart
 	local host = prompt.Parent
 	local target
@@ -537,7 +538,7 @@ local function updateCarriedFuse(player, count)
 		Brightness = 0.35,
 		Range = 5,
 	}):Play()
-	if workspace:GetAttribute("Level1BlenderPreviewActive") == true then
+	if workspace:GetAttribute("Level1BlenderActive") == true then
 		require(script.Parent:WaitForChild("BlenderRoomRenderer")).SkinCarriedFuse(visual)
 	end
 end
@@ -772,8 +773,14 @@ local function makeFuseRelay(cf, folder)
 	local door = relayPart("RelayDoor", Vector3.new(5.15, 6.25, 0.2), CFrame.new(0, 0, -1.42),
 		Color3.fromRGB(38, 41, 40), Enum.Material.DiamondPlate, 0.18)
 	door.CanCollide = false
-	local openDoorCF = cf * CFrame.new(-2.58, 0, -1.42)
-		* CFrame.Angles(0, math.rad(-86), 0) * CFrame.new(2.58, 0, 0)
+	door.CanQuery = false -- a door swung open on a client must not block the prompt's line of sight
+	-- The hinge is on -X; +86 swings the door out into the room (-Z faces the room).
+	-- Level 1 Hardware Client animates the same swing from these attributes.
+	local doorHinge = cf * CFrame.new(-2.58, 0, -1.42)
+	local openDoorCF = doorHinge * CFrame.Angles(0, math.rad(86), 0) * CFrame.new(2.58, 0, 0)
+	model:SetAttribute("DoorHinge", doorHinge)
+	model:SetAttribute("DoorHingeOffset", 2.58)
+	model:SetAttribute("DoorOpenDegrees", 86)
 
 	local core = relayPart("Fuse", Vector3.new(0.9, 2.65, 0.72), CFrame.new(0, -0.35, -1.25),
 		Color3.fromRGB(218, 174, 38), Enum.Material.Neon)
@@ -808,6 +815,7 @@ local function makeFuseRelay(cf, folder)
 	local handle = relayPart("ReleaseHandle", Vector3.new(0.38, 1.7, 0.38), CFrame.new(-1.85, 0.15, -1.72)
 		* CFrame.Angles(0, 0, math.rad(-18)), Color3.fromRGB(184, 116, 31), Enum.Material.Metal)
 	handle.CanCollide = false
+	handle.CanQuery = false
 
 	local labelPlate = relayPart("RelayLabel", Vector3.new(3.25, 0.72, 0.16), CFrame.new(-0.35, 2.35, -1.55),
 		Color3.fromRGB(13, 16, 15), Enum.Material.Metal)
@@ -838,11 +846,12 @@ local function makeFuseRelay(cf, folder)
 		weld.Parent = doorControl
 	end
 
-	-- Put the prompt on the visible front face instead of the recessed body.
+	-- The prompt sits just in front of the closed door face but hangs off the body, so the door can
+	-- swing open on clients during the hold without carrying the prompt away.
 	local promptPoint = Instance.new("Attachment")
 	promptPoint.Name = "InteractionPoint"
-	promptPoint.Position = Vector3.new(0, 0, -0.18)
-	promptPoint.Parent = door
+	promptPoint.Position = Vector3.new(0, 0, -1.17)
+	promptPoint.Parent = body
 	local prompt = makePrompt(promptPoint, "Extract fuse", "ZYNTRA power relay", 10)
 	prompt.HoldDuration = RELAY_HOLD_TIME
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
@@ -1069,6 +1078,15 @@ local function showFuseInBox(box, index)
 	game:GetService("Debris"):AddItem(insertSound, 3)
 end
 
+-- The rod pivots on the hub: the LeverShell's copper bearing cap lands at y .015 on the rim face once
+-- SkinGroup fits the shell to Plate+Rim. Degrees about the wall X axis: 0 = straight up, -90 = straight
+-- out into the room. The lever rests UP and is thrown DOWN (Level 1 Hardware Client animates the throw).
+local LEVER_HINGE = CFrame.new(0, 0.015, -0.72)
+local LEVER_UP, LEVER_DOWN = -25, -155
+local function leverHandleCF(cf, degrees)
+	return cf * LEVER_HINGE * CFrame.Angles(math.rad(degrees), 0, 0) * CFrame.new(0, 1.225, 0)
+end
+
 local function makeLever(cf, folder)
 	local model = Instance.new("Model")
 	model.Name = "Lever"
@@ -1084,8 +1102,9 @@ local function makeLever(cf, folder)
 	handle.Anchored = true
 	handle.Material = Enum.Material.Metal
 	handle.Color = Color3.fromRGB(150, 35, 28)
-	handle.CFrame = cf * CFrame.new(0, 0.25, -1.0) * CFrame.Angles(math.rad(35), 0, 0)
+	handle.CFrame = leverHandleCF(cf, LEVER_UP)
 	handle.CanQuery = false
+	handle.CanCollide = false -- the throw must never shove a player; Interact owns the prompt
 	handle.Parent = model
 
 	local knob = Instance.new("Part")
@@ -1140,6 +1159,9 @@ local function makeLever(cf, folder)
 	pullSound.RollOffMaxDistance = 45
 	pullSound.Parent = plate
 
+	model:SetAttribute("LeverHinge", cf * LEVER_HINGE)
+	model:SetAttribute("LeverUp", LEVER_UP)
+	model:SetAttribute("LeverDown", LEVER_DOWN)
 	model.Parent = folder
 	return { model = model, cf = cf, plate = plate, handle = handle, knob = knob,
 		prompt = pp, statusLight = statusLight, statusLabel = statusLabel,
@@ -1147,9 +1169,10 @@ local function makeLever(cf, folder)
 end
 
 local function setLeverHandle(lever, pulled)
-	local a = pulled and -35 or 35
-	lever.handle.CFrame = lever.cf * CFrame.new(0, 0.25, -1.0) * CFrame.Angles(math.rad(a), 0, 0)
+	lever.handle.CFrame = leverHandleCF(lever.cf, pulled and LEVER_DOWN or LEVER_UP)
 	if lever.knob then lever.knob.CFrame = lever.handle.CFrame * CFrame.new(0, 1.25, 0) end
+	-- Clients play the throw; this final pose is what anyone who missed it sees.
+	if pulled then status:FireAllClients("leverpull", lever.model) end
 end
 
 local function makeExit(cf, folder)
@@ -1200,7 +1223,7 @@ local function makeExit(cf, folder)
 	htext.Size = UDim2.fromScale(1, 1)
 	htext.BackgroundTransparency = 1
 	htext.Font = Enum.Font.Code
-	local previewDoor = workspace:GetAttribute("Level1BlenderPreviewActive") == true
+	local previewDoor = workspace:GetAttribute("Level1BlenderActive") == true
 	sign.CanCollide = previewDoor
 	htext.Text = previewDoor and "EXIT LOCKED" or "ENERGY TRANSFER GATE"
 	htext.TextColor3 = Color3.fromRGB(90, 255, 135)
@@ -1218,7 +1241,11 @@ local function makeExit(cf, folder)
 	trig.CanCollide = false
 	trig.Transparency = 1
 	model.Parent = folder
-	if previewDoor then require(script.Parent:WaitForChild("BlenderRoomRenderer")).MakeExitAperture(model,cf) end
+	if previewDoor then
+		-- A failed wall cut must never cost the exit: the door still opens onto the Trigger in front of the wall.
+		local ok, problem = pcall(require(script.Parent:WaitForChild("BlenderRoomRenderer")).MakeExitAperture, model, cf)
+		if not ok then warn("[PuzzleManager] exit aperture failed: " .. tostring(problem)) end
+	end
 	return { model = model, sign = sign, light = light, trig = trig, open = false,
 		headerLabel = htext, openDoorCF = previewDoor and sign.CFrame * CFrame.new(3.5, 0, 0)
 			* CFrame.Angles(0, math.rad(-95), 0) * CFrame.new(-3.5, 0, 0) or nil }
@@ -1280,6 +1307,7 @@ end
 
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
+	workspace:SetAttribute("Level1RelaysExtracted", nil)
 	surfaceLightCache = nil -- the maze (and its lights) is rebuilt every round
 	if not session then
 		workspace:SetAttribute("Level1ActiveCircuitCount", nil)
@@ -1324,6 +1352,7 @@ local function startPuzzle()
 	-- deliberately tied to the frozen puzzle session, not total server players,
 	-- so spectators and players who join later cannot advertise nonexistent cables.
 	workspace:SetAttribute("Level1ActiveCircuitCount", boxCount)
+	workspace:SetAttribute("Level1RelaysExtracted", 0)
 	local fusesNeeded = boxCount * FUSES_PER_BOX
 	local fuseCount = fusesNeeded * SPAWN_MULT
 	-- SMALL_PARTY_RELAYS_20260922 (Trello JYiwjBxw): a party of 1-3 gets half
@@ -1431,10 +1460,9 @@ local function startPuzzle()
 			if not canUsePrompt(player, relay.prompt, relay.model) then return end
 			local extractionRecord = owningSession.fuseCharacters[player]
 			local extractionPosition = player.Character.HumanoidRootPart.Position
-			local extractionHandleCF = relay.handle.CFrame
-			local extractionFuseFrames = {}
-			for _, part in ipairs(relay.fuseParts) do extractionFuseFrames[part] = part.CFrame end
 			relay.extracting = true
+			-- Clients swing the door open and fly the fuse to whoever took it (Level 1 Hardware Client).
+			status:FireAllClients("relayextract", relay.model, player)
 			relay.prompt.Enabled = false
 			relay.label.Text = "RELEASING  //  STAND BY"
 			relay.hum:Stop()
@@ -1464,17 +1492,6 @@ local function startPuzzle()
 			electricalSnap:Play()
 			Debris:AddItem(electricalSnap, 3)
 
-			TweenService:Create(relay.door, TweenInfo.new(0.34, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-				CFrame = relay.openDoorCF,
-			}):Play()
-			TweenService:Create(relay.handle, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-				CFrame = relay.handle.CFrame * CFrame.Angles(0, 0, math.rad(58)),
-			}):Play()
-			for _, fusePart in ipairs(relay.fuseParts) do
-				TweenService:Create(fusePart, TweenInfo.new(0.48, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-					CFrame = fusePart.CFrame * CFrame.new(0, 0, -2.35),
-				}):Play()
-			end
 			relay.flickerAndRelease()
 
 			for _ = 1, 10 do
@@ -1501,8 +1518,7 @@ local function startPuzzle()
 				if session ~= owningSession or not session.active or not relay.model.Parent or relay.extracted then return end
 				if not finishFuseExtraction(owningSession, player, extractionRecord, extractionPosition) then
 					-- No verified floor: keep this one fuse in its relay for another attempt.
-					for part, pose in pairs(extractionFuseFrames) do if part.Parent then part.CFrame = pose end end
-					relay.handle.CFrame = extractionHandleCF
+					status:FireAllClients("relayrestore", relay.model)
 					relay.extracting = false
 					relay.prompt.Enabled = true
 					relay.label.Text = "FUSE READY  //  EXTRACT"
@@ -1511,6 +1527,8 @@ local function startPuzzle()
 				end
 				relay.extracted = true
 				relay.model:SetAttribute("ContainsFuse", false)
+				workspace:SetAttribute("Level1RelaysExtracted", (workspace:GetAttribute("Level1RelaysExtracted") or 0) + 1)
+				relay.door.CFrame = relay.openDoorCF
 				for _, fusePart in ipairs(relay.fuseParts) do
 					if fusePart.Parent then fusePart:Destroy() end
 				end
@@ -1773,7 +1791,7 @@ local function startPuzzle()
 	local wirePits = pitRects()        -- pit fields a floor cable can't cross
 	local mazeModel = workspace:FindFirstChild("Maze")
 	local WIRE_LANE_GAP = 0.55         -- cable width .25: leaves a visible gap between routes
-	local previewWires = workspace:GetAttribute("Level1BlenderPreviewActive") == true
+	local previewWires = workspace:GetAttribute("Level1BlenderActive") == true
 	local wireObstacles = previewWires and mazeModel and previewWireObstacles(mazeModel,
 		workspace:FindFirstChild("Decor"), wirePits, WALLHn) or nil
 
@@ -1932,7 +1950,13 @@ local function startPuzzle()
 	local function layPiece(a, b, color)
 		local function emit(p, q)
 			if wireObstacles then
-				local path = assert(previewWirePlan(p, q, wireObstacles), "Preview cable has no collision-free detour")
+				local path = previewWirePlan(p, q, wireObstacles)
+					or previewWirePlan(p, q, wireObstacles, 12)
+					or previewWirePlan(p, q, wireObstacles, 24)
+				if not path then -- degrade to a straight run rather than abort the round
+					warn(("[PuzzleManager] cable has no collision-free detour (%s -> %s); laying it straight"):format(tostring(p), tostring(q)))
+					path = {p, q}
+				end
 				for index = 1, #path - 1 do makeRawPiece(path[index], path[index+1], color) end
 			else makeRawPiece(p, q, color) end
 		end
@@ -2128,7 +2152,6 @@ local function startPuzzle()
 		local gx, gz = frontCell(toCF)
 		local cells = gridPath(sx, sz, gx, gz)
 		if not cells or (#cells < 2 and not previewWires) then
-			assert(not previewWires, "Preview circuit has no open maze route")
 			layWireDirect(fromCF, toCF, color, connectStart, laneIndex, terminalPosition) -- BFS failed → guarantee a wire
 			return
 		end
@@ -2146,7 +2169,8 @@ local function startPuzzle()
 			-- +/-3 lanes. Keep every cell step instead of cutting across corners.
 			local offset = -math.min(2, CELLn * .125) + math.max((laneIndex or 1) - 1, 0) * WIRE_LANE_GAP
 			for _, point in ipairs(W) do
-				local clear = assert(previewWirePoint(point + Vector3.new(offset, .06, offset), wireObstacles), "Preview cable cell is obstructed")
+				local raw = point + Vector3.new(offset, .06, offset)
+				local clear = previewWirePoint(raw, wireObstacles) or raw -- an obstructed cell keeps its lane point
 				verts[#verts+1] = Vector3.new(clear.X, 0, clear.Z)
 			end
 		else

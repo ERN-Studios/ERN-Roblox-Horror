@@ -1,0 +1,607 @@
+{
+  "id": "finale-hesitate",
+  "result": {
+    "audio": {
+      "sounds": [
+        {
+          "id": "rbxassetid://75285146479953",
+          "path": "Workspace.Level 3 Generated World.Corridors.Level 3 Corridor 31 SignalHall-Exit.Level 3 Exit Corridor PA Speaker 03.PA Speaker Emitter.Level 3 Room Song Speaker",
+          "volume": 0.163972869515419,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://75285146479953",
+          "path": "Workspace.Level 3 Generated World.Corridors.Level 3 Corridor 31 SignalHall-Exit.Level 3 Exit Corridor PA Speaker 04.PA Speaker Emitter.Level 3 Room Song Speaker",
+          "volume": 0.25274717807769775,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://9125446543",
+          "path": "Workspace.Level 3 Generated World.Ambient Emitters.Level 3 HVAC Bed.Level 3 HVAC Bed",
+          "volume": 0.004000002983957529,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://105088070261380",
+          "path": "Workspace.Level 3 Generated World.Mall Manager Runtime.Mall Manager.char1.Hips.Spine02.Spine01.Spine.neck.Head.Mall Manager Chase Scream 1",
+          "volume": 1.25,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://128260682244977",
+          "path": "Workspace.Level 3 Generated World.Mall Manager Runtime.Mall Manager.HumanoidRootPart.Mall Manager Footstep Emitter.Mall Manager Walk Sound 4",
+          "volume": 2,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://131363472955449",
+          "path": "Workspace.Level 3 Generated World.Mall Manager Runtime.Mall Manager.HumanoidRootPart.Mall Manager Footstep Emitter.Mall Manager Walk Sound 3",
+          "volume": 2,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player1.HumanoidRootPart.Running",
+          "volume": 0,
+          "playing": false
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player2.HumanoidRootPart.Running",
+          "volume": 0,
+          "playing": false
+        },
+        {
+          "id": "rbxassetid://133003345144597",
+          "path": "SoundService.Sound",
+          "volume": 0.6799997687339783,
+          "playing": true
+        }
+      ],
+      "guis": [
+        {
+          "visible": true,
+          "path": "Players.Player2.PlayerGui.SpectateGui.TextLabel",
+          "text": "POV: Player1  (Q / E to switch)",
+          "active": false
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectatePrevious",
+          "text": "\u2039",
+          "active": false
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectateNext",
+          "text": "\u203a",
+          "active": false
+        },
+        {
+          "visible": true,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectateBackToLobby",
+          "text": "BACK TO LOBBY",
+          "active": true
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectatorCounter",
+          "text": "",
+          "active": false
+        }
+      ],
+      "name": "Player2",
+      "position": [
+        6194.01513671875,
+        24.618581771850586,
+        -87.9039535522461
+      ],
+      "stamina": {
+        "visible": true,
+        "alpha": 1,
+        "fraction": 1,
+        "position": [
+          299,
+          491
+        ]
+      },
+      "attributes": {
+        "ZyntraFirstLogin": false,
+        "Crouching": false,
+        "ZyntraLobbyBriefingPlayed": true,
+        "LevelThreeBriefingActive": false,
+        "CaptionsEnabled": true,
+        "ZyntraReentryCredits": 0,
+        "ZyntraRecordedSupportRobux": 0,
+        "ZyntraDispatchClientActive": false,
+        "DisableCaptions": false,
+        "Escaped": true,
+        "SpectateBattery": 1,
+        "Level3_HeldCDMask": 0,
+        "ZyntraHazmatColor": null,
+        "ZyntraStaminaMultiplier": 1.05,
+        "ZyntraDonationRobux": 0,
+        "GlowstickSlot": 2,
+        "ReduceCameraShake": false,
+        "ZyntraReentryUsed": false,
+        "ReduceFlashing": false,
+        "ZyntraUtilityRobux": 0,
+        "ZyntraMuteDispatch": false,
+        "LevelOneBriefingActive": false,
+        "ZyntraDispatchPreferenceLoaded": true,
+        "GlowstickColor": null,
+        "RoundEntryUIReady": true,
+        "Spectating": true,
+        "Level3_HeldCDCount": 0,
+        "SpectateStamina": 1,
+        "ZyntraGlowstickColor": null,
+        "LobbyBriefingSkipped": false,
+        "ZyntraOwnsCosmeticEquipment": true,
+        "ZyntraOwnsAdvancedEquipment": true,
+        "LobbyBriefingPlayed": true,
+        "Level3_HideTableIndex": 0,
+        "ZyntraBatteryMultiplier": 1.05,
+        "LocalCrouching": false,
+        "ZyntraReentryProductId": 3707755318,
+        "ZyntraOwnsSupporter": true,
+        "QueueModalOpen": false,
+        "ZyntraProfileLoaded": true,
+        "DevFastQueue": true,
+        "RoundEntryControlsReady": true,
+        "InRound": true,
+        "Level3_Hiding": false,
+        "LevelTwoBriefingActive": false,
+        "SpectateTargetUserId": -1,
+        "Level3_HideGeneration": 0,
+        "ZyntraReentryPrice": 29,
+        "Stamina": 1,
+        "LobbyMusicEnabled": true,
+        "DispatchBriefingOpen": false,
+        "LobbyBriefingActive": false
+      },
+      "battery": {
+        "visible": true,
+        "bars": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "userId": -2
+    },
+    "elapsed": 13.566319500001555,
+    "samples": [
+      {
+        "runner": [
+          6664.09716796875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 0.03200910000123258,
+        "escaped": false,
+        "health": 100
+      },
+      {
+        "runner": [
+          6671.369140625,
+          27.605484008789062,
+          486.996337890625
+        ],
+        "time": 0.533291100000497,
+        "entity": [
+          6229.31298828125,
+          28.10005760192871,
+          -89.61941528320312
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6686.19580078125,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 1.067500300001484,
+        "entity": [
+          6374.646484375,
+          28.10005760192871,
+          -89.81967163085938
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6700.67333984375,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 1.5828264000010677,
+        "entity": [
+          6420.07861328125,
+          28.10005760192871,
+          15.629768371582031
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6714.41162109375,
+          27.60548210144043,
+          486.9963684082031
+        ],
+        "time": 2.1167909000014333,
+        "entity": [
+          6514.56396484375,
+          28.10005760192871,
+          90.57437896728516
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6728.02587890625,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 2.632406800001263,
+        "entity": [
+          6495.794921875,
+          28.10005760192871,
+          207.9425811767578
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6740.8818359375,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 3.1497777000004135,
+        "entity": [
+          6521.404296875,
+          28.10005760192871,
+          352.6749267578125
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6754.8095703125,
+          27.605484008789062,
+          486.996337890625
+        ],
+        "time": 3.6668731000008847,
+        "entity": [
+          6522,
+          28.10005760192871,
+          436.7843322753906
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6768.1845703125,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 4.199762400001418,
+        "entity": [
+          6592.31396484375,
+          28.10005760192871,
+          487
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 360
+      },
+      {
+        "runner": [
+          6782.080078125,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 4.716718900001069,
+        "entity": [
+          6676.65869140625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6795.89990234375,
+          27.605484008789062,
+          486.996337890625
+        ],
+        "time": 5.265531100001681,
+        "entity": [
+          6693.79736328125,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6809.59912109375,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 5.782585900000413,
+        "entity": [
+          6709.900390625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6822.67724609375,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 6.29928370000016,
+        "entity": [
+          6726.0361328125,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6836.69091796875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 6.816571700001077,
+        "entity": [
+          6742.14013671875,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6850.15576171875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 7.34930870000062,
+        "entity": [
+          6758.79345703125,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6863.60986328125,
+          27.605480194091797,
+          486.996337890625
+        ],
+        "time": 7.850321100000656,
+        "entity": [
+          6774.35986328125,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6876.90478515625,
+          27.605484008789062,
+          486.996337890625
+        ],
+        "time": 8.38290380000035,
+        "entity": [
+          6791.05126953125,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6890.79150390625,
+          27.605480194091797,
+          486.996337890625
+        ],
+        "time": 8.900193400000717,
+        "entity": [
+          6807.166015625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6904.552734375,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 9.449506500001007,
+        "entity": [
+          6824.373046875,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6918.53173828125,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 9.965722400000232,
+        "entity": [
+          6840.41650390625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6932.39306640625,
+          27.605480194091797,
+          486.996337890625
+        ],
+        "time": 10.515428400000019,
+        "entity": [
+          6857.591796875,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6946.1923828125,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 11.048331300000427,
+        "entity": [
+          6874.263671875,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6945.26904296875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 11.548690200001147,
+        "entity": [
+          6889.87744140625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6945.26904296875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 12.048778800000946,
+        "entity": [
+          6905.435546875,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6945.26904296875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 12.565353200001482,
+        "entity": [
+          6921.53369140625,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6945.26904296875,
+          27.60548210144043,
+          486.996337890625
+        ],
+        "time": 13.065654700001687,
+        "entity": [
+          6937.1474609375,
+          28.10005760192871,
+          486.99993896484375
+        ],
+        "escaped": false,
+        "health": 100,
+        "speed": 31.2
+      },
+      {
+        "runner": [
+          6945.47802734375,
+          27.25632095336914,
+          486.98175048828125
+        ],
+        "time": 13.566312100001596,
+        "entity": [
+          6942.77783203125,
+          28.10005760192871,
+          486.9964294433594
+        ],
+        "escaped": false,
+        "health": 0,
+        "speed": 5.25
+      }
+    ],
+    "escaped": false,
+    "paused": true
+  },
+  "ok": true
+}

@@ -1,0 +1,14 @@
+{
+  "before": {
+    "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/baselineOA.rbxlT.rbxl",
+    "bytes": 9448869,
+    "sha256": "1011e94bee1bb81d35f620ac11878239c1b9e67b881dee34f03653fa2c3b2f82",
+    "robloxBinaryHeaderVerified": true
+  },
+  "after": {
+    "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/Backrooms-Level5-v2026.rbxl",
+    "bytes": 9462909,
+    "sha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
+    "robloxBinaryHeaderVerified": true
+  }
+}

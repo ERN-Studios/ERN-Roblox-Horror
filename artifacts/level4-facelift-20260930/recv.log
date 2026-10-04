@@ -1,0 +1,4 @@
+npm error code ETARGET
+npm error notarget No matching version found for ruflo@3.47.1.
+npm error notarget In most cases you or one of your dependencies are requesting a package version that doesn't exist.
+npm error A complete log of this run can be found in: C:\Users\mikke\AppData\Local\npm-cache\_logs\2026-09-30T17_00_36_804Z-debug-0.log

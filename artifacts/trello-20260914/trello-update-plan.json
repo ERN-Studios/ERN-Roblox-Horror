@@ -1,0 +1,80 @@
+[
+  {
+    "url": "O0h3ag8I",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25608ba83c505c95e8bd4",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nResearch færdig. Forslag: route-marker pack (2 tokens for 3 markører), flashlight-casings (10–20 permanent), milestone-titler (6–15), battericelle (3, engangsbrug), noise lure (4) og kosmetiske resultatrammer (8–12). Anbefalet start: markører, casings og titler. Priserne er forslag, der skal testes; ingen nye varer er implementeret, da kortet kun bad om research.\n\nForslag, begrænsninger og målepunkter: https://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/token-items-research.md\n\nFlyttes til Done."
+  },
+  {
+    "url": "53c4MFE5",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2560a94de304f6e3b02e2",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret: udviklere kan slå player ESP til i dev-menuen. Serveren kontrollerer udvikleradgang og svarer kun til den pågældende udviklers klient; markørerne er lokale og vises ikke for almindelige spectators. Verificeret i Studio med en faktisk dev-markør.\n\nFlyttes til Done: implementering og Studio-test afsluttet.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "bwyxIUz1",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa28f74f28ee42411f88578",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret: udviklere kan respawne gratis efter død uden Robux, research tokens eller re-entry credits. Adgangen kontrolleres på serveren. Studio-test gav en ny karakter med 100 health; tokens, credits og betalt re-entry-status var uændrede.\n\nFlyttes til Done: implementering og Studio-test afsluttet.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "j2JrjfkG",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa3948b39ce15a584bb1f45",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nRettet: loftlysene tænder og slukker i fem forskellige mønstre. Lysenes oprindelige tilstand gendannes, når et mønster afsluttes/afbrydes. En Color3-runtimefejl blev fundet og rettet under Studio-test. Alle fem mønstre og oprydning er verificeret; 21.940 offline assertions består.\n\nFlyttes til Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "0xPyX762",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa54161d8e3624b3beb802a",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nShop- og upgrade-indhold er gjort mindre på telefon/tablet; tab-knapperne beholder deres størrelse. Kortbredder og ikoner tilpasses telefon, tablet og mus/tastatur. Studio-layoutmatrix: 1.405 checks på 11 layouts, 0 fejl.\n\nFlyttes til Done: implementering og layoutkontrol afsluttet.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "69agyLbr",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5a3ddd3b98913804464f2",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret: en guidelinje leder nye spillere til Level 1. Første login afgøres ved den første succesfulde atomiske profiloprettelse, så spilleren ikke får guiden igen ved at forlade spillet før velkomsten er slut. Guiden stopper ved launch-zonen. Studio-preview og 33 profilchecks + 39 guidechecks består.\n\nFlyttes til Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "J67RPeIy",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa64aefe6db48d80373f4ce",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret: tæller uden spectator-navne, oprydning af gamle counts og korrekt lyd/UI for den spiller, man ser på — også når spectatoren allerede er escaped. Exit/objective-visning, stamina, batteri og read-only protection-timer følger den sete spiller. Developer ESP er stadig lokal for udvikleren.\n\nVerificeret med en rigtig lokal server og to klienter: 1 SPECTATOR WATCHING, vores custom løbelyd ved 0,68 volume og dæmpet standard-Running. HUD-test viste 37% stamina, 2/5 batteristreger og en ikke-klikbar SAFE-timer.\n\nFlyttes til Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "jhwiqOIL",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8076d031e080ec6040660",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret efter ejerens præcisering: den normale entity-logik under spillet er bevaret. Når alle 5 CD'er er afleveret, og første spiller løber ind i slutgangen, spawner entity ved starten af Level 3 og jager gennem labyrinten. Slutgangens tempo fastsættes én gang ud fra forspringet; det sænkes ikke, hvis spilleren tøver.\n\nRigtig server/to klienter: uafbrudt sprint escaped efter 23,75 sekunder med ca. 20 studs til entity. På et andet layout blev spilleren fanget efter tøven (14,55 sekunder, health 0). Ingen tidlig spawn ved CD-aflevering alene. 30 finalechecks består; normal navigation og blackout-timing består også.\n\nFlyttes til Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "tqcZqFqk",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8170ca9d00704fc203fcd",
+    "list": "Done",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nImplementeret: en synlig fysisk ring blokerer ekstra spillere, når party er fuldt. Medlemmer kan gå ud; når plads bliver ledig, fjernes ringen og collision groups gendannes.\n\nRigtig to-klienters gangtest: ekstra spiller stoppede ved radius 9,05 uden for cirklens 7,41 studs. Medlem gik ud, barrieren forsvandt, gruppen blev Default igen, og den ekstra spiller kunne gå ind til radius 0,80. 72 offline checks består.\n\nFlyttes til Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "3FGClSDh",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa6466de5d69a5e7a3b1467",
+    "list": "Testing",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nGaven er implementeret til AdminNBCRxAria (@Kecoalmutt), UserId 10152463945: +1 stamina-upgrade, +1 battery-upgrade og 10 research tokens. En permanent engangsmarkør forhindrer dobbelt tildeling; fejlet lagring kan forsøges igen. 26 checks består, og eksisterende kvitteringer/pass-rettigheder bevares.\n\nFlyttes til Testing: gaven tildeles automatisk ved spillerens næste succesfulde profil-load på den publicerede build. Faktisk levering er endnu ikke bekræftet. Done når tildelingen er verificeret.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "FON3SKNO",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa80215a5f2cfc2c59bb6cd",
+    "list": "Testing",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nBack to lobby er implementeret for både levende spillere og spectators. En rigtig to-klienters Level 1-test bekræftede retur til lobby for begge, nulstillet spectator-count og afsluttet runde.\n\nFlyttes til Testing: Level 2/3 bruger TeleportService i publicerede servere. Studio kan ikke verificere den eksterne teleport og svarer bevidst, at retur ikke er tilgængelig i denne testrunde. Efter publicering: prøv Back to lobby fra både Level 2 og Level 3, og bekræft ankomst samt oprydning. Derefter Done.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "XuxYAtTA",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5565746ee8953de105288",
+    "list": "To Do",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nUdskudt efter ejerens besked: Discord-roller/kanal/relay tager vi senere. Koden er klar, men funktionen er deaktiveret uden konfiguration. Ingen kanal, webhook, roller eller relay-deployment blev oprettet, og ingen Discord-besked blev sendt.\n\nReceipt-hook og relay består 97 + 30 checks: først efter verificeret grant, permanent receipt-deduplication, separat best-effort-notifikation og rate limiting. Købet afhænger ikke af Discord.\n\nForbliver i To Do. Når arbejdet genoptages: privat udviklerkanal + relay/Secrets, derefter et reelt testkøb med præcis én privat alert og test af receipt-retry/relay-fejl.\n\nKode og testgrundlag: commit 17a13e1 på main. Studio: 129/129 scripts kompilerer, 0 drift. Ejeren håndterer publiceringen; denne kommentar bekræfter ikke en live-udgivelse.\nhttps://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/codex-completion.md"
+  },
+  {
+    "url": "iMTZhXMy",
+    "cardId": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9d9659d329a1e64f1fedb2",
+    "list": "To Do",
+    "comment": "Codex — afslutningsstatus 14. september 2026\n\nStatus fra kontrollen 14. september: oplevelsen stod stadig til 16+ and trusted friends, Publishing tier at risk og fee Not submitted. Roblox-tælleren viste 175/250 kvalificerende spillere (data dateret 12/9). Det er ikke bekræftet yngre adgang.\n\nEjeren har nu bekræftet, at gruppeejeren IKKE har haft Plus/Premium i to sammenhængende måneder. Abonnementsvejen er derfor ikke opfyldt. Ingen betaling eller kontoændring er foretaget. Den daværende dashboardpris for valgfrit expedited review var 50.000 Robux; kortets historiske 100.000 er forældet.\n\nForbliver i To Do: afvent/opfyld Roblox' publiceringskrav, kvalificerende engagement og sikkerhedsevaluering. Done først ved faktisk bekræftet adgang til målgruppen.\n\nUndersøgelse og kilder: https://github.com/ERN-Studios/ERN-Roblox-Horror/blob/17a13e1/artifacts/trello-20260914/audience-status.md"
+  }
+]

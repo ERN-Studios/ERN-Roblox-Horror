@@ -1,0 +1,33 @@
+{
+  "scope": [
+    "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua",
+    "ReplicatedStorage/UIRegression.ModuleScript.lua",
+    "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua"
+  ],
+  "decision": "No material publication blocker found in this bounded review. Preserve all three concurrent sources.",
+  "remoteHead": "2e5cfd8",
+  "author": "Krillemand",
+  "featureCommit": "43110c6",
+  "studioSyncCommit": "2e5cfd8",
+  "exactRemoteStudioSourceParity": true,
+  "editorMatches": true,
+  "compileFailures": 0,
+  "tests": {
+    "RecordsPage": 2465,
+    "Challenges": 42,
+    "StoreCompact": 544
+  },
+  "limits": [
+    "Offline page tests do not measure real font metrics, TextBounds, actual UIDevice or rendering.",
+    "No live UI or Studio state changed in this audit."
+  ],
+  "notes": [
+    "Remote also repairs stale test harnesses previously recorded at 2c2ff2a; original audit totals remain tied to that commit.",
+    "Previously reported completion-save failure remains an independent open server bug; this read-only records tab neither introduces nor fixes it."
+  ],
+  "sourceSha256": {
+    "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+    "ReplicatedStorage/UIRegression.ModuleScript.lua": "4e975f803b3bf369729f436168fd95a13a067dab027c58ecec0d63e2cebb325f",
+    "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua": "198e780c2acc40f1154685603fa21945f4f622e63ffdf363f60e3aae69654f5b"
+  }
+}

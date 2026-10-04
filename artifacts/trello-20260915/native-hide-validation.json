@@ -1,0 +1,13 @@
+{
+  "animationId": 113160394754713,
+  "serverTrackLength": 4,
+  "serverWeight": 1,
+  "clientTrackLength": 4,
+  "clientWeight": 1,
+  "observedFrames": 130,
+  "floorClearance": 0.020212173461914062,
+  "tableClearance": 0.08828521728515781,
+  "rootDrift": 0,
+  "nativeCapture": "trello-hide-blender-runtime",
+  "otherPlayerObserver": false
+}

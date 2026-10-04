@@ -1,0 +1,35 @@
+{
+  "cards": {
+    "totalCount": 1,
+    "nodes": [
+      {
+        "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafefcd7aadf7ccfc3445e5",
+        "name": "Level 1: halve objectives, permanent lever pulls og lokalt spotting-skrig",
+        "desc": "LEVERET 20/9/2026 — publiceret v1939 kl. 16:37.\n\nLevel 1: ceil(spillere/2) par af fusebox + lever: 1–2 spillere → 1 par, 3–4 → 2, 5–6 → 3. Tælles fra den startende rundegruppe; senere tilskuere/lobbyspillere ændrer ikke antal. Alle levers bliver stående efter ét gyldigt træk; ingen timer, timeout-reset eller krav om samtidighed. HUD og guide opdateret. Den gamle voice-sætning om ti sekunder er lydløs i dens fem sekunder, med korrekt tekst.\n\nEntity: spotted-skrig afspilles kun på den spottede spillers klient, via eget serverudstedt alert-serial. Ingen fælles workspace/CHASE-fallback. Lokal SoundService-lyd, volumen 1.20 → 0.96 (−20%). Chase-loop 0.85 → 1.105 (+30%). Andre entities/ambient-lyde er uændrede.\n\n53 adfærdstjek bestået for ejerskab/stamina, 1–6 spillere, idempotente permanente levertræk og lydkrav. Native Play: fælles spotting/CHASE gav 0 skrig; eget signal gav 1 lokalt skrig ved 0.96. 8 ændrede scripts kompilerer; 147 Studio-scripts matcher source/editor. Fuld multiplayer-runde og rigtigt genjoin ikke udført.\n\nKode, fuld backup og evidens: https://github.com/ERN-Studios/ERN-Roblox-Horror/tree/codex/six-improvements-20260920/artifacts/balance-20260920",
+        "webUrl": "https://trello.com/c/DR1Isx73/125-level-1-halve-objectives-permanent-lever-pulls-og-lokalt-spotting-skrig",
+        "url": "https://trello.com/c/DR1Isx73/125-level-1-halve-objectives-permanent-lever-pulls-og-lokalt-spotting-skrig",
+        "list": {
+          "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980826fad773b14dcac79f",
+          "name": "Done"
+        },
+        "board": {
+          "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+          "name": "BACKROOMS: STAY QUIET – Development"
+        },
+        "labels": [],
+        "labelsHasMore": false,
+        "due": null,
+        "dueComplete": true,
+        "lastActivityAt": "2026-09-20T14:39:05.527Z",
+        "startedAt": null,
+        "closed": false,
+        "complete": true,
+        "members": [],
+        "comments": [],
+        "commentsHasMore": false,
+        "checklists": [],
+        "checklistsHasMore": false
+      }
+    ]
+  }
+}

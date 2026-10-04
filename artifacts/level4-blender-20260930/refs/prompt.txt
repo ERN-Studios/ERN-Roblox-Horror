@@ -1,0 +1,25 @@
+You are producing reference art for a Roblox horror game level: an abandoned 1990s multiplex cinema ("Level 4", Backrooms-style, eerie, empty, no people). The owner's existing references are attached; match their palette exactly: blood-red carpet, orange-rust stained plaster walls with peeling patches, black marble columns with gold veins, red neon cove strips, warm amber wall sconces, dark ceilings.
+
+Use your built-in image generation tool. Generate each image below as a separate image and save every result as a PNG into the current working directory with EXACTLY the given file name (copy/convert the generated file there). Do not write anything else except a final list of the saved files.
+
+Prop / object references (3/4 view, isolated on a plain dark grey studio background, whole object visible, realistic game-asset style):
+1. prop_auditorium_double_door.png - pair of padded red leather auditorium swing doors with brass push plates, round porthole windows, black steel frame, green EXIT sign above.
+2. prop_restroom_door.png - single dark wood-veneer restroom door with steel kick plate, push plate and a men/women pictogram sign.
+3. prop_service_door.png - grey painted steel service door, "STAFF ONLY" stencil, scuffed, with lever handle and a small wired-glass window.
+4. prop_cinema_seat_row.png - row of four red velvet cinema recliner seats with cupholder armrests and black plastic backs.
+5. prop_concession_counter.png - long curved concession counter with red front panels, black granite top, popcorn machine, soda fountain, menu lightbox boards above.
+6. prop_arcade_cabinet.png - worn 1990s upright arcade cabinet with glowing CRT, side art, coin door.
+7. prop_ticket_podium.png - ticket-taker podium with velvet rope stanchions.
+8. prop_projector_booth.png - old 35mm film projector with platter system in a small concrete booth.
+9. prop_wall_sconce_and_poster.png - art-deco amber wall sconce next to a lightbox movie poster frame (poster art: dark foggy road, title "LAST SHOWING").
+10. prop_restroom_stalls.png - grimy restroom interior: three toilet stall partitions (dark red laminate), sinks with mirror, cracked tiles.
+
+Seamless tileable texture maps (flat, top-down/orthographic, no perspective, no lighting gradient, perfectly tileable at the edges, square):
+11. tex_carpet_red_circles.png - dark red cinema carpet with overlapping orange-red circle pattern (like the foyer reference).
+12. tex_carpet_arcade.png - 90s arcade carpet, deep maroon with muted triangles and circles.
+13. tex_wall_orange_plaster.png - orange-rust painted plaster with water stains and peeling patches.
+14. tex_marble_black_gold.png - polished black marble with thin gold veins.
+15. tex_velvet_red.png - red velvet seat fabric.
+16. tex_tile_restroom.png - dirty off-white square ceramic tiles with dark grout.
+17. tex_ceiling_tile.png - stained acoustic drop-ceiling tiles.
+18. tex_wood_door.png - dark wood veneer.

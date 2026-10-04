@@ -462,9 +462,15 @@ print(("MazeGenerator: plaza at (%d,%d) · %d pit zone(s) at %s · elevator at (
 -- ── build geometry ────────────────────────────────────────
 local maze = Instance.new("Model")
 maze.Name = "Maze"
+-- Level 1 is the Blender world. The plain maze below is only a fallback if the kit is missing.
 local blender
-if workspace:GetAttribute("Level1BlenderPreviewActive") == true then
-	blender = require(script.Parent:WaitForChild("BlenderRoomRenderer")).Begin(maze)
+do
+	local roomRenderer = require(script.Parent:WaitForChild("BlenderRoomRenderer"))
+	if roomRenderer.IsReady() then
+		blender = roomRenderer.Begin(maze)
+	else
+		warn("[MazeGenerator] Level 1 Blender kit is not ready; building the plain maze")
+	end
 end
 
 local function part(size, cf, color, material, parent)
@@ -910,26 +916,41 @@ do
 	local STEEL      = Color3.fromRGB(184, 187, 190) -- cool commercial elevator aluminum
 	local STEEL_DARK = Color3.fromRGB(70, 75, 80)
 	local CABIN_FLOOR = Color3.fromRGB(42, 46, 50)
-	local CAB_W = 8 -- interior width — LONG and narrow, not wide
+	local CAB_W = blender and 12 or 8 -- reference cabin; legacy width retained
 
 	-- outer shell: same textured yellow walls as the rest of the maze
 	wallPart(Vector3.new(CELL, WALL_H, 2), CFrame.new(cx, WALL_H / 2, z0 + 1), elev)   -- south
 	wallPart(Vector3.new(CELL, WALL_H, 2), CFrame.new(cx, WALL_H / 2, z1 - 1), elev)   -- north
 	wallPart(Vector3.new(2, WALL_H, CELL), CFrame.new(x0 + 1, WALL_H / 2, cz), elev)   -- west (back)
-	-- east face: a BLACK elevator frame around the doors (header + side fillers)
-	-- instead of yellow wall — so from the maze it reads as a proper elevator
-	-- entrance ("there's supposed to be an elevator here"). 8-stud opening.
-	local FRAME = Color3.fromRGB(14, 14, 17)
-	local frameTop = part(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), FRAME, Enum.Material.Metal, elev)
-	local frameSideA = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), FRAME, Enum.Material.Metal, elev)
-	local frameSideB = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), FRAME, Enum.Material.Metal, elev)
-	-- The dark entrance used to stay plain black after the doors opened. Use the
-	-- same brushed-steel texture on both the maze-facing and cabin-facing sides,
-	-- so every visible part of the doorway reads as one material.
-	for _, framePart in ipairs({ frameTop, frameSideA, frameSideB }) do
-		applyTexture(framePart, ELEV_WALL_TEXTURE,
-			{ Enum.NormalId.Left, Enum.NormalId.Right }, 4,
-			Color3.fromRGB(118, 123, 128), 4)
+	-- One authored facade keeps wallpaper UVs and steel returns at their real scale.
+	if blender then
+		local function frontWall(name, width, height, y, z)
+			local wall = part(Vector3.new(width, height, 2),
+				CFrame.new(x1 - 1, y, z) * CFrame.Angles(0, math.pi / 2, 0), WALL_COLOR, nil, elev)
+			wall.Name = name
+			return wall
+		end
+		local header = frontWall("ElevatorWallpaperHeader", CELL, WALL_H - 10, (WALL_H + 10) / 2, cz)
+		local sideA = frontWall("ElevatorWallpaperSideA", 8, 10, 5, z0 + 4)
+		local sideB = frontWall("ElevatorWallpaperSideB", 8, 10, 5, z1 - 4)
+		-- .03 proud of x1: the shell walls' wallpaper end faces also lie on x1 and would z-fight.
+		blender:ElevatorExterior(elev, CFrame.new(x1 + .03, 0, cz) * CFrame.Angles(0, -math.pi / 2, 0), {header, sideA, sideB})
+	else
+		-- east face: a BLACK elevator frame around the doors (header + side fillers)
+		-- instead of yellow wall — so from the maze it reads as a proper elevator
+		-- entrance ("there's supposed to be an elevator here"). 8-stud opening.
+		local FRAME = Color3.fromRGB(14, 14, 17)
+		local frameTop = part(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), FRAME, Enum.Material.Metal, elev)
+		local frameSideA = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), FRAME, Enum.Material.Metal, elev)
+		local frameSideB = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), FRAME, Enum.Material.Metal, elev)
+		-- The dark entrance used to stay plain black after the doors opened. Use the
+		-- same brushed-steel texture on both the maze-facing and cabin-facing sides,
+		-- so every visible part of the doorway reads as one material.
+		for _, framePart in ipairs({ frameTop, frameSideA, frameSideB }) do
+			applyTexture(framePart, ELEV_WALL_TEXTURE,
+				{ Enum.NormalId.Left, Enum.NormalId.Right }, 4,
+				Color3.fromRGB(118, 123, 128), 4)
+		end
 	end
 
 	-- sliding stainless doors (named for GameManager; they slide ±4 now). Thicker
@@ -959,6 +980,7 @@ do
 	applyTexture(sill, ELEV_WALL_TEXTURE,
 		{ Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }, 4,
 		Color3.fromRGB(105, 110, 115), 4)
+	if blender then blender:Hide(sill) end -- the authored exterior carries its own steel threshold
 
 	elev.Parent = workspace
 	if blender then
@@ -968,6 +990,8 @@ do
 					if child:IsA("SurfaceGui") and child.Name == "ElevatorDoorSurface" then child.Enabled = false end
 				end
 			end
+			if p.Name == "DoorL" or p.Name == "DoorR" then return "ElevatorDoorLeaf", true end
+			if p.Name == "ElevatorLinearLamp" then return nil end
 			return p.Material == Enum.Material.Neon and "LightFixture" or "MetalPanel", p.Material == Enum.Material.Neon
 				or p.Name == "DoorL" or p.Name == "DoorR"
 		end)
@@ -1038,7 +1062,7 @@ do
 	end
 
 	local function buildCabin(depth)
-		depth = math.clamp(depth, 8, 18)
+		depth = math.clamp(depth, blender and 12 or 8, 18)
 		if cabin then cabin:Destroy() end
 		cabin = Instance.new("Model")
 		cabin.Name = "Cabin"
@@ -1053,6 +1077,9 @@ do
 		local roof = part(Vector3.new(depth + 1, 1, CAB_W + 2), CFrame.new(bx - 0.25, 10.5, cz), STEEL_DARK, Enum.Material.Metal, cabin)
 		roof.Name = "CabinRoof"
 		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), CABIN_FLOOR, Enum.Material.DiamondPlate, cabin)
+		if blender then
+			back.Name, sideA.Name, sideB.Name, floorP.Name = "CabinBack", "CabinSideA", "CabinSideB", "CabinFloor"
+		end
 
 		-- The generated aluminum is a square seamless tile. Keep it at the same
 		-- four-stud scale on every elevator surface so its grain never stretches
@@ -1071,13 +1098,45 @@ do
 		end
 		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_FLOOR_TILE)
 
-		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
-			Color3.fromRGB(255, 250, 230), Enum.Material.Neon, cabin)
+		local lightPanel = part(blender and Vector3.new(.16, .06, 11.2) or Vector3.new(2, .3, 2),
+			blender and CFrame.new(xFront - .5, 9.95, cz) or CFrame.new(bx, 9.7, cz),
+			blender and Color3.fromRGB(205, 218, 235) or Color3.fromRGB(255, 250, 230), Enum.Material.Neon, cabin)
+		if blender then
+			lightPanel.Name = "ElevatorLinearLamp"
+			lightPanel.CanCollide, lightPanel.CanTouch, lightPanel.CanQuery = false, false, false
+		end
 		local elevLamp = Instance.new("PointLight")
-		elevLamp.Brightness = blender and 1.65 or 1
-		elevLamp.Range = depth + 8
-		elevLamp.Color = Color3.fromRGB(255, 240, 210)
+		elevLamp.Brightness = blender and 2.15 or 1
+		elevLamp.Range = depth + (blender and 10 or 8)
+		elevLamp.Color = blender and Color3.fromRGB(235, 240, 248) or Color3.fromRGB(255, 240, 210)
+		elevLamp.Shadows = blender ~= nil
 		elevLamp.Parent = lightPanel
+
+		-- Preview steel needs direct fill: ambient alone leaves PBR metal black.
+		if blender then
+			local fillHost = Instance.new("Part")
+			fillHost.Name = "ElevatorSteelFillMount"
+			fillHost.Size = Vector3.new(.1, .1, .1)
+			fillHost.CFrame = CFrame.new(x1 + 6, 11, cz)
+			fillHost.Anchored, fillHost.Transparency = true, 1
+			fillHost.CanCollide, fillHost.CanTouch, fillHost.CanQuery = false, false, false
+			local fill = Instance.new("PointLight")
+			fill.Name = "ElevatorSteelFill"
+			fill.Color = Color3.fromRGB(235, 240, 245)
+			fill.Range, fill.Brightness, fill.Shadows = 14, .35, true
+			fill.Enabled = (workspace:GetAttribute("LightMode") or "NORMAL") == "NORMAL"
+			fill.Parent = fillHost
+			fillHost.Parent = cabin
+			local insideHost = fillHost:Clone()
+			insideHost.Name = "ElevatorCabinFillMount"
+			insideHost.CFrame = CFrame.new(bx, 6.5, cz)
+			local insideFill = insideHost:FindFirstChildOfClass("PointLight")
+			insideFill.Name = "ElevatorCabinFill"
+			insideFill.Color = Color3.fromRGB(235, 240, 248)
+			insideFill.Range, insideFill.Brightness = depth + 8, 1.05
+			insideFill.Shadows = true
+			insideHost.Parent = cabin
+		end
 
 		-- cosmetic FLOOR SELECTOR by the doors: a lit button panel with numbers.
 		-- Purely decorative — no collision, no query, does nothing.
@@ -1267,15 +1326,19 @@ do
 		pad.Size = Vector3.new(math.max(depth - 3, 4), 1, CAB_W - 2)
 		pad.Position = Vector3.new(bx, 0.5, cz)
 
+		if blender then
+			blender:ElevatorCabin(cabin, depth, CFrame.new(xFront, 0, cz) * CFrame.Angles(0, -math.pi / 2, 0),
+				{back, sideA, sideB, roof, floorP, lightPanel})
+		end
 		cabin.Parent = elev
 		refreshCableGuidePoster()
 	end
 
-	local largestCabinDepth = 10
+	local largestCabinDepth = blender and 12 or 10
 	local function cabinDepth()
 		-- 1 player → 10 studs deep · +2 per extra player · caps at 18
 		-- Do not shrink the occupied floor when someone disconnects during arrival.
-		largestCabinDepth = math.max(largestCabinDepth, 8 + math.clamp(#Players:GetPlayers(), 1, 5) * 2)
+		largestCabinDepth = math.max(largestCabinDepth, (blender and 10 or 8) + math.clamp(#Players:GetPlayers(), 1, 5) * 2)
 		return largestCabinDepth
 	end
 	buildCabin(cabinDepth())
@@ -1289,7 +1352,7 @@ do
 end
 
 -- ── ceiling lights ────────────────────────────────────────
-local fixtureBrightness = blender and .85 or .7
+local fixtureBrightness = blender and 1.05 or .7
 local flicker = {}
 local allLights = {} -- every WORKING light, for the entity-presence effect
 for x = 2, GRID, LIGHT_EVERY do
@@ -1329,9 +1392,9 @@ for x = 2, GRID, LIGHT_EVERY do
 
 			local light = Instance.new("SurfaceLight")
 			light.Face = Enum.NormalId.Bottom
-			light.Brightness = fixtureBrightness -- dim enough that darkness pools between lights
-			light.Range = 28
-			light.Angle = 140
+			light.Brightness = fixtureBrightness -- normal coverage; relay clusters retain their own boost
+			light.Range = blender and 44 or 28
+			light.Angle = blender and 160 or 140
 			light.Color = LIGHT_COLOR
 			light.Shadows = false -- shadows on hundreds of lights kills performance
 			light.Enabled = not isDead
@@ -1991,6 +2054,13 @@ task.spawn(function()
 	while true do
 		local dt = task.wait(0.08)
 		local mode = lightMode()
+		if blender and mode ~= prev then
+			local elevator = workspace:FindFirstChild("Elevator")
+			for _, name in ipairs({"ElevatorSteelFill", "ElevatorCabinFill"}) do
+				local fill = elevator and elevator:FindFirstChild(name, true)
+				if fill and fill:IsA("PointLight") then fill.Enabled = mode == "NORMAL" end
+			end
+		end
 		if mode == "ALERT" then
 			phase += dt
 			-- Static red-alert properties are set once on the mode edge; only the
@@ -2003,7 +2073,8 @@ task.spawn(function()
 					L.panel.Material = Enum.Material.Neon
 				end
 			end
-			local b = 0.12 + 0.55 * (0.5 + 0.5 * math.sin(phase * 1.6))
+			-- Owner 2026-10-04: a little brighter so the red phase stays readable; it still pulses.
+			local b = 0.25 + 0.6 * (0.5 + 0.5 * math.sin(phase * 1.6))
 			for _, L in ipairs(allLights) do
 				L.light.Brightness = b
 			end

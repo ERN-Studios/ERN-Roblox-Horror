@@ -1,0 +1,9 @@
+# Retired code. These are frozen copies of live scripts, kept as rollback
+# insurance. They are real Lua and graphify parses them happily -- which is the
+# problem: they were 442 of 2475 nodes (18%) and gave their names to two of the
+# graph's communities, so searching for "Slidemouth" or "World Builder" led to
+# code that no longer runs. Excluded from the graph, untouched on disk.
+ServerStorage/Archive/
+
+# graphify's own dated backup of a previous run.
+graphify-out/2026-*/

@@ -1,0 +1,17 @@
+{
+  "b57a400": [
+    "artifacts/donations-20260916/README.md",
+    "artifacts/donations-20260916/manifest.json",
+    "artifacts/donations-20260916/task-only.patch",
+    "tools/tests/test_support_product_receipts.py"
+  ],
+  "c21e126": [
+    "artifacts/level2-entity-audio-20260914/asset-ids.md",
+    "artifacts/level2-entity-audio-20260914/runtime-evidence.json",
+    "drafts/level2-entity-audio-20260914/README.md",
+    "drafts/level2-entity-audio-20260914/status.json",
+    "drafts/level2-entity-audio-20260914/upload-plan.json",
+    "drafts/level2-entity-audio-20260914/build_bank.py",
+    "drafts/level2-entity-audio-20260914/Level 2 Entity Audio.Client.lua"
+  ]
+}

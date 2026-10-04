@@ -1,0 +1,12 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"sampleFrames\":120,\"clientWorldDescendants\":53989,\"audioAttributes\":{\"ActiveEmitters\":4,\"ActiveSounds\":0},\"position\":\"-597.725830078125, 0.31858062744140625, -422.70953369140625\",\"maxMs\":71.69219851493836,\"p95Ms\":68.8771978020668,\"meanMs\":66.64966077854236}"
+      }
+    ],
+    "isError": false
+  }
+}

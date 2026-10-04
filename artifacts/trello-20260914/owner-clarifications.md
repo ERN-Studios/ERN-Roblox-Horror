@@ -1,0 +1,5 @@
+# User clarifications, 2026-09-14
+
+Card 71: user supplied AdminNBCRxAria (@Kecoalmutt). Official Roblox username API verified id 10152463945, username Kecoalmutt, displayName AdminNBCRxAria. Gift requested: the Advanced Equipment upgrades (+1 StaminaLevel and +1 BatteryLevel, currently +5% each) plus 10 Research Tokens. Use a persistent one-time grant marker and existing serialized profile mutation; do not fake gamepass ownership, alter receipts, or write behind an active session. Codex owns this card, but any ZyntraMonetization insertion must be coordinated with Claude, who owns that shared file. Not granted yet.
+
+Card 75: user explicitly says to leave entity gameplay logic unchanged during normal play. After every CD is deposited, when players start running toward exit, spawn entity at the START OF LEVEL 3 and begin hunting to make the escape tight. This replaces the current finale-only halfway/all-players trigger and 40%-down-final-hall spawn; Codex is preparing this change. Normal hunt speed/profile and CD cycle logic remain unchanged until finale timing is measured.

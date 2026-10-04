@@ -21,6 +21,25 @@ Configuration.Sequence = {
 	FullyLitSeconds = 15,        -- "woooow": everything on before the failing starts
 	-- each switch's prompt sits at eye height in front of its cabinet, 3.5 studs apart (Objective placeSwitchAnchor)
 	SwitchPromptDistance = 7,
+	-- FINDABILITY_20261003 (owner: the note must be easier to find and readable by clicking it): the paper is scaled up,
+	-- glints, and carries a "Read" prompt that opens the note on screen
+	NoteScale = 2.5,
+	NotePromptDistance = 10,
+	-- owner 2026-10-04: the note lies somewhere in the service room (random each round), where POWER A/B are
+	NoteSpots = { "Note_Workbench", "Note_ServiceShelf" },
+	-- a small warm light just in front of the sheet: the note is needed while the cinema is dark (Lift = studs off the
+	-- written face)
+	NoteGlow = { Range = 9, Brightness = 1.3, Lift = 1.2, Color = Color3.fromRGB(255, 226, 170) },
+}
+
+-- Per-spot placement tweaks (marker name -> Offset in the marker's frame, Tilt degrees toward -Z, Yaw degrees turning a
+-- note's sheet in its own plane, Scale for a loose reel there). The service shelf tray (7.8 studs up) also carries a
+-- poster-roll bin: the note stands at the deck's front edge so it shows above the shelf beam from the aisle (Studio QA
+-- 2026-10-04: seen from 39 of 43 standing spots within reach; leaning on the bin it was 5 of 39), turned so its writing
+-- reads upright; the reel sits in front of the bin at template size.
+Configuration.SpotTweaks = {
+	Note_ServiceShelf = { Offset = Vector3.new(0, 0, -1.8), Tilt = 80, Yaw = 90 },
+	Reel_ServiceShelf = { Offset = Vector3.new(0, 0, -0.9), Scale = 1 },
 }
 
 -- Light failing (escalates with each reel loaded: index = reels loaded + 1)
@@ -39,6 +58,10 @@ Configuration.Reels = {
 	RunNoiseSpeed = 18,          -- moving faster than this with reels rattles them ("reel" noise)
 	PromptDistance = 10,         -- the highest spot (service shelf) is 7 studs from the nearest standing root
 	Scale = 1.6,                 -- the film can template is scaled up so a reel reads from across a room
+	-- FINDABILITY_20261003 (owner: "the reels are hidden too well"): at most MaxHard of these spots per round (above eye
+	-- level, behind a seat back, at the far end of the gallery, or locked in the prize case)
+	HardSpots = { "Reel_Cinema1", "Reel_Gallery", "Reel_Popcorn", "Reel_ServiceShelf", "Reel_Prize" },
+	MaxHard = 1,
 }
 
 Configuration.Projectors = {
@@ -97,10 +120,6 @@ Configuration.Noise = {
 	Projector = "projector",
 	Breaker = "breaker",
 	Door = "door",
-}
-
-Configuration.Finale = {
-	CreditsSeconds = 75,
 }
 
 -- Sound asset ids (0 = silent). Server-side one-shots; the client carries its own ambience.

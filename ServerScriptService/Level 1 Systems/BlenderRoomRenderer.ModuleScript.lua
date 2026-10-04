@@ -33,6 +33,16 @@ function Renderer.IsReady()
 	for mask = 1, 15 do
 		if not masks[mask] then return false, "PREVIEW_NOT_READY" end
 	end
+	local elevator = ServerStorage:FindFirstChild("Level1ElevatorInsetKit")
+	if not elevator or elevator:GetAttribute("Ready") ~= true or not elevator:FindFirstChild("Components") or not elevator:FindFirstChild("Assemblies") then return false, "PREVIEW_NOT_READY" end
+	for _, name in ipairs({"ElevatorExterior", "ElevatorDoorLeaf"}) do
+		local component = elevator.Components:FindFirstChild(name)
+		if not component or not component:FindFirstChildWhichIsA("MeshPart", true) then return false, "PREVIEW_NOT_READY" end
+	end
+	for _, depth in ipairs({12, 14, 16, 18}) do
+		local cabin = elevator.Assemblies:FindFirstChild("CabinDepth" .. depth)
+		if not cabin or not cabin:FindFirstChildWhichIsA("MeshPart", true) then return false, "PREVIEW_NOT_READY" end
+	end
 	return true
 end
 
@@ -133,10 +143,21 @@ function Renderer.OpenMask(wallV, wallH, grid, x, z)
 end
 
 function Renderer.Begin(maze)
-	if workspace:GetAttribute("Level1BlenderPreviewActive") ~= true then return nil end
 	assert(Renderer.IsReady(), "Level 1 Blender assets are incomplete")
+	-- PuzzleManager and RoundUI follow the Blender world through this; GameManager clears it with the round.
+	workspace:SetAttribute("Level1BlenderActive", true)
 	local kit = ServerStorage[KIT_NAME]
 	local state = {connections = {}, closed = false, skinned = {}, apertureCleanups = {}, recessCells = {}}
+	-- The kit's ceiling T-bar grid and fixture louvres are fully metallic PBR. No Level 1 light reaches
+	-- them (ambient only; fixture SurfaceLights face down), so they rendered as black lines and black
+	-- grilles. Matte seams read soft, and a louvre that glows with its own fixture shows the light source.
+	local CEILING_SEAM = Color3.fromRGB(226, 218, 198) -- close to the tile albedo: the grid reads by shape, not by a dark line
+	local GRILLE_OFF, GRILLE_GLOW = Color3.fromRGB(150, 146, 132), .42
+	local function matte(mesh, color)
+		local appearance = mesh:FindFirstChildOfClass("SurfaceAppearance")
+		if appearance then appearance:Destroy() end
+		mesh.Material, mesh.Color = Enum.Material.SmoothPlastic, color
+	end
 	activeState = state
 	local roomsByMask = {}
 	for _, room in ipairs(kit.Rooms:GetChildren()) do
@@ -198,6 +219,8 @@ function Renderer.Begin(maze)
 						part.Anchored = true
 						local collider = part:GetAttribute("RoomRole") == "Collider" or (part.Parent and part.Parent.Name == "Colliders")
 						part.CanCollide, part.CanQuery, part.CanTouch = collider, false, false
+						if part:IsA("MeshPart") and part:GetAttribute("BlenderMaterial") == "Steel"
+							and part:GetAttribute("RoomRole") == "SurfaceCeiling" then matte(part, CEILING_SEAM) end
 						if collider then part.CollisionGroup = "Decor" end
 						local role = part:GetAttribute("RoomRole")
 						local ancestor = part.Parent
@@ -282,12 +305,46 @@ function Renderer.Begin(maze)
 		for _, part in ipairs(parts) do self.skinned[part] = true; self:Hide(part) end
 		visual.Parent = model
 	end
+	-- Dedicated Blender geometry is placed at its authored floor/entrance origin.
+	-- Physics remains on the original query Parts; native bevels and UVs are not stretched.
+	local elevatorArt = assert(ServerStorage:FindFirstChild("Level1ElevatorInsetKit"))
+	local function elevatorVisual(self, parent, template, frame, queries, name)
+		assert(elevatorArt:GetAttribute("Ready") == true and template and template:IsA("Model"), "Elevator Blender kit incomplete")
+		for _, proxy in ipairs(queries) do
+			self.skinned[proxy] = true
+			self:Hide(proxy)
+		end
+		local visual = template:Clone()
+		visual.Name = name
+		visual:PivotTo(frame)
+		for _, mesh in ipairs(visual:GetDescendants()) do
+			if mesh:IsA("BasePart") then
+				mesh.Anchored = true
+				mesh.CanCollide, mesh.CanTouch, mesh.CanQuery = false, false, false
+			end
+		end
+		visual.Parent = parent
+		return visual
+	end
+	function state:ElevatorExterior(owner, frame, queries)
+		return elevatorVisual(self, owner, elevatorArt.Components:FindFirstChild("ElevatorExterior"), frame, queries, "BlenderElevatorExterior")
+	end
+	function state:ElevatorCabin(owner, depth, frame, queries)
+		local template = elevatorArt.Assemblies:FindFirstChild("CabinDepth" .. tostring(depth))
+		return elevatorVisual(self, owner, template, frame, queries, "BlenderElevatorCabin")
+	end
 	-- Dynamic hardware keeps its authoritative Part, signals and prompts. Its
 	-- Blender mesh follows the same frame; it never contributes a second collider.
 	function state:Skin(part, componentName, dynamic, tint)
 		if self.closed or self.skinned[part] or part.Transparency >= 1 then return end
 		self.skinned[part] = true
-		local visual = assert(kit.Components:FindFirstChild(componentName), componentName):Clone()
+		local authoredElevator = componentName == "ElevatorDoorLeaf"
+		local components = authoredElevator and elevatorArt.Components or kit.Components
+		local visual = assert(components:FindFirstChild(componentName), componentName):Clone()
+		if authoredElevator then
+			visual:PivotTo(CFrame.Angles(0, -math.pi / 2, 0))
+			visual.WorldPivot = CFrame.identity
+		end
 		if part.Shape == Enum.PartType.Ball and componentName == "MetalPanel" then
 			local handle = kit.Components:FindFirstChild("LeverHandle")
 			local knob = handle and handle:FindFirstChild("Red")
@@ -298,9 +355,18 @@ function Renderer.Begin(maze)
 			end
 		end
 		visual.Name = "BlenderVisual"
+		if part.Name == "ElevatorWallpaperHeader" then
+			-- Keep baseboards on the side walls, never across the top of the entrance.
+			for _, child in ipairs(visual:GetDescendants()) do
+				if child:IsA("MeshPart") and child:GetAttribute("BlenderMaterial") == "Trim" then child:Destroy() end
+			end
+		end
 		local box, size = visual:GetBoundingBox()
 		local ratio, attachmentOffset, fixture = Renderer.SkinLayout(componentName, part.Size, size)
-		local styled = fixture or componentName ~= "MetalPanel" and table.find(HARDWARE_NAMES, componentName) ~= nil
+		if authoredElevator then ratio = Vector3.one end
+		local styled = authoredElevator or fixture or componentName ~= "MetalPanel" and table.find(HARDWARE_NAMES, componentName) ~= nil
+		local elevator = part:FindFirstAncestor("Elevator")
+		local elevatorSteel = componentName == "MetalPanel" and elevator and elevator.Parent == workspace and part.Name ~= "ElevatorLinearLamp"
 		local pieces = {}
 		for _, mesh in ipairs(visual:GetDescendants()) do
 			if mesh:IsA("BasePart") then
@@ -312,7 +378,15 @@ function Renderer.Begin(maze)
 				local offset = frame.Position * ratio
 				mesh.Size *= ratio
 				local appearance = mesh:FindFirstChildOfClass("SurfaceAppearance")
-				if part.Name == "ObjectiveCable" and appearance then appearance:Destroy(); appearance = nil end
+				if elevatorSteel and appearance then
+					local template = elevatorArt.Components.ElevatorDoorLeaf:FindFirstChild("InsetSteel")
+					local steel = assert(template and template:FindFirstChildOfClass("SurfaceAppearance"), "Elevator steel PBR missing")
+					appearance:Destroy()
+					appearance = steel:Clone()
+					appearance.Parent = mesh
+				end
+				if (part.Name == "ObjectiveCable" or part.Name == "ElevatorLinearLamp") and appearance then appearance:Destroy(); appearance = nil end
+				if fixture and appearance and mesh:GetAttribute("BlenderMaterial") == "Steel" then appearance:Destroy(); appearance = nil end
 				pieces[#pieces + 1] = {mesh, CFrame.new(offset + attachmentOffset) * frame.Rotation,
 					mesh.Color, mesh.Material, mesh.Transparency, appearance and appearance.Color or Color3.new(1, 1, 1)}
 			end
@@ -331,9 +405,24 @@ function Renderer.Begin(maze)
 					mesh.Color, mesh.Material = part.Color, part.Material
 					if fixture and materialName == "Lamp" and part.Material == Enum.Material.Neon then mesh.Color = Color3.new(part.Color.R * .65, part.Color.G * .65, part.Color.B * .65) end
 				else mesh.Color, mesh.Material = piece[3], piece[4] end
+				if elevatorSteel then
+					mesh.Color = part:GetAttribute("ElevatorSteelRole") == "Joint" and Color3.fromRGB(70, 78, 86)
+						or part.Name == "CabinFloor" and Color3.fromRGB(184, 192, 202) or Color3.fromRGB(214, 218, 222)
+					mesh.Material = Enum.Material.Metal
+				end
+				if part.Name == "ElevatorLinearLamp" then mesh.Color = Color3.new(part.Color.R * .65, part.Color.G * .65, part.Color.B * .65) end
 				if part.Name == "ObjectiveCable" then mesh.Color = Color3.new(part.Color.R * .5, part.Color.G * .5, part.Color.B * .5) end
+				if fixture and materialName == "Steel" then
+					-- the BLACKOUT beacon blink is Neon at (18,18,18): treat that as off, not as a black glow
+					local lit = part.Material == Enum.Material.Neon and part.Color.R + part.Color.G + part.Color.B > .3
+					mesh.Material = lit and Enum.Material.Neon or Enum.Material.SmoothPlastic
+					mesh.Color = lit and Color3.new(part.Color.R * GRILLE_GLOW, part.Color.G * GRILLE_GLOW, part.Color.B * GRILLE_GLOW) or GRILLE_OFF
+				end
 				local appearance = mesh:FindFirstChildOfClass("SurfaceAppearance")
-				if appearance and tint then
+				if appearance and authoredElevator then appearance.Color = piece[6]
+				elseif appearance and elevatorSteel then
+					appearance.Color = Color3.new(1, 1, 1)
+				elseif appearance and tint then
 					appearance.Color = Color3.new(piece[6].R * math.clamp(part.Color.R / (197 / 255), 0, 1),
 						piece[6].G * math.clamp(part.Color.G / (180 / 255), 0, 1), piece[6].B * math.clamp(part.Color.B / (116 / 255), 0, 1))
 				elseif appearance and (not styled or emitter) and (dynamic or componentName == "MetalPanel") then appearance.Color = part.Color end
@@ -456,6 +545,12 @@ function Renderer.Begin(maze)
 				part.CFrame=base*CFrame.new(pos.X*scale,pos.Y,pos.Z*scale)*localCF.Rotation
 				if part:GetAttribute("RoomRole")~="Fixture" then part.Size=Vector3.new(part.Size.X*scale,part.Size.Y,part.Size.Z*scale) end
 				part.Anchored=true;part.CanCollide=false;part.CanQuery=false;part.CanTouch=false
+				if part:IsA("MeshPart") and part:GetAttribute("BlenderMaterial")=="Steel" then
+					if part:GetAttribute("RoomRole")=="SurfaceCeiling" then matte(part,CEILING_SEAM)
+					elseif part:GetAttribute("RoomRole")=="Fixture" then
+						matte(part,Color3.new(GRILLE_GLOW,.933*GRILLE_GLOW,.698*GRILLE_GLOW));part.Material=Enum.Material.Neon
+					end
+				end
 				if part:GetAttribute("BlenderMaterial")=="Lamp" then
 					local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Brightness=.35;light.Range=18;light.Shadows=false;light.Parent=part
 				end
@@ -502,7 +597,7 @@ function Renderer.Begin(maze)
 			end
 			if self.skinned[part] then return nil end
 			local dynamic = part.Material == Enum.Material.Neon or part.Name == "RelayDoor"
-				or part.Name == "ReleaseHandle" or part.Name == "Handle" or part.Name == "Knob"
+				or part.Name == "ReleaseHandle" or part.Name == "RelayLabel" or part.Name == "Handle" or part.Name == "Knob"
 				or part.Name == "Fuse" or part.Name == "FuseCap" or part.Name:sub(1, 13) == "InstalledFuse"
 			local preferred = part.Name == "RelayDoor" and "RelayDoor"
 				or part.Name == "Handle" and "LeverShaft"

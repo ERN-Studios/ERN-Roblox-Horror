@@ -1,0 +1,11 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2026,
+  "publishedAtUtc": "2026-09-23T21:05:06Z",
+  "success": true,
+  "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
+  "evidenceFile": "publish-log-v2026.txt",
+  "evidenceSha256": "14e6628ac64871849f928167b48bbc3c8a8ad5ae00fbf0a21a2c3d16ba39c92f",
+  "scope": "Successful publication of existing experience; no active-server restart claimed."
+}

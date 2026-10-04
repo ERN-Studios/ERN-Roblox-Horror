@@ -1,0 +1,5 @@
+2026-09-23T23:05:04.265Z,10322.265625,f0fa20c0,6,Info [FLog::StudioKeyEvents] publish request routing through state machine (publishType=1)
+2026-09-23T23:05:12.081Z,10330.081055,6f707000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-23T23:05:12.598Z,10330.598633,f0fa20c0,6,Info [FLog::CreatorOutput] Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
+2026-09-23T23:05:12.739Z,10330.739258,f0fa20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-23T23:05:12.744Z,10330.744141,f0fa20c0,6,Info [FLog::CreatorOutput] → Add publish notes to v2036

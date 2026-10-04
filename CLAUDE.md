@@ -948,3 +948,9 @@ weight and button size on phones, no noise meter.
   the feet, the level's assets (cap 8 s) and a quiet queue. Client attribute `LevelLoadingOpen`; it prints
   `[LevelLoading] level N covered for X s`. Measured in Studio: Level 6 9.9 s on a cold cache, Level 1 16.2 s.
   The level's game does not wait for it (the Level 6 doll starts counting behind the cover).
+- **GitHub, 2026-10-04 (owner: "Studio is source of truth; get everything in Studio in as main, and all local files
+  into the repo too")**: the local history and GitHub's `main` had no commit in common (131 local, 264 remote).
+  The remote `main` as it was is kept as the branch `backup/main-before-2026-10-04`; local `main` (every Studio
+  script pulled with `mac_pull_from_studio.py`, every local file, `.gitignore` = both sides of an old unfinished
+  merge) was then pushed over `main`. Pushes of this repo need `http.postBuffer` 1048576000 and HTTP/1.1.
+- **Lobby backdrop image** is uploaded: `rbxassetid://89904369379943` (`IMAGE` in `INFINITE_END_20261004`).

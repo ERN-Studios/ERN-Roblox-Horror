@@ -478,7 +478,7 @@ function Module.Build()
 	--   flat image, so it only lines up exactly from about that distance; the fence keeps everyone at least 7 studs
 	--   off it. One part and one image for the tunnel, about 70 small parts for the fence.
 	do
-		local IMAGE = ""        -- rbxassetid of lobby_tunnel_infinite.png; empty = the wall is just dark
+		local IMAGE = "rbxassetid://89904369379943"        -- lobby_tunnel_infinite.png; empty = the wall is just dark
 		local visuals = model:FindFirstChild("BlenderVisuals")
 		local dj = visuals and visuals:FindFirstChild("DJConsole")
 		local djAt = dj and (dj:IsA("Model") and dj:GetPivot().Position or dj.Position)

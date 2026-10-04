@@ -1,0 +1,1675 @@
+[
+  {
+    "bytes": 990,
+    "segments": [
+      "ReplicatedStorage",
+      "DevAccess"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3864079872
+  },
+  {
+    "bytes": 2505,
+    "segments": [
+      "ReplicatedStorage",
+      "FlashlightProfiles"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2035285055
+  },
+  {
+    "bytes": 2841,
+    "segments": [
+      "ReplicatedStorage",
+      "Level 2 Entity Audio Bank"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2441775782
+  },
+  {
+    "bytes": 21208,
+    "segments": [
+      "ReplicatedStorage",
+      "MasterConfiguration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 311143705
+  },
+  {
+    "bytes": 6906,
+    "segments": [
+      "ReplicatedStorage",
+      "ProtectionClient"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3496899417
+  },
+  {
+    "bytes": 3693,
+    "segments": [
+      "ReplicatedStorage",
+      "SlideContinuationSafety"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2109951696
+  },
+  {
+    "bytes": 99881,
+    "segments": [
+      "ReplicatedStorage",
+      "UIDevice"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2594197881
+  },
+  {
+    "bytes": 443665,
+    "segments": [
+      "ReplicatedStorage",
+      "UIRegression"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 572673245
+  },
+  {
+    "bytes": 10555,
+    "segments": [
+      "ReplicatedStorage",
+      "UIStyle"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2683759656
+  },
+  {
+    "bytes": 13008,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraConfig"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 814147391
+  },
+  {
+    "bytes": 1496,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraDailyResearch"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2390954477
+  },
+  {
+    "bytes": 38146,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraDailyRewardsPage"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1678333741
+  },
+  {
+    "bytes": 1407,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraDetectorVisual"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2051817315
+  },
+  {
+    "bytes": 7373,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraFieldNotes"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2549927091
+  },
+  {
+    "bytes": 16492,
+    "segments": [
+      "ReplicatedStorage",
+      "ZyntraFieldNotesPage"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3748128709
+  },
+  {
+    "bytes": 2567,
+    "segments": [
+      "ServerScriptService",
+      "AvatarNormalize"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 2434167251
+  },
+  {
+    "bytes": 6714,
+    "segments": [
+      "ServerScriptService",
+      "Crouch State Server"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 2395885106
+  },
+  {
+    "bytes": 21612,
+    "segments": [
+      "ServerScriptService",
+      "FieldNotesService"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3646331193
+  },
+  {
+    "bytes": 6163,
+    "segments": [
+      "ServerScriptService",
+      "FlashlightSync"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 1478505597
+  },
+  {
+    "bytes": 5413,
+    "segments": [
+      "ServerScriptService",
+      "FriendBoost"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4078293387
+  },
+  {
+    "bytes": 150909,
+    "segments": [
+      "ServerScriptService",
+      "GameManager"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 343225650
+  },
+  {
+    "bytes": 58731,
+    "segments": [
+      "ServerScriptService",
+      "Level 1 Systems",
+      "EntityAI"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 2980162132
+  },
+  {
+    "bytes": 6301,
+    "segments": [
+      "ServerScriptService",
+      "Level 1 Systems",
+      "EntityAnimation"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3441592848
+  },
+  {
+    "bytes": 11471,
+    "segments": [
+      "ServerScriptService",
+      "Level 1 Systems",
+      "EntityKill"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3650494911
+  },
+  {
+    "bytes": 84041,
+    "segments": [
+      "ServerScriptService",
+      "Level 1 Systems",
+      "MazeGenerator"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 2958472143
+  },
+  {
+    "bytes": 97116,
+    "segments": [
+      "ServerScriptService",
+      "Level 1 Systems",
+      "PuzzleManager"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3855234543
+  },
+  {
+    "bytes": 9970,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3632465989
+  },
+  {
+    "bytes": 47083,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Exit Transition Test Suite"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 542717137
+  },
+  {
+    "bytes": 37520,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Layout Generator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2471315786
+  },
+  {
+    "bytes": 50965,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Objective Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 929057489
+  },
+  {
+    "bytes": 16481,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Animation Adapter"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3230588902
+  },
+  {
+    "bytes": 10652,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2099796731
+  },
+  {
+    "bytes": 69432,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1656273113
+  },
+  {
+    "bytes": 118667,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2672915855
+  },
+  {
+    "bytes": 16597,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Observer"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3603489834
+  },
+  {
+    "bytes": 11278,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Foam Proxy Factory"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1756786975
+  },
+  {
+    "bytes": 691,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Slide Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3199129851
+  },
+  {
+    "bytes": 38772,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Slide Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3425605733
+  },
+  {
+    "bytes": 131658,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Slide Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 155121565
+  },
+  {
+    "bytes": 7363,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Pool Slide Rig Adapter"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3974023740
+  },
+  {
+    "bytes": 19458,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Round Adapter"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2430042948
+  },
+  {
+    "bytes": 21604,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 Slide Ragdoll Service"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3531639917
+  },
+  {
+    "bytes": 265471,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "Level 2 World Builder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1187504075
+  },
+  {
+    "bytes": 7451,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "README - LEVEL 2 POOL FOAM"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1399321127
+  },
+  {
+    "bytes": 5828,
+    "segments": [
+      "ServerScriptService",
+      "Level 2 Systems",
+      "README - LEVEL 2 TWEAKS"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2341741100
+  },
+  {
+    "bytes": 19070,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 201781888
+  },
+  {
+    "bytes": 23157,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Hiding Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 147807900
+  },
+  {
+    "bytes": 38107,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Layout Generator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 933162897
+  },
+  {
+    "bytes": 181869,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Mall Manager AI Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2171784412
+  },
+  {
+    "bytes": 20901,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Music Sequence Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1781181791
+  },
+  {
+    "bytes": 66237,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Objective Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2413410489
+  },
+  {
+    "bytes": 30972,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Round Adapter"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3222720138
+  },
+  {
+    "bytes": 196197,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 Test Suite"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1993594995
+  },
+  {
+    "bytes": 105403,
+    "segments": [
+      "ServerScriptService",
+      "Level 3 Systems",
+      "Level 3 World Builder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 793173584
+  },
+  {
+    "bytes": 427,
+    "segments": [
+      "ServerScriptService",
+      "Level2Generator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 278658600
+  },
+  {
+    "bytes": 437,
+    "segments": [
+      "ServerScriptService",
+      "Level3Generator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3490766066
+  },
+  {
+    "bytes": 7124,
+    "segments": [
+      "ServerScriptService",
+      "LobbyPartyModeController"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3448053770
+  },
+  {
+    "bytes": 22048,
+    "segments": [
+      "ServerScriptService",
+      "LobbyShopDisplay"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3508484151
+  },
+  {
+    "bytes": 1991,
+    "segments": [
+      "ServerScriptService",
+      "NoiseRegistry"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1640011175
+  },
+  {
+    "bytes": 7408,
+    "segments": [
+      "ServerScriptService",
+      "PlayerProtection"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 326713719
+  },
+  {
+    "bytes": 6278,
+    "segments": [
+      "ServerScriptService",
+      "PurchaseAlerts"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3831620165
+  },
+  {
+    "bytes": 4473,
+    "segments": [
+      "ServerScriptService",
+      "ReentryPlacement"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 114897137
+  },
+  {
+    "bytes": 74983,
+    "segments": [
+      "ServerScriptService",
+      "Round Completion Routing"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 102701575
+  },
+  {
+    "bytes": 135364,
+    "segments": [
+      "ServerScriptService",
+      "Round Completion Test Suite"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1186912996
+  },
+  {
+    "bytes": 8128,
+    "segments": [
+      "ServerScriptService",
+      "Round Loading Runtime"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1025409681
+  },
+  {
+    "bytes": 15550,
+    "segments": [
+      "ServerScriptService",
+      "Round Loading Test Suite"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1678066252
+  },
+  {
+    "bytes": 12066,
+    "segments": [
+      "ServerScriptService",
+      "RouteMarkerService"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3525654410
+  },
+  {
+    "bytes": 789,
+    "segments": [
+      "ServerScriptService",
+      "TeamObjectives"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3153777581
+  },
+  {
+    "bytes": 103329,
+    "segments": [
+      "ServerScriptService",
+      "TunnelLobbyBuilder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2300846163
+  },
+  {
+    "bytes": 1819,
+    "segments": [
+      "ServerScriptService",
+      "ZyntraDetectorSensing"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4196723567
+  },
+  {
+    "bytes": 2229,
+    "segments": [
+      "ServerScriptService",
+      "ZyntraDetectorService"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 3698449566
+  },
+  {
+    "bytes": 173312,
+    "segments": [
+      "ServerScriptService",
+      "ZyntraMonetization"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 1289805623
+  },
+  {
+    "bytes": 84738,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Kids Skylight Backup 20260806",
+      "Level 2 World Builder Before Kids Skylights"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4239643150
+  },
+  {
+    "bytes": 69618,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Kids Texture Backup 20260806",
+      "Level 2 World Builder Before Kids Textures"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 963118296
+  },
+  {
+    "bytes": 5803,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Kids V1 Backup 20260811",
+      "Level 2 Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 775349615
+  },
+  {
+    "bytes": 97093,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Kids V1 Backup 20260811",
+      "Level 2 World Builder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1721824290
+  },
+  {
+    "bytes": 5926,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Lever Redesign Backup 20260806",
+      "Level 2 Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 960046379
+  },
+  {
+    "bytes": 7391,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Lever Redesign Backup 20260806",
+      "Level 2 Objective Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 504324176
+  },
+  {
+    "bytes": 58002,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Lever Redesign Backup 20260806",
+      "Level 2 World Builder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4090486371
+  },
+  {
+    "bytes": 68535,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level 2 Pump Scale Backup 20260806",
+      "Level 2 World Builder Before 40 Percent Reduction"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2353508344
+  },
+  {
+    "bytes": 9801,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level2AudioBackup_20260831_NoDistantSplash",
+      "Level 2 Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 422023566
+  },
+  {
+    "bytes": 26598,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level2AudioBackup_20260831_NoDistantSplash",
+      "Level 2 Sound Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1453134650
+  },
+  {
+    "bytes": 9372,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level2RetiredSlidemouth_20260831",
+      "Level 2 Slidemouth Client"
+    ],
+    "className": "LocalScript",
+    "disabled": true,
+    "sourceEqualsEditor": true,
+    "djb2": 3321308729
+  },
+  {
+    "bytes": 167166,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level2RetiredSlidemouth_20260831",
+      "Level 2 Slidemouth Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 525644413
+  },
+  {
+    "bytes": 295599,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "Level2RetiredSlidemouth_20260831",
+      "Level 2 Slidemouth Test Suite"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4020833381
+  },
+  {
+    "bytes": 2250,
+    "segments": [
+      "ServerStorage",
+      "Archive",
+      "RetiredLobbyAssets",
+      "Miso",
+      "MisoPatrol"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 393301951
+  },
+  {
+    "bytes": 96252,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_ComingSoonGates",
+      "TunnelLobbyBuilder_PreComingSoon"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2761280007
+  },
+  {
+    "bytes": 6740,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "ServerScriptService__FlashlightSync"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 403707552
+  },
+  {
+    "bytes": 5736,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2493076798
+  },
+  {
+    "bytes": 42420,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2377820728
+  },
+  {
+    "bytes": 16436,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3266719072
+  },
+  {
+    "bytes": 95466,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "ServerScriptService__TunnelLobbyBuilder"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2465356827
+  },
+  {
+    "bytes": 8095,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1453969031
+  },
+  {
+    "bytes": 28932,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "StarterPlayer__StarterPlayerScripts__FlashlightController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 932442676
+  },
+  {
+    "bytes": 6350,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3374472632
+  },
+  {
+    "bytes": 27514,
+    "segments": [
+      "ServerStorage",
+      "CodexBackup_20260902_FiveFixes",
+      "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 694641386
+  },
+  {
+    "bytes": 35774,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_0710",
+      "Level 2 Pool Slide Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2429415967
+  },
+  {
+    "bytes": 126820,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_0710",
+      "Level 2 Pool Slide Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2696878426
+  },
+  {
+    "bytes": 35774,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+      "Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2429415967
+  },
+  {
+    "bytes": 126820,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+      "Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2696878426
+  },
+  {
+    "bytes": 35774,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+      "Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2429415967
+  },
+  {
+    "bytes": 126820,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+      "Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2696878426
+  },
+  {
+    "bytes": 35774,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2429415967
+  },
+  {
+    "bytes": 126975,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 209686369
+  },
+  {
+    "bytes": 126820,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "NavigatorBeforeBudgetFix"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2696878426
+  },
+  {
+    "bytes": 35774,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+      "Controller"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2429415967
+  },
+  {
+    "bytes": 126975,
+    "segments": [
+      "ServerStorage",
+      "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+      "Navigator"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 209686369
+  },
+  {
+    "bytes": 167,
+    "segments": [
+      "ServerStorage",
+      "Project Mirror",
+      "IMPORTANT"
+    ],
+    "className": "LocalScript",
+    "disabled": true,
+    "sourceEqualsEditor": true,
+    "djb2": 428501494
+  },
+  {
+    "bytes": 235,
+    "segments": [
+      "ServerStorage",
+      "Project Mirror",
+      "Script"
+    ],
+    "className": "Script",
+    "sourceEqualsEditor": true,
+    "djb2": 1177353877
+  },
+  {
+    "bytes": 4670,
+    "segments": [
+      "ServerStorage",
+      "TEMP_PipeEntityAnimations_20260909",
+      "PreviewControls"
+    ],
+    "className": "ModuleScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2018353447
+  },
+  {
+    "bytes": 28802,
+    "segments": [
+      "StarterPlayer",
+      "StarterCharacter",
+      "Animate"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3780544750
+  },
+  {
+    "bytes": 1539,
+    "segments": [
+      "StarterPlayer",
+      "StarterCharacterScripts",
+      "DanceEmote"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1807488750
+  },
+  {
+    "bytes": 300,
+    "segments": [
+      "StarterPlayer",
+      "StarterCharacterScripts",
+      "DisableDefaultWalkingSound"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3439527266
+  },
+  {
+    "bytes": 654,
+    "segments": [
+      "StarterPlayer",
+      "StarterCharacterScripts",
+      "SetRunAnimation"
+    ],
+    "className": "LocalScript",
+    "disabled": true,
+    "sourceEqualsEditor": true,
+    "djb2": 1673959203
+  },
+  {
+    "bytes": 27008,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Daily Rewards Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2292762524
+  },
+  {
+    "bytes": 22809,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "DevCheats"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1384591171
+  },
+  {
+    "bytes": 10390,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "EntityShakeController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4219574313
+  },
+  {
+    "bytes": 9288,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Field Notes Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 634705961
+  },
+  {
+    "bytes": 9947,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "First Entry Guide"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1597103129
+  },
+  {
+    "bytes": 33275,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "FlashlightController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3553547400
+  },
+  {
+    "bytes": 8386,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Friend Boost Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3184439710
+  },
+  {
+    "bytes": 7476,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "JumpscareUI"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2974176949
+  },
+  {
+    "bytes": 10507,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 1 Cable Current"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 941913027
+  },
+  {
+    "bytes": 3462,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 1 Sound Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3922834887
+  },
+  {
+    "bytes": 9971,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Entity Audio"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1694846705
+  },
+  {
+    "bytes": 5592,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Lighting Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 647352600
+  },
+  {
+    "bytes": 13516,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Objective UI"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1332525697
+  },
+  {
+    "bytes": 18788,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Pool Foam Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3812252092
+  },
+  {
+    "bytes": 9656,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Pool Slide Dev ESP"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2765241465
+  },
+  {
+    "bytes": 31003,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Slide Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1277968138
+  },
+  {
+    "bytes": 39939,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 2 Sound Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3191793753
+  },
+  {
+    "bytes": 39946,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 3 Lighting Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3941783821
+  },
+  {
+    "bytes": 6548,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 3 Mall Manager Visual Smoother"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 788152186
+  },
+  {
+    "bytes": 54201,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 3 Reader Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 14800855
+  },
+  {
+    "bytes": 46833,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 3 Sound Controller"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3799268199
+  },
+  {
+    "bytes": 21675,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level 3 Table Hiding Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3278484801
+  },
+  {
+    "bytes": 34389,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Level2AlertClient"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2897461417
+  },
+  {
+    "bytes": 7021,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "LobbyCeilingSweeps"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 43626616
+  },
+  {
+    "bytes": 5033,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "LobbyLevel3GateFlicker"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3678563929
+  },
+  {
+    "bytes": 10098,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "LobbyMusicController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3837618104
+  },
+  {
+    "bytes": 33299,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Lucky Wheel Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3247656667
+  },
+  {
+    "bytes": 10614,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "MasterTuningClient"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2372024782
+  },
+  {
+    "bytes": 43475,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "NoiseReporter"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4013165107
+  },
+  {
+    "bytes": 31343,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "ProtectionHUD"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2436149620
+  },
+  {
+    "bytes": 79548,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "PuzzleUI"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 627256119
+  },
+  {
+    "bytes": 5914,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Round Entry Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1312958886
+  },
+  {
+    "bytes": 20545,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Round Exit Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1298341756
+  },
+  {
+    "bytes": 237727,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "RoundUI"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 648595596
+  },
+  {
+    "bytes": 31051,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Shop Display Client"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 1003998426
+  },
+  {
+    "bytes": 67153,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "SoundController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2022468377
+  },
+  {
+    "bytes": 19883,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "SpectateController"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3072305203
+  },
+  {
+    "bytes": 3388,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "Team Objective Feed"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 3177459099
+  },
+  {
+    "bytes": 1674,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "ZyntraDetectorClient"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 4216643759
+  },
+  {
+    "bytes": 187349,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "ZyntraStore"
+    ],
+    "className": "LocalScript",
+    "sourceEqualsEditor": true,
+    "djb2": 2459639310
+  }
+]

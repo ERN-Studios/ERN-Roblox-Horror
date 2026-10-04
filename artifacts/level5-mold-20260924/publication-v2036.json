@@ -1,0 +1,12 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2036,
+  "publishedAtUtc": "2026-09-23T23:05:12Z",
+  "success": true,
+  "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
+  "evidenceFile": "artifacts/level5-mold-20260924/publish-log-v2036.txt",
+  "evidenceSha256": "85acfcf882e14203d9f5dece1328255b8a8b3b05df8045c5b67848447e08cf51",
+  "scope": "Level 5 expansion, furnishing and current mold replacement, plus preserved authoritative Studio state. No active-server restart claimed.",
+  "metadataFile": "artifacts/level5-mold-20260924/publication-v2036.json"
+}

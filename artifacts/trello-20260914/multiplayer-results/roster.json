@@ -1,0 +1,498 @@
+{
+  "id": "roster",
+  "result": {
+    "players": [
+      {
+        "id": -1,
+        "name": "Player1",
+        "attributes": {
+          "ZyntraFirstLogin": false,
+          "Crouching": false,
+          "ZyntraLobbyBriefingPlayed": true,
+          "CaptionsEnabled": true,
+          "ZyntraGlowstickColor": null,
+          "ZyntraRecordedSupportRobux": 0,
+          "ZyntraOwnsCosmeticEquipment": true,
+          "DisableCaptions": false,
+          "ZyntraBatteryMultiplier": 1.05,
+          "ZyntraOwnsSupporter": true,
+          "ZyntraProfileLoaded": true,
+          "ZyntraStaminaMultiplier": 1.05,
+          "ZyntraDonationRobux": 0,
+          "ZyntraOwnsAdvancedEquipment": true,
+          "ReduceCameraShake": false,
+          "ZyntraHazmatColor": null,
+          "ReduceFlashing": false,
+          "ZyntraUtilityRobux": 0,
+          "ZyntraMuteDispatch": false,
+          "LobbyMusicEnabled": true,
+          "InRound": false,
+          "ZyntraDispatchPreferenceLoaded": true
+        }
+      },
+      {
+        "id": -2,
+        "name": "Player2",
+        "attributes": {
+          "ZyntraFirstLogin": false,
+          "Crouching": false,
+          "ZyntraLobbyBriefingPlayed": true,
+          "CaptionsEnabled": true,
+          "ZyntraGlowstickColor": null,
+          "ZyntraRecordedSupportRobux": 0,
+          "ZyntraOwnsCosmeticEquipment": true,
+          "DisableCaptions": false,
+          "ZyntraBatteryMultiplier": 1.05,
+          "ZyntraOwnsSupporter": true,
+          "ZyntraProfileLoaded": true,
+          "ZyntraStaminaMultiplier": 1.05,
+          "ZyntraDonationRobux": 0,
+          "ZyntraOwnsAdvancedEquipment": true,
+          "ReduceCameraShake": false,
+          "ZyntraHazmatColor": null,
+          "ReduceFlashing": false,
+          "ZyntraUtilityRobux": 0,
+          "ZyntraMuteDispatch": false,
+          "LobbyMusicEnabled": true,
+          "InRound": false,
+          "ZyntraDispatchPreferenceLoaded": true
+        }
+      }
+    ],
+    "zones": [
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -853.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.LaunchZone1",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -853.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.LaunchZone2",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -826.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.LaunchZone3",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -826.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.LaunchZone4",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -853.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom.LaunchZone5",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -853.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom.LaunchZone6",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -826.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom.LaunchZone7",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -826.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level2QueueRoom.LaunchZone8",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -773.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom.LaunchZone9",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -773.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom.LaunchZone10",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -746.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom.LaunchZone11",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -746.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level3QueueRoom.LaunchZone12",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -773.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level4QueueRoom.FutureLaunchZone13",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -773.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level4QueueRoom.FutureLaunchZone14",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -746.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level4QueueRoom.FutureLaunchZone15",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -746.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level4QueueRoom.FutureLaunchZone16",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -693.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone17",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -693.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone18",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -72,
+          30.18000030517578,
+          -666.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone19",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          -54,
+          30.18000030517578,
+          -666.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone20",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -693.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level6QueueRoom.FutureLaunchZone21",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -693.2000122070312
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level6QueueRoom.FutureLaunchZone22",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          54,
+          30.18000030517578,
+          -666.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level6QueueRoom.FutureLaunchZone23",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      },
+      {
+        "position": [
+          72,
+          30.18000030517578,
+          -666.7999877929688
+        ],
+        "path": "Workspace.ServerLobby.LevelQueueRooms.Level6QueueRoom.FutureLaunchZone24",
+        "attributes": {
+          "CircularPadDiameter": 14.82,
+          "QueueRadius": 7.41,
+          "QueueDetectorShape": "Circle"
+        },
+        "size": [
+          14.819999694824219,
+          0.30000001192092896,
+          14.819999694824219
+        ]
+      }
+    ]
+  },
+  "ok": true
+}

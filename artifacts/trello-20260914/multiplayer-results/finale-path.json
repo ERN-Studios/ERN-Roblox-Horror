@@ -1,0 +1,9 @@
+{
+  "id": "finale-path",
+  "result": {
+    "status": "NoPath",
+    "length": 0,
+    "points": []
+  },
+  "ok": true
+}

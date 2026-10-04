@@ -1,0 +1,17 @@
+Same project as before: abandoned 1990s multiplex cinema for a Roblox horror game (palette: blood-red, rust-orange, black marble, brass, red neon). Use your built-in image generation tool. Save each result as a PNG in the current working directory with EXACTLY the given file name (copy the generated file there). Final answer: only the list of saved files.
+
+Seamless tileable texture maps (flat, orthographic, no perspective, no lighting gradient, perfectly tileable edges, square):
+1. tex_door_red_leather.png - tufted/padded red leather door upholstery with brass button studs in a diamond grid, worn.
+2. tex_steel_scuffed.png - grey painted steel sheet, scuffed and scratched, some rust spots.
+3. tex_brass_worn.png - brushed brass, tarnished.
+4. tex_cardboard.png - brown corrugated cardboard box surface with faint tape residue.
+5. tex_wall_dark_red.png - dark oxblood-red painted auditorium wall, water stains and faint mould.
+6. tex_acoustic_fabric.png - dark red acoustic wall-panel fabric with vertical pleats.
+7. tex_concrete_stained.png - stained grey concrete floor of a back-of-house service room.
+8. tex_granite_counter.png - black speckled granite counter top.
+
+Non-tileable decal art (front view, flat, fills the frame):
+9. art_arcade_side.png - 1990s arcade cabinet side art, synthwave mountains and a red sun, portrait 1:2.
+10. art_arcade_screen.png - glowing CRT arcade game attract screen, vector grid, title "VOID SIEGE", 4:3.
+11. art_menu_board.png - backlit cinema concession menu board: POPCORN, SODA, CANDY, HOT DOG with prices, wide 4:1.
+12. art_exit_sign.png - green illuminated EXIT sign with running-man pictogram, 2:1.

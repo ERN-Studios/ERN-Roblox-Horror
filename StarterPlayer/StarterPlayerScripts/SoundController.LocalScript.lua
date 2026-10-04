@@ -95,9 +95,9 @@ local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Enti
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 0.96   -- 20% softer; direct local warning for the spotted player
-local SPOT_MIN_DISTANCE = 10    -- close-range warning, then directional distance falloff
-local SPOT_MAX_DISTANCE = 200   -- same audible range as the existing chase loop
+local SPOT_VOLUME      = 0.45   -- quieter spatial warning for the spotted player
+local SPOT_MIN_DISTANCE = 8     -- full volume only beside the Entity
+local SPOT_MAX_DISTANCE = 96    -- local warning; silent beyond four maze cells
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 1.014 -- entity walk impact (30% louder)
 local STEP_RUN_VOLUME  = 1.30  -- entity chase impact (30% louder)
@@ -363,6 +363,7 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	-- Only the living hear the scream -- and a spectator hears whatever the
 	-- LIVING player they are watching hears, from that player's ears.
 	if not audioSubject() then return end
+	local levelOne = workspace:GetAttribute("SelectedLevel") == 1
 	local holder = Instance.new("Part")
 	holder.Anchored = true
 	holder.CanCollide = false
@@ -373,13 +374,12 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	holder.Parent = workspace
 	local s = Instance.new("Sound")
 	s.SoundId = DEATH_SOUND
-	s.Volume = DEATH_VOLUME
+	s.Volume = levelOne and .5 or DEATH_VOLUME
 	s.PlaybackSpeed = 0.98 + math.random() * 0.04
-	-- Level 1 spans hundreds of studs. Linear falloff keeps the scream directional
-	-- while remaining clearly audible to survivors at the far side of the maze.
-	s.RollOffMode = Enum.RollOffMode.Linear
-	s.RollOffMinDistance = 60
-	s.RollOffMaxDistance = 2200
+	-- Level 1 deaths are local to the actual kill spot; other levels keep their mix.
+	s.RollOffMode = levelOne and Enum.RollOffMode.InverseTapered or Enum.RollOffMode.Linear
+	s.RollOffMinDistance = levelOne and 8 or 60
+	s.RollOffMaxDistance = levelOne and 96 or 2200
 	local eq = Instance.new("EqualizerSoundEffect")
 	eq.HighGain = -3
 	eq.MidGain = -1
@@ -460,8 +460,8 @@ if YELL_SOUND ~= "" then
 	end)
 end
 
--- Chase ambience remains positional. The spotted warning below is private
--- to the actual target and does not depend on distance or streamed entity parts.
+-- Chase ambience remains positional. The spotted warning is private to its
+-- target and comes from the Entity with native 3D distance falloff.
 local function chaseActive()
 	return workspace:GetAttribute("SelectedLevel") == 1
 		and workspace:GetAttribute("RoundActive") == true
@@ -479,12 +479,18 @@ local function playEntitySpotScream()
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	if not humanoid or humanoid.Health <= 0 then return false end
 	if SPOT_SOUND == "" or (os.clock() - lastSpotScreamAt) < 4 then return false end
+	local entity = workspace:FindFirstChild("Entity")
+	local er = entity and (entity:FindFirstChild("HumanoidRootPart") or entity:FindFirstChildWhichIsA("BasePart", true))
+	if not er or not er:IsA("BasePart") then return false end
 	lastSpotScreamAt = os.clock()
 	local sound = Instance.new("Sound")
 	sound.Name = "SpotScream"
 	sound.SoundId = SPOT_SOUND
 	sound.Volume = SPOT_VOLUME
-	sound.Parent = SoundService
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = SPOT_MIN_DISTANCE
+	sound.RollOffMaxDistance = SPOT_MAX_DISTANCE
+	sound.Parent = er
 	sound:Play()
 	sound.Ended:Connect(function() sound:Destroy() end)
 	task.delay(12, function() sound:Destroy() end)

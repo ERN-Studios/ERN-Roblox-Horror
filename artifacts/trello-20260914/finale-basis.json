@@ -1,0 +1,15 @@
+{
+  "status": "prepared; Studio parity and physical chase test pending",
+  "files": [
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "beforeCanonicalSha256": "f4cedcac2c6ac687c8e84bb9885ce9fab924da65df92ad43e8fc57fd2c0b9453",
+      "proposedCanonicalSha256": "9d9052269592df2b3fb1779f60c612a1c17d5c1ae78a3c17bc6d618e7c8a76be"
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "beforeCanonicalSha256": "b8befd31131e49fb37dc5812906be5378ad90e6c6433f5d884c75d1f114b2f2d",
+      "proposedCanonicalSha256": "70de739bb78c9a75ad44cd254b50eed4d7d62af3ac5abb1d469f9923e6ba0cce"
+    }
+  ]
+}

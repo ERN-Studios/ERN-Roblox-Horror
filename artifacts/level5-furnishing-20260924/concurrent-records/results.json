@@ -1,0 +1,26 @@
+[
+  {
+    "test": "test_zyntra_records_page.py",
+    "remoteCommit": "2e5cfd8",
+    "source": "exact final Studio verification source snapshot",
+    "returnCode": 0,
+    "output": "Records page: 2465 checks passed (offline Luau, real ZyntraChallenges + ZyntraConfig; font metrics, TextBounds, real UIDevice and rendering not exercised)\n",
+    "stderr": ""
+  },
+  {
+    "test": "test_zyntra_challenges.py",
+    "remoteCommit": "2e5cfd8",
+    "source": "exact final Studio verification source snapshot",
+    "returnCode": 0,
+    "output": "ZyntraChallenges: 42 checks passed (real module, real Config.Challenges)\n",
+    "stderr": ""
+  },
+  {
+    "test": "test_zyntra_store_compact.py",
+    "remoteCommit": "2e5cfd8",
+    "source": "exact final Studio verification source snapshot",
+    "returnCode": 0,
+    "output": "ok  544 checks: terminal 1180x760, upgrade card 210/246/330px (phone/tablet/pointer), shop icon 52/64/76px, list+detail at >=760 pointer only, 5-button rail (tabs 14, supplies 42, supplies-absent 4, shop 102, rail 123, layout 121, routing 39, modals 19)\n",
+    "stderr": ""
+  }
+]

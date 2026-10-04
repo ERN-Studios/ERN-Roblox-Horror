@@ -1,0 +1,127 @@
+[
+  {
+    "file": "00_hero_stay_quiet.png",
+    "references": [
+      "l1_e.png",
+      "l1_f.png"
+    ],
+    "prompt": "Cinematic Roblox 16:9 office hero. Two blocky yellow hazmat players crouched behind a near-left yellow wallpaper partition. Ochre carpet, low brown square-panel ceiling, sparse fluorescent panels and boxy maze openings. Far down the corridor in a lit right-middle doorway, one very tall extremely thin dark silhouette with two tiny glowing eyes. No other entity details. Upper-left off-white condensed sans lockup: small BACKROOMS above larger STAY QUIET and small CO-OP HORROR. No other text, HUD, icons, brands, gore or blood. Sharp practical lighting, readable at 320x180."
+  },
+  {
+    "file": "01_level1_office_a.png",
+    "references": [
+      "l1_f.png",
+      "l1_e.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Low wide 24mm architectural office view: foreground wallpaper corner at right, broad maze of mustard patterned partitions, ochre carpet, brown square ceiling panels, sparse rectangular fluorescent lights and thin red cable along floor as reference. One hazmat teammate half hidden near right corner. Far left-middle corridor only one very tall thin dark silhouette with two tiny glowing eyes, backlit against yellow wall. Emphasize long vanishing lines. Only text: 'LEVEL 1' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "02_level1_office_b.png",
+    "references": [
+      "l1_e.png",
+      "l1_a.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Eye-height oblique view through the metal elevator doorway into the sprawling office maze. A thin red cable leads across ochre carpet. Two yellow hazmat avatars seen from behind stand still near partition, separated readable silhouettes. Far down hall only a very tall thin dark silhouette with two small glowing eyes. Preserve yellow patterned walls and brown ceiling grid. Omit elevator keypad and all signage lettering. Different wide camera with doorway at left framing. Only text: 'LEVEL 1' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "03_level2_poolrooms_a.png",
+    "references": [
+      "l2_a.png",
+      "l2_d.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Low water-level diagonal shot through repeated rounded cream tile arches, dark navy stripe near ceiling, blue rectangular skylights. Cyan water in the arched channel, cream tiled dry ledge. Two hazmat avatars crouch on near dry ledge watching a small distant pale irregular foam mass low in water beneath far arch. Foam has no anatomy, eyes, mouth or limbs. Preserve broad tiled room and simple arches, no ornate additions. Only text: 'LEVEL 2' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "04_level2_poolrooms_b.png",
+    "references": [
+      "l2_a.png",
+      "l2_f.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Wide eye-height near-symmetrical poolroom composition, cream square tiled hall, three blue skylight rectangles and navy high wall stripe; repeated rounded arches recede right-middle over turquoise water channel. One hazmat avatar at left wall watching a small pale foam mass far away in channel. Foam no face, eyes, limbs or teeth. Large quiet architectural negative space, bright soft skylight reflection, distinct from water-level shot. Only text: 'LEVEL 2' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "05_level3_mall_party_a.png",
+    "references": [
+      "l3_a.png",
+      "l3_e.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Table-height three-quarter view of actual 90s mall party rooms: tall orange wall panels above black lower wall band, dark carpet densely patterned with small colourful stars circles triangles squiggles, plain dark ceiling. Doorway chain into next party room; small simple yellow chairs by door as reference. Two hazmat players partially concealed by near doorway edge. One still dark human-shaped figure far beyond rear doorway, no glowing eyes or monster details. Do not substitute generic shopping mall or add balloons. Only text: 'LEVEL 3' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "06_level3_mall_party_b.png",
+    "references": [
+      "l3_c.png",
+      "l3_d.png",
+      "l3_a.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Wide corner composition highlighting large pale faceted circular tube opening on orange-and-black party-room wall, and perpendicular rectangular passage on right. Patterned black arcade carpet with multicoloured stars circles squiggles. One hazmat player near tube, paused looking toward a single still dark human-shaped figure distant in right passage. No eyes or creature details. No writing on signs, retain small generic playground picture decals without lettering. Cinematic warm orange, keep actual sparse architecture. Only text: 'LEVEL 3' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "07_level4_cinema_a.png",
+    "references": [
+      "l4_a.png",
+      "l4_b.png",
+      "l4_c.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Low oblique cinema corridor view at doorway. Preserve reference dark paneled walls, rectangular black doors, deep red carpet with repeated red triangular motifs and dotted square grid, red practical bollard lamps, recessed poster frames. Lift exposure with subtle indigo fill and restrained red light so architecture reads. Two hazmat avatars tucked behind near doorway; single still dark human-shaped figure far away against lit doorway. No glowing eyes, no monster details, no invented auditorium seats, no projector, posters abstract with no text. Only text: 'LEVEL 4' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "08_level4_cinema_b.png",
+    "references": [
+      "l4_c.png",
+      "l4_d.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Wide eye-height quiet architectural cinema foyer view: dark tall paneled walls, doorway bays and poster frames, red practical lighting and triangular patterned red/dark carpet exactly as references. Faint violet fill opens shadow detail without turning into neon city. One still human-shaped dark figure in far off-center doorway, one small hazmat teammate in foreground left behind wall edge. No monster anatomy or eyes. Blank abstract original posters, all signs without words. Clear vanishing point and broad empty space. Only text: 'LEVEL 4' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "09_level5_void_rooms_a.png",
+    "references": [
+      "l5_amber.png",
+      "l5_plate.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Amber blocks room. Elevated three-quarter wide view closely matching first reference: ochre amber plaster corridor with repeating huge rounded wall ribs, ceiling, hanging bare white spherical bulbs on black cords. Staggered tall rectangular stepping blocks rise from pure black bottomless abyss, readable route. Two blocky yellow hazmat players on separate blocks, one waiting. One dark-blue smooth ball on far platform, subtle white circular pressure plate on endpoint as in second reference adapted amber. NO ENTITY, no monster, no face in darkness. Only text: 'LEVEL 5' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "10_level5_void_rooms_b.png",
+    "references": [
+      "l5_rose.png",
+      "l5_plate.png",
+      "l5_mint.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Rose pastel void parkour corridor, same rough pink plaster repeating enormous rounded wall ribs, low ceiling and bare white hanging spherical lamps. Elevated sideways three-quarter camera shows one yellow blocky hazmat player MID-JUMP across a clearly visible gap between two rose ledges over pure black abyss. Teammate waits on next ledge. Ledges and tall rectangular pillars follow reference navigable route. Prominent dark-blue smooth ball on safe near platform, another small ball far away; round white pressure plate at endpoint. NO entity whatsoever, no water, no landscape, no stairs replacing ledge jump. Only text: 'LEVEL 5' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "11_level5_void_rooms_c.png",
+    "references": [
+      "l5_coral.png",
+      "l5_violet.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Coral shaft: dramatic high-corner wide view angled down into square coral rough plaster shaft with huge pure black abyss. Narrow coral stairs climb along walls around perimeter, carried by tall thin wall-like blocks plunging into darkness as coral reference. Two white bare globe bulbs on long black cords. One small yellow hazmat Roblox player climbing near-right stair and another higher on far wall. No railings, no central floating spiral, NO entities, no monster, no face. Route must read as wall-hugging ascent. Only text: 'LEVEL 5' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "12_level6_playground_a.png",
+    "references": [
+      "l6_doll.png",
+      "l6_d.png",
+      "l6_b.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Low intimate camera behind blue padded play structure upright, revealing one yellow blocky hazmat player hiding near-left. Middle-right the EXACT grey porcelain doll child from first reference counting at yellow cylindrical HOME BASE pole: bald grey porcelain head, small conical cap, grey jointed arms and legs, striped muted brown/blue shirt, denim short overalls, bare porcelain feet, hands covering eyes facing pole. White circular base with yellow rim and black band on pole. Keep yellow sign but remove ALL lettering and numerals; only retain simple counting-child drawing. Blue/green checker foam floor, primary-colour netted play frame, industrial exposed steel ceiling, ducts, white strip lights, potted plants and benches. Doll is fictional, intact, no injury. Hide-and-seek stillness, no chase. Only text: 'LEVEL 6' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "13_level6_playground_b.png",
+    "references": [
+      "l6_b.png",
+      "l6_c.png",
+      "l6_doll.png"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Wide sweeping 24mm indoor playground showing reference large yellow open slide foreground right, long red slide beyond and smaller green slide, yellow/red/green padded frame with black safety mesh and blue enclosed tube, dark blue mat scattered coloured balls; green/blue checker surrounding floor, warehouse ceiling with silver duct and fluorescent bars. Two yellow hazmat Roblox players cautiously gathering beside near slide. Small exact grey porcelain doll in striped shirt and denim short overalls stands still in distant opening, no other entities. No lettering on any signs. Sharp playful equipment against quiet uncanny empty scale. Only text: 'LEVEL 6' in upper-left at 5% margins, off-white clean condensed sans, slight tracking, small cap-height approximately 4% of frame height, no box."
+  },
+  {
+    "file": "14_lobby.png",
+    "references": [
+      "lobby_tunnel.jpg",
+      "lobby_bay4.jpg"
+    ],
+    "prompt": "Use case: ads-marketing. Create ONE landscape 16:9 1920x1080 PNG Roblox store gallery image. References are authoritative environment references, not UI references. Match their architecture, materials, simple game geometry, colours and props faithfully, with sharper rendering and cinematic practical lighting. Readable at 320x180: clear foreground, route/threat, background; key subjects 5% inside edges, above bottom 15%. Players must be unmistakably blocky Roblox avatars in yellow hazmat suits with dark face visors, black gloves and boots, never realistic humans. No HUD, menus, icons, cursor, interface, borders, watermarks, real brands, gore, blood, weapons, extra entities, or unspecified text. Keep restrained lighting, no heavy bloom or fog. Wide tunnel lobby with players gathering: preserve concrete arched tunnel, dark ribs, two overhead cable trays with cyan practical lamps, asphalt roadway with dashed white centerline and pale raised sidewalks from first reference. Show a side gate opening into matching second-reference level bay with oval green staging pads, beige benches, dark walls with thin cyan/magenta light strips and blank rectangular gate panels. Three yellow hazmat blocky Roblox players gather together foreground middle, readable co-op group. No entity. Background tunnel blockage made of piled grey furniture as first reference. No text anywhere, no numbers on gates, no signage, no interface. Absolutely no text."
+  }
+]

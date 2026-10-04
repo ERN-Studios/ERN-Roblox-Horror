@@ -1,0 +1,6 @@
+2026-09-21T22:47:36.576Z,23339.576172,8e80,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing
+2026-09-21T22:47:36.576Z,23339.576172,8fb4,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress
+2026-09-21T22:47:41.046Z,23344.046875,8dcc,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-21T22:47:41.126Z,23344.126953,907c,6,Info [FLog::CreatorOutput] Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
+2026-09-21T22:47:41.132Z,23344.132812,907c,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-21T22:47:41.132Z,23344.132812,907c,6,Info [FLog::CreatorOutput] → Add publish notes to v1973

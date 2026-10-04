@@ -1,0 +1,8 @@
+Verified target: place 131311258779917, universe 10559217407
+Published version: v2005
+Source log: 0.740.0.7400927_20260923T092827Z_Studio_B9061_last.log
+Action: native Studio Publish to Roblox (Alt+P)
+
+2026-09-23T10:58:47.207Z,5419.207031,a3c4,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-23T10:58:47.225Z,5419.225098,a0a8,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-23T10:58:47.226Z,5419.226074,a0a8,6,Info [FLog::CreatorOutput] → Add publish notes to v2005
