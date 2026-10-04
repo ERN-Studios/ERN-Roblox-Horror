@@ -69,6 +69,15 @@ do
 end
 local session = nil
 
+-- PARTY_20261004 (owner): the round's clock. Every deadline in this module reads `clock()`, which stands still
+-- while the easter-egg party is on, so the round carries on afterwards exactly where it was: the search timer,
+-- the voice gaps, a pause the doll was in. `realClock` is the wall clock, for the party itself.
+local realClock = os.clock
+local pausedAt, pausedTotal = nil, 0
+local function clock()
+	return (pausedAt or realClock()) - pausedTotal
+end
+
 function Game.SetReturnHandler(fn)
 	returnHandler = fn
 end
@@ -304,12 +313,12 @@ end
 -- Speak one recorded line (ReplicatedStorage.Level6Counter.Voice). Chatter gives way to a line that is
 -- still playing; `force` cuts it off. Returns the line's length in seconds, or nil when it was skipped.
 function Session:say(key, force)
-	if not force and os.clock() < self.voiceUntil then return nil end
+	if not force and clock() < self.voiceUntil then return nil end
 	local voice = ReplicatedStorage:FindFirstChild("Level6Counter")
 	voice = voice and voice:FindFirstChild("Voice")
 	local sound = voice and voice:FindFirstChild(key)
 	local seconds = sound and sound:GetAttribute("Seconds") or 2
-	self.voiceUntil = os.clock() + seconds + 0.5
+	self.voiceUntil = clock() + seconds + 0.5
 	broadcast(self, "say", key)
 	return seconds
 end
@@ -342,6 +351,7 @@ function Session:follow(points, speed, phase)
 		while true do
 			if not self.active or self.phase ~= phase or self.interrupt then return false end
 			local dt = RunService.Heartbeat:Wait()
+			if self.partyOn then self:hold(); continue end
 			local feet = self:feet()
 			local delta = goal - feet
 			local dist = delta.Magnitude
@@ -452,7 +462,7 @@ function Session:perceive()
 	local best, bestDist = nil, math.huge
 	for player, state in pairs(self.players) do
 		local root = rootOf(player)
-		if root and not state.caught and os.clock() >= (state.graceUntil or 0) then
+		if root and not state.caught and clock() >= (state.graceUntil or 0) then
 			local seen, dist = self:sees(root, params)
 			if seen and dist < bestDist then best, bestDist = player, dist end
 			local speed = flat(root.AssemblyLinearVelocity).Magnitude
@@ -492,8 +502,8 @@ function Session:catch(player)
 		local stand = Vector3.new(held.Position.X, feet.Y, held.Position.Z) - to.Unit * CONFIG.GrabDistance
 		self:place(self:surface(stand), to)
 	end
-	self.pauseUntil = os.clock() + CONFIG.CaughtReturnDelay
-	self.killUntil = os.clock() + CONFIG.CaughtReturnDelay + 0.5
+	self.pauseUntil = clock() + CONFIG.CaughtReturnDelay
+	self.killUntil = clock() + CONFIG.CaughtReturnDelay + 0.5
 	self.interrupt = true
 	self:pose("Catch")
 	self:say(pick("kill"), true)
@@ -543,7 +553,7 @@ function Session:playerDied(player)
 		end
 	end
 	if self:living() == 0 and not self.wipedAt then
-		self.wipedAt = os.clock()
+		self.wipedAt = clock()
 		self.interrupt = true
 		for other in pairs(self.players) do
 			if other.Parent == Players then
@@ -556,7 +566,7 @@ end
 -- The 15 seconds after the last player falls. True when somebody re-entered and the round goes on.
 function Session:wipeWindow()
 	self:pose("Idle")
-	while self.active and self.wipedAt and os.clock() - self.wipedAt < CONFIG.PartyDownSeconds do
+	while self.active and self.wipedAt and clock() - self.wipedAt < CONFIG.PartyDownSeconds do
 		self.anim.speed = 0
 		task.wait(0.2)
 		if self:count() == 0 then break end
@@ -589,7 +599,7 @@ function Session:reenter(player, free)
 	local at = entrance and entrance:IsA("BasePart") and entrance.Position or self.info.spawn
 	character:PivotTo(CFrame.new(at + Vector3.new(0, 3.5, 0)))
 	state.caught, state.dead, state.dunked = false, false, false
-	state.graceUntil = os.clock() + CONFIG.ReentryGraceSeconds
+	state.graceUntil = clock() + CONFIG.ReentryGraceSeconds
 	if not free then player:SetAttribute("ZyntraReentryUsed", true) end
 	local wasWiped = self.wipedAt ~= nil
 	self.wipedAt = nil
@@ -667,9 +677,10 @@ function Session:chooseSpot()
 end
 
 function Session:seekBrain(deadline)
-	while self.active and self.phase == "seek" and os.clock() < deadline do
+	while self.active and self.phase == "seek" and clock() < deadline do
+		self:hold()
 		self.interrupt = false
-		if self.pauseUntil and os.clock() < self.pauseUntil then
+		if self.pauseUntil and clock() < self.pauseUntil then
 			self.anim.speed = 0             -- holding a Spotted or Catch pose
 			task.wait(0.1)
 		elseif self.chase then
@@ -678,21 +689,21 @@ function Session:seekBrain(deadline)
 			if not root or not self.players[player] or self.players[player].caught then
 				self.chase = nil
 			else
-				if os.clock() > (self.nextChaseLine or 0) then
-					self.nextChaseLine = os.clock() + 6 + math.random() * 4
+				if clock() > (self.nextChaseLine or 0) then
+					self.nextChaseLine = clock() + 6 + math.random() * 4
 					self:say(pick("chase"))
 				end
 				local target = root.Position - Vector3.new(0, 3, 0)
-				local direct = (target - self:feet()).Magnitude < 28 and os.clock() - (self.lastSeen or 0) < 0.4
+				local direct = (target - self:feet()).Magnitude < 28 and clock() - (self.lastSeen or 0) < 0.4
 				-- no route is no obstacle: it comes straight through whatever is in the way
 				local points = direct and {self:feet(), target} or self:path(target) or {self:feet(), target}
 				if points then
 					-- re-plan often while chasing; only the first stretch of the route is used
 					local short = {points[1]}
 					for i = 2, math.min(#points, 5) do short[#short + 1] = points[i] end
-					local started = os.clock()
+					local started = clock()
 					self.interrupt = false
-					task.delay(0.35, function() if os.clock() - started >= 0.3 then self.interrupt = true end end)
+					task.delay(0.35, function() if clock() - started >= 0.3 then self.interrupt = true end end)
 					self:follow(short, CONFIG.ChaseSpeed, "seek")
 				else
 					task.wait(0.2)
@@ -704,16 +715,16 @@ function Session:seekBrain(deadline)
 			self:walkTo(at - Vector3.new(0, 3, 0), CONFIG.WalkSpeed * 1.25, "seek")
 		else
 			local option = self:chooseSpot()
-			if os.clock() > (self.nextSearchLine or 0) then
-				self.nextSearchLine = os.clock() + 9 + math.random() * 8
+			if clock() > (self.nextSearchLine or 0) then
+				self.nextSearchLine = clock() + 9 + math.random() * 8
 				self:say(pick("search"))
 			end
 			local arrived = self:walkTo(option.spot - Vector3.new(0, 0.5, 0), CONFIG.WalkSpeed, "seek")
 			self.checked[option.i] = true
 			if arrived and self.active and self.phase == "seek" and not self.chase then
 				self:pose("Search_Look")
-				local untilT = os.clock() + CONFIG.CheckPause
-				while os.clock() < untilT and not self.chase and self.phase == "seek" do task.wait(0.1) end
+				local untilT = clock() + CONFIG.CheckPause
+				while clock() < untilT and not self.chase and self.phase == "seek" do task.wait(0.1) end
 				if not self.chase and self.phase == "seek" and math.random() < 0.55 then self:say(pick("check")) end
 			elseif not arrived and not self.chase then
 				self:pose("Idle")
@@ -725,12 +736,13 @@ end
 
 function Session:seekPhase()
 	self.phase = "seek"
-	local deadline = os.clock() + CONFIG.SeekSeconds
+	local deadline = clock() + CONFIG.SeekSeconds
 	local result = "timeup"
 	local brain = task.spawn(function() self:seekBrain(deadline) end)
 	local lastTimer = -1
 	while self.active and self.phase == "seek" do
 		task.wait(0.15)
+		if self.partyOn then self:hold(); continue end
 		if self:count() == 0 then result = "empty"; break end
 		if self.wipedAt then result = "wiped"; break end
 		local seen = self:perceive()
@@ -741,19 +753,19 @@ function Session:seekPhase()
 				self.chase = seen
 				self.interrupt = true
 				event:FireClient(seen, "chase", true)
-				if first and not (self.pauseUntil and os.clock() < self.pauseUntil) then
+				if first and not (self.pauseUntil and clock() < self.pauseUntil) then
 					-- it stops dead, points and says so before it runs: the player's head start
-					self.pauseUntil = os.clock() + CONFIG.SpottedPause
+					self.pauseUntil = clock() + CONFIG.SpottedPause
 					self:pose("Spotted")
 					local feet = self:feet()
 					local to = rootOf(seen)
 					if to then self:place(feet, flat(to.Position - feet)) end
 					self:say(pick("sprint"), true)
-					self.nextChaseLine = os.clock() + 4
+					self.nextChaseLine = clock() + 4
 				end
 			end
-			self.lastSeen = os.clock()
-		elseif self.chase and os.clock() - (self.lastSeen or 0) > CONFIG.LoseSightSeconds then
+			self.lastSeen = clock()
+		elseif self.chase and clock() - (self.lastSeen or 0) > CONFIG.LoseSightSeconds then
 			local lost = self.chase
 			self.chase = nil
 			local root = rootOf(lost)
@@ -792,7 +804,7 @@ function Session:seekPhase()
 		-- a player caught after tagging no longer counts either way: the tally is always of the living
 		self.dunks = self:tagged()
 		if self:living() > 0 and self.dunks >= self:target() then result = "won"; break end
-		local left = math.max(0, math.ceil(deadline - os.clock()))
+		local left = math.max(0, math.ceil(deadline - clock()))
 		if left ~= lastTimer then lastTimer = left; broadcast(self, "timer", left) end
 		if left <= 0 then result = "timeup"; break end
 	end
@@ -820,7 +832,7 @@ function Session:escapePhase()
 	light.Color, light.Range, light.Brightness = Color3.fromRGB(80, 255, 130), 40, 3
 	light.Parent = beacon
 	beacon.Parent = self.info.model
-	local deadline = os.clock() + CONFIG.EscapeSeconds
+	local deadline = clock() + CONFIG.EscapeSeconds
 	self.pauseUntil = nil
 	local brain = task.spawn(function()
 		while self.active and self.phase == "escape" do
@@ -853,11 +865,11 @@ function Session:escapePhase()
 			end
 		end
 	end)
-	while self.active and self.phase == "escape" and os.clock() < deadline do
+	while self.active and self.phase == "escape" and clock() < deadline do
 		task.wait(0.15)
 		if self:count() == 0 then break end
 		if self.wipedAt then
-			if self:wipeWindow() then deadline = os.clock() + CONFIG.EscapeSeconds else break end
+			if self:wipeWindow() then deadline = clock() + CONFIG.EscapeSeconds else break end
 		end
 		self:perceive()
 		for player, state in pairs(self.players) do
@@ -890,6 +902,196 @@ function Session:escapePhase()
 	beacon:Destroy()
 end
 
+-- PARTY_20261004 (owner's easter egg). A hidden button behind one of the counters. Pressed while it is searching
+-- (once per session, never during a chase), everything stops for 30 seconds: every living player is stood round
+-- the table in the dark party room, the door is shut, a disco ball turns, the eurodance track plays and the
+-- Counter breakdances on the table (clips Dance_* from tools/level6_entity/build_dance.py). Then every player
+-- and the doll are put back exactly where they were and the search goes on from the same second: `clock()`
+-- stood still meanwhile, and the loops that move the doll or look for players wait in `hold`.
+local PARTY = {Seconds = 30, Track = "rbxassetid://129281139879903", RoomX = -193,
+	Routine = {{"Dance_Toprock", 4}, {"Dance_Windmill", 7}, {"Dance_Headspin", 7}, {"Dance_Freeze", 4}, {"Dance_Windmill", 4}, {"Dance_Finale", 4}},
+	Slots = {Vector3.new(12.5, 0, 0), Vector3.new(-12.5, 0, 0), Vector3.new(7, 0, 13), Vector3.new(-7, 0, 13), Vector3.new(7, 0, -13), Vector3.new(-7, 0, -13)},
+	Colours = {Color3.fromRGB(255, 64, 176), Color3.fromRGB(70, 230, 255), Color3.fromRGB(255, 220, 60), Color3.fromRGB(90, 255, 130)}}
+
+function Session:hold()
+	while self.partyOn and self.active do task.wait(0.1) end
+end
+
+local function partyTable(model)
+	local rooms = model:FindFirstChild("PartyRooms")
+	local originX = model:GetPivot().Position.X
+	local best, bestGap = nil, 6
+	for _, d in ipairs(rooms and rooms:GetDescendants() or {}) do
+		if d:IsA("BasePart") and d.Name == "paper" and d.Size.X > 12 then
+			local gap = math.abs(d.Position.X - (math.floor(originX / 1000 + 0.5) * 1000 + PARTY.RoomX))
+			if gap < bestGap then best, bestGap = d, gap end
+		end
+	end
+	return best
+end
+
+function Session:party(by)
+	if not self.active or self.phase ~= "seek" or self.chase or self.partyUsed or self.partyOn or self.wipedAt
+		or clock() < (self.killUntil or 0) then return false end
+	local model = self.info.model
+	local top = partyTable(model)
+	if not top then return false end
+	self.partyUsed, self.partyOn = true, true
+	pausedAt = realClock()
+	local tableTop = top.Position + Vector3.new(0, top.Size.Y / 2, 0)
+	local floorY = tableTop.Y - 3.6
+	local made, dimmed, back = {}, {}, {}
+	local saved = {frame = self.root.CFrame, name = self.anim.name, speed = self.anim.speed}
+	local function part(name, size, cf, colour, material)
+		local item = Instance.new("Part")
+		item.Name, item.Size, item.CFrame, item.Color, item.Material = name, size, cf, colour, material
+		item.Anchored, item.CanTouch = true, false
+		item.Parent = model
+		table.insert(made, item)
+		return item
+	end
+	local ok, problem = pcall(function()
+		-- the players, round the table and facing it
+		local slot = 0
+		for player in pairs(self.players) do
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = humanoid and humanoid.RootPart
+			if root and humanoid.Health > 0 then
+				slot += 1
+				back[player] = {character = character, frame = character:GetPivot()}
+				local at = Vector3.new(tableTop.X, floorY + 3.2, tableTop.Z) + PARTY.Slots[(slot - 1) % #PARTY.Slots + 1]
+				root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+				character:PivotTo(CFrame.lookAt(at, Vector3.new(tableTop.X, at.Y, tableTop.Z)))
+			end
+		end
+		-- the door, shut
+		local door = part("L6PartyDoor", Vector3.new(8.2, 10.6, 1.2),
+			CFrame.new(tableTop.X - 0.25, floorY + 5.3, tableTop.Z + 36), Color3.fromRGB(28, 40, 110), Enum.Material.SmoothPlastic)
+		local lock = Instance.new("SurfaceGui")
+		lock.Face, lock.CanvasSize, lock.LightInfluence = Enum.NormalId.Front, Vector2.new(400, 520), 0
+		local word = Instance.new("TextLabel")
+		word.Size, word.BackgroundTransparency, word.Text = UDim2.fromScale(1, 0.3), 1, "LOCKED"
+		word.Position, word.Font, word.TextScaled, word.TextColor3 = UDim2.fromScale(0, 0.3), Enum.Font.Arcade, true, PARTY.Colours[1]
+		word.Parent = lock
+		lock.Parent = door
+		-- the room's own lamps down, the disco ball up
+		local lights = model:FindFirstChild("Lights")
+		for _, d in ipairs(lights and lights:GetDescendants() or {}) do
+			if d:IsA("Light") then
+				local host = d.Parent
+				local at = host and host:IsA("BasePart") and host.Position
+				if at and math.abs(at.X - tableTop.X) < 22 and math.abs(at.Z - (tableTop.Z + 6)) < 32 then
+					dimmed[d] = d.Brightness
+					d.Brightness *= 0.12
+				end
+			end
+		end
+		local hang = Vector3.new(tableTop.X, floorY + 14.6, tableTop.Z)
+		part("L6DiscoRod", Vector3.new(0.2, 1.6, 0.2), CFrame.new(hang + Vector3.new(0, 1.9, 0)), Color3.fromRGB(20, 20, 24), Enum.Material.Metal).CanCollide = false
+		local ball = part("L6DiscoBall", Vector3.new(2.4, 2.4, 2.4), CFrame.new(hang), Color3.fromRGB(210, 214, 226), Enum.Material.Metal)
+		ball.Shape, ball.Reflectance, ball.CanCollide, ball.CastShadow = Enum.PartType.Ball, 0.75, false, false
+		local glow = Instance.new("PointLight")
+		glow.Range, glow.Brightness, glow.Shadows = 26, 0.9, false
+		glow.Parent = ball
+		local beams = {}
+		for i, colour in ipairs(PARTY.Colours) do
+			for _, tilt in ipairs({-38, -68}) do
+				local holder = Instance.new("Attachment")
+				holder.CFrame = CFrame.Angles(0, math.rad(i * 90 + (tilt == -68 and 45 or 0)), 0) * CFrame.Angles(math.rad(tilt), 0, 0)
+				holder.Parent = ball
+				local spot = Instance.new("SpotLight")
+				spot.Face, spot.Angle, spot.Range, spot.Brightness, spot.Color, spot.Shadows = Enum.NormalId.Front, 24, 46, 6, colour, false
+				spot.Parent = holder
+				table.insert(beams, spot)
+			end
+		end
+		local music = Instance.new("Sound")
+		music.Name, music.SoundId, music.Volume, music.Looped = "L6PartyMusic", PARTY.Track, 1.4, true
+		music.RollOffMode, music.RollOffMinDistance, music.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 40, 160
+		music.Parent = ball
+		music:Play()
+		workspace:SetAttribute("Level6Party", true)
+		broadcast(self, "party", true, by and by.DisplayName or nil)
+		-- the Counter, on the table
+		self:place(tableTop, Vector3.new(0, 0, 1))
+		local began = realClock()
+		local spin = RunService.Heartbeat:Connect(function()
+			local t = realClock() - began
+			ball.CFrame = CFrame.new(hang) * CFrame.Angles(0, t * 1.9, 0)
+			local beat = t * 142 / 60
+			glow.Color = PARTY.Colours[math.floor(beat / 2) % #PARTY.Colours + 1]
+		end)
+		for _, step in ipairs(PARTY.Routine) do
+			if not self.active then break end
+			self.anim.name, self.anim.speed = step[1], 0
+			self.anim.serial += 1
+			local untilT = realClock() + step[2]
+			while self.active and realClock() < untilT do task.wait(0.1) end
+		end
+		spin:Disconnect()
+		music:Stop()
+	end)
+	if not ok then warn("[Level6] party: " .. tostring(problem)) end
+	-- everything back where it was
+	for _, item in ipairs(made) do item:Destroy() end
+	for light, brightness in pairs(dimmed) do
+		if light.Parent then light.Brightness = brightness end
+	end
+	for player, was in pairs(back) do
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if self.players[player] and character == was.character and humanoid and humanoid.Health > 0 and humanoid.RootPart then
+			humanoid.RootPart.AssemblyLinearVelocity = Vector3.zero
+			character:PivotTo(was.frame)
+		end
+	end
+	if self.root.Parent then
+		self.root.CFrame = saved.frame
+		self.anim.name, self.anim.speed = saved.name, saved.speed
+		self.anim.serial += 1
+	end
+	workspace:SetAttribute("Level6Party", nil)
+	broadcast(self, "party", false)
+	pausedTotal += realClock() - pausedAt
+	pausedAt = nil
+	self.partyOn = false
+	return true
+end
+
+-- The button: small, red, on the floor behind a counter where a hider would crouch.
+local function ensurePartyButton(info)
+	local model = info.model
+	if model:FindFirstChild("L6PartyButton") then return end
+	local anchors = model:FindFirstChild("Anchors")
+	local spot = anchors and (anchors:FindFirstChild("L6_Hide_counter_05") or anchors:FindFirstChild("L6_Hide_counter_01"))
+	if not spot then return end
+	local base = Instance.new("Part")
+	base.Name = "L6PartyButton"
+	base.Size, base.Color, base.Material = Vector3.new(0.9, 0.25, 0.9), Color3.fromRGB(18, 18, 22), Enum.Material.Metal
+	base.Anchored, base.CanCollide, base.CanTouch = true, false, false
+	base.CFrame = CFrame.new(spot.Position.X, info.floorY + 0.2, spot.Position.Z)
+	local hit = workspace:Raycast(spot.Position + Vector3.new(0, 3, 0), Vector3.new(0, -12, 0))
+	if hit then base.CFrame = CFrame.new(hit.Position + Vector3.new(0, 0.12, 0)) end
+	local cap = Instance.new("Part")
+	cap.Name, cap.Shape = "Cap", Enum.PartType.Cylinder
+	cap.Size, cap.Color, cap.Material = Vector3.new(0.22, 0.6, 0.6), Color3.fromRGB(210, 30, 40), Enum.Material.SmoothPlastic
+	cap.Anchored, cap.CanCollide, cap.CanTouch = true, false, false
+	cap.CFrame = base.CFrame * CFrame.new(0, 0.2, 0) * CFrame.Angles(0, 0, math.rad(90))
+	cap.Parent = base
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.ActionText, prompt.ObjectText = "PRESS", "?"
+	prompt.HoldDuration, prompt.MaxActivationDistance, prompt.RequiresLineOfSight = 0.6, 7, false
+	prompt.Parent = base
+	prompt.Triggered:Connect(function(player)
+		local s = session
+		if s and s.active and s.players[player] then
+			task.spawn(function() s:party(player) end)
+		end
+	end)
+	base.Parent = model
+end
+
 function Session:run()
 	while self.active do
 		self:countPhase()
@@ -903,14 +1105,14 @@ function Session:run()
 		if result == "empty" or result == "lost" or self.phase == "over" then break end
 		broadcast(self, "roundover", result)
 		-- let whatever it is saying finish; "I'll count again" only when the time simply ran out
-		if os.clock() < self.voiceUntil then task.wait(math.min(self.voiceUntil - os.clock(), 4)) end
+		if clock() < self.voiceUntil then task.wait(math.min(self.voiceUntil - clock(), 4)) end
 		if result == "timeup" then
 			local seconds = self:say("l6_round_again", true)
 			task.wait((seconds or 2) + 0.3)
 		end
 	end
 	-- a kill cam is looking at the doll: it stays until that is over
-	while os.clock() < (self.killUntil or 0) do task.wait(0.1) end
+	while clock() < (self.killUntil or 0) do task.wait(0.1) end
 	self:finish()
 end
 
@@ -1019,6 +1221,7 @@ function Game.AddPlayer(player)
 		event:FireClient(player, "paused")
 		return true
 	end
+	ensurePartyButton(info)
 	if not session or not session.active then
 		session = newSession(info)
 		session.players[player] = {dunked = false}
@@ -1042,7 +1245,7 @@ function Game.RemovePlayer(player)
 		s.interrupt = true
 	elseif s:living() == 0 and not s.wipedAt and s.active then
 		-- the last one standing LEFT rather than fell: the watchers still get their window, with no name on it
-		s.wipedAt = os.clock()
+		s.wipedAt = clock()
 		s.interrupt = true
 		for other in pairs(s.players) do
 			if other.Parent == Players then roundStatus:FireClient(other, "partydown", CONFIG.PartyDownSeconds, nil, DEATH_CAUSE) end

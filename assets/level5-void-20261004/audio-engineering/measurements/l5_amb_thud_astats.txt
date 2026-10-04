@@ -1,0 +1,92 @@
+Input #0, mp3, from '/Users/zeanjuul4/Projects/Roblox Horror REPO/assets/level5-void-20261004/l5_amb_thud.mp3':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Duration: 00:00:03.02, start: 0.023021, bitrate: 193 kb/s
+  Stream #0:0: Audio: mp3 (mp3float), 48000 Hz, stereo, fltp, 192 kb/s
+      Metadata:
+        encoder         : Lavc61.19
+Stream mapping:
+  Stream #0:0 -> #0:0 (mp3 (mp3float) -> pcm_s16le (native))
+Output #0, null, to 'pipe:':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0: Audio: pcm_s16le, 48000 Hz, stereo, s16, 1536 kb/s
+      Metadata:
+        encoder         : Lavc61.19.100 pcm_s16le
+[Parsed_astats_0 @ 0x600002eb02c0] Channel: 1
+[Parsed_astats_0 @ 0x600002eb02c0] DC offset: 0.000022
+[Parsed_astats_0 @ 0x600002eb02c0] Min level: -0.521931
+[Parsed_astats_0 @ 0x600002eb02c0] Max level: 0.405451
+[Parsed_astats_0 @ 0x600002eb02c0] Min difference: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Max difference: 0.004993
+[Parsed_astats_0 @ 0x600002eb02c0] Mean difference: 0.000379
+[Parsed_astats_0 @ 0x600002eb02c0] RMS difference: 0.000761
+[Parsed_astats_0 @ 0x600002eb02c0] Peak level dB: -5.647740
+[Parsed_astats_0 @ 0x600002eb02c0] RMS level dB: -23.963943
+[Parsed_astats_0 @ 0x600002eb02c0] RMS peak dB: -13.583513
+[Parsed_astats_0 @ 0x600002eb02c0] RMS trough dB: -94.098856
+[Parsed_astats_0 @ 0x600002eb02c0] Crest factor: 8.237779
+[Parsed_astats_0 @ 0x600002eb02c0] Flat factor: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Peak count: 2
+[Parsed_astats_0 @ 0x600002eb02c0] Abs Peak count: 1
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor dB: -93.104829
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor count: 43
+[Parsed_astats_0 @ 0x600002eb02c0] Entropy: 0.634009
+[Parsed_astats_0 @ 0x600002eb02c0] Bit depth: 31/32/32/32
+[Parsed_astats_0 @ 0x600002eb02c0] Dynamic range: 232.650044
+[Parsed_astats_0 @ 0x600002eb02c0] Zero crossings: 939
+[Parsed_astats_0 @ 0x600002eb02c0] Zero crossings rate: 0.006521
+[Parsed_astats_0 @ 0x600002eb02c0] Number of NaNs: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Number of Infs: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Number of denormals: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Channel: 2
+[Parsed_astats_0 @ 0x600002eb02c0] DC offset: 0.000023
+[Parsed_astats_0 @ 0x600002eb02c0] Min level: -0.480042
+[Parsed_astats_0 @ 0x600002eb02c0] Max level: 0.374152
+[Parsed_astats_0 @ 0x600002eb02c0] Min difference: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Max difference: 0.004659
+[Parsed_astats_0 @ 0x600002eb02c0] Mean difference: 0.000310
+[Parsed_astats_0 @ 0x600002eb02c0] RMS difference: 0.000638
+[Parsed_astats_0 @ 0x600002eb02c0] Peak level dB: -6.374411
+[Parsed_astats_0 @ 0x600002eb02c0] RMS level dB: -24.940522
+[Parsed_astats_0 @ 0x600002eb02c0] RMS peak dB: -14.249518
+[Parsed_astats_0 @ 0x600002eb02c0] RMS trough dB: -94.938160
+[Parsed_astats_0 @ 0x600002eb02c0] Crest factor: 8.478236
+[Parsed_astats_0 @ 0x600002eb02c0] Flat factor: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Peak count: 2
+[Parsed_astats_0 @ 0x600002eb02c0] Abs Peak count: 1
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor dB: -90.446622
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor count: 45
+[Parsed_astats_0 @ 0x600002eb02c0] Entropy: 0.612239
+[Parsed_astats_0 @ 0x600002eb02c0] Bit depth: 30/32/32/32
+[Parsed_astats_0 @ 0x600002eb02c0] Dynamic range: 247.905625
+[Parsed_astats_0 @ 0x600002eb02c0] Zero crossings: 895
+[Parsed_astats_0 @ 0x600002eb02c0] Zero crossings rate: 0.006215
+[Parsed_astats_0 @ 0x600002eb02c0] Number of NaNs: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Number of Infs: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Number of denormals: 0
+[Parsed_astats_0 @ 0x600002eb02c0] Overall
+[Parsed_astats_0 @ 0x600002eb02c0] DC offset: 0.000023
+[Parsed_astats_0 @ 0x600002eb02c0] Min level: -0.521931
+[Parsed_astats_0 @ 0x600002eb02c0] Max level: 0.405451
+[Parsed_astats_0 @ 0x600002eb02c0] Min difference: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Max difference: 0.004993
+[Parsed_astats_0 @ 0x600002eb02c0] Mean difference: 0.000344
+[Parsed_astats_0 @ 0x600002eb02c0] RMS difference: 0.000702
+[Parsed_astats_0 @ 0x600002eb02c0] Peak level dB: -5.647740
+[Parsed_astats_0 @ 0x600002eb02c0] RMS level dB: -24.424840
+[Parsed_astats_0 @ 0x600002eb02c0] RMS peak dB: -13.583513
+[Parsed_astats_0 @ 0x600002eb02c0] RMS trough dB: -94.938160
+[Parsed_astats_0 @ 0x600002eb02c0] Flat factor: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Peak count: 2.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Abs Peak count: 1.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor dB: -90.446622
+[Parsed_astats_0 @ 0x600002eb02c0] Noise floor count: 44.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Entropy: 0.623124
+[Parsed_astats_0 @ 0x600002eb02c0] Bit depth: 31/32/32/32
+[Parsed_astats_0 @ 0x600002eb02c0] Number of samples: 144000
+[Parsed_astats_0 @ 0x600002eb02c0] Number of NaNs: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Number of Infs: 0.000000
+[Parsed_astats_0 @ 0x600002eb02c0] Number of denormals: 0.000000
+[out#0/null @ 0x600002cbc000] video:0KiB audio:562KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+size=N/A time=00:00:03.00 bitrate=N/A speed= 438x    

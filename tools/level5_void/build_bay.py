@@ -75,15 +75,22 @@ block('MarqueeTrim', 'cyan', 14.6, 0.24, 0.7, 0.0, -26.3, y0=12.36, collide=Fals
 for k in range(9):
     SET.append({'n': 'Bulb', 'c': 'warm', 's': [0.5] * 3, 'p': [-6.4 + k * 1.6, 12.0, -25.9], 'sh': 's', 'col': False, 'material': 'Neon',
                 **({'light': [16, 0.7]} if k in (1, 4, 7) else {})})
-# two poster cases on the side of the rear wall, each a dark board in a neon frame, turned to face the middle
-for side, glow in ((-1, 'magenta'), (1, 'cyan')):
-    angle = 47.0
-    px, pz = side * 26.4 * math.sin(math.radians(angle)), -26.4 * math.cos(math.radians(angle))
+# four poster cases round the wall, each a one-sheet in a neon frame, turned to face the middle. The images are
+# the four "films" of the cinema (assets/lobby-posters-20261004, made from the level's own screenshots).
+POSTERS = [(-1, 132.0, 'cyan', 111560448892703), (1, 132.0, 'magenta', 99844209195430)]
+for side, angle, glow, image in POSTERS:
+    px, pz = side * 26.5 * math.sin(math.radians(angle)), -26.5 * math.cos(math.radians(angle))
     yaw = -side * angle
-    block('Poster', 'screen', 5.2, 7.4, 0.3, px, pz, y0=3.6, collide=False, yaw=yaw, material='SmoothPlastic',
-          text='LEVEL 4' if side < 0 else 'STAY QUIET', tc=glow)
-    block('PosterFrame', glow, 5.8, 0.22, 0.4, px, pz, y0=11.0, collide=False, yaw=yaw, material='Neon', light=[14, 0.6], lc=glow)
-    block('PosterFrame', glow, 5.8, 0.22, 0.4, px, pz, y0=3.38, collide=False, yaw=yaw, material='Neon')
+    block('Poster', 'screen', 5.4, 8.1, 0.3, px, pz, y0=3.4, collide=False, yaw=yaw, material='SmoothPlastic', img=image)
+    block('PosterFrame', glow, 6.0, 0.22, 0.4, px, pz, y0=11.5, collide=False, yaw=yaw, material='Neon', light=[14, 0.6], lc=glow)
+    block('PosterFrame', glow, 6.0, 0.22, 0.4, px, pz, y0=3.18, collide=False, yaw=yaw, material='Neon')
+# The two posters the bay's original decor carries on its back panel, either side of the desk, are the ones
+# the owner called "very bad". They are part of that mesh's texture, so each is covered by a new one-sheet
+# standing just in front of it.
+for side, glow, image in ((-1, 'magenta', 107732660117869), (1, 'cyan', 70389718286652)):
+    block('Poster', 'screen', 5.8, 8.7, 0.3, side * 7.0, -23.5, y0=3.0, collide=False, material='SmoothPlastic', img=image)
+    block('PosterFrame', glow, 6.4, 0.22, 0.4, side * 7.0, -23.5, y0=11.72, collide=False, material='Neon', light=[14, 0.6], lc=glow)
+    block('PosterFrame', glow, 6.4, 0.22, 0.4, side * 7.0, -23.5, y0=2.78, collide=False, material='Neon')
 # rope posts either side of the way in
 for side in (-1, 1):
     for pz in (17.0, 21.5, 26.0):
@@ -110,6 +117,8 @@ for level, rows in SETS.items():
             fields.append('yaw=%g' % row['yaw'])
         if row.get('light'):
             fields.append('light={%g,%g}' % tuple(row['light']))
+        if row.get('img'):
+            fields.append('img="rbxassetid://%d"' % row['img'])
         lines.append('\t\t\t\t{' + ', '.join(fields) + '},')
     pattern = re.compile(r'(-- LEVEL%d_BAY_SET_BEGIN[^\n]*\n).*?(\t\t\t\t-- LEVEL%d_BAY_SET_END)' % (level, level), re.S)
     assert pattern.search(source), f'the builder has no LEVEL{level}_BAY_SET markers'

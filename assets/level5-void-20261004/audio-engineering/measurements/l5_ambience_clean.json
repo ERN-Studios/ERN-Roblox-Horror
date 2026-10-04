@@ -1,0 +1,56 @@
+{
+  "name": "l5_ambience_clean.mp3",
+  "source": "l5_ambience.mp3",
+  "sha256": "14a82a741d44ec120810a9d1d6adc3b996d8745002380837f466fbe88355c4dc",
+  "processing": {
+    "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=5500:p=2",
+    "gain_db": 11.560000000000002,
+    "target_lufs": -24,
+    "loop_crossfade_seconds": 1.5,
+    "loop_duration_compensation_atempo": 0.9361702127659575
+  },
+  "before": {
+    "decoded_seconds": 22.0,
+    "quietest_second_start": 4.11,
+    "quietest_rms_dbfs": -40.73556011684491,
+    "quietest_high_band_rms_dbfs": -77.36444185223237,
+    "high_band_rms_dbfs": -76.6491808270686,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-35.29",
+      "input_tp": "-20.79",
+      "input_lra": "2.50",
+      "input_thresh": "-45.29",
+      "output_i": "-23.89",
+      "output_tp": "-9.72",
+      "output_lra": "2.70",
+      "output_thresh": "-33.89",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.11"
+    }
+  },
+  "after": {
+    "decoded_seconds": 22.0,
+    "quietest_second_start": 2.89,
+    "quietest_rms_dbfs": -29.768550726324698,
+    "quietest_high_band_rms_dbfs": -95.64494530298988,
+    "high_band_rms_dbfs": -94.249878705469,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-24.26",
+      "input_tp": "-9.93",
+      "input_lra": "3.90",
+      "input_thresh": "-34.26",
+      "output_i": "-24.28",
+      "output_tp": "-10.41",
+      "output_lra": "3.00",
+      "output_thresh": "-34.28",
+      "normalization_type": "dynamic",
+      "target_offset": "0.28"
+    }
+  },
+  "high_band_reduction_db": 17.600697878400396,
+  "boundary_step_dbfs": -64.06210744319176,
+  "decode_ok": true,
+  "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+}

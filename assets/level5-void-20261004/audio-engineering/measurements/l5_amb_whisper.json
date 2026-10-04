@@ -1,0 +1,56 @@
+{
+  "name": "l5_amb_whisper.mp3",
+  "source": "audio-engineering/raw/l5_amb_whisper.mp3",
+  "sha256": "70c516017024daf52a99fef691f88b7c41dddc63836b3b1c7fab483c598d9d5a",
+  "processing": {
+    "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=3.35000000:d=0.65",
+    "gain_db": 7.530000000000001,
+    "target_lufs": -22,
+    "loop_crossfade_seconds": null,
+    "loop_duration_compensation_atempo": null
+  },
+  "before": {
+    "decoded_seconds": 4.0,
+    "quietest_second_start": 3.0,
+    "quietest_rms_dbfs": -52.41220008754873,
+    "quietest_high_band_rms_dbfs": -67.35954300894578,
+    "high_band_rms_dbfs": -38.551639549299225,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-27.04",
+      "input_tp": "-14.85",
+      "input_lra": "1.40",
+      "input_thresh": "-38.04",
+      "output_i": "-23.71",
+      "output_tp": "-11.60",
+      "output_lra": "1.00",
+      "output_thresh": "-34.78",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.29"
+    }
+  },
+  "after": {
+    "decoded_seconds": 4.0,
+    "quietest_second_start": 3.0,
+    "quietest_rms_dbfs": -44.82998655297507,
+    "quietest_high_band_rms_dbfs": -72.18687643570003,
+    "high_band_rms_dbfs": -48.49519169188486,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-22.28",
+      "input_tp": "-8.74",
+      "input_lra": "1.50",
+      "input_thresh": "-33.27",
+      "output_i": "-23.71",
+      "output_tp": "-10.31",
+      "output_lra": "1.30",
+      "output_thresh": "-34.65",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.29"
+    }
+  },
+  "high_band_reduction_db": 9.943552142585638,
+  "boundary_step_dbfs": null,
+  "decode_ok": true,
+  "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+}

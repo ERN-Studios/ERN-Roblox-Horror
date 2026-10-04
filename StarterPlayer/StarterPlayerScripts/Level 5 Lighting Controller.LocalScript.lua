@@ -208,7 +208,11 @@ task.spawn(function()
 	-- AMBIENT_20261004: now and then something far off in the hall. Each plays once from a random point well
 	-- away from the listener, so it has a direction and never the same one twice.
 	local AMBIENT = {"l5_amb_knock", "l5_amb_door", "l5_amb_groan", "l5_amb_gust", "l5_amb_ball", "l5_amb_steps",
-		"l5_amb_chime", "l5_amb_drip", "l5_amb_hum", "l5_amb_breath"}
+		"l5_amb_chime", "l5_amb_drip", "l5_amb_hum", "l5_amb_breath",
+		-- the darker set (2026-10-04): something dragged far below, a whisper, a giggle, an impact in the pit,
+		-- the structure bending, a cry falling away, a heartbeat in the walls, a dissonant swell
+		"l5_amb_scrape", "l5_amb_whisper", "l5_amb_laugh", "l5_amb_thud", "l5_amb_metal", "l5_amb_fallaway",
+		"l5_amb_heartbeat", "l5_amb_tone"}
 	local nextAmbient, lastAmbient = os.clock() + 10 + math.random() * 10, nil
 	local function ambientAt(position)
 		local name

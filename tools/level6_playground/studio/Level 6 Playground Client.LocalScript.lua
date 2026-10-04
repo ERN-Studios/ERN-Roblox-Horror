@@ -258,6 +258,7 @@ local function musicTick(dt)
 	-- duck under any line that is playing
 	local talking = speaking ~= nil or next(paCopies) ~= nil
 	local goal = talking and DUCK or 1
+	if workspace:GetAttribute("Level6Party") == true then goal = 0 end      -- the party room has its own music
 	music.level += math.clamp(goal - music.level, -dt * 1.6, dt * 0.7)
 	bed.Volume = BED_VOLUME * GENERAL * MUSIC * music.level
 	local model = workspace:FindFirstChild(MODEL_NAME)
@@ -537,6 +538,8 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		markerMode = "post"
 		objective("TOUCH THE POST", "Everyone alive must touch the yellow post. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
+	elseif kind == "party" then
+		if a then status("PARTY MODE  ·  30 SECONDS", 5, Color3.fromRGB(255, 64, 176)) else status("Back to hiding.", 3, Color3.fromRGB(255, 90, 90)) end
 	elseif kind == "timer" then
 		timerLabel.Text = string.format("%d:%02d", a // 60, a % 60)
 	elseif kind == "dunk" then

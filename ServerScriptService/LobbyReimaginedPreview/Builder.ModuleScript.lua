@@ -262,9 +262,11 @@ function Module.Build()
 		for _, d in ipairs(visuals:GetChildren()) do
 			if SOLID[d.Name] then solid(d) end
 		end
-		-- END_PILES_20261004 (owner): the wall behind each end's furniture pile showed above and around it. Every
-		-- piece of the piles is cloned twice more, higher and further back (the clones may sink into the wall), with
-		-- the pile mirrored left to right so the copies do not line up with the originals.
+		-- END_PILES_20261004b (owner, twice: "the wall behind the furniture is still visible"). The pile is a mound,
+		-- and the tunnel's end wall showed beside and above it. The whole cross-section of the tunnel is now filled
+		-- behind the pile: a grid over the arch (two layers deep, the far one sunk into the wall), each cell a clone
+		-- of a random pile piece at a random tilt. The first attempt cloned the mound upward, which only made a
+		-- taller mound and left the sides open.
 		local piles = visuals:FindFirstChild("Reference End Furniture Piles")
 		if piles then
 			local extra = Instance.new("Folder")
@@ -272,19 +274,32 @@ function Module.Build()
 			extra:SetAttribute("LobbyReimaginedOwned", true)
 			extra.Parent = visuals
 			local random = Random.new(20261004)
+			local ends = {[1] = {pieces = {}, far = 0}, [-1] = {pieces = {}, far = 0}}
 			for _, piece in ipairs(piles:GetDescendants()) do
 				if piece:IsA("BasePart") then
 					local rel = piece.Position - center
-					local out = rel.Z > 0 and 1 or -1                   -- which end of the tunnel this piece is at
-					for layer = 1, 2 do
-						local copy = piece:Clone()
-						local lift = layer == 1 and 7.5 or 14.5
-						local at = center + Vector3.new(-rel.X * (layer == 1 and 0.85 or 0.6) + random:NextNumber(-2, 2),
-							rel.Y + lift + random:NextNumber(-1.5, 1.5), rel.Z + out * (1.5 + layer * 2 + random:NextNumber(0, 1.5)))
-						copy.CFrame = CFrame.new(at) * CFrame.Angles(random:NextNumber(-0.5, 0.5), random:NextNumber(-math.pi, math.pi), random:NextNumber(-0.5, 0.5))
-						copy.CanCollide, copy.CanQuery, copy.CanTouch = false, false, false   -- out of reach: nobody stands up there
-						copy.CastShadow = false
-						copy.Parent = extra
+					local side = ends[rel.Z > 0 and 1 or -1]
+					table.insert(side.pieces, piece)
+					side.far = math.max(side.far, math.abs(rel.Z))
+				end
+			end
+			local HALF_WIDTH, HEIGHT, CELL = 37, 31, 4.4
+			for out, side in pairs(ends) do
+				if #side.pieces == 0 then continue end
+				for layer = 0, 1 do
+					for x = -HALF_WIDTH, HALF_WIDTH, CELL do
+						for y = 1.5, HEIGHT, CELL do
+							-- inside the arch (an ellipse over the floor), with a margin so the rim is covered too
+							if (x / HALF_WIDTH) ^ 2 + (y / HEIGHT) ^ 2 <= 1.08 then
+								local copy = side.pieces[random:NextInteger(1, #side.pieces)]:Clone()
+								local at = center + Vector3.new(x + random:NextNumber(-1.4, 1.4), y + random:NextNumber(-1.4, 1.4),
+									out * (side.far - 2.5 + layer * 3.2 + random:NextNumber(-0.8, 0.8)))
+								copy.CFrame = CFrame.new(at) * CFrame.Angles(random:NextNumber(-0.6, 0.6), random:NextNumber(-math.pi, math.pi), random:NextNumber(-0.6, 0.6))
+								copy.CanCollide, copy.CanQuery, copy.CanTouch = false, false, false   -- behind the pile: nobody reaches it
+								copy.CastShadow = false
+								copy.Parent = extra
+							end
+						end
 					end
 				end
 			end
@@ -338,12 +353,18 @@ function Module.Build()
 				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={3.2,12,-25.9}, ball=true, ghost=true, m="Neon"},
 				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={4.8,12,-25.9}, ball=true, ghost=true, m="Neon", light={16,0.7}},
 				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={6.4,12,-25.9}, ball=true, ghost=true, m="Neon"},
-				{n="Poster", c="screen", s={5.2,7.4,0.3}, p={-19.308,7.3,-18.005}, ghost=true, m="SmoothPlastic", text="LEVEL 4", tc="magenta", yaw=47},
-				{n="PosterFrame", c="magenta", s={5.8,0.22,0.4}, p={-19.308,11.11,-18.005}, ghost=true, m="Neon", lc="magenta", yaw=47, light={14,0.6}},
-				{n="PosterFrame", c="magenta", s={5.8,0.22,0.4}, p={-19.308,3.49,-18.005}, ghost=true, m="Neon", yaw=47},
-				{n="Poster", c="screen", s={5.2,7.4,0.3}, p={19.308,7.3,-18.005}, ghost=true, m="SmoothPlastic", text="STAY QUIET", tc="cyan", yaw=-47},
-				{n="PosterFrame", c="cyan", s={5.8,0.22,0.4}, p={19.308,11.11,-18.005}, ghost=true, m="Neon", lc="cyan", yaw=-47, light={14,0.6}},
-				{n="PosterFrame", c="cyan", s={5.8,0.22,0.4}, p={19.308,3.49,-18.005}, ghost=true, m="Neon", yaw=-47},
+				{n="Poster", c="screen", s={5.4,8.1,0.3}, p={-19.693,7.45,17.732}, ghost=true, m="SmoothPlastic", yaw=132, img="rbxassetid://111560448892703"},
+				{n="PosterFrame", c="cyan", s={6,0.22,0.4}, p={-19.693,11.61,17.732}, ghost=true, m="Neon", lc="cyan", yaw=132, light={14,0.6}},
+				{n="PosterFrame", c="cyan", s={6,0.22,0.4}, p={-19.693,3.29,17.732}, ghost=true, m="Neon", yaw=132},
+				{n="Poster", c="screen", s={5.4,8.1,0.3}, p={19.693,7.45,17.732}, ghost=true, m="SmoothPlastic", yaw=-132, img="rbxassetid://99844209195430"},
+				{n="PosterFrame", c="magenta", s={6,0.22,0.4}, p={19.693,11.61,17.732}, ghost=true, m="Neon", lc="magenta", yaw=-132, light={14,0.6}},
+				{n="PosterFrame", c="magenta", s={6,0.22,0.4}, p={19.693,3.29,17.732}, ghost=true, m="Neon", yaw=-132},
+				{n="Poster", c="screen", s={5.8,8.7,0.3}, p={-7,7.35,-23.5}, ghost=true, m="SmoothPlastic", img="rbxassetid://107732660117869"},
+				{n="PosterFrame", c="magenta", s={6.4,0.22,0.4}, p={-7,11.83,-23.5}, ghost=true, m="Neon", lc="magenta", light={14,0.6}},
+				{n="PosterFrame", c="magenta", s={6.4,0.22,0.4}, p={-7,2.89,-23.5}, ghost=true, m="Neon"},
+				{n="Poster", c="screen", s={5.8,8.7,0.3}, p={7,7.35,-23.5}, ghost=true, m="SmoothPlastic", img="rbxassetid://70389718286652"},
+				{n="PosterFrame", c="cyan", s={6.4,0.22,0.4}, p={7,11.83,-23.5}, ghost=true, m="Neon", lc="cyan", light={14,0.6}},
+				{n="PosterFrame", c="cyan", s={6.4,0.22,0.4}, p={7,2.89,-23.5}, ghost=true, m="Neon"},
 				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={-3.6,1.6,17}, m="Metal"},
 				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={-3.6,3.4,17}, ball=true, ghost=true, m="Metal"},
 				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={-3.6,1.6,21.5}, m="Metal"},
@@ -445,6 +466,14 @@ function Module.Build()
 					glow.Color = COLOURS[row.lc or "warm"]
 					glow.Parent = part
 					part.CastShadow = false
+				end
+				if row.img then
+					local sheet = Instance.new("Decal")
+					sheet.Face, sheet.Texture = Enum.NormalId.Back, row.img
+					sheet.Parent = part
+					local lamp = Instance.new("SurfaceLight")                -- a picture light, so the one-sheet reads in the dark bay
+					lamp.Face, lamp.Range, lamp.Brightness, lamp.Angle, lamp.Shadows = Enum.NormalId.Back, 8, 1.3, 150, false
+					lamp.Parent = part
 				end
 				if row.text then
 					local gui = Instance.new("SurfaceGui")

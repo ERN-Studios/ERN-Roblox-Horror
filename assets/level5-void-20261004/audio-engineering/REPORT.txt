@@ -1,0 +1,27 @@
+Level 5 audio engineering results
+
+All changes confined to assets/level5-void-20261004. No Git commit, Studio edit or publication.
+Original MP3s preserved. Eight ElevenLabs Sound Effects v2 generations retained in audio-engineering/raw.
+
+Measurement: decoded 48 kHz stereo float; quietest rolling 1-second RMS window searched every 10 ms; Welch PSD (8192 samples), channel-mean power integrated over 6-16 kHz, expressed as RMS dBFS. Measurements include final MP3 encoding and normalization. Spectrum CSVs and FFmpeg astats logs accompany per-file JSON.
+No qualifying narrow high-frequency whine in either original bed; no notch/de-esser applied.
+22 dB afftdn with noise tracking, 30 Hz high-pass, 2-pole low-pass at 5500 Hz (ambience), 2800 Hz (wind), 3500 Hz (one-shots).
+Bed loops: slight pitch-preserving duration expansion before 1.5-second linear acrossfade of two copies, then extract exactly one original-length period. atempo factors recorded. MP3 boundary steps: ambience -64.1 dBFS, wind -37.4 dBFS.
+One-shots: short attack smoothing, final 650 ms fade. Heartbeat arranged from generated material to obtain four main thumps.
+Loudness: measured BS.1770 integrated loudness, constant gain normalization, final encoded loudness verified within 0.75 LU of targets.
+Subjective listening review was not performed; quantitative noise reduction is verified, absolute absence of audible hiss and semantic prompt fidelity are not certified.
+
+File | decoded seconds | LUFS | 6-16 kHz RMS before -> after dBFS | reduction dB
+l5_ambience_clean.mp3 | 22.000 | -24.26 | -76.65 -> -94.25 | 17.60
+l5_depth_wind_clean.mp3 | 15.000 | -24.27 | -85.62 -> -114.18 | 28.56
+l5_amb_scrape.mp3 | 4.000 | -22.25 | -42.62 -> -62.26 | 19.63
+l5_amb_whisper.mp3 | 4.000 | -22.28 | -38.55 -> -48.50 | 9.94
+l5_amb_laugh.mp3 | 3.000 | -22.25 | -47.14 -> -68.25 | 21.11
+l5_amb_thud.mp3 | 3.000 | -22.56 | -98.42 -> -119.93 | 21.51
+l5_amb_metal.mp3 | 5.000 | -22.27 | -69.14 -> -98.04 | 28.91
+l5_amb_fallaway.mp3 | 5.000 | -22.28 | -51.41 -> -68.66 | 17.25
+l5_amb_heartbeat.mp3 | 5.000 | -22.27 | -86.64 -> -105.22 | 18.58
+l5_amb_tone.mp3 | 6.000 | -22.11 | -85.27 -> -112.52 | 27.25
+
+Every MP3 in folder and raw subfolder decoded without errors: 56 files.
+Reproduce with Python numpy/scipy and FFmpeg: process_audio.py beds / shots.

@@ -466,5 +466,270 @@
       "last_signal_seconds_at_minus45_dbfs": 0.185521,
       "listening_review": "Not performed; transient count is an automated signal check."
     }
+  },
+  {
+    "name": "l5_ambience_clean.mp3",
+    "seconds": 22.032,
+    "loop": true,
+    "sha256": "14a82a741d44ec120810a9d1d6adc3b996d8745002380837f466fbe88355c4dc",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=5500:p=2",
+      "gain_db": 11.560000000000002,
+      "target_lufs": -24,
+      "loop_crossfade_seconds": 1.5,
+      "loop_duration_compensation_atempo": 0.9361702127659575
+    },
+    "verification": {
+      "decoded_seconds": 22.0,
+      "integrated_lufs": -24.26,
+      "true_peak_dbtp": -9.93,
+      "high_band_before_dbfs": -76.6491808270686,
+      "high_band_after_dbfs": -94.249878705469,
+      "high_band_reduction_db": 17.600697878400396,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "source": "l5_ambience.mp3",
+    "generator": "None; FFmpeg processing of existing bed"
+  },
+  {
+    "name": "l5_depth_wind_clean.mp3",
+    "seconds": 15.024,
+    "loop": true,
+    "sha256": "3292ee7aa90b484101bd09134bec07680b9ef90fdc6b4ba499ea9188f7ed6b1a",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=2800:p=2",
+      "gain_db": 12.43,
+      "target_lufs": -24,
+      "loop_crossfade_seconds": 1.5,
+      "loop_duration_compensation_atempo": 0.9090909090909091
+    },
+    "verification": {
+      "decoded_seconds": 15.0,
+      "integrated_lufs": -24.27,
+      "true_peak_dbtp": -8.34,
+      "high_band_before_dbfs": -85.62155696794542,
+      "high_band_after_dbfs": -114.17680417299168,
+      "high_band_reduction_db": 28.555247205046257,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "source": "l5_depth_wind.mp3",
+    "generator": "None; FFmpeg processing of existing bed"
+  },
+  {
+    "name": "l5_amb_scrape.mp3",
+    "seconds": 4.032,
+    "loop": false,
+    "sha256": "1505fc195110d199a3160439faf766393df370ca6d200d4065dd12c42787c6e4",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=3.35000000:d=0.65",
+      "gain_db": -2.9499999999999993,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 4.0,
+      "integrated_lufs": -22.25,
+      "true_peak_dbtp": -8.56,
+      "high_band_before_dbfs": -42.624069772456934,
+      "high_band_after_dbfs": -62.25902370404377,
+      "high_band_reduction_db": 19.634953931586836,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "Something heavy dragged a short way across plaster far below, a single slow gritty scrape in the first second. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "STFNhqR9LVsz8wW5OLdW"
+  },
+  {
+    "name": "l5_amb_whisper.mp3",
+    "seconds": 4.032,
+    "loop": false,
+    "sha256": "70c516017024daf52a99fef691f88b7c41dddc63836b3b1c7fab483c598d9d5a",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=3.35000000:d=0.65",
+      "gain_db": 7.530000000000001,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 4.0,
+      "integrated_lufs": -22.28,
+      "true_peak_dbtp": -8.74,
+      "high_band_before_dbfs": -38.551639549299225,
+      "high_band_after_dbfs": -48.49519169188486,
+      "high_band_reduction_db": 9.943552142585638,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "One breathy unintelligible whisper drifting past at a distance, entirely wordless exhalation, no syllables or intelligible speech. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "2THXw7SN4hgcdG9dXIr5"
+  },
+  {
+    "name": "l5_amb_laugh.mp3",
+    "seconds": 3.024,
+    "loop": false,
+    "sha256": "3288301fe2c51aa9623340fdfb1605d96a6a5590d33267311ba684f10c1b959b",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=2.35000000:d=0.65",
+      "gain_db": -8.33,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 3.0,
+      "integrated_lufs": -22.25,
+      "true_peak_dbtp": -9.27,
+      "high_band_before_dbfs": -47.13802562644905,
+      "high_band_after_dbfs": -68.24675654452162,
+      "high_band_reduction_db": 21.108730918072567,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "A single faint distant child-like giggle early in the clip, swallowed by a huge reverberation. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "OjaJ7ReVwNN6ZxZMcnbv"
+  },
+  {
+    "name": "l5_amb_thud.mp3",
+    "seconds": 3.024,
+    "loop": false,
+    "sha256": "183e3647602c17ed3558440818a6dff1ad95c7e96761ab1a8dd0cc3e801d16a3",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=2.35000000:d=0.65",
+      "gain_db": 14.219999999999999,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 3.0,
+      "integrated_lufs": -22.56,
+      "true_peak_dbtp": -5.65,
+      "high_band_before_dbfs": -98.4183767007153,
+      "high_band_after_dbfs": -119.93089214707808,
+      "high_band_reduction_db": 21.512515446362784,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "One deep muffled impact from far below in the pit, early onset, low resonant tail. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "x0QRHmE4SzJccaTAw0pi"
+  },
+  {
+    "name": "l5_amb_metal.mp3",
+    "seconds": 5.04,
+    "loop": false,
+    "sha256": "6db367105b844cdef1d5752f6f27335e2cd5f7ff87f1b11bb433b934ca018293",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=4.35000000:d=0.65",
+      "gain_db": -13.74,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 5.0,
+      "integrated_lufs": -22.27,
+      "true_peak_dbtp": -12.9,
+      "high_band_before_dbfs": -69.13586006598968,
+      "high_band_after_dbfs": -98.04345405201046,
+      "high_band_reduction_db": 28.907593986020785,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "A slow metallic groan and bend of an enormous unseen architectural structure, strained low creaking, dying into echoes. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "TQhB0eRCkfxrycbXvumF"
+  },
+  {
+    "name": "l5_amb_fallaway.mp3",
+    "seconds": 5.04,
+    "loop": false,
+    "sha256": "3421467aa35175eef1024ba23587b869f1e7c23af3826664da35d9646e2bdfb5",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=4.35000000:d=0.65",
+      "gain_db": -4.289999999999999,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 5.0,
+      "integrated_lufs": -22.28,
+      "true_peak_dbtp": -14.48,
+      "high_band_before_dbfs": -51.41242063604257,
+      "high_band_after_dbfs": -68.65825643804008,
+      "high_band_reduction_db": 17.245835801997515,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "One faint soft inhuman wordless cry or wail, descending in pitch and receding farther into a bottomless abyss. Fragile and eerie, never a monster roar. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "8V6YWbuhAgr4zcPWaBgs"
+  },
+  {
+    "name": "l5_amb_heartbeat.mp3",
+    "seconds": 5.04,
+    "loop": false,
+    "sha256": "5ffea0ee5a813dda4d5635c8f69862c37711c938626b59373e780bad47298036",
+    "processing": {
+      "filter": "[0:a]highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=4.35000000:d=0.65,atrim=duration=0.95,afade=t=out:st=0.65:d=0.3,asplit=4[a][b][c][d];[b]adelay=1000:all=1[b1];[c]adelay=2000:all=1[c1];[d]adelay=3000:all=1[d1];[a][b1][c1][d1]amix=inputs=4:normalize=0,aecho=0.8:0.9:191|373|617|911:0.20|0.13|0.09|0.04,apad,asetpts=N/SR/TB,atrim=end_sample=220500,afade=t=out:st=4.35:d=0.65[o]",
+      "gain_db": -4.73,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null,
+      "arrangement": "First generated thump repeated at 1-second intervals four times, with diffuse delayed tail; original generator returned two main thumps."
+    },
+    "verification": {
+      "decoded_seconds": 5.0,
+      "integrated_lufs": -22.27,
+      "true_peak_dbtp": -8.09,
+      "high_band_before_dbfs": -86.63782569712816,
+      "high_band_after_dbfs": -105.2196804153693,
+      "high_band_reduction_db": 18.581854718241132,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy.",
+      "detected_main_thumps_seconds": [
+        0.22,
+        1.22,
+        2.22,
+        3.22
+      ]
+    },
+    "prompt": "Exactly four slow muffled low thumps, at about 0.2, 1.2, 2.2 and 3.2 seconds, like a huge heartbeat inside distant walls. Reverberation dies in the remaining time. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "lahNBijYUakBdfe24wKF"
+  },
+  {
+    "name": "l5_amb_tone.mp3",
+    "seconds": 6.024,
+    "loop": false,
+    "sha256": "51a92aaa505fe04cc727657c150722d557f73a55c5207abec879bf59649a7038",
+    "processing": {
+      "filter": "highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=5.35000000:d=0.65",
+      "gain_db": -7.539999999999999,
+      "target_lufs": -22,
+      "loop_crossfade_seconds": null,
+      "loop_duration_compensation_atempo": null
+    },
+    "verification": {
+      "decoded_seconds": 6.0,
+      "integrated_lufs": -22.11,
+      "true_peak_dbtp": -8.8,
+      "high_band_before_dbfs": -85.2698901379841,
+      "high_band_after_dbfs": -112.51583197277253,
+      "high_band_reduction_db": 27.245941834788425,
+      "decode_ok": true,
+      "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+    },
+    "prompt": "One dissonant low environmental drone swell rising slowly then dying away, uneasy beating structural resonance. Nonmusical sound design, no instrument or melody. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "eQ58ptqveDV89MBC5930"
   }
 ]

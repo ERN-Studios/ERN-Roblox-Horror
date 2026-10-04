@@ -1,0 +1,58 @@
+[
+  {
+    "name": "l5_amb_scrape.mp3",
+    "duration": 4,
+    "prompt": "Something heavy dragged a short way across plaster far below, a single slow gritty scrape in the first second. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "wiK4jon3cr5AxydV1aJp",
+    "generation_id": "STFNhqR9LVsz8wW5OLdW"
+  },
+  {
+    "name": "l5_amb_whisper.mp3",
+    "duration": 4,
+    "prompt": "One breathy unintelligible whisper drifting past at a distance, entirely wordless exhalation, no syllables or intelligible speech. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "XECdiDWYKdQOwHrrnhWE",
+    "generation_id": "2THXw7SN4hgcdG9dXIr5"
+  },
+  {
+    "name": "l5_amb_laugh.mp3",
+    "duration": 3,
+    "prompt": "A single faint distant child-like giggle early in the clip, swallowed by a huge reverberation. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "wYztvCOiWOAnoOzLTNtM",
+    "generation_id": "OjaJ7ReVwNN6ZxZMcnbv"
+  },
+  {
+    "name": "l5_amb_thud.mp3",
+    "duration": 3,
+    "prompt": "One deep muffled impact from far below in the pit, early onset, low resonant tail. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "FZCGWnSFkqqpJbXZRj9l",
+    "generation_id": "x0QRHmE4SzJccaTAw0pi"
+  },
+  {
+    "name": "l5_amb_metal.mp3",
+    "duration": 5,
+    "prompt": "A slow metallic groan and bend of an enormous unseen architectural structure, strained low creaking, dying into echoes. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "SChNYHKGht58gykQ9gH7",
+    "generation_id": "TQhB0eRCkfxrycbXvumF"
+  },
+  {
+    "name": "l5_amb_fallaway.mp3",
+    "duration": 5,
+    "prompt": "One faint soft inhuman wordless cry or wail, descending in pitch and receding farther into a bottomless abyss. Fragile and eerie, never a monster roar. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "YB46yGxEUW8KzWkOJQzx",
+    "generation_id": "8V6YWbuhAgr4zcPWaBgs"
+  },
+  {
+    "name": "l5_amb_heartbeat.mp3",
+    "duration": 5,
+    "prompt": "Exactly four slow muffled low thumps, at about 0.2, 1.2, 2.2 and 3.2 seconds, like a huge heartbeat inside distant walls. Reverberation dies in the remaining time. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "ligdiA14JHcZ3EC3SwEZ",
+    "generation_id": "lahNBijYUakBdfe24wKF"
+  },
+  {
+    "name": "l5_amb_tone.mp3",
+    "duration": 6,
+    "prompt": "One dissonant low environmental drone swell rising slowly then dying away, uneasy beating structural resonance. Nonmusical sound design, no instrument or melody. Far away in an enormous empty plaster hall over a black abyss. Quiet lonely dreamlike horror, soft muffled source, long dark diffuse reverb dying to silence. No music, words, monster, jump scare, static or hiss.",
+    "node_id": "Li36cA9TpgQ9PXCnD7wG",
+    "generation_id": "eQ58ptqveDV89MBC5930"
+  }
+]

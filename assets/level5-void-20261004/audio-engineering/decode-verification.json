@@ -1,0 +1,338 @@
+[
+  {
+    "name": "audio-engineering/raw/l5_amb_fallaway.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "12c853934e1709ab2d503b02292b5a8cc2198d7d67bb76da80f1378cc643215e",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_heartbeat.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "24513b606d7df94b73f2fd1247d5b8a55c69ba3bed1aaa8f7f096365c0a95c4a",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_laugh.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "0a9d8ef4f6e705e23dbd075122a9be4b732ed2d2fbb3697efc177d9fde2848c9",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_metal.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "fcf9f0c02a8b7ab15277c38c9e3f72a269ee28c7a0129260a71035626c837570",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_scrape.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "8915a5fbf964c4cc7b6bcfa6795f5c0b8ee32f1a1649ffe30d6eca313537ff20",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_thud.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "8deedb3a13dd84b1225663d922327e3714d70e5dbf05a3478dfde3ff29364cd0",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_tone.mp3",
+    "decoded_seconds": 6.0,
+    "sha256": "0c9a50e3ceafa7bdb03bd6df0551f11e918d79c863ec83959c86bd1eccbc8978",
+    "decode_ok": true
+  },
+  {
+    "name": "audio-engineering/raw/l5_amb_whisper.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "7dad08291c44f0d9bfa24dc44f4bdbce0f53337e8ac84e25b7f30c4c04b7de8b",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_ball.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "9fd9ab9e2123a67336d3f6909ad8017694e853dc5b16cfae8e71095a75037efd",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_breath.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "bba43fc72f40d48efcf1182031ecc783cf0dbc9c86fc1fd7542e0d95b533d18f",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_chime.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "6aa3edf4f982214ebe76fa632ec5ea0f622cd414b531ff468e7ace083ce5901d",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_door.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "33dde7b78e1192e832cdd5697a805c7554191c4f88dc34b2073916c180e843e2",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_drip.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "13773de953e69604e30059970649b9ff5a56e56c8178e730ebaf9bba2b45b5d9",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_fallaway.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "3421467aa35175eef1024ba23587b869f1e7c23af3826664da35d9646e2bdfb5",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_groan.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "15f2c803ea912c8def48382a6e8302eaf290ef30e130a68146c26ba2701979a9",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_gust.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "423c5ebbc0db575c67b062020de980bedb1438b5e343ad28022a4d9424bda590",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_heartbeat.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "5ffea0ee5a813dda4d5635c8f69862c37711c938626b59373e780bad47298036",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_hum.mp3",
+    "decoded_seconds": 6.0,
+    "sha256": "c96f39a5369e9a8a16a014549006dc44558058efe7109627bff68d3deae59181",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_knock.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "276828f198a390babd92dc9efc59ba40085bf9b520cb3c5e293c59971004af5c",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_laugh.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "3288301fe2c51aa9623340fdfb1605d96a6a5590d33267311ba684f10c1b959b",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_metal.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "6db367105b844cdef1d5752f6f27335e2cd5f7ff87f1b11bb433b934ca018293",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_scrape.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "1505fc195110d199a3160439faf766393df370ca6d200d4065dd12c42787c6e4",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_steps.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "aed01ee5ccd0a21b569284a0f12462c5d029165dcd6f78b6a07632d1382c158a",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_thud.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "183e3647602c17ed3558440818a6dff1ad95c7e96761ab1a8dd0cc3e801d16a3",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_tone.mp3",
+    "decoded_seconds": 6.0,
+    "sha256": "51a92aaa505fe04cc727657c150722d557f73a55c5207abec879bf59649a7038",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_amb_whisper.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "70c516017024daf52a99fef691f88b7c41dddc63836b3b1c7fab483c598d9d5a",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_ambience.mp3",
+    "decoded_seconds": 22.0,
+    "sha256": "9edc179075a98a84ae916146407c9658c29399e783415f8de076d74c52ba0b3c",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_ambience_clean.mp3",
+    "decoded_seconds": 22.0,
+    "sha256": "14a82a741d44ec120810a9d1d6adc3b996d8745002380837f466fbe88355c4dc",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_ball_fall.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "2ce051b69b559213cc90a61cb9a0614fc987f437c24049ef10923a3695aaf64d",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_ball_hit.mp3",
+    "decoded_seconds": 0.48,
+    "sha256": "2558ed23bb4fd3999a387ec040850129f5e092d9f3338e470374e4d00e021020",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_ball_roll.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "af7f796a094c5dd2f45dae6e411608cdd3ebe758a67e51683c43d1022049e5a7",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_depth_wind.mp3",
+    "decoded_seconds": 15.0,
+    "sha256": "3e3497d3beadd77ac06ad0536850c8a5ec57ec4e9d28838557d1b543e337269a",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_depth_wind_clean.mp3",
+    "decoded_seconds": 15.0,
+    "sha256": "3292ee7aa90b484101bd09134bec07680b9ef90fdc6b4ba499ea9188f7ed6b1a",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_edge_creak.mp3",
+    "decoded_seconds": 2.0,
+    "sha256": "4190d0151fdfafef6f9d5fa6530ebb24fc9ae4dd5ecdad87e98e45d970bd3b77",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_finish.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "0418cd9eaa84e501632fbc04c3a311f20466b286b959edd7702579286cc98664",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_gate_close.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "27f38dbfd54d718318307d0a98e576b929269dd2c5def396c5114662b2f5f025",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_gate_open.mp3",
+    "decoded_seconds": 4.0,
+    "sha256": "ece0e8c0c440eeb659842fc5eda0e43a34abf5936d35d59995aea9bd1cc8ecae",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_land.mp3",
+    "decoded_seconds": 0.6,
+    "sha256": "13707bccc171f793e117e9dd8c39d98e12077eb89f2b6cd214459bfeb206b0df",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_plate_down.mp3",
+    "decoded_seconds": 1.0,
+    "sha256": "d461d2fb099f38c756c41e0302645ca63fefcb13ba73cae2f2e28c85ff45e25f",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_plate_hum.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "c0c93a769ef8c0e084f4990ac2ee2a38341e066b3134cf9b50751135340601e6",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_plate_up.mp3",
+    "decoded_seconds": 1.0,
+    "sha256": "2ab2d916df884c4081716f35865f8d56e76bd84ff48ab16fd1d0102fa9102640",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_player_fall.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "820f121a71c56aca66381814e1ed8b540f070e66f7678381f8934c629de27344",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_respawn.mp3",
+    "decoded_seconds": 1.48,
+    "sha256": "8d0947bf83828a0faeac534a99e40bfaa9edd58ce447126f2c87310b5bc33814",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_section_tone.mp3",
+    "decoded_seconds": 3.0,
+    "sha256": "6bd4351a4bc5e1a6276f60bc32d566bc51550452774d854811ddf06af9e33bae",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_1.mp3",
+    "decoded_seconds": 0.28,
+    "sha256": "4f921bcb6a8cf0dcecbc8dfc5b36e67439182a2e3f24e59d5a27179406b3cc4d",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_2.mp3",
+    "decoded_seconds": 0.27,
+    "sha256": "3b2bbcab8beed2c138f722895aaee6f197ff46e2b6cca6aca3a182cec18b1fc7",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_3.mp3",
+    "decoded_seconds": 0.3,
+    "sha256": "98a5aa612ab37bc3f09f1022745815c0371fa688dd5178e895ca3bfac809df2c",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_4.mp3",
+    "decoded_seconds": 0.29,
+    "sha256": "f01e6fbf557f6b4c9c4c72a59f799ae429a7c7df4f501977593be178f429befe",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_5.mp3",
+    "decoded_seconds": 0.26,
+    "sha256": "d0f9bcb26346fbdc75dab5059e2c1708f6efa5b1ce959ebc5238b7148fe52a36",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_step_6.mp3",
+    "decoded_seconds": 0.28,
+    "sha256": "de5889e382953b473886bf525b85580c880673af2a0a3d91b605f2632974e6eb",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_stepr_1.mp3",
+    "decoded_seconds": 0.22,
+    "sha256": "b64b6ef805166c3ef682ab7511cdcdbc16c47b6fdf53278b06aa57a75203ad99",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_stepr_2.mp3",
+    "decoded_seconds": 0.24,
+    "sha256": "efa4460985f1b7f3e69b65868d14b07b32dfd1ed1f724695b2b1f6a8002c4fb0",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_stepr_3.mp3",
+    "decoded_seconds": 0.23,
+    "sha256": "10a8293e3690a7eea5b61ac9fe39cc8850b94ea26bcd12a47f2842dad8a7a1b4",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_stepr_4.mp3",
+    "decoded_seconds": 0.22,
+    "sha256": "0df7e80eca9f2899eadef7a91d69e03cfff9f7c34795c2c0a950d631fc42ed99",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_steps_run.mp3",
+    "decoded_seconds": 5.0,
+    "sha256": "a648abd713dc39518b9c48ebf09f6f3ce31b90ed2f40265f4e19edffffcb0d4f",
+    "decode_ok": true
+  },
+  {
+    "name": "l5_steps_walk.mp3",
+    "decoded_seconds": 6.0,
+    "sha256": "bc175d3bcd29337c9dc58e99d9470c3812819f1d20c4341fb789ab13a0d43937",
+    "decode_ok": true
+  }
+]

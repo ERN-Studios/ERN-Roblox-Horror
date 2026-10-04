@@ -783,3 +783,23 @@ weight and button size on phones, no noise meter.
   lobby model takes a colour from the track's palette and the pattern steps every second beat of the track's `Bpm`
   (in the server's TRACKS), counted from `LobbyDJStartedAt`; brightness swells on the beat. Colours glide, and
   `ReduceFlashing` slows it to one step per eight beats with no pulse. Stopping restores every lamp exactly.
+
+### Added 2026-10-04 (late night)
+
+- **Level 6 Dev ESP** (`StarterPlayerScripts."Level 6 Dev ESP"`; took over the dead `Level 2 Pool Slide Dev ESP`): for
+  `DevAccess.IsLevel6PreviewAllowed`, an always-on-top outline and a name/distance label on the Counter and on every
+  other player in Level 6. Follows `DevEspEnabled` (the terminal's ESP switch); K toggles it inside the level.
+- **Tunnel ends** (`END_PILES_20261004b`): a grid over the whole arch behind each pile (400 clones, two layers), not a
+  taller mound. The first version left the wall showing at the sides.
+- **Level 6 party easter egg** (`PARTY_20261004` in the game module): a small red button on the floor behind a
+  counter (`L6_Hide_counter_05`). Pressed while it is searching (once per session, not during a chase): every living
+  player is stood round the table of the dark party room (x -193), the door is shut, a disco ball with coloured
+  spots turns, "Hands Up Arcade" plays and the Counter breakdances on the table for 30 s (`Dance_Toprock`,
+  `Windmill`, `Headspin`, `Freeze`, `Finale`: `tools/level6_entity/build_dance.py`, procedural, same clip format,
+  with a `hips` track). Then everyone and the doll are put back and the search resumes on the same second.
+  **Every deadline in the module reads `clock()`**, which stands still during the party; loops that move the doll
+  or look for players call `Session:hold()`. Use `realClock()` for anything that must run during it.
+- **Level 4 bay posters**: four generated one-sheets (`assets/lobby-posters-20261004`), two standing in front of the
+  decor mesh's own poster texture, two by the entrance; `img` rows in the bay set become a Decal plus a picture light.
+- **Level 5 audio**: the two always-on beds were denoised (`*_clean.mp3`, 17.6 dB and 28.6 dB less energy above
+  6 kHz) and replace the originals under the same keys; eight darker `l5_amb_*` one-shots joined the random set (18).

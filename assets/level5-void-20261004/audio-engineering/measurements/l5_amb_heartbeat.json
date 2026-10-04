@@ -1,0 +1,56 @@
+{
+  "name": "l5_amb_heartbeat.mp3",
+  "source": "audio-engineering/raw/l5_amb_heartbeat.mp3",
+  "sha256": "5ffea0ee5a813dda4d5635c8f69862c37711c938626b59373e780bad47298036",
+  "processing": {
+    "filter": "[0:a]highpass=f=30,afftdn=nr=22:nf=-65.000:tn=1:gs=8,lowpass=f=3500:p=2,afade=t=in:d=0.012,afade=t=out:st=4.35000000:d=0.65,atrim=duration=0.95,afade=t=out:st=0.65:d=0.3,asplit=4[a][b][c][d];[b]adelay=1000:all=1[b1];[c]adelay=2000:all=1[c1];[d]adelay=3000:all=1[d1];[a][b1][c1][d1]amix=inputs=4:normalize=0,aecho=0.8:0.9:191|373|617|911:0.20|0.13|0.09|0.04,apad,asetpts=N/SR/TB,atrim=end_sample=220500,afade=t=out:st=4.35:d=0.65[o]",
+    "gain_db": -4.73,
+    "target_lufs": -22,
+    "loop_crossfade_seconds": null,
+    "loop_duration_compensation_atempo": null
+  },
+  "before": {
+    "decoded_seconds": 5.0,
+    "quietest_second_start": 4.0,
+    "quietest_rms_dbfs": -65.98549290058426,
+    "quietest_high_band_rms_dbfs": -100.8199466279197,
+    "high_band_rms_dbfs": -86.63782569712816,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-16.85",
+      "input_tp": "-0.32",
+      "input_lra": "6.30",
+      "input_thresh": "-33.11",
+      "output_i": "-22.68",
+      "output_tp": "-6.44",
+      "output_lra": "6.20",
+      "output_thresh": "-37.03",
+      "normalization_type": "dynamic",
+      "target_offset": "-1.32"
+    }
+  },
+  "after": {
+    "decoded_seconds": 5.0,
+    "quietest_second_start": 4.0,
+    "quietest_rms_dbfs": -46.65770395334321,
+    "quietest_high_band_rms_dbfs": -142.9472820312806,
+    "high_band_rms_dbfs": -105.2196804153693,
+    "tonal_whine_candidates_hz": [],
+    "loudness": {
+      "input_i": "-22.27",
+      "input_tp": "-8.09",
+      "input_lra": "2.30",
+      "input_thresh": "-33.47",
+      "output_i": "-24.08",
+      "output_tp": "-9.95",
+      "output_lra": "1.80",
+      "output_thresh": "-35.01",
+      "normalization_type": "dynamic",
+      "target_offset": "0.08"
+    }
+  },
+  "high_band_reduction_db": 18.581854718241132,
+  "boundary_step_dbfs": null,
+  "decode_ok": true,
+  "listening_review": "Not performed; measurements do not prove subjective absence of hiss or semantic prompt accuracy."
+}
