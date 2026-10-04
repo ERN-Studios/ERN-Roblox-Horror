@@ -931,3 +931,10 @@ weight and button size on phones, no noise meter.
   that return. The code, sounds and cue tables are left in place. RoundUI and Level 4 Round Client in the repo
   were brought level with Studio for this edit (they carried another session's changes).
 - **Arrival gate nameplate**: 19 x 2.1 studs, text sized in pixels (`TextScaled` off), lamps at the lintel's ends.
+- **Tutorial and Help** (`TUTORIAL_20261004`, `HELP_20261004` in First Entry Guide): four pages (THE GAME, HOW YOU
+  PLAY, PLAY TOGETHER, RESEARCH TOKENS) for a first login, SKIP on every page; a HELP button under BADGES on the
+  left rail opens ten topics and PLAY THE TUTORIAL. Token numbers are read from ZyntraConfig. Test hooks (client
+  attributes, no input device needed): `PlayerGui.WelcomeCard:SetAttribute("Page", n)` (0 closes),
+  `PlayerGui.HelpButton:SetAttribute("Toggle", x)`, `PlayerGui.HelpPanel:SetAttribute("Topic", n)`; set
+  `workspace.DevShowWelcome` on the CLIENT within the first seconds of play. VirtualInputManager is not
+  available to `execute_luau`.
