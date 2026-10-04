@@ -868,7 +868,6 @@ local function onClientEvent(payload)
 end
 
 local function briefing()
-	do return end -- BRIEFINGS_OFF_20261004 (owner): no opening briefing in any level
 	task.spawn(function()
 		task.wait(1.2)
 		local lines = {
