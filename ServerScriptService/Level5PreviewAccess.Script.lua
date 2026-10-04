@@ -335,6 +335,11 @@ do
 		event.Parent = folder
 	end
 	local members = {}        -- player -> {cp = checkpoint index, group = table shared by one queue launch}
+	-- ACHIEVEMENTS_20261004: ZyntraMonetization owns the record; this only reports what happened.
+	local function achieve(player, key)
+		local bindable = ServerStorage:FindFirstChild("ZyntraAchievement")
+		if bindable and player and player.Parent == Players then bindable:Fire(player, key) end
+	end
 
 	local cache = setmetatable({}, { __mode = "k" })
 	local function checkpoints(model)
@@ -504,6 +509,18 @@ do
 			if ball:IsA("BasePart") and typeof(home) == "Vector3" and not falling[ball]
 				and ball.Position.Y < home.Y - 30 then
 				falling[ball] = true
+				-- whoever stands nearest the ledge it left pushed it
+				local nearest, gap = nil, 18
+				for player, state in pairs(members) do
+					local character = player.Character
+					local root = character and character:FindFirstChild("HumanoidRootPart")
+					local distance = root and (root.Position - home).Magnitude
+					if distance and distance < gap then nearest, gap = player, distance end
+				end
+				if nearest then
+					members[nearest].balls = (members[nearest].balls or 0) + 1
+					if members[nearest].balls == 5 then achieve(nearest, "L5Balls") end
+				end
 				play(ball, "l5_ball_fall", 0.7)
 				task.delay(1.6, function()
 					if not ball.Parent then return end
@@ -553,6 +570,8 @@ do
 						local newSection = SECTION[row.sec] ~= SECTION[list[record.cp].sec]
 						record.cp = index
 						event:FireClient(player, "checkpoint", index, #list, row.sec, newSection)
+						if newSection and row.sec == "mint" then achieve(player, "L5Mint") end
+						if newSection and row.sec == "coral" then achieve(player, "L5Coral") end
 					end
 				end
 				local row = list[record.cp]
@@ -562,9 +581,12 @@ do
 					root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
 					character:PivotTo(checkpointFrame(model, row))
 					event:FireClient(player, "fell")
+					record.fell = true
 				elseif finish and finish:IsA("BasePart") and (root.Position - finish.Position).Magnitude < 7 and not leaving[player] then
 					leaving[player] = true
 					event:FireClient(player, "finish")
+					achieve(player, "FirstClearLevel5")
+					if not record.fell then achieve(player, "L5NoFall") end
 					task.delay(2.2, function()
 						leaving[player] = nil
 						if members[player] then Void.Leave(player) end
@@ -597,7 +619,20 @@ do
 				record.folder:SetAttribute("On", best)
 				record.folder:SetAttribute("Need", bestNeed)
 				movePlate(record, radius, standing > 0, complete)
-				if complete then record.openUntil = os.clock() + GATE_HOLD end
+				if complete then
+					record.openUntil = os.clock() + GATE_HOLD
+					if standing >= 2 then
+						for player, state in pairs(members) do
+							local _, root = living(player)
+							local offset = root and root.Position - record.rest
+							if offset and SECTION[list[state.cp].sec] == record.section
+								and offset.X * offset.X + offset.Z * offset.Z <= radius * radius and not state["lift" .. record.section] then
+								state["lift" .. record.section] = true
+								achieve(player, "L5TeamLift")
+							end
+						end
+					end
+				end
 				local wantOpen = os.clock() < record.openUntil
 				if not wantOpen and record.open then
 					for player in pairs(members) do                  -- never close on a body in the doorway

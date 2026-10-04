@@ -291,12 +291,45 @@ return {
 		FirstClearLevel1 = 2788462628933614,
 		FirstClearLevel2 = 349186155479685,
 		FirstClearLevel3 = 457908347698355,
-		-- Level 4 (the cinema, developer-only for now). 0 until the badge exists on the Creator Dashboard.
 		FirstClearLevel4 = 0,
 		-- Awarded the first time all three levels have been cleared at least
 		-- once, which is NOT the same as clearing Level 3.
 		CampaignComplete = 2318404539475574,
+		-- ACHIEVEMENTS_20261004: every key below is an in-game achievement from the moment it is listed here and in
+		-- `Achievements`. It becomes a Roblox badge as well once its badge exists on the Creator Dashboard and its
+		-- id replaces the 0 (players who already unlocked it get the badge on their next join).
+		FirstClearLevel5 = 0, FirstClearLevel6 = 0, AllSix = 0, Welcome = 0, BetterTogether = 0,
+		L5NoFall = 0, L5Balls = 0, L5Mint = 0, L5Coral = 0, L5TeamLift = 0,
+		L6HomeFree = 0, L6Caught = 0, L6Party = 0, L6Survivor = 0, L6Escaped = 0,
 	},
+
+	-- ACHIEVEMENTS_20261004: the list the Achievements panel shows, in this order. Key = the key in `Badges` = the
+	-- name ServerStorage.ZyntraAchievement:Fire(player, key) takes. Icon is the uploaded image of
+	-- assets/badges/icons-512/badge_<Key>.png (0 = not uploaded: the panel shows a plain medal). Secret ones show
+	-- as "???" until unlocked.
+	Achievements = {
+		{Key = "Welcome", Name = "New Arrival", Text = "Step into the lobby for the first time.", Icon = 80881978844105},
+		{Key = "FirstClearLevel1", Name = "Office Hours", Text = "Escape Level 1, the office backrooms.", Icon = 89658548510995},
+		{Key = "FirstClearLevel2", Name = "Out of the Deep End", Text = "Escape Level 2, the poolrooms.", Icon = 87985847366985},
+		{Key = "FirstClearLevel3", Name = "Party's Over", Text = "Escape Level 3, the mall party rooms.", Icon = 75357171576583},
+		{Key = "FirstClearLevel4", Name = "The Last Show", Text = "Escape Level 4, the cinema.", Icon = 111445449955014},
+		{Key = "FirstClearLevel5", Name = "Over the Void", Text = "Reach the lit doorway at the top of Level 5.", Icon = 97552408465726},
+		{Key = "FirstClearLevel6", Name = "Ready or Not", Text = "Get out of Level 6, the playground.", Icon = 76439445644101},
+		{Key = "CampaignComplete", Name = "Three Doors Down", Text = "Clear Levels 1, 2 and 3.", Icon = 102083552353825},
+		{Key = "AllSix", Name = "Every Door", Text = "Clear all six levels.", Icon = 123021326870125},
+		{Key = "BetterTogether", Name = "Better Together", Text = "Clear a level with a Roblox friend.", Icon = 103724028910737},
+		{Key = "L5Mint", Name = "Thin Ice", Text = "Reach the Mint room in Level 5.", Icon = 120651511342859},
+		{Key = "L5Coral", Name = "The Shaft", Text = "Reach the Coral room in Level 5.", Icon = 125372236049199},
+		{Key = "L5NoFall", Name = "Sure-Footed", Text = "Finish Level 5 without falling once.", Icon = 116926041044523},
+		{Key = "L5Balls", Name = "Gravity Test", Text = "Push five balls into the void in one run of Level 5.", Icon = 70668225245201},
+		{Key = "L5TeamLift", Name = "All Aboard", Text = "Open a Level 5 door with a teammate on the plate.", Icon = 126723198188585},
+		{Key = "L6HomeFree", Name = "Home Free", Text = "Touch the post in Level 6.", Icon = 104656421868815},
+		{Key = "L6Escaped", Name = "Not Today", Text = "Be chased by the Counter and lose it.", Icon = 129994495122834},
+		{Key = "L6Survivor", Name = "Still Hiding", Text = "Still be in the game when it counts for the third time.", Icon = 98690786393152},
+		{Key = "L6Caught", Name = "Found You", Text = "Get caught by the Counter.", Icon = 123603432046201},
+		{Key = "L6Party", Name = "After Hours", Text = "Find what is hidden behind the arcade counter.", Icon = 83270358274893, Secret = true},
+	},
+
 
 	-- CHALLENGES_20260923 (Trello FnF49TWk): voluntary goals for a level you
 	-- can already clear, and personal records. Nothing here gates the normal

@@ -72,6 +72,11 @@ local session = nil
 -- PARTY_20261004 (owner): the round's clock. Every deadline in this module reads `clock()`, which stands still
 -- while the easter-egg party is on, so the round carries on afterwards exactly where it was: the search timer,
 -- the voice gaps, a pause the doll was in. `realClock` is the wall clock, for the party itself.
+-- ACHIEVEMENTS_20261004: ZyntraMonetization owns the record; this only reports what happened.
+local function achieve(player, key)
+	local bindable = ServerStorage:FindFirstChild("ZyntraAchievement")
+	if bindable and player and player.Parent == Players then bindable:Fire(player, key) end
+end
 local realClock = os.clock
 local pausedAt, pausedTotal = nil, 0
 local function clock()
@@ -480,6 +485,7 @@ function Session:perceive()
 end
 
 function Session:catch(player)
+	achieve(player, "L6Caught")
 	local state = self.players[player]
 	if not state or state.caught then return end
 	state.caught = true
@@ -643,6 +649,9 @@ function Session:countPhase()
 	self:pose("Count_Loop")
 	local seconds = self:say(CONFIG.CountLines[math.min(self.round, #CONFIG.CountLines)], true) or 20
 	broadcast(self, "round", self.round, self.dunks, self:target(), seconds)
+	if self.round >= 3 then
+		for player in pairs(self.players) do achieve(player, "L6Survivor") end
+	end
 	local beat = seconds / CONFIG.CountTo   -- the numbers on the HUD keep pace with the recording
 	for n = 1, CONFIG.CountTo do
 		if not self.active or self.phase ~= "count" then return end
@@ -770,7 +779,7 @@ function Session:seekPhase()
 			self.chase = nil
 			local root = rootOf(lost)
 			if root then self.noise = root.Position end
-			if lost.Parent == Players then event:FireClient(lost, "chase", false) end
+			if lost.Parent == Players then event:FireClient(lost, "chase", false); achieve(lost, "L6Escaped") end
 			self:say(pick("lost"), true)
 		end
 		-- dunks
@@ -786,6 +795,7 @@ function Session:seekPhase()
 					state.dunked = true
 					self.dunks = self:tagged()
 					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
+					achieve(player, "L6HomeFree")
 					self.noise = home
 					-- the winning tag belongs to the angry line alone
 					if self.dunks < self:target() then self:say(pick("dunk"), true) end
@@ -877,7 +887,7 @@ function Session:escapePhase()
 			if root and not state.caught and not state.escaped and flat(root.Position - exit).Magnitude <= CONFIG.ExitRadius then
 				state.escaped = true
 				player:SetAttribute(CLEARED, true)
-				event:FireClient(player, "escaped", player.DisplayName, true)
+				event:FireClient(player, "escaped", player.DisplayName, true); achieve(player, "FirstClearLevel6")
 				event:FireClient(player, "say", "l6_escaped")
 				task.delay(1.5, function()
 					if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
@@ -893,7 +903,7 @@ function Session:escapePhase()
 		if not state.caught and not state.escaped and player.Parent == Players then
 			state.escaped = true
 			player:SetAttribute(CLEARED, true)
-			event:FireClient(player, "escaped", player.DisplayName, true)
+			event:FireClient(player, "escaped", player.DisplayName, true); achieve(player, "FirstClearLevel6")
 			if returnHandler and player:GetAttribute(IN_PREVIEW) == true then returnHandler(player, "escaped") end
 		end
 	end
@@ -1013,6 +1023,7 @@ function Session:party(by)
 		music:Play()
 		workspace:SetAttribute("Level6Party", true)
 		broadcast(self, "party", true, by and by.DisplayName or nil)
+		for player in pairs(back) do achieve(player, "L6Party") end
 		-- the Counter, on the table
 		self:place(tableTop, Vector3.new(0, 0, 1))
 		local began = realClock()

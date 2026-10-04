@@ -678,6 +678,9 @@ local function newProfile()
 		-- idempotent without asking Roblox on every clear.
 		LevelsCleared = {},
 		AwardedBadges = {},
+		-- ACHIEVEMENTS_20261004: unlocked achievements (keys of Config.Badges). AwardedBadges above is narrower: the
+		-- ones whose Roblox badge has really been handed out.
+		Achievements = {},
 		-- COMPLETION_SAVE_20260924: ids of the latest applied clears, oldest first.
 		CompletionIds = {},
 		-- CHALLENGES_20260923: personal records per level x solo/party x
@@ -763,6 +766,19 @@ local function normalizeProfile(data)
 		if savedBadges[badgeKey] == true then awardedBadges[badgeKey] = true end
 	end
 	data.AwardedBadges = awardedBadges
+	-- ACHIEVEMENTS_20261004: only known keys survive, and a profile from before achievements existed gets the
+	-- ones it had already earned (a badge it holds, a level it has cleared).
+	local achievements = {}
+	local savedAchievements = type(data.Achievements) == "table" and data.Achievements or {}
+	for badgeKey in pairs(Config.Badges or {}) do
+		if savedAchievements[badgeKey] == true or awardedBadges[badgeKey] == true then achievements[badgeKey] = true end
+	end
+	for levelKey in pairs(levelsCleared) do
+		if Config.Badges and Config.Badges["FirstClearLevel" .. levelKey] ~= nil then achievements["FirstClearLevel" .. levelKey] = true end
+	end
+	if achievements.FirstClearLevel1 and achievements.FirstClearLevel2 and achievements.FirstClearLevel3
+		and Config.Badges and Config.Badges.CampaignComplete ~= nil then achievements.CampaignComplete = true end
+	data.Achievements = achievements
 	-- COMPLETION_SAVE_20260924. Only an in-flight retry of a clear ever looks an
 	-- id up, and those end with this server's session, so the newest 20 are
 	-- plenty; unlike ReceiptIds nothing outside this server can replay one.
@@ -1576,6 +1592,8 @@ end
 -- before its delta (the protection item below). Unkeyed currency/reward deltas
 -- stay on mutate(): an errored response may already have committed.
 local IDEMPOTENT_RETRY_DELAYS = {0, 0.35, 0.80}
+-- ACHIEVEMENTS_20261004: filled in further down (after awardBadge); declared here so the profile load can call it.
+local achievementApi = {}
 local function mutateIdempotent(player, transform, suppressPush)
 	local session = sessions[player]
 	if not session or session.closing then return false, false, "Profile is not loaded" end
@@ -2231,6 +2249,19 @@ local function loadProfile(player, loadState)
 	-- flag and reads this one in the same tick, once, and never again.
 	player:SetAttribute("ZyntraFirstLogin", firstLogin)
 	player:SetAttribute("ZyntraProfileLoaded", true)
+	-- ACHIEVEMENTS_20261004: the list, the arrival achievement, and any Roblox badge created since it was unlocked.
+	achievementApi.publish(player)
+	task.spawn(function()
+		achievementApi.unlock(player, "Welcome")
+		task.wait(4)
+		local loaded = sessions[player]
+		for key, on in pairs(loaded and loaded.data.Achievements or {}) do
+			if on == true and sessions[player] == loaded then
+				awardBadge(player, key)
+				task.wait(0.4)
+			end
+		end
+	end)
 	if Analytics then Analytics.ProfileLoaded(player, firstLogin) end
 	local pendingSnapshot = pendingDispatchSnapshots[player.UserId]
 	if pendingSnapshot then
@@ -3049,6 +3080,60 @@ local function awardBadge(player, badgeKey)
 			data.AwardedBadges[badgeKey] = true
 			return true
 		end, true)
+	end)
+end
+
+-- ACHIEVEMENTS_20261004. An achievement is a key of Config.Badges. Unlocking one records it in the profile
+-- (idempotent target state), publishes the player's list (`ZyntraAchievements`, comma-joined, which the
+-- Achievements Client reads for its panel and its unlock toast) and then tries the Roblox badge, which does
+-- nothing while the key's id is 0. Other server scripts unlock through ServerStorage.ZyntraAchievement:Fire(
+-- player, key): it is a BindableEvent, so no client can reach it.
+function achievementApi.publish(player)
+	local session = sessions[player]
+	if not session then return end
+	local keys = {}
+	for key, on in pairs(session.data.Achievements or {}) do
+		if on == true then table.insert(keys, key) end
+	end
+	table.sort(keys)
+	player:SetAttribute("ZyntraAchievements", table.concat(keys, ","))
+end
+function achievementApi.unlock(player, key)
+	if type(key) ~= "string" or not Config.Badges or Config.Badges[key] == nil then return end
+	local session = sessions[player]
+	if not session or type(session.data.Achievements) ~= "table" then return end
+	if session.data.Achievements[key] == true then
+		awardBadge(player, key)                       -- the badge may have been created since
+		return
+	end
+	task.spawn(function()
+		mutateIdempotent(player, function(data)
+			data.Achievements = type(data.Achievements) == "table" and data.Achievements or {}
+			if data.Achievements[key] == true then return false end
+			data.Achievements[key] = true
+			return true
+		end, true)
+		local now = sessions[player]
+		if not now then return end
+		now.data.Achievements[key] = true
+		achievementApi.publish(player)
+		awardBadge(player, key)
+		local have = now.data.Achievements
+		if key ~= "AllSix" and have.FirstClearLevel1 and have.FirstClearLevel2 and have.FirstClearLevel3
+			and have.FirstClearLevel4 and have.FirstClearLevel5 and have.FirstClearLevel6 then
+			achievementApi.unlock(player, "AllSix")
+		end
+	end)
+end
+do
+	local bindable = ServerStorage:FindFirstChild("ZyntraAchievement")
+	if not bindable then
+		bindable = Instance.new("BindableEvent")
+		bindable.Name = "ZyntraAchievement"
+		bindable.Parent = ServerStorage
+	end
+	bindable.Event:Connect(function(player, key)
+		if typeof(player) == "Instance" and player:IsA("Player") then achievementApi.unlock(player, key) end
 	end)
 end
 
@@ -4106,12 +4191,13 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 		-- Badges follow the CONFIRMED write, never precede it: a First Clear badge
 		-- on a profile that has no saved clear is exactly the bug this replaced.
 		-- awardBadge is non-blocking and contains its own failures.
-		awardBadge(player, "FirstClearLevel" .. cleared)
+		achievementApi.unlock(player, "FirstClearLevel" .. cleared)
 		local session = sessions[player]
 		local levelsCleared = session and session.data.LevelsCleared
 		if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
-			awardBadge(player, "CampaignComplete")
+			achievementApi.unlock(player, "CampaignComplete")
 		end
+		if type(friendCount) == "number" and friendCount >= 1 then achievementApi.unlock(player, "BetterTogether") end
 	end)
 end)
 

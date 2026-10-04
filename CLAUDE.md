@@ -804,3 +804,23 @@ weight and button size on phones, no noise meter.
 - **Level 5 audio**: the two always-on beds were denoised (`*_clean.mp3`, 17.6 dB and 28.6 dB less energy above
   6 kHz) and replace the originals under the same keys; eight darker `l5_amb_*` one-shots joined the random set (18).
 - **Level 5 doors carry no counter** (owner, 2026-10-04): only the first room's door says EVERYONE ON THE PLATE; the plates still scale with the players.
+
+### Added 2026-10-04 - Achievements
+
+- **An achievement is a key of `ZyntraConfig.Badges`**; the display list (name, text, icon, `Secret`) is
+  `ZyntraConfig.Achievements` (20). ZyntraMonetization records unlocks in the profile field `Achievements`
+  (`achievementApi.unlock`), publishes them as the replicated player attribute `ZyntraAchievements` (comma-joined
+  keys) and then tries the Roblox badge, which does nothing while the key's id is 0. `AwardedBadges` stays the
+  narrower record of badges really handed out; a badge created later is awarded on the player's next join.
+  Old profiles get what they had already earned (badges held, levels cleared) at load.
+- **Other server scripts unlock with `ServerStorage.ZyntraAchievement:Fire(player, key)`** (a BindableEvent: no
+  client can reach it). Level5PreviewAccess and the Level 6 game module report through it.
+- **`StarterPlayerScripts."Achievements Client"`** (took over the disabled `Level 6 Lighting Controller`): unlock
+  toast, a BADGES button under the lobby's left rail and the panel. Its ScreenGui respects the top inset, so
+  "off screen" for the toast is y -170, not -90.
+- **Badge art is drawn, not generated**: `tools/badges/build_badges.py` writes flat SVG pictograms in the store
+  icons' palette (#161D20 ground; cream F3ECDA, teal 4FADAA, amber EDA827, coral F2725D) and renders them with
+  headless Chrome to `assets/badges/icons-512` and `~/Desktop/Backrooms Stay Quiet - Badges`. The owner rejected
+  a generated set as AI slop; keep new badges in this style.
+- **Still to do by hand**: the 16 new Roblox badges have to be created on the Creator Dashboard (5 free per day,
+  then 100 Robux each) and their ids pasted over the 0s in `Badges`.
