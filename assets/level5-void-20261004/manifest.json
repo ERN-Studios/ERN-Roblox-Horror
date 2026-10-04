@@ -166,5 +166,305 @@
     "seconds": 4.04898,
     "loop": false,
     "prompt": "One long slow exhale made entirely of diffuse filtered air, as if the empty room itself breathed out. A distant soft air release, gently swelling then dissolving. Absolutely no human voice character, mouth sound or human breathing. FROM FAR AWAY in an enormous empty pastel hall over a black abyss. Quiet, soft, muffled, dreamlike, lonely, uneasy. Long natural hall reverb tail fading to silence. No music, speech, words or voices."
+  },
+  {
+    "name": "l5_step_1.mp3",
+    "seconds": 0.312,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "VsS7lhknCo1tkTFswD0U",
+    "sha256": "4f921bcb6a8cf0dcecbc8dfc5b36e67439182a2e3f24e59d5a27179406b3cc4d",
+    "processing": {
+      "source_trim_start_seconds": 0.05,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 23.15,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.35,
+      "true_peak_dbtp": -4.18,
+      "leading_silence_seconds_at_minus45_dbfs": 6.2e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.312,
+      "decoded_seconds": 0.28,
+      "last_signal_seconds_at_minus45_dbfs": 0.197187,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_step_2.mp3",
+    "seconds": 0.312,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "eDzc3aHkgqhpWgeFRYTZ",
+    "sha256": "3b2bbcab8beed2c138f722895aaee6f197ff46e2b6cca6aca3a182cec18b1fc7",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 21.35,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.19,
+      "leading_silence_seconds_at_minus45_dbfs": 2.1e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.312,
+      "decoded_seconds": 0.27,
+      "last_signal_seconds_at_minus45_dbfs": 0.185021,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_step_3.mp3",
+    "seconds": 0.336,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "elCza9IS7qFc5YbKrPqp",
+    "sha256": "98a5aa612ab37bc3f09f1022745815c0371fa688dd5178e895ca3bfac809df2c",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 32.85,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.16,
+      "leading_silence_seconds_at_minus45_dbfs": 2.1e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.336,
+      "decoded_seconds": 0.3,
+      "last_signal_seconds_at_minus45_dbfs": 0.198313,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_step_4.mp3",
+    "seconds": 0.336,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "6AeU1zMYUgjX3bLhZIpC",
+    "sha256": "f01e6fbf557f6b4c9c4c72a59f799ae429a7c7df4f501977593be178f429befe",
+    "processing": {
+      "source_trim_start_seconds": 0.071,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 15.45,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.26,
+      "leading_silence_seconds_at_minus45_dbfs": 0.000333,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.336,
+      "decoded_seconds": 0.29,
+      "last_signal_seconds_at_minus45_dbfs": 0.176563,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_step_5.mp3",
+    "seconds": 0.288,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "AVbrDu0FCZPPh8lLSm9e",
+    "sha256": "d0f9bcb26346fbdc75dab5059e2c1708f6efa5b1ce959ebc5238b7148fe52a36",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 33.5,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.03,
+      "leading_silence_seconds_at_minus45_dbfs": 2.1e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.288,
+      "decoded_seconds": 0.26,
+      "last_signal_seconds_at_minus45_dbfs": 0.197667,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_step_6.mp3",
+    "seconds": 0.312,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One quiet soft heel-to-toe WALKING footfall, compact gentle rounded thud, sound lasts 0.30 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "TQlpWOJJ7yZ7xBKLjzaL",
+    "sha256": "de5889e382953b473886bf525b85580c880673af2a0a3d91b605f2632974e6eb",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 25.4,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.23,
+      "leading_silence_seconds_at_minus45_dbfs": 8.3e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.312,
+      "decoded_seconds": 0.28,
+      "last_signal_seconds_at_minus45_dbfs": 0.195604,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_stepr_1.mp3",
+    "seconds": 0.264,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One firm RUNNING footfall, short tight rubber sole impact, sound lasts 0.24 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "x5RUZpLjNzYLQYb4ZKGY",
+    "sha256": "b64b6ef805166c3ef682ab7511cdcdbc16c47b6fdf53278b06aa57a75203ad99",
+    "processing": {
+      "source_trim_start_seconds": 0.026,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 8.05,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.15,
+      "true_peak_dbtp": -4.26,
+      "leading_silence_seconds_at_minus45_dbfs": 0.000167,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.264,
+      "decoded_seconds": 0.22,
+      "last_signal_seconds_at_minus45_dbfs": 0.187146,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_stepr_2.mp3",
+    "seconds": 0.264,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One firm RUNNING footfall, short tight rubber sole impact, sound lasts 0.24 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "jr6eevTvNYu1T9XZIOrs",
+    "sha256": "efa4460985f1b7f3e69b65868d14b07b32dfd1ed1f724695b2b1f6a8002c4fb0",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 10.45,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -4.19,
+      "leading_silence_seconds_at_minus45_dbfs": 4.2e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.264,
+      "decoded_seconds": 0.24,
+      "last_signal_seconds_at_minus45_dbfs": 0.197292,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_stepr_3.mp3",
+    "seconds": 0.264,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One firm RUNNING footfall, short tight rubber sole impact, sound lasts 0.24 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "8M1GE4OXyPBRkwBV22Ow",
+    "sha256": "10a8293e3690a7eea5b61ac9fe39cc8850b94ea26bcd12a47f2842dad8a7a1b4",
+    "processing": {
+      "source_trim_start_seconds": 0,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 32.95,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.15,
+      "true_peak_dbtp": -4.11,
+      "leading_silence_seconds_at_minus45_dbfs": 2.1e-05,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.264,
+      "decoded_seconds": 0.23,
+      "last_signal_seconds_at_minus45_dbfs": 0.192542,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
+  },
+  {
+    "name": "l5_stepr_4.mp3",
+    "seconds": 0.264,
+    "loop": false,
+    "prompt": "Exactly ONE isolated natural footstep, one contact transient only. Soft rubber boot sole on hard painted plaster / smooth concrete. Very dry close-miked real foley, no room sound, no echo, decay under 0.2 seconds. No music, voice, cloth, shuffle, scrape, second step or repetition. Immediate onset followed by silence. One firm RUNNING footfall, short tight rubber sole impact, sound lasts 0.24 seconds.",
+    "generator": "ElevenLabs MCP Sound Effects v2",
+    "generation_id": "n2quO3rcBaZFdDdR7vJJ",
+    "sha256": "0df7e80eca9f2899eadef7a91d69e03cfff9f7c34795c2c0a950d631fc42ed99",
+    "processing": {
+      "source_trim_start_seconds": 0.672,
+      "decay_fade_seconds": [
+        0.13,
+        0.2
+      ],
+      "gain_db": 19.65,
+      "loudness_method": "FFmpeg BS.1770 loudnorm measured with silence padding to 400 ms for sub-400 ms one-shots; padding used for measurement only",
+      "peak_limiter": "FFmpeg alimiter: ceiling 0.63 (-4.01 dBFS), attack 1 ms, release 15 ms, latency compensated, auto level off"
+    },
+    "verification": {
+      "integrated_lufs": -20.05,
+      "true_peak_dbtp": -3.68,
+      "leading_silence_seconds_at_minus45_dbfs": 0.0,
+      "detected_impact_transients": 1,
+      "transient_method": "10 ms RMS envelope, 25% peak height/prominence, 80 ms minimum separation",
+      "mp3_container_seconds": 0.264,
+      "decoded_seconds": 0.22,
+      "last_signal_seconds_at_minus45_dbfs": 0.185521,
+      "listening_review": "Not performed; transient count is an automated signal check."
+    }
   }
 ]

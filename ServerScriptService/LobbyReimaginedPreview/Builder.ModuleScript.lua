@@ -252,58 +252,145 @@ function Module.Build()
 		solid(cinemaRow)
 		solid(visuals:FindFirstChild("Reference End Furniture Piles"))
 		solid(bayPolish:FindFirstChild("Theme Furniture") or model:FindFirstChild("Theme Furniture", true))
+		-- LOBBY_COLLISION_20261004b (owner): everything outside the queue bays is solid: the DJ console, the speaker
+		-- towers and subwoofers, the stage rail and the loose office furniture. All of them are Box-fidelity
+		-- MeshParts, so each gets its own box. Gates, conduits, signs and floor visuals are left alone (a gate's box
+		-- would close its doorway; the floors already have colliders).
+		local SOLID = {DJConsole = true, SpeakerTower = true, Subwoofer = true, StageRearRail = true, CRTMonitor = true,
+			FilingCabinet = true, Sofa = true, Desk = true, StackChair = true, Photocopier = true, VinylBench = true,
+			WireTrolley = true, RolledCarpet = true, R4PartyChair = true, BeigeKeyboard = true}
+		for _, d in ipairs(visuals:GetChildren()) do
+			if SOLID[d.Name] then solid(d) end
+		end
+		-- END_PILES_20261004 (owner): the wall behind each end's furniture pile showed above and around it. Every
+		-- piece of the piles is cloned twice more, higher and further back (the clones may sink into the wall), with
+		-- the pile mirrored left to right so the copies do not line up with the originals.
+		local piles = visuals:FindFirstChild("Reference End Furniture Piles")
+		if piles then
+			local extra = Instance.new("Folder")
+			extra.Name = "End Pile Fill"
+			extra:SetAttribute("LobbyReimaginedOwned", true)
+			extra.Parent = visuals
+			local random = Random.new(20261004)
+			for _, piece in ipairs(piles:GetDescendants()) do
+				if piece:IsA("BasePart") then
+					local rel = piece.Position - center
+					local out = rel.Z > 0 and 1 or -1                   -- which end of the tunnel this piece is at
+					for layer = 1, 2 do
+						local copy = piece:Clone()
+						local lift = layer == 1 and 7.5 or 14.5
+						local at = center + Vector3.new(-rel.X * (layer == 1 and 0.85 or 0.6) + random:NextNumber(-2, 2),
+							rel.Y + lift + random:NextNumber(-1.5, 1.5), rel.Z + out * (1.5 + layer * 2 + random:NextNumber(0, 1.5)))
+						copy.CFrame = CFrame.new(at) * CFrame.Angles(random:NextNumber(-0.5, 0.5), random:NextNumber(-math.pi, math.pi), random:NextNumber(-0.5, 0.5))
+						copy.CanCollide, copy.CanQuery, copy.CanTouch = false, false, false   -- out of reach: nobody stands up there
+						copy.CastShadow = false
+						copy.Parent = extra
+					end
+				end
+			end
+		end
 	end
-	-- LEVEL5_BAY_20261004. The Level 5 bay as a small void room, to match the level behind it (owner request).
-	--   The suburb house fronts (BayDecorLevel5) are hidden, not deleted. The wall gets a plaster lining in the
-	--   five room colours, one thin panel in front of each wall collider; the floor a black disc; and the set
-	--   below (the stair to the lit doorway, the monoliths, the balls) comes from tools/level5_void/build_bay.py,
-	--   which builds it in Blender and writes the table between the markers. Bay-local: z toward the entrance.
+	-- BAY_DRESSING_20261004. A queue bay dressed to match the level behind it (owner request): Level 5 as a small
+	--   void room, Level 4 as the foyer of the synthwave cinema. The bay's old decor is hidden where it clashes, never
+	--   deleted. The wall gets a thin lining panel in front of each wall collider, the floor a disc, and the SET
+	--   comes from tools/level5_void/build_bay.py, which builds both bays in Blender and writes the tables between
+	--   the markers. Bay-local coordinates: y up from the floor's top, z toward the entrance.
 	do
-		local SET = {
-			-- LEVEL5_BAY_SET_BEGIN (generated; edit build_bay.py, not this table)
-			{n="Step", c="rose", s={9,0.8,1.7}, p={0,0.4,-18.45}},
-			{n="Step", c="blue", s={9,1.6,1.7}, p={0,0.8,-20.15}},
-			{n="Step", c="amber", s={9,2.4,1.7}, p={0,1.2,-21.85}},
-			{n="Step", c="mint", s={9,3.2,1.7}, p={0,1.6,-23.55}},
-			{n="Step", c="violet", s={9,4,1.9}, p={0,2,-25.35}},
-			{n="Door", c="black", s={6,11,0.4}, p={0,9.5,-26.55}, m="SmoothPlastic"},
-			{n="DoorPost", c="violet", s={1,15,1}, p={-3.5,7.5,-26.55}},
-			{n="DoorPost", c="violet", s={1,15,1}, p={3.5,7.5,-26.55}},
-			{n="DoorLintel", c="violet", s={8,1.1,1}, p={0,15.55,-26.55}},
-			{n="Orb", c="orb", s={2.2,2.2,2.2}, p={0,17.4,-22}, ball=true, ghost=true, m="Neon", light={30,1.3}},
-			{n="OrbRod", c="black", s={0.2,3.5,0.2}, p={0,20.25,-22}, ghost=true, m="Metal"},
-			{n="Monolith", c="rose", s={3.2,13,3.2}, p={-8.2,6.5,-23.4}},
-			{n="Monolith", c="mint", s={2.6,8.5,2.6}, p={-11.6,4.25,-20.6}},
-			{n="Monolith", c="amber", s={3,10.5,3}, p={8,5.25,-23.6}},
-			{n="Monolith", c="blue", s={2.4,6,2.4}, p={11.4,3,-20.8}},
-			{n="Bench", c="rose", s={2.6,1.7,8}, p={-22.6,0.85,0}},
-			{n="Bench", c="blue", s={2.6,1.7,8}, p={22.6,0.85,0}},
-			{n="Monolith", c="amber", s={1.8,9,1.8}, p={-23.2,4.5,-5.6}},
-			{n="Monolith", c="mint", s={1.8,9,1.8}, p={23.2,4.5,5.6}},
-			{n="Ball", c="sphere", s={1.6,1.6,1.6}, p={2.8,2.4,-20.15}, ball=true},
-			{n="Ball", c="sphere", s={3,3,3}, p={-5.6,1.5,-18.9}, ball=true},
-			{n="Ball", c="sphere", s={2,2,2}, p={11.4,7,-20.8}, ball=true},
-			{n="Ball", c="sphere", s={1.4,1.4,1.4}, p={-22.6,2.4,2.4}, ball=true},
-			-- LEVEL5_BAY_SET_END
+		local SETS = {
+			[5] = {
+				-- LEVEL5_BAY_SET_BEGIN (generated; edit build_bay.py, not this table)
+				{n="Step", c="rose", s={9,0.8,1.7}, p={0,0.4,-18.45}},
+				{n="Step", c="blue", s={9,1.6,1.7}, p={0,0.8,-20.15}},
+				{n="Step", c="amber", s={9,2.4,1.7}, p={0,1.2,-21.85}},
+				{n="Step", c="mint", s={9,3.2,1.7}, p={0,1.6,-23.55}},
+				{n="Step", c="violet", s={9,4,1.9}, p={0,2,-25.35}},
+				{n="Door", c="black", s={6,11,0.4}, p={0,9.5,-26.55}, m="SmoothPlastic"},
+				{n="DoorPost", c="coral", s={1,15,1}, p={-3.5,7.5,-26.55}},
+				{n="DoorPost", c="coral", s={1,15,1}, p={3.5,7.5,-26.55}},
+				{n="DoorLintel", c="coral", s={8,1.1,1}, p={0,15.55,-26.55}},
+				{n="Orb", c="orb", s={2.2,2.2,2.2}, p={0,17.4,-22}, ball=true, ghost=true, m="Neon", light={30,1.3}},
+				{n="OrbRod", c="black", s={0.2,3.5,0.2}, p={0,20.25,-22}, ghost=true, m="Metal"},
+				{n="Monolith", c="rose", s={3.2,13,3.2}, p={-8.2,6.5,-23.4}},
+				{n="Monolith", c="mint", s={2.6,8.5,2.6}, p={-11.6,4.25,-20.6}},
+				{n="Monolith", c="amber", s={3,10.5,3}, p={8,5.25,-23.6}},
+				{n="Monolith", c="blue", s={2.4,6,2.4}, p={11.4,3,-20.8}},
+				{n="Bench", c="rose", s={2.6,1.7,8}, p={-22.6,0.85,0}},
+				{n="Bench", c="blue", s={2.6,1.7,8}, p={22.6,0.85,0}},
+				{n="Monolith", c="amber", s={1.8,9,1.8}, p={-23.2,4.5,-5.6}},
+				{n="Monolith", c="mint", s={1.8,9,1.8}, p={23.2,4.5,5.6}},
+				{n="Ball", c="sphere", s={1.6,1.6,1.6}, p={2.8,2.4,-20.15}, ball=true},
+				{n="Ball", c="sphere", s={3,3,3}, p={-5.6,1.5,-18.9}, ball=true},
+				{n="Ball", c="sphere", s={2,2,2}, p={11.4,7,-20.8}, ball=true},
+				{n="Ball", c="sphere", s={1.4,1.4,1.4}, p={-22.6,2.4,2.4}, ball=true},
+				-- LEVEL5_BAY_SET_END
+			},
+			[4] = {
+				-- LEVEL4_BAY_SET_BEGIN (generated; edit build_bay.py, not this table)
+				{n="Marquee", c="screen", s={14,3.4,0.6}, p={0,14.3,-26.3}, ghost=true, m="SmoothPlastic", text="NOW SHOWING", tc="warm"},
+				{n="MarqueeTrim", c="magenta", s={14.6,0.24,0.7}, p={0,16.12,-26.3}, ghost=true, m="Neon"},
+				{n="MarqueeTrim", c="cyan", s={14.6,0.24,0.7}, p={0,12.48,-26.3}, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={-6.4,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={-4.8,12,-25.9}, ball=true, ghost=true, m="Neon", light={16,0.7}},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={-3.2,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={-1.6,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={0,12,-25.9}, ball=true, ghost=true, m="Neon", light={16,0.7}},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={1.6,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={3.2,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={4.8,12,-25.9}, ball=true, ghost=true, m="Neon", light={16,0.7}},
+				{n="Bulb", c="warm", s={0.5,0.5,0.5}, p={6.4,12,-25.9}, ball=true, ghost=true, m="Neon"},
+				{n="Poster", c="screen", s={5.2,7.4,0.3}, p={-19.308,7.3,-18.005}, ghost=true, m="SmoothPlastic", text="LEVEL 4", tc="magenta", yaw=47},
+				{n="PosterFrame", c="magenta", s={5.8,0.22,0.4}, p={-19.308,11.11,-18.005}, ghost=true, m="Neon", lc="magenta", yaw=47, light={14,0.6}},
+				{n="PosterFrame", c="magenta", s={5.8,0.22,0.4}, p={-19.308,3.49,-18.005}, ghost=true, m="Neon", yaw=47},
+				{n="Poster", c="screen", s={5.2,7.4,0.3}, p={19.308,7.3,-18.005}, ghost=true, m="SmoothPlastic", text="STAY QUIET", tc="cyan", yaw=-47},
+				{n="PosterFrame", c="cyan", s={5.8,0.22,0.4}, p={19.308,11.11,-18.005}, ghost=true, m="Neon", lc="cyan", yaw=-47, light={14,0.6}},
+				{n="PosterFrame", c="cyan", s={5.8,0.22,0.4}, p={19.308,3.49,-18.005}, ghost=true, m="Neon", yaw=-47},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={-3.6,1.6,17}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={-3.6,3.4,17}, ball=true, ghost=true, m="Metal"},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={-3.6,1.6,21.5}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={-3.6,3.4,21.5}, ball=true, ghost=true, m="Metal"},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={-3.6,1.6,26}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={-3.6,3.4,26}, ball=true, ghost=true, m="Metal"},
+				{n="Rope", c="velvet", s={0.22,0.22,4.2}, p={-3.6,2.61,19.25}, ghost=true, m="Fabric"},
+				{n="Rope", c="velvet", s={0.22,0.22,4.2}, p={-3.6,2.61,23.75}, ghost=true, m="Fabric"},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={3.6,1.6,17}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={3.6,3.4,17}, ball=true, ghost=true, m="Metal"},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={3.6,1.6,21.5}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={3.6,3.4,21.5}, ball=true, ghost=true, m="Metal"},
+				{n="RopePost", c="gold", s={0.5,3.2,0.5}, p={3.6,1.6,26}, m="Metal"},
+				{n="RopeCap", c="gold", s={0.8,0.8,0.8}, p={3.6,3.4,26}, ball=true, ghost=true, m="Metal"},
+				{n="Rope", c="velvet", s={0.22,0.22,4.2}, p={3.6,2.61,19.25}, ghost=true, m="Fabric"},
+				{n="Rope", c="velvet", s={0.22,0.22,4.2}, p={3.6,2.61,23.75}, ghost=true, m="Fabric"},
+				-- LEVEL4_BAY_SET_END
+			},
 		}
 		local COLOURS = {
 			rose = Color3.fromRGB(224, 150, 200), blue = Color3.fromRGB(92, 150, 200), amber = Color3.fromRGB(228, 180, 88),
-			mint = Color3.fromRGB(150, 216, 182), violet = Color3.fromRGB(164, 134, 214), black = Color3.fromRGB(4, 4, 5),
-			sphere = Color3.fromRGB(26, 38, 120), orb = Color3.fromRGB(255, 255, 250),
+			mint = Color3.fromRGB(150, 216, 182), violet = Color3.fromRGB(164, 134, 214), coral = Color3.fromRGB(236, 118, 102),
+			black = Color3.fromRGB(4, 4, 5), sphere = Color3.fromRGB(26, 38, 120), orb = Color3.fromRGB(255, 255, 250),
+			navy = Color3.fromRGB(34, 20, 64), magenta = Color3.fromRGB(255, 64, 176), cyan = Color3.fromRGB(70, 230, 255),
+			gold = Color3.fromRGB(212, 170, 80), velvet = Color3.fromRGB(150, 22, 44), carpet = Color3.fromRGB(46, 22, 60),
+			screen = Color3.fromRGB(12, 10, 20), warm = Color3.fromRGB(255, 214, 150),
 		}
-		local ORDER = {"rose", "blue", "amber", "mint", "violet"}
+		local ROOMS = {"rose", "blue", "amber", "mint", "violet", "coral"}
+		local STYLE = {
+			[5] = {folder = "Level5VoidBay", hide = "BayDecorLevel5", floor = "black", floorMaterial = Enum.Material.SmoothPlastic,
+				lining = function(share) return COLOURS[ROOMS[math.clamp(math.floor(share * #ROOMS) + 1, 1, #ROOMS)]], Enum.Material.Plaster end},
+			[4] = {folder = "Level4CinemaBay", floor = "carpet", floorMaterial = Enum.Material.Fabric, bands = {{6.2, "cyan"}, {15.4, "magenta"}},
+				lining = function() return COLOURS.navy, Enum.Material.Fabric end},
+		}
+		local plaster = game:GetService("MaterialService"):FindFirstChild("L5 Void Plaster") ~= nil
 		local pads = model:FindFirstChild("PreviewQueuePads")
-		local bay = pads and pads:FindFirstChild("QueueBay_Level5")
-		local floor = bay and bay:FindFirstChild("ChamberFloor")
 		local signs = model:FindFirstChild("LevelGateSigns")
-		local header = signs and signs:FindFirstChild("LEVEL 5 Door Header")
-		if floor and header then
+		for level, style in pairs(STYLE) do
+			local bay = pads and pads:FindFirstChild("QueueBay_Level" .. level)
+			local floor = bay and bay:FindFirstChild("ChamberFloor")
+			local header = signs and signs:FindFirstChild("LEVEL " .. level .. " Door Header")
+			if not floor or not header then continue end
 			local top = floor.Position + Vector3.new(0, math.min(floor.Size.X, floor.Size.Y, floor.Size.Z) / 2, 0)
 			local toward = ((header.Position - floor.Position) * Vector3.new(1, 0, 1)).Unit
 			local frame = CFrame.lookAt(top, top - toward)                    -- +Z is the entrance
-			local plaster = game:GetService("MaterialService"):FindFirstChild("L5 Void Plaster") ~= nil
 			local set = Instance.new("Folder")
-			set.Name = "Level5VoidBay"
+			set.Name = style.folder
 			set:SetAttribute("LobbyReimaginedOwned", true)
 			set.Parent = model
 			local function piece(name, size, cf, colour, material, collide)
@@ -317,7 +404,7 @@ function Module.Build()
 				part.Parent = set
 				return part
 			end
-			local old = visuals:FindFirstChild("BayDecorLevel5")
+			local old = style.hide and visuals:FindFirstChild(style.hide)
 			for _, d in ipairs(old and old:GetDescendants() or {}) do
 				if d:IsA("BasePart") then d.Transparency, d.CanCollide, d.CanQuery, d.CastShadow = 1, false, false, false end
 			end
@@ -326,31 +413,48 @@ function Module.Build()
 					local at = frame:PointToObjectSpace(wall.Position)
 					local radius = math.sqrt(at.X * at.X + at.Z * at.Z)
 					if radius > 26 and radius < 30 and math.abs(at.Y - 11) < 3 then
-						local inward = (top - wall.Position) * Vector3.new(1, 0, 1)
+						local inward = ((top - wall.Position) * Vector3.new(1, 0, 1)).Unit
 						local share = (math.atan2(at.X, -at.Z) + math.pi) / (2 * math.pi)        -- 0..1 round the bay, the entrance at both ends
-						local colour = COLOURS[ORDER[math.clamp(math.floor(share * 5) + 1, 1, 5)]]
-						piece("Lining", Vector3.new(wall.Size.X + 0.16, wall.Size.Y, 0.12),
-							wall.CFrame + inward.Unit * 0.42, colour, Enum.Material.Plaster, false)
+						local colour, material = style.lining(share)
+						piece("Lining", Vector3.new(wall.Size.X + 0.16, wall.Size.Y, 0.12), wall.CFrame + inward * 0.42, colour, material, false)
+						for _, band in ipairs(style.bands or {}) do
+							local strip = piece("NeonBand", Vector3.new(wall.Size.X + 0.16, 0.22, 0.1),
+								wall.CFrame + inward * 0.52 + Vector3.new(0, band[1] - 11, 0), COLOURS[band[2]], Enum.Material.Neon, false)
+							strip.CastShadow = false
+						end
 					end
 				end
 			end
-			local disc = piece("VoidFloor", Vector3.new(0.05, 55.8, 55.8), frame * CFrame.new(0, 0.045, 0) * CFrame.Angles(0, 0, math.pi / 2),
-				COLOURS.black, Enum.Material.SmoothPlastic, false)
+			local disc = piece("BayFloor", Vector3.new(0.05, 55.8, 55.8), frame * CFrame.new(0, 0.045, 0) * CFrame.Angles(0, 0, math.pi / 2),
+				COLOURS[style.floor], style.floorMaterial, false)
 			disc.Shape = Enum.PartType.Cylinder
-			disc.Reflectance = 0.06
-			for _, row in ipairs(SET) do
-				local part = piece(row.n, Vector3.new(row.s[1], row.s[2], row.s[3]), frame * CFrame.new(row.p[1], row.p[2], row.p[3]),
+			if style.floor == "black" then disc.Reflectance = 0.06 end
+			for _, row in ipairs(SETS[level]) do
+				local part = piece(row.n, Vector3.new(row.s[1], row.s[2], row.s[3]),
+					frame * CFrame.new(row.p[1], row.p[2], row.p[3]) * CFrame.Angles(0, math.rad(row.yaw or 0), 0),
 					COLOURS[row.c], Enum.Material[row.m or (row.ball and "SmoothPlastic" or "Plaster")], not row.ghost)
 				if row.ball then
 					part.Shape = Enum.PartType.Ball
 					if row.c == "sphere" then part.Reflectance = 0.25 end
 				end
+				if row.cyl then part.Shape = Enum.PartType.Cylinder end
+				if row.m == "Neon" then part.CastShadow = false end
 				if row.light then
 					local glow = Instance.new("PointLight")
 					glow.Range, glow.Brightness, glow.Shadows = row.light[1], row.light[2], false
-					glow.Color = Color3.fromRGB(255, 250, 240)
+					glow.Color = COLOURS[row.lc or "warm"]
 					glow.Parent = part
 					part.CastShadow = false
+				end
+				if row.text then
+					local gui = Instance.new("SurfaceGui")
+					gui.Face, gui.CanvasSize, gui.LightInfluence, gui.Brightness = Enum.NormalId.Back, Vector2.new(900, 200), 0, 1.4
+					local label = Instance.new("TextLabel")
+					label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
+					label.Font, label.TextScaled, label.Text = Enum.Font.Arcade, true, row.text
+					label.TextColor3 = COLOURS[row.tc or "warm"]
+					label.Parent = gui
+					gui.Parent = part
 				end
 			end
 		end

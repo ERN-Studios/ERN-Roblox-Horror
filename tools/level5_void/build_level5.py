@@ -24,10 +24,10 @@ WALK, JUMP, GRAVITY = 16.0, 50.0, 196.2
 BOTTOM = -420.0            # everything goes this far down; nothing below the paths is lit
 HALF = 70.0                # rooms are 140 wide inside
 CLEAR_Z = 50.0             # the folds' faces start at about 55; a path's centre line keeps this side of them
-SHARE = {'rose': 0.50, 'blue': 0.64, 'amber': 0.74, 'mint': 0.80, 'violet': 0.86}
+SHARE = {'rose': 0.50, 'blue': 0.64, 'amber': 0.74, 'mint': 0.80, 'violet': 0.86, 'coral': 0.88}
 COLOURS = {
     'rose': (224, 150, 200), 'blue': (92, 150, 200), 'amber': (228, 180, 88),
-    'mint': (150, 216, 182), 'violet': (164, 134, 214), 'black': (4, 4, 5),
+    'mint': (150, 216, 182), 'violet': (164, 134, 214), 'coral': (236, 118, 102), 'black': (4, 4, 5),
     'sphere': (26, 38, 120), 'orb': (255, 255, 250), 'plate': (236, 236, 230),
 }
 PARTS, BALLS, LIGHTS, ROUTE, CHECKPOINTS, GAPS, PLATES, FOOT = [], [], [], [], [], [], [], []
@@ -129,6 +129,12 @@ class Path_:
         self.h += degrees * self.mirror
         return self
 
+    def corner(self, degrees, width):
+        """A square landing where the route turns: a checkpoint with a lamp over it."""
+        CHECKPOINTS.append({'sec': self.section, 'x': round(self.x, 2), 'y': round(self.y, 2), 'z': round(self.z, 2), 'at': len(ROUTE)})
+        orb(self.x, self.y + 20, self.z, self.section)
+        return self.turn(degrees, width)
+
     def gap(self, distance, dy=0.0):
         limit, cap = reach(dy), SHARE[self.section]
         assert distance <= limit * cap + 1e-6, \
@@ -224,11 +230,12 @@ def route_y(name, x):
     return min(pts, key=lambda r: abs(r['x'] - x))['y']
 
 
-def room(name, x0, x1, monoliths=True):
+def room(name, x0, x1, monoliths=True, shaft=False):
     e = EXTENT[name]
     print(f'    {name}: z {e[2]:.1f}..{e[3]:.1f}, ends at z {ROUTE[-1]["z"]:.1f}')
     assert e[0] >= x0 - 0.01 and e[1] <= x1 + 0.01, f'{name}: the path runs x {e[0]:.1f}..{e[1]:.1f}, outside the room {x0:.1f}..{x1:.1f}'
-    assert e[2] >= -CLEAR_Z and e[3] <= CLEAR_Z, f'{name}: the path runs z {e[2]:.1f}..{e[3]:.1f}, into the walls (limit {CLEAR_Z})'
+    limit = HALF - 2 if shaft else CLEAR_Z                 # a shaft's stair runs along the walls themselves
+    assert e[2] >= -limit and e[3] <= limit, f'{name}: the path runs z {e[2]:.1f}..{e[3]:.1f}, into the walls (limit {limit})'
     no_crossing(name)
     length, top = x1 - x0, e[5] + 64
     for side in (-1, 1):
@@ -236,7 +243,7 @@ def room(name, x0, x1, monoliths=True):
     part('Ceiling', (length + 8, 6, HALF * 2 + 16), ((x0 + x1) / 2, top + 3, 0), name)
     # the references' walls are huge curved sheets: tall cylinders sunk most of the way into the side walls
     radii = [34, 26, 40, 30, 36]
-    n = max(2, int(length // 62))
+    n = 0 if shaft else max(2, int(length // 62))
     for k in range(n):
         cx = x0 + (k + 0.5) * length / n
         for side in (-1, 1):
@@ -246,7 +253,7 @@ def room(name, x0, x1, monoliths=True):
     # loose monoliths standing in the drop: they give the dark a scale and are never on the route
     feet = [f for f in FOOT if f['sec'] == name]
     made, tries = 0, 0
-    while monoliths and made < int(length // 34) and tries < 4000:
+    while monoliths and not shaft and made < int(length // 34) and tries < 4000:
         tries += 1
         w, d = random.choice((6, 8, 10, 14, 18)), random.choice((6, 8, 10, 14))
         m = {'x': random.uniform(x0 + 14, x1 - 14), 'z': random.uniform(-HALF + 20, HALF - 20), 'l': w, 'w': d,
@@ -260,7 +267,19 @@ def room(name, x0, x1, monoliths=True):
     # Measured in Studio (2026-10-03): brightness 1 at 26 studs from the walls blew the room out to white;
     # 0.2 from two rows near the middle reads as the references' soft gradient. The rows follow the route's
     # height, and a last row sits just under the ceiling, which is black without it.
-    for i in range(int((length - 36) // 34) + 1):
+    if shaft:
+        # lamps follow the stair round the walls, a little toward the middle; the middle itself stays black
+        pts = [r for r in ROUTE if r['sec'] == name]
+        mid, walked = (x0 + x1) / 2, 0.0
+        for a, b in zip(pts, pts[1:]):
+            walked += math.hypot(b['x'] - a['x'], b['z'] - a['z'])
+            if walked >= 26:
+                walked = 0.0
+                dx, dz = mid - b['x'], -b['z']
+                d = math.hypot(dx, dz) or 1.0
+                light((b['x'] + dx / d * 12, b['y'] + 10, b['z'] + dz / d * 12))
+                light((b['x'] + dx / d * 12, b['y'] + 36, b['z'] + dz / d * 12))
+    for i in range(0 if shaft else int((length - 36) // 34) + 1):
         lx = x0 + 18 + i * 34
         y = route_y(name, lx)
         for lz in (-18, 18):
@@ -287,11 +306,11 @@ def link(x0, x1, y, z, sec):
     ROUTE.append({'x': x1 - 2, 'y': y, 'z': z, 'jump': False, 'sec': sec})
 
 
-def close(p, x0, last=False):
+def close(p, x0, last=False, x1=None, shaft=False):
     """Walls, ceiling, lamps and the two end walls for the room `p` has just finished; returns where the next starts."""
     name = p.section
-    x1 = p.x
-    top = room(name, x0, x1)
+    x1 = p.x if x1 is None else x1
+    top = room(name, x0, x1, shaft=shaft)
     wall_with_door(x1 + 4, name, top, p.z if not last else 300, p.y if not last else -200)
     if last:
         return None
@@ -460,15 +479,56 @@ p.turn(-48).gap(7.0).plat(3.6, 3.6).stairs(6, 2.2, -1.0, 3.4, 3.2).plat(5, 3.2)
 p.gap(7.4, dy=-3.0).plat(3.6, 3.6)
 p.gap(7.0).plat(3.6, 3.6)
 p.turn(24).gap(7.4, dy=-3.0).plat(10, 6)
-p.plaza(last=True)
-finish = (p.x - 6, p.y, p.z)
-for side in (-1, 1):                                                               # the lit doorway at the bottom
-    solid('ExitFrame', 3, 3, p.y + 16, p.x - 1.5, p.z + side * 5.5, 0, 'violet')
-part('ExitFrame', (3, 3, 14), (p.x - 1.5, p.y + 16.5, p.z), 'violet')
-part('ExitDark', (1, 14, 8), (p.x - 0.8, p.y + 7, p.z), 'black')
-close(p, p.x0 - 4, last=True)
-wall_with_door(p.x0 - 4, 'violet', EXTENT['violet'][5] + 64, violet_in[0], violet_in[1])
-TOTAL = p.x
+p.plaza()
+nxt = close(p, p.x0 - 4)
+wall_with_door(p.x0 - 4, 'violet', nxt[3], violet_in[0], violet_in[1])
+
+# ---------------------------------------------------------------------------------------------- 6. CORAL
+# The shaft: a square well with nothing in the middle, and the stair goes UP round its four walls, once
+# round, with a missing piece in every stretch (<= 88%, most of them with a rise). Every gap leaves from a
+# flat tread and lands on one. The lit doorway is at the top, above the door you came in by.
+cx0, cy0, cz0 = nxt[:3]
+SHAFT = 140.0
+p = Path_('coral', cx0 + 3.0, cy0, cz0 - 5.0, heading=90.0)          # along the west wall, toward +z
+p.x0 = cx0
+coral_in = (cz0, cy0)
+p.rest(10, 6)
+GAPS_UP = [(6.4, 0.0), (6.0, 1.0), (6.7, 0.0), (6.2, 1.5), (6.9, 0.0), (6.4, 1.0), (7.0, 0.0), (6.4, 2.0),
+           (7.1, 0.0), (6.6, 1.5), (7.1, 0.0), (6.5, 2.0), (7.15, 0.0), (6.8, 1.0), (7.15, 0.0), (6.5, 2.0)]
+unit = 0
+
+def climb(length, width):
+    """Fill one wall's stretch: steps up, a flat tread, a gap, a flat tread, again, and a flat run to the corner."""
+    global unit
+    left = length
+    while left > 34 and unit < len(GAPS_UP):
+        g, dy = GAPS_UP[unit]
+        unit += 1
+        p.stairs(6, 2.0, 0.9, width, width).plat(4.5, width).gap(g, dy).plat(4.0, width)
+        left -= 12 + 4.5 + g + 4.0
+    steps = int((left - 6) // 2)
+    p.stairs(steps, 2.0, 0.9, width, width)
+    p.plat(left - steps * 2, width)
+
+climb(HALF - 3 - p.z, 5.0)                       # west wall to the north-west corner
+p.corner(-90, 6)
+climb(SHAFT - 6, 4.6)                            # north wall
+p.corner(-90, 6)
+climb(SHAFT - 6, 4.2)                            # east wall
+p.corner(-90, 6)
+climb(SHAFT - 6, 3.8)                            # south wall
+p.corner(-90, 6)
+climb((coral_in[0] - 22) - p.z, 3.6)             # west wall again, stopping short of the stretch it began on
+p.rest(12, 6)
+finish = (p.x, p.y, p.z - 6)
+for side in (-1, 1):                                                               # the lit doorway at the top
+    part('ExitFrame', (3, 16, 3), (cx0 + 1.5, p.y + 8, p.z - 6 + side * 5.5), 'coral')
+part('ExitFrame', (3, 3, 14), (cx0 + 1.5, p.y + 16.5, p.z - 6), 'coral')
+part('ExitDark', (1, 14, 8), (cx0 + 0.6, p.y + 7, p.z - 6), 'black')
+orb(cx0 + 5, p.y + 21, p.z - 6, 'coral')
+close(p, cx0, last=True, x1=cx0 + SHAFT, shaft=True)
+wall_with_door(cx0 - 4, 'coral', EXTENT['coral'][5] + 64, coral_in[0], coral_in[1])
+TOTAL = cx0 + SHAFT
 
 # a fall is judged against the lowest walking height between a checkpoint and the next one
 for i, cp in enumerate(CHECKPOINTS):
@@ -479,7 +539,7 @@ for i, cp in enumerate(CHECKPOINTS):
 OUT.mkdir(parents=True, exist_ok=True)
 data = {'origin': [40000, 600, 0], 'colours': COLOURS, 'parts': PARTS, 'balls': BALLS, 'lights': LIGHTS, 'route': ROUTE,
         'checkpoints': CHECKPOINTS, 'plates': PLATES, 'start': START, 'finish': finish, 'gaps': GAPS,
-        'sections': ['rose', 'blue', 'amber', 'mint', 'violet'],
+        'sections': ['rose', 'blue', 'amber', 'mint', 'violet', 'coral'],
         'physics': {'walk': WALK, 'jump': JUMP, 'gravity': GRAVITY, 'flat_reach': round(reach(0), 2)}}
 (OUT / 'level5.json').write_text(json.dumps(data))
 print(f"parts {len(PARTS)}, balls {len(BALLS)}, lights {len(LIGHTS)}, route points {len(ROUTE)}, checkpoints {len(CHECKPOINTS)}, "

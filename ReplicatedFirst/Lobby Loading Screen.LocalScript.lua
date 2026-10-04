@@ -439,6 +439,26 @@ local ok, problem = pcall(function() outcome, total = run() end)
 if not ok then warn("[LobbyLoading] " .. tostring(problem)) end
 
 if outcome == "lobby" and not enterAnyway then
+	-- TEXTURE_SETTLE_20261004 (owner: "all objects load in but some textures still need a couple of seconds").
+	-- PreloadAsync returns when the files are fetched; the renderer then still decodes and uploads them, and
+	-- surface/material maps arrive through the same request queue. Hold the cover until that queue has stayed
+	-- empty for a moment, then a beat more for the sharp mip levels. Capped, so a slow device is never trapped.
+	progress = 0.98
+	status.Text = "FINISHING TEXTURES"
+	detail.Text = ""
+	do
+		local began, calm = os.clock(), nil
+		while os.clock() - began < 5 do
+			if ContentProvider.RequestQueueSize == 0 then
+				calm = calm or os.clock()
+				if os.clock() - calm >= 1.2 then break end
+			else
+				calm = nil
+			end
+			task.wait(0.1)
+		end
+		task.wait(1.0)
+	end
 	progress = 1
 	status.Text = "LOBBY READY"
 	detail.Text = failedCount > 0

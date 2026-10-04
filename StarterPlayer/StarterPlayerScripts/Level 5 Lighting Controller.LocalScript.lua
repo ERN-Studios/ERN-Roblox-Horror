@@ -143,7 +143,7 @@ task.spawn(function()
 	end
 
 	local ambience, wind, fall = clip("l5_ambience", true), clip("l5_depth_wind", true), clip("l5_player_fall")
-	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET"}
+	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP"}
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
 		if what == "fell" then
 			if fall then fall:Stop() end
@@ -164,10 +164,38 @@ task.spawn(function()
 		end
 	end)
 
-	-- FOOTSTEPS_20261004: the level's own steps (boots on rough plaster), a walk loop and a run loop that only
-	-- sound while the body is on the ground and moving, and a landing after every jump.
-	local STEP_VOLUME = 0.3
-	local walkLoop, runLoop = clip("l5_steps_walk", true), clip("l5_steps_run", true)
+	-- FOOTSTEPS_20261004: the level's own steps (boots on plaster). The first version was two loops and the owner
+	-- rejected it; a loop never lines up with the feet. Each step is now ONE recorded step, played when the body
+	-- has covered a stride on the ground: six walking steps and four running ones, never the same twice in a row,
+	-- each a little different in pitch and level. A landing sounds after every jump.
+	local STRIDE_WALK, STRIDE_RUN = 6.4, 7.8
+	local WALK_STEPS = {"l5_step_1", "l5_step_2", "l5_step_3", "l5_step_4", "l5_step_5", "l5_step_6"}
+	local RUN_STEPS = {"l5_stepr_1", "l5_stepr_2", "l5_stepr_3", "l5_stepr_4"}
+	local covered, lastStep = 0, nil
+	game:GetService("RunService").Heartbeat:Connect(function(dt)
+		if not inLevel() then covered = 0 return end
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local body = humanoid and humanoid.RootPart
+		if not body or humanoid.Health <= 0 or humanoid.FloorMaterial == Enum.Material.Air then return end
+		local velocity = body.AssemblyLinearVelocity
+		local flat = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+		if flat < 2 then covered = STRIDE_WALK * 0.6 return end       -- the first step comes soon after setting off
+		covered += flat * dt
+		local running = humanoid.WalkSpeed > 20
+		if covered < (running and STRIDE_RUN or STRIDE_WALK) then return end
+		covered = 0
+		local list = running and RUN_STEPS or WALK_STEPS
+		local name
+		repeat name = list[math.random(#list)] until name ~= lastStep
+		lastStep = name
+		local step = clip(name)
+		if not step then return end
+		step.Volume = (running and 0.42 or 0.3) * (0.85 + math.random() * 0.3) * math.clamp(flat / 12, 0.5, 1)
+		step.PlaybackSpeed = 0.94 + math.random() * 0.12
+		step:Play()
+		step.Ended:Once(function() step:Destroy() end)
+	end)
 	local landed = setmetatable({}, {__mode = "k"})
 	local function hookLanding(character)
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
@@ -224,27 +252,9 @@ task.spawn(function()
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 		if not on or not model or not root or not humanoid then
 			if fall and fall.IsPlaying then fall:Stop() end
-			for _, loop in ipairs({walkLoop, runLoop}) do
-				if loop and loop.IsPlaying then loop:Stop(); loop.Volume = 0 end
-			end
 			continue
 		end
 		hookLanding(character)
-		do
-			local velocity = root.AssemblyLinearVelocity
-			local flat = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
-			local grounded = humanoid.FloorMaterial ~= Enum.Material.Air and humanoid.Health > 0
-			local running = humanoid.WalkSpeed > 20
-			for loop, wanted in pairs({[walkLoop or false] = not running, [runLoop or false] = running}) do
-				if loop then
-					local target = (grounded and flat > 2 and wanted) and STEP_VOLUME or 0
-					loop.Volume += (target - loop.Volume) * 0.5
-					loop.PlaybackSpeed = math.clamp(flat / (running and 26 or 16), 0.6, 1.15)   -- a crouched walk steps slower
-					if target > 0 and not loop.IsPlaying then loop:Play()
-					elseif target == 0 and loop.IsPlaying and loop.Volume < 0.01 then loop:Stop() end
-				end
-			end
-		end
 		if os.clock() > nextAmbient then
 			nextAmbient = os.clock() + 14 + math.random() * 20
 			ambientAt(root.Position)

@@ -746,3 +746,34 @@ weight and button size on phones, no noise meter.
   loops and `l5_land` in the Level 5 Lighting Controller (`FOOTSTEPS_20261004`; run = WalkSpeed over 20, silent in the
   air), so SoundController's round footsteps exclude Level 5 again. `AMBIENT_20261004` plays one of ten `l5_amb_*`
   one-shots every 14-34 s from a random point 45-115 studs from the listener. 28 sounds in `sound_ids.json`.
+
+### Added 2026-10-04 (night run, v2632)
+
+- **Level 5 has a sixth room, Coral: the shaft.** A 140-stud square well with nothing in the middle; the stair climbs
+  once round its four walls (14 jumps, cap 88%, most with a rise) to the lit doorway above the door you came in by.
+  `close(..., shaft=True)` skips the folds/monoliths and hangs the lamps along the route. Violet now ends in a plate
+  and gate like the others (5 plates, 25 checkpoints, 95 jumps, 3108 studs). No entity in Level 5 (owner decision).
+- **Level 5 footsteps are single recorded steps** (`l5_step_1..6`, `l5_stepr_1..4`), one per stride covered on the
+  ground (6.4 studs walking, 7.8 running), never the same twice running. The owner rejected the looped version.
+- **Lobby (Builder)**: `LOBBY_COLLISION_20261004b` makes the DJ console, speaker towers, subwoofers, stage rail and
+  the loose office furniture solid; `END_PILES_20261004` clones every end-pile piece twice more, higher and further
+  back (438 non-colliding parts), so no wall shows behind the piles; `BAY_DRESSING_20261004` dresses bay 5 (void
+  room) and bay 4 (synthwave cinema foyer: navy lining, cyan/magenta neon bands, NOW SHOWING marquee, poster
+  cases, rope posts) from the sets `tools/level5_void/build_bay.py` writes between the `LEVELn_BAY_SET` markers.
+- **Lobby DJ** (`ServerScriptService."Lobby DJ"`, `StarterPlayerScripts."Lobby DJ Client"`; they took over the retired
+  `Level4RenovationBoot` and `Level 6 Table Hiding Client`): E at the console opens the booth for
+  `DevAccess.IsLevel6PreviewAllowed`. Five tracks (`assets/lobby-dj-20261004`), published as workspace attributes
+  `LobbyDJTrack` / `LobbyDJStartedAt` / `LobbyDJTracks`; every client plays the track itself, in step, only in the
+  lobby and only with its own lobby music on, and silences the `ZyntraLobbyMusic` group meanwhile. DJ MODE stands
+  the caller behind the console, welds a headset to the Head and moves shoulders/elbows/neck/waist by offsetting
+  Motor6D C0 on the server (no animation assets); everything is restored on the way out.
+- **Welcome card**: `First Entry Guide` (was empty) shows one card to a first-time player (`ZyntraFirstLogin`) after
+  the briefing has finished typing: three steps, device-specific controls, the two-person-team line.
+  `workspace.DevShowWelcome = true` shows it in Studio.
+- **Loading screen** holds for textures: after the preload it waits for `ContentProvider.RequestQueueSize == 0` for
+  1.2 s (cap 5 s) plus 1 s (`TEXTURE_SETTLE_20261004`).
+- **Bug run, Level 6**: caught -> kill cam -> PARTY DOWN -> lobby, and post -> exit beacon (`L6_Anchor_Exit`, not
+  `Level6Exit`) -> LEVEL 6 CLEARED -> lobby, both clean in one session, console clean.
+- **Gallery**: `artifacts/gallery-20261004/` holds the competitor research and the raw in-game captures of all six
+  levels; the finished 1920x1080 images are in `~/Desktop/Backrooms Stay Quiet - Gallery/`. `/tmp/shots.sh`-style
+  capture needs the luau and the shell to agree on a wall-clock time (`DateTime.now()`), not on a sleep.
