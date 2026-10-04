@@ -28,7 +28,7 @@ SHARE = {'rose': 0.50, 'blue': 0.64, 'amber': 0.74, 'mint': 0.80, 'violet': 0.86
 COLOURS = {
     'rose': (224, 150, 200), 'blue': (92, 150, 200), 'amber': (228, 180, 88),
     'mint': (150, 216, 182), 'violet': (164, 134, 214), 'coral': (236, 118, 102), 'black': (4, 4, 5),
-    'sphere': (26, 38, 120), 'orb': (255, 255, 250), 'plate': (236, 236, 230),
+    'sphere': (26, 38, 120), 'orb': (150, 146, 134), 'plate': (236, 236, 230),
 }
 PARTS, BALLS, LIGHTS, ROUTE, CHECKPOINTS, GAPS, PLATES, FOOT = [], [], [], [], [], [], [], []
 EXTENT = {}        # section -> [min x, max x, min z, max z, min y, max y] of its walkable pieces
@@ -202,7 +202,9 @@ class Path_:
 
 def orb(x, y, z, colour):
     """The lamp: a white ball on a rod from the ceiling (the rod's top is set by `room`, which knows the ceiling)."""
-    part('Orb', (5, 5, 5), (x, y, z), 'orb', shape='s', collide=False, material='Neon', extra={'light': [46, 2.6], 'rod': colour})
+    # Owner, 2026-10-04: the first lamps (a 5-stud white neon globe, light 2.6 over 46 studs) were blinding and hid
+    # the way ahead. A 3-stud dull globe and a light a sixth as strong.
+    part('Orb', (3, 3, 3), (x, y + 0.9, z), 'orb', shape='s', collide=False, material='Neon', extra={'light': [30, 0.45], 'rod': colour})
 
 
 def wall_with_door(x, colour, top, door_z, door_y, thick=8.0, door_w=9.0, door_h=13.0):
@@ -290,7 +292,7 @@ def room(name, x0, x1, monoliths=True, shaft=False):
     for row in PARTS:                                             # hang this room's lamps from its ceiling
         if row.get('rod') == name:
             x, y, z = row['p']
-            part('OrbRod', (0.35, top - y - 2.2, 0.35), (x, (top + y + 2.2) / 2, z), 'black', collide=False, material='Metal')
+            part('OrbRod', (0.35, top - y - 1.4, 0.35), (x, (top + y + 1.4) / 2, z), 'black', collide=False, material='Metal')
             row['rod'] = True
     return top
 
