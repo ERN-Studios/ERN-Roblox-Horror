@@ -865,3 +865,9 @@ weight and button size on phones, no noise meter.
   the client (black cover, YOU FELL) and `Void.Leave` returns the player to the lobby 3 s later. `model.Checkpoints`
   and `record.cp` remain only to know which room a player has reached (plates, room names); `"checkpoint"` is sent
   for a new room only. There is no spectating or re-entry in Level 5.
+- **Roblox badges, 2026-10-04**: the four old badges were renamed and re-pictured in place (Office Hours, Out of
+  the Deep End, Party's Over, Three Doors Down) and five were created free: FirstClearLevel4 1275875713593023,
+  FirstClearLevel5 174274361107994, FirstClearLevel6 2830428358398761, AllSix 2321372450692958, Welcome
+  1036919688053942. Eleven keys are still 0 (BetterTogether, L5*, L6*). Creation on the dashboard has NO price
+  confirmation: it is free for the first five per day and otherwise charges 100 Robux silently, so create at most
+  five a day unless the owner approves the spend. Done through `codex exec --enable computer_use`.

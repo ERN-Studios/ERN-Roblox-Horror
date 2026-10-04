@@ -291,14 +291,15 @@ return {
 		FirstClearLevel1 = 2788462628933614,
 		FirstClearLevel2 = 349186155479685,
 		FirstClearLevel3 = 457908347698355,
-		FirstClearLevel4 = 0,
+		FirstClearLevel4 = 1275875713593023,
 		-- Awarded the first time all three levels have been cleared at least
 		-- once, which is NOT the same as clearing Level 3.
 		CampaignComplete = 2318404539475574,
 		-- ACHIEVEMENTS_20261004: every key below is an in-game achievement from the moment it is listed here and in
 		-- `Achievements`. It becomes a Roblox badge as well once its badge exists on the Creator Dashboard and its
 		-- id replaces the 0 (players who already unlocked it get the badge on their next join).
-		FirstClearLevel5 = 0, FirstClearLevel6 = 0, AllSix = 0, Welcome = 0, BetterTogether = 0,
+		FirstClearLevel5 = 174274361107994, FirstClearLevel6 = 2830428358398761, AllSix = 2321372450692958,
+		Welcome = 1036919688053942, BetterTogether = 0,
 		L5NoFall = 0, L5Balls = 0, L5Mint = 0, L5Coral = 0, L5TeamLift = 0,
 		L6HomeFree = 0, L6Caught = 0, L6Party = 0, L6Survivor = 0, L6Escaped = 0,
 	},
