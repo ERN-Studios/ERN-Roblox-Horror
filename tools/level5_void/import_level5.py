@@ -181,30 +181,28 @@ for _, row in ipairs(data.plates) do
 	gate.CFrame = CFrame.new(O + Vector3.new(row.gate[1], row.gate[2] + 6.5, row.gate[3]))
 	gate:SetAttribute("Closed", gate.Position)
 	gate.Parent = folder
-	local face = Instance.new("SurfaceGui")
-	face.Name = "Count"
-	face.Face = Enum.NormalId.Left
-	face.CanvasSize = Vector2.new(360, 520)
-	face.LightInfluence = 0
-	face.Brightness = 1.2
-	local text = Instance.new("TextLabel")
-	text.Name = "Text"
-	text.Size = UDim2.fromScale(1, 0.4)
-	text.Position = UDim2.fromScale(0, 0.18)
-	text.BackgroundTransparency = 1
-	text.Font = Enum.Font.GothamMedium
-	text.TextScaled = true
-	text.TextColor3 = Color3.fromRGB(240, 240, 232)
-	text.Text = "0 / 1"
-	text.Parent = face
-	local hint = text:Clone()
-	hint.Name = "Hint"
-	hint.Size = UDim2.fromScale(0.84, 0.1)
-	hint.Position = UDim2.fromScale(0.08, 0.62)
-	hint.TextTransparency = 0.25
-	hint.Text = "EVERYONE ON THE PLATE"
-	hint.Parent = face
-	face.Parent = gate
+	-- No counter on the door (owner, 2026-10-04): the plate grows with the players and the door goes down when
+	-- they all stand on it. Only the first room says so, once, on its door.
+	if row.sec == "rose" then
+		local face = Instance.new("SurfaceGui")
+		face.Name = "Hint"
+		face.Face = Enum.NormalId.Left
+		face.CanvasSize = Vector2.new(360, 520)
+		face.LightInfluence = 0
+		face.Brightness = 1.2
+		local hint = Instance.new("TextLabel")
+		hint.Name = "Hint"
+		hint.Size = UDim2.fromScale(0.84, 0.16)
+		hint.Position = UDim2.fromScale(0.08, 0.36)
+		hint.BackgroundTransparency = 1
+		hint.Font = Enum.Font.GothamMedium
+		hint.TextScaled = true
+		hint.TextColor3 = Color3.fromRGB(240, 240, 232)
+		hint.TextTransparency = 0.15
+		hint.Text = "EVERYONE ON THE PLATE"
+		hint.Parent = face
+		face.Parent = gate
+	end
 	folder.Parent = model.Plates
 end
 for name, value in pairs({Route = data.route, Checkpoints = data.checkpoints}) do

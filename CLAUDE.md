@@ -803,3 +803,4 @@ weight and button size on phones, no noise meter.
   decor mesh's own poster texture, two by the entrance; `img` rows in the bay set become a Decal plus a picture light.
 - **Level 5 audio**: the two always-on beds were denoised (`*_clean.mp3`, 17.6 dB and 28.6 dB less energy above
   6 kHz) and replace the originals under the same keys; eight darker `l5_amb_*` one-shots joined the random set (18).
+- **Level 5 doors carry no counter** (owner, 2026-10-04): only the first room's door says EVERYONE ON THE PLATE; the plates still scale with the players.
