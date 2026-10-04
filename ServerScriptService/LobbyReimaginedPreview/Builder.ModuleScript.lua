@@ -470,6 +470,112 @@ function Module.Build()
 			end
 		end
 	end
+	-- INFINITE_END_20261004 (owner: "make the end of the tunnel where the DJ set is look like the tunnel proceeds
+	--   into infinity ... without making the lobby heavy ... then block it off with a metal fence that cannot be
+	--   jumped over, and a warning sign"). The end wall carries ONE picture: this same tunnel, photographed in the
+	--   game from 40 studs in front of the wall at eye height, with the stage and every sign hidden and the far end
+	--   lost in the dark, cropped to the wall's own cross-section (assets/lobby-infinite-tunnel-20261004). It is a
+	--   flat image, so it only lines up exactly from about that distance; the fence keeps everyone at least 7 studs
+	--   off it. One part and one image for the tunnel, about 70 small parts for the fence.
+	do
+		local IMAGE = ""        -- rbxassetid of lobby_tunnel_infinite.png; empty = the wall is just dark
+		local visuals = model:FindFirstChild("BlenderVisuals")
+		local dj = visuals and visuals:FindFirstChild("DJConsole")
+		local djAt = dj and (dj:IsA("Model") and dj:GetPivot().Position or dj.Position)
+		local wall
+		for _, item in ipairs(visuals and visuals:GetChildren() or {}) do
+			if item.Name == "EndBackstop" and item:IsA("BasePart") and djAt
+				and (not wall or (item.Position - djAt).Magnitude < (wall.Position - djAt).Magnitude) then wall = item end
+		end
+		if wall then
+			local inward = (djAt - wall.Position) * Vector3.new(1, 0, 1)
+			inward = math.abs(inward.X) > math.abs(inward.Z) and Vector3.new(math.sign(inward.X), 0, 0) or Vector3.new(0, 0, math.sign(inward.Z))
+			local thick = math.min(wall.Size.X, wall.Size.Z)
+			local width, height = math.max(wall.Size.X, wall.Size.Z), wall.Size.Y
+			local floorY = wall.Position.Y - height / 2 + 1
+			local set = Instance.new("Folder")
+			set.Name = "InfiniteTunnelEnd"
+			set:SetAttribute(OWNED, true)
+			set.Parent = model
+			local function piece(name, size, cf, colour, material, collide)
+				local part = Instance.new("Part")
+				part.Name, part.Size, part.CFrame, part.Color, part.Material = name, size, cf, colour, material
+				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery, part.CastShadow = true, collide, false, collide, false
+				part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+				part:SetAttribute(OWNED, true)
+				part.Parent = set
+				return part
+			end
+			-- the picture, a hair in front of the wall, its Front face toward the lobby
+			local faceAt = wall.Position + inward * (thick / 2 + 0.08)
+			local picture = piece("TunnelBeyond", Vector3.new(width, height, 0.1), CFrame.lookAt(faceAt, faceAt + inward),
+				Color3.fromRGB(8, 8, 9), Enum.Material.SmoothPlastic, false)
+			if IMAGE ~= "" then
+				local gui = Instance.new("SurfaceGui")
+				gui.Face, gui.SizingMode, gui.PixelsPerStud = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 17
+				gui.LightInfluence, gui.Brightness = 0, 0.82                 -- as photographed, a touch under the room
+				local image = Instance.new("ImageLabel")
+				image.Size, image.BackgroundTransparency, image.Image = UDim2.fromScale(1, 1), 1, IMAGE
+				image.ScaleType = Enum.ScaleType.Stretch
+				image.Parent = gui
+				gui.Parent = picture
+			end
+			-- the fence: 7.6 studs in front of the wall (behind the stage), wall to wall, 15 studs high
+			local METAL, DARK = Color3.fromRGB(150, 156, 162), Color3.fromRGB(92, 97, 104)
+			local base = CFrame.lookAt(Vector3.new(wall.Position.X, floorY, wall.Position.Z) + inward * 7.6,
+				Vector3.new(wall.Position.X, floorY, wall.Position.Z) + inward * 8.6)        -- local X across, -Z toward the lobby
+			local TOP = 15
+			local function room(dx)                                              -- headroom under the arch at this offset
+				local a = math.abs(dx)
+				return a <= 28.5 and TOP or math.max(2, TOP - (a - 28.5) * 2.4)
+			end
+			for i = -6, 6 do                                                      -- posts
+				local dx = i * 5.6
+				local h = room(dx)
+				piece("FencePost", Vector3.new(0.55, h + 0.4, 0.55), base * CFrame.new(dx, h / 2 - 0.2, 0), DARK, Enum.Material.Metal, true)
+				piece("FencePostCap", Vector3.new(0.8, 0.25, 0.8), base * CFrame.new(dx, h + 0.1, 0), METAL, Enum.Material.Metal, false)
+			end
+			for _, rail in ipairs({{0.9, 67}, {7.6, 63}, {14.6, 57.5}}) do        -- rails
+				piece("FenceRail", Vector3.new(rail[2], 0.32, 0.32), base * CFrame.new(0, rail[1], 0), DARK, Enum.Material.Metal, true)
+			end
+			for i = -23, 23 do                                                    -- bars
+				local dx = i * 1.4
+				if i % 4 ~= 0 then
+					local h = room(dx) - 0.3
+					piece("FenceBar", Vector3.new(0.16, h, 0.16), base * CFrame.new(dx, h / 2 + 0.15, 0), METAL, Enum.Material.Metal, false)
+				end
+			end
+			-- what actually stops a body: one sheet the width of the fence, far taller than a jump
+			local stop = piece("FenceCollision", Vector3.new(68, 30, 0.6), base * CFrame.new(0, 15, 0), METAL, Enum.Material.Metal, true)
+			stop.Transparency = 1
+			-- the signs: a large one high in the middle (over the DJ console), one at eye height either side of the stage
+			local function sign(dx, y, w, h)
+				piece("WarningSignBack", Vector3.new(w + 0.5, h + 0.5, 0.12), base * CFrame.new(dx, y, -0.3), DARK, Enum.Material.Metal, false)
+				local plate = piece("WarningSign", Vector3.new(w, h, 0.1), base * CFrame.new(dx, y, -0.4), Color3.fromRGB(240, 190, 20), Enum.Material.SmoothPlastic, false)
+				local gui = Instance.new("SurfaceGui")
+				gui.Face, gui.CanvasSize, gui.LightInfluence = Enum.NormalId.Front, Vector2.new(math.floor(900 * w / h / 1.6), 560), 1
+				local edge = Instance.new("Frame")
+				edge.Size, edge.Position = UDim2.new(1, -28, 1, -28), UDim2.fromOffset(14, 14)
+				edge.BackgroundTransparency = 1
+				local line = Instance.new("UIStroke")
+				line.Color, line.Thickness = Color3.fromRGB(18, 18, 18), 10
+				line.Parent = edge
+				edge.Parent = gui
+				for _, row in ipairs({{"WARNING", 0.06, 0.4, Enum.Font.GothamBlack}, {"UNSTABLE AFTER THIS POINT", 0.48, 0.2, Enum.Font.GothamBold},
+					{"STAY BEHIND THIS FENCE", 0.7, 0.2, Enum.Font.GothamBold}}) do
+					local label = Instance.new("TextLabel")
+					label.BackgroundTransparency, label.Text, label.Font, label.TextScaled = 1, row[1], row[4], true
+					label.TextColor3 = Color3.fromRGB(18, 18, 18)
+					label.Position, label.Size = UDim2.fromScale(0.06, row[2]), UDim2.fromScale(0.88, row[3])
+					label.Parent = gui
+				end
+				gui.Parent = plate
+			end
+			sign(0, 11.4, 17, 5.6)
+			sign(-22.4, 5.4, 9.2, 3.2)
+			sign(22.4, 5.4, 9.2, 3.2)
+		end
+	end
 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
 	model.Parent = workspace
 	require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(model)
