@@ -36,7 +36,7 @@ local CONFIG = {
 	-- Owner, 2026-10-04: the level is won over THREE searches in each of which every living player touches the
 	-- post. (For a while one such search was enough: that was a mistake made when the target became 'all alive'.)
 	RoundsToWin = 3,
-	ExitRadius = 11, EscapeSeconds = 45, CaughtReturnDelay = 4.3,   -- the length of the kill cam
+	ExitRadius = 11, CaughtReturnDelay = 4.3,   -- the length of the kill cam
 	PartyDownSeconds = 15,     -- the window after the last player falls, as in every other level
 	ReentryGraceSeconds = 8,   -- a re-entered player is not seen for this long
 	GrabDistance = 3.6,   -- how far in front of its victim it stands for the kill cam
@@ -854,7 +854,8 @@ function Session:escapePhase()
 	light.Color, light.Range, light.Brightness = Color3.fromRGB(80, 255, 130), 40, 3
 	light.Parent = beacon
 	beacon.Parent = self.info.model
-	local deadline = clock() + CONFIG.EscapeSeconds
+	-- No time limit (owner, 2026-10-04): the level is only cleared by walking out through the exit. The phase lasts
+	-- until every player still standing is out or caught; the furious doll is what ends it for someone who waits.
 	self.pauseUntil = nil
 	local brain = task.spawn(function()
 		while self.active and self.phase == "escape" do
@@ -887,11 +888,13 @@ function Session:escapePhase()
 			end
 		end
 	end)
-	while self.active and self.phase == "escape" and clock() < deadline do
+	while self.active and self.phase == "escape" do
 		task.wait(0.15)
 		if self:count() == 0 then break end
 		if self.wipedAt then
-			if self:wipeWindow() then deadline = clock() + CONFIG.EscapeSeconds else break end
+			if not self:wipeWindow() then break end
+		elseif self:living() == 0 then
+			break                                   -- the last one standing is out; only watchers are left
 		end
 		self:perceive()
 		for player, state in pairs(self.players) do
@@ -908,15 +911,6 @@ function Session:escapePhase()
 					Game.RemovePlayer(player)
 				end)
 			end
-		end
-	end
-	-- anyone still inside when the exit window closes made it too: the dunks were the real test
-	for player, state in pairs(self.players) do
-		if not state.caught and not state.escaped and player.Parent == Players then
-			state.escaped = true
-			player:SetAttribute(CLEARED, true)
-			event:FireClient(player, "escaped", player.DisplayName, true); achieve(player, "FirstClearLevel6")
-			if returnHandler and player:GetAttribute(IN_PREVIEW) == true then returnHandler(player, "escaped") end
 		end
 	end
 	self.phase = "over"

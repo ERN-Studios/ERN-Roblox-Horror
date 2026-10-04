@@ -854,3 +854,9 @@ weight and button size on phones, no noise meter.
 - **The Mac may be on the 2560x1440 display**: the Asset Manager click positions in older notes were for the
   smaller screen. Set the Studio window to {0,25} full size, take a screenshot and read positions from it
   (screenshot pixels x 1.829 = points at 1400 px wide).
+- **Level 6's exit phase has no time limit** (owner, 2026-10-04): `EscapeSeconds` and the "anyone still inside
+  made it too" block are gone. After the third search the level is cleared only by reaching the exit beacon; the
+  phase ends when every standing player is out or caught (or the party-down window runs out).
+- **Prompt plates fill a ring, not a bar** (`HOLD_RING_20261004` in Found Footage HUD): the key is a round badge;
+  `Plate.Hold` holds a dim circle and two clipped half-windows (`First`, `Second`) whose UIStroke carries a
+  UIGradient that is rotated (0..180, then 180..360). Keep the ring's size even or the halves show a seam.

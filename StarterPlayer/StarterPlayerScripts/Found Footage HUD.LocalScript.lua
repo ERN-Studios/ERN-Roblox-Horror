@@ -4,7 +4,7 @@
 --   1. the camcorder frame of a round: corner brackets on every device, and on a
 --      pointer device a REC mark with the round's running timecode;
 --   2. the interaction prompt, drawn next to the object it belongs to as a dark
---      plate with the key, the action and a hold bar, instead of Roblox's default.
+--      plate with the key, the action and a hold ring round the key, instead of Roblox's default.
 --
 -- Nothing here owns game state. The frame follows `InRound`; the prompt renderer
 -- only draws prompts the engine has already decided to show, so a script that
@@ -155,10 +155,15 @@ local function build(prompt)
 	local action = string.upper(prompt.ActionText ~= "" and prompt.ActionText or "Interact")
 	local object = string.upper(prompt.ObjectText)
 	local actionSize = touch and 17 or 15
-	local keyWidth = math.max(touch and 44 or 30, #keyText * 9 + 14)
+	-- HOLD_RING_20261004 (owner: the 3px bar under the plate was nearly invisible). The key is a round badge and
+	-- a hold fills a ring round it, clockwise from the top.
+	local RING, GAP = 4, 2
+	local keyWidth = math.clamp(math.max(touch and 40 or 30, #keyText * 9 + 12), 30, 50)   -- the badge's diameter
+	keyWidth += keyWidth % 2          -- even, so the ring's two halves meet on a whole pixel (an odd size leaves a seam)
+	local ringSize = keyWidth + 2 * (GAP + RING)
 	local textWidth = math.max(#action * (actionSize * 0.62), #object * 7) + 8
-	local height = touch and 52 or (object ~= "" and 46 or 38)
-	local width = math.clamp(10 + keyWidth + 10 + textWidth + 12, 120, 340)
+	local height = ringSize + 8
+	local width = math.clamp(6 + ringSize + 10 + textWidth + 12, 120, 340)
 
 	local board = Instance.new("BillboardGui")
 	board.Name = "InteractionPrompt"
@@ -166,8 +171,8 @@ local function build(prompt)
 	board.AlwaysOnTop = true
 	board.Active = true
 	board.ResetOnSpawn = false
-	board.Size = UDim2.fromOffset(width, height + 6)
-	board.SizeOffset = Vector2.new(prompt.UIOffset.X / width, prompt.UIOffset.Y / (height + 6))
+	board.Size = UDim2.fromOffset(width, height)
+	board.SizeOffset = Vector2.new(prompt.UIOffset.X / width, prompt.UIOffset.Y / height)
 	board.MaxDistance = prompt.MaxActivationDistance + 8
 
 	local plate = Instance.new("TextButton")
@@ -190,20 +195,20 @@ local function build(prompt)
 
 	local key = Instance.new("TextLabel")
 	key.Name = "Key"
-	key.Size = UDim2.fromOffset(keyWidth, height - 14)
-	key.Position = UDim2.fromOffset(8, 7)
+	key.Size = UDim2.fromOffset(keyWidth, keyWidth)
+	key.Position = UDim2.fromOffset(4 + GAP + RING, 4 + GAP + RING)
 	key.BackgroundColor3 = PAPER
 	key.BorderSizePixel = 0
 	key.Font = Enum.Font.RobotoMono
 	key.Text = keyText
-	key.TextSize = touch and 14 or 15
+	key.TextSize = #keyText > 3 and 11 or (touch and 15 or 16)
 	key.TextColor3 = INK
 	key.Parent = plate
 	local keyCorner = Instance.new("UICorner")
-	keyCorner.CornerRadius = UDim.new(0, 4)
+	keyCorner.CornerRadius = UDim.new(1, 0)
 	keyCorner.Parent = key
 
-	local left = 8 + keyWidth + 10
+	local left = 4 + ringSize + 9
 	local actionLabel = Instance.new("TextLabel")
 	actionLabel.Name = "Action"
 	actionLabel.BackgroundTransparency = 1
@@ -233,21 +238,56 @@ local function build(prompt)
 		actionLabel.Position = UDim2.fromOffset(left, math.floor((height - actionSize - 4) / 2))
 	end
 
-	local track = Instance.new("Frame")
-	track.Name = "Hold"
-	track.Position = UDim2.new(0, 0, 0, height + 2)
-	track.Size = UDim2.new(1, 0, 0, 3)
-	track.BackgroundColor3 = INK
-	track.BackgroundTransparency = 0.4
-	track.BorderSizePixel = 0
-	track.Visible = prompt.HoldDuration > 0
-	track.Parent = board
-	local fill = Instance.new("Frame")
-	fill.Name = "Fill"
-	fill.Size = UDim2.fromScale(0, 1)
-	fill.BackgroundColor3 = MUSTARD
-	fill.BorderSizePixel = 0
-	fill.Parent = track
+	-- the ring: a dim full circle, and over it two half-windows whose stroke a rotating gradient uncovers
+	local hold = Instance.new("Frame")
+	hold.Name = "Hold"
+	hold.Position = UDim2.fromOffset(4, 4)
+	hold.Size = UDim2.fromOffset(ringSize, ringSize)
+	hold.BackgroundTransparency = 1
+	hold.Visible = prompt.HoldDuration > 0
+	hold.Parent = plate
+	local function circle(parent, x, colour, transparency)
+		local disc = Instance.new("Frame")
+		disc.BackgroundTransparency = 1
+		disc.BorderSizePixel = 0
+		disc.Position = UDim2.fromOffset(x, RING)
+		disc.Size = UDim2.fromOffset(ringSize - 2 * RING, ringSize - 2 * RING)
+		disc.Parent = parent
+		local round = Instance.new("UICorner")
+		round.CornerRadius = UDim.new(1, 0)
+		round.Parent = disc
+		local line = Instance.new("UIStroke")
+		line.Thickness = RING
+		line.Color = colour
+		line.Transparency = transparency
+		line.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		line.Parent = disc
+		return line
+	end
+	circle(hold, RING, PAPER, 0.78)
+	local function half(name, right)
+		local window = Instance.new("Frame")
+		window.Name = name
+		window.BackgroundTransparency = 1
+		window.ClipsDescendants = true
+		window.Position = UDim2.fromOffset(right and ringSize / 2 or 0, 0)
+		window.Size = UDim2.fromOffset(ringSize / 2, ringSize)
+		window.Parent = hold
+		local sweep = Instance.new("UIGradient")
+		sweep.Transparency = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.5, 0),
+			NumberSequenceKeypoint.new(0.501, 1), NumberSequenceKeypoint.new(1, 1),
+		})
+		sweep.Rotation = right and 0 or 180        -- nothing of this half shows yet
+		sweep.Parent = circle(window, right and RING - ringSize / 2 or RING, MUSTARD, 0)
+		return sweep
+	end
+	local first, second = half("First", true), half("Second", false)
+	local function setFill(share)
+		first.Rotation = math.clamp(share, 0, 0.5) * 360
+		second.Rotation = 180 + math.clamp(share - 0.5, 0, 0.5) * 360
+		key.BackgroundColor3 = share > 0 and MUSTARD or PAPER
+	end
 
 	local state = { Board = board, Connections = {}, Holding = nil }
 	local function connect(signal, callback)
@@ -271,11 +311,11 @@ local function build(prompt)
 	end)
 	connect(prompt.PromptButtonHoldEnded, function()
 		state.Holding = nil
-		fill.Size = UDim2.fromScale(0, 1)
+		setFill(0)
 	end)
 	connect(RunService.RenderStepped, function()
 		if state.Holding and prompt.HoldDuration > 0 then
-			fill.Size = UDim2.fromScale(math.clamp((os.clock() - state.Holding) / prompt.HoldDuration, 0, 1), 1)
+			setFill(math.clamp((os.clock() - state.Holding) / prompt.HoldDuration, 0, 1))
 		end
 	end)
 	board.Parent = playerGui
