@@ -576,6 +576,92 @@ function Module.Build()
 			sign(22.4, 5.4, 9.2, 3.2)
 		end
 	end
+	-- ARRIVAL_GATE_20261004 (owner: "behind them the wall is like a gate they have arrived from ... a huge metal door
+	--   in the wall, and the wall around it a shining subtle force field of Zyntra colour"). The end wall FARTHEST
+	--   from the DJ stage, the one behind the spawn: a blast door, two leaves in a heavy frame, and over the rest of
+	--   the wall one sheet of ForceField in the store's teal with a faint glow. About 45 parts, none colliding (the
+	--   wall's own colliders are untouched).
+	do
+		local ZYNTRA = Color3.fromRGB(73, 245, 204)
+		local visuals = model:FindFirstChild("BlenderVisuals")
+		local dj = visuals and visuals:FindFirstChild("DJConsole")
+		local djAt = dj and (dj:IsA("Model") and dj:GetPivot().Position or dj.Position)
+		local wall
+		for _, item in ipairs(visuals and visuals:GetChildren() or {}) do
+			if item.Name == "EndBackstop" and item:IsA("BasePart") and djAt
+				and (not wall or (item.Position - djAt).Magnitude > (wall.Position - djAt).Magnitude) then wall = item end
+		end
+		if wall then
+			local inward = (djAt - wall.Position) * Vector3.new(1, 0, 1)
+			inward = math.abs(inward.X) > math.abs(inward.Z) and Vector3.new(math.sign(inward.X), 0, 0) or Vector3.new(0, 0, math.sign(inward.Z))
+			local thick = math.min(wall.Size.X, wall.Size.Z)
+			local width, height = math.max(wall.Size.X, wall.Size.Z), wall.Size.Y
+			local floorY = wall.Position.Y - height / 2 + 1
+			local set = Instance.new("Folder")
+			set.Name = "ArrivalGate"
+			set:SetAttribute(OWNED, true)
+			set.Parent = model
+			local at = Vector3.new(wall.Position.X, floorY, wall.Position.Z) + inward * (thick / 2)
+			local base = CFrame.lookAt(at, at + inward)                           -- local X across, Y up from the floor, -Z into the lobby
+			local function piece(name, size, offset, colour, material, shape)
+				local part = Instance.new("Part")
+				part.Name, part.Size, part.Color, part.Material = name, size, colour, material
+				if shape then part.Shape = shape end
+				part.CFrame = base * offset
+				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery, part.CastShadow = true, false, false, false, false
+				part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+				part:SetAttribute(OWNED, true)
+				part.Parent = set
+				return part
+			end
+			local STEEL, DARK, LEAF = Color3.fromRGB(96, 102, 110), Color3.fromRGB(48, 52, 58), Color3.fromRGB(128, 134, 141)
+			local M = Enum.Material
+			-- the field: the whole wall, then a soft glow off it
+			local field = piece("ForceField", Vector3.new(width, height, 0.2), CFrame.new(0, height / 2 - 1, -0.2), ZYNTRA, M.ForceField)
+			field.Transparency = 0.25
+			local glow = Instance.new("SurfaceLight")
+			glow.Face, glow.Color, glow.Brightness, glow.Range, glow.Angle, glow.Shadows = Enum.NormalId.Front, ZYNTRA, 0.55, 18, 120, false
+			glow.Parent = field
+			-- the frame
+			local W, H = 13, 22                                                   -- one leaf
+			piece("GateJamb", Vector3.new(2.6, H + 2.6, 1.8), CFrame.new(-(W + 1.3), (H + 2.6) / 2, -0.9), DARK, M.Metal)
+			piece("GateJamb", Vector3.new(2.6, H + 2.6, 1.8), CFrame.new(W + 1.3, (H + 2.6) / 2, -0.9), DARK, M.Metal)
+			local lintel = piece("GateLintel", Vector3.new(W * 2 + 5.2, 2.6, 1.8), CFrame.new(0, H + 1.3, -0.9), DARK, M.Metal)
+			piece("GateSill", Vector3.new(W * 2 + 5.2, 0.4, 2.4), CFrame.new(0, 0.2, -1.2), DARK, M.DiamondPlate)
+			-- the leaves, their ribs, hinges and the seam
+			for _, side in ipairs({-1, 1}) do
+				piece("GateLeaf", Vector3.new(W, H, 0.9), CFrame.new(side * W / 2, H / 2, -0.75), LEAF, M.Metal)
+				for _, y in ipairs({2.6, 7.6, 14.4, 19.4}) do
+					piece("GateRib", Vector3.new(W - 1.4, 0.8, 0.35), CFrame.new(side * W / 2, y, -1.35), STEEL, M.Metal)
+				end
+				piece("GatePanel", Vector3.new(W - 3, 4.2, 0.2), CFrame.new(side * W / 2, 11, -1.28), STEEL, M.DiamondPlate)
+				for _, y in ipairs({3.5, 11, 18.5}) do
+					piece("GateHinge", Vector3.new(1.3, 2.2, 0.7), CFrame.new(side * (W - 0.2), y, -1.45), DARK, M.Metal)
+				end
+				piece("GateHazard", Vector3.new(W - 0.6, 1.1, 0.12), CFrame.new(side * W / 2, 0.95, -1.24), Color3.fromRGB(222, 172, 24), M.SmoothPlastic)
+				local lamp = piece("GateLamp", Vector3.new(4.5, 0.35, 0.15), CFrame.new(side * 7, H + 1.3, -1.85), ZYNTRA, M.Neon)
+			end
+			piece("GateSeam", Vector3.new(0.3, H, 1.0), CFrame.new(0, H / 2, -0.8), Color3.fromRGB(12, 13, 15), M.SmoothPlastic)
+			-- the lock in the middle: a wheel and the one light on the door
+			piece("GateLock", Vector3.new(0.6, 5, 5), CFrame.new(0, 11, -1.5) * CFrame.Angles(0, math.rad(90), 0), DARK, M.Metal, Enum.PartType.Cylinder)
+			piece("GateLockLight", Vector3.new(0.7, 1.6, 1.6), CFrame.new(0, 11, -1.55) * CFrame.Angles(0, math.rad(90), 0), ZYNTRA, M.Neon, Enum.PartType.Cylinder)
+			for _, angle in ipairs({0, 60, 120}) do
+				piece("GateLockBar", Vector3.new(5.6, 0.5, 0.3), CFrame.new(0, 11, -1.7) * CFrame.Angles(0, 0, math.rad(angle)), STEEL, M.Metal)
+			end
+			-- the name over it
+			local plate = piece("GateNameplate", Vector3.new(11, 1.5, 0.1), CFrame.new(0, H + 1.3, -1.86), Color3.fromRGB(10, 22, 20), M.SmoothPlastic)
+			local gui = Instance.new("SurfaceGui")
+			gui.Face, gui.CanvasSize, gui.LightInfluence, gui.Brightness = Enum.NormalId.Front, Vector2.new(880, 120), 0, 1.2
+			local label = Instance.new("TextLabel")
+			label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
+			label.Font, label.TextScaled, label.Text, label.TextColor3 = Enum.Font.GothamBold, true, "ZYNTRA   ·   ARRIVAL GATE", ZYNTRA
+			local pad = Instance.new("UIPadding")
+			pad.PaddingTop, pad.PaddingBottom = UDim.new(0.18, 0), UDim.new(0.18, 0)
+			pad.Parent = label
+			label.Parent = gui
+			gui.Parent = plate
+		end
+	end
 	model:SetAttribute("Ready",true); model:SetAttribute("InstantiatedTriangles",manifest.instantiatedTriangles + endPiles:GetAttribute("AddedInstancedTriangles") + bayPolish:GetAttribute("AddedInstancedTriangles"))
 	model.Parent = workspace
 	require(script.Parent:WaitForChild("DevBayAccessGuard")).Start(model)

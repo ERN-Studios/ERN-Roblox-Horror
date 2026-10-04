@@ -900,3 +900,28 @@ weight and button size on phones, no noise meter.
   when a script switches the camera to Scriptable gets the camera type reset when the call ends.
 - **Timed screenshots**: `screencapture -R x,y,w,h` of just the viewport takes about 0.4 s; the full 2560x1440
   screen takes about 2 s, too slow to catch a 5 s sequence.
+
+### Added 2026-10-04 (late evening) - lobby ends, spawn view, new store artwork
+
+- **DJ end** (`INFINITE_END_20261004` in Builder, folder `InfiniteTunnelEnd`): a metal fence wall to wall 7.6 studs
+  in front of the end wall (behind the stage; `FenceCollision` is the invisible 30-stud sheet that stops a body),
+  three yellow signs "WARNING / UNSTABLE AFTER THIS POINT / STAY BEHIND THIS FENCE", and `TunnelBeyond`: one flat
+  part on the wall that shows `assets/lobby-infinite-tunnel-20261004/lobby_tunnel_infinite.png` once its asset id
+  is put in `IMAGE` (empty = a dark wall). The picture is the real tunnel photographed in play from 40 studs in
+  front of the wall at eye height (y 39), stage/signs/bay dressing hidden client-side, `FogEnd` 215 in black,
+  cropped to the wall's cross-section with two magenta corner marks found in the screenshot's BMP.
+- **Spawn end** (`ARRIVAL_GATE_20261004`, folder `ArrivalGate`): a two-leaf blast door 26 x 22 studs in a heavy
+  frame on the end wall behind the spawn, "ZYNTRA - ARRIVAL GATE" over it, and the whole wall under one
+  ForceField sheet in the store's teal (73, 245, 204) with a faint SurfaceLight. Nothing collides.
+- **Spawn view** (`SPAWN_VIEW_20261004` in First Entry Guide): on every lobby spawn the default camera is turned
+  to look from the spawn toward the lobby centre (the DJ end). `GameManager.scatterAt` already faces the body
+  that way (`facing = math.pi`).
+- **Publishing works without bringing Studio to the front**: the System Events click on File > Publish to Roblox
+  goes through while another app is in front (and hangs if preceded by `activate` when Studio is on another
+  Space). `screencapture` cannot see Studio when it is on another Space; CGWindowList lists no window for it.
+- **Discord attachments without the GUI**: Discord's cache (`~/Library/Application Support/discord/Cache/
+  Cache_Data`) holds the signed CDN URLs (`ex`, `is`, `hm`) of every attachment the app has shown; the attachment
+  id is a snowflake, so its upload time is `(id >> 22) + 1420070400000` ms. Curl the `cdn.discordapp.com` URL.
+- **Store artwork v2**: `~/Desktop/Backrooms Stay Quiet - Covers 2026-10-04` (16 thumbnails 1920x1080, 4 icons
+  1024, Krille's 35 in-game references of 2026-10-04, prompts). The earlier Desktop gallery was moved to
+  `artifacts/gallery-20261004/old-desktop-gallery`.

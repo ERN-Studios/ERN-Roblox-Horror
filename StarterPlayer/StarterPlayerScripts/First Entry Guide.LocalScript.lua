@@ -12,6 +12,37 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
+-- SPAWN_VIEW_20261004 (owner): whoever arrives in the lobby looks down the tunnel toward the DJ stage, with the
+-- arrival gate behind them. The server already stands the body that way (GameManager.scatterAt); the camera keeps
+-- whatever direction it had, so it is turned here, once per lobby spawn, as soon as the default camera owns the
+-- view again (the loading cover and the briefing do not use it).
+task.spawn(function()
+	local function aim(character)
+		local root = character:WaitForChild("HumanoidRootPart", 10)
+		if not root then return end
+		local started = os.clock()
+		while os.clock() - started < 20 do
+			if character.Parent == nil or player:GetAttribute("InRound") == true then return end
+			local lobby = workspace:FindFirstChild("ServerLobby")
+			local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
+			local stage = workspace:FindFirstChild("LobbyReimaginedPreview")
+			local camera = workspace.CurrentCamera
+			if spawn and spawn:IsA("BasePart") and stage and camera and camera.CameraType == Enum.CameraType.Custom
+				and (root.Position - spawn.Position).Magnitude <= 30 then
+				local toward = (stage:GetPivot().Position - spawn.Position) * Vector3.new(1, 0, 1)
+				if toward.Magnitude < 1 then return end
+				toward = toward.Unit
+				local head = root.Position + Vector3.new(0, 2, 0)
+				camera.CFrame = CFrame.lookAt(head - toward * 12 + Vector3.new(0, 3.5, 0), head + toward * 30)
+				return
+			end
+			task.wait(0.1)
+		end
+	end
+	player.CharacterAdded:Connect(aim)
+	if player.Character then aim(player.Character) end
+end)
+
 local function wanted()
 	if RunService:IsStudio() and workspace:GetAttribute("DevShowWelcome") == true then return true end
 	return player:GetAttribute("ZyntraFirstLogin") == true
