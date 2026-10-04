@@ -1,7 +1,7 @@
 -- Lobby DJ (2026-10-04, owner request). The DJ console on the lobby stage is a working booth for the team.
 --   WHO: DevAccess.IsLevel6PreviewAllowed (the developer allowlist plus the owner's own account). Everyone else
 --   sees and hears the result, nothing more; every request is checked again here.
---   WHAT: five instrumental tracks (ElevenLabs, assets/lobby-dj-20261004). The server only publishes WHICH track
+--   WHAT: eight instrumental tracks (ElevenLabs, assets/lobby-dj-20261004). The server only publishes WHICH track
 --   is on and when it started (workspace attributes LobbyDJTrack / LobbyDJStartedAt / LobbyDJBy, and the list as
 --   LobbyDJTracks); each client plays it itself, in step, and honours its own lobby-music setting.
 --   DJ MODE: the caller is stood behind the console and gets a headset (a few welded parts on the Head). The
@@ -20,6 +20,9 @@ local TRACKS = {
 	{Title = "VHS Sunrise", Genre = "SYNTHWAVE", Id = 121661472960006, Bpm = 118},
 	{Title = "Level Up 96", Genre = "EURODANCE", Id = 127095326589213, Bpm = 138},
 	{Title = "Hands Up Arcade", Genre = "EURODANCE", Id = 129281139879903, Bpm = 142},
+	{Title = "Electric Blue", Genre = "EURODANCE", Id = 131426415207915, Bpm = 128},
+	{Title = "Round the Planet", Genre = "EURODANCE", Id = 87330961422570, Bpm = 132},
+	{Title = "Plastic Roses", Genre = "EURODANCE", Id = 136491273182208, Bpm = 138},
 }
 local PROMPT_NAME = "LobbyDJPrompt"
 local REACH = 26

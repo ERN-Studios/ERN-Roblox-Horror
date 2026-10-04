@@ -849,3 +849,8 @@ weight and button size on phones, no noise meter.
   was in Discord and the Roblox player: `gk.sh` aborted, the bare `osascript` keystrokes did not. `HIDIdleTime` is
   not enough either (a spectating player is idle). `/tmp/dj_upload.sh` shows the guarded form: check the front
   process before each step and wait while `RobloxPlayer` is in front.
+- **Lobby DJ has eight tracks** (2026-10-04): Electric Blue 131426415207915 / 128 bpm, Round the Planet
+  87330961422570 / 132, Plastic Roses 136491273182208 / 138 joined the five (`dj_eurodance_3..5.mp3`).
+- **The Mac may be on the 2560x1440 display**: the Asset Manager click positions in older notes were for the
+  smaller screen. Set the Studio window to {0,25} full size, take a screenshot and read positions from it
+  (screenshot pixels x 1.829 = points at 1400 px wide).
