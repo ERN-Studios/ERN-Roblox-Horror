@@ -262,48 +262,31 @@ function Module.Build()
 		for _, d in ipairs(visuals:GetChildren()) do
 			if SOLID[d.Name] then solid(d) end
 		end
-		-- END_PILES_20261004b (owner, twice: "the wall behind the furniture is still visible"). The pile is a mound,
-		-- and the tunnel's end wall showed beside and above it. The whole cross-section of the tunnel is now filled
-		-- behind the pile: a grid over the arch (two layers deep, the far one sunk into the wall), each cell a clone
-		-- of a random pile piece at a random tilt. The first attempt cloned the mound upward, which only made a
-		-- taller mound and left the sides open.
+		-- END_PILES_REMOVED_20261004 (owner: "remove all the furniture from the ends of the tunnels", for load time
+		-- and frame rate). The two piles EndBlockades builds (219 MeshParts), the 400-piece fill this block used to
+		-- add behind them, and the loose office furniture standing at the foot of the south pile are all taken
+		-- out; the stage, its speakers and the DJ console stay. The folder itself is kept (empty): the Ready line
+		-- below still reads its triangle attribute.
 		local piles = visuals:FindFirstChild("Reference End Furniture Piles")
+		local removed = 0
 		if piles then
-			local extra = Instance.new("Folder")
-			extra.Name = "End Pile Fill"
-			extra:SetAttribute("LobbyReimaginedOwned", true)
-			extra.Parent = visuals
-			local random = Random.new(20261004)
-			local ends = {[1] = {pieces = {}, far = 0}, [-1] = {pieces = {}, far = 0}}
-			for _, piece in ipairs(piles:GetDescendants()) do
-				if piece:IsA("BasePart") then
-					local rel = piece.Position - center
-					local side = ends[rel.Z > 0 and 1 or -1]
-					table.insert(side.pieces, piece)
-					side.far = math.max(side.far, math.abs(rel.Z))
-				end
+			for _, piece in ipairs(piles:GetChildren()) do
+				piece:Destroy()
+				removed += 1
 			end
-			local HALF_WIDTH, HEIGHT, CELL = 37, 31, 4.4
-			for out, side in pairs(ends) do
-				if #side.pieces == 0 then continue end
-				for layer = 0, 1 do
-					for x = -HALF_WIDTH, HALF_WIDTH, CELL do
-						for y = 1.5, HEIGHT, CELL do
-							-- inside the arch (an ellipse over the floor), with a margin so the rim is covered too
-							if (x / HALF_WIDTH) ^ 2 + (y / HEIGHT) ^ 2 <= 1.08 then
-								local copy = side.pieces[random:NextInteger(1, #side.pieces)]:Clone()
-								local at = center + Vector3.new(x + random:NextNumber(-1.4, 1.4), y + random:NextNumber(-1.4, 1.4),
-									out * (side.far - 2.5 + layer * 3.2 + random:NextNumber(-0.8, 0.8)))
-								copy.CFrame = CFrame.new(at) * CFrame.Angles(random:NextNumber(-0.6, 0.6), random:NextNumber(-math.pi, math.pi), random:NextNumber(-0.6, 0.6))
-								copy.CanCollide, copy.CanQuery, copy.CanTouch = false, false, false   -- behind the pile: nobody reaches it
-								copy.CastShadow = false
-								copy.Parent = extra
-							end
-						end
-					end
+			piles:SetAttribute("AddedInstancedTriangles", 0)
+		end
+		local STAGE = {DJConsole = true, SpeakerTower = true, Subwoofer = true, StageRearRail = true}
+		for _, d in ipairs(visuals:GetChildren()) do
+			if SOLID[d.Name] and not STAGE[d.Name] then
+				local at = d:IsA("BasePart") and d.Position or (d:IsA("Model") and d:GetPivot().Position)
+				if at and math.abs((at - center).Z) > 118 then
+					d:Destroy()
+					removed += 1
 				end
 			end
 		end
+		model:SetAttribute("EndFurnitureRemoved", removed)
 	end
 	-- BAY_DRESSING_20261004. A queue bay dressed to match the level behind it (owner request): Level 5 as a small
 	--   void room, Level 4 as the foyer of the synthwave cinema. The bay's old decor is hidden where it clashes, never
