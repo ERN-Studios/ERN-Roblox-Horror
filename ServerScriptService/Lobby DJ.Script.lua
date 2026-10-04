@@ -4,9 +4,9 @@
 --   WHAT: five instrumental tracks (ElevenLabs, assets/lobby-dj-20261004). The server only publishes WHICH track
 --   is on and when it started (workspace attributes LobbyDJTrack / LobbyDJStartedAt / LobbyDJBy, and the list as
 --   LobbyDJTracks); each client plays it itself, in step, and honours its own lobby-music setting.
---   DJ MODE: the caller is stood behind the console, gets a headset (a few welded parts on the Head) and works the
---   decks. There are no animation assets: the arms, neck and waist are moved by offsetting their Motor6D C0 on
---   the server, over whatever the Animate script is playing, and put back exactly on the way out.
+--   DJ MODE: the caller is stood behind the console and gets a headset (a few welded parts on the Head). The
+--   server only marks the player (`LobbyDJMode`, replicated); every client poses that character itself (Lobby DJ
+--   Client: each frame it turns the limb joints' Transform a little further, after the Animate script).
 -- This script took over the retired, disabled `Level4RenovationBoot`.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -52,7 +52,7 @@ local function booth()
 	if not desk then return nil end
 	local away = (desk.Position - lobby:GetPivot().Position) * Vector3.new(1, 0, 1)
 	away = away.Magnitude > 1 and away.Unit or Vector3.zAxis
-	local feet = desk.Position + away * 3.4 - Vector3.new(0, desk.Size.Y / 2, 0)
+	local feet = desk.Position + away * 2.9 - Vector3.new(0, desk.Size.Y / 2, 0)
 	return desk, feet, -away
 end
 
@@ -79,13 +79,6 @@ end
 -- DJ mode ------------------------------------------------------------------------------------------------
 local djs = {}       -- player -> {character, joints = {motor -> original C0}, headset, speed, jump, phase}
 
-local function joint(character, names)
-	for _, name in ipairs(names) do
-		local found = character:FindFirstChild(name, true)
-		if found and found:IsA("Motor6D") then return found end
-	end
-end
-
 local function headset(character)
 	local head = character:FindFirstChild("Head")
 	if not head or not head:IsA("BasePart") then return nil end
@@ -108,7 +101,7 @@ local function headset(character)
 	for _, side in ipairs({-1, 1}) do
 		piece("Arm", Vector3.new(0.1, half + 0.1, 0.26), CFrame.new(side * (half + 0.02), (half + 0.1) / 2 - 0.02, 0), black, Enum.Material.SmoothPlastic)
 		piece("Cup", Vector3.new(0.24, 0.62, 0.62), CFrame.new(side * (half + 0.1), -0.02, 0), black, Enum.Material.SmoothPlastic, Enum.PartType.Cylinder)
-		piece("Ring", Vector3.new(0.06, 0.44, 0.44), CFrame.new(side * (half + 0.24), -0.02, 0), glow, Enum.Material.Neon, Enum.PartType.Cylinder)
+		piece("Ring", Vector3.new(0.06, 0.3, 0.3), CFrame.new(side * (half + 0.24), -0.02, 0), glow, Enum.Material.Neon, Enum.PartType.Cylinder)
 	end
 	model.Parent = character
 	return model
@@ -118,9 +111,6 @@ local function stopDJ(player)
 	local state = djs[player]
 	if not state then return end
 	djs[player] = nil
-	for motor, original in pairs(state.joints) do
-		if motor.Parent then motor.C0 = original end
-	end
 	if state.headset then state.headset:Destroy() end
 	local humanoid = state.character:FindFirstChildOfClass("Humanoid")
 	if humanoid then humanoid.WalkSpeed, humanoid.JumpPower = state.speed, state.jump end
@@ -135,17 +125,7 @@ local function startDJ(player)
 	local desk, feet, facing = booth()
 	if not root or not desk or humanoid.Health <= 0 or player:GetAttribute("InRound") == true then return end
 	for other in pairs(djs) do stopDJ(other) end                       -- one DJ at the decks
-	local state = {character = character, joints = {}, speed = humanoid.WalkSpeed, jump = humanoid.JumpPower, started = os.clock()}
-	state.rightShoulder = joint(character, {"RightShoulder", "Right Shoulder"})
-	state.leftShoulder = joint(character, {"LeftShoulder", "Left Shoulder"})
-	state.rightElbow = joint(character, {"RightElbow"})
-	state.leftElbow = joint(character, {"LeftElbow"})
-	state.neck = joint(character, {"Neck"})
-	state.waist = joint(character, {"Waist"})
-	state.r6 = character:FindFirstChild("Torso") ~= nil and character:FindFirstChild("UpperTorso") == nil
-	for _, key in ipairs({"rightShoulder", "leftShoulder", "rightElbow", "leftElbow", "neck", "waist"}) do
-		if state[key] then state.joints[state[key]] = state[key].C0 end
-	end
+	local state = {character = character, speed = humanoid.WalkSpeed, jump = humanoid.JumpPower}
 	state.headset = headset(character)
 	humanoid.WalkSpeed, humanoid.JumpPower = 0, 0
 	root.AssemblyLinearVelocity = Vector3.zero
@@ -161,25 +141,6 @@ RunService.Heartbeat:Connect(function()
 		if player.Parent ~= Players or player.Character ~= state.character or not state.character.Parent
 			or player:GetAttribute("InRound") == true then
 			stopDJ(player)
-			continue
-		end
-		local t = os.clock() - state.started
-		local beat = t * math.pi * 2 * 2                                 -- two bobs a second
-		local scratch = math.sin(t * 9) * (math.sin(t * 0.9) > 0.2 and 1 or 0.15)    -- bursts on the right deck
-		local slide = math.sin(t * 1.3)                                  -- the left hand rides a fader
-		local base = state.joints
-		if state.r6 then
-			-- R6 shoulders hinge about their own Z
-			if state.rightShoulder then state.rightShoulder.C0 = base[state.rightShoulder] * CFrame.Angles(0, 0, math.rad(62 + scratch * 9)) * CFrame.Angles(math.rad(-10), 0, 0) end
-			if state.leftShoulder then state.leftShoulder.C0 = base[state.leftShoulder] * CFrame.Angles(0, 0, math.rad(-58 - slide * 7)) * CFrame.Angles(math.rad(-10), 0, 0) end
-			if state.neck then state.neck.C0 = base[state.neck] * CFrame.Angles(math.rad(8 + math.sin(beat) * 6), 0, 0) end
-		else
-			if state.rightShoulder then state.rightShoulder.C0 = base[state.rightShoulder] * CFrame.Angles(math.rad(48 + scratch * 5), math.rad(-scratch * 12), math.rad(-8)) end
-			if state.leftShoulder then state.leftShoulder.C0 = base[state.leftShoulder] * CFrame.Angles(math.rad(44), math.rad(slide * 8), math.rad(8 + slide * 5)) end
-			if state.rightElbow then state.rightElbow.C0 = base[state.rightElbow] * CFrame.Angles(math.rad(34 + scratch * 8), 0, 0) end
-			if state.leftElbow then state.leftElbow.C0 = base[state.leftElbow] * CFrame.Angles(math.rad(38), 0, 0) end
-			if state.neck then state.neck.C0 = base[state.neck] * CFrame.Angles(math.rad(-6 - math.sin(beat) * 6), math.rad(math.sin(t * 0.7) * 10), 0) end
-			if state.waist then state.waist.C0 = base[state.waist] * CFrame.Angles(math.rad(-7 - math.sin(beat) * 2), 0, 0) end
 		end
 	end
 end)

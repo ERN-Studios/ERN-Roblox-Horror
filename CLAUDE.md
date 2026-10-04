@@ -765,8 +765,10 @@ weight and button size on phones, no noise meter.
   `DevAccess.IsLevel6PreviewAllowed`. Five tracks (`assets/lobby-dj-20261004`), published as workspace attributes
   `LobbyDJTrack` / `LobbyDJStartedAt` / `LobbyDJTracks`; every client plays the track itself, in step, only in the
   lobby and only with its own lobby music on, and silences the `ZyntraLobbyMusic` group meanwhile. DJ MODE stands
-  the caller behind the console, welds a headset to the Head and moves shoulders/elbows/neck/waist by offsetting
-  Motor6D C0 on the server (no animation assets); everything is restored on the way out.
+  the caller behind the console and welds a headset to the Head (server); the pose is done on EVERY CLIENT for
+  whoever carries `LobbyDJMode`: in `RunService.Stepped` each limb joint's `Transform` is turned a little further
+  (no animation assets). Current avatars have `AnimationConstraint` joints, not Motor6D; a server-side C0 or
+  attachment change, and Attachment0/Attachment1 edits, do not move such a limb. Transform in Stepped does.
 - **Welcome card**: `First Entry Guide` (was empty) shows one card to a first-time player (`ZyntraFirstLogin`) after
   the briefing has finished typing: three steps, device-specific controls, the two-person-team line.
   `workspace.DevShowWelcome = true` shows it in Studio.

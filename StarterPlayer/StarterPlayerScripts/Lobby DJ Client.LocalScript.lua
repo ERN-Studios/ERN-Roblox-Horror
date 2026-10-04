@@ -97,6 +97,63 @@ for _, name in ipairs({"LobbyDJTrack", "LobbyDJStartedAt", "LobbyDJTracks"}) do 
 for _, name in ipairs({"InRound", "LobbyMusicEnabled"}) do player:GetAttributeChangedSignal(name):Connect(applyTrack) end
 task.defer(applyTrack)
 
+-- the DJ's hands ----------------------------------------------------------------------------------------------
+-- Whoever is marked LobbyDJMode is posed here, on every client: arms out over the decks, the right hand
+-- scratching in bursts, the left riding a fader, the head nodding. There are no animation assets. Each frame,
+-- after the Animate script has written the joints and before physics reads them (RunService.Stepped), each limb
+-- joint's Transform is turned a little further. Motor6D (older rigs) and AnimationConstraint (current avatars)
+-- both have Transform, and the animator rewrites it every frame, so there is nothing to put back afterwards.
+-- What did NOT work on 2026-10-04: a server-side C0/attachment change (replicates, does not move a limb the
+-- client owns), Attachment0 or Attachment1 of an AnimationConstraint (the rig is kinematic), PreAnimation.
+do
+	local RunService = game:GetService("RunService")
+	local posed = setmetatable({}, {__mode = "k"})        -- character -> {joints, started}
+	local NAMES = {rightShoulder = {"RightShoulder", "Right Shoulder"}, leftShoulder = {"LeftShoulder", "Left Shoulder"},
+		rightElbow = {"RightElbow"}, leftElbow = {"LeftElbow"}, neck = {"Neck"}, waist = {"Waist"}}
+	local function find(character, names)
+		for _, name in ipairs(names) do
+			for _, found in ipairs(character:GetDescendants()) do
+				if found.Name == name and (found:IsA("Motor6D") or found:IsA("AnimationConstraint")) then return found end
+			end
+		end
+	end
+	RunService.Stepped:Connect(function()
+		for _, other in ipairs(Players:GetPlayers()) do
+			local character = other.Character
+			if not character or other:GetAttribute("LobbyDJMode") ~= true then
+				if character then posed[character] = nil end
+				continue
+			end
+			local state = posed[character]
+			if not state then
+				state = {started = os.clock(), r6 = character:FindFirstChild("UpperTorso") == nil}
+				for key, names in pairs(NAMES) do state[key] = find(character, names) end
+				posed[character] = state
+			end
+			local t = os.clock() - state.started
+			local beat = t * math.pi * 2 * 2
+			local scratch = math.sin(t * 9) * (math.sin(t * 0.9) > 0.2 and 1 or 0.15)
+			local slide = math.sin(t * 1.3)
+			local function pose(key, turn)
+				local found = state[key]
+				if found and found.Parent then found.Transform = found.Transform * turn end
+			end
+			if state.r6 then
+				pose("rightShoulder", CFrame.Angles(0, 0, math.rad(62 + scratch * 9)))
+				pose("leftShoulder", CFrame.Angles(0, 0, math.rad(-58 - slide * 7)))
+				pose("neck", CFrame.Angles(math.rad(8 + math.sin(beat) * 6), 0, 0))
+			else
+				pose("rightShoulder", CFrame.Angles(math.rad(60 + scratch * 5), math.rad(-scratch * 10), math.rad(-6)))
+				pose("leftShoulder", CFrame.Angles(math.rad(56), math.rad(slide * 8), math.rad(6 + slide * 5)))
+				pose("rightElbow", CFrame.Angles(math.rad(24 + scratch * 8), 0, 0))
+				pose("leftElbow", CFrame.Angles(math.rad(28), 0, 0))
+				pose("neck", CFrame.Angles(math.rad(-6 - math.sin(beat) * 6), math.rad(math.sin(t * 0.7) * 10), 0))
+				pose("waist", CFrame.Angles(math.rad(-6 - math.sin(beat) * 2), 0, 0))
+			end
+		end
+	end)
+end
+
 -- the prompt: the team only ------------------------------------------------------------------------------
 local function watchPrompt(instance)
 	if instance.Name ~= "LobbyDJPrompt" or not instance:IsA("ProximityPrompt") or team then return end
