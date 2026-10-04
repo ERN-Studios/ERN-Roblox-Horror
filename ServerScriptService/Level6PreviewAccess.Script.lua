@@ -231,6 +231,10 @@ local function hookExit()
 	if legacy then legacy.Parent = anchor end
 	local prompt = ensurePrompt(anchor, RETURN, "RETURN TO LOBBY", onReturn)
 	if validReturnPrompt(prompt, exit) then prompt.MaxActivationDistance = 7.5 end
+	-- Owner, 2026-10-04: no RETURN TO LOBBY at the start of the level. The prompt instance stays (the queue's
+	-- `ready` check and the mount validation look for it) but it can never be shown or triggered; leaving the
+	-- level is the round exit chip's job.
+	if prompt then prompt.MaxActivationDistance = 0 end
 end
 
 local function onEnter(player, prompt)

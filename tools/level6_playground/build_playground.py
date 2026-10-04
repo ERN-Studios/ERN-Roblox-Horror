@@ -1002,9 +1002,40 @@ def build_party_rooms():
         p.box((mid - 8, 373, 0.35), (mid + 8, 379, 3.4), ('pink', 'cyan', 'yellow', 'pink')[n])
         for side in (368, 381.5):
             p.box((mid - 9, side, 0.35), (mid + 9, side + 2.5, 2.2), 'wood')
-        for k in range(4):
-            p.cyl((mid - 6 + k * 4, 376, 3.9), (mid - 6 + k * 4, 376, 4.0), 1.0, 'white', 8, True)
-        p.cyl((mid, 376, 3.9), (mid, 376, 5.6), 1.6, ('pink', 'white', 'cyan', 'yellow')[n], 10, True)   # cake
+        # PARTY_TABLES_20261004. The table was four plates down the middle with a plain drum of a "cake" standing in
+        # two of them. Now: a place setting (plate and cup) in front of every seat along both long edges, and a real
+        # two-tier cake on a stand. Room 3 (the dark one, n == 2) is where the easter egg's doll dances: its table
+        # top is left completely clear and its cake stands on a side table by the wall.
+        dance = n == 2
+        cake_col = ('pink', 'white', 'cyan', 'yellow')[n]
+        def cake(cx, cy, z):
+            p.cyl((cx, cy, z), (cx, cy, z + 0.12), 2.0, 'white', 12, True)                 # stand
+            p.cyl((cx, cy, z + 0.12), (cx, cy, z + 1.0), 1.5, cake_col, 12, True)          # bottom tier
+            p.cyl((cx, cy, z + 1.0), (cx, cy, z + 1.14), 1.58, 'white', 12, True)          # icing
+            p.cyl((cx, cy, z + 1.14), (cx, cy, z + 1.84), 0.95, cake_col, 12, True)        # top tier
+            p.cyl((cx, cy, z + 1.84), (cx, cy, z + 1.96), 1.02, 'white', 12, True)
+            for k in range(5):                                                             # candles, long burnt out
+                ang = math.radians(72 * k + 18)
+                p.cyl((cx + 0.55 * math.cos(ang), cy + 0.55 * math.sin(ang), z + 1.96),
+                      (cx + 0.55 * math.cos(ang), cy + 0.55 * math.sin(ang), z + 2.5), 0.07, ('yellow', 'red', 'cyan')[k % 3], 5, True)
+        if dance:
+            sx, sy = a + 6, 387                                                            # side table against the left wall
+            p.box((sx - 2.6, sy - 2.6, 0.35), (sx + 2.6, sy + 2.6, 3.0), 'wood')
+            p.box((sx - 2.9, sy - 2.9, 3.0), (sx + 2.9, sy + 2.9, 3.3), 'paper')
+            cake(sx, sy, 3.3)
+            for k in range(6):                                                             # the plates, stacked beside it
+                p.cyl((sx - 1.9, sy + 1.9, 3.3 + k * 0.08), (sx - 1.9, sy + 1.9, 3.36 + k * 0.08), 0.7, 'white', 8, True)
+        else:
+            cake(mid, 376, 3.9)
+            for row_y in (373.4, 378.6):
+                for k in range(6):
+                    px = mid - 7.5 + k * 3
+                    p.cyl((px, row_y, 3.9), (px, row_y, 3.98), 0.75, 'white', 8, True)      # plate
+                    cy2 = row_y + (0.95 if row_y < 376 else -0.95)
+                    if (k + n) % 3 == 1:                                                   # a cup knocked over
+                        p.cyl((px + 0.9, cy2 - 0.3, 4.12), (px + 0.9, cy2 + 0.3, 4.12), 0.22, ('red', 'blue', 'yellow')[k % 3], 6, True)
+                    else:
+                        p.cyl((px + 0.9, cy2, 3.9), (px + 0.9, cy2, 4.5), 0.22, ('red', 'blue', 'yellow')[k % 3], 6, True)
         for k, (bx, by, bz) in enumerate(((a + 4, 396, 9), (b - 4, 396, 11), (mid, 397, 12.5))):
             p.ball((bx, by, bz), 1.5, ('red', 'yellow', 'blue', 'green')[(n + k) % 4])
             p.cyl((bx, by, 0.4), (bx, by, bz - 1.4), 0.05, 'white', 3)
@@ -1016,10 +1047,17 @@ def build_party_rooms():
         for k, (px, py, mat) in enumerate(((a + 5, 392, 'red'), (a + 8, 394, 'blue'), (b - 6, 391, 'yellow'), (b - 9, 394, 'green'))):
             p.box((px, py, 0.35), (px + 2.4, py + 2.4, 2.4 + (k % 2)), mat)                # presents
             p.box((px + 1.0, py - 0.02, 0.35), (px + 1.4, py + 2.42, 2.45 + (k % 2)), 'white')
-        for k in range(6):                                                                # chairs pushed back from the table
+        # Chairs pushed back from the table: a seat, a back and four legs each (they were solid slabs standing against
+        # the bench). None in the dance room: the easter egg stands its players exactly there.
+        for k in range(0 if dance else 6):
             cx2 = mid - 7.5 + k * 3
-            p.box((cx2, 365.5, 0.35), (cx2 + 2, 367.5, 2.2), ('red', 'blue', 'yellow')[k % 3])
-            p.box((cx2, 365.5, 2.2), (cx2 + 2, 365.9, 4.6), ('red', 'blue', 'yellow')[k % 3])
+            cy2 = 362.6 + ((k * 7 + n * 3) % 5) * 0.35                                     # nobody lined them up
+            col = ('red', 'blue', 'yellow')[k % 3]
+            p.box((cx2, cy2, 1.9), (cx2 + 2, cy2 + 2, 2.2), col)
+            p.box((cx2, cy2, 2.2), (cx2 + 2, cy2 + 0.3, 4.6), col)
+            for lx in (cx2, cx2 + 1.75):
+                for ly in (cy2, cy2 + 1.75):
+                    p.box((lx, ly, 0.35), (lx + 0.25, ly + 0.25, 1.9), 'stainless')
         for k, (bx, by, bz) in enumerate(((a + 6, 356, 13.5), (b - 6, 358, 12.5), (mid - 5, 388, 13), (mid + 6, 386, 14))):
             p.ball((bx, by, bz), 1.5, ('pink', 'yellow', 'cyan', 'red')[(n + k) % 4])           # balloons on the ceiling
         HIDE.append(('table', mid, 376, 0.6))

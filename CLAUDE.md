@@ -871,3 +871,11 @@ weight and button size on phones, no noise meter.
   1036919688053942. Eleven keys are still 0 (BetterTogether, L5*, L6*). Creation on the dashboard has NO price
   confirmation: it is free for the first five per day and otherwise charges 100 Robux silently, so create at most
   five a day unless the owner approves the spend. Done through `codex exec --enable computer_use`.
+- **Level 6 party rooms rebuilt** (`PARTY_TABLES_20261004` in `build_playground.py`): a two-tier cake with
+  candles, a plate and cup per seat, real chairs (seat, back, legs). The dark room 3, where the easter egg's doll
+  dances, has a completely clear table top, its cake on a side table by the wall and no chairs (the party stands
+  its players there). `import_to_studio.py --only <Group>` rebuilds one group's parts in the live model and
+  leaves the rest alone; check first that the export differs only in that group.
+- **No RETURN TO LOBBY prompt at the Level 6 start** (owner, 2026-10-04): `hookExit` still mounts the prompt (the
+  queue's `ready` check needs it present and Enabled) but sets `MaxActivationDistance = 0`. The `HOLD L - LOBBY`
+  chip of Round Exit Client is untouched.

@@ -542,6 +542,25 @@ def main():
         return
 
     studio = Studio()
+    if '--only' in sys.argv:
+        # Rebuild ONE group's parts in the live model and leave everything else as it is:
+        #   python3 tools/level6_playground/import_to_studio.py --only PartyRooms
+        owner = sys.argv[sys.argv.index('--only') + 1]
+        mine = [r for r in rows if r.split(',')[1] == owner]
+        if not mine:
+            raise SystemExit(f'no parts for group {owner}')
+        print(studio.luau(f'''
+local model = workspace:FindFirstChild({json.dumps(MODEL_NAME)})
+local group = model and model:FindFirstChild({json.dumps(owner)})
+if not group then return "no such group in the live model" end
+local n = #group:GetChildren()
+group:ClearAllChildren()
+return "cleared " .. n
+'''), flush=True)
+        for start in range(0, len(mine), CHUNK):
+            body = '\n'.join(mine[start:start + CHUNK])
+            print(start, studio.luau(prelude + f'local DATA = [==[\n{body}\n]==]\n' + BUILD), flush=True)
+        return
     print(studio.luau(f'''
 local NAME = {json.dumps(MODEL_NAME)}
 local old = workspace:FindFirstChild(NAME)
