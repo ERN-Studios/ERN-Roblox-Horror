@@ -618,7 +618,7 @@ do
 				if record.text then record.text.Text = best .. " / " .. bestNeed end
 				record.folder:SetAttribute("On", best)
 				record.folder:SetAttribute("Need", bestNeed)
-				movePlate(record, radius, standing > 0, complete)
+				movePlate(record, radius, complete, complete)      -- the plate only goes down under a whole party (owner, 2026-10-04)
 				if complete then
 					record.openUntil = os.clock() + GATE_HOLD
 					if standing >= 2 then

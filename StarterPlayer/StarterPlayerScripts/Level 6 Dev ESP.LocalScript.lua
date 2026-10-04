@@ -1,5 +1,5 @@
 -- Level 6 Dev ESP (2026-10-04, owner request). In the Indoor Playground a developer sees the Counter (the doll)
--- and every other player in the level through walls: an always-on-top outline and a name with the distance.
+-- every other player in the level and the party easter egg's button through walls: an always-on-top outline and a name with the distance.
 -- It replaces the CD ESP this script drew for the retired generated Level 6 world.
 --   WHO: DevAccess.IsLevel6PreviewAllowed (the developer list plus the owner's account). Local presentation only:
 --   nothing here asks the server for anything, and nothing replicates.
@@ -16,6 +16,7 @@ if not DevAccess.IsLevel6PreviewAllowed(player) then return end
 local WORLD_NAME, DOLL_NAME = "Level 6 Indoor Playground", "Level 6 Counting Child"
 local IN_LEVEL = "Level6PlaygroundPreview"
 local ENTITY_COLOUR, PLAYER_COLOUR = Color3.fromRGB(255, 70, 70), Color3.fromRGB(70, 230, 255)
+local BUTTON_COLOUR = Color3.fromRGB(255, 220, 60)      -- the party easter egg's button (`L6PartyButton`)
 local on = player:GetAttribute("DevEspEnabled") ~= false
 player:GetAttributeChangedSignal("DevEspEnabled"):Connect(function()
 	on = player:GetAttribute("DevEspEnabled") ~= false
@@ -75,7 +76,8 @@ RunService.Heartbeat:Connect(function(dt)
 		local own = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		local from = own and own.Position or workspace.CurrentCamera.CFrame.Position
 		local function show(subject, name, colour)
-			local part = subject:FindFirstChild("HumanoidRootPart") or subject.PrimaryPart or subject:FindFirstChildWhichIsA("BasePart", true)
+			local part = subject:IsA("BasePart") and subject or subject:FindFirstChild("HumanoidRootPart") or subject.PrimaryPart
+				or subject:FindFirstChildWhichIsA("BasePart", true)
 			if not part then return end
 			local found = mark(subject, colour)
 			found.label.Adornee = part
@@ -85,6 +87,8 @@ RunService.Heartbeat:Connect(function(dt)
 		local world = workspace:FindFirstChild(WORLD_NAME)
 		local doll = world and world:FindFirstChild(DOLL_NAME)
 		if doll and doll:IsA("Model") then show(doll, "THE COUNTER", ENTITY_COLOUR) end
+		local partyButton = world and world:FindFirstChild("L6PartyButton")
+		if partyButton and partyButton:IsA("BasePart") then show(partyButton, "PARTY BUTTON", BUTTON_COLOUR) end
 		for _, other in ipairs(Players:GetPlayers()) do
 			local character = other.Character
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")

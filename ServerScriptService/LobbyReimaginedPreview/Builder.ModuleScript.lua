@@ -401,8 +401,7 @@ function Module.Build()
 				local part = Instance.new("Part")
 				part.Name, part.Size, part.CFrame, part.Color = name, size, cf, colour
 				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, collide, false, collide
-				part.Material = material
-				if material == Enum.Material.Plaster and plaster then part.MaterialVariant = "L5 Void Plaster" end
+				part.Material = material == Enum.Material.Plaster and Enum.Material.SmoothPlastic or material   -- Level 5's smooth finish
 				part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
 				part:SetAttribute("LobbyReimaginedOwned", true)
 				part.Parent = set

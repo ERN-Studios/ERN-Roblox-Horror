@@ -833,3 +833,19 @@ weight and button size on phones, no noise meter.
   and goes dark for about a quarter of each 3.6 s cycle (halved dip under `ReduceFlashing`).
 - **Level 5 hanging lamps dimmed** (owner, 2026-10-04: "blinding"): a 3-stud dull grey neon globe (was 5, white) and a PointLight of 0.45 over 30 studs (was 2.6 over 46). The room lighting itself is unchanged.
 - **Tunnel-end furniture removed** (owner, 2026-10-04, `END_PILES_REMOVED_20261004` in Builder): both EndBlockades piles (219 MeshParts), the 400-piece fill and the loose office furniture at the south end are destroyed at build time (652 parts; the lobby went from about 2800 to 2149 BaseParts). The stage, speakers and DJ console stay; the end walls are bare. EndBlockades still runs and its folder is kept empty.
+
+### Added 2026-10-04 (afternoon) - Level 5 smooth again, plate, party button ESP
+
+- **Level 5 is SmoothPlastic again** (owner: "forget this bump map"): `part()` defaults to SmoothPlastic, the importer
+  maps any Plaster row to SmoothPlastic and no longer sets `MaterialVariant`, Builder's bay 5 pieces do the same.
+  `MaterialService."L5 Void Plaster"` and `texture_ids.json` still exist but nothing uses them.
+- **A Level 5 plate only goes down (and sounds) when a whole party stands on it**: `movePlate(record, radius,
+  complete, complete)`. One of several players standing on it changes nothing visible.
+- **Level 6 Dev ESP also marks `L6PartyButton`** (yellow, "PARTY BUTTON"). The button is at model-local (-3, -150):
+  on the floor behind `L6_Hide_counter_05`, on the arcade carpet, the far side of the hall from the entrance.
+- **The DJ booth lists every track the server publishes** (`TRACK_LIST_20261004`: a ScrollingFrame, rows made on
+  demand), no longer five fixed rows.
+- **GUI automation must guard every keystroke, not only the clicks.** On 2026-10-04 an upload ran while the owner
+  was in Discord and the Roblox player: `gk.sh` aborted, the bare `osascript` keystrokes did not. `HIDIdleTime` is
+  not enough either (a spectating player is idle). `/tmp/dj_upload.sh` shows the guarded form: check the front
+  process before each step and wait while `RobloxPlayer` is in front.

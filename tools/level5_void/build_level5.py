@@ -41,7 +41,7 @@ def reach(dy):
     return WALK * (JUMP + math.sqrt(disc)) / GRAVITY
 
 
-def part(name, size, pos, colour, yaw=0.0, shape='b', collide=True, material='Plaster', extra=None):
+def part(name, size, pos, colour, yaw=0.0, shape='b', collide=True, material='SmoothPlastic', extra=None):
     row = {'n': name, 's': [round(v, 3) for v in size], 'p': [round(v, 3) for v in pos], 'c': colour,
            'yaw': round(yaw, 3), 'sh': shape, 'col': collide, 'm': material}
     if extra:

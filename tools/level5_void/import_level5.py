@@ -67,8 +67,8 @@ for _, row in ipairs(data.parts) do
 	part.CanCollide = row.col and row.n ~= "Monolith"      -- a body that lands on a loose monolith would be stranded there
 	part.CanTouch = false
 	part.CastShadow = row.n ~= "Orb" and row.n ~= "OrbRod"
-	part.Material = Enum.Material[row.c == "black" and row.m == "Plaster" and "SmoothPlastic" or row.m]
-	if part.Material == Enum.Material.Plaster and plaster then part.MaterialVariant = "L5 Void Plaster" end
+	-- the original smooth finish (owner, 2026-10-04): no plaster, no bump-map variant
+	part.Material = Enum.Material[row.m == "Plaster" and "SmoothPlastic" or row.m]
 	local c = data.colours[row.c]
 	part.Color = Color3.fromRGB(c[1], c[2], c[3])
 	part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth

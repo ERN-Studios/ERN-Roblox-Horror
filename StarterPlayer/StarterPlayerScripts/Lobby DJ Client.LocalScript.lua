@@ -275,13 +275,22 @@ label(panel, "DJ BOOTH", 26, PAPER, UDim2.fromOffset(22, 14), UDim2.fromOffset(2
 label(panel, "LOBBY  ·  EVERYONE HEARS THIS", 12, CYAN, UDim2.fromOffset(22, 46), UDim2.fromOffset(300, 16), Enum.Font.Code)
 local close = button(panel, "Close", "×", UDim2.new(1, -52, 0, 12), UDim2.fromOffset(40, 40), Color3.fromRGB(46, 28, 74))
 close.TextSize = 24
+-- TRACK_LIST_20261004: a scrolling list with one row per track the server publishes (it was five fixed rows)
 local rows = {}
-for index = 1, 5 do
+local trackList = Instance.new("ScrollingFrame")
+trackList.Name = "Tracks"
+trackList.Position, trackList.Size = UDim2.fromOffset(18, 74), UDim2.new(1, -30, 0, 258)
+trackList.BackgroundTransparency, trackList.BorderSizePixel = 1, 0
+trackList.ScrollBarThickness, trackList.ScrollBarImageColor3 = 6, CYAN
+trackList.ScrollingDirection = Enum.ScrollingDirection.Y
+trackList.CanvasSize = UDim2.new()
+trackList.Parent = panel
+local function trackRow(index)
 	local row = Instance.new("Frame")
 	row.Name = "Track" .. index
-	row.Position, row.Size = UDim2.fromOffset(18, 74 + (index - 1) * 52), UDim2.new(1, -36, 0, 46)
+	row.Position, row.Size = UDim2.fromOffset(2, 2 + (index - 1) * 52), UDim2.new(1, -16, 0, 46)
 	row.BackgroundColor3, row.BorderSizePixel = Color3.fromRGB(30, 18, 54), 0
-	row.Parent = panel
+	row.Parent = trackList
 	Instance.new("UICorner", row).CornerRadius = UDim.new(0, 8)
 	local stroke = Instance.new("UIStroke", row)
 	stroke.Color, stroke.Thickness, stroke.Transparency = CYAN, 1.5, 1
@@ -300,6 +309,8 @@ stop.Activated:Connect(function() remote:FireServer("stop") end)
 mode.Activated:Connect(function() remote:FireServer("dj", player:GetAttribute("LobbyDJMode") ~= true) end)
 refreshPanel = function()
 	local list, current = tracks(), workspace:GetAttribute("LobbyDJTrack") or 0
+	for index = #rows + 1, #list do trackRow(index) end
+	trackList.CanvasSize = UDim2.fromOffset(0, #list * 52 + 2)
 	for index, row in ipairs(rows) do
 		local entry = list[index]
 		row.title.Text = entry and entry.Title or "—"
