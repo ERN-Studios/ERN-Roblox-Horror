@@ -74,25 +74,74 @@ BADGES = {
         f'<rect x="212" y="236" width="60" height="22" rx="11" fill="{C}"/><rect x="340" y="240" width="60" height="22" rx="11" fill="{C}"/>',
 }
 
+# name, description (as in ZyntraConfig.Achievements), and whether its Roblox badge already exists
+META = [
+    ('Welcome', 'New Arrival', 'Step into the lobby for the first time.', False),
+    ('FirstClearLevel1', 'Office Hours', 'Escape Level 1, the office backrooms.', True),
+    ('FirstClearLevel2', 'Out of the Deep End', 'Escape Level 2, the poolrooms.', True),
+    ('FirstClearLevel3', "Party's Over", 'Escape Level 3, the mall party rooms.', True),
+    ('FirstClearLevel4', 'The Last Show', 'Escape Level 4, the cinema.', False),
+    ('FirstClearLevel5', 'Over the Void', 'Reach the lit doorway at the top of Level 5.', False),
+    ('FirstClearLevel6', 'Ready or Not', 'Get out of Level 6, the playground.', False),
+    ('CampaignComplete', 'Three Doors Down', 'Clear Levels 1, 2 and 3.', True),
+    ('AllSix', 'Every Door', 'Clear all six levels.', False),
+    ('BetterTogether', 'Better Together', 'Clear a level with a Roblox friend.', False),
+    ('L5Mint', 'Thin Ice', 'Reach the Mint room in Level 5.', False),
+    ('L5Coral', 'The Shaft', 'Reach the Coral room in Level 5.', False),
+    ('L5NoFall', 'Sure-Footed', 'Finish Level 5 without falling once.', False),
+    ('L5Balls', 'Gravity Test', 'Push five balls into the void in one run of Level 5.', False),
+    ('L5TeamLift', 'All Aboard', 'Open a Level 5 door with a teammate on the plate.', False),
+    ('L6HomeFree', 'Home Free', 'Touch the post in Level 6.', False),
+    ('L6Escaped', 'Not Today', 'Be chased by the Counter and lose it.', False),
+    ('L6Survivor', 'Still Hiding', 'Still be in the game when it counts for the third time.', False),
+    ('L6Caught', 'Found You', 'Get caught by the Counter.', False),
+    ('L6Party', 'After Hours', 'Find what is hidden behind the arcade counter.', False),
+]
+assert {m[0] for m in META} == set(BADGES)
+
 source, icons = ROOT / 'assets' / 'badges' / 'source', ROOT / 'assets' / 'badges' / 'icons-512'
 desktop = Path.home() / 'Desktop' / 'Backrooms Stay Quiet - Badges'
 for folder in (source, icons, desktop):
     folder.mkdir(parents=True, exist_ok=True)
-for key, body in BADGES.items():
-    svg = source / f'badge_{key}.svg'
-    svg.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="{BG}"/>{body}</svg>')
-    png = icons / f'badge_{key}.png'
-    subprocess.run([CHROME, '--headless', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=512,512',
-                    f'--screenshot={png}', f'file://{svg}'], capture_output=True)
-    shutil.copy(png, desktop / png.name)
-keys = list(BADGES)
+for old in desktop.iterdir():                      # the folder holds exactly this set
+    if old.is_file():
+        old.unlink()
+
+
+def shot(target, page, width, height):
+    subprocess.run([CHROME, '--headless', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1',
+                    f'--window-size={width},{height}', f'--screenshot={target}', f'file://{page}'], capture_output=True)
+
+
 rows = []
-inputs = []
-for key in keys:
-    inputs += ['-i', str(icons / f'badge_{key}.png')]
-layout = ''.join(f'[{i}:v]scale=256:256[s{i}];' for i in range(len(keys)))
-for r in range(4):
-    layout += ''.join(f'[s{r * 5 + c}]' for c in range(5)) + f'hstack=inputs=5[r{r}];'
-layout += '[r0][r1][r2][r3]vstack=inputs=4'
-subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', *inputs, '-filter_complex', layout, str(desktop / 'contact_sheet.jpg')])
-print(len(keys), 'badges ->', icons, 'and', desktop)
+for number, (key, name, text, exists) in enumerate(META, 1):
+    svg = source / f'badge_{key}.svg'
+    svg.write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="{BG}"/>{BADGES[key]}</svg>')
+    png = icons / f'badge_{key}.png'
+    shot(png, svg, 512, 512)
+    safe = name.replace("'", '').replace(' ', '-')
+    upload = desktop / f'{number:02d}_{safe}__{key}.png'
+    shutil.copy(png, upload)
+    rows.append((number, key, name, text, exists, upload.name))
+
+# the labelled contact sheet: one page, rendered the same way
+cells = ''.join(
+    f'<div class="cell"><img src="file://{icons / ("badge_" + key + ".png")}"><b>{number:02d}  {name}</b>'
+    f'<i>{"already a Roblox badge" if exists else "NEW: create on Roblox"}</i></div>'
+    for number, key, name, text, exists, _ in rows)
+page = source / 'contact_sheet.html'
+page.write_text(f'<html><body style="margin:0;background:{BG};font-family:Helvetica,Arial,sans-serif">'
+                f'<h1 style="color:{C};font-size:30px;margin:26px 34px 6px">BACKROOMS: STAY QUIET  ·  ACHIEVEMENT BADGES  ·  20</h1>'
+                f'<style>.cell{{width:236px;display:inline-block;margin:14px 0 6px 34px;vertical-align:top;text-align:center}}'
+                f'.cell img{{width:200px;height:200px;border-radius:50%}}.cell b{{display:block;color:{C};font-size:17px;margin-top:8px}}'
+                f'.cell i{{display:block;color:{T};font-size:13px;font-style:normal;margin-top:3px}}</style>{cells}</body></html>')
+shot(desktop / 'CONTACT_SHEET.png', page, 1400, 1260)
+lines = ['BACKROOMS: STAY QUIET - achievement badges', '20 pictures, 512 x 512 PNG, ready to upload on the Creator Dashboard (Roblox crops them to a circle).', '',
+         'NEW = this badge does not exist on Roblox yet: create it with this picture, name and description.', '']
+for number, key, name, text, exists, filename in rows:
+    lines.append(f'{number:02d}  {filename}')
+    lines.append(f'    Name: {name}    Key in the game: {key}    {"Already a Roblox badge (picture can replace the old one)" if exists else "NEW"}')
+    lines.append(f'    Description: {text}')
+    lines.append('')
+(desktop / 'BADGE_LIST.txt').write_text('\n'.join(lines))
+print(len(rows), 'badges ->', desktop)
