@@ -639,7 +639,7 @@ function Module.Build()
 					piece("GateHinge", Vector3.new(1.3, 2.2, 0.7), CFrame.new(side * (W - 0.2), y, -1.45), DARK, M.Metal)
 				end
 				piece("GateHazard", Vector3.new(W - 0.6, 1.1, 0.12), CFrame.new(side * W / 2, 0.95, -1.24), Color3.fromRGB(222, 172, 24), M.SmoothPlastic)
-				local lamp = piece("GateLamp", Vector3.new(4.5, 0.35, 0.15), CFrame.new(side * 7, H + 1.3, -1.85), ZYNTRA, M.Neon)
+				piece("GateLamp", Vector3.new(3.2, 0.35, 0.15), CFrame.new(side * 11.6, H + 1.3, -1.85), ZYNTRA, M.Neon)
 			end
 			piece("GateSeam", Vector3.new(0.3, H, 1.0), CFrame.new(0, H / 2, -0.8), Color3.fromRGB(12, 13, 15), M.SmoothPlastic)
 			-- the lock in the middle: a wheel and the one light on the door
@@ -649,15 +649,17 @@ function Module.Build()
 				piece("GateLockBar", Vector3.new(5.6, 0.5, 0.3), CFrame.new(0, 11, -1.7) * CFrame.Angles(0, 0, math.rad(angle)), STEEL, M.Metal)
 			end
 			-- the name over it
-			local plate = piece("GateNameplate", Vector3.new(11, 1.5, 0.1), CFrame.new(0, H + 1.3, -1.86), Color3.fromRGB(10, 22, 20), M.SmoothPlastic)
+			-- The name over it. Owner, 2026-10-04: "the gate's text is not entirely visible" - it was an 11 x 1.5 plate
+			-- with the lamps overlapping its ends. Now a plate nearly the width of the door, standing clear of the
+			-- lintel, with the lamps moved out to the corners; the text is sized to the plate, not scaled into it.
+			local plate = piece("GateNameplate", Vector3.new(19, 2.1, 0.12), CFrame.new(0, H + 1.3, -2.0), Color3.fromRGB(10, 22, 20), M.SmoothPlastic)
 			local gui = Instance.new("SurfaceGui")
-			gui.Face, gui.CanvasSize, gui.LightInfluence, gui.Brightness = Enum.NormalId.Front, Vector2.new(880, 120), 0, 1.2
+			gui.Face, gui.SizingMode, gui.PixelsPerStud = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 50
+			gui.LightInfluence, gui.Brightness, gui.ClipsDescendants = 0, 1.2, false
 			local label = Instance.new("TextLabel")
 			label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
-			label.Font, label.TextScaled, label.Text, label.TextColor3 = Enum.Font.GothamBold, true, "ZYNTRA   ·   ARRIVAL GATE", ZYNTRA
-			local pad = Instance.new("UIPadding")
-			pad.PaddingTop, pad.PaddingBottom = UDim.new(0.18, 0), UDim.new(0.18, 0)
-			pad.Parent = label
+			label.Font, label.TextSize, label.Text, label.TextColor3 = Enum.Font.GothamBold, 62, "ZYNTRA  -  ARRIVAL GATE", ZYNTRA
+			label.TextScaled = false
 			label.Parent = gui
 			gui.Parent = plate
 		end

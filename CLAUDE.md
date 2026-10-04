@@ -925,3 +925,9 @@ weight and button size on phones, no noise meter.
 - **Store artwork v2**: `~/Desktop/Backrooms Stay Quiet - Covers 2026-10-04` (16 thumbnails 1920x1080, 4 icons
   1024, Krille's 35 in-game references of 2026-10-04, prompts). The earlier Desktop gallery was moved to
   `artifacts/gallery-20261004/old-desktop-gallery`.
+- **No briefings anywhere** (`BRIEFINGS_OFF_20261004`, owner): `lobbyBriefing.playOnce`, `playLevelOneBriefing`,
+  `playLevelTwoBriefing` and `levelThreeBriefing.play` in RoundUI and `briefing()` in Level 4 Round Client return
+  at once (`do return end`; RoundUI has no room for a new local). Level 1's objectives are made available before
+  that return. The code, sounds and cue tables are left in place. RoundUI and Level 4 Round Client in the repo
+  were brought level with Studio for this edit (they carried another session's changes).
+- **Arrival gate nameplate**: 19 x 2.1 studs, text sized in pixels (`TextScaled` off), lamps at the lintel's ends.

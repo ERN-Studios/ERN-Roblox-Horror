@@ -479,6 +479,26 @@ local function applyPlayerLighting()
   Lighting.FogColor = Color3.fromRGB(16, 14, 9)
   Lighting.FogStart = 30
   Lighting.FogEnd = 220
+  if selectedLevel == 1 and workspace:GetAttribute("Level1BlenderActive") == true
+   and (workspace:GetAttribute("LightMode") or "NORMAL") == "NORMAL" then
+   -- Successful relay extractions are permanent for the round, including deaths/drops.
+   local taken = workspace:GetAttribute("Level1RelaysExtracted") or 0
+   local total = math.max(workspace:GetAttribute("Level1RelaysPlaced") or 3, 1)
+   local stage = taken * 3 >= total * 2 and 3 or taken * 3 >= total and 2 or 1
+   local presets = {
+    {Color3.fromRGB(100,94,70), Color3.fromRGB(35,32,23), 1.3, Color3.fromRGB(120,110,79), 200, 900}, -- C
+    {Color3.fromRGB(65,61,45), Color3.fromRGB(20,18,12), 1, Color3.fromRGB(85,77,55), 140, 650}, -- B
+    {Color3.fromRGB(36,34,26), Color3.fromRGB(10,9,6), .65, Color3.fromRGB(55,49,34), 85, 450}, -- A
+   }
+   local preset = presets[stage]
+   Lighting.Ambient, Lighting.OutdoorAmbient, Lighting.Brightness = preset[1], preset[2], preset[3]
+   Lighting.FogColor, Lighting.FogStart, Lighting.FogEnd = preset[4], preset[5], preset[6]
+  elseif selectedLevel == 1 and workspace:GetAttribute("Level1BlenderActive") == true
+   and workspace:GetAttribute("LightMode") == "ALERT" then
+   -- Red alert (owner 2026-10-04): a dim red fill keeps the maze readable between the pulsing lights.
+   Lighting.Ambient, Lighting.OutdoorAmbient = Color3.fromRGB(48, 14, 10), Color3.fromRGB(14, 4, 3)
+   Lighting.FogColor, Lighting.FogStart, Lighting.FogEnd = Color3.fromRGB(36, 10, 8), 85, 450
+  end
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = true end
  else
@@ -2809,6 +2829,7 @@ function lobbyBriefing.skip()
 	return true
 end
 function lobbyBriefing.playOnce()
+	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level
 	if lobbyBriefing.played or not lobbyBriefing.isEligible() then return end
 	lobbyBriefing.played = true
 	lobbyBriefing.pending = true
@@ -3961,6 +3982,7 @@ local function playLevelOneBriefing()
 	player:SetAttribute("LevelOneBriefingActive", false)
 	setObjectivesAvailable(isLevelOneParticipant())
 	setSubtitle(nil)
+	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level; the objectives are up from the start
 
 	task.spawn(function()
 		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
@@ -4104,6 +4126,7 @@ local function playLevelTwoBriefing()
 	local speechAt = os.clock() + LEVEL_TWO_BRIEFING_DELAY
 	player:SetAttribute("LevelTwoBriefingActive", false)
 	setSubtitle(nil)
+	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level
 
 	task.spawn(function()
 		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
@@ -4259,6 +4282,7 @@ function levelThreeBriefing.play()
 	player:SetAttribute("LevelThreeBriefingActive", false)
 	levelThreeBriefing.resetInterference()
 	setSubtitle(nil)
+	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level
 
 	task.spawn(function()
 		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end

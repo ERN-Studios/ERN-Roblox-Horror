@@ -4,7 +4,7 @@
 --   * zone light rendering: stutters announced by ClientEvent {Type="Zones"} (Brightness + neon, local only, landing
 --     on exactly the server's final state; ReduceFlashing fades instead) and a 1 s repair pass for stale local writes
 --   * the power-up "woooow": surge flash, a low rumble (none with ReduceCameraShake), the title card
---   * film flicker on running screens, the glowing exit screen and the credits roll in the finale
+--   * film flicker on running screens, the exit screen and the credits music in the finale
 --   * the arcade keypad (KeypadSubmit) and the Usher: a local rig drawn from UsherMotion (interpolated 0.1 s behind
 --     server time) and animated from ReplicatedStorage."Level 4 Usher Animations" with procedural overlays
 -- Nothing here is authority; a client that drops this script still plays the same round.
@@ -185,7 +185,10 @@ local function refreshPanel()
 	local phase = st("Level4_Phase")
 	if phase == "Dark" then
 		mainLine.Text = "RESTORE THE POWER"
-		subLine.Text = ("Find the note.  Breakers %d/%d"):format(st("Level4_SequenceProgress") or 0, st("Level4_SequenceGoal") or 4)
+		-- once this player has read the note, the order replaces the "find the note" hint
+		local order = player:GetAttribute("Level4_NoteOrder")
+		subLine.Text = ("%s   Breakers %d/%d"):format(type(order) == "string" and ("Order: " .. order) or "Find the note.",
+			st("Level4_SequenceProgress") or 0, st("Level4_SequenceGoal") or 4)
 		extraLine.Text = "Service room: POWER A and POWER B"
 	elseif phase == "Reels" then
 		local goal = st("Level4_ReelGoal") or 3
@@ -377,7 +380,7 @@ local function powerUp(payload)
 	end)
 end
 
--- ---------------------------------------------------------------- screens: film, exit, credits
+-- ---------------------------------------------------------------- screens: film, exit
 
 local screenGuis = {}
 local function screenGui(part, name)
@@ -428,63 +431,34 @@ local function startFilm(part)
 	end)
 end
 
+-- owner 2026-10-04: the white exit screen bloomed so hard the word could not be read -> a dark panel with cream
+-- letters (the TICKETS sign's look), a dimmer surface and a pulse that never fades the word out
 local function exitScreen(part)
 	for _, g in ipairs(screenGui(part, "L4Exit")) do
+		g.Brightness = 1.2
 		local f = Instance.new("Frame")
 		f.Size = UDim2.fromScale(1, 1)
 		f.BorderSizePixel = 0
-		f.BackgroundColor3 = Color3.new(1, 1, 1)
+		f.BackgroundColor3 = Color3.fromRGB(10, 8, 24)
 		f.Parent = g
-		local grad = Instance.new("UIGradient")
-		grad.Color = ColorSequence.new(Color3.fromRGB(255, 255, 255), CYAN)
-		grad.Rotation = 90
-		grad.Parent = f
 		local t = Instance.new("TextLabel")
 		t.BackgroundTransparency = 1
 		t.Size = UDim2.fromScale(1, 1)
 		t.Font = Enum.Font.Arcade
 		t.Text = "EXIT"
 		t.TextScaled = true
-		t.TextColor3 = Color3.fromRGB(20, 10, 40)
+		t.TextColor3 = Color3.fromRGB(235, 228, 205)
 		t.Parent = f
 		task.spawn(function()
 			while f.Parent do
-				TweenService:Create(t, TweenInfo.new(0.9, Enum.EasingStyle.Sine), { TextTransparency = 0.5 }):Play()
+				local low = reduceFlashing() and 0 or 0.3
+				TweenService:Create(t, TweenInfo.new(0.9, Enum.EasingStyle.Sine), { TextTransparency = low }):Play()
 				task.wait(0.9)
 				TweenService:Create(t, TweenInfo.new(0.9, Enum.EasingStyle.Sine), { TextTransparency = 0 }):Play()
 				task.wait(0.9)
 			end
 		end)
 	end
-end
-
-local credits = Instance.new("Frame")
-credits.Name = "Credits"
-credits.AnchorPoint = Vector2.new(1, 1)
-credits.Position = UDim2.new(1, -24, 1, -40)
-credits.Size = UDim2.fromOffset(260, 300)
-credits.BackgroundTransparency = 1
-credits.ClipsDescendants = true
-credits.Visible = false
-credits.Parent = gui
-local creditsText = label(credits, { Size = UDim2.new(1, 0, 0, 1400), TextSize = 16, Font = Enum.Font.Gotham,
-	TextXAlignment = Enum.TextXAlignment.Center, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true,
-	TextColor3 = Color3.fromRGB(230, 225, 245), TextTransparency = 0.15, Text = "" })
-
-local function rollCredits(seconds)
-	local cast = {}
-	for _, p in ipairs(Players:GetPlayers()) do
-		if p:GetAttribute("InRound") == true then table.insert(cast, p.DisplayName) end
-	end
-	creditsText.Text = table.concat({
-		"THE LAST SHOW", "", "", "THE USHER", "as himself", "", "THE AUDIENCE", table.concat(cast, "\n"), "",
-		"PROJECTION", "three reels, one breaker", "", "FILMED ON LOCATION", "somewhere in the Backrooms", "", "",
-		"No ushers were harmed.", "Some audience members were.", "", "", "Please exit through the screen.",
-	}, "\n")
-	credits.Visible = true
-	creditsText.Position = UDim2.fromOffset(0, 300)
-	TweenService:Create(creditsText, TweenInfo.new(seconds or 75, Enum.EasingStyle.Linear), { Position = UDim2.fromOffset(0, -900) }):Play()
-	playSound(AUDIO.Credits, nil, 0.6)
 end
 
 -- ---------------------------------------------------------------- keypad
@@ -547,10 +521,19 @@ closeButton.TextSize = 18
 closeButton.TextColor3 = WHITE
 closeButton.BackgroundColor3 = Color3.fromRGB(60, 20, 40)
 closeButton.ZIndex = 11
+-- rounds lock the camera in first person: a visible Modal button frees the mouse so the keys can be clicked
+closeButton.Modal = true
 closeButton.Parent = keypad
 closeButton.Activated:Connect(closeKeypad)
-UserInputService.InputBegan:Connect(function(input, processed)
-	if not keypad.Visible or processed then return end
+-- typed digits: the Backpack CoreGui marks the top-row digits as processed even with no tools, so only a focused text
+-- box (chat) stops them here
+local function typingInChat()
+	if UserInputService:GetFocusedTextBox() then return true end
+	local bar = game:GetService("TextChatService"):FindFirstChildOfClass("ChatInputBarConfiguration")
+	return bar ~= nil and bar.IsFocused
+end
+UserInputService.InputBegan:Connect(function(input)
+	if not keypad.Visible or typingInChat() then return end
 	local code = input.KeyCode
 	local digit = code.Value >= Enum.KeyCode.Zero.Value and code.Value <= Enum.KeyCode.Nine.Value and tostring(code.Value - Enum.KeyCode.Zero.Value)
 		or (code.Value >= Enum.KeyCode.KeypadZero.Value and code.Value <= Enum.KeyCode.KeypadNine.Value and tostring(code.Value - Enum.KeyCode.KeypadZero.Value))
@@ -559,6 +542,63 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	elseif code == Enum.KeyCode.Backspace then press("C")
 	elseif code == Enum.KeyCode.Escape then closeKeypad() end
 end)
+
+-- ---------------------------------------------------------------- the note card (FINDABILITY_20261003)
+
+local noteCard = Instance.new("Frame")
+noteCard.Name = "NoteCard"
+noteCard.AnchorPoint = Vector2.new(0.5, 0.5)
+noteCard.Position = UDim2.fromScale(0.5, 0.48)
+noteCard.Size = UDim2.fromOffset(380, 270)
+noteCard.BackgroundColor3 = Color3.fromRGB(226, 220, 196)
+noteCard.Rotation = -2
+noteCard.Visible = false
+noteCard.ZIndex = 10
+noteCard.Parent = gui
+Instance.new("UICorner", noteCard).CornerRadius = UDim.new(0, 4)
+local noteText = label(noteCard, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52),
+	Size = UDim2.new(1, -56, 1, -56), Font = Enum.Font.PatrickHand, TextScaled = true, TextWrapped = true,
+	TextColor3 = Color3.fromRGB(40, 30, 40), TextStrokeTransparency = 1, TextXAlignment = Enum.TextXAlignment.Center,
+	ZIndex = 11, Text = "" })
+label(noteCard, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -8), Size = UDim2.new(1, -20, 0, 16),
+	Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = Color3.fromRGB(110, 96, 90), TextStrokeTransparency = 1,
+	TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 11, Text = "click to close" })
+local noteOrigin = nil
+-- RoundUI hides the pointer in rounds: a Level 4 card shows it while open and hands it back when the last one closes
+local cursorForced = false
+local function syncCursor()
+	if not UserInputService.MouseEnabled then return end
+	if noteCard.Visible or keypad.Visible then
+		UserInputService.MouseIconEnabled = true
+		cursorForced = true
+	elseif cursorForced then
+		cursorForced = false
+		UserInputService.MouseIconEnabled = player:GetAttribute("InRound") ~= true
+	end
+end
+local function closeNote() noteCard.Visible = false; noteOrigin = nil; syncCursor() end
+-- the whole card closes it on a click or tap
+local noteHit = Instance.new("TextButton")
+noteHit.Size = UDim2.fromScale(1, 1)
+noteHit.BackgroundTransparency = 1
+noteHit.Text = ""
+noteHit.AutoButtonColor = false
+noteHit.ZIndex = 10
+noteHit.Parent = noteCard
+noteHit.Activated:Connect(closeNote)
+local noteClose = Instance.new("TextButton")
+noteClose.AnchorPoint = Vector2.new(1, 0)
+noteClose.Position = UDim2.new(1, -10, 0, 10)
+noteClose.Size = UDim2.fromOffset(30, 30)
+noteClose.Text = "X"
+noteClose.Font = Enum.Font.GothamBold
+noteClose.TextSize = 18
+noteClose.TextColor3 = WHITE
+noteClose.BackgroundColor3 = Color3.fromRGB(60, 20, 40)
+noteClose.ZIndex = 11
+noteClose.Modal = true
+noteClose.Parent = noteCard
+noteClose.Activated:Connect(closeNote)
 
 -- ---------------------------------------------------------------- the Usher (local rig)
 
@@ -789,8 +829,18 @@ local function onClientEvent(payload)
 	elseif kind == "UsherCapture" then
 		local victim = payload.Player ~= player.UserId and nameOf(payload.Player)
 		if victim then say(victim .. " was shushed.", Color3.fromRGB(255, 110, 130)) end
+	elseif kind == "Note" then
+		closeKeypad()
+		noteText.Text = tostring(payload.Text or "")
+		noteCard.Visible = true
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		noteOrigin = root and root.Position
+		syncCursor()
 	elseif kind == "Keypad" then
+		closeNote()
 		keypad.Visible = true
+		syncCursor()
 		entered = ""
 		renderEntry()
 		local character = player.Character
@@ -807,7 +857,7 @@ local function onClientEvent(payload)
 		end
 	elseif kind == "Finale" then
 		showTitle("THE LAST SHOW", "Run. The screen in Cinema 2 is the way out.", 5)
-		rollCredits(payload.Credits)
+		playSound(AUDIO.Credits, nil, 0.6)   -- the credits roll itself was removed (owner 2026-10-04); its music stays
 		local model = cinema()
 		if model then
 			for _, d in ipairs(model:GetDescendants()) do
@@ -818,6 +868,7 @@ local function onClientEvent(payload)
 end
 
 local function briefing()
+	do return end -- BRIEFINGS_OFF_20261004 (owner): no opening briefing in any level
 	task.spawn(function()
 		task.wait(1.2)
 		local lines = {
@@ -886,6 +937,12 @@ local function startRound()
 				local root = character and character:FindFirstChild("HumanoidRootPart")
 				if not root or (root.Position - keypadOrigin).Magnitude > 10 then closeKeypad() end
 			end
+			if noteCard.Visible and noteOrigin then
+				local character = player.Character
+				local root = character and character:FindFirstChild("HumanoidRootPart")
+				if not root or (root.Position - noteOrigin).Magnitude > 12 then closeNote() end
+			end
+			syncCursor()   -- also hands the pointer back after the keypad closes itself
 		end
 	end))
 	table.insert(roundConnections, task.spawn(function()
@@ -909,7 +966,7 @@ local function stopRound()
 	table.clear(modelConnections)
 	destroyUsher()
 	closeKeypad()
-	credits.Visible = false
+	closeNote()
 	table.clear(filmRunning)
 	for _, g in ipairs(screenGuis) do g:Destroy() end
 	table.clear(screenGuis)
