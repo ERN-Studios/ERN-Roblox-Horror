@@ -1004,3 +1004,31 @@ weight and button size on phones, no noise meter.
   viewport on the 1440x900 display with the window at {0,25,1440,821}; Asset Manager: tab (46,761), Import
   (1380,601), a file in the dialog (477,236), Start Import (1364,319), Confirm (819,597), close (1401,289) and
   (1401,571).
+
+### Added 2026-10-05 (morning) - Level 5 fall screams cleaned and turned down (v2704)
+
+- **Owner: the screams were "a little too loud and have that ai static".** The six ElevenLabs screams and the
+  level's fall rush were re-uploaded cleaned; the ids sit under the ORIGINAL keys in `sound_ids.json`
+  (`l5_fall_scream_1..6`, `l5_player_fall`), so no script names changed. Sources and `*_clean.mp3` are side by
+  side in `assets/level5-void-20261005` (the rush in `...20261004`).
+- **What the static was, measured**: a hiss band from about 5 kHz to the MP3 edge where the voice has nothing, and
+  noise BETWEEN the voice's harmonics that rises and falls with it (a tenth to almost half of the 2-5 kHz energy
+  in screams 3, 4 and 6). A fixed noise print (`afftdn`) cannot take the second kind.
+  `assets/level5-void-20261005/audio-engineering/clean_screams.py` does: mono, a per-frame gate that turns
+  whatever does not stand clear of the local floor down 12 dB, a steep low-pass at 4.8 kHz, -18 LUFS. Above
+  6 kHz the screams went from about -48 to -88 dBFS. It needs numpy; the only one on this Mac is Blender's
+  (`/Applications/Blender.app/Contents/Resources/5.2/python/bin/python3.13`).
+- **Run generated audio through a cleaner BEFORE uploading it.** This is the second time the owner heard static in
+  raw ElevenLabs output (the Level 5 beds on 2026-10-04 were the first).
+- **Level**: a falling body peaks at 1.1 for a scream (was 1.6; `thing.loud`), and the files are 2 dB lower, so
+  about 5.5 dB quieter in all. The rush is a far quieter recording (-26 LUFS) and keeps 1.6 and its loudness.
+- **A mono file reads 3 LU lower than the same sound in stereo**: measure with `ebur128=dualmono=true`, or a
+  "-18 LUFS" mono file comes out 3 dB louder than meant.
+- **ffmpeg cannot replace a file in place from a session's shell here** ("Operation not permitted" on the second
+  write); delete the output first. New files and deletes are fine.
+- **Nobody but the owner has heard the result**: a session cannot listen. It was checked by band measurements,
+  before/after spectrograms, a look at what the gate removed (noise only, no harmonic lines) and a play test in
+  which a body fell with the new `l5_fall_scream_1` at peak volume 1.10.
+- **A person-fall can be predicted for a test**: `Random.new(slot * 977 + cell * 31):NextNumber() < 0.03` for
+  `slot = floor(GetServerTimeNow() / 2)` and the rose room's cells 0..13; stand on a route point of that cell
+  before the slot starts and read the Sound under `workspace.Level5Falling`.

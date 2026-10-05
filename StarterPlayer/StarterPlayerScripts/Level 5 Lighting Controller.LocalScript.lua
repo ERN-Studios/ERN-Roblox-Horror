@@ -251,7 +251,7 @@ task.spawn(function()
 		local holder = Instance.new("Folder")
 		holder.Name = "Level5Falling"
 		local route, routeOf = nil, nil
-		local things = {}                               -- {parts = {{part, offset, spin}}, at, speed, top, turn, sound, born}
+		local things = {}                               -- {parts = {{part, offset, spin}}, at, speed, top, turn, sound, loud, born}
 		local YELLOW, DARK = Color3.fromRGB(232, 190, 40), Color3.fromRGB(16, 16, 18)
 		local function block(size, colour, shape)
 			local part = Instance.new("Part")
@@ -317,6 +317,10 @@ task.spawn(function()
 					voice.RollOffMode, voice.RollOffMinDistance, voice.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 26, 420
 					voice:Play()
 					thing.sound = voice
+					-- the screams were "a little too loud" (owner, 2026-10-05): 1.1 at the peak, was 1.6, and the
+					-- recordings themselves are 2 dB lower. The level's own rush is a far quieter recording and
+					-- keeps the level it had
+					thing.loud = voice.Name == "l5_player_fall" and 1.6 or 1.1
 				end
 			else
 				local kind = rng:NextInteger(1, 4)
@@ -356,7 +360,7 @@ task.spawn(function()
 					-- in over the first half second, held, and out again as the body goes down: with the distance
 					-- roll-off on top, it is loud as it passes and gone before the dark takes it
 					thing.sound.PlaybackSpeed = math.clamp(1.04 - age * 0.035, 0.82, 1.04)
-					thing.sound.Volume = 1.6 * math.clamp(age / 0.5, 0, 1) * math.clamp(1 - (age - 3.0) / 2.6, 0, 1)
+					thing.sound.Volume = thing.loud * math.clamp(age / 0.5, 0, 1) * math.clamp(1 - (age - 3.0) / 2.6, 0, 1)
 				end
 				if thing.at.Y < thing.floor - 330 or age > 12 or not inLevel() then
 					for _, piece in ipairs(thing.parts) do piece.part:Destroy() end

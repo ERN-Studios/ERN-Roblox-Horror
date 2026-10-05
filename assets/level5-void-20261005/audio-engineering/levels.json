@@ -1,0 +1,51 @@
+{
+ "l5_fall_scream_1": {
+  "before_lufs": -16.3,
+  "before_peak": -12.3,
+  "after_lufs": -18.1,
+  "after_peak": -13.6,
+  "seconds": 5.85
+ },
+ "l5_fall_scream_2": {
+  "before_lufs": -16.4,
+  "before_peak": -12.8,
+  "after_lufs": -18.2,
+  "after_peak": -14.0,
+  "seconds": 5.85
+ },
+ "l5_fall_scream_3": {
+  "before_lufs": -16.3,
+  "before_peak": -12.1,
+  "after_lufs": -18.3,
+  "after_peak": -13.2,
+  "seconds": 5.85
+ },
+ "l5_fall_scream_4": {
+  "before_lufs": -15.8,
+  "before_peak": -9.8,
+  "after_lufs": -18.3,
+  "after_peak": -10.4,
+  "seconds": 5.8
+ },
+ "l5_fall_scream_5": {
+  "before_lufs": -15.4,
+  "before_peak": -5.2,
+  "after_lufs": -18.2,
+  "after_peak": -8.3,
+  "seconds": 5.8
+ },
+ "l5_fall_scream_6": {
+  "before_lufs": -15.5,
+  "before_peak": -9.3,
+  "after_lufs": -18.3,
+  "after_peak": -11.2,
+  "seconds": 5.8
+ },
+ "l5_player_fall": {
+  "before_lufs": -26.0,
+  "before_peak": -12.2,
+  "after_lufs": -26.3,
+  "after_peak": -12.4,
+  "seconds": 3.0
+ }
+}
