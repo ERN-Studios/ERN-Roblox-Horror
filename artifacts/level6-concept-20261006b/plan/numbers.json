@@ -1,0 +1,22 @@
+{
+ "hall_across": 548,
+ "roof": 150,
+ "frame_share": 95,
+ "frame_share_today": 10,
+ "cells_today": 504,
+ "cells": 18382,
+ "lane_length": 228,
+ "top_floor": 12,
+ "top_height": 120,
+ "floors_that_see_the_post": [
+  1,
+  2,
+  3,
+  4,
+  7,
+  8,
+  11,
+  12
+ ],
+ "countdown": 60
+}

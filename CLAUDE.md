@@ -1165,3 +1165,28 @@ weight and button size on phones, no noise meter.
   as the geometry reference. Codex copies its generations into `raw/` only at the end of a job; while it runs they
   sit in `~/.codex/generated_images/<session>/`.
 
+### Added 2026-10-06 (later) - Level 6 concept v5: tall walls, and the way out is under the post (pictures only)
+
+- **Owner on v4**: "I like that but don't make the structure look like a circle staircase that much." They picked two
+  of the generated pictures as the look for the main area and asked for a blend: the gallery looking down on the court
+  (v4 picture 09, `refs/owner_ref.png`) and the twelve floors standing straight up round it (v4 picture 16,
+  `refs/tall_walls.png`). So v4's six stepped rings ("the bowl") are out.
+- **The escape is decided** (owner): the third touch makes the post start a countdown of about a minute; then the post
+  goes down into the ground "to a green exit light where the players have to go down to and escape". The other three
+  ideas from v4 (big slide, back through the gate, fire door) are dropped.
+- **The draft** (constants at the top of `tools/level6_playground/concept_v5/draw_arena.py`): same round hall (548
+  across, roof 150, court radius 44, tunnel + PLAY ZONE gate + one straight lane of 228 studs). `TIERS`: four floors
+  straight up from the court's edge, a 16-stud ledge, four more, a 16-stud ledge, then twelve floors solid to the wall.
+  `numbers()` works out which gallery floors see the foot of the post over the ledge in front: 1-4, 7-8, 11-12.
+  Two ring corridors (r 118 and 196), staggered spokes and stair cores are the Counter's ways on every floor.
+  Under the post: a shaft 10 across and 30 deep with a slide winding round the sinking post, an exit room 14 high
+  (too low for the Counter), a green EXIT door. `COUNTDOWN` 60; the floor ring is a 60-segment clock so the galleries
+  can read it. About 18 400 cells (v4's bowl: 13 200; today: 504).
+- **Where it is**: `~/Desktop/Level 6 nyt koncept` rebuilt by `concept_v5/assemble.py` (16 pictures, sheet, README; it
+  reuses four v4 pictures the new shape does not change); sources in `artifacts/level6-concept-20261006b/`.
+- **Still nothing built.** My own choices in the draft, not the owner's: the clock on the floor, the hole staying open
+  until everyone standing is out or caught, the post going down the middle of the slide. Still open: the Counter's
+  sight rule, and the size (one slice first, measured on a phone; narrow the hall rather than lower it).
+- **zsh aborts a whole `&&` chain when a glob matches nothing** (`rm -f /tmp/x_*.txt` with no such file: "no matches
+  found"), so the jobs after it never started. Name the files, or `setopt nonomatch`.
+
