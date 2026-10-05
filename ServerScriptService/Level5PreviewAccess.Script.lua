@@ -902,10 +902,16 @@ do
 							tally.inside += 1
 						end
 					end
-					for _, tally in pairs(parties) do
+					for group, tally in pairs(parties) do
 						if tally.arrived > 0 and tally.inside == tally.all then
 							task.spawn(runCrusher, origin, data)
 							break
+						elseif tally.arrived > 0 and os.clock() >= (group.waitTold or 0) then
+							-- somebody stands at the shut gate and the rest are still climbing: say what it is waiting for
+							group.waitTold = os.clock() + 7
+							for player, record in pairs(members) do
+								if record.group == group then event:FireClient(player, "crusher", "waiting", tally.inside, tally.all) end
+							end
 						end
 					end
 				elseif finale.state == "closing" or finale.state == "shut" then

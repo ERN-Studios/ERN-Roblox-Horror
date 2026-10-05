@@ -1056,3 +1056,61 @@ weight and button size on phones, no noise meter.
   "public", "normal")` on the Level 3 zone starts the round in Studio. Pick up a CD by standing 3.5 studs beside
   it, a Scriptable camera on it, then `prompt:InputHoldBegin()` / `InputHoldEnd()`; the disc player the same way.
   Do NOT anchor the root for this: the server never sees the move and refuses the prompt.
+
+### Added 2026-10-05 (afternoon) - Level 5: red spiral, tower, the closing corridor, choices at the finish (v2712)
+
+- **Doors stay down** (owner): a plate's gate is `locked` once a party has opened it and comes back up only when
+  `members` is empty, so the next party finds every door shut. Two parties in the level at once share open doors.
+- **Dev fall** (owner: "dev button that triggers a fall and scream"): `Level5VoidHud.DevFall` (top right) and the
+  O key, for `DevAccess.IsLevel6PreviewAllowed` (the owner's account, ZenMeister02, is NOT on `IsAllowed`, so it
+  has no DevCheats and no DEV tab). The client only asks (`Event "devfall"`); the server tells every member, so all
+  see the same body. Every second serial is aimed at a pillar. The terminal also has a `level5Fall` row
+  (`LiveAttribute`: a live level cannot be recognised by `SelectedLevel`/`RoundActive`).
+- **Pillar hits** (`PILLAR_HIT_20261005`, client): about 45% of bodies, where a loose `Monolith` stands near, land
+  on its top: the scream stops, `land()` bounces it over the side that faces away from the path, and it falls on
+  limp (each limb trails the velocity). All kinematic and seeded: nothing collides. `pathGap` measures to the
+  route's SEGMENTS; the old test measured to its points and missed the middle of a long ledge.
+- **`spiral()` in build_level5.py**: a stair fixed to a round column. It asserts every gap edge to edge against
+  the room's cap and 15 studs between a tread and the turn above. A wide tread on a tight column fans out, so
+  each box is long enough to meet its neighbour at the OUTER edge. Anything solid to the bottom (a `plat`, a
+  `plaza`) would cut through the lower turns: the bridge off a spiral is a plain part.
+- **CRIMSON** is the spiral: 4.5 turns round the great pillar, +131 studs, 25 jumps (93%). **IVORY** is the tower:
+  7.5 turns, treads 10 wide at the foot and 2.2 at the top, steps of 1.25, +151 studs, 19 jumps; the column's top
+  is the platform, a pier leads to a 14 x 16 doorway. Walked at walking speed: crimson 25/25, ivory 19/19. The
+  first seven rooms are byte-identical and TEAL only moved (-28.8 x, +131 y).
+- **THE CORRIDOR** (`FINALE_20261005`): 226 studs, 26 wide, beyond the tower's east wall. The map carries
+  `Finale` (`CrusherWall` x2 with `Side`, `CrusherBlock` hidden in the wall over the doorway, `CrusherGate` 28 studs
+  in), `FinaleData` (JSON, relative to `Origin`), `Level5Reentry`, lamps named `CrusherLight`. The server's
+  `runCrusher` starts when every walking member of a party is inside and one of them is in front of the gate
+  (so nobody walking back out of the room can start it): block down, gate down, walls in for `CLOSE_SECONDS`
+  15.5 to `SHUT_GAP` 5, then shut; a body between them under `KILL_GAP` 3, or inside a wall, dies. It reopens 4 s
+  later. Measured: walking in without stopping reaches the room at 15.3 s with the walls 8.5 apart; standing
+  still dies at 18.6 s. The small room at the end has the exit door and two glass windows back into the corridor.
+- **Deaths between the walls stay in the level** (`finaleDeath`): the party gets "death" (cause `L5Crusher` in
+  DeathAdvice), "partydown" when nobody is walking and nobody finished, then "lose"; the dead of a party that
+  did finish get "win". `ZyntraReentryUsed` is TRUE from `Void.Join` (a fall must not offer a re-entry) and
+  false only after such a death. `ServerStorage.Level5Reentry` stands the player up in the small room;
+  GameManager reaches it through `Level6Reentry`, which hands on every player carrying `Level5VoidRound`.
+- **The finish has the two choices**: "win" now carries a deadline, next level 6 and a serial (from 500001, far
+  from GameManager's); RoundUI answers "continuenow" / "returntolobby" on the same remote; no choice continues.
+  `Void.Continue` calls `ServerStorage.Level6EnterFromLevel` twice: "prepare" streams the place, "enter" loads
+  the round body there and THEN joins the round.
+- **Two traps on the way from one live level into the next.** A living round body torn down by
+  `LoadCharacterAsync` reports `Humanoid.Died`: both levels' death hooks counted it (hence body first, join
+  second, and `record.continuing` in Level 5's hook). And the new body in Level 6 is 500 studs "under" Level 5,
+  so Level 5's fall rule killed it while the player was still on its list: the loop skips `record.continuing`.
+- **Loading cover on continue**: the shared marker never drops, so the cover rises for Level 6 on
+  `Level5VoidRound` going false while the marker is still true. **Spectating** lists only players of the same
+  live level (both carry the marker).
+- **Five new sounds** (ElevenLabs via Codex, `assets/level5-void-20261005b`, cleaned by `clean_finale.py`):
+  `l5_body_hit_1`, `l5_crusher_slam`, `l5_crusher_groan`, `l5_crusher_grind`, `l5_crusher_shut`. The grind is a
+  loop: levelled (`steady`, it came in surges with two seconds of near silence), cross-faded and uploaded as OGG.
+  The second body hit was not usable (its scrape was louder than its thud and 1.5 s late).
+- **Tool facts.** Two tool calls sent together run one after the other: to capture the viewport WHILE a luau call
+  holds a Scriptable camera, start the capture as a background shell job first. The Mac was on the 2560x1440
+  display: Studio's dialogs open centred on the DISPLAY, not on its window (file dialog at {830,241}, File Import
+  at {470,749} with Confirm at (820,1137)); capture only the window's rectangle. A client-side `PivotTo` of a
+  standing body once took 6 s to reach the server; a server-side one is seen at once.
+- **Not tested**: more than one player (the party gathering at the gate and its "WAITING FOR THE OTHERS" line, a
+  dead player watching the rest, "win" for the dead), the store's own paid re-entry button (the
+  `ZyntraReentry:Invoke(player)` hook was used), and the dev button on a touch screen.

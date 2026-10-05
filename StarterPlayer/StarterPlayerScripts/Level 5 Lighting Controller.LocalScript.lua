@@ -237,13 +237,16 @@ task.spawn(function()
 				if lamp.Parent then lamp.Brightness = own[2] * (1.0 + 0.8 * swell) end
 			end
 		end)
-		crusher = function(what, seconds)
+		crusher = function(what, seconds, all)
 			local there, model = near()
 			if what == "reset" then
 				closingUntil = 0
 				redden(false, model)
 			elseif not there then
 				return
+			elseif what == "waiting" then
+				-- the gate ahead is shut until the whole party stands in here (`seconds` is how many do)
+				say(string.format("WAITING FOR THE OTHERS   ·   %d / %d", tonumber(seconds) or 0, tonumber(all) or 0), 4)
 			elseif what == "slam" then
 				jolt(0.9, 0.7)
 				say("THE WAY BACK IS SHUT", 2.2)
@@ -278,7 +281,7 @@ task.spawn(function()
 		elseif what == "devfall" then
 			if devFall then devFall(a, b) end
 		elseif what == "crusher" then
-			crusher(a, b)
+			crusher(a, b, c)
 		elseif what == "crushed" then
 			if fall then fall:Stop() end
 			flash(Color3.new(0, 0, 0), 1.8)             -- black for a moment; the party's death screen is RoundUI's
