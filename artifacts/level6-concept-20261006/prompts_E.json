@@ -1,0 +1,19 @@
+{
+  "job": "E",
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "name": "16_the_other_way_the_well",
+      "prompt": "Use case: stylized-concept. Create ONE photoreal horror environment concept image, landscape 16:9, no text.\nReference 1 liked_court.png: preserve this exact court's look, materials, floor, camera position and direction, but tilt the wide lens steeply upward to show DOUBLE its height: TWELVE distinct storeys, all visible from ground to roof. Reference 2 doll_counting.png: exact identity, clothing and both-hands-over-eyes counting pose for the Counter. Reference 3 ref_section.png: use ONLY the LOWER diagram, THE WELL, as geometry guidance; do not reproduce any diagram or lettering and do not use the stepped bowl in the upper diagram.\nThe whole level is one gigantic abandoned soft-play climbing frame filling a round warehouse 155 metres across, steel roof 42 metres overhead. The central round open court is 22 metres across, worn blue-and-green checker foam puzzle mats, a painted yellow ring, short red padded post at exact centre under the single brightest pool of cold-white light. The Counter stands beside the post: 2.3-metre-tall porcelain ball-jointed doll, cracked glossy pale porcelain, cone party hat, muted striped shirt and denim dungarees, BOTH hands fully covering its eyes, matching reference 2. It remains small in this immense architecture.\nCRITICAL GEOMETRY: cylindrical WELL, not bowl. Twelve storeys of netted galleries rise STRAIGHT UP at the court edge on EVERY side, a sheer uninterrupted wall of soft-play frame surrounding the viewer 360 degrees. Twelve stacked occupiable bays, each about 2.8 metres high, vertically aligned with NO setbacks, NO terraced steps, NO amphitheatre. Show all twelve rows clearly from ground to top. Like standing at the bottom of a towering silo made from colourful padded soft-play structure. The round opening far above is enclosed by the exposed steel-deck warehouse roof, trusses and ducts, not sky. One net bridge spans the well high overhead. One glossy solid ORANGE tube slide descends the entire twelve-storey inner wall, from topmost gallery to court, continuously visible, never striped.\nPhotoreal concept art matching reference 1: ultra-wide lens, court-edge low camera looking steeply up while retaining central post, yellow floor ring and Counter in the lower image. Dim, dusty, abandoned, quiet, sparse cold-white fluorescent strips far overhead, several dead, pools of light, long shadows, light haze. Slightly brighter and more saturated than real dereliction so colours read. Steel posts wrapped in worn yellow, red, blue and green vinyl padding; black knotted safety netting; coloured vinyl decks; crawl tubes in frame; square red panels with round clear bubble windows; a few loose plastic balls on court floor. Frame everywhere outside the court, no bare hall floor around it.\nNo people, no living children, no animals, only the specified doll entity. No reception, snack bar, party rooms, inflatables, arcade, ball pit, neon, lettering, watermarks, HUD or UI. Keep full court focal elements and full height in the 16:9 composition.",
+      "references": [
+        "refs/liked_court.png",
+        "refs/doll_counting.png",
+        "refs/ref_section.png"
+      ],
+      "raw": "raw/16_the_other_way_the_well_raw.png",
+      "final": "final/16_the_other_way_the_well.png",
+      "weaknesses": "The exact twelve-storey count is difficult to distinguish in the upper shadows; the orange slide's top connection is partly cropped.",
+      "export": "1920 x 1080, aspect-preserving resize and centre crop, no stretching."
+    }
+  ]
+}

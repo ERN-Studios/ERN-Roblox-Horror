@@ -1135,3 +1135,33 @@ weight and button size on phones, no noise meter.
 - **Image generation**: four `codex exec` jobs in parallel (built-in image tool, at most five reference paths each)
   made 14 views in about twelve minutes. Giving it a to-scale drawing as a reference is what made the map picture
   follow the layout; it still understates height unless told how much of the picture the empty air must fill.
+
+### Added 2026-10-06 - Level 6 concept v4, "the Arena" (supersedes concept v3; still pictures only)
+
+- **Owner, after seeing v3**: "brilliant, but I want something else". The whole map is to be the structure: drop every
+  other area, the post and the Counter in the middle, "a fuck ton" of structure all the way round and high up "so you
+  can look down on the post if you're high up", players spawn in a small hole in the wall (a little tunnel) right in
+  front of the PLAY ZONE sign and walk in, where the intro starts. They also asked for ideas for the escape after
+  the third touch, and for the old concept folder to be deleted and a new one made.
+- **The draft** (constants at the top of `tools/level6_playground/concept_v4/draw_arena.py`): a ROUND hall 548 studs
+  across, roof 150; court radius 44 with the post; six rings of frame 38 studs deep, each two floors taller than the one
+  in front (2, 4, 6, 8, 10, 12 floors: "the bowl"), every ring's top a terrace; eight stair aisles wide enough for the
+  Counter; a spawn tunnel 12 x 8 through the wall (the Counter is 8.2 tall and does not fit), the PLAY ZONE gate, one
+  straight lane of 228 studs to the court. The frame is 95% of the floor, about 13 200 cells against today's 504.
+- **Why the rings step**: a terrace's front edge sees the post at floor level only if no ring is deeper than the
+  court's radius (the sight line from ring n clears ring n-1 by `R(court - depth) + eye * ...`, independent of the rise).
+  With twelve floors straight up from the court ("the well", drawn as the alternative, 43% more structure) only the
+  inner galleries see it.
+- **Four ways out drawn as ideas**: A the big slide from the top terrace out through the wall (recommended), B back
+  through the gate and tunnel, C a chute under the post, D one of four fire doors high in the wall.
+- **Where it is**: `~/Desktop/Level 6 nyt koncept` was deleted and rebuilt by `concept_v4/assemble.py` (16 pictures, a
+  sheet, a README); sources and prompts in `artifacts/level6-concept-20261006/`. The v3 pictures remain in
+  `artifacts/level6-concept-20261005/`.
+- **Still nothing built.** Open with the owner: bowl or well, which way out, and the Counter's sight rule on open
+  terraces ("seen = dead" would reach half the level from the post). A build would be one 45-degree slice of joined
+  meshes repeated eight times, measured on a phone before the rest.
+- **Image generation**: the model keeps drawing a vertical wall of galleries for "terraces stepping back"; the views
+  from above came out right at once, the views from the court needed a retry with an already-correct picture passed
+  as the geometry reference. Codex copies its generations into `raw/` only at the end of a job; while it runs they
+  sit in `~/.codex/generated_images/<session>/`.
+
