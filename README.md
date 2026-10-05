@@ -403,9 +403,13 @@ out (`Level 3 Systems`):
   the **five-slot disc player** in the Signal Hall (`Configuration.ModuleGoal`
   is 5). The state folder tracks collected, inserted, carried and dropped counts
   separately, so a CD dropped on a death is not silently lost from the total.
-- **The final hall**: a generated exit corridor with a halfway marker that
-  triggers the Mall Manager's **finale chase**, and a validated Manager spawn
-  marker of its own.
+- **The final hall**: a 560-stud exit corridor from the Signal Hall's hidden
+  wall to the Exit room. Once every living survivor is past its halfway marker
+  the Mall Manager's **finale chase** starts: he appears on one fixed marker at
+  the hall's ENTRANCE (`MallManager.FinalHallSpawnProgress`, 2% in), behind the
+  runners, and follows them out at `FinaleApproachSpeed`. The marker must stay
+  behind the halfway line; a spawn beyond it stands between the players and the
+  exit.
 - **`Level3Seed`** pins the layout for reproduction, on the same contract as
   Level 2: a whole number from **1 to 2,147,483,646** pins, while 0, negatives,
   NaN, out-of-range values and non-numbers all mean "pick a random seed".

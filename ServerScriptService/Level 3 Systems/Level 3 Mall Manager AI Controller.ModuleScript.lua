@@ -175,8 +175,8 @@ local function currentSpeed(session: any): number
 	local stateName = session.State
 	local activeProfile = profile(session)
 	if session.FinalHallChase and stateName == "CHASE" then
-		-- The finale starts ahead of the players and walks toward them.
-		-- Keep a fixed speed; the old catch-up calculation assumed a spawn behind them.
+		-- The finale starts at the hall's entrance, behind the runners, and keeps one
+		-- fixed speed: it never adapts to the runner, so stopping still gets them caught.
 		return Tuning.FinaleApproachSpeed
 	end
 	if stateName == "PATROL" or stateName == "PATROL_LISTEN" or stateName == "AWAKENING" then
@@ -3425,8 +3425,11 @@ local function chooseFinalHallSpawn(manifest: any, generation: number): any?
 			end
 		end
 	end
-	-- Exactly the authored far endpoint; never move the reveal toward a player.
-	local position = Vector3.new(hall.EndPoint.X, hall.FloorY, hall.EndPoint.Z)
+	-- Exactly the authored marker at the hall's entrance, behind every runner (they
+	-- are all past the halfway line); never move the reveal toward a player.
+	local marker = hall.StartPoint:Lerp(hall.EndPoint,
+		tonumber(hall.SpawnProgress) or Tuning.FinalHallSpawnProgress)
+	local position = Vector3.new(marker.X, hall.FloorY, marker.Z)
 	if not spawnVolumeFits(position, spawnOverlapParams(records, true)) then return nil end
 	-- Face a runner in the exit lane before the first authoritative chase tick.
 	table.sort(records, function(a, b)
@@ -3604,11 +3607,11 @@ local function cloneManager(manifest: any, spawnPosition: Vector3, facePosition:
 	local rootPosition = spawnPosition + Vector3.new(0, groundOffset, 0)
 	local target = Vector3.new(facePosition.X, rootPosition.Y, facePosition.Z)
 	if (target - rootPosition).Magnitude <= .001 then
-		-- A runner may stand exactly at the fixed endpoint. Keep the authored
-		-- position and face back down the hall instead of constructing a zero look vector.
+		-- A runner may stand exactly on the fixed marker. Keep the authored position
+		-- and face down the hall toward the exit instead of constructing a zero look vector.
 		local hall = manifest.FinalHall
 		local forward = type(hall) == "table" and hall.Forward
-		local direction = forward and Vector3.new(-forward.X, 0, -forward.Z) or Vector3.new(0, 0, -1)
+		local direction = forward and Vector3.new(forward.X, 0, forward.Z) or Vector3.new(0, 0, -1)
 		if direction.Magnitude <= .001 then direction = Vector3.new(0, 0, -1) end
 		target = rootPosition + direction.Unit
 	end

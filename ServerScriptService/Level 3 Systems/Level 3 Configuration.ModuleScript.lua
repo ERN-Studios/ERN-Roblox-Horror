@@ -157,7 +157,14 @@ local Configuration = {
 		SpawnMinimumDistance = 90,
 		SpawnPreferredDistance = 125,
 		SpawnMaximumDistance = 180,
-		FinalHallSpawnProgress = .97,
+		-- The finale Manager appears at the START of the exit hall, behind the runners
+		-- (every one of them is past the halfway line by then), and chases them out.
+		-- A spawn at the far end stood between the players and the exit and nobody
+		-- could finish the level (owner, 2026-10-05). .02 of the 560-stud hall is 11
+		-- studs in, so the whole body stands inside the tunnel.
+		FinalHallSpawnProgress = .02,
+		-- Faster than a sprint (26), so a runner who stops is caught; slow enough that
+		-- one who keeps walking (16) from the halfway line reaches the exit first.
 		FinaleApproachSpeed = 28,
 		SpawnGroupRadius = 75,
 		SpawnRoomMargin = 10,

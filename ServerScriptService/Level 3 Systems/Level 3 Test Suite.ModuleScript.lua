@@ -178,7 +178,7 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and Configuration.Layout.FinalHallHalfwayProgress == .50
 		and Configuration.Layout.ExitCorridorSpeakerCount == 7
 		and Configuration.Layout.ExitCorridorFixtureCount == 9
-		and Configuration.MallManager.FinalHallSpawnProgress == .40
+		and Configuration.MallManager.FinalHallSpawnProgress == .02
 		and Configuration.MusicSequence.CompletionDimSeconds == 5.5,
 		"Level 3 must preserve the authored 560-stud finale geometry and fade tuning")
 	assert(Configuration.CorridorWidth == 14 and Configuration.CorridorHeight == 10.5,
@@ -655,7 +655,10 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		and (finalHall.HalfwayMarker.Position
 			- finalHall.StartPoint:Lerp(finalHall.EndPoint, .50)).Magnitude <= .11
 		and (finalHall.SpawnMarker.Position
-			- finalHall.StartPoint:Lerp(finalHall.EndPoint, .40)).Magnitude <= .11
+			- finalHall.StartPoint:Lerp(finalHall.EndPoint,
+				Configuration.MallManager.FinalHallSpawnProgress)).Magnitude <= .11
+		-- behind the halfway line: anywhere beyond it is between the runners and the exit
+		and finalHall.SpawnProgress < finalHall.HalfwayProgress
 		and finalHall.HalfwayMarker.Transparency == 1
 		and not finalHall.HalfwayMarker.CanCollide and not finalHall.HalfwayMarker.CanTouch
 		and not finalHall.HalfwayMarker.CanQuery

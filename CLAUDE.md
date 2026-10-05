@@ -1032,3 +1032,27 @@ weight and button size on phones, no noise meter.
 - **A person-fall can be predicted for a test**: `Random.new(slot * 977 + cell * 31):NextNumber() < 0.03` for
   `slot = floor(GetServerTimeNow() / 2)` and the rose room's cells 0..13; stand on a route point of that cell
   before the slot starts and read the Sound under `workspace.Level5Falling`.
+
+### Added 2026-10-05 (midday) - Level 3 finale: the Manager starts at the hall's entrance (v2706)
+
+- **Owner: "he spawns in the end and make the level impossible to complete".** Since the 2026-10-02 rebuild the
+  finale Manager was placed on the exit hall's `EndPoint`: the Exit-room mouth, between the runners and the
+  freight door, coming at them at 28 in a 14-stud tunnel. The hall runs from the Signal Hall's false wall
+  (`StartPoint`) 560 studs to the Exit room (`EndPoint`); the escape sensor is another 53 studs on.
+- **Now**: one fixed marker at `Configuration.MallManager.FinalHallSpawnProgress` = .02, 11.2 studs inside the
+  entrance (clear of the false wall, which is still solid at 0 and 6 studs until the exit unlocks). The builder
+  reads the config and asserts the marker is behind `FinalHallHalfwayProgress`; `chooseFinalHallSpawn` lerps to
+  `hall.SpawnProgress`. The trigger (every living survivor past 50%) and the speed (`FinaleApproachSpeed` 28,
+  against walk 16 and sprint 26) are unchanged. This supersedes the 2026-09-14 note above (spawn at the level
+  entry); that design went with the rebuild.
+- **Measured in a Studio round** (five real pickups, insertion, then walking across the halfway line at 16 and
+  never sprinting): the Manager appeared 270 studs behind, the gap went 275 -> 56 over 20 s and the player
+  reached the sensor with about 33 studs in hand; LEVEL 3 CLEARED. Walking is enough, stopping is not. Not
+  tested: a runner who is caught, and more than one player.
+- **`Level 3 Test Suite.ValidateConfiguration()` passes again**: it had asserted `.40` against a config of `.97`
+  since the rebuild. The suite cannot be required in Edit (`PlayerProtection` insists on the server); call it
+  from a play session's Server datamodel.
+- **Driving a Level 3 round from `execute_luau`**: Client `Remotes.ConfigureQueue:FireServer(queueId, 1,
+  "public", "normal")` on the Level 3 zone starts the round in Studio. Pick up a CD by standing 3.5 studs beside
+  it, a Scriptable camera on it, then `prompt:InputHoldBegin()` / `InputHoldEnd()`; the disc player the same way.
+  Do NOT anchor the root for this: the server never sees the move and refuses the prompt.

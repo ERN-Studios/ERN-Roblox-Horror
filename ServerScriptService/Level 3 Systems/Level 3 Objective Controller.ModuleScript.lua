@@ -194,7 +194,7 @@ local function updateFinalHallChase(session: AnyTable)
 	session.Manifest.World:SetAttribute("Level3_FinalHallChaseActive", true)
 	workspace:SetAttribute("Level3FinalHallChaseTriggered", true)
 	-- This must precede HuntActive so the Manager's synchronous Start selects the
-	-- far-end finale spawn rather than a normal hidden random-room spawn.
+	-- finale spawn at the hall's entrance rather than a normal hidden random-room spawn.
 	workspace:SetAttribute("Level3FinalHallChaseActive", true)
 	workspace:SetAttribute("Level3MallManagerHuntActive", true)
 end
