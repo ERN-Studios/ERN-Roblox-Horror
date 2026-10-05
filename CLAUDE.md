@@ -974,3 +974,9 @@ weight and button size on phones, no noise meter.
   of the room it last reached. `Humanoid:MoveTo` stops about a stud short of its target, so the walker's arrival
   tolerance is 1.25 studs (0.75 produced timeouts that looked like stuck steps).
 - Server `SECTION` and the client's `NAMES` list the four new rooms; nothing else in the scripts changed.
+- **The DJ end is real tunnel now** (`TUNNEL_BEYOND_20261005`, owner: the picture "doesn't work"): the flat
+  `TunnelBeyond` image is gone. The end wall (`EndBackstop` at the DJ end) is hidden and the lobby's last 40-stud
+  section (PlainShell, ArchRib, CableTray, ConduitSection, Fluorescent, RoadSection, SidewalkSection) is cloned
+  five times beyond it (`Beyond*`, 90 parts, no collision, no shadows, lights removed); six black sheets
+  (`BeyondDark`, transparency 0.82 down to 0.14) take it to nothing and `BeyondEnd` caps it at 176 studs. A flat
+  image only lines up from one spot; from the stage it read as a poster. The fence and signs are unchanged.

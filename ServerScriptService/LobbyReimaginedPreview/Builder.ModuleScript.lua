@@ -478,7 +478,6 @@ function Module.Build()
 	--   flat image, so it only lines up exactly from about that distance; the fence keeps everyone at least 7 studs
 	--   off it. One part and one image for the tunnel, about 70 small parts for the fence.
 	do
-		local IMAGE = "rbxassetid://89904369379943"        -- lobby_tunnel_infinite.png; empty = the wall is just dark
 		local visuals = model:FindFirstChild("BlenderVisuals")
 		local dj = visuals and visuals:FindFirstChild("DJConsole")
 		local djAt = dj and (dj:IsA("Model") and dj:GetPivot().Position or dj.Position)
@@ -506,20 +505,55 @@ function Module.Build()
 				part.Parent = set
 				return part
 			end
-			-- the picture, a hair in front of the wall, its Front face toward the lobby
-			local faceAt = wall.Position + inward * (thick / 2 + 0.08)
-			local picture = piece("TunnelBeyond", Vector3.new(width, height, 0.1), CFrame.lookAt(faceAt, faceAt + inward),
-				Color3.fromRGB(8, 8, 9), Enum.Material.SmoothPlastic, false)
-			if IMAGE ~= "" then
-				local gui = Instance.new("SurfaceGui")
-				gui.Face, gui.SizingMode, gui.PixelsPerStud = Enum.NormalId.Front, Enum.SurfaceGuiSizingMode.PixelsPerStud, 17
-				gui.LightInfluence, gui.Brightness = 0, 0.82                 -- as photographed, a touch under the room
-				local image = Instance.new("ImageLabel")
-				image.Size, image.BackgroundTransparency, image.Image = UDim2.fromScale(1, 1), 1, IMAGE
-				image.ScaleType = Enum.ScaleType.Stretch
-				image.Parent = gui
-				gui.Parent = picture
+			-- TUNNEL_BEYOND_20261005. The flat picture did not work (owner: "the tunnel that goes on effect doesn't work
+			-- with that picture ... make the tunnel longer after the fence and use perspective ... and make it just
+			-- pitch black at some point"): seen from the stage, off its one right spot, a photo is a poster. So the
+			-- tunnel really continues: the end wall is hidden and the lobby's own last 40-stud section (shell, rib,
+			-- cable trays, conduit, lamps, road, pavement - the Blender meshes, cloned, so no new asset) is repeated
+			-- five times beyond it. Real geometry has real perspective from every angle. Sheets of black across it,
+			-- each a little denser, take it down to nothing, and a solid black cap closes the far end. About 75 parts,
+			-- none colliding or casting shadows; the meshes are instances of ones the lobby already loads.
+			wall.Transparency = 1
+			for _, d in ipairs(wall:GetDescendants()) do
+				if d:IsA("Decal") or d:IsA("Texture") then d.Transparency = 1 elseif d:IsA("SurfaceAppearance") then d:Destroy() end
 			end
+			local REPEAT = {PlainShell = true, ArchRib = true, CableTray = true, ConduitSection = true, Fluorescent = true,
+				RoadSection = true, SidewalkSection = true}
+			local SECTION, COPIES = 40, 5
+			local outward = -inward
+			local last = {}
+			for _, item in ipairs(visuals:GetChildren()) do
+				if REPEAT[item.Name] and item ~= wall then
+					local at = item:IsA("Model") and item:GetPivot().Position or (item:IsA("BasePart") and item.Position or nil)
+					local along = at and (at - wall.Position):Dot(inward)
+					if along and along > 0.6 and along <= SECTION + 0.6 then table.insert(last, item) end
+				end
+			end
+			for n = 1, COPIES do
+				for _, item in ipairs(last) do
+					local copy = item:Clone()
+					copy.Name = "Beyond" .. item.Name
+					if copy:IsA("Model") then copy:PivotTo(item:GetPivot() + outward * SECTION * n) else copy.CFrame = item.CFrame + outward * SECTION * n end
+					for _, d in ipairs(copy:IsA("BasePart") and {copy, table.unpack(copy:GetDescendants())} or copy:GetDescendants()) do
+						if d:IsA("BasePart") then
+							d.Anchored, d.CanCollide, d.CanTouch, d.CanQuery, d.CastShadow = true, false, false, false, false
+						elseif d:IsA("Light") then
+							d:Destroy()                                    -- lit by what spills in from the lobby, and less of it each section
+						end
+					end
+					copy:SetAttribute(OWNED, true)
+					copy.Parent = set
+				end
+			end
+			local centre = wall.Position
+			for i, row in ipairs({{18, 0.82}, {42, 0.72}, {66, 0.6}, {92, 0.46}, {120, 0.3}, {150, 0.14}}) do    -- the dark, in sheets
+				local at = centre + outward * row[1]
+				local sheet = piece("BeyondDark", Vector3.new(width, height, 0.2), CFrame.lookAt(at, at + inward),
+					Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, false)
+				sheet.Transparency = row[2]
+			end
+			local far = centre + outward * 176
+			piece("BeyondEnd", Vector3.new(width + 8, height + 8, 1), CFrame.lookAt(far, far + inward), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, false)
 			-- the fence: 7.6 studs in front of the wall (behind the stage), wall to wall, 15 studs high
 			local METAL, DARK = Color3.fromRGB(150, 156, 162), Color3.fromRGB(92, 97, 104)
 			local base = CFrame.lookAt(Vector3.new(wall.Position.X, floorY, wall.Position.Z) + inward * 7.6,
