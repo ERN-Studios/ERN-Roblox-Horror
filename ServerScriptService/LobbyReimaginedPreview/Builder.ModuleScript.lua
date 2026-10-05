@@ -545,14 +545,38 @@ function Module.Build()
 					copy.Parent = set
 				end
 			end
+			-- Seen in play (2026-10-05): with no lamps of their own the copies were black from the first stud - a
+			-- closed shell gets no light under Realistic lighting - so the tunnel just stopped at the fence. The
+			-- lobby's own lamps over its last section are repeated with the shell, each section weaker than the one
+			-- before, and the black sheets start further in.
+			local lamps = model:FindFirstChild("PreviewLighting")
+			local FADE = {0.8, 0.52, 0.3, 0.14, 0.05}
+			for _, holder in ipairs(lamps and lamps:GetChildren() or {}) do
+				local at = holder:IsA("BasePart") and holder.Position or (holder:IsA("Model") and holder:GetPivot().Position) or nil
+				local along = at and (at - wall.Position):Dot(inward)
+				if along and along > 0.6 and along <= SECTION + 0.6 and holder:FindFirstChildWhichIsA("Light", true) then
+					for n = 1, COPIES do
+						local copy = holder:Clone()
+						copy.Name = "BeyondLamp"
+						if copy:IsA("Model") then copy:PivotTo(holder:GetPivot() + outward * SECTION * n) else copy.CFrame = holder.CFrame + outward * SECTION * n end
+						for _, d in ipairs(copy:GetDescendants()) do
+							if d:IsA("Light") then d.Brightness *= FADE[n]; d.Shadows = false end
+							if d:IsA("BasePart") then d.CanCollide, d.CanTouch, d.CanQuery, d.CastShadow = false, false, false, false end
+						end
+						if copy:IsA("BasePart") then copy.CanCollide, copy.CanTouch, copy.CanQuery, copy.CastShadow = false, false, false, false end
+						copy:SetAttribute(OWNED, true)
+						copy.Parent = set
+					end
+				end
+			end
 			local centre = wall.Position
-			for i, row in ipairs({{18, 0.82}, {42, 0.72}, {66, 0.6}, {92, 0.46}, {120, 0.3}, {150, 0.14}}) do    -- the dark, in sheets
+			for i, row in ipairs({{70, 0.8}, {100, 0.66}, {128, 0.5}, {152, 0.32}, {170, 0.14}}) do    -- the dark, in sheets
 				local at = centre + outward * row[1]
 				local sheet = piece("BeyondDark", Vector3.new(width, height, 0.2), CFrame.lookAt(at, at + inward),
 					Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, false)
 				sheet.Transparency = row[2]
 			end
-			local far = centre + outward * 176
+			local far = centre + outward * 190
 			piece("BeyondEnd", Vector3.new(width + 8, height + 8, 1), CFrame.lookAt(far, far + inward), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, false)
 			-- the fence: 7.6 studs in front of the wall (behind the stage), wall to wall, 15 studs high
 			local METAL, DARK = Color3.fromRGB(150, 156, 162), Color3.fromRGB(92, 97, 104)
@@ -652,9 +676,9 @@ function Module.Build()
 			local M = Enum.Material
 			-- the field: the whole wall, then a soft glow off it
 			local field = piece("ForceField", Vector3.new(width, height, 0.2), CFrame.new(0, height / 2 - 1, -0.2), ZYNTRA, M.ForceField)
-			field.Transparency = 0.25
+			field.Transparency = 0.62                 -- seen in play: 0.25 was a mint wall, 0.82 hardly there
 			local glow = Instance.new("SurfaceLight")
-			glow.Face, glow.Color, glow.Brightness, glow.Range, glow.Angle, glow.Shadows = Enum.NormalId.Front, ZYNTRA, 0.55, 18, 120, false
+			glow.Face, glow.Color, glow.Brightness, glow.Range, glow.Angle, glow.Shadows = Enum.NormalId.Front, ZYNTRA, 0.32, 16, 120, false
 			glow.Parent = field
 			-- the frame
 			local W, H = 13, 22                                                   -- one leaf

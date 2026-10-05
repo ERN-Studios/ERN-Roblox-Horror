@@ -980,3 +980,27 @@ weight and button size on phones, no noise meter.
   five times beyond it (`Beyond*`, 90 parts, no collision, no shadows, lights removed); six black sheets
   (`BeyondDark`, transparency 0.82 down to 0.14) take it to nothing and `BeyondEnd` caps it at 176 studs. A flat
   image only lines up from one spot; from the stage it read as a poster. The fence and signs are unchanged.
+
+### Added 2026-10-05 (later) - Level 5 finish screen, open rooms, things falling; lobby ends seen in play
+
+- **Level 5 ends on RoundUI's LEVEL CLEARED screen**: at the finish the server fires `RoundStatus "win", seconds,
+  done, total` (the party is one queue launch: `group.total` / `group.done`; `began` on the member record) and
+  leaves 7 s later. No serial, so the screen has no buttons. RoundUI says 5 for a player with `Level5VoidRound`
+  (SelectedLevel is 1 on the lobby server).
+- **Only Rose, Blue and Amber have a ceiling** (`ROOFED` in build_level5.py). The other rooms' walls carry on
+  `RISE` 320 studs with no ceiling part and no top lamp row; the crimson pillar and the ivory column go up too.
+- **Things fall** (`FALLING_20261005` in the Level 5 Lighting Controller, local parts in `workspace.Level5Falling`):
+  a block, slab or ball about every 12 s and a hazmat body about once a minute, never within 12 studs of the
+  route, from under the ceiling in a roofed room and from 190 studs up elsewhere. What and where is drawn from
+  `Random.new(slot * 977 + cell * 31)` (2 s slots of server time, 60-stud cells), so players standing together
+  see the same fall. The body's sound is one of `l5_player_fall` and `l5_fall_scream_1..6` (ElevenLabs,
+  `assets/level5-void-20261005`, ids in sound_ids.json), on the body, InverseTapered 26..420, faded in over 0.5 s
+  and out from 3 s, pitch sliding down; `l5_debris_whoosh` on large debris.
+- **A closed mesh shell is black under Realistic lighting without lamps inside it.** The lobby's tunnel extension
+  showed nothing until the lobby's own lamps (`PreviewLighting`, last section) were cloned with it, weaker each
+  section (`FADE` 0.8 .. 0.05); the black sheets now start 70 studs in and the cap is at 190.
+- **Arrival gate force field**: Transparency 0.62, SurfaceLight 0.32 (0.25 was a solid mint wall, 0.82 invisible).
+- **With the owner's go-ahead the Mac's screen is usable**: `screencapture -x -R 2,176,1412,572` is the Studio
+  viewport on the 1440x900 display with the window at {0,25,1440,821}; Asset Manager: tab (46,761), Import
+  (1380,601), a file in the dialog (477,236), Start Import (1364,319), Confirm (819,597), close (1401,289) and
+  (1401,571).
