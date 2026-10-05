@@ -1114,3 +1114,24 @@ weight and button size on phones, no noise meter.
 - **Not tested**: more than one player (the party gathering at the gate and its "WAITING FOR THE OTHERS" line, a
   dead player watching the rest, "win" for the dead), the store's own paid re-entry button (the
   `ZyntraReentry:Invoke(player)` hook was used), and the dev button on a touch screen.
+
+### Added 2026-10-05 (night) - Level 6 concept v3: a draft in pictures, nothing built
+
+- **Owner's brief**: a new revision of the Level 6 map. Remove the arcade, make the hall bigger, make the Big Frame
+  (the soft-play structure; the owner calls it "the play area between the net fences") a far larger share of the map
+  "so you almost have to hide in there", and make the roof far higher with the frame correspondingly taller.
+- **The draft** (numbers live in `NEW` in `tools/level6_playground/concept_v3/draw_plan.py`): hall 600 x 400 ->
+  864 x 576 studs, roof 46 -> 120, frame 10% -> 47% of the floor (main block plus a wing on the arcade's wall), 6 floors
+  everywhere, 7 in Tube Town, 10 in the Tower, Home Base as a round court inside the frame, the Ball Ocean sunk inside
+  it, three gates and dog-legged lanes wide enough for the Counter. Arcade and Prizes go; the other zones stay round
+  the edge.
+- **Where it is**: `~/Desktop/Level 6 nyt koncept` (16 pictures, a contact sheet, a README); sources, prompts and every
+  raw generation in `artifacts/level6-concept-20261005/`. `draw_plan.py` draws the three to-scale sheets (plan,
+  today/new, heights) with headless Chrome; `assemble.py` rebuilds the Desktop folder.
+- **Nothing in Studio or in `build_playground.py` changed.** A build waits for the owner's yes, and for three answers:
+  does the Counter climb (six to ten floors are out of its reach otherwise), is the 20 s count still right in a hall
+  twice the size, and the frame has to become joined meshes (about twenty times today's cells is too many loose parts).
+  The easter egg's party button sits on the arcade carpet and needs a new place when the arcade goes.
+- **Image generation**: four `codex exec` jobs in parallel (built-in image tool, at most five reference paths each)
+  made 14 views in about twelve minutes. Giving it a to-scale drawing as a reference is what made the map picture
+  follow the layout; it still understates height unless told how much of the picture the empty air must fill.

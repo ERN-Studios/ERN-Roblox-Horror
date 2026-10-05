@@ -1,0 +1,18 @@
+{
+ "hall_old": [
+  600,
+  400
+ ],
+ "hall_new": [
+  864,
+  576
+ ],
+ "floor_factor": 2.07,
+ "frame_old_sq": 24192.0,
+ "frame_new_sq": 235872.0,
+ "frame_factor": 9.8,
+ "frame_share_old": 10.1,
+ "frame_share_new": 47.4,
+ "roof_old": 46,
+ "roof_new": 120
+}

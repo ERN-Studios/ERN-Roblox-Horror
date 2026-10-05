@@ -1,0 +1,14 @@
+{
+  "image": "12b_same_view_new_height_ingame",
+  "mode": "built-in image_gen",
+  "prompt": "Use case: precise-object-edit. Edit reference 3, the current final image, preserving its clean Roblox game graphics and all existing parts, colours and signs. Reference 1 is the original in-game parts/style reference. Reference 2 is the height scale reference ONLY; do not reproduce its diagram or text.\nONE CORRECTION: THE ROOF IS FAR TOO LOW. Raise the steel-deck warehouse roof to TWICE the total height of the six-storey frame: floor z=0, top of frame z=60, roof z=120. Above the highest deck there must be a completely empty dark air gap AS TALL AS THE ENTIRE FRAME. Strong visually unmistakable cathedral-scale vertical clearance. Do not put a low roof, truss or duct immediately over the frame. All steel roof joists, ducts and tiny fluorescent strips are very far above, near the very top of the image. Extend the existing grey concrete column with its blue padded foot all the way up to that distant roof.\nCAMERA: same viewing direction and arrangement as reference 3 but pull camera considerably back and tilt up. Wide 16:9 landscape. The entire six-storey frame occupies the LOWER HALF only, its highest rail around 50-53% down from image top and floor around 94% down. The UPPER HALF is predominantly immense empty dark air, capped only by the distant roof near the top edge. Keep roof fixtures tiny. This framing and the empty gap are the most important correction.\nPRESERVE: six distinct full storeys, yellow and green padded posts, blue rails and coloured decks, black netting, repeated red square bubble-window panels with white round windows and yellow rings; the long dark-blue horizontal tube in front on the left, additional solid-red and solid-yellow horizontal tubes; three glossy single-solid-colour tube slides green/red/yellow descending from fifth/sixth storeys to floor on right; grey column left of centre; blue-green checkerboard floor and sparse loose balls. Structure extends left and right. Keep the same signs readable and EXACTLY spelled: \"THE BIG FRAME\", \"PLAY ZONE\", \"NO ADULTS\". No other lettering. Preserve simple smooth Roblox parts and flat bright colours, not photorealism. No people, entities, arcade, neon, HUD, watermark, striped slides or extra storeys. Produce one image.",
+  "references": [
+    "refs/owner_frame_ingame.png",
+    "refs/ref_height.png",
+    "final/12_same_view_new_height_ingame.png"
+  ],
+  "raw": "raw/12_same_view_new_height_ingame_try3_raw.png",
+  "final": "final/12b_same_view_new_height_ingame.png",
+  "weakness": "Roof clearance still reads shorter than the frame's full height; roof detail occupies much of the upper half.",
+  "export": "1920x1080, aspect-preserving scale and centre crop"
+}
