@@ -654,6 +654,14 @@ local function dispatchCommand(command, requested)
 		-- Timeline seeking is server-authoritative; GameManager verifies the
 		-- timeline owner and reports back via the DevLevel3Timeline* attributes.
 		fireDev("level3PreBlackout", true)
+	elseif command == "level5Fall" then
+		-- DEV_LEVEL5_FALL_20261005: Level 5 runs outside GameManager, so the request goes on the level's own
+		-- remote. Level5PreviewAccess checks the developer and tells every player in the level. The O key
+		-- and the on-screen button belong to the Level 5 Lighting Controller, which also serves the owner's
+		-- account; this is only the phone's row.
+		local folder = game:GetService("ReplicatedStorage"):FindFirstChild("Level5Void")
+		local event = folder and folder:FindFirstChild("Event")
+		if event and event:IsA("RemoteEvent") then event:FireServer("devfall") end
 	else
 		warn("[DevCheats] Unknown command: " .. tostring(command))
 	end

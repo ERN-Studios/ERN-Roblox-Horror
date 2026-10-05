@@ -1070,6 +1070,19 @@ if devAllowed and pages.Dev then
 			ActionCaption = "PULL",
 			BusyAttribute = "DevLevel2PumpBusy",
 		},
+		{
+			-- DEV_LEVEL5_FALL_20261005: the server tells every player in the level, so they
+			-- all see and hear the same body. Level 5 is a live level on the lobby server:
+			-- SelectedLevel and RoundActive say nothing there, the player attribute does.
+			Name = "DROP A BODY",
+			Description = "A suited body falls past you, screaming. Every second one hits a pillar.",
+			Key = "O",
+			Command = "level5Fall",
+			Action = true,
+			Level = 5,
+			LiveAttribute = "Level5VoidRound",
+			ActionCaption = "DROP",
+		},
 	}
 	if level3TimelineOwner then
 		table.insert(controls, {
@@ -1222,6 +1235,10 @@ if devAllowed and pages.Dev then
 					and hum ~= nil and hum.Health <= 0
 					and player:GetAttribute(info.BusyAttribute) ~= true
 			end
+			if info.LiveAttribute then
+				return player:GetAttribute(info.LiveAttribute) == true
+					and player:GetAttribute("InRound") == true
+			end
 			return workspace:GetAttribute("SelectedLevel") == (info.Level or 3)
 				and workspace:GetAttribute("RoundActive") == true
 				and player:GetAttribute("InRound") == true
@@ -1261,6 +1278,9 @@ if devAllowed and pages.Dev then
 			player:GetAttributeChangedSignal("InRound"):Connect(refresh)
 			if info.BusyAttribute then
 				player:GetAttributeChangedSignal(info.BusyAttribute):Connect(refresh)
+			end
+			if info.LiveAttribute then
+				player:GetAttributeChangedSignal(info.LiveAttribute):Connect(refresh)
 			end
 			if info.DeadOnly then
 				local watchedCharacter, healthConnection, childConnection

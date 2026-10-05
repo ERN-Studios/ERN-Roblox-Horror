@@ -143,6 +143,50 @@ task.spawn(function()
 	end
 
 	local ambience, wind, fall = clip("l5_ambience", true), clip("l5_depth_wind", true), clip("l5_player_fall")
+	local devFall = nil                                          -- set by the falling block further down
+	-- DEV_FALL_20261005 (owner: "dev button that triggers a fall and scream"): a button and the O key, for the
+	-- developers and the owner's own account (the Level 6 dev ESP's list). It only asks; the server checks who
+	-- is asking and tells every player in the level, so they all see and hear the same body.
+	do
+		local found, DevAccess = pcall(function() return require(ReplicatedStorage:WaitForChild("DevAccess", 10)) end)
+		if found and DevAccess and DevAccess.IsLevel6PreviewAllowed(player) then
+			local UserInputService = game:GetService("UserInputService")
+			local button = Instance.new("TextButton")
+			button.Name = "DevFall"
+			button.AnchorPoint = Vector2.new(1, 0)
+			button.Position = UDim2.new(1, -14, 0, 64)
+			button.Size = UDim2.fromOffset(184, UserInputService.TouchEnabled and 44 or 32)
+			button.BackgroundColor3 = Color3.fromRGB(12, 12, 14)
+			button.BackgroundTransparency = 0.25
+			button.BorderSizePixel = 0
+			button.Font = Enum.Font.GothamMedium
+			button.TextSize = 13
+			button.TextColor3 = Color3.fromRGB(240, 236, 220)
+			button.Text = UserInputService.KeyboardEnabled and "DEV  ·  DROP A BODY  [O]" or "DEV  ·  DROP A BODY"
+			button.Visible = false
+			button.ZIndex = 0                                      -- under the cover: it is not part of a death screen
+			local corner = Instance.new("UICorner")
+			corner.CornerRadius = UDim.new(0, 6)
+			corner.Parent = button
+			local stroke = Instance.new("UIStroke")
+			stroke.Color, stroke.Transparency, stroke.Thickness = Color3.fromRGB(240, 236, 220), 0.7, 1
+			stroke.Parent = button
+			button.Parent = gui
+			local function ask()
+				if inLevel() then event:FireServer("devfall") end
+			end
+			button.Activated:Connect(ask)
+			UserInputService.InputBegan:Connect(function(input, processed)
+				if not processed and input.KeyCode == Enum.KeyCode.O then ask() end
+			end)
+			task.spawn(function()
+				while true do
+					button.Visible = inLevel()
+					task.wait(0.5)
+				end
+			end)
+		end
+	end
 	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP",
 		orange = "ORANGE   ·   THE SPIRAL", crimson = "CRIMSON   ·   THE RING", teal = "TEAL   ·   THE PILLARS", ivory = "IVORY   ·   THE TOWER"}
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
@@ -161,6 +205,8 @@ task.spawn(function()
 		elseif what == "finish" then
 			oneShot("l5_finish", 0.5)
 			flash(Color3.new(1, 1, 1), 0.7)             -- short: the LEVEL 5 CLEARED screen comes up behind it
+		elseif what == "devfall" then
+			if devFall then devFall(a, b) end
 		end
 	end)
 
@@ -245,14 +291,25 @@ task.spawn(function()
 	-- a hazmat suit, arms and legs going, with a scream that is close for a moment and then far below. Local parts,
 	-- moved here, never colliding. WHAT falls WHERE is drawn from the server's clock and the stretch of the level
 	-- the listener is in, so players standing together see and hear the same fall.
+	--
+	-- PILLAR_HIT_20261005 (owner: "a person can randomly fall and hit that pillar on the top and then ragdoll down
+	-- the pit after the hit/bounce"). Where a loose pillar stands near enough, some of the bodies come down ON its
+	-- top instead of past it: the scream stops on the stone, the body bounces, goes over the side that faces away
+	-- from the path and falls on limp, arms and legs trailing behind it.
+	--
+	-- DEV_FALL_20261005: a developer's button (Level5PreviewAccess checks who asks and tells the whole level) drops
+	-- one on demand; every second one is aimed at a pillar when there is one.
 	task.spawn(function()
 		local RunService = game:GetService("RunService")
 		local HttpService = game:GetService("HttpService")
 		local holder = Instance.new("Folder")
 		holder.Name = "Level5Falling"
 		local route, routeOf = nil, nil
-		local things = {}                               -- {parts = {{part, offset, spin}}, at, speed, top, turn, sound, loud, born}
+		-- {parts = {{part, offset, swing, phase, dir}}, at, velocity, turn, spin, sound, loud, fadeAt, born, person,
+		--  floor, strikeY, away, bounceOut, spinAfter, hit, holdUntil}
+		local things = {}
 		local YELLOW, DARK = Color3.fromRGB(232, 190, 40), Color3.fromRGB(16, 16, 18)
+		local DOWN = Vector3.new(0, -1, 0)
 		local function block(size, colour, shape)
 			local part = Instance.new("Part")
 			part.Size, part.Color, part.Material = size, colour, Enum.Material.SmoothPlastic
@@ -262,42 +319,106 @@ task.spawn(function()
 			part.Parent = holder
 			return part
 		end
-		local function clearOfPath(model, origin, x, z)
+		-- How far (x, z) is from the path in plan, and the direction that leads away from it. The path is the line
+		-- through the route's points: measuring to the points alone missed the middle of a long ledge.
+		local function pathGap(model, origin, x, z)
 			if routeOf ~= model then
 				local value = model:FindFirstChild("Route")
 				local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
 				route, routeOf = ok and decoded or {}, model
 			end
-			for _, point in ipairs(route) do
-				local dx, dz = origin.X + point.x - x, origin.Z + point.z - z
-				if dx * dx + dz * dz < 12 * 12 then return false end
+			local best, awayX, awayZ = math.huge, 1, 0
+			local px, pz = x - origin.X, z - origin.Z
+			for index = 1, #route - 1 do
+				local a, b = route[index], route[index + 1]
+				local ex, ez = b.x - a.x, b.z - a.z
+				local length = ex * ex + ez * ez
+				local t = length > 0 and math.clamp(((px - a.x) * ex + (pz - a.z) * ez) / length, 0, 1) or 0
+				local dx, dz = px - (a.x + ex * t), pz - (a.z + ez * t)
+				local gap = dx * dx + dz * dz
+				if gap < best then best, awayX, awayZ = gap, dx, dz end
 			end
-			return true
+			local away = Vector3.new(awayX, 0, awayZ)
+			return math.sqrt(best), away.Magnitude > 0.01 and away.Unit or Vector3.xAxis
 		end
-		local function drop(model, origin, rng, person, floorY, near)
-			local x, z
-			for _ = 1, 10 do                              -- somewhere off the path; a body falls where it can be seen
-				if person then
-					local angle, far = rng:NextNumber(0, math.pi * 2), rng:NextNumber(16, 42)
-					x, z = near.X + math.cos(angle) * far, near.Z + math.sin(angle) * far
-				else
-					x, z = near.X + rng:NextNumber(-90, 90), origin.Z + rng:NextNumber(-52, 52)
+		local function clearOfPath(model, origin, x, z)
+			return (pathGap(model, origin, x, z)) >= 12
+		end
+		-- A loose pillar whose top the listener can see: not on the path, not right beside them, not far below.
+		local function pillarNear(model, origin, rng, near, floorY)
+			local geometry = model:FindFirstChild("Geometry")
+			if not geometry then return nil end
+			local params = OverlapParams.new()
+			params.FilterType = Enum.RaycastFilterType.Include
+			params.FilterDescendantsInstances = {geometry}
+			local found = {}
+			for _, part in ipairs(workspace:GetPartBoundsInRadius(Vector3.new(near.X, floorY, near.Z), 80, params)) do
+				if part.Name == "Monolith" and math.min(part.Size.X, part.Size.Z) >= 5 then
+					local top = part.Position.Y + part.Size.Y / 2
+					local flat = Vector3.new(part.Position.X - near.X, 0, part.Position.Z - near.Z).Magnitude
+					if flat > 14 and flat < 74 and top > floorY - 64 and top < floorY + 36
+						and clearOfPath(model, origin, part.Position.X, part.Position.Z) then
+						table.insert(found, part)
+					end
 				end
-				if math.abs(z - origin.Z) < 58 and clearOfPath(model, origin, x, z) then break end
-				x = nil
+			end
+			if #found == 0 then return nil end
+			-- the same order on every client, whatever order the query answered in
+			table.sort(found, function(a, b)
+				if a.Position.X ~= b.Position.X then return a.Position.X < b.Position.X end
+				return a.Position.Z < b.Position.Z
+			end)
+			return found[rng:NextInteger(1, #found)]
+		end
+		-- the rotation that takes a limb's own "down" to `dir`
+		local function hang(dir)
+			local axis = DOWN:Cross(dir)
+			local dot = math.clamp(DOWN:Dot(dir), -1, 1)
+			if axis.Magnitude < 1e-4 then return dot > 0 and CFrame.identity or CFrame.Angles(math.pi, 0, 0) end
+			return CFrame.fromAxisAngle(axis.Unit, math.acos(dot))
+		end
+		-- `strike`: true = onto a pillar if one stands near, false = never, nil = sometimes
+		local function drop(model, origin, rng, person, floorY, near, strike)
+			local x, z
+			local pillar = nil
+			if person and (strike == true or (strike == nil and rng:NextNumber() < 0.45)) then
+				pillar = pillarNear(model, origin, rng, near, floorY)
+			end
+			local away, strikeY
+			if pillar then
+				-- onto the top, toward the side that faces away from the path, so it goes over that edge
+				local _, lead = pathGap(model, origin, pillar.Position.X, pillar.Position.Z)
+				local turn = math.rad(rng:NextNumber(20, 65)) * (rng:NextNumber() < 0.5 and -1 or 1)
+				away = Vector3.new(lead.X * math.cos(turn) - lead.Z * math.sin(turn), 0, lead.X * math.sin(turn) + lead.Z * math.cos(turn))
+				local reach = math.max(0.4, math.min(pillar.Size.X, pillar.Size.Z) / 2 - 1.4)
+				local spot = pillar.Position + away * rng:NextNumber(0.3, reach)
+				x, z = spot.X, spot.Z
+				strikeY = pillar.Position.Y + pillar.Size.Y / 2 + 1.1
+			else
+				for _ = 1, 10 do                              -- somewhere off the path; a body falls where it can be seen
+					if person then
+						local angle, far = rng:NextNumber(0, math.pi * 2), rng:NextNumber(16, 42)
+						x, z = near.X + math.cos(angle) * far, near.Z + math.sin(angle) * far
+					else
+						x, z = near.X + rng:NextNumber(-90, 90), origin.Z + rng:NextNumber(-52, 52)
+					end
+					if math.abs(z - origin.Z) < 58 and clearOfPath(model, origin, x, z) then break end
+					x = nil
+				end
 			end
 			if not x then return end
 			-- from the ceiling where the room has one, from the dark where it has not
 			local params = RaycastParams.new()
 			params.FilterType, params.FilterDescendantsInstances = Enum.RaycastFilterType.Include, {model}
-			local roof = workspace:Raycast(Vector3.new(x, floorY + 8, z), Vector3.new(0, 420, 0), params)
+			local from = math.max(floorY + 8, (strikeY or floorY) + 6)
+			local roof = workspace:Raycast(Vector3.new(x, from, z), Vector3.new(0, 420, 0), params)
 			local top = (roof and roof.Instance.Name == "Ceiling") and roof.Position.Y - 3 or floorY + 190
-			local thing = {parts = {}, at = Vector3.new(x, top, z), speed = 18, top = top, born = os.clock(), person = person,
+			local thing = {parts = {}, at = Vector3.new(x, top, z), velocity = Vector3.new(0, -18, 0), born = os.clock(), person = person,
 				turn = CFrame.Angles(rng:NextNumber(0, 6), rng:NextNumber(0, 6), rng:NextNumber(0, 6)),
 				spin = Vector3.new(rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4)), floor = floorY}
 			if person then
 				local function limb(size, colour, offset, swing)
-					table.insert(thing.parts, {part = block(size, colour), offset = offset, swing = swing, phase = rng:NextNumber(0, 6)})
+					table.insert(thing.parts, {part = block(size, colour), offset = offset, swing = swing, phase = rng:NextNumber(0, 6), dir = DOWN})
 				end
 				limb(Vector3.new(2, 2, 1), YELLOW, CFrame.new(0, 0, 0))                                   -- torso
 				limb(Vector3.new(1.3, 1.3, 1.3), YELLOW, CFrame.new(0, 1.65, 0))                          -- hood
@@ -310,6 +431,7 @@ task.spawn(function()
 				-- the level's own falling sound, or one of the recorded screams (owner, 2026-10-05); a key that is not
 				-- installed yet falls back to the first
 				local choice = rng:NextInteger(0, 6)
+				if strikeY and choice == 0 then choice = rng:NextInteger(1, 6) end   -- a body that hits has a voice to lose
 				local voice = (choice > 0 and clip("l5_fall_scream_" .. choice, false, thing.parts[1].part))
 					or clip("l5_player_fall", false, thing.parts[1].part)
 				if voice then
@@ -321,6 +443,14 @@ task.spawn(function()
 					-- recordings themselves are 2 dB lower. The level's own rush is a far quieter recording and
 					-- keeps the level it had
 					thing.loud = voice.Name == "l5_player_fall" and 1.6 or 1.1
+				end
+				thing.fadeAt = strikeY and 5.0 or 3.0                  -- one that hits is still screaming when it does
+				if strikeY then
+					thing.strikeY, thing.away = strikeY, away
+					thing.bounceOut = rng:NextNumber(9, 13)
+					local across = Vector3.new(-away.Z, 0, away.X)     -- it rolls over the edge it leaves by
+					thing.spinAfter = across * rng:NextNumber(4.5, 7) + Vector3.new(0, rng:NextNumber(-1.5, 1.5), 0)
+					thing.thud = rng:NextNumber() < 0.5 and "l5_body_hit_1" or "l5_body_hit_2"
 				end
 			else
 				local kind = rng:NextInteger(1, 4)
@@ -340,19 +470,79 @@ task.spawn(function()
 			end
 			table.insert(things, thing)
 		end
+		-- the stone: the scream stops, a thud and a little dust, a beat of stillness, then over the side
+		local function land(thing)
+			thing.hit = os.clock()
+			thing.holdUntil = thing.hit + 0.09
+			local impact = -thing.velocity.Y
+			thing.at = Vector3.new(thing.at.X, thing.strikeY, thing.at.Z)
+			thing.velocity = thing.away * thing.bounceOut + Vector3.new(0, math.clamp(impact * 0.2, 11, 18), 0)
+			thing.spin = thing.spinAfter
+			local torso = thing.parts[1].part
+			local voice = thing.sound
+			if voice then
+				thing.sound = nil
+				voice.Volume *= 0.2
+				task.delay(0.06, function() if voice.Parent then voice:Stop() end end)
+			end
+			local thud = clip(thing.thud, false, torso) or clip("l5_amb_thud", false, torso) or clip("l5_land", false, torso)
+			if thud then
+				thud.Volume = 1.5
+				thud.PlaybackSpeed = 0.94 + math.random() * 0.1
+				thud.RollOffMode, thud.RollOffMinDistance, thud.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 22, 320
+				thud:Play()
+			end
+			local puff = block(Vector3.one, DARK)
+			puff.Transparency = 1
+			puff.Position = thing.at - Vector3.new(0, 1, 0)
+			local dust = Instance.new("ParticleEmitter")
+			dust.Texture = "rbxasset://textures/particles/smoke_main.dds"
+			dust.Color = ColorSequence.new(Color3.fromRGB(196, 192, 182))
+			dust.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.5), NumberSequenceKeypoint.new(1, 1)})
+			dust.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, 1.1), NumberSequenceKeypoint.new(1, 4.5)})
+			dust.Lifetime, dust.Speed = NumberRange.new(0.5, 1.0), NumberRange.new(3, 9)
+			dust.SpreadAngle, dust.Rate, dust.LightEmission = Vector2.new(180, 180), 0, 0
+			dust.Parent = puff
+			dust:Emit(14)
+			task.delay(1.6, function() puff:Destroy() end)
+		end
+		devFall = function(position, serial)
+			local model = workspace:FindFirstChild(MODEL_NAME)
+			local origin = model and model:GetAttribute("Origin")
+			if not inLevel() or typeof(origin) ~= "Vector3" or typeof(position) ~= "Vector3" or #things >= 8 then return end
+			holder.Parent = workspace
+			serial = tonumber(serial) or 1
+			drop(model, origin, Random.new(serial * 7919 + 13), true, position.Y - 3, position, serial % 2 == 0)
+		end
 		RunService.Heartbeat:Connect(function(dt)
 			for index = #things, 1, -1 do
 				local thing = things[index]
-				thing.speed = math.min(thing.speed + (thing.person and 62 or 110) * dt, thing.person and 92 or 150)
-				thing.at -= Vector3.new(0, thing.speed * dt, 0)
-				thing.turn *= CFrame.Angles(thing.spin.X * dt, thing.spin.Y * dt, thing.spin.Z * dt)
-				local base = CFrame.new(thing.at) * thing.turn
 				local age = os.clock() - thing.born
+				if thing.strikeY and not thing.hit and thing.at.Y <= thing.strikeY then land(thing) end
+				if not (thing.holdUntil and os.clock() < thing.holdUntil) then
+					local gravity = thing.person and (thing.hit and 96 or 62) or 110
+					local terminal = thing.person and (thing.hit and 118 or 92) or 150
+					local velocity = thing.velocity
+					local drag = thing.hit and math.max(0, 1 - 0.5 * dt) or 1
+					thing.velocity = Vector3.new(velocity.X * drag, math.max(velocity.Y - gravity * dt, -terminal), velocity.Z * drag)
+					thing.at += thing.velocity * dt
+					thing.turn *= CFrame.Angles(thing.spin.X * dt, thing.spin.Y * dt, thing.spin.Z * dt)
+				end
+				local base = CFrame.new(thing.at) * thing.turn
 				for _, piece in ipairs(thing.parts) do
 					local frame = base * piece.offset
-					if piece.swing then                             -- a limb: hinged at its top, flailing
+					if piece.swing then                             -- a limb: hinged at its top
 						local hinge = CFrame.new(-piece.swing)
-						frame = base * piece.offset * hinge * CFrame.Angles(math.sin(age * 9 + piece.phase) * 1.1, 0, math.cos(age * 7 + piece.phase) * 0.7) * hinge:Inverse()
+						if thing.hit then
+							-- limp: it trails behind the way the body is going, each limb in its own time
+							local speed = thing.velocity.Magnitude
+							local want = speed > 0.5 and base:VectorToObjectSpace(-thing.velocity / speed) or piece.dir
+							local dir = piece.dir + (want - piece.dir) * math.min(1, dt * (3.2 + piece.phase * 0.6))
+							piece.dir = dir.Magnitude > 0.01 and dir.Unit or DOWN
+							frame = base * piece.offset * hinge * hang(piece.dir) * hinge:Inverse()
+						else
+							frame = base * piece.offset * hinge * CFrame.Angles(math.sin(age * 9 + piece.phase) * 1.1, 0, math.cos(age * 7 + piece.phase) * 0.7) * hinge:Inverse()
+						end
 					end
 					piece.part.CFrame = frame
 				end
@@ -360,9 +550,9 @@ task.spawn(function()
 					-- in over the first half second, held, and out again as the body goes down: with the distance
 					-- roll-off on top, it is loud as it passes and gone before the dark takes it
 					thing.sound.PlaybackSpeed = math.clamp(1.04 - age * 0.035, 0.82, 1.04)
-					thing.sound.Volume = thing.loud * math.clamp(age / 0.5, 0, 1) * math.clamp(1 - (age - 3.0) / 2.6, 0, 1)
+					thing.sound.Volume = thing.loud * math.clamp(age / 0.5, 0, 1) * math.clamp(1 - (age - thing.fadeAt) / 2.6, 0, 1)
 				end
-				if thing.at.Y < thing.floor - 330 or age > 12 or not inLevel() then
+				if thing.at.Y < thing.floor - 330 or age > (thing.strikeY and 16 or 12) or not inLevel() then
 					for _, piece in ipairs(thing.parts) do piece.part:Destroy() end
 					table.remove(things, index)
 				end

@@ -308,15 +308,17 @@ watchR3Lobby(workspace:FindFirstChild("LobbyReimaginedPreview"))
 --   NO CHECKPOINTS (owner, 2026-10-04): A FALL IS A DEATH. A body that drops well below the stretch it was on is
 --   killed, and any death (a Reset too) ends that player's run: back to the lobby. The `Checkpoints` list is
 --   still read, but only to know which room a player has reached (the plates and the room names need it).
---   PLATES: the door out of a room opens while every member of a party who has not passed it yet stands on the
---   room's plate. A party is one queue launch; members ahead of the door do not count, members behind it do.
---   The plate grows with the number of players in the room, so they all fit.
+--   PLATES: the door out of a room goes down when every member of a party who has not passed it yet stands on
+--   the room's plate, and it STAYS down (owner, 2026-10-05: "it stays down permanently and does not go up
+--   again"). It comes back up only when nobody is left in the level, so the next party finds every door shut.
+--   A party is one queue launch; members ahead of the door do not count, members behind it do. The plate grows
+--   with the number of players in the room, so they all fit.
 --   BALLS: loose parts. One that leaves its ledge falls out of sight and is put back on its `Home` later.
 --   THE FINISH: the lit doorway at the bottom of the last room returns the player to the lobby.
 do
 	local HttpService = game:GetService("HttpService")
 	local TweenService = game:GetService("TweenService")
-	local FALL_MARGIN, GATE_TRAVEL, GATE_HOLD = 40, 13.4, 8
+	local FALL_MARGIN, GATE_TRAVEL = 40, 13.4
 	local BALL_RETURN = 35
 	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6, orange = 7, crimson = 8, teal = 9, ivory = 10}
 	local SOUND_IDS = {
@@ -452,6 +454,26 @@ do
 		return character, root
 	end
 
+	-- DEV_FALL_20261005 (owner: "dev button that triggers a fall and scream"). A developer in the level asks; every
+	-- player in the level is told where and which, so they all see and hear the same body. Every second one is
+	-- aimed at a pillar, when one stands near enough. The list is the Level 6 dev ESP's: the developers and the
+	-- owner's own account, who is not on the general cheat list.
+	do
+		local nextFall = setmetatable({}, { __mode = "k" })
+		local serial = 0
+		event.OnServerEvent:Connect(function(player, what)
+			if what ~= "devfall" or not members[player] or not DevAccess.IsLevel6PreviewAllowed(player) then return end
+			if (nextFall[player] or 0) > os.clock() then return end
+			nextFall[player] = os.clock() + 1.2
+			local _, root = living(player)
+			if not root then return end
+			serial += 1
+			for other in pairs(members) do
+				event:FireClient(other, "devfall", root.Position, serial)
+			end
+		end)
+	end
+
 	-- plates and gates
 	local plates = {}
 	local function plateRecords(model)
@@ -465,7 +487,7 @@ do
 				table.insert(plates.list, {
 					section = item:GetAttribute("SectionIndex"), folder = item, plate = plate, gate = gate,
 					rest = plate:GetAttribute("Rest") or plate.Position, closed = gate:GetAttribute("Closed") or gate.Position,
-					text = count and count:FindFirstChild("Text"), radius = 4.1, open = false, openUntil = 0, pressed = false,
+					text = count and count:FindFirstChild("Text"), radius = 4.1, open = false, locked = false, pressed = false,
 				})
 			end
 		end
@@ -600,7 +622,21 @@ do
 					end)
 				end
 			end
+			local empty = next(members) == nil
 			for _, record in ipairs(plateRecords(model)) do
+				if record.locked then
+					-- this door has gone down and stays down; the plate stays pressed and lit, its hum fades out
+					if empty then
+						record.locked, record.quiet = false, nil
+						moveGate(record, false)
+						movePlate(record, 4.1, false, false)
+					elseif not record.quiet and os.clock() - record.lockedAt > 3 then
+						record.quiet = true
+						local hum = record.plate:FindFirstChild("l5_plate_hum")
+						if hum then hum:Stop() end
+					end
+					continue
+				end
 				local radius = 3.2 + 0.9 * math.max(1, inSection[record.section] or 0)
 				-- who stands on it, and which parties are complete on it
 				local standing, need, on = 0, {}, {}
@@ -627,7 +663,8 @@ do
 				record.folder:SetAttribute("Need", bestNeed)
 				movePlate(record, radius, complete, complete)      -- the plate only goes down under a whole party (owner, 2026-10-04)
 				if complete then
-					record.openUntil = os.clock() + GATE_HOLD
+					record.locked, record.lockedAt = true, os.clock()
+					moveGate(record, true)
 					if standing >= 2 then
 						for player, state in pairs(members) do
 							local _, root = living(player)
@@ -640,16 +677,6 @@ do
 						end
 					end
 				end
-				local wantOpen = os.clock() < record.openUntil
-				if not wantOpen and record.open then
-					for player in pairs(members) do                  -- never close on a body in the doorway
-						local _, root = living(player)
-						if root and math.abs(root.Position.X - record.closed.X) < 7 and math.abs(root.Position.Z - record.closed.Z) < 7 then
-							wantOpen = true
-						end
-					end
-				end
-				moveGate(record, wantOpen)
 			end
 			tendBalls(model)
 		end

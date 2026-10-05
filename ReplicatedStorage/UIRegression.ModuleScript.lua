@@ -4600,6 +4600,7 @@ local DEV_CAPTION_KEYS = {
 	{Command = "unlimited", Key = "U"},
 	{Command = "thirdPerson", Key = "C"},
 	{Command = "level3PreBlackout", Key = "K"},
+	{Command = "level5Fall", Key = "O"},
 }
 local DEV_INTRO_BASE = "WHITELISTED DEVELOPER CONTROLS"
 local DEV_INTRO_KEYBOARD = DEV_INTRO_BASE .. "  //  PHONE: J"
