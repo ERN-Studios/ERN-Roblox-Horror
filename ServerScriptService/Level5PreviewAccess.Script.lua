@@ -373,7 +373,8 @@ do
 
 	function Void.Join(player, group)
 		if player.Parent ~= Players or members[player] then return false, "ALREADY_IN_LEVEL" end
-		members[player] = {cp = 1, group = group or {}}
+		members[player] = {cp = 1, group = group or {}, began = os.clock()}
+		members[player].group.total = (members[player].group.total or 0) + 1
 		player:SetAttribute(IN_LEVEL, true)
 		player:SetAttribute(LIVE, true)            -- before InRound: the round features read both
 		return true
@@ -584,7 +585,16 @@ do
 					event:FireClient(player, "finish")
 					achieve(player, "FirstClearLevel5")
 					if not record.fell then achieve(player, "L5NoFall") end
-					task.delay(2.2, function()
+					-- The same LEVEL CLEARED screen every other level ends on (owner, 2026-10-05): RoundUI draws it for
+					-- GameManager's "win" word, with the time and how many of the party made it. No serial, so it
+					-- offers no buttons; the lobby follows by itself.
+					record.group.done = (record.group.done or 0) + 1
+					local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+					local status = remotes and remotes:FindFirstChild("RoundStatus")
+					if status then
+						status:FireClient(player, "win", os.clock() - (record.began or os.clock()), record.group.done, math.max(record.group.total or 1, record.group.done))
+					end
+					task.delay(7, function()
 						leaving[player] = nil
 						if members[player] then Void.Leave(player) end
 					end)

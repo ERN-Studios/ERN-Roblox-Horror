@@ -40,6 +40,8 @@ COLOURS = {
     'sphere': (26, 38, 120), 'orb': (150, 146, 134), 'plate': (236, 236, 230),
 }
 PARTS, BALLS, LIGHTS, ROUTE, CHECKPOINTS, GAPS, PLATES, FOOT = [], [], [], [], [], [], [], []
+ROOFED = {'rose', 'blue', 'amber'}       # owner, 2026-10-05: only these have a ceiling you can see; the rest go up into black
+RISE = 320.0                              # how far an open room's walls carry on above the route
 STACKED = {'ivory'}       # the tower's treads are fixed to its column, so the stair may pass over itself
 EXTENT = {}        # section -> [min x, max x, min z, max z, min y, max y] of its walkable pieces
 random.seed(505)
@@ -258,9 +260,14 @@ def room(name, x0, x1, monoliths=True, shaft=False, dense=1):
     if name not in STACKED:
         no_crossing(name)
     length, top = x1 - x0, e[5] + 64
+    roofed = name in ROOFED
+    lamp_top = top                                 # the lamps and their rods are placed as if the ceiling were there
+    if not roofed:
+        top = e[5] + RISE                          # no ceiling: the walls carry on up, past where any light reaches
     for side in (-1, 1):
         part('Wall', (length, top - BOTTOM, 8), ((x0 + x1) / 2, (top + BOTTOM) / 2, side * (HALF + 4)), name)
-    part('Ceiling', (length + 8, 6, HALF * 2 + 16), ((x0 + x1) / 2, top + 3, 0), name)
+    if roofed:
+        part('Ceiling', (length + 8, 6, HALF * 2 + 16), ((x0 + x1) / 2, top + 3, 0), name)
     # the references' walls are huge curved sheets: tall cylinders sunk most of the way into the side walls
     radii = [34, 26, 40, 30, 36]
     n = 0 if shaft else max(2, int(length // 62))
@@ -304,9 +311,10 @@ def room(name, x0, x1, monoliths=True, shaft=False, dense=1):
         y = route_y(name, lx)
         for lz in (-18, 18):
             for ly in (y + 10, y + 44):
-                if ly < top - 16:
+                if ly < lamp_top - 16:
                     light((lx, ly, lz))
-            light((lx, top - 12, lz))
+            if roofed:
+                light((lx, top - 12, lz))              # the row that shows the ceiling; an open room has none
     for row in PARTS:                                             # hang this room's lamps from its ceiling
         if row.get('rod') == name:
             x, y, z = row['p']
@@ -626,7 +634,7 @@ centre_room(p)
 p.plat(5, 5)
 RING = 57.0
 rcx, rcz, ry0 = p.x + RING, 0.0, p.y
-part('Fold', (ry0 + 150 - BOTTOM, 60, 60), (rcx, (ry0 + 150 + BOTTOM) / 2, rcz), 'crimson', shape='c', extra={'roll': 90})   # the pillar
+part('Fold', (ry0 + RISE - BOTTOM, 60, 60), (rcx, (ry0 + RISE + BOTTOM) / 2, rcz), 'crimson', shape='c', extra={'roll': 90})   # the pillar, up into the dark
 CRIMSON_DY = [0.0, 1.5, -2.0, 1.0, 0.0, 2.0, -3.0, 1.5, 0.0, -1.5, 2.0, 0.0, -2.5, 1.0, 1.5, -1.0, 0.0]
 blocks = len(CRIMSON_DY)
 for k in range(1, blocks + 1):
@@ -730,7 +738,7 @@ top_a = math.radians(180.0 - total * STEP)
 tx, tz = icx + (COLUMN + 5) * math.cos(top_a), icz + (COLUMN + 5) * math.sin(top_a)
 part('Rest', (10, 1.4, 14), (tx, y - 0.7, tz), 'ivory')          # the landing at the top, against the column
 mark('ivory', tx, y, tz)
-part('Fold', (y + 60 - BOTTOM, COLUMN * 2, COLUMN * 2), (icx, (y + 60 + BOTTOM) / 2, icz), 'ivory', shape='c', extra={'roll': 90})
+part('Fold', (y + RISE - BOTTOM, COLUMN * 2, COLUMN * 2), (icx, (y + RISE + BOTTOM) / 2, icz), 'ivory', shape='c', extra={'roll': 90})   # the column goes up into the dark too
 finish = (icx - COLUMN - 4, y, icz)
 for side in (-1, 1):                                             # the lit doorway into the column
     part('ExitFrame', (3, 16, 3), (icx - COLUMN - 1.2, y + 8, icz + side * 5.5), 'ivory')
@@ -738,7 +746,7 @@ part('ExitFrame', (3, 3, 14), (icx - COLUMN - 1.2, y + 16.5, icz), 'ivory')
 part('ExitDark', (1, 14, 8), (icx - COLUMN - 0.2, y + 7, icz), 'black')
 orb(icx - COLUMN - 5, y + 21, icz, 'ivory')
 close(p, ix0, last=True, x1=ix0 + SHAFT, shaft=True)
-wall_with_door(ix0 - 4, 'ivory', EXTENT['ivory'][5] + 64, ivory_in[0], ivory_in[1])
+wall_with_door(ix0 - 4, 'ivory', EXTENT['ivory'][5] + RISE, ivory_in[0], ivory_in[1])
 TOTAL = ix0 + SHAFT
 
 # a fall is judged against the lowest walking height between a checkpoint and the next one

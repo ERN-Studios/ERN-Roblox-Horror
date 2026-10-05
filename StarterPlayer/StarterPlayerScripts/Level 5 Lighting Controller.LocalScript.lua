@@ -160,7 +160,7 @@ task.spawn(function()
 			say("ROSE   ·   STAY ON THE LEDGES", 4)
 		elseif what == "finish" then
 			oneShot("l5_finish", 0.5)
-			flash(Color3.new(1, 1, 1), 2.4)
+			flash(Color3.new(1, 1, 1), 0.7)             -- short: the LEVEL 5 CLEARED screen comes up behind it
 		end
 	end)
 
@@ -237,6 +237,159 @@ task.spawn(function()
 		sound.Ended:Once(function() holder:Destroy() end)
 		task.delay(12, function() if holder.Parent then holder:Destroy() end end)
 	end
+
+	-- FALLING_20261005 (owner: "randomly have objects falling down, not hitting the pathway, just falling from the
+	-- ceiling to the pit, and sometimes make sure it is a player ... with a falling scream that comes loud in the
+	-- level and fades when they go down, like someone observing a true fall"). Things drop past, out of the dark
+	-- above and into the dark below: blocks and balls about every twelve seconds, and about once a minute a body in
+	-- a hazmat suit, arms and legs going, with a scream that is close for a moment and then far below. Local parts,
+	-- moved here, never colliding. WHAT falls WHERE is drawn from the server's clock and the stretch of the level
+	-- the listener is in, so players standing together see and hear the same fall.
+	task.spawn(function()
+		local RunService = game:GetService("RunService")
+		local HttpService = game:GetService("HttpService")
+		local holder = Instance.new("Folder")
+		holder.Name = "Level5Falling"
+		local route, routeOf = nil, nil
+		local things = {}                               -- {parts = {{part, offset, spin}}, at, speed, top, turn, sound, born}
+		local YELLOW, DARK = Color3.fromRGB(232, 190, 40), Color3.fromRGB(16, 16, 18)
+		local function block(size, colour, shape)
+			local part = Instance.new("Part")
+			part.Size, part.Color, part.Material = size, colour, Enum.Material.SmoothPlastic
+			if shape then part.Shape = shape end
+			part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery, part.CastShadow = true, false, false, false, false
+			part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+			part.Parent = holder
+			return part
+		end
+		local function clearOfPath(model, origin, x, z)
+			if routeOf ~= model then
+				local value = model:FindFirstChild("Route")
+				local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
+				route, routeOf = ok and decoded or {}, model
+			end
+			for _, point in ipairs(route) do
+				local dx, dz = origin.X + point.x - x, origin.Z + point.z - z
+				if dx * dx + dz * dz < 12 * 12 then return false end
+			end
+			return true
+		end
+		local function drop(model, origin, rng, person, floorY, near)
+			local x, z
+			for _ = 1, 10 do                              -- somewhere off the path; a body falls where it can be seen
+				if person then
+					local angle, far = rng:NextNumber(0, math.pi * 2), rng:NextNumber(16, 42)
+					x, z = near.X + math.cos(angle) * far, near.Z + math.sin(angle) * far
+				else
+					x, z = near.X + rng:NextNumber(-90, 90), origin.Z + rng:NextNumber(-52, 52)
+				end
+				if math.abs(z - origin.Z) < 58 and clearOfPath(model, origin, x, z) then break end
+				x = nil
+			end
+			if not x then return end
+			-- from the ceiling where the room has one, from the dark where it has not
+			local params = RaycastParams.new()
+			params.FilterType, params.FilterDescendantsInstances = Enum.RaycastFilterType.Include, {model}
+			local roof = workspace:Raycast(Vector3.new(x, floorY + 8, z), Vector3.new(0, 420, 0), params)
+			local top = (roof and roof.Instance.Name == "Ceiling") and roof.Position.Y - 3 or floorY + 190
+			local thing = {parts = {}, at = Vector3.new(x, top, z), speed = 18, top = top, born = os.clock(), person = person,
+				turn = CFrame.Angles(rng:NextNumber(0, 6), rng:NextNumber(0, 6), rng:NextNumber(0, 6)),
+				spin = Vector3.new(rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4)), floor = floorY}
+			if person then
+				local function limb(size, colour, offset, swing)
+					table.insert(thing.parts, {part = block(size, colour), offset = offset, swing = swing, phase = rng:NextNumber(0, 6)})
+				end
+				limb(Vector3.new(2, 2, 1), YELLOW, CFrame.new(0, 0, 0))                                   -- torso
+				limb(Vector3.new(1.3, 1.3, 1.3), YELLOW, CFrame.new(0, 1.65, 0))                          -- hood
+				limb(Vector3.new(1.0, 0.7, 0.2), DARK, CFrame.new(0, 1.7, -0.62))                         -- visor
+				limb(Vector3.new(1, 2, 1), YELLOW, CFrame.new(-1.5, 0.6, 0), Vector3.new(0, -0.9, 0))     -- arms, from the shoulder
+				limb(Vector3.new(1, 2, 1), YELLOW, CFrame.new(1.5, 0.6, 0), Vector3.new(0, -0.9, 0))
+				limb(Vector3.new(1, 2, 1), DARK, CFrame.new(-0.5, -1.1, 0), Vector3.new(0, -0.9, 0))      -- legs, from the hip
+				limb(Vector3.new(1, 2, 1), DARK, CFrame.new(0.5, -1.1, 0), Vector3.new(0, -0.9, 0))
+				thing.spin *= 0.45
+				-- the level's own falling sound, or one of the recorded screams (owner, 2026-10-05); a key that is not
+				-- installed yet falls back to the first
+				local choice = rng:NextInteger(0, 6)
+				local voice = (choice > 0 and clip("l5_fall_scream_" .. choice, false, thing.parts[1].part))
+					or clip("l5_player_fall", false, thing.parts[1].part)
+				if voice then
+					voice.Volume = 0                                   -- it fades in; the Heartbeat below owns the level
+					voice.RollOffMode, voice.RollOffMinDistance, voice.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 26, 420
+					voice:Play()
+					thing.sound = voice
+				end
+			else
+				local kind = rng:NextInteger(1, 4)
+				local shade = rng:NextNumber() < 0.5 and Color3.fromRGB(22, 22, 25) or Color3.fromRGB(226, 222, 208)
+				local size = kind == 1 and Vector3.one * rng:NextNumber(2, 6)
+					or kind == 2 and Vector3.new(rng:NextNumber(5, 12), rng:NextNumber(0.6, 1.4), rng:NextNumber(3, 6))
+					or Vector3.new(rng:NextNumber(2, 5), rng:NextNumber(2, 8), rng:NextNumber(2, 5))
+				table.insert(thing.parts, {part = block(size, shade, kind == 1 and Enum.PartType.Ball or nil), offset = CFrame.new()})
+				if size.Magnitude > 7 then
+					local rush = clip("l5_debris_whoosh", false, thing.parts[1].part)
+					if rush then
+						rush.Volume = 0.7
+						rush.RollOffMode, rush.RollOffMinDistance, rush.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 14, 160
+						rush:Play()
+					end
+				end
+			end
+			table.insert(things, thing)
+		end
+		RunService.Heartbeat:Connect(function(dt)
+			for index = #things, 1, -1 do
+				local thing = things[index]
+				thing.speed = math.min(thing.speed + (thing.person and 62 or 110) * dt, thing.person and 92 or 150)
+				thing.at -= Vector3.new(0, thing.speed * dt, 0)
+				thing.turn *= CFrame.Angles(thing.spin.X * dt, thing.spin.Y * dt, thing.spin.Z * dt)
+				local base = CFrame.new(thing.at) * thing.turn
+				local age = os.clock() - thing.born
+				for _, piece in ipairs(thing.parts) do
+					local frame = base * piece.offset
+					if piece.swing then                             -- a limb: hinged at its top, flailing
+						local hinge = CFrame.new(-piece.swing)
+						frame = base * piece.offset * hinge * CFrame.Angles(math.sin(age * 9 + piece.phase) * 1.1, 0, math.cos(age * 7 + piece.phase) * 0.7) * hinge:Inverse()
+					end
+					piece.part.CFrame = frame
+				end
+				if thing.sound then
+					-- in over the first half second, held, and out again as the body goes down: with the distance
+					-- roll-off on top, it is loud as it passes and gone before the dark takes it
+					thing.sound.PlaybackSpeed = math.clamp(1.04 - age * 0.035, 0.82, 1.04)
+					thing.sound.Volume = 1.6 * math.clamp(age / 0.5, 0, 1) * math.clamp(1 - (age - 3.0) / 2.6, 0, 1)
+				end
+				if thing.at.Y < thing.floor - 330 or age > 12 or not inLevel() then
+					for _, piece in ipairs(thing.parts) do piece.part:Destroy() end
+					table.remove(things, index)
+				end
+			end
+		end)
+		local lastSlot = 0
+		while true do
+			task.wait(0.25)
+			local model = workspace:FindFirstChild(MODEL_NAME)
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			local origin = model and model:GetAttribute("Origin")
+			if not inLevel() or not root or not origin then
+				holder.Parent = nil
+				continue
+			end
+			holder.Parent = workspace
+			local slot = math.floor(workspace:GetServerTimeNow() / 2)
+			if slot ~= lastSlot then
+				lastSlot = slot
+				local cell = math.floor((root.Position.X - origin.X) / 60 + 0.5)   -- players near each other share a stretch
+				local rng = Random.new(slot * 977 + cell * 31)
+				local dice = rng:NextNumber()
+				if dice < 0.17 and #things < 6 then
+					-- about the stretch the listener is in: a body falls 16 to 42 studs from its middle, close enough to watch
+					local anchor = Vector3.new(origin.X + cell * 60, 0, origin.Z + math.floor((root.Position.Z - origin.Z) / 60 + 0.5) * 60)
+					drop(model, origin, rng, dice < 0.03, root.Position.Y - 3, anchor)
+				end
+			end
+		end
+	end)
 
 	local rolling = setmetatable({}, {__mode = "k"})
 	local nextCreak = os.clock() + 8
