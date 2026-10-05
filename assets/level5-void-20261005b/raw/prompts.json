@@ -1,0 +1,66 @@
+{
+  "model_id": "eleven_text_to_sound_v2",
+  "quality_note": "The connected MCP Sound Effects v2 schema exposes duration_seconds, prompt_influence and loop only; no output quality or bitrate selector is offered. Original generated download bytes retained.",
+  "effects": [
+    {
+      "filename": "l5_body_hit_1.mp3",
+      "prompt": "A heavy human body in a rubber hazmat suit slams onto a concrete slab after a long fall. One dull, meaty, heavy thud with a short hard crack inside it. Dry and close, almost no reverb. Only the single impact, nothing after the impact; no falling or wind lead-in. Isolated realistic sound effect for a dark abstract horror level of huge silent concrete rooms over a black pit. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "uo0hDde6K3WMVJUH1g5F"
+    },
+    {
+      "filename": "l5_body_hit_2.mp3",
+      "prompt": "A heavy human body in a rubber hazmat suit hits concrete after a long fall: one heavy dull meaty thud with a short hard crack, then a short rubbery scrape as the body slides off the edge. A distinct second take. Dry and close, almost no reverb. No further fall sound. Isolated realistic sound effect for a dark abstract horror level of huge silent concrete rooms over a black pit. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 2,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "CrymhisexBsc1ByfFnWG"
+    },
+    {
+      "filename": "l5_crusher_slam.mp3",
+      "prompt": "An enormous stone block weighing many tons drops into a stone doorway and slams shut. A sharp crack and a very deep boom, then dust and small stones settling in a large concrete hall. Immense physical weight, brutal stone impact. Isolated sound effect for a dark abstract horror level of huge silent concrete rooms over a black pit. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 3.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "uV2Gya5blfQEOqJ9eIdI"
+    },
+    {
+      "filename": "l5_crusher_grind.mp3",
+      "prompt": "Seamless loop of two colossal stone walls grinding slowly toward each other. Continuous deep stone-on-stone rumble and gritty scraping, steady level from the first sample to the last. No start or end transient, no fade in or fade out, no impacts, no pauses. The end must join the beginning seamlessly. Heavy low stone friction in a huge concrete room over a black pit, dark abstract horror. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 10,
+        "prompt_influence": 0.5,
+        "loop": true
+      },
+      "node_id": "xKxBXPp8DOqOLkhKdCjN"
+    },
+    {
+      "filename": "l5_crusher_shut.mp3",
+      "prompt": "Two giant stone walls finally slam together. A massive double boom with a dense stone crunch and a long low resonant tail in a huge concrete hall. Immense weight, crushing force, deep bass decay. Isolated sound effect for a dark abstract horror level of huge silent concrete rooms over a black pit. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 3.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "xTE5YVGBDCClDykSV7KI"
+    },
+    {
+      "filename": "l5_crusher_groan.mp3",
+      "prompt": "A deep ominous stone groan and a low mechanical clunk as an ancient trap wakes up inside the walls. Low and menacing, heavy structural stone strain and buried machinery, entirely non-vocal. Isolated sound effect in a huge silent concrete room over a black pit, dark abstract horror. No music, no voices, no speech.",
+      "model_parameters": {
+        "duration_seconds": 4,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "buGTopXqTFDb89LVNc8r"
+    }
+  ]
+}

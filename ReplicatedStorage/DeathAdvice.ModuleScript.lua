@@ -102,6 +102,15 @@ DeathAdvice.Causes = {
 		Cause = "The Usher reached you in the dark.",
 		Tip = "When you hear \"shhh\", shine your light on it or crouch and hide.",
 	},
+	-- Level5PreviewAccess.Script.lua, FINALE_20261005: the two walls of the last
+	-- corridor meet; a body still between them under KILL_GAP (3 studs) is killed.
+	-- WHY THIS TIP: the walls take CLOSE_SECONDS (15.5) and the room is 198 studs
+	-- past the gate, 12.4 s at a walk (16) -- but only if nobody stands waiting.
+	L5Crusher = {
+		Title = "THE WALLS MET",
+		Cause = "The corridor closed before you reached the room at its end.",
+		Tip = "Run the moment the gate drops. Do not wait for the others.",
+	},
 	-- Everything nothing marked: a void fall, a failed arrival placement
 	-- (GameManager.Script.lua:913), or a kill site added without a mark. It says
 	-- so and offers NOTHING, because there is nothing true to offer.

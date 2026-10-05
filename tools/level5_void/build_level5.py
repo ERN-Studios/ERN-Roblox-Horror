@@ -37,12 +37,14 @@ COLOURS = {
     'rose': (224, 150, 200), 'blue': (92, 150, 200), 'amber': (228, 180, 88),
     'mint': (150, 216, 182), 'violet': (164, 134, 214), 'coral': (236, 118, 102), 'black': (4, 4, 5),
     'orange': (244, 142, 44), 'crimson': (188, 34, 46), 'teal': (44, 178, 184), 'ivory': (232, 228, 212),
+    'stone': (74, 72, 68), 'slab': (30, 29, 28), 'glass': (150, 190, 200),
     'sphere': (26, 38, 120), 'orb': (150, 146, 134), 'plate': (236, 236, 230),
 }
 PARTS, BALLS, LIGHTS, ROUTE, CHECKPOINTS, GAPS, PLATES, FOOT = [], [], [], [], [], [], [], []
 ROOFED = {'rose', 'blue', 'amber'}       # owner, 2026-10-05: only these have a ceiling you can see; the rest go up into black
 RISE = 320.0                              # how far an open room's walls carry on above the route
-STACKED = {'ivory'}       # the tower's treads are fixed to its column, so the stair may pass over itself
+STACKED = {'crimson', 'ivory'}   # a stair fixed to a column winds up over itself: no solid blocks, no crossing test
+FINALE = {}               # the last room's closing corridor: what the server needs to run it
 EXTENT = {}        # section -> [min x, max x, min z, max z, min y, max y] of its walkable pieces
 random.seed(505)
 
@@ -66,8 +68,11 @@ def solid(name, length, width, top, cx, cz, yaw, colour, bottom=BOTTOM):
     part(name, (length, top - bottom, width), (cx, (top + bottom) / 2, cz), colour, yaw=yaw)
 
 
-def light(pos, rng=60, brightness=0.2):
-    LIGHTS.append({'p': [round(v, 2) for v in pos], 'r': rng, 'b': round(brightness, 3)})
+def light(pos, rng=60, brightness=0.2, name=None):
+    row = {'p': [round(v, 2) for v in pos], 'r': rng, 'b': round(brightness, 3)}
+    if name:
+        row['n'] = name
+    LIGHTS.append(row)
 
 
 def corners(f, grow=0.0):
@@ -251,7 +256,7 @@ def route_y(name, x):
     return min(pts, key=lambda r: abs(r['x'] - x))['y']
 
 
-def room(name, x0, x1, monoliths=True, shaft=False, dense=1):
+def room(name, x0, x1, monoliths=True, shaft=False, dense=1, column=None):
     e = EXTENT[name]
     print(f'    {name}: z {e[2]:.1f}..{e[3]:.1f}, ends at z {ROUTE[-1]["z"]:.1f}')
     assert e[0] >= x0 - 0.01 and e[1] <= x1 + 0.01, f'{name}: the path runs x {e[0]:.1f}..{e[1]:.1f}, outside the room {x0:.1f}..{x1:.1f}'
@@ -303,6 +308,8 @@ def room(name, x0, x1, monoliths=True, shaft=False, dense=1):
             if walked >= 26:
                 walked = 0.0
                 dx, dz = mid - b['x'], -b['z']
+                if column:                                 # a stair round a column is lit from outside it
+                    dx, dz = b['x'] - column[0], b['z'] - column[1]
                 d = math.hypot(dx, dz) or 1.0
                 light((b['x'] + dx / d * 12, b['y'] + 10, b['z'] + dz / d * 12))
                 light((b['x'] + dx / d * 12, b['y'] + 36, b['z'] + dz / d * 12))
@@ -334,11 +341,15 @@ def link(x0, x1, y, z, sec):
     ROUTE.append({'x': x1 - 2, 'y': y, 'z': z, 'jump': False, 'sec': sec})
 
 
-def close(p, x0, last=False, x1=None, shaft=False, dense=1):
-    """Walls, ceiling, lamps and the two end walls for the room `p` has just finished; returns where the next starts."""
+def close(p, x0, last=False, x1=None, shaft=False, dense=1, column=None, door=None):
+    """Walls, ceiling, lamps and the two end walls for the room `p` has just finished; returns where the next starts.
+    `door` = (width, height) of the way out of the last room, which has no plate and no link."""
     name = p.section
     x1 = p.x if x1 is None else x1
-    top = room(name, x0, x1, shaft=shaft, dense=dense)
+    top = room(name, x0, x1, shaft=shaft, dense=dense, column=column)
+    if last and door:
+        wall_with_door(x1 + 4, name, top, p.z, p.y, door_w=door[0], door_h=door[1])
+        return top
     wall_with_door(x1 + 4, name, top, p.z if not last else 300, p.y if not last else -200)
     if last:
         return None
@@ -585,6 +596,67 @@ def centre_room(p, target=0.0):
     return p
 
 
+def spiral(sec, cx, cz, column, y0, sweep, width, units, tread=4.0, thick=1.4, a0=180.0):
+    """A stair fixed to a round column of radius `column`: treads from the column's face outward, each `tread`
+    long, laid clockwise seen from above (toward +z first) from the angle `a0` through `sweep` degrees.
+    `width(t)` is the tread width at progress t (0 at the foot, 1 at the top). `units(k)` gives the k-th stretch
+    as a list of (dy, gap): dy = how much higher this tread is than the last, gap = None for the next tread of a
+    stair, or the length of the jump that lands on it. The last few treads are level, for the arrival.
+    Returns (x, y, z, heading, radius of the last tread's centre line)."""
+    cap = SHARE[sec]
+    ang, y, done = math.radians(a0), y0, 0.0
+    total = math.radians(sweep)
+    laid = []                                                 # (sweep so far, y) of every tread, for the headroom test
+    prev = None                                               # (x, z, heading, rt) of the last tread
+    queue, k = [], 0
+    while True:
+        left = total - done
+        if not queue:
+            queue = list(units(k))
+            k += 1
+        dy, gap = queue.pop(0)
+        w = width(min(1.0, done / total))
+        rt = column + w / 2 - 0.4                             # centre line; the inner edge is sunk into the column
+        if left * rt < tread * 2.6:                           # the arrival: level treads up to the end angle
+            dy, gap, queue = 0.0, None, [(0.0, None)] * 4
+        step = 0.0
+        if prev:
+            chord = tread + (gap or 0.0)
+            step = 2 * math.asin(min(1.0, chord / (rt + prev[3])))
+            if step > left + 1e-9:
+                if gap:
+                    dy, gap = 0.0, None
+                    continue
+                step = left
+        ang -= step
+        done += step
+        y += dy
+        x, z = cx + rt * math.cos(ang), cz + rt * math.sin(ang)
+        heading = math.degrees(ang) - 90
+        hx, hz = math.cos(math.radians(heading)), math.sin(math.radians(heading))
+        if prev and gap:
+            # edge to edge, as the body crosses it: from the end of the last tread to the start of this one
+            px, pz, ph = prev[0], prev[1], math.radians(prev[2])
+            ex, ez = px + math.cos(ph) * tread / 2, pz + math.sin(ph) * tread / 2
+            real = math.hypot(x - hx * tread / 2 - ex, z - hz * tread / 2 - ez)
+            assert real <= reach(dy) * cap + 1e-6, f'{sec}: spiral gap {real:.2f} with dy {dy} is over the cap {reach(dy) * cap:.2f}'
+            GAPS.append({'sec': sec, 'gap': round(real, 2), 'dy': dy, 'reach': round(reach(dy), 2), 'share': round(real / reach(dy), 3)})
+        # long enough that neighbours meet at the OUTER edge too (a wide tread on a tight column fans out)
+        length = tread * (column + w - 0.4) / rt + 0.4
+        part('Step', (length, thick, w), (x, y - thick / 2, z), sec, yaw=heading)
+        mark(sec, x, y, z, jump=bool(gap))
+        laid.append((done, y))
+        prev = (x, z, heading, rt)
+        if total - done < 1e-6:
+            break
+    # headroom: a body under the turn above needs its own height and the top of a jump (6.4)
+    turn = 2 * math.pi
+    for a, ya in laid:
+        over = [yb for b, yb in laid if abs((b - a) - turn) < 0.06]
+        assert all(yb - ya >= 15.0 for yb in over), f'{sec}: the stair passes {min(over) - ya:.1f} above itself'
+    return x, y, z, heading, rt
+
+
 # ---------------------------------------------------------------------------------------------- 7. ORANGE
 # The double spiral: one arm winds in to an island in the middle, climbing all the way, and its twin winds out
 # again to the far side. A jump on every other ledge (<= 93%), the ledges 3 studs wide.
@@ -625,46 +697,41 @@ nxt = close(p, p.x0 - 4, shaft=True)
 wall_with_door(p.x0 - 4, 'orange', nxt[3], orange_in[0], orange_in[1])
 
 # ---------------------------------------------------------------------------------------------- 8. CRIMSON
-# The ring: a great pillar stands in the middle of the drop and the way goes half round it on single blocks, up
-# and down, a jump between every pair (<= 94%). The other half of the ring is there too, with a piece missing.
+# The spiral (owner, 2026-10-05: "the red level should be much more for a spiral going high up to the next
+# level"). A great pillar stands in the middle of the drop and a stair fixed to it winds four and a half times
+# round, 130 studs up, a missing stretch after every short flight (<= 94%, half of them with a rise), to a bridge
+# and a door high in the east wall. (v3 was half a ring of single blocks at one height.)
 p = open_room('crimson', nxt[:3])
 crimson_in = (p.z, p.y)
 p.rest(14, 10)
 centre_room(p)
-p.plat(5, 5)
-RING = 57.0
-rcx, rcz, ry0 = p.x + RING, 0.0, p.y
-part('Fold', (ry0 + RISE - BOTTOM, 60, 60), (rcx, (ry0 + RISE + BOTTOM) / 2, rcz), 'crimson', shape='c', extra={'roll': 90})   # the pillar, up into the dark
-CRIMSON_DY = [0.0, 1.5, -2.0, 1.0, 0.0, 2.0, -3.0, 1.5, 0.0, -1.5, 2.0, 0.0, -2.5, 1.0, 1.5, -1.0, 0.0]
-blocks = len(CRIMSON_DY)
-for k in range(1, blocks + 1):
-    ang = math.pi - math.pi * k / (blocks + 1)                   # over the +z side, west to east
-    x, z = rcx + RING * math.cos(ang), rcz + RING * math.sin(ang)
-    dy = CRIMSON_DY[k - 1]
-    p.h = math.degrees(math.atan2(z - p.z, x - p.x))
-    d = math.hypot(x - p.x, z - p.z)
-    size = 3.4 if k % 5 else 5.0                                 # every fifth block is a little larger
-    g = min(d - size / 2 - 0.4, reach(dy) * SHARE['crimson'] - 0.02)
-    p.gap(round(g, 2), dy)
-    p.plat(d - g + size / 2, size)
-    p.x, p.z = x + math.cos(math.radians(p.h)) * size / 2, z + math.sin(math.radians(p.h)) * size / 2
-east = (rcx + RING, rcz)
-p.h = math.degrees(math.atan2(east[1] - p.z, east[0] - p.x))
-d = math.hypot(east[0] - p.x, east[1] - p.z)
-g = min(d - 3.4, reach(0.0) * SHARE['crimson'] - 0.02)
-p.gap(round(g, 2), 0.0)
-p.plat(d - g, 5)
-p.x, p.z = east
-p.h = 0.0
-solid('Walk', 6, 6, p.y, p.x, p.z, 0, 'crimson')
-for k in range(2, 24):                                           # the broken half of the ring, on the -z side
-    if 10 <= k <= 14:
-        continue                                                # the missing piece
-    ang = math.pi + math.pi * k / 25
-    x, z = rcx + RING * math.cos(ang), rcz + RING * math.sin(ang)
-    solid('Walk', 8.2, 4, ry0 - 2 + 6 * math.sin(k * 0.7), x, z, math.degrees(ang) + 90, 'crimson')
+PILLAR, C_TREAD_W = 30.0, 5.0
+p.plat(12, 4)                                                    # the beam out to the foot of the stair
+rcx, rcz, ry0 = p.x + PILLAR + C_TREAD_W - 0.4, 0.0, p.y
+CRIMSON_GAPS = [(7.3, 0.0), (6.9, 1.0), (7.4, 0.0), (6.8, 1.5), (7.5, 0.0), (7.0, 1.0), (7.5, -1.0), (6.7, 2.0)]
+def crimson_unit(k):
+    first = [(0.0, None)] if k == 0 else [(CRIMSON_GAPS[k % len(CRIMSON_GAPS)][1], CRIMSON_GAPS[k % len(CRIMSON_GAPS)][0])]
+    return first + [(0.9, None)] * 5 + [(0.0, None)]
+x, y, z, heading, rt = spiral('crimson', rcx, rcz, PILLAR, ry0, 360 * 4.5, lambda t: C_TREAD_W, crimson_unit)
+part('Fold', (y + RISE - BOTTOM, PILLAR * 2, PILLAR * 2), (rcx, (y + RISE + BOTTOM) / 2, rcz), 'crimson', shape='c', extra={'roll': 90})   # the pillar, up into the dark
+# The stair carries on above the door, broken: the next tread is twenty studs away and the rest thin out.
+ruin = random.Random(88)
+ang, ry = math.radians(-34.0), y + 4.0
+for k in range(26):
+    ang -= math.radians(8.0)
+    ry += 0.9
+    if ruin.random() < 0.45:
+        continue
+    rr = PILLAR + C_TREAD_W / 2 - 0.4
+    part('Ruin', (4.6, 1.4, C_TREAD_W * ruin.uniform(0.5, 1.0)), (rcx + rr * math.cos(ang), ry - 0.7, rcz + rr * math.sin(ang)),
+         'crimson', yaw=math.degrees(ang) - 90, collide=False)
+# the bridge from the top of the stair to the plaza: not a solid block, the lower turns pass under it
+bridge = 9.0
+part('Walk', (bridge + 1.0, 1.4, 5.0), (rcx + PILLAR + C_TREAD_W - 0.9 + bridge / 2, y - 0.7, rcz), 'crimson')
+p.x, p.y, p.z, p.h = rcx + PILLAR + C_TREAD_W - 0.4 + bridge, y, rcz, 0.0
+mark('crimson', p.x - 1.0, p.y, p.z)
 p.plaza()
-nxt = close(p, p.x0 - 4, shaft=True)
+nxt = close(p, p.x0 - 4, shaft=True, column=(rcx, rcz))
 wall_with_door(p.x0 - 4, 'crimson', nxt[3], crimson_in[0], crimson_in[1])
 
 # ---------------------------------------------------------------------------------------------- 9. TEAL
@@ -690,64 +757,94 @@ nxt = close(p, p.x0 - 4, dense=3)
 wall_with_door(p.x0 - 4, 'teal', nxt[3], teal_in[0], teal_in[1])
 
 # ---------------------------------------------------------------------------------------------- 10. IVORY
-# The tower: one column in the middle of a square well, and a stair fixed to it that winds up three times round
-# with a missing stretch in every quarter turn (<= 95%, each with a rise). The lit doorway is in the column,
-# at the top. The treads are fixed to the column, so here - and only here - the way passes over itself.
+# The tower and the way out (owner, 2026-10-05: "make the last section staircase start wide and then become very
+# thin and have them walk a great amount of up ... in the top of the staircase, create a platform and a long
+# corridor that goes into the exit door"). One column in the middle of a square well and a stair fixed to it,
+# seven and a half times round: ten studs wide at the foot and a body's width at the top, a missing stretch in
+# every flight (<= 95%). A body that falls from the thin top is usually caught by a wider turn further down.
+# The column's top is the platform where a party gathers. A pier leads east from it through a great doorway
+# into THE CORRIDOR: when the whole party is inside, a block comes down in the doorway behind them, the gate
+# ahead sinks, and the two walls start to close. The exit door is in a small room at the far end that the walls
+# do not reach, with windows back into the corridor. Level5PreviewAccess runs it; `finale` in the json is what
+# it needs to know.
 ix0, iy0, iz0 = nxt[:3]
 p = open_room('ivory', nxt[:3])
 ivory_in = (p.z, p.y)
 p.rest(12, 9)
 centre_room(p)
-COLUMN, TREAD_W = 10.0, 6.0
-RT = COLUMN + TREAD_W / 2
+COLUMN, I_W0, I_W1, I_TREAD = 12.0, 10.0, 2.2, 3.6
 icx, icz = ix0 + SHAFT / 2, 0.0
-p.plat((icx - RT) - p.x - 1.7, 3.0)                              # the beam out to the foot of the stair
-STEP, TURNS_UP = 16.5, 3                                         # three treads out of six missing = 49.5 degrees = 91% of the reach
-tread_l = 2 * RT * math.sin(math.radians(STEP / 2))
-ang, y, k = 180.0, p.y, 0
-flat_reach = None
-pending = None                                                   # (gap, dy) to record on the next tread
-total = int(360 * TURNS_UP / STEP)
-i = 0
-last = (p.x, p.z)
-while i <= total:
-    quarter = i % 6                                              # six steps of 15 degrees to a quarter turn
-    if quarter in (3, 4) and i < total - 2:                      # the missing stretch: two treads out of six
-        if quarter == 3:
-            pending = True
-        i += 1
-        continue
-    a = math.radians(180.0 - i * STEP)                           # clockwise seen from above: toward +z first
-    x, z = icx + RT * math.cos(a), icz + RT * math.sin(a)
-    heading = math.degrees(a) - 90
-    if pending:
-        dy = 1.0
-        gap_len = math.hypot(x - last[0], z - last[1]) - tread_l
-        cap = reach(dy) * SHARE['ivory']
-        assert gap_len <= cap + 1e-6, f'ivory: gap {gap_len:.2f} over the {cap:.2f} cap'
-        GAPS.append({'sec': 'ivory', 'gap': round(gap_len, 2), 'dy': dy, 'reach': round(reach(dy), 2), 'share': round(gap_len / reach(dy), 3)})
-        y += dy
-    elif i > 0:
-        y += 1.0
-    part('Step', (tread_l + 0.5, 1.4, TREAD_W), (x, y - 0.7, z), 'ivory', yaw=heading)
-    mark('ivory', x, y, z, jump=bool(pending))
-    pending = None
-    last = (x, z)
-    i += 1
-top_a = math.radians(180.0 - total * STEP)
-tx, tz = icx + (COLUMN + 5) * math.cos(top_a), icz + (COLUMN + 5) * math.sin(top_a)
-part('Rest', (10, 1.4, 14), (tx, y - 0.7, tz), 'ivory')          # the landing at the top, against the column
-mark('ivory', tx, y, tz)
-part('Fold', (y + RISE - BOTTOM, COLUMN * 2, COLUMN * 2), (icx, (y + RISE + BOTTOM) / 2, icz), 'ivory', shape='c', extra={'roll': 90})   # the column goes up into the dark too
-finish = (icx - COLUMN - 4, y, icz)
-for side in (-1, 1):                                             # the lit doorway into the column
-    part('ExitFrame', (3, 16, 3), (icx - COLUMN - 1.2, y + 8, icz + side * 5.5), 'ivory')
-part('ExitFrame', (3, 3, 14), (icx - COLUMN - 1.2, y + 16.5, icz), 'ivory')
-part('ExitDark', (1, 14, 8), (icx - COLUMN - 0.2, y + 7, icz), 'black')
-orb(icx - COLUMN - 5, y + 21, icz, 'ivory')
-close(p, ix0, last=True, x1=ix0 + SHAFT, shaft=True)
+p.plat((icx - COLUMN - I_W0 + 0.4) - p.x, 3.0)                   # the beam out to the foot of the stair
+IVORY_GAPS = [(6.9, 1.0), (7.1, 0.0), (6.8, 1.0), (7.2, 0.0), (6.9, 1.0), (7.2, 0.0)]
+def ivory_unit(k):
+    g, dy = IVORY_GAPS[k % len(IVORY_GAPS)]
+    if k >= 15:
+        g -= 0.3                                                 # the last turns are a body wide: the jumps ease a little
+    first = [(0.0, None)] if k == 0 else [(dy, g)]
+    return first + [(1.25, None)] * 6 + [(0.0, None)]             # steep enough that the thin top turns still clear each other
+x, y, z, heading, rt = spiral('ivory', icx, icz, COLUMN, p.y, 360 * 7.5, lambda t: I_W0 + (I_W1 - I_W0) * t, ivory_unit, tread=I_TREAD)
+YT = y                                                           # the height of the platform, the corridor and the exit
+x1 = ix0 + SHAFT
+part('Fold', (YT - BOTTOM, COLUMN * 2, COLUMN * 2), (icx, (YT + BOTTOM) / 2, icz), 'ivory', shape='c', extra={'roll': 90})   # the column: its top is the platform
+part('Rest', (16, 1.4, 14), (icx + 16.0, YT - 0.7, icz), 'ivory')                # the deck east of it
+solid('Walk', x1 - (icx + 24), 12, YT, (icx + 24 + x1) / 2, icz, 0, 'ivory')     # the pier to the great doorway
+CHECKPOINTS.append({'sec': 'ivory', 'x': round(icx, 2), 'y': round(YT, 2), 'z': round(icz, 2), 'at': len(ROUTE)})
+mark('ivory', icx + 6, YT, icz)
+mark('ivory', icx + 30, YT, icz)
+mark('ivory', x1 - 12, YT, icz)                                  # the walk-through stops here: the corridor is its own test
+orb(icx, YT + 21, icz, 'ivory')
+p.x, p.y, p.z, p.h = x1, YT, icz, 0.0
+DOOR_IN = (14.0, 16.0)
+close(p, ix0, last=True, x1=x1, shaft=True, column=(icx, icz), door=DOOR_IN)
 wall_with_door(ix0 - 4, 'ivory', EXTENT['ivory'][5] + RISE, ivory_in[0], ivory_in[1])
-TOTAL = ix0 + SHAFT
+
+WX = x1 + 8.0                 # the corridor begins at the east face of the well's wall
+L, HALF_W, H = 226.0, 13.0, 16.4
+EX = WX + L                   # the west face of the end wall
+ROOM_LEN = 30.0
+SHELL = L + 4 + ROOM_LEN + 4
+solid('FinaleFloor', SHELL, 72, YT, WX + SHELL / 2, 0, 0, 'stone')                 # carried from the bottom of the drop, like everything
+part('FinaleCeiling', (SHELL, 3, 72), (WX + SHELL / 2, YT + H + 1.6, 0), 'black')
+for side in (-1, 1):
+    part('FinaleShell', (SHELL, H + 3.2, 3), (WX + SHELL / 2, YT + (H + 3.2) / 2 - 0.1, side * 34.6), 'black')
+    # a closing wall: it fills its side from the corridor's face to the shell, and comes in until the two meet
+    part('CrusherWall', (L - 0.4, H, 20.0), (WX + L / 2, YT + H / 2, side * (HALF_W + 10.0)), 'slab', extra={'g': 'Finale', 'side': side})
+# the block waits inside the wall over the doorway; the gate stands 28 studs in and sinks into the floor
+part('CrusherBlock', (7.6, H, DOOR_IN[0] - 0.1), (x1 + 4, YT + DOOR_IN[1] + 0.3 + H / 2, 0), 'slab', extra={'g': 'Finale'})
+part('CrusherGate', (2.4, H, HALF_W * 2 + 0.4), (WX + 28.0, YT + H / 2, 0), 'slab', extra={'g': 'Finale'})
+
+def end_slab(z0, z1, y0, y1):
+    part('FinaleWall', (4.0, y1 - y0, z1 - z0), (EX + 2, YT + (y0 + y1) / 2, (z0 + z1) / 2), 'stone')
+for z0, z1 in ((-36.0, -12.5), (12.5, 36.0), (-5.5, -4.0), (4.0, 5.5)):       # the ends and the piers beside the door
+    end_slab(z0, z1, 0.0, H + 0.1)
+end_slab(-4.0, 4.0, 13.0, H + 0.1)                                            # over the door (8 wide, 13 high)
+for z0, z1 in ((-12.5, -5.5), (5.5, 12.5)):                                    # a window each side: the room looks back down the corridor
+    end_slab(z0, z1, 0.0, 2.5)
+    end_slab(z0, z1, 10.5, H + 0.1)
+    part('FinaleGlass', (0.8, 8.0, 7.0), (EX + 2, YT + 6.5, (z0 + z1) / 2), 'glass', material='Glass', extra={'t': 0.6})
+for side in (-1, 1):                                                           # the small room the walls do not reach
+    part('FinaleWall', (ROOM_LEN, H + 0.1, 4), (EX + 4 + ROOM_LEN / 2, YT + (H + 0.1) / 2, side * 15.0), 'stone')
+FX = EX + 4 + ROOM_LEN
+part('FinaleWall', (4, H + 0.1, 72), (FX + 2, YT + (H + 0.1) / 2, 0), 'stone')
+for side in (-1, 1):                                                           # the lit doorway out of the level
+    part('ExitFrame', (3, 14, 3), (FX - 1.2, YT + 7, side * 5.5), 'ivory')
+part('ExitFrame', (3, 3, 14), (FX - 1.2, YT + 14.5, 0), 'ivory')
+part('ExitDark', (1, 13, 8), (FX - 0.2, YT + 6.5, 0), 'black')
+finish = (FX - 4.5, YT, 0.0)
+for i in range(int(L // 28) + 1):
+    light((WX + 12 + i * 28, YT + 13.4, 0), 34, 0.4, name='CrusherLight')
+light((EX + 4 + ROOM_LEN / 2, YT + 12.5, 0), 34, 0.55)
+light((FX - 5, YT + 9, 0), 20, 0.7)
+FINALE.update({
+    'floor': round(YT, 2), 'height': H, 'half': HALF_W, 'z': 0.0,
+    'entry_x': round(x1 + 4, 2),        # the block's doorway
+    'inside_x': round(WX + 5.0, 2),     # past this line a body is in the corridor
+    'gate_x': round(WX + 28.0, 2), 'end_x': round(EX, 2),
+    'room': [round(EX + 4, 2), round(FX, 2), 13.0],
+    'reentry': [round(EX + 14, 2), round(YT, 2), 0.0],
+    'block_drop': DOOR_IN[1] + 0.3, 'wall_travel': HALF_W,
+})
+TOTAL = WX + SHELL
 
 # a fall is judged against the lowest walking height between a checkpoint and the next one
 for i, cp in enumerate(CHECKPOINTS):
@@ -757,7 +854,7 @@ for i, cp in enumerate(CHECKPOINTS):
 
 OUT.mkdir(parents=True, exist_ok=True)
 data = {'origin': [40000, 600, 0], 'colours': COLOURS, 'parts': PARTS, 'balls': BALLS, 'lights': LIGHTS, 'route': ROUTE,
-        'checkpoints': CHECKPOINTS, 'plates': PLATES, 'start': START, 'finish': finish, 'gaps': GAPS,
+        'checkpoints': CHECKPOINTS, 'plates': PLATES, 'start': START, 'finish': finish, 'gaps': GAPS, 'finale': FINALE,
         'sections': ['rose', 'blue', 'amber', 'mint', 'violet', 'coral', 'orange', 'crimson', 'teal', 'ivory'],
         'physics': {'walk': WALK, 'jump': JUMP, 'gravity': GRAVITY, 'flat_reach': round(reach(0), 2)}}
 (OUT / 'level5.json').write_text(json.dumps(data))

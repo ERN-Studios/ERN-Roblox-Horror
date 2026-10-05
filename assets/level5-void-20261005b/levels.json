@@ -1,0 +1,37 @@
+{
+ "l5_body_hit_1": {
+  "before_lufs": -43.8,
+  "after_lufs": -19.1,
+  "after_peak": -2.0,
+  "seconds": 1.48,
+  "file": "l5_body_hit_1.mp3"
+ },
+ "l5_crusher_slam": {
+  "before_lufs": -16.2,
+  "after_lufs": -15.6,
+  "after_peak": -1.7,
+  "seconds": 3.48,
+  "file": "l5_crusher_slam.mp3"
+ },
+ "l5_crusher_shut": {
+  "before_lufs": -15.0,
+  "after_lufs": -15.6,
+  "after_peak": -1.8,
+  "seconds": 3.48,
+  "file": "l5_crusher_shut.mp3"
+ },
+ "l5_crusher_groan": {
+  "before_lufs": -16.0,
+  "after_lufs": -18.5,
+  "after_peak": -5.9,
+  "seconds": 4.0,
+  "file": "l5_crusher_groan.mp3"
+ },
+ "l5_crusher_grind": {
+  "before_lufs": -21.3,
+  "after_lufs": -20.0,
+  "after_peak": -5.7,
+  "seconds": 9.5,
+  "file": "l5_crusher_grind.ogg"
+ }
+}

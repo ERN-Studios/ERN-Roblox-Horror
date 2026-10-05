@@ -122,9 +122,11 @@ local function livingOthers()
 		-- only players still ACTIVE in the maze: alive and not escaped (escapees
 		-- sit parked in the safe room — nothing to watch there)
 		-- In Level 6 (lobby server) only the others in the level, never somebody standing in the lobby.
+		-- Level 5 is a live level on the same server and shares the marker: only the others in the SAME one.
 		if p ~= player and p:GetAttribute("Escaped") ~= true
 			and (player:GetAttribute("Level6PlaygroundPreview") ~= true
-				or p:GetAttribute("Level6PlaygroundPreview") == true) then
+				or (p:GetAttribute("Level6PlaygroundPreview") == true
+					and (p:GetAttribute("Level5VoidRound") == true) == (player:GetAttribute("Level5VoidRound") == true))) then
 			local char = p.Character
 			local hum = char and char:FindFirstChildOfClass("Humanoid")
 			if hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then

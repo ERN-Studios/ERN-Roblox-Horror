@@ -1235,6 +1235,13 @@ do
 	local reentry = Instance.new("BindableFunction")
 	reentry.Name = "Level6Reentry"
 	reentry.OnInvoke = function(player, free)
+		-- Level 5 is a live level too and its players carry the same marker, so GameManager sends them here:
+		-- they go on to their own level's re-entry (the small room at the end of its last corridor).
+		if typeof(player) == "Instance" and player:IsA("Player") and player:GetAttribute("Level5VoidRound") == true then
+			local theirs = ServerStorage:FindFirstChild("Level5Reentry")
+			if theirs and theirs:IsA("BindableFunction") then return theirs:Invoke(player, free) end
+			return false, "UNAVAILABLE"
+		end
 		local s = session
 		if not s or typeof(player) ~= "Instance" or not player:IsA("Player") then return false, "UNAVAILABLE" end
 		if free == true then

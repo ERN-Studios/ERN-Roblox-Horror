@@ -187,8 +187,78 @@ task.spawn(function()
 			end)
 		end
 	end
+	-- FINALE_20261005: the corridor at the top of the last room. The server moves the block, the gate and the walls
+	-- and plays their sounds on them; this is only the listener's share of it, and only for a listener who is
+	-- there: the jolt of the block landing, one line, and the corridor's lamps going red while the walls come in.
+	local crusher
+	do
+		local lamps = {}                                          -- PointLight -> {its colour, its brightness}
+		local closingUntil = 0
+		local function near()
+			local model = workspace:FindFirstChild(MODEL_NAME)
+			local parts = model and model:FindFirstChild("Finale")
+			local block = parts and parts:FindFirstChild("CrusherBlock")
+			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			return inLevel() and block ~= nil and root ~= nil and (block.Position - root.Position).Magnitude < 420, model
+		end
+		local function jolt(strength, seconds)
+			if player:GetAttribute("ReduceCameraShake") == true then return end
+			local began = os.clock()
+			local name = "Level5Jolt" .. tostring(began)
+			RunService:BindToRenderStep(name, Enum.RenderPriority.Camera.Value + 1, function()
+				local left = 1 - (os.clock() - began) / seconds
+				if left <= 0 then RunService:UnbindFromRenderStep(name) return end
+				local camera = workspace.CurrentCamera
+				camera.CFrame *= CFrame.new((math.random() - 0.5) * strength * left, (math.random() - 0.5) * strength * left, 0)
+			end)
+		end
+		local function redden(on, model)
+			local holders = model and model:FindFirstChild("Lights")
+			if on and holders then
+				for _, holder in ipairs(holders:GetChildren()) do
+					local lamp = holder.Name == "CrusherLight" and holder:FindFirstChildOfClass("PointLight")
+					if lamp and not lamps[lamp] then lamps[lamp] = {lamp.Color, lamp.Brightness} end
+				end
+			end
+			for lamp, own in pairs(lamps) do
+				if lamp.Parent then
+					TweenService:Create(lamp, TweenInfo.new(on and 0.6 or 1.5),
+						{Color = on and Color3.fromRGB(255, 52, 40) or own[1], Brightness = on and own[2] * 1.4 or own[2]}):Play()
+				end
+			end
+			if not on then table.clear(lamps) end
+		end
+		-- the red swells, slowly at first and quicker as the walls come in; still under ReduceFlashing
+		RunService.Heartbeat:Connect(function()
+			local left = closingUntil - os.clock()
+			if left <= 0 or player:GetAttribute("ReduceFlashing") == true then return end
+			local swell = 0.5 + 0.5 * math.sin(os.clock() * (4 + 6 * math.clamp(1 - left / 16, 0, 1)))
+			for lamp, own in pairs(lamps) do
+				if lamp.Parent then lamp.Brightness = own[2] * (1.0 + 0.8 * swell) end
+			end
+		end)
+		crusher = function(what, seconds)
+			local there, model = near()
+			if what == "reset" then
+				closingUntil = 0
+				redden(false, model)
+			elseif not there then
+				return
+			elseif what == "slam" then
+				jolt(0.9, 0.7)
+				say("THE WAY BACK IS SHUT", 2.2)
+			elseif what == "closing" then
+				closingUntil = os.clock() + (tonumber(seconds) or 16) + 1
+				redden(true, model)
+				say("THE WALLS ARE CLOSING", 3.4)
+			elseif what == "shut" then
+				closingUntil = 0
+				jolt(1.3, 0.9)
+			end
+		end
+	end
 	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP",
-		orange = "ORANGE   ·   THE SPIRAL", crimson = "CRIMSON   ·   THE RING", teal = "TEAL   ·   THE PILLARS", ivory = "IVORY   ·   THE TOWER"}
+		orange = "ORANGE   ·   THE SPIRAL", crimson = "CRIMSON   ·   THE CLIMB", teal = "TEAL   ·   THE PILLARS", ivory = "IVORY   ·   THE TOWER"}
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
 		if what == "died" then
 			-- no checkpoints (owner, 2026-10-04): a fall or any other death ends the run; black until the lobby
@@ -207,6 +277,11 @@ task.spawn(function()
 			flash(Color3.new(1, 1, 1), 0.7)             -- short: the LEVEL 5 CLEARED screen comes up behind it
 		elseif what == "devfall" then
 			if devFall then devFall(a, b) end
+		elseif what == "crusher" then
+			crusher(a, b)
+		elseif what == "crushed" then
+			if fall then fall:Stop() end
+			flash(Color3.new(0, 0, 0), 1.8)             -- black for a moment; the party's death screen is RoundUI's
 		end
 	end)
 
@@ -306,7 +381,7 @@ task.spawn(function()
 		holder.Name = "Level5Falling"
 		local route, routeOf = nil, nil
 		-- {parts = {{part, offset, swing, phase, dir}}, at, velocity, turn, spin, sound, loud, fadeAt, born, person,
-		--  floor, strikeY, away, bounceOut, spinAfter, hit, holdUntil}
+		--  floor, strikeY, away, bounceOut, spinAfter, thudSpeed, hit, holdUntil}
 		local things = {}
 		local YELLOW, DARK = Color3.fromRGB(232, 190, 40), Color3.fromRGB(16, 16, 18)
 		local DOWN = Vector3.new(0, -1, 0)
@@ -450,7 +525,7 @@ task.spawn(function()
 					thing.bounceOut = rng:NextNumber(9, 13)
 					local across = Vector3.new(-away.Z, 0, away.X)     -- it rolls over the edge it leaves by
 					thing.spinAfter = across * rng:NextNumber(4.5, 7) + Vector3.new(0, rng:NextNumber(-1.5, 1.5), 0)
-					thing.thud = rng:NextNumber() < 0.5 and "l5_body_hit_1" or "l5_body_hit_2"
+					thing.thudSpeed = rng:NextNumber(0.86, 1.08)       -- one recording, never quite the same twice
 				end
 			else
 				local kind = rng:NextInteger(1, 4)
@@ -485,10 +560,10 @@ task.spawn(function()
 				voice.Volume *= 0.2
 				task.delay(0.06, function() if voice.Parent then voice:Stop() end end)
 			end
-			local thud = clip(thing.thud, false, torso) or clip("l5_amb_thud", false, torso) or clip("l5_land", false, torso)
+			local thud = clip("l5_body_hit_1", false, torso) or clip("l5_amb_thud", false, torso) or clip("l5_land", false, torso)
 			if thud then
 				thud.Volume = 1.5
-				thud.PlaybackSpeed = 0.94 + math.random() * 0.1
+				thud.PlaybackSpeed = thing.thudSpeed or 1
 				thud.RollOffMode, thud.RollOffMinDistance, thud.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 22, 320
 				thud:Play()
 			end

@@ -357,6 +357,50 @@ do
  end
 end
 
+-- CONTINUE on Level 5's ending (ServerStorage.Level6EnterFromLevel, called by Level5PreviewAccess): the same
+-- player comes on into this level in the round state they already have. Two steps, so the level they are
+-- leaving does not let go of them before this one is ready: "prepare" streams the place to the client,
+-- "enter" takes the player and loads a round body at the arrival.
+do
+	local old = ServerStorage:FindFirstChild("Level6EnterFromLevel")
+	if old then old:Destroy() end
+	local enter = Instance.new("BindableFunction")
+	enter.Name = "Level6EnterFromLevel"
+	enter.OnInvoke = function(player, step)
+		if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players
+			or not DevAccess.IsLevel6Allowed(player) or workspace:GetAttribute("ReservedRoundServer") == true then return false end
+		local model, exit = Runtime.EnsureWorld()
+		hookExit()
+		if not model or not exit or not floorAt(model, exit.Position) then return false end
+		if step == "prepare" then
+			return streamReady(player, exit.Position, MODEL_NAME) == true
+		elseif step == "enter" then
+			-- This level's round body first, at the arrival, and only THEN the round takes the player. The other
+			-- way round (the queue's order, which starts from a lobby avatar) the round's life watch sees the
+			-- living body they came in being torn down by the load, and counts it a death.
+			local frame = upright(exit.CFrame)
+			Runtime.Suit(player, frame)
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			if player.Parent ~= Players or not root or not humanoid or humanoid.Health <= 0
+				or (root.Position - frame.Position).Magnitude > 60 then
+				warn("[Level6PreviewAccess] continue: the round body did not arrive")
+				return false
+			end
+			local joined, reason = Runtime.Join(player)
+			if not joined then
+				player:SetAttribute(IN_PREVIEW, true)      -- Join took the shared marker off: the level they came from still needs it
+				warn("[Level6PreviewAccess] continue rejected: " .. tostring(reason))
+				return false
+			end
+			return true
+		end
+		return false
+	end
+	enter.Parent = ServerStorage
+end
+
 local function hookDoor()
 	local door = lobbyPart("Level6SealedDoor")
 	if door and door:IsA("BasePart") then ensurePrompt(door, ENTER, "ENTER INDOOR PLAYGROUND", onEnter) end

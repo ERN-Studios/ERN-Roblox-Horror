@@ -4,9 +4,10 @@
     python3 tools/level5_void/import_level5.py
 
 Native Parts only. The model carries the attributes Level5PreviewAccess checks, `Level5Exit` (the arrival pad),
-`Level5Finish`, the loose `Balls` (unanchored, each with its `Home`), one folder per pressure plate under `Plates`
-(`Plate`, `Gate`, attributes `Section` and `SectionIndex`), and StringValues `Route` / `Checkpoints` (JSON) for
-the walk-through test, the fall recovery and the plates.
+`Level5Finish`, `Level5Reentry`, the loose `Balls` (unanchored, each with its `Home`), one folder per pressure
+plate under `Plates` (`Plate`, `Gate`, attributes `Section` and `SectionIndex`), the moving parts of the last
+room's corridor under `Finale` (`CrusherWall` x2 with `Side`, `CrusherBlock`, `CrusherGate`), and StringValues
+`Route` / `Checkpoints` / `FinaleData` (JSON) for the walk-through test, the plates and the corridor.
 
 The plaster is `MaterialService."L5 Void Plaster"` (base material Plaster). Its three maps are the PNGs the
 Blender build writes; their asset ids go in TEXTURES below once they are uploaded (Asset Manager > Import).
@@ -76,18 +77,30 @@ for _, row in ipairs(data.parts) do
 	part.Size = Vector3.new(row.s[1], row.s[2], row.s[3])
 	part.CFrame = CFrame.new(O + Vector3.new(row.p[1], row.p[2], row.p[3]))
 		* CFrame.Angles(0, -math.rad(row.yaw), 0) * CFrame.Angles(0, 0, math.rad(row.roll or 0))
+	if row.t then part.Transparency = row.t end
+	if row.side then part:SetAttribute("Side", row.side) end
 	if row.light then
 		local glow = Instance.new("PointLight")
 		glow.Range, glow.Brightness, glow.Shadows = row.light[1], row.light[2], false
 		glow.Color = Color3.fromRGB(255, 250, 240)
 		glow.Parent = part
 	end
-	part.Parent = model.Geometry
+	-- a row with a group goes in a folder of its own: the parts a script moves are not lost among the static ones
+	local home = model.Geometry
+	if row.g then
+		home = model:FindFirstChild(row.g)
+		if not home then
+			home = Instance.new("Folder")
+			home.Name = row.g
+			home.Parent = model
+		end
+	end
+	part.Parent = home
 	made += 1
 end
 for _, row in ipairs(data.lights) do
 	local holder = Instance.new("Part")
-	holder.Name = "Light"
+	holder.Name = row.n or "Light"
 	holder.Anchored, holder.CanCollide, holder.CanQuery, holder.CanTouch = true, false, false, false
 	holder.Transparency = 1
 	holder.Size = Vector3.new(1, 1, 1)
@@ -143,6 +156,9 @@ local function marker(name, at)
 end
 marker("Level5Exit", Vector3.new(data.start[1], data.start[2], data.start[3]))
 marker("Level5Finish", Vector3.new(data.finish[1], data.finish[2], data.finish[3]))
+if data.finale and data.finale.reentry then
+	marker("Level5Reentry", Vector3.new(data.finale.reentry[1], data.finale.reentry[2], data.finale.reentry[3]))
+end
 local index = {}
 for i, name in ipairs(data.sections) do index[name] = i end
 for _, row in ipairs(data.plates) do
@@ -205,7 +221,7 @@ for _, row in ipairs(data.plates) do
 	end
 	folder.Parent = model.Plates
 end
-for name, value in pairs({Route = data.route, Checkpoints = data.checkpoints}) do
+for name, value in pairs({Route = data.route, Checkpoints = data.checkpoints, FinaleData = data.finale}) do
 	local holder = Instance.new("StringValue")
 	holder.Name = name
 	holder.Value = Http:JSONEncode(value)
@@ -220,5 +236,5 @@ local cf, size = model:GetBoundingBox()
 model:SetAttribute("BoundsCenter", cf.Position)
 model:SetAttribute("BoundsSize", size)
 return "instances " .. #model:GetDescendants() .. ", bounds " .. tostring(size)
-''' % (ORIGIN, json.dumps({k: data[k] for k in ('start', 'finish', 'plates', 'sections', 'colours', 'route', 'checkpoints')}), -420)))
+''' % (ORIGIN, json.dumps({k: data[k] for k in ('start', 'finish', 'plates', 'sections', 'colours', 'route', 'checkpoints', 'finale')}), -420)))
 print('built', total)

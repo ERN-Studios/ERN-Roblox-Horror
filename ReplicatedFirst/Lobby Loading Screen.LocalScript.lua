@@ -757,17 +757,23 @@ do
 
 	if workspace:GetAttribute("ReservedRoundServer") == true then task.spawn(coverRound, true) end
 	local wasLive = player:GetAttribute("Level6PlaygroundPreview") == true
+	local wasFive = player:GetAttribute("Level5VoidRound") == true
 	while true do
 		task.wait(0.1)
 		local live = player:GetAttribute("Level6PlaygroundPreview") == true
+		local five = player:GetAttribute("Level5VoidRound") == true
 		if not up then
 			if roundCover() then
 				task.spawn(coverRound, false)
 			elseif live and not wasLive then
 				task.wait(0.15)                          -- Level 5 sets its own marker next to the shared one
 				task.spawn(coverLive, player:GetAttribute("Level5VoidRound") == true and 5 or 6)
+			elseif live and wasFive and not five then
+				-- CONTINUE on Level 5's ending: the same player goes on into Level 6 with the shared marker
+				-- still set, so there is no rising edge to see. Level 5's own marker dropping is the cue.
+				task.spawn(coverLive, 6)
 			end
 		end
-		wasLive = live
+		wasLive, wasFive = live, five
 	end
 end
