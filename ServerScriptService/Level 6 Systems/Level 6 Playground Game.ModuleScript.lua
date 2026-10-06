@@ -44,7 +44,14 @@ local CONFIG = {
 	ExitRadius = 11, CaughtReturnDelay = 5.0,   -- the length of the kill cam (the `Choke` clip)
 	PartyDownSeconds = 15,     -- the window after the last player falls, as in every other level
 	ReentryGraceSeconds = 8,   -- a re-entered player is not seen for this long
-	GrabDistance = 2.7,   -- how far in front of its victim it stands for the kill cam: its arms reach 2 studs
+	GrabDistance = 2.3,   -- how far in front of its victim it stands for the kill cam (= Choke.Grab's distance)
+	-- CHOKE_20261006: where the victim's NECK is during the kill, in front of the doll. The `Choke` clip is built
+	-- round exactly these numbers (tools/level6_entity/build_choke.py prints them: change them there), so its hands
+	-- are on the throat for everyone who watches. Each key is {studs the neck rises above where it is when the
+	-- victim stands on the doll's floor, studs in front of the doll}; Times are the ends of the grab and the lift
+	-- and the start and end of the pull.
+	Choke = {Grab = {0.0, 2.30}, Lift = {1.85, 1.78}, Pull = {1.45, 1.62}, Times = {0.30, 1.50, 1.70, 4.30},
+		NeckAboveFeet = 4.66},
 	HipHeight = 2.4,   -- root above the soles; replaced by the mesh's own value when the doll is built
 	EyeHeight = 2.6,   -- eyes above the root
 	SpottedPause = 0.7,
@@ -902,6 +909,19 @@ function Session:perceive()
 	return best
 end
 
+-- CHOKE_20261006: the victim's neck t seconds into the kill, as a point in the doll's own frame (its Root).
+local function chokeNeck(t)
+	local c = CONFIG.Choke
+	local function ease(a, b)
+		local u = math.clamp((t - a) / (b - a), 0, 1)
+		return u * u * (3 - 2 * u)
+	end
+	local lift, pull = ease(c.Times[1], c.Times[2]), ease(c.Times[3], c.Times[4])
+	local rise = c.Grab[1] + (c.Lift[1] - c.Grab[1]) * lift + (c.Pull[1] - c.Lift[1]) * pull
+	local away = c.Grab[2] + (c.Lift[2] - c.Grab[2]) * lift + (c.Pull[2] - c.Lift[2]) * pull
+	return Vector3.new(0, -CONFIG.HipHeight + c.NeckAboveFeet + rise, -away)
+end
+
 function Session:catch(player)
 	local state = self.players[player]
 	if not state or state.caught then return end
@@ -931,17 +951,24 @@ function Session:catch(player)
 	self.navLoose = true          -- it left the graph to stand in front of them
 	self:pose("Choke")
 	self:say(pick("kill"), true)
-	-- what the others see: the body is lifted off the floor by the throat and drawn in to its face
+	-- What the others see (CHOKE_20261006): the victim is turned to face it and their neck is carried along
+	-- chokeNeck, the path the clip's hands are solved to: taken by the throat where they stand, lifted off the
+	-- floor at arm's length, then drawn down to its face.
 	if held then
 		local from, started = held.CFrame, os.clock()
-		local inward = flat(self.root.Position - held.Position)
-		inward = inward.Magnitude > 0.1 and inward.Unit or Vector3.zero
+		local doll = self.root.CFrame
+		local head = held.Parent and held.Parent:FindFirstChild("Head")
+		local attach = head and head:FindFirstChild("NeckRigAttachment")
+		local neckLocal = from:PointToObjectSpace(attach and attach.WorldPosition or (from.Position + Vector3.new(0, 1.06, 0)))
+		local facing = CFrame.lookAt(Vector3.zero, flat(doll.Position - from.Position).Magnitude > 0.1
+			and flat(doll.Position - from.Position) or -doll.LookVector)
+		local grabTime = CONFIG.Choke.Times[1]
 		task.spawn(function()
 			while held.Parent and held.Anchored and os.clock() - started < CONFIG.CaughtReturnDelay do
 				local t = os.clock() - started
-				local lift = math.clamp((t - 0.3) / 1.3, 0, 1)
-				local pull = math.clamp((t - 1.6) / 2.8, 0, 1)
-				held.CFrame = from + Vector3.new(0, 1.4 * lift * lift * (3 - 2 * lift), 0) + inward * (1.1 * pull * pull * (3 - 2 * pull))
+				local target = CFrame.new(doll:PointToWorldSpace(chokeNeck(t))) * facing * CFrame.new(-neckLocal)
+				local grab = math.clamp(t / grabTime, 0, 1)
+				held.CFrame = from:Lerp(target, grab * grab * (3 - 2 * grab))     -- from where they stood, in the time its arms take
 				task.wait()
 			end
 		end)

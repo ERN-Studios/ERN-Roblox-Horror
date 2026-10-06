@@ -1059,10 +1059,17 @@ end
 
 -- Kill cam (KILL_CHOKE_20261004, owner: "it grabs the person, chokes them and brings them closer to the face
 -- until it goes black and that is when the player dies"). The doll plays `Choke` (tools/level6_entity/
--- build_choke.py): both hands shoot out to the throat, it lifts, then folds its arms and leans in. The victim's
--- camera HANGS ON THE TWO HAND BONES, just above and behind them, looking at its face - so the hands are at the
--- bottom of the view the whole time and the pull toward the face is the doll's own arms. Sight goes in pulses
--- and then for good; the screen is black before the server kills the body (`CaughtReturnDelay`).
+-- build_choke.py): it takes the throat in both hands, lifts its victim off the floor at arm's length, then folds
+-- its arms and brings them down to its face. Sight goes in pulses and then for good; the screen is black before
+-- the server kills the body (`CaughtReturnDelay`).
+-- CHOKE_20261006 (owner, with frames of the first version: "the choke effect with the hands looks awful"). The
+-- camera used to sit just behind the doll's fingertips, so the view was two fans of fingers. Now it is where
+-- your eyes are: ABOVE THE NECK THE TWO PALMS ARE CLAMPED ON, worked out from the hand bones every frame, so
+-- the hands are under your chin, out of sight, and what you see is its face and both arms running up to your
+-- throat. The gaze drops toward its arms while it holds you up and rises to its face as it draws you in.
+-- the numbers of tools/level6_entity/build_choke.py that the camera shares with the clip and the server
+local CHOKE = {Grab = 0.30, Lift = 1.50, Pull0 = 1.70, Pull1 = 4.30, GrabDistance = 2.30, NeckAboveFeet = 4.66,
+	EyeUp = 0.57, PalmAlong = 0.42, PalmBelowNeck = 0.05}
 killCam = function()
 	local child = childModel()
 	local rig = child and rigOf(child)
@@ -1151,22 +1158,34 @@ killCam = function()
 				if part:IsA("BasePart") or part:IsA("Decal") then part.LocalTransparencyModifier = 1 end
 			end
 		end
-		local face = rig.bones.Head.TransformedWorldCFrame.Position + Vector3.new(0, 0.22, 0)   -- its eyes, not its chin
-		local hands = (left.TransformedWorldCFrame.Position + right.TransformedWorldCFrame.Position) / 2
-		local toward = dollRoot.CFrame.LookVector                   -- from the doll to its victim
-		local pull = math.clamp((t - 1.6) / 2.8, 0, 1)
-		-- the eyes sit above the throat it is holding, a little behind the hands; less behind as it draws them in
-		local eye = hands + Vector3.new(0, 0.62, 0) + toward * (1.0 - 0.6 * pull)
+		local function smooth(u)
+			u = math.clamp(u, 0, 1)
+			return u * u * (3 - 2 * u)
+		end
+		local face = rig.bones.Head.TransformedWorldCFrame:PointToWorldSpace(Vector3.new(0, 0.62, -0.45))   -- between its eyes
+		local chest = rig.bones.Spine and rig.bones.Spine.TransformedWorldCFrame.Position or face - Vector3.new(0, 1.3, 0)
+		-- The middle of each palm is CHOKE.PalmAlong along the hand from its wrist; your neck is between the two and
+		-- your eyes are CHOKE.EyeUp above it. Until its hands have arrived the eye is where they are about to be.
+		local palms = (left.TransformedWorldCFrame:PointToWorldSpace(Vector3.new(-CHOKE.PalmAlong, 0, 0))
+			+ right.TransformedWorldCFrame:PointToWorldSpace(Vector3.new(CHOKE.PalmAlong, 0, 0))) / 2
+		local body = child:FindFirstChild("Body")
+		local standing = dollRoot.CFrame:PointToWorldSpace(Vector3.new(0,
+			-(body and body.Size.Y / 2 or 4.095) + CHOKE.NeckAboveFeet + CHOKE.EyeUp, -CHOKE.GrabDistance))
+		local eye = standing:Lerp(palms + Vector3.new(0, CHOKE.PalmBelowNeck + CHOKE.EyeUp, 0), smooth((t - CHOKE.Grab) / 0.25))
+		local lift = smooth((t - CHOKE.Grab) / (CHOKE.Lift - CHOKE.Grab))
+		local pull = smooth((t - CHOKE.Pull0) / (CHOKE.Pull1 - CHOKE.Pull0))
 		local grab = math.clamp(t / GRAB, 0, 1)
 		grab = 1 - (1 - grab) * (1 - grab)
 		local position = startCF.Position:Lerp(eye, grab)
 		local tremble = (0.02 + 0.05 * pull) * (calm and 0.2 or 1)
 		position += Vector3.new(math.noise(t * 17, 0.5) * tremble, math.noise(0.5, t * 19) * tremble, 0)
-		-- the head is forced back and rolls as the air goes
-		local aim = CFrame.lookAt(position, face + Vector3.new(0, -0.25 * (1 - pull), 0))
+		-- where you look: up at its face as it takes you, down along its arms while it holds you up, into its face
+		-- at the end. The head rolls as the air goes.
+		local gaze = face:Lerp(chest, 0.2 + 0.4 * lift - 0.45 * pull)
+		local aim = CFrame.lookAt(position, gaze)
 			* CFrame.Angles(0, 0, math.rad((calm and 1.5 or 5) * math.sin(t * 2.3) * (0.3 + 0.7 * pull)))
 		cam.CFrame = CFrame.new(position) * startCF.Rotation:Lerp(aim.Rotation, grab)
-		cam.FieldOfView = startFov + (78 - startFov) * grab + (62 - 78) * pull
+		cam.FieldOfView = startFov + (84 + 4 * lift - 16 * pull - startFov) * grab
 		-- sight: it dims on every heartbeat, a little more each time, and then does not come back
 		local dark = math.clamp((t - DARK_FROM) / (DARK_FULL - DARK_FROM), 0, 1)
 		dark = dark * dark * (3 - 2 * dark)

@@ -1275,3 +1275,35 @@ weight and button size on phones, no noise meter.
   a Studio of its own once. `osascript ... set frontmost` still works without the accessibility permission;
   clicking a menu does not.
 
+### Added 2026-10-06 (afternoon) - Level 6 kill cam: the choke is built round the victim's neck
+
+- **Owner, with ten frames from the live game**: "the choke effect with the hands looks awful ... fix this right away,
+  so the entity is choking the player visually." The 2026-10-04 clip held both arms straight out, palms down, wrists
+  0.13 studs apart (the forearms crossed), and the camera sat just behind the fingertips: two fans of fingers.
+- **Now** (`CHOKE_20261006`): `tools/level6_entity/build_choke.py` defines `neck(t)`, where the victim's neck is in the
+  doll's own space for the five seconds, and solves both arms to it every frame: a hand either side of the neck,
+  palms in, thumbs up, the rigid fingers round the back, elbows out. It takes the throat where the victim stands
+  (0.3 s), lifts them 1.85 studs at arm's length (to 1.5 s), then folds its arms and brings them down to its face
+  (1.7 to 4.3 s). The server's `chokeNeck(t)` (`CONFIG.Choke`) carries the victim's body along the same path, turned
+  to face the doll, and the client's camera is where the victim's eyes are: 0.57 above the neck the two palms are
+  clamped on (table `CHOKE`). The three share their numbers; the build prints them.
+- **`tools/level6_entity/rig_math.py`**: forward kinematics and a two-bone arm solver for the Counter's rig in plain
+  Python. The rig has identity bone frames, so the maths is exact: checked against `TransformedWorldCFrame` to a
+  thousandth of a stud. The doll has NO finger bones: a hand is a rigid paddle 0.84 long with the fingers spread,
+  the thumb on its front edge. Any pose that points the hands at a camera shows the fan.
+- **Measured in a real catch in Studio**: the victim's actual neck stayed within 0.06 studs (mean 0.02) of the grip
+  for the whole kill, wrists 1.29 apart. Seen: the frames at about 1 s and 2 s (its face, both arms running to the
+  bottom corners of the view). Not seen in the game: the last second (it is going dark by then), and the kill from
+  another player's screen (the pose was checked from the side on a test rig with a copy of the suit).
+- **A test rig for a pose**: in a play session, clone the doll (and the suit) on the CLIENT while a Level 6 session
+  exists, leave the level, and write `Bone.Transform` on the copy yourself: nothing else animates it, so a pose
+  holds still for `screen_capture` from any side. Stand the player near it (lights far from the player do not
+  draw) and hide the PlayerGui. The suit's visible mesh is `ZyntraHazmatSkinVisual.Scene.char1`, one skinned
+  MeshPart on the same bone names; the R15 parts are all transparent. A real kill lasts 5 s and a capture takes
+  2 to 3 s to arrive: return from the server poll on the doll's `Spotted` pose to get an early frame.
+- The hazmat body, for anything that has to touch it: neck attachment 4.66 above the feet (1.06 above the root),
+  first-person eye 0.57 above that, collar about 1.2 across.
+- Studio had been closed by the owner; `open -g "roblox-studio:..."` reopened it in the background (it came to the
+  front once; MonoCode was put back). In Studio at the end and compiled, NOT published: this session still cannot
+  click Studio's menus.
+

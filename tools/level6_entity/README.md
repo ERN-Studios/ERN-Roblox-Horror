@@ -26,6 +26,20 @@ Idle, Count_Start, Count_Loop, Count_End, Walk_Wander (head scans and twitches),
 Run_Chase, Catch, Head_Twitch (head and neck only, layered at random over Idle, walk and run).
 `export/animations.json` lists length, loop flag and purpose.
 
+## The kill: `Choke` (2026-10-06)
+
+`python3 tools/level6_entity/build_choke.py` builds and installs the kill clip. It is not posed by hand: the
+script defines where the victim's neck is for the five seconds (`neck(t)`, in the doll's space) and solves both
+arms to it with `rig_math.py` (forward kinematics and a two-bone solver; the rig's identity bone frames make it
+exact). The game module moves the victim's body along the same path (`CONFIG.Choke`, `chokeNeck`) and the client's
+kill cam sits where the victim's eyes are, above the neck the palms are clamped on (`CHOKE`). The build asserts
+that the hands reach the neck in every frame and never close in on each other, and prints the numbers the two
+scripts must hold. `--dump 0.3,1.5,4.4 out.json` writes poses for a test rig.
+
+The doll's hands have no finger bones: a hand is a rigid paddle, 0.84 studs from the wrist, fingers spread. A
+grip is therefore the palm against the side of the neck with the fingers lying round the back of it; never point
+a hand at the camera.
+
 ## How it runs in the game
 
 - `AssetService:CreateAssetAsync` is not available from a Studio session, so the mesh cannot become an asset.
