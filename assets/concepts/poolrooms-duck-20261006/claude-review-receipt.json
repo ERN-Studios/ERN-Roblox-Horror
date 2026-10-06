@@ -1,0 +1,119 @@
+{
+  "schema": "level3-promotion-claude-review-v1",
+  "scope": "Read-only explicitly supplied code/facts, tools disabled; no Studio access",
+  "commandArguments": [
+    "--print",
+    "--safe-mode",
+    "--no-chrome",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--model",
+    "opus",
+    "--effort",
+    "max",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a read-only Roblox Luau code-security and game-behavior reviewer. Use only supplied code and facts. You have no tools and cannot inspect or mutate live applications. Distinguish tested facts from inference. Give concise concrete findings within the requested word limit. Do not disclose private internal reasoning."
+  ],
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "startedAtUTC": "2026-10-06T07:01:44.117149+00:00",
+  "finishedAtUTC": "2026-10-06T07:02:42.553960+00:00",
+  "requestedModel": "opus",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "reportedAssistantModels": [
+    "claude-opus-5-5"
+  ],
+  "requestedEffort": "max",
+  "strictEmptyMcpConfig": true,
+  "reportedTools": [],
+  "inputPrompt": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/duck-reference-claude-hput62vl/prompt.md",
+  "inputPromptSHA256": "692569fe169cd38ad7e4d7fc9710bb88d9f0abc4e4614d5e0168bbe69335d2f5",
+  "elapsedSeconds": 58.464,
+  "hardTimeoutSeconds": 180,
+  "exitCode": 0,
+  "spawnedChildPID": 18750,
+  "cleanupTarget": "Only directly spawned owned Claude CLI PID",
+  "childExitConfirmed": true,
+  "timedOut": false,
+  "status": "success",
+  "result": {
+    "subtype": "success",
+    "is_error": false,
+    "result": "**Risks (inferred, untested, unseen)**\n\n- **Leg count:** a three-quarter view can hide or fuse a rear leg; require visible gaps and four grounded feet.\n- **Thin legs:** may reconstruct broken or merged. Use thick, even cylinders.\n- **Hollow eyes:** lose the bulging white-eye identity and may become pits. Use white eyes with menacing pupils and brows.\n- **Wings:** unspecified; may read as extra limbs.\n- **Source clutter:** crop to the duck first.\n\n**Tightened instruction**\n\n```\nOne isolated full-body toy duck monster, centered, fully in frame with margin, portrait format, plain light-gray background. Round yellow body, short tail, small wings flat against sides. Exactly four legs, two front, two rear, like a table: long straight sturdy yellow cylinders twice body height, widely spaced, clear gaps, no overlap; four flat orange webbed feet, all visible. Front three-quarter view, slightly raised camera. Bulging white eyes with tiny black pupils, dark rims, angry brows. Orange beak slightly open, dark interior, one row of six large pointed teeth. Matte-satin, soft even lighting, faint contact shadow. No extra limbs, water, tiles, text, logo, gore.\n```",
+    "duration_ms": 54943,
+    "duration_api_ms": 54719,
+    "num_turns": 1,
+    "total_cost_usd": 0.130352,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 978,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 6126,
+      "output_tokens_details": {
+        "thinking_tokens": 5686
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 978,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 6126,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 978,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 978
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 6126,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 978,
+        "webSearchRequests": 0,
+        "costUSD": 0.130352,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 5686,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": []
+  },
+  "eventTypeCounts": {
+    "system": 42,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1
+  },
+  "rawInternalStreamSaved": false
+}

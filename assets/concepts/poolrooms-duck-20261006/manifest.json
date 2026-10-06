@@ -1,0 +1,32 @@
+{
+  "asset": "four-legged-poolrooms-duck-v1.png",
+  "purpose": "Image-to-3D reference for Meshy; no model generated or imported",
+  "tool": "built-in image_gen.imagegen",
+  "mode": "edit using latest user attachment",
+  "promptFile": "generation-prompt.txt",
+  "sha256": "dc28d674dea33a94c5a4ede5ed8ce3e5884cc50c8bd306e393e0a47d7e4f3895",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "bytes": 1774144,
+  "visualInspection": {
+    "exactlyFourVisibleLegs": true,
+    "fourSeparateWebbedFeet": true,
+    "fullBodyInFrame": true,
+    "yellowDuckIdentityPreserved": true,
+    "scaryNonGoryFace": true,
+    "plainNeutralBackground": true
+  },
+  "claudeCollaboration": {
+    "reportedModel": "claude-opus-5-5",
+    "requestedEffort": "max",
+    "scope": "Text design brief only; Claude did not inspect the image",
+    "receipt": "claude-review-receipt.json",
+    "response": "claude-design-review.md",
+    "decision": "Retain generated image: leg separation and count confirmed visually; black eyes are an intentional horror styling choice."
+  },
+  "meshyReconstructionTested": false,
+  "studioChanged": false,
+  "sourceReference": "User-attached Poolrooms rubber duck screenshot, 2026-10-06"
+}
