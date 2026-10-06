@@ -1307,3 +1307,37 @@ weight and button size on phones, no noise meter.
   front once; MonoCode was put back). In Studio at the end and compiled, NOT published: this session still cannot
   click Studio's menus.
 
+
+### Added 2026-10-06 (night) - The Reach: an easter egg behind the lobby's fence
+
+- **Owner**: at the DJ end of the lobby you can get over the fence; once you are over there, big glowing eyes open in
+  the dark and long clammy arms "made in Blender" creep toward the nearest player; whoever does not jump back is
+  grabbed, pulled into the dark, killed and respawned in the lobby. Everything about it (what a player meets, where
+  the code is, how to build the meshes, how to test) is in `tools/lobby_reach/README.md`. Marker
+  `TUNNEL_REACH_20261006`.
+- **Two new scripts**: `ServerScriptService."Lobby Tunnel Reach"` (who is over the fence, where each hand is, the
+  kill; publishes attributes on `ReplicatedStorage.LobbyTunnelReach`) and `StarterPlayerScripts."Lobby Tunnel Reach
+  Client"` (draws the eyes, the four arms and the victim's screen from those attributes, all local parts). The
+  place for it is a block in `LobbyReimaginedPreview.Builder`.
+- **The fence was three walls deep.** Its own collision was a sheet 30 studs high, the retired furniture pile's
+  blockers (`FurnitureEndBlocker`, in `PreviewCollisions`) still stood in the fence's plane right up to the arch, and
+  the end wall kept its `Opaque End Cap`. The Builder now makes the fence's collision as tall as the fence you see
+  (14.9) and switches the other two off at the DJ end. Getting over needs the two road cases on the stage's back
+  corner; the way back is three crates behind the fence. There is unseen ground for 64 studs behind the wall.
+- **The session COULD create scripts on 2026-10-06** (`Instance.new("Script")` parented to ServerScriptService and
+  StarterPlayerScripts, source through `UpdateSourceAsync`): the refusal noted on 2026-10-03 was not there in this
+  Studio process. Try it before taking over an old script. `CreateAssetAsync` was still refused the same evening.
+- **The meshes are baked per server** from `ServerStorage.LobbyTunnelReachSource` (nine pieces, about a second), as
+  the Level 6 slides are. Vertex colours work on a Neon MeshPart (the irises).
+- **A cap wound the wrong way is a hole in the game**: Blender shows both sides of a face, Roblox culls the back.
+  `build_reach.py` asserts every edge is used once in each direction.
+- **A lobby avatar's standing jump is 7.3 studs** (JumpPower 50, measured), not the 6.4 of v squared over 2g.
+- **Writing the camera from a `RenderStepped` connection loses to the default camera** when the type is Custom; use
+  `BindToRenderStep` after `Enum.RenderPriority.Camera`. The lobby respawn (3 s after a death) lands in the middle
+  of the victim's last shot, so that shot holds `CameraType = Scriptable` every frame.
+- **Tested in Studio, solo**: over the cases and the fence on foot, back over the crates on foot, the arms drawing
+  back after an escape, a taking from start to respawn (19 s standing by the fence), the victim's screen. **Not
+  tested**: two or more players, phones. **No sound** (not asked for; an upload needs the owner's hands).
+- **Studio drift seen that evening** (other sessions, left alone): 21 scripts differ from the repo, among them
+  `ZyntraMonetization`, `LunaTribute`, the Level 2 kit generator and builder, `MazeGenerator`, `QueueBridge` and
+  three Level 4 modules. `python3 tools/mac_pull_from_studio.py --audit` lists them.

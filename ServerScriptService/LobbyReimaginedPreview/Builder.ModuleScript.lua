@@ -603,9 +603,94 @@ function Module.Build()
 					piece("FenceBar", Vector3.new(0.16, h, 0.16), base * CFrame.new(dx, h / 2 + 0.15, 0), METAL, Enum.Material.Metal, false)
 				end
 			end
-			-- what actually stops a body: one sheet the width of the fence, far taller than a jump
-			local stop = piece("FenceCollision", Vector3.new(68, 30, 0.6), base * CFrame.new(0, 15, 0), METAL, Enum.Material.Metal, true)
+			-- TUNNEL_REACH_20261006 (owner: "an easter egg: you CAN get over the fence here, and as soon as you are
+			--   over there, big glowing eyes come on in the dark and long arms creep toward you; if you do not jump
+			--   back it takes you and pulls you into the dark"). The creature is `Lobby Tunnel Reach` (server) and
+			--   `Lobby Tunnel Reach Client`; this block only makes the place for it:
+			--   1. What stops a body is as tall as the fence you see, no taller. It was a 30-stud sheet, and behind
+			--      it stood two more walls nobody could see: the retired furniture pile's blockers (in the fence's
+			--      own plane, right up to the arch) and the end cap. Those are switched off at this end.
+			--   2. A way over and a way back: two road cases on the back corner of the stage (deck 4.5 -> 7.4 ->
+			--      10.0; a jump from the tall one clears the 14.9 by more than a stud), and three crates behind the
+			--      fence, off to the other side (3.6 -> 7.2 -> 10.8, set back so a jump from them clears it too).
+			--   3. Ground to stand on behind the wall: the road, both pavements and the lower walls carry on for
+			--      REACH_GROUND studs, unseen (the tunnel you see there is the copies above), and an unseen wall
+			--      closes it before the first sheet of dark.
+			--   The scripts read where all this is from the folder's attributes.
+			local FENCE_TOP, REACH_GROUND = 14.9, 64
+			local stop = piece("FenceCollision", Vector3.new(68, FENCE_TOP, 0.6), base * CFrame.new(0, FENCE_TOP / 2, 0), METAL, Enum.Material.Metal, true)
 			stop.Transparency = 1
+			local opened = 0
+			local colliders = model:FindFirstChild("PreviewCollisions")
+			for _, c in ipairs(colliders and colliders:GetChildren() or {}) do
+				local along = c:IsA("BasePart") and (c.Position - wall.Position):Dot(inward)
+				if along and along > -3 and along < 9
+					and (c.Name == "Opaque End Cap" or c.Name == "Furniture Base" or c:GetAttribute("FurnitureEndBlocker") == true) then
+					c.CanCollide, c.CanQuery, c.CanTouch = false, false, false
+					c:SetAttribute("OpenedForTunnelReach", true)
+					opened += 1
+				end
+			end
+			local function unseen(name, size, cf)
+				local part = piece(name, size, cf, Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, true)
+				part.Transparency = 1
+				return part
+			end
+			local GAP = 7.6                                                -- the fence stands this far in front of the wall
+			local mid = GAP + 1 + (REACH_GROUND - 1) / 2                   -- the lobby's own ground ends a stud behind the wall
+			unseen("BeyondGround", Vector3.new(33, 1, REACH_GROUND - 1), base * CFrame.new(0, -0.5, mid))
+			for _, side in ipairs({-1, 1}) do
+				unseen("BeyondGround", Vector3.new(17.6, 0.8, REACH_GROUND - 1), base * CFrame.new(side * 25, 0.4, mid))
+				unseen("BeyondSide", Vector3.new(1.3, 36, REACH_GROUND + 8), base * CFrame.new(side * 34.2, 18, GAP + REACH_GROUND / 2 - 3))
+			end
+			unseen("BeyondStop", Vector3.new(73, 39, 1), base * CFrame.new(0, 19.5, GAP + REACH_GROUND + 0.5))
+			-- road cases (the stage's own gear) and crates (whatever was left behind the fence)
+			local CASE, TRIM, GRIP = Color3.fromRGB(23, 24, 27), Color3.fromRGB(104, 108, 114), Color3.fromRGB(10, 10, 11)
+			local WOOD, BATTEN = Color3.fromRGB(104, 80, 55), Color3.fromRGB(72, 54, 37)
+			local function box(at, size, wooden)                           -- `at`: the middle of its underside, fence frame
+				local hx, hy, hz = size.X / 2, size.Y / 2, size.Z / 2
+				local body = piece(wooden and "ReachCrate" or "ReachCase", size - Vector3.new(0.14, 0.14, 0.14), at * CFrame.new(0, hy, 0),
+					wooden and WOOD or CASE, wooden and Enum.Material.WoodPlanks or Enum.Material.SmoothPlastic, true)
+				body.CastShadow = true
+				local edge, metal = wooden and BATTEN or TRIM, wooden and Enum.Material.Wood or Enum.Material.Metal
+				local w = wooden and 0.34 or 0.15
+				for _, sx in ipairs({-1, 1}) do
+					for _, sz in ipairs({-1, 1}) do
+						piece("ReachBoxEdge", Vector3.new(w, size.Y, w), at * CFrame.new(sx * (hx - w / 2), hy, sz * (hz - w / 2)), edge, metal, false)
+					end
+					for _, y in ipairs({w / 2, size.Y - w / 2}) do
+						piece("ReachBoxEdge", Vector3.new(w, w, size.Z), at * CFrame.new(sx * (hx - w / 2), y, 0), edge, metal, false)
+						piece("ReachBoxEdge", Vector3.new(size.X, w, w), at * CFrame.new(0, y, sx * (hz - w / 2)), edge, metal, false)
+					end
+					if not wooden then                                     -- a recessed handle on either end, two latches on the lid
+						piece("ReachBoxGrip", Vector3.new(0.06, 0.55, 1.2), at * CFrame.new(sx * (hx + 0.01), size.Y * 0.42, 0), GRIP, Enum.Material.Metal, false)
+						piece("ReachBoxLatch", Vector3.new(0.36, 0.46, 0.07), at * CFrame.new(sx * size.X * 0.27, size.Y * 0.7, -hz - 0.02), TRIM, Enum.Material.Metal, false)
+					end
+				end
+				if wooden then                                             -- a plank across each long face
+					for _, sz in ipairs({-1, 1}) do
+						piece("ReachBoxEdge", Vector3.new(size.X * 1.05, w, 0.12), at * CFrame.new(0, hy, sz * hz) * CFrame.Angles(0, 0, math.atan2(size.Y, size.X) * 0.82),
+							BATTEN, Enum.Material.Wood, false)
+					end
+				else
+					piece("ReachBoxEdge", Vector3.new(size.X + 0.04, 0.07, size.Z + 0.04), at * CFrame.new(0, size.Y * 0.7, 0), TRIM, Enum.Material.Metal, false)
+				end
+			end
+			local DECK = 4.5                                               -- the stage's top above the road
+			box(base * CFrame.new(10.3, DECK, -5.0), Vector3.new(4.2, 2.9, 2.8), false)
+			box(base * CFrame.new(13.7, DECK, -4.95) * CFrame.Angles(0, math.rad(-4), 0), Vector3.new(2.6, 2.75, 2.8), false)
+			box(base * CFrame.new(13.72, DECK + 2.75, -4.9) * CFrame.Angles(0, math.rad(3), 0), Vector3.new(2.6, 2.75, 2.7), false)
+			for i, x in ipairs({-15.6, -12.1, -8.6}) do                    -- one, two and three crates high
+				for level = 1, i do
+					box(base * CFrame.new(x, (level - 1) * 3.6, 3.9) * CFrame.Angles(0, math.rad(((i * 7 + level * 11) % 9) - 4), 0),
+						Vector3.new(3.4, 3.6, 3.2), true)
+				end
+			end
+			local at = Vector3.new(wall.Position.X, floorY, wall.Position.Z)
+			set:SetAttribute("ReachFrame", CFrame.lookAt(at, at + inward))  -- on the road at the wall: x across, y up, +z into the dark
+			set:SetAttribute("ReachFence", GAP)
+			set:SetAttribute("ReachGround", REACH_GROUND)
+			set:SetAttribute("ReachOpened", opened)
 			-- the signs: a large one high in the middle (over the DJ console), one at eye height either side of the stage
 			local function sign(dx, y, w, h)
 				piece("WarningSignBack", Vector3.new(w + 0.5, h + 0.5, 0.12), base * CFrame.new(dx, y, -0.3), DARK, Enum.Material.Metal, false)
