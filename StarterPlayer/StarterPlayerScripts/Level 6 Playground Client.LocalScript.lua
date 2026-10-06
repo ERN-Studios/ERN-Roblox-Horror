@@ -214,25 +214,47 @@ local HORN_VOLUME, BED_VOLUME, DUCK = 0.18, 0.12, 0.45
 local MUSIC_ON_HORNS = true
 local REVERSED_GAIN = 2.2
 local MUSIC_STAGES = {{speed = 1, octave = 1}, {speed = 1.12, octave = 0.82}, {speed = 1.26, octave = 0.66}}
-local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false}
+local music = {key = nil, stage = 1, bed = nil, horns = {}, level = 0, wanted = false, pending = false,
+	startedAt = 0, aligned = {}, bus = {}}
+
+-- MUSIC_SMOOTH_20261006 (owner: "the music stutters ... it happens for me every time"). Two things made it hitch:
+-- 1. Every copy on a horn was pulled back with a jump whenever it read more than 0.05 s out of step, twenty times a
+--    second. Two positions read in one frame differ by that much on their own when the frame rate is low, so on a
+--    machine that is not running smoothly the copies were being re-seeked all the time. Now a copy is set once as it
+--    comes in (still silent), kept in step by running it 1.5% slower or faster for a moment, and only jumps if it is
+--    three quarters of a second out. The reference is the wall clock, not another sound's position.
+-- 2. Every copy carried its own equaliser and, from the second tape on, its own pitch shifter: up to five of the
+--    most expensive effect there is, at once. The effects now sit once on a sound group per tape.
+local function musicBus(stage)
+	local bus = music.bus[stage]
+	if not bus then
+		local st = MUSIC_STAGES[stage] or MUSIC_STAGES[1]
+		bus = Instance.new("SoundGroup")
+		bus.Name = "Level6MusicBus" .. tostring(stage)
+		local eq = Instance.new("EqualizerSoundEffect")
+		eq.LowGain, eq.MidGain, eq.HighGain = -3, 0, -4
+		eq.Parent = bus
+		if st.octave ~= 1 then
+			local shift = Instance.new("PitchShiftSoundEffect")
+			shift.Octave = st.octave
+			shift.Parent = bus
+		end
+		bus.Parent = game:GetService("SoundService")
+		music.bus[stage] = bus
+	end
+	return bus
+end
 
 local function dressMusic(m, stage)
 	local st = MUSIC_STAGES[stage] or MUSIC_STAGES[1]
 	m.Looped, m.PlaybackSpeed = true, st.speed
-	local eq = Instance.new("EqualizerSoundEffect")
-	eq.LowGain, eq.MidGain, eq.HighGain = -3, 0, -4
-	eq.Parent = m
-	if st.octave ~= 1 then
-		local shift = Instance.new("PitchShiftSoundEffect")
-		shift.Octave = st.octave
-		shift.Parent = m
-	end
+	m.SoundGroup = musicBus(stage)
 end
 
 local function dropMusic(seconds)
 	local old = {music.bed}
 	for _, h in pairs(music.horns) do old[#old + 1] = h end
-	music.bed, music.horns = nil, {}
+	music.bed, music.horns, music.aligned = nil, {}, {}
 	for _, o in ipairs(old) do
 		TweenService:Create(o, TweenInfo.new(seconds), {Volume = 0}):Play()
 		task.delay(seconds + 0.1, function() o:Destroy() end)
@@ -253,6 +275,7 @@ local function setMusic(key, stage)
 	bed.Parent = audio
 	bed:Play()
 	music.bed, music.level = bed, 0          -- the tick below fades it up and hangs copies on the horns
+	music.startedAt = os.clock()
 end
 
 local function musicTick(dt)
@@ -279,6 +302,7 @@ local function musicTick(dt)
 	for horn, m in pairs(music.horns) do
 		if not near[horn] or not horn.Parent then
 			music.horns[horn] = nil
+			music.aligned[m] = nil
 			TweenService:Create(m, TweenInfo.new(0.8), {Volume = 0}):Play()
 			task.delay(0.9, function() m:Destroy() end)
 		end
@@ -293,7 +317,6 @@ local function musicTick(dt)
 			m.Volume = 0
 			m.RollOffMode, m.RollOffMinDistance, m.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 55, 220
 			m.Parent = horn
-			m.TimePosition = bed.TimePosition
 			m:Play()
 			music.horns[horn] = m
 		end
@@ -301,7 +324,23 @@ local function musicTick(dt)
 			local gain = music.key == "l6_music_reversed" and REVERSED_GAIN or 1
 			-- four horns at this level are about as loud as the single quiet track the owner settled on
 			m.Volume += math.clamp(HORN_VOLUME * GENERAL * MUSIC * gain * music.level - m.Volume, -dt * 1.2, dt * 0.35)
-			if math.abs(m.TimePosition - bed.TimePosition) > 0.05 then m.TimePosition = bed.TimePosition end
+			local length = m.TimeLength
+			if length > 1 then
+				local base = (MUSIC_STAGES[music.stage] or MUSIC_STAGES[1]).speed
+				local ref = ((os.clock() - music.startedAt) * base) % length
+				local off = m.TimePosition - ref
+				if off > length / 2 then off -= length elseif off < -length / 2 then off += length end   -- either side of the loop's end
+				local now = os.clock()
+				if not music.aligned[m] or (math.abs(off) > 0.75 and now - music.aligned[m] > 6) then
+					music.aligned[m] = now           -- set once as it comes in, still silent; after that only if far out
+					m.TimePosition = ref
+					m.PlaybackSpeed = base
+				elseif math.abs(off) > 0.09 then
+					m.PlaybackSpeed = base * (off > 0 and 0.985 or 1.015)
+				elseif math.abs(off) < 0.03 then
+					m.PlaybackSpeed = base
+				end
+			end
 		end
 	end
 end
@@ -607,9 +646,35 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("THE WAY OUT IS OPEN", 5, Color3.fromRGB(110, 255, 150))
 		objective("GO DOWN THE HOLE!", "Where the post stood. Slide to the EXIT.", Color3.fromRGB(110, 255, 150))
 	elseif kind == "escaped" then
+		-- WIN_SCREEN_20261006: the server sends the round's own "win" next, and RoundUI draws LEVEL 6 CLEARED with
+		-- its time, survivors and BACK TO LOBBY, as in every level. Nothing of this HUD stays over it.
 		vignette.ImageTransparency = 1
-		countLabel.Text = "LEVEL 6 CLEARED"
-		status("You got out.", 4, Color3.fromRGB(120, 255, 150))
+		markerMode = nil
+		objective(nil)
+		countLabel.Text, statusLabel.Text, hintLabel.Text, timerLabel.Text, dunkLabel.Text = "", "", "", "", ""
+	elseif kind == "exittaunt" then
+		-- TAUNT_20261006 (owner): everyone is down in the room under the court. It screams after them down the
+		-- slide, and ends on a sweet little laugh. Heard from the mouth of the tube in the ceiling; the music ducks.
+		local model = workspace:FindFirstChild(MODEL_NAME)
+		local lights = model and model:FindFirstChild("ExitLights")
+		local mouth = lights and lights:FindFirstChild("L6_ExitRoom_Tube")
+		local voice = counter:FindFirstChild("Voice")
+		local source = AUDIO_ENABLED and voice and (voice:FindFirstChild("l6_exit_taunt") or voice:FindFirstChild("l6_angry_1"))
+		if source then
+			local o = source:Clone()
+			o.Name = "Level6ExitTaunt"
+			o.Looped, o.PlaybackSpeed = false, 1
+			o.RollOffMode, o.RollOffMinDistance, o.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, 45, 300
+			local echo = Instance.new("ReverbSoundEffect")
+			echo.DecayTime, echo.Density, echo.Diffusion, echo.DryLevel, echo.WetLevel = 2.4, 0.8, 0.8, 0, -8
+			echo.Parent = o
+			o.Parent = mouth or audio
+			paCopies[o] = true
+			o.Ended:Once(function() paCopies[o] = nil; o:Destroy() end)
+			task.delay(40, function() paCopies[o] = nil; if o.Parent then o:Destroy() end end)
+			o:Play()
+			soft(o, 2.0 * ENTITY)
+		end
 	elseif kind == "lost" then
 		countLabel.Text = horror.killing and "" or "EVERYONE WAS FOUND"
 		markerMode = nil

@@ -67,14 +67,36 @@ room under the court are out of its reach by construction.
 - *Sight.* Outside a chase it sees a player only in front of it (`SightCos`; all round inside `CloseRange`, and
   all round while it stops to look), with nothing solid between, and a player who stands still behind netting
   further than `NetCoverRange` away is not seen. Moving behind a net is seen. Seen is still dead.
-- *Search.* 90 s (`ArenaSeekSeconds`); a third of its picks are a hunch near a living player.
+- *Search* (`HUNT_20261006`, owner). 90 s (`ArenaSeekSeconds`). It does not look in hiding places: it walks, calmly,
+  toward whoever is nearest (`Session:nearestPlayer`, a straight line), keeps coming, and looks again at where
+  they are now every so often. Quicker each time it counts: `ArenaHuntSpeeds` 7 / 9.5 / 12 studs a second and
+  `ArenaHuntReplan` 1.6 / 1.1 / 0.7 s for searches one to three, then +1.5 a search up to 15 (a player walks
+  at 16). As near as it can get without having seen them, it stops and looks all round for a moment.
 - *The last minute.* The third search won: every lamp turns red, the post counts down from 60 with digits over
   it and the yellow ring on the floor going dark mark by mark (`Finale_Dial`), and the Counter hunts at
   `FinaleChaseSpeed`. At zero the lid drops, the post sinks, green light comes up (`Finale_Glow`: `Pool` over
   the hole, `Rim`, `Up`, `Down`), `Level6HatchOpen` is set and the client says GO DOWN THE HOLE, then EXIT once
   you are under the floor. `finaleReset` puts the post, the lid, the ring and the lights back.
+- *Everyone down* (`TAUNT_20261006`, owner). The moment every player still standing is in the room under the
+  court, the server sends `exittaunt` once and each client plays `l6_exit_taunt` from the mouth of the tube in
+  the ceiling (`ExitLights.L6_ExitRoom_Tube`), with the music ducked: it screams after them, stops, and ends on
+  a sweet laugh. Source: `assets/level6-exit-taunt-20261006` (ElevenLabs, the voice "Demonic child for level
+  6", three takes; take 2 cleaned and levelled is `l6_exit_taunt.mp3`). Until a Sound of that name is in
+  `ReplicatedStorage.Level6Counter.Voice`, `l6_angry_1` stands in.
+- *The ending* (`WIN_SCREEN_20261006`, owner: "like all other maps, same screen and options"). A player through
+  the green door leaves the session and is sent the round remote's own `"win"` (time, survivors, a 15 s
+  deadline, no next level, a serial from 600001), so RoundUI draws LEVEL 6 CLEARED with BACK TO LOBBY, as on
+  the last level of a campaign. `returntolobby` with that serial, or the deadline, sends them home
+  (`releaseWinner`). When the party got out, whoever fell gets the same word ("THE OTHERS FOUND A WAY OUT").
+  RoundUI names the level 6 for a player with `Level6PlaygroundPreview` (the lobby server's `SelectedLevel` is 1).
 - The easter egg's button is at `L6_Anchor_PartyButton` (the floor of a dead end low in the frame); the dance is
   on the court.
+- *Music* (`MUSIC_SMOOTH_20261006` in the client; owner: "the music stutters, every time for me"). The copies on
+  the four nearest horns are kept in step with the wall clock by running 1.5% slower or faster for a moment;
+  a copy is set once as it comes in and jumps again only if it is 0.75 s out. Before, any copy that read 0.05 s
+  out was seeked, twenty times a second, which on a slow frame rate is all the time. The equaliser and pitch
+  shifter sit once on a sound group per tape (`Level6MusicBus<n>`), not on every copy. Measured in Studio: no
+  jumps in 18 s, copies at most 0.02 s apart.
 
 **The look** is set by the client (`ARENA_LOOK`): exposure -0.45, saturation -0.3 and contrast -0.1 (worn
 vinyl, lifted blacks), and 24 faint fill lights hung in the open well (`L6_Fill_*`), because a light's range

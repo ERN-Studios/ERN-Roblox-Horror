@@ -62,6 +62,14 @@ local CONFIG = {
 	ArrivalWait = 25,           -- after the first player is through the gate, how long it waits for the rest
 	ExitDrop = 9,               -- how far under the floor the exit is, at least
 	ArenaExitRadius = 6,        -- the exit's mark is in the passage behind the green door: you are out when you step through
+	-- HUNT_20261006 (owner): each search it walks calmly toward whoever is nearest, and it is quicker, in its
+	-- step and in how soon it notices you have moved, every time it counts again
+	ArenaHuntSpeeds = {7, 9.5, 12},     -- studs a second in the first, second and third search (you walk at 16)
+	ArenaHuntSpeedStep = 1.5,           -- and this much more for every search after that,
+	ArenaHuntSpeedMax = 15,             -- never past this
+	ArenaHuntReplan = {1.6, 1.1, 0.7},  -- seconds before it looks again at where you are now
+	ArenaHuntReplanMin = 0.5,
+	WinChoiceSeconds = 15,              -- LEVEL 6 CLEARED stays up this long, as every level's ending does
 }
 
 local Game = {}
@@ -89,6 +97,7 @@ do
 	if ok and type(advice) == "table" and type(advice.Unknown) == "string" then DEATH_CAUSE = advice.Unknown end
 end
 local session = nil
+local lifeWatch = {}       -- player -> the connection that reports their death
 
 -- PARTY_20261004 (owner): the round's clock. Every deadline in this module reads `clock()`, which stands still
 -- while the easter-egg party is on, so the round carries on afterwards exactly where it was: the search timer,
@@ -457,6 +466,37 @@ local function broadcast(s, ...)
 	end
 end
 
+-- WIN_SCREEN_20261006 (owner: "the map completes like all other maps with the same screen and options"). A player
+-- who gets out is taken off the session and sent GameManager's own "win" word on the round remote, so RoundUI draws
+-- LEVEL 6 CLEARED with the time, the survivors and BACK TO LOBBY (the last level has no CONTINUE), counting down as
+-- in every level. The serials start far from GameManager's and Level 5's, so neither answers for this one.
+local winners = {}            -- player -> {serial, deadline}
+local winSerial = 600000
+local function releaseWinner(player, serial)
+	local mine = winners[player]
+	if not mine or (serial and mine.serial ~= serial) then return end
+	winners[player] = nil
+	if player.Parent == Players and returnHandler and player:GetAttribute(IN_PREVIEW) == true then
+		returnHandler(player, "escaped")
+	end
+end
+local function sendWin(s, player)
+	winSerial += 1
+	local mine = {serial = winSerial, deadline = workspace:GetServerTimeNow() + CONFIG.WinChoiceSeconds}
+	winners[player] = mine
+	roundStatus:FireClient(player, "win", os.clock() - s.startedAt, s.escapedCount, math.max(s.partySize, s.escapedCount, 1),
+		mine.deadline, nil, mine.serial)
+	task.delay(CONFIG.WinChoiceSeconds + 0.5, function() releaseWinner(player, mine.serial) end)
+end
+roundStatus.OnServerEvent:Connect(function(player, message, serial)
+	local mine = winners[player]
+	if message == "returntolobby" and mine and tonumber(serial) == mine.serial then
+		roundStatus:FireClient(player, "returnpending", mine.serial)
+		releaseWinner(player, mine.serial)
+	end
+end)
+Players.PlayerRemoving:Connect(function(player) winners[player] = nil end)
+
 local function newSession(info)
 	local s = setmetatable({}, Session)
 	s.info = info
@@ -465,6 +505,7 @@ local function newSession(info)
 	s.round = 0
 	s.dunks = 0
 	s.wins = 0               -- searches in which every living player touched the post
+	s.startedAt, s.partySize, s.escapedCount = os.clock(), 0, 0
 	info.model:SetAttribute("Level6Wins", 0)
 	info.model:SetAttribute("Level6WinsNeeded", CONFIG.RoundsToWin)
 	s.phase = "starting"
@@ -1077,6 +1118,27 @@ function Session:countPhase()
 	self:pose("Idle")
 end
 
+-- HUNT_20261006: whoever is nearest of those still standing inside (a straight line, floors included).
+function Session:nearestPlayer()
+	local feet, best, bestD = self:feet(), nil, nil
+	for player, state in pairs(self.players) do
+		local root = rootOf(player)
+		if root and not state.caught and not state.escaped and state.entered and root.Position.Y > self.info.floorY - CONFIG.ExitDrop then
+			local d = (root.Position - feet).Magnitude
+			if not bestD or d < bestD then best, bestD = root.Position, d end
+		end
+	end
+	return best, bestD
+end
+
+function Session:huntPace()
+	local n = math.max(self.round, 1)
+	local speeds, plans = CONFIG.ArenaHuntSpeeds, CONFIG.ArenaHuntReplan
+	local speed = speeds[n] or math.min(speeds[#speeds] + (n - #speeds) * CONFIG.ArenaHuntSpeedStep, CONFIG.ArenaHuntSpeedMax)
+	local again = plans[n] or math.max(plans[#plans] - (n - #plans) * 0.1, CONFIG.ArenaHuntReplanMin)
+	return speed, again
+end
+
 function Session:chooseSpot()
 	local feet = self:feet()
 	local options = {}
@@ -1159,6 +1221,32 @@ function Session:seekBrain(deadline)
 			local at = self.noise
 			self.noise = nil
 			self:walkTo(at - Vector3.new(0, 3, 0), self:walkSpeed() * 1.25, "seek")
+		elseif self.info.arena then
+			-- HUNT_20261006 (owner): it does not go looking in hiding places. It walks, calmly, toward whoever is
+			-- nearest, keeps coming, and looks again at where they are now every second or so; quicker each search.
+			if clock() > (self.nextSearchLine or 0) then
+				self.nextSearchLine = clock() + 9 + math.random() * 8
+				self:say(pick("search"))
+			end
+			local target, distance = self:nearestPlayer()
+			local speed, again = self:huntPace()
+			local route = target and self:routeTo(target - Vector3.new(0, 3, 0), true)
+			if route and distance > 9 then
+				local started = clock()
+				self.interrupt = false
+				task.delay(again, function() if self.phase == "seek" and clock() - started >= again - 0.05 then self.interrupt = true end end)
+				self:travel(clipRoute(route, 8), speed, "seek")
+			elseif target then
+				-- as near as it can get, and it has not seen them: it stands and looks all round
+				self:pose("Search_Look")
+				self.lookingRound = true
+				local untilT = clock() + 1.4
+				while clock() < untilT and not self.chase and self.phase == "seek" do task.wait(0.1) end
+				self.lookingRound = false
+			else
+				self:pose("Idle")
+				task.wait(0.3)
+			end
 		else
 			local option = self:chooseSpot()
 			if clock() > (self.nextSearchLine or 0) then
@@ -1450,20 +1538,37 @@ function Session:finalePhase()
 			self:say(pick("exit"), true)
 		end
 		self:perceive()
+		-- TAUNT_20261006 (owner): the second everyone still standing is down in the room under the court, it screams
+		-- after them from above, and ends on a sweet little laugh. Once.
+		if open and not self.taunted then
+			local anchors = model:FindFirstChild("Anchors")
+			local room = anchors and anchors:FindFirstChild("L6_Anchor_ExitRoom")
+			local standing, down = 0, 0
+			for player, state in pairs(self.players) do
+				local root = rootOf(player)
+				if root and room and not state.caught and not state.escaped then
+					standing += 1
+					local d = root.Position - room.Position
+					if math.abs(d.X) <= 16.5 and math.abs(d.Z) <= 13.5 and d.Y > -4.5 and d.Y < 11 then down += 1 end
+				end
+			end
+			if standing > 0 and down == standing then
+				self.taunted = true
+				broadcast(self, "exittaunt")
+			end
+		end
 		if open then
 			for player, state in pairs(self.players) do
 				local root = rootOf(player)
 				if root and not state.caught and not state.escaped and (root.Position - exit).Magnitude <= CONFIG.ArenaExitRadius then
 					state.escaped = true
 					player:SetAttribute(CLEARED, true)
+					self.escapedCount += 1
 					event:FireClient(player, "escaped", player.DisplayName, true); achieve(player, "FirstClearLevel6")
-					event:FireClient(player, "say", "l6_escaped")
-					task.delay(1.5, function()
-						if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
-							returnHandler(player, "escaped")
-						end
-						Game.RemovePlayer(player)
-					end)
+					-- out of the session (it goes on for whoever is still inside) and onto the ending every level has
+					self.players[player] = nil
+					if lifeWatch[player] then lifeWatch[player]:Disconnect(); lifeWatch[player] = nil end
+					sendWin(self, player)
 				end
 			end
 		end
@@ -1783,7 +1888,9 @@ function Session:finish()
 	for player in pairs(self.players) do
 		if player.Parent == Players then
 			roundStatus:FireClient(player, "partydownclear")
-			if returnHandler and player:GetAttribute(IN_PREVIEW) == true then
+			if self.info.arena and self.escapedCount > 0 then
+				sendWin(self, player)          -- the party got out: whoever fell sees the same ending, as in every level
+			elseif returnHandler and player:GetAttribute(IN_PREVIEW) == true then
 				task.spawn(returnHandler, player, "over")
 			end
 			event:FireClient(player, "left")
@@ -1840,7 +1947,7 @@ local function ownRoundCamera(player)
 end
 
 -- Deaths are read off the humanoid, so a reset or a fall counts the same as the doll's catch.
-local lifeWatch = {}
+-- (lifeWatch is declared at the top: the finale uses it too)
 local function watchLife(player)
 	if lifeWatch[player] then return end
 	local function hook(character)
@@ -1895,10 +2002,13 @@ function Game.AddPlayer(player)
 		if info.arena then pcall(finaleReset, info.model) end     -- whatever a session that broke off left behind
 		session = newSession(info)
 		session.players[player] = {dunked = false}
+		session.partySize += 1
 		task.spawn(function() session:run() end)
 	else
 		session.players[player] = {dunked = false}
+		session.partySize += 1
 	end
+	winners[player] = nil
 	local s = session
 	event:FireClient(player, "joined", s.round, s.dunks, s:target(), s.phase)
 	return true

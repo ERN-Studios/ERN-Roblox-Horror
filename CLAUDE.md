@@ -1238,3 +1238,25 @@ weight and button size on phones, no noise meter.
   Roblox, the live game still has the old hall; the arena is saved in the Team Create place.
 - `ZyntraConfig`'s L6Party hint said "behind the arcade counter"; that one line was changed in Studio and in the repo
   copy ("at a dead end in the frame"). The rest of that script's foreign drift was left alone.
+
+### Added 2026-10-06 (later in the morning) - Level 6: calm hunt, standard ending, the line in the exit room, music
+
+- **Owner**: Level 6 must complete "like all other maps with the same screen and options"; "the music stutters ...
+  it happens for me every time"; each round the Counter is to pathfind calmly toward the nearest player, its
+  pathfinding and walk speed quicker every round; and the second everyone is down in the exit room, a furious
+  ElevenLabs line in the Level 6 voice that ends in a sweet laugh.
+- **What changed** is in `tools/level6_playground/README.md` ("Round changes for the arena": Search, Everyone down,
+  The ending, Music). Markers: `HUNT_20261006`, `WIN_SCREEN_20261006`, `TAUNT_20261006` in the game module,
+  `MUSIC_SMOOTH_20261006` in the client. RoundUI got one expression (the level's number).
+- **Tested in Studio, solo**: searches walked at 7, 9.5 and 12 toward the player; the ending drew LEVEL 6 CLEARED,
+  TIME, SURVIVORS 1/1, the countdown and BACK TO LOBBY, and the deadline sent the player home; `exittaunt` fired
+  on arrival in the room; music 0 jumps in 18 s. **Not tested**: the button's own message (the deadline came first;
+  it is the same word and serial RoundUI sends for every level), the line itself in the game (not uploaded when
+  this was written), several players.
+- **A second `local` further down a script is not in scope above it**: `lifeWatch` was declared 400 lines below
+  the finale that began to use it, where it would have read as a nil global. Moved to the top.
+- **Codex commits what it writes** (`b74f047`, the three takes) even when told to touch nothing else; check
+  `git log` after a Codex job.
+- **Measuring something that moves from `execute_luau`**: count real elapsed time between samples, not the number
+  of samples (a slow server tick made 9.5 studs/s read as 17.7). The doll publishes its own `Speed` attribute.
+

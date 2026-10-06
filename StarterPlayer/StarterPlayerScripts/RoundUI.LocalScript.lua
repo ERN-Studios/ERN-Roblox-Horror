@@ -4823,7 +4823,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or math.max(1, survivors)))
 		showRoundEnding(
 			-- Level 5 runs on the lobby server, where SelectedLevel stays 1: it says its own number.
-			dead and "THE OTHERS FOUND A WAY OUT" or ("LEVEL " .. tostring(player:GetAttribute("Level5VoidRound") == true and 5
+			dead and "THE OTHERS FOUND A WAY OUT" or ("LEVEL " .. tostring(player:GetAttribute("Level5VoidRound") == true and 5 or player:GetAttribute("Level6PlaygroundPreview") == true and 6
 				or workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
