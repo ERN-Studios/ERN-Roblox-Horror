@@ -38,7 +38,7 @@ N = 1024
 TAU = 2 * np.pi
 
 SETS = {    # studs one repeat covers, the Roblox material it stands on, what it is called in MaterialService
-    'foam_floor': {'studs': 8, 'base': 'SmoothPlastic', 'variant': 'L6 Foam Floor'},
+    'foam_floor': {'studs': 6, 'base': 'SmoothPlastic', 'variant': 'L6 Foam Floor'},      # 6: the court's 12-stud tiles are two repeats
     'vinyl_quilt': {'studs': 7, 'base': 'SmoothPlastic', 'variant': 'L6 Vinyl Quilt'},
     'vinyl_plain': {'studs': 6, 'base': 'SmoothPlastic', 'variant': 'L6 Vinyl Plain'},
     'vinyl_filthy': {'studs': 7, 'base': 'SmoothPlastic', 'variant': 'L6 Vinyl Filthy'},
@@ -173,24 +173,24 @@ def foam_floor():
     scratch = strokes(13, 110, 260, 0.6, 0.97)
     scuff = strokes(14, 60, 150, 3.5, 0.6)
     grime = noise(15, 1.9, 1, 40) * 0.6 + noise(16, 1.2, 8, 140) * 0.4
-    stain = step(noise(17, 2.2, 2, 26), 0.60, 0.70) * (0.55 + 0.45 * noise(171, 1.4, 8, 90))
+    stain = step(noise(17, 2.0, 3, 40), 0.66, 0.80) * (0.55 + 0.45 * noise(171, 1.4, 8, 90))
     speck = np.maximum(spots(18, 150, 1.3), spots(181, 40, 2.6) * 0.8) * step(noise(182, 2.0, 1, 12), 0.35, 0.7)
 
-    height = (0.012 * diamond * (1 - 0.8 * wear) + 0.05 * dents - 0.06 * groove - 0.022 * lip
+    height = (0.02 * diamond * (1 - 0.8 * wear) + 0.05 * dents - 0.085 * groove - 0.03 * lip
               - 0.006 * scratch - 0.003 * scuff)
     BLUE, GREEN = np.array([0.10, 0.155, 0.37]), np.array([0.165, 0.34, 0.20])
-    tint = 1 + 0.10 * (noise(19, 3.0, 1, 3) - 0.5)                 # no two mats quite the same
+    tint = 1 + 0.06 * (noise(19, 3.0, 1, 3) - 0.5)                 # no two mats quite the same
     colour = mix(BLUE, GREEN, check.astype(float)) * tint[:, :, None]
     colour = colour * (0.80 + 0.28 * (1 - grime))[:, :, None]
     colour = mix(colour, colour * 1.5 + 0.06, 0.35 * wear * diamond)        # worn tops of the grip go pale
     colour = mix(colour, (0.42, 0.42, 0.40), 0.30 * scuff)
     colour = mix(colour, (0.50, 0.50, 0.48), 0.13 * scratch)
-    colour = mix(colour, (0.055, 0.05, 0.04), 0.5 * stain)
+    colour = mix(colour, (0.055, 0.05, 0.04), 0.24 * stain)
     colour = mix(colour, (0.03, 0.028, 0.024), 0.9 * groove + 0.25 * lip * grime)
     colour = mix(colour, (0.04, 0.035, 0.03), 0.7 * speck)
     # worn foam has a sheen; dirt, scuffs and the joints kill it; the walked-smooth patches are nearly wet
-    rough = 0.40 + 0.10 * (diamond - 0.5) * (1 - wear) - 0.20 * wear + 0.22 * scuff + 0.14 * scratch
-    rough = rough + 0.30 * groove + 0.18 * stain + 0.10 * (grime - 0.5) + 0.2 * speck
+    rough = 0.29 + 0.10 * (diamond - 0.5) * (1 - wear) - 0.13 * wear + 0.22 * scuff + 0.14 * scratch
+    rough = rough + 0.30 * groove + 0.14 * stain + 0.10 * (grime - 0.5) + 0.2 * speck
     return colour, normal_map(height, px), np.clip(rough, 0.1, 0.95)
 
 
@@ -210,14 +210,16 @@ def vinyl(seed, quilt, filthy=False, studs=7.0):
     seam = np.zeros((N, N))
     stitch = np.zeros((N, N))
     near = np.ones((N, N))
+    shade = 0.90 + 0.10 * folds                                   # what a soft light from above would do, painted in
     if quilt:
         CELLS = 2
         a, b = (U * CELLS) % 1.0, (V * CELLS) % 1.0
         da, db = np.minimum(a, 1 - a), np.minimum(b, 1 - b)
         edge = np.minimum(da, db) * (N / CELLS)                    # pixels to the nearest seam
         pillow = (1 - (2 * a - 1) ** 6) * (1 - (2 * b - 1) ** 6)   # fat in the middle, pulled down at the seam
-        seam = np.exp(-(edge / 3.0) ** 2)
+        seam = np.exp(-(edge / 5.5) ** 2)
         near = np.exp(-(edge / 80.0) ** 2)
+        shade = (0.70 + 0.30 * pillow ** 0.6) * (0.94 + 0.06 * folds)   # each cushion darkens into its seams
         # the skin is pulled toward its stitching: wrinkles run in at right angles to the seam they come from
         side = np.exp(-((da * N / CELLS) / 95.0) ** 2)             # near a seam that runs down the picture
         top = np.exp(-((db * N / CELLS) / 95.0) ** 2)              # near one that runs across
@@ -225,19 +227,19 @@ def vinyl(seed, quilt, filthy=False, studs=7.0):
         along = np.where(da < db, b, a)
         dash = (np.sin(TAU * along * 46) > 0.25).astype(float)
         stitch = blur(np.exp(-((edge - 9.0) / 2.2) ** 2) * dash, 0.8)
-        height = 0.03 * folds * pillow + 0.006 * grain + 0.36 * pillow - 0.10 * seam + 0.022 * stitch - 0.034 * crease
+        height = 0.03 * folds * pillow + 0.006 * grain + 0.58 * pillow - 0.14 * seam + 0.03 * stitch - 0.055 * crease
     else:
         patch = step(noise(seed + 10, 2.4, 1, 6), 0.35, 0.7)       # wrinkled here, taut there
         crease = np.clip(across * patch + 0.5 * down * (1 - patch) * step(noise(seed + 11, 2.4, 1, 6), 0.5, 0.8), 0, 1)
-        height = 0.06 * folds + 0.006 * grain - 0.028 * crease
-    colour = np.ones((N, N, 3)) * 0.93
+        height = 0.10 * folds + 0.006 * grain - 0.045 * crease
+    colour = np.ones((N, N, 3)) * 0.96 * shade[:, :, None]
     colour = colour * (0.86 + 0.14 * (1 - step(grime, 0.35, 0.8)))[:, :, None]
     colour = mix(colour, (0.50, 0.49, 0.46), 0.28 * scuff)
     colour = mix(colour, (0.99, 0.99, 0.97), 0.25 * scratch)
-    colour = mix(colour, (0.34, 0.32, 0.28), 0.2 * crease * step(grime, 0.3, 0.9))     # dirt sits in the wrinkles
+    colour = mix(colour, (0.30, 0.28, 0.25), 0.42 * crease)                           # a wrinkle is a shadow, and dirt sits in it
     colour = mix(colour, (0.12, 0.11, 0.09), 0.85 * seam)
     colour = mix(colour, (0.72, 0.70, 0.62), 0.8 * stitch)
-    rough = 0.24 + 0.08 * (grain - 0.5) + 0.26 * scuff + 0.12 * scratch + 0.18 * step(grime, 0.45, 0.9) + 0.35 * seam + 0.3 * stitch
+    rough = 0.18 + 0.08 * (grain - 0.5) + 0.26 * scuff + 0.12 * scratch + 0.18 * step(grime, 0.45, 0.9) + 0.35 * seam + 0.3 * stitch
     if filthy:
         # mould: it starts in the seams and the low corners and spreads in blotches with a pale fringe
         spread = noise(seed + 20, 2.3, 1, 14) * 0.65 + near * 0.35 * (1 if quilt else 0) + 0.12 * noise(seed + 21, 1.2, 10, 120)
@@ -341,7 +343,7 @@ def slide_plastic():
 def net_knotted():
     """Knotted cord netting, 4 meshes across the repeat (the nets' Textures repeat every 5 studs, as before).
     Near-white with a little shading across the cord, so Texture.Color3 still makes it black or yellow."""
-    CELLS, CORD = 4, 0.085                                         # meshes per repeat, half a cord's width in meshes
+    CELLS, CORD = 4, 0.058                                         # meshes per repeat, half a cord's width in meshes
     a, b = (U * CELLS) % 1.0, (V * CELLS) % 1.0
     wob = 0.012 * (noise(61, 2.0, 3, 30) - 0.5) * 8                # cord is never quite straight
     da = np.abs(((a + wob) % 1.0) - 0.5)                           # distance to the cord that runs down ...
@@ -349,7 +351,7 @@ def net_knotted():
     twist_a = 0.5 + 0.5 * np.sin(TAU * (b * 9 + da * 6))           # the lay of the cord
     twist_b = 0.5 + 0.5 * np.sin(TAU * (a * 9 + db * 6))
     width = CORD * (1 + 0.16 * (noise(62, 1.5, 6, 60) - 0.5) * 2)
-    fray = 0.02 * (noise(63, 0.6, 60, 240) - 0.5)
+    fray = 0.007 * (noise(63, 0.6, 60, 240) - 0.5)
     cord_a = 1 - step(da, width * 0.72 + fray, width + fray)
     cord_b = 1 - step(db, width * 0.72 + fray, width + fray)
     knot = 1 - step(np.hypot(da, db), CORD * 1.55, CORD * 2.05)

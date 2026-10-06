@@ -17,7 +17,7 @@ seam, into `assets/level6-pbr-20261006/`. Nothing is photographed or generated b
 
 | Set | MaterialVariant | Repeat | Worn by |
 |---|---|---:|---|
-| `foam_floor` | L6 Foam Floor | 8 studs | the hall floor, the court, the lid, every deck of the frame |
+| `foam_floor` | L6 Foam Floor | 6 studs | the hall floor, the court, the lid, every deck of the frame |
 | `vinyl_quilt` | L6 Vinyl Quilt | 7 | panels, soft blocks, tunnel, gate, rim, shaft, and a pad under every deck |
 | `vinyl_plain` | L6 Vinyl Plain | 6 | posts, beams, steps, punch bags, bridge rails |
 | `vinyl_filthy` | L6 Vinyl Filthy | 7 | the exit room's pads |
@@ -33,22 +33,30 @@ and a `.blend`), which is how they were judged before anything was uploaded.
 
 ## Getting the pictures into Roblox
 
-They must belong to the group that owns the experience. Three ways were tried on 2026-10-06:
+They must belong to the group that owns the experience.
 
-- `AssetService:CreateAssetAsync` from the session: "not available yet". It is a Studio Beta Feature
-  (`CreateAssetAsyncBetaFeature` in the binary; File > Beta Features) and it is off on this Mac
-  (`defaults read com.roblox.RobloxStudio BetaFeatureInformation`: `CreateAssetAsync = { enabled = 0 }`,
-  `enrolled = 0`). Enrolling is the owner's to accept. That is why it "comes and goes".
-- The MCP `upload_image` tool: uploads to the logged-in user. The experience may then not load the picture, not
-  even in a Studio play session ("The experience doesn't have access permission to use asset id ...", fetch
-  status Failure), until "Share access" is clicked for that one asset in the Output window.
-- **Asset Manager > Import**: all files at once, owned by the group. This is the one used.
+    python3 tools/level6_playground/pbr/upload_pbr.py            # every picture whose current version has no id yet
+    python3 tools/level6_playground/pbr/upload_pbr.py foam_floor # one set
 
-      python3 tools/level6_playground/pbr/collect_ids.py --folder     # ~/Desktop/Level 6 PBR - import these
-      (the owner imports that folder's 22 files in Studio's Asset Manager)
-      python3 tools/level6_playground/pbr/collect_ids.py              # names -> ids, into pbr_ids.json
+`upload_pbr.py` uploads from the session with `AssetService:CreateAssetAsync` and writes `pbr_ids.json` (ids, and
+the hash of the PNG each was made from, so an unchanged picture is never uploaded twice). 22 pictures take about
+two minutes. Play has to be stopped: the call only exists in the Edit datamodel.
 
-File names carry the round (`L6PBR_r1_...`); raise `ROUND` in `collect_ids.py` when a picture changes.
+- **`CreateAssetAsync` is a Studio Beta Feature** (File > Beta Features; `CreateAssetAsyncBetaFeature` in the
+  binary). That is why it "came and went" in earlier notes: it was off, and worked only while some rollout had it
+  on. The owner switched it on on 2026-10-07 (`defaults read com.roblox.RobloxStudio BetaFeatureInformation` shows
+  `CreateAssetAsync = { enabled = 1 }`); Studio has to be restarted after the switch. If it answers "not available
+  yet" again, look there first.
+- How a megapixel picture travels through a text channel: PNG -> RGBA -> `zstd -19` FROM A FILE (a frame made
+  from a pipe has no content size and `EncodingService:DecompressBuffer` refuses it) -> base64 -> pieces of
+  199 000 characters in StringValues (a StringValue holds under 200 000; nothing but instances survives between
+  two `execute_luau` calls) -> one last call joins them, `EncodingService` unpacks, `WritePixelsBuffer`,
+  `CreateAssetAsync`.
+- The MCP `upload_image` tool is NOT a way: it uploads to the logged-in user, and the experience may not load such
+  a picture, not even in a Studio play session ("The experience doesn't have access permission to use asset id
+  ...", fetch status Failure), until "Share access" is clicked for that asset in the Output window.
+- `collect_ids.py` is the fallback when the beta feature is off: it makes a Desktop folder for an Asset Manager
+  import and afterwards finds the ids by name.
 
 ## Dressing the level
 
@@ -72,8 +80,30 @@ What it does is in that file's header. The points that are not obvious:
 - Five slides are baked per server by the game module; it gives them `L6 Slide Plastic` itself.
 - It runs again after every `import_arena.py`.
 
+## What the engine taught (three rounds of tuning on 2026-10-07)
+
+- **A normal map does nothing where no lamp shines.** Roblox has no bounce light: a gallery ceiling lit only by
+  ambient light showed no quilting at all. The cushions' own shading (darker into the seams, wrinkles as shadows)
+  is therefore painted into the vinyl colour maps too.
+- **Everything reads flatter in the engine than in the Blender render**: the relief was raised by about half and
+  the roughness lowered (vinyl 0.24 -> 0.18, foam 0.40 -> 0.29) after the first look.
+- **The floor's repeat has to divide the parts it lies on.** At 8 studs the check broke along every edge of the
+  court's 12-stud tiles; at 6 (mats of 3 studs) two repeats fill a tile exactly. Decks are cut to odd sizes and
+  still break at their edges, where a beam or a net stands anyway.
+- **Stains that are strong repeat loudly.** The first floor had the same dark blotch on every mat.
+- **The old net picture was black cord; the new one is pale** and takes `Texture.Color3` from the net part
+  (black nets get 26, 26, 28).
+- `--play` dresses a running play session without saving, which is how each round was looked at; a real Level 6
+  round (not just standing in the level as a lobby body) is needed to see it under the level's own grade.
+
+## Numbers
+
+Before: 11 122 parts, 16 028 Textures. After: 14 274 parts (3152 are the pads under the decks: no collision, no
+ray queries, no shadows) and 5688 Textures. Frame rate was not measurable in a meaningful way (Studio runs
+throttled at 15 fps in the background, before and after).
+
 ## Not done / not known
 
-- Nobody has seen the sets in the game yet: only in the Blender render. The first look in the engine comes after
-  the import, with `--play`.
-- The steel trusses, lamp housings, signs and the Counter are untouched.
+- Seen in Studio only, by one player: the arrival tunnel, the lane, a first-floor bay, the court through a net,
+  the exit room. Not looked at: the upper floors one by one, the roof and the far walls from close by, a phone.
+- The steel trusses, lamp housings, signs, the yellow clock on the court floor and the Counter are untouched.

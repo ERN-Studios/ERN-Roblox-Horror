@@ -1,0 +1,65 @@
+{
+ "_net_earlier": [
+  125845142544426
+ ],
+ "_sha256": {
+  "block_wall_color": "46cc3870fd7621ccf2c47de44b42bdbe8aba9409edfc0e39d44adbfba25ebfe6",
+  "block_wall_normal": "0e917cb7d1aefd2ee47b479bbb6491c88b62f0bed9e8fce3f4fda4099769f248",
+  "block_wall_roughness": "4153e2ac96ca898857b6fa7dbee15e0a9aa7fae1a7c8b3e6c4c75159272c3569",
+  "foam_floor_color": "623c902e0c248c4d3af399592951f4fa05fae7082520851f7e2403eaaaa4d663",
+  "foam_floor_normal": "8ad0c022520e1480bac4eb06727ab992a774cf33948f7ce2b1ad1b3bd295b66c",
+  "foam_floor_roughness": "e9cd2a44bd139984261f421c816a689cdd9b75e6ca9bff5857c9278aaae52bff",
+  "net_knotted": "f809701fe1531fb97a730f58dbdf0d2ca122f136e9460e024f3b887a82520872",
+  "roof_deck_color": "c19161425ed291194d77d17d8c1d9ac0e5144a1e6eb6f1a09ff6623a42d84f5c",
+  "roof_deck_normal": "74ee35ddca05fe2a9e4af3bc678d2b66cbdfe254bf7ed38fc67aed3e24eb4f44",
+  "roof_deck_roughness": "4a1e429393f781f95b02a7c62c7d2f99342e1724b24aed0492fc0593c4e03e73",
+  "slide_plastic_color": "564f96736888be6e63011339d0bfcd93d49ddfe35adbfcd1568cf758258aa7ae",
+  "slide_plastic_normal": "6f8b44e0b0e6070e9ca779439a1a411b372e35edf27ec430b1b420eddc174fbd",
+  "slide_plastic_roughness": "6bc9c73020199cd0771d2c0d3e28b30a5ef1b961680c78ddd7d5ac10e86ee001",
+  "vinyl_filthy_color": "f8689c174224219a41eac495329b1e7290c4cdd53c4be959fe68677831d5ab6e",
+  "vinyl_filthy_normal": "508def89bd665922e6b8aa89d87435d607a97b024360dbf0b88bd636f6184a8c",
+  "vinyl_filthy_roughness": "aa320e5c735e057d88deee64cfc533f1c516d7f55d1cfa2da808b19a8b269a0c",
+  "vinyl_plain_color": "accbfef70d07bc6ba683b2d367ce9fa4904effc65793113168bb81bbe7906272",
+  "vinyl_plain_normal": "f97169b2229c573ff551d53301809a7a2320b9885402e2ce13d9e1c0dab25d3f",
+  "vinyl_plain_roughness": "6b88de51fb829b93e8f0d274063e46bb2abba94c421390f2f4b179511f078fd7",
+  "vinyl_quilt_color": "5bfebd1e98f2f19142ea60b03a91a6a836728a8d0defc7ea1bfdc5535e44ccb8",
+  "vinyl_quilt_normal": "5c69bbb7d6474028efde19aea2c4085f16ea3ef9015e1fc7abd558184093fef3",
+  "vinyl_quilt_roughness": "9b57bcf74ec25fc39274063186e6df0e98bcd6534882935e42605f0bf6887157"
+ },
+ "block_wall": {
+  "color": 101730840299725,
+  "normal": 126406239441662,
+  "roughness": 102018547365332
+ },
+ "foam_floor": {
+  "color": 89573364153531,
+  "normal": 114478835860341,
+  "roughness": 99951584974364
+ },
+ "net_knotted": 70910648109339,
+ "roof_deck": {
+  "color": 116535660668459,
+  "normal": 109708079633160,
+  "roughness": 111960905623386
+ },
+ "slide_plastic": {
+  "color": 81117682061625,
+  "normal": 137196773926027,
+  "roughness": 131810915134756
+ },
+ "vinyl_filthy": {
+  "color": 102283394916492,
+  "normal": 112837783945488,
+  "roughness": 115302900148431
+ },
+ "vinyl_plain": {
+  "color": 124444848051816,
+  "normal": 134857766524562,
+  "roughness": 117819364746614
+ },
+ "vinyl_quilt": {
+  "color": 78404698627546,
+  "normal": 115342499325316,
+  "roughness": 77912410169986
+ }
+}

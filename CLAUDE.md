@@ -1346,7 +1346,7 @@ weight and button size on phones, no noise meter.
   published when the session ended. `osascript` still had no accessibility permission that evening ("UI elements
   enabled" false), so the session could not press File > Publish; Studio was left open on the place for the owner.
 
-### Added 2026-10-07 (small hours) - Level 6 in PBR: sets made, waiting for the pictures to be imported
+### Added 2026-10-07 (small hours) - Level 6 in PBR: seven texture sets, applied to the arena
 
 - **Owner**: "recreate level 6 with PBR textures for every texture where it makes sense, and the floor ... almost
   everything would look much better with a detailed, extensive PBR look." Everything is in
@@ -1354,16 +1354,22 @@ weight and button size on phones, no noise meter.
 - **What exists**: seven tiling sets (colour, normal, roughness, 1024 px) from `make_pbr.py` in
   `assets/level6-pbr-20261006/` (foam-mat floor with the blue/green check and jigsaw joints, quilted vinyl, plain
   vinyl, mouldy vinyl, painted block, roof deck, slide plastic) and a knotted net picture; a Blender render of
-  them (`artifacts/level6-pbr-20261006/preview`); `apply_pbr.py`, which makes the MaterialVariants and dresses the
-  arena (dry run: 3566 floor parts, 3152 new pads under the decks, 2052 padded parts, 10 340 overlay Textures
-  removed); `collect_ids.py`. The game module gives its five runtime-baked slides `L6 Slide Plastic`.
-- **NOT applied yet.** The pictures have to become group-owned image assets first, and that needs the owner's
-  hands: `~/Desktop/Level 6 PBR - import these` (22 files) through Studio's Asset Manager > Import. Then
-  `collect_ids.py`, `apply_pbr.py --check`, `--play` (first look in the engine), the apply, and a publish.
-- **Why `CreateAssetAsync` comes and goes: it is a Studio Beta Feature** (File > Beta Features; the binary names
-  `CreateAssetAsyncBetaFeature`). On this Mac it is off and the account is not enrolled
-  (`defaults read com.roblox.RobloxStudio BetaFeatureInformation`). Enrolling means accepting terms: the owner's
-  call, not a session's.
+  them (`artifacts/level6-pbr-20261006/preview`); `upload_pbr.py`; `apply_pbr.py`, which makes the MaterialVariants and dresses the
+  arena (3566 floor parts, 3152 new pads under the decks, 2052 padded parts, 10 340 overlay Textures removed);
+  `collect_ids.py` (the fallback: an Asset Manager import). The game module gives its five runtime-baked slides `L6 Slide Plastic`.
+- **APPLIED to the place on 2026-10-07 (about 01:00), NOT published by the session** (it still cannot click
+  Studio's menus). `Workspace."Level 6 Indoor Playground"` carries the attribute `PBR = "PBR_20261006"`, seven
+  `L6 ...` MaterialVariants are in MaterialService, and `Frame_DeckPads` holds 3152 pads. Three rounds of tuning
+  were looked at in play sessions first (`apply_pbr.py --play`); what the engine taught is in the README.
+- **Why `CreateAssetAsync` came and went: it is a Studio Beta Feature** (File > Beta Features; the binary names
+  `CreateAssetAsyncBetaFeature`). The owner switched it on that night and restarted Studio, and since then a
+  session uploads images itself: `tools/level6_playground/pbr/upload_pbr.py` (22 pictures in two minutes; the
+  transport through StringValues, zstd and `EncodingService` is described there and is reusable for any image).
+  If it answers "not available yet" again: `defaults read com.roblox.RobloxStudio BetaFeatureInformation`.
+- **Studio asked for a new sign-in after that restart** ("Reauthorization required" in its log, a Quick Sign-In
+  code on screen): only the owner can do that. A studio the MCP lists with `name: null` has no place open.
+- **A normal map shows nothing where no lamp reaches** (no bounce light in Roblox): shading that must be seen on
+  ambient-lit surfaces has to be painted into the colour map as well.
 - **`upload_image` (MCP) uploads to the USER**, and a picture the experience has not been given access to fails
   even in a Studio play session (fetch status Failure; Output: "Click to share access"). The old overlay pictures
   work because access was shared for each. One stray test picture of that kind exists: 71070358744357.

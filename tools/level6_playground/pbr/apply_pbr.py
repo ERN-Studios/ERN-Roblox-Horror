@@ -2,7 +2,7 @@
 
     python3 tools/level6_playground/pbr/apply_pbr.py --check      # are all the pictures there and usable? changes nothing
     python3 tools/level6_playground/pbr/apply_pbr.py --play       # dress the level in a running play session only (a look, not saved)
-    python3 tools/level6_playground/pbr/apply_pbr.py              # dress the saved place (Edit); refuses unless --check passes
+    python3 tools/level6_playground/pbr/apply_pbr.py              # dress the saved place (Edit, play stopped): only after --check said every picture is usable
     python3 tools/level6_playground/pbr/apply_pbr.py --dry        # count what would change
 
 What it does, to the model as import_arena.py leaves it (run it again after every re-import; it can be run twice):
@@ -158,7 +158,8 @@ for _, group in ipairs(model:GetChildren()) do
 					or (g == "ExitRoom" and smooth and round and part.Shape == Enum.PartType.Ball) then
 					wear(part, "slide_plastic")
 				elseif g == "ExitRoom" then
-					if smooth and (vinyl or round) then
+					-- (on a second run the overlay that marked a pad is gone: the mark the first run left says it)
+					if smooth and (vinyl or round or part:GetAttribute("L6PBR") == "vinyl_filthy") then
 						wear(part, "vinyl_filthy")
 						strip(list)
 					elseif part.Name == "white" then
@@ -183,9 +184,15 @@ if not dry then pads.Parent = model end
 -- 3. the nets: the same Textures, a better picture
 if SPEC.net then
 	for _, d in ipairs(model:GetDescendants()) do
-		if d:IsA("Texture") and tonumber(string.match(d.Texture, "%%d+")) == SPEC.netOld then
+		local id = d:IsA("Texture") and tonumber(string.match(d.Texture, "%%d+"))
+		if id and (id == SPEC.netOld or SPEC.netWas[tostring(id)]) and d.Parent:IsA("BasePart") then
 			tally("net textures")
-			if not dry then d.Texture = "rbxassetid://" .. SPEC.net end
+			if not dry then
+				d.Texture = "rbxassetid://" .. SPEC.net
+				-- the old picture was black cord; this one is pale and takes its colour from the net it hangs on
+				local c = d.Parent.Color
+				d.Color3 = (c.R + c.G + c.B < 0.3) and Color3.fromRGB(26, 26, 28) or c
+			end
 		end
 	end
 end
@@ -237,12 +244,15 @@ def spec(ids):
         'vinylOverlay': digits(TEXTURES['vinyl_pad']),
         'strip': [digits(TEXTURES[k]) for k in ('vinyl_pad', 'foam_mat', 'block_wall', 'roof_deck')],
         'netOld': digits(TEXTURES['net']), 'net': ids.get('net_knotted'),
+        'netWas': {str(n): True for n in ids.get('_net_earlier', []) + ([ids['net_knotted']] if ids.get('net_knotted') else [])},
     }
 
 
 def flat(ids):
     out = {}
     for key, value in ids.items():
+        if key.startswith('_'):                           # bookkeeping, not a picture
+            continue
         if isinstance(value, dict):
             for kind, number in value.items():
                 out[f'{key}_{kind}'] = number

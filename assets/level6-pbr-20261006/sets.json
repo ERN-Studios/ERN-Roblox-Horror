@@ -1,6 +1,6 @@
 {
  "foam_floor": {
-  "studs": 8,
+  "studs": 6,
   "base": "SmoothPlastic",
   "variant": "L6 Foam Floor"
  },
