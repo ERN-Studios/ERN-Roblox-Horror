@@ -1341,3 +1341,7 @@ weight and button size on phones, no noise meter.
 - **Studio drift seen that evening** (other sessions, left alone): 21 scripts differ from the repo, among them
   `ZyntraMonetization`, `LunaTribute`, the Level 2 kit generator and builder, `MazeGenerator`, `QueueBridge` and
   three Level 4 modules. `python3 tools/mac_pull_from_studio.py --audit` lists them.
+- **Published state at the end of 2026-10-06**: the owner published v2743 at 14:14 (Studio's log; it carries the
+  Level 6 choke). The Reach came after that: it is in Studio (Team Create) and in the repo (`be7ffd8`) and was NOT
+  published when the session ended. `osascript` still had no accessibility permission that evening ("UI elements
+  enabled" false), so the session could not press File > Publish; Studio was left open on the place for the owner.
