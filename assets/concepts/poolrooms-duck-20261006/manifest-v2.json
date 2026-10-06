@@ -1,0 +1,30 @@
+{
+  "asset": "mutated-poolrooms-duck-v2.png",
+  "baseImage": "four-legged-poolrooms-duck-v1.png",
+  "purpose": "Meshy image-to-3D reference",
+  "tool": "built-in image_gen.imagegen",
+  "mode": "edit",
+  "promptFile": "generation-prompt-v2.txt",
+  "sha256": "e844461f39035b1a2cfa1551e6569415f8c5c6bbbd4a2164dedd99f00a5b89c9",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "bytes": 1851183,
+  "visualInspection": {
+    "fourTallLegsAndFourSeparateFeet": true,
+    "twoArmsAndTwoHandsVisible": true,
+    "realisticIrisScleraAndEyelidDetails": true,
+    "fullBodyAndHandsWithinFrame": true,
+    "plainNeutralBackground": true
+  },
+  "claudeCollaboration": {
+    "reportedModel": "claude-opus-5-5",
+    "requestedEffort": "max",
+    "scope": "Text design brief only; no generated-image inspection",
+    "receipt": "claude-review-receipt-v2.json",
+    "response": "claude-design-review-v2.md"
+  },
+  "meshyReconstructionTested": false,
+  "studioChanged": false
+}

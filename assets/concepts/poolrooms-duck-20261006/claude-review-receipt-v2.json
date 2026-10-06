@@ -1,0 +1,119 @@
+{
+  "schema": "level3-promotion-claude-review-v1",
+  "scope": "Read-only explicitly supplied code/facts, tools disabled; no Studio access",
+  "commandArguments": [
+    "--print",
+    "--safe-mode",
+    "--no-chrome",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--tools",
+    "",
+    "--permission-mode",
+    "dontAsk",
+    "--permission-prompts",
+    "none",
+    "--disable-slash-commands",
+    "--no-session-persistence",
+    "--model",
+    "opus",
+    "--effort",
+    "max",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--system-prompt",
+    "You are a read-only Roblox Luau code-security and game-behavior reviewer. Use only supplied code and facts. You have no tools and cannot inspect or mutate live applications. Distinguish tested facts from inference. Give concise concrete findings within the requested word limit. Do not disclose private internal reasoning."
+  ],
+  "cliPath": "/Users/zeanjuul4/.local/bin/claude",
+  "startedAtUTC": "2026-10-06T07:04:29.395922+00:00",
+  "finishedAtUTC": "2026-10-06T07:04:53.273434+00:00",
+  "requestedModel": "opus",
+  "reportedCanonicalModel": "claude-opus-5-5",
+  "reportedAssistantModels": [
+    "claude-opus-5-5"
+  ],
+  "requestedEffort": "max",
+  "strictEmptyMcpConfig": true,
+  "reportedTools": [],
+  "inputPrompt": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/duck-reference-v2-claude-vw39u040/prompt.md",
+  "inputPromptSHA256": "99804f0d4e51f9058b54cbda476ff084d7dcff5feafa86f3c3568c20311b1a74",
+  "elapsedSeconds": 23.879,
+  "hardTimeoutSeconds": 180,
+  "exitCode": 0,
+  "spawnedChildPID": 19850,
+  "cleanupTarget": "Only directly spawned owned Claude CLI PID",
+  "childExitConfirmed": true,
+  "timedOut": false,
+  "status": "success",
+  "result": {
+    "subtype": "success",
+    "is_error": false,
+    "result": "Based on the description only; nothing inspected or tested.\n\n- **Limb merging:** Six same-yellow limbs can fuse. Hold the arms clear of the torso and front legs, with visible gaps, bent elbows, and hands overlapping nothing.\n- **Three-quarter occlusion:** Ensure the far arm and both far legs are fully visible and separated, or use a shallower angle.\n- **Fingers:** Thin digits fuse or break. Spread them, thicken slightly, and limit to three or four.\n- **Eyes:** Wet highlights bake in as white spots, so keep them small. Make the eyes large and bulging with thick lid rims so the asymmetry reads as geometry.",
+    "duration_ms": 22425,
+    "duration_api_ms": 22374,
+    "num_turns": 1,
+    "total_cost_usd": 0.052424,
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 942,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2244,
+      "output_tokens_details": {
+        "thinking_tokens": 2012
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 942,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2244,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 942,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 942
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 2,
+        "outputTokens": 2244,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 942,
+        "webSearchRequests": 0,
+        "costUSD": 0.052424,
+        "contextWindow": 1000000,
+        "maxOutputTokens": 128000,
+        "thinkingTokens": 2012,
+        "canonicalModel": "claude-opus-5-5",
+        "provider": "firstParty",
+        "costBasis": "list"
+      }
+    },
+    "permission_denials": []
+  },
+  "eventTypeCounts": {
+    "system": 17,
+    "assistant": 2,
+    "rate_limit_event": 1,
+    "result": 1
+  },
+  "rawInternalStreamSaved": false
+}
