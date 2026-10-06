@@ -328,7 +328,7 @@ return {
 		{Key = "L6Escaped", Name = "Not Today", Text = "Be chased by the Counter and lose it.", Icon = 129994495122834},
 		{Key = "L6Survivor", Name = "Still Hiding", Text = "Still be in the game when it counts for the third time.", Icon = 98690786393152},
 		{Key = "L6Caught", Name = "Found You", Text = "Get caught by the Counter.", Icon = 123603432046201},
-		{Key = "L6Party", Name = "After Hours", Text = "Find what is hidden behind the arcade counter.", Icon = 83270358274893, Secret = true},
+		{Key = "L6Party", Name = "After Hours", Text = "Find what is hidden at a dead end in the frame.", Icon = 83270358274893, Secret = true},
 	},
 
 

@@ -1,8 +1,100 @@
 # Level 6: Indoor Playground Backrooms
 
 A 90s soft-play warehouse with a hide-and-seek round against a mutated counting child.
-Developer preview only, entered from the Level 6 queue bays in the R4 lobby (or the old lobby's
-`Level6SealedDoor`).
+Entered from the Level 6 queue bays in the lobby.
+
+## The Arena (2026-10-06): the map the level uses now
+
+One structure, wall to wall, round the post. Everything below "Pipeline" describes the hall it replaced; the
+shared conventions (coordinates, `L6Slide`, anchors, the round's three searches, the Counter) still hold.
+
+```
+/Applications/Blender.app/Contents/MacOS/Blender -b --python tools/level6_playground/build_arena.py --
+python3 tools/level6_playground/upload_arena_slides.py      # when Roblox allows it (see "Slide meshes")
+python3 tools/level6_playground/import_arena.py             # --only <Group> | --finish | --slide-source | --nav | --dry
+python3 tools/level6_playground/run_luau.py tools/level6_playground/check_nav.luau
+```
+
+The build writes `artifacts/level6-arena-20261006/` (`blend/Level6_Arena.blend`, `export/prims.json`,
+`export/nav.json`, `export/slide_meshes.json`). The importer replaces `Workspace."Level 6 Indoor Playground"`
+(same name and origin, so every script that looks the level up keeps working) with about 11 100 native Parts.
+
+**Shape** (constants at the top of `build_arena.py`): a round hall of radius 156 with a roof at 150. The court
+(radius 44) holds the post. Round it seven bands of cells in twelve floors of 10 studs: four floors straight up
+from the court's edge, a ledge, four more, a second ledge, four more, and behind that face the frame runs solid
+to the wall. Band 4 is a ring corridor on every floor. A Kruskal maze opens the cells to each other; twelve
+stairwells of soft steps join the floors. Two rope-net bridges cross from the second ledge (sectors 4/16 and
+10/22), 80 studs above the post. Players arrive in a padded tunnel (14 wide, 13 high, 30 long) through the hall
+wall, looking straight at the PLAY ZONE gate; one lane of 112 studs runs from the gate to the court.
+
+**The way out** (`exit_layout()` and `EXIT_*` in the build): the hole where the post stood is a funnel (three
+`Arena_SlideSurfaces` panels) that tips you east into the mouth of a slide. The slide winds down three turns
+(radius 14, 10 studs per turn, 284 studs in all) and comes out of the ceiling of a small padded room
+(30 x 24 x 13) with a cut-back lip on the floor, clamp bands, a collar in the ceiling: the owner's picture. The
+room is worn: missing pads over bare concrete, grime on every surface, one failing strip light, a steel door
+with a green EXIT sign and a passage behind it. `L6_Anchor_Exit` stands in that passage; a player within
+`ArenaExitRadius` (6) of it is out, which is the moment they step through the door.
+
+**Slides carry their own direction and pace.** Every trough floor of a slide has `L6SlideDir` (which way that
+stretch runs) and, where the build sets one, `L6SlideSpeed`; the client pushes a body along that way at that
+pace, so a slide takes hold at its almost level mouth, and the way out eases from 40 studs/s to walking pace
+over its last turn. The first three trough segments of a slide have no roof (a standing body can step in).
+Four slides in the frame: orange and yellow from the second ledge to the first, blue from the first ledge to
+the court, green from floor 2 to the court. All run ONE way and their mouths stand mid-sector: the build prints
+each one's distance to its nearest post and stops if a post would stand in the trough.
+
+**Slide meshes.** A slide's look is one moulded mesh (vertex colours carry the plastic, its highlights and its
+dirt). `upload_arena_slides.py` turns a mesh into a group asset with `AssetService:CreateAssetAsync` and records
+id and hash in `arena_slide_ids.json`. That call answers "not available yet" on some days (it worked in the
+small hours of 2026-10-06 and not after Studio was restarted). A mesh without a recorded asset for exactly its
+present data is therefore kept as numbers in `ServerStorage.Level6ArenaSlideSource` and built once per server
+by the game module (`arenaSlides.build`, `CreateDataModelContentAsync`), the way the Counter's own mesh is. The
+importer decides per mesh (`baked_names`). In Edit mode those slides are not there; they appear when a server
+starts. Today orange, yellow, blue and the two pieces of the way out are built this way.
+
+**The Counter never uses Roblox pathfinding here.** The build writes a route graph (`export/nav.json`, about
+2 850 nodes and 3 450 links with their via points: cells, stair flights, the court's two rings, the lane, the
+bridges) and asserts every node can be reached from the post. The importer stores it in `model.NavGraph`; the
+game module's `navOf` / `navNodeAt` / `navRoute` (A* over it) give `Session:routeTo`, and `walkTo`, the chase and
+the finale all travel along it. `check_nav.luau` ray-tests every link in the built level every 1.5 studs
+(something solid in the way, no floor within 4 studs under it, less than 7 studs of headroom) and must print
+three zeros after any change to geometry. The Counter is 8.2 studs tall: crawl tubes, nooks, the tunnel and the
+room under the court are out of its reach by construction.
+
+**Round changes for the arena** (`ARENA_20261006` in the game module, every number in `CONFIG`):
+- *Arrival.* The Counter stands idle at the post until every player is through the gate (or 25 s after the
+  first, 120 s at most). A player who has entered cannot walk back out through it.
+- *Sight.* Outside a chase it sees a player only in front of it (`SightCos`; all round inside `CloseRange`, and
+  all round while it stops to look), with nothing solid between, and a player who stands still behind netting
+  further than `NetCoverRange` away is not seen. Moving behind a net is seen. Seen is still dead.
+- *Search.* 90 s (`ArenaSeekSeconds`); a third of its picks are a hunch near a living player.
+- *The last minute.* The third search won: every lamp turns red, the post counts down from 60 with digits over
+  it and the yellow ring on the floor going dark mark by mark (`Finale_Dial`), and the Counter hunts at
+  `FinaleChaseSpeed`. At zero the lid drops, the post sinks, green light comes up (`Finale_Glow`: `Pool` over
+  the hole, `Rim`, `Up`, `Down`), `Level6HatchOpen` is set and the client says GO DOWN THE HOLE, then EXIT once
+  you are under the floor. `finaleReset` puts the post, the lid, the ring and the lights back.
+- The easter egg's button is at `L6_Anchor_PartyButton` (the floor of a dead end low in the frame); the dance is
+  on the court.
+
+**The look** is set by the client (`ARENA_LOOK`): exposure -0.45, saturation -0.3 and contrast -0.1 (worn
+vinyl, lifted blacks), and 24 faint fill lights hung in the open well (`L6_Fill_*`), because a light's range
+ends at 60 studs and the roof lamps reach nothing. In the last minute the lamps keep their spread, turn red and
+swell (dark for a moment in each cycle). The exit room's three lights are in `ExitLights`, outside that.
+
+**Weight.** Draw calls come from Texture instances, not from parts: with every texture hidden the heaviest view
+(court, looking up the galleries) drew in 18 calls, with them in about 950 (the lobby: 214). The faint sheet
+behind each net used to add 570 more; it is fully transparent now and only the cords show. About 16 000
+textures remain. Not measured on a phone.
+
+**Testing in Studio.** Server: stand the player on the Level 6 pad (`CFrame.new(274, 35.2, -693.2)`); Client:
+`Remotes.ConfigureQueue:FireServer(121, 1, "public", "normal")`. `model:SetAttribute("Level6DevTag", true)`
+scores a tag. In a play session the Server datamodel keeps a `task.spawn`ed thread alive after the call that
+started it, so a whole run can be driven in the background (write progress to a workspace attribute and poll
+it; a single call over about 100 s answers "Request timeout") while `screen_capture` with a camera position
+shows what the client sees. Give the lighting ten seconds after a camera jump. To try the way out alone, set
+`CanCollide = false` on `Finale_Lid` and `Finale_Post` and drop a body in from court level. The doll is
+`model."Level 6 Counting Child"` (attributes `Anim`, `Chasing`); a body left standing in the open is caught
+within a minute of the count ending.
 
 ## Pipeline (run from the repo root, Studio open on the place)
 

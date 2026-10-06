@@ -63,9 +63,9 @@ class Studio:
         self.send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
         text = self.call('list_roblox_studios', {})
         studios = json.loads(text)['studios']
-        match = [s for s in studios if PLACE_HINT in s['name']]
+        match = [s for s in studios if PLACE_HINT in (s.get('name') or '')]     # a Studio on its start page has no name
         if len(match) != 1:
-            raise SystemExit(f'expected one Studio with {PLACE_HINT!r}, found: {[s["name"] for s in studios]}')
+            raise SystemExit(f'expected one Studio with {PLACE_HINT!r}, found: {[s.get("name") for s in studios]}')
         self.studio_id = match[0]['id']
         print('studio:', match[0]['name'], flush=True)
 

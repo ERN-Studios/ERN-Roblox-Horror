@@ -5,10 +5,14 @@
 -- ServerStorage.Level6CounterSource, its clips and voice lines live in ReplicatedStorage.Level6Counter
 -- (pipeline: tools/level6_entity). The server only publishes Anim / AnimSerial / Speed on the model and
 -- says which line to speak; the Level 6 Playground Client moves the bones and plays the sound.
--- Each round: the child faces Home Base and counts to 20 out loud; when it finishes it searches
--- the hide spots and chases anyone it sees. While it is away, players score by "dunking" the home
--- post (once per player per round). Enough dunks opens the emergency exit; reaching it clears the
--- level. A caught player is sent back to the lobby; if everyone is caught the party has lost.
+-- Each round: the child faces the post and counts to 20 out loud; when it finishes it searches
+-- the hide spots and chases anyone it sees. While it is away, players score by touching the post
+-- (once per player per round). After three searches in which everyone alive touched it, the post
+-- counts down a minute and sinks into the floor: the way out is the shaft under it.
+--
+-- ARENA_20261006: the map is "the Arena" (tools/level6_playground/build_arena.py): one frame round the
+-- post, twelve floors, players arriving through a tunnel and the PLAY ZONE gate. The Counter walks the
+-- graph the build writes (model.NavGraph) instead of asking PathfindingService.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local PathfindingService = game:GetService("PathfindingService")
@@ -16,6 +20,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local AssetService = game:GetService("AssetService")
 local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
 
 local MODEL_NAME = "Level 6 Indoor Playground"
 local IN_PREVIEW = "Level6PlaygroundPreview"
@@ -44,6 +49,19 @@ local CONFIG = {
 	EyeHeight = 2.6,   -- eyes above the root
 	SpottedPause = 0.7,
 	IntroSilence = 5,  -- seconds of quiet after the players arrive, before the PA chime
+	-- ARENA_20261006
+	ArenaSeekSeconds = 90,      -- twelve floors to come down from
+	ArenaDunkSafeDistance = 30, -- it has to be out of the middle of the court
+	ArenaWalkSpeed = 11,
+	SightCos = 0.17,            -- it sees what it is facing: within about 80 degrees of where it looks
+	CloseRange = 14,            -- nearer than this it notices you whichever way it faces
+	NetCoverRange = 18,         -- standing still behind netting hides you, unless it is this close
+	StillSpeed = 2,
+	FinaleSeconds = 60,         -- from the third touch to the post going down (owner, 2026-10-06)
+	FinaleChaseSpeed = 22,
+	ArrivalWait = 25,           -- after the first player is through the gate, how long it waits for the rest
+	ExitDrop = 9,               -- how far under the floor the exit is, at least
+	ArenaExitRadius = 6,        -- the exit's mark is in the passage behind the green door: you are out when you step through
 }
 
 local Game = {}
@@ -104,8 +122,17 @@ local function map()
 	for _, a in ipairs(anchors:GetChildren()) do
 		if a:GetAttribute("HideKind") then spots[#spots + 1] = a.Position end
 	end
+	local origin = model:GetAttribute("Origin")
+	local arena = model:GetAttribute("Arena") == true and typeof(origin) == "Vector3"
+	local gate = anchors:FindFirstChild("L6_Anchor_Gate")
+	local gateRadius = nil
+	if arena and gate then
+		local d = gate.Position - home.Position
+		gateRadius = math.sqrt(d.X * d.X + d.Z * d.Z)
+	end
 	return {model = model, home = home.Position, exit = exit.Position, spawn = spawn and spawn.Position or home.Position,
-		spots = spots, floorY = model:GetPivot().Position.Y}
+		spots = spots, floorY = arena and origin.Y or model:GetPivot().Position.Y,
+		arena = arena, gate = gate and gate.Position or nil, gateRadius = gateRadius}
 end
 
 local function rootOf(player)
@@ -118,6 +145,169 @@ end
 
 local function flat(v)
 	return Vector3.new(v.X, 0, v.Z)
+end
+
+-- ---------------------------------------------------------------------------------------
+-- ARENA_20261006: the Counter's own map of the frame. The build knows every cell, opening and stair and writes
+-- them as a graph: one node per cell, one link per way through. The Counter walks along it and nowhere else,
+-- so it never meets a net it cannot pass or a floor it has to guess at.
+local navCache = setmetatable({}, {__mode = "k"})
+local function navOf(model)
+	local cached = navCache[model]
+	if cached ~= nil then return cached or nil end
+	local built = false
+	local folder = model:FindFirstChild("NavGraph")
+	local origin = model:GetAttribute("Origin")
+	if folder and typeof(origin) == "Vector3" then
+		local ok, data = pcall(function()
+			local pieces = {}
+			for i = 1, folder:GetAttribute("Parts") or 0 do
+				pieces[i] = folder:FindFirstChild(string.format("Part_%02d", i)).Value
+			end
+			return HttpService:JSONDecode(table.concat(pieces))
+		end)
+		if ok and type(data) == "table" and type(data.nodes) == "table" then
+			local nodes, links = {}, {}
+			for i = 1, #data.nodes, 3 do
+				nodes[#nodes + 1] = origin + Vector3.new(data.nodes[i], data.nodes[i + 1], data.nodes[i + 2]) / 10
+				links[#nodes] = {}
+			end
+			for _, e in ipairs(data.edges) do
+				local a, b = e[1] + 1, e[2] + 1
+				local via, back = {}, {}
+				for i = 3, #e, 3 do via[#via + 1] = origin + Vector3.new(e[i], e[i + 1], e[i + 2]) / 10 end
+				for i = #via, 1, -1 do back[#back + 1] = via[i] end
+				local cost, at = 0, nodes[a]
+				for _, point in ipairs(via) do cost += (point - at).Magnitude; at = point end
+				cost += (nodes[b] - at).Magnitude
+				table.insert(links[a], {to = b, via = via, cost = cost})
+				table.insert(links[b], {to = a, via = back, cost = cost})
+			end
+			local cells, open = {}, {}
+			for key, id in pairs(data.cells or {}) do cells[key] = id + 1 end
+			for _, id in ipairs(data.open or {}) do open[#open + 1] = id + 1 end
+			built = {nodes = nodes, links = links, home = (data.home or 0) + 1, cells = cells, open = open, origin = origin,
+				radii = data.radii, sectors = data.sectors, floorHeight = data.floorHeight or 10}
+		else
+			warn("[Level6] the navigation graph could not be read: " .. tostring(data))
+		end
+	end
+	navCache[model] = built
+	return built or nil
+end
+
+-- The node of the cell a point is in: floors are ten studs apart, a band is the ring between two radii, a
+-- sector is a slice of it. In the court, in the lane and on the bridges it is the nearest node there.
+local function navNodeAt(nav, pos)
+	local rel = pos - nav.origin
+	local r = math.sqrt(rel.X * rel.X + rel.Z * rel.Z)
+	local openOnly = r < nav.radii[1] or (rel.Z > nav.radii[1] - 4 and math.abs(rel.X) <= 7.6)
+	if not openOnly then
+		local k = math.max(0, math.floor((rel.Y + 4.5) / nav.floorHeight))
+		local band = #nav.radii - 1
+		for b = 1, #nav.radii - 1 do
+			if r < nav.radii[b + 1] then band = b; break end
+		end
+		local a = math.deg(math.atan2(-rel.Z, rel.X)) % 360
+		local s = nav.sectors[band] == 24 and math.floor(((a + 7.5) % 360) / 15) or (math.floor(a / 7.5) + 1) % 48
+		local id = nav.cells[string.format("%d,%d,%d", k, band - 1, s)]
+		if id then return id end
+	end
+	local best, bestD = nil, math.huge
+	local list = openOnly and nav.open or nil
+	for pass = 1, 2 do
+		for i = 1, list and #list or #nav.nodes do
+			local id = list and list[i] or i
+			local d = nav.nodes[id] - pos
+			if pass == 2 or math.abs(d.Y) <= 4.5 then
+				local m = d.X * d.X + d.Z * d.Z + (pass == 2 and 4 * d.Y * d.Y or 0)
+				if m < bestD then best, bestD = id, m end
+			end
+		end
+		if best then return best end
+	end
+	return best
+end
+
+-- The shortest way over the graph from any of `sources` ({node, cost already spent}) to `goal`: a list of nodes.
+local function navRoute(nav, sources, goal)
+	local g, from, closed = {}, {}, {}
+	local heap, size = {}, 0
+	local goalPos = nav.nodes[goal]
+	local function push(node, f)
+		size += 1
+		local i = size
+		heap[i] = {node, f}
+		while i > 1 do
+			local parent = i // 2
+			if heap[parent][2] <= heap[i][2] then break end
+			heap[parent], heap[i] = heap[i], heap[parent]
+			i = parent
+		end
+	end
+	local function pop()
+		local top = heap[1]
+		heap[1] = heap[size]
+		heap[size] = nil
+		size -= 1
+		local i = 1
+		while true do
+			local l, r, m = i * 2, i * 2 + 1, i
+			if l <= size and heap[l][2] < heap[m][2] then m = l end
+			if r <= size and heap[r][2] < heap[m][2] then m = r end
+			if m == i then break end
+			heap[m], heap[i] = heap[i], heap[m]
+			i = m
+		end
+		return top[1]
+	end
+	for _, source in ipairs(sources) do
+		if g[source[1]] == nil or source[2] < g[source[1]] then
+			g[source[1]] = source[2]
+			push(source[1], source[2] + (nav.nodes[source[1]] - goalPos).Magnitude)
+		end
+	end
+	while size > 0 do
+		local node = pop()
+		if node == goal then
+			local list = {node}
+			while from[node] do
+				node = from[node]
+				table.insert(list, 1, node)
+			end
+			return list
+		end
+		if not closed[node] then
+			closed[node] = true
+			for _, link in ipairs(nav.links[node]) do
+				local cost = g[node] + link.cost
+				if not closed[link.to] and (g[link.to] == nil or cost < g[link.to]) then
+					g[link.to] = cost
+					from[link.to] = node
+					push(link.to, cost + (nav.nodes[link.to] - goalPos).Magnitude)
+				end
+			end
+		end
+	end
+	return nil
+end
+
+-- Add the way along a list of nodes to `points`. tags[i] is the node points[i] is, or false for a point on the
+-- way between two nodes (the middle of a doorway, the foot and the head of a stair).
+local function navExpand(nav, list, points, tags)
+	for i = 2, #list do
+		local a, b = list[i - 1], list[i]
+		local chosen = nil
+		for _, link in ipairs(nav.links[a]) do
+			if link.to == b and (not chosen or link.cost < chosen.cost) then chosen = link end
+		end
+		for _, point in ipairs(chosen.via) do
+			points[#points + 1] = point
+			tags[#points] = false
+		end
+		points[#points + 1] = nav.nodes[b]
+		tags[#points] = b
+	end
 end
 
 -- ---------------------------------------------------------------------------------------
@@ -286,6 +476,15 @@ local function newSession(info)
 	local home = info.home
 	root.CFrame = CFrame.lookAt(home + Vector3.new(0, CONFIG.HipHeight - 3 + 0.35, 4), home + Vector3.new(0, CONFIG.HipHeight - 3 + 0.35, 0))
 	model.Parent = info.model
+	-- ARENA_20261006: where it is on the graph. It starts on the node it counts from.
+	s.nav = info.arena and navOf(info.model) or nil
+	if s.nav then
+		s.navLast, s.navBehind, s.navLoose = s.nav.home, {}, false
+		local stand = s.nav.nodes[s.nav.home]
+		root.CFrame = CFrame.lookAt(stand + Vector3.new(0, CONFIG.HipHeight, 0), Vector3.new(home.X, stand.Y + CONFIG.HipHeight, home.Z))
+	elseif info.arena then
+		warn("[Level6] the arena has no navigation graph: the Counter falls back to PathfindingService")
+	end
 	s.heartbeat = RunService.Heartbeat:Connect(function(dt) s:animate(dt) end)
 	return s
 end
@@ -383,7 +582,132 @@ function Session:follow(points, speed, phase)
 	return true
 end
 
+-- ARENA_20261006: the way over the graph from where it stands to `target`. It may be part-way along a link
+-- when it is asked (called off by a noise, or planning again in a chase): then the way starts with whichever end
+-- of that link is the shorter way round, along the link, never across the cell. With `approach` the way ends
+-- with the last few studs to the target itself, inside the target's own cell.
+function Session:routeTo(target, approach)
+	local nav = self.nav
+	local feet = self:feet()
+	local goal = navNodeAt(nav, target)
+	if not goal then return nil end
+	local points, tags = {feet}, {false}
+	local sources = {}
+	local last = self.navLast
+	local behind, ahead, nextNode = {}, {}, nil
+	if self.navLoose or not last then
+		local here = navNodeAt(nav, feet)
+		sources[1] = {here, (nav.nodes[here] - feet).Magnitude}
+		last = nil
+	else
+		behind = self.navBehind or {}
+		local route = self.navRoute
+		if route then
+			for j = (self.navIndex or 1) + 1, #route.points do
+				local tag = route.tags[j]
+				if tag == "off" then break end
+				ahead[#ahead + 1] = route.points[j]
+				if tag then nextNode = tag; break end
+			end
+		end
+		local cost, at = 0, feet
+		for i = #behind, 1, -1 do cost += (behind[i] - at).Magnitude; at = behind[i] end
+		sources[1] = {last, cost + (nav.nodes[last] - at).Magnitude}
+		if nextNode then
+			cost, at = 0, feet
+			for _, point in ipairs(ahead) do cost += (point - at).Magnitude; at = point end
+			sources[2] = {nextNode, cost}
+		end
+	end
+	local list = navRoute(nav, sources, goal)
+	if not list then return nil end
+	local first = list[1]
+	local state = nil                    -- what it will have behind it once it sets off this way
+	if nextNode and first == nextNode then
+		for i, point in ipairs(ahead) do
+			points[#points + 1] = point
+			tags[#points] = i == #ahead and first or false
+		end
+	elseif last and first == last then
+		for i = #behind, 1, -1 do
+			points[#points + 1] = behind[i]
+			tags[#points] = false
+		end
+		points[#points + 1] = nav.nodes[first]
+		tags[#points] = first
+		if nextNode then
+			-- turning back: the node it was heading for is the one behind it now
+			local passed = {}
+			for i = #ahead - 1, 1, -1 do passed[#passed + 1] = ahead[i] end
+			state = {last = nextNode, behind = passed}
+		end
+	else
+		points[#points + 1] = nav.nodes[first]
+		tags[#points] = first
+	end
+	navExpand(nav, list, points, tags)
+	if approach then
+		local node = nav.nodes[goal]
+		if math.abs(target.Y - node.Y) < 4.5 and flat(target - node).Magnitude < 16 then
+			points[#points + 1] = Vector3.new(target.X, node.Y, target.Z)
+			tags[#points] = "off"
+		end
+	end
+	return {points = points, tags = tags, goal = goal, state = state}
+end
+
+-- The first `count` points of a way: a chase plans again before it has gone further than that. The whole way is
+-- kept beside it, because the next plan has to know which node lies ahead even when the cut falls half-way up a
+-- stair (without that it only knew the node behind it, turned back every time, and stood jittering on the steps).
+local function clipRoute(route, count)
+	if #route.points <= count then return route end
+	local points, tags = {}, {}
+	for i = 1, count do points[i], tags[i] = route.points[i], route.tags[i] end
+	return {points = points, tags = tags, goal = route.goal, state = route.state, whole = route}
+end
+
+-- Walk a way from routeTo, keeping track of the node behind it and the points passed since.
+function Session:travel(route, speed, phase)
+	local points, tags = route.points, route.tags
+	if route.state then self.navLast, self.navBehind = route.state.last, route.state.behind end
+	self.navRoute, self.navIndex = route.whole or route, 1
+	for i = 2, #points do
+		local goal = points[i]
+		if tags[i] == "off" then self.navLoose = true end
+		while true do
+			if not self.active or self.phase ~= phase or self.interrupt then return false end
+			local dt = RunService.Heartbeat:Wait()
+			if self.partyOn then self:hold(); continue end
+			if not self.active or self.phase ~= phase or self.interrupt then return false end
+			local feet = self:feet()
+			local delta = goal - feet
+			local dist = delta.Magnitude
+			local step = speed * dt
+			self.anim.speed = speed
+			self.anim.name = speed >= 15 and "Run_Chase" or "Walk_Wander"
+			if dist <= step then
+				self:place(goal, flat(delta))
+				break
+			end
+			self:place(feet + delta.Unit * step, flat(delta))
+		end
+		self.navIndex = i
+		local tag = tags[i]
+		if type(tag) == "number" then
+			self.navLast, self.navBehind, self.navLoose = tag, {}, false
+		elseif tag == false and not self.navLoose then
+			table.insert(self.navBehind, goal)
+		end
+	end
+	return true
+end
+
 function Session:walkTo(pos, speed, phase)
+	if self.nav then
+		local route = self:routeTo(pos, false)
+		if not route then return false end
+		return self:travel(route, speed, phase)
+	end
 	local points = self:path(pos)
 	if not points then
 		-- the 8-stud doll cannot get into a playhouse or behind a counter: go and stand next to it instead
@@ -421,10 +745,21 @@ function Session:surface(pos)
 	return pos
 end
 
+function Session:walkSpeed()
+	return self.info.arena and CONFIG.ArenaWalkSpeed or CONFIG.WalkSpeed
+end
+
+-- ARENA_20261006: through the gate and inside the hall (the tunnel a party arrives in is outside it).
+function Session:inside(pos)
+	local radius = self.info.gateRadius
+	if not radius then return true end
+	return flat(pos - self.info.home).Magnitude < radius - 1
+end
+
 function Session:goHome(phase)
 	local home = self.info.home
 	local stand = home + Vector3.new(0, 0.35 - 3, 4)
-	self:walkTo(stand, CONFIG.WalkSpeed * 1.4, phase)
+	self:walkTo(stand, self:walkSpeed() * 1.4, phase)
 	stand = self:surface(stand)
 	self:place(stand, home - stand)
 	self:pose("Idle")
@@ -447,6 +782,16 @@ function Session:rayParams()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	params.FilterDescendantsInstances = exclude
 	params.RespectCanCollide = true
+	-- ARENA_20261006: a second look that only meets netting, for "is there a net between us"
+	local nets = {}
+	for _, name in ipairs({"Frame_Nets", "Frame_BridgeNets"}) do
+		local f = model:FindFirstChild(name)
+		if f then nets[#nets + 1] = f end
+	end
+	local netParams = RaycastParams.new()
+	netParams.FilterType = Enum.RaycastFilterType.Include
+	netParams.FilterDescendantsInstances = nets
+	self.netParams = netParams
 	return params
 end
 
@@ -458,7 +803,7 @@ function Session:hidden(pos)
 	return false
 end
 
-function Session:sees(root, params)
+function Session:sees(root, params, hunted)
 	local eye = self.root.Position + Vector3.new(0, CONFIG.EyeHeight, 0)
 	local to = root.Position + Vector3.new(0, 1.5, 0)
 	local delta = to - eye
@@ -468,8 +813,17 @@ function Session:sees(root, params)
 	if self:hidden(root.Position) and dist > CONFIG.HiddenSpotRange and not (speed > 10 and dist < 25) then
 		return false, dist
 	end
-	local hit = workspace:Raycast(eye, delta, params)
-	return hit == nil, dist
+	local arena = self.info.arena and not hunted       -- whoever it is already after gets none of this
+	if arena and dist > CONFIG.CloseRange and not self.lookingRound then
+		-- ARENA_20261006: it sees what it is facing. From the post it would otherwise look into every gallery at once.
+		if self.root.CFrame.LookVector:Dot(delta.Unit) < CONFIG.SightCos then return false, dist end
+	end
+	if workspace:Raycast(eye, delta, params) then return false, dist end
+	if arena and dist > CONFIG.NetCoverRange and root.AssemblyLinearVelocity.Magnitude < CONFIG.StillSpeed
+		and self.netParams and workspace:Raycast(eye, delta, self.netParams) then
+		return false, dist              -- standing still behind netting: it looks straight past you
+	end
+	return true, dist
 end
 
 function Session:perceive()
@@ -477,8 +831,21 @@ function Session:perceive()
 	local best, bestDist = nil, math.huge
 	for player, state in pairs(self.players) do
 		local root = rootOf(player)
+		if root and self.info.arena then
+			-- ARENA_20261006: a player still in the tunnel has not come in; one under the floor is on the way out
+			if not state.entered and self:inside(root.Position) then state.entered = true end
+			if state.entered and not self:inside(root.Position) and root.Position.Y > self.info.floorY - 3
+				and flat(root.Position - self.info.home).Magnitude > self.info.gateRadius + 2 then
+				-- no way back out: the gate lets you in, not out
+				local inward = flat(self.info.home - self.info.gate).Unit
+				local at = self.info.gate + inward * 7
+				root.AssemblyLinearVelocity = Vector3.zero
+				root.Parent:PivotTo(CFrame.lookAt(Vector3.new(at.X, self.info.floorY + 4.4, at.Z), Vector3.new(self.info.home.X, self.info.floorY + 4.4, self.info.home.Z)))
+			end
+			if not state.entered or root.Position.Y < self.info.floorY - 3 then root = nil end
+		end
 		if root and not state.caught and clock() >= (state.graceUntil or 0) then
-			local seen, dist = self:sees(root, params)
+			local seen, dist = self:sees(root, params, self.chase == player)
 			if seen and dist < bestDist then best, bestDist = player, dist end
 			local speed = flat(root.AssemblyLinearVelocity).Magnitude
 			if not seen and speed >= CONFIG.NoiseSpeed and dist <= CONFIG.NoiseRange and not self.chase then
@@ -520,6 +887,7 @@ function Session:catch(player)
 	self.pauseUntil = clock() + CONFIG.CaughtReturnDelay
 	self.killUntil = clock() + CONFIG.CaughtReturnDelay + 0.5
 	self.interrupt = true
+	self.navLoose = true          -- it left the graph to stand in front of them
 	self:pose("Choke")
 	self:say(pick("kill"), true)
 	-- what the others see: the body is lifted off the floor by the throat and drawn in to its face
@@ -646,6 +1014,25 @@ end
 
 -- ---------------------------------------------------------------------------------------
 -- phases
+-- ARENA_20261006: a party arrives in the tunnel and walks in through the PLAY ZONE gate. The Counter stands at
+-- the post with its back to them and does nothing until they are in: everyone, or whoever is in after a wait.
+function Session:arrivalPhase()
+	self.phase = "arrival"
+	self:pose("Idle")
+	local started, firstIn = clock(), nil
+	while self.active and self:count() > 0 do
+		local everyone, anyone = true, false
+		for player, state in pairs(self.players) do
+			local root = rootOf(player)
+			if root and self:inside(root.Position) then state.entered = true end
+			if state.entered then anyone = true elseif root then everyone = false end
+		end
+		if anyone and not firstIn then firstIn = clock() end
+		if (anyone and everyone) or (firstIn and clock() - firstIn > CONFIG.ArrivalWait) or clock() - started > 120 then break end
+		task.wait(0.2)
+	end
+end
+
 function Session:countPhase()
 	self.phase = "count"
 	self.round += 1
@@ -693,9 +1080,21 @@ end
 function Session:chooseSpot()
 	local feet = self:feet()
 	local options = {}
+	-- ARENA_20261006: twelve floors is a lot to search blind. One time in three it has a feeling about where
+	-- somebody is and looks near them; it does not know which spot, or that anyone is in one.
+	local hunch = nil
+	if self.info.arena and math.random() < 0.34 then
+		local living = {}
+		for player, state in pairs(self.players) do
+			local root = rootOf(player)
+			if root and not state.caught and state.entered then living[#living + 1] = root.Position end
+		end
+		if #living > 0 then hunch = living[math.random(#living)] end
+	end
 	for i, spot in ipairs(self.info.spots) do
 		if not self.checked[i] then
-			local d = (spot - feet).Magnitude
+			local d = (spot - (hunch or feet)).Magnitude
+			if hunch then d = math.max(d - 14, 0) * 2 end
 			options[#options + 1] = {i = i, spot = spot, w = 1 / (8 + d) ^ 1.3}
 		end
 	end
@@ -728,6 +1127,19 @@ function Session:seekBrain(deadline)
 					self:say(pick("chase"))
 				end
 				local target = root.Position - Vector3.new(0, 3, 0)
+				if self.nav then
+					-- ARENA_20261006: over the graph, planning again every third of a second
+					local route = self:routeTo(target, true)
+					if route then
+						local started = clock()
+						self.interrupt = false
+						task.delay(0.35, function() if clock() - started >= 0.3 then self.interrupt = true end end)
+						self:travel(clipRoute(route, 6), CONFIG.ChaseSpeed, "seek")
+					else
+						task.wait(0.2)
+					end
+					continue
+				end
 				local direct = (target - self:feet()).Magnitude < 28 and clock() - (self.lastSeen or 0) < 0.4
 				-- no route is no obstacle: it comes straight through whatever is in the way
 				local points = direct and {self:feet(), target} or self:path(target) or {self:feet(), target}
@@ -746,19 +1158,21 @@ function Session:seekBrain(deadline)
 		elseif self.noise then
 			local at = self.noise
 			self.noise = nil
-			self:walkTo(at - Vector3.new(0, 3, 0), CONFIG.WalkSpeed * 1.25, "seek")
+			self:walkTo(at - Vector3.new(0, 3, 0), self:walkSpeed() * 1.25, "seek")
 		else
 			local option = self:chooseSpot()
 			if clock() > (self.nextSearchLine or 0) then
 				self.nextSearchLine = clock() + 9 + math.random() * 8
 				self:say(pick("search"))
 			end
-			local arrived = self:walkTo(option.spot - Vector3.new(0, 0.5, 0), CONFIG.WalkSpeed, "seek")
+			local arrived = self:walkTo(option.spot - Vector3.new(0, 0.5, 0), self:walkSpeed(), "seek")
 			self.checked[option.i] = true
 			if arrived and self.active and self.phase == "seek" and not self.chase then
 				self:pose("Search_Look")
+				self.lookingRound = true        -- it turns its head: for these seconds it sees all round
 				local untilT = clock() + CONFIG.CheckPause
 				while clock() < untilT and not self.chase and self.phase == "seek" do task.wait(0.1) end
+				self.lookingRound = false
 				if not self.chase and self.phase == "seek" and math.random() < 0.55 then self:say(pick("check")) end
 			elseif not arrived and not self.chase then
 				self:pose("Idle")
@@ -770,7 +1184,8 @@ end
 
 function Session:seekPhase()
 	self.phase = "seek"
-	local deadline = clock() + CONFIG.SeekSeconds
+	local deadline = clock() + (self.info.arena and CONFIG.ArenaSeekSeconds or CONFIG.SeekSeconds)
+	local safeDistance = self.info.arena and CONFIG.ArenaDunkSafeDistance or CONFIG.DunkSafeDistance
 	local result = "timeup"
 	local brain = task.spawn(function() self:seekBrain(deadline) end)
 	local lastTimer = -1
@@ -815,8 +1230,8 @@ function Session:seekPhase()
 			local root = rootOf(player)
 			if not state.caught and not state.dunked then
 				allDunked = false
-				if root and flat(root.Position - home).Magnitude <= CONFIG.DunkRadius
-					and flat(feet - home).Magnitude >= CONFIG.DunkSafeDistance then
+				if root and flat(root.Position - home).Magnitude <= CONFIG.DunkRadius and math.abs(root.Position.Y - home.Y) < 9
+					and flat(feet - home).Magnitude >= safeDistance then
 					state.dunked = true
 					self.dunks = self:tagged()
 					broadcast(self, "dunk", player.DisplayName, self.dunks, self:target())
@@ -857,7 +1272,208 @@ function Session:seekPhase()
 	return result
 end
 
+-- ARENA_20261006 (owner): the third touch starts a countdown on the post. For a minute the Counter hunts; then
+-- the post sinks into the floor, green light comes up out of the hole, and the way out is down it: the shaft, the
+-- slide under the court, the room with the EXIT door. The model is put back as it was when the session ends.
+local function finaleParts(model)
+	local post, dial, lid = model:FindFirstChild("Finale_Post"), model:FindFirstChild("Finale_Dial"), model:FindFirstChild("Finale_Lid")
+	local home = model:GetAttribute("HomePosition")
+	if not (post and dial and lid and typeof(home) == "Vector3") then return nil end
+	local marks = {}
+	for _, part in ipairs(dial:GetChildren()) do
+		if part:IsA("BasePart") then
+			local d = part.Position - home
+			-- clockwise from the top of the dial (north), seen from above
+			marks[#marks + 1] = {part = part, angle = math.atan2(d.X, -d.Z) % (2 * math.pi), color = part.Color, material = part.Material}
+		end
+	end
+	table.sort(marks, function(a, b) return a.angle < b.angle end)
+	local moving, tallest = {}, nil
+	for _, folder in ipairs({post, lid}) do
+		for _, part in ipairs(folder:GetChildren()) do
+			if part:IsA("BasePart") then
+				moving[#moving + 1] = {part = part, frame = part.CFrame, collide = part.CanCollide, lid = folder == lid}
+				if folder == post and (not tallest or part.Size.X > tallest.Size.X) then tallest = part end
+			end
+		end
+	end
+	return {marks = marks, moving = moving, post = tallest, glow = model:FindFirstChild("Finale_Glow")}
+end
+
+local function finaleReset(model)
+	local f = finaleParts(model)
+	if not f then return end
+	local gui = f.post and f.post:FindFirstChild("L6Countdown")
+	if gui then gui:Destroy() end
+	if model:GetAttribute("Level6FinaleStarted") then
+		-- the build's own values travel with the parts as attributes, so a later session finds them too
+		for _, mark in ipairs(f.marks) do
+			local c, m = mark.part:GetAttribute("RestColor"), mark.part:GetAttribute("RestMaterial")
+			if c then mark.part.Color = c end
+			if m then mark.part.Material = Enum.Material[m] end
+		end
+		for _, item in ipairs(f.moving) do
+			local frame = item.part:GetAttribute("RestFrame")
+			if frame then item.part.CFrame = frame end
+			item.part.CanCollide = item.part:GetAttribute("RestCollide") ~= false
+		end
+	end
+	if f.glow then
+		for _, light in ipairs(f.glow:GetDescendants()) do
+			if light:IsA("Light") then light.Enabled, light.Brightness = false, 0 end
+		end
+	end
+	model:SetAttribute("Level6FinaleStarted", nil)
+	model:SetAttribute("Level6FinaleEndsAt", nil)
+	model:SetAttribute("Level6HatchOpen", nil)
+end
+
+function Session:finalePhase()
+	self.phase = "escape"
+	local model = self.info.model
+	local f = finaleParts(model)
+	local total = CONFIG.FinaleSeconds
+	broadcast(self, "won", self.dunks, total)
+	model:SetAttribute("Level6Enraged", true)             -- the client turns every light deep red
+	self:say(pick("angry"), true)
+	local label = nil
+	if f then
+		for _, mark in ipairs(f.marks) do
+			mark.part:SetAttribute("RestColor", mark.color)
+			mark.part:SetAttribute("RestMaterial", mark.material.Name)
+			mark.part.Material, mark.part.Color = Enum.Material.Neon, Color3.fromRGB(255, 246, 220)
+		end
+		for _, item in ipairs(f.moving) do
+			item.part:SetAttribute("RestFrame", item.frame)
+			item.part:SetAttribute("RestCollide", item.collide)
+		end
+		model:SetAttribute("Level6FinaleStarted", true)
+		if f.post then
+			local gui = Instance.new("BillboardGui")
+			gui.Name, gui.Adornee = "L6Countdown", f.post
+			gui.Size, gui.StudsOffsetWorldSpace = UDim2.fromScale(11, 4.4), Vector3.new(0, 7.4, 0)
+			gui.LightInfluence, gui.MaxDistance, gui.AlwaysOnTop, gui.Brightness = 0, 700, false, 2
+			label = Instance.new("TextLabel")
+			label.Size, label.BackgroundTransparency = UDim2.fromScale(1, 1), 1
+			label.Font, label.TextScaled, label.TextColor3 = Enum.Font.Arcade, true, Color3.fromRGB(255, 250, 235)
+			label.TextStrokeTransparency, label.TextStrokeColor3 = 0.35, Color3.fromRGB(120, 10, 5)
+			label.Text = string.format("%d:%02d", total // 60, total % 60)
+			label.Parent = gui
+			gui.Parent = f.post
+		end
+	end
+	model:SetAttribute("Level6FinaleEndsAt", workspace:GetServerTimeNow() + total)
+	local deadline = clock() + total
+	local open, lastShown = false, nil
+	local exit = self.info.exit
+	self.pauseUntil = nil
+	local brain = task.spawn(function()
+		while self.active and self.phase == "escape" do
+			-- frenzy: it goes for whoever is nearest, over the graph, and knows where they are
+			self.interrupt = false
+			if self.pauseUntil and clock() < self.pauseUntil then
+				self.anim.speed = 0
+				task.wait(0.1)
+				continue
+			end
+			local nearest, nd = nil, math.huge
+			for player, state in pairs(self.players) do
+				local root = rootOf(player)
+				if root and not state.caught and not state.escaped and state.entered and root.Position.Y > self.info.floorY - 3 then
+					local d = (root.Position - self.root.Position).Magnitude
+					if d < nd then nearest, nd = root, d end
+				end
+			end
+			local route = nearest and self.nav and self:routeTo(nearest.Position - Vector3.new(0, 3, 0), true)
+			if route then
+				local started = clock()
+				task.delay(0.4, function() if clock() - started >= 0.35 then self.interrupt = true end end)
+				self:travel(clipRoute(route, 6), CONFIG.FinaleChaseSpeed, "escape")
+			else
+				self:pose("Idle")
+				task.wait(0.3)
+			end
+		end
+	end)
+	while self.active and self.phase == "escape" do
+		task.wait(0.15)
+		if self:count() == 0 then break end
+		if self.wipedAt then
+			if not self:wipeWindow() then break end
+		elseif self:living() == 0 then
+			break
+		end
+		local left = math.max(0, math.ceil(deadline - clock()))
+		if f and left ~= lastShown then
+			lastShown = left
+			if label then label.Text = string.format("%d:%02d", left // 60, left % 60) end
+			if not open then broadcast(self, "timer", left) end
+			local dark = math.floor((total - left) / total * #f.marks + 0.5)
+			for i, mark in ipairs(f.marks) do
+				if i <= dark and mark.part.Material == Enum.Material.Neon then
+					mark.part.Material, mark.part.Color = Enum.Material.SmoothPlastic, Color3.fromRGB(26, 24, 22)
+				end
+			end
+		end
+		if left <= 0 and not open then
+			open = true
+			if f then
+				for _, item in ipairs(f.moving) do
+					item.part.CanCollide = false
+					if item.lid then
+						TweenService:Create(item.part, TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+							{CFrame = item.frame * CFrame.new(0, -20, 0)}):Play()
+					else
+						TweenService:Create(item.part, TweenInfo.new(3.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
+							{CFrame = item.frame + Vector3.new(0, -18.5, 0)}):Play()
+					end
+				end
+				if f.glow then
+					for _, light in ipairs(f.glow:GetDescendants()) do
+						if light:IsA("Light") then
+							-- the green you see from the galleries: a pool on the court round the hole (Pool, hung unseen
+							-- over it), the padded wall of the shaft (Rim), the way down (Down) and the undersides of
+							-- the ledges above (Up). Lit at once, then brought up.
+							local level = ({Up = 2.5, Rim = 3.2, Down = 3, Pool = 2.2})[light.Name] or 3
+							light.Enabled, light.Brightness = true, level * 0.2
+							TweenService:Create(light, TweenInfo.new(1.6), {Brightness = level}):Play()
+						end
+					end
+				end
+				task.delay(2.2, function()
+					local gui = f.post and f.post:FindFirstChild("L6Countdown")
+					if gui then gui:Destroy() end
+				end)
+			end
+			model:SetAttribute("Level6HatchOpen", true)
+			broadcast(self, "hatch")
+			self:say(pick("exit"), true)
+		end
+		self:perceive()
+		if open then
+			for player, state in pairs(self.players) do
+				local root = rootOf(player)
+				if root and not state.caught and not state.escaped and (root.Position - exit).Magnitude <= CONFIG.ArenaExitRadius then
+					state.escaped = true
+					player:SetAttribute(CLEARED, true)
+					event:FireClient(player, "escaped", player.DisplayName, true); achieve(player, "FirstClearLevel6")
+					event:FireClient(player, "say", "l6_escaped")
+					task.delay(1.5, function()
+						if returnHandler and player.Parent == Players and player:GetAttribute(IN_PREVIEW) == true then
+							returnHandler(player, "escaped")
+						end
+						Game.RemovePlayer(player)
+					end)
+				end
+			end
+		end
+	end
+	self.phase = "over"
+	pcall(task.cancel, brain)
+end
+
 function Session:escapePhase()
+	if self.info.arena then return self:finalePhase() end
 	self.phase = "escape"
 	broadcast(self, "won", self.dunks)
 	self.info.model:SetAttribute("Level6Enraged", true)   -- the client turns every light deep red
@@ -969,12 +1585,16 @@ function Session:party(by)
 	if not self.active or self.phase ~= "seek" or self.chase or self.partyUsed or self.partyOn or self.wipedAt
 		or clock() < (self.killUntil or 0) then return false end
 	local model = self.info.model
-	local top = partyTable(model)
-	if not top then return false end
+	-- ARENA_20261006: there is no party room any more. The party is on the court, the Counter dancing beside the post.
+	local anchors = model:FindFirstChild("Anchors")
+	local stage = self.info.arena and anchors and anchors:FindFirstChild("L6_Anchor_PartyStage") or nil
+	local top = not stage and partyTable(model) or nil
+	if not stage and not top then return false end
 	self.partyUsed, self.partyOn = true, true
 	pausedAt = realClock()
-	local tableTop = top.Position + Vector3.new(0, top.Size.Y / 2, 0)
-	local floorY = tableTop.Y - 3.6
+	local tableTop = stage and Vector3.new(stage.Position.X, self.info.floorY + 0.95, stage.Position.Z)
+		or (top.Position + Vector3.new(0, top.Size.Y / 2, 0))
+	local floorY = stage and tableTop.Y or tableTop.Y - 3.6
 	local made, dimmed, back = {}, {}, {}
 	local saved = {frame = self.root.CFrame, name = self.anim.name, speed = self.anim.speed}
 	local function part(name, size, cf, colour, material)
@@ -1003,7 +1623,9 @@ function Session:party(by)
 		-- the door, shut
 		local door = part("L6PartyDoor", Vector3.new(8.2, 10.6, 1.2),
 			CFrame.new(tableTop.X - 0.25, floorY + 5.3, tableTop.Z + 36), Color3.fromRGB(28, 40, 110), Enum.Material.SmoothPlastic)
+		if stage then door.Transparency, door.CanCollide = 1, false end      -- the court has no door to shut
 		local lock = Instance.new("SurfaceGui")
+		lock.Enabled = stage == nil
 		lock.Face, lock.CanvasSize, lock.LightInfluence = Enum.NormalId.Front, Vector2.new(400, 520), 0
 		local word = Instance.new("TextLabel")
 		word.Size, word.BackgroundTransparency, word.Text = UDim2.fromScale(1, 0.3), 1, "LOCKED"
@@ -1082,6 +1704,7 @@ function Session:party(by)
 			character:PivotTo(was.frame)
 		end
 	end
+	self.navLoose = true           -- it was lifted off the graph for the dance
 	if self.root.Parent then
 		self.root.CFrame = saved.frame
 		self.anim.name, self.anim.speed = saved.name, saved.speed
@@ -1100,7 +1723,8 @@ local function ensurePartyButton(info)
 	local model = info.model
 	if model:FindFirstChild("L6PartyButton") then return end
 	local anchors = model:FindFirstChild("Anchors")
-	local spot = anchors and (anchors:FindFirstChild("L6_Hide_counter_05") or anchors:FindFirstChild("L6_Hide_counter_01"))
+	local spot = anchors and (anchors:FindFirstChild("L6_Anchor_PartyButton") or anchors:FindFirstChild("L6_Hide_counter_05")
+		or anchors:FindFirstChild("L6_Hide_counter_01"))
 	if not spot then return end
 	local base = Instance.new("Part")
 	base.Name = "L6PartyButton"
@@ -1129,6 +1753,7 @@ local function ensurePartyButton(info)
 end
 
 function Session:run()
+	if self.info.arena then self:arrivalPhase() end
 	while self.active do
 		self:countPhase()
 		if not self.active or self:count() == 0 then break end
@@ -1168,6 +1793,7 @@ function Session:finish()
 	if self.heartbeat then self.heartbeat:Disconnect() end
 	if self.child then self.child:Destroy() end
 	self.info.model:SetAttribute("Level6Enraged", nil)
+	if self.info.arena then pcall(finaleReset, self.info.model) end
 	if session == self then session = nil end
 end
 
@@ -1266,6 +1892,7 @@ function Game.AddPlayer(player)
 	end
 	ensurePartyButton(info)
 	if not session or not session.active then
+		if info.arena then pcall(finaleReset, info.model) end     -- whatever a session that broke off left behind
 		session = newSession(info)
 		session.players[player] = {dunked = false}
 		task.spawn(function() session:run() end)
@@ -1399,5 +2026,68 @@ task.spawn(function()
 	end
 end)
 
+-- ARENA_20261006: the slide under the post is two moulded meshes that are not assets. Roblox's in-session upload
+-- (AssetService:CreateAssetAsync) answered "not available yet" when they were made, so their data is kept in
+-- ServerStorage.Level6ArenaSlideSource and they are built once per server, the way the Counter's own mesh is.
+-- What you ride is the unseen trough the import made; these are only what you see. A mesh of the same name that
+-- already stands in the level (an uploaded asset placed by the import) is left alone.
+local arenaSlides = {busy = false}
+function arenaSlides.build()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	local source = ServerStorage:FindFirstChild("Level6ArenaSlideSource")
+	local slides = model and model:FindFirstChild("Slides")
+	local origin = model and model:GetAttribute("Origin")
+	if arenaSlides.busy or not (source and slides and typeof(origin) == "Vector3") then return false end
+	arenaSlides.busy = true
+	local missing = 0
+	for _, item in ipairs(source:GetChildren()) do
+		if not slides:FindFirstChild(item.Name) then
+			local ok, why = pcall(function()
+				local text = {}
+				for i = 1, item:GetAttribute("Parts") do
+					text[i] = item:FindFirstChild(string.format("Part_%02d", i)).Value
+				end
+				local data = HttpService:JSONDecode(table.concat(text))
+				local em = assert(AssetService:CreateEditableMesh(), "no EditableMesh budget")
+				local V, N, C, T = data.verts, data.normals, data.colours, data.tris
+				local vid, nid, cid = {}, {}, {}
+				for i = 1, #V, 3 do
+					vid[#vid + 1] = em:AddVertex(Vector3.new(V[i], V[i + 1], V[i + 2]) / 1000)
+					nid[#nid + 1] = em:AddNormal(Vector3.new(N[i], N[i + 1], N[i + 2]) / 1000)
+					cid[#cid + 1] = em:AddColor(Color3.fromRGB(C[i], C[i + 1], C[i + 2]), 1)
+				end
+				for i = 1, #T, 3 do
+					local a, b, c = T[i] + 1, T[i + 1] + 1, T[i + 2] + 1
+					local face = em:AddTriangle(vid[a], vid[b], vid[c])
+					em:SetFaceNormals(face, {nid[a], nid[b], nid[c]})
+					em:SetFaceColors(face, {cid[a], cid[b], cid[c]})
+					if i % 6000 == 1 then task.wait() end
+				end
+				local baked, result, content = pcall(AssetService.CreateDataModelContentAsync, AssetService, Content.fromObject(em))
+				em:Destroy()
+				if not baked or result ~= Enum.CreateContentResult.Success then error("bake: " .. tostring(result)) end
+				local part = AssetService:CreateMeshPartAsync(content, {CollisionFidelity = Enum.CollisionFidelity.Box})
+				part.Name = item.Name
+				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
+				-- moulded plastic: the colour, its highlights and its dirt are painted into the mesh's vertex colours
+				part.Material, part.Reflectance, part.Color = Enum.Material.SmoothPlastic, 0.06, Color3.new(1, 1, 1)
+				part.CFrame = CFrame.new(origin + item:GetAttribute("Centre"))
+				part.Parent = slides
+			end)
+			if not ok then
+				missing += 1
+				warn("[Level6] slide mesh " .. item.Name .. " was not built: " .. tostring(why))
+			end
+		end
+	end
+	arenaSlides.busy = false
+	return missing == 0
+end
+task.spawn(function()
+	for _ = 1, 40 do                      -- the level may not be there yet when this module is first required
+		if arenaSlides.build() then break end
+		task.wait(6)
+	end
+end)
 
 return Game

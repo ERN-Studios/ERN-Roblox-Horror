@@ -1,0 +1,38 @@
+{
+ "arena_tube_red": {
+  "id": 132112091600195,
+  "sha256": "f691c9adea95d0a7369738866a0baa42f49e4a363a1bb4c8daaedd116266f98b"
+ },
+ "arena_orange": {
+  "id": 107770129954315,
+  "sha256": "52b58dcbb040c6ce480097fc487f813607d6b09d4476c207a719ec2253b85a7d"
+ },
+ "arena_yellow": {
+  "id": 96544513084531,
+  "sha256": "fe30a1113287fa60d098ea65d617171b91754175482eda414251e3f7866dc094"
+ },
+ "arena_blue": {
+  "id": 91098583243356,
+  "sha256": "be841a14fcc7f956cb2811ddf6c53ca4888f2c859385d7b9f82b077df9290dd0"
+ },
+ "arena_green": {
+  "id": 107638821263588,
+  "sha256": "d18998e308f94a1a22501fff74f2de79e57b8ac2adbb9778ecead38b5b26d32c"
+ },
+ "arena_exit": {
+  "id": 120387185458935,
+  "sha256": "e8c2c55a1f484b69548bfaadbfab2e6d9fec5f0cec0affb180c2ad7fab0ca929"
+ },
+ "arena_tube_yellow": {
+  "id": 114055278193073,
+  "sha256": "00d1297991a57360e7fceb7b246c185880019f0887f7944465b6b6e85837caea"
+ },
+ "arena_tube_green": {
+  "id": 113250415251109,
+  "sha256": "a5e1380177d9ec1c5ee770d24b44689a795b37600fe5b0ed3cdc109fc34ea689"
+ },
+ "arena_tube_blue": {
+  "id": 127489258664708,
+  "sha256": "74ef82e959e599f0f2fd536d538352b16dba551aa2cfcbb2ab9fcd734222c187"
+ }
+}

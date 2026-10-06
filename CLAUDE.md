@@ -1190,3 +1190,51 @@ weight and button size on phones, no noise meter.
 - **zsh aborts a whole `&&` chain when a glob matches nothing** (`rm -f /tmp/x_*.txt` with no such file: "no matches
   found"), so the jobs after it never started. Name the files, or `setopt nonomatch`.
 
+
+### Added 2026-10-06 (morning) - Level 6 is the Arena: built, in Studio, NOT yet published
+
+- **Owner on concept v5**: "I like the new concept photos. Remake the whole map, make sure it matches that vibe 1:1,
+  adjust gameplay so it matches the level, make sure the entity is perfect at pathfinding in the structure", then
+  "the hole where the post was is the opening to a slide ... a rather long spiral, they slow down, and the end looks
+  like the picture" (the exit room, `artifacts/level6-concept-20261006b`, picture 16), "a small room, dirty and worn
+  out", and "when you are done make a QA of the map and fix any visual or playable bugs".
+- **What stands in Studio**: `Workspace."Level 6 Indoor Playground"` is the arena (`tools/level6_playground/
+  build_arena.py` -> `import_arena.py`; everything about it is in `tools/level6_playground/README.md`, "The Arena").
+  The game module and client carry the arena's round (`ARENA_20261006`). The old hall is gone from the place and
+  can be re-imported from `import_to_studio.py` and the committed `prims.json`.
+- **Smaller than the concept's numbers, on purpose**: hall radius 156 (the drawings said 274), lane 112 studs, about
+  2 800 cells and 11 100 parts. The drawings' 18 400 cells as loose parts were never possible.
+- **Tested in Studio, solo**: arrival through the gate, three searches, the one-minute countdown with the Counter
+  hunting across floors (400 studs up to floor 9 in 20 s, no stall), the hatch, nine drops into the funnel from every
+  side (12 to 14 s to standing in the exit room), out through the green door (cleared), all four big slides walked
+  into from their ledges, a bridge crossed on foot, a stair flight climbed, a chase and catch, the sight rule
+  (standing still behind netting: not seen in 38 s; moving: seen). `check_nav.luau`: 0 blocked, 0 without floor,
+  0 low roof. **Not tested**: more than one player, a phone, the frame rate on real hardware, the party easter egg in
+  the new map, re-entry in the new map.
+- **QA found and fixed five real faults**, all of my own making and none visible in a still picture: the funnel's
+  side panels were skewed (a flat part needs its two edges at right angles in its own plane) and left a ledge that
+  trapped a body; two bridge ends landed on a stairwell's hole; slides never took hold of a walking player at their
+  almost level mouths; three slide mouths stood half a degree from a sector's edge and ran into a post; the two tall
+  slides doubled back on themselves and jammed the rider in the hairpins. Lesson: **ride and walk every way a player
+  can go; the Counter's route check does not cover players**, and it sampled too coarsely to see the bridge fault
+  (now every 1.5 studs).
+- **A weak-keyed table lost lamps' saved brightness** in the client's red finale (`litBefore`): an Instance key with
+  no other Lua reference is collected while the Instance still exists, so the next tick saved the already-changed
+  value as "before" and scaled that. In the arena the fill lights ran away to 200 000 (a white screen). Strong table,
+  cleared by hand.
+- **`AssetService:CreateAssetAsync` comes and goes.** It worked from this Mac session in the small hours of
+  2026-10-06 (nine slide meshes became group assets, no GUI), and answered "not available yet" after Studio was
+  restarted the same morning. Do not build a pipeline that needs it on the day: meshes without a current asset are
+  kept as numbers in ServerStorage and built per server (`Level6ArenaSlideSource`).
+- **Studio dropped its Team Create connection once** (02:40, "Connection error 279"); the MCP then lists the old
+  process as a studio with no place. Reopen with the `roblox-studio:` URL (`open -g` keeps it in the background) and
+  take the new id from `list_roblox_studios`.
+- **MCP `screen_capture` works in a play session** and takes a camera position; it shows the client's own lighting
+  and HUD. Calls sent together return the same frame: send them one at a time. A camera far from the player sees
+  lights arrive late (the engine's coarse far-light grid), which looked like missing light twice.
+- **Publishing was NOT possible from this session at the end**: `osascript` had lost its accessibility permission
+  ("not allowed assistive access", `UI elements enabled` false under MonoCode), so the File > Publish click was
+  refused, and the owner was at the Mac, so no other GUI route was used. Until someone presses File > Publish to
+  Roblox, the live game still has the old hall; the arena is saved in the Team Create place.
+- `ZyntraConfig`'s L6Party hint said "behind the arcade counter"; that one line was changed in Studio and in the repo
+  copy ("at a dead end in the frame"). The rest of that script's foreign drift was left alone.

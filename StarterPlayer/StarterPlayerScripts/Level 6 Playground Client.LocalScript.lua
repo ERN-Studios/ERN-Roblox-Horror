@@ -459,11 +459,13 @@ end
 local killCam = function() end   -- assigned below, once the doll's rig code exists
 local dunked = false
 local horror = {chase = false, rage = false}
+local ARRIVAL_HINT = "Go in through the gate."
 event.OnClientEvent:Connect(function(kind, a, b)
 	if kind == "say" then
 		say(a)
 	elseif kind == "pa" then
 		say(a, true)
+		if hintLabel.Text == ARRIVAL_HINT then hintLabel.Text = "" end   -- everyone is in: the welcome has begun
 	elseif kind == "dunk" or kind == "escaped" then
 		if not oneShot("l6_tag", 0.5) then SFX.ping:Play() end
 	elseif kind == "chase" then
@@ -520,7 +522,12 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		if d == "seek" then
 			dunked = false
 			markerMode = "post"
-			objective("TOUCH THE POST", "Everyone alive must touch the yellow post, three searches in a row. Do not let it see you.")
+			objective("TOUCH THE POST", "Everyone alive must touch the post in the middle, three searches in a row. Do not let it see you.")
+		elseif d == "arrival" then
+			-- ARENA_20261006: a party arrives in the tunnel, looking straight at the PLAY ZONE sign; the round starts
+			-- when they are through the gate. No card here: it sits exactly where the sign is.
+			objective(nil)
+			hintLabel.Text = ARRIVAL_HINT
 		else
 			objective("HIDE!", "It is counting. Find a hiding place.")
 		end
@@ -546,7 +553,7 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		status("HERE I COME!", 2.5, Color3.fromRGB(255, 70, 70))
 		hintLabel.Text = ""
 		markerMode = "post"
-		objective("TOUCH THE POST", "Everyone alive must touch the yellow post, three searches in a row. Do not let it see you.")
+		objective("TOUCH THE POST", "Everyone alive must touch the post in the middle, three searches in a row. Do not let it see you.")
 		task.delay(2.2, function() if countLabel.Text == "READY OR NOT . . ." then countLabel.Text = "" end end)
 	elseif kind == "party" then
 		if a then status("PARTY MODE  ·  30 SECONDS", 5, Color3.fromRGB(255, 64, 176)) else status("Back to hiding.", 3, Color3.fromRGB(255, 90, 90)) end
@@ -584,9 +591,21 @@ event.OnClientEvent:Connect(function(kind, a, b, c, d)
 		countLabel.Text = ""
 		status("IT LOST. NOW IT IS ANGRY.", 5, Color3.fromRGB(255, 70, 60))
 		hintLabel.Text = ""
+		local arena = workspace:FindFirstChild(MODEL_NAME)
+		if arena and arena:GetAttribute("Arena") == true then
+			-- ARENA_20261006: the post counts down a minute; the way out is under it when it reaches zero
+			markerMode = nil
+			objective("STAY ALIVE", "The post is counting down. At zero the way out opens under it.", Color3.fromRGB(255, 70, 60))
+		else
+			markerMode = "exit"
+			objective("RUN TO THE EXIT!", "The red door inside STAFF ONLY. It is angry and fast.", Color3.fromRGB(255, 70, 60))
+			timerLabel.Text = ""
+		end
+	elseif kind == "hatch" then
 		markerMode = "exit"
-		objective("RUN TO THE EXIT!", "The red door inside STAFF ONLY. It is angry and fast.", Color3.fromRGB(255, 70, 60))
 		timerLabel.Text = ""
+		status("THE WAY OUT IS OPEN", 5, Color3.fromRGB(110, 255, 150))
+		objective("GO DOWN THE HOLE!", "Where the post stood. Slide to the EXIT.", Color3.fromRGB(110, 255, 150))
 	elseif kind == "escaped" then
 		vignette.ImageTransparency = 1
 		countLabel.Text = "LEVEL 6 CLEARED"
@@ -616,6 +635,21 @@ local LOOK = {
 	ClockTime = 0, FogColor = Color3.fromRGB(62, 66, 68), FogStart = 0, FogEnd = 520,   -- a grey haze, not black
 	ColorShift_Top = Color3.new(0, 0, 0), ColorShift_Bottom = Color3.new(0, 0, 0), ExposureCompensation = 0.4,
 }
+-- ARENA_20261006: measured in play against the concept pictures. At the hall's old exposure the frame was a
+-- flat bright toy; at -0.45 the roof goes dark and the lamps read as lamps. The grade takes the primary colours
+-- down to worn vinyl and lifts the blacks into dusty air; the level's own fill lights (L6_Fill_*) keep the
+-- upper galleries from going black.
+local ARENA_LOOK = {ExposureCompensation = -0.45, Contrast = -0.1, Saturation = -0.3, Brightness = -0.02,
+	Tint = Color3.fromRGB(244, 240, 226),
+	-- the last minute: every lamp red and none of them weaker, the colour back in, the picture a little up
+	-- (red light on blue and green vinyl gives almost nothing back, so the same lamps read far darker in red)
+	FinaleExposure = 0.15, FinaleSaturation = 0.3, FinaleContrast = 0.16, FinaleFill = 5,
+	Red = Color3.fromRGB(255, 56, 40)}
+local HALL_TINT = Color3.fromRGB(238, 245, 255)
+local function isArena()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	return model ~= nil and model:GetAttribute("Arena") == true
+end
 local saved = nil
 local grade, bloom = nil, nil
 local function applyLighting(on)
@@ -631,7 +665,11 @@ local function applyLighting(on)
 		-- Ambient and Fog do nothing visible under this place's Realistic lighting: the dusty grey air is
 		-- exposure up plus a grade that lifts the blacks
 		grade.Saturation, grade.Contrast, grade.Brightness = 0.08, -0.17, -0.01
-		grade.TintColor = Color3.fromRGB(238, 245, 255)
+		grade.TintColor = HALL_TINT
+		if isArena() then
+			grade.Saturation, grade.Contrast, grade.Brightness = ARENA_LOOK.Saturation, ARENA_LOOK.Contrast, ARENA_LOOK.Brightness
+			grade.TintColor = ARENA_LOOK.Tint
+		end
 		grade.Parent = Lighting
 		bloom = Instance.new("BloomEffect")       -- the tubes glow into the haze
 		bloom.Name = "Level6PlaygroundBloom"
@@ -651,7 +689,9 @@ local function applyLighting(on)
 		player:SetAttribute(LIGHTING_OWNED, nil)
 	end
 	if on then
+		local arena = isArena()
 		for k, v in pairs(LOOK) do
+			if k == "ExposureCompensation" and arena then v = ARENA_LOOK.ExposureCompensation end
 			if not (k == "ExposureCompensation" and finale > 0) then Lighting[k] = v end
 		end
 		-- other controllers put the lobby's Atmosphere back; with a black sky it swallows the whole hall
@@ -668,8 +708,13 @@ end
 -- marker, music and the red finale
 -- not a pure red: pure red light turns the blue and green floor black
 local RED = Color3.fromRGB(255, 40, 28)
-local litBefore = setmetatable({}, {__mode = "k"})     -- light or lamp -> {colour, brightness}
+-- light or lamp -> {colour, brightness, angle}. A STRONG table on purpose: with weak keys an entry is dropped as soon
+-- as Lua holds no other reference to the Instance, even though the Instance is still in the level. The next tick
+-- then saved the lamp's already-changed brightness as its "before" and scaled that, again and again: in the arena
+-- the fill lights ran away to 200 000 (a white screen) and every other lamp sank to nothing. Cleared by hand below.
+local litBefore = {}
 local FINALE_FOLDERS = {"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}
+local exitLamp = {bulb = nil, base = 0, dipUntil = 0, nextDip = 0}
 task.spawn(function()
 	local last = os.clock()
 	while true do
@@ -680,19 +725,50 @@ task.spawn(function()
 		local model = workspace:FindFirstChild(MODEL_NAME)
 		local on = model ~= nil and (player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true)
 		local target = on and markerMode and model:GetAttribute(markerMode == "post" and "HomePosition" or "ExitPosition")
+		local lift = markerMode == "post" and 16 or 9
+		-- ARENA_20261006: once you are down the hole, the way out is the green door at the end of the room under the court
+		local door = target and markerMode ~= "post" and model:GetAttribute("ExitDoorPosition")
+		if door then
+			local body = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if body and body.Position.Y < target.Y - 12 then
+				target, lift = door, 5
+				if cardTitle.Text == "GO DOWN THE HOLE!" then
+					objective("EXIT", "Through the green door.", Color3.fromRGB(110, 255, 150))
+				end
+			end
+		end
 		if target then
-			markerPart.Position = target + Vector3.new(0, markerMode == "post" and 16 or 9, 0)
+			markerPart.Position = target + Vector3.new(0, lift, 0)
 			markerPart.Parent = workspace
 			local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			local dist = root and (root.Position - target).Magnitude or 200
 			local px = math.clamp(250 - dist * 0.85, 80, 250)      -- grows as you get close
 			marker.Size = UDim2.fromOffset(px, px)
 			markerText.Text = (markerMode == "post" and "TOUCH" or "EXIT") .. "  " .. math.floor(dist / 3.6 + 0.5) .. " m"
-			markerRing.BackgroundColor3 = markerMode == "post" and Color3.fromRGB(255, 215, 40) or Color3.fromRGB(255, 70, 60)
+			markerRing.BackgroundColor3 = markerMode == "post" and Color3.fromRGB(255, 215, 40)
+				or (model:GetAttribute("Arena") == true and Color3.fromRGB(90, 255, 140) or Color3.fromRGB(255, 70, 60))
 			marker.Enabled = true
 		else
 			marker.Enabled = false
 			markerPart.Parent = nil
+		end
+
+		-- ARENA_20261006: the one lamp in the room under the court is on its last legs: it dips for a moment every
+		-- few seconds (never with ReduceFlashing)
+		local exitLights = on and model:FindFirstChild("ExitLights")
+		local exitLampPart = exitLights and exitLights:FindFirstChild("L6_ExitRoom_Lamp")
+		local bulb = exitLampPart and exitLampPart:FindFirstChildWhichIsA("Light")
+		if bulb then
+			if exitLamp.bulb ~= bulb then exitLamp.bulb, exitLamp.base = bulb, bulb.Brightness end
+			if player:GetAttribute("ReduceFlashing") == true then
+				bulb.Brightness = exitLamp.base
+			else
+				if now > exitLamp.nextDip then
+					exitLamp.dipUntil = now + 0.12 + math.random() * 0.25
+					exitLamp.nextDip = now + 2.5 + math.random() * 6
+				end
+				bulb.Brightness = exitLamp.base * (now < exitLamp.dipUntil and 0.35 or (0.94 + 0.06 * math.noise(now * 3)))
+			end
 		end
 
 		local enraged = on and model:GetAttribute("Level6Enraged") == true
@@ -731,7 +807,17 @@ task.spawn(function()
 									before = {d.Color, isLight and d.Brightness or 0, d:IsA("SpotLight") and d.Angle or 0}
 									litBefore[d] = before
 								end
-								if d:IsA("SpotLight") then              -- the ceiling fixtures: red cones straight down
+								if isLight and model:GetAttribute("Arena") == true then
+									-- ARENA_20261006: the arena's lamps are its gallery lights: they keep their spread, turn red and
+									-- swell from almost nothing to well over their own strength (the owner's pulse: red, then dark
+									-- for a moment). The fill lights in the open well come up with them, so at the top of each
+									-- swell the whole wall of galleries stands in red.
+									local fill = d.Parent.Name:sub(1, 8) == "L6_Fill_" and ARENA_LOOK.FinaleFill or 1
+									d.Color = before[1]:Lerp(ARENA_LOOK.Red, ease)
+									d.Brightness = before[2] * (1 - ease) + before[2] * fill * (0.12 + 1.25 * swell) * ease
+								elseif model:GetAttribute("Arena") == true then
+									d.Color = before[1]:Lerp(pulsedRed, ease)  -- every tube in the frame glows red with its light
+								elseif d:IsA("SpotLight") then          -- the ceiling fixtures: red cones straight down
 									d.Color = before[1]:Lerp(RED, ease)
 									d.Angle = before[3] + (85 - before[3]) * ease
 									-- low on purpose: the yellow and red padding reflects red far more than the floor does
@@ -753,12 +839,16 @@ task.spawn(function()
 					end
 				end
 			end
+			if finale <= 0 then table.clear(litBefore) end     -- everything still in the level was put back above
+			local arena = model:GetAttribute("Arena") == true
 			if grade then
-				grade.TintColor = Color3.fromRGB(238, 245, 255)   -- never tinted: the red comes from the lamps only
-				grade.Contrast = -0.17 + 0.22 * ease              -- the grey haze goes, so the dark between the pools is dark
-				grade.Saturation = 0.08
+				grade.TintColor = arena and ARENA_LOOK.Tint or HALL_TINT   -- never tinted red: the red comes from the lamps only
+				-- the grey haze goes, so the dark between the pools is dark
+				grade.Contrast = (arena and ARENA_LOOK.Contrast or -0.17) + (arena and ARENA_LOOK.FinaleContrast or 0.22) * ease
+				grade.Saturation = arena and ARENA_LOOK.Saturation + ARENA_LOOK.FinaleSaturation * ease or 0.08
 			end
-			Lighting.ExposureCompensation = LOOK.ExposureCompensation - 0.2 * ease
+			Lighting.ExposureCompensation = (arena and ARENA_LOOK.ExposureCompensation or LOOK.ExposureCompensation)
+				+ (arena and ARENA_LOOK.FinaleExposure or -0.2) * ease
 		end
 	end
 end)
@@ -805,13 +895,25 @@ RunService.RenderStepped:Connect(function(dt)
 	params.FilterDescendantsInstances = {model}
 	params.RespectCanCollide = true
 	local hit = workspace:Raycast(root.Position, Vector3.new(0, -5, 0), params)
-	local slide = hit and hit.Instance:GetAttribute("L6Slide") == true and hit.Normal.Y < 0.985 and hit.Normal.Y > 0.2
+	-- ARENA_20261006: the way out under the post carries its own direction and pace on every stretch (L6SlideDir,
+	-- L6SlideSpeed), so it takes you round the spiral at one speed, eases off over the last turn and lets you out
+	-- at a walk, whatever the slope under you is. The funnel above it only sets a pace.
+	local way = hit and hit.Instance:GetAttribute("L6SlideDir")
+	local slide = hit and hit.Instance:GetAttribute("L6Slide") == true
+		and (way ~= nil or (hit.Normal.Y < 0.985 and hit.Normal.Y > 0.2))
 	if slide then
 		local n = hit.Normal
-		local downhill = (Vector3.new(0, -1, 0) + n * n.Y).Unit
+		local downhill = way or (Vector3.new(0, -1, 0) + n * n.Y).Unit
 		local v = root.AssemblyLinearVelocity
-		local along = math.max(v:Dot(downhill), 26)
-		root.AssemblyLinearVelocity = downhill * math.min(along + 55 * dt, 62)
+		local pace = hit.Instance:GetAttribute("L6SlideSpeed")
+		if pace then
+			local along = v:Dot(downhill)
+			local speed = along > pace and math.max(pace, along - 60 * dt) or math.min(pace, math.max(along, 10) + 55 * dt)
+			root.AssemblyLinearVelocity = downhill * speed
+		else
+			local along = math.max(v:Dot(downhill), 26)
+			root.AssemblyLinearVelocity = downhill * math.min(along + 55 * dt, 62)
+		end
 		if not sliding then sliding = true; humanoid.Sit = true end
 		offSince = os.clock()
 		-- wedged on a seam: stand up so the player can walk off instead of sitting stuck
