@@ -1,0 +1,32 @@
+Exactly three generations via configured ElevenLabs MCP. Delivery varied using audio tags; numeric stability, similarity, style, speed and speaker boost are not exposed by this MCP and were left at server defaults (values not reported). Audio delivery and precise one-second pause have not been auditioned.
+
+Take 1
+Voice name (exact): "Demonic child for level 6 "
+Voice ID: hApnWsYasWj7hoy1cBCk
+Model: eleven_v3
+Settings: generations_count=1; all numeric voice settings=server defaults, not exposed/reported; delivery tags as below.
+Exact text sent:
+[furious] [screaming] WHY DID YOU DO THAT?! COME BACK! COME BACK AND PLAY WITH ME, RIGHT NOW!
+[pause] [breathing for one second]
+[softly] [sweetly] [giggles] Ha... ha ha ha. [lightly amused] Oh well. [sweet sing song voice] You can't hide forever. [giggles softly trailing off] Ha ha ha ha.
+
+Take 2
+Voice name (exact): "Demonic child for level 6 "
+Voice ID: hApnWsYasWj7hoy1cBCk
+Model: eleven_v3
+Settings: generations_count=1; all numeric voice settings=server defaults, not exposed/reported; delivery tags as below.
+Exact text sent:
+[furious] [screaming at the top of your voice] [raspy] WHY DID YOU DO THAT?! COME BACK! COME BACK AND PLAY WITH ME, RIGHT NOW!
+[pause] [shaky breathing for one second]
+[sweetly] [soft giggles] Ha... ha ha ha. [playfully amused] Oh well. [soft sweet sing song voice] You can't hide forever. [little giggles fading away] Ha ha ha ha.
+
+Take 3
+Voice name (exact): "Demonic child for level 6 "
+Voice ID: hApnWsYasWj7hoy1cBCk
+Model: eleven_v3
+Settings: generations_count=1; all numeric voice settings=server defaults, not exposed/reported; delivery tags as below.
+Exact text sent:
+[angry] [harsh screaming] WHY DID YOU DO THAT?! COME BACK! COME BACK AND PLAY WITH ME, RIGHT NOW!
+[pause] [exhales] [short pause]
+[softly] [pleased little giggle] Ha... ha ha ha. [lightly] [amused] Oh well. [sweetly] [sing song voice] You can't hide forever. [soft sweet giggles trailing off] Ha ha ha ha.
+
