@@ -1,0 +1,37 @@
+{
+ "foam_floor": {
+  "studs": 8,
+  "base": "SmoothPlastic",
+  "variant": "L6 Foam Floor"
+ },
+ "vinyl_quilt": {
+  "studs": 7,
+  "base": "SmoothPlastic",
+  "variant": "L6 Vinyl Quilt"
+ },
+ "vinyl_plain": {
+  "studs": 6,
+  "base": "SmoothPlastic",
+  "variant": "L6 Vinyl Plain"
+ },
+ "vinyl_filthy": {
+  "studs": 7,
+  "base": "SmoothPlastic",
+  "variant": "L6 Vinyl Filthy"
+ },
+ "block_wall": {
+  "studs": 16,
+  "base": "Concrete",
+  "variant": "L6 Block Wall"
+ },
+ "roof_deck": {
+  "studs": 16,
+  "base": "Metal",
+  "variant": "L6 Roof Deck"
+ },
+ "slide_plastic": {
+  "studs": 8,
+  "base": "SmoothPlastic",
+  "variant": "L6 Slide Plastic"
+ }
+}

@@ -2208,6 +2208,9 @@ function arenaSlides.build()
 				part.Anchored, part.CanCollide, part.CanTouch, part.CanQuery = true, false, false, false
 				-- moulded plastic: the colour, its highlights and its dirt are painted into the mesh's vertex colours
 				part.Material, part.Reflectance, part.Color = Enum.Material.SmoothPlastic, 0.06, Color3.new(1, 1, 1)
+				-- PBR_20261006: the scuffed moulded-plastic skin the other slides wear (tools/level6_playground/pbr). The
+				-- vertex colours show through it; if that variant is not in the place this is plain plastic, as before
+				part.MaterialVariant = "L6 Slide Plastic"
 				part.CFrame = CFrame.new(origin + item:GetAttribute("Centre"))
 				part.Parent = slides
 			end)

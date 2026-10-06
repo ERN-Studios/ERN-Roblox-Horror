@@ -1345,3 +1345,32 @@ weight and button size on phones, no noise meter.
   Level 6 choke). The Reach came after that: it is in Studio (Team Create) and in the repo (`be7ffd8`) and was NOT
   published when the session ended. `osascript` still had no accessibility permission that evening ("UI elements
   enabled" false), so the session could not press File > Publish; Studio was left open on the place for the owner.
+
+### Added 2026-10-07 (small hours) - Level 6 in PBR: sets made, waiting for the pictures to be imported
+
+- **Owner**: "recreate level 6 with PBR textures for every texture where it makes sense, and the floor ... almost
+  everything would look much better with a detailed, extensive PBR look." Everything is in
+  `tools/level6_playground/pbr/README.md`. Marker `PBR_20261006`.
+- **What exists**: seven tiling sets (colour, normal, roughness, 1024 px) from `make_pbr.py` in
+  `assets/level6-pbr-20261006/` (foam-mat floor with the blue/green check and jigsaw joints, quilted vinyl, plain
+  vinyl, mouldy vinyl, painted block, roof deck, slide plastic) and a knotted net picture; a Blender render of
+  them (`artifacts/level6-pbr-20261006/preview`); `apply_pbr.py`, which makes the MaterialVariants and dresses the
+  arena (dry run: 3566 floor parts, 3152 new pads under the decks, 2052 padded parts, 10 340 overlay Textures
+  removed); `collect_ids.py`. The game module gives its five runtime-baked slides `L6 Slide Plastic`.
+- **NOT applied yet.** The pictures have to become group-owned image assets first, and that needs the owner's
+  hands: `~/Desktop/Level 6 PBR - import these` (22 files) through Studio's Asset Manager > Import. Then
+  `collect_ids.py`, `apply_pbr.py --check`, `--play` (first look in the engine), the apply, and a publish.
+- **Why `CreateAssetAsync` comes and goes: it is a Studio Beta Feature** (File > Beta Features; the binary names
+  `CreateAssetAsyncBetaFeature`). On this Mac it is off and the account is not enrolled
+  (`defaults read com.roblox.RobloxStudio BetaFeatureInformation`). Enrolling means accepting terms: the owner's
+  call, not a session's.
+- **`upload_image` (MCP) uploads to the USER**, and a picture the experience has not been given access to fails
+  even in a Studio play session (fetch status Failure; Output: "Click to share access"). The old overlay pictures
+  work because access was shared for each. One stray test picture of that kind exists: 71070358744357.
+- **A MaterialVariant lies correctly on blocks, cylinders and UV-less meshes, but does not draw from an
+  EditableImage** (`ColorMapContent = Content.fromObject(image)` shows the base material; a SurfaceAppearance fed
+  the same way showed nothing either). There is no in-engine preview of a texture that is not an asset.
+- **A client-side write to a replicated property hides later server writes of the same value** (the server sees
+  no change, so nothing is sent): a test that set `MaterialVariant` on the client kept showing the client's
+  choice. Reset it on the client.
+- **The owner published v2758 at 23:29 on 2026-10-06** (Studio's log): the lobby easter egg is live.
