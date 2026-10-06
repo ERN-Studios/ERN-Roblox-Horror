@@ -1259,4 +1259,18 @@ weight and button size on phones, no noise meter.
   `git log` after a Codex job.
 - **Measuring something that moves from `execute_luau`**: count real elapsed time between samples, not the number
   of samples (a slow server tick made 9.5 studs/s read as 17.7). The doll publishes its own `Speed` attribute.
+- **Published state**: the owner published the arena themselves at 08:38 on 2026-10-06 (v2739, in Studio's log:
+  "Published new changes"). `game.PlaceVersion` in an edit session keeps the number the place was opened at
+  (it still said 2724), so read the log, not that. Everything in this section came AFTER v2739 and is in Studio
+  (Team Create) but was NOT published when the session ended.
+- **`l6_exit_taunt` is not uploaded.** The file is `assets/level6-exit-taunt-20261006/l6_exit_taunt.mp3`. Import it
+  (Asset Manager > Import), find its id (`search_asset`, scope group, type Audio), add a Sound of that name with
+  attribute `Seconds` to `ReplicatedStorage.Level6Counter.Voice`, publish.
+- **Codex computer use failed four times on Studio this morning**, each for a new reason: it took the window of a
+  Studio process that had lost its place the night before (an old "Unable to Connect, RCC-275" dialog), then a
+  second empty Studio ("Low System Resources"), then the Asset Manager stayed blank (Studio at 6.3 GB on an 8 GB
+  Mac), then "two installed app paths share its identifier". Before sending it in: only ONE Studio process (the
+  stale ones answer "Place is not open" to the MCP and can be closed), and expect it not to work. It also launched
+  a Studio of its own once. `osascript ... set frontmost` still works without the accessibility permission;
+  clicking a menu does not.
 
