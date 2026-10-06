@@ -1263,9 +1263,10 @@ weight and button size on phones, no noise meter.
   "Published new changes"). `game.PlaceVersion` in an edit session keeps the number the place was opened at
   (it still said 2724), so read the log, not that. Everything in this section came AFTER v2739 and is in Studio
   (Team Create) but was NOT published when the session ended.
-- **`l6_exit_taunt` is not uploaded.** The file is `assets/level6-exit-taunt-20261006/l6_exit_taunt.mp3`. Import it
-  (Asset Manager > Import), find its id (`search_asset`, scope group, type Audio), add a Sound of that name with
-  attribute `Seconds` to `ReplicatedStorage.Level6Counter.Voice`, publish.
+- **`l6_exit_taunt` is in**: the owner imported it through the Asset Manager (group asset 128590836842587, 19.0 s);
+  a Sound of that name with `Seconds` 19 is in `ReplicatedStorage.Level6Counter.Voice`, and it loaded and played on
+  a client in Studio. Not heard in the exit room itself yet (the trigger was tested with the stand-in line), and
+  not published when this was written.
 - **Codex computer use failed four times on Studio this morning**, each for a new reason: it took the window of a
   Studio process that had lost its place the night before (an old "Unable to Connect, RCC-275" dialog), then a
   second empty Studio ("Low System Resources"), then the Asset Manager stayed blank (Studio at 6.3 GB on an 8 GB

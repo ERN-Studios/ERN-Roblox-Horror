@@ -81,8 +81,8 @@ room under the court are out of its reach by construction.
   court, the server sends `exittaunt` once and each client plays `l6_exit_taunt` from the mouth of the tube in
   the ceiling (`ExitLights.L6_ExitRoom_Tube`), with the music ducked: it screams after them, stops, and ends on
   a sweet laugh. Source: `assets/level6-exit-taunt-20261006` (ElevenLabs, the voice "Demonic child for level
-  6", three takes; take 2 cleaned and levelled is `l6_exit_taunt.mp3`). Until a Sound of that name is in
-  `ReplicatedStorage.Level6Counter.Voice`, `l6_angry_1` stands in.
+  6", three takes; take 2 cleaned and levelled is `l6_exit_taunt.mp3`, group asset 128590836842587). If no
+  Sound of that name is in `ReplicatedStorage.Level6Counter.Voice`, `l6_angry_1` stands in.
 - *The ending* (`WIN_SCREEN_20261006`, owner: "like all other maps, same screen and options"). A player through
   the green door leaves the session and is sent the round remote's own `"win"` (time, survivors, a 15 s
   deadline, no next level, a serial from 600001), so RoundUI draws LEVEL 6 CLEARED with BACK TO LOBBY, as on
