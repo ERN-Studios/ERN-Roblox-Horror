@@ -1547,3 +1547,34 @@ weight and button size on phones, no noise meter.
 - **Played on this run / not played**: every level was entered as a real round or session and photographed;
   the Level 1 fuse run, the Level 3 CDs and blackout and the Level 4 breaker puzzle were NOT played tonight (the
   analysis says so per level and names the earlier runs it leans on).
+
+### Added 2026-10-07 (night) - The store pictures on Roblox were replaced from a session (live)
+
+- **Owner**: "Open the exact place where the pictures can be changed", then "replace all pictures and put these in".
+  Live since about 23:35: the Experience Detail gallery holds the ten new pictures (T01, T02, G03, G05, G08, G09,
+  G11, G02, G04, G12, each with an alt text, all approved), the Home Page tile is T01, and T02 to T06 are uploaded
+  and approved but not shown. The six old gallery pictures and the old tile are off the page; copies of them and
+  of the icon are in `~/Desktop/Backrooms Stay Quiet - Backup live Roblox billeder 2026-10-07`. The icon was not
+  changed. The Level 2 pictures (G03, G04, T02) show the new map and are public now, by the owner's word.
+  Which Roblox image each file became: `artifacts/promo-20261007/store-upload.json`.
+- **How, without the mouse or the keyboard**: `tools/promo/dashboard.py` runs JavaScript in the owner's own
+  Creator Dashboard tab through AppleScript (`execute ... javascript`; it works because "Allow JavaScript from
+  Apple Events" is on in their Chrome) and sends requests FROM THE PAGE, so they carry the signed-in session as
+  the dashboard's own buttons do. No cookie, password or key is read. `tools/promo/store_pictures.py` has the
+  calls and `status` (what is live); its docstring lists every address. The page is
+  `create.roblox.com/dashboard/creations/experiences/10559217407/places/131311258779917/thumbnails`.
+- **Two sets, two services.** The gallery is the place asset's `previews` list (read and PATCH through
+  `apis.roblox.com/assets/user-auth/v1/assets/<place>`; one PATCH with the whole list removes, reorders and sets
+  alt texts; new pictures are added with `publish.roblox.com/v1/games/<universe>/thumbnail/image`). The Home
+  Page tile is `apis.roblox.com/thumbnail-personalization-api` (upload, then `personalization/create` with the
+  ids to show). The addresses were read out of the dashboard's own public script files.
+- **Traps.** The script runs in an isolated world: it sees the page's DOM but not its React, the site's policy
+  blocks inline scripts, and the page's own "Upload thumbnail" control took a file handed to it and did nothing
+  while the tab was in the background. After a PATCH the list goes through half-changed states for some seconds
+  AFTER the operation reports done (a read right away showed four pictures missing that were there ten seconds
+  later): read until it matches before deciding anything. The old
+  `develop.roblox.com/v1/universes/<id>/thumbnails/<id>` DELETE answers 200 and removes nothing. A bare
+  `open <url>` from the session's shell opened nothing; `open -a "Google Chrome" <url>` did.
+- **Order that never leaves the page empty**: add new pictures beside the old (ten at most), wait for "approved"
+  in the public list, set the list to the approved new ones, add the rest, set the final order. Moderation took
+  seconds that night. No Chrome-extension or computer-use tool was available in the session.

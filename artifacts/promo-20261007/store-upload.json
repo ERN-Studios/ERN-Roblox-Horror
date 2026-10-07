@@ -1,0 +1,70 @@
+{
+ "detail": {
+  "T01_hero_office_hide": 123836402732253,
+  "T02_hero_six_levels": 83882138551286,
+  "G03_level2_the_stepwell": 108022448496326,
+  "G05_level3_under_the_table": 92336424751586,
+  "G08_level4_the_usher": 76803311135439,
+  "G09_level5_over_the_void": 130069742797028,
+  "G11_level6_it_is_counting": 79758433427457,
+  "G02_level1_pull_the_fuse": 81253794712731,
+  "G04_level2_a_thousand_doors": 138339615350414,
+  "G12_level6_the_way_out": 99435621721701
+ },
+ "home": {
+  "T01_hero_office_hide": {
+   "homepageThumbnailId": "6207116c-3a9e-4932-95a7-2e290d9e7396",
+   "assetId": 126251615732246,
+   "moderationStatus": "Approved"
+  },
+  "T02_hero_six_levels": {
+   "homepageThumbnailId": "7612c533-26a7-4d67-9697-94ce9b3973f7",
+   "assetId": 116610451742568,
+   "moderationStatus": "Approved"
+  },
+  "T03_hero_playground": {
+   "homepageThumbnailId": "d9e82b9a-770d-41d2-b49d-96834289a6ce",
+   "assetId": 86601891252051,
+   "moderationStatus": "Approved"
+  },
+  "T04_hero_shh": {
+   "homepageThumbnailId": "76f30300-57a5-46c1-991b-91e808ae3aed",
+   "assetId": 74609287435365,
+   "moderationStatus": "Approved"
+  },
+  "T05_hero_cinema": {
+   "homepageThumbnailId": "60cb57b3-25b1-42f4-8a54-ff2c496ecde5",
+   "assetId": 124164424729092,
+   "moderationStatus": "Approved"
+  },
+  "T06_hero_party_rooms": {
+   "homepageThumbnailId": "f0253f59-b65f-4d4f-a1f4-8825896dce1b",
+   "assetId": 107407152656159,
+   "moderationStatus": "Approved"
+  }
+ },
+ "alt": {
+  "T01_hero_office_hide": "Two hazmat-suited players hide behind a yellow wall while a dark entity with glowing eyes stands in the Level 1 corridor.",
+  "T02_hero_six_levels": "Six slices show the six levels: yellow office, poolrooms, party rooms, neon cinema, colour void and soft-play playground.",
+  "G03_level2_the_stepwell": "Two hazmat-suited players walk down zig-zag stairs in a vast sunlit stepwell above a green pool in Level 2.",
+  "G05_level3_under_the_table": "Two hazmat-suited players hide under a folding table as the balloon-headed Mall Manager walks past in Level 3.",
+  "G08_level4_the_usher": "A hazmat-suited player's torch beam freezes the Usher in a dark cinema aisle in Level 4.",
+  "G09_level5_over_the_void": "A hazmat-suited player jumps between narrow blue ledges over a black drop in Level 5.",
+  "G11_level6_it_is_counting": "Two hazmat-suited players hide behind netting above the court where a doll counts at a red post in Level 6.",
+  "G02_level1_pull_the_fuse": "A hazmat-suited player pulls a fuse from a wall relay while a teammate watches the Level 1 corridor.",
+  "G04_level2_a_thousand_doors": "Two hazmat-suited players stand in a drained pool beneath ten floors of identical yellow doors in Level 2.",
+  "G12_level6_the_way_out": "Two hazmat-suited players tumble out of a slide into a green padded room and run for the exit door in Level 6."
+ },
+ "order": [
+  "T01_hero_office_hide",
+  "T02_hero_six_levels",
+  "G03_level2_the_stepwell",
+  "G05_level3_under_the_table",
+  "G08_level4_the_usher",
+  "G09_level5_over_the_void",
+  "G11_level6_it_is_counting",
+  "G02_level1_pull_the_fuse",
+  "G04_level2_a_thousand_doors",
+  "G12_level6_the_way_out"
+ ]
+}
