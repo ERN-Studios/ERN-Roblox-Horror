@@ -124,8 +124,14 @@ local function placeHud()
 		l.TextXAlignment = align or Enum.TextXAlignment.Center
 	end
 	if not info.IsTouch then
-		countLabel.Size, countLabel.Position = UDim2.fromScale(0.6, 0.09), UDim2.fromScale(0.5, 0.215)
-		statusLabel.Size, statusLabel.Position = UDim2.fromScale(0.8, 0.05), UDim2.fromScale(0.5, 0.285)
+		-- (a short window: the card is at least 74 pixels high and hangs 58 from the top, the count is placed by
+		-- the window's height, so at 768 pixels and under the count ran up under the card, as it did on a phone.
+		-- Seen in a 595-pixel Studio window on 2026-10-07. Both lines move down by what is missing.)
+		local camera = workspace.CurrentCamera
+		local high = camera and camera.ViewportSize.Y or 0
+		local short = high > 0 and math.max(0, math.ceil(58 + math.clamp(0.1 * high, 74, 110) + 8 - 0.17 * high)) or 0
+		countLabel.Size, countLabel.Position = UDim2.fromScale(0.6, 0.09), UDim2.new(0.5, 0, 0.215, short)
+		statusLabel.Size, statusLabel.Position = UDim2.fromScale(0.8, 0.05), UDim2.new(0.5, 0, 0.285, short)
 		hintLabel.Size, hintLabel.Position = UDim2.fromScale(0.8, 0.045), UDim2.fromScale(0.5, 0.9)
 		dunkLabel.Size, dunkLabel.Position = UDim2.fromScale(0.24, 0.05), UDim2.fromScale(0.86, 0.08)
 		timerLabel.Size, timerLabel.Position = UDim2.fromScale(0.16, 0.045), UDim2.fromScale(0.14, 0.08)
@@ -180,6 +186,10 @@ local function placeHud()
 end
 UIDevice.Changed:Connect(placeHud)
 placeHud()
+do      -- a desktop window can be dragged shorter or taller at any time
+	local camera = workspace.CurrentCamera
+	if camera then camera:GetPropertyChangedSignal("ViewportSize"):Connect(placeHud) end
+end
 
 local flash = Instance.new("Frame")
 flash.Name = "Flash"

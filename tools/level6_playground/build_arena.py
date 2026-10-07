@@ -43,6 +43,7 @@ TUNNEL_W, TUNNEL_L, TUNNEL_H = 14.0, 30.0, 13.0
 POST_R, BEAM_R = 0.7, 0.45
 GATES = (0, 3, 6, 9, 12, 15, 21)            # ground-floor openings from the court into the frame (sector 18 is the lane)
 SHAFT_R, SHAFT_DEPTH = 5.7, 12.0
+LID_CORE, LID_REACH = 4.0, 5.85              # the lid over the shaft is a cross: a square this far each way, arms out to this
 
 # ---- the way out: under the post a funnel, a long spiral slide, and the small padded room it ends in ------------
 # (worked out relative to the court's centre: x east, y north, z up)
@@ -233,6 +234,23 @@ class Builder:
         self.prim('b', [x0, y0, z0, x1, y1, z1], mat)
         self._hexa([(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0),
                     (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)], mat)
+
+    def sector(self, ra, rb, a0, a1, zc, thick, mat, split=False):
+        """A mat between radii ra and rb and the sector lines a0 and a1 (degrees): its corners lie ON the two circles,
+        so it meets its neighbours edge to edge and never lies over them. `split`: the outer edge has a corner in the
+        middle as well, where the next band out has two sectors to this one. Studio cuts it from a block ('p')."""
+        am = (a0 + a1) / 2
+        self.prim('p', [ra, rb, a1 - a0, 1 if split else 0, am, zc, thick], mat)
+        ring = [P(ra, a0), P(ra, a1), P(rb, a1)] + ([P(rb, am)] if split else []) + [P(rb, a0)]
+        lo = [(x, y, zc - thick / 2) for x, y, _ in ring]
+        hi = [(x, y, zc + thick / 2) for x, y, _ in ring]
+        was, self.rec = self.rec, False
+        self.face(list(reversed(lo)), mat)
+        self.face(hi, mat)
+        for i in range(len(ring)):
+            j = (i + 1) % len(ring)
+            self.face([lo[i], lo[j], hi[j], hi[i]], mat)
+        self.rec = was
 
     def obox(self, c, size, yaw, mat):
         """A box centred on c; size = (along its own x, along its own y, up); its x is turned yaw degrees from +X."""
@@ -623,10 +641,17 @@ BRIDGE_Z = ftop(BRIDGE_K)
 BRIDGES = ((4, 16), (10, 22))
 assert not any((BRIDGE_B, s) in WELL_OF for pair in BRIDGES for s in pair), 'a bridge lands on a stairwell'
 node(('bridge', 'mid'), (CX, CY, BRIDGE_Z))
+# OVERPASS_20261007 (owner: "the entity gets stuck in the middle of the overpass"). Each arm used to be ONE link from
+# the ledge to the middle, so the only place on the whole crossing the Counter could be sent to was the middle: a
+# player standing anywhere else on a bridge had it walk to the hub and stop there, sixteen to forty studs short,
+# for as long as they stayed. Now there is a point every twelve studs along every arm.
+BRIDGE_STOPS = (12.0, 24.0, 36.0, 48.0)
 for pair in BRIDGES:
     for s in pair:
-        edge(cell_node(BRIDGE_K, BRIDGE_B, s), NODE_ID[('bridge', 'mid')],
-             [P(R[BRIDGE_B], 15.0 * s, BRIDGE_Z), P(30.0, 15.0 * s, BRIDGE_Z)])
+        chain = [NODE_ID[('bridge', 'mid')]] + [node(('bridge', s, r), P(r, 15.0 * s, BRIDGE_Z)) for r in BRIDGE_STOPS]
+        for a, b_ in zip(chain, chain[1:]):
+            edge(a, b_)
+        edge(chain[-1], cell_node(BRIDGE_K, BRIDGE_B, s), [P(R[BRIDGE_B], 15.0 * s, BRIDGE_Z)])
 
 # every node must be reachable from where the Counter stands
 adjacent = {i: [] for i in range(len(NODES))}
@@ -663,9 +688,11 @@ def build_shell():
         w.obox(c, (WALL_T, panel, ROOF_Z), a, 'wall_white')
     south = CY - WALL_R * math.cos(math.radians(7.5)) + 0.4
     edge_x = (WALL_R + WALL_T) * math.sin(math.radians(7.5)) + 0.4
-    w.box((CX - edge_x, CY - WALL_R - WALL_T, 0.0), (CX - TUNNEL_W / 2, south, ROOF_Z), 'wall_white')
-    w.box((CX + TUNNEL_W / 2, CY - WALL_R - WALL_T, 0.0), (CX + edge_x, south, ROOF_Z), 'wall_white')
-    w.box((CX - TUNNEL_W / 2, CY - WALL_R - WALL_T, TUNNEL_H + 1.0), (CX + TUNNEL_W / 2, south, ROOF_Z), 'wall_white')
+    # (0.9 back from the tunnel's width: the tunnel's side pads are that thick and stood INSIDE these two blocks,
+    # their faces in the same plane as the blocks' own for the last three studs of the tunnel)
+    w.box((CX - edge_x, CY - WALL_R - WALL_T, 0.0), (CX - TUNNEL_W / 2 - 0.9, south, ROOF_Z), 'wall_white')
+    w.box((CX + TUNNEL_W / 2 + 0.9, CY - WALL_R - WALL_T, 0.0), (CX + edge_x, south, ROOF_Z), 'wall_white')
+    w.box((CX - TUNNEL_W / 2 - 0.9, CY - WALL_R - WALL_T, TUNNEL_H + 1.0), (CX + TUNNEL_W / 2 + 0.9, south, ROOF_Z), 'wall_white')
     w.finish()
 
     c = Builder('Ceiling_Structure', shell_col)
@@ -742,13 +769,15 @@ def build_floors():
             if near > R[0] + 1.5 or (i in (-1, 0) and j in (-1, 0)):
                 continue
             f.box((x, y, 0.3), (x + 12, y + 12, 0.9), 'concrete' if (i, j) in worn else ('tile_green', 'tile_blue')[(i + j) % 2])
-    q = SHAFT_R + 0.35                           # the four centre tiles, cut back round the shaft
+    q, c = LID_REACH, LID_CORE                   # the four centre tiles, cut back round the lid (a cross: see build_finale)
     for n, (xa, ya, xb, yb) in enumerate(((-12, -12, -q, 12), (q, -12, 12, 12), (-q, -12, q, -q), (-q, q, q, 12))):
         f.box((CX + xa, CY + ya, 0.3), (CX + xb, CY + yb, 0.9), ('tile_blue', 'tile_green')[n % 2])
     for sx in (-1, 1):
         for sy in (-1, 1):
-            f.box((CX + sx * 3.9, CY + sy * 3.9, 0.3), (CX + sx * q, CY + sy * q, 0.9), 'tile_blue')
-    y, n = CY - R[0] + 2.0, 0                    # the lane, the gate and the tunnel
+            f.box((CX + min(sx * c, sx * q), CY + min(sy * c, sy * q), 0.3), (CX + max(sx * c, sx * q), CY + max(sy * c, sy * q), 0.9), 'tile_blue')
+    # (the lane began six studs inside the court's own tiles: 84 square studs of two floors in one plane, which is
+    # the patch of flickering mats in the owner's picture of 2026-10-07)
+    y, n = CY - 48.0, 0                          # the lane, the gate and the tunnel
     end = CY - WALL_R - WALL_T - TUNNEL_L
     while y > end + 0.1:
         y2 = max(y - 12.0, end)
@@ -813,13 +842,18 @@ def build_frame():
             posts.cyl((CX + side * LANE_HALF, y, 0.3), (CX + side * LANE_HALF, y, top), POST_R, post_cols[int(r // 12) % len(post_cols)], 8)
     posts.finish()
 
-    # decks: one slab per cell, three strips where a stairwell needs one of them open
-    def slab(k, b, s, ra, rb, colour, z_extra=0.0):
-        a = mid(b, s)
-        delta = span(b, s)[1] - span(b, s)[0]
-        width = 2 * rb * math.tan(math.radians(delta / 2)) + 0.12
-        z = (0.65 if k == 0 else k * H) + (0.04 if s % 2 else 0.0) + z_extra
-        (decks if b <= 2 else deep).obox(P((ra + rb) / 2, a, z), (rb - ra, width, 0.6 if k == 0 else 0.7), a, colour)
+    # decks: one slab per cell, three strips where a stairwell needs one of them open.
+    # MATS_20261007 (owner: "we have overlapping textures several places"). A slab was a rectangle as wide as its
+    # cell's OUTER edge, so every slab lay over its two neighbours in a wedge up to four studs wide, every other
+    # one 0.04 higher so that the two did not flicker. With one flat colour nobody saw it; with a printed mat on
+    # every slab each cell showed its neighbours' mats lying across its own at an angle. A slab is now the shape of
+    # its cell (Builder.sector), they all lie at one height, and where a band of 24 meets a band of 48 the outer
+    # edge of the inner one has the extra corner that makes the two edges the same line.
+    def slab(k, b, s, ra, rb, colour):
+        a0, a1 = span(b, s)
+        z = 0.65 if k == 0 else k * H
+        split = b + 1 < NB and abs(rb - R[b + 1]) < 1e-6 and NSEC[b + 1] == 2 * NSEC[b]
+        (decks if b <= 2 else deep).sector(ra, rb, a0, a1, z, 0.6 if k == 0 else 0.7, colour, split)
 
     def deck_colour(k, b, s):
         if (s * 7 + b * 3 + k) % 5 == 0:
@@ -932,8 +966,13 @@ def build_frame():
             yaw = math.degrees(math.atan2(tangent.y, tangent.x))
             for n in range(5):
                 c = base + tangent * (half - RUN + 2.4 * (n + 0.5))
-                height = (z1 - z0) * (n + 1) / 5
-                steps.obox((c.x, c.y, z0 + height / 2), (2.4, 4.9, height), yaw, FRAME_VINYL[(n + s + k) % len(FRAME_VINYL)])
+                # (the top step ended flush with the deck above and stood partly in it: two surfaces in one plane. It
+                # stops 0.04 short now and reaches 0.4 under the mat it leads to: mats meet edge to edge since
+                # 2026-10-07, and a step that ended exactly on that edge left a seam with nothing under it)
+                height = (z1 - z0) * (n + 1) / 5 - (0.04 if n == 4 else 0.0)
+                reach = 0.4 if n == 4 else 0.0
+                c = c + tangent * (reach / 2)
+                steps.obox((c.x, c.y, z0 + height / 2), (2.4 + reach, 4.9, height), yaw, FRAME_VINYL[(n + s + k) % len(FRAME_VINYL)])
     steps.finish()
 
 
@@ -1267,16 +1306,27 @@ def build_finale():
         a = 90.0 - 6.0 * i - 3.0
         dial.obox(P(28.0, a, 0.94), (1.5, 2.3, 0.1), a, 'dial')
     dial.finish()
-    lid = Builder('Finale_Lid', finale_col)                   # twelve flaps round the post that drop when the minute is up
-    for i in range(12):
-        a = 30.0 * i
-        lid.obox(P((1.7 + SHAFT_R) / 2, a, 0.72 + (0.03 if i % 2 else 0.0)), (SHAFT_R - 1.7, 2 * SHAFT_R * math.tan(math.radians(15.0)) + 0.1, 0.36),
-                 a, ('tile_blue', 'tile_green')[i % 2])
+    # MATS_20261007. The lid was twelve flaps, each a rectangle as wide as the shaft's rim, turned thirty degrees
+    # from the last: they lay over one another like a hand of cards, every other one 0.03 higher, each with its own
+    # piece of the printed mat at its own angle. It is six pads now that do not touch each other's ground, square to
+    # the court's tiles: a cross over the shaft with a square hole for the post, one dark colour, and a yellow
+    # collar round the foot of the post over the hole's corners. Everything in the group drops when the minute is up.
+    lid = Builder('Finale_Lid', finale_col)
+    c, q, hole = LID_CORE, LID_REACH, 1.7
+    for xa, ya, xb, yb in ((-c, hole, c, q), (-c, -q, c, -hole), (-q, -c, -c, c), (c, -c, q, c),
+                           (-c, -hole, -hole, hole), (hole, -hole, c, hole)):
+        lid.box((CX + xa, CY + ya, 0.54), (CX + xb, CY + yb, 0.9), 'navy')
+    lid.cyl((CX, CY, 0.9), (CX, CY, 1.0), 2.45, 'yellow', 16, True)
     lid.finish()
+    # The ring round it was sixteen flat pads, each overlapping the next where the ring turns. It is one padded roll
+    # now: a round tube of twenty-four lengths, a ball in every joint, half sunk in the floor. Round things that run
+    # into each other meet in a line; flat ones that lie in one plane fight over it. It hides where lid meets floor.
     rim = Builder('Finale_Rim', finale_col)
-    for i in range(16):
-        a = 22.5 * i
-        rim.obox(P(SHAFT_R + 0.75, a, 0.98), (1.3, 2 * (SHAFT_R + 1.4) * math.tan(math.radians(11.25)) + 0.05, 0.22), a, 'yellow')
+    ring_r, roll = SHAFT_R + 0.75, 0.66
+    joints = [P(ring_r, 15.0 * i, 0.9) for i in range(24)]
+    for i, a in enumerate(joints):
+        rim.cyl(a, joints[(i + 1) % 24], roll, 'yellow', 10)
+        rim.ball(a, roll, 'yellow')
     rim.finish()
 
     sh = Builder('Finale_Shaft', finale_col)
@@ -1382,7 +1432,9 @@ def build_finale():
         a = math.radians(360.0 * n / 14)
         q = cross + along * (half_a + 0.75) * math.cos(a) + across * (half_b + 0.75) * math.sin(a)
         tangent = -along * (half_a + 0.75) * math.sin(a) + across * (half_b + 0.75) * math.cos(a)
-        room.obox((q.x, q.y, zc - 0.3), (tangent.length * 2 * math.pi / 14 + 0.5, 1.7, 0.6),
+        # (every other one hangs a little lower: they lie over each other where the collar turns, in two colours,
+        # and with their undersides in one plane the two colours flickered through each other)
+        room.obox((q.x, q.y, zc - 0.3 - (0.07 if n % 2 else 0.0)), (tangent.length * 2 * math.pi / 14 + 0.5, 1.7, 0.6),
                   math.degrees(math.atan2(tangent.y, tangent.x)), ('navy_worn', 'navy')[n % 2])
 
     # the door: a steel frame, the leaf pushed half open into the passage behind, the EXIT sign over it
@@ -1421,7 +1473,7 @@ def build_finale():
     room.obox((x0 + 23.0, y0 + 3.6, zf + 0.4), (5.2, 3.8, 0.8), 17.0, 'yellow_dark')
     room.obox((x0 + 3.4, y0 + 9.0, zf + 0.35), (4.4, 0.7, 5.6), 82.0, 'navy_worn')        # one more, stood against the west wall
     for n in range(9):
-        room.obox((x0 + 2.5 + dice.random() * (ROOM_W - 5.0), y0 + 2.5 + dice.random() * (ROOM_D - 5.0), zf + 0.02 + 0.003 * n),
+        room.obox((x0 + 2.5 + dice.random() * (ROOM_W - 5.0), y0 + 2.5 + dice.random() * (ROOM_D - 5.0), zf + 0.03 + 0.012 * n),
                   (2.2 + dice.random() * 4.5, 1.4 + dice.random() * 3.0, 0.04), dice.random() * 180.0, 'stain')
     for n, (dx, dy) in enumerate(((4.0, 4.5), (25.5, 18.5), (20.0, 6.0), (9.5, 13.0), (27.0, 9.0))):
         room.ball((x0 + dx, y0 + dy, zf + 0.55), 0.55, ('red', 'yellow_dark', 'blue_worn', 'red', 'yellow_worn')[n])

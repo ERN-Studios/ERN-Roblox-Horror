@@ -17,9 +17,9 @@ seam, into `assets/level6-pbr-20261006/`. Nothing is photographed or generated b
 
 | Set | MaterialVariant | Repeat | Worn by |
 |---|---|---:|---|
-| `foam_floor` | L6 Foam Floor | 6 studs | the hall floor, the court, the lid, every deck of the frame |
+| `foam_floor` | L6 Foam Floor | 6 studs | the hall floor, the court, every deck of the frame |
 | `vinyl_quilt` | L6 Vinyl Quilt | 7 | panels, soft blocks, tunnel, gate, rim, shaft, and a pad under every deck |
-| `vinyl_plain` | L6 Vinyl Plain | 6 | posts, beams, steps, punch bags, bridge rails |
+| `vinyl_plain` | L6 Vinyl Plain | 6 | posts, beams, steps, punch bags, bridge rails, the lid over the shaft and the ring round it |
 | `vinyl_filthy` | L6 Vinyl Filthy | 7 | the exit room's pads |
 | `block_wall` | L6 Block Wall | 16 | the hall's walls |
 | `roof_deck` | L6 Roof Deck | 16 | the roof |
@@ -96,10 +96,20 @@ What it does is in that file's header. The points that are not obvious:
 - `--play` dresses a running play session without saving, which is how each round was looked at; a real Level 6
   round (not just standing in the level as a lobby body) is needed to see it under the level's own grade.
 
+## What a printed surface shows (2026-10-07)
+
+The owner's pictures of that day: the ring round the post, the lid inside it and a patch of the lane, each two
+patterns lying over or flickering through each other. None of it was new geometry. Wherever two parts shared a
+plane or one lay on another, a flat colour had hidden it and a printed material showed it. The fix is in the
+geometry, not here (`tools/level6_playground/README.md`, "No two surfaces in one plane"); what changed here is
+that the lid is plain vinyl now, and that a deck's pad is a clone of the deck when the deck is a cut shape.
+A printed material is a reason to run `check_overlaps.py` BEFORE dressing a level, not after.
+
 ## Numbers
 
 Before: 11 122 parts, 16 028 Textures. After: 14 274 parts (3152 are the pads under the decks: no collision, no
-ray queries, no shadows) and 5688 Textures. Frame rate was not measurable in a meaningful way (Studio runs
+ray queries, no shadows) and 5688 Textures. Since the mats were cut to shape on 2026-10-07: 14 300 parts, of
+which the 3453 decks and their 3152 pads are unions of 12 or 16 triangles. Frame rate was not measurable in a meaningful way (Studio runs
 throttled at 15 fps in the background, before and after).
 
 ## Not done / not known

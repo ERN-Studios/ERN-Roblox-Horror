@@ -13,6 +13,8 @@ shared conventions (coordinates, `L6Slide`, anchors, the round's three searches,
 python3 tools/level6_playground/upload_arena_slides.py      # when Roblox allows it (see "Slide meshes")
 python3 tools/level6_playground/import_arena.py             # --only <Group> | --finish | --slide-source | --nav | --dry
 python3 tools/level6_playground/run_luau.py tools/level6_playground/check_nav.luau
+python3 tools/level6_playground/check_overlaps.py           # after the build: must end RESULT 0
+python3 tools/level6_playground/pbr/apply_pbr.py            # after any import: the materials, and the pads under the mats
 ```
 
 The build writes `artifacts/level6-arena-20261006/` (`blend/Level6_Arena.blend`, `export/prims.json`,
@@ -26,6 +28,41 @@ to the wall. Band 4 is a ring corridor on every floor. A Kruskal maze opens the 
 stairwells of soft steps join the floors. Two rope-net bridges cross from the second ledge (sectors 4/16 and
 10/22), 80 studs above the post. Players arrive in a padded tunnel (14 wide, 13 high, 30 long) through the hall
 wall, looking straight at the PLAY ZONE gate; one lane of 112 studs runs from the gate to the court.
+
+**No two surfaces in one plane** (`MATS_20261007`; owner, with pictures: "we have overlapping textures several
+places"). Two faces that lie in one plane and cover the same ground cannot both be drawn: the renderer picks one
+per pixel and the pick changes as the camera moves. While everything was one flat colour nobody saw it. The PBR
+pass printed a pattern on every surface, and every such place became two patterns flickering through each other.
+`check_overlaps.py` finds them in the export (tops, undersides and upright faces of boxes, turned boxes and cut
+mats); it found 1 276 and has to print `RESULT 0` after any change to the geometry. What it took:
+
+- *The frame's mats.* A deck was a rectangle as wide as its cell's OUTER edge, so it lay over both neighbours in a
+  wedge up to four studs wide, every other one 0.04 higher. Now a deck is the shape of its cell
+  (`Builder.sector`, prim kind `p`): its corners lie on the two circles, it meets its neighbours edge to edge, and
+  where a band of 24 sectors meets a band of 48 the inner one's outer edge has the extra corner. Studio has no
+  such part, so the importer cuts one block per shape with `GeometryService:SubtractAsync` (16 shapes) and
+  clones it: the decks are `UnionOperation`s, 12 or 16 triangles each. `apply_pbr.py` clones a deck for the pad
+  under it, so the ceilings meet edge to edge too. All decks of a floor lie at one height.
+- *The lid* was twelve flaps turned thirty degrees from each other, lying over one another like a hand of cards.
+  It is six pads square to the court's tiles (a cross over the shaft with a square hole for the post) in one dark
+  colour, and a yellow collar round the post. Everything in `Finale_Lid` drops when the minute is up.
+- *The ring round it* was sixteen flat pads overlapping where the ring turns. It is one padded roll: 24 lengths
+  of round tube and a ball in every joint. Round things that run into each other meet in a line.
+- *The lane* began six studs inside the court's own tiles (84 square studs of two floors in one plane: the
+  flickering patch in the owner's picture). It begins where the tiles end.
+- *Stairs*: the top step ended flush with the deck it reaches and stood partly in it. It stops 0.04 short and
+  reaches 0.4 under the mat (mats that meet edge to edge leave a seam; a step that ended on it had nothing under it).
+- *The tunnel*: its side pads stood inside the hall wall's blocks, faces in one plane. The blocks stand back.
+- *The exit room*: every other pad of the collar in the ceiling hangs 0.07 lower; stains lie 0.012 apart.
+
+What the check still lists under "one mat lying on another" is meant: ground-floor decks on the court's tiles,
+the dial's marks on the floor, steps under the mats they lead to.
+
+**The overpass** (`OVERPASS_20261007`; owner: "the entity gets stuck in the middle of the overpass"). The
+Counter is only ever sent to a node of its graph and walks at most 16 studs on from there. Each arm of the
+overpass was ONE link from the ledge to the middle, so the middle was the only place on the whole crossing it
+could be sent to: with a player standing anywhere else on a bridge it walked to the hub and stood there. Each arm
+has a node every twelve studs now (`BRIDGE_STOPS`); nowhere on the overpass is more than 11.5 studs from one.
 
 **The way out** (`exit_layout()` and `EXIT_*` in the build): the hole where the post stood is a funnel (three
 `Arena_SlideSurfaces` panels) that tips you east into the mouth of a slide. The slide winds down three turns

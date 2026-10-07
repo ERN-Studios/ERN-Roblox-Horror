@@ -107,9 +107,11 @@ local function uneven(part, lo)
 	return Color3.new(v, v, v * 0.985)
 end
 
-local FOAM_GROUPS = {Floor_Concrete = true, Floor_FoamTiles = true, Finale_Lid = true, Frame_Decks = true, Frame_DecksDeep = true}
+-- (the lid over the shaft is a hatch of plain dark pads since 2026-10-07, not a piece of the printed floor)
+local FOAM_GROUPS = {Floor_Concrete = true, Floor_FoamTiles = true, Frame_Decks = true, Frame_DecksDeep = true}
 local DECKS = {Frame_Decks = true, Frame_DecksDeep = true}
-local PLAIN_GROUPS = {Frame_Posts = true, Frame_Beams = true, Frame_SoftSteps = true, Frame_PlayFeatures = true, Frame_Bridges = true, Finale_Post = true}
+local PLAIN_GROUPS = {Frame_Posts = true, Frame_Beams = true, Frame_SoftSteps = true, Frame_PlayFeatures = true, Frame_Bridges = true, Finale_Post = true,
+	Finale_Lid = true}
 local QUILT_GROUPS = {Frame_Panels = true, Hall_SoftBlocks = true, Tunnel = true, Finale_Shaft = true, Finale_Rim = true, Frame_Entrances = true, Gate = true}
 local pads = model:FindFirstChild("Frame_DeckPads")
 if not dry then
@@ -134,7 +136,11 @@ for _, group in ipairs(model:GetChildren()) do
 						if part.Position.Y - origin.Y > 2 then                       -- a ground deck has nothing under it to look up at
 							tally("deck pads")
 							if not dry then
-								local pad = Instance.new("Part")
+								-- a mat cut to its cell is a union: its pad is the same shape, so the pads meet edge to edge too
+								local pad = part:IsA("PartOperation") and part:Clone() or Instance.new("Part")
+								pad:ClearAllChildren()
+								for name in pairs(pad:GetAttributes()) do pad:SetAttribute(name, nil) end
+								if pad:IsA("PartOperation") then pad.UsePartColor = true end
 								pad.Name = part.Name
 								pad.Size = Vector3.new(part.Size.X, 0.14, part.Size.Z)
 								pad.CFrame = part.CFrame * CFrame.new(0, -(part.Size.Y / 2 + 0.06), 0)

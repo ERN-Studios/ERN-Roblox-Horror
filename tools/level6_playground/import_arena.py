@@ -140,6 +140,56 @@ local function decorate(p, owner, mat)
 		for _, face in ipairs(SIDES) do texture(p, TEX.vinyl_pad, face, 7, c) end
 	end
 end
+-- MATS_20261007: a mat is cut to the shape of its cell (kind "p": inner radius, outer radius, the sector's angle,
+-- whether the outer edge has a corner in the middle, the angle the mat stands at, its height, its thickness).
+-- One block per shape is cut with GeometryService and every mat of that shape is a clone of it, turned about the
+-- middle of the hall. Rectangles as wide as the cell's outer edge lay over their neighbours; these meet edge to edge.
+local GeometryService = game:GetService("GeometryService")
+local matKit = {}
+local function matTemplate(ra, rb, delta, split)
+	local key = string.format("%%g,%%g,%%g,%%d", ra, rb, delta, split)
+	local kit = matKit[key]
+	if kit then return kit end
+	local h = math.rad(delta / 2)
+	local T = Vector3.new(0, 2000, 0)                     -- cut near the world's origin: out at the level the numbers are coarse
+	local corners = {Vector3.new(ra * math.cos(h), 0, ra * math.sin(h)), Vector3.new(ra * math.cos(h), 0, -ra * math.sin(h)),
+		Vector3.new(rb * math.cos(h), 0, -rb * math.sin(h))}
+	if split == 1 then corners[#corners + 1] = Vector3.new(rb, 0, 0) end
+	corners[#corners + 1] = Vector3.new(rb * math.cos(h), 0, rb * math.sin(h))
+	local middle = Vector3.zero
+	for _, c in ipairs(corners) do middle += c / #corners end
+	local xi, xo, w = ra * math.cos(h), split == 1 and rb or rb * math.cos(h), rb * math.sin(h)
+	local bench = Instance.new("Folder")
+	bench.Name = "L6MatBench"
+	bench.Parent = workspace
+	local base = Instance.new("Part")
+	base.Anchored, base.Size, base.CFrame = true, Vector3.new(xo - xi, 1, 2 * w), CFrame.new(T + Vector3.new((xi + xo) / 2, 0, 0))
+	base.TopSurface, base.BottomSurface, base.Material = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth, Enum.Material.SmoothPlastic
+	base.Parent = bench
+	local cutters = {}
+	for i, a in ipairs(corners) do
+		local b = corners[i %% #corners + 1]
+		if math.abs(a.X - b.X) > 1e-4 then                -- an edge that is not already a side of the block
+			local d = (b - a).Unit
+			local out = Vector3.new(d.Z, 0, -d.X)
+			local mid = (a + b) / 2
+			if out:Dot(mid - middle) < 0 then out = -out end
+			local c = Instance.new("Part")
+			c.Anchored, c.Size = true, Vector3.new((b - a).Magnitude + 8, 4, 10)
+			c.CFrame = CFrame.fromMatrix(T + mid + out * 5, d, Vector3.yAxis)
+			c.Parent = bench
+			cutters[#cutters + 1] = c
+		end
+	end
+	local cut = GeometryService:SubtractAsync(base, cutters, {CollisionFidelity = Enum.CollisionFidelity.Hull,
+		RenderFidelity = Enum.RenderFidelity.Precise, SplitApart = false})
+	local shape = cut[1]
+	shape.UsePartColor, shape.Anchored, shape.CanTouch = true, true, false
+	kit = {part = shape, rel = CFrame.new(-T) * shape.CFrame}
+	bench:Destroy()
+	matKit[key] = kit
+	return kit
+end
 local function along(a, b)
 	local d = b - a
 	local up = math.abs(d.Unit.Y) > 0.99 and Vector3.xAxis or Vector3.yAxis
@@ -169,6 +219,16 @@ for line in string.gmatch(DATA, "[^\\n]+") do
 		p.Size = Vector3.new(n[4], n[6], n[5])
 		p.CFrame = CFrame.new(O + Vector3.new(n[1], n[2], n[3])) * CFrame.Angles(0, math.rad(n[7]), 0)
 		decorate(p, owner, mat)
+		p.Parent = parent
+	elseif kind == "p" then
+		local kit = matTemplate(n[1], n[2], n[3], n[4])
+		local p = kit.part:Clone()
+		local m = MAT[mat]
+		p.Name = mat
+		p.Color, p.Material, p.Transparency = m[1], m[2], m[3]
+		p.CanCollide = m[4] and not loose(owner)
+		p.Size = Vector3.new(kit.part.Size.X, n[7], kit.part.Size.Z)
+		p.CFrame = (CFrame.new(O) * CFrame.Angles(0, math.rad(n[5]), 0) * kit.rel) + Vector3.new(0, n[6], 0)
 		p.Parent = parent
 	elseif kind == "c" or kind == "t" then
 		local a, b = O + Vector3.new(n[1], n[2], n[3]), O + Vector3.new(n[4], n[5], n[6])
@@ -565,6 +625,9 @@ def main():
                 continue
         elif kind == 'o':
             nums = [*to_roblox(*d[0:3]), d[3], d[4], d[5], d[6]]
+        elif kind == 'p':
+            ra, rb, delta, split, yaw, zc, thick = d
+            nums = [ra, rb, delta, int(split), yaw, zc, thick]      # Blender's z is Studio's height; the angle turns the same way
         elif kind in ('c', 't'):
             if math.dist(d[0:3], d[3:6]) < 0.01:
                 continue

@@ -1464,3 +1464,44 @@ weight and button size on phones, no noise meter.
   `UpdateSourceAsync`, then required and destroyed. RoundUI in Studio and in the repo are the same 272 478 bytes.
 - **Rule from this**: before reporting a visual fix, look at it as the player (body there, own camera, HUD on,
   full quality), not through a parked camera.
+
+### Added 2026-10-07 (afternoon) - Level 6: nothing lies over anything any more, and the overpass (in Studio, NOT published)
+
+- **Owner, with ten pictures from the live game**: "we have overlapping textures several places, fix that, and
+  the entity gets stuck in the middle of the overpass in the top of the map." The pictures: the yellow ring round
+  the post, the lid inside it, a patch of floor where the lane meets the court, and the Counter standing on the
+  hub of the two bridges while the player stood on one of them.
+- **The overlaps were mine and a day old in their effect**: none of the geometry was new, but the PBR pass of
+  the night before printed a pattern on every surface, and wherever two parts shared a plane or one lay on
+  another a flat colour had hidden it. `tools/level6_playground/check_overlaps.py` finds such places in the
+  export: 1 276 in sight before, `RESULT 0` now. **Run it after every geometry change, and before dressing any
+  level with printed materials.** What changed is in `tools/level6_playground/README.md` ("No two surfaces in
+  one plane"): decks cut to the shape of their cells, a new lid and ring, the lane, the top step of every
+  flight, the tunnel's wall, the exit room's collar. Marker `MATS_20261007`.
+- **The decks are `UnionOperation`s now** (3453, and their 3152 pads): a mat between two radii and two sector
+  lines is not a shape Studio has, so the importer cuts one block per shape (16) with
+  `GeometryService:SubtractAsync` and clones it. That call works from an Edit `execute_luau` (0.1 s a cut); the
+  result takes a non-uniform `Size`, a MaterialVariant and ray queries like a part; set `UsePartColor`. Cut near
+  the world's origin, not at x = 52 000.
+- **Mats that meet edge to edge leave a seam a ray can fall through**: `check_nav.luau` reported "no floor" at
+  the top of 10 stair flights, exactly on the line between two mats. The top step reaches 0.4 under the mat now.
+- **The overpass** (`OVERPASS_20261007`): the Counter is only sent to a node of its graph and walks at most 16
+  studs on from it. Each arm of the bridge was one link, so the hub was the only node on the crossing: a player
+  anywhere else on a bridge had it walk to the hub and stand there. Four nodes per arm now. Tested: with the
+  player 30 studs out on an arm it climbed to floor 8, ran down the arm and caught them there.
+- **The same card-over-count bug existed on desktop** in any window 768 pixels high or less (the card is at
+  least 74 pixels high and hangs 58 from the top; the count is placed by the window's height). The count and
+  status lines move down by what is missing, and `placeHud` also runs when the viewport changes.
+- **Tested in Studio at full quality, solo, as a player**: the court, the lane's mouth, a gallery (floor and
+  ceiling), the tunnel, the exit room; three stair flights climbed on foot; the lid's seven pieces drop and come
+  back; six of six entries into the hole reached the exit room (two walked in, four dropped at the edge; a
+  seventh was cut short by the Counter); `check_nav.luau` three zeros; console clean. Pictures:
+  `artifacts/level6-overlaps-20261007`. **Not tested**: more than one player, a phone, frame rate (3453 unions
+  instead of 3453 parts: same triangle count, not measured).
+- **A drop test and the Counter**: it ignores a body under the floor and catches one that comes back up beside
+  the post. Open the hatch by hand during the count (`CanCollide = false` on `Finale_Lid` and `Finale_Post`) and
+  expect about four drops before the hunt reaches the court.
+- **Studio was closed when this began; `open -g "roblox-studio:..."` reopened it and it took the front for a
+  moment** (Chrome was put back with `tell application ... to activate`). The MCP studio id changes with every
+  restart. 23 scripts differ between Studio and the repo from other sessions (ZyntraStore, three new `Zyntra *
+  L4` clients, the Level 2 kit, GameManager...): left alone.
