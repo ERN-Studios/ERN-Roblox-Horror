@@ -251,6 +251,252 @@
     103797698944118,
     131830288383893
    ],
+   "budget_in_micro_usd": 11000000,
+   "budget_type": 1,
+   "detailed_targeting_match_type": 0,
+   "duration_in_days": 5,
+   "is_auto_reload_ad_credit_enabled": false,
+   "is_off_platform_request": false,
+   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
+   "objective": 2,
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "target_universe_id": 10559217407,
+   "targeting_criteria": {
+    "age_bucket_criteria": {
+     "all_ages": true
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": [],
+     "regions": [
+      1
+     ]
+    }
+   }
+  },
+  "pictures": {
+   "A01_ad_office_run": 86971162315270,
+   "T01_hero_office_hide": 85334319149309,
+   "T04_hero_shh": 109659855098434,
+   "A03_ad_table_check": 130462922453042,
+   "T03_hero_playground": 103797698944118,
+   "T05_hero_cinema": 131830288383893
+  },
+  "idempotency_key": "a35034ae-99dd-4745-9d61-e2197934ebd1",
+  "submitted_at": "2026-10-08T01:00:08",
+  "status": 200,
+  "answer": "{\"campaign_id\":\"fc071f73-178a-491c-8257-c8be9e222e3c\",\"ad_set_id\":\"d7f469d5-c8c5-4c80-9739-dab2fb83c3d3\",\"ad_ids\":[\"0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9\",\"1c9aff9d-69f9-463d-962f-e37ded1120d6\",\"9d346178-e3ef-4ad1-8302-9f57feaec4de\",\"9042dfd0-d12c-4541-90aa-42be0efc88be\",\"132fc3d8-9d39-42d9-ae41-1379c4b203a0\",\"f373206a-dbc9-4dc1-98eb-b994cbe3a478\"]}",
+  "read_back": {
+   "id": "fc071f73-178a-491c-8257-c8be9e222e3c",
+   "name": "Stay Quiet | Plays | 11 a day | 6 creatives",
+   "status": 2,
+   "objective": 2,
+   "budget_type": 1,
+   "budget_in_micro_usd": 11000000,
+   "performance": {},
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "duration_in_days": 5,
+   "target_universe_id": 10559217407,
+   "asset_ids": [
+    85334319149309,
+    130462922453042,
+    86971162315270,
+    109659855098434,
+    103797698944118,
+    131830288383893
+   ],
+   "targeting_criteria": {
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "age_criteria": {
+     "all_ages": false,
+     "lower_bound": 0,
+     "upper_bound": 0
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "age_bucket_criteria": {
+     "all_ages": true,
+     "age_buckets": null
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": null,
+     "regions": [
+      1
+     ]
+    },
+    "keyword_criteria": {
+     "keywords": null
+    },
+    "retargeting_criteria": {
+     "retargeting_audiences": null
+    },
+    "operating_system_criteria": {
+     "operating_systems": null
+    }
+   },
+   "bid_value_micro_usd": 1000001,
+   "is_full_days": false,
+   "is_auto_reload_ad_credit_enabled": false
+  }
+ },
+ "square_and_vertical_archived": [
+  {
+   "id": "b27bbc3f-39c3-481e-82f2-b2000b818588",
+   "asset_id": 99298058334890,
+   "name": "A25_ad_six_levels_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "34f6d2a9-93ad-4c8d-bccb-150732bc2530",
+   "asset_id": 138221916816475,
+   "name": "A24_ad_void_the_fall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "ef70bb21-6d6d-4b65-9280-65fdc7e8a1e9",
+   "asset_id": 132518805324517,
+   "name": "A23_ad_party_hall_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "4d945200-3ccc-40d3-aa02-3b82ef978fb1",
+   "asset_id": 115038668580807,
+   "name": "A22_ad_cinema_corridor_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "9813cc1d-7f3a-4e63-8b7e-f1387afcf56d",
+   "asset_id": 112221753423899,
+   "name": "A21_ad_office_shadow_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "42d852ac-f5e0-493a-bab8-b7544305abad",
+   "asset_id": 111463970574590,
+   "name": "A20_ad_poolrooms_doors_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "6335aaf2-afcf-4fe1-a1e1-df9fd6cd8e3e",
+   "asset_id": 89113202226844,
+   "name": "A19_ad_void_crimson_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "4be918b7-fde3-4dba-83cd-f9dca3a9dfb5",
+   "asset_id": 132152812394578,
+   "name": "A18_ad_playground_tall",
+   "width": 1080,
+   "height": 1920
+  },
+  {
+   "id": "9774cb11-2486-4798-90c8-16b292911880",
+   "asset_id": 139778226324660,
+   "name": "A17_ad_hand_under_table",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "c2389047-a205-4239-8ab9-00f30aa0fd89",
+   "asset_id": 104440887632011,
+   "name": "A16_ad_poolrooms_stairs_down",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "95bc4bab-61ba-43f2-a52c-9d62d946af4e",
+   "asset_id": 77452219346390,
+   "name": "A15_ad_void_ledge_above",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "bce1ca61-aa5f-4367-815a-82968ff2fa6f",
+   "asset_id": 75903320002771,
+   "name": "A14_ad_usher_shh",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "8b56ea14-6b53-4ec4-b6f1-0680de7dff47",
+   "asset_id": 104754933599087,
+   "name": "A13_ad_manager_balloon",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "5fb5af2e-2de2-4fed-b759-25f9bf9387a0",
+   "asset_id": 137913894696344,
+   "name": "A12_ad_player_shh",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "5d86a904-093a-4e3c-a218-bf2b821fb819",
+   "asset_id": 100026434178461,
+   "name": "A11_ad_counter_peek",
+   "width": 1080,
+   "height": 1080
+  },
+  {
+   "id": "2502c489-91e4-4355-b66b-d51c3e19e5d6",
+   "asset_id": 125491303890904,
+   "name": "A10_ad_entity_reach",
+   "width": 1080,
+   "height": 1080
+  }
+ ],
+ "campaign_previous": {
+  "request": {
+   "asset_ids": [
+    86971162315270,
+    85334319149309,
+    109659855098434,
+    130462922453042,
+    103797698944118,
+    131830288383893
+   ],
    "budget_in_micro_usd": 57000000,
    "budget_type": 2,
    "detailed_targeting_match_type": 0,
@@ -439,6 +685,30 @@
    "bid_value_micro_usd": 1000001,
    "is_full_days": false,
    "is_auto_reload_ad_credit_enabled": false
+  },
+  "cancelled": {
+   "at": "2026-10-08T00:59:13",
+   "answer_status": 400,
+   "state_after": {
+    "id": "4f4b9c87-81b9-468b-8967-7c415489a63c",
+    "display_status": 2,
+    "is_on": true,
+    "disabled": false
+   },
+   "status_after": 2,
+   "why": "owner asked for a daily budget of 11; the budget type of an existing campaign cannot be changed"
+  },
+  "switched_off": {
+   "at": "2026-10-08T00:59:54",
+   "answer_status": 200,
+   "state_after": {
+    "id": "4f4b9c87-81b9-468b-8967-7c415489a63c",
+    "display_status": 1,
+    "is_on": false,
+    "disabled": false
+   },
+   "status_after": 3,
+   "why": "owner asked for a daily budget of 11; the budget type of an existing campaign cannot be changed, and Roblox refuses a cancel within 6 hours of the start"
   }
  }
 }

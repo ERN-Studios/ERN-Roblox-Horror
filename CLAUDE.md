@@ -1632,3 +1632,18 @@ weight and button size on phones, no noise meter.
   its `call` keeps ONE answer slot in the page: never run two jobs through the same tab at once.
 - Roblox says review takes up to 24 hours; the review state itself could not be read from the session (the
   list query's enum values were not found). The owner sees it under Manage ads.
+
+### Added 2026-10-08 (night, later) - Ads: daily budget of 11, no square or vertical assets (LIVE)
+
+- **Owner**: "do not have squared and vertical ads pushed as they would be stretched", and "run the ad with 11
+  credits a day". The 16 square and vertical pictures are archived in the asset library (15 are left, all
+  1920 x 1080; none of the 16 was ever in a campaign).
+- **The campaign that runs is `fc071f73-178a-491c-8257-c8be9e222e3c`**, "Stay Quiet | Plays | 11 a day | 6
+  creatives": DAILY budget 11 for 5 days from 2026-10-08 01:30 local (55 in all; about 2.46 credits stay), same
+  six pictures, everyone, group ad credit, auto-reload off. The first one (`4f4b9c87...`, lifetime 57) is
+  SWITCHED OFF and never delivered: do not switch it on again, the two together would spend twice as fast.
+- **Why two**: the budget type of an existing campaign cannot be changed, and Roblox refuses to cancel a
+  campaign within 6 hours of its start ("CAMPAIGN_INELIGIBLE_FOR_UPDATE"). Switching off (`status: 3`) works at
+  any time. `ads.py` has `states`, `switch` and the status numbers; its `status` lists both campaigns.
+- Chrome answered one request with "Connection is invalid (-609)" while a prompt was up on the owner's screen;
+  after a failed call, READ the state before sending the request again (the cancel had not gone through).

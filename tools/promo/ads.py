@@ -16,6 +16,10 @@ service  https://apis.roblox.com/ads-management-api
   DELETE /v1/adCreatives/<id>?groupId=          archives it (the library's "archive"; a PATCH to true is refused)
   PATCH /v1/adCreatives/<id>?groupId=           {"is_archived": false, "update_mask": ["is_archived"]} brings it back
   POST  /v3/native/campaigns?groupId=           {"campaign": {...}, "idempotency_key": "..."}   CREATES AND SUBMITS
+  POST  /v3/native/campaigns/status?groupId=    {"campaign_ids": [...]}: display_status (1 paused, 2 scheduled, 6 in review,
+                                                9 active, 14 learning, 5 completed, 7 cancelled) and is_on
+  PATCH /v3/native/campaigns/<id>               {"campaign": {"status": 3}} switches it off, 2 on again, 5 cancels
+                                                (a cancel within 6 hours of the start is refused)
   GET   /v3/native/campaigns/<id>?groupId=      one campaign as it stands (status 2 = enabled, 3 stopped, 5 cancelled,
                                                 6 paused for lack of credit)
   POST  /v2/native/ads/dateFilter?request_timestamp=&time_period=&reporting_view=   {"campaign_ids": [...]}: results
@@ -24,6 +28,9 @@ service  https://apis.roblox.com/ads-management-api
 An ad picture is first an ordinary group-owned image asset (the same upload the Icon page does), then it is
 registered in the library with its size. Sponsored tiles are 16:9; a campaign shows its pictures (ten at most)
 to players in even shares, so a weak picture costs as much as a strong one.
+
+An existing campaign's budget TYPE cannot be changed (the edit form does not even send it): for another type,
+switch the old one off and create a new one.
 
 Campaign numbers: objective 2 = Plays; budget_type 1 = daily, 2 = lifetime; payment_type 4 = the group's ad
 credit (2 = a user's own, 1 = card); detailed_targeting_match_type 0 = all players, 3 = new, 2 = recent,
@@ -140,6 +147,19 @@ def submit(body, key=None):
     return d.call('POST', f'{API}/v3/native/campaigns?groupId={GROUP}', body={'campaign': body, 'idempotency_key': key}, wait=120) + (key,)
 
 
+def states(campaign_ids):
+    tab()
+    status, text = d.call('POST', f'{API}/v3/native/campaigns/status?groupId={GROUP}', body={'campaign_ids': list(campaign_ids)})
+    assert status == 200, (status, text[:300])
+    return json.loads(text)
+
+
+def switch(campaign_id, on):
+    """On (2) or off (3). Off stops delivery at once; nothing is charged while it is off."""
+    tab()
+    return d.call('PATCH', f'{API}/v3/native/campaigns/{campaign_id}', body={'campaign': {'status': 2 if on else 3}})
+
+
 def read_campaign(campaign_id):
     return get(f'/v3/native/campaigns/{campaign_id}?groupId={GROUP}')
 
@@ -152,13 +172,18 @@ def status():
         print(f"  {r['asset_id']}  {str(r.get('asset_name'))[:40]:40s} {r.get('width')}x{r.get('height')}  {r.get('content_moderation_status')}")
     print(len(library(archived=True)), 'archived')
     record = json.loads(RECORD.read_text()) if RECORD.exists() else {}
-    answer = record.get('campaign', {}).get('answer')
-    if answer:
-        c = read_campaign(json.loads(answer)['campaign_id'])
+    names = {1: 'paused', 2: 'scheduled', 5: 'completed', 6: 'in review', 7: 'cancelled', 9: 'active', 14: 'learning'}
+    for key in ('campaign', 'campaign_previous'):
+        answer = record.get(key, {}).get('answer')
+        if not answer:
+            continue
+        cid = json.loads(answer)['campaign_id']
+        c = read_campaign(cid)
         c = c.get('campaign', c)
-        print('campaign:', c.get('name'), '| status', c.get('status'), '| budget', c.get('budget_in_micro_usd', 0) / 1e6,
-              '| days', c.get('duration_in_days'), '| pictures', len(c.get('asset_ids') or []), '| results', json.dumps(c.get('performance'))[:300])
-
+        st = states([cid])[0]
+        print(f"{key}: {c.get('name')} | {names.get(st.get('display_status'), st.get('display_status'))}, {'ON' if st.get('is_on') else 'off'}",
+              '|', 'daily' if c.get('budget_type') == 1 else 'lifetime', c.get('budget_in_micro_usd', 0) / 1e6, '| days', c.get('duration_in_days'),
+              '| pictures', len(c.get('asset_ids') or []), '| results', json.dumps(c.get('performance'))[:300])
 
 if __name__ == '__main__':
     if sys.argv[1:] == ['status']:
