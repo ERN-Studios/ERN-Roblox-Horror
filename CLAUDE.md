@@ -1647,3 +1647,16 @@ weight and button size on phones, no noise meter.
   any time. `ads.py` has `states`, `switch` and the status numbers; its `status` lists both campaigns.
 - Chrome answered one request with "Connection is invalid (-609)" while a prompt was up on the owner's screen;
   after a failed call, READ the state before sending the request again (the cancel had not gone through).
+
+### Added 2026-10-08 (night) - The game's public name is "(UPDATE) BACKROOMS: BE QUIET" (live)
+
+- **Owner**: "Change our game name to just BACKROOMS: Be quiet, remove the co-op horror part and add (UPDATE) to
+  the start", then "with all caps". Was `BACKROOMS: STAY QUIET [CO-OP HORROR]`. Changed through the dashboard's own
+  call (`PATCH develop.roblox.com/v2/places/<start place>` with name and the unchanged description;
+  `store_pictures.rename`); place, experience and public page all read the new name three seconds later. The old
+  name and the description are in `artifacts/promo-20261007/store-upload.json` (`name`).
+- **Not changed, and now out of step with the name**: every title thumbnail and ad picture still says STAY QUIET
+  and CO-OP HORROR (on the store page, the Home tile and in the running ad campaign); the description still has
+  "1-6 PLAYER CO-OP HORROR"; in-game text was not touched. The owner was told; re-lettering is one run of
+  `finish.py` after the wording in it is changed, plus a re-upload.
+- This file's own heading and the repo's folder names keep the old name.

@@ -82,5 +82,12 @@
    "I10_icon_poolrooms_alone": 102677566383982
   },
   "live": "I01_icon_shh_eyes_in_the_lenses"
+ },
+ "name": {
+  "before": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
+  "description_before": "\u26a0\ufe0f FLASHING LIGHTS \u2022 LOUD NOISES \u2022 SUDDEN CHASES\n\n\ud83d\udce1 ZYNTRA intercepted a signal from a place that doesn't exist.\nCommand Center sent your team to trace it.\n\nThen the signal started using your names.\n\nThe halls remember every sound. The lights lead deeper. Something on the other side is waiting for you to answer.\n\n\ud83d\udc41\ufe0f Stay together. Stay quiet. Don't trust the static.\n\ud83e\udd1d 1\u20136 PLAYER CO-OP HORROR\n\ud83d\udcf1 PC + MOBILE\n\ud83c\udfa7 HEADPHONES RECOMMENDED\n\nTHE TRANSMISSION IS STILL LIVE.\nWill you follow it?",
+  "after": "(UPDATE) BACKROOMS: BE QUIET",
+  "at": "2026-10-08T01:10:10",
+  "answer_status": 200
  }
 }

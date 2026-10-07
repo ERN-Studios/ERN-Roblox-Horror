@@ -29,6 +29,11 @@ HOME PAGE (the tile on Roblox's Home, one shown unless personalization is on)
   show     POST   /personalization/create       {"homepageThumbnailIds": [...]}, as application/json-patch+json
   remove   DELETE /thumbnails?homepageThumbnailIds=...
 
+THE NAME (what the Basic Settings page does)
+  PATCH develop.roblox.com/v2/places/<place>   {"name": ..., "description": ...}: for the start place this is the
+        game's public name too (experience and public page followed within three seconds on 2026-10-08).
+        Send the description you read, unchanged, as the page does.
+
 THE ICON (one per game: the Icon page has a single slot, there is no set to choose from)
   It is the place asset's `icon` field. The Icon page makes an Image asset first and then points the field at it:
   create   POST  apis.roblox.com/assets/user-auth/v1/assets    form: "request" = {"assetType": "Image",
@@ -185,6 +190,14 @@ def set_icon(asset):
             return True
         time.sleep(2)
     return False
+
+
+def rename(name):
+    """The game's public name (the start place's name). The description is sent back as it was."""
+    status, text = d.call('GET', f'https://develop.roblox.com/v2/places/{PLACE}')
+    assert status == 200, (status, text[:200])
+    description = json.loads(text)['description']
+    return d.call('PATCH', f'https://develop.roblox.com/v2/places/{PLACE}', body={'name': name, 'description': description})
 
 
 def status():
