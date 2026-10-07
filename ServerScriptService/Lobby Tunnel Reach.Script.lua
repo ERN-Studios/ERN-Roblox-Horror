@@ -16,7 +16,7 @@
 --   reads `ReachFrame` / `ReachFence` / `ReachGround` from the lobby's InfiniteTunnelEnd folder.
 --
 --   Every position here is in the tunnel's own frame: x across, y up from the road, z = studs BEHIND the end wall
---   (the fence is at -ReachFence, the dark starts at about +70).
+--   (the fence is at -ReachFence, the light is gone at about +70).
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
@@ -55,8 +55,9 @@ local CONFIG = {
 	HandLimit = 1.5,            -- a creeping hand comes no nearer the fence than this far behind the wall
 	HeldLimit = 7,              -- seconds; a whole taking is under three
 	Publish = 0.05,
-	-- how far behind the wall the eyes are: asleep and waking, and when a hand has reached the fence. The dark is
-	-- sheets of black at 70, 100, 128, 152 and 170; behind the fourth nothing shows, so they start in front of it
+	-- how far behind the wall the eyes are: asleep and waking, and when a hand has reached the fence. The tunnel's
+	-- light is out 70 studs in and the tunnel itself goes black with it (REACH_DARK_20261007, in the Builder); the
+	-- first sheet of black stands at 156, so the eyes stay in front of that
 	EyesFar = 148, EyesNear = 96,
 }
 

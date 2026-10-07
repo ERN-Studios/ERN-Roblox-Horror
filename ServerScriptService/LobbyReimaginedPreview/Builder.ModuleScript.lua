@@ -520,6 +520,15 @@ function Module.Build()
 			local REPEAT = {PlainShell = true, ArchRib = true, CableTray = true, ConduitSection = true, Fluorescent = true,
 				RoadSection = true, SidewalkSection = true}
 			local SECTION, COPIES = 40, 5
+			-- REACH_DARK_20261007 (owner, with a picture from a few steps behind the fence: "you can see the built
+			-- monster and that it's not complete, make sure it is dark all the way down to the entity"). The copies
+			-- were lit for 120 studs and only veiled after that, so the eyes and arms of the easter egg stood in a
+			-- lit tunnel. Now the light is gone 70 studs in and the tunnel itself goes black with it: each copied
+			-- section keeps this much of its colour (Lighting.Ambient lights an unlit shell too; black parts are the
+			-- only thing it cannot light). The creature's own pieces are blacked out to match by its client script.
+			-- (Seen in play: 0.5 on the second section was already black and drew a hard line across the road where
+			-- the first section ends; a Color3 is not a linear amount of light.)
+			local SHADE = {1, 0.78, 0.45, 0.12, 0}
 			local outward = -inward
 			local last = {}
 			for _, item in ipairs(visuals:GetChildren()) do
@@ -534,9 +543,17 @@ function Module.Build()
 					local copy = item:Clone()
 					copy.Name = "Beyond" .. item.Name
 					if copy:IsA("Model") then copy:PivotTo(item:GetPivot() + outward * SECTION * n) else copy.CFrame = item.CFrame + outward * SECTION * n end
+					local shade = SHADE[n]
 					for _, d in ipairs(copy:IsA("BasePart") and {copy, table.unpack(copy:GetDescendants())} or copy:GetDescendants()) do
 						if d:IsA("BasePart") then
 							d.Anchored, d.CanCollide, d.CanTouch, d.CanQuery, d.CastShadow = true, false, false, false, false
+							if shade < 1 then
+								d.Color = Color3.new(d.Color.R * shade, d.Color.G * shade, d.Color.B * shade)
+								d.Reflectance = 0
+								if shade <= 0.2 and d:IsA("MeshPart") and d.TextureID ~= "" then d.TextureID = "" end   -- (a texture may not take the tint)
+							end
+						elseif d:IsA("SurfaceAppearance") then
+							if shade < 1 then d.Color = Color3.new(d.Color.R * shade, d.Color.G * shade, d.Color.B * shade) end
 						elseif d:IsA("Light") then
 							d:Destroy()                                    -- lit by what spills in from the lobby, and less of it each section
 						end
@@ -547,20 +564,24 @@ function Module.Build()
 			end
 			-- Seen in play (2026-10-05): with no lamps of their own the copies were black from the first stud - a
 			-- closed shell gets no light under Realistic lighting - so the tunnel just stopped at the fence. The
-			-- lobby's own lamps over its last section are repeated with the shell, each section weaker than the one
-			-- before, and the black sheets start further in.
+			-- lobby's own lamps over its last section are repeated with the shell, weaker the further in they hang.
+			-- REACH_DARK_20261007: every lamp fades by its own distance behind the wall (not a whole section at a
+			-- time, which drew a line across the road), and the last of the light is LAMPS_END studs in.
 			local lamps = model:FindFirstChild("PreviewLighting")
-			local FADE = {0.8, 0.52, 0.3, 0.14, 0.05}
+			local LAMPS_END, LAMPS_FIRST = 70, 0.5
 			for _, holder in ipairs(lamps and lamps:GetChildren() or {}) do
 				local at = holder:IsA("BasePart") and holder.Position or (holder:IsA("Model") and holder:GetPivot().Position) or nil
 				local along = at and (at - wall.Position):Dot(inward)
 				if along and along > 0.6 and along <= SECTION + 0.6 and holder:FindFirstChildWhichIsA("Light", true) then
 					for n = 1, COPIES do
+						local depth = SECTION * n - along                         -- studs behind the wall
+						local fade = LAMPS_FIRST * math.clamp(1 - depth / LAMPS_END, 0, 1) ^ 1.5
+						if fade < 0.01 then break end
 						local copy = holder:Clone()
 						copy.Name = "BeyondLamp"
 						if copy:IsA("Model") then copy:PivotTo(holder:GetPivot() + outward * SECTION * n) else copy.CFrame = holder.CFrame + outward * SECTION * n end
 						for _, d in ipairs(copy:GetDescendants()) do
-							if d:IsA("Light") then d.Brightness *= FADE[n]; d.Shadows = false end
+							if d:IsA("Light") then d.Brightness *= fade; d.Shadows = false end
 							if d:IsA("BasePart") then d.CanCollide, d.CanTouch, d.CanQuery, d.CastShadow = false, false, false, false end
 						end
 						if copy:IsA("BasePart") then copy.CanCollide, copy.CanTouch, copy.CanQuery, copy.CastShadow = false, false, false, false end
@@ -570,7 +591,9 @@ function Module.Build()
 				end
 			end
 			local centre = wall.Position
-			for i, row in ipairs({{70, 0.8}, {100, 0.66}, {128, 0.5}, {152, 0.32}, {170, 0.14}}) do    -- the dark, in sheets
+			-- (the sheets in front of 150 are gone: they were what dimmed the tunnel before it was black itself, and
+			-- they dimmed the easter egg's eyes with it. These two stand behind the eyes, in front of its shoulders.)
+			for i, row in ipairs({{156, 0.25}, {172, 0.05}}) do    -- the dark, in sheets
 				local at = centre + outward * row[1]
 				local sheet = piece("BeyondDark", Vector3.new(width, height, 0.2), CFrame.lookAt(at, at + inward),
 					Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, false)

@@ -19,7 +19,12 @@ in the lobby. Marker in the code: `TUNNEL_REACH_20261006`.
 - **Taken.** A hand that gets within 15 studs rears up (0.6 s, the last moment to be gone), comes down over the
   body, closes, lifts it and drags it into the dark; at 150 studs behind the wall the body dies. GameManager's own
   lobby respawn stands the player up at the spawn three seconds later. On the victim's screen the picture closes
-  in during the pull, goes black, shows the eyes once from below, and comes back in the lobby.
+  in during the pull, is black thirty studs into it, stays black, and comes back in the lobby.
+- **The dark** (owner, 2026-10-07, `REACH_DARK_20261007`: "you can see the built monster and that it's not
+  complete, make sure it is dark all the way down to the entity", and of the shot of the eyes that used to follow
+  the kill: "no kill cam like that looking at the entity please, just black screen and then respawn in lobby").
+  It is two eyes and four arms and nothing else, so it may only be seen where there is light, and there is light
+  only near the fence. See "How the dark is made".
 
 ## Where the code is
 
@@ -33,8 +38,26 @@ in the lobby. Marker in the code: `TUNNEL_REACH_20261006`.
 | The meshes' numbers | `ServerStorage.LobbyTunnelReachSource` |
 
 Every position is in the tunnel's own frame (`Frame` on the folder): x across, y up from the road, z = studs
-behind the end wall. The fence is at z = -7.6, the ground ends at 64, the sheets of dark are at 70, 100, 128, 152
-and 170, the shoulders are at 187.
+behind the end wall. The fence is at z = -7.6, the ground ends at 64, the last lamp hangs at 61, the tunnel is
+black from 160, two sheets of dark stand at 156 and 172, the shoulders are at 187.
+
+## How the dark is made
+
+Three things, and it takes all three (`Lighting.Ambient` is not zero in the lobby, so "no lamps" alone leaves
+everything a visible grey):
+
+1. **The lamps** (Builder): the lobby's lamps are repeated behind the wall, each weaker by its own depth
+   (`LAMPS_FIRST` 0.5 at the wall, nothing from `LAMPS_END` 70). Fading a whole 40-stud section at a time drew a
+   line across the road.
+2. **The tunnel** (Builder): each copied section keeps `SHADE` of its colour: 1, 0.78, 0.45, 0.12, 0. A black part
+   is the only thing ambient light cannot light. These are Color3 factors, not amounts of light: 0.5 on the second
+   section was already black on screen.
+3. **The creature** (client, `DARK`): every piece keeps all of its colour up to 34 studs behind the wall and none
+   from 72, and a piece within 14 to 30 studs of the camera keeps some wherever it is, so a hand that has come
+   right up to somebody standing in the dark is a shape. The eyes are Neon and light nothing; the PointLights they
+   used to carry lit the tunnel round them orange for 52 studs, which is what showed the arms' far ends.
+
+The sheets of black that used to stand at 70, 100 and 128 are gone: they dimmed the eyes along with everything else.
 
 Three things were in the way of "over the fence" and all three had to go: the fence's own collision was a sheet 30
 studs high (it is 14.9 now, the height you see), the retired furniture pile's blockers still stood in the fence's
@@ -69,13 +92,19 @@ asset templates and removes the numbers, and the server finds nothing left to ba
 - **Vertex colours come out stronger in the game than in the render.** The second palette (green, violet and red
   in equal parts) looked like camouflage; the skin is one dead grey now with the rest as accents.
 - **Vertex colours work on a Neon MeshPart**: the iris is one mesh, painted from the pupil outward.
-- **The eyes cannot be further in than the fourth sheet of dark** (152): behind it 8% of them gets through.
-  `EyesFar` 148, `EyesNear` 96.
+- **The eyes cannot be further in than the first sheet of dark** (156). `EyesFar` 148, `EyesNear` 96.
 - **A lobby avatar jumps 7.3 studs** (JumpPower 50; measured), not the 6.4 that v squared over 2g gives.
 - **Screenshots of something fast**: an `execute_luau` call that is in flight when a LocalScript switches the
   camera to Scriptable resets the camera when it returns. Schedule the test with `task.spawn` in a call that
-  returns at once, then take captures. `workspace.DevTunnelReachStare = <seconds>` (Studio) holds the victim's
-  last picture; the client publishes its phase as the player attribute `TunnelReachPhase`.
+  returns at once, then take captures. The client publishes its phase as the player attribute `TunnelReachPhase`
+  (`pull`, `wait`, `back`).
+- **Looking at it in Studio**: park the real camera (a `BindToRenderStep` after the camera's own priority that
+  writes `CameraType = Scriptable` and the CFrame every frame) and stand the player's body near what you look at:
+  lamps far from the body do not draw, and the whole lobby is black for some seconds after a teleport.
+- **One play session on 2026-10-07 drew the bones and elbows but no palm, finger, claw or eye**, although every
+  piece was in the data model in the right place with Transparency 0. The next session drew all of it. Not
+  explained (the five missing kinds are the last five the server bakes). If a hand looks like a stump in Studio,
+  restart play before changing anything.
 - **Posing one hand for a look**: on the Client, set `Awake`, `S<n>`, `T<n>`, `At<n>` (and `V<n>` to a UserId for
   the grip) on `ReplicatedStorage.LobbyTunnelReach`. The server only rewrites an arm's attributes when that arm
   moves, so a resting arm keeps what you gave it.

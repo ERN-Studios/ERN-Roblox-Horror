@@ -14,9 +14,16 @@
 --   THE PIECES are MeshPart templates in ReplicatedStorage.LobbyTunnelReach.Meshes, baked by the server. Each looks
 --   down its own -Z (the far end) and carries `Offset`: its own origin measured from the middle of its box.
 --
---   For the player it takes: the picture closes in while they are pulled, goes black as they die, shows the eyes
---   once from close by, and comes back when the lobby has stood them up again. `ReduceCameraShake` leaves the
---   camera alone; nothing here flashes.
+--   For the player it takes: the picture closes in while they are pulled and is black by the time they are in the
+--   dark; it stays black until the lobby has stood them up again. `ReduceCameraShake` leaves the camera alone;
+--   nothing here flashes.
+--
+--   REACH_DARK_20261007 (owner, with two pictures: "you can see the built monster and that it's not complete, make
+--   sure it is dark all the way down to the entity" and, of the eyes shown to the victim after the kill, "no kill
+--   cam like that looking at the entity please, just black screen and then respawn in lobby"). It is eyes and arms
+--   and nothing else, so nothing of it may be seen where there is no light: every piece is blacked out by how far
+--   behind the wall it is (`DARK`; the Builder takes the tunnel itself to black over the same stretch), the eyes
+--   light nothing, and the shot of the eyes after the kill is gone.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -47,10 +54,15 @@ local LOOK = {                               -- per arm: thickness, size of the 
 }
 local EYES = {{x = -9.4, y = 21.4, size = 10.0}, {x = 8.0, y = 22.6, size = 11.2}}   -- not a matched pair
 local SKIN_REFLECTANCE = 0.1
+-- How much of its colour a piece keeps. By depth: all of it up to `Lit` studs behind the wall, none from `Black` on
+-- (the tunnel's lamps are out at 70). And by nearness: a piece close to the camera keeps a little wherever it is,
+-- so a hand that has come right up to somebody standing in the dark is a shape and not nothing.
+local DARK = {Lit = 34, Black = 72, Near = 14, Far = 30, NearKeeps = 0.7, Steps = 16}
 
 local holder = Instance.new("Folder")
 holder.Name = "LobbyTunnelReachLocal"
 local parts, frames = {}, {}                 -- every piece and where it goes this frame, for one BulkMoveTo
+local items = {}                             -- the same pieces, with what each needs to be shaded
 local function piece(name, size)
 	local template = kit[name]
 	local part = template:Clone()
@@ -58,7 +70,8 @@ local function piece(name, size)
 	part.Material, part.Reflectance, part.Color = Enum.Material.SmoothPlastic, SKIN_REFLECTANCE, Color3.new(1, 1, 1)
 	local native = template.Size
 	local offset = template:GetAttribute("Offset") or Vector3.zero
-	local item = {part = part, native = native, centre = -offset, slot = #parts + 1, shift = CFrame.new()}
+	local item = {part = part, native = native, centre = -offset, slot = #parts + 1, shift = CFrame.new(), shade = DARK.Steps}
+	items[item.slot] = item
 	if size then
 		part.Size = Vector3.new(native.X * size.X, native.Y * size.Y, native.Z * size.Z)
 		item.shift = CFrame.new(item.centre * size)
@@ -118,10 +131,7 @@ for i, spec in ipairs(EYES) do
 	ball.MeshType = Enum.MeshType.Sphere
 	ball.Parent = pupil
 	pupil.Parent = holder
-	local light = Instance.new("PointLight")
-	light.Color, light.Range, light.Brightness, light.Shadows = Color3.fromRGB(255, 176, 60), 52, 0, false
-	light.Parent = iris
-	eyes[i] = {spec = spec, iris = iris, pupil = pupil, light = light, native = kit.eye.Size}
+	eyes[i] = {spec = spec, iris = iris, pupil = pupil, native = kit.eye.Size}
 end
 
 local function deg(v) return math.rad(v) end
@@ -204,6 +214,10 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 local taken
 local eyeOpen, eyeOut, eyeWide, blinkAt, blink = 0, root:GetAttribute("Eyes") or 148, 0, 0, 0
+local function depthOf(character)            -- studs behind the wall
+	local body = character and character:FindFirstChild("HumanoidRootPart")
+	return body and frame:PointToObjectSpace(body.Position).Z or nil
+end
 local SHAKE = "TunnelReachShake"
 
 -- The lobby's own screens (the left rail, Friend Boost, the daily chips) have no place over this: they are switched
@@ -236,8 +250,7 @@ local function endTaken()
 end
 
 -- The camera is written AFTER the default camera has had its turn (a RenderStepped connection runs before it and
--- loses), and the stare holds the camera type every frame: the lobby respawn lands in the middle of this and other
--- scripts hand the camera back to the player when a character arrives.
+-- loses).
 local function cameraStep()
 	local camera = workspace.CurrentCamera
 	if not (taken and camera) then return end
@@ -249,27 +262,15 @@ local function cameraStep()
 			camera.CFrame *= CFrame.Angles(math.noise(whole * 23, 1.7) * 2 * a, math.noise(whole * 19, 9.1) * 2 * a, math.noise(whole * 17, 4.3) * 1.2 * a)
 			camera.FieldOfView = taken.fov + 20 * ease(whole / 0.7)
 		end
-	elseif taken.phase == "stare" and taken.view then
-		if camera.CameraType ~= Enum.CameraType.Scriptable then camera.CameraType = Enum.CameraType.Scriptable end
-		camera.FieldOfView = 52
-		camera.CFrame = taken.view
 	elseif taken.phase == "back" and taken.view and e < 0.35 then
 		camera.CFrame = taken.view                                 -- the default camera takes its direction from this
-	end
-	-- with `DevTunnelReachStare` set (Studio): four lines a second of what the camera really did, for a play test
-	if workspace:GetAttribute("DevTunnelReachStare") and os.clock() - (taken.traced or 0) >= 0.25 then
-		taken.traced = os.clock()
-		local at = camera.CFrame.Position
-		local _, seen = camera:WorldToViewportPoint(frame:PointToWorldSpace(Vector3.new(EYES[1].x, EYES[1].y, eyeOut)))
-		taken.trace = (taken.trace or "") .. string.format("%.1f %s %s (%.0f,%.0f,%.0f) eye %s cover %.2f\n", os.clock() - taken.at, taken.phase,
-			camera.CameraType.Name, at.X, at.Y, at.Z, tostring(seen), black.BackgroundTransparency)
-		player:SetAttribute("TunnelReachTrace", taken.trace)
 	end
 end
 
 local function beginTaken()
 	local camera = workspace.CurrentCamera
-	taken = {at = os.clock(), fov = camera.FieldOfView, phase = "pull", since = os.clock(), character = player.Character}
+	taken = {at = os.clock(), fov = camera.FieldOfView, phase = "pull", since = os.clock(), character = player.Character,
+		from = depthOf(player.Character) or 0}
 	player:SetAttribute("TunnelReachPhase", "pull")
 	gui.Enabled = true
 	RunService:BindToRenderStep(SHAKE, Enum.RenderPriority.Camera.Value + 2, cameraStep)
@@ -288,28 +289,17 @@ local function stepTaken(dt)
 		player:SetAttribute("TunnelReachPhase", phase)             -- client-local; a play test reads it
 	end
 	if taken.phase == "pull" then
-		black.BackgroundTransparency = 1 - 0.55 * ease((os.clock() - taken.at) / 2.2)
+		-- it closes in from the moment the hand shuts, and it is black thirty studs into the pull, wherever the hand
+		-- took them: the eyes are never nearer than that, so nothing of what is down there is seen from close by
+		local deep = depthOf(taken.character) or taken.deep or taken.from
+		taken.deep = deep
+		taken.cover = math.max(taken.cover or 0, 0.55 * ease((os.clock() - taken.at) / 2.2), ease((deep - taken.from - 4) / 26))
+		black.BackgroundTransparency = 1 - taken.cover
 		local humanoid = taken.character and taken.character:FindFirstChildOfClass("Humanoid")
-		if not humanoid or humanoid.Health <= 0 or e > 5 then go("dark") end
-	elseif taken.phase == "dark" then
-		black.BackgroundTransparency = math.max(0, black.BackgroundTransparency - dt * 9)
-		if e > 0.6 then go("stare") end
-	elseif taken.phase == "stare" then
-		-- from below and close by: the two eyes, looking down at where you were
-		local mid = frame:PointToWorldSpace(Vector3.new((EYES[1].x + EYES[2].x) / 2, (EYES[1].y + EYES[2].y) / 2, eyeOut))
-		local from = frame:PointToWorldSpace(Vector3.new(-1.5, 12.5, eyeOut - 36 + 3 * ease(e / 1.9)))
-		taken.view = CFrame.lookAt(from, mid)
-		taken.gaze = from
-		-- `DevTunnelReachStare` on workspace (Studio) holds this picture that many seconds, to look at it
-		local stay = (tonumber(workspace:GetAttribute("DevTunnelReachStare")) or 1.9) - 0.45
-		black.BackgroundTransparency = e < stay and 0.9 * ease(e / 0.5) or 0.9 * (1 - ease((e - stay) / 0.4))
-		if e > stay + 0.45 then
-			taken.view = nil
-			go("wait")
-		end
+		if not humanoid or humanoid.Health <= 0 or e > 5 then go("wait") end
 	elseif taken.phase == "wait" then
-		black.BackgroundTransparency = 0
-		taken.gaze = nil
+		-- black, and it stays black until the lobby has stood them up again
+		black.BackgroundTransparency = math.max(0, black.BackgroundTransparency - dt * 9)
 		local character = player.Character
 		local humanoid = character and character ~= taken.character and character:FindFirstChildOfClass("Humanoid")
 		local body = humanoid and character:FindFirstChild("HumanoidRootPart")
@@ -357,7 +347,7 @@ RunService.RenderStepped:Connect(function(dt)
 		arm.state = root:GetAttribute("S" .. arm.index) or "rest"
 		if arm.state ~= "rest" then busy = true end
 	end
-	local want = (awake or (taken and taken.phase == "stare")) and 1 or 0
+	local want = awake and 1 or 0
 	eyeOpen += (want - eyeOpen) * (1 - math.exp(-dt * (want > eyeOpen and 3.2 or 1.1)))
 	if not busy and eyeOpen < 0.02 then
 		eyeOpen = 0
@@ -421,6 +411,21 @@ RunService.RenderStepped:Connect(function(dt)
 		local wrist = poseHand(arm, palm, dt, rate)
 		poseArm(arm, frame:PointToWorldSpace(root:GetAttribute("Shoulder" .. arm.index)), wrist, t)
 	end
+	-- no piece is seen where there is no light to see it by (DARK)
+	local eyeAt = camera.CFrame.Position
+	for slot, item in ipairs(items) do
+		local at = frames[slot].Position
+		local depth = frame:PointToObjectSpace(at).Z
+		local keep = math.clamp((DARK.Black - depth) / (DARK.Black - DARK.Lit), 0, 1)
+		keep = math.max(keep * keep, DARK.NearKeeps * math.clamp((DARK.Far - (at - eyeAt).Magnitude) / (DARK.Far - DARK.Near), 0, 1))
+		local step = math.floor(keep * DARK.Steps + 0.5)
+		if step ~= item.shade then
+			item.shade = step
+			local v = step / DARK.Steps
+			item.part.Color = Color3.new(v, v, v)
+			item.part.Reflectance = SKIN_REFLECTANCE * v
+		end
+	end
 	workspace:BulkMoveTo(parts, frames, Enum.BulkMoveMode.FireCFrameChanged)
 
 	-- the eyes: they open when it wakes, come nearer as the hands go out, and blink now and then
@@ -431,7 +436,7 @@ RunService.RenderStepped:Connect(function(dt)
 		blinkAt = t + 3.2 + math.random() * 5.5
 	end
 	local lid = 1 - math.clamp(1 - math.abs((t - blink) / 0.09 - 1), 0, 1)       -- shut for an instant, 0.18 s in all
-	local gaze = (taken and taken.gaze) or frame:PointToWorldSpace(root:GetAttribute("Gaze") or Vector3.new(0, 4, 0))
+	local gaze = frame:PointToWorldSpace(root:GetAttribute("Gaze") or Vector3.new(0, 4, 0))
 	for i, eye in ipairs(eyes) do
 		local spec = eye.spec
 		local size = spec.size * (1 + 0.14 * eyeWide)
@@ -445,7 +450,6 @@ RunService.RenderStepped:Connect(function(dt)
 		eye.pupil.Size = Vector3.new(slit, size * 0.78 * open, size * 0.05)
 		local aside = math.clamp(frame:PointToObjectSpace(gaze).X - spec.x, -30, 30) / 30
 		eye.pupil.CFrame = face * CFrame.new(-aside * size * 0.1, 0, -size * (eye.native.Z * 0.5 + 0.03))
-		eye.light.Brightness = 0.9 * eyeOpen
 		local visible = eyeOpen > 0.02 and 0 or 1
 		eye.iris.Transparency, eye.pupil.Transparency = visible, visible
 	end

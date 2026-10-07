@@ -1411,3 +1411,32 @@ weight and button size on phones, no noise meter.
   the call): step into the lane, stand on a floor-11 `Frame_DecksDeep` deck, set `Level6DevTag` every 1.5 s until
   `Level6Wins` is 3, sit the minute out in the exit room (the Counter reaches floor 11 in 30 s in the finale),
   then go to `ExitDoorPosition`. LEVEL CLEARED has a deadline: measure it at once.
+
+### Added 2026-10-07 (late morning) - The Reach: dark all the way, and no shot of the eyes after the kill (in Studio, NOT published)
+
+- **Owner, with two pictures from the live game**: a few steps behind the fence "you can see the built monster and
+  that it's not complete, make sure it is dark all the way down to the entity", and of the picture the victim got
+  after the kill (the two eyes from below, the arms in front): "no kill cam like that looking at the entity
+  please, just black screen and then respawn in lobby". Marker `REACH_DARK_20261007`; the how and why are in
+  `tools/lobby_reach/README.md` ("How the dark is made").
+- **It took three things, because `Lighting.Ambient` is (30, 32, 30) in the lobby**: an unlit part is still a
+  visible grey. The Builder fades the copied lamps by their own depth (none from 70 studs behind the wall) and
+  shades the five copied tunnel sections 1, 0.78, 0.45, 0.12, 0; the client blacks out every piece of the
+  creature by depth (all colour to 34 studs, none from 72; a piece near the camera keeps some); the eyes' two
+  PointLights (range 52, orange) are gone. The black sheets at 70, 100 and 128 are gone as well.
+- **A Color3 factor is not an amount of light**: 0.5 on a section (part Color and SurfaceAppearance.Color both)
+  was black on screen and drew a hard line across the road.
+- **The victim's screen**: closes in from the grab, black thirty studs into the pull, black until the lobby has
+  stood them up, then fades in. The `stare` phase, its Scriptable camera and `DevTunnelReachStare` are deleted;
+  phases are `pull`, `wait`, `back`.
+- **Tested in Studio, solo**: a taking from 14 studs behind the wall and one from 50 (the eyes were never nearer
+  than about 45 studs to the camera while anything showed; camera stayed Custom; new body 3.5 s after the death;
+  22 screens back; console clean), and the look from the lobby, from 4 studs behind the wall and from 58.
+  Pictures: `artifacts/lobby-reach-20261007`. **Not tested**: two or more players, a phone, the live game.
+- **Parking the camera for a look**: `BindToRenderStep` at `Camera.Value + 5` writing `CameraType = Scriptable`
+  and a CFrame from a workspace attribute every frame; nil hands the camera back. Stand the body near the place
+  first: lamps far from the body do not draw, and the lobby is black for some seconds after a teleport.
+- **One play session drew the creature's bones but none of its palms, fingers, claws or eyes** (all in the data
+  model, Transparency 0); the next session drew everything. Not explained. Restart play before believing it.
+- **A push right after stopping play can take two minutes** (the first try answered "Edit datamodel is not
+  available in Play mode", the second sat until Studio was back); it did land.
