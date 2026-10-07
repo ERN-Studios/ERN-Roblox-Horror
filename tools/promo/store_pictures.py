@@ -29,6 +29,15 @@ HOME PAGE (the tile on Roblox's Home, one shown unless personalization is on)
   show     POST   /personalization/create       {"homepageThumbnailIds": [...]}, as application/json-patch+json
   remove   DELETE /thumbnails?homepageThumbnailIds=...
 
+THE ICON (one per game: the Icon page has a single slot, there is no set to choose from)
+  It is the place asset's `icon` field. The Icon page makes an Image asset first and then points the field at it:
+  create   POST  apis.roblox.com/assets/user-auth/v1/assets    form: "request" = {"assetType": "Image",
+           "displayName": ..., "creationContext": {"creator": {"groupId": ...}}}, "fileContent" = the file,
+           "additionalParameters" = {"AssetPrivacy": "OpenUse"}; answers an operation whose response has assetId
+  check    GET   .../assets/<image>?readMask=moderationResult
+  set      PATCH .../assets/<place>?updateMask=icon   form "request" = {"assetId": <place>, "icon": "assets/<image>"}
+  Upload, wait for Approved, THEN set: the game never shows an icon that is still in moderation.
+
 Order that never leaves the page empty: add new ones beside the old (10 at most), wait until the public list
 says approved, set the list to the approved new ones, add the rest, set the final order. Moderation took
 seconds that night. Keep a copy of what is live first (the public CDN serves 768 x 432).
@@ -122,12 +131,71 @@ def remove_from_home(thumbnail_ids):
     return d.call('DELETE', HOME + '/thumbnails?' + '&'.join('homepageThumbnailIds=' + i for i in thumbnail_ids))
 
 
+GROUP = '1039373905'
+
+
+def operation(op, tries=40, pause=1.5):
+    """Wait for an assets operation; returns its response."""
+    for _ in range(tries):
+        time.sleep(pause)
+        status, text = d.call('GET', f'{ASSETS}/operations/{op}')
+        done = json.loads(text) if status == 200 else {}
+        if done.get('done'):
+            if done.get('error'):
+                raise RuntimeError(json.dumps(done['error']))
+            return done.get('response', {})
+    raise RuntimeError('operation did not finish: ' + text[:200])
+
+
+def current_icon():
+    """The place's icon as the dashboard knows it: 'assets/<image id>', or '' for the auto-generated one."""
+    status, text = d.call('GET', f'{ASSETS}/assets/{PLACE}?readMask=icon')
+    assert status == 200, (status, text)
+    return json.loads(text).get('icon', '')
+
+
+def upload_icon_image(path, display_name):
+    """Create the image asset an icon is made of, the way the Icon page does (group-owned, open use).
+    Returns (asset id, moderation state). It is NOT the game's icon until set_icon() is called."""
+    path = Path(path)
+    d.stage(path)
+    request = {'assetType': 'Image', 'displayName': display_name, 'creationContext': {'creator': {'groupId': GROUP}}}
+    status, text = d.call('POST', f'{ASSETS}/assets', form={'fileContent': [path.name]},
+                          fields={'request': json.dumps(request), 'additionalParameters': json.dumps({'AssetPrivacy': 'OpenUse'})}, wait=120)
+    d.js(f'(delete window.__files[{json.dumps(path.name)}], "freed")')
+    assert status == 200, (status, text)
+    asset = int(operation(json.loads(text)['operationId'])['assetId'])
+    return asset, moderation(asset)
+
+
+def moderation(asset):
+    status, text = d.call('GET', f'{ASSETS}/assets/{asset}?readMask=moderationResult')
+    return json.loads(text).get('moderationResult', {}).get('moderationState', '?') if status == 200 else f'HTTP {status}'
+
+
+def set_icon(asset):
+    """Make an uploaded, APPROVED image the game's icon ('' puts the auto-generated one back)."""
+    icon = f'assets/{asset}' if asset else ''
+    status, text = d.call('PATCH', f'{ASSETS}/assets/{PLACE}?updateMask=icon',
+                          fields={'request': json.dumps({'assetId': int(PLACE), 'icon': icon})})
+    assert status == 200, (status, text)
+    operation(json.loads(text)['operationId'])
+    for _ in range(20):
+        if current_icon() == icon:
+            return True
+        time.sleep(2)
+    return False
+
+
 def status():
     record = json.loads(RECORD.read_text()) if RECORD.exists() else {}
     name = {v: k for k, v in record.get('detail', {}).items()}
     print('EXPERIENCE DETAIL, public:')
     for n, m in enumerate(public_gallery(), 1):
         print(f"  {n:2d} {name.get(m['imageId'], m['imageId'])!s:30s} {'approved' if m['approved'] else 'in moderation'}  {(m.get('altText') or '')[:50]}")
+    icons = {f'assets/{v}': k for k, v in record.get('icon', {}).get('assets', {}).items()}
+    icon = current_icon()
+    print('ICON (through the dashboard tab):', icons.get(icon, icon or 'auto-generated'))
     home = {v['assetId']: k for k, v in record.get('home', {}).items()}
     print('HOME PAGE (through the dashboard tab):')
     for t in home_thumbnails():

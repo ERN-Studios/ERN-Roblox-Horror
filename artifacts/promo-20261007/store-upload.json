@@ -66,5 +66,21 @@
   "G02_level1_pull_the_fuse",
   "G04_level2_a_thousand_doors",
   "G12_level6_the_way_out"
- ]
+ ],
+ "icon": {
+  "before": "assets/139988603985474",
+  "assets": {
+   "I01_icon_shh_eyes_in_the_lenses": 85777375815942,
+   "I02_icon_it_is_behind_you": 108863759231436,
+   "I03_icon_entity_round_the_corner": 105718952423169,
+   "I04_icon_split_face": 85202389715243,
+   "I05_icon_balloon_manager": 124315682978827,
+   "I06_icon_usher_shh": 96946602930325,
+   "I07_icon_counter_peeking": 122605467621898,
+   "I08_icon_squad_looking_up": 119159091743739,
+   "I09_icon_void_jump": 101147124095607,
+   "I10_icon_poolrooms_alone": 102677566383982
+  },
+  "live": "I01_icon_shh_eyes_in_the_lenses"
+ }
 }

@@ -1592,3 +1592,19 @@ weight and button size on phones, no noise meter.
   other folders alone. Three `codex exec` jobs made 16 generations in about eight minutes.
 - **The generator's square size is 1024 x 1024**, so the icons are at native size (the 1920 x 1080 pictures are
   enlargements of 1536 x 1024).
+
+### Added 2026-10-08 (later) - The game's icon on Roblox is I01 (live)
+
+- **Owner**: "Upload them to icons". **Roblox has one icon per game** (the Icon page has a single slot; there is
+  no set and no testing as with thumbnails). So: all ten icons were uploaded to the group as Image assets (named
+  `BSQ icon I01 shh` ... `BSQ icon I10 poolrooms`), all ten were approved, and I01 (the "shh" with the Entity in
+  both lenses) was set as the icon. Confirmed from Roblox's public icon service. The other nine are shown nowhere.
+  Ids: `artifacts/promo-20261007/store-upload.json` (`icon.assets`, `icon.live`, `icon.before`).
+- **The old icon** is image `139988603985474`; `store_pictures.set_icon(139988603985474)` puts it back, and
+  `set_icon(<another id from the record>)` switches to one of the nine.
+- **How the Icon page works** (read from its own script, now in `tools/promo/store_pictures.py`): it creates an
+  Image asset (`POST apis.roblox.com/assets/user-auth/v1/assets`, form fields `request`, `fileContent`,
+  `additionalParameters = {"AssetPrivacy": "OpenUse"}`) and then points the place asset's `icon` field at it
+  (`PATCH .../assets/<place>?updateMask=icon`). Doing the two steps apart lets the picture be approved BEFORE it
+  becomes the icon, so the game never shows one that is in moderation: the ten took about a minute to go from
+  `Reviewing` to `Approved`, and the public icon was `Pending` for under ten seconds after the switch.

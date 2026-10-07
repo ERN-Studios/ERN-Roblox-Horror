@@ -49,7 +49,9 @@ I10  a player alone in the flooded hall (the new Level 2, no entity)
 What I would use: I01 as the icon, and I03 as the one to test against it. Both read at 64 pixels and both are
 Level 1, which is where every new player starts.
 The icons are 1024 x 1024 as generated (not enlarged). Roblox asks for a square of at least 512 x 512.
-NONE OF THEM IS UPLOADED: the game's icon on Roblox is still the old one.
+ON ROBLOX SINCE 2026-10-08: I01 is the game's icon. Roblox takes ONE icon per game, so the other nine are
+uploaded to the group as images and approved, ready to be switched in, but not shown anywhere. The old icon
+is kept (image 139988603985474, and a copy in the Desktop backup folder of 2026-10-07).
 Not exactly the game: I06's buttons carry a small star, the in-game ones are plain; I05 has a small striped
 knot at the collar; I07 gives the doll jointed fingers (in the game its hands are rigid); I10's water ripples
 more than the game's.
