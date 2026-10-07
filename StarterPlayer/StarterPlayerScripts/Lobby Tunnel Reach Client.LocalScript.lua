@@ -54,6 +54,7 @@ local LOOK = {                               -- per arm: thickness, size of the 
 }
 local EYES = {{x = -9.4, y = 21.4, size = 10.0}, {x = 8.0, y = 22.6, size = 11.2}}   -- not a matched pair
 local SKIN_REFLECTANCE = 0.1
+local EYE_GLOW = 0.55
 -- How much of its colour a piece keeps. By depth: all of it up to `Lit` studs behind the wall, none from `Black` on
 -- (the tunnel's lamps are out at 70). And by nearness: a piece close to the camera keeps a little wherever it is,
 -- so a hand that has come right up to somebody standing in the dark is a shape and not nothing.
@@ -121,7 +122,9 @@ local eyes = {}
 for i, spec in ipairs(EYES) do
 	local iris = kit.eye:Clone()
 	iris.Anchored, iris.CanCollide, iris.CanTouch, iris.CanQuery, iris.CastShadow = true, false, false, false, false
-	iris.Material, iris.Color = Enum.Material.Neon, Color3.new(1, 1, 1)
+	-- (at full colour the game's bloom turned each eye into a ball of light with no iris and no slit: seen in the
+	-- live game at full graphics quality, not in Studio's default quality. EYE_GLOW is how much of it they keep.)
+	iris.Material, iris.Color = Enum.Material.Neon, Color3.new(EYE_GLOW, EYE_GLOW, EYE_GLOW)
 	iris.Parent = holder
 	local pupil = Instance.new("Part")
 	pupil.Name = "pupil"

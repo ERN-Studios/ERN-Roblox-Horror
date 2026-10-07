@@ -43,8 +43,17 @@ black from 160, two sheets of dark stand at 156 and 172, the shoulders are at 18
 
 ## How the dark is made
 
-Three things, and it takes all three (`Lighting.Ambient` is not zero in the lobby, so "no lamps" alone leaves
-everything a visible grey):
+**First of all: the body has to count as being in the lobby.** RoundUI gives a client the lobby's night
+(`revisedLobbyLighting`: ClockTime 0, Ambient 30/32/30, Brightness 0.6) only while its body is inside the lobby's
+box, and that box ended five studs behind the end wall. One step further and the client got the OLD lobby's
+preset back: 14:00, Brightness 1.35, Ambient 76/69/45. The copied tunnel casts no shadows, so the sun came
+straight through its roof: a daylit tunnel with black arms standing in it. `contains` now also accepts a body in
+the stretch behind the wall (`ReachFrame`: 40 studs either side, from 10 in front of the wall to 215 behind it).
+The first fix on 2026-10-07 missed this completely, because every screenshot was taken with the camera parked
+behind the fence and the BODY left in front of it. The owner's next picture from the live game showed it.
+
+Then three things, and it takes all three (`Lighting.Ambient` is not zero in the lobby, so "no lamps" alone
+leaves everything a visible grey):
 
 1. **The lamps** (Builder): the lobby's lamps are repeated behind the wall, each weaker by its own depth
    (`LAMPS_FIRST` 0.5 at the wall, nothing from `LAMPS_END` 70). Fading a whole 40-stud section at a time drew a
@@ -58,6 +67,10 @@ everything a visible grey):
    used to carry lit the tunnel round them orange for 52 studs, which is what showed the arms' far ends.
 
 The sheets of black that used to stand at 70, 100 and 128 are gone: they dimmed the eyes along with everything else.
+
+**The eyes keep 55% of their colour** (`EYE_GLOW` in the client). At full colour, without the sheets in front of
+them, the game's bloom made each eye a ball of light with no iris and no slit. That only shows at full graphics
+quality: Studio's play window runs at a low automatic level and drew them fine.
 
 Three things were in the way of "over the fence" and all three had to go: the fence's own collision was a sheet 30
 studs high (it is 14.9 now, the height you see), the retired furniture pile's blockers still stood in the fence's
@@ -98,6 +111,10 @@ asset templates and removes the numbers, and the server finds nothing left to ba
   camera to Scriptable resets the camera when it returns. Schedule the test with `task.spawn` in a call that
   returns at once, then take captures. The client publishes its phase as the player attribute `TunnelReachPhase`
   (`pull`, `wait`, `back`).
+- **Test with the body where a player's body will be, at the player's graphics quality.** Lighting, streaming and
+  several client scripts go by where the body is, not the camera. `settings().Rendering.QualityLevel =
+  Enum.QualityLevel.Level21` can be set from a Client `execute_luau` (it is a Studio setting and stays: put it back
+  to `Automatic` afterwards). For the player's own view, leave the camera `Custom` and write its CFrame once.
 - **Looking at it in Studio**: park the real camera (a `BindToRenderStep` after the camera's own priority that
   writes `CameraType = Scriptable` and the CFrame every frame) and stand the player's body near what you look at:
   lamps far from the body do not draw, and the whole lobby is black for some seconds after a teleport.

@@ -358,7 +358,15 @@ function revisedLobbyLighting.contains(inMaze)
  local point = root.Position-center
  -- Authored R4 tube plus six circular bays. The original lobby is outside
  -- these bounds even at its nearest bay; distant level previews stay excluded.
- return math.abs(point.X) <= 100 and math.abs(point.Z) <= 144 and point.Y >= -5 and point.Y <= 45
+ if math.abs(point.X) <= 100 and math.abs(point.Z) <= 144 and point.Y >= -5 and point.Y <= 45 then return true end
+ -- REACH_DARK_20261007: the tunnel carries on behind the fence at the DJ end (the easter egg), and a body there
+ -- is still in the lobby. The box above ends five studs behind the end wall: past it this pass let go and the
+ -- old lobby's 14:00 daylight came back, so the dark the easter egg lives in was a sunlit tunnel.
+ local beyond = model:FindFirstChild("InfiniteTunnelEnd")
+ local reach = beyond and beyond:GetAttribute("ReachFrame")
+ if typeof(reach) ~= "CFrame" then return false end
+ local at = reach:PointToObjectSpace(root.Position)
+ return math.abs(at.X) <= 40 and at.Y >= -8 and at.Y <= 60 and at.Z >= -10 and at.Z <= 215
 end
 function revisedLobbyLighting.restore()
  -- A nonparticipant can leave R4 while another party keeps the old global

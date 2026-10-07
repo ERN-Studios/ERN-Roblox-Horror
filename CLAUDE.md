@@ -1440,3 +1440,27 @@ weight and button size on phones, no noise meter.
   model, Transparency 0); the next session drew everything. Not explained. Restart play before believing it.
 - **A push right after stopping play can take two minutes** (the first try answered "Edit datamodel is not
   available in Play mode", the second sat until Studio was back); it did land.
+
+### Added 2026-10-07 (midday) - The Reach, second round: the daylight behind the fence was RoundUI's (in Studio, NOT published)
+
+- **The owner published the first fix (10:55) and sent a picture: the tunnel behind the fence still fully lit,
+  the arms black cut-outs in it, the eyes two balls of light. "You be the judge."** Not good: the morning's fix
+  treated a symptom.
+- **The cause: RoundUI's `revisedLobbyLighting.contains` only counted a body inside the lobby's box**, which ended
+  5 studs behind the DJ end wall (`PreviewCenter` z + 144; the wall is at + 139). Past that the client was handed
+  the old lobby's preset: ClockTime 14, Brightness 1.35, Ambient 76/69/45. The copied tunnel sections cast no
+  shadow, so the sun lit them from end to end. `contains` now also accepts the stretch behind the wall, measured
+  in `InfiniteTunnelEnd.ReachFrame` (x within 40, z from -10 to 215). Logged through a whole taking afterwards:
+  ClockTime 0 and Ambient 0.12 from the fence to the kill at 151 studs and back to the spawn.
+- **Why the morning's tests did not show it**: every picture was taken with a parked camera behind the fence and
+  the body in front of it, so the lobby's lighting stayed on. Lighting goes by the BODY. The two real takings of
+  the morning had the body there, but only numbers were logged, no picture.
+- **The eyes keep 55% of their colour** (`EYE_GLOW`): at full colour the bloom ate the iris and the slit. Only
+  visible at full graphics quality; Studio's play window at `Automatic` drew them fine.
+- **Studio can be put at the player's quality**: `settings().Rendering.QualityLevel = Enum.QualityLevel.Level21`
+  from a Client `execute_luau`. It is a Studio setting and persists: it was set back to `Automatic`.
+- **A script over 200 000 characters cannot be written to a probe's `.Source`** ("greater than or equal to max
+  length"): RoundUI's compile probe is a ModuleScript parented to ServerStorage and filled with
+  `UpdateSourceAsync`, then required and destroyed. RoundUI in Studio and in the repo are the same 272 478 bytes.
+- **Rule from this**: before reporting a visual fix, look at it as the player (body there, own camera, HUD on,
+  full quality), not through a parked camera.
