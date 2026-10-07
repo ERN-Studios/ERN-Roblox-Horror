@@ -1648,7 +1648,7 @@ weight and button size on phones, no noise meter.
 - Chrome answered one request with "Connection is invalid (-609)" while a prompt was up on the owner's screen;
   after a failed call, READ the state before sending the request again (the cancel had not gone through).
 
-### Added 2026-10-08 (night) - The game's public name is "(UPDATE) BACKROOMS: BE QUIET" (live)
+### Added 2026-10-08 (night) - The game's public name became "(UPDATE) BACKROOMS: BE QUIET" (superseded 35 minutes later, see below)
 
 - **Owner**: "Change our game name to just BACKROOMS: Be quiet, remove the co-op horror part and add (UPDATE) to
   the start", then "with all caps". Was `BACKROOMS: STAY QUIET [CO-OP HORROR]`. Changed through the dashboard's own
@@ -1660,3 +1660,15 @@ weight and button size on phones, no noise meter.
   "1-6 PLAYER CO-OP HORROR"; in-game text was not touched. The owner was told; re-lettering is one run of
   `finish.py` after the wording in it is changed, plus a re-upload.
 - This file's own heading and the repo's folder names keep the old name.
+
+### Added 2026-10-08 (night, later) - The game's public name is "(UPDATE) BACKROOMS: STAY QUIET" (live)
+
+- **Owner**, after asking for other name ideas and weighing them ("We will just keep be quite"), then: "Change to
+  (UPDATE)BACKROOOMS: STAY QUIET". Set at 01:45 with `store_pictures.rename` (typed with a space after "(UPDATE)"
+  and BACKROOMS spelled right); place and public page both read it six seconds later. `store-upload.json`'s `name`
+  holds the name before all of this, the BE QUIET one under `history`, and the description, which was never changed.
+- **In step again**: the thumbnails, the Home tile and the running ads say STAY QUIET, as the name does. Still on
+  them and no longer in the name: the small "CO-OP HORROR" line. The description still has "1-6 PLAYER CO-OP HORROR".
+- **The owner's "slip" is Danish** ("drop it"), not the English word: "Slip STAY QUIET" was first read as "BE QUIET
+  was a slip". Nothing was changed on that reading; when a short message can be read both ways, ask before a
+  public change.
