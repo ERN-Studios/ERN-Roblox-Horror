@@ -45,6 +45,10 @@ SPACE = {
     'ad_landscape': 'Leave the UPPER-LEFT third calm and darker for the game title.',
     'ad_square': 'Leave the TOP fifth calm and darker for the game title.',
     'ad_portrait': 'Leave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important.',
+    'icon': 'GAME ICON. It is shown 150 pixels wide and often 64: ONE subject that fills the square, big simple shapes, a '
+            'strong rim light, two or three colours, a face or eyes where there is one, nothing that needs a second look. '
+            'Keep everything that matters inside the middle 80 percent (Roblox rounds the corners). No calm space is '
+            'needed: nothing is written on an icon.',
 }
 
 # name, job, set, shape, level, references, scene
@@ -257,6 +261,50 @@ IMAGES = [
      'stepwell, empty; party room and the balloon-headed Mall Manager; neon cinema and the crimson Usher; '
      'single-colour void with a jumping player; soft-play arena and the doll Counter. Follow the boards exactly. The '
      'top band is darker in its upper half.'),
+    # ---------------------------------------------------------------- game icons (jobs H, I, K), added 2026-10-08
+    ('I01_icon_shh_eyes_in_the_lenses', 'H', 'icon', 'square', 1, [PF, PB, L1C],
+     'One player, head and shoulders, facing us, filling the square: yellow hood, black twin-lens gas mask, one black '
+     'mitten finger held upright in front of the filter. In EACH round lens, small and sharp, the reflection of the '
+     'Entity: a black hunched shape with two amber eyes. Dark mustard background, warm rim light on the hood.'),
+    ('I02_icon_it_is_behind_you', 'H', 'icon', 'square', 1, [PF, L1C, L1D],
+     'A player\'s hooded head and shoulders in the lower half of the square, facing us, lenses wide. Directly behind '
+     'and above it, filling the upper half, the Entity looms out of the dark: black hood, heavy shoulders, two glowing '
+     'amber eyes, one long-fingered black hand coming down toward the player\'s shoulder. Yellow wallpaper glimpsed at '
+     'the edges, one ceiling light behind the Entity\'s head.'),
+    ('I03_icon_entity_round_the_corner', 'H', 'icon', 'square', 1, [L1C, L1D],
+     'The Entity leans out from behind the corner of a yellow-wallpapered wall that fills the left third of the square: '
+     'its black hooded head tilted, two round glowing amber eyes, and four long black fingers wrapped round the '
+     'corner\'s edge. Bright fluorescent yellow room behind it so the black shape reads at any size. No players.'),
+    ('I04_icon_split_face', 'H', 'icon', 'square', 1, [PF, L1C],
+     'One face made of two halves, split straight down the middle of the square. LEFT half: the player, half of the '
+     'yellow hood and the black gas mask with one round lens, lit warm. RIGHT half: the Entity, half of the black '
+     'hood with one glowing amber eye, lit from behind. The two halves line up as one head. Plain dark background.'),
+    ('I05_icon_balloon_manager', 'I', 'icon', 'square', 3, [L3C, L3B, K(14)],
+     'The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: the glossy red '
+     'balloon head with one white highlight and no face, the collar of the orange and cream striped shirt, a blank '
+     'white name tag, and one red-gloved hand raised with the fingers spread. Deep orange party-room wall behind, two '
+     'ordinary balloons out of focus.'),
+    ('I06_icon_usher_shh', 'I', 'icon', 'square', 4, [L4C, L4B, K(18)],
+     'The Usher, head and shoulders, facing us: glossy black featureless mannequin head under the crimson pillbox cap '
+     'with its gold band, crimson collar and gold buttons, and one glowing white-gloved index finger held upright in '
+     'front of the blank face. Magenta rim light on one side and cyan on the other, black background with a few '
+     'pin-point ceiling stars.'),
+    ('I07_icon_counter_peeking', 'I', 'icon', 'square', 6, [L6[4], L6[3], K(33)],
+     'The Counter\'s face filling the square, both jointed porcelain hands held over its eyes, and between two parted '
+     'fingers ONE large dark glass eye looking straight at us. Cracked white porcelain, rosy cheek, small closed smile, '
+     'the striped paper party hat on top. Dark soft-play netting and one cold strip light out of focus behind.'),
+    ('I08_icon_squad_looking_up', 'K', 'icon', 'square', 1, [PF, PB, L1D],
+     'Four players huddled shoulder to shoulder seen from slightly above, all four gas masks tilted up at us, lit from '
+     'below by one hand torch. Across their yellow hoods falls the shadow of a huge hand with long spread fingers. '
+     'Dark yellow carpet round them. Nothing else.'),
+    ('I09_icon_void_jump', 'K', 'icon', 'square', 5, [L5[2], L5[1], PB],
+     'A player in mid-jump, seen from the side and a little below, large in the square: yellow suit, black backpack, '
+     'arms flung out, between the edges of two rose-pink blocks at the left and right borders. Under it and behind it '
+     'pure black. A single small lamp globe on a thin rod above. Three colours only: pink, yellow, black.'),
+    ('I10_icon_poolrooms_alone', 'K', 'icon', 'square', 2, [L2[1], L2[2], PB],
+     'A player seen from behind, waist up in the lower middle of the square, standing in flat turquoise water. In front '
+     'of it two rows of huge round tiled columns and a low vault recede to one bright point of daylight. Cream and '
+     'turquoise, the yellow hood the only strong colour. Nothing alive but the player.'),
 ]
 
 # what finish.py prints on each picture
@@ -279,7 +327,7 @@ TAGLINES = {
 
 def main():
     names = [i[0] for i in IMAGES]
-    assert len(names) == len(set(names)) == 43, len(names)
+    assert len(names) == len(set(names)) == 53, len(names)
     for name, job, kind, shape, level, refs, scene in IMAGES:
         assert len(refs) <= 5, name
         for r in refs:

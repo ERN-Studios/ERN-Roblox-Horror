@@ -1,5 +1,5 @@
 BACKROOMS: STAY QUIET [CO-OP HORROR] - PROMO PICTURES, 2026-10-07
-43 pictures: 12 for the gallery, 6 thumbnails, 25 for an ad campaign.
+53 pictures: 12 for the gallery, 6 thumbnails, 25 for an ad campaign, and 10 game icons (added 2026-10-08).
 
 HOW THEY WERE MADE
 1. Claude went into all six levels in Studio (full graphics quality) and took 42 pictures: every level's
@@ -19,7 +19,9 @@ WHAT IS IN THE FOLDER
      landscape 1920x1080      9   (YouTube, Discord, X, in-feed)
      square 1080x1080         8   (Instagram, Facebook, Discord)
      vertical 1080x1920       8   (TikTok, Reels, Shorts, Stories)
-contact sheets               everything at a glance, and the thumbnails at the store's 320 x 180
+4 Icons (1024x1024)          10 game icons, no lettering; the same ten at 512 x 512 in the subfolder
+contact sheets               everything at a glance, and the thumbnails at the store's 320 x 180,
+                             and the icons at 150 and 64 pixels, which is how Roblox shows them
 In-game references           the 42 pictures from the playtest
 ANALYSIS - the six levels    look, entity and how to clear each level
 prompts.json                 the brief, the references and Codex's own note on what is still off, per picture
@@ -32,6 +34,25 @@ Rotate / test     T04 (the finger to the mask), T03 (the Counter), T05 (the Ushe
 Gallery order     T01, T02, G03, G05, G08, G09, G11, G02, G04, G12 (Roblox takes ten).
 Strongest ads     A09 THEY ARE ALL LISTENING (all four hunters), A12 SHHH, A03 DON'T. MOVE.,
                   A11 READY OR NOT, A20 A THOUSAND DOORS, A25 SIX LEVELS. ONE RULE.
+
+THE TEN ICONS (added 2026-10-08; made the same way, three Codex jobs, 16 generations, 10 kept)
+I01  the player's "shh", with the Entity reflected in both lenses        the game's name in one picture
+I02  the Entity looming behind a player
+I03  the Entity looking round a yellow corner, fingers on the edge       strongest shape at 64 pixels
+I04  one face, half player and half Entity
+I05  the Mall Manager (balloon head, red glove raised)
+I06  the Usher with a white-gloved finger to its blank face
+I07  the Counter with its hands over its eyes, one eye peeking
+I08  four players looking up, a hand's shadow across them                weakest when small
+I09  a player in mid-jump over the void (Level 5, no entity)
+I10  a player alone in the flooded hall (the new Level 2, no entity)
+What I would use: I01 as the icon, and I03 as the one to test against it. Both read at 64 pixels and both are
+Level 1, which is where every new player starts.
+The icons are 1024 x 1024 as generated (not enlarged). Roblox asks for a square of at least 512 x 512.
+NONE OF THEM IS UPLOADED: the game's icon on Roblox is still the old one.
+Not exactly the game: I06's buttons carry a small star, the in-game ones are plain; I05 has a small striped
+knot at the collar; I07 gives the doll jointed fingers (in the game its hands are rigid); I10's water ripples
+more than the game's.
 
 READ THIS BEFORE PUBLISHING: LEVEL 2
 Every Level 2 picture shows the NEW map (the sunlit bath-house, no entity). In the game today that map is a

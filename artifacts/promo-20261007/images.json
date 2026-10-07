@@ -675,5 +675,153 @@
   "scene": "Six horizontal bands stacked top to bottom with thin black gaps, one per level in order from the top, each a wide slice of that level and its entity where it has one: yellow office and the Entity; cream poolrooms stepwell, empty; party room and the balloon-headed Mall Manager; neon cinema and the crimson Usher; single-colour void with a jumping player; soft-play arena and the doll Counter. Follow the boards exactly. The top band is darker in its upper half.",
   "level_name": null,
   "tagline": "SIX LEVELS. ONE RULE."
+ },
+ {
+  "name": "I01_icon_shh_eyes_in_the_lenses",
+  "job": "H",
+  "set": "icon",
+  "shape": "square",
+  "level": 1,
+  "references": [
+   "artifacts/promo-20261007/refs/player_suit_front.jpg",
+   "artifacts/promo-20261007/refs/player_suit_back.jpg",
+   "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+  ],
+  "scene": "One player, head and shoulders, facing us, filling the square: yellow hood, black twin-lens gas mask, one black mitten finger held upright in front of the filter. In EACH round lens, small and sharp, the reflection of the Entity: a black hunched shape with two amber eyes. Dark mustard background, warm rim light on the hood.",
+  "level_name": "THE OFFICE",
+  "tagline": null
+ },
+ {
+  "name": "I02_icon_it_is_behind_you",
+  "job": "H",
+  "set": "icon",
+  "shape": "square",
+  "level": 1,
+  "references": [
+   "artifacts/promo-20261007/refs/player_suit_front.jpg",
+   "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg",
+   "artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+  ],
+  "scene": "A player's hooded head and shoulders in the lower half of the square, facing us, lenses wide. Directly behind and above it, filling the upper half, the Entity looms out of the dark: black hood, heavy shoulders, two glowing amber eyes, one long-fingered black hand coming down toward the player's shoulder. Yellow wallpaper glimpsed at the edges, one ceiling light behind the Entity's head.",
+  "level_name": "THE OFFICE",
+  "tagline": null
+ },
+ {
+  "name": "I03_icon_entity_round_the_corner",
+  "job": "H",
+  "set": "icon",
+  "shape": "square",
+  "level": 1,
+  "references": [
+   "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg",
+   "artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+  ],
+  "scene": "The Entity leans out from behind the corner of a yellow-wallpapered wall that fills the left third of the square: its black hooded head tilted, two round glowing amber eyes, and four long black fingers wrapped round the corner's edge. Bright fluorescent yellow room behind it so the black shape reads at any size. No players.",
+  "level_name": "THE OFFICE",
+  "tagline": null
+ },
+ {
+  "name": "I04_icon_split_face",
+  "job": "H",
+  "set": "icon",
+  "shape": "square",
+  "level": 1,
+  "references": [
+   "artifacts/promo-20261007/refs/player_suit_front.jpg",
+   "artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+  ],
+  "scene": "One face made of two halves, split straight down the middle of the square. LEFT half: the player, half of the yellow hood and the black gas mask with one round lens, lit warm. RIGHT half: the Entity, half of the black hood with one glowing amber eye, lit from behind. The two halves line up as one head. Plain dark background.",
+  "level_name": "THE OFFICE",
+  "tagline": null
+ },
+ {
+  "name": "I05_icon_balloon_manager",
+  "job": "I",
+  "set": "icon",
+  "shape": "square",
+  "level": 3,
+  "references": [
+   "artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg",
+   "artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
+   "artifacts/promo-20261007/refs/krille/krille_14.png"
+  ],
+  "scene": "The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: the glossy red balloon head with one white highlight and no face, the collar of the orange and cream striped shirt, a blank white name tag, and one red-gloved hand raised with the fingers spread. Deep orange party-room wall behind, two ordinary balloons out of focus.",
+  "level_name": "THE PARTY ROOMS",
+  "tagline": null
+ },
+ {
+  "name": "I06_icon_usher_shh",
+  "job": "I",
+  "set": "icon",
+  "shape": "square",
+  "level": 4,
+  "references": [
+   "artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg",
+   "artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg",
+   "artifacts/promo-20261007/refs/krille/krille_18.png"
+  ],
+  "scene": "The Usher, head and shoulders, facing us: glossy black featureless mannequin head under the crimson pillbox cap with its gold band, crimson collar and gold buttons, and one glowing white-gloved index finger held upright in front of the blank face. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars.",
+  "level_name": "THE CINEMA",
+  "tagline": null
+ },
+ {
+  "name": "I07_icon_counter_peeking",
+  "job": "I",
+  "set": "icon",
+  "shape": "square",
+  "level": 6,
+  "references": [
+   "artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
+   "artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
+   "artifacts/promo-20261007/refs/krille/krille_33.png"
+  ],
+  "scene": "The Counter's face filling the square, both jointed porcelain hands held over its eyes, and between two parted fingers ONE large dark glass eye looking straight at us. Cracked white porcelain, rosy cheek, small closed smile, the striped paper party hat on top. Dark soft-play netting and one cold strip light out of focus behind.",
+  "level_name": "THE PLAYGROUND",
+  "tagline": null
+ },
+ {
+  "name": "I08_icon_squad_looking_up",
+  "job": "K",
+  "set": "icon",
+  "shape": "square",
+  "level": 1,
+  "references": [
+   "artifacts/promo-20261007/refs/player_suit_front.jpg",
+   "artifacts/promo-20261007/refs/player_suit_back.jpg",
+   "artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+  ],
+  "scene": "Four players huddled shoulder to shoulder seen from slightly above, all four gas masks tilted up at us, lit from below by one hand torch. Across their yellow hoods falls the shadow of a huge hand with long spread fingers. Dark yellow carpet round them. Nothing else.",
+  "level_name": "THE OFFICE",
+  "tagline": null
+ },
+ {
+  "name": "I09_icon_void_jump",
+  "job": "K",
+  "set": "icon",
+  "shape": "square",
+  "level": 5,
+  "references": [
+   "artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg",
+   "artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+   "artifacts/promo-20261007/refs/player_suit_back.jpg"
+  ],
+  "scene": "A player in mid-jump, seen from the side and a little below, large in the square: yellow suit, black backpack, arms flung out, between the edges of two rose-pink blocks at the left and right borders. Under it and behind it pure black. A single small lamp globe on a thin rod above. Three colours only: pink, yellow, black.",
+  "level_name": "THE VOID",
+  "tagline": null
+ },
+ {
+  "name": "I10_icon_poolrooms_alone",
+  "job": "K",
+  "set": "icon",
+  "shape": "square",
+  "level": 2,
+  "references": [
+   "artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+   "artifacts/promo-20261007/refs/l2new_02_area3_colossal_column_nave.jpg",
+   "artifacts/promo-20261007/refs/player_suit_back.jpg"
+  ],
+  "scene": "A player seen from behind, waist up in the lower middle of the square, standing in flat turquoise water. In front of it two rows of huge round tiled columns and a low vault recede to one bright point of daylight. Cream and turquoise, the yellow hood the only strong colour. Nothing alive but the player.",
+  "level_name": "THE POOLROOMS",
+  "tagline": null
  }
 ]

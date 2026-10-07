@@ -1,0 +1,13 @@
+Saved using built-in image generation at native 1254×1254. Remaining framing issues are recorded in `prompts_I.json`.
+
+```text
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try1_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try2_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try2_raw.png
+artifacts/promo-20261007/prompts_I.json
+```

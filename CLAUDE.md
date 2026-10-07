@@ -1578,3 +1578,17 @@ weight and button size on phones, no noise meter.
 - **Order that never leaves the page empty**: add new pictures beside the old (ten at most), wait for "approved"
   in the public list, set the list to the approved new ones, add the rest, set the final order. Moderation took
   seconds that night. No Chrome-extension or computer-use tool was available in the session.
+
+### Added 2026-10-08 - Ten game icons (pictures only; the icon on Roblox was NOT changed)
+
+- **Owner**: "Create 10 new icons". They are in `~/Desktop/Backrooms Stay Quiet - Promo 2026-10-07/4 Icons
+  (1024x1024)` (and at 512 x 512 in its subfolder), with a sheet at 150 and 64 pixels in `contact sheets`.
+  I01 shh with the Entity in both lenses, I02 Entity behind a player, I03 Entity round a corner, I04 half player
+  half Entity, I05 Mall Manager, I06 Usher, I07 Counter peeking, I08 four players under a hand's shadow, I09 void
+  jump, I10 alone in the new poolrooms. Recommended: I01, tested against I03. None is uploaded.
+- **Same pipeline, one more set**: `make_briefs.py` has the set `icon` (jobs H, I, K; its `SPACE` line tells Codex
+  what an icon needs: one subject, big shapes, readable at 64, everything inside the middle 80 percent), and
+  `finish.py --only icon` writes 1024 and 512 without lettering. `--only <set>` rebuilds one set and leaves the
+  other folders alone. Three `codex exec` jobs made 16 generations in about eight minutes.
+- **The generator's square size is 1024 x 1024**, so the icons are at native size (the 1920 x 1080 pictures are
+  enlargements of 1536 x 1024).

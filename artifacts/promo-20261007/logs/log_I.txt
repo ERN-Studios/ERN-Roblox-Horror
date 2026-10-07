@@ -1,0 +1,708 @@
+Reading additional input from stdin...
+OpenAI Codex v0.160.1
+--------
+workdir: /Users/zeanjuul4/Projects/Roblox Horror REPO
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a11865-3051-7cf3-92c7-da6152f849d3
+--------
+user
+Read artifacts/promo-20261007/brief_I.md (and the common brief it names) and do the whole job with your built-in image generation tool, passing the listed reference image paths for each image. These are square GAME ICONS: follow the icon line under each image. Save into artifacts/promo-20261007/raw/ exactly as the brief says. Do not run git. Finish by printing the list of files you saved.
+2026-10-07T22:04:14.599990Z ERROR codex_rmcp_client::oauth::refresh_transaction: error=failed to refresh OAuth tokens for server ElevenLabs
+codex
+I’ll read both briefs and the image-generation instructions, then generate and save each square game icon with its specified references. I won’t run git.
+exec
+/bin/zsh -lc 'cat artifacts/promo-20261007/brief_I.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 462ms:
+Read `artifacts/promo-20261007/brief_common.md` first and follow it. Job name: I. 3 images.
+Write `artifacts/promo-20261007/prompts_I.json` at the end. Make the images one after another.
+
+Image `I05_icon_balloon_manager` (square; references: refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg, refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg, refs/krille/krille_14.png)
+The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: the glossy red balloon head with one white highlight and no face, the collar of the orange and cream striped shirt, a blank white name tag, and one red-gloved hand raised with the fingers spread. Deep orange party-room wall behind, two ordinary balloons out of focus.
+GAME ICON. It is shown 150 pixels wide and often 64: ONE subject that fills the square, big simple shapes, a strong rim light, two or three colours, a face or eyes where there is one, nothing that needs a second look. Keep everything that matters inside the middle 80 percent (Roblox rounds the corners). No calm space is needed: nothing is written on an icon. No lettering.
+
+Image `I06_icon_usher_shh` (square; references: refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg, refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg, refs/krille/krille_18.png)
+The Usher, head and shoulders, facing us: glossy black featureless mannequin head under the crimson pillbox cap with its gold band, crimson collar and gold buttons, and one glowing white-gloved index finger held upright in front of the blank face. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars.
+GAME ICON. It is shown 150 pixels wide and often 64: ONE subject that fills the square, big simple shapes, a strong rim light, two or three colours, a face or eyes where there is one, nothing that needs a second look. Keep everything that matters inside the middle 80 percent (Roblox rounds the corners). No calm space is needed: nothing is written on an icon. No lettering.
+
+Image `I07_icon_counter_peeking` (square; references: refs/l6_04_the_counter_face_closeup_party_hat.jpg, refs/l6_03_the_counter_side_full_body_at_post.jpg, refs/krille/krille_33.png)
+The Counter's face filling the square, both jointed porcelain hands held over its eyes, and between two parted fingers ONE large dark glass eye looking straight at us. Cracked white porcelain, rosy cheek, small closed smile, the striped paper party hat on top. Dark soft-play netting and one cold strip light out of focus behind.
+GAME ICON. It is shown 150 pixels wide and often 64: ONE subject that fills the square, big simple shapes, a strong rim light, two or three colours, a face or eyes where there is one, nothing that needs a second look. Keep everything that matters inside the middle 80 percent (Roblox rounds the corners). No calm space is needed: nothing is written on an icon. No lettering.
+
+exec
+/bin/zsh -lc 'cat /Users/zeanjuul4/.codex/skills/.system/imagegen/SKILL.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 250ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/zsh -lc 'cat artifacts/promo-20261007/brief_common.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 27ms:
+# BACKROOMS: STAY QUIET [CO-OP HORROR] - promo art, 2026-10-07
+
+You generate key art with your BUILT-IN image generation tool (not Meshy, not Canva, not any MCP). Do not run
+git, do not commit, do not touch Roblox Studio, and do not create or edit any file outside
+`artifacts/promo-20261007/raw/`, `artifacts/promo-20261007/logs/` and your own `prompts_<job>.json`.
+
+Claude played all six levels today and took the pictures in `refs/`. Claude also reviews every image you make
+and adds ALL lettering afterwards. You make the pictures.
+
+## Output
+- Save every accepted generation as `artifacts/promo-20261007/raw/<name>_raw.png` at the size the tool gives you
+  (do not resize, crop or add anything). A rejected try stays as `<name>_try1_raw.png`, `<name>_try2_raw.png`.
+- Shapes: `landscape` = the tool's widest landscape size (3:2); `square`; `portrait` = the tallest portrait size
+  (2:3). Claude crops landscape to 16:9 and portrait to 9:16 from the CENTRE, so keep every important thing
+  inside the middle 80% of the height (landscape) or the middle 80% of the width (portrait).
+- When the job is done write `artifacts/promo-20261007/prompts_<job>.json`: for each image the name, the final
+  prompt, the reference paths you passed, the number of tries and one honest sentence on what is still wrong.
+- The image tool takes at most FIVE reference paths. Pass the ones listed for each image, by path.
+
+## NO LETTERING
+No title, no caption, no logo, no watermark, no HUD, no UI, no key hints, no numbers. Claude adds the title and
+the "LEVEL n" lines later in a fixed typeface, so each image says where to leave calm, darker, uncluttered
+space for them. The only letters allowed are signs that exist in the game and are named in the image's text
+(PLAY ZONE, EXIT, ZYNTRA RELAY). Regenerate if any other lettering appears or a named sign is misspelled.
+
+## What the pictures are for
+Store gallery, the main thumbnail and a paid ad campaign for a Roblox co-op horror game. What worked last time
+and what the owner asked for then still holds: highly clickable, one clear idea per image that reads at
+320 x 180, ACCURATE to each level. The research on the genre's biggest games said: lead with teammates hiding
+while the thing passes, and show that the levels are six recognisably different places.
+
+The owner has rejected generated art as "AI slop" before. So: be faithful, not generic. Rebuild the real
+places in the references with better light, lens and detail. Never invent a new monster, a new room type, new
+props, gore, blood, weapons or jump-scare faces. If a reference shows it plain, keep it plain.
+
+## The player (every human in every image)
+See `refs/player_suit_front.jpg`, `refs/player_suit_back.jpg` (or `refs/board_player.jpg`). A stylised, chunky
+game avatar, about three heads tall: mustard-yellow hooded hazmat suit of crumpled fabric, the hood up; a black
+gas mask with TWO ROUND LENSES and one round filter in front; black backpack straps, a black belt with pouches,
+a black tactical backpack with two small olive tanks at its sides; black mitten-like gloves; chunky black boots.
+Never a realistic human, never a bare face, never a clear visor, never a different colour of suit. All players
+look the same. They may carry a small hand torch.
+
+## The six levels (the references are the truth; this is what you are looking at)
+1. LEVEL 1, THE OFFICE. The classic yellow backrooms: mustard damask wallpaper, beige-brown carpet, low white
+   acoustic-tile ceiling with fluorescent panels, square pillars, endless low partitions, black marker scribbles
+   on walls. ENTITY, "the Entity": a tall, hunched, pitch-black figure in a rough hooded knit garment, heavy
+   shoulders, very long arms, big long-fingered hands, chunky feet, two small round glowing eyes (amber when
+   calm, red when hunting). It hears noise. Players pull fuses out of wall cabinets marked ZYNTRA RELAY, carry
+   them to fuse boxes, pull levers and run for the exit.
+2. LEVEL 2, THE POOLROOMS. BRAND NEW MAP. THERE IS NO ENTITY, NO MONSTER, NO CREATURE AND NO FOAM IN LEVEL 2.
+   It is a silent, sunlit, clean, endless bath-house you walk through: a flooded hall of tiled columns and
+   vaults over turquoise water; a nave of colossal fluted concrete columns; an immense stepwell of zig-zag
+   stairs with glass rails down to a green pool; a domed rotunda in deep blue and gold mosaic with a golden
+   gong on an island; a lap-pool hall with ribbon windows onto empty desert; and a ten-storey atrium of
+   identical yellow doors over a drained pool. Cream plaster, pale tile, warm daylight. Awe and loneliness.
+3. LEVEL 3, THE PARTY ROOMS. A dead mall's children's party rooms: road-map play carpet or dark confetti
+   carpet, cream or orange walls with a black lower band, black tile ceiling with a few panels, folding tables
+   with paper cups and plates, plastic kids' chairs, balloons, wall stickers. Players collect five CDs in jewel
+   cases and hide UNDER the folding tables. ENTITY, "the Mall Manager": very tall and thin; its head is a
+   glossy RED BALLOON with no face; short-sleeved shirt with wide orange and cream vertical stripes and a white
+   name tag; black trousers, white belt buckle, black shoes; long thin pale arms ending in RED GLOVES. The
+   reference shows it in a stiff arms-out rig pose: never draw that pose. Draw it walking, stooping, peering.
+4. LEVEL 4, THE CINEMA. An 80s-90s multiplex lost in the backrooms: navy walls, magenta and cyan neon bands, a
+   carpet of pink and blue triangles on a dotted grid, a starlight ceiling, arcade cabinets, red seats, a
+   glowing screen, a projector booth. With the power off it is black with deep red emergency light. ENTITY,
+   "the Usher": very tall and thin, in a crimson bellhop uniform with gold buttons in two rows, gold cuffs and a
+   gold stripe down the trouser leg, a crimson pillbox cap with a gold band; its head is a glossy BLACK
+   featureless mannequin head with no face; its hands are bright WHITE gloves that glow. It only exists in the
+   dark and freezes while a torch beam is on it. Same note: the reference is a stiff rig pose, do not copy the
+   pose.
+5. LEVEL 5, THE VOID. THERE IS NO ENTITY IN LEVEL 5. Ten huge rooms, each ONE colour (rose, blue, amber, mint,
+   violet, coral, orange, crimson, teal, ivory), smooth matte plastic, soft pools of light near the top, and
+   below the walkways nothing but black. Players jump along narrow ledges, block tops, pillar tops and spiral
+   stairs with treads missing. A fall is death. Dark blue balls lie on some ledges; a small lamp globe hangs on
+   a long thin rod here and there.
+6. LEVEL 6, THE PLAYGROUND. One colossal indoor soft-play arena: a round court of blue-and-green foam puzzle
+   mats with a yellow ring and a short RED padded post in the middle, and all round it twelve storeys of
+   netted galleries: posts wrapped in yellow, red, blue and green vinyl, black knotted nets, mat decks, red
+   panels with round bubble windows, big tube slides, rope bridges high across the court, cold strip lights,
+   loose plastic balls. ENTITY, "the Counter": a porcelain ball-jointed doll child about as tall as a player
+   and a half: bald white cracked head, large dark glass eyes, rosy cheeks, a small closed smile, a striped
+   paper party cone hat, a striped T-shirt in faded orange, blue and cream, dusty denim dungaree shorts, bare
+   jointed limbs. It counts at the post with its hands over its eyes while players hide, then comes looking.
+
+## Look
+Polished promotional key art of THIS game: the real geometry, colours and materials of the references, with
+cinematic practical light, real depth, a little haze and fine film grain. Strong simple composition, a clear
+focal point, a readable silhouette against a lighter or darker ground. Players and entity must be fully inside
+the frame unless the image says close-up. Never more than one entity in an image unless the image says so.
+
+## Check before you accept an image (regenerate up to twice if it fails)
+- Is every player exactly the avatar above (yellow hood, twin-lens black gas mask, black backpack)?
+- Is the entity the one from the reference, and only where asked? Level 2 and Level 5: no creature at all.
+- Any lettering, logo or UI that was not asked for? Any gore?
+- Is the calm space for lettering where the image asked for it?
+
+codex
+I’m using the imagegen skill. The brief calls for three icons generated one at a time, with no lettering, plus a JSON record of prompts and any remaining issues.
+exec
+/bin/zsh -lc 'ls artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg artifacts/promo-20261007/raw/I* refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ exited 1 in 0ms:
+zsh:1: no matches found: artifacts/promo-20261007/raw/I*
+
+exec
+/bin/zsh -lc "rg --files artifacts/promo-20261007 | rg '(l3_03|l3_02|l4_03|l4_02|l6_04|l6_03|krille_14|krille_18|krille_33|raw/I|prompts_I)'" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 53ms:
+artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg
+artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg
+artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg
+artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg
+artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg
+artifacts/promo-20261007/refs/krille/krille_14.png
+artifacts/promo-20261007/refs/krille/krille_33.png
+artifacts/promo-20261007/refs/krille/krille_18.png
+artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg
+
+codex
+The first Mall Manager image has the right character and blank name tag, but its head sits too close to the top edge. I’ll adjust the framing for the icon’s safe area.
+exec
+/bin/zsh -lc 'mkdir -p artifacts/promo-20261007/raw
+cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-e564214a-e69f-4801-937b-004eca6bea17.png artifacts/promo-20261007/raw/I05_icon_balloon_manager_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-dc283c9f-6d16-4721-8be5-0fde70dc3ba7.png artifacts/promo-20261007/raw/I05_icon_balloon_manager_try2_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 124ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-4678c6de-085b-498e-b81b-8b60f6c41188.png artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 50ms:
+codex
+The Mall Manager’s final attempt is saved; I’ll note the remaining tight margins in the prompt record. Next is the Usher, with its blank black head and glowing “shh” gesture.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-545327d4-05f6-4603-bed6-c9cc94667ad5.png artifacts/promo-20261007/raw/I06_icon_usher_shh_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-596a6b06-7ceb-4267-9868-603734b4ac23.png artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+codex
+The Usher is saved with improved framing and no lettering. I’m generating the Counter next, focusing on the single eye peeking between its porcelain fingers.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-56f22a30-6a27-4203-b7bf-ef2208ac2a22.png artifacts/promo-20261007/raw/I07_icon_counter_peeking_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+codex
+The Counter now has the single-eye gesture and a fully visible hat. I’m making one last framing attempt to bring the hat farther inside the safe area, then I’ll save the prompt record and verify the files.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-fde64ace-a4f2-4d6e-8306-a353b59de437.png artifacts/promo-20261007/raw/I07_icon_counter_peeking_try2_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11865-3051-7cf3-92c7-da6152f849d3/exec-63984317-f1ba-4a7a-9500-613419efeb4c.png artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+apply patch
+patch: completed
+/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/prompts_I.json
+diff --git a/artifacts/promo-20261007/prompts_I.json b/artifacts/promo-20261007/prompts_I.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..43016bdd303408e448f4f6ee4536a7f2efe49af0
+--- /dev/null
++++ b/artifacts/promo-20261007/prompts_I.json
+@@ -0,0 +1,42 @@
++{
++  "job": "I",
++  "tool": "built-in image_gen",
++  "images": [
++    {
++      "name": "I05_icon_balloon_manager",
++      "final_prompt": "Use case: ads-marketing. Generate ONE square 1:1 Roblox GAME ICON for Backrooms: Stay Quiet. Reference images 1 and 2 establish the exact Mall Manager design; reference 3 establishes the orange party-room environment. Do not copy screenshot UI or stiff rig pose. The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: glossy elongated RED BALLOON head with one white highlight and absolutely no face, the collar of its orange and cream wide vertically striped short-sleeved shirt, a blank white name tag, and ONE red-gloved hand raised with fingers spread. Preserve the thin pale arm and reference character identity. Deep orange party-room wall behind, exactly two ordinary balloons out of focus. Polished cinematic 3D game promotional art faithful to the references, practical light, real depth, subtle haze and fine film grain. GAME ICON shown at 150 pixels and often 64: ONE subject fills the square, big simple shapes, strong rim light, restricted red/orange/cream palette, instantly readable silhouette. Keep all important head and hand features inside middle 80 percent for rounded corners; chest-up crop allowed. No calm text area. Absolutely NO lettering, numbers, logo, watermark, HUD, UI, title or caption; name tag completely blank. No new monster, face, eyes, mouth, gore, weapons, or extra characters.\nCRITICAL FRAMING: balloon head top must be at y=12% of canvas, NOT touching top border. All five raised fingertips must be within x=12% to 88% and y=12% to 88%. The chest may crop at bottom. Use a slightly wider chest-up composition to leave this safety inset; head still dominates. Only soft orange wall and two blurred warm-colored balloons behind, no bright ceiling fixtures.\nFrame from slightly farther back: reserve the entire top 15% for background. The silhouette of head begins below that top band. Raised hand fits fully inside the central 70% width. Do not let the pinky finger approach the right edge. Prioritize safe icon framing over extreme close-up.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_14.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The balloon top and outer fingertip still slightly exceed the middle-80-percent safe area after two retries, and a small necktie-like detail appears at the collar.",
++      "output": "artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png"
++    },
++    {
++      "name": "I06_icon_usher_shh",
++      "final_prompt": "Use case: ads-marketing. ONE SQUARE 1:1 GAME ICON for Roblox Backrooms: Stay Quiet. Input reference 1: exact Usher true crimson/gold uniform and glossy black faceless head; reference 2: same character in emergency darkness; reference 3: cinema starlight ceiling mood. References establish identity and materials, not pose or screenshot lettering. The Usher, head and shoulders, facing us: glossy BLACK completely featureless mannequin head under a crimson pillbox cap with a gold band, crimson collar and gold buttons in two rows, and ONE glowing WHITE-gloved index finger held upright in front of the blank face in a clear shh gesture, other fingers naturally curled. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars. Polished cinematic 3D promotional art faithful to this actual game character, fine film grain and restrained haze. GAME ICON seen at 150 pixels and often 64: ONE subject fills square, big simple shapes, strong rim light, restricted crimson/black/white with thin neon accents and small gold trim. Absolutely no eyes, nose, mouth or facial features. Keep entire hat, head and raised glove inside the middle 80%: top of cap below y=12%, glove above y=88%, shoulders can crop at bottom. No calm space for text. NO lettering, numbers, logo, watermark, HUD, UI, caption or title. No extra characters, props, gore, weapons, or rig pose.\nCAMERA CORRECTION: pull back significantly to include upper chest. Hat top starts 16 percent down from canvas top, with a visible band of black background above. Entire glove including wrist fits before 85 percent of canvas height. Head and cap together occupy only 48 percent of canvas height. Keep this precise inset rather than making hat reach top edge.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_18.png"
++      ],
++      "tries": 2,
++      "remaining_issue": "The glove cuff slightly exceeds the middle-80-percent safe area, and the gold button decoration is more elaborate than the reference.",
++      "output": "artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png"
++    },
++    {
++      "name": "I07_icon_counter_peeking",
++      "final_prompt": "Use case: ads-marketing. Generate ONE SQUARE 1:1 Roblox GAME ICON, Backrooms: Stay Quiet. Reference 1 establishes exact Counter porcelain child doll face and striped paper hat; reference 2 the same character body and soft-play net environment; reference 3 the hands-over-eyes counting gesture. Rebuild this actual game character with polished cinematic 3D game art, not a different horror doll. The Counter's face filling the square, BOTH jointed white porcelain hands held over its eyes, and between TWO parted fingers exactly ONE large dark glass eye looking straight at us. Other eye completely hidden. Cracked white porcelain, rosy cheek, small CLOSED smile, bald head and the small striped paper cone party hat on top. Dark soft-play knotted netting and ONE cold strip light out of focus behind. If any clothing appears at bottom, faded orange blue cream striped T shirt with dusty denim dungaree straps. One subject, no players. Strong cold rim light, big simple shapes, porcelain cream and charcoal with muted rosy accents; one instantly readable peeking-eye idea at 150 pixels and 64 pixels. Keep every essential feature including entire party hat, hands, eye and smile in central 80% of square. Reserve at least 12 percent above hat tip; face occupies central 65% width, shoulders may crop. No text area needed. No lettering whatsoever: no words, numbers, signs, HUD, UI, logos, watermark or captions, ignore all screenshot lettering. No blood, gore, weapons, jump-scare face, bared teeth, hair, invented props or extra creatures. Subtle haze, fine grain, real depth; reference identity is authoritative.\nFRAMING FIX: visibly pull camera back to head-and-upper-chest view. Make the paper hat SMALL, like reference, entirely visible with tip at y=15% and base at y=28%. Face between y=28% and y=78%. Both hands fit centrally. A continuous band of dark background above entire hat is essential. Stronger light on rosy cheek, darker blurrier background so eye and hands dominate.\nFinal composition priority: paper party hat tip must be at least 18% down from top of square, clearly inset. Make hat shorter if necessary. Keep doll face and hands large and central. The top 18% is exclusively dark blurred net background. Avoid elbows dominating composition.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_33.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The hat tip remains slightly above the middle-80-percent safe area after two retries, and the background is more detailed than ideal for a 64-pixel icon.",
++      "output": "artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png"
++    }
++  ]
++}
+
+exec
+/bin/zsh -lc "python3 - <<'PY'
+from pathlib import Path
+import struct,json
+p=Path('artifacts/promo-20261007')
+json.loads((p/'prompts_I.json').read_text())
+for f in sorted((p/'raw').glob('I0[567]*.png')):
+ b=f.read_bytes(); assert b[:8]==b'\\x89PNG\\r\\n\\x1a\\n'; w,h=struct.unpack('>II',b[16:24]); assert w==h
+ print(f'{f}: {w}x{h}, {len(b)} bytes')
+print(p/'prompts_I.json')
+PY" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 79ms:
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png: 1254x1254, 1836276 bytes
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try1_raw.png: 1254x1254, 1921716 bytes
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try2_raw.png: 1254x1254, 1932708 bytes
+artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png: 1254x1254, 2048766 bytes
+artifacts/promo-20261007/raw/I06_icon_usher_shh_try1_raw.png: 1254x1254, 2051696 bytes
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png: 1254x1254, 2009429 bytes
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try1_raw.png: 1254x1254, 2085014 bytes
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try2_raw.png: 1254x1254, 2035523 bytes
+artifacts/promo-20261007/prompts_I.json
+
+diff --git a/artifacts/promo-20261007/prompts_I.json b/artifacts/promo-20261007/prompts_I.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..43016bdd303408e448f4f6ee4536a7f2efe49af0
+--- /dev/null
++++ b/artifacts/promo-20261007/prompts_I.json
+@@ -0,0 +1,42 @@
++{
++  "job": "I",
++  "tool": "built-in image_gen",
++  "images": [
++    {
++      "name": "I05_icon_balloon_manager",
++      "final_prompt": "Use case: ads-marketing. Generate ONE square 1:1 Roblox GAME ICON for Backrooms: Stay Quiet. Reference images 1 and 2 establish the exact Mall Manager design; reference 3 establishes the orange party-room environment. Do not copy screenshot UI or stiff rig pose. The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: glossy elongated RED BALLOON head with one white highlight and absolutely no face, the collar of its orange and cream wide vertically striped short-sleeved shirt, a blank white name tag, and ONE red-gloved hand raised with fingers spread. Preserve the thin pale arm and reference character identity. Deep orange party-room wall behind, exactly two ordinary balloons out of focus. Polished cinematic 3D game promotional art faithful to the references, practical light, real depth, subtle haze and fine film grain. GAME ICON shown at 150 pixels and often 64: ONE subject fills the square, big simple shapes, strong rim light, restricted red/orange/cream palette, instantly readable silhouette. Keep all important head and hand features inside middle 80 percent for rounded corners; chest-up crop allowed. No calm text area. Absolutely NO lettering, numbers, logo, watermark, HUD, UI, title or caption; name tag completely blank. No new monster, face, eyes, mouth, gore, weapons, or extra characters.\nCRITICAL FRAMING: balloon head top must be at y=12% of canvas, NOT touching top border. All five raised fingertips must be within x=12% to 88% and y=12% to 88%. The chest may crop at bottom. Use a slightly wider chest-up composition to leave this safety inset; head still dominates. Only soft orange wall and two blurred warm-colored balloons behind, no bright ceiling fixtures.\nFrame from slightly farther back: reserve the entire top 15% for background. The silhouette of head begins below that top band. Raised hand fits fully inside the central 70% width. Do not let the pinky finger approach the right edge. Prioritize safe icon framing over extreme close-up.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_14.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The balloon top and outer fingertip still slightly exceed the middle-80-percent safe area after two retries, and a small necktie-like detail appears at the collar.",
++      "output": "artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png"
++    },
++    {
++      "name": "I06_icon_usher_shh",
++      "final_prompt": "Use case: ads-marketing. ONE SQUARE 1:1 GAME ICON for Roblox Backrooms: Stay Quiet. Input reference 1: exact Usher true crimson/gold uniform and glossy black faceless head; reference 2: same character in emergency darkness; reference 3: cinema starlight ceiling mood. References establish identity and materials, not pose or screenshot lettering. The Usher, head and shoulders, facing us: glossy BLACK completely featureless mannequin head under a crimson pillbox cap with a gold band, crimson collar and gold buttons in two rows, and ONE glowing WHITE-gloved index finger held upright in front of the blank face in a clear shh gesture, other fingers naturally curled. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars. Polished cinematic 3D promotional art faithful to this actual game character, fine film grain and restrained haze. GAME ICON seen at 150 pixels and often 64: ONE subject fills square, big simple shapes, strong rim light, restricted crimson/black/white with thin neon accents and small gold trim. Absolutely no eyes, nose, mouth or facial features. Keep entire hat, head and raised glove inside the middle 80%: top of cap below y=12%, glove above y=88%, shoulders can crop at bottom. No calm space for text. NO lettering, numbers, logo, watermark, HUD, UI, caption or title. No extra characters, props, gore, weapons, or rig pose.\nCAMERA CORRECTION: pull back significantly to include upper chest. Hat top starts 16 percent down from canvas top, with a visible band of black background above. Entire glove including wrist fits before 85 percent of canvas height. Head and cap together occupy only 48 percent of canvas height. Keep this precise inset rather than making hat reach top edge.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_18.png"
++      ],
++      "tries": 2,
++      "remaining_issue": "The glove cuff slightly exceeds the middle-80-percent safe area, and the gold button decoration is more elaborate than the reference.",
++      "output": "artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png"
++    },
++    {
++      "name": "I07_icon_counter_peeking",
++      "final_prompt": "Use case: ads-marketing. Generate ONE SQUARE 1:1 Roblox GAME ICON, Backrooms: Stay Quiet. Reference 1 establishes exact Counter porcelain child doll face and striped paper hat; reference 2 the same character body and soft-play net environment; reference 3 the hands-over-eyes counting gesture. Rebuild this actual game character with polished cinematic 3D game art, not a different horror doll. The Counter's face filling the square, BOTH jointed white porcelain hands held over its eyes, and between TWO parted fingers exactly ONE large dark glass eye looking straight at us. Other eye completely hidden. Cracked white porcelain, rosy cheek, small CLOSED smile, bald head and the small striped paper cone party hat on top. Dark soft-play knotted netting and ONE cold strip light out of focus behind. If any clothing appears at bottom, faded orange blue cream striped T shirt with dusty denim dungaree straps. One subject, no players. Strong cold rim light, big simple shapes, porcelain cream and charcoal with muted rosy accents; one instantly readable peeking-eye idea at 150 pixels and 64 pixels. Keep every essential feature including entire party hat, hands, eye and smile in central 80% of square. Reserve at least 12 percent above hat tip; face occupies central 65% width, shoulders may crop. No text area needed. No lettering whatsoever: no words, numbers, signs, HUD, UI, logos, watermark or captions, ignore all screenshot lettering. No blood, gore, weapons, jump-scare face, bared teeth, hair, invented props or extra creatures. Subtle haze, fine grain, real depth; reference identity is authoritative.\nFRAMING FIX: visibly pull camera back to head-and-upper-chest view. Make the paper hat SMALL, like reference, entirely visible with tip at y=15% and base at y=28%. Face between y=28% and y=78%. Both hands fit centrally. A continuous band of dark background above entire hat is essential. Stronger light on rosy cheek, darker blurrier background so eye and hands dominate.\nFinal composition priority: paper party hat tip must be at least 18% down from top of square, clearly inset. Make hat shorter if necessary. Keep doll face and hands large and central. The top 18% is exclusively dark blurred net background. Avoid elbows dominating composition.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_33.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The hat tip remains slightly above the middle-80-percent safe area after two retries, and the background is more detailed than ideal for a 64-pixel icon.",
++      "output": "artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png"
++    }
++  ]
++}
+
+codex
+Saved using built-in image generation at native 1254×1254. Remaining framing issues are recorded in `prompts_I.json`.
+
+```text
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try1_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try2_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try2_raw.png
+artifacts/promo-20261007/prompts_I.json
+```
+diff --git a/artifacts/promo-20261007/prompts_I.json b/artifacts/promo-20261007/prompts_I.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..43016bdd303408e448f4f6ee4536a7f2efe49af0
+--- /dev/null
++++ b/artifacts/promo-20261007/prompts_I.json
+@@ -0,0 +1,42 @@
++{
++  "job": "I",
++  "tool": "built-in image_gen",
++  "images": [
++    {
++      "name": "I05_icon_balloon_manager",
++      "final_prompt": "Use case: ads-marketing. Generate ONE square 1:1 Roblox GAME ICON for Backrooms: Stay Quiet. Reference images 1 and 2 establish the exact Mall Manager design; reference 3 establishes the orange party-room environment. Do not copy screenshot UI or stiff rig pose. The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: glossy elongated RED BALLOON head with one white highlight and absolutely no face, the collar of its orange and cream wide vertically striped short-sleeved shirt, a blank white name tag, and ONE red-gloved hand raised with fingers spread. Preserve the thin pale arm and reference character identity. Deep orange party-room wall behind, exactly two ordinary balloons out of focus. Polished cinematic 3D game promotional art faithful to the references, practical light, real depth, subtle haze and fine film grain. GAME ICON shown at 150 pixels and often 64: ONE subject fills the square, big simple shapes, strong rim light, restricted red/orange/cream palette, instantly readable silhouette. Keep all important head and hand features inside middle 80 percent for rounded corners; chest-up crop allowed. No calm text area. Absolutely NO lettering, numbers, logo, watermark, HUD, UI, title or caption; name tag completely blank. No new monster, face, eyes, mouth, gore, weapons, or extra characters.\nCRITICAL FRAMING: balloon head top must be at y=12% of canvas, NOT touching top border. All five raised fingertips must be within x=12% to 88% and y=12% to 88%. The chest may crop at bottom. Use a slightly wider chest-up composition to leave this safety inset; head still dominates. Only soft orange wall and two blurred warm-colored balloons behind, no bright ceiling fixtures.\nFrame from slightly farther back: reserve the entire top 15% for background. The silhouette of head begins below that top band. Raised hand fits fully inside the central 70% width. Do not let the pinky finger approach the right edge. Prioritize safe icon framing over extreme close-up.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_14.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The balloon top and outer fingertip still slightly exceed the middle-80-percent safe area after two retries, and a small necktie-like detail appears at the collar.",
++      "output": "artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png"
++    },
++    {
++      "name": "I06_icon_usher_shh",
++      "final_prompt": "Use case: ads-marketing. ONE SQUARE 1:1 GAME ICON for Roblox Backrooms: Stay Quiet. Input reference 1: exact Usher true crimson/gold uniform and glossy black faceless head; reference 2: same character in emergency darkness; reference 3: cinema starlight ceiling mood. References establish identity and materials, not pose or screenshot lettering. The Usher, head and shoulders, facing us: glossy BLACK completely featureless mannequin head under a crimson pillbox cap with a gold band, crimson collar and gold buttons in two rows, and ONE glowing WHITE-gloved index finger held upright in front of the blank face in a clear shh gesture, other fingers naturally curled. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars. Polished cinematic 3D promotional art faithful to this actual game character, fine film grain and restrained haze. GAME ICON seen at 150 pixels and often 64: ONE subject fills square, big simple shapes, strong rim light, restricted crimson/black/white with thin neon accents and small gold trim. Absolutely no eyes, nose, mouth or facial features. Keep entire hat, head and raised glove inside the middle 80%: top of cap below y=12%, glove above y=88%, shoulders can crop at bottom. No calm space for text. NO lettering, numbers, logo, watermark, HUD, UI, caption or title. No extra characters, props, gore, weapons, or rig pose.\nCAMERA CORRECTION: pull back significantly to include upper chest. Hat top starts 16 percent down from canvas top, with a visible band of black background above. Entire glove including wrist fits before 85 percent of canvas height. Head and cap together occupy only 48 percent of canvas height. Keep this precise inset rather than making hat reach top edge.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_18.png"
++      ],
++      "tries": 2,
++      "remaining_issue": "The glove cuff slightly exceeds the middle-80-percent safe area, and the gold button decoration is more elaborate than the reference.",
++      "output": "artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png"
++    },
++    {
++      "name": "I07_icon_counter_peeking",
++      "final_prompt": "Use case: ads-marketing. Generate ONE SQUARE 1:1 Roblox GAME ICON, Backrooms: Stay Quiet. Reference 1 establishes exact Counter porcelain child doll face and striped paper hat; reference 2 the same character body and soft-play net environment; reference 3 the hands-over-eyes counting gesture. Rebuild this actual game character with polished cinematic 3D game art, not a different horror doll. The Counter's face filling the square, BOTH jointed white porcelain hands held over its eyes, and between TWO parted fingers exactly ONE large dark glass eye looking straight at us. Other eye completely hidden. Cracked white porcelain, rosy cheek, small CLOSED smile, bald head and the small striped paper cone party hat on top. Dark soft-play knotted netting and ONE cold strip light out of focus behind. If any clothing appears at bottom, faded orange blue cream striped T shirt with dusty denim dungaree straps. One subject, no players. Strong cold rim light, big simple shapes, porcelain cream and charcoal with muted rosy accents; one instantly readable peeking-eye idea at 150 pixels and 64 pixels. Keep every essential feature including entire party hat, hands, eye and smile in central 80% of square. Reserve at least 12 percent above hat tip; face occupies central 65% width, shoulders may crop. No text area needed. No lettering whatsoever: no words, numbers, signs, HUD, UI, logos, watermark or captions, ignore all screenshot lettering. No blood, gore, weapons, jump-scare face, bared teeth, hair, invented props or extra creatures. Subtle haze, fine grain, real depth; reference identity is authoritative.\nFRAMING FIX: visibly pull camera back to head-and-upper-chest view. Make the paper hat SMALL, like reference, entirely visible with tip at y=15% and base at y=28%. Face between y=28% and y=78%. Both hands fit centrally. A continuous band of dark background above entire hat is essential. Stronger light on rosy cheek, darker blurrier background so eye and hands dominate.\nFinal composition priority: paper party hat tip must be at least 18% down from top of square, clearly inset. Make hat shorter if necessary. Keep doll face and hands large and central. The top 18% is exclusively dark blurred net background. Avoid elbows dominating composition.",
++      "reference_paths": [
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
++        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_33.png"
++      ],
++      "tries": 3,
++      "remaining_issue": "The hat tip remains slightly above the middle-80-percent safe area after two retries, and the background is more detailed than ideal for a 64-pixel icon.",
++      "output": "artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png"
++    }
++  ]
++}
+
+tokens used
+63 464
+Saved using built-in image generation at native 1254×1254. Remaining framing issues are recorded in `prompts_I.json`.
+
+```text
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try1_raw.png
+artifacts/promo-20261007/raw/I05_icon_balloon_manager_try2_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png
+artifacts/promo-20261007/raw/I06_icon_usher_shh_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try1_raw.png
+artifacts/promo-20261007/raw/I07_icon_counter_peeking_try2_raw.png
+artifacts/promo-20261007/prompts_I.json
+```

@@ -1,0 +1,42 @@
+{
+  "job": "I",
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "name": "I05_icon_balloon_manager",
+      "final_prompt": "Use case: ads-marketing. Generate ONE square 1:1 Roblox GAME ICON for Backrooms: Stay Quiet. Reference images 1 and 2 establish the exact Mall Manager design; reference 3 establishes the orange party-room environment. Do not copy screenshot UI or stiff rig pose. The Mall Manager from the chest up, leaning into the square from above and tilting its head at us: glossy elongated RED BALLOON head with one white highlight and absolutely no face, the collar of its orange and cream wide vertically striped short-sleeved shirt, a blank white name tag, and ONE red-gloved hand raised with fingers spread. Preserve the thin pale arm and reference character identity. Deep orange party-room wall behind, exactly two ordinary balloons out of focus. Polished cinematic 3D game promotional art faithful to the references, practical light, real depth, subtle haze and fine film grain. GAME ICON shown at 150 pixels and often 64: ONE subject fills the square, big simple shapes, strong rim light, restricted red/orange/cream palette, instantly readable silhouette. Keep all important head and hand features inside middle 80 percent for rounded corners; chest-up crop allowed. No calm text area. Absolutely NO lettering, numbers, logo, watermark, HUD, UI, title or caption; name tag completely blank. No new monster, face, eyes, mouth, gore, weapons, or extra characters.\nCRITICAL FRAMING: balloon head top must be at y=12% of canvas, NOT touching top border. All five raised fingertips must be within x=12% to 88% and y=12% to 88%. The chest may crop at bottom. Use a slightly wider chest-up composition to leave this safety inset; head still dominates. Only soft orange wall and two blurred warm-colored balloons behind, no bright ceiling fixtures.\nFrame from slightly farther back: reserve the entire top 15% for background. The silhouette of head begins below that top band. Raised hand fits fully inside the central 70% width. Do not let the pinky finger approach the right edge. Prioritize safe icon framing over extreme close-up.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_14.png"
+      ],
+      "tries": 3,
+      "remaining_issue": "The balloon top and outer fingertip still slightly exceed the middle-80-percent safe area after two retries, and a small necktie-like detail appears at the collar.",
+      "output": "artifacts/promo-20261007/raw/I05_icon_balloon_manager_raw.png"
+    },
+    {
+      "name": "I06_icon_usher_shh",
+      "final_prompt": "Use case: ads-marketing. ONE SQUARE 1:1 GAME ICON for Roblox Backrooms: Stay Quiet. Input reference 1: exact Usher true crimson/gold uniform and glossy black faceless head; reference 2: same character in emergency darkness; reference 3: cinema starlight ceiling mood. References establish identity and materials, not pose or screenshot lettering. The Usher, head and shoulders, facing us: glossy BLACK completely featureless mannequin head under a crimson pillbox cap with a gold band, crimson collar and gold buttons in two rows, and ONE glowing WHITE-gloved index finger held upright in front of the blank face in a clear shh gesture, other fingers naturally curled. Magenta rim light on one side and cyan on the other, black background with a few pin-point ceiling stars. Polished cinematic 3D promotional art faithful to this actual game character, fine film grain and restrained haze. GAME ICON seen at 150 pixels and often 64: ONE subject fills square, big simple shapes, strong rim light, restricted crimson/black/white with thin neon accents and small gold trim. Absolutely no eyes, nose, mouth or facial features. Keep entire hat, head and raised glove inside the middle 80%: top of cap below y=12%, glove above y=88%, shoulders can crop at bottom. No calm space for text. NO lettering, numbers, logo, watermark, HUD, UI, caption or title. No extra characters, props, gore, weapons, or rig pose.\nCAMERA CORRECTION: pull back significantly to include upper chest. Hat top starts 16 percent down from canvas top, with a visible band of black background above. Entire glove including wrist fits before 85 percent of canvas height. Head and cap together occupy only 48 percent of canvas height. Keep this precise inset rather than making hat reach top edge.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l4_02_the_usher_look_reference_in_red_emergency_light.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_18.png"
+      ],
+      "tries": 2,
+      "remaining_issue": "The glove cuff slightly exceeds the middle-80-percent safe area, and the gold button decoration is more elaborate than the reference.",
+      "output": "artifacts/promo-20261007/raw/I06_icon_usher_shh_raw.png"
+    },
+    {
+      "name": "I07_icon_counter_peeking",
+      "final_prompt": "Use case: ads-marketing. Generate ONE SQUARE 1:1 Roblox GAME ICON, Backrooms: Stay Quiet. Reference 1 establishes exact Counter porcelain child doll face and striped paper hat; reference 2 the same character body and soft-play net environment; reference 3 the hands-over-eyes counting gesture. Rebuild this actual game character with polished cinematic 3D game art, not a different horror doll. The Counter's face filling the square, BOTH jointed white porcelain hands held over its eyes, and between TWO parted fingers exactly ONE large dark glass eye looking straight at us. Other eye completely hidden. Cracked white porcelain, rosy cheek, small CLOSED smile, bald head and the small striped paper cone party hat on top. Dark soft-play knotted netting and ONE cold strip light out of focus behind. If any clothing appears at bottom, faded orange blue cream striped T shirt with dusty denim dungaree straps. One subject, no players. Strong cold rim light, big simple shapes, porcelain cream and charcoal with muted rosy accents; one instantly readable peeking-eye idea at 150 pixels and 64 pixels. Keep every essential feature including entire party hat, hands, eye and smile in central 80% of square. Reserve at least 12 percent above hat tip; face occupies central 65% width, shoulders may crop. No text area needed. No lettering whatsoever: no words, numbers, signs, HUD, UI, logos, watermark or captions, ignore all screenshot lettering. No blood, gore, weapons, jump-scare face, bared teeth, hair, invented props or extra creatures. Subtle haze, fine grain, real depth; reference identity is authoritative.\nFRAMING FIX: visibly pull camera back to head-and-upper-chest view. Make the paper hat SMALL, like reference, entirely visible with tip at y=15% and base at y=28%. Face between y=28% and y=78%. Both hands fit centrally. A continuous band of dark background above entire hat is essential. Stronger light on rosy cheek, darker blurrier background so eye and hands dominate.\nFinal composition priority: paper party hat tip must be at least 18% down from top of square, clearly inset. Make hat shorter if necessary. Keep doll face and hands large and central. The top 18% is exclusively dark blurred net background. Avoid elbows dominating composition.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_04_the_counter_face_closeup_party_hat.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l6_03_the_counter_side_full_body_at_post.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_33.png"
+      ],
+      "tries": 3,
+      "remaining_issue": "The hat tip remains slightly above the middle-80-percent safe area after two retries, and the background is more detailed than ideal for a 64-pixel icon.",
+      "output": "artifacts/promo-20261007/raw/I07_icon_counter_peeking_raw.png"
+    }
+  ]
+}

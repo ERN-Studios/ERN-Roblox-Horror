@@ -1,0 +1,39 @@
+{
+  "job": "K",
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "name": "I08_icon_squad_looking_up",
+      "prompt": "Use case: ads-marketing. Create a SQUARE 1:1 Roblox GAME ICON, polished cinematic 3D promotional art faithful to the supplied game references. Four identical chunky stylised game avatars, about three heads tall, huddled shoulder to shoulder as ONE tight bold focal cluster filling the square, viewed from slightly above. All FOUR black gas masks tilt UP toward the viewer: each has TWO ROUND LENSES and ONE round front filter. Mustard-yellow crumpled fabric hazmat suits with hoods up, black backpack straps, black belts with pouches, black tactical backpacks with two small olive side tanks, black mitten gloves and chunky black boots. Match reference images 1 and 2 for exact avatar identity. One small hand torch held low between them illuminates their masks from BELOW with strong golden rim light. Across their yellow hoods falls the clearly readable SHADOW of ONE huge hand with long spread fingers, based on the Entity hand in reference 3; the actual Entity remains offscreen. Only dark yellow carpet surrounds this compact group, nothing else. No room scenery. Palette yellow, near-black and warm amber only. Big simple shapes and highly readable faces at 150px and 64px. Keep all important shapes within middle 80% of the square for rounded corners, all players inside frame. Fine film grain, restrained fabric detail, cinematic practical lighting; no photoreal humans. NO lettering, text, graffiti, logos, watermark, HUD, UI, numbers, weapons, blood or gore. No reserved copy space. Reference 3 is hand-shape reference only, do not copy its wall writing or HUD.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+      ],
+      "tries": 1,
+      "remaining_issue": "The outer backpacks and boots extend beyond the middle 80% safe area, though all four masks remain clearly inside it."
+    },
+    {
+      "name": "I09_icon_void_jump",
+      "prompt": "Use case: ads-marketing. Create a SQUARE 1:1 GAME ICON for this Roblox game, polished cinematic 3D key art accurate to supplied references. ONE chunky stylised three-heads-tall avatar in MID-JUMP, viewed from the SIDE and a little BELOW, large in the square. Arms flung out, separated bent legs visibly airborne over an unmistakable black gap between the edges of TWO plain rose-pink matte plastic blocks at the left and right borders. Under and behind the player PURE BLACK, no scenery or walls. ONE small lamp globe hanging on a thin rod above. THREE COLOURS ONLY: rose pink, mustard yellow and black; lamp and rim light pale yellow. Reference 1 supplies ledge/drop and lamp geometry, reference 2 supplies rose plastic colour and scene material, reference 3 supplies exact avatar back design. The avatar is a chunky stylised game character, NOT a realistically proportioned human: mustard-yellow hooded hazmat suit of crumpled fabric with hood up, black gas mask with TWO ROUND LENSES and ONE round front filter, black backpack straps, black belt with pouches, black tactical backpack with two small olive tanks at its sides (subdued in yellow-black light), black mitten gloves, chunky black boots. A side-three-quarter view may show mask and backpack together while keeping the jump sideways. Strong yellow rim light separates the entire silhouette from black. Big simple shapes: ONE focal subject filling the square, instantly readable at 150px and 64px. Entire airborne player inside central 80% of image, with important lamp globe and ledge edges also safe from rounded corners. No calm copy space. Fine restrained grain and real depth but uncluttered. NO other players, no creature, no balls, no extra props, no text or lettering, no logo, watermark, HUD, UI, numbers, blood or weapons.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+      ],
+      "tries": 1,
+      "remaining_issue": "The lamp globe sits partly above the central 80% safe area, and its brightest highlight is nearly white rather than yellow."
+    },
+    {
+      "name": "I10_icon_poolrooms_alone",
+      "prompt": "Use case: ads-marketing. Generate SQUARE 1:1 Roblox GAME ICON, polished cinematic 3D promotional key art faithful to the supplied references. A SINGLE chunky stylised game avatar seen directly FROM BEHIND, WAIST UP in the LOWER MIDDLE of the square, standing in flat turquoise water. The big mustard-yellow hood and black backpack are the clear focal subject; player occupies roughly half the square's width, head near centre, visible waist above water, not tiny in a wide landscape. In front of the player TWO ROWS of huge ROUND pale tiled columns and a LOW VAULT recede to ONE bright point of daylight, simple bold symmetrical perspective. Reference 1 provides round tiled columns, low vaulted cream ceiling, flat clean turquoise water; reference 2 provides colossal scale and deep rhythmic column perspective, not its square bases or pit; reference 3 provides exact back of avatar. Chunky roughly three-heads-tall stylised game proportions, mustard-yellow crumpled-fabric hazmat hood up, black tactical backpack with two small olive side tanks, black shoulder straps, black belt with pouches and black mitten gloves. Head faces away so no face visible; never a bare human or realistic adult. Strong daylight rim light on the hood and shoulders separates the lone player from cream and turquoise background. Colour palette cream and turquoise with the YELLOW HOOD the only strong colour, equipment dark. Silent clean sunlit endless bath-house, awe and loneliness. Big SIMPLE shapes, one instantly readable focal subject at 150px and 64px; all important avatar shapes stay within middle 80% of square for rounded corners. No calm text space. Restrained material detail and fine film grain. NO entity, monster, animal, foam, other people or anything else alive. No extra props, no gong, no machinery. NO lettering, title, caption, logos, watermark, HUD, UI, numbers, weapons, gore or blood.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l2new_01_area1_flooded_pillar_hall.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l2new_02_area3_colossal_column_nave.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+      ],
+      "tries": 1,
+      "remaining_issue": "The water has more visible ripples and bright reflections than the requested flat surface."
+    }
+  ]
+}

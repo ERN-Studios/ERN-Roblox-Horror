@@ -3,6 +3,7 @@
     PY=~/Desktop/"Backrooms Stay Quiet - Covers 2026-10-04"/.artwork-venv/bin/python     # the only Pillow on this Mac
     "$PY" tools/promo/finish.py            # everything that has an accepted raw
     "$PY" tools/promo/finish.py --sheet    # only the review sheets of the raws (for QA, before accepting)
+    "$PY" tools/promo/finish.py --only icon   # one set (gallery, thumb, ad_landscape, ad_square, ad_portrait, icon)
 
 Codex makes the pictures without lettering (image models misspell). Everything that is read is set here, in one
 typeface, so "LEVEL 3" looks the same on every picture and nothing is misspelled. Each picture is written twice:
@@ -26,10 +27,10 @@ DIN = '/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf'
 CREAM, AMBER = (243, 236, 218), (237, 168, 39)
 
 SIZE = {'gallery': (1920, 1080), 'thumb': (1920, 1080), 'ad_landscape': (1920, 1080), 'ad_square': (1080, 1080),
-        'ad_portrait': (1080, 1920)}
+        'ad_portrait': (1080, 1920), 'icon': (1024, 1024)}
 FOLDER = {'gallery': '1 Gallery (1920x1080)', 'thumb': '2 Thumbnails (1920x1080)',
           'ad_landscape': '3 Ad campaign/landscape 1920x1080', 'ad_square': '3 Ad campaign/square 1080x1080',
-          'ad_portrait': '3 Ad campaign/vertical 1080x1920'}
+          'ad_portrait': '3 Ad campaign/vertical 1080x1920', 'icon': '4 Icons (1024x1024)'}
 
 
 def font(px):
@@ -200,7 +201,9 @@ def sheet(rows, path, cell, cols, label=16):
     f = ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial.ttf', label)
     for i, (name, im) in enumerate(rows):
         x, y = 20 + (i % cols) * (cw + 20), 20 + (i // cols) * (ch + 20 + label + 14)
-        thumb = ImageOps.contain(im.convert('RGB'), cell, Image.Resampling.LANCZOS)
+        thumb = im.convert('RGB')
+        if thumb.width > cw or thumb.height > ch:      # never enlarged: a 64-pixel icon is shown at 64
+            thumb = ImageOps.contain(thumb, cell, Image.Resampling.LANCZOS)
         out.paste(thumb, (x + (cw - thumb.width) // 2, y + (ch - thumb.height) // 2))
         d.text((x, y + ch + 6), name, font=f, fill='#eee8da')
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -221,10 +224,14 @@ def main():
         for job, rows in sorted(by_job.items()):
             sheet(rows, JOB / 'review' / f'raw_{job}.jpg', (760, 507), 3)
         return
+    only = sys.argv[sys.argv.index('--only') + 1] if '--only' in sys.argv else None
+    assert only is None or only in SIZE, only
     done, missing, report = [], [], []
     rows = {k: [] for k in SIZE}
     for spec in images:
         name, kind = spec['name'], spec['set']
+        if only and kind != only:
+            continue
         raw, focus = raw_of(name, accept)
         if not raw:
             missing.append(name)
@@ -232,6 +239,17 @@ def main():
         with Image.open(raw) as opened:
             src = opened.convert('RGB')
         clean = ImageOps.fit(src, SIZE[kind], Image.Resampling.LANCZOS, centering=focus)
+        if kind == 'icon':
+            # an icon carries no lettering: the 1024 picture, and the 512 that is Roblox's own minimum
+            for root in (JOB / 'final', DESK):
+                folder = root / FOLDER[kind]
+                (folder / '512x512').mkdir(parents=True, exist_ok=True)
+                clean.save(folder / f'{name}.png', compress_level=4)
+                clean.resize((512, 512), Image.Resampling.LANCZOS).save(folder / '512x512' / f'{name}_512.png', compress_level=4)
+            rows[kind].append((name, clean))
+            report.append(dict(name=name, set=kind, width=clean.width, height=clean.height, raw=raw.name))
+            done.append(name)
+            continue
         if kind == 'gallery':
             lettered = level_line(clean.copy(), spec['level'], spec['level_name'])
         elif kind == 'thumb':
@@ -267,7 +285,12 @@ def main():
         # how the store shows them: 320 x 180
         small = [(n, ImageOps.fit(im, (320, 180))) for n, im in rows['thumb'] + rows['gallery']]
         sheet(small, root / 'contact sheets' / 'at store size 320x180.jpg', (320, 180), 6, label=11)
-    (JOB / 'final' / 'size_verification.json').write_text(json.dumps(report, indent=1))
+        sheet(rows['icon'], root / 'contact sheets' / 'icons.jpg', (380, 380), 5)
+        # how Roblox shows an icon: 150 on the game's page and in lists, 64 and smaller in menus
+        tiny = [(n.split('_')[0] + ' 150', im.resize((150, 150), Image.Resampling.LANCZOS)) for n, im in rows['icon']]
+        tiny += [(n.split('_')[0] + ' 64', im.resize((64, 64), Image.Resampling.LANCZOS)) for n, im in rows['icon']]
+        sheet(tiny, root / 'contact sheets' / 'icons at 150 and 64.jpg', (150, 150), 10, label=11)
+    (JOB / 'final' / ('size_verification.json' if not only else f'size_verification_{only}.json')).write_text(json.dumps(report, indent=1))
     # the pictures Claude took in the game, and the records
     refs = DESK / 'In-game references (playtest 2026-10-07)'
     refs.mkdir(parents=True, exist_ok=True)

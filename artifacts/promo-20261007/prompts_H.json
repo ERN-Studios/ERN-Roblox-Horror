@@ -1,0 +1,52 @@
+{
+  "job": "H",
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "name": "I01_icon_shh_eyes_in_the_lenses",
+      "final_prompt": "Use case: ads-marketing. Create one square 1:1 GAME ICON for BACKROOMS: STAY QUIET. Polished cinematic 3D game promotional art faithful to the supplied character references, stylised chunky game avatars, never realistic people. Must read instantly at 150 pixels and 64 pixels: one unified focal subject filling the square, big simple shapes, strong rim light, only two or three main colours. Keep all important face/eye/gesture details inside the central 80 percent for rounded corners. No blank space for text. Absolutely NO lettering, captions, logos, watermarks, HUD, UI, numbers, signs or graffiti; do not copy screenshot UI. No gore, weapons, new monsters or jump-scare faces. The player is the reference mustard-yellow crumpled-fabric hooded hazmat avatar, black gas mask with TWO ROUND LENSES and one round front filter, black backpack straps and mitten-like gloves. The Entity is the reference pitch-black hunched rough-knit hooded figure with heavy shoulders, long arms and long-fingered black hands, featureless black face except two small round amber eyes. Fine subtle film grain, restrained haze, practical cinematic light, readable silhouettes. Input images 1 and 2: player identity references (front and back); image 3: Entity identity reference. One player, head and shoulders, facing us, filling the square: yellow hood, black twin-lens gas mask, one black mitten finger held upright in front of the filter in a shh gesture. In EACH round lens, small and sharp, the reflection of the Entity: a black hunched shape with TWO amber eyes in each reflection. Dark mustard background, warm rim light on the hood. No other characters outside the reflections.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "number_of_tries": 1,
+      "remaining_issue": "The background includes faint office lighting rather than a completely plain mustard field, and the tiny reflected eyes may lose definition at 64 pixels.",
+      "output_path": "artifacts/promo-20261007/raw/I01_icon_shh_eyes_in_the_lenses_raw.png"
+    },
+    {
+      "name": "I02_icon_it_is_behind_you",
+      "final_prompt": "Use case: ads-marketing. Create one square 1:1 GAME ICON for BACKROOMS: STAY QUIET. Polished cinematic 3D game promotional art faithful to the supplied character references, stylised chunky game avatars, never realistic people. Must read instantly at 150 pixels and 64 pixels: one unified focal subject filling the square, big simple shapes, strong rim light, only two or three main colours. Keep all important face/eye/gesture details inside the central 80 percent for rounded corners. No blank space for text. Absolutely NO lettering, captions, logos, watermarks, HUD, UI, numbers, signs or graffiti; do not copy screenshot UI. No gore, weapons, new monsters or jump-scare faces. The player is the reference mustard-yellow crumpled-fabric hooded hazmat avatar, black gas mask with TWO ROUND LENSES and one round front filter, black backpack straps and mitten-like gloves. The Entity is the reference pitch-black hunched rough-knit hooded figure with heavy shoulders, long arms and long-fingered black hands, featureless black face except two small round amber eyes. Fine subtle film grain, restrained haze, practical cinematic light, readable silhouettes. Input image 1: player identity reference; images 2 and 3: Entity identity and yellow-office material references. A player's hooded head and shoulders in the lower half of the square, facing us, lenses wide. Directly behind and above it, filling the upper half, the Entity looms out of the dark: black hood, heavy shoulders, two glowing amber eyes, one long-fingered black hand coming down toward the player's shoulder. Yellow wallpaper glimpsed at the edges, one ceiling light behind the Entity's head. One compact unified silhouette with the two faces clearly readable.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+      ],
+      "number_of_tries": 1,
+      "remaining_issue": "The reaching fingertips extend beyond the central 80 percent, although both faces remain safely central.",
+      "output_path": "artifacts/promo-20261007/raw/I02_icon_it_is_behind_you_raw.png"
+    },
+    {
+      "name": "I03_icon_entity_round_the_corner",
+      "final_prompt": "Use case: ads-marketing. Create one square 1:1 GAME ICON for BACKROOMS: STAY QUIET. Polished cinematic 3D game promotional art faithful to the supplied character references, stylised chunky game avatars, never realistic people. Must read instantly at 150 pixels and 64 pixels: one unified focal subject filling the square, big simple shapes, strong rim light, only two or three main colours. Keep all important face/eye/gesture details inside the central 80 percent for rounded corners. No blank space for text. Absolutely NO lettering, captions, logos, watermarks, HUD, UI, numbers, signs or graffiti; do not copy screenshot UI. No gore, weapons, new monsters or jump-scare faces. The player is the reference mustard-yellow crumpled-fabric hooded hazmat avatar, black gas mask with TWO ROUND LENSES and one round front filter, black backpack straps and mitten-like gloves. The Entity is the reference pitch-black hunched rough-knit hooded figure with heavy shoulders, long arms and long-fingered black hands, featureless black face except two small round amber eyes. Fine subtle film grain, restrained haze, practical cinematic light, readable silhouettes. Both input images: Entity identity and yellow-office material references. The Entity leans out from behind the corner of a yellow-wallpapered wall that fills the left third of the square: its black hooded head tilted, two round glowing amber eyes, and FOUR long black fingers wrapped round the corner's edge. Bright fluorescent yellow room behind it so the black shape reads at any size. No players. Close-up with large hood and hand, eyes and four fingers prominent, no copied wall writing.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_04_the_entity_full_body_corridor_wall_graffiti.jpg"
+      ],
+      "number_of_tries": 1,
+      "remaining_issue": "The lowest finger sits near the central safe-area boundary, and the knit texture is more detailed than needed at 64 pixels.",
+      "output_path": "artifacts/promo-20261007/raw/I03_icon_entity_round_the_corner_raw.png"
+    },
+    {
+      "name": "I04_icon_split_face",
+      "final_prompt": "Use case: ads-marketing. Create one square 1:1 GAME ICON for BACKROOMS: STAY QUIET. Polished cinematic 3D game promotional art faithful to the supplied character references, stylised chunky game avatars, never realistic people. Must read instantly at 150 pixels and 64 pixels: one unified focal subject filling the square, big simple shapes, strong rim light, only two or three main colours. Keep all important face/eye/gesture details inside the central 80 percent for rounded corners. No blank space for text. Absolutely NO lettering, captions, logos, watermarks, HUD, UI, numbers, signs or graffiti; do not copy screenshot UI. No gore, weapons, new monsters or jump-scare faces. The player is the reference mustard-yellow crumpled-fabric hooded hazmat avatar, black gas mask with TWO ROUND LENSES and one round front filter, black backpack straps and mitten-like gloves. The Entity is the reference pitch-black hunched rough-knit hooded figure with heavy shoulders, long arms and long-fingered black hands, featureless black face except two small round amber eyes. Fine subtle film grain, restrained haze, practical cinematic light, readable silhouettes. Input image 1: player identity reference; image 2: Entity identity reference. One face made of two halves, split straight down the middle of the square. LEFT half: the player, half of the yellow hood and the black gas mask with ONE round lens, lit warm. RIGHT half: the Entity, half of the black hood with ONE glowing amber eye, lit from behind. The two halves line up as ONE head, same scale, same eye line, seamless straight central division. Plain dark background. Large unified head fills square with key features inside central 80 percent. Strict vertical cut at x=50% across the entire image: ALL gas mask parts including the round front filter stop at that line. The right half contains ONLY the Entity black void face and hood with one amber eye, absolutely no gas-mask filter or mechanical mask part. Align lens centre and amber eye centre horizontally.",
+      "reference_paths": [
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg",
+        "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg"
+      ],
+      "number_of_tries": 2,
+      "remaining_issue": "The amber eye sits slightly lower than the gas-mask lens centre, although the halves now divide cleanly.",
+      "output_path": "artifacts/promo-20261007/raw/I04_icon_split_face_raw.png"
+    }
+  ]
+}
