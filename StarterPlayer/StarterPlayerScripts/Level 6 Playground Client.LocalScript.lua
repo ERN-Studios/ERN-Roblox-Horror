@@ -56,7 +56,7 @@ card.Parent = gui
 do
 	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 12); corner.Parent = card
 	local stroke = Instance.new("UIStroke"); stroke.Thickness, stroke.Color = 2, Color3.fromRGB(255, 205, 40); stroke.Name = "Edge"; stroke.Parent = card
-	local limit = Instance.new("UISizeConstraint"); limit.MinSize, limit.MaxSize = Vector2.new(280, 74), Vector2.new(560, 110); limit.Parent = card
+	local limit = Instance.new("UISizeConstraint"); limit.Name = "Limit"; limit.MinSize, limit.MaxSize = Vector2.new(280, 74), Vector2.new(560, 110); limit.Parent = card
 end
 local function cardLabel(name, y, h, size, color)
 	local l = Instance.new("TextLabel")
@@ -105,6 +105,81 @@ markerText.Font, markerText.TextScaled, markerText.TextColor3, markerText.TextSt
 markerText.Parent = marker
 local markerMode = nil     -- nil, "post" or "exit"
 local timerLabel = label("Timer", UDim2.fromScale(0.16, 0.045), UDim2.fromScale(0.14, 0.08), 30, Color3.fromRGB(255, 255, 255))
+
+-- MOBILE_HUD_20261007 (owner, from a phone: "the hide box is over the counting text"). Everything above is placed
+-- by fractions of the screen, which holds on a monitor and nowhere else: on an 844 x 390 phone the objective card
+-- (never under 74 px high, 58 px from the top) lay exactly on the count and the status line, the timer sat on
+-- Roblox's own buttons and the hint ran into the thumbs' zones. On a handheld the HUD is now laid out from
+-- UIDevice, like every other level's:
+--   the objective card  the upper right corner (UIDevice.TopRightPanel, where Levels 1 to 4 keep theirs)
+--   count, status, hint one column in the top row, between the LOBBY chip on the left and the card on the right
+--                       (under both of them when the screen is too narrow for that)
+--   timer, touched      in the free part of Roblox's top bar (TopbarSafeInsets), centre and right
+-- A pointer device keeps the composition it had, number for number.
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+local function placeHud()
+	local info = UIDevice.Layout()
+	local function text(l, limit, align)
+		l:FindFirstChildOfClass("UITextSizeConstraint").MaxTextSize = limit
+		l.TextXAlignment = align or Enum.TextXAlignment.Center
+	end
+	if not info.IsTouch then
+		countLabel.Size, countLabel.Position = UDim2.fromScale(0.6, 0.09), UDim2.fromScale(0.5, 0.215)
+		statusLabel.Size, statusLabel.Position = UDim2.fromScale(0.8, 0.05), UDim2.fromScale(0.5, 0.285)
+		hintLabel.Size, hintLabel.Position = UDim2.fromScale(0.8, 0.045), UDim2.fromScale(0.5, 0.9)
+		dunkLabel.Size, dunkLabel.Position = UDim2.fromScale(0.24, 0.05), UDim2.fromScale(0.86, 0.08)
+		timerLabel.Size, timerLabel.Position = UDim2.fromScale(0.16, 0.045), UDim2.fromScale(0.14, 0.08)
+		text(countLabel, 60); text(statusLabel, 32); text(hintLabel, 28); text(dunkLabel, 32); text(timerLabel, 30)
+		card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 58), UDim2.fromScale(0.34, 0.1)
+		card.Limit.MinSize, card.Limit.MaxSize = Vector2.new(280, 74), Vector2.new(560, 110)
+		cardTitle.Position, cardTitle.Size = UDim2.fromScale(0.04, 0.08), UDim2.fromScale(0.92, 0.5)
+		cardLine.Position, cardLine.Size = UDim2.fromScale(0.04, 0.58), UDim2.fromScale(0.92, 0.34)
+		text(cardTitle, 40); text(cardLine, 22)
+		return
+	end
+	local safe = info.Safe
+	local k = math.clamp(math.min(safe.Width, safe.Height) / 332, 0.85, 1.6)      -- a tablet gets larger type than a phone
+	local function box(l, left, top, width, height)                              -- a rectangle in UIDevice's space
+		local x, y = UIDevice.LocalOffset(gui, left + width / 2, top + height / 2)
+		l.Size, l.Position = UDim2.fromOffset(math.floor(width), math.floor(height)), UDim2.fromOffset(math.floor(x), math.floor(y))
+	end
+	local slot = UIDevice.TopRightPanel(math.floor(236 * k), math.floor(78 * k))    -- Level 2's panel is this size too
+	card.AnchorPoint = Vector2.zero
+	card.Limit.MinSize, card.Limit.MaxSize = Vector2.new(slot.Width, slot.Height), Vector2.new(slot.Width, slot.Height)
+	card.Size, card.Position = UDim2.fromOffset(slot.Width, slot.Height), UIDevice.LocalPosition(gui, slot.Left, slot.Top)
+	-- the line under the title runs to two lines on a card this narrow: it gets half the card, not a third
+	cardTitle.Position, cardTitle.Size = UDim2.fromScale(0.04, 0.06), UDim2.fromScale(0.92, 0.4)
+	cardLine.Position, cardLine.Size = UDim2.fromScale(0.04, 0.47), UDim2.fromScale(0.92, 0.47)
+	text(cardTitle, math.floor(25 * k)); text(cardLine, math.floor(14 * k))
+	-- Roblox's top bar: its own buttons are on the left, the rest of the strip is free
+	local bar = UIDevice.InsetArea(Enum.ScreenInsets.TopbarSafeInsets)
+	local barMid = (bar.Top + bar.Bottom) / 2
+	local touchedWidth = math.min(232 * k, bar.Width * 0.46)
+	box(dunkLabel, bar.Right - 6 - touchedWidth, barMid - 10 * k, touchedWidth, 20 * k)
+	text(dunkLabel, math.floor(14 * k), Enum.TextXAlignment.Right)
+	local clockWidth = 96 * k
+	local clockLeft = math.clamp((safe.Left + safe.Right) / 2 - clockWidth / 2, bar.Left + 6, math.max(bar.Left + 6, bar.Right - 12 - touchedWidth - clockWidth))
+	box(timerLabel, clockLeft, barMid - 13 * k, clockWidth, 26 * k)
+	text(timerLabel, math.floor(22 * k))
+	-- the column of things it says: between the LOBBY chip (164 wide, 12 in from the safe edge) and the card
+	local left, right, top = info.SafeLeft + 12 + 164 + 10, slot.Left - 10, safe.Top + 4
+	if right - left < 140 then                                                   -- no room beside them: under them
+		-- (on a screen that narrow the chip cannot sit beside the card either: Round Exit Client steps it down
+		-- under the card, 44 high and 8 below it)
+		local chipLeft = info.SafeLeft + 12
+		local under = chipLeft < slot.Right + 8 and chipLeft + 164 > slot.Left - 8
+		left, right = info.SafeLeft + 12, info.SafeRight - 12
+		top = (under and slot.Bottom + 8 + 44 or math.max(slot.Bottom, info.SafeTop + 12 + 44)) + 6
+	end
+	local rows = {{countLabel, 30, 30}, {statusLabel, 17, 16}, {hintLabel, 15, 14}}
+	for _, row in ipairs(rows) do
+		box(row[1], left, top, right - left, row[2] * k)
+		text(row[1], math.floor(row[3] * k))
+		top += math.floor(row[2] * k) + 1
+	end
+end
+UIDevice.Changed:Connect(placeHud)
+placeHud()
 
 local flash = Instance.new("Frame")
 flash.Name = "Flash"

@@ -57,9 +57,16 @@ end
 line(toast, "Kicker", 10, 12, AMBER, Enum.Font.Code).Text = "ACHIEVEMENT UNLOCKED"
 local toastName = line(toast, "Name", 28, 20, CREAM, Enum.Font.GothamBold)
 local queue, showing = {}, false
+-- MOBILE_HUD_20261007: the toast drops in at the top of the screen, and on a phone that is where RoundUI's PARTY
+-- DOWN card is (it takes the screen from y 61 to 329 of 390): "Found You" unlocked at the very moment the card
+-- came up and was drawn under it, unseen. A toast waits for the card to go; one that is already down when the card
+-- arrives is taken away and shown again afterwards.
+local function cardUp() return player:GetAttribute("PartyDownCardOpen") == true end
 local function showNext()
 	if showing or #queue == 0 then return end
 	showing = true
+	local waited = os.clock()
+	while cardUp() and os.clock() - waited < 60 do task.wait(0.25) end
 	local entry = table.remove(queue, 1)
 	toastName.Text = entry.Name
 	toastIcon.Image = (entry.Icon or 0) ~= 0 and ("rbxassetid://" .. string.format("%.0f", entry.Icon)) or ""
@@ -69,9 +76,15 @@ local function showNext()
 	ping:Play()
 	ping.Ended:Once(function() ping:Destroy() end)
 	TweenService:Create(toast, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0, 10)}):Play()
-	task.delay(4, function()
+	task.spawn(function()
+		local shown, again = os.clock(), false
+		while os.clock() - shown < 4 do
+			if cardUp() and os.clock() - shown < 3 then again = true; break end
+			task.wait(0.2)
+		end
 		TweenService:Create(toast, TweenInfo.new(0.3), {Position = UDim2.new(0.5, 0, 0, -170)}):Play()
 		task.wait(0.4)
+		if again then table.insert(queue, 1, entry) end
 		showing = false
 		showNext()
 	end)

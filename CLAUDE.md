@@ -1380,3 +1380,34 @@ weight and button size on phones, no noise meter.
   no change, so nothing is sent): a test that set `MaterialVariant` on the client kept showing the client's
   choice. Reset it on the client.
 - **The owner published v2758 at 23:29 on 2026-10-06** (Studio's log): the lobby easter egg is live.
+
+### Added 2026-10-07 (morning) - Level 6 on a phone: the HUD is placed by UIDevice (in Studio, NOT published)
+
+- **Owner**: "Test level 6 on Mobile view and tell if you find any bugs, for example the hide box is over the
+  counting text." Confirmed on 844x390: the objective card (x 279..565, y 58..132) lay over the count and the
+  status line, the timer lay on Roblox's own top-bar buttons, and the hint ran toward the thumb zones. The Level 6
+  HUD was laid out in screen fractions, made for a desktop.
+- **Fix** (`MOBILE_HUD_20261007` in Level 6 Playground Client, `placeHud`): on touch the card takes
+  `UIDevice.TopRightPanel`, count/status/hint are a column between the LOBBY chip and the card (stacked under both
+  when that gap is under 140 px: portrait), timer and the TOUCHED line sit in the free part of Roblox's top bar
+  (`UIDevice.InsetArea(TopbarSafeInsets)`). Pointer devices get the old numbers back, number for number. Round
+  Exit Client lists `Level6PlaygroundHUD.Objective` as an obstacle; Achievements Client holds a toast while
+  `PartyDownCardOpen` (the "Found You" toast was drawn under the PARTY DOWN card).
+- **`tools/level6_playground/mobile_audit.py W H`** (and `off`): on the Client of a play session it sets the
+  fixtures (`ForceTouchUI`, `UIRegressionViewport`), COPIES every enabled ScreenGui into a frame of the phone's
+  size (real GUIs keep hanging on the real screen's edges under the fixture) and reports OVERLAP / THUMB / OFF /
+  SMALL / CUT in the phone's pixels. It is a still: run it again for a new moment. Studio's Device Emulator
+  cannot be driven from a session (`StudioDeviceEmulatorService` is nil). THUMB findings on a full-screen modal
+  (LEVEL CLEARED, PARTY DOWN) mean nothing.
+- **Audited clean** (Level 6's own HUD): arrival, count (844x390, 667x375, 568x320, 390x844), search, after a
+  touch, the finale countdown, LEVEL 6 CLEARED. Pictures: `artifacts/level6-mobile-20261007`.
+- **Found and NOT changed** (shared HUD, the owner's call): `TouchDropGlowstick` is shown in Level 6 and does
+  nothing (GameManager's handler wants `inRound[player]`; UIRegression's fixtures expect the button);
+  FlashlightPower's "HOLD WIDE" is 10 px high and the gauge stands half behind JUMP; on 568x320 the LOBBY chip
+  is 15 px inside the thumbstick zone; the lobby's left rail reports cut labels (UPGRADES, REWARDS, MUTE).
+- **Not tested**: a real phone, real touch input (Studio has no thumbstick), the kill cam and the re-entry modal
+  at phone size, more than one player.
+- **A driver for a whole Level 6 round from the Server** (a play session keeps `task.spawn`ed threads alive after
+  the call): step into the lane, stand on a floor-11 `Frame_DecksDeep` deck, set `Level6DevTag` every 1.5 s until
+  `Level6Wins` is 3, sit the minute out in the exit room (the Counter reaches floor 11 in 30 s in the finale),
+  then go to `ExitDoorPosition`. LEVEL CLEARED has a deadline: measure it at once.

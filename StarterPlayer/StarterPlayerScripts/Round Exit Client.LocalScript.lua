@@ -229,6 +229,7 @@ local hudObstacles = {
 	{"Level2ObjectiveGui", "Level2ObjectivePanel"},
 	{"Level3ReaderGui", "ReaderPanel"},
 	{"LevelOneGuideGui", "ObjectivesButton"},
+	{"Level6PlaygroundHUD", "Objective"},     -- MOBILE_HUD_20261007: Level 6's card is in that corner on a handheld too
 }
 
 local function applyLayout()

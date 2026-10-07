@@ -213,3 +213,15 @@ players (negative UserIds, Studio only) so they can use the dev-only queue bays.
 Client: `StarterPlayerScripts."Level 6 Playground Client"` (HUD, night lighting while
 `Level6PlaygroundPreview` is set, slide ride, the child's limb animation). RoundUI stands down while the
 client-local attribute `Level6PlaygroundLightingOwned` is true.
+
+## On a phone (2026-10-07, `MOBILE_HUD_20261007`)
+
+The HUD used to be laid out in screen fractions, which on a phone put the objective card on the count and the
+timer on Roblox's own buttons. `placeHud` in the client now asks `ReplicatedStorage.UIDevice` where things go on
+touch devices (card in `TopRightPanel`, count/status/hint between the LOBBY chip and the card, timer and TOUCHED
+in the free strip of the top bar) and restores the desktop numbers otherwise.
+
+    python3 tools/level6_playground/mobile_audit.py 844 390     # in a play session: lay the HUD out as on a phone and measure
+    python3 tools/level6_playground/mobile_audit.py off
+
+The audit is described in `mobile_audit.luau`. It is an emulation: no real touch input, no real thumbstick.
