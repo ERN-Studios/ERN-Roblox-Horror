@@ -20,26 +20,30 @@ from pathlib import Path
 EXPERIENCE = '10559217407'
 PIECE = 480_000          # characters of base64 per call
 
+# Which tab: the first whose address holds this text. The store pages by default; the Ads Manager sets
+# `dashboard.TAB = 'create.roblox.com/advertise'` (or whatever its address holds) before calling.
+TAB = 'create.roblox.com/dashboard/creations/experiences/%s' % EXPERIENCE
+
 OSA = '''on run argv
 set js to read (POSIX file (item 1 of argv)) as «class utf8»
 tell application "Google Chrome"
 repeat with w in windows
 repeat with t in tabs of w
-if (URL of t) contains "create.roblox.com/dashboard/creations/experiences/%s" then
+if (URL of t) contains (item 2 of argv) then
 return (execute t javascript js)
 end if
 end repeat
 end repeat
-return "NO DASHBOARD TAB"
+return "NO TAB WITH " & (item 2 of argv)
 end tell
-end run''' % EXPERIENCE
+end run'''
 
 
 def js(source, timeout=60):
     with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False, encoding='utf-8') as f:
         f.write(source)
     try:
-        done = subprocess.run(['osascript', '-e', OSA, f.name], capture_output=True, text=True, timeout=timeout)
+        done = subprocess.run(['osascript', '-e', OSA, f.name, TAB], capture_output=True, text=True, timeout=timeout)
     finally:
         Path(f.name).unlink(missing_ok=True)
     if done.returncode:
@@ -128,6 +132,10 @@ def stage(path, name=None):
 
 
 if __name__ == '__main__':
+    if '--tab' in sys.argv:
+        i = sys.argv.index('--tab')
+        TAB = sys.argv[i + 1]
+        del sys.argv[i:i + 2]
     what = sys.argv[1]
     if what == 'js':
         print(js(sys.argv[2]))

@@ -1,0 +1,444 @@
+{
+ "library_before": [
+  {
+   "id": "f107bd01-8c65-4a17-aa2b-9e3f68fe5582",
+   "asset_id": 88158856774841,
+   "name": "10-coop-shush",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "c76b67ec-677b-45c2-b39c-b5e3e01bdc3c",
+   "asset_id": 115057966315494,
+   "name": "09-level2-pipe-cathedral",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "be7dcf7a-d58c-4c77-82c3-7d26147bf4bd",
+   "asset_id": 73862136880233,
+   "name": "05-level1-doorway-hand",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "b75f56f7-86e2-4375-b727-e95f0b26e475",
+   "asset_id": 109231876730272,
+   "name": "08-level2-flooded-splash",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "99e6a2a9-71a4-45d4-847d-aa04c8f77f57",
+   "asset_id": 81318912844895,
+   "name": "07-level3-party-room-stalker",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "7f503d65-f3db-4e80-97f9-082a91663645",
+   "asset_id": 110537862957348,
+   "name": "02-level1-broken-glass",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "6f282cc2-93f2-4de1-bf24-139c1cc0fe6a",
+   "asset_id": 89836478455155,
+   "name": "03-level3-static-tv",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "4b1066e8-f616-4b8f-975b-df226194989a",
+   "asset_id": 104890001986176,
+   "name": "01-level1-can-decoy",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "42922538-4427-4a06-88ab-516b4b562332",
+   "asset_id": 116591990975948,
+   "name": "06-level1-corner-chase",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "1221041d-00b6-4d38-a767-c6c20daef0a0",
+   "asset_id": 102964565417616,
+   "name": "04-level1-under-desk",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "fdbdf0ff-126c-41ce-8400-7b64ccb8e34f",
+   "asset_id": 81948118906723,
+   "name": "15-level1-wrong-door",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "e801c7ca-7365-4ccb-83ca-77b93a6c1bda",
+   "asset_id": 114487880252456,
+   "name": "12-coop-closing-gate",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "78f3507e-6608-490f-9845-a1c7104419bc",
+   "asset_id": 90039561614672,
+   "name": "13-exit-elevator-reflection",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "774d30ed-e1f0-42f2-8961-e2a56008b66a",
+   "asset_id": 91127590643854,
+   "name": "14-level3-security-feed",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "768e53b5-dd27-4419-a417-0dc20e15fb4f",
+   "asset_id": 132143357190915,
+   "name": "11-coop-team-decoy",
+   "width": 1920,
+   "height": 1080,
+   "status": "approved"
+  },
+  {
+   "id": "b525985d-e9e6-41a3-ac85-06a998563b5f",
+   "asset_id": 105808213932417,
+   "name": "Asset Thumbnail",
+   "width": 768,
+   "height": 432,
+   "status": "approved"
+  },
+  {
+   "id": "ae8d1fc1-d619-4a5e-9dae-e9bc4cf2b5d9",
+   "asset_id": 107826936181310,
+   "name": "Asset Thumbnail",
+   "width": 768,
+   "height": 432,
+   "status": "approved"
+  },
+  {
+   "id": "8672bfbd-5200-43ad-9413-75d9e432c6fc",
+   "asset_id": 117768008824445,
+   "name": "Asset Thumbnail",
+   "width": 768,
+   "height": 432,
+   "status": "approved"
+  },
+  {
+   "id": "29be97c4-fca3-40d0-981c-dd699176e0ee",
+   "asset_id": 121731777671770,
+   "name": "Asset Thumbnail",
+   "width": 768,
+   "height": 432,
+   "status": "approved"
+  },
+  {
+   "id": "25b67147-4cd3-4b70-95f1-50c483bd2421",
+   "asset_id": 137704840085405,
+   "name": "Asset Thumbnail",
+   "width": 768,
+   "height": 432,
+   "status": "approved"
+  },
+  {
+   "id": "34dae1f7-bcea-405f-9f6e-cb4f88290b74",
+   "asset_id": 90516721530679,
+   "name": "01-level1-corner-encounter",
+   "width": 1672,
+   "height": 941,
+   "status": "approved"
+  },
+  {
+   "id": "17f8d79c-fa9d-4d4d-a0d3-f0bc9dfd7b87",
+   "asset_id": 128537864750031,
+   "name": "05-level3-table-check",
+   "width": 1672,
+   "height": 941,
+   "status": "approved"
+  },
+  {
+   "id": "1241f4fe-b5b4-462a-ada3-0f2e49a49e10",
+   "asset_id": 133005997612283,
+   "name": "02-level1-beam-crossing",
+   "width": 1672,
+   "height": 941,
+   "status": "approved"
+  }
+ ],
+ "balance_before": 57.46,
+ "already_archived_before": [
+  {
+   "id": "e2035a0d-cd58-4842-88e7-63a52a502468",
+   "asset_id": 102918879922474,
+   "name": "Personalized Thumbnail"
+  },
+  {
+   "id": "977a30a8-63c1-4f2d-950e-1d7dd55ddf6c",
+   "asset_id": 126952805201581,
+   "name": "03-level2-arch-encounter"
+  },
+  {
+   "id": "2f09fb33-be7f-4d8e-aea7-b01383c692b5",
+   "asset_id": 97104135305560,
+   "name": "06-level3-party-chase"
+  },
+  {
+   "id": "089c4e03-e709-456c-91d5-4dad20b43a0f",
+   "asset_id": 86655787175782,
+   "name": "04-level2-pump-walkway-v2"
+  }
+ ],
+ "uploaded": {
+  "T06_hero_party_rooms": 115940570510873,
+  "T02_hero_six_levels": 90736291490815,
+  "T01_hero_office_hide": 85334319149309,
+  "A25_ad_six_levels_tall": 99298058334890,
+  "A24_ad_void_the_fall": 138221916816475,
+  "A23_ad_party_hall_tall": 132518805324517,
+  "A22_ad_cinema_corridor_tall": 115038668580807,
+  "A21_ad_office_shadow_tall": 112221753423899,
+  "A20_ad_poolrooms_doors_tall": 111463970574590,
+  "A19_ad_void_crimson_tall": 89113202226844,
+  "A18_ad_playground_tall": 132152812394578,
+  "A17_ad_hand_under_table": 139778226324660,
+  "A16_ad_poolrooms_stairs_down": 104440887632011,
+  "A15_ad_void_ledge_above": 77452219346390,
+  "A14_ad_usher_shh": 75903320002771,
+  "A13_ad_manager_balloon": 104754933599087,
+  "A12_ad_player_shh": 137913894696344,
+  "A11_ad_counter_peek": 100026434178461,
+  "A10_ad_entity_reach": 125491303890904,
+  "A08_ad_poolrooms_rotunda": 107182923833121,
+  "A07_ad_squad_back_to_back": 128181665337969,
+  "A06_ad_playground_looking_up": 116922228966812,
+  "A05_ad_void_pillars": 111809250594328,
+  "A04_ad_usher_torch": 89268799631436,
+  "A02_ad_poolrooms_hall": 79426727575422,
+  "T05_hero_cinema": 131830288383893,
+  "T03_hero_playground": 103797698944118,
+  "T04_hero_shh": 109659855098434,
+  "A09_ad_meet_the_staff": 112386003934119,
+  "A03_ad_table_check": 130462922453042,
+  "A01_ad_office_run": 86971162315270
+ },
+ "campaign": {
+  "request": {
+   "asset_ids": [
+    86971162315270,
+    85334319149309,
+    109659855098434,
+    130462922453042,
+    103797698944118,
+    131830288383893
+   ],
+   "budget_in_micro_usd": 57000000,
+   "budget_type": 2,
+   "detailed_targeting_match_type": 0,
+   "duration_in_days": 5,
+   "is_auto_reload_ad_credit_enabled": false,
+   "is_off_platform_request": false,
+   "name": "Stay Quiet | Plays | Oct 8-13 | 6 creatives",
+   "objective": 2,
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "target_universe_id": 10559217407,
+   "targeting_criteria": {
+    "age_bucket_criteria": {
+     "all_ages": true
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": [],
+     "regions": [
+      1
+     ]
+    }
+   }
+  },
+  "pictures": {
+   "A01_ad_office_run": 86971162315270,
+   "T01_hero_office_hide": 85334319149309,
+   "T04_hero_shh": 109659855098434,
+   "A03_ad_table_check": 130462922453042,
+   "T03_hero_playground": 103797698944118,
+   "T05_hero_cinema": 131830288383893
+  },
+  "idempotency_key": "12dfb514-ba88-456d-9923-2821ee661597",
+  "submitted_at": "2026-10-08T00:52:30",
+  "status": 200,
+  "answer": "{\"campaign_id\":\"4f4b9c87-81b9-468b-8967-7c415489a63c\",\"ad_set_id\":\"5ebc9eed-59c0-46c2-8eac-bfec706def36\",\"ad_ids\":[\"8dafbd52-3463-46e1-9a5d-1d5bf928278e\",\"7fba9d31-3dae-4326-946d-1b6b4c6c7f17\",\"f583d786-a5d3-4a53-bec1-60d7df820820\",\"3c94b00f-ac9e-4065-a94e-a31039581e9f\",\"476b4ed4-81aa-40a5-93b7-cd1a5e0a5553\",\"e3f16533-3ca6-49af-8cee-edb9e735f49c\"]}",
+  "read_back": {
+   "id": "4f4b9c87-81b9-468b-8967-7c415489a63c",
+   "name": "Stay Quiet | Plays | Oct 8-13 | 6 creatives",
+   "status": 2,
+   "objective": 2,
+   "budget_type": 2,
+   "budget_in_micro_usd": 57000000,
+   "performance": {},
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "duration_in_days": 5,
+   "target_universe_id": 10559217407,
+   "asset_ids": [
+    109659855098434,
+    130462922453042,
+    86971162315270,
+    85334319149309,
+    131830288383893,
+    103797698944118
+   ],
+   "targeting_criteria": {
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "age_criteria": {
+     "all_ages": false,
+     "lower_bound": 0,
+     "upper_bound": 0
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "age_bucket_criteria": {
+     "all_ages": true,
+     "age_buckets": null
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": null,
+     "regions": [
+      1
+     ]
+    },
+    "keyword_criteria": {
+     "keywords": null
+    },
+    "retargeting_criteria": {
+     "retargeting_audiences": null
+    },
+    "operating_system_criteria": {
+     "operating_systems": null
+    }
+   },
+   "bid_value_micro_usd": 1000001,
+   "is_full_days": false,
+   "is_auto_reload_ad_credit_enabled": false
+  },
+  "read_back_v3": {
+   "id": "4f4b9c87-81b9-468b-8967-7c415489a63c",
+   "name": "Stay Quiet | Plays | Oct 8-13 | 6 creatives",
+   "status": 2,
+   "objective": 2,
+   "budget_type": 2,
+   "budget_in_micro_usd": 57000000,
+   "performance": {},
+   "payment_type": 4,
+   "start_timestamp_ms": 1791415800000,
+   "duration_in_days": 5,
+   "target_universe_id": 10559217407,
+   "asset_ids": [
+    109659855098434,
+    130462922453042,
+    86971162315270,
+    85334319149309,
+    131830288383893,
+    103797698944118
+   ],
+   "targeting_criteria": {
+    "language_criteria": {
+     "languages": [
+      1
+     ]
+    },
+    "gender_criteria": {
+     "gender": 1
+    },
+    "age_criteria": {
+     "all_ages": false,
+     "lower_bound": 0,
+     "upper_bound": 0
+    },
+    "device_criteria": {
+     "devices": [
+      1
+     ]
+    },
+    "age_bucket_criteria": {
+     "all_ages": true,
+     "age_buckets": null
+    },
+    "genre_criteria": {
+     "genres": [
+      1
+     ]
+    },
+    "location_criteria": {
+     "countries": null,
+     "regions": [
+      1
+     ]
+    },
+    "keyword_criteria": {
+     "keywords": null
+    },
+    "retargeting_criteria": {
+     "retargeting_audiences": null
+    },
+    "operating_system_criteria": {
+     "operating_systems": null
+    }
+   },
+   "bid_value_micro_usd": 1000001,
+   "is_full_days": false,
+   "is_auto_reload_ad_credit_enabled": false
+  }
+ }
+}

@@ -1608,3 +1608,27 @@ weight and button size on phones, no noise meter.
   (`PATCH .../assets/<place>?updateMask=icon`). Doing the two steps apart lets the picture be approved BEFORE it
   becomes the icon, so the game never shows one that is in moderation: the ten took about a minute to go from
   `Reviewing` to `Approved`, and the public icon was `Pending` for under ten seconds after the switch.
+
+### Added 2026-10-08 (night) - Ads Manager: library replaced, first campaign submitted (LIVE, spends ad credit)
+
+- **Owner**: "create a great ads campaign, we have 57 ads credits, maximize reach and click rate, upload the best
+  pictures", then "archive all existing assets and upload all the new ads assets". Done from the session.
+- **Asset library** (`create.roblox.com/advertise/creative-library`): the 27 old assets are archived (they can be
+  brought back), 31 new ones are in and approved: the 25 ad pictures and the 6 title thumbnails. Square and
+  vertical ads are there because they were asked for; Roblox's only ad placement is the 16:9 tile.
+- **Campaign** `4f4b9c87-81b9-468b-8967-7c415489a63c`, "Stay Quiet | Plays | Oct 8-13 | 6 creatives": objective
+  Plays, all players, all ages/devices/regions, LIFETIME budget 57 credits over 5 days from 2026-10-08 01:30
+  local, paid from the GROUP's ad credit, auto-reload off, no card on file (so 57 is the most it can spend; 0.46
+  stays). Pictures: A01 run, T01 hide, T04 shh, A03 table check, T03 Counter, T05 Usher. Six and not ten because
+  a campaign shows its pictures in EVEN shares: a weak one costs as much as a strong one. No Level 2 picture is
+  in it (the new map is not what players get yet). Record: `artifacts/promo-20261007/ads-campaign.json`.
+- **To do after about two days**: read the results per picture and take the weak ones out.
+- **`tools/promo/ads.py`** has the calls and `status`. Facts that cost time: the Ads Manager draws NOTHING while
+  its tab is in the background (so only its API is usable from a session); "archive" in the library is the
+  DELETE call (a PATCH to `is_archived: true` is refused, 400); a campaign is created AND submitted by one POST
+  to `/v3/native/campaigns`; the real minimum daily budget is 0.95 credits (`/v1/metadata`), not the 10 in the
+  page's defaults; Roblox's own suggestion for this game was 12 to 20 a day; the "No payment method on file"
+  banner did not stop a campaign paid from ad credit. `dashboard.py` now takes any tab (`dashboard.TAB`), and
+  its `call` keeps ONE answer slot in the page: never run two jobs through the same tab at once.
+- Roblox says review takes up to 24 hours; the review state itself could not be read from the session (the
+  list query's enum values were not found). The owner sees it under Manage ads.
