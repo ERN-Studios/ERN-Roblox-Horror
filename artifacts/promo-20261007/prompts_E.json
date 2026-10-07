@@ -1,0 +1,76 @@
+[
+  {
+    "name": "G09_level5_over_the_void",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe blue room of the reference: a line of narrow blue block tops leading away over a black drop between huge rounded blue walls, a lamp globe on a long thin rod. One player stands on the near ledge, seen from behind; a second is in mid-jump across the gap ahead, arms out, nothing under it. Dark blue balls rest on a far ledge.\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \"LEVEL\" line. No lettering.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_24.png",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg"
+    ],
+    "tries": 1,
+    "remaining_issue": "The lower-left reserved text area includes a dim ledge edge and the nearest boot toward its right side.",
+    "tool": "built-in image_gen"
+  },
+  {
+    "name": "G10_level5_the_tower",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe ivory room of the reference: a white spiral stair winding round a great white column, treads missing so the stair is a broken ring of small steps over blackness. Three tiny players at different heights on it, one about to jump a gap. The column rises out of frame and sinks into the dark. Cold soft light from above.\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \"LEVEL\" line. No lettering.\nCritical composition: a distant wide establishing view; ALL THREE players must be tiny, each at most 7 percent of image height, at three different stair elevations. One bends knees at the edge of a clearly missing tread, preparing to jump. Show all three from behind with plain solid yellow backs of hoods, no dots, lenses or marks on the back of any hood. The towering column is the focal point and dwarfs them. Smooth untextured matte white plastic, not stone.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+    ],
+    "tries": 2,
+    "remaining_issue": "The nearest player is larger than the requested tiny scale and the overhead light is warmer than the requested cold tone.",
+    "tool": "built-in image_gen"
+  },
+  {
+    "name": "A05_ad_void_pillars",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe teal room of the reference from above and behind: a field of tall square teal pillars of different heights standing out of blackness, only their small flat tops to stand on. A player is caught in the air between two tops, legs tucked, a second waits on the pillar behind. The far pillars fade into the dark.\nLeave the UPPER-LEFT third calm and darker for the game title. No lettering.\nCritical safe framing: pull the camera back and higher, with both players fully between 25% and 80% of image height, including boots. Nearest player is no more than 30% of image height. Bottom 15% contains only pillar sides and blackness. Clear overhead-behind view showing the small square tops. Keep upper-left third dark empty wall.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg"
+    ],
+    "tries": 2,
+    "remaining_issue": "The jumping player's boots are close to the landing top, so the airborne gap is less emphatic than requested.",
+    "tool": "built-in image_gen"
+  },
+  {
+    "name": "A15_ad_void_ledge_above",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate square 1:1.\nStraight down from above onto a narrow rose-pink walkway crossing the square on a diagonal, a player on it seen from directly overhead (yellow hood, black backpack), two dark blue balls beside it. On both sides of the walkway: the smooth pink walls falling away into pure black.\nLeave the TOP fifth calm and darker for the game title. No lettering.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+    ],
+    "tries": 1,
+    "remaining_issue": "The overhead view is slightly oblique rather than perfectly vertical.",
+    "tool": "built-in image_gen"
+  },
+  {
+    "name": "A19_ad_void_crimson_tall",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\nTall picture of the crimson room of the reference: a single stair of red treads fixed to the side of an enormous round red pillar, winding up out of frame and down into black. One small player on the stair in the middle of the picture, hand on the pillar. Everything is the one red; soft highlights on the curved surfaces.\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+    ],
+    "tries": 1,
+    "remaining_issue": "The player is slightly below the picture midpoint and upper stair edges enter the reserved title area.",
+    "tool": "built-in image_gen"
+  },
+  {
+    "name": "A24_ad_void_the_fall",
+    "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\nTall picture, looking down past the edge of a blue ledge in the lower foreground where a player kneels and reaches down. Below, already small, a second player falls backward into the black, arms and legs spread, looking up. Blue walls narrow toward the darkness. No impact, no blood, just the drop.\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.\nCritical framing: pull camera back so kneeling player is fully visible with BOTH boots above the 85% height line, and whole silhouette within central 70% width. Bottom 12% is empty plain blue ledge, no body parts. Kneeling player no taller than 30% image height. Fallen teammate is much smaller at 10% height. Both wear simple mitten-like gloves, not articulated realistic fingers. Architecture primarily rounded blue walls from blue reference, not a teal pillar-field. Dark empty top fifth.",
+    "reference_paths": [
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg",
+      "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"
+    ],
+    "tries": 2,
+    "remaining_issue": "The reaching glove has separated fingers rather than a fully mitten-like silhouette, and the falling player's backpack is hidden by the frontal view.",
+    "tool": "built-in image_gen"
+  }
+]

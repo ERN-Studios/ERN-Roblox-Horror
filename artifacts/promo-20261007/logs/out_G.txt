@@ -1,0 +1,21 @@
+Saved using built-in image generation, at original sizes. Paths relative to `artifacts/promo-20261007/`:
+
+```text
+raw/T02_hero_six_levels_raw.png
+raw/T02_hero_six_levels_try1_raw.png
+raw/A07_ad_squad_back_to_back_raw.png
+raw/A09_ad_meet_the_staff_raw.png
+raw/A09_ad_meet_the_staff_try1_raw.png
+raw/A12_ad_player_shh_raw.png
+raw/A21_ad_office_shadow_tall_raw.png
+raw/A21_ad_office_shadow_tall_try1_raw.png
+raw/A23_ad_party_hall_tall_raw.png
+raw/A23_ad_party_hall_tall_try1_raw.png
+raw/A25_ad_six_levels_tall_raw.png
+raw/A25_ad_six_levels_tall_try1_raw.png
+raw/A25_ad_six_levels_tall_try2_raw.png
+prompts_G.json
+logs/G_work.json
+```
+
+Remaining visual limitations are recorded in `prompts_G.json`. No git commands were run.

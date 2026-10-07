@@ -1,0 +1,14 @@
+Saved using built-in image generation, without resizing or cropping:
+
+```text
+artifacts/promo-20261007/raw/G11_level6_it_is_counting_raw.png
+artifacts/promo-20261007/raw/G11_level6_it_is_counting_try1_raw.png
+artifacts/promo-20261007/raw/G12_level6_the_way_out_raw.png
+artifacts/promo-20261007/raw/T03_hero_playground_raw.png
+artifacts/promo-20261007/raw/A06_ad_playground_looking_up_raw.png
+artifacts/promo-20261007/raw/A11_ad_counter_peek_raw.png
+artifacts/promo-20261007/raw/A18_ad_playground_tall_raw.png
+artifacts/promo-20261007/prompts_F.json
+```
+
+The rejected try is preserved; remaining issues are recorded in the JSON. No git commands were run.

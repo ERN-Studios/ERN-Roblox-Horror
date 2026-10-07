@@ -1,0 +1,21 @@
+Saved using built-in image generation, without resizing or cropping. No git commands run.
+
+In `artifacts/promo-20261007/raw/`:
+
+```text
+G07_level4_the_lobby_raw.png
+G07_level4_the_lobby_try1_raw.png
+G08_level4_the_usher_raw.png
+G08_level4_the_usher_try1_raw.png
+G08_level4_the_usher_try2_raw.png
+T05_hero_cinema_raw.png
+T05_hero_cinema_try1_raw.png
+T05_hero_cinema_try2_raw.png
+A04_ad_usher_torch_raw.png
+A04_ad_usher_torch_try1_raw.png
+A14_ad_usher_shh_raw.png
+A22_ad_cinema_corridor_tall_raw.png
+A22_ad_cinema_corridor_tall_try1_raw.png
+```
+
+Prompt record and remaining issues: `artifacts/promo-20261007/prompts_D.json`.

@@ -1,0 +1,721 @@
+Reading additional input from stdin...
+OpenAI Codex v0.160.1
+--------
+workdir: /Users/zeanjuul4/Projects/Roblox Horror REPO
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: danger-full-access
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a11769-dc93-7650-8db5-97c8d4513808
+--------
+user
+Read artifacts/promo-20261007/brief_E.md (and the common brief it names) and do the whole job with your built-in image generation tool, passing the listed reference image paths for each image. Save into artifacts/promo-20261007/raw/ exactly as the brief says. Do not run git. Finish by printing the list of files you saved.
+2026-10-07T17:29:52.730579Z ERROR codex_rmcp_client::oauth::refresh_transaction: error=failed to refresh OAuth tokens for server ElevenLabs
+codex
+I’ll read brief E and its common brief, then generate the images with the listed references and save them to the specified paths. I won’t run git.
+exec
+/bin/zsh -lc 'cat artifacts/promo-20261007/brief_E.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+Read `artifacts/promo-20261007/brief_common.md` first and follow it. Job name: E. 6 images.
+Write `artifacts/promo-20261007/prompts_E.json` at the end. Make the images one after another.
+
+Image `G09_level5_over_the_void` (landscape; references: refs/l5_02_blue_player_on_ledge_over_drop.jpg, refs/l5_01_rose_start_player_from_behind.jpg, refs/krille/krille_24.png, refs/player_suit_back.jpg, refs/player_suit_front.jpg)
+The blue room of the reference: a line of narrow blue block tops leading away over a black drop between huge rounded blue walls, a lamp globe on a long thin rod. One player stands on the near ledge, seen from behind; a second is in mid-jump across the gap ahead, arms out, nothing under it. Dark blue balls rest on a far ledge.
+Leave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small "LEVEL" line. No lettering.
+
+Image `G10_level5_the_tower` (landscape; references: refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg, refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg, refs/player_suit_back.jpg)
+The ivory room of the reference: a white spiral stair winding round a great white column, treads missing so the stair is a broken ring of small steps over blackness. Three tiny players at different heights on it, one about to jump a gap. The column rises out of frame and sinks into the dark. Cold soft light from above.
+Leave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small "LEVEL" line. No lettering.
+
+Image `A05_ad_void_pillars` (landscape; references: refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg, refs/player_suit_back.jpg, refs/player_suit_front.jpg)
+The teal room of the reference from above and behind: a field of tall square teal pillars of different heights standing out of blackness, only their small flat tops to stand on. A player is caught in the air between two tops, legs tucked, a second waits on the pillar behind. The far pillars fade into the dark.
+Leave the UPPER-LEFT third calm and darker for the game title. No lettering.
+
+Image `A15_ad_void_ledge_above` (square; references: refs/l5_01_rose_start_player_from_behind.jpg, refs/l5_02_blue_player_on_ledge_over_drop.jpg, refs/player_suit_back.jpg)
+Straight down from above onto a narrow rose-pink walkway crossing the square on a diagonal, a player on it seen from directly overhead (yellow hood, black backpack), two dark blue balls beside it. On both sides of the walkway: the smooth pink walls falling away into pure black.
+Leave the TOP fifth calm and darker for the game title. No lettering.
+
+Image `A19_ad_void_crimson_tall` (portrait; references: refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg, refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg, refs/player_suit_back.jpg)
+Tall picture of the crimson room of the reference: a single stair of red treads fixed to the side of an enormous round red pillar, winding up out of frame and down into black. One small player on the stair in the middle of the picture, hand on the pillar. Everything is the one red; soft highlights on the curved surfaces.
+Leave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.
+
+Image `A24_ad_void_the_fall` (portrait; references: refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg, refs/l5_02_blue_player_on_ledge_over_drop.jpg, refs/player_suit_back.jpg)
+Tall picture, looking down past the edge of a blue ledge in the lower foreground where a player kneels and reaches down. Below, already small, a second player falls backward into the black, arms and legs spread, looking up. Blue walls narrow toward the darkness. No impact, no blood, just the drop.
+Leave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.
+
+exec
+/bin/zsh -lc 'cat /Users/zeanjuul4/.codex/skills/.system/imagegen/SKILL.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 5ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/zsh -lc 'cat artifacts/promo-20261007/brief_common.md' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+# BACKROOMS: STAY QUIET [CO-OP HORROR] - promo art, 2026-10-07
+
+You generate key art with your BUILT-IN image generation tool (not Meshy, not Canva, not any MCP). Do not run
+git, do not commit, do not touch Roblox Studio, and do not create or edit any file outside
+`artifacts/promo-20261007/raw/`, `artifacts/promo-20261007/logs/` and your own `prompts_<job>.json`.
+
+Claude played all six levels today and took the pictures in `refs/`. Claude also reviews every image you make
+and adds ALL lettering afterwards. You make the pictures.
+
+## Output
+- Save every accepted generation as `artifacts/promo-20261007/raw/<name>_raw.png` at the size the tool gives you
+  (do not resize, crop or add anything). A rejected try stays as `<name>_try1_raw.png`, `<name>_try2_raw.png`.
+- Shapes: `landscape` = the tool's widest landscape size (3:2); `square`; `portrait` = the tallest portrait size
+  (2:3). Claude crops landscape to 16:9 and portrait to 9:16 from the CENTRE, so keep every important thing
+  inside the middle 80% of the height (landscape) or the middle 80% of the width (portrait).
+- When the job is done write `artifacts/promo-20261007/prompts_<job>.json`: for each image the name, the final
+  prompt, the reference paths you passed, the number of tries and one honest sentence on what is still wrong.
+- The image tool takes at most FIVE reference paths. Pass the ones listed for each image, by path.
+
+## NO LETTERING
+No title, no caption, no logo, no watermark, no HUD, no UI, no key hints, no numbers. Claude adds the title and
+the "LEVEL n" lines later in a fixed typeface, so each image says where to leave calm, darker, uncluttered
+space for them. The only letters allowed are signs that exist in the game and are named in the image's text
+(PLAY ZONE, EXIT, ZYNTRA RELAY). Regenerate if any other lettering appears or a named sign is misspelled.
+
+## What the pictures are for
+Store gallery, the main thumbnail and a paid ad campaign for a Roblox co-op horror game. What worked last time
+and what the owner asked for then still holds: highly clickable, one clear idea per image that reads at
+320 x 180, ACCURATE to each level. The research on the genre's biggest games said: lead with teammates hiding
+while the thing passes, and show that the levels are six recognisably different places.
+
+The owner has rejected generated art as "AI slop" before. So: be faithful, not generic. Rebuild the real
+places in the references with better light, lens and detail. Never invent a new monster, a new room type, new
+props, gore, blood, weapons or jump-scare faces. If a reference shows it plain, keep it plain.
+
+## The player (every human in every image)
+See `refs/player_suit_front.jpg`, `refs/player_suit_back.jpg` (or `refs/board_player.jpg`). A stylised, chunky
+game avatar, about three heads tall: mustard-yellow hooded hazmat suit of crumpled fabric, the hood up; a black
+gas mask with TWO ROUND LENSES and one round filter in front; black backpack straps, a black belt with pouches,
+a black tactical backpack with two small olive tanks at its sides; black mitten-like gloves; chunky black boots.
+Never a realistic human, never a bare face, never a clear visor, never a different colour of suit. All players
+look the same. They may carry a small hand torch.
+
+## The six levels (the references are the truth; this is what you are looking at)
+1. LEVEL 1, THE OFFICE. The classic yellow backrooms: mustard damask wallpaper, beige-brown carpet, low white
+   acoustic-tile ceiling with fluorescent panels, square pillars, endless low partitions, black marker scribbles
+   on walls. ENTITY, "the Entity": a tall, hunched, pitch-black figure in a rough hooded knit garment, heavy
+   shoulders, very long arms, big long-fingered hands, chunky feet, two small round glowing eyes (amber when
+   calm, red when hunting). It hears noise. Players pull fuses out of wall cabinets marked ZYNTRA RELAY, carry
+   them to fuse boxes, pull levers and run for the exit.
+2. LEVEL 2, THE POOLROOMS. BRAND NEW MAP. THERE IS NO ENTITY, NO MONSTER, NO CREATURE AND NO FOAM IN LEVEL 2.
+   It is a silent, sunlit, clean, endless bath-house you walk through: a flooded hall of tiled columns and
+   vaults over turquoise water; a nave of colossal fluted concrete columns; an immense stepwell of zig-zag
+   stairs with glass rails down to a green pool; a domed rotunda in deep blue and gold mosaic with a golden
+   gong on an island; a lap-pool hall with ribbon windows onto empty desert; and a ten-storey atrium of
+   identical yellow doors over a drained pool. Cream plaster, pale tile, warm daylight. Awe and loneliness.
+3. LEVEL 3, THE PARTY ROOMS. A dead mall's children's party rooms: road-map play carpet or dark confetti
+   carpet, cream or orange walls with a black lower band, black tile ceiling with a few panels, folding tables
+   with paper cups and plates, plastic kids' chairs, balloons, wall stickers. Players collect five CDs in jewel
+   cases and hide UNDER the folding tables. ENTITY, "the Mall Manager": very tall and thin; its head is a
+   glossy RED BALLOON with no face; short-sleeved shirt with wide orange and cream vertical stripes and a white
+   name tag; black trousers, white belt buckle, black shoes; long thin pale arms ending in RED GLOVES. The
+   reference shows it in a stiff arms-out rig pose: never draw that pose. Draw it walking, stooping, peering.
+4. LEVEL 4, THE CINEMA. An 80s-90s multiplex lost in the backrooms: navy walls, magenta and cyan neon bands, a
+   carpet of pink and blue triangles on a dotted grid, a starlight ceiling, arcade cabinets, red seats, a
+   glowing screen, a projector booth. With the power off it is black with deep red emergency light. ENTITY,
+   "the Usher": very tall and thin, in a crimson bellhop uniform with gold buttons in two rows, gold cuffs and a
+   gold stripe down the trouser leg, a crimson pillbox cap with a gold band; its head is a glossy BLACK
+   featureless mannequin head with no face; its hands are bright WHITE gloves that glow. It only exists in the
+   dark and freezes while a torch beam is on it. Same note: the reference is a stiff rig pose, do not copy the
+   pose.
+5. LEVEL 5, THE VOID. THERE IS NO ENTITY IN LEVEL 5. Ten huge rooms, each ONE colour (rose, blue, amber, mint,
+   violet, coral, orange, crimson, teal, ivory), smooth matte plastic, soft pools of light near the top, and
+   below the walkways nothing but black. Players jump along narrow ledges, block tops, pillar tops and spiral
+   stairs with treads missing. A fall is death. Dark blue balls lie on some ledges; a small lamp globe hangs on
+   a long thin rod here and there.
+6. LEVEL 6, THE PLAYGROUND. One colossal indoor soft-play arena: a round court of blue-and-green foam puzzle
+   mats with a yellow ring and a short RED padded post in the middle, and all round it twelve storeys of
+   netted galleries: posts wrapped in yellow, red, blue and green vinyl, black knotted nets, mat decks, red
+   panels with round bubble windows, big tube slides, rope bridges high across the court, cold strip lights,
+   loose plastic balls. ENTITY, "the Counter": a porcelain ball-jointed doll child about as tall as a player
+   and a half: bald white cracked head, large dark glass eyes, rosy cheeks, a small closed smile, a striped
+   paper party cone hat, a striped T-shirt in faded orange, blue and cream, dusty denim dungaree shorts, bare
+   jointed limbs. It counts at the post with its hands over its eyes while players hide, then comes looking.
+
+## Look
+Polished promotional key art of THIS game: the real geometry, colours and materials of the references, with
+cinematic practical light, real depth, a little haze and fine film grain. Strong simple composition, a clear
+focal point, a readable silhouette against a lighter or darker ground. Players and entity must be fully inside
+the frame unless the image says close-up. Never more than one entity in an image unless the image says so.
+
+## Check before you accept an image (regenerate up to twice if it fails)
+- Is every player exactly the avatar above (yellow hood, twin-lens black gas mask, black backpack)?
+- Is the entity the one from the reference, and only where asked? Level 2 and Level 5: no creature at all.
+- Any lettering, logo or UI that was not asked for? Any gore?
+- Is the calm space for lettering where the image asked for it?
+
+codex
+I’m using the imagegen skill for six sequential generations. I’ll check the avatar design, level geometry, and blank text areas before saving each image.
+exec
+/bin/zsh -lc 'ls artifacts/promo-20261007/refs; ls artifacts/promo-20261007/raw' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+board_four_entities.jpg
+board_player.jpg
+board_six_levels.jpg
+krille
+l1_01_elevator_arrival_yellow_maze_red_floor_line.jpg
+l1_02_player_in_maze_elevator_behind.jpg
+l1_03_the_entity_closeup_walking_at_camera_amber_eyes.jpg
+l1_04_the_entity_full_body_corridor_wall_graffiti.jpg
+l1_05_zyntra_fuse_relay_wall_cabinet.jpg
+l2new_00_start_stairs.jpg
+l2new_01_area1_flooded_pillar_hall.jpg
+l2new_02_area3_colossal_column_nave.jpg
+l2new_03_area4_stair_tower_from_below.jpg
+l2new_04_area4_great_stepwell.jpg
+l2new_05_area2_blue_gold_mosaic_rotunda.jpg
+l2new_06_area5_lap_pool_hall_desert_windows.jpg
+l2new_07_area6_door_galleries_spiral_stair.jpg
+l2new_08_area6_drained_pool_atrium_of_yellow_doors.jpg
+l3_01_player_in_orange_party_room_confetti_carpet.jpg
+l3_02_mall_manager_look_reference_bind_pose_red_balloon_head.jpg
+l3_03_mall_manager_upper_body_striped_shirt_name_tag.jpg
+l3_04_party_room_road_carpet_cd_on_folding_table_player.jpg
+l4_01_round_start_power_off_red_emergency_light_player.jpg
+l4_02_the_usher_look_reference_in_red_emergency_light.jpg
+l4_03_the_usher_true_colours_test_lamp_red_uniform_black_faceless_head.jpg
+l5_01_rose_start_player_from_behind.jpg
+l5_02_blue_player_on_ledge_over_drop.jpg
+l5_03_orange_spiral_room_player_on_ledge.jpg
+l5_04_crimson_spiral_stair_round_great_pillar.jpg
+l5_05_teal_pillar_field_player_on_pillar_top.jpg
+l5_06_ivory_tower_spiral_stair_missing_treads.jpg
+l5_07_finale_antechamber_before_gate.jpg
+l5_08_finale_closing_corridor_door_at_far_end.jpg
+l5_09_mint_room_player_on_block_over_drop.jpg
+l6_01_spawn_tunnel_padded_vinyl_play_zone_gate.jpg
+l6_02_arena_court_counter_at_post_galleries_all_round.jpg
+l6_03_the_counter_side_full_body_at_post.jpg
+l6_04_the_counter_face_closeup_party_hat.jpg
+l6_05_looking_down_on_court_through_netting.jpg
+l6_06_top_down_overpass_bridges_court_far_below.jpg
+l6_07_inside_a_gallery_floor_and_ceiling.jpg
+l6_08_post_ring_and_hatch_closeup.jpg
+l6_09_exit_room_green_mouldy_padding_exit_door.jpg
+lobby_01_tunnel.jpg
+player_suit_back.jpg
+player_suit_front.jpg
+
+exec
+/bin/zsh -lc "python3 - <<'PY'
+import re,json
+from pathlib import Path
+b=Path('artifacts/promo-20261007')
+s=(b/'brief_E.md').read_text()
+items=[]
+common='Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. '
+for m in re.finditer(r'Image "'`([''^`]+)` '"\\((["'^;]+); references: ([''^)]+)'"\\)\\n(.*?)(?=\\nImage "'`|'"\\Z)',s,re.S):
+ name,shape,refs,scene=m.groups()
+ framing={'landscape':'Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.','portrait':'Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.','square':'Generate square 1:1.'}[shape]
+ items.append(dict(name=name,final_prompt=common+framing+'\\n'+scene.strip(),reference_paths=[str((b/p.strip()).resolve()) for p in refs.split(',')],tries=0,remaining_issue=''))
+(b/'prompts_E.json').write_text(json.dumps(items,indent=2))
+print(json.dumps(items))
+PY" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+[{"name": "G09_level5_over_the_void", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe blue room of the reference: a line of narrow blue block tops leading away over a black drop between huge rounded blue walls, a lamp globe on a long thin rod. One player stands on the near ledge, seen from behind; a second is in mid-jump across the gap ahead, arms out, nothing under it. Dark blue balls rest on a far ledge.\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \"LEVEL\" line. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_24.png", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg"], "tries": 0, "remaining_issue": ""}, {"name": "G10_level5_the_tower", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe ivory room of the reference: a white spiral stair winding round a great white column, treads missing so the stair is a broken ring of small steps over blackness. Three tiny players at different heights on it, one about to jump a gap. The column rises out of frame and sinks into the dark. Cold soft light from above.\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \"LEVEL\" line. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"], "tries": 0, "remaining_issue": ""}, {"name": "A05_ad_void_pillars", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\nThe teal room of the reference from above and behind: a field of tall square teal pillars of different heights standing out of blackness, only their small flat tops to stand on. A player is caught in the air between two tops, legs tucked, a second waits on the pillar behind. The far pillars fade into the dark.\nLeave the UPPER-LEFT third calm and darker for the game title. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg"], "tries": 0, "remaining_issue": ""}, {"name": "A15_ad_void_ledge_above", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate square 1:1.\nStraight down from above onto a narrow rose-pink walkway crossing the square on a diagonal, a player on it seen from directly overhead (yellow hood, black backpack), two dark blue balls beside it. On both sides of the walkway: the smooth pink walls falling away into pure black.\nLeave the TOP fifth calm and darker for the game title. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"], "tries": 0, "remaining_issue": ""}, {"name": "A19_ad_void_crimson_tall", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\nTall picture of the crimson room of the reference: a single stair of red treads fixed to the side of an enormous round red pillar, winding up out of frame and down into black. One small player on the stair in the middle of the picture, hand on the pillar. Everything is the one red; soft highlights on the curved surfaces.\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"], "tries": 0, "remaining_issue": ""}, {"name": "A24_ad_void_the_fall", "final_prompt": "Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\nTall picture, looking down past the edge of a blue ledge in the lower foreground where a player kneels and reaches down. Below, already small, a second player falls backward into the black, arms and legs spread, looking up. Blue walls narrow toward the darkness. No impact, no blood, just the drop.\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.", "reference_paths": ["/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg", "/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg"], "tries": 0, "remaining_issue": ""}]
+
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-54008fa2-4f97-4306-8c51-ac141ee17887.png artifacts/promo-20261007/raw/G09_level5_over_the_void_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+codex
+The blue ledge image is saved. I’m retrying the ivory tower: the first version made the nearest player too large and added stray details to the back of its hood.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-0f25e149-ef38-4937-9f42-23d760ba522e.png artifacts/promo-20261007/raw/G10_level5_the_tower_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-7c4a33de-5c4b-4643-9e1a-5c4d8428b38a.png artifacts/promo-20261007/raw/G10_level5_the_tower_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-f1b9d387-57ee-4026-b065-c3ad98864b37.png artifacts/promo-20261007/raw/A05_ad_void_pillars_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 16ms:
+codex
+The revised tower is saved. The teal pillar image put a boot too close to the crop boundary, so I’m generating a wider view before moving on to the square and portrait images.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-576ff737-fdd6-41b2-9580-fb9d17ba9a0a.png artifacts/promo-20261007/raw/A05_ad_void_pillars_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-1a6d42df-d87a-463c-b401-8ddf2bf64f91.png artifacts/promo-20261007/raw/A15_ad_void_ledge_above_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+codex
+Five images are saved. I’m generating the final falling-player scene, then I’ll verify the saved dimensions and finish the prompt log with any remaining visual limitations.
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-9caab018-b034-4dc9-aad3-6f2a2b29c79b.png artifacts/promo-20261007/raw/A19_ad_void_crimson_tall_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-7f10f5d5-0f00-4bd3-ba17-1aa7e122045d.png artifacts/promo-20261007/raw/A24_ad_void_the_fall_try1_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc 'cp /Users/zeanjuul4/.codex/generated_images/01a11769-dc93-7650-8db5-97c8d4513808/exec-53424d6a-6fb6-4373-a2f6-e77d0aeac6d4.png artifacts/promo-20261007/raw/A24_ad_void_the_fall_raw.png' in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "python3 -c 'from pathlib import Path; import sys; Path(\"artifacts/promo-20261007/prompts_E.json\").write_text(sys.argv[1])' '[
+  {
+    \"name\": \"G09_level5_over_the_void\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\\nThe blue room of the reference: a line of narrow blue block tops leading away over a black drop between huge rounded blue walls, a lamp globe on a long thin rod. One player stands on the near ledge, seen from behind; a second is in mid-jump across the gap ahead, arms out, nothing under it. Dark blue balls rest on a far ledge.\\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \\\"LEVEL\\\" line. No lettering.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/krille/krille_24.png\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg\"
+    ],
+    \"tries\": 1,
+    \"remaining_issue\": \"The lower-left reserved text area includes a dim ledge edge and the nearest boot toward its right side.\",
+    \"tool\": \"built-in image_gen\"
+  },
+  {
+    \"name\": \"G10_level5_the_tower\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\\nThe ivory room of the reference: a white spiral stair winding round a great white column, treads missing so the stair is a broken ring of small steps over blackness. Three tiny players at different heights on it, one about to jump a gap. The column rises out of frame and sinks into the dark. Cold soft light from above.\\nLeave the LOWER-LEFT corner (about a third of the width, a fifth of the height) calm and darker for a small \\\"LEVEL\\\" line. No lettering.\\nCritical composition: a distant wide establishing view; ALL THREE players must be tiny, each at most 7 percent of image height, at three different stair elevations. One bends knees at the edge of a clearly missing tread, preparing to jump. Show all three from behind with plain solid yellow backs of hoods, no dots, lenses or marks on the back of any hood. The towering column is the focal point and dwarfs them. Smooth untextured matte white plastic, not stone.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\"
+    ],
+    \"tries\": 2,
+    \"remaining_issue\": \"The nearest player is larger than the requested tiny scale and the overhead light is warmer than the requested cold tone.\",
+    \"tool\": \"built-in image_gen\"
+  },
+  {
+    \"name\": \"A05_ad_void_pillars\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at widest landscape 3:2. Keep all important subjects within the middle 80% of image height for a later centre 16:9 crop.\\nThe teal room of the reference from above and behind: a field of tall square teal pillars of different heights standing out of blackness, only their small flat tops to stand on. A player is caught in the air between two tops, legs tucked, a second waits on the pillar behind. The far pillars fade into the dark.\\nLeave the UPPER-LEFT third calm and darker for the game title. No lettering.\\nCritical safe framing: pull the camera back and higher, with both players fully between 25% and 80% of image height, including boots. Nearest player is no more than 30% of image height. Bottom 15% contains only pillar sides and blackness. Clear overhead-behind view showing the small square tops. Keep upper-left third dark empty wall.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_front.jpg\"
+    ],
+    \"tries\": 2,
+    \"remaining_issue\": \"The jumping player'\\''s boots are close to the landing top, so the airborne gap is less emphatic than requested.\",
+    \"tool\": \"built-in image_gen\"
+  },
+  {
+    \"name\": \"A15_ad_void_ledge_above\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate square 1:1.\\nStraight down from above onto a narrow rose-pink walkway crossing the square on a diagonal, a player on it seen from directly overhead (yellow hood, black backpack), two dark blue balls beside it. On both sides of the walkway: the smooth pink walls falling away into pure black.\\nLeave the TOP fifth calm and darker for the game title. No lettering.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_01_rose_start_player_from_behind.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\"
+    ],
+    \"tries\": 1,
+    \"remaining_issue\": \"The overhead view is slightly oblique rather than perfectly vertical.\",
+    \"tool\": \"built-in image_gen\"
+  },
+  {
+    \"name\": \"A19_ad_void_crimson_tall\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\\nTall picture of the crimson room of the reference: a single stair of red treads fixed to the side of an enormous round red pillar, winding up out of frame and down into black. One small player on the stair in the middle of the picture, hand on the pillar. Everything is the one red; soft highlights on the curved surfaces.\\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_04_crimson_spiral_stair_round_great_pillar.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_06_ivory_tower_spiral_stair_missing_treads.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\"
+    ],
+    \"tries\": 1,
+    \"remaining_issue\": \"The player is slightly below the picture midpoint and upper stair edges enter the reserved title area.\",
+    \"tool\": \"built-in image_gen\"
+  },
+  {
+    \"name\": \"A24_ad_void_the_fall\",
+    \"final_prompt\": \"Use case: ads-marketing. Polished cinematic promotional key art of this Roblox co-op horror game, faithful to reference geometry, colours and smooth matte plastic materials; practical soft lighting, real depth, slight haze and fine film grain. Strong simple composition readable at thumbnail size. All input images are visual references, not edit targets. No entity or creature in Level 5. No invented props, gore, weapons, lettering, title, caption, logo, watermark, HUD, UI, key hints or numbers. Every player is the same stylised chunky game avatar about three heads tall: mustard-yellow crumpled fabric hazmat suit, hood up, black gas mask with TWO ROUND LENSES and one front round filter, black backpack straps, black belt and pouches, black tactical backpack with two small olive side tanks, black mitten gloves, chunky black boots. Never realistic humans, bare faces or clear visors. Players fully inside the frame. Generate at tallest portrait 2:3. Keep all important subjects within the middle 80% of image width for a later centre 9:16 crop.\\nTall picture, looking down past the edge of a blue ledge in the lower foreground where a player kneels and reaches down. Below, already small, a second player falls backward into the black, arms and legs spread, looking up. Blue walls narrow toward the darkness. No impact, no blood, just the drop.\\nLeave the TOP fifth calm and darker for the game title, and keep the bottom tenth free of anything important. No lettering.\\nCritical framing: pull camera back so kneeling player is fully visible with BOTH boots above the 85% height line, and whole silhouette within central 70% width. Bottom 12% is empty plain blue ledge, no body parts. Kneeling player no taller than 30% image height. Fallen teammate is much smaller at 10% height. Both wear simple mitten-like gloves, not articulated realistic fingers. Architecture primarily rounded blue walls from blue reference, not a teal pillar-field. Dark empty top fifth.\",
+    \"reference_paths\": [
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_05_teal_pillar_field_player_on_pillar_top.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/l5_02_blue_player_on_ledge_over_drop.jpg\",
+      \"/Users/zeanjuul4/Projects/Roblox Horror REPO/artifacts/promo-20261007/refs/player_suit_back.jpg\"
+    ],
+    \"tries\": 2,
+    \"remaining_issue\": \"The reaching glove has separated fingers rather than a fully mitten-like silhouette, and the falling player'\\''s backpack is hidden by the frontal view.\",
+    \"tool\": \"built-in image_gen\"
+  }
+]
+'" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 468ms:
+exec
+/bin/zsh -lc "python3 - <<'PY'
+from pathlib import Path
+from PIL import Image
+import json
+b=Path('artifacts/promo-20261007')
+items=json.loads((b/'prompts_E.json').read_text())
+for item in items:
+ for p in sorted((b/'raw').glob(item['name']+'*_raw.png')):
+  with Image.open(p) as im:
+   im.verify()
+  with Image.open(p) as im: print(f'{p}: {im.size[0]}x{im.size[1]} {im.format}')
+print(b/'prompts_E.json')
+PY" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ exited 1 in 193ms:
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ModuleNotFoundError: No module named 'PIL'
+
+exec
+/bin/zsh -lc "python3 - <<'PY'
+from pathlib import Path
+import json,struct
+b=Path('artifacts/promo-20261007')
+for item in json.loads((b/'prompts_E.json').read_text()):
+ for p in sorted((b/'raw').glob(item['name']+'*_raw.png')):
+  d=p.read_bytes(); assert d[:8]==b'\\x89PNG\\r\\n\\x1a\\n'
+  w,h=struct.unpack('>II',d[16:24]);print(f'{p}: {w}x{h}')
+print(b/'prompts_E.json')
+PY" in /Users/zeanjuul4/Projects/Roblox Horror REPO
+ succeeded in 618ms:
+artifacts/promo-20261007/raw/G09_level5_over_the_void_raw.png: 1536x1024
+artifacts/promo-20261007/raw/G10_level5_the_tower_raw.png: 1536x1024
+artifacts/promo-20261007/raw/G10_level5_the_tower_try1_raw.png: 1536x1024
+artifacts/promo-20261007/raw/A05_ad_void_pillars_raw.png: 1536x1024
+artifacts/promo-20261007/raw/A05_ad_void_pillars_try1_raw.png: 1536x1024
+artifacts/promo-20261007/raw/A15_ad_void_ledge_above_raw.png: 1254x1254
+artifacts/promo-20261007/raw/A19_ad_void_crimson_tall_raw.png: 1024x1536
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_raw.png: 1024x1536
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_try1_raw.png: 1024x1536
+artifacts/promo-20261007/prompts_E.json
+
+codex
+Saved using built-in image generation, at original sizes:
+
+```text
+artifacts/promo-20261007/raw/G09_level5_over_the_void_raw.png
+artifacts/promo-20261007/raw/G10_level5_the_tower_raw.png
+artifacts/promo-20261007/raw/G10_level5_the_tower_try1_raw.png
+artifacts/promo-20261007/raw/A05_ad_void_pillars_raw.png
+artifacts/promo-20261007/raw/A05_ad_void_pillars_try1_raw.png
+artifacts/promo-20261007/raw/A15_ad_void_ledge_above_raw.png
+artifacts/promo-20261007/raw/A19_ad_void_crimson_tall_raw.png
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_raw.png
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_try1_raw.png
+artifacts/promo-20261007/prompts_E.json
+```
+tokens used
+66 947
+Saved using built-in image generation, at original sizes:
+
+```text
+artifacts/promo-20261007/raw/G09_level5_over_the_void_raw.png
+artifacts/promo-20261007/raw/G10_level5_the_tower_raw.png
+artifacts/promo-20261007/raw/G10_level5_the_tower_try1_raw.png
+artifacts/promo-20261007/raw/A05_ad_void_pillars_raw.png
+artifacts/promo-20261007/raw/A05_ad_void_pillars_try1_raw.png
+artifacts/promo-20261007/raw/A15_ad_void_ledge_above_raw.png
+artifacts/promo-20261007/raw/A19_ad_void_crimson_tall_raw.png
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_raw.png
+artifacts/promo-20261007/raw/A24_ad_void_the_fall_try1_raw.png
+artifacts/promo-20261007/prompts_E.json
+```

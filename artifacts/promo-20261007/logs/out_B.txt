@@ -1,0 +1,13 @@
+Saved using built-in image generation, at original sizes:
+
+```text
+artifacts/promo-20261007/raw/G03_level2_the_stepwell_raw.png
+artifacts/promo-20261007/raw/G04_level2_a_thousand_doors_raw.png
+artifacts/promo-20261007/raw/G04_level2_a_thousand_doors_try1_raw.png
+artifacts/promo-20261007/raw/A02_ad_poolrooms_hall_raw.png
+artifacts/promo-20261007/raw/A08_ad_poolrooms_rotunda_raw.png
+artifacts/promo-20261007/raw/A16_ad_poolrooms_stairs_down_raw.png
+artifacts/promo-20261007/raw/A16_ad_poolrooms_stairs_down_try1_raw.png
+artifacts/promo-20261007/raw/A20_ad_poolrooms_doors_tall_raw.png
+artifacts/promo-20261007/prompts_B.json
+```

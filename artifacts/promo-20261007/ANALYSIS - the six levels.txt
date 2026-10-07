@@ -1,0 +1,147 @@
+BACKROOMS: STAY QUIET [CO-OP HORROR]
+THE SIX LEVELS AS THEY ARE ON 2026-10-07: what each looks like, what hunts you, how you clear it
+
+Written by Claude after going into every level in Studio the same evening (one player, full graphics quality).
+The 42 pictures in "In-game references" were taken on that run; every promo picture was made from them.
+Each level says what was done on this run and what is known from earlier verified runs or from the game's code.
+
+
+THE PLAYER (the same in every level)
+A chunky little figure about three heads tall: mustard-yellow hooded hazmat suit of crumpled fabric, a black
+gas mask with two round lenses and one round filter, a black tactical backpack with two small olive tanks,
+black belt with pouches, black mitten gloves, chunky black boots. A hand torch, a sprint that makes noise,
+a crouch. Everyone in a party looks the same.
+NOTE FOR THE OLD ARTWORK: the covers of 2026-10-04 drew "blocky avatars with dark visors". The real suit has a
+twin-lens gas mask and a backpack. This batch uses the real one.
+
+
+LEVEL 1, THE OFFICE  (a round; entity: the Entity)
+Look     The yellow backrooms: mustard damask wallpaper, beige-brown carpet, low white tile ceiling with
+         fluorescent panels, square pillars, a 40 x 40 maze that is different every round, black marker
+         scribbles on the walls ("THE CARPET MOVES"), a red line on the carpet from the elevator, office
+         chairs and boxes. You arrive in a brushed-steel elevator with a floor panel 1 to 8.
+Entity   Tall, hunched and pitch black, in a rough hooded knit garment; heavy shoulders, very long arms, big
+         long-fingered hands, chunky feet. Two small round eyes: amber when calm, RED when it is hunting. It
+         hunts by sight and by sound (sprinting is loud, sneaking is silent, a torch lets it see you further).
+         It pounces, and a kill is five seconds on the floor seen through your own eyes.
+To clear 1. Pull fuses out of the wall cabinets marked ZYNTRA RELAY (pulling one makes noise).
+         2. Carry each to a fuse box. Every fuse raises the danger; all boxes full = a red ALERT.
+         3. Pull every lever within 10 seconds of each other.
+         4. The power goes down in a wave, the exit gate opens, and the Entity guards it. Get out.
+         Each player in the party adds one fuse box, one lever and one coloured cable to follow.
+This run A real round: elevator ride, into the maze, the Entity walked 400 studs across the maze to within
+         110 studs of me and was photographed from 15 and 20 studs. Relays, fuse box, lever and exit were
+         located in the round. The fuse run itself was not played tonight; it is described from the game's
+         README and from earlier rounds.
+
+
+LEVEL 2, THE POOLROOMS  (BRAND NEW MAP; a walk; NO ENTITY)
+Look     Nothing like the old poolrooms. A silent, sunlit, clean bath-house of impossible size, six areas:
+         1  a flooded hall of tiled columns and low vaults over turquoise water, a dark machine at its end
+         3  a nave of colossal fluted concrete columns on tiled plinths, a sunken pool between them
+         4  an immense stepwell: zig-zag stairs with glass rails and arched doors, tier under tier, down to a
+            green pool, one slender pillar up the middle, a stair tower beside it
+         2  a domed rotunda in deep blue and gold mosaic, a round pool, a golden gong on an island, a deck chair
+         5  a lap-pool hall under a truss roof with ribbon windows onto empty desert
+         6  a ten-storey atrium of identical yellow doors on galleries over a drained pool, a rusted spiral
+            stair up to the last gallery, where the way out is
+         (The areas are numbered as the map names them; the route visits them 1, 3, 4, 2, 5, 6.)
+Entity   None. No creature, no foam, nothing. The horror is the size and the silence.
+To clear Walk the route from the start stairs through the six areas to the EXIT at the top of area 6.
+         It is a developer preview today: entered from a pedestal in the lobby's Level 2 bay, with RETURN TO
+         LOBBY at the start and at the EXIT. No round, no objective, no timer yet.
+This run Stood in all six areas and at the exit (moved from marker to marker, not walked end to end).
+         9 pictures. The old Level 2 pictures (tube slides, the Pool Foam figures) are out of date and were
+         not used anywhere in this batch.
+
+
+LEVEL 3, THE PARTY ROOMS  (a round; entity: the Mall Manager)
+Look     The children's party rooms of a dead mall: road-map play carpet in some rooms, dark confetti carpet
+         in others, cream walls with toy stickers or orange walls with a black lower band, a black tile
+         ceiling with a few light panels, folding tables with paper cups and plates, plastic kids' chairs,
+         bunches of balloons, an arcade corner with a prize claw.
+Entity   Very tall and thin. Its head is a glossy RED BALLOON with no face. Short-sleeved shirt in wide orange
+         and cream stripes with a white name tag, black trousers, white belt buckle, black shoes, long thin
+         pale arms ending in red gloves. It is NOT in the level at the start: it comes with the blackout.
+         It goes for the nearest living player even when they are hidden, walks to their table and checks it.
+To clear 1. Find the five PARTY MIX CDs (jewel cases on folding tables). You can hide UNDER any folding table,
+            two players to a table.
+         2. Carry them to the BIRTHDAY CD PLAYER in the Signal Hall and put them in.
+         3. The music plays, then the lights go: the blackout. The Manager hunts. Hide, and when it checks
+            your table you have about two seconds to get out the other side.
+         4. The exit opens: a 560-stud hall. Once every survivor is past half way the Manager appears at the
+            hall's entrance and comes at 28 against your walking 16. Keep moving. Stopping is death.
+This run A real round was started: the start room, a CD on its table, the 30 tables, the CD player and the
+         arcade were located. The Manager was photographed from the game's own model, stood in a party room,
+         because it does not exist until the blackout. The whole clear was played on 2026-10-05.
+
+
+LEVEL 4, THE CINEMA  (a round; entity: the Usher)
+Look     An 80s-90s multiplex lost in the backrooms: navy walls, magenta and cyan neon bands, a carpet of pink
+         and blue triangles on a dotted grid, a starlight ceiling, an arcade, auditoriums of red seats, a
+         projector booth upstairs. THE ROUND STARTS WITH THE POWER OFF: black, with deep red emergency light,
+         a CLOSED sign, STAFF ONLY doors. The neon only comes back when you restore the power.
+Entity   Very tall and thin, in a crimson bellhop uniform: two rows of gold buttons, gold cuffs, a gold stripe
+         down the leg, a crimson pillbox cap with a gold band. Its head is a glossy black mannequin head with
+         no face. Its hands are bright white gloves that glow. It only exists in the dark, a torch beam on it
+         freezes it, and it whispers "shhh" before it takes you. It sleeps until the power is on.
+To clear 1. Read the note: it gives the order for the six breaker switches (A1-A3, B1-B3).
+         2. Power comes on. The Usher wakes.
+         3. Find three film reels (one can be locked in the arcade's prize case behind a code).
+         4. Thread each reel into its projector upstairs. A projector only threads while somebody holds the
+            MAIN BREAKER downstairs, or for 60 seconds on a fuse: this is the co-op part.
+         5. The film runs and the screen of Cinema 2 is the way out.
+This run A real round was started: the red power-off state, all six switches, the note, three reels, the
+         prize case, three projectors, the main breaker and the fuse were located. The Usher was photographed
+         from the game's own model (it is dormant until the power is on), once in the red light and once under
+         a white test lamp to see its true colours. The breaker puzzle was not solved tonight.
+NOTE     The older reference showed the Usher as a pale pink glowing figure. Up close it is the red uniform
+         and black head described here; the promo pictures follow that.
+
+
+LEVEL 5, THE VOID  (lives on the lobby server; NO ENTITY)
+Look     Ten enormous rooms, each one colour and nothing else: rose, blue, amber, mint, violet, coral, orange,
+         crimson, teal, ivory. Smooth matte surfaces, soft light high up, and under the walkways pure black.
+         The route is 4130 studs and 171 jumps: narrow ledges and block tops, a double spiral (orange), a
+         stair wound round a great pillar (crimson), a field of bare pillar tops (teal), a tower with treads
+         missing (ivory). Dark blue balls lie on ledges. Things fall past you in the open rooms: blocks, and
+         now and then a body in a yellow suit, screaming.
+Entity   None, by the owner's decision. The drop is the monster.
+To clear 1. Jump the route. A fall is death and sends you back to the lobby.
+         2. Each room ends in a plate: the door only opens while the WHOLE party stands on it.
+         3. After the tower, the corridor: 226 studs between two walls that start closing when everyone is in.
+            Walk and never stop (walking gets through with 8 studs to spare; standing still dies at 18 s).
+         4. LEVEL 5 CLEARED, then on to Level 6 or back to the lobby.
+This run A real session: stood in rose, blue, mint, orange, crimson, teal and ivory and at the corridor (moved
+         along the route's own points, not jumped tonight). All 171 jumps were walked on 2026-10-05.
+
+
+LEVEL 6, THE PLAYGROUND  (lives on the lobby server; entity: the Counter)
+Look     One colossal indoor soft-play arena, rebuilt on 2026-10-06 and given real materials on 2026-10-07.
+         You arrive in a low tunnel padded in yellow and navy quilted vinyl, through a gate that says
+         PLAY ZONE. A lane leads to a round court of blue-and-green foam mats with a yellow ring and a short
+         red post. All round the court, twelve storeys of netted galleries: vinyl-wrapped posts in four
+         colours, black nets, mat decks, red panels with bubble windows, tube slides, and two rope bridges
+         crossing high above. Under the court: a slide down to a small, mouldy, green padded room.
+Entity   A porcelain ball-jointed doll child, taller than a player: bald cracked white head, large dark glass
+         eyes, rosy cheeks, a small smile, a striped paper party hat, a faded striped T-shirt, dusty denim
+         dungaree shorts. It counts at the post with its hands over its eyes, then walks toward the nearest
+         player, a little faster every round. If it sees you, you are as good as dead (it runs at 40), and
+         the kill is a choke seen through your own eyes.
+To clear 1. Hide while it counts.
+         2. While it searches, every living player has to touch the post. That is one round.
+         3. Do it three times. It gets quicker each time.
+         4. On the third touch everything turns red and a one-minute countdown starts while it hunts in a rage.
+         5. The post sinks. Drop into the hole, ride the long slide, and leave by the green EXIT door.
+This run A real session: the tunnel and gate, the court, the Counter at the post from 12 and 5 studs, the view
+         down from the eighth floor, the bridges, the exit room. Whole rounds (three searches, the countdown,
+         the slide, LEVEL 6 CLEARED) were played earlier today and on 2026-10-06.
+
+
+WHAT THIS MEANS FOR THE PICTURES
+- Six places that could not be mistaken for each other: yellow office, sunlit pools, party rooms, neon
+  cinema, one-colour void, soft-play arena. That is the game's best argument and it leads the thumbnails.
+- Four hunters with strong silhouettes: a black hunched thing with two eyes, a man with a balloon for a head,
+  a faceless usher with glowing gloves, a porcelain doll in a party hat.
+- Levels 2 and 5 have no hunter and are sold on scale: tiny yellow figures in something far too big.
+- The promise in the name: teammates hiding, holding still, a finger to the mask.

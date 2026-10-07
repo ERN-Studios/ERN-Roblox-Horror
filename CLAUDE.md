@@ -1505,3 +1505,45 @@ weight and button size on phones, no noise meter.
   moment** (Chrome was put back with `tell application ... to activate`). The MCP studio id changes with every
   restart. 23 scripts differ between Studio and the repo from other sessions (ZyntraStore, three new `Zyntra *
   L4` clients, the Level 2 kit, GameManager...): left alone.
+
+### Added 2026-10-07 (evening) - Promo pictures: 12 gallery, 6 thumbnails, 25 ads (nothing in Studio changed)
+
+- **Owner**: playtest every level, understand each entity and how each level is cleared, then a batch for the
+  gallery, the thumbnail and 25 for an ad campaign; Codex makes the pictures, Claude is the QA; Level 2 is the NEW
+  map (no entity). Result: `~/Desktop/Backrooms Stay Quiet - Promo 2026-10-07` (43 pictures, each with lettering
+  and clean; README; `ANALYSIS - the six levels.txt`). Sources: `artifacts/promo-20261007` (42 in-game references,
+  briefs, all 68 generations; `final/` is ignored there, it is rebuilt) and `tools/promo`.
+- **How**: `tools/promo/make_briefs.py` holds every picture (references, scene, tagline) and writes one brief per
+  Codex job; seven `codex exec` jobs side by side made 68 generations in about 25 minutes; `tools/promo/finish.py`
+  crops to exact size and sets ALL lettering (DIN Condensed), so nothing is misspelled. Codex is told to draw no
+  lettering at all. `accept.json` carries QA's per-picture decisions. The only Pillow on this Mac is the venv in
+  `~/Desktop/Backrooms Stay Quiet - Covers 2026-10-04/.artwork-venv`.
+- **What things really look like** (the covers of 2026-10-04 had three of these wrong):
+  the PLAYER is a chunky hooded mustard hazmat figure with a black TWIN-LENS GAS MASK and a black backpack with
+  two olive tanks (not "a dark visor"); the MALL MANAGER is tall and thin with a RED BALLOON for a head, an
+  orange-and-cream striped shirt with a name tag and red gloves; the USHER wears a crimson bellhop uniform with
+  gold buttons and a pillbox cap, has a glossy BLACK faceless head and glowing WHITE gloves (not a pale pink
+  figure); the COUNTER wears a striped paper party hat.
+- **The new Level 2** is `Workspace."Level 2 Poolrooms New (preview)"` (origin 70000, 300, 0; about 32 000 parts;
+  attribute `Route = "P0 A1 P1 A3 P2 A4 P3 A2 P4 A5 P5 A6 EXIT"`; markers `A<n>_<nn>`, `P<n>_<nn>`, `EXIT`), entered
+  by developers from `Level2NewMapPreviewEntry` in the lobby's Level 2 bay (`Level2BlenderPreviewAccess`). Six
+  areas, no entity, no round. The public Level 2 queue (105) still starts the old round: the README of the promo
+  folder says to hold the Level 2 pictures until the new map is what players get.
+- **Two entities are not in their level when a round starts.** The Mall Manager only exists once
+  `Level3MallManagerHuntActive` is true (the blackout); the Usher is `Dormant` at (0, -600, 0) until the power is
+  on, and the Level 4 round STARTS with the power off (black, red emergency light). For a look at them: clone
+  `ServerStorage.Level3Assets.EntityTemplates.MallManagerTemplate` (Server) or
+  `ReplicatedStorage."Level 4 Usher Visual"` (Client; that is what the client draws) into the level, anchored.
+  Both stand in a stiff rig pose without their animations.
+- **Taking pictures in a play session.** A `BindToRenderStep` at `Camera.Value + 5` that reads a CFrame from a
+  workspace attribute parks the camera; a `RunService.PreRender` connection that disables every ScreenGui hides
+  the HUD (ProtectionHUD turns itself back on after the render step, so the render step alone is not enough).
+  The body turns its back to a Scriptable camera: `Humanoid.AutoRotate = false`, then `PivotTo` facing it.
+  `player.ReplicationFocus = <part>` (Server) streams the place round a far entity in, so a camera that follows
+  `Workspace.Entity` 400 studs from the body shows a lit maze. Queue ids: 101, 105, 109, 113, 117, 121 for
+  Levels 1 to 6. Put `QualityLevel` back to `Automatic` afterwards (it was).
+- **Codex's ElevenLabs connector fails to refresh its login** (`failed to refresh OAuth tokens for server
+  ElevenLabs` at the top of every job's log). Harmless for pictures; an audio job will need the owner to sign in.
+- **Played on this run / not played**: every level was entered as a real round or session and photographed;
+  the Level 1 fuse run, the Level 3 CDs and blackout and the Level 4 breaker puzzle were NOT played tonight (the
+  analysis says so per level and names the earlier runs it leans on).
