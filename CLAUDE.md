@@ -2215,3 +2215,19 @@ weight and button size on phones, no noise meter.
   it, `kill -9 <pid>` did; `open -g "roblox-studio:..."` started a new one beside it (two processes for a moment:
   end the old one by pid, never by name).
 
+### Added 2026-10-08 (afternoon, later still) - The game's own numbers: reach is not the bottleneck
+
+- **Owner**: "How can we make it go viral otherwise?" Read first (snapshot:
+  `artifacts/promo-20261007/game-metrics-20261008.json`): 16 to 84 daily players over the last two weeks (50 on
+  2026-10-06), about 12 500 monthly, so nearly everybody who came in the last month came once; an average session
+  of about 6 minutes; next-day return between 0 and 12%; return after a week 0% on every day read. The game's tile
+  was shown to 2 000 to 8 000 people a day. The answer given: more reach into this funnel does not compound; find
+  where the first session ends, then the invite loop, clips of the moments worth filming, and a Halloween update.
+- **Metric names the analytics gateway takes** (same call as the locale query of 2026-10-08, breakdown empty,
+  `METRIC_GRANULARITY_ONE_DAY`): `DailyActiveUsers`, `MonthlyActiveUsers`, `Visits`, `D1Retention`, `D7Retention`,
+  `D30Retention`, `ForwardD1Retention`, `AverageSessionLengthMinutes`, `AveragePlayTimeMinutesPerDAU`,
+  `TotalPlayTimeHours`, `DauMauStickiness`, `UniqueUsersWithImpressions`, `RFYPlayThroughRate`, `PayingUsers`,
+  `AverageRevenuePerUser`. Not available for this universe: the `SessionDurationSeconds*` percentiles and
+  `PeakConcurrentPlayers`; `Visits` cannot be broken down by `AcquisitionSource`. The dashboard's scripts name
+  about 200 more (funnels, share links, thumbnails); `Revenue` did not answer in 90 s.
+
