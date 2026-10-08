@@ -2058,3 +2058,43 @@ weight and button size on phones, no noise meter.
   **Not tested**: the saved write (Studio keeps profiles in the session only), the belly rub (same function), a phone.
 - **`/tmp/l2sign/run.py` must be run from the repo root** (it imports the Studio client by relative path). A play
   test started before the mute call is audible for those seconds: start play and mute in one command.
+
+### Added 2026-10-08 (midday) - Phone and tablet QA; own servers for everyone; the board says 12 hours (in Studio, NOT published)
+
+- **Owner**: "test the game on phone and tablet and make sure it all plays, all levels, all UI", then, mid-run:
+  own servers for Levels 5 and 6 "from now on" (no developer test first: "same setup as the other levels"), the
+  Level 2 board to say under 12 hours, and the four shared HUD faults from the Level 6 phone audit fixed.
+  The record, with every picture, is `artifacts/mobile-qa-20261008/README.md`. Marker `MOBILE_QA_20261008`.
+- **`ServerKind.OwnServers = "everyone"`.** Every Level 5/6 party gets its own lobby server and a Level 4 clear
+  offers CONTINUE into Level 5. The cross-server path has still never run (it cannot in Studio); a refused
+  reservation falls back to the lobby server behind the one-party lock; `"off"` is the way back.
+- **Level 2 board**: "within 12 hours" in all seven languages (`LEVEL2_MAINTENANCE_20261008`).
+- **`tools/mobile_qa/qa.py`** drives a session: `play` (starts and mutes in one go), `audit <state> [WxH ...]
+  [--shot] [--as <ScreenGui>]`, `run`, `shot`, `stop`; `digest.py <state>` folds the reports; `known.txt` holds
+  findings that are not faults; `read_studio.py` copies a drifted script to a scratch folder without touching
+  the repo. Helpers for standing in each level are described in the artifacts README's sources (`/tmp/qa`).
+- **What the audit taught**:
+  - Positions must come from `UIDevice.Layout()` (`Safe`, `ModalViewport`, `Zones`, `TopBand`), never from
+    `workspace.CurrentCamera.ViewportSize`: the camera counts Roblox's top bar, a ScreenGui's own space does not.
+    That one mistake put two lobby buttons off the bottom of every phone.
+  - A lobby window belongs in `UIDevice.SCREEN_OWNING_MODALS` AND in `ZyntraStore.RAIL_WINDOWS` (with a
+    `Close...` BindableFunction in PlayerScripts): the first docks the token pill and raises the rail, the second
+    lets a rail press close it. The L4 windows refuse to open over somebody else's modal.
+  - **Do not make an in-round panel a screen-owning modal.** With movement suppressed the touch cluster does not
+    go away, it re-forms as a column (tried for Level 4's keypad: SNEAK/RUN/JUMP landed on the objective card).
+    Publish a plain attribute and let the chip and slots opt out (`Level4CardOpen`, `LevelOneGuideObjectivesOpen`).
+  - The suite's scenario setups (`UIRegression.Scenarios()[n].Setup`) stage panels in the LOBBY; called inside a
+    real round they corrupt the client's round state. Use them in a lobby session only.
+  - The Lucky Wheel disables every ScreenGui but three, by name: the phone view survives it as
+    `--as FriendBoostGui`.
+  - Scale-laid-out pieces (the wheel's grafted title) cannot be judged under the fixture: the real ScreenGui
+    keeps the host's size. Their rules were checked by arithmetic for a real phone, not seen.
+  - `#Source` counts bytes, the Mac audit tool characters: a script with box-drawing comments "changes size"
+    between the two. It was not another session.
+- **ZyntraStore, Zyntra Shop L4 and RoundUI in the repo were brought level with Studio** before editing (another
+  session's rewrite of the store: 201 KB to 58 KB, the shop in its own script).
+- **Memory on this Mac decides the pace.** Studio holds 5.7 GB in Edit mode with this place open; a play session
+  adds a server and a client. The desktop app's own WebKit process grew to 5 GB over the session as pictures
+  were read. Short sessions, a Studio restart every few, few pictures read.
+- **Owed**: the portrait decision (lock to landscape, or portrait layouts for the L4 windows), a real phone, and
+  watching the first public parties on their own Level 5/6 servers after the publish.

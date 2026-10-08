@@ -649,13 +649,14 @@ local function placeForDevice()
 end
 placeForDevice()
 UIDevice.Changed:Connect(placeForDevice)
--- On touch an open keypad or note owns the screen (UIDevice.SCREEN_OWNING_MODALS): the buttons, slots and chip that
--- would lie on it stand down and come back when it closes. A pointer device keeps its HUD; nothing covers it there.
+-- On touch an open keypad or note publishes `Level4CardOpen`: the LOBBY chip (it lay on the code display on a
+-- 568x320 phone) and the equipment slots stand down on it and come back when the card closes. Deliberately NOT one
+-- of UIDevice's screen-owning modals: tried, and with movement suppressed the touch cluster re-forms as a column
+-- across the objective card instead of going away. The cluster stays where it is; the cards stand left of it.
 local function publishCard()
 	local open = gui.Enabled and (keypad.Visible or noteCard.Visible) and UIDevice.IsTouch()
 	if (player:GetAttribute("Level4CardOpen") == true) ~= open then
 		player:SetAttribute("Level4CardOpen", open or nil)
-		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 	end
 end
 keypad:GetPropertyChangedSignal("Visible"):Connect(publishCard)

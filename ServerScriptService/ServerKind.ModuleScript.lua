@@ -30,8 +30,11 @@ local ServerKind = {}
 --                 Every other party keeps the one-party-at-a-time lock on the lobby server (PARTY_LOCK_20261008).
 --   "everyone"    every party.
 --   "off"         nobody: both levels run on the lobby server for all, as before 2026-10-08.
--- It cannot be tested in Studio (no reserved servers, no teleports), which is why it starts on "developers".
-ServerKind.OwnServers = "developers"
+-- It cannot be tested in Studio (no reserved servers, no teleports), which is why it started on "developers".
+-- "everyone" since 2026-10-08, on the owner's word ("own servers from now on ... same setup as the other levels"):
+-- it went public without a live run by a developer party first. Where Roblox refuses the reservation the party
+-- still enters on the lobby server behind the one-party lock, as before; "off" is the way back.
+ServerKind.OwnServers = "everyone"
 
 local reserved = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
 local live = nil                   -- {Level = 5 | 6, Session = string} on a live-level lobby

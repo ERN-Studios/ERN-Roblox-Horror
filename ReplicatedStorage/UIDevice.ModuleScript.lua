@@ -1648,9 +1648,6 @@ end
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
 	"LuckyWheelOpen", "DailyRewardsOpen", "AchievementsOpen", "HelpPanelOpen",
-	-- Level 4's keypad and note card, published on TOUCH only (Level 4 Round Client): their gui draws under every
-	-- touch control, and on a phone the buttons, the equipment slots and the LOBBY chip lay on the code display.
-	"Level4CardOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean

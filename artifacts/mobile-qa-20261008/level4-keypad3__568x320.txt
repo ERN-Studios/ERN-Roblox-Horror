@@ -1,0 +1,26 @@
+phone 568x320, 25 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level4RoundGui, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 49 pieces measured, 25 findings
+THUMB   Level4RoundGui.Keypad '0' (128,259)-(138,275) is 9x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '1' (77,129)-(82,145) is 6x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '2' (129,129)-(137,145) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '3' (183,129)-(191,145) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '4' (75,172)-(84,188) is 10x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '5' (129,172)-(137,188) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '6' (182,172)-(191,188) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '7' (75,215)-(84,231) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '8' (128,215)-(138,231) is 9x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad '9' (182,215)-(191,231) is 8x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad 'C' (74,259)-(84,275) is 10x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad 'OK' (176,259)-(197,275) is 22x16 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad (44,66)-(222,312) is 179x205 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key0 (109,248)-(157,285) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key1 (55,118)-(103,155) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key2 (109,118)-(157,155) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key3 (163,118)-(211,155) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key4 (55,161)-(103,199) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key5 (109,161)-(157,199) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key6 (163,161)-(211,199) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key7 (55,205)-(103,242) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key8 (109,205)-(157,242) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > Key9 (163,205)-(211,242) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > KeyC (55,248)-(103,285) is 48x37 px inside the Thumbstick zone
+THUMB   Level4RoundGui.Keypad > KeyOK (163,248)-(211,285) is 48x37 px inside the Thumbstick zone

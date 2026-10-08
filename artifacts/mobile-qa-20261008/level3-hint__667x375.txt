@@ -1,0 +1,2 @@
+phone 667x375, 24 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, FlashlightPopup, FriendBoostGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 24 pieces measured, 1 findings
+THUMB   Level3ReaderGui.ReaderHint (147,66)-(447,167) is 120x42 px inside the Thumbstick zone

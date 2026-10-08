@@ -833,7 +833,7 @@ function Module.Build()
 		end
 	end
 	-- LEVEL2_MAINTENANCE_20261008 (owner: "a sign at the entrance to the Level 2 poolrooms: this level is under
-	--   maintenance, the real poolrooms level is live within 24 hours, please go on to another level, thank you
+	--   maintenance, the real poolrooms level is live within 24 hours (12 since the afternoon of 2026-10-08, owner), please go on to another level, thank you
 	--   for your patience; in very simple language everyone understands, and in the languages our players speak").
 	--   A barrier board on the sidewalk 5.6 studs in front of the Level 2 gate, lettered on both faces: English
 	--   large, then the six next locales of the last 28 days' players (es 9.7%, ru 9.2%, pt 3.6%, de 3.4%, id 2.9%,
@@ -881,17 +881,17 @@ function Module.Build()
 
 			local ENGLISH = {
 				"We are fixing this level.",
-				"The real Poolrooms open within 24 hours.",
+				"The real Poolrooms open within 12 hours.",
 				"Please play another level.",
 				"Thank you for your patience!",
 			}
 			local OTHERS = {
-				{"ES", "En mantenimiento. Las Poolrooms de verdad abren en menos de 24 horas. Juega otro nivel, por favor. ¡Gracias por tu paciencia!"},
-				{"RU", "Идёт ремонт. Настоящие Poolrooms откроются в течение 24 часов. Пожалуйста, выбери другой уровень. Спасибо за терпение!"},
-				{"PT", "Em manutenção. As Poolrooms de verdade abrem em menos de 24 horas. Jogue outro nível, por favor. Obrigado pela paciência!"},
-				{"DE", "Wird gerade repariert. Die echten Poolrooms öffnen in weniger als 24 Stunden. Bitte spiel ein anderes Level. Danke für deine Geduld!"},
-				{"ID", "Sedang diperbaiki. Poolrooms yang asli dibuka dalam waktu kurang dari 24 jam. Silakan main level lain. Terima kasih atas kesabaranmu!"},
-				{"FR", "En maintenance. Les vraies Poolrooms ouvrent dans moins de 24 heures. Joue à un autre niveau, s'il te plaît. Merci pour ta patience !"},
+				{"ES", "En mantenimiento. Las Poolrooms de verdad abren en menos de 12 horas. Juega otro nivel, por favor. ¡Gracias por tu paciencia!"},
+				{"RU", "Идёт ремонт. Настоящие Poolrooms откроются в течение 12 часов. Пожалуйста, выбери другой уровень. Спасибо за терпение!"},
+				{"PT", "Em manutenção. As Poolrooms de verdade abrem em menos de 12 horas. Jogue outro nível, por favor. Obrigado pela paciência!"},
+				{"DE", "Wird gerade repariert. Die echten Poolrooms öffnen in weniger als 12 Stunden. Bitte spiel ein anderes Level. Danke für deine Geduld!"},
+				{"ID", "Sedang diperbaiki. Poolrooms yang asli dibuka dalam waktu kurang dari 12 jam. Silakan main level lain. Terima kasih atas kesabaranmu!"},
+				{"FR", "En maintenance. Les vraies Poolrooms ouvrent dans moins de 12 heures. Joue à un autre niveau, s'il te plaît. Merci pour ta patience !"},
 			}
 			local PPS = 75                                                        -- 100 is the largest text size: 1.33 studs here
 			local function notice(face)

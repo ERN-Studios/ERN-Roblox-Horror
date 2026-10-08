@@ -1,0 +1,3 @@
+phone 568x320, 25 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Level6PlaygroundHUD, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, StaminaGui, FlashlightPopup, FriendBoostGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 17 pieces measured, 2 findings
+THUMB   Level6PlaygroundHUD.Hint 'Go in through the gate.' (220,104)-(328,114) is 7x8 px inside the Thumbstick zone
+THUMB   RoundExitGui.LeaveChip (24,78)-(188,122) is 164x15 px inside the Thumbstick zone

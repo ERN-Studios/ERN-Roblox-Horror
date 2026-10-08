@@ -286,6 +286,8 @@ local function covered()
 		local layout = UIDevice.Layout()
 		if layout.IsTouch and layout.TopBand.Height < 150 then return true end
 	end
+	-- and Level 4's keypad or note card, which publish this on touch only: their gui draws under these slots
+	if player:GetAttribute("Level4CardOpen") == true then return true end
 	return false
 end
 
@@ -728,7 +730,7 @@ connect(profileChanged.OnClientEvent, function(_, message, tone)
 end)
 for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId",
 	"Level2_ExitTransition", "RoundEntryControlsReady",
-	"DispatchBriefingOpen", "LevelOneGuideObjectivesOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
+	"DispatchBriefingOpen", "LevelOneGuideObjectivesOpen", "Level4CardOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
 	"PlayerProtectionActive", "PlayerProtectionExpiresAt", "PlayerProtectionSource",
 	"ZyntraSpeedPotions", "ZyntraRouteMarkers", "RouteMarkersActive",
 	"ZyntraSpeedBoostUntil", "ZyntraSpeedPotionUsedThisRound"}) do

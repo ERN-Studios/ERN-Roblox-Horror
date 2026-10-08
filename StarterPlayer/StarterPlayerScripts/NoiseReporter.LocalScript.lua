@@ -925,7 +925,9 @@ local function updateRoundState()
 	-- lobby, and applySpeed() ignores crouch out of a round anyway.
 	UIDevice.SetInteractive(touchSneakButton, usable)
 	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
-	UIDevice.SetInteractive(touchGlowButton, usable and not inPreview())
+	-- MOBILE_QA_20261008: not in the live levels either (5 and 6, which carry Level6PlaygroundPreview): GameManager's
+	-- drop handler only serves its own rounds, so the button was there and did nothing.
+	UIDevice.SetInteractive(touchGlowButton, usable and not inPreview() and player:GetAttribute("Level6PlaygroundPreview") ~= true)
 	-- Own the jump control only while in a round. In the lobby the default
 	-- touch jump comes back, because that is the only jump there is there.
 	UIDevice.SuppressDefaultJump(touchControls() and active)

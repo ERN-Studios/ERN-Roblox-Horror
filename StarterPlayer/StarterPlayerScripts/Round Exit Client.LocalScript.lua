@@ -332,6 +332,7 @@ local function chipAvailable()
 		and player:GetAttribute("RoundEntryControlsReady") == true
 		and player:GetAttribute("DispatchBriefingOpen") ~= true
 		and player:GetAttribute("LevelOneGuideObjectivesOpen") ~= true
+		and player:GetAttribute("Level4CardOpen") ~= true      -- Level 4's keypad or note, on touch (MOBILE_QA_20261008)
 		and player:GetAttribute("PartyDownCardOpen") ~= true
 		and not UIDevice.ScreenOwningModalOpen()
 		and not GuiService.MenuIsOpen
@@ -507,7 +508,7 @@ remote.OnClientEvent:Connect(function(event)
 end)
 
 for _, attribute in ipairs({"InRound", "Spectating", "Escaped", "Level2_ExitTransition",
-	"RoundEntryControlsReady", "DispatchBriefingOpen", "LevelOneGuideObjectivesOpen",
+	"RoundEntryControlsReady", "DispatchBriefingOpen", "LevelOneGuideObjectivesOpen", "Level4CardOpen",
 	"PartyDownCardOpen"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(function()
 		if attribute == "InRound" and player:GetAttribute("InRound") ~= true then

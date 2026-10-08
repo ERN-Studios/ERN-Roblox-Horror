@@ -1,0 +1,13 @@
+phone 844x390, 19 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, Level3ReaderGui, ZyntraShopL4, SpectateGui, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, ZyntraStore, FriendBoostGui), 122 pieces measured, 12 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,21)-(822,37)
+CUT     ZyntraShopL4.Root '+' (656,76)-(664,91)
+CUT     ZyntraShopL4.Root '35' (562,73)-(581,94)
+CUT     ZyntraShopL4.Root 'OWNED' (518,122)-(548,135)
+CUT     ZyntraShopL4.Root 'OWNED' (636,122)-(666,135)
+CUT     ZyntraShopL4.Root 'OWNED' (755,122)-(785,135)
+CUT     ZyntraShopL4.Root 'SHOP' (370,368)-(401,380)
+CUT     ZyntraShopL4.Root 'TOKEN EARNER 5x ACTIVE' (828,245)-(908,256)
+CUT     ZyntraShopL4.Root 'TOKENS' (586,78)-(622,91)
+CUT     ZyntraShopL4.Root 'X' (699,68)-(717,97)
+OFF     ZyntraShopL4.Root 'TOKEN EARNER 5x ACTIVE' (828,245)-(908,256)
+OFF     ZyntraShopL4.Root 'Token Earner 2x' (821,214)-(916,227)
