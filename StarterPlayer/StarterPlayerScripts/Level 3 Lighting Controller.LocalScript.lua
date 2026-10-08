@@ -371,7 +371,10 @@ local function captureWorldLightBaseline()
 	if not world then return end
 	for _, descendant in ipairs(world:GetDescendants()) do
 		captureAuthoredRoomGlow(descendant)
-		if descendant:IsA("Light") and descendant:GetAttribute("Level3_CeilingBounce") ~= true then
+		-- EXIT_WAY_20261008: the hidden exit's doorway lights and the exit signs' pools belong to the server (off
+		-- until the five CDs are in, then the one lit way out). They are never recorded, swept or flickered here.
+		if descendant:IsA("Light") and descendant:GetAttribute("Level3_CeilingBounce") ~= true
+			and descendant:GetAttribute("Level3_ExitWay") ~= true then
 			table.insert(blackoutLights, {
 				Light = descendant,
 				Enabled = descendant.Enabled,
@@ -451,7 +454,7 @@ local function enforceBlackout()
 	-- the authoritative live world so completion can never leave a late light on.
 	if boundWorld then
 		for _, descendant in ipairs(boundWorld:GetDescendants()) do
-			if descendant:IsA("Light") then
+			if descendant:IsA("Light") and descendant:GetAttribute("Level3_ExitWay") ~= true then
 				descendant.Enabled = false
 				descendant.Brightness = 0
 				local parent = descendant.Parent
@@ -470,8 +473,14 @@ local function enforceBlackout()
 	end
 	for _, record in ipairs(blackoutParts) do
 		if record.Part.Parent then
-			record.Part.Material = Enum.Material.SmoothPlastic
-			record.Part.Color = Color3.fromRGB(13, 14, 15)
+			if unlocked and record.Part:GetAttribute("Level3_HiddenExitFrame") == true then
+				-- EXIT_WAY_20261008: the frame round the way out is what the players are looking for
+				record.Part.Material = Enum.Material.Neon
+				record.Part.Color = record.Color
+			else
+				record.Part.Material = Enum.Material.SmoothPlastic
+				record.Part.Color = Color3.fromRGB(13, 14, 15)
+			end
 		end
 	end
 	completionFadeActive = false
@@ -515,8 +524,12 @@ local function beginCompletionFade()
 	for _, record in ipairs(blackoutParts) do
 		if record.Part.Parent then
 			record.Part.Material = record.Material
-			record.Part.Color = record.Color:Lerp(dark, progress)
-			if completionFadeActive then tween(record.Part, remaining, {Color = dark}) end
+			if record.Part:GetAttribute("Level3_HiddenExitFrame") == true then
+				record.Part.Color = record.Color                -- EXIT_WAY_20261008: this fade only runs once the exit is unlocked
+			else
+				record.Part.Color = record.Color:Lerp(dark, progress)
+				if completionFadeActive then tween(record.Part, remaining, {Color = dark}) end
+			end
 		end
 	end
 
@@ -921,7 +934,9 @@ local function bindWorld(world: Model?)
 				local oldCount = #blackoutParts
 				captureAuthoredRoomGlow(descendant)
 				if #blackoutParts > oldCount and blackoutApplied then
-					if completionFadeActive then
+					if exitUnlocked() and descendant:GetAttribute("Level3_HiddenExitFrame") == true then
+						blackoutSweptUnlocked = nil             -- EXIT_WAY_20261008: stays lit; the next sweep confirms it
+					elseif completionFadeActive then
 						local _, duration, progress = completionTiming()
 						local remaining = duration * (1 - progress)
 						local glow = blackoutParts[#blackoutParts]
@@ -944,7 +959,8 @@ local function bindWorld(world: Model?)
 				blackoutSweptUnlocked = nil
 			end
 			if blackoutApplied and exitUnlocked() and descendant:IsA("Light")
-				and descendant:GetAttribute("Level3_CeilingBounce") ~= true then
+				and descendant:GetAttribute("Level3_CeilingBounce") ~= true
+				and descendant:GetAttribute("Level3_ExitWay") ~= true then
 				local _, duration, progress = completionTiming()
 				local remaining = duration * (1 - progress)
 				local parent = descendant.Parent

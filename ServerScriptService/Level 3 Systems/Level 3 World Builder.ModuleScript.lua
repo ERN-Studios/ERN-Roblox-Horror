@@ -1340,15 +1340,26 @@ local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any})
 			Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper,
 			falseWallTransparency)
 	end
-	local strip = .12
+	-- EXIT_WAY_20261008 (owner: "when the CDs are put into the CD player the pathway doorframe should have a
+	-- visible blue light so people know they have to walk through there and down the corridor"). The frame was
+	-- here already, but it was an eighth of a stud wide, the blackout the unlock starts painted it black on every
+	-- client, and its one light was switched off. It is a real frame now (.34 wide, .16 proud) with a strip of
+	-- plain blue Neon set into its two posts and its head (`WayGlow`: the kit skin the Visual Adapter puts on the
+	-- frame is a lamp diffuser and reads dull under the blackout's grade), and the doorway carries three lights of
+	-- its own: over the opening on the hall side, inside the mouth, and further in, so the corridor behind reads
+	-- as a way through. The numbers were set by eye in a round, from 26 studs out, in the blackout. `Level3_ExitWay`
+	-- marks what the Level 3 Lighting Controller leaves alone in its blackout and what the Visual Adapter does not
+	-- hide; the Objective Controller brings glow and lights up at the unlock.
+	local strip = .34
+	local proud = .16
 	local frameParts = {}
 	for _, side in ipairs({-1, 1}) do
-		local z = side * (Configuration.WallThickness * .5 + .06)
+		local z = side * (Configuration.WallThickness * .5 + proud * .5 + .02)
 		for _, data in ipairs({
-			{Vector3.new(-apertureW * .5 + strip * .5, apertureH * .5, z), Vector3.new(strip, apertureH, .08)},
-			{Vector3.new(apertureW * .5 - strip * .5, apertureH * .5, z), Vector3.new(strip, apertureH, .08)},
-			{Vector3.new(0, strip * .5, z), Vector3.new(apertureW, strip, .08)},
-			{Vector3.new(0, apertureH - strip * .5, z), Vector3.new(apertureW, strip, .08)},
+			{Vector3.new(-apertureW * .5 + strip * .5, apertureH * .5, z), Vector3.new(strip, apertureH, proud)},
+			{Vector3.new(apertureW * .5 - strip * .5, apertureH * .5, z), Vector3.new(strip, apertureH, proud)},
+			{Vector3.new(0, strip * .5, z), Vector3.new(apertureW, strip, proud)},
+			{Vector3.new(0, apertureH - strip * .5, z), Vector3.new(apertureW, strip, proud)},
 		}) do
 			local beam = part(model, "Hidden Exit Blue Frame", frameCF * CFrame.new(data[1]), data[2],
 				Color3.fromRGB(70, 170, 255), Enum.Material.Neon, 1)
@@ -1365,9 +1376,110 @@ local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any})
 	light.Shadows = false
 	light.Enabled = false
 	light.Parent = frameParts[1]
+	-- frameCF looks into the corridor: +Z is the hall the players stand in, -Z the way out
+	local wayLights = {}
+	for _, spec in ipairs({
+		{Name = "Hall", At = Vector3.new(0, apertureH - 1.0, 2.4), Range = 34, Brightness = 7},
+		{Name = "Mouth", At = Vector3.new(0, apertureH - 1.0, -4.0), Range = 30, Brightness = 6},
+		{Name = "Within", At = Vector3.new(0, apertureH - 1.0, -15.0), Range = 26, Brightness = 4},
+	}) do
+		local lamp = part(model, "Hidden Exit Way Lamp " .. spec.Name, frameCF * CFrame.new(spec.At),
+			Vector3.new(.2, .2, .2), Color3.fromRGB(70, 170, 255), Enum.Material.SmoothPlastic, 1)
+		decorative(lamp)
+		lamp:SetAttribute("Level3_ExitWay", true)
+		local way = Instance.new("PointLight")
+		way.Name = "Hidden Exit Way Light"
+		way.Color = Color3.fromRGB(80, 175, 255)
+		way.Brightness = spec.Brightness
+		way.Range = spec.Range
+		way.Shadows = false
+		way.Enabled = false
+		way:SetAttribute("Level3_ExitWay", true)
+		way:SetAttribute("Level3_ExitWayBrightness", spec.Brightness)
+		way.Parent = lamp
+		table.insert(wayLights, way)
+	end
+	local wayGlow = {}
+	local band, glowProud = .22, .08
+	for _, side in ipairs({-1, 1}) do
+		local z = side * (Configuration.WallThickness * .5 + proud + .02 + glowProud * .5)
+		for _, data in ipairs({
+			{Vector3.new(-apertureW * .5 + strip * .5, apertureH * .5, z), Vector3.new(band, apertureH - .1, glowProud)},
+			{Vector3.new(apertureW * .5 - strip * .5, apertureH * .5, z), Vector3.new(band, apertureH - .1, glowProud)},
+			{Vector3.new(0, apertureH - strip * .5, z), Vector3.new(apertureW - .1, band, glowProud)},
+		}) do
+			local glow = part(model, "Hidden Exit Way Glow", frameCF * CFrame.new(data[1]), data[2],
+				Color3.fromRGB(96, 190, 255), Enum.Material.Neon, 1)
+			decorative(glow)
+			glow:SetAttribute("Level3_ExitWay", true)
+			table.insert(wayGlow, glow)
+		end
+	end
 	local discPlayer = makeHiddenExitDiscPlayer(model, frameCF)
 	model:SetAttribute("Level3_ExitUnlocked", false)
-	return {Model=model, Wall=wall, FrameParts=frameParts, Light=light, Position=center, DiscPlayer=discPlayer}
+	return {Model=model, Wall=wall, FrameParts=frameParts, Light=light, WayLights=wayLights, WayGlow=wayGlow, Position=center, DiscPlayer=discPlayer}
+end
+
+-- EXIT_WAY_20261008 (owner: "put very subtle lit exit signs down the corridor ... made in Blender; the light
+-- effect is yours to work out"). The sign is ServerStorage.Level3Assets.ExitSign (tools/level3_exit_signs: a box
+-- on two rods, a dark green lens, the word and an arrow). One hangs every 56 studs from 24 studs in, lettered
+-- toward the walkers and blank toward the exit. The light effect: the lens only smoulders and the letters are a
+-- dim green, each sign drops a faint pool of green on the floor under it (a PointLight with no shadows), and a
+-- few of them are worn: weaker, and one in seven dead. With the finale's fog ending at 115 studs a runner always
+-- has the next one or two in sight and no more. Nothing collides. A missing template only leaves the signs out.
+local function makeFinalHallExitSigns(corridor: {[string]: any}): number
+	local assets = ServerStorage:FindFirstChild("Level3Assets")
+	local template = assets and assets:FindFirstChild("ExitSign")
+	if not (template and template:IsA("Model") and template.PrimaryPart) then
+		warn("[Level 3 World Builder] ServerStorage.Level3Assets.ExitSign is missing; the last corridor has no exit signs")
+		return 0
+	end
+	local folder = Instance.new("Folder")
+	folder.Name = "Level 3 Exit Way Signs"
+	folder.Parent = corridor.Model
+	local forward = corridor.Forward
+	local count = 0
+	local distance = 24
+	while distance < corridor.Length - 18 do
+		count += 1
+		local at = corridor.StartPoint + forward * distance + Vector3.new(0, corridor.Height - .02, 0)
+		local sign = template:Clone()
+		sign.Name = string.format("Level 3 Exit Sign %02d", count)
+		sign:PivotTo(CFrame.lookAt(at, at + forward))
+		local worn = (count * 5 + 3) % 7                            -- the same signs every round: 0 is dead, 1 and 2 are tired
+		local level = if worn == 0 then 0 elseif worn <= 2 then .5 else 1
+		for _, piece in ipairs(sign:GetDescendants()) do
+			if piece:IsA("BasePart") then
+				decorative(piece)
+				piece.Anchored = true
+				piece:SetAttribute("Level3_ExitWay", true)
+				if piece.Name == "ExitSignHousing" then
+					piece.Material = Enum.Material.SmoothPlastic       -- Metal caught the doorway's blue and shone like a lamp
+					piece.Color = Color3.fromRGB(170, 170, 170)        -- over its own painted colours, as modelled
+				elseif piece.Name == "ExitSignGlow" then
+					piece.Material = if level > 0 then Enum.Material.Neon else Enum.Material.SmoothPlastic
+					piece.Color = Color3.fromRGB(150, 255, 190):Lerp(Color3.fromRGB(40, 60, 48), 1 - level)
+				end
+			end
+		end
+		if level > 0 then
+			local pool = Instance.new("PointLight")
+			pool.Name = "Exit Sign Pool"
+			pool.Color = Color3.fromRGB(96, 255, 160)
+			pool.Brightness = 1.1 * level
+			pool.Range = 16
+			pool.Shadows = false
+			pool:SetAttribute("Level3_ExitWay", true)
+			local glow = sign:FindFirstChild("ExitSignGlow")
+			pool.Parent = glow or sign.PrimaryPart
+		end
+		sign:SetAttribute("Level3_ExitWay", true)
+		sign:SetAttribute("Level3_ExitSignLevel", level)
+		sign.Parent = folder
+		distance += 56
+	end
+	folder:SetAttribute("Level3_ExitSignCount", count)
+	return count
 end
 
 local function sideBetween(a: {[string]: any}, b: {[string]: any}): string
@@ -1699,38 +1811,10 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	local centerY = p.Y + radius + .05
 	visual:SetAttribute("Level3_SlideMouthPosition", Vector3.new(mouthX, centerY, p.Z))
 	visual:SetAttribute("Level3_DirectMallArrival", true)
-	local signPosition = Vector3.new(mouthX + .16, centerY + radius + 2.3, p.Z)
-	local arrivalSign = part(visual, "Arrival Only Sign",
-		CFrame.lookAt(signPosition, signPosition + Vector3.xAxis),
-		Vector3.new(14, 3.6, .2), Color3.fromRGB(223, 197, 115), Enum.Material.SmoothPlastic)
-	decorative(arrivalSign)
-	local signGui = Instance.new("SurfaceGui")
-	signGui.Name = "Arrival Only Notice"
-	signGui.Face = Enum.NormalId.Front
-	signGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
-	signGui.CanvasSize = Vector2.new(840, 216)
-	signGui.LightInfluence = .15
-	signGui.AlwaysOnTop = false
-	signGui.Parent = arrivalSign
-	local signTitle = Instance.new("TextLabel")
-	signTitle.Name = "NoExit"
-	signTitle.BackgroundTransparency = 1
-	signTitle.Size = UDim2.new(1, 0, .62, 0)
-	signTitle.Font = Enum.Font.GothamBold
-	signTitle.TextSize = 78
-	signTitle.TextColor3 = Color3.fromRGB(37, 33, 23)
-	signTitle.Text = "NO EXIT"
-	signTitle.Parent = signGui
-	local signDetail = Instance.new("TextLabel")
-	signDetail.Name = "ArrivalOnly"
-	signDetail.BackgroundTransparency = 1
-	signDetail.Position = UDim2.new(0, 0, .62, 0)
-	signDetail.Size = UDim2.new(1, 0, .3, 0)
-	signDetail.Font = Enum.Font.GothamMedium
-	signDetail.TextSize = 36
-	signDetail.TextColor3 = signTitle.TextColor3
-	signDetail.Text = "ONE-WAY ARRIVAL"
-	signDetail.Parent = signGui
+	-- SLIDE_MOUTH_20261008 (owner: "remove that NO EXIT sign at the end of the slide, just make sure one slides out
+	-- of it if one tries to go into the end"). The yellow NO EXIT / ONE-WAY ARRIVAL board over the mouth is gone.
+	-- What turns a walker round is the loop at the foot of this function: anybody more than ten studs up the bore
+	-- is laid down and carried back out at slide speed.
 	local shellColor = Color3.fromRGB(218, 226, 211)
 	local shellShadow = Color3.fromRGB(193, 207, 197)
 	local slipperyPhysics = PhysicalProperties.new(.7, .02, 0, 100, 1)
@@ -2202,6 +2286,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		end
 		if link.Door == "HiddenExit" then
 			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
+			makeFinalHallExitSigns(corridor)
 			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
 			-- One fixed spawn at the hall's entrance. It must stay behind the halfway
 			-- line: anywhere beyond it is between the runners and the exit.

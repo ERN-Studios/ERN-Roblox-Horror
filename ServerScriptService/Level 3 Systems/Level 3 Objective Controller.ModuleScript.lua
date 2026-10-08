@@ -1218,6 +1218,25 @@ unlockExit = function(session: AnyTable, startRoomId: string)
 	if portal.Light and portal.Light.Parent then
 		portal.Light.Enabled = false
 	end
+	-- EXIT_WAY_20261008: the doorway's own lights come up with the frame, so the way out is the one lit thing in
+	-- the blackout that follows. The Lighting Controller leaves `Level3_ExitWay` alone; nothing else is relit.
+	for _, way in ipairs(portal.WayLights or {}) do
+		if way and way.Parent then
+			local target = way:GetAttribute("Level3_ExitWayBrightness")
+			way.Brightness = 0
+			way.Enabled = true
+			playTween(session, way, TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				Brightness = if type(target) == "number" then target else 1.5,
+			})
+		end
+	end
+	for _, glow in ipairs(portal.WayGlow or {}) do
+		if glow and glow.Parent then
+			playTween(session, glow, TweenInfo.new(0.60, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				Transparency = 0,
+			})
+		end
+	end
 
 	local finalExit = session.Manifest.FinalExit
 	if finalExit and finalExit.Parent then
@@ -1534,6 +1553,8 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 	portal.Wall.CanQuery = true
 	for _, framePart in ipairs(portal.FrameParts) do framePart.Transparency = 1 end
 	if portal.Light then portal.Light.Enabled = false end
+	for _, way in ipairs(portal.WayLights or {}) do way.Enabled = false end   -- EXIT_WAY_20261008
+	for _, glow in ipairs(portal.WayGlow or {}) do glow.Transparency = 1 end
 
 	local finalExit = manifest.FinalExit
 	if finalExit and finalExit.Parent then
@@ -1623,6 +1644,12 @@ function ObjectiveController.Stop()
 			if framePart and framePart.Parent then framePart.Transparency = 1 end
 		end
 		if portal.Light and portal.Light.Parent then portal.Light.Enabled = false end
+		for _, way in ipairs(portal.WayLights or {}) do
+			if way and way.Parent then way.Enabled = false end
+		end
+		for _, glow in ipairs(portal.WayGlow or {}) do
+			if glow and glow.Parent then glow.Transparency = 1 end
+		end
 	end
 
 	for _, object in ipairs(session.Manifest.World:GetDescendants()) do

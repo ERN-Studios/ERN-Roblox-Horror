@@ -1448,6 +1448,100 @@ trackReaderConnection(RunService.RenderStepped:Connect(function(dt)
 	updateReader(elapsed)
 end))
 
+-- CD_HINT_20261008 (owner: "a message and an arrow that points at the reader, with how to find the CDs; shown for
+-- a short while"). Once per round, when the reader is first up and nothing has been collected yet: a small card
+-- beside the panel (under it where there is no room beside it) whose arrows run toward the panel. It goes after
+-- ten seconds, or the moment a CD is picked up, the reader is put away, a toast or anything else takes the screen.
+-- Nothing flashes: the arrows drift a few pixels and come back.
+do
+	local HINT_SECONDS = 10
+	local hint = Instance.new("Frame")
+	hint.Name = "ReaderHint"
+	hint.Visible = false
+	hint.Parent = gui
+	UIStyle.panel(hint)
+	local hintStroke = hint:FindFirstChildOfClass("UIStroke")
+	if hintStroke then hintStroke.Color = ENERGON end
+	local arrow = Instance.new("TextLabel")
+	arrow.Name = "Arrow"
+	arrow.BackgroundTransparency = 1
+	UIStyle.readout(arrow, {TextColor = ENERGON, TextSize = 22})
+	arrow.Parent = hint
+	local heading = Instance.new("TextLabel")
+	heading.Name = "Heading"
+	heading.BackgroundTransparency = 1
+	UIStyle.readout(heading, {TextColor = ENERGON, TextSize = 15})
+	heading.Text = "FIND THE 5 CDs"
+	heading.TextXAlignment = Enum.TextXAlignment.Left
+	heading.Parent = hint
+	local body = Instance.new("TextLabel")
+	body.Name = "Body"
+	body.BackgroundTransparency = 1
+	UIStyle.body(body, {TextColor = TEXT, TextSize = 13})
+	body.Text = "This reader points to the nearest CD. Turn until the mark is in the middle, then walk."
+	body.TextWrapped = true
+	body.TextXAlignment = Enum.TextXAlignment.Left
+	body.TextYAlignment = Enum.TextYAlignment.Top
+	body.Parent = hint
+
+	-- One world at a time, held strongly: a weak table keyed on the Model can lose its entry while the Model lives
+	-- (nothing else in this script keeps a Lua reference to it), and the card would come back mid-round.
+	local hintWorld: Model? = nil
+	local hintSeconds = 0
+	local function wanted(): Model?
+		local world = currentWorld()
+		if world ~= hintWorld then hintWorld, hintSeconds = world, 0 end
+		if not world or hintSeconds >= HINT_SECONDS then return nil end
+		if not panel.Visible or toast.Visible or not isActive() or spectateSubject() ~= nil then return nil end
+		if player:GetAttribute("LevelLoadingOpen") == true or workspace:GetAttribute("UIRegressionViewport") ~= nil then return nil end
+		if stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
+			or numberAttribute("Level3_ModuleProgress", "Level3Modules", 0) > 0 then
+			hintSeconds = HINT_SECONDS                                    -- they have found one: nothing left to say
+			return nil
+		end
+		return world
+	end
+	local function place(seconds: number)
+		local size, right, top = panel.AbsoluteSize, panel.Position.X.Offset, panel.Position.Y.Offset
+		local drift = math.floor(3 + 3 * math.sin(seconds * 3.2))
+		local beside = right - size.X - 12 - 300 >= 150                   -- clear of the LOBBY chip on the left
+		if beside then
+			hint.AnchorPoint = Vector2.new(1, 0)
+			hint.Position = UDim2.fromOffset(right - size.X - 12, top)
+			hint.Size = UDim2.fromOffset(300, math.max(74, size.Y))
+			arrow.Text = ">>"
+			arrow.AnchorPoint = Vector2.new(1, 0.5)
+			arrow.Position = UDim2.new(1, -8 + drift, 0.5, 0)
+			arrow.Size = UDim2.fromOffset(34, 28)
+			heading.Position, heading.Size = UDim2.fromOffset(12, 8), UDim2.new(1, -62, 0, 18)
+			body.Position, body.Size = UDim2.fromOffset(12, 30), UDim2.new(1, -62, 1, -36)
+		else
+			local width = math.max(200, size.X)
+			hint.AnchorPoint = Vector2.new(1, 0)
+			hint.Position = UDim2.fromOffset(right, top + size.Y + 10)
+			hint.Size = UDim2.fromOffset(width, 96)
+			arrow.Text = "^ ^"
+			arrow.AnchorPoint = Vector2.new(0.5, 0)
+			arrow.Position = UDim2.new(0.5, 0, 0, 2 - drift)
+			arrow.Size = UDim2.fromOffset(60, 22)
+			heading.Position, heading.Size = UDim2.fromOffset(12, 24), UDim2.new(1, -24, 0, 18)
+			body.Position, body.Size = UDim2.fromOffset(12, 44), UDim2.new(1, -24, 1, -50)
+		end
+	end
+	trackReaderConnection(RunService.RenderStepped:Connect(function(dt)
+		local world = wanted()
+		if not world then
+			if hint.Visible then hint.Visible = false end
+			return
+		end
+		hintSeconds += dt
+		local seconds = hintSeconds
+		place(seconds)
+		if not hint.Visible then hint.Visible = true end
+		script:SetAttribute("Level3_ReaderHintSeconds", math.floor(seconds * 10) / 10)
+	end))
+end
+
 -- C_READER_TEARDOWN_20260831.
 --
 -- One teardown, idempotent, that every exit path funnels into. The triggers are

@@ -171,8 +171,11 @@ function Adapter.Apply(manifest)
     assert(arrivalTube, "Missing public Level 2 slide continuation")
     local waitingRoom = world:FindFirstChild("Escaped Player Waiting Room")
     for _, object in ipairs(legacy) do
+        -- EXIT_WAY_20261008: the exit signs of the last corridor and the hidden exit's own glow are the builder's
+        -- final look, not a stand-in for a kit piece: they stay as they were made.
         if object:IsDescendantOf(arrivalTube)
-            or (waitingRoom and object:IsDescendantOf(waitingRoom)) then continue end
+            or (waitingRoom and object:IsDescendantOf(waitingRoom))
+            or object:GetAttribute("Level3_ExitWay") == true then continue end
         if object:IsA("BasePart") then
             object:SetAttribute("Level3_LegacyTransparency", object.Transparency)
             object.Transparency = 1

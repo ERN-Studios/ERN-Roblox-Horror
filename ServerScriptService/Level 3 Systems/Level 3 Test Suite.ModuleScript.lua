@@ -600,16 +600,11 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		and typeof(slideMouth) == "Vector3"
 		and ((slideMouth :: Vector3) - expectedMouth).Magnitude <= .02,
 		"Level 2 slide mouth must terminate directly at the Level 3 mall arrival wall")
-	local arrivalSign = slide:FindFirstChild("Arrival Only Sign")
-	local arrivalNotice = arrivalSign and arrivalSign:FindFirstChild("Arrival Only Notice")
-	local noExitText = arrivalNotice and arrivalNotice:FindFirstChild("NoExit")
-	local arrivalOnlyText = arrivalNotice and arrivalNotice:FindFirstChild("ArrivalOnly")
-	assert(arrivalSign and arrivalSign:IsA("BasePart")
-		and arrivalNotice and arrivalNotice:IsA("SurfaceGui")
-		and arrivalNotice.Face == Enum.NormalId.Front and not arrivalNotice.AlwaysOnTop
-		and noExitText and noExitText:IsA("TextLabel") and noExitText.Text == "NO EXIT"
-		and arrivalOnlyText and arrivalOnlyText:IsA("TextLabel") and arrivalOnlyText.Text == "ONE-WAY ARRIVAL",
-		"The authored one-way arrival sign is missing or changed")
+	-- SLIDE_MOUTH_20261008: the NO EXIT board over the mouth was taken down on the owner's word; the slip loop is
+	-- what turns a walker round.
+	assert(slide:FindFirstChild("Arrival Only Sign") == nil
+		and slide:GetAttribute("Level3_SlideSlipback") == true,
+		"The arrival slide must carry no NO EXIT board and must still slip walkers back out")
 	local transitionSeals = 0
 	for _, object in ipairs(slide:GetDescendants()) do
 		if object:IsA("BasePart") and object:GetAttribute("Level3_TransitionWallSeal") == true then
@@ -1386,6 +1381,16 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 	end
 	assert(portalLight.Enabled == false,
 		"Hidden-exit blue spill must remain off during the lightless finale")
+	-- EXIT_WAY_20261008: the doorway's own lights and the corridor's signs are the one exception to "lightless"
+	local wayLights = 0
+	for _, instance in ipairs(portalModel:GetDescendants()) do
+		if instance:IsA("Light") and instance.Name == "Hidden Exit Way Light" then
+			wayLights += 1
+			assert(instance:GetAttribute("Level3_ExitWay") == true and instance.Enabled == unlocked,
+				"Hidden-exit way lights must be off before 5/5 modules and on after")
+		end
+	end
+	assert(wayLights == 3, "Hidden exit must carry its three way lights")
 	assert(state:GetAttribute("Level3_ExitGuideActive") == false
 		and state:GetAttribute("Level3_ExitGuideLampCount") == 0
 		and workspace:GetAttribute("Level3ExitGuideActive") == false,
