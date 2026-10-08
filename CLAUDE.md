@@ -1942,3 +1942,51 @@ weight and button size on phones, no noise meter.
   process and a Studio that answers.
 - **After the publish the two passes' descriptions on Roblox were changed** to the new numbers
   (`tools/store/pass_text.py`; old and new texts in `artifacts/store-passes-20261008/pass-descriptions.json`).
+
+### Added 2026-10-08 (morning) - Level 5: a death keeps you in the level; the Level 4 bay's posters in lightboxes
+
+- **Owner**: "For Level 5 there is no kill cam like all the other maps. You just die and are thrown back to the
+  lobby; there has to be spectating, buying a re-entry or using a banked one, and you spawn at the start of the
+  section you have reached. So like the other levels", a DEV cheat button that re-enters all dead players in the
+  level, and the DEV re-entry option for developers who die. This supersedes "a fall is a death, no spectating or
+  re-entry in Level 5" (2026-10-04). Markers `DEATH_PARITY_20261008`, `FALL_CAM_20261008`, `DEV_REVIVE_20261008`.
+- **Server (`Level5PreviewAccess`)**: the corridor's stay-dead flow (`finaleDeath`, `record.dead`, the party tally
+  with its 15 s window) now takes EVERY death. `ZyntraReentryUsed` is false from `Void.Join` and true after a paid
+  re-entry: one per run, as in every level (the corridor no longer re-arms it). A fall (40 studs under the stretch
+  reached) is first SHOWN: `record.fallingAt`, event `"falling", 2.4`, and only 2.4 s later `Health = 0`. Causes for
+  the death card: `L5Fall` (new in `DeathAdvice`), `L5Crusher`, `Unknown`. `reenter(player, free, forced)` stands a
+  player at the FIRST checkpoint of the section they had reached and sets `record.cp` back to it (the fall line is
+  measured from the checkpoint held: a later one's would kill the body where it stands); a death past the
+  corridor's doorway (`record.deadInFinale`) still stands up in the small room. A dead member is no longer waited
+  for on a plate. `living()` also refuses a humanoid in the Dead state: the body's own Health script heals a
+  corpse (0, 1, 2, 3 ... measured), and a corpse now stays in the level.
+- **Developers**: the free re-entry is the one every level has (PARTY DOWN card and the store's re-entry modal,
+  `DevAccess.IsAllowed`, through `ZyntraReentry` -> `Level6Reentry` -> `Level5Reentry`). New: `Level5VoidHud.DevRevive`
+  ("DEV · REVIVE THE DEAD", the U key) under the DROP A BODY button, for `DevAccess.IsLevel6PreviewAllowed` (which
+  has the owner's own account on it): `Event "devrevive"` stands every dead player in the level up, free, the asker
+  included, and answers `"devrevived", count`.
+- **Client (`Level 5 Lighting Controller`)**: `fallCam` (bound after the camera at `Camera.Value + 6`): the camera
+  stays where it was, 1.5 studs up, turns down after the body with a small light on it, the cover closes to black
+  from half way and the line says YOU FELL. `"died"` now only blacks out for 1.8 s (the death screen, spectating
+  and the re-entry are RoundUI's); `"reentered"` clears it.
+- **Tested in Studio, solo** (entered through `Level5LaunchParty`): a drop off Rose: camera Scriptable, cover
+  closing, dead at 2.5 s, still in the level, `PartyDownCardOpen`, the store's EMERGENCY RE-ENTRY modal (29 R$ / BUY
+  CREDIT, SPECTATE), then NO ONE MADE IT OUT and home after the window; the revive button (alive at Rose's first
+  checkpoint, card gone); the paid path through `ZyntraReentry:Invoke` (alive, `ZyntraReentryUsed` true) and a
+  second one refused; two checkpoints into Amber, dropped, revived at Amber's FIRST checkpoint. **Not tested**:
+  two or more players (a dead one watching the living, the plate without the dead, revive of somebody else), a
+  real purchase, the FREE RESPAWN // DEV button itself (the Studio test account is not on `IsAllowed`), a phone.
+- **A test that waits past the 15 s window finds the player back in the lobby** and then moves a lobby avatar
+  about: check `Level5VoidRound` before driving a body.
+- **Level 4 bay posters** (`POSTER_CASE_20261008` in `tools/level5_void/build_bay.py`; owner, with a picture: "they
+  are placed on top of the old ones and it looks like shit"). The two old poster cases on the bay's back wall are
+  baked into the decor mesh `BayDecorLevel4` (one mesh, one texture). The 2026-10-04 one-sheets stood 0.25 studs
+  in front of them, a whole stud to one side and 1.7 taller, so the old gold frames showed round them. Each sheet
+  (5.2 x 7.8, 2:3) now sits on a dark housing `PosterCase` (5.7 x 8.25 x 0.86) that swallows the old case and is
+  0.13 proud of its face. The two posters further round the wall have no old case behind them and are unchanged.
+- **Reading a baked kit mesh**: the lobby kit has no mesh assets (`RuntimeBake` builds it per server), so
+  `CreateEditableMeshAsync` on the placed part fails. Its source is `ServerStorage.LobbyReimaginedBlenderSource
+  20261001R4`: `ManifestJSON` and `Meshes/<chunk id>` are folders of StringValue pieces (base64 of zstd); a raw
+  mesh is `u32 magic, nv, nn, nu, nf` then `nv` float32 triples. Decoding it in an Edit `execute_luau` and listing
+  the distinct coordinates per axis gave the old case's rectangle: x 5.4..10.6, y -1.6..5.4, z -2.24..-1.61 about
+  the part's centre, which the Builder stands at bay (0, 5.4, -21.99) since the seat row's 1.5 stud move.
