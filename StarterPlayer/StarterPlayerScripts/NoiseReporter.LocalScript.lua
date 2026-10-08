@@ -617,16 +617,34 @@ touchSneakButton.Activated:Connect(function()
 	refreshCrouch()
 end)
 
-touchJumpButton.Activated:Connect(function()
-	if not inRound() then return end
-	local character, hum = currentChar()
-	if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
-	if hum and hum.Health > 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then
+-- TOUCH_JUMP_GROUNDED_20261008 (owner: "people can double jump and some infinity hop"). This button has to force
+-- the Jumping state (the control module writes Humanoid.Jump every frame, so setting it alone is lost), and a
+-- forced state does not ask whether there is ground under the feet: every tap in the air was another jump, and
+-- tapping on was flying. It jumps from the ground, a ladder or water only, and not twice within a jump's first
+-- moments (the floor is still read for a frame or two after the feet have left it).
+do
+	local lastJump = 0
+	local FROM = {
+		[Enum.HumanoidStateType.Running] = true, [Enum.HumanoidStateType.RunningNoPhysics] = true,
+		[Enum.HumanoidStateType.Landed] = true, [Enum.HumanoidStateType.GettingUp] = true,
+		[Enum.HumanoidStateType.Climbing] = true, [Enum.HumanoidStateType.Swimming] = true,
+	}
+	touchJumpButton.Activated:Connect(function()
+		if not inRound() then return end
+		local character, hum = currentChar()
+		if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
+		if not (hum and hum.Health > 0) then return end
+		local state = hum:GetState()
+		if not FROM[state] or os.clock() - lastJump < 0.4 then return end
+		local onSomething = hum.FloorMaterial ~= Enum.Material.Air
+			or state == Enum.HumanoidStateType.Climbing or state == Enum.HumanoidStateType.Swimming
+		if not onSomething then return end
+		lastJump = os.clock()
 		if crouching then cancelCrouch() end
 		hum.Jump = true
 		hum:ChangeState(Enum.HumanoidStateType.Jumping)
-	end
-end)
+	end)
+end
 
 touchGlowButton.Activated:Connect(dropGlowstick)
 

@@ -462,6 +462,41 @@ do
 		end
 		return found or nil
 	end
+	-- FALL_TRUTH_20261008 (owner: "after the green section the player goes into third person without clicking and
+	-- then it just fades to black"). A fall used to be judged ONLY against the last checkpoint a body had touched:
+	-- 40 studs under that stretch's lowest tread. Violet is the first room that goes DOWN (65 to -3), so a body that
+	-- had come past Violet's first landings without touching them (hopping over them with the touch JUMP bug of the
+	-- same day, flying with a developer cheat, a hitch) was "40 under" the Mint stretch while it stood on Violet's
+	-- own treads: the fall camera let go of it, the screen closed, and if it touched a later landing inside the 2.4 s
+	-- nothing ever opened the screen again. A body's progress is where it IS on the route: before anything is called
+	-- a fall the route ahead is searched for the tread the body is at, and the checkpoints up to there are reached.
+	local routeFor, routeList
+	local function routeOf(model)
+		if routeFor ~= model then
+			local value = model:FindFirstChild("Route")
+			local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
+			routeFor, routeList = model, ok and type(decoded) == "table" and #decoded > 1 and decoded or false
+		end
+		return routeList or nil
+	end
+	-- The first point (Lua index) of the route segment ahead of `from` that a body at `at` is on or over: within 14
+	-- studs of it in plan, its feet between 3 under the segment and a jump's height above it.
+	local function routeAhead(route, from, at)
+		local feet = at.Y - 3.6
+		local best, bestGap
+		for k = math.max(1, from), #route - 1 do
+			local a, b = route[k], route[k + 1]
+			if feet > math.min(a.y, b.y) - 3 and feet < math.max(a.y, b.y) + 12 then
+				local dx, dz = b.x - a.x, b.z - a.z
+				local span = dx * dx + dz * dz
+				local t = span > 0 and math.clamp(((at.X - a.x) * dx + (at.Z - a.z) * dz) / span, 0, 1) or 0
+				local gx, gz = at.X - (a.x + dx * t), at.Z - (a.z + dz * t)
+				local gap = gx * gx + gz * gz
+				if gap < 196 and (not bestGap or gap < bestGap) then best, bestGap = k, gap end
+			end
+		end
+		return best
+	end
 	local function checkpointFrame(model, row)
 		local origin = model:GetAttribute("Origin")
 		return upright(origin + Vector3.new(row.x, row.y + 3.5, row.z), Vector3.xAxis)
@@ -1077,20 +1112,48 @@ do
 				local character, root = living(player)
 				if not character then continue end
 				local at = root.Position - origin
+				local function reach(index)
+					local row = list[index]
+					local newSection = SECTION[row.sec] ~= SECTION[list[record.cp].sec]
+					record.cp = index
+					if newSection then event:FireClient(player, "checkpoint", index, #list, row.sec, true) end
+					if newSection and row.sec == "mint" then achieve(player, "L5Mint") end
+					if newSection and row.sec == "coral" then achieve(player, "L5Coral") end
+				end
 				for index = record.cp + 1, #list do
 					local row = list[index]
 					if math.abs(at.X - row.x) < 11 and math.abs(at.Z - row.z) < 13 and math.abs(at.Y - 3 - row.y) < 7 then
-						local newSection = SECTION[row.sec] ~= SECTION[list[record.cp].sec]
-						record.cp = index
-						if newSection then event:FireClient(player, "checkpoint", index, #list, row.sec, true) end
-						if newSection and row.sec == "mint" then achieve(player, "L5Mint") end
-						if newSection and row.sec == "coral" then achieve(player, "L5Coral") end
+						reach(index)
 					end
 				end
 				local row = list[record.cp]
+				local below = at.Y < row.low - FALL_MARGIN
+				if below then
+					-- FALL_TRUTH_20261008: under the stretch last touched, but is it on the route further on?
+					local route = routeOf(model)
+					local k = route and routeAhead(route, row.at + 1, at)
+					if k then
+						local reached = record.cp
+						for index = record.cp + 1, #list do
+							if list[index].at <= k - 1 then reached = index else break end
+						end
+						if reached > record.cp then reach(reached) end
+						row = list[record.cp]
+						below = at.Y < row.low - FALL_MARGIN
+					end
+				end
 				local section = SECTION[row.sec]
 				inSection[section] = (inSection[section] or 0) + 1
-				if at.Y < row.low - FALL_MARGIN then
+				-- a fall begins as a fall (a body that hovers or stands down there is not dropping), and it is taken
+				-- back, on the player's screen too, the moment the body is on the route or above the line again
+				-- (a developer who is noclipping flies: GameManager's setServerNoclip puts the body in this group)
+				local dropping = below and root.CollisionGroup ~= "DevNoclip"
+					and (record.fallingAt ~= nil or root.AssemblyLinearVelocity.Y < -25)
+				if record.fallingAt and not dropping then
+					record.fallingAt = nil
+					event:FireClient(player, "fallover")
+				end
+				if dropping then
 					record.fell = true
 					if not record.fallingAt then
 						-- DEATH_PARITY_20261008: the fall is shown first (the client's fall camera), then it is a death

@@ -287,9 +287,25 @@ task.spawn(function()
 		if not fallCam.on then return end
 		fallCam.on = false
 		pcall(function() game:GetService("RunService"):UnbindFromRenderStep("Level5FallCam") end)
+		if fallCam.tween then fallCam.tween:Cancel() fallCam.tween = nil end
 		if fallCam.light then fallCam.light:Destroy() fallCam.light = nil end
 		local camera = workspace.CurrentCamera
-		if camera and camera.CameraType == Enum.CameraType.Scriptable then camera.CameraType = Enum.CameraType.Custom end
+		if camera and camera.CameraType == Enum.CameraType.Scriptable then
+			-- The view is handed back looking the way it looked before the fall. This camera ends up looking
+			-- STRAIGHT DOWN at the body, and Roblox's own camera script takes asin of that look vector's Y: a hair
+			-- past -1 is NaN, and from then on it threw on every frame (BaseCamera:686, "max must be greater than or
+			-- equal to min", seen 2026-10-08) and the view stayed where the fall camera had left it.
+			if fallCam.back then camera.CFrame = CFrame.new(camera.CFrame.Position) * fallCam.back end
+			camera.CameraType = Enum.CameraType.Custom
+		end
+		fallCam.back = nil
+	end
+	-- the fall was not one after all, or nothing followed it: the camera is the player's again and the screen opens
+	function fallCam.open()
+		if not fallCam.on then return end
+		fallCam.stop()
+		say("", 0.1)
+		TweenService:Create(cover, TweenInfo.new(0.35), {BackgroundTransparency = 1}):Play()
 	end
 	function fallCam.start(seconds)
 		local camera = workspace.CurrentCamera
@@ -299,6 +315,11 @@ task.spawn(function()
 		fallCam.on = true
 		seconds = tonumber(seconds) or 2.4
 		local eye, look, began = camera.CFrame.Position + Vector3.new(0, 1.5, 0), camera.CFrame, os.clock()
+		-- (kept level enough for the default camera whatever the player was looking at: within 60 degrees of level)
+		do
+			local rx, ry = camera.CFrame:ToOrientation()
+			fallCam.back = CFrame.fromOrientation(math.clamp(rx, -math.rad(60), math.rad(60)), ry, 0)
+		end
 		local light = Instance.new("PointLight")
 		light.Name, light.Brightness, light.Range, light.Shadows = "FallCamLight", 1.3, 24, false
 		light.Color = Color3.fromRGB(255, 244, 224)
@@ -306,10 +327,13 @@ task.spawn(function()
 		fallCam.light = light
 		say("YOU FELL", seconds + 0.8)
 		cover.BackgroundColor3 = Color3.new(0, 0, 0)
-		TweenService:Create(cover, TweenInfo.new(seconds * 0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, seconds * 0.5),
-			{BackgroundTransparency = 0}):Play()
+		fallCam.tween = TweenService:Create(cover, TweenInfo.new(seconds * 0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, seconds * 0.5),
+			{BackgroundTransparency = 0})
+		fallCam.tween:Play()
 		game:GetService("RunService"):BindToRenderStep("Level5FallCam", Enum.RenderPriority.Camera.Value + 6, function(dt)
-			if not root.Parent or os.clock() - began > seconds + 4 then fallCam.stop() return end
+			-- FALL_TRUTH_20261008: nothing came after it (no death, no word that it was taken back): the screen may
+			-- never stay closed on its own account
+			if not root.Parent or os.clock() - began > seconds + 4 then fallCam.open() return end
 			camera.CameraType = Enum.CameraType.Scriptable
 			look = look:Lerp(CFrame.lookAt(eye, root.Position), 1 - math.exp(-dt * 7))
 			camera.CFrame = CFrame.new(eye) * look.Rotation
@@ -318,6 +342,8 @@ task.spawn(function()
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
 		if what == "falling" then
 			fallCam.start(a)
+		elseif what == "fallover" then
+			fallCam.open()                             -- FALL_TRUTH_20261008: the server took the fall back
 		elseif what == "died" then
 			-- DEATH_PARITY_20261008: a death keeps the player in the level (it used to be black until the lobby):
 			-- black for a moment, and the death screen, the spectating and the re-entry are RoundUI's.

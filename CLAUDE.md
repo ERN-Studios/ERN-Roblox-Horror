@@ -2134,3 +2134,47 @@ weight and button size on phones, no noise meter.
 - **The owner had closed Studio at 11:26**; it was reopened in the background for this (new MCP id) and left
   open in Edit mode on the place. Everything since v2816 (the phone QA fixes, own servers for everyone, the
   12-hour board, these sounds) is in Studio and was NOT published when this was written.
+
+### Added 2026-10-08 (afternoon) - No more jumping in the air on touch; Level 5's fall is judged by the route (in Studio, NOT published)
+
+- **Owner**: "People can double jump and some infinity hop, fix that ASAP", and in Level 5 "after the green section
+  the player goes into third person without clicking and then it just fades to black"; then: "I was noclipping in
+  the level but stayed above ground".
+- **The double jump was the touch JUMP button** (`TOUCH_JUMP_GROUNDED_20261008` in NoiseReporter). It forces
+  `ChangeState(Jumping)` because the control module overwrites `Humanoid.Jump` every frame, and a forced state does
+  not ask for ground: every tap in the air was another jump, tapping on was flying. It now jumps only from
+  Running / Landed / GettingUp with a floor under the feet, or from a ladder or water, and not twice within 0.4 s.
+  Keyboard and gamepad go through Roblox's own jump and never had it. Measured with real taps on the button
+  (`user_mouse_input` on `PlayerGui.StaminaGui.TouchJump` under `ForceTouchUI`): 18 taps gave 9 jumps, each from the
+  ground, the body never more than 7.8 studs up (one jump is 7.3).
+- **The Level 5 fade was the fall camera on a body that had not fallen** (`FALL_TRUTH_20261008`). A fall was judged
+  only against the last checkpoint a body had TOUCHED: 40 studs under that stretch's lowest tread. Violet is the
+  first room that goes down (65 to -3), so anybody who had passed Violet's first two landings without touching
+  them (the owner noclipping over them; a phone player hopping over them with the jump bug) was "40 under Mint"
+  while standing on Violet's own treads. The camera let go, the screen closed, and if the body touched a later
+  landing inside the 2.4 s there was no death and NOTHING ever opened the screen again.
+  - Server (`Level5PreviewAccess`): before a fall is called, `routeAhead` looks for the route segment the body is
+    on or over (within 14 studs in plan, feet from 3 under to 12 over it) and reaches the checkpoints up to there.
+    A fall has to BEGIN as one (vertical speed under -25) and is taken back (`"fallover"`) the moment the body is
+    on the route or over the line again. A body in the `DevNoclip` collision group (GameManager's
+    `setServerNoclip`) is never falling. An honest player always holds the right checkpoint, so nothing changes
+    for a real fall.
+  - Client (`Level 5 Lighting Controller`): `fallCam.open()` on `"fallover"`, and by itself 4 s after the fall
+    time if nothing followed: the screen may never stay closed on the fall camera's account.
+  - **The fall camera broke Roblox's own camera script on the way out.** It ends looking straight down, and
+    `BaseCamera` takes asin of the look vector's Y: a hair past -1 is NaN and it then threw on EVERY frame
+    ("BaseCamera:686 ... max must be greater than or equal to min") with the view left where the fall camera had
+    put it. This was live since v2813. The view is now handed back with the direction it had before the fall
+    (pitch held within 60 degrees). **Any Scriptable camera that may look straight up or down must do the same
+    before it sets `CameraType = Custom`.**
+- **Tested in Studio, solo** (two sessions): Mint's last landing touched, then stood on a Violet tread between
+  landings 17 and 18: no fall, checkpoint 17 reached, alive; a fall sent and taken back: camera and screen back
+  at once; a fall sent with nothing after it: screen open 6.4 s later; a body in `DevNoclip` dropping 280 studs:
+  no fall; a real step off the tread: fall camera, dead after 3.5 s, death card, 0 camera-script errors.
+  **Not tested**: a whole honest walk of Violet after the change (nothing in it runs unless a body is under its
+  line), a real phone, more than one player.
+- **Open**: times set by hopping or noclipping may already stand on the Level 5 board (developers are not
+  excluded in Levels 5 and 6, and a hopper could skip everything). Not looked at.
+- `user_mouse_input` (MCP) clicks a GuiButton by instance path in a play session and fires its `Activated`:
+  the way to test a touch button without a phone.
+
