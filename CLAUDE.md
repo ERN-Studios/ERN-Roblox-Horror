@@ -1894,3 +1894,41 @@ weight and button size on phones, no noise meter.
     from the entity, gone at 30 s, ready 10 s later, Z scans again, Z hides, Z shows; the demo from the lobby.
     **Not tested**: touch (the SCAN control on a phone), a gamepad, Levels 2 to 4, UIRegression.
 - **MCP `user_keyboard_input`** presses real game keys in a play session (Client): the way to test a key binding.
+
+### Added 2026-10-08 (before dawn) - Advanced Equipment is +100% on both capacities; a leaderboard board at every gate
+
+- **Advanced Equipment** (`ADVANCED_100_20261008`; owner: "100% for both stamina and battery cap", and the wording
+  everywhere). `ZyntraConfig.Passes.AdvancedEquipment.StaminaBonus` 0.50 -> 1.00 and a new `BatteryBonus` 1.00, both
+  additive on top of bought upgrades; `advancedStaminaBonus(player, field)` in ZyntraMonetization feeds both
+  multipliers (`ZyntraStaminaMultiplier`, `ZyntraBatteryMultiplier`) and `BatteryPercent`. The pass used to hand
+  one +5% upgrade LEVEL to each on purchase: that grant is gone for new buyers (the once-only flag and message
+  stay), old owners keep their levels. My reading of "100% for both": it replaces the +50% stamina, it is not added
+  to it. Measured in Studio on an owner with no upgrades: stamina x2, battery x2. The wording lives in the two
+  config descriptions, the purchase message, and the pass's description on Roblox.
+- **Level leaderboards** (`LEVEL_LEADERBOARDS_20261008`, new Script `ServerScriptService."Level Leaderboards"`;
+  owner: a tall sign out from each level's entrance with the usernames that cleared it fastest, in the lobby's
+  style, top 3 each with their own colour and size; "it is when YOU reach the exit ... somebody who died has none").
+  - RECORD (every server): one OrderedDataStore per level, `LevelBestTimes_v1_L<n>`, key = UserId, value = the
+    player's own time in whole milliseconds, only ever lowered (`UpdateAsync` returns nil for a slower time).
+    Levels 1-4: the script listens to `ServerStorage.ZyntraLevelCompleted` (fired once per escapee; `run.Seconds`
+    is round start to that player's own escape) and skips `run.DevTouched`. Levels 5 and 6 fire the new
+    `ServerStorage.LevelTimeReported(player, level, seconds)` at their finish lines, and only for the player who
+    really got out (both levels also send the "win" screen to the fallen: no time for them). Times under 10 s or
+    over 6 h are refused. Studio never writes. Re-entries count; developers are not excluded in Levels 5 and 6.
+  - SHOW (lobby servers, also a party's own): `LobbyReimaginedPreview."Level <n> Leaderboard"`, a 5.6 x 13.2 stud
+    board at right angles to the wall, 15 studs along it from the gate's middle (under the "LEVEL n" arrow blade;
+    at Level 4 on the other side, where the blade's side is the shop's last box), solid, lettered on both faces
+    at 50 px per stud: LEVEL n / FASTEST ESCAPES, three cards (gold 255,205,84; silver 206,222,232; bronze
+    230,152,92; name sizes .52 / .44 / .39 studs), ranks 4 to 10 as rows. One level is read every 20 s
+    (`GetSortedAsync(true, 10, 10000)`), names through `GetNameFromUserIdAsync` (cached). No Light instances.
+  - `workspace.DevLeaderboardDemo = true` (Studio only) fills the boards with sample rows. Never leave it set.
+  - **Seen in Studio** with the sample rows: all six boards, the Level 3 board close up, the Level 2 gate with its
+    maintenance board beside it. **Not tested**: a real time being saved and read back (Studio writes nothing),
+    names of real accounts, the boards on a phone.
+- **Gate geometry, measured** (gate frame: X along the wall, Y up from the sidewalk, -Z into the tunnel): header
+  22.8 x 2.68 at y 17.2; arrow blade .86 x 2.95 x 9.2 at (15, 17.0, -3.7); the sidewalk is clear on both sides of
+  every gate from the wall to 6.6 studs out. Gates stand at lobby x = +-27.2, z = -80, 0, +80 (left wall 1, 3, 5).
+- **Studio hangs when the Mac is out of memory.** Second hang of the night (03:33 UTC+2 ... the play session's stop
+  never reached `StopPlaySoloEnd`, then the Team Create heartbeat failed): Studio held 6 GB and swap was 7.5 of
+  8 GB. Before a play test on this 8 GB Mac check `sysctl vm.swapusage`; restart Studio when it is nearly full.
+  A stop that hangs shows in the log as `StopPlaySoloStart` with no `StopPlaySoloEnd`.
