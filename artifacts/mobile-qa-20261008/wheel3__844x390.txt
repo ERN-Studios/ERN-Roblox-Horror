@@ -1,0 +1,11 @@
+phone 844x390, 4 ScreenGuis copied (LuckyWheelGui, FriendBoostGui, ZyntraStore, ZyntraLobbyPillL4), 58 pieces measured, 10 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,21)-(822,37)
+SMALL   LuckyWheelGui.WheelShade '1 ENTITY SHIELD' (611,237)-(686,247)
+SMALL   LuckyWheelGui.WheelShade '1 SPEED POTION' (611,204)-(687,214)
+SMALL   LuckyWheelGui.WheelShade '1 TOKEN' (608,171)-(646,181)
+SMALL   LuckyWheelGui.WheelShade '2 SPEED POTIONS' (612,221)-(695,231)
+SMALL   LuckyWheelGui.WheelShade '3 TOKENS' (608,188)-(654,198)
+SMALL   LuckyWheelGui.WheelShade 'ODDS ARE NOT EQUAL' (626,155)-(716,165)
+SMALL   LuckyWheelGui.WheelShade 'One free spin every UTC day.' (600,300)-(728,310)
+SMALL   LuckyWheelGui.WheelShade 'SKIN OR 3 TOKENS' (612,254)-(698,264)
+SMALL   LuckyWheelGui.WheelShade 'TODAY' (601,274)-(626,284)

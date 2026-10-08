@@ -253,6 +253,31 @@ local function applyLayout()
 				end
 			end
 		end
+		-- MOBILE_QA_20261008: under the Mission Brief the chip stood wholly inside the thumbstick's zone on every phone
+		-- (measured 667x375 to 956x440): a dead spot for the thumb, on the button that leaves the round. Where the row
+		-- BESIDE what it dodged is free, and clear of the zone, it goes there instead.
+		if UIDevice.OverlapsMovementZone(left, top, left + chipWidth, top + tap) then
+			local rowLeft, rowTop = left, layout.SafeTop + 12
+			for _ = 1, #hudObstacles do                       -- step right past whatever stands in that row
+				local moved = false
+				for _, names in ipairs(hudObstacles) do
+					local owner = playerGui:FindFirstChild(names[1])
+					local object = owner and owner:FindFirstChild(names[2])
+					if object and owner.Enabled and object.Visible then
+						local pos, size = object.AbsolutePosition, object.AbsoluteSize
+						if rowLeft < pos.X + size.X + 8 and rowLeft + chipWidth > pos.X - 8
+							and rowTop < pos.Y + size.Y + 8 and rowTop + tap > pos.Y - 8 then
+							rowLeft, moved = pos.X + size.X + 8, true
+						end
+					end
+				end
+				if not moved then break end
+			end
+			if rowLeft + chipWidth <= layout.SafeRight - 12
+				and not UIDevice.OverlapsMovementZone(rowLeft, rowTop, rowLeft + chipWidth, rowTop + tap) then
+				left, top = rowLeft, rowTop
+			end
+		end
 	end
 	local x, y = UIDevice.LocalOffset(gui, left, top)
 	chip.Size = UDim2.fromOffset(chipWidth, tap)

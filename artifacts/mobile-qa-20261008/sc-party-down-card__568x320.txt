@@ -1,0 +1,3 @@
+phone 568x320, 17 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, StaminaGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui), 15 pieces measured, 2 findings
+OVERLAP FlashlightPopup.FlashlightPower 'HOLD WIDE' (424,277)-(450,297)  x  RoundGui.PartyDownOverlay > PartyDownCard (54,26)-(514,294)  (26x17 px)
+SMALL   FlashlightPopup.FlashlightPower 'HOLD WIDE' (424,277)-(450,297)

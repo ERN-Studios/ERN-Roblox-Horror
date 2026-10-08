@@ -18,8 +18,13 @@ local MODE = "__MODE__"                                   -- "on" | "off"
 local Players = game:GetService("Players")
 local pg = Players.LocalPlayer.PlayerGui
 
-local old = pg:FindFirstChild("PhoneEmu")
-if old then old:Destroy() end
+-- The copy is found again by its attribute, not its name: the name can be borrowed (EMU_NAME) from a ScreenGui that
+-- a full-screen takeover leaves alone. The Lucky Wheel switches off every ScreenGui but three, by name, and the
+-- phone view was one of the ones it switched off.
+local EMU_NAME = "__EMU__"
+for _, g in ipairs(pg:GetChildren()) do
+	if g:GetAttribute("PhoneEmuRoot") then g:Destroy() end
+end
 for _, g in ipairs(pg:GetChildren()) do
 	if g:IsA("ScreenGui") and g:GetAttribute("PhoneEmuHidden") then
 		g.Enabled = true
@@ -34,13 +39,15 @@ end
 
 workspace:SetAttribute("ForceTouchUI", true)
 workspace:SetAttribute("UIRegressionViewport", Vector2.new(W, H))
-task.wait(0.6)                                            -- the HUD scripts re-lay themselves out on UIDevice.Changed
+task.wait(1.7)                                            -- the HUD scripts re-lay themselves out on UIDevice.Changed; two of them
+                                                          -- (BADGES, then HELP beside it) on a half-second tick each
 local UIDevice = require(game:GetService("ReplicatedStorage").UIDevice)
 local L = UIDevice.Layout()
 local TOP = 58
 
 local emu = Instance.new("ScreenGui")
-emu.Name, emu.IgnoreGuiInset, emu.ResetOnSpawn, emu.DisplayOrder, emu.ZIndexBehavior = "PhoneEmu", true, false, 5000, Enum.ZIndexBehavior.Sibling
+emu.Name, emu.IgnoreGuiInset, emu.ResetOnSpawn, emu.DisplayOrder, emu.ZIndexBehavior = EMU_NAME, true, false, 5000, Enum.ZIndexBehavior.Sibling
+emu:SetAttribute("PhoneEmuRoot", true)
 local device = Instance.new("Frame")
 device.Name, device.Size, device.BackgroundTransparency, device.ClipsDescendants = "Device", UDim2.fromOffset(W, H), 1, true
 device.Parent = emu

@@ -1,0 +1,8 @@
+phone 1024x768, 25 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, FlashlightPopup, FriendBoostGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 30 pieces measured, 7 findings
+OVERLAP PuzzleGui.Level1Objectives (716,66)-(1016,150)  x  PuzzleGui.Level1ObjectivesToggle 'v' (979,82)-(989,102)  (10x20 px)
+SMALL   FlashlightPopup.FlashlightPower 'HOLD WIDE' (855,721)-(881,741)
+SMALL   PuzzleGui.Level1Objectives 'LEVEL 1  //  ACTIVE OBJECTIVE' (728,72)-(858,81)
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (849,182)-(887,206) is 38x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (832,158)-(904,230) is 72x72 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (848,452)-(888,476) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (832,428)-(904,500) is 72x72 px inside the Controls zone

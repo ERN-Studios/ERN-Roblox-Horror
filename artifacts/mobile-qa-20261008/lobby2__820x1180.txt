@@ -1,0 +1,11 @@
+phone 820x1180, 22 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, FriendBoostGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 39 pieces measured, 10 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (789,84)-(798,100)
+THUMB   Achievements.Open 'Badges' (14,788)-(58,800) is 44x13 px inside the Thumbstick zone
+THUMB   Achievements.Open (8,779)-(64,809) is 56x30 px inside the Thumbstick zone
+THUMB   HelpButton.Open 'Help' (22,826)-(50,838) is 27x13 px inside the Thumbstick zone
+THUMB   HelpButton.Open (8,817)-(64,847) is 56x30 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton 'MUTE' (24,757)-(48,768) is 24x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton (8,715)-(64,771) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Face (8,715)-(64,771) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Icon (12,719)-(60,767) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Plate (8,755)-(64,769) is 56x14 px inside the Thumbstick zone

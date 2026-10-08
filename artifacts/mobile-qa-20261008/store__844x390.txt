@@ -1,0 +1,9 @@
+phone 844x390, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraShopL4, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, FriendBoostGui, ZyntraStore), 96 pieces measured, 8 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,21)-(822,37)
+CUT     ZyntraShopL4.Root '+' (656,76)-(664,91)
+CUT     ZyntraShopL4.Root '35' (562,73)-(581,94)
+CUT     ZyntraShopL4.Root 'AUDIO' (177,111)-(207,124)
+CUT     ZyntraShopL4.Root 'SHOP' (370,368)-(401,380)
+CUT     ZyntraShopL4.Root 'TOKENS' (586,78)-(622,91)
+CUT     ZyntraShopL4.Root 'X' (699,68)-(717,97)
+SMALL   ZyntraShopL4.Root 'Turn background music in the l' (188,143)-(603,153)

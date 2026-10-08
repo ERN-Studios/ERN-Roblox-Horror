@@ -1,0 +1,7 @@
+# Findings that were looked at and are not faults. One regular expression per line (matched against a report line).
+# The lobby rail and the two small buttons beside it stand at the left edge by design (ZyntraStore solves the rail
+# against the thumbstick's resting glyph, measured on a real iPhone 13); the audit's zone is the whole lower left.
+^THUMB   ZyntraStore\.Zyntra(Music|Open|Rewards|Shop|Wheel)Button
+^THUMB   (Achievements|HelpButton)\.Open
+# TextFits reads false on the pill's "+" glyph although it is drawn whole (seen in every picture)
+^CUT     ZyntraLobbyPillL4\.TokenPill '\+'

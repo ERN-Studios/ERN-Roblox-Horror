@@ -16,6 +16,6 @@ from import_to_studio import Studio   # noqa: E402
 args = sys.argv[1:]
 off = args[:1] == ['off']
 w, h = (0, 0) if off else (int(args[0]), int(args[1]))
-code = (HERE / 'mobile_audit.luau').read_text().replace('__W__', str(w)).replace('__H__', str(h)).replace('__MODE__', 'off' if off else 'on')
+code = (HERE / 'mobile_audit.luau').read_text().replace('__W__', str(w)).replace('__H__', str(h)).replace('__MODE__', 'off' if off else 'on').replace('__EMU__', 'PhoneEmu')
 studio = Studio()
 print(studio.call('execute_luau', {'studio_id': studio.studio_id, 'datamodel_type': 'Client', 'code': code}))

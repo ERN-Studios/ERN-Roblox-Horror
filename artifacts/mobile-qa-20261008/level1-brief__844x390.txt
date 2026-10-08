@@ -1,0 +1,93 @@
+phone 844x390, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 62 pieces measured, 92 findings
+CUT     LevelOneGuideGui.ObjectivesPanel '<b>Find the powered exit</b> F' (76,291)-(308,318)
+CUT     LevelOneGuideGui.ObjectivesPanel '<b>Locate the fuse relays</b> ' (76,147)-(458,174)
+CUT     LevelOneGuideGui.ObjectivesPanel '<b>Pull the levers</b> Once ev' (76,243)-(503,270)
+CUT     LevelOneGuideGui.ObjectivesPanel '<b>Restore the circuits</b> Fo' (76,195)-(441,222)
+CUT     LevelOneGuideGui.ObjectivesPanel '<b>Threat protocol</b> Keep yo' (76,339)-(363,366)
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,84)-(822,100)
+OVERLAP Achievements.Open 'Badges' (78,354)-(122,368)  x  LevelOneGuideGui.ObjectivesPanel '<b>Threat protocol</b> Keep yo' (76,339)-(363,366)  (44x12 px)
+OVERLAP Achievements.Open 'Badges' (78,354)-(122,368)  x  LevelOneGuideGui.ObjectivesPanel > Objective5 (28,332)-(810,370)  (44x13 px)
+OVERLAP Achievements.Open (72,346)-(128,376)  x  LevelOneGuideGui.ObjectivesPanel '<b>Threat protocol</b> Keep yo' (76,339)-(363,366)  (52x20 px)
+OVERLAP HelpButton.Open 'Help' (86,316)-(114,330)  x  LevelOneGuideGui.ObjectivesPanel > Objective4 (28,284)-(810,322)  (27x6 px)
+OVERLAP HelpButton.Open (72,308)-(128,338)  x  LevelOneGuideGui.ObjectivesPanel '<b>Find the powered exit</b> F' (76,291)-(308,318)  (52x10 px)
+OVERLAP StaminaGui.TouchRunHold 'RUN  »' (712,258)-(748,270)  x  LevelOneGuideGui.ObjectivesPanel > Objective3 (28,236)-(810,274)  (36x12 px)
+OVERLAP ZyntraLobbyPillL4.TokenPill '+' (813,84)-(822,100)  x  LevelOneGuideGui.ObjectivesPanel (12,66)-(832,120)  (8x16 px)
+OVERLAP ZyntraLobbyPillL4.TokenPill '+' (813,84)-(822,100)  x  LevelOneGuideGui.ObjectivesPanel > Close (778,76)-(822,120)  (8x16 px)
+OVERLAP ZyntraLobbyPillL4.TokenPill '35' (716,81)-(735,103)  x  LevelOneGuideGui.ObjectivesPanel (12,66)-(832,120)  (19x22 px)
+OVERLAP ZyntraLobbyPillL4.TokenPill 'TOKENS' (741,86)-(777,99)  x  LevelOneGuideGui.ObjectivesPanel (12,66)-(832,120)  (36x13 px)
+OVERLAP ZyntraLobbyPillL4.TokenPill (683,66)-(836,118)  x  LevelOneGuideGui.ObjectivesPanel '×' (795,88)-(805,108)  (10x20 px)
+OVERLAP ZyntraStore.ZyntraMusicButton 'MUTE' (24,362)-(48,373)  x  LevelOneGuideGui.ObjectivesPanel > Number (36,340)-(66,370)  (12x8 px)
+OVERLAP ZyntraStore.ZyntraMusicButton 'MUTE' (24,362)-(48,373)  x  LevelOneGuideGui.ObjectivesPanel > Objective5 (28,332)-(810,370)  (20x8 px)
+OVERLAP ZyntraStore.ZyntraOpenButton (8,134)-(64,190)  x  LevelOneGuideGui.ObjectivesPanel '01' (46,158)-(56,168)  (10x11 px)
+OVERLAP ZyntraStore.ZyntraOpenButton > Face (8,134)-(64,190)  x  LevelOneGuideGui.ObjectivesPanel '01' (46,158)-(56,168)  (10x11 px)
+OVERLAP ZyntraStore.ZyntraOpenButton > Icon (12,138)-(60,186)  x  LevelOneGuideGui.ObjectivesPanel '01' (46,158)-(56,168)  (10x11 px)
+OVERLAP ZyntraStore.ZyntraRewardsButton 'REWARDS' (16,238)-(56,249)  x  LevelOneGuideGui.ObjectivesPanel > Objective3 (28,236)-(810,274)  (28x11 px)
+OVERLAP ZyntraStore.ZyntraRewardsButton (8,196)-(64,252)  x  LevelOneGuideGui.ObjectivesPanel '02' (45,206)-(57,216)  (12x11 px)
+OVERLAP ZyntraStore.ZyntraRewardsButton > Face (8,196)-(64,252)  x  LevelOneGuideGui.ObjectivesPanel '02' (45,206)-(57,216)  (12x11 px)
+OVERLAP ZyntraStore.ZyntraRewardsButton > Icon (12,200)-(60,248)  x  LevelOneGuideGui.ObjectivesPanel '02' (45,206)-(57,216)  (12x11 px)
+OVERLAP ZyntraStore.ZyntraShopButton 'SHOP' (24,114)-(48,125)  x  LevelOneGuideGui.ObjectivesPanel (12,66)-(832,120)  (23x6 px)
+OVERLAP ZyntraStore.ZyntraShopButton (8,72)-(64,128)  x  LevelOneGuideGui.ObjectivesPanel 'ESCAPE PROCEDURE' (30,96)-(199,114)  (34x18 px)
+OVERLAP ZyntraStore.ZyntraShopButton (8,72)-(64,128)  x  LevelOneGuideGui.ObjectivesPanel 'FIELD BRIEF  //  LEVEL 1' (30,77)-(150,87)  (34x10 px)
+OVERLAP ZyntraStore.ZyntraShopButton > Face (8,72)-(64,128)  x  LevelOneGuideGui.ObjectivesPanel 'ESCAPE PROCEDURE' (30,96)-(199,114)  (34x18 px)
+OVERLAP ZyntraStore.ZyntraShopButton > Face (8,72)-(64,128)  x  LevelOneGuideGui.ObjectivesPanel 'FIELD BRIEF  //  LEVEL 1' (30,77)-(150,87)  (34x10 px)
+OVERLAP ZyntraStore.ZyntraShopButton > Icon (12,76)-(60,124)  x  LevelOneGuideGui.ObjectivesPanel 'ESCAPE PROCEDURE' (30,96)-(199,114)  (30x18 px)
+OVERLAP ZyntraStore.ZyntraShopButton > Icon (12,76)-(60,124)  x  LevelOneGuideGui.ObjectivesPanel 'FIELD BRIEF  //  LEVEL 1' (30,77)-(150,87)  (30x10 px)
+OVERLAP ZyntraStore.ZyntraWheelButton 'WHEEL' (22,300)-(50,311)  x  LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312)  (6x9 px)
+OVERLAP ZyntraStore.ZyntraWheelButton 'WHEEL' (22,300)-(50,311)  x  LevelOneGuideGui.ObjectivesPanel > Number (36,292)-(66,322)  (14x11 px)
+OVERLAP ZyntraStore.ZyntraWheelButton 'WHEEL' (22,300)-(50,311)  x  LevelOneGuideGui.ObjectivesPanel > Objective4 (28,284)-(810,322)  (22x11 px)
+OVERLAP ZyntraStore.ZyntraWheelButton (8,258)-(64,314)  x  LevelOneGuideGui.ObjectivesPanel '03' (45,254)-(57,264)  (12x6 px)
+OVERLAP ZyntraStore.ZyntraWheelButton (8,258)-(64,314)  x  LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312)  (13x11 px)
+OVERLAP ZyntraStore.ZyntraWheelButton > Face (8,258)-(64,314)  x  LevelOneGuideGui.ObjectivesPanel '03' (45,254)-(57,264)  (12x6 px)
+OVERLAP ZyntraStore.ZyntraWheelButton > Face (8,258)-(64,314)  x  LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312)  (13x11 px)
+OVERLAP ZyntraStore.ZyntraWheelButton > Icon (12,262)-(60,310)  x  LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312)  (13x8 px)
+OVERLAP ZyntraStore.ZyntraWheelButton > Plate (8,298)-(64,312)  x  LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312)  (13x11 px)
+SMALL   LevelOneGuideGui.ObjectivesPanel 'FIELD BRIEF  //  LEVEL 1' (30,77)-(150,87)
+THUMB   Achievements.Open 'Badges' (78,354)-(122,368) is 44x13 px inside the Thumbstick zone
+THUMB   Achievements.Open (72,346)-(128,376) is 56x30 px inside the Thumbstick zone
+THUMB   HelpButton.Open 'Help' (86,316)-(114,330) is 27x13 px inside the Thumbstick zone
+THUMB   HelpButton.Open (72,308)-(128,338) is 56x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '01' (46,158)-(56,168) is 10x11 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '02' (45,206)-(57,216) is 12x11 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '03' (45,254)-(57,264) is 12x11 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '04' (44,302)-(58,312) is 13x11 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '<b>Find the powered exit</b> F' (76,291)-(308,318) is 232x27 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '<b>Locate the fuse relays</b> ' (76,147)-(458,174) is 262x27 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '<b>Pull the levers</b> Once ev' (76,243)-(503,270) is 262x27 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '<b>Restore the circuits</b> Fo' (76,195)-(441,222) is 262x27 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel '<b>Threat protocol</b> Keep yo' (76,339)-(363,366) is 262x27 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Number (36,148)-(66,178) is 30x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Number (36,196)-(66,226) is 30x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Number (36,244)-(66,274) is 30x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Number (36,292)-(66,322) is 30x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Number (36,340)-(66,370) is 30x30 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective1 (28,140)-(810,178) is 310x38 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective2 (28,188)-(810,226) is 310x38 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective3 (28,236)-(810,274) is 308x34 px inside the Controls zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective3 (28,236)-(810,274) is 310x38 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective4 (28,284)-(810,322) is 308x38 px inside the Controls zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective4 (28,284)-(810,322) is 310x38 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective4 (28,284)-(810,322) is 61x22 px inside the Jump zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective5 (28,332)-(810,370) is 308x38 px inside the Controls zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective5 (28,332)-(810,370) is 310x38 px inside the Thumbstick zone
+THUMB   LevelOneGuideGui.ObjectivesPanel > Objective5 (28,332)-(810,370) is 61x38 px inside the Jump zone
+THUMB   ZyntraStore.ZyntraMusicButton 'MUTE' (24,362)-(48,373) is 24x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton (8,320)-(64,376) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Face (8,320)-(64,376) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Icon (12,324)-(60,372) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Plate (8,360)-(64,374) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton 'UPGRADES' (14,176)-(58,187) is 44x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton (8,134)-(64,190) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Face (8,134)-(64,190) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Icon (12,138)-(60,186) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Plate (8,174)-(64,188) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton 'REWARDS' (16,238)-(56,249) is 40x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton (8,196)-(64,252) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Face (8,196)-(64,252) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Icon (12,200)-(60,248) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Plate (8,236)-(64,250) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton 'WHEEL' (22,300)-(50,311) is 28x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton (8,258)-(64,314) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Face (8,258)-(64,314) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Icon (12,262)-(60,310) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > NotificationDot (50,262)-(60,272) is 10x10 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Plate (8,298)-(64,312) is 56x14 px inside the Thumbstick zone

@@ -1,0 +1,13 @@
+phone 820x1180, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraShopL4, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, FriendBoostGui, ZyntraStore), 108 pieces measured, 12 findings
+CUT     ZyntraDailyL4.Root '0/1' (538,568)-(564,591)
+CUT     ZyntraLobbyPillL4.TokenPill '+' (789,21)-(798,37)
+OVERLAP Achievements.Open 'Badges' (78,750)-(122,762)  x  ZyntraDailyL4.Root '5:00 TO GO' (116,748)-(201,765)  (6x13 px)
+OVERLAP Achievements.Open 'Badges' (78,750)-(122,762)  x  ZyntraDailyL4.Root > ClaimButton (99,727)-(218,787)  (23x13 px)
+OVERLAP Achievements.Open 'Badges' (78,750)-(122,762)  x  ZyntraDailyL4.Root > DailyRewardsPanel (72,396)-(808,842)  (44x13 px)
+OVERLAP Achievements.Open 'Badges' (78,750)-(122,762)  x  ZyntraDailyL4.Root > Milestone5 (92,587)-(225,799)  (30x13 px)
+OVERLAP Achievements.Open 'Badges' (78,750)-(122,762)  x  ZyntraDailyL4.Root > ModalShadow (72,403)-(808,849)  (44x13 px)
+OVERLAP Achievements.Open (72,741)-(128,771)  x  ZyntraDailyL4.Root '5:00 TO GO' (116,748)-(201,765)  (12x17 px)
+OVERLAP HelpButton.Open 'Help' (22,620)-(50,632)  x  ZyntraStore.ZyntraRewardsButton (8,591)-(64,647)  (27x13 px)
+OVERLAP HelpButton.Open 'Help' (22,620)-(50,632)  x  ZyntraStore.ZyntraRewardsButton > Face (8,591)-(64,647)  (27x13 px)
+OVERLAP HelpButton.Open 'Help' (22,620)-(50,632)  x  ZyntraStore.ZyntraRewardsButton > Icon (12,595)-(60,643)  (27x13 px)
+OVERLAP HelpButton.Open (8,611)-(64,641)  x  ZyntraStore.ZyntraRewardsButton 'REWARDS' (16,633)-(56,644)  (40x8 px)

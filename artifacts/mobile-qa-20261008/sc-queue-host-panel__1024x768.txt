@@ -1,0 +1,2 @@
+phone 1024x768, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, StaminaGui, FriendBoostGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui), 20 pieces measured, 1 findings
+SMALL   RoundGui.QueueHostShade 'WALK OUT OR TAP X TO CANCEL' (444,518)-(580,528)

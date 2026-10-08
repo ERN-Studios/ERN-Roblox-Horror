@@ -1,0 +1,70 @@
+phone 844x390, 22 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, FriendBoostGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 107 pieces measured, 69 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,84)-(822,100)
+OVERLAP Achievements.Panel '×' (702,87)-(714,113)  x  ZyntraLobbyPillL4.TokenPill (683,66)-(836,118)  (13x26 px)
+OVERLAP Achievements.Panel (102,66)-(742,382)  x  Achievements.Open 'Badges' (78,354)-(122,368)  (20x13 px)
+OVERLAP Achievements.Panel (102,66)-(742,382)  x  StaminaGui.TouchRunHold 'RUN  »' (712,258)-(748,270)  (30x12 px)
+OVERLAP Achievements.Panel (102,66)-(742,382)  x  ZyntraLobbyPillL4.TokenPill '35' (716,81)-(735,103)  (19x22 px)
+OVERLAP Achievements.Panel > Close (686,78)-(730,122)  x  ZyntraLobbyPillL4.TokenPill '35' (716,81)-(735,103)  (14x22 px)
+OVERLAP Achievements.Panel > L5Coral (627,238)-(720,342)  x  StaminaGui.TouchRunHold 'RUN  »' (712,258)-(748,270)  (8x12 px)
+OVERLAP HelpButton.Open 'Help' (86,316)-(114,330)  x  Achievements.Panel (102,66)-(742,382)  (12x13 px)
+THUMB   Achievements.Open 'Badges' (78,354)-(122,368) is 44x13 px inside the Thumbstick zone
+THUMB   Achievements.Open (72,346)-(128,376) is 56x30 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Better Together' (432,318)-(510,330) is 8x11 px inside the Controls zone
+THUMB   Achievements.Panel 'Four Doors Down' (242,313)-(296,335) is 54x22 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'New Arrival' (140,208)-(197,220) is 58x11 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Office Hours' (239,208)-(300,220) is 61x11 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Out of the Deep End' (331,203)-(410,225) is 6x22 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Ready or Not' (137,318)-(200,330) is 64x11 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Tap a badge to see how to earn' (126,340)-(343,356) is 212x15 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'The Shaft' (650,318)-(697,330) is 47x11 px inside the Controls zone
+THUMB   Achievements.Panel 'Thin Ice' (553,318)-(592,330) is 39x11 px inside the Controls zone
+THUMB   Achievements.Panel (102,66)-(742,382) is 236x252 px inside the Thumbstick zone
+THUMB   Achievements.Panel (102,66)-(742,382) is 240x142 px inside the Controls zone
+THUMB   Achievements.Panel > AllSix (324,238)-(417,342) is 14x104 px inside the Thumbstick zone
+THUMB   Achievements.Panel > BetterTogether (425,238)-(518,342) is 16x102 px inside the Controls zone
+THUMB   Achievements.Panel > CampaignComplete (223,238)-(316,342) is 93x104 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel1 (223,128)-(316,232) is 93x102 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel2 (324,128)-(417,232) is 14x102 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel6 (122,238)-(215,342) is 93x104 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (138,134)-(200,196) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (138,244)-(200,306) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (138,354)-(200,416) is 62x36 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (238,134)-(300,196) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (238,244)-(300,306) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (238,354)-(300,416) is 62x36 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (542,244)-(604,306) is 62x62 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (542,354)-(604,416) is 62x36 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (642,244)-(704,306) is 62x62 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (642,354)-(704,416) is 62x36 px inside the Controls zone
+THUMB   Achievements.Panel > L5Balls (223,348)-(316,452) is 93x42 px inside the Thumbstick zone
+THUMB   Achievements.Panel > L5Coral (627,238)-(720,342) is 93x102 px inside the Controls zone
+THUMB   Achievements.Panel > L5Mint (526,238)-(619,342) is 93x102 px inside the Controls zone
+THUMB   Achievements.Panel > L5NoFall (122,348)-(215,452) is 93x42 px inside the Thumbstick zone
+THUMB   Achievements.Panel > L5TeamLift (324,348)-(417,452) is 14x42 px inside the Thumbstick zone
+THUMB   Achievements.Panel > L6Escaped (526,348)-(619,452) is 93x42 px inside the Controls zone
+THUMB   Achievements.Panel > L6HomeFree (425,348)-(518,452) is 16x42 px inside the Controls zone
+THUMB   Achievements.Panel > L6Survivor (627,348)-(720,452) is 93x42 px inside the Controls zone
+THUMB   Achievements.Panel > Welcome (122,128)-(215,232) is 93x102 px inside the Thumbstick zone
+THUMB   HelpButton.Open 'Help' (86,316)-(114,330) is 27x13 px inside the Thumbstick zone
+THUMB   HelpButton.Open (72,308)-(128,338) is 56x30 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton 'MUTE' (24,362)-(48,373) is 24x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton (8,320)-(64,376) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Face (8,320)-(64,376) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Icon (12,324)-(60,372) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Plate (8,360)-(64,374) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton 'UPGRADES' (14,176)-(58,187) is 44x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton (8,134)-(64,190) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Face (8,134)-(64,190) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Icon (12,138)-(60,186) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Plate (8,174)-(64,188) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton 'REWARDS' (16,238)-(56,249) is 40x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton (8,196)-(64,252) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Face (8,196)-(64,252) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Icon (12,200)-(60,248) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Plate (8,236)-(64,250) is 56x14 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton 'WHEEL' (22,300)-(50,311) is 28x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton (8,258)-(64,314) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Face (8,258)-(64,314) is 56x56 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Icon (12,262)-(60,310) is 48x48 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > NotificationDot (50,262)-(60,272) is 10x10 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Plate (8,298)-(64,312) is 56x14 px inside the Thumbstick zone

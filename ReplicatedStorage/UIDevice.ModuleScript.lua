@@ -1640,9 +1640,14 @@ end
 -- terminal does -- full ModalViewport panel, movement suppressed, the rail
 -- underneath them -- so they belong to the same set rather than each inventing
 -- a private flag that the HUDs, and each other, would have to learn.
+--
+-- AchievementsOpen and HelpPanelOpen joined on 2026-10-08 (MOBILE_QA_20261008). The BADGES and HELP windows were
+-- plain panels under everything: on a phone the token pill lay on their close button and the rail on their left
+-- edge. As members of this set the pill docks into the top bar, the rail and chip stand over them and the touch
+-- movement cluster stands down, exactly as for the shop.
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
-	"LuckyWheelOpen", "DailyRewardsOpen",
+	"LuckyWheelOpen", "DailyRewardsOpen", "AchievementsOpen", "HelpPanelOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean

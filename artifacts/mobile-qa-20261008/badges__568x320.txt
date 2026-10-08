@@ -1,0 +1,96 @@
+phone 568x320, 22 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, FriendBoostGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 110 pieces measured, 95 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (537,84)-(546,100)
+OFF     Achievements.Panel 'Four Doors Down' (426,318)-(512,330)
+OFF     Achievements.Panel 'Over the Void' (184,318)-(250,330)
+OFF     Achievements.Panel 'Ready or Not' (311,318)-(375,330)
+OFF     Achievements.Panel 'The Last Show' (55,318)-(127,330)
+OVERLAP Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  x  ZyntraStore.ZyntraShopButton (8,105)-(60,157)  (24x6 px)
+OVERLAP Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  x  ZyntraStore.ZyntraShopButton > Face (8,105)-(60,157)  (24x6 px)
+OVERLAP Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  x  ZyntraStore.ZyntraWheelButton (66,105)-(118,157)  (52x6 px)
+OVERLAP Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  x  ZyntraStore.ZyntraWheelButton > Face (66,105)-(118,157)  (52x6 px)
+OVERLAP Achievements.Panel 'New Arrival' (62,208)-(120,220)  x  ZyntraStore.ZyntraMusicButton (66,163)-(118,215)  (52x6 px)
+OVERLAP Achievements.Panel 'New Arrival' (62,208)-(120,220)  x  ZyntraStore.ZyntraMusicButton > Face (66,163)-(118,215)  (52x6 px)
+OVERLAP Achievements.Panel 'Party's Over' (439,208)-(499,220)  x  StaminaGui.TouchRunHold (428,167)-(483,222)  (44x11 px)
+OVERLAP Achievements.Panel '×' (516,87)-(528,113)  x  ZyntraLobbyPillL4.TokenPill (407,66)-(560,118)  (13x26 px)
+OVERLAP Achievements.Panel > Close (500,78)-(544,122)  x  ZyntraLobbyPillL4.TokenPill '+' (537,84)-(546,100)  (7x16 px)
+OVERLAP Achievements.Panel > FirstClearLevel3 (410,128)-(528,232)  x  FriendBoostGui.FriendBoostChip 'FRIENDS +0%' (479,130)-(537,142)  (49x12 px)
+OVERLAP Achievements.Panel > FirstClearLevel3 (410,128)-(528,232)  x  StaminaGui.TouchRunHold 'RUN  »' (438,188)-(474,200)  (36x12 px)
+OVERLAP Achievements.Panel > FirstClearLevel4 (32,238)-(150,342)  x  Achievements.Open 'Badges' (12,290)-(56,302)  (24x13 px)
+OVERLAP Achievements.Panel > FirstClearLevel4 (32,238)-(150,342)  x  ZyntraStore.ZyntraRewardsButton 'REWARDS' (14,259)-(54,270)  (22x11 px)
+OVERLAP Achievements.Panel > Icon (438,134)-(500,196)  x  FriendBoostGui.FriendBoostChip 'FRIENDS +0%' (479,130)-(537,142)  (21x8 px)
+OVERLAP Achievements.Panel > Icon (438,134)-(500,196)  x  StaminaGui.TouchRunHold 'RUN  »' (438,188)-(474,200)  (36x8 px)
+OVERLAP Achievements.Panel > Icon (60,134)-(122,196)  x  ZyntraStore.ZyntraWheelButton 'WHEEL' (78,143)-(106,154)  (28x11 px)
+OVERLAP Achievements.Panel > Welcome (32,128)-(150,232)  x  ZyntraStore.ZyntraMusicButton 'MUTE' (80,201)-(104,212)  (24x11 px)
+OVERLAP Achievements.Panel > Welcome (32,128)-(150,232)  x  ZyntraStore.ZyntraOpenButton 'UPGRADES' (12,201)-(56,212)  (24x11 px)
+OVERLAP Achievements.Panel > Welcome (32,128)-(150,232)  x  ZyntraStore.ZyntraShopButton 'SHOP' (22,143)-(45,154)  (13x11 px)
+OVERLAP Achievements.Panel > Welcome (32,128)-(150,232)  x  ZyntraStore.ZyntraWheelButton 'WHEEL' (78,143)-(106,154)  (28x11 px)
+OVERLAP Achievements.Unlocked 'ACHIEVEMENT UNLOCKED' (192,81)-(312,93)  x  Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  (102x8 px)
+OVERLAP Achievements.Unlocked 'New Arrival' (192,99)-(294,119)  x  Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  (102x12 px)
+OVERLAP Achievements.Unlocked (114,68)-(454,144)  x  Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  (180x26 px)
+OVERLAP Achievements.Unlocked (114,68)-(454,144)  x  ZyntraLobbyPillL4.TokenPill '35' (440,81)-(459,103)  (14x22 px)
+OVERLAP Achievements.Unlocked > Icon (124,78)-(180,134)  x  Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111)  (56x26 px)
+OVERLAP HelpButton.Open 'Help' (80,290)-(108,302)  x  Achievements.Panel > FirstClearLevel4 (32,238)-(150,342)  (27x13 px)
+OVERLAP HelpButton.Open 'Help' (80,290)-(108,302)  x  Achievements.Panel > Icon (60,244)-(122,306)  (27x13 px)
+THUMB   Achievements.Open 'Badges' (12,290)-(56,302) is 44x13 px inside the Thumbstick zone
+THUMB   Achievements.Open (8,281)-(60,311) is 52x30 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'ACHIEVEMENTS   1 / 21' (36,85)-(294,111) is 191x4 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'New Arrival' (62,208)-(120,220) is 58x11 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Office Hours' (186,208)-(248,220) is 16x11 px inside the Controls zone
+THUMB   Achievements.Panel 'Office Hours' (186,208)-(248,220) is 41x11 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Out of the Deep End' (293,208)-(393,220) is 100x11 px inside the Controls zone
+THUMB   Achievements.Panel 'Party's Over' (439,208)-(499,220) is 60x11 px inside the Controls zone
+THUMB   Achievements.Panel 'Tap a badge to see how to earn' (36,270)-(253,286) is 191x15 px inside the Thumbstick zone
+THUMB   Achievements.Panel 'Tap a badge to see how to earn' (36,270)-(253,286) is 22x15 px inside the Controls zone
+THUMB   Achievements.Panel > CampaignComplete (410,238)-(528,342) is 118x82 px inside the Controls zone
+THUMB   Achievements.Panel > CampaignComplete (410,238)-(528,342) is 55x62 px inside the Jump zone
+THUMB   Achievements.Panel > FirstClearLevel1 (158,128)-(276,232) is 45x60 px inside the Controls zone
+THUMB   Achievements.Panel > FirstClearLevel1 (158,128)-(276,232) is 69x104 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel2 (284,128)-(402,232) is 118x60 px inside the Controls zone
+THUMB   Achievements.Panel > FirstClearLevel3 (410,128)-(528,232) is 118x60 px inside the Controls zone
+THUMB   Achievements.Panel > FirstClearLevel4 (32,238)-(150,342) is 118x82 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel5 (158,238)-(276,342) is 45x82 px inside the Controls zone
+THUMB   Achievements.Panel > FirstClearLevel5 (158,238)-(276,342) is 69x82 px inside the Thumbstick zone
+THUMB   Achievements.Panel > FirstClearLevel6 (284,238)-(402,342) is 118x82 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (186,134)-(248,196) is 17x24 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (186,134)-(248,196) is 41x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (186,244)-(248,306) is 17x62 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (186,244)-(248,306) is 41x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (312,134)-(374,196) is 62x24 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (312,244)-(374,306) is 62x62 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (438,134)-(500,196) is 62x24 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (438,244)-(500,306) is 27x56 px inside the Jump zone
+THUMB   Achievements.Panel > Icon (438,244)-(500,306) is 62x62 px inside the Controls zone
+THUMB   Achievements.Panel > Icon (60,134)-(122,196) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Icon (60,244)-(122,306) is 62x62 px inside the Thumbstick zone
+THUMB   Achievements.Panel > Welcome (32,128)-(150,232) is 118x104 px inside the Thumbstick zone
+THUMB   Achievements.Unlocked 'New Arrival' (192,99)-(294,119) is 35x12 px inside the Thumbstick zone
+THUMB   Achievements.Unlocked (114,68)-(454,144) is 113x37 px inside the Thumbstick zone
+THUMB   Achievements.Unlocked > Icon (124,78)-(180,134) is 56x27 px inside the Thumbstick zone
+THUMB   HelpButton.Open 'Help' (80,290)-(108,302) is 27x13 px inside the Thumbstick zone
+THUMB   HelpButton.Open (68,281)-(120,311) is 52x30 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton 'MUTE' (80,201)-(104,212) is 24x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton (66,163)-(118,215) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Face (66,163)-(118,215) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Icon (70,167)-(114,211) is 45x45 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraMusicButton > Plate (66,200)-(118,213) is 52x13 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton 'UPGRADES' (12,201)-(56,212) is 44x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton (8,163)-(60,215) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Face (8,163)-(60,215) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Icon (12,167)-(56,211) is 45x45 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraOpenButton > Plate (8,200)-(60,213) is 52x13 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton 'REWARDS' (14,259)-(54,270) is 40x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton (8,221)-(60,273) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Face (8,221)-(60,273) is 52x52 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Icon (12,225)-(56,269) is 45x45 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraRewardsButton > Plate (8,258)-(60,271) is 52x13 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton 'SHOP' (22,143)-(45,154) is 23x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton (8,105)-(60,157) is 52x50 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Face (8,105)-(60,157) is 52x50 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Icon (12,109)-(56,153) is 45x45 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraShopButton > Plate (8,142)-(60,155) is 52x13 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton 'WHEEL' (78,143)-(106,154) is 28x11 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton (66,105)-(118,157) is 52x50 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Face (66,105)-(118,157) is 52x50 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Icon (70,109)-(114,153) is 45x45 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > NotificationDot (104,109)-(114,119) is 10x10 px inside the Thumbstick zone
+THUMB   ZyntraStore.ZyntraWheelButton > Plate (66,142)-(118,155) is 52x13 px inside the Thumbstick zone

@@ -1,0 +1,9 @@
+phone 1024x768, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraShopL4, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, FriendBoostGui, ZyntraStore), 106 pieces measured, 8 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (993,21)-(1002,37)
+CUT     ZyntraShopL4.Root '+' (875,171)-(888,196)
+CUT     ZyntraShopL4.Root '35' (721,166)-(752,201)
+CUT     ZyntraShopL4.Root 'SKINS' (518,649)-(569,668)
+CUT     ZyntraShopL4.Root 'UPGRADES' (273,649)-(369,668)
+CUT     ZyntraShopL4.Root 'X' (946,159)-(975,206)
+OVERLAP HelpButton.Open 'Help' (86,620)-(114,632)  x  ZyntraShopL4.Root > ShopWindow (72,142)-(1012,684)  (27x13 px)
+OVERLAP HelpButton.Open 'Help' (86,620)-(114,632)  x  ZyntraShopL4.Root > WindowShadow (72,150)-(1012,693)  (27x13 px)

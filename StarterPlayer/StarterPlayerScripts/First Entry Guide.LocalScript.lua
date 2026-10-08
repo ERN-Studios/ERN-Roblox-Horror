@@ -16,6 +16,10 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
+-- MOBILE_QA_20261008: the screen is asked of UIDevice (what THIS device shows and where its safe area ends), not
+-- of the raw camera viewport, which counts Roblox's top bar: that put the HELP button on top of MUTE or under the
+-- bottom edge on phones.
+local UIDevice = require(game:GetService("ReplicatedStorage"):WaitForChild("UIDevice"))
 
 -- SPAWN_VIEW_20261004 (owner): whoever arrives in the lobby looks down the tunnel toward the DJ stage, with the
 -- arrival gate behind them. The server already stands the body that way (GameManager.scatterAt); the camera keeps
@@ -126,11 +130,11 @@ local function show()
 	stroke.Color, stroke.Thickness, stroke.Transparency = GREEN, 2, 0.25
 	local scale = Instance.new("UIScale", card)
 	local function fit()
-		local view = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
+		local view = UIDevice.Layout().Viewport
 		scale.Scale = math.clamp(math.min((view.X - 28) / W, (view.Y - 28) / H), 0.5, 1.3)
 	end
 	fit()
-	local resized = workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)
+	local resized = UIDevice.Changed:Connect(fit)
 	local function text(parent, name, content, size, colour, x, y, w, h, font)
 		local item = Instance.new("TextLabel")
 		item.Name, item.Text, item.TextSize, item.TextColor3 = name, content, size, colour
@@ -308,13 +312,19 @@ local TOPICS = {
 		{"Tell us", "We are two people making this. Bugs and ideas are welcome in our Discord (#bugs, #feedback)."},
 	}},
 }
-local helpGui = nil
+local helpGui, helpClose = nil, nil
 local function help()
-	if helpGui then helpGui:Destroy() helpGui = nil player:SetAttribute("HelpPanelOpen", nil) return end
+	if helpGui then helpClose() return end
 	if open or player:GetAttribute("InRound") == true then return end
+	do
+		local switch = player:FindFirstChild("PlayerScripts") and player.PlayerScripts:FindFirstChild("ZyntraRailSwitch")
+		if switch and switch:IsA("BindableFunction") then pcall(switch.Invoke, switch, "HelpPanelOpen") end
+	end
 	local W, H = 760, 500
 	local gui = Instance.new("ScreenGui")
-	gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset, gui.DisplayOrder = "HelpPanel", false, true, 58
+	-- 117: the height the lobby's windows draw at, under the rail's 119 (HelpPanelOpen is one of UIDevice's
+	-- screen-owning modals since MOBILE_QA_20261008, so the rail, token pill and chip stand over it as over the shop)
+	gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset, gui.DisplayOrder = "HelpPanel", false, true, 117
 	helpGui = gui
 	local shade = Instance.new("Frame")
 	shade.Size, shade.BackgroundColor3, shade.BackgroundTransparency, shade.BorderSizePixel, shade.Active = UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 0.5, 0, true
@@ -328,12 +338,26 @@ local function help()
 	local edge = Instance.new("UIStroke", panel)
 	edge.Color, edge.Thickness, edge.Transparency = GREEN, 2, 0.25
 	local scale = Instance.new("UIScale", panel)
+	local columns = function() end                 -- set once the two columns exist
 	local function fit()
-		local view = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1280, 720)
-		scale.Scale = math.clamp(math.min((view.X - 24) / W, (view.Y - 24) / H), 0.45, 1.25)
+		-- The rectangle the lobby's own windows take: the modal viewport, on touch the whole safe height, and never
+		-- under the rail (ZyntraRailRight). Where that is smaller than the authored 760 x 500 the panel takes what
+		-- there is at full text size (on touch) and its two columns scroll, instead of the whole panel shrinking.
+		local device = UIDevice.Layout()
+		local area = device.ModalViewport
+		local left, top, room, tall = area.Left, area.Top, area.Width, area.Height
+		if device.IsTouch then top, tall = device.Safe.Top, device.Safe.Bottom - device.Safe.Top end
+		local railRight = player:GetAttribute("ZyntraRailRight")
+		if type(railRight) == "number" and left < railRight + 8 then
+			room, left = room - (railRight + 8 - left), railRight + 8
+		end
+		local s = math.clamp(math.min(room / W, tall / H), device.IsTouch and 1 or 0.8, 1.25)
+		scale.Scale = s
+		panel.Size = UDim2.fromOffset(math.min(W, math.floor(room / s)), math.min(H, math.floor(tall / s)))
+		panel.Position = UIDevice.LocalPosition(gui, left + room / 2, top + tall / 2)
+		columns(panel.Size.X.Offset < 560)
 	end
-	fit()
-	local connections = {workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)}
+	local connections = {UIDevice.Changed:Connect(fit), player:GetAttributeChangedSignal("ZyntraRailRight"):Connect(fit)}
 	local function label(parent, content, size, colour, font)
 		local item = Instance.new("TextLabel")
 		item.Text, item.TextSize, item.TextColor3, item.Font = content, size, colour, font or Enum.Font.GothamMedium
@@ -351,8 +375,10 @@ local function help()
 		helpGui = nil
 		for _, connection in ipairs(connections) do connection:Disconnect() end
 		player:SetAttribute("HelpPanelOpen", nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 		gui:Destroy()
 	end
+	helpClose = close
 	local x = Instance.new("TextButton")
 	x.Name, x.Text, x.TextSize, x.Font, x.TextColor3 = "Close", "×", 26, Enum.Font.GothamBold, PAPER
 	x.AnchorPoint, x.Position, x.Size = Vector2.new(1, 0), UDim2.new(1, -16, 0, 14), UDim2.fromOffset(44, 44)
@@ -370,7 +396,7 @@ local function help()
 	-- topics down the left, the chosen one on the right
 	local list = Instance.new("ScrollingFrame")
 	list.Name = "Topics"
-	list.Position, list.Size = UDim2.fromOffset(20, 84), UDim2.fromOffset(214, H - 104)
+	list.Position, list.Size = UDim2.fromOffset(20, 84), UDim2.new(0.3, -14, 1, -104)
 	list.BackgroundTransparency, list.BorderSizePixel, list.ScrollBarThickness = 1, 0, 4
 	list.CanvasSize, list.AutomaticCanvasSize = UDim2.new(), Enum.AutomaticSize.Y
 	list.Parent = panel
@@ -378,7 +404,7 @@ local function help()
 	listLayout.Padding = UDim.new(0, 6)
 	local content = Instance.new("ScrollingFrame")
 	content.Name = "Content"
-	content.Position, content.Size = UDim2.fromOffset(250, 84), UDim2.fromOffset(W - 270, H - 104)
+	content.Position, content.Size = UDim2.new(0.3, 22, 0, 84), UDim2.new(0.7, -42, 1, -104)
 	content.BackgroundColor3, content.BackgroundTransparency, content.BorderSizePixel = Color3.fromRGB(16, 24, 21), 0.2, 0
 	content.ScrollBarThickness, content.ScrollBarImageColor3 = 5, GREEN
 	content.CanvasSize, content.AutomaticCanvasSize = UDim2.new(), Enum.AutomaticSize.Y
@@ -427,6 +453,22 @@ local function help()
 		buttons[index] = item
 	end
 	choose(1)
+	-- a narrow panel (a small phone beside a two-column rail) gives the topic list more of its width and smaller
+	-- names, and drops the kicker line that would run under PLAY THE TUTORIAL
+	columns = function(narrow)
+		local share = narrow and 0.4 or 0.3
+		list.Size = UDim2.new(share, -14, 1, -104)
+		content.Position, content.Size = UDim2.new(share, 22, 0, 84), UDim2.new(1 - share, -42, 1, -104)
+		sub.Visible = not narrow
+		for _, item in ipairs(buttons) do item.TextSize = narrow and 12 or 14 end
+	end
+	-- one window at a time: opening this one closes the rail's, and it closes when one of theirs opens
+	for _, flag in ipairs({"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen", "LuckyWheelOpen",
+		"DailyRewardsOpen", "AchievementsOpen"}) do
+		table.insert(connections, player:GetAttributeChangedSignal(flag):Connect(function()
+			if player:GetAttribute(flag) == true then close() end
+		end))
+	end
 	table.insert(connections, gui:GetAttributeChangedSignal("Topic"):Connect(function()      -- for tests, as above
 		local to = gui:GetAttribute("Topic")
 		if to == 0 then close() elseif type(to) == "number" and TOPICS[to] then choose(to) end
@@ -439,6 +481,18 @@ local function help()
 	end))
 	gui.Parent = player:WaitForChild("PlayerGui")
 	player:SetAttribute("HelpPanelOpen", true)
+	UIDevice.SuppressTouchMovement(true)         -- the thumbstick and RUN stand down under it
+	fit()                                        -- once it is on screen: its origin is only known then, and the rail has moved
+end
+
+do   -- the rail closes HELP through here before it opens one of its own windows (ZyntraStore.RAIL_WINDOWS)
+	local closer = Instance.new("BindableFunction")
+	closer.Name = "CloseHelpPanel"
+	closer.OnInvoke = function()
+		if helpGui then helpClose() end
+		return true
+	end
+	closer.Parent = player:WaitForChild("PlayerScripts")
 end
 
 -- the HELP button: under BADGES on the lobby's left rail
@@ -464,17 +518,35 @@ task.spawn(function()
 		end
 		local inLobby = player:GetAttribute("InRound") ~= true and workspace:GetAttribute("ReservedRoundServer") ~= true
 			and player:GetAttribute("LuckyWheelOpen") ~= true and player:GetAttribute("LobbyLoadingDone") == true
-		again.Visible = inLobby and badges ~= nil and badges.Visible and not open
+		again.Visible = inLobby and badges ~= nil and badges.Visible and not open and not UIDevice.ScreenOwningModalOpen()
 		if not inLobby and helpGui then help() end
 		if badges then
-			local view = workspace.CurrentCamera.ViewportSize
+			-- under BADGES where the safe area has room; on a phone, where the rail runs to the bottom edge and BADGES
+			-- stands beside its foot, above BADGES; failing that beside it. Never over a rail button.
 			local at, size = badges.AbsolutePosition, badges.AbsoluteSize
-			again.Size = UDim2.fromOffset(size.X, 30)
-			if at.Y + size.Y + 8 + 30 <= view.Y - 6 then
-				again.Position = UDim2.fromOffset(at.X, at.Y + size.Y + 8)
-			else
-				again.Position = UDim2.fromOffset(at.X + size.X + 8, at.Y)
+			local bottom = UIDevice.Layout().Safe.Bottom - 6
+			local rail = {}
+			local store = playerGui:FindFirstChild("ZyntraStore")
+			for _, item in ipairs(store and store:GetChildren() or {}) do
+				if item:IsA("GuiButton") and item.Visible and item.AbsolutePosition.X < 120 and item.AbsoluteSize.X < 140 then
+					table.insert(rail, item)
+				end
 			end
+			local function free(x, y)
+				if y < 0 or y + 30 > bottom then return false end
+				for _, item in ipairs(rail) do
+					local p, s = item.AbsolutePosition, item.AbsoluteSize
+					if x < p.X + s.X and x + size.X > p.X and y < p.Y + s.Y and y + 30 > p.Y then return false end
+				end
+				return true
+			end
+			again.Size = UDim2.fromOffset(size.X, 30)
+			local spots = {{at.X, at.Y + size.Y + 8}, {at.X, at.Y - 38}, {at.X + size.X + 8, at.Y}}
+			local spot = spots[3]
+			for _, candidate in ipairs(spots) do
+				if free(candidate[1], candidate[2]) then spot = candidate break end
+			end
+			again.Position = UDim2.fromOffset(spot[1], spot[2])
 		end
 		task.wait(0.5)
 	end

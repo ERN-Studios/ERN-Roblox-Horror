@@ -1,0 +1,3 @@
+phone 844x390, 19 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, LobbyDJ, Level3ReaderGui, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, Achievements, LuckyWheelGui, ZyntraStore, FriendBoostGui, ZyntraLobbyPillL4), 103 pieces measured, 2 findings
+CUT     ZyntraLobbyPillL4.TokenPill '+' (813,21)-(822,37)
+OVERLAP StaminaGui.TouchRunHold 'RUN  »' (766,250)-(814,266)  x  Achievements.Panel (132,58)-(772,390)  (6x16 px)

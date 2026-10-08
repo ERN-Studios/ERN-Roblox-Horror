@@ -1,0 +1,12 @@
+phone 956x440, 25 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, FlashlightPopup, FriendBoostGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 30 pieces measured, 11 findings
+OVERLAP PuzzleGui.Level1Objectives (648,66)-(948,172)  x  PuzzleGui.Level1ObjectivesToggle 'v' (908,84)-(918,104)  (10x20 px)
+SMALL   FlashlightPopup.FlashlightPower 'HOLD WIDE' (622,397)-(649,417)
+SMALL   ProtectionHUD.EntityDetectorScan 'SCAN READY' (400,384)-(432,404)
+SMALL   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (564,384)-(597,404)
+SMALL   PuzzleGui.Level1Objectives 'LEVEL 1  //  ACTIVE OBJECTIVE' (664,74)-(809,84)
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (400,384)-(432,404) is 32x20 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (392,371)-(439,418) is 47x47 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (564,384)-(597,404) is 34x20 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (557,371)-(604,418) is 47x47 px inside the Controls zone
+THUMB   RoundExitGui.LeaveChip 'HOLD • LOBBY' (64,146)-(148,158) is 84x12 px inside the Thumbstick zone
+THUMB   RoundExitGui.LeaveChip (24,130)-(188,174) is 164x27 px inside the Thumbstick zone
