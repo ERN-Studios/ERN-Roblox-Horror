@@ -1990,3 +1990,12 @@ weight and button size on phones, no noise meter.
   mesh is `u32 magic, nv, nn, nu, nf` then `nv` float32 triples. Decoding it in an Edit `execute_luau` and listing
   the distinct coordinates per axis gave the old case's rectangle: x 5.4..10.6, y -1.6..5.4, z -2.24..-1.61 about
   the part's centre, which the Builder stands at bay (0, 5.4, -21.99) since the seat row's 1.5 stud move.
+- **Seen while checking the posters (2026-10-08, 08:10)**: with the play session at 7 GB and swap full, the client
+  drew the lobby kit's baked atlas on NOTHING (seat row, desk and furniture plain beige) although every part's
+  `TextureContent` was the opaque baked content on server and client; the session before it drew them. A
+  memory artefact of this Mac, not a fault in the place: do not chase it, restart Studio. `TextureID` is empty
+  for such parts, so "has a texture" has to be read from `TextureContent.SourceType`.
+- **`Level Leaderboards` asks no data store in Studio**: Studio has no API access here and the engine itself
+  prints every refused `GetSortedAsync`, pcall or not (six lines every few seconds).
+- **The poster fix and the Level 5 death flow went into Studio at 08:13 and were waiting for a publish** when this
+  was written (`/tmp/live/publish_when_idle.sh`: three minutes of idle, then Codex clicks File > Publish).
