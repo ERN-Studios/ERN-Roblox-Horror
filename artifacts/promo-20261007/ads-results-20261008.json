@@ -1,0 +1,57 @@
+{
+ "read_at": "2026-10-08T14:08 local, 12.6 hours after the start (01:30 local); plays are not reported yet (up to 48 hours late)",
+ "window": [
+  "2026-10-07T00:00:00.000Z",
+  "2026-10-08T12:08:50.000Z"
+ ],
+ "ads": {
+  "T01_hero_office_hide": {
+   "ad_id": "0a1bb234-9ec3-49cf-8cf6-01ba432dfaa9",
+   "asset_id": 85334319149309,
+   "impressions": 20223,
+   "clicks": 943,
+   "ctr_percent": 4.66,
+   "spend_credits": 2.25
+  },
+  "A03_ad_table_check": {
+   "ad_id": "132fc3d8-9d39-42d9-ae41-1379c4b203a0",
+   "asset_id": 130462922453042,
+   "impressions": 2633,
+   "clicks": 173,
+   "ctr_percent": 6.57,
+   "spend_credits": 0.31
+  },
+  "A01_ad_office_run": {
+   "ad_id": "1c9aff9d-69f9-463d-962f-e37ded1120d6",
+   "asset_id": 86971162315270,
+   "impressions": 9232,
+   "clicks": 486,
+   "ctr_percent": 5.26,
+   "spend_credits": 1.09
+  },
+  "T04_hero_shh": {
+   "ad_id": "9042dfd0-d12c-4541-90aa-42be0efc88be",
+   "asset_id": 109659855098434,
+   "impressions": 3219,
+   "clicks": 157,
+   "ctr_percent": 4.88,
+   "spend_credits": 0.33
+  },
+  "T03_hero_playground": {
+   "ad_id": "9d346178-e3ef-4ad1-8302-9f57feaec4de",
+   "asset_id": 103797698944118,
+   "impressions": 6766,
+   "clicks": 453,
+   "ctr_percent": 6.7,
+   "spend_credits": 0.81
+  },
+  "T05_hero_cinema": {
+   "ad_id": "f373206a-dbc9-4dc1-98eb-b994cbe3a478",
+   "asset_id": 131830288383893,
+   "impressions": 2473,
+   "clicks": 122,
+   "ctr_percent": 4.93,
+   "spend_credits": 0.26
+  }
+ }
+}

@@ -710,5 +710,25 @@
    "status_after": 3,
    "why": "owner asked for a daily budget of 11; the budget type of an existing campaign cannot be changed, and Roblox refuses a cancel within 6 hours of the start"
   }
- }
+ },
+ "edits": [
+  {
+   "at": "2026-10-08T14:14:51.895974",
+   "what": "four pictures added to the running campaign (ten in all, the most a campaign holds)",
+   "added": [
+    "A02_ad_poolrooms_hall",
+    "A08_ad_poolrooms_rotunda",
+    "A09_ad_meet_the_staff",
+    "A04_ad_usher_torch"
+   ],
+   "asset_ids": [
+    79426727575422,
+    107182923833121,
+    112386003934119,
+    89268799631436
+   ],
+   "http": 200,
+   "why": "owner 2026-10-08: \"submit the level 2 pictures even though its under maintenance to the campaign and maybe just add the max\""
+  }
+ ]
 }

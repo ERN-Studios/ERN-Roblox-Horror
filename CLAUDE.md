@@ -2178,3 +2178,40 @@ weight and button size on phones, no noise meter.
 - `user_mouse_input` (MCP) clicks a GuiButton by instance path in a play session and fires its `Activated`:
   the way to test a touch button without a phone.
 
+### Added 2026-10-08 (afternoon, later) - Ads: first numbers, ten pictures in the campaign; phones locked to landscape
+
+- **Owner**: read the campaign's first numbers, "do extensive research and submit the level 2 pictures even though
+  its under maintenance to the campaign and maybe just add the max 25 assets", and "lock the screen on phones to
+  landscape".
+- **The numbers, 12.6 hours in** (`python3 tools/promo/ads.py results`; snapshot in
+  `artifacts/promo-20261007/ads-results-20261008.json`): 44 546 impressions, 2 334 clicks, 5.24% click rate, 5.05
+  credits (0.11 per thousand impressions, 0.002 per click). Per picture: T01 hide 45% of the impressions at 4.66%,
+  A01 run 21% at 5.26%, T03 Counter 15% at 6.70%, T04 shh 7% at 4.88%, A03 table check 6% at 6.57%, T05 cinema 6%
+  at 4.93%. The two pictures with a monster close in the frame click best. Third-party benchmarks put a usual
+  sponsored click rate at 1 to 2% and "great" at 3% and over. **Plays were not reported yet**: Roblox says plays
+  and earnings can take up to 48 hours. I had told the owner the campaign had run "about a day and a half": it had
+  run half a day (it started 2026-10-08 01:30).
+- **Three things I had wrong, now corrected in `ads.py`**: a campaign holds TEN pictures, not 25; delivery between
+  pictures is NOT even (45 / 21 / 15 / 7 / 6 / 6 percent for six ads approved in the same second), so the reason
+  given on 2026-10-08 for running only six does not hold; and the per-picture query needs an ISO timestamp.
+- **The campaign has ten pictures now** (edit at 14:13, HTTP 200; nothing else about it changed: daily 11, 5 days,
+  group ad credit, auto-reload off): added A02 poolrooms hall and A08 poolrooms rotunda (Level 2, by the owner's
+  word although the level is under maintenance), A09 the four entities, A04 the Usher. All four ads were approved
+  at once and the campaign stayed on, still "learning" (its first 24 hours). The five landscape pictures not in
+  it: A05, A06, A07, T02, T06. No new pictures were made: with a cap of ten there was no room for more.
+- **How a running campaign is changed**: `PATCH /v3/native/campaigns/<id>?groupId=` with `{"campaign": {"id",
+  "asset_ids": [only the NEW pictures]}}`. Sending the full list is refused ("AssetId ... already exists on this
+  campaign") and changes nothing. Roblox lets only the name and the pictures of a running campaign be changed.
+  Numbers per picture come from the analytics gateway broken down by `AdId` (addresses in `ads.py`'s docstring);
+  they move in batches, not live. `PATCH /v1/ads/<ad id>` switches one picture off: not used yet.
+- **To do about 2026-10-10**: `ads.py results` again, now with plays; judge the pictures on cost per play, switch
+  the weak ones off, and only then think about new pictures in the manner of the winners.
+- **Phones are locked to landscape**: `StarterGui.ScreenOrientation` was `Sensor` and is `LandscapeSensor` (either
+  landscape way up, never portrait). A place property, not a script, so the repo does not mirror it. Read back in
+  a play session: `PlayerGui.ScreenOrientation = LandscapeSensor`. **In Studio, NOT published** when this was
+  written. The portrait layouts found wanting in the phone QA (shop, daily rewards) no longer matter.
+- **Studio had lost Team Create at 13:10** ("heartbeat failure") and answered `execute_luau` with timeouts while
+  still listing the place. `tell application "RobloxStudio" to quit` answered "User cancelled", `pkill` did not end
+  it, `kill -9 <pid>` did; `open -g "roblox-studio:..."` started a new one beside it (two processes for a moment:
+  end the old one by pid, never by name).
+

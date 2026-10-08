@@ -1,6 +1,7 @@
 """Roblox Ads Manager from a session: the asset library and campaigns of the group's ad account.
 
     python3 tools/promo/ads.py status        # balance, library, campaigns (reads only)
+    python3 tools/promo/ads.py results       # the running campaign per picture: impressions, clicks, spend (reads only)
 
 Like `store_pictures.py` it talks through the owner's own signed-in tab (`dashboard.py`), here a tab on
 `create.roblox.com/advertise`. Nothing is typed or clicked and no credential is read. The Ads Manager does not
@@ -22,12 +23,30 @@ service  https://apis.roblox.com/ads-management-api
                                                 (a cancel within 6 hours of the start is refused)
   GET   /v3/native/campaigns/<id>?groupId=      one campaign as it stands (status 2 = enabled, 3 stopped, 5 cancelled,
                                                 6 paused for lack of credit)
-  POST  /v2/native/ads/dateFilter?request_timestamp=&time_period=&reporting_view=   {"campaign_ids": [...]}: results
-                                                per picture (the query's enum values were not worked out on 2026-10-08)
+  PATCH /v3/native/campaigns/<id>?groupId=      {"campaign": {"id": ..., "asset_ids": [...]}} ADDS those pictures to a
+                                                running campaign (the edit form sends only what changed; sending a
+                                                picture that is already in it is refused, 400, and changes nothing)
+  POST  /v2/native/ads/dateFilter?request_timestamp=<ISO, as new Date().toISOString()>&time_period=1&reporting_view=1
+                                                {"campaign_ids": [...]}: the campaign's ads (one per picture: id,
+                                                asset id, review state). time_period 1 today, 2 yesterday, 3 seven
+                                                days, 4 thirty; 0 ("lifetime") is refused here. No numbers in it.
+  PATCH /v1/ads/<ad id>                         {"ad": {"status": ...}} switches ONE picture of a campaign on or off
+
+The NUMBERS per picture come from the analytics service, as the page's own tables do:
+  POST https://apis.roblox.com/analytics-query-gateway/v1/metrics/resource/RESOURCE_TYPE_UNIVERSE/id/<universe>
+       {"resourceType": "RESOURCE_TYPE_UNIVERSE", "resourceId": "<universe>", "query": {"metric": M, "granularity":
+        "METRIC_GRANULARITY_NONE", "startTime", "endTime", "breakdown": [{"dimensions": ["AdId"]}], "filter":
+        [{"dimension": "CampaignId", "operation": "FILTER_OPERATION_CONTAINS", "values": [<campaign>]}]}}
+  M = AdsUANumImpressionsDefaultViewByUniverse, AdsUANumClicksDefaultViewByUniverse,
+      AdsUATotalSpendMicroUsdDefaultViewByUniverse, AdsUANumPlaysDefaultViewByUniverse (plays are attributed and
+      arrive up to 48 hours late: empty on the first day).
 
 An ad picture is first an ordinary group-owned image asset (the same upload the Icon page does), then it is
-registered in the library with its size. Sponsored tiles are 16:9; a campaign shows its pictures (ten at most)
-to players in even shares, so a weak picture costs as much as a strong one.
+registered in the library with its size. Sponsored tiles are 16:9 and a campaign holds TEN pictures at most
+(Roblox's documentation; it also says they are "evenly distributed across players"). Measured on 2026-10-08, twelve
+hours into a campaign whose six ads were approved in the same second: 45, 21, 15, 7, 6 and 6 percent of the
+impressions. Delivery is NOT even, so a weak picture does not cost as much as a strong one. The first 24 hours are
+the "learning" state. Only a campaign's name and pictures can be changed once it runs.
 
 An existing campaign's budget TYPE cannot be changed (the edit form does not even send it): for another type,
 switch the old one off and create a new one.
@@ -164,6 +183,74 @@ def read_campaign(campaign_id):
     return get(f'/v3/native/campaigns/{campaign_id}?groupId={GROUP}')
 
 
+def add_pictures(campaign_id, asset_ids):
+    """ADD pictures to a running campaign (ten in all at most). Changes nothing else: not the budget, not the dates."""
+    tab()
+    return d.call('PATCH', f'{API}/v3/native/campaigns/{campaign_id}?groupId={GROUP}',
+                  body={'campaign': {'id': campaign_id, 'asset_ids': [int(a) for a in asset_ids]}})
+
+
+def campaign_ads(campaign_id):
+    """The campaign's ads, one per picture: {ad id: asset id}."""
+    import datetime
+    import urllib.parse
+    tab()
+    stamp = urllib.parse.quote(datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z'))
+    status, text = d.call('POST', f'{API}/v2/native/ads/dateFilter?request_timestamp={stamp}&time_period=1&reporting_view=1',
+                          body={'campaign_ids': [campaign_id]})
+    assert status == 200, (status, text[:300])
+    return {r['id']: r['sponsored_universe_ad_metadata']['asset_metadata']['asset_id'] for r in json.loads(text).get('ads', [])}
+
+
+def switch_ad(ad_id, on):
+    """One picture of a campaign on (1) or off (2), as the Ads Manager's own toggle does. NOT USED YET from here:
+    read the ad's status first and check the number the page sends before trusting these two."""
+    tab()
+    return d.call('PATCH', f'{API}/v1/ads/{ad_id}', body={'ad': {'status': 1 if on else 2}})
+
+
+METRICS = {'impressions': 'AdsUANumImpressionsDefaultViewByUniverse', 'clicks': 'AdsUANumClicksDefaultViewByUniverse',
+           'spend': 'AdsUATotalSpendMicroUsdDefaultViewByUniverse', 'plays': 'AdsUANumPlaysDefaultViewByUniverse'}
+GATEWAY = 'https://apis.roblox.com/analytics-query-gateway/v1/metrics/resource/RESOURCE_TYPE_UNIVERSE/id/%d' % UNIVERSE
+
+
+def results(campaign_id, start='2026-10-07T00:00:00.000Z', end=None):
+    """Per picture: impressions, clicks, spend (credits) and plays (late by up to 48 hours) since `start`."""
+    import datetime
+    tab()
+    end = end or datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z')
+    names = {r['asset_id']: r.get('asset_name') for r in library()}
+    table = {ad: {'picture': names.get(asset, str(asset)), 'asset_id': asset} for ad, asset in campaign_ads(campaign_id).items()}
+    for key, metric in METRICS.items():
+        body = {'resourceType': 'RESOURCE_TYPE_UNIVERSE', 'resourceId': str(UNIVERSE),
+                'query': {'metric': metric, 'granularity': 'METRIC_GRANULARITY_NONE', 'startTime': start, 'endTime': end,
+                          'breakdown': [{'dimensions': ['AdId']}],
+                          'filter': [{'dimension': 'CampaignId', 'operation': 'FILTER_OPERATION_CONTAINS', 'values': [campaign_id]}]}}
+        data = {}
+        for _ in range(12):
+            status, text = d.call('POST', GATEWAY, body=body)
+            data = json.loads(text) if status == 200 else {}
+            if data.get('operation', {}).get('done'):
+                break
+            time.sleep(1)
+        for v in data.get('operation', {}).get('queryResult', {}).get('values', []):
+            row = table.setdefault(v['breakdownValue'][0]['value'], {'picture': '?'})
+            row[key] = sum(p['value'] for p in v['dataPoints'])
+    for row in table.values():
+        row['spend'] = row.get('spend', 0) / 1e6
+    return {'campaign': campaign_id, 'start': start, 'end': end, 'ads': table}
+
+
+def print_results(report):
+    rows = sorted(report['ads'].values(), key=lambda r: -r.get('impressions', 0))
+    total = sum(r.get('impressions', 0) for r in rows) or 1
+    print(f"{report['start']} .. {report['end']}")
+    print(f"{'picture':30s} {'impr.':>7s} {'share':>6s} {'clicks':>6s} {'CTR':>6s} {'plays':>6s} {'spend':>6s}")
+    for r in rows + [{'picture': 'ALL', **{k: sum(x.get(k, 0) for x in rows) for k in ('impressions', 'clicks', 'plays', 'spend')}}]:
+        i, c = r.get('impressions', 0), r.get('clicks', 0)
+        print(f"{str(r['picture'])[:30]:30s} {i:7.0f} {100 * i / total:5.1f}% {c:6.0f} {100 * c / max(i, 1):5.2f}% {r.get('plays', 0):6.0f} {r.get('spend', 0):6.2f}")
+
+
 def status():
     print('ad credit:', balance())
     rows = library()
@@ -188,5 +275,7 @@ def status():
 if __name__ == '__main__':
     if sys.argv[1:] == ['status']:
         status()
+    elif sys.argv[1:] == ['results']:
+        print_results(results(json.loads(json.loads(RECORD.read_text())['campaign']['answer'])['campaign_id']))
     else:
         print(__doc__)
