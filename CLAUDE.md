@@ -1932,3 +1932,13 @@ weight and button size on phones, no noise meter.
   never reached `StopPlaySoloEnd`, then the Team Create heartbeat failed): Studio held 6 GB and swap was 7.5 of
   8 GB. Before a play test on this 8 GB Mac check `sysctl vm.swapusage`; restart Studio when it is nearly full.
   A stop that hangs shows in the log as `StopPlaySoloStart` with no `StopPlaySoloEnd`.
+- **Published as v2809 on 2026-10-08 at 05:04** (Studio's log: "Place published", "Published new changes"). It
+  carries the Level 3 batch, the party servers (gate on "developers"), the detector, Advanced Equipment at +100%
+  and the leaderboards, plus whatever other sessions had in Studio. The owner's own publish at 03:47 had failed on
+  the hung Studio; they went to bed with "you have to publish on your own ... open codex on my pc and have that do
+  it". With the Mac idle for 17 minutes, `codex exec --enable computer_use -s read-only` was given one job (File >
+  Publish to Roblox, type nothing, touch no other app, stop at any other dialog) and did it in about 80 seconds;
+  `/tmp/live/publish_when_idle.sh` waited for three minutes of `HIDIdleTime` first. It needs exactly one Studio
+  process and a Studio that answers.
+- **After the publish the two passes' descriptions on Roblox were changed** to the new numbers
+  (`tools/store/pass_text.py`; old and new texts in `artifacts/store-passes-20261008/pass-descriptions.json`).
