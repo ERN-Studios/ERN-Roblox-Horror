@@ -776,7 +776,8 @@ local function normalizeProfile(data)
 	for levelKey in pairs(levelsCleared) do
 		if Config.Badges and Config.Badges["FirstClearLevel" .. levelKey] ~= nil then achievements["FirstClearLevel" .. levelKey] = true end
 	end
-	if achievements.FirstClearLevel1 and achievements.FirstClearLevel2 and achievements.FirstClearLevel3
+	-- the campaign is Levels 1-4 since 2026-10-05 (owner); an achievement already saved stays (savedAchievements above)
+	if achievements.FirstClearLevel1 and achievements.FirstClearLevel2 and achievements.FirstClearLevel3 and achievements.FirstClearLevel4
 		and Config.Badges and Config.Badges.CampaignComplete ~= nil then achievements.CampaignComplete = true end
 	data.Achievements = achievements
 	-- COMPLETION_SAVE_20260924. Only an in-flight retry of a clear ever looks an
@@ -994,9 +995,10 @@ end
 -- know: the playtime seconds that have not been flushed yet, whether they are
 -- accruing right now, and the speed boost that is running. Called without one
 -- (a profile that is not a live session) those simply read as "none".
-local function advancedStaminaBonus(player)
+-- ADVANCED_100_20261008: the pass adds to BOTH capacities (`field` = "BatteryBonus" for the battery).
+local function advancedStaminaBonus(player, field)
 	return player and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
-		and Config.Passes.AdvancedEquipment.StaminaBonus or 0
+		and Config.Passes.AdvancedEquipment[field or "StaminaBonus"] or 0
 end
 
 local function publicProfile(data, player)
@@ -1010,7 +1012,7 @@ local function publicProfile(data, player)
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
 		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL + advancedStaminaBonus(player) * 100,
-		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
+		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL + advancedStaminaBonus(player, "BatteryBonus") * 100,
 		CompletedLevels = data.CompletedLevels,
 		-- The unpaid tenth-of-a-token remainder, carried so the client can see it
 		-- exists. It is NOT a balance and no UI spends it.
@@ -1126,7 +1128,7 @@ local function applyAttributes(player, data)
 	-- ZyntraProfileChanged/ZyntraGetProfile payloads; gameplay consumes the two
 	-- derived multipliers plus the cosmetic colors below.
 	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step + advancedStaminaBonus(player))
-	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
+	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step + advancedStaminaBonus(player, "BatteryBonus"))
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	-- Cosmetic selection replicates to other players. The visual applicator is
 	-- installed only after the imported skinned model passes avatar/animation QA.
@@ -2513,13 +2515,11 @@ local function refreshPasses(player)
 		mutate(player, function(data)
 			if data.Grants.AdvancedEquipment then return false end
 			data.Grants.AdvancedEquipment = true
-			data.StaminaLevel += 1
-			data.BatteryLevel += 1
-			-- Names what the pass is (focus beam, +50% base stamina, colours) and
-			-- then the one-time bonus this branch actually grants; the grant and
-			-- its once-only flag above are unchanged.
-			return true, "Advanced Equipment unlocked: focused torch, +50% base stamina and hazmat colors. One-time bonus: +"
-				.. PCT .. " stamina and +" .. PCT .. " battery.", "success"
+			-- ADVANCED_100_20261008 (owner): the pass is +100% Stamina Capacity and +100% Battery Capacity now,
+			-- applied through the two multipliers for as long as the pass is owned. The one-time +1 upgrade level
+			-- to each that this branch used to add is gone for new buyers (it is no longer what is sold); the
+			-- once-only flag stays, so this message is still shown once, and old owners keep their levels.
+			return true, "Advanced Equipment unlocked: +100% Stamina Capacity, +100% Battery Capacity, focused torch and hazmat colors.", "success"
 		end)
 	end
 	if cosmetic and player:GetAttribute("InRound") == true then
@@ -4123,7 +4123,7 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 	-- (ServerScriptService.FriendBoost counts them; it is never a client's claim).
 	local cleared = math.floor(tonumber(level) or 0)
 	-- Level 4 (the cinema) is a tracked clear like 1-3 since 2026-10-02 (owner decision): LevelsCleared, the daily
-	-- Clear goal, records/challenges and its first-clear badge. CampaignComplete below still names 1-3 only.
+	-- Clear goal, records/challenges and its first-clear badge. CampaignComplete below names 1-4 since 2026-10-05.
 	local tracked = cleared >= 1 and cleared <= 4
 	local base = Config.LevelCompletionTokens
 	-- The count is a bounded loop result from FriendBoost, so anything outside a
@@ -4195,7 +4195,8 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 		achievementApi.unlock(player, "FirstClearLevel" .. cleared)
 		local session = sessions[player]
 		local levelsCleared = session and session.data.LevelsCleared
-		if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
+		-- the campaign is Levels 1-4 since 2026-10-05 (owner); one already unlocked stays unlocked
+		if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] and levelsCleared["4"] then
 			achievementApi.unlock(player, "CampaignComplete")
 		end
 		if type(friendCount) == "number" and friendCount >= 1 then achievementApi.unlock(player, "BetterTogether") end

@@ -120,10 +120,14 @@ return {
 			Id = 1945402536,
 			IconId = 80999828522184,
 			Name = "Advanced Equipment",
-			PreviewDescription = "PERMANENT · Focused torch (+45% range, same drain), +50% base stamina, hazmat colors and one +5% stamina/battery upgrade. Demo includes colors.",
-			StaminaBonus = 0.50, -- additive capacity bonus; existing upgrades remain
+			PreviewDescription = "PERMANENT · +100% Stamina Capacity, +100% Battery Capacity, focused torch (+45% range, same drain) and the hazmat color picker. Demo includes colors.",
+			-- ADVANCED_100_20261008 (owner: "100% for both stamina and battery cap"). Additive capacity bonuses on
+			-- top of whatever upgrades the player has bought; before this the pass gave +50% stamina, nothing on
+			-- the battery, and one +5% upgrade level to each on purchase (those levels stay with who got them).
+			StaminaBonus = 1.00,
+			BatteryBonus = 1.00,
 			Price = 149,
-			Description = "Permanent focused flashlight: a narrower beam with 45% more range and the same battery drain. Press Y / R3 or hold the torch on touch to switch. Includes permanent +50% base stamina on top of existing upgrades, hazmat colors and one " .. PCT .. " Stamina/Battery upgrade. Existing owners get focus automatically.",
+			Description = "Permanent focused flashlight: a narrower beam with 45% more range and the same battery drain. Press Y / R3 or hold the torch on touch to switch. Includes permanent +100% Stamina Capacity and +100% Battery Capacity on top of your upgrades, and the hazmat color picker. Existing owners get all of it automatically.",
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,
