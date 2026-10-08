@@ -15,6 +15,9 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
+-- MOBILE_QA_20261008: where the card, the keypad and the note stand on a touch screen is asked of UIDevice
+-- (see placeForDevice): at their desktop places they lay under the phone's buttons.
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local MODEL_NAME = "Level 4 Cinema Blender"
 local STATE_NAME = "Level 4 State"
 local REMOTES_NAME = "Level 4 Remotes"
@@ -560,7 +563,7 @@ local noteText = label(noteCard, { AnchorPoint = Vector2.new(0.5, 0.5), Position
 	Size = UDim2.new(1, -56, 1, -56), Font = Enum.Font.PatrickHand, TextScaled = true, TextWrapped = true,
 	TextColor3 = Color3.fromRGB(40, 30, 40), TextStrokeTransparency = 1, TextXAlignment = Enum.TextXAlignment.Center,
 	ZIndex = 11, Text = "" })
-label(noteCard, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -8), Size = UDim2.new(1, -20, 0, 16),
+local noteHint = label(noteCard, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -8), Size = UDim2.new(1, -20, 0, 16),
 	Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = Color3.fromRGB(110, 96, 90), TextStrokeTransparency = 1,
 	TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 11, Text = "click to close" })
 local noteOrigin = nil
@@ -599,6 +602,67 @@ noteClose.ZIndex = 11
 noteClose.Modal = true
 noteClose.Parent = noteCard
 noteClose.Activated:Connect(closeNote)
+
+-- MOBILE_QA_20261008 -- WHAT SHIPPED BROKEN. This gui draws at DisplayOrder 6, under every touch control, and all
+-- three of its panels stood at desktop places. Measured on 844x390: the objective card (18 px from the right edge,
+-- 110 down) lay behind SCAN, SHIELD and the torch with its last line unreadable; on 568x320 it was wholly covered.
+-- The keypad is 330 px high in a safe area of 262 to 332, so its OK row ran off the bottom of a small phone, and it
+-- stood centred, partly under the equipment slots.
+--   card    on touch: the upper right corner every level's readout has (UIDevice.TopRightPanel), only as tall as
+--           the room above the control cluster
+--   keypad, note   scaled to the safe area, and on touch standing left of the control cluster; their close
+--           buttons are 44 px there
+local keypadScale, noteScale = Instance.new("UIScale"), Instance.new("UIScale")
+keypadScale.Parent, noteScale.Parent = keypad, noteCard
+local function placeForDevice()
+	local layout = UIDevice.Layout()
+	local safe, touch = layout.Safe, layout.IsTouch
+	if touch then
+		local slot = UIDevice.TopRightPanel(300, 96)
+		panel.AnchorPoint = Vector2.new(0, 0)
+		panel.Position = UIDevice.LocalPosition(gui, slot.Left, slot.Top)
+		panel.Size = UDim2.fromOffset(slot.Width, slot.Height)
+	else
+		panel.AnchorPoint = Vector2.new(1, 0)
+		panel.Position = UDim2.new(1, -18, 0, 110)
+		panel.Size = UDim2.fromOffset(300, 96)
+	end
+	panel.ClipsDescendants = touch
+	local function fit(frame, scale, width, height, down)
+		local s = math.min(1, (safe.Height - 16) / height, (safe.Width - 16) / width)
+		scale.Scale = s
+		if touch then
+			local half = width * s / 2
+			local x = math.max(safe.Left + half + 8, math.min((safe.Left + safe.Right) / 2, layout.Zones.Controls.Left - 8 - half))
+			frame.Position = UIDevice.LocalPosition(gui, x, safe.Top + safe.Height * down)
+		else
+			frame.Position = UDim2.fromScale(0.5, down)
+		end
+	end
+	fit(keypad, keypadScale, 240, 330, 0.5)
+	fit(noteCard, noteScale, 400, 290, 0.48)          -- the card is turned two degrees: a little more than its 380 x 270
+	local tap = touch and 44 or 30
+	closeButton.Size, closeButton.Position = UDim2.fromOffset(tap, tap), UDim2.new(1, -10, 0, touch and 14 or 21)
+	display.Size = UDim2.new(1, touch and -76 or -62, 0, 44)
+	noteClose.Size = UDim2.fromOffset(tap, tap)
+	noteHint.Text = touch and "tap to close" or "click to close"
+end
+placeForDevice()
+UIDevice.Changed:Connect(placeForDevice)
+-- On touch an open keypad or note owns the screen (UIDevice.SCREEN_OWNING_MODALS): the buttons, slots and chip that
+-- would lie on it stand down and come back when it closes. A pointer device keeps its HUD; nothing covers it there.
+local function publishCard()
+	local open = gui.Enabled and (keypad.Visible or noteCard.Visible) and UIDevice.IsTouch()
+	if (player:GetAttribute("Level4CardOpen") == true) ~= open then
+		player:SetAttribute("Level4CardOpen", open or nil)
+		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
+	end
+end
+keypad:GetPropertyChangedSignal("Visible"):Connect(publishCard)
+noteCard:GetPropertyChangedSignal("Visible"):Connect(publishCard)
+gui:GetPropertyChangedSignal("Enabled"):Connect(publishCard)
+UIDevice.Changed:Connect(publishCard)
+player:SetAttribute("Level4CardOpen", nil)
 
 -- ---------------------------------------------------------------- the Usher (local rig)
 

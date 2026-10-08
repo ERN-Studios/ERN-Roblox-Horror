@@ -438,7 +438,8 @@ local function applyPlayerLighting()
  local inRevisedLobby = revisedLobbyLighting.contains(inMaze)
  if not inRevisedLobby then revisedLobbyLighting.restore() end
  if player:GetAttribute("Level4LightingOwned") == true or player:GetAttribute("Level6PlaygroundLightingOwned") == true
-  or player:GetAttribute("Level5LightingOwned") == true then
+  or player:GetAttribute("Level5LightingOwned") == true or player:GetAttribute("Level2NewMapLightingOwned") == true then
+  -- Level2NewMapLightingOwned: the Level 2 new-map developer preview keeps the place's daylight, no lobby grade
   -- the Level 4 cinema preview and the Level 6 playground grade themselves (Level 4 Lighting Controller); stand down while it owns it
   revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
@@ -3193,6 +3194,14 @@ local function updateLevelOneGuideLayout()
 	-- back on top of the thumbstick at 667x375.
 	if touch then
 		local band = layout.TopBand
+		-- MOBILE_QA_20261008 -- WHAT SHIPPED BROKEN. On a landscape phone the band above the thumbstick is about
+		-- 54px high: the header fits in it and not one objective does, so MISSION BRIEF opened a title bar with
+		-- nothing under it on every phone (measured 568x320 to 956x440; a tablet's band holds two rows and scrolls).
+		-- Where the band cannot hold the header and two rows, the brief is a SHEET over the modal viewport: it is
+		-- Active, so it takes the controls it covers for as long as it is up, and it is closed with its own X.
+		-- That is the trade the clamp above refused for a panel that stayed open during play; a brief that cannot
+		-- be read is the worse fault.
+		if band.Height < 150 then band = layout.ModalViewport end
 		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
 		objectivesPanel.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
 		objectivesPanel.Size = UDim2.fromOffset(band.Width, band.Height)

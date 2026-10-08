@@ -1,0 +1,13 @@
+phone 1024x768, 26 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level4RoundGui, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 26 pieces measured, 12 findings
+OVERLAP Level4RoundGui.Objective 'Find the note.   Breakers 0/4' (718,222)-(882,236)  x  ProtectionHUD.EntityDetectorScan (832,158)-(904,230)  (50x8 px)
+OVERLAP Level4RoundGui.Objective 'RESTORE THE POWER' (718,196)-(894,214)  x  ProtectionHUD.EntityDetectorScan 'SCAN READY' (849,182)-(887,206)  (38x10 px)
+OVERLAP Level4RoundGui.Objective 'RESTORE THE POWER' (718,196)-(894,214)  x  ProtectionHUD.EntityDetectorScan (832,158)-(904,230)  (62x18 px)
+OVERLAP Level4RoundGui.Objective (706,168)-(1006,264)  x  ProtectionHUD.EntityDetectorScan 'SCAN READY' (849,182)-(887,206)  (38x24 px)
+THUMB   Level4RoundGui.Objective 'Find the note.   Breakers 0/4' (718,222)-(882,236) is 58x14 px inside the Controls zone
+THUMB   Level4RoundGui.Objective 'RESTORE THE POWER' (718,196)-(894,214) is 70x18 px inside the Controls zone
+THUMB   Level4RoundGui.Objective 'Service room: POWER A and POWE' (718,242)-(936,256) is 112x13 px inside the Controls zone
+THUMB   Level4RoundGui.Objective (706,168)-(1006,264) is 182x96 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (849,182)-(887,206) is 38x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (832,158)-(904,230) is 72x72 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (848,452)-(888,476) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (832,428)-(904,500) is 72x72 px inside the Controls zone

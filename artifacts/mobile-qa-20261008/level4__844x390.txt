@@ -1,0 +1,9 @@
+phone 844x390, 26 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level4RoundGui, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 26 pieces measured, 8 findings
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (538,242)-(756,256)  x  ProtectionHUD.EntityDetectorScan (510,248)-(566,304)  (28x8 px)
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (538,242)-(756,256)  x  ProtectionHUD.ProtectionUse (702,248)-(758,304)  (54x8 px)
+THUMB   Level4RoundGui.Objective 'Service room: POWER A and POWE' (538,242)-(756,256) is 218x13 px inside the Controls zone
+THUMB   Level4RoundGui.Objective (526,168)-(826,264) is 300x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (519,264)-(557,288) is 38x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (510,248)-(566,304) is 56x56 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (710,264)-(750,288) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (702,248)-(758,304) is 56x56 px inside the Controls zone

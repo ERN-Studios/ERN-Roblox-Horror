@@ -1493,7 +1493,10 @@ do
 		if world ~= hintWorld then hintWorld, hintSeconds = world, 0 end
 		if not world or hintSeconds >= HINT_SECONDS then return nil end
 		if not panel.Visible or toast.Visible or not isActive() or spectateSubject() ~= nil then return nil end
-		if player:GetAttribute("LevelLoadingOpen") == true or workspace:GetAttribute("UIRegressionViewport") ~= nil then return nil end
+		if player:GetAttribute("LevelLoadingOpen") == true then return nil end
+		-- not under UIRegression's viewport fixture (its matrices measure the reader alone); `DevReaderHintInFixture`
+		-- on the workspace lets a phone audit see the card anyway
+		if workspace:GetAttribute("UIRegressionViewport") ~= nil and workspace:GetAttribute("DevReaderHintInFixture") ~= true then return nil end
 		if stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
 			or numberAttribute("Level3_ModuleProgress", "Level3Modules", 0) > 0 then
 			hintSeconds = HINT_SECONDS                                    -- they have found one: nothing left to say
@@ -1504,11 +1507,32 @@ do
 	local function place(seconds: number)
 		local size, right, top = panel.AbsoluteSize, panel.Position.X.Offset, panel.Position.Y.Offset
 		local drift = math.floor(3 + 3 * math.sin(seconds * 3.2))
-		local beside = right - size.X - 12 - 300 >= 150                   -- clear of the LOBBY chip on the left
-		if beside then
+		-- MOBILE_QA_20261008: the room beside the reader is measured to the LOBBY chip's real right edge (it is at
+		-- 188, not the 150 this assumed), and a phone that has less than the card's 300 gets a narrower, taller card
+		-- beside the reader instead of one under it: under it is where a phone's buttons are (667x375). With no room
+		-- beside either (568x320) it stands under the chip, on the thumbstick's side; the card takes no input.
+		local chip = player.PlayerGui:FindFirstChild("RoundExitGui")
+		chip = chip and chip.Enabled and chip:FindFirstChild("LeaveChip")
+		local chipRight = (chip and chip.Visible) and (chip.AbsolutePosition.X + chip.AbsoluteSize.X - panel.Parent.AbsolutePosition.X) or 0
+		local room = right - size.X - 12 - (chipRight + 12)
+		local touch = UIDevice.IsTouch()
+		local beside = room >= 300 or (touch and room >= 170)
+		if not beside and touch and chip and chip.Visible then
+			local origin = panel.Parent.AbsolutePosition
+			hint.AnchorPoint = Vector2.new(0, 0)
+			hint.Position = UDim2.fromOffset(chip.AbsolutePosition.X - origin.X, chip.AbsolutePosition.Y + chip.AbsoluteSize.Y + 8 - origin.Y)
+			hint.Size = UDim2.fromOffset(220, 122)
+			arrow.Text = ">>"
+			arrow.AnchorPoint = Vector2.new(1, 0.5)
+			arrow.Position = UDim2.new(1, -8 + drift, 0.5, 0)
+			arrow.Size = UDim2.fromOffset(34, 28)
+			heading.Position, heading.Size = UDim2.fromOffset(12, 8), UDim2.new(1, -62, 0, 18)
+			body.Position, body.Size = UDim2.fromOffset(12, 30), UDim2.new(1, -62, 1, -36)
+		elseif beside then
+			local width = math.min(300, room)
 			hint.AnchorPoint = Vector2.new(1, 0)
 			hint.Position = UDim2.fromOffset(right - size.X - 12, top)
-			hint.Size = UDim2.fromOffset(300, math.max(74, size.Y))
+			hint.Size = UDim2.fromOffset(width, math.max(74, size.Y, width < 300 and 150 or 0))
 			arrow.Text = ">>"
 			arrow.AnchorPoint = Vector2.new(1, 0.5)
 			arrow.Position = UDim2.new(1, -8 + drift, 0.5, 0)

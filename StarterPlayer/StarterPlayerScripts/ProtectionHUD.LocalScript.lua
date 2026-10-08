@@ -280,6 +280,12 @@ local function covered()
 		local frame = roundGui:FindFirstChild(name)
 		if frame and frame.Visible then return true end
 	end
+	-- MOBILE_QA_20261008: on a landscape phone the mission brief is a sheet over the whole modal viewport (RoundUI
+	-- takes it where the band above the thumbstick is under 150 px); the slots drew on top of its rows.
+	if player:GetAttribute("LevelOneGuideObjectivesOpen") == true then
+		local layout = UIDevice.Layout()
+		if layout.IsTouch and layout.TopBand.Height < 150 then return true end
+	end
 	return false
 end
 
@@ -722,7 +728,7 @@ connect(profileChanged.OnClientEvent, function(_, message, tone)
 end)
 for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId",
 	"Level2_ExitTransition", "RoundEntryControlsReady",
-	"DispatchBriefingOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
+	"DispatchBriefingOpen", "LevelOneGuideObjectivesOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
 	"PlayerProtectionActive", "PlayerProtectionExpiresAt", "PlayerProtectionSource",
 	"ZyntraSpeedPotions", "ZyntraRouteMarkers", "RouteMarkersActive",
 	"ZyntraSpeedBoostUntil", "ZyntraSpeedPotionUsedThisRound"}) do

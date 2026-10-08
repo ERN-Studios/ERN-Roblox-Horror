@@ -1,0 +1,7 @@
+phone 1024x768, 25 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, FlashlightPopup, StaminaGui, FriendBoostGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 26 pieces measured, 6 findings
+SMALL   Level3ReaderGui.ReaderPanel 'CD // ▮▮▮□□  29m' (776,120)-(849,129)
+SMALL   Level3ReaderGui.ReaderPanel 'DISC RELAY [□□□□□]  ' (776,82)-(894,92)
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (849,182)-(887,206) is 38x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (832,158)-(904,230) is 72x72 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (848,452)-(888,476) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (832,428)-(904,500) is 72x72 px inside the Controls zone

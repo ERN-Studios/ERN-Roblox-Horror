@@ -1,0 +1,14 @@
+phone 667x375, 26 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level4RoundGui, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, StaminaGui, FriendBoostGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD), 26 pieces measured, 13 findings
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (361,242)-(578,256)  x  ProtectionHUD.EntityDetectorScan 'SCAN READY' (342,249)-(380,273)  (19x6 px)
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (361,242)-(578,256)  x  ProtectionHUD.EntityDetectorScan (333,233)-(389,289)  (28x13 px)
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (361,242)-(578,256)  x  ProtectionHUD.ProtectionUse 'SHIELD WAIT' (533,249)-(573,273)  (40x6 px)
+OVERLAP Level4RoundGui.Objective 'Service room: POWER A and POWE' (361,242)-(578,256)  x  ProtectionHUD.ProtectionUse (525,233)-(581,289)  (54x13 px)
+OVERLAP Level4RoundGui.Objective (349,168)-(649,264)  x  ProtectionHUD.EntityDetectorScan 'SCAN READY' (342,249)-(380,273)  (31x15 px)
+OVERLAP Level4RoundGui.Objective (349,168)-(649,264)  x  ProtectionHUD.ProtectionUse 'SHIELD WAIT' (533,249)-(573,273)  (40x15 px)
+THUMB   Level4RoundGui.Objective 'Find the note.   Breakers 0/4' (361,222)-(526,236) is 164x11 px inside the Controls zone
+THUMB   Level4RoundGui.Objective 'Service room: POWER A and POWE' (361,242)-(578,256) is 218x13 px inside the Controls zone
+THUMB   Level4RoundGui.Objective (349,168)-(649,264) is 300x39 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan 'SCAN READY' (342,249)-(380,273) is 38x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (333,233)-(389,289) is 56x56 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (533,249)-(573,273) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (525,233)-(581,289) is 56x56 px inside the Controls zone

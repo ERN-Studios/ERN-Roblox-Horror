@@ -51,16 +51,34 @@ remote.OnClientEvent:Connect(function(event,reading,expires)
   -- hand does. Never wider than half the screen, so a portrait phone keeps both thumbs' controls in sight.
   -- It is on for thirty seconds, so the equipment key puts it away and brings it back (ProtectionHUD sets
   -- `ZyntraDetectorStowed`); the status line stays either way.
+  local layout=UIDevice.Layout()
   local h=math.min(math.clamp(safe.Height*.7,240,600),safe.Width*.5/.66)
+  local middle,captionWidth=(safe.Left+safe.Right)/2,math.min(300,safe.Width-32)
+  -- MOBILE_QA_20261008: on a touch screen the middle of the bottom edge is where the buttons are. Measured on
+  -- 568x320: the device lay on SCAN/HIDE and DROP GLOW and the status line across SNEAK and RUN, so the one button
+  -- that puts the device away was under it. There the device is smaller (62% of the safe height, no 240 floor)
+  -- and both it and the status line end 8 px left of the control cluster; nothing in this gui takes input, so
+  -- over the thumbstick's side it costs the thumb nothing.
+  local edge=nil
+  if layout.IsTouch then
+   h=math.min(math.max(150,safe.Height*.62),safe.Width*.5/.66)
+   edge=layout.Zones.Controls.Left-8
+  end
   local w=h*.66
+  if edge then
+   middle=math.max(safe.Left+w/2+8,math.min(middle,edge-w/2))
+   captionWidth=math.min(captionWidth,math.max(w+70,190))
+  end
   local stowed=player:GetAttribute("ZyntraDetectorStowed")==true
   preview.Root.Visible=not stowed
   preview.Root.Size=UDim2.fromOffset(w,h)
   preview.Root.AnchorPoint=Vector2.new(.5,1)
-  preview.Root.Position=UIDevice.LocalPosition(gui,(safe.Left+safe.Right)/2,safe.Bottom-52+h*(1-Visual.ScreenBottom))
+  preview.Root.Position=UIDevice.LocalPosition(gui,middle,safe.Bottom-52+h*(1-Visual.ScreenBottom))
   preview:SetReading(reading,false,remaining)
-  caption.Size=UDim2.fromOffset(math.min(300,safe.Width-32),32)
-  caption.Position=UIDevice.LocalPosition(gui,(safe.Left+safe.Right)/2,safe.Bottom-45)
+  local captionMiddle=middle
+  if edge then captionMiddle=math.max(safe.Left+captionWidth/2+8,math.min(middle,edge-captionWidth/2)) end
+  caption.Size=UDim2.fromOffset(captionWidth,32)
+  caption.Position=UIDevice.LocalPosition(gui,captionMiddle,safe.Bottom-45)
   caption.Text=Visual.Labels[reading]..string.format("  ·  %ds",math.ceil(remaining))
   caption.TextColor3=Visual.Colors[reading]
  end)

@@ -1,0 +1,14 @@
+phone 667x375, 26 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, StaminaGui, TeamObjectiveFeed, FlashlightPopup, FriendBoostGui, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ProtectionHUD, ZyntraDetectorReadout), 31 pieces measured, 13 findings
+SMALL   ZyntraDetectorReadout.DetectorPreview '18s REMAINING' (229,309)-(274,316)
+SMALL   ZyntraDetectorReadout.DetectorPreview 'LIVE READING' (227,245)-(275,253)
+SMALL   ZyntraDetectorReadout.DetectorPreview 'SAFE DISTANCE' (219,288)-(284,298)
+THUMB   ProtectionHUD.EntityDetectorScan 'HIDE LOW' (347,249)-(375,273) is 28x24 px inside the Controls zone
+THUMB   ProtectionHUD.EntityDetectorScan (333,233)-(389,289) is 56x56 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse 'SHIELD WAIT' (533,249)-(573,273) is 40x24 px inside the Controls zone
+THUMB   ProtectionHUD.ProtectionUse (525,233)-(581,289) is 56x56 px inside the Controls zone
+THUMB   ZyntraDetectorReadout.DetectorPreview '18s REMAINING' (229,309)-(274,316) is 38x7 px inside the Thumbstick zone
+THUMB   ZyntraDetectorReadout.DetectorPreview 'LIVE READING' (227,245)-(275,253) is 39x8 px inside the Thumbstick zone
+THUMB   ZyntraDetectorReadout.DetectorPreview 'SAFE DISTANCE' (219,288)-(284,298) is 48x10 px inside the Thumbstick zone
+THUMB   ZyntraDetectorReadout.DetectorPreview > DetectorScreen (216,242)-(286,320) is 50x78 px inside the Thumbstick zone
+THUMB   ZyntraDetectorReadout.ReadableScanStatus 'SAFE DISTANCE  ·  18s' (149,339)-(285,353) is 118x14 px inside the Thumbstick zone
+THUMB   ZyntraDetectorReadout.ReadableScanStatus (118,330)-(316,362) is 149x32 px inside the Thumbstick zone

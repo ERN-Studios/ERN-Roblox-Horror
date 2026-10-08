@@ -230,6 +230,9 @@ local hudObstacles = {
 	{"Level3ReaderGui", "ReaderPanel"},
 	{"LevelOneGuideGui", "ObjectivesButton"},
 	{"Level6PlaygroundHUD", "Objective"},     -- MOBILE_HUD_20261007: Level 6's card is in that corner on a handheld too
+	-- MOBILE_QA_20261008: on a 568x320 phone LEAVE HIDING and its status line reach the chip's column and lay on it
+	{"Level3TableHideUI", "LeaveHiding"},
+	{"Level3TableHideUI", "HiddenStatus"},
 }
 
 local function applyLayout()
@@ -257,26 +260,39 @@ local function applyLayout()
 		-- (measured 667x375 to 956x440): a dead spot for the thumb, on the button that leaves the round. Where the row
 		-- BESIDE what it dodged is free, and clear of the zone, it goes there instead.
 		if UIDevice.OverlapsMovementZone(left, top, left + chipWidth, top + tap) then
-			local rowLeft, rowTop = left, layout.SafeTop + 12
-			for _ = 1, #hudObstacles do                       -- step right past whatever stands in that row
-				local moved = false
-				for _, names in ipairs(hudObstacles) do
-					local owner = playerGui:FindFirstChild(names[1])
-					local object = owner and owner:FindFirstChild(names[2])
-					if object and owner.Enabled and object.Visible then
-						local pos, size = object.AbsolutePosition, object.AbsoluteSize
-						if rowLeft < pos.X + size.X + 8 and rowLeft + chipWidth > pos.X - 8
-							and rowTop < pos.Y + size.Y + 8 and rowTop + tap > pos.Y - 8 then
-							rowLeft, moved = pos.X + size.X + 8, true
+			local rowTop = layout.SafeTop + 12
+			-- the first free place in the top row for a chip of this width: step right past whatever stands there
+			local function rowSpot(width)
+				local rowLeft = layout.SafeLeft + 12
+				for _ = 1, #hudObstacles do
+					local moved = false
+					for _, names in ipairs(hudObstacles) do
+						local owner = playerGui:FindFirstChild(names[1])
+						local object = owner and owner:FindFirstChild(names[2])
+						if object and owner.Enabled and object.Visible then
+							local pos, size = object.AbsolutePosition, object.AbsoluteSize
+							if rowLeft < pos.X + size.X + 8 and rowLeft + width > pos.X - 8
+								and rowTop < pos.Y + size.Y + 8 and rowTop + tap > pos.Y - 8 then
+								rowLeft, moved = pos.X + size.X + 8, true
+							end
 						end
 					end
+					if not moved then break end
 				end
-				if not moved then break end
+				if rowLeft + width <= layout.SafeRight - 12
+					and not UIDevice.OverlapsMovementZone(rowLeft, rowTop, rowLeft + width, rowTop + tap) then
+					return rowLeft
+				end
+				return nil
 			end
-			if rowLeft + chipWidth <= layout.SafeRight - 12
-				and not UIDevice.OverlapsMovementZone(rowLeft, rowTop, rowLeft + chipWidth, rowTop + tap) then
-				left, top = rowLeft, rowTop
+			-- at its own width, else 140 wide (the label needs about 110): the row between the brief and the objective
+			-- card is 147 px on a 667x375 phone
+			local spot = rowSpot(chipWidth)
+			if not spot then
+				spot = rowSpot(140)
+				if spot then chipWidth = 140 end
 			end
+			if spot then left, top = spot, rowTop end
 		end
 	end
 	local x, y = UIDevice.LocalOffset(gui, left, top)
