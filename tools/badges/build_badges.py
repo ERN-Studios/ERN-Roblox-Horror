@@ -1,4 +1,4 @@
-"""The 20 achievement badges, drawn as flat pictograms in the store's own icon style (assets/shop/icons-v2-20261001):
+"""The 21 achievement badges, drawn as flat pictograms in the store's own icon style (assets/shop/icons-v2-20261001):
 the same charcoal ground and the same four inks, bold geometric shapes, no gradients, no texture, no lettering.
 Written as SVG (assets/badges/source), rendered to 512x512 PNG with headless Chrome (assets/badges/icons-512),
 copied with a contact sheet to ~/Desktop/Backrooms Stay Quiet - Badges.
@@ -72,6 +72,11 @@ BADGES = {
     'L6Escaped': f'<circle cx="150" cy="238" r="62" fill="{R}"/><rect x="88" y="238" width="124" height="162" rx="30" fill="{R}"/>'
         f'<circle cx="318" cy="170" r="34" fill="{C}"/><polygon points="286,214 352,214 372,300 330,300 346,400 306,400 296,326 262,400 222,388 266,300 250,262" fill="{C}"/>'
         f'<rect x="212" y="236" width="60" height="22" rx="11" fill="{C}"/><rect x="340" y="240" width="60" height="22" rx="11" fill="{C}"/>',
+    # a paw print with a heart on the pad (LUNA_KIND_20261008)
+    'LunaKind': ''.join(f'<ellipse cx="{x}" cy="{y}" rx="31" ry="42" transform="rotate({turn} {x} {y})" fill="{C}"/>'
+                        for x, y, turn in ((152, 236, -26), (218, 164, -9), (294, 164, 9), (360, 236, 26))) +
+        f'<path d="M256 226 C314 226 362 288 362 338 C362 388 316 398 256 376 C196 398 150 388 150 338 C150 288 198 226 256 226 Z" fill="{C}"/>'
+        f'<path d="M256 356 C234 338 212 320 212 296 A22 22 0 0 1 256 296 A22 22 0 0 1 300 296 C300 320 278 338 256 356 Z" fill="{R}"/>',
 }
 
 # name, description (as in ZyntraConfig.Achievements), and whether its Roblox badge already exists
@@ -96,6 +101,7 @@ META = [
     ('L6Survivor', 'Still Hiding', 'Still be in the game when it counts for the third time.', False),
     ('L6Caught', 'Found You', 'Get caught by the Counter.', False),
     ('L6Party', 'After Hours', 'Find what is hidden behind the arcade counter.', False),
+    ('LunaKind', 'Being Kind to Luna', 'Pet Luna in the lobby for the first time.', False),
 ]
 assert {m[0] for m in META} == set(BADGES)
 
@@ -109,8 +115,16 @@ for old in desktop.iterdir():                      # the folder holds exactly th
 
 
 def shot(target, page, width, height):
-    subprocess.run([CHROME, '--headless', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1',
-                    f'--window-size={width},{height}', f'--screenshot={target}', f'file://{page}'], capture_output=True)
+    # headless Chrome normally answers in 3 s, and now and then never (2026-10-08): give up on it and ask again
+    for _ in range(4):
+        try:
+            subprocess.run([CHROME, '--headless', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1',
+                            f'--window-size={width},{height}', f'--screenshot={target}', f'file://{page}'],
+                           capture_output=True, timeout=40)
+            return
+        except subprocess.TimeoutExpired:
+            pass
+    raise SystemExit(f'Chrome never rendered {page}')
 
 
 rows = []
@@ -131,7 +145,7 @@ cells = ''.join(
     for number, key, name, text, exists, _ in rows)
 page = source / 'contact_sheet.html'
 page.write_text(f'<html><body style="margin:0;background:{BG};font-family:Helvetica,Arial,sans-serif">'
-                f'<h1 style="color:{C};font-size:30px;margin:26px 34px 6px">BACKROOMS: STAY QUIET  ·  ACHIEVEMENT BADGES  ·  20</h1>'
+                f'<h1 style="color:{C};font-size:30px;margin:26px 34px 6px">BACKROOMS: STAY QUIET  ·  ACHIEVEMENT BADGES  ·  {len(rows)}</h1>'
                 f'<style>.cell{{width:236px;display:inline-block;margin:14px 0 6px 34px;vertical-align:top;text-align:center}}'
                 f'.cell img{{width:200px;height:200px;border-radius:50%}}.cell b{{display:block;color:{C};font-size:17px;margin-top:8px}}'
                 f'.cell i{{display:block;color:{T};font-size:13px;font-style:normal;margin-top:3px}}</style>{cells}</body></html>')

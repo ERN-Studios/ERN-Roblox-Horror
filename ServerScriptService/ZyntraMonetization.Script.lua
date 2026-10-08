@@ -3160,15 +3160,29 @@ function achievementApi.unlock(player, key)
 		awardBadge(player, key)                       -- the badge may have been created since
 		return
 	end
+	-- LUNA_KIND_20261008: an achievement may carry a gift of Research Tokens (`Tokens` on its row of
+	-- Config.Achievements). The gift is added in the SAME write that records the unlock, behind the same check, so
+	-- it is handed out exactly once per profile however often the write is retried or the unlock is asked for.
+	local gift = 0
+	for _, entry in ipairs(Config.Achievements or {}) do
+		if entry.Key == key then gift = wholeCount(entry.Tokens) end
+	end
 	task.spawn(function()
-		mutateIdempotent(player, function(data)
+		local saved, gifted = mutateIdempotent(player, function(data)
 			data.Achievements = type(data.Achievements) == "table" and data.Achievements or {}
 			if data.Achievements[key] == true then return false end
+			if gift > 0 and (not isSafeSupportAmount(data.Tokens) or gift > MAX_SAFE_SUPPORT - data.Tokens) then return false end
 			data.Achievements[key] = true
+			data.Tokens += gift
 			return true
 		end, true)
 		local now = sessions[player]
 		if not now then return end
+		if gift > 0 then
+			-- A gift that was not saved is not shown as unlocked: the next pet tries again.
+			if not saved or now.data.Achievements[key] ~= true then return end
+			if gifted then pushProfile(player) end   -- the token counter; the toast is the Achievements Client's
+		end
 		now.data.Achievements[key] = true
 		achievementApi.publish(player)
 		awardBadge(player, key)

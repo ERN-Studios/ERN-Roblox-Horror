@@ -15,8 +15,10 @@ local ANIMS = { -- KeyframeSequences from tools/luna/glb_to_rbxmx.py (receipts/l
 	Idle = 126786816607054, Walk = 103802473375899, Run = 102273883403776, Sniff = 113212912040174,
 	SitDown = 117349775636197, Sit = 98286663489268, GivePaw = 109042539941659, StandUp = 112870979215682,
 	LieDown = 102191286557976, Sleep = 74699347617141, WakeUp = 94046810034417,
+	RollOver = 93018084533678, BellyUp = 75958294393479, BellyRub = 121013549859435, RollUp = 136860767375927,
 }
 local PLAYER_PET_ANIM = 135130382947090 -- R15 clip the petting player plays (receipts/luna_player_pet_v1.json)
+local PLAYER_BELLY_ANIM = 114539659229386 -- R15 clip for the player rubbing her belly (receipts/luna_player_belly_v1.json)
 local EYES_CLOSED_TEXTURE = 86024350432064 -- her texture with closed eyes, worn while she sleeps (receipts/luna_eyes_closed_v1.json)
 local WALK_REF, RUN_REF = 3.0645, 16 -- studs/s at which the Walk / Run clips' paws stay planted
 local WALK_SPEED, RUN_SPEED, BED_WALK_SPEED = WALK_REF * 1.15, RUN_REF, WALK_REF * 0.8
@@ -24,6 +26,10 @@ local TURN_RATE = math.rad(300)
 local FOLLOW_SECONDS, FOLLOW_GAP, RUN_BEYOND = 5, 3.5, 11
 local PET_DISTANCE = 9
 local PET_GAP = 3.3 -- she sits this far in front of the petting player (their kneeling reach)
+-- now and then she walks up to a player in the lobby and rolls onto her back for a belly rub
+local BELLY_CHANCE, BELLY_COOLDOWN, BELLY_RANGE = 0.35, 75, 30 -- per wander stop / seconds / studs
+-- she lies across in front of them, belly and left side towards them, so their kneeling hands reach her belly
+local BELLY_GAP, BELLY_WAIT, BELLY_RUB_SECONDS = 2.6, 12, 4.3
 local CUSHION_HEIGHT = 0.7 -- top of the bed cushion above the floor (studs)
 -- Layout relative to the revised lobby's PreviewCenter (220, 30, -760); heights come from floor raycasts.
 -- Her bed is on the west wall between the Level 3 and Level 5 gates, opening towards the road.
@@ -102,7 +108,7 @@ local bedEntry = bedFrame * CFrame.new(0, 0, -(bed.Size.Z / 2 + 2.5))
 -- Its face is drawn by the SurfaceGui itself (LightInfluence 0) so it reads in the dim tunnel.
 local plate = Instance.new("Part")
 plate.Name = "Memorial Plate"
-plate.Size = Vector3.new(3.6, 1.4, 0.12)
+plate.Size = Vector3.new(3.6, 1.75, 0.12)
 plate.Material = Enum.Material.Metal
 plate.Color = Color3.fromRGB(150, 118, 58)
 plate.Anchored, plate.CanCollide, plate.CanTouch, plate.CanQuery = true, false, false, false
@@ -116,7 +122,7 @@ end
 plate.Parent = home
 local gui = Instance.new("SurfaceGui")
 gui.Face = Enum.NormalId.Front
-gui.CanvasSize = Vector2.new(360, 140)
+gui.CanvasSize = Vector2.new(360, 175)
 gui.LightInfluence = 0
 gui.Brightness = 1
 gui.MaxDistance = 80
@@ -132,16 +138,21 @@ rim.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 rim.Parent = face
 local name = Instance.new("TextLabel")
 name.BackgroundTransparency = 1
-name.Position = UDim2.fromScale(0, 0.04)
-name.Size = UDim2.fromScale(1, 0.62)
+name.Position = UDim2.fromScale(0, 0.2)
+name.Size = UDim2.fromScale(1, 0.5)
 name.Font = Enum.Font.Garamond
 name.Text = "LUNA"
 name.TextScaled = true
 name.TextColor3 = Color3.fromRGB(52, 34, 12)
 name.Parent = face
+local rip = name:Clone() -- owner 2026-10-04: "RIP" on the plate
+rip.Position = UDim2.fromScale(0, 0.05)
+rip.Size = UDim2.fromScale(1, 0.18)
+rip.Text = "RIP"
+rip.Parent = face
 local mark = name:Clone()
-mark.Position = UDim2.fromScale(0, 0.64)
-mark.Size = UDim2.fromScale(1, 0.3)
+mark.Position = UDim2.fromScale(0, 0.7)
+mark.Size = UDim2.fromScale(1, 0.24)
 mark.Font = Enum.Font.GothamMedium
 mark.Text = "\u{1F43E} \u{2764} \u{1F43E}" -- paw, heart, paw
 mark.Parent = face
@@ -366,6 +377,7 @@ local function eyes(open)
 	if EYES_CLOSED_TEXTURE ~= 0 then mesh.TextureID = open and openEyes or ("rbxassetid://" .. EYES_CLOSED_TEXTURE) end
 end
 local function state(name) luna:SetAttribute("State", name) end -- readback for playtests
+local maybeBellyUp -- set with the pet code below
 local function life()
 	while true do
 		if inBed then
@@ -383,6 +395,7 @@ local function life()
 		for _ = 1, math.random(2, 4) do
 			if #WANDER == 0 then break end
 			walkTo(ground(WANDER[math.random(#WANDER)]), WALK_SPEED)
+			if maybeBellyUp() then state("Wandering") end
 			sniffing = math.random() < 0.5
 			task.wait(math.random(3, 7))
 			sniffing = false
@@ -433,22 +446,29 @@ local function follow(player)
 end
 
 -- the petting player kneels, strokes her head and takes the paw (their own Animator, server-played)
-local petAnim
-if PLAYER_PET_ANIM ~= 0 then
-	petAnim = Instance.new("Animation")
-	petAnim.Name = "PlayerPetsLuna"
-	petAnim.AnimationId = "rbxassetid://" .. PLAYER_PET_ANIM
-	petAnim.Parent = luna
+local function playerClip(name, id)
+	if id == 0 then return nil end
+	local anim = Instance.new("Animation")
+	anim.Name = name
+	anim.AnimationId = "rbxassetid://" .. id
+	anim.Parent = luna
+	return anim
 end
-local function playerPets(player)
+local petAnim = playerClip("PlayerPetsLuna", PLAYER_PET_ANIM)
+local bellyAnim = playerClip("PlayerRubsLunasBelly", PLAYER_BELLY_ANIM)
+local function playerPlays(player, anim)
+	-- LUNA_KIND_20261008: a pet or a belly rub is the "Being Kind to Luna" achievement (and its gift of tokens),
+	-- once per player; ZyntraMonetization keeps the record, so asking again changes nothing.
+	local unlock = game:GetService("ServerStorage"):FindFirstChild("ZyntraAchievement")
+	if unlock and player.Parent then unlock:Fire(player, "LunaKind") end
 	local character = player.Character
 	local human = character and character:FindFirstChildOfClass("Humanoid")
 	local hrp = character and character:FindFirstChild("HumanoidRootPart")
 	local animator = human and human:FindFirstChildOfClass("Animator")
-	if not (petAnim and animator and hrp) then return end
+	if not (anim and animator and hrp) then return end
 	local toward = Vector3.new(pos.X, hrp.Position.Y, pos.Z)
 	if (toward - hrp.Position).Magnitude > 0.5 then hrp.CFrame = CFrame.lookAt(hrp.Position, toward) end
-	local track = animator:LoadAnimation(petAnim)
+	local track = animator:LoadAnimation(anim)
 	track.Priority = Enum.AnimationPriority.Action4
 	track:Play(0.25)
 	local start = hrp.Position
@@ -466,9 +486,84 @@ local function playerRoot(player)
 	return character and character:FindFirstChild("HumanoidRootPart")
 end
 
+local bellyUp, rubbedBy, lastBelly = false, nil, -math.huge
+-- the Found Footage HUD reads ActionText only when a prompt is shown, so re-show it to swap the label
+local function promptLabel(text)
+	if prompt.ActionText == text then return end
+	local was = prompt.Enabled
+	prompt.Enabled = false
+	prompt.ActionText = text
+	task.delay(0.25, function() prompt.Enabled = was end) -- a same-frame flip would never reach the client
+end
+local function nearestPlayer(range)
+	local best, bestRoot, bestDist = nil, nil, range
+	for _, player in ipairs(Players:GetPlayers()) do
+		local character = player.Character
+		local human = character and character:FindFirstChildOfClass("Humanoid")
+		local hrp = character and character:FindFirstChild("HumanoidRootPart")
+		if human and hrp and human.Health > 0 and player:GetAttribute("InRound") ~= true
+			and player:GetAttribute("Level6InRound") ~= true then
+			local dist = (Vector3.new(hrp.Position.X, pos.Y, hrp.Position.Z) - pos).Magnitude
+			if dist < bestDist then best, bestRoot, bestDist = player, hrp, dist end
+		end
+	end
+	return best, bestRoot
+end
+
+-- returns true if she went to a player (and maybe got her belly rubbed)
+function maybeBellyUp()
+	local forced = luna:GetAttribute("BellyNow") == true -- playtest lever: the next stop with a player near is a belly-up
+	if not tracks.RollOver then return false end
+	if not forced and (os.clock() - lastBelly < BELLY_COOLDOWN or math.random() > BELLY_CHANCE) then return false end
+	local player, hrp = nearestPlayer(BELLY_RANGE)
+	if not player then return false end
+	luna:SetAttribute("BellyNow", nil)
+	lastBelly = os.clock()
+	state("Approaching")
+	local near = false
+	for attempt = 1, 4 do -- they may wander off while she comes: up to three walks, each re-aimed at them
+		hrp = playerRoot(player)
+		if not hrp then break end
+		local them = Vector3.new(hrp.Position.X, pos.Y, hrp.Position.Z)
+		local dist = (them - pos).Magnitude
+		if dist <= BELLY_GAP + 1.5 then near = true break end
+		if dist > BELLY_RANGE or attempt == 4 then break end
+		walkTo(them + (pos - them).Unit * BELLY_GAP, WALK_SPEED)
+	end
+	if not near then return true end
+	local toward = Vector3.new(hrp.Position.X - pos.X, 0, hrp.Position.Z - pos.Z).Unit
+	settleFacing(pos + Vector3.new(-toward.Z, 0, toward.X) * 5, 0.9) -- her left side towards them
+	state("BellyUp")
+	bellyUp, rubbedBy = true, nil
+	promptLabel("Rub belly")
+	oneShot("RollOver", "BellyUp")
+	local deadline = os.clock() + BELLY_WAIT
+	while not rubbedBy and os.clock() < deadline do task.wait(0.1) end
+	local rubber = rubbedBy
+	bellyUp, rubbedBy = false, nil
+	if rubber then
+		prompt.Enabled = false
+		state("BellyRub")
+		playerPlays(rubber, bellyAnim)
+		task.wait(0.4)
+		playAction("BellyRub", 0.25)
+		task.wait(BELLY_RUB_SECONDS)
+		playAction("BellyUp", 0.3)
+		task.wait(0.6)
+	end
+	promptLabel("Pet")
+	oneShot("RollUp")
+	prompt.Enabled = true
+	return true
+end
+
 prompt.Triggered:Connect(function(player)
 	local hrp = inLobby(player)
 	if not hrp or not prompt.Enabled then return end
+	if bellyUp then -- on her back: this is a belly rub, the brain picks it up
+		rubbedBy = rubbedBy or player
+		return
+	end
 	prompt.Enabled = false
 	if brain then task.cancel(brain) end
 	brain = task.spawn(function()
@@ -493,7 +588,7 @@ prompt.Triggered:Connect(function(player)
 		end
 		hrp = playerRoot(player) or hrp
 		settleFacing(hrp.Position, 0.7)
-		playerPets(player)
+		playerPlays(player, petAnim)
 		oneShot("SitDown", "Sit")
 		task.wait(0.4)
 		oneShot("GivePaw", "Sit")

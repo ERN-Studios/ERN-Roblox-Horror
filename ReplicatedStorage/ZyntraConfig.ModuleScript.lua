@@ -309,12 +309,14 @@ return {
 		Welcome = 1036919688053942, BetterTogether = 0,
 		L5NoFall = 0, L5Balls = 0, L5Mint = 0, L5Coral = 0, L5TeamLift = 0,
 		L6HomeFree = 0, L6Caught = 0, L6Party = 0, L6Survivor = 0, L6Escaped = 0,
+		LunaKind = 0,
 	},
 
 	-- ACHIEVEMENTS_20261004: the list the Achievements panel shows, in this order. Key = the key in `Badges` = the
 	-- name ServerStorage.ZyntraAchievement:Fire(player, key) takes. Icon is the uploaded image of
 	-- assets/badges/icons-512/badge_<Key>.png (0 = not uploaded: the panel shows a plain medal). Secret ones show
-	-- as "???" until unlocked.
+	-- as "???" until unlocked. LUNA_KIND_20261008: `Tokens` is a gift of Research Tokens the server adds in the same
+	-- write that records the unlock (so exactly once per player); `Reward` is the line the toast shows under the name.
 	Achievements = {
 		{Key = "Welcome", Name = "New Arrival", Text = "Step into the lobby for the first time.", Icon = 80881978844105},
 		{Key = "FirstClearLevel1", Name = "Office Hours", Text = "Escape Level 1, the office backrooms.", Icon = 89658548510995},
@@ -336,6 +338,8 @@ return {
 		{Key = "L6Survivor", Name = "Still Hiding", Text = "Still be in the game when it counts for the third time.", Icon = 98690786393152},
 		{Key = "L6Caught", Name = "Found You", Text = "Get caught by the Counter.", Icon = 123603432046201},
 		{Key = "L6Party", Name = "After Hours", Text = "Find what is hidden at a dead end in the frame.", Icon = 83270358274893, Secret = true},
+		{Key = "LunaKind", Name = "Being Kind to Luna", Text = "Pet Luna in the lobby. She gifts you 5 Research Tokens.", Icon = 75034771348605,
+			Tokens = 5, Reward = "+5 gifted tokens for being kind to Luna"},
 	},
 
 

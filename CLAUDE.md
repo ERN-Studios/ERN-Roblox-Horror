@@ -2031,3 +2031,30 @@ weight and button size on phones, no noise meter.
   own test, from `LobbyTunnelReach.Fence`) once they have stood there 2.5 s with `Awake` and the eyes more than half
   open; it blinks once a second (steady under `ReduceFlashing`) and goes when they are back or taken.
   Tested in Studio: off in the lobby, on and blinking behind the fence, off again 1 s after stepping back.
+
+### Added 2026-10-08 (morning, later) - "Being Kind to Luna": an achievement with a gift (in Studio, NOT published)
+
+- **Owner**: the first time somebody pets Luna in the lobby, a little achievement pops up, "Being Kind to Luna", with
+  "+5 gifted tokens for being kind to Luna", and the 5 tokens are theirs at once; and: "people that have pet Luna
+  before will get it on the next pet". Marker `LUNA_KIND_20261008`.
+- **An achievement row may carry a gift**: `Tokens = n` and `Reward = "<line for the toast>"` on its row of
+  `ZyntraConfig.Achievements`. `achievementApi.unlock` adds the tokens in the SAME write that records the unlock,
+  behind the same "already has it" check, so it is paid exactly once per profile; an unlock whose write failed is
+  not shown (the next pet tries again). Rows without `Tokens` behave as before. Nothing recorded earlier pets, so
+  every player earns it on their first pet from this build on.
+- **Key `LunaKind`** (`Badges.LunaKind = 0`: no Roblox badge yet). `LunaTribute.playerPlays` fires
+  `ServerStorage.ZyntraAchievement` for it: that function is both the pet and the belly rub.
+- **Achievements Client**: the toast has a third line (`Reward`, teal, 86 px high instead of 76); the panel's grid is
+  `max(5, ceil(count / 4))` columns, so 21 to 24 badges are six narrower tiles a row and never a fifth row (it
+  would run over the footer).
+- **Icon**: a paw with a heart, drawn in `tools/badges/build_badges.py` like the other twenty (21 now);
+  `tools/badges/upload_icon.py <Key>` uploads a badge icon to the group through Studio (`CreateAssetAsync`; it reads
+  any 8-bit PNG, Chrome's included) and keeps ids in `icon_ids.json`. Image 75034771348605.
+- **Headless Chrome hung once** in `build_badges.py` (normally 3 s a picture) AFTER the script had emptied the
+  Desktop badge folder; `shot()` now gives up after 40 s and asks again.
+- **Tested in Studio, solo**: pet through the real prompt: `LunaKind` unlocked, tokens 35 to 40, the toast with icon
+  and both lines, the lobby's token counter at 40; a second pet (walked up to her, she sat and followed): tokens
+  still 40, no toast; BADGES panel 2 / 21, the new tile lit, nothing over the footer; console clean.
+  **Not tested**: the saved write (Studio keeps profiles in the session only), the belly rub (same function), a phone.
+- **`/tmp/l2sign/run.py` must be run from the repo root** (it imports the Studio client by relative path). A play
+  test started before the mute call is audible for those seconds: start play and mute in one command.

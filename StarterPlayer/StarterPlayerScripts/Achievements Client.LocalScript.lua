@@ -56,6 +56,10 @@ local function line(parent, name, y, size, colour, font)
 end
 line(toast, "Kicker", 10, 12, AMBER, Enum.Font.Code).Text = "ACHIEVEMENT UNLOCKED"
 local toastName = line(toast, "Name", 28, 20, CREAM, Enum.Font.GothamBold)
+-- LUNA_KIND_20261008: an achievement with a `Reward` line (a gift, see ZyntraConfig.Achievements) shows it under the
+-- name, and the toast is that much taller for it.
+local toastReward = line(toast, "Reward", 55, 13, TEAL, Enum.Font.GothamMedium)
+toastReward.Visible = false
 local queue, showing = {}, false
 -- MOBILE_HUD_20261007: the toast drops in at the top of the screen, and on a phone that is where RoundUI's PARTY
 -- DOWN card is (it takes the screen from y 61 to 329 of 390): "Found You" unlocked at the very moment the card
@@ -69,6 +73,8 @@ local function showNext()
 	while cardUp() and os.clock() - waited < 60 do task.wait(0.25) end
 	local entry = table.remove(queue, 1)
 	toastName.Text = entry.Name
+	toastReward.Text, toastReward.Visible = entry.Reward or "", entry.Reward ~= nil
+	toast.Size = UDim2.fromOffset(340, entry.Reward and 86 or 76)
 	toastIcon.Image = (entry.Icon or 0) ~= 0 and ("rbxassetid://" .. string.format("%.0f", entry.Icon)) or ""
 	local ping = Instance.new("Sound")
 	ping.SoundId, ping.Volume = "rbxasset://sounds/electronicpingshort.wav", 0.35
@@ -125,7 +131,9 @@ local grid = Instance.new("Frame")
 grid.BackgroundTransparency, grid.Position, grid.Size = 1, UDim2.fromOffset(20, 62), UDim2.new(1, -40, 1, -124)
 grid.Parent = panel
 local layout = Instance.new("UIGridLayout", grid)
-layout.CellSize, layout.CellPadding, layout.SortOrder = UDim2.fromOffset(112, 104), UDim2.fromOffset(10, 6), Enum.SortOrder.LayoutOrder
+local columns = math.max(5, math.ceil(#LIST / 4))   -- four rows fit between the title and the footer
+layout.CellSize = UDim2.fromOffset(columns == 5 and 112 or math.floor((600 - (columns - 1) * 8) / columns), 104)
+layout.CellPadding, layout.SortOrder = UDim2.fromOffset(columns == 5 and 10 or 8, 6), Enum.SortOrder.LayoutOrder
 local tiles = {}
 for index, entry in ipairs(LIST) do
 	local tile = Instance.new("TextButton")
