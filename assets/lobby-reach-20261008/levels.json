@@ -1,0 +1,282 @@
+{
+ "reach_wake_1": {
+  "take": "reach_wake_b.mp3",
+  "before_lufs": -13.4,
+  "after_lufs": -17.3,
+  "after_peak": -5.1,
+  "seconds": 4.0,
+  "file": "reach_wake_1.mp3",
+  "lowpass_hz": 5500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -66.3,
+   -78.4
+  ],
+  "above_cutoff_db": [
+   -59.2,
+   -93.4
+  ]
+ },
+ "reach_wake_2": {
+  "take": "reach_wake_a.mp3",
+  "before_lufs": -12.4,
+  "after_lufs": -17.3,
+  "after_peak": -5.1,
+  "seconds": 4.0,
+  "file": "reach_wake_2.mp3",
+  "lowpass_hz": 5500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -66.9,
+   -70.9
+  ],
+  "above_cutoff_db": [
+   -57.0,
+   -82.7
+  ]
+ },
+ "reach_presence": {
+  "take": "reach_presence_b.mp3",
+  "before_lufs": -11.0,
+  "after_lufs": -19.1,
+  "after_peak": -6.8,
+  "seconds": 13.1,
+  "file": "reach_presence.ogg",
+  "lowpass_hz": 5000,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -71.6,
+   -91.1
+  ],
+  "above_cutoff_db": [
+   -3.3,
+   -47.5
+  ]
+ },
+ "reach_creep": {
+  "take": "reach_creep_c.mp3",
+  "before_lufs": -27.7,
+  "after_lufs": -22.5,
+  "after_peak": -1.6,
+  "seconds": 9.97,
+  "file": "reach_creep.ogg",
+  "lowpass_hz": 6500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -51.7,
+   -62.9
+  ],
+  "above_cutoff_db": [
+   -19.1,
+   -49.8
+  ]
+ },
+ "reach_windup_1": {
+  "take": "reach_windup_b.mp3",
+  "before_lufs": -23.6,
+  "after_lufs": -25.8,
+  "after_peak": -1.7,
+  "seconds": 1.48,
+  "file": "reach_windup_1.mp3",
+  "lowpass_hz": 8000,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -67.6,
+   -74.1
+  ],
+  "above_cutoff_db": [
+   -16.3,
+   -50.6
+  ]
+ },
+ "reach_windup_2": {
+  "take": "reach_windup_c.mp3",
+  "before_lufs": -21.8,
+  "after_lufs": -24.5,
+  "after_peak": -1.3,
+  "seconds": 1.48,
+  "file": "reach_windup_2.mp3",
+  "lowpass_hz": 8000,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -53.5,
+   -70.2
+  ],
+  "above_cutoff_db": [
+   -9.2,
+   -43.1
+  ]
+ },
+ "reach_slam_1": {
+  "take": "reach_slam_a.mp3",
+  "before_lufs": -17.1,
+  "after_lufs": -19.1,
+  "after_peak": -1.7,
+  "seconds": 1.48,
+  "file": "reach_slam_1.mp3",
+  "lowpass_hz": 8500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -59.2,
+   -71.6
+  ],
+  "above_cutoff_db": [
+   -13.6,
+   -46.8
+  ]
+ },
+ "reach_slam_2": {
+  "take": "reach_slam_c.mp3",
+  "before_lufs": -15.5,
+  "after_lufs": -16.6,
+  "after_peak": -1.7,
+  "seconds": 0.7,
+  "file": "reach_slam_2.mp3",
+  "lowpass_hz": 8500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -41.5,
+   -60.0
+  ],
+  "above_cutoff_db": [
+   -13.3,
+   -47.9
+  ]
+ },
+ "reach_grab_1": {
+  "take": "reach_grab_a.mp3",
+  "before_lufs": -14.1,
+  "after_lufs": -15.3,
+  "after_peak": -1.7,
+  "seconds": 2.0,
+  "file": "reach_grab_1.mp3",
+  "lowpass_hz": 8500,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -56.5,
+   -78.2
+  ],
+  "above_cutoff_db": [
+   -7.6,
+   -44.0
+  ]
+ },
+ "reach_drag": {
+  "take": "reach_drag_loop.mp3",
+  "before_lufs": -14.8,
+  "after_lufs": -18.0,
+  "after_peak": -3.5,
+  "seconds": 6.7,
+  "file": "reach_drag.ogg",
+  "lowpass_hz": 5000,
+  "haze_cut_db": 0,
+  "print_gate_db": -12,
+  "silences_cut": 2,
+  "floor_2k_16k_db": [
+   -46.2,
+   -24.4
+  ],
+  "above_cutoff_db": [
+   -22.1,
+   -53.4
+  ]
+ },
+ "reach_kill_1": {
+  "take": "reach_kill_b.mp3",
+  "before_lufs": -18.2,
+  "after_lufs": -18.6,
+  "after_peak": -1.5,
+  "seconds": 4.0,
+  "file": "reach_kill_1.mp3",
+  "lowpass_hz": 8000,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -64.0,
+   -68.1
+  ],
+  "above_cutoff_db": [
+   -10.2,
+   -44.4
+  ]
+ },
+ "reach_kill_2": {
+  "take": "reach_kill_a.mp3",
+  "before_lufs": -33.6,
+  "after_lufs": -19.6,
+  "after_peak": -1.8,
+  "seconds": 4.0,
+  "file": "reach_kill_2.mp3",
+  "lowpass_hz": 5000,
+  "haze_cut_db": 0,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -50.0,
+   -60.3
+  ],
+  "above_cutoff_db": [
+   -34.9,
+   -64.4
+  ]
+ },
+ "reach_retreat_1": {
+  "take": "reach_retreat_a.mp3",
+  "before_lufs": -21.6,
+  "after_lufs": -18.3,
+  "after_peak": -4.6,
+  "seconds": 4.48,
+  "file": "reach_retreat_1.mp3",
+  "lowpass_hz": 5000,
+  "haze_cut_db": -8,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -60.8,
+   -77.3
+  ],
+  "above_cutoff_db": [
+   -45.8,
+   -91.2
+  ]
+ },
+ "reach_retreat_2": {
+  "take": "reach_retreat_b.mp3",
+  "before_lufs": -11.1,
+  "after_lufs": -18.3,
+  "after_peak": -7.1,
+  "seconds": 4.48,
+  "file": "reach_retreat_2.mp3",
+  "lowpass_hz": 4500,
+  "haze_cut_db": -8,
+  "print_gate_db": -14,
+  "silences_cut": 0,
+  "floor_2k_16k_db": [
+   -59.2,
+   -85.6
+  ],
+  "above_cutoff_db": [
+   -54.4,
+   -92.3
+  ]
+ }
+}

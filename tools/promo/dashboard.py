@@ -120,7 +120,8 @@ def stage(path, name=None):
     for i in range(0, len(data), PIECE):
         got = js(f'(window.__up[{key}] += "{data[i:i + PIECE]}", String(window.__up[{key}].length))')
         assert int(float(got)) == min(i + PIECE, len(data)), got
-    kind = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg'}[path.suffix.lower()]
+    kind = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+            '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav'}[path.suffix.lower()]
     return js(f"""(() => {{ try {{
   const bin = atob(window.__up[{key}]);
   const bytes = new Uint8Array(bin.length);

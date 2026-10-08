@@ -1,0 +1,16 @@
+{
+ "reach_wake_1": {"take": "reach_wake_b.mp3", "lufs": -17, "lowpass": 5500, "gate": -14},
+ "reach_wake_2": {"take": "reach_wake_a.mp3", "lufs": -17, "lowpass": 5500, "gate": -14, "shelf": [220, 8]},
+ "reach_presence": {"take": "reach_presence_b.mp3", "lufs": -19, "lowpass": 5000, "gate": -14, "loop": true, "cross": 0.1, "pad": 1.2},
+ "reach_creep": {"take": "reach_creep_c.mp3", "lufs": -22, "lowpass": 6500, "gate": -14, "shelf": [180, 10], "loop": true, "roll": 0.68, "cross": 0.03},
+ "reach_windup_1": {"take": "reach_windup_b.mp3", "lufs": -20, "lowpass": 8000, "gate": -14},
+ "reach_windup_2": {"take": "reach_windup_c.mp3", "lufs": -20, "lowpass": 8000, "gate": -14},
+ "reach_slam_1": {"take": "reach_slam_a.mp3", "lufs": -15, "lowpass": 8500, "gate": -14},
+ "reach_slam_2": {"take": "reach_slam_c.mp3", "lufs": -15, "lowpass": 8500, "gate": -14, "end": 0.7},
+ "reach_grab_1": {"take": "reach_grab_a.mp3", "lufs": -15, "lowpass": 8500, "gate": -14},
+ "reach_drag": {"take": "reach_drag_loop.mp3", "lufs": -18, "lowpass": 5000, "gate": -12, "loop": true, "gaps": true, "steady": true},
+ "reach_kill_1": {"take": "reach_kill_b.mp3", "lufs": -17, "lowpass": 8000, "gate": -14},
+ "reach_kill_2": {"take": "reach_kill_a.mp3", "lufs": -19, "lowpass": 5000, "gate": -14},
+ "reach_retreat_1": {"take": "reach_retreat_a.mp3", "lufs": -18, "lowpass": 5000, "haze": -8, "gate": -14},
+ "reach_retreat_2": {"take": "reach_retreat_b.mp3", "lufs": -18, "lowpass": 4500, "haze": -8, "gate": -14}
+}

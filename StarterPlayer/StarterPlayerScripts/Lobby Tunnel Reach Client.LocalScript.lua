@@ -502,3 +502,146 @@ do
 		end
 	end)
 end
+
+-- REACH_SOUNDS_20261008 (owner: "give the lobby monster sounds behind the fence. Use ElevenLabs and remember to
+-- sound engineer the ai static out"). Its own sounds, made for it and for nothing else (no level lends another its
+-- sounds): assets/lobby-reach-20261008 has the brief, every raw take and `clean_reach.py`, which takes the
+-- generator's hiss out of them; tools/lobby_reach/README.md says what plays when.
+--   deep in the tunnel, where the eyes are:  WAKE once when they open, a slow BREATHING for as long as they are
+--     open, KILL when a hand comes back from the dark with nobody in it, RETREAT when it gives up and the eyes close
+--   at each hand:  a wet CRAWL that is louder and quicker the faster the hand goes, WINDUP when it rears, SLAM when
+--     it comes down on nothing, GRAB when it closes on somebody, DRAG all the way into the dark
+-- Everything is a local Sound on a local part, driven by the same replicated attributes the arms are drawn from, so
+-- every player near the fence hears the same thing at the same moment. Distances: somebody just over the fence is
+-- about 145 studs from the eyes, the middle of the lobby 290, the spawn 430. The deep emitter is whole to 120 studs
+-- and gone at 400 (a faint breath from the stage, nothing at the spawn); a hand is whole at 16 and gone at 150 to
+-- 190, so it is heard coming for the last hundred studs of its way. The lobby's music plays at 0.12.
+do
+	-- REACH_SOUND_IDS_BEGIN (written by tools/lobby_reach/install_sounds.py from sound_ids.json)
+	local IDS = {
+		wake = {117940189058779, 72164714595964},
+		windup = {128917156313141, 121233909593277},
+		slam = {97896736900807, 124069536656370},
+		grab = {140068430266389},
+		kill = {139492757172415, 78029580675374},
+		retreat = {121505714120825, 118016938051269},
+		presence = 114751129400744,
+		creep = 95645845470090,
+		drag = 75840869369188,
+	}
+	-- REACH_SOUND_IDS_END
+	local stage = Instance.new("Folder")       -- its own folder: `holder` leaves the workspace when nothing is awake
+	stage.Name = "LobbyTunnelReachSound"
+	stage.Parent = workspace
+	local all = {}
+	local function emitter(name)
+		local part = Instance.new("Part")
+		part.Name, part.Anchored, part.CanCollide, part.CanQuery, part.CanTouch = name, true, false, false, false
+		part.Transparency, part.CastShadow, part.Size = 1, false, Vector3.one
+		part.Parent = stage
+		return part
+	end
+	local function sound(parent, name, id, volume, near, far, looped)
+		if type(id) ~= "number" or id <= 0 then return nil end
+		local item = Instance.new("Sound")
+		item.Name, item.SoundId, item.Volume, item.Looped = name, "rbxassetid://" .. string.format("%.0f", id), volume, looped == true
+		item.RollOffMode, item.RollOffMinDistance, item.RollOffMaxDistance = Enum.RollOffMode.InverseTapered, near, far
+		item.Parent = parent
+		table.insert(all, item)
+		return item
+	end
+	local function takes(parent, name, ids, volume, near, far)
+		local list = {}
+		for i, id in ipairs(ids) do
+			table.insert(list, sound(parent, name .. i, id, volume, near, far))
+		end
+		return list
+	end
+	local function playOne(list)
+		if #list == 0 then return end
+		local ready = {}                       -- a take that has not loaded would be a silence: one that has, if any
+		for _, item in ipairs(list) do
+			if item.IsLoaded then table.insert(ready, item) end
+		end
+		local from = #ready > 0 and ready or list
+		local item = from[math.random(#from)]
+		item.PlaybackSpeed = 0.95 + math.random() * 0.1
+		item.TimePosition = 0
+		item:Play()
+	end
+	-- a loop follows a wanted volume: it starts when that is above nothing and stops when it has faded out
+	local function follow(item, want, dt, quick, startAt)
+		if not item then return end
+		item.Volume += (want - item.Volume) * math.min(1, dt * quick)
+		if item.Volume > 0.012 then
+			if not item.IsPlaying then
+				item.TimePosition = startAt or 0
+				item:Play()
+			end
+		elseif item.IsPlaying and want <= 0 then
+			item:Stop()
+		end
+	end
+
+	local deep = emitter("Deep")
+	local presence = sound(deep, "Breathing", IDS.presence, 0, 120, 400, true)
+	local wake = takes(deep, "Wake", IDS.wake, 1, 120, 400)
+	local retreat = takes(deep, "Retreat", IDS.retreat, 0.9, 120, 400)
+	local kill = takes(deep, "Kill", IDS.kill, 1, 120, 400)
+	-- the one who is taken hears it whole, wherever the lobby stands them up meanwhile: a Sound in a Folder has no place
+	local killOwn = takes(stage, "KillOwn", IDS.kill, 0.8, 120, 400)
+	local hands = {}
+	for _, arm in ipairs(arms) do
+		local at = emitter("Hand" .. arm.index)
+		hands[arm.index] = {part = at, last = "rest", was = arm.tip, speed = 0,
+			creep = sound(at, "Crawl", IDS.creep, 0, 16, 150, true),
+			drag = sound(at, "Drag", IDS.drag, 0, 16, 190, true),
+			-- (the cracks and the slaps are all peak: the limiter left them 5 and 3 dB under the rest)
+			windup = takes(at, "Windup", IDS.windup, 1.6, 16, 170),
+			slam = takes(at, "Slam", IDS.slam, 1.25, 16, 170),
+			grab = takes(at, "Grab", IDS.grab, 1, 16, 170)}
+	end
+	task.spawn(function()
+		pcall(function() game:GetService("ContentProvider"):PreloadAsync(all) end)
+	end)
+
+	local wasAwake, lastKill = false, -math.huge
+	RunService.Heartbeat:Connect(function(dt)
+		local camera = workspace.CurrentCamera
+		local near = camera ~= nil and (camera.CFrame.Position - frame.Position).Magnitude < 620
+		local awake = near and root:GetAttribute("Awake") == true
+		deep.CFrame = CFrame.new(frame:PointToWorldSpace(Vector3.new(0, 21, eyeOut)))
+		if awake and not wasAwake then playOne(wake) end
+		-- (not after a taking: what is heard then is the kill, and a groan of giving up would be the wrong end)
+		if wasAwake and not awake and near and os.clock() - lastKill > 9 then playOne(retreat) end
+		wasAwake = awake
+		follow(presence, near and eyeOpen * 0.85 or 0, dt, 2.5)
+		for _, arm in ipairs(arms) do
+			local h = hands[arm.index]
+			local state = near and arm.state or "rest"
+			h.part.CFrame = CFrame.new(arm.tip)
+			h.speed += ((arm.tip - h.was).Magnitude / math.max(dt, 1 / 240) - h.speed) * math.min(1, dt * 6)
+			h.was = arm.tip
+			if state ~= h.last then
+				if state == "windup" then
+					playOne(h.windup)
+				elseif state == "miss" then
+					playOne(h.slam)
+				elseif state == "hold" then
+					playOne(h.grab)
+				elseif h.last == "drag" then
+					lastKill = os.clock()
+					playOne(taken and killOwn or kill)
+				end
+				h.last = state
+			end
+			-- four hands on one loop would beat against each other: each has its own place in it and its own pace
+			-- (a hand that is waiting where it stopped is still: it is heard only for as long as it really moves)
+			local crawling = state == "creep" or state == "retreat"
+			local moving = math.clamp(h.speed / 22, 0, 0.64)          -- it sets out at 4.5 studs a second and ends near 18
+			follow(h.creep, crawling and 0.16 + moving or state == "wait" and moving or 0, dt, 5, arm.index * 2.3)
+			if h.creep then h.creep.PlaybackSpeed = 0.84 + 0.07 * arm.index + math.clamp(h.speed / 40, 0, 0.25) end
+			follow(h.drag, state == "drag" and 0.95 or 0, dt, 8)
+		end
+	end)
+end

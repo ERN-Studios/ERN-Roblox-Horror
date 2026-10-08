@@ -77,6 +77,42 @@ studs high (it is 14.9 now, the height you see), the retired furniture pile's bl
 plane right up to the arch, and the end wall kept its cap. The Builder switches the last two off at this end only
 (`OpenedForTunnelReach` on each part).
 
+## The sounds
+
+`REACH_SOUNDS_20261008`, the last block of the client script (owner, 2026-10-08: "give the lobby monster sounds
+behind the fence. Use ElevenLabs and remember to sound engineer the AI static out"). Fourteen sounds of its own,
+in `assets/lobby-reach-20261008` (takes, the cleaner, what was measured: its README). Every one is a local Sound
+on a local part in `workspace.LobbyTunnelReachSound`, driven by the same replicated attributes the arms are drawn
+from, so everybody near the fence hears the same thing at the same moment.
+
+| where | sound | when |
+|---|---|---|
+| `Deep` (where the eyes are) | `Wake` (2 takes) | `Awake` goes true: the eyes open |
+| | `Breathing` (loop) | for as long as the eyes are open; its volume is the eyes' opening |
+| | `Kill` (2 takes) | a hand leaves `drag`: it has come to the dark with somebody |
+| | `Retreat` (2 takes) | `Awake` goes false with nobody taken in the last 9 s: it gives up |
+| `Hand1..4` (at each hand's tip) | `Crawl` (loop) | while the hand creeps or draws back; louder and quicker the faster it goes; each hand starts 2.3 s further into the loop and plays 7% quicker than the one before, so four hands are four gaits |
+| | `Windup` (2 takes) | it rears: the last 0.6 s to be gone |
+| | `Slam` (2 takes) | it came down on nothing |
+| | `Grab` | it closed on somebody |
+| | `Drag` (loop) | all the way into the dark |
+| the folder itself (no place) | `KillOwn` | the kill, for the one who was taken: they hear it whole wherever the lobby stands them up |
+
+Distances: somebody just over the fence is about 145 studs from the eyes, the middle of the lobby 290, the spawn
+430. `Deep` is whole to 120 studs and gone at 400; a hand is whole at 16 and gone at 150 to 190. The lobby's own
+music plays at 0.12, so nothing is ducked. A take that has not loaded is passed over for one that has.
+
+Ids are written between the `REACH_SOUND_IDS` markers by `install_sounds.py` from `sound_ids.json`, which
+`upload_sounds.py` fills: it uploads through the owner's signed-in Creator Dashboard tab (`tools/promo/
+dashboard.py`; no keys, no clicks, no Asset Manager), as Audio assets of the group. Roblox reviewed all fourteen
+within about ten minutes; a sound in review fails to load with "Asset has not been reviewed".
+
+**Testing it without hearing it** (a play test is audible to the owner): `/tmp/qa/reach_play.py`-style, mute by
+putting every Sound in a SoundGroup of volume 0. Do NOT force `Sound.Volume` to 0 as `tools/mobile_qa/qa.py play`
+does: the loops keep their own state in `Volume` and would never start. A Client logger then records every
+`IsPlaying` edge with volume, speed, `IsLoaded` and the distance to the camera while a Server call stands the
+body behind the fence (frame space z 10) and, for the miss, back in front of it the moment an arm says `windup`.
+
 ## The meshes
 
     /Applications/Blender.app/Contents/MacOS/Blender -b --python tools/lobby_reach/build_reach.py
@@ -128,7 +164,7 @@ asset templates and removes the numbers, and the server finds nothing left to ba
 
 ## Not done
 
-- **No sound.** The owner did not ask for any, uploading audio needs their hands (Asset Manager), and no other
-  level's sounds may be borrowed.
+- **Nobody has listened to the sounds** (a session cannot): which fires when, at what volume and distance, was
+  logged in two play tests; how they sound is for the owner's ears.
 - Not tested: more than one player at once (hands choosing between bodies, one player watching another taken),
   phones, the frame rate on real hardware.

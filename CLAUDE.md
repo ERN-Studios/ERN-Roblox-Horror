@@ -2098,3 +2098,39 @@ weight and button size on phones, no noise meter.
   were read. Short sessions, a Studio restart every few, few pictures read.
 - **Owed**: the portrait decision (lock to landscape, or portrait layouts for the L4 windows), a real phone, and
   watching the first public parties on their own Level 5/6 servers after the publish.
+
+### Added 2026-10-08 (midday, later) - The Reach has sounds (in Studio, NOT published)
+
+- **Owner**: "give the lobby monster sounds behind the fence. Use ElevenLabs and remember to sound engineer the AI
+  static out." Fourteen sounds of its own (wake x2, a breathing loop, a crawl loop per hand, windup x2, slam x2,
+  grab, a drag loop, kill x2, retreat x2). What plays when: `tools/lobby_reach/README.md` ("The sounds"). How they
+  were made, which takes were thrown out and what the cleaning measured: `assets/lobby-reach-20261008/README.md`.
+  Marker `REACH_SOUNDS_20261008`, the last block of `Lobby Tunnel Reach Client`.
+- **Audio can be uploaded from a session, no Asset Manager and no hands**: `tools/lobby_reach/upload_sounds.py`
+  posts each file as an `Audio` asset of the group through the owner's signed-in Creator Dashboard tab (the icon
+  upload's endpoint, `assetType: "Audio"`; `dashboard.stage` takes mp3/ogg/wav now). The experience can use them
+  without any "share access" step. Review took minutes; meanwhile a sound fails with "Asset has not been
+  reviewed". The tab was gone when needed: `tell window 1 to make new tab` and put `active tab index` back keeps
+  the owner's tab showing, but Chrome still came to the front once (it was put back).
+- **Cleaning, beyond `clean_screams.py`** (`clean_reach.py`): a gate against the print of the file's own quietest
+  frames takes the hiss (and a hum) that is there with or without the sound; the per-frame haze gate is only for
+  voiced groans (on a breath the noise IS the sound); a limiter that ducks the gain round a peak, because soft
+  clipping a knuckle crack put back the treble the low-pass had taken. Also: a sound that is nearly all under
+  150 Hz is nothing on a phone's speaker (lift what is above it), a loop ElevenLabs made seamless has to be
+  ROLLED until its join lies in a silence before anything is cross-faded, and a loop's "energy above the cutoff"
+  must be measured with the join inside (a file's cut ends read as a click that is not there).
+- **ElevenLabs refuses prompts over 450 characters**; `codex exec` has no `--full-auto` (use `-s workspace-write`),
+  waits on stdin unless it is closed (`< /dev/null`), and its sandbox has no network: have it print
+  `FILE <name> <signed url>` and fetch with curl.
+- **`tools/mobile_qa/qa.py play` mutes by forcing every `Sound.Volume` to 0, which breaks any script that keeps
+  state in a Sound's volume** (these loops fade through it and would never start). To test sound logic silently,
+  put every Sound in a SoundGroup of volume 0 instead (`/tmp/qa/reach_play.py` did; the README has the recipe).
+- **A test started while the lobby is still loading has the client's camera at the spawn** for half a minute
+  although the server has moved the body: wait for `[LobbyLoading] lobby in ...` before measuring distances.
+- **Tested in Studio, solo, muted**: a whole taking (wake, breathing, four crawls, windup, grab, drag, the
+  victim's own kill) and an escape (windup, slam, crawl back, retreat), each logged with volume, speed, load state
+  and distance; all 14 assets load; console clean. **Nobody has listened to them**: a session cannot hear, and
+  the Mac had been idle for a quarter of an hour. Not tested: two or more players, a phone's speaker.
+- **The owner had closed Studio at 11:26**; it was reopened in the background for this (new MCP id) and left
+  open in Edit mode on the place. Everything since v2816 (the phone QA fixes, own servers for everyone, the
+  12-hour board, these sounds) is in Studio and was NOT published when this was written.

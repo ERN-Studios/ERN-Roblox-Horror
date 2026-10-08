@@ -1,0 +1,236 @@
+{
+  "model_id": "eleven_text_to_sound_v2",
+  "quality_note": "The connected MCP Sound Effects v2 schema exposes duration_seconds, prompt_influence and loop only; no output quality or bitrate selector is offered. Original generated download bytes retained.",
+  "effects": [
+    {
+      "filename": "reach_wake_a.mp3",
+      "prompt": "Far down a long concrete road tunnel something enormous wakes up: one deep wet inhale through a huge throat, a low subsonic growl swelling under it, a slow wet peel like a giant eyelid opening. Distant, cavernous tunnel reverb. Animal, non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "uhUbi64g2PRfg8Adb0gj"
+    },
+    {
+      "filename": "reach_wake_b.mp3",
+      "prompt": "A second, different take: from deep inside a long dark concrete tunnel, a huge creature stirs awake. A slow rattling wet breath in, a very low chest rumble that swells and settles, faint wet clicks in its throat. Distant with long tunnel reverb. Animal, non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "f4H94InuQg2kR71UZCGx"
+    },
+    {
+      "filename": "reach_presence_loop.mp3",
+      "prompt": "Seamless loop of a giant creature breathing slowly far down a long concrete tunnel: huge wet breaths in and out at a calm steady pace, a deep chest rumble under every breath, faint wet clicking in the throat. Steady level from the first sample to the last, no start or end transient, no fade in or out, long tunnel reverb. The end must join the beginning seamlessly. Animal, non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 12,
+        "prompt_influence": 0.5,
+        "loop": true
+      },
+      "node_id": "lFCp7CeEMaKmGuvSLKTv"
+    },
+    {
+      "filename": "reach_creep_loop.mp3",
+      "prompt": "Seamless loop of a huge clammy hand with long fingernails crawling slowly across wet concrete: soft wet palm pats, wet skin dragging, long nails ticking and scraping on the concrete. Close and dry, steady unhurried pace, steady level from the first sample to the last, no start or end transient. The end must join the beginning seamlessly. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 10,
+        "prompt_influence": 0.5,
+        "loop": true
+      },
+      "node_id": "aSDfSKFATaMhWi3QiQdV"
+    },
+    {
+      "filename": "reach_windup_a.mp3",
+      "prompt": "A huge wet arm rears up fast to strike: a sharp hissing animal intake of breath with tendons creaking and big knuckles cracking in quick succession. Close, dry, short and tense. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "r78zXpfMedkBeVyH47Cp"
+    },
+    {
+      "filename": "reach_windup_b.mp3",
+      "prompt": "A second, different take: a giant wet limb snaps upward, joints popping one after another, a short sharp reptile-like hiss. Close and dry. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "nyLNvYmhd1q0QZHJ9zu8"
+    },
+    {
+      "filename": "reach_slam_a.mp3",
+      "prompt": "A huge wet open hand slams flat onto a concrete road: one heavy fleshy slap with a deep thud, then long nails clattering on the concrete. Close and dry, a single impact. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "UMmMUYoTrfth5xli4Z86"
+    },
+    {
+      "filename": "reach_slam_b.mp3",
+      "prompt": "A second, different take: an enormous clammy palm smacks down hard on wet concrete, a deep meaty slap with a short splash and nails scraping as the fingers close on nothing. Close and dry. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "L6ai294XQyCl3t0Op6I2"
+    },
+    {
+      "filename": "reach_grab_a.mp3",
+      "prompt": "A huge wet hand closes round a person in a rubber hazmat suit: a fast heavy slap, rubber squeaking under the grip, a tight wet squeeze and one muffled crack. Close, dry, brutal. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 2,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "EBBUPHw1kmx7AqaXZqeW"
+    },
+    {
+      "filename": "reach_grab_b.mp3",
+      "prompt": "A second, different take: giant clammy fingers snap shut round a body in thick rubber clothing, wet slap, creaking rubber, a hard squeeze. Close and dry. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 2,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "aPimEu0k83zb2Fy9UExp"
+    },
+    {
+      "filename": "reach_drag_loop.mp3",
+      "prompt": "Seamless loop of a heavy body in a rubber suit being dragged very fast along a concrete road: rubber and plastic gear scraping, bumping and skidding continuously, with a deep guttural animal growl held underneath. Urgent and fast, steady level from the first sample to the last, no start or end transient. The end must join the beginning seamlessly. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 8,
+        "prompt_influence": 0.5,
+        "loop": true
+      },
+      "node_id": "EGMD1MZhTsVnFysdwnmg"
+    },
+    {
+      "filename": "reach_kill_a.mp3",
+      "prompt": "Deep in a pitch-black tunnel, far away: a wet crunch of bone, a heavy thud, then one long, low, satisfied animal rumble that fades out. Cavernous tunnel reverb. Non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "1Js5bkhkLMMPCeEjfKbq"
+    },
+    {
+      "filename": "reach_kill_b.mp3",
+      "prompt": "A second, different take: from far inside a dark concrete tunnel, a sudden wet snap and crunch, then a slow deep purring growl dying away into silence. Long tunnel reverb. Non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "47qUhRysNZvhrcGitx4s"
+    },
+    {
+      "filename": "reach_retreat_a.mp3",
+      "prompt": "Far down a long concrete tunnel a huge creature gives up and withdraws: one long disappointed low groan sinking in pitch into a wet exhale, slow dragging of long limbs being pulled back, fading to nothing. Distant, tunnel reverb. Animal, non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "XljXBW1iMZKK9rdk5CQl"
+    },
+    {
+      "filename": "reach_retreat_b.mp3",
+      "prompt": "A second, different take: a giant animal deep in a tunnel lets out a slow, low, frustrated rumbling sigh that falls away, with wet limbs sliding back along concrete, fading out. Long tunnel reverb. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 4.5,
+        "prompt_influence": 0.5,
+        "loop": false
+      },
+      "node_id": "CR8Z8DvzYkcRBlvFVAHa"
+    },
+    {
+      "filename": "reach_creep_c.mp3",
+      "prompt": "Seamless loop of a huge, heavy, wet hand walking slowly across a wet concrete floor: slow heavy soft slaps of a big fleshy palm, about one every second, each with a low thud and a wet squelch, and thick fingers dragging between the slaps. Close and dry, deep and heavy, low and mid frequencies, no hiss. Steady level from the first sample to the last, no start or end transient. The end must join the beginning seamlessly. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 10,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "9N82gCauINCVBsMScWoH"
+    },
+    {
+      "filename": "reach_creep_d.mp3",
+      "prompt": "Seamless loop, a second different take: something huge crawling on its hands over wet stone, slow heavy wet pats and squelches of thick clammy palms with a slimy slide after each one. Close, dry, weighty, mostly low and mid frequencies. Steady level throughout, no start or end transient, the end joins the beginning seamlessly. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 10,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "bFYbUJu9yGtRdg5zmHde"
+    },
+    {
+      "filename": "reach_presence_b.mp3",
+      "prompt": "Seamless loop of a huge animal breathing slowly in a long concrete tunnel, clearly audible raspy breaths: a long hoarse wet inhale through enormous nostrils, a long rattling throaty exhale, again and again at a calm steady pace. The breath noise itself is the sound: hoarse, airy, mid-range and present, with a low growl under it. Tunnel reverb. Steady level, no start or end transient, the end joins the beginning seamlessly. Animal, non-human. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 12,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "hHlEikH1Zt90tJ7Edt1R"
+    },
+    {
+      "filename": "reach_slam_c.mp3",
+      "prompt": "An enormous wet hand slaps down hard and flat on a wet concrete floor: one loud, heavy, meaty slap with a deep boom and a splash of water. Close, dry, a single powerful impact at the very start. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.6,
+        "loop": false
+      },
+      "node_id": "G7E4MPOechdKPNDOmLYn"
+    },
+    {
+      "filename": "reach_windup_c.mp3",
+      "prompt": "A giant arm tenses to strike: four or five big joints and knuckles cracking and popping in quick succession with a short creak of stretching sinew. Close and dry. Only cracks, pops and creaks: no hiss, no breath, no air noise. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 1.5,
+        "prompt_influence": 0.6,
+        "loop": false
+      },
+      "node_id": "Xh5pojsTQGFiMYk7QDCQ"
+    },
+    {
+      "filename": "reach_creep_c.mp3",
+      "prompt": "Seamless loop: a huge heavy wet hand walking slowly across a wet concrete floor. Slow soft slaps of a big fleshy palm, one every second, each a low thud with a wet squelch, thick fingers dragging between slaps. Close, dry, deep, low and mid frequencies, no hiss. Steady level, no start or end transient, seamless. Isolated sound effect, no music, no voice.",
+      "model_parameters": {
+        "duration_seconds": 10,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "EtDchPkm50XNmKmFSHSb"
+    },
+    {
+      "filename": "reach_presence_b.mp3",
+      "prompt": "Seamless loop: a huge animal breathing slowly in a long concrete tunnel. Clearly audible raspy breaths: a long hoarse wet inhale through enormous nostrils, then a long rattling throaty exhale, calm steady pace. Hoarse, mid-range and present, low growl under it. Tunnel reverb. Steady level, no start or end transient. Non-human. Isolated sound effect, no music, no speech.",
+      "model_parameters": {
+        "duration_seconds": 12,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "3DkI7HBEjtHMwjZcsc0f"
+    },
+    {
+      "filename": "reach_presence_c.mp3",
+      "prompt": "Seamless loop: a giant beast asleep in a dark tunnel, slow deep snoring breaths with a wet throat rattle and a low rumbling growl on every exhale. Clearly audible mid-range rasp, not only bass. Calm, slow, steady level, no start or end transient, seamless. Non-human animal. Isolated sound effect, no music, no speech, no human voice.",
+      "model_parameters": {
+        "duration_seconds": 12,
+        "prompt_influence": 0.6,
+        "loop": true
+      },
+      "node_id": "OXejcWT763L4tSAA1CFc"
+    }
+  ]
+}
