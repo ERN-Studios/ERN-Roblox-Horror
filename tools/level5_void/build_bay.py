@@ -85,12 +85,25 @@ for side, angle, glow, image in POSTERS:
     block('PosterFrame', glow, 6.0, 0.22, 0.4, px, pz, y0=11.5, collide=False, yaw=yaw, material='Neon', light=[14, 0.6], lc=glow)
     block('PosterFrame', glow, 6.0, 0.22, 0.4, px, pz, y0=3.18, collide=False, yaw=yaw, material='Neon')
 # The two posters the bay's original decor carries on its back panel, either side of the desk, are the ones
-# the owner called "very bad". They are part of that mesh's texture, so each is covered by a new one-sheet
-# standing just in front of it.
+# the owner called "very bad". They are baked into that decor mesh (one mesh, one texture), so they cannot be
+# taken out. POSTER_CASE_20261008 (owner: "they are placed on top of the old ones and it looks like shit"): the
+# first version stood a larger sheet a quarter of a stud in FRONT of each old case and a whole stud to one side
+# of it, so the old gold frame showed round it. The old case, read from the mesh's own vertices (RuntimeBake
+# chunk 6 "BayDecorLevel4_atlas": x 5.4..10.6, y -1.6..5.4, z -2.24..-1.61 about a centre the Builder stands at
+# (0, 5.4, -21.99) since the seat row's 1.5 stud move): centre x = +-8.0, 5.2 wide, y 3.8 to 10.8, its face at
+# z = -23.60 and its back at -24.23. Each new one-sheet now sits in a lightbox that swallows that case whole:
+# a dark housing a little larger on every side and 0.13 proud of its face, the sheet (2:3, undistorted) on it.
+OLD_CASE = {'x': 8.0, 'w': 5.2, 'y0': 3.8, 'y1': 10.8, 'face': -23.60, 'back': -24.23}
 for side, glow, image in ((-1, 'magenta', 107732660117869), (1, 'cyan', 70389718286652)):
-    block('Poster', 'screen', 5.8, 8.7, 0.3, side * 7.0, -23.5, y0=3.0, collide=False, material='SmoothPlastic', img=image)
-    block('PosterFrame', glow, 6.4, 0.22, 0.4, side * 7.0, -23.5, y0=11.72, collide=False, material='Neon', light=[14, 0.6], lc=glow)
-    block('PosterFrame', glow, 6.4, 0.22, 0.4, side * 7.0, -23.5, y0=2.78, collide=False, material='Neon')
+    cx, mid = side * OLD_CASE['x'], (OLD_CASE['y0'] + OLD_CASE['y1']) / 2
+    case_w, case_h = 5.7, 8.25
+    face = OLD_CASE['face'] + 0.13
+    depth = face - (OLD_CASE['back'] - 0.1)
+    assert case_w > OLD_CASE['w'] + 0.3 and case_h > OLD_CASE['y1'] - OLD_CASE['y0'] + 0.3, 'the housing must swallow the old case'
+    block('PosterCase', 'screen', case_w, case_h, depth, cx, face - depth / 2, y0=mid - case_h / 2, collide=False, material='SmoothPlastic')
+    block('Poster', 'screen', 5.2, 7.8, 0.06, cx, face + 0.03, y0=mid - 3.9, collide=False, material='SmoothPlastic', img=image)
+    block('PosterFrame', glow, 5.9, 0.22, 0.4, cx, face, y0=mid + case_h / 2 + 0.06, collide=False, material='Neon', light=[14, 0.6], lc=glow)
+    block('PosterFrame', glow, 5.9, 0.22, 0.4, cx, face, y0=mid - case_h / 2 - 0.28, collide=False, material='Neon')
 # rope posts either side of the way in
 for side in (-1, 1):
     for pz in (17.0, 21.5, 26.0):
