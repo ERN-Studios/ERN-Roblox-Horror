@@ -1705,7 +1705,34 @@ weight and button size on phones, no noise meter.
   clicks in Studio's toolbar), the CONTINUE from Level 5 into a busy Level 6, the idle rule's five minutes.
 - `execute_luau` has no `loadstring`. Studio updated itself on launch that night (0.741 to 0.742) and reopened
   the place by itself; `open -g` did not take the front from the Roblox player.
-- **Left half done when this came in: the Level 2 maintenance sign** (block written in `/tmp/l2sign/block.lua`,
-  not in the Builder, never seen in play). Player locales for it, last 28 days: en 55%, es 9.7, ru 9.2, pt 3.6,
-  de 3.4, id 2.9, fr 2.5 (`analytics-query-gateway`, dimension `Locale`, through the dashboard tab).
+- **The owner published it at 02:26 (v2798).** Servers that were already running keep the old code until they empty.
 
+### Added 2026-10-08 (small hours, later) - A maintenance board in front of the Level 2 gate (in Studio, NOT published)
+
+- **Owner**: a sign at the entrance to the Level 2 poolrooms: this level is under maintenance, the real poolrooms
+  level is live within 24 hours, please go on to another level, thank you for your patience; "in very simple
+  language everyone can understand, and in several languages, the ones our players speak".
+- **`LEVEL2_MAINTENANCE_20261008`, the last block of `LobbyReimaginedPreview.Builder`** (folder
+  `Level2Maintenance`, 9 parts, no Light): a barrier board 16 x 10.1 studs on the sidewalk 5.6 studs in front of the
+  gate, lettered on both faces. UNDER MAINTENANCE, four English lines ("We are fixing this level. / The real
+  Poolrooms open within 24 hours. / Please play another level. / Thank you for your patience!"), then ES, RU, PT,
+  DE, ID, FR in two columns. Board and posts collide; the way in is round either end. **Take the block out the day
+  the new Level 2 is what the queue starts.** The gate, pads and queue are untouched: the old round still starts.
+- **The languages are the game's own players**: `POST apis.roblox.com/analytics-query-gateway/v1/metrics/resource/
+  RESOURCE_TYPE_UNIVERSE/id/<universe>` with `{resourceType, resourceId, query: {metric: "DailyActiveUsers",
+  granularity: "METRIC_GRANULARITY_ONE_DAY", startTime, endTime, breakdown: [{dimensions: ["Locale"]}]}}`, sent
+  through the dashboard tab (`Country` works too, `Language` does not; a first answer can be 202 with no result:
+  ask again; `dashboard.call` cuts answers at 20 000 characters, so sum inside the page). Last 28 days: en 55%,
+  es 9.7, ru 9.2, pt 3.6, de 3.4, id 2.9, fr 2.5; by country US 14.6%, PH 12.0, RU 5.6, DE 4.9, GB 4.1.
+- **SurfaceGui facts**: 100 is the largest text size, with `TextScaled` too, so `PixelsPerStud` decides how tall
+  letters can be (75 gives 1.33 studs). Cyrillic renders in the Gotham faces. A `UIGradient` turned 45 degrees does
+  NOT run corner to corner on a wide tile: its ends clamp, so ten hard bands came out as a block, four thin
+  stripes and a gap. It reads as hazard tape and was kept.
+- **Tested in Studio at full quality, as a player**: built by the Builder at boot; readable from the spawn (the
+  Level 1 and 2 gates are the first a new player sees); a straight walk at the door is stopped by the board; round
+  the spawn-side end into the bay and out round the far end on foot; console clean. Pictures:
+  `artifacts/lobby-level2-maintenance-20261008`. **Not tested**: a phone (the six translations are 0.33 studs
+  high: readable from about eight studs on a desktop, closer on a phone), more than one player.
+- **A play test can be muted from the client**: set `Volume = 0` on every Sound and SoundGroup and hold it there
+  with `GetPropertyChangedSignal("Volume")`, plus `DescendantAdded`. `UserGameSettings.MasterVolume` is out of an
+  `execute_luau` call's reach (RobloxScript capability).
