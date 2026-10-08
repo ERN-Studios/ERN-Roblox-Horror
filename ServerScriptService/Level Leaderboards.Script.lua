@@ -275,9 +275,11 @@ local function read(level)
 		end
 		return rows
 	end
+	-- Studio has no access to the data stores here, and the engine prints every refused call: do not ask.
+	if IS_STUDIO then return {} end
 	local ok, pages = pcall(function() return store(level):GetSortedAsync(true, TOP, MIN_SECONDS * 1000) end)
 	if not ok then
-		if not IS_STUDIO then warn("[LevelLeaderboards] could not read Level " .. level .. ": " .. tostring(pages)) end
+		warn("[LevelLeaderboards] could not read Level " .. level .. ": " .. tostring(pages))
 		return nil
 	end
 	local rows = {}
