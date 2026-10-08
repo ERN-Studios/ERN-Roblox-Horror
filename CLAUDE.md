@@ -2269,10 +2269,21 @@ weight and button size on phones, no noise meter.
     97 place files in Codex's project folders, three in Downloads.
 - **Do not write whole-place snapshots to this Mac again.** Team Create keeps the place's version history, git
   keeps the scripts; a before/after `.rbxl` per change is what filled the disk (about 100 to 320 MB a time).
-- **Left for the owner to decide** (reported, not removed): Codex's old clones and Level 5 working copies
-  (`~/.codex/.chatgpt-projects/.../github` 3.8 GB, `output/level5-*` and `work` 5.5 GB; three branches in that
-  clone, 7 commits and 0.9 MB, exist nowhere else), Codex's own session logs (36 GB, 12 GB of them from this
-  repo), the Roblox player's asset cache (`$TMPDIR/Roblox`, 1.6 GB), old asset sources in Downloads. The old repo
-  copies in `~/Documents` are in iCloud only and take no space on the Mac.
+- **Removed a little later on the owner's word** ("Delete that"): the 23 `output/level5-*` entries in Codex's
+  project folder (4.8 GB: the old suburbs Level 5's working copies, among them the clone `level5-audit/repository`
+  and its two worktrees; every ref in it was on GitHub first). I had given the owner 5.5 GB for that row: the
+  figure wrongly included `work/` (810 MB, Level 2 entity work and an sfx build from September), which is not
+  Level 5 and was left.
+- **Left for the owner to decide** (reported, not removed): Codex's old clones of this repo
+  (`~/.codex/.chatgpt-projects/.../github`, 3.8 GB; three branches there, 7 commits and 0.9 MB, exist nowhere
+  else), `work/`, Codex's own session logs (36 GB, 12 GB of them from this repo), the Roblox player's asset cache
+  (`$TMPDIR/Roblox`, 1.6 GB), old asset sources in Downloads. The old repo copies in `~/Documents` are in iCloud
+  only and take no space on the Mac.
+- **27 tracked concept pictures left the working tree at 16:00:37-44 that day, and no session of mine did it** (my
+  last command before was at 15:50, my next at 16:03; no Codex job logged it): 9 in
+  `artifacts/level5-void-20261003/final`, 7 in its `concepts`, 5 in
+  `artifacts/level6-playground-20261002/concepts/entity`, 6 in `assets/concepts/level3-sections-20260929`
+  (44.6 MB). They show as ` D` in `git status` and are whole in git. Not restored and not committed: do not
+  `git add -A` them away, and do not put them back, before the owner says which they meant.
 - `mdfind` plus `find ~` for `.rbxl/.rbxlx/.rbxm/.rbxmx` is the whole search; `stat -f %b` (blocks) tells a file
   that is really on disk from one iCloud has evicted (`du` and `ls` sizes do not agree for those).
