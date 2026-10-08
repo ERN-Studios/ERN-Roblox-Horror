@@ -2544,6 +2544,59 @@ local function refreshPasses(player)
 			if sessions[player] and passReadFailed[player] then refreshPasses(player) end
 		end)
 	end
+	-- PASS_SPEND_20261008 (owner: "make sure the TOP SUPPORTERS leaderboard is updated with the latest buys").
+	-- A developer product has always been added to the recorded total at its receipt; a GAME PASS never was
+	-- ("the pass stream has no live writer": the one sales import of 2026-09-15 is all the board ever knew of
+	-- them, so every pass sold since was missing from it). Each pass this player owns is now counted once, at
+	-- its listed price, under the marker that import uses for a pass (`pass:<pass id>` in SalesImport.Rows), so
+	-- neither path can count one twice and a later import of the same sale is a no-op. It runs with every
+	-- refresh: at the profile load, which also picks up passes bought on the website or before this existed,
+	-- and right after a purchase in the game. Not in Studio (GrantAllPasses owns everything there) and not for
+	-- the one entitlement nobody paid for. No new top-level local: this script is at about 195 of 200.
+	if not RunService:IsStudio() and sessions[player] then
+		local owned = {}
+		local function own(key, pass)
+			local id = math.floor(tonumber(pass and pass.Id) or 0)
+			local price = math.floor(tonumber(pass and pass.Price) or 0)
+			if id > 0 and price > 0 and player:GetAttribute("ZyntraOwns" .. key) == true
+				and not (key == "AdvancedEquipment" and player.UserId == 9488575949) then
+				owned[#owned + 1] = {Marker = "pass:" .. id, Price = price}
+			end
+		end
+		for key, pass in pairs(Config.Passes) do own(key, pass) end
+		for key, pass in pairs(Config.Donations or {}) do
+			if pass.Kind == "GamePass" then own(key, pass) end
+		end
+		for _, skinId in ipairs(Skins.Order) do
+			local skin = Skins.ById[skinId]
+			if skin.Kind == "Robux" and skin.PassId > 0 then own(skinId, {Id = skin.PassId, Price = skin.RobuxPrice}) end
+		end
+		for key, pass in pairs(Config.TokenEarner.Passes) do own(key, pass) end
+		local seen = sessions[player].data.SalesImport and sessions[player].data.SalesImport.Rows or {}
+		local missing = false
+		for _, item in ipairs(owned) do
+			if not seen[item.Marker] then missing = true end
+		end
+		if missing then
+			local written, counted = mutateIdempotent(player, function(data)
+				local markers, add, fresh = data.SalesImport.Rows, 0, {}
+				for _, item in ipairs(owned) do
+					if not markers[item.Marker] and not fresh[item.Marker] then
+						fresh[item.Marker] = true
+						add += item.Price
+					end
+				end
+				-- validate before the first change: a transform that returns false must have changed nothing
+				if add <= 0 or add > MAX_SAFE_SUPPORT - recordedSupportRobux(data) then return false end
+				for marker in pairs(fresh) do markers[marker] = true end
+				data.PassRobux += add
+				return true
+			end, true)
+			if written and counted and sessions[player] then
+				queueSupportTotalSync(player.UserId, recordedSupportRobux(sessions[player].data))
+			end
+		end
+	end
 	-- Existing owners may have already received their one-time grant, so refresh
 	-- derived capacity even when mutate made no profile change. Never award levels twice.
 	if not sessions[player] then return end

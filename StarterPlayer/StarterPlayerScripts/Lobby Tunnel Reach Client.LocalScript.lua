@@ -457,3 +457,48 @@ RunService.RenderStepped:Connect(function(dt)
 		eye.iris.Transparency, eye.pupil.Transparency = visible, visible
 	end
 end)
+
+-- REACH_WARNING_20261008 (owner: "when players hop over the fence and the eyes start shining, a couple of seconds
+-- go by and a text prompt appears on their screen: 'You are in danger, get back to safezone', blinking in red but
+-- not in a big font"). Only on the screen of a player who is over the fence, from WARN_AFTER seconds after they
+-- stand there with the eyes open, until they are back on the lobby's side or it has them (the taking blacks the
+-- screen itself). The test is the server's own for "over the fence". A line in a ScreenGui of its own: the cover
+-- above is only enabled for a taking. Under ReduceFlashing it stands still instead of blinking.
+do
+	local WARN_AFTER = 2.5
+	local screen = Instance.new("ScreenGui")
+	screen.Name = "TunnelReachWarning"
+	screen.ResetOnSpawn, screen.IgnoreGuiInset, screen.DisplayOrder, screen.Enabled = false, false, 930, false
+	local line = Instance.new("TextLabel")
+	line.Name = "Line"
+	line.AnchorPoint, line.Position, line.Size = Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0.16, 0), UDim2.new(0.9, 0, 0, 24)
+	line.BackgroundTransparency = 1
+	line.Font, line.TextSize = Enum.Font.GothamMedium, 16
+	line.TextColor3 = Color3.fromRGB(255, 64, 56)
+	line.TextStrokeColor3, line.TextStrokeTransparency = Color3.new(0, 0, 0), 0.45
+	line.Text = "You are in danger, get back to the safe zone"
+	line.Parent = screen
+	screen.Parent = player:WaitForChild("PlayerGui")
+	local overSince = nil
+	RunService.Heartbeat:Connect(function()
+		local fence = root:GetAttribute("Fence")
+		local body = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		local at = body and frame:PointToObjectSpace(body.Position)
+		local over = at ~= nil and type(fence) == "number" and at.Z > -(fence - 0.9) and math.abs(at.X) < 37
+			and at.Y > -4 and at.Y < 42 and player:GetAttribute("InRound") ~= true
+			and player:GetAttribute("Level6PlaygroundPreview") ~= true
+		if over and not taken and root:GetAttribute("Awake") == true and eyeOpen > 0.5 then
+			overSince = overSince or os.clock()
+		else
+			overSince = nil
+		end
+		local on = overSince ~= nil and os.clock() - overSince >= WARN_AFTER
+		if screen.Enabled ~= on then screen.Enabled = on end
+		if on then
+			-- a blink a second, lit for a little over half of it
+			local dim = player:GetAttribute("ReduceFlashing") ~= true and (os.clock() - overSince) % 1 >= 0.58
+			line.TextTransparency = dim and 0.85 or 0
+			line.TextStrokeTransparency = dim and 0.92 or 0.45
+		end
+	end)
+end

@@ -1999,3 +1999,35 @@ weight and button size on phones, no noise meter.
   prints every refused `GetSortedAsync`, pcall or not (six lines every few seconds).
 - **The poster fix and the Level 5 death flow went into Studio at 08:13 and were waiting for a publish** when this
   was written (`/tmp/live/publish_when_idle.sh`: three minutes of idle, then Codex clicks File > Publish).
+
+### Added 2026-10-08 (later in the morning) - Passes count on TOP SUPPORTERS; a warning behind the fence (in Studio, NOT published)
+
+- **The owner published v2813 at 08:30** (Studio's log): the Level 5 death flow and the Level 4 poster cases are
+  live. They wrote "I will publish on my own" while the idle-wait publish job was pending; it was cancelled.
+- **Owner**: "make sure the TOP SUPPORTERS leaderboard is updated with the latest buys and such".
+  **What was wrong**: the board is `recordedSupportRobux` = `DonationRobux + UtilityRobux + PassRobux`, synced to the
+  ordered store `ZyntraDonationLeaderboard_v2`. Developer products have always been added at their receipt. A GAME
+  PASS never was: `PassRobux` had no live writer, only the one sales import of 2026-09-15
+  (`artifacts/trello-20260915/agent-36-report.md`; its module `ServerStorage.ZyntraSalesBackfill` is no longer in
+  the place). So every pass sold since (detector, Advanced Equipment, the token earners, skins) was missing.
+- **Now** (`PASS_SPEND_20261008`, a block at the end of `refreshPasses` in ZyntraMonetization): each pass a player
+  owns (`ZyntraOwns<Key>` true: `Config.Passes`, game-pass donations, Robux skins, the six token earners) is added
+  ONCE, at its listed price, under the marker that import prescribed for a pass: `pass:<pass id>` in
+  `data.SalesImport.Rows`, so neither path can count one twice. It runs at every profile load (which also picks up
+  passes bought on the website or before this existed) and right after a purchase in the game; then
+  `queueSupportTotalSync`. Not in Studio (GrantAllPasses) and not for LaverSneglen's unpaid Advanced Equipment.
+  **Limits, said to the owner**: a buyer is counted when they are next in the game, not before; the amount is the
+  listed price, so a regionally priced sale reads a little high; the 20K support pass (1978617781) is not in the
+  config and stays as imported.
+- **ZyntraMonetization is at about 195 of Luau's 200 top-level locals**: the new code is a block inside
+  `refreshPasses`. Count before adding a `local` at the top level of that script.
+- **Tested**: the transform against stand-in profiles (six cases: two new passes, the same again, one already
+  imported, nothing owned, a pass listed twice, the safe limit); the script boots and loads a profile in Studio.
+  **Not tested**: the real write (Studio skips it by design) and the board changing on the live game.
+- **Owner**: when players hop over the fence and the eyes start shining, a couple of seconds later a text on their
+  screen, "You are in danger, get back to safezone", blinking in red, not in a big font.
+  `REACH_WARNING_20261008`, a block at the end of `Lobby Tunnel Reach Client`: ScreenGui `TunnelReachWarning`, one
+  line (GothamMedium 16, red 255/64/56, 16% from the top), shown to the player who is over the fence (the server's
+  own test, from `LobbyTunnelReach.Fence`) once they have stood there 2.5 s with `Awake` and the eyes more than half
+  open; it blinks once a second (steady under `ReduceFlashing`) and goes when they are back or taken.
+  Tested in Studio: off in the lobby, on and blinking behind the fence, off again 1 s after stepping back.
