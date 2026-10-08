@@ -2252,3 +2252,27 @@ weight and button size on phones, no noise meter.
 - **Owning is not buying for a pass's creator.** Any future "count what they own" rule has to leave the developer
   accounts out, or ask the purchase history instead of ownership.
 
+
+### Added 2026-10-08 (late afternoon) - Local place backups removed (the Mac was out of disk)
+
+- **Owner**: "I am getting storage problems on my computer. Please remove every local backup of any roblox game on
+  my pc." The 228 GB disk had under 7 GB free. Removed, about 6.2 GB:
+  - the untracked contents of every `artifacts/*/native-*` folder (4.1 GB: `*-AuthoritativeStudio.rbxl`,
+    `all-service-children.rbxm`, `native-part-*.bin`, `scripts.json`, their chunk files). **Those folders now hold
+    only the tracked records** (`source-manifest.json`, `backup-file-hashes.json`, `backup-metadata-summary.json`,
+    receipts): the snapshots they describe are gone, so the one-off tools that read them
+    (`tools/lobby_access_spawn_20261002/verify_backup.py`, `recovery/assemble_native_backup.py`, the
+    `level3_finale_player_20261002` native checks) cannot run any more;
+  - `.git/premerge-untracked-backup-20261002` (918 MB), after all 1589 of its files hashed to blobs git already has;
+  - the 11 place files git tracked under `artifacts/` (55 MB; still in history, `git show d06cf72:<path>`);
+  - `~/Projects/RobloxStudioBackups`, Studio's `AutoSaves` (seven recovery copies from September and 6 October),
+    97 place files in Codex's project folders, three in Downloads.
+- **Do not write whole-place snapshots to this Mac again.** Team Create keeps the place's version history, git
+  keeps the scripts; a before/after `.rbxl` per change is what filled the disk (about 100 to 320 MB a time).
+- **Left for the owner to decide** (reported, not removed): Codex's old clones and Level 5 working copies
+  (`~/.codex/.chatgpt-projects/.../github` 3.8 GB, `output/level5-*` and `work` 5.5 GB; three branches in that
+  clone, 7 commits and 0.9 MB, exist nowhere else), Codex's own session logs (36 GB, 12 GB of them from this
+  repo), the Roblox player's asset cache (`$TMPDIR/Roblox`, 1.6 GB), old asset sources in Downloads. The old repo
+  copies in `~/Documents` are in iCloud only and take no space on the Mac.
+- `mdfind` plus `find ~` for `.rbxl/.rbxlx/.rbxm/.rbxmx` is the whole search; `stat -f %b` (blocks) tells a file
+  that is really on disk from one iCloud has evicted (`du` and `ls` sizes do not agree for those).
