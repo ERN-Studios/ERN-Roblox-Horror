@@ -176,12 +176,28 @@ task.spawn(function()
 				if inLevel() then event:FireServer("devfall") end
 			end
 			button.Activated:Connect(ask)
+			-- DEV_REVIVE_20261008 (owner: "a dev cheat button that re-enters all dead players in the level with us"):
+			-- under the first button, and the U key. The server checks who asks and stands every dead player in the
+			-- level up at the start of their section, the asker included.
+			local revive = button:Clone()
+			revive.Name = "DevRevive"
+			revive.Position = UDim2.new(1, -14, 0, 64 + button.Size.Y.Offset + 8)
+			revive.Text = UserInputService.KeyboardEnabled and "DEV  ·  REVIVE THE DEAD  [U]" or "DEV  ·  REVIVE THE DEAD"
+			revive.ZIndex = 3                                      -- over the cover: a dead developer has to reach it
+			revive.Parent = gui
+			local function askRevive()
+				if inLevel() then event:FireServer("devrevive") end
+			end
+			revive.Activated:Connect(askRevive)
 			UserInputService.InputBegan:Connect(function(input, processed)
-				if not processed and input.KeyCode == Enum.KeyCode.O then ask() end
+				if processed then return end
+				if input.KeyCode == Enum.KeyCode.O then ask() end
+				if input.KeyCode == Enum.KeyCode.U then askRevive() end
 			end)
 			task.spawn(function()
 				while true do
 					button.Visible = inLevel()
+					revive.Visible = button.Visible
 					task.wait(0.5)
 				end
 			end)
@@ -262,12 +278,57 @@ task.spawn(function()
 	end
 	local NAMES = {rose = "ROSE", blue = "BLUE", amber = "AMBER", mint = "MINT", violet = "VIOLET", coral = "CORAL   ·   UP",
 		orange = "ORANGE   ·   THE SPIRAL", crimson = "CRIMSON   ·   THE CLIMB", teal = "TEAL   ·   THE PILLARS", ivory = "IVORY   ·   THE TOWER"}
+	-- FALL_CAM_20261008 (owner: "no kill cam like all the other maps"). The server lets a fall run for a moment
+	-- before it is a death ("falling", seconds). The camera lets go of the body where it is, turns down after it
+	-- and watches it drop into the dark with a small light on it; the screen closes to black. The death that
+	-- follows is the round's own: RoundUI's screen, spectating, the re-entry.
+	local fallCam = {on = false}
+	function fallCam.stop()
+		if not fallCam.on then return end
+		fallCam.on = false
+		pcall(function() game:GetService("RunService"):UnbindFromRenderStep("Level5FallCam") end)
+		if fallCam.light then fallCam.light:Destroy() fallCam.light = nil end
+		local camera = workspace.CurrentCamera
+		if camera and camera.CameraType == Enum.CameraType.Scriptable then camera.CameraType = Enum.CameraType.Custom end
+	end
+	function fallCam.start(seconds)
+		local camera = workspace.CurrentCamera
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if fallCam.on or not camera or not root then return end
+		fallCam.on = true
+		seconds = tonumber(seconds) or 2.4
+		local eye, look, began = camera.CFrame.Position + Vector3.new(0, 1.5, 0), camera.CFrame, os.clock()
+		local light = Instance.new("PointLight")
+		light.Name, light.Brightness, light.Range, light.Shadows = "FallCamLight", 1.3, 24, false
+		light.Color = Color3.fromRGB(255, 244, 224)
+		light.Parent = root
+		fallCam.light = light
+		say("YOU FELL", seconds + 0.8)
+		cover.BackgroundColor3 = Color3.new(0, 0, 0)
+		TweenService:Create(cover, TweenInfo.new(seconds * 0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.In, 0, false, seconds * 0.5),
+			{BackgroundTransparency = 0}):Play()
+		game:GetService("RunService"):BindToRenderStep("Level5FallCam", Enum.RenderPriority.Camera.Value + 6, function(dt)
+			if not root.Parent or os.clock() - began > seconds + 4 then fallCam.stop() return end
+			camera.CameraType = Enum.CameraType.Scriptable
+			look = look:Lerp(CFrame.lookAt(eye, root.Position), 1 - math.exp(-dt * 7))
+			camera.CFrame = CFrame.new(eye) * look.Rotation
+		end)
+	end
 	event.OnClientEvent:Connect(function(what, a, b, c, d)
-		if what == "died" then
-			-- no checkpoints (owner, 2026-10-04): a fall or any other death ends the run; black until the lobby
+		if what == "falling" then
+			fallCam.start(a)
+		elseif what == "died" then
+			-- DEATH_PARITY_20261008: a death keeps the player in the level (it used to be black until the lobby):
+			-- black for a moment, and the death screen, the spectating and the re-entry are RoundUI's.
 			if fall then fall:Stop() end
-			flash(Color3.new(0, 0, 0), 4.5)
-			say("YOU FELL", 3)
+			fallCam.stop()
+			flash(Color3.new(0, 0, 0), 1.8)
+		elseif what == "reentered" then
+			fallCam.stop()
+			TweenService:Create(cover, TweenInfo.new(0.6), {BackgroundTransparency = 1}):Play()
+		elseif what == "devrevived" then
+			say(string.format("DEV   ·   %d REVIVED", tonumber(a) or 0), 2.4)
 		elseif what == "checkpoint" then
 			if d then
 				oneShot("l5_section_tone", 0.4)

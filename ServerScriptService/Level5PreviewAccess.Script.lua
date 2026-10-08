@@ -412,6 +412,15 @@ do
 	-- them is dead from KILL_GAP. Walking the 198 studs from the gate takes 12.4 s, a sprint 7.6 s.
 	local CLOSE_SECONDS, SHUT_GAP, KILL_GAP = 15.5, 5.0, 3.0
 	local REENTRY_WINDOW, CHOICE_SECONDS, NEXT_LEVEL = 15, 15, 6
+	-- DEATH_PARITY_20261008 (owner: "no kill cam like all the other maps, you just die and are thrown back to the
+	-- lobby; there has to be spectating, buying a re-entry or using a banked one, and you spawn at the start of
+	-- the section you have reached. So like the other levels"). EVERY death keeps the player in the level, dead,
+	-- the way the last corridor's always did: the party is told ("death"), a dead player watches the others
+	-- (SpectateController), nobody left standing is PARTY DOWN with its window, and an Emergency Re-entry (one
+	-- paid per run, as in every level; a developer's free one any time) stands the player at the START OF THE
+	-- SECTION they had reached. A fall is shown before it is a death: the client's camera lets go and watches
+	-- the body drop for FALL_CAM seconds.
+	local FALL_CAM = 2.4
 	local SECTION = {rose = 1, blue = 2, amber = 3, mint = 4, violet = 5, coral = 6, orange = 7, crimson = 8, teal = 9, ivory = 10}
 	local SOUND_IDS = {
 		-- filled by tools/level5_void/install_sounds.py (ReplicatedStorage.Level5Void.Sounds carries the same)
@@ -546,9 +555,8 @@ do
 		members[player].group.total = (members[player].group.total or 0) + 1
 		player:SetAttribute(IN_LEVEL, true)
 		player:SetAttribute(LIVE, true)            -- before InRound: the round features read both
-		-- A fall ends the run, so the store must not offer an Emergency Re-entry for it. The one place this level
-		-- offers one is the last corridor, which opens it again.
-		player:SetAttribute("ZyntraReentryUsed", true)
+		-- DEATH_PARITY_20261008: one paid Emergency Re-entry per run, as in every other level
+		player:SetAttribute("ZyntraReentryUsed", false)
 		return true
 	end
 
@@ -709,6 +717,9 @@ do
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 		local root = humanoid and humanoid.RootPart
 		if not root or humanoid.Health <= 0 or not character:IsDescendantOf(workspace) then return nil end
+		-- a body's own Health script goes on healing a corpse (measured 2026-10-08: 0, 1, 2, 3 ...), and since
+		-- DEATH_PARITY_20261008 a corpse stays in the level: it is the state that says dead
+		if humanoid:GetState() == Enum.HumanoidStateType.Dead then return nil end
 		return character, root
 	end
 
@@ -842,27 +853,30 @@ do
 		announce("reset")
 		finale.state = "idle"
 	end
-	-- A death in the corridor or the small room keeps the player in the level, dead: the party is told, the store
-	-- offers the Emergency Re-entry, and the loop below decides how it ends. True when this death was that kind.
+	-- DEATH_PARITY_20261008: ANY death keeps the player in the level, dead (it used to be only a death in the
+	-- corridor or the small room): the party is told, the store offers the Emergency Re-entry, and the loop below
+	-- decides how it ends. `deadInFinale` remembers a death past the corridor's doorway: that one stands up in
+	-- the small room, every other at the start of its section. Always true once the map is there.
 	finaleDeath = function(player, record, character)
 		if leaving[player] then return true end            -- already out of the door: the ending screen is theirs
 		local model = readyPreview()
 		local origin = model and model:GetAttribute("Origin")
 		local data = model and finaleOf(model)
 		local root = character:FindFirstChild("HumanoidRootPart")
-		if not data or typeof(origin) ~= "Vector3" or not root then return false end
-		local at = root.Position - origin
+		if not model or typeof(origin) ~= "Vector3" then return false end
+		local at = root and root.Position - origin
 		local crushed = record.crushed == true
-		if not (crushed or inCorridor(data, at, true) or inRoom(data, at)) then return false end
-		record.dead, record.crushed = true, nil
-		record.group.lastDeath = player.Name
-		player:SetAttribute("ZyntraReentryUsed", false)     -- the one place in this level a re-entry is offered
+		local inFinale = crushed or (data ~= nil and at ~= nil and (inCorridor(data, at, true) or inRoom(data, at)))
+		local cause = crushed and "L5Crusher" or ((record.fallingAt or record.fellNow) and "L5Fall" or "Unknown")
+		record.dead, record.crushed, record.fallingAt, record.fellNow = true, nil, nil, nil
+		record.deadInFinale = inFinale or nil
+		record.group.lastDeath, record.group.lastCause = player.Name, cause
 		for other, state in pairs(members) do
 			if state.group == record.group then
-				tell(other, "death", player.Name, root.Position, crushed and "L5Crusher" or "Unknown")
+				tell(other, "death", player.Name, root and root.Position or origin, cause)
 			end
 		end
-		event:FireClient(player, "crushed")
+		event:FireClient(player, crushed and "crushed" or "died", cause)
 		return true
 	end
 	-- Emergency Re-entry (ServerStorage.Level5Reentry; GameManager's ZyntraReentry reaches it through Level 6's,
@@ -872,14 +886,31 @@ do
 		if old then old:Destroy() end
 		local reentry = Instance.new("BindableFunction")
 		reentry.Name = "Level5Reentry"
-		reentry.OnInvoke = function(player, free)
+		-- `forced` = a developer in the level brought this player back (the revive-all cheat): free, whoever they are
+		local function reenter(player, free, forced)
 			local record = typeof(player) == "Instance" and player:IsA("Player") and members[player] or nil
 			if not record or not record.dead or record.reentering then return false, "UNAVAILABLE" end
-			if free == true and not DevAccess.IsAllowed(player) then return false, "UNAVAILABLE" end
+			if free == true and not forced and not DevAccess.IsAllowed(player) then return false, "UNAVAILABLE" end
 			if free ~= true and player:GetAttribute("ZyntraReentryUsed") == true then return false, "UNAVAILABLE" end
 			local model = readyPreview()
-			local spot = model and model:FindFirstChild("Level5Reentry")
-			if not spot or not spot:IsA("BasePart") then return false, "UNAVAILABLE" end
+			local list = model and checkpoints(model)
+			-- DEATH_PARITY_20261008: where they stand up. A death past the corridor's doorway: the small room at its
+			-- end, as before. Any other: the first checkpoint of the section they had reached.
+			local frame, first = nil, nil
+			if record.deadInFinale then
+				local spot = model and model:FindFirstChild("Level5Reentry")
+				if spot and spot:IsA("BasePart") then
+					local group = record.group
+					group.reentered = (group.reentered or 0) + 1
+					-- facing the exit door, each one a little to the side of the last
+					frame = upright(spot.Position + Vector3.new(0, 0, ((group.reentered - 1) % 5 - 2) * 3.5), Vector3.xAxis)
+				end
+			elseif list and list[record.cp] then
+				first = record.cp
+				while first > 1 and list[first - 1].sec == list[record.cp].sec do first -= 1 end
+				frame = checkpointFrame(model, list[first])
+			end
+			if not frame then return false, "UNAVAILABLE" end
 			record.reentering = true
 			local load = ServerStorage:FindFirstChild("LoadGameplayCharacter")
 			local previous = player.Character
@@ -893,21 +924,39 @@ do
 			local root = character:WaitForChild("HumanoidRootPart", 5)
 			if not humanoid or not root or members[player] ~= record then return false, "UNAVAILABLE" end
 			root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
-			-- facing the exit door, each one a little to the side of the last
-			local group = record.group
-			group.reentered = (group.reentered or 0) + 1
-			local side = ((group.reentered - 1) % 5 - 2) * 3.5
-			character:PivotTo(upright(spot.Position + Vector3.new(0, 0, side), Vector3.xAxis))
-			record.dead, record.crushed = nil, nil
+			-- Back to the section's first checkpoint in the books as well: the fall line is measured from the
+			-- checkpoint a player holds, and a later one's would have this body dead where it stands.
+			if first then record.cp = first end
+			character:PivotTo(frame)
+			record.dead, record.crushed, record.deadInFinale, record.fallingAt = nil, nil, nil, nil
 			if free ~= true then player:SetAttribute("ZyntraReentryUsed", true) end
 			hookDeath(player, character, humanoid)
+			local group = record.group
 			for other, state in pairs(members) do
 				if state.group == group then tell(other, "reentry", player.Name) end
 			end
 			event:FireClient(player, "reentered")
 			return true
 		end
+		reentry.OnInvoke = function(player, free) return reenter(player, free == true, false) end
 		reentry.Parent = ServerStorage
+		-- DEV_REVIVE_20261008 (owner: "a dev cheat button that re-enters all dead players in the level with us").
+		-- A developer in the level asks (the Level 6 dev ESP's list, which has the owner's own account on it);
+		-- everybody in the level who is dead stands up again at the start of their section, free, the asker too.
+		local nextRevive = setmetatable({}, { __mode = "k" })
+		event.OnServerEvent:Connect(function(player, what)
+			if what ~= "devrevive" or not members[player] or not DevAccess.IsLevel6PreviewAllowed(player) then return end
+			if (nextRevive[player] or 0) > os.clock() then return end
+			nextRevive[player] = os.clock() + 2
+			local count = 0
+			for other, record in pairs(members) do
+				if record.dead and not record.reentering then
+					count += 1
+					task.spawn(reenter, other, true, true)
+				end
+			end
+			event:FireClient(player, "devrevived", count)
+		end)
 	end
 
 	-- plates and gates
@@ -1043,8 +1092,15 @@ do
 				inSection[section] = (inSection[section] or 0) + 1
 				if at.Y < row.low - FALL_MARGIN then
 					record.fell = true
-					local humanoid = character:FindFirstChildOfClass("Humanoid")
-					if humanoid then humanoid.Health = 0 end       -- the Died hook sends them home
+					if not record.fallingAt then
+						-- DEATH_PARITY_20261008: the fall is shown first (the client's fall camera), then it is a death
+						record.fallingAt = os.clock()
+						event:FireClient(player, "falling", FALL_CAM)
+					elseif os.clock() - record.fallingAt >= FALL_CAM then
+						record.fellNow = true
+						local humanoid = character:FindFirstChildOfClass("Humanoid")
+						if humanoid then humanoid.Health = 0 end   -- the Died hook keeps them in the level, dead
+					end
 				elseif finish and finish:IsA("BasePart") and (root.Position - finish.Position).Magnitude < 7 and not leaving[player] then
 					leaving[player] = true
 					event:FireClient(player, "finish")
@@ -1131,7 +1187,7 @@ do
 						if (group.done or 0) == 0 then               -- nobody made it: the PARTY DOWN card and its countdown
 							group.wiped = true
 							for _, player in ipairs(tally.dead) do
-								tell(player, "partydown", REENTRY_WINDOW, group.lastDeath, "L5Crusher")
+								tell(player, "partydown", REENTRY_WINDOW, group.lastDeath, group.lastCause or "Unknown")
 							end
 						end
 					elseif os.clock() >= group.endAt then
@@ -1171,6 +1227,7 @@ do
 				-- who stands on it, and which parties are complete on it
 				local standing, need, on = 0, {}, {}
 				for player, state in pairs(members) do
+					if state.dead then continue end                -- DEATH_PARITY_20261008: the dead are not waited for
 					local _, root = living(player)
 					local section = SECTION[list[state.cp].sec]
 					if section > record.section then continue end

@@ -111,6 +111,14 @@ DeathAdvice.Causes = {
 		Cause = "The corridor closed before you reached the room at its end.",
 		Tip = "Run the moment the gate drops. Do not wait for the others.",
 	},
+	-- Level5PreviewAccess.Script.lua, DEATH_PARITY_20261008: a body 40 studs under the stretch it had reached.
+	-- WHY THIS TIP: build_level5.py asserts every gap against the WALKING reach (8.15 studs at 16), so each one
+	-- can be made at a walk from the edge; a sprint carries a body past the narrow landings.
+	L5Fall = {
+		Title = "YOU FELL",
+		Cause = "You went over the edge into the drop.",
+		Tip = "Every gap can be made at a walk. Jump from the very edge of the ledge, not before it.",
+	},
 	-- Everything nothing marked: a void fall, a failed arrival placement
 	-- (GameManager.Script.lua:913), or a kill site added without a mark. It says
 	-- so and offers NOTHING, because there is nothing true to offer.
