@@ -265,6 +265,45 @@ local function reserveLandings(context, model, exit)
     return entries
 end
 
+-- LIVE_LEVEL_SERVERS_20261008. The same arrival slots for a party that does not come off a pad: a party that was
+-- given a server of its own lands in that server's lobby and is taken into the level by the level's own
+-- LaunchParty function ("Live Level Server"). Returns {[player] = CFrame}; a member no clear slot is found for
+-- gets the exit itself, which is where a single E entry has always stood.
+function Bridge.PartyLandings(model, exit, players)
+    local look = Vector3.new(exit.CFrame.LookVector.X, 0, exit.CFrame.LookVector.Z)
+    local facing = CFrame.lookAt(exit.Position, exit.Position + (if look.Magnitude > .01 then look else Vector3.zAxis))
+    local ray = RaycastParams.new()
+    ray.FilterType = Enum.RaycastFilterType.Include
+    ray.FilterDescendantsInstances = {model}; ray.RespectCanCollide = true
+    local overlap = OverlapParams.new()
+    overlap.FilterType = Enum.RaycastFilterType.Include
+    overlap.FilterDescendantsInstances = {model}; overlap.RespectCanCollide = true
+    local chosen, frames = {}, {}
+    for _, player in ipairs(players) do
+        local selected
+        for _, offset in ipairs(SLOT_OFFSETS) do
+            local at = facing:PointToWorldSpace(Vector3.new(offset.X, 0, offset.Y))
+            local hit = workspace:Raycast(at + Vector3.new(0,1.5,0), Vector3.new(0,-14,0), ray)
+            if not hit or hit.Normal.Y < .7 or hit.Position.Y > exit.Position.Y - .75 then continue end
+            local point = hit.Position + Vector3.new(0, 3.5, 0)
+            if (point - exit.Position).Magnitude > 16 then continue end
+            local clear = true
+            for _, used in ipairs(chosen) do
+                if Vector3.new(point.X-used.X,0,point.Z-used.Z).Magnitude < 4.2 then clear = false; break end
+            end
+            if not clear then continue end
+            for _, part in ipairs(workspace:GetPartBoundsInBox(CFrame.new(point), Vector3.new(3.4,5.4,3.4), overlap)) do
+                if part.CanCollide then clear = false; break end
+            end
+            if clear then selected = point; break end
+        end
+        selected = selected or exit.Position
+        table.insert(chosen, selected)
+        frames[player] = CFrame.lookAt(selected, selected + facing.LookVector)
+    end
+    return frames
+end
+
 function Bridge.PreparePreviewGroup(context, model, exit, stream)
     local state = contexts[context]
     if not state or type(stream) ~= "function" then return nil, "INVALID_PREVIEW_CONTEXT" end

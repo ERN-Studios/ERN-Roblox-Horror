@@ -126,7 +126,10 @@ workspace:SetAttribute("Level2BlenderPreviewActive", false)
 
 -- A station launch creates a reserved server of this same place. Reserved servers
 -- run the maze directly; public servers remain lightweight four-station lobbies.
-local IS_RESERVED_ROUND_SERVER = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
+-- SERVER_KIND_20261008: a reserved server can also be one party's own LOBBY, started so that Level 5 or 6 runs
+-- for that party alone (ServerKind, "Live Level Server"). Such a server is a lobby in every way this script
+-- cares about, so the answer comes from the module, which has settled it before this line returns.
+local IS_RESERVED_ROUND_SERVER = require(script.Parent:WaitForChild("ServerKind")).IsRoundServer()
 local IS_STUDIO = RunService:IsStudio()
 workspace:SetAttribute("ReservedRoundServer", IS_RESERVED_ROUND_SERVER)
 
@@ -2105,6 +2108,13 @@ local function teleportPlayersToNextLevel(group, plan)
 		reportDispatchFailure(live, attemptId, "NEXT_DESCRIPTOR_FAILED: " .. tostring(descriptor))
 		return false, "NEXT_DESCRIPTOR_FAILED: " .. tostring(descriptor), live
 	end
+	-- LIVE_LEVEL_SERVERS_20261008: a level past the last round level is entered on a party's own lobby server;
+	-- "Live Level Server" there reads these three (the round packet around them is ignored by a lobby).
+	if type(descriptor.Data) == "table" and (tonumber(plan.NextLevel) or 0) > Routing.MaxLevel then
+		descriptor.Data.LiveLevel = plan.NextLevel
+		descriptor.Data.LiveSession = plan.SessionId
+		descriptor.Data.Expected = plan.Expected
+	end
 	local ok, err, attemptId = dispatchTransfer(live, descriptor)
 	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
@@ -2506,6 +2516,21 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 	-- NO_LEVEL3_CONTINUE_20260923: the campaign chain, for EVERY party. Level 3
 	-- offers no Continue, developers included.
 	local nextLevel = workspace:GetAttribute("Level2BlenderPreviewActive") ~= true and Routing.NextLevel(activeLevel) or nil
+	-- LIVE_LEVEL_SERVERS_20261008: CONTINUE out of the last round level. Level 5 is not a GameManager round; it
+	-- runs on a lobby server. So the next server is reserved and registered as this party's own lobby for
+	-- Level 5 BEFORE the choice is offered (no server, no button), and the continuers travel to it like any
+	-- other continuation. Decided for the party that finished: the gate in ServerKind is asked about all of them.
+	local liveNextCode = nil
+	if nextLevel == nil and activeLevel == Routing.MaxLevel and not IS_STUDIO
+		and workspace:GetAttribute("Level2BlenderPreviewActive") ~= true then
+		local finishers = {}
+		for _, player in ipairs(participants) do
+			if player.Parent == Players then finishers[#finishers + 1] = player end
+		end
+		liveNextCode = #finishers > 0 and require(script.Parent:WaitForChild("ServerKind")).Reserve(
+			Routing.MaxLevel + 1, finishers, Routing.SessionId(game.JobId, postWinSerial), 4) or nil
+		if liveNextCode then nextLevel = Routing.MaxLevel + 1 end
+	end
 	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
 	local roster = Routing.NewRoster((function()
 		local members = {}
@@ -2529,7 +2554,7 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 		-- the head count the destination is told truthful.
 		Roster = roster,
 		EntryMode = entryMode,
-		NextServerCode = nil,
+		NextServerCode = liveNextCode,
 		ReservingServer = false,
 		Closed = false,
 		Aborted = false,
@@ -2541,7 +2566,7 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 	-- the retry reserved a server of its own and both halves of the party timed
 	-- out behind the loading cover. A reservation that fails, or is still in
 	-- flight at the deadline, falls back to reserving on dispatch as before.
-	if nextLevel and not IS_STUDIO then
+	if nextLevel and not IS_STUDIO and not liveNextCode then
 		task.spawn(function()
 			local ok, code = pcall(TeleportService.ReserveServer, TeleportService, game.PlaceId)
 			if ok and type(code) == "string" and code ~= "" then
@@ -3275,6 +3300,44 @@ local function launchStation(station, participants)
   local bridge = revisedQueueBridge()
   if not bridge or not bridge.LaunchPreviewGroup then return end
   station.busy = true
+  -- LIVE_LEVEL_SERVERS_20261008 (owner: a server per party for Levels 5 and 6, "whatever is the case for the
+  -- other levels like level 1, 2 and 3"). Both levels are one map and one game per server, so the party gets a
+  -- lobby server of its own: reserved here, registered as theirs (ServerKind), and "Live Level Server" over
+  -- there takes them into the level as they land. Whenever that cannot be had (Studio, the gate in ServerKind,
+  -- Roblox refusing, a server that already is a party's own) the party goes in on THIS server as before, where
+  -- the level takes one party at a time (PARTY_LOCK_20261008).
+  if station.level == 5 or station.level == 6 then
+   local travellers = {}
+   for _, member in ipairs(participants) do
+    if member.Parent == Players then travellers[#travellers + 1] = member end
+   end
+   local launchToken = game.JobId .. ":live" .. station.index .. ":" .. math.floor(os.clock() * 1000)
+   local accessCode = #travellers > 0
+    and require(script.Parent:WaitForChild("ServerKind")).Reserve(station.level, travellers, launchToken) or nil
+   if accessCode then
+    for index = #travellers, 1, -1 do
+     if travellers[index].Parent ~= Players then table.remove(travellers, index) end
+    end
+    setStationDisplay(station, "STARTING PRIVATE WORLD", #travellers .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
+    fireGroup(travellers, "queueconfigclosed")
+    fireGroup(travellers, "loadinggame", station.level)
+    local sent, problem = pcall(function()
+     local options = Instance.new("TeleportOptions")
+     options.ReservedServerAccessCode = accessCode
+     options:SetTeleportData({LiveLevel = station.level, LiveSession = launchToken, Expected = #travellers, Station = station.index})
+     TeleportService:TeleportAsync(game.PlaceId, travellers, options)
+    end)
+    if sent then
+     for _, member in ipairs(travellers) do Analytics.Launch(member, station.level) end
+     task.wait(7)
+     station.busy = false
+     return
+    end
+    warn("GameManager: station " .. station.index .. " could not send its party to its own Level "
+     .. tostring(station.level) .. " server: " .. tostring(problem))
+    fireGroup(travellers, "lobby")                          -- takes the loading cover down again
+   end
+  end
   setStationDisplay(station, "STARTING LEVEL " .. tostring(station.level), #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
   -- Preview controllers own their stream/entry UI; never announce a campaign
   -- loadinggame or create a reserved production server for levels4-6.

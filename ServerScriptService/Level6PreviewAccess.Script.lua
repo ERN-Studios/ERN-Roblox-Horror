@@ -506,6 +506,75 @@ do
 	enter.Parent = ServerStorage
 end
 
+-- LIVE_LEVEL_SERVERS_20261008 (ServerStorage.Level6LaunchParty, invoked by "Live Level Server"). A party that was
+-- given a server of its own for this level lands in that server's lobby and is taken in here: the same checks,
+-- streaming handshake, join and round body as the pad's launch, without a pad. `token` is the party; a latecomer
+-- of the same party is launched with the same token and joins the round that is already running.
+-- Returns whether anybody got in, and how many.
+do
+	local old = ServerStorage:FindFirstChild("Level6LaunchParty")
+	if old then old:Destroy() end
+	local launchParty = Instance.new("BindableFunction")
+	launchParty.Name = "Level6LaunchParty"
+	launchParty.OnInvoke = function(players, token)
+		if type(players) ~= "table" or type(token) ~= "table" then return false, 0, "BAD_REQUEST" end
+		local model, exit = Runtime.EnsureWorld()
+		hookExit()
+		if not model or not exit or not previewReady() or not floorAt(model, exit.Position) then return false, 0, "PREVIEW_NOT_READY" end
+		if not claim(token) then
+			for _, player in ipairs(players) do tellBusy(player) end
+			return false, 0, "LEVEL_IN_USE"
+		end
+		local party = {}
+		for _, player in ipairs(players) do
+			if typeof(player) == "Instance" and player:IsA("Player") and (nextUse[player] or 0) <= os.clock()
+				and player:GetAttribute(IN_PREVIEW) ~= true and playerReady(player) then
+				table.insert(party, player)
+			end
+		end
+		local bridge = r3Bridge()
+		local frames = bridge and bridge.PartyLandings and bridge.PartyLandings(model, exit, party) or {}
+		-- everybody's client has the place before anybody is moved, so the party arrives together
+		local streamed, waiting = {}, #party
+		for _, player in ipairs(party) do
+			nextUse[player] = math.huge
+			frames[player] = frames[player] or upright(exit.CFrame)
+			task.spawn(function()
+				local ok, ready = pcall(streamReady, player, frames[player].Position, MODEL_NAME)
+				streamed[player] = ok and ready == true
+				waiting -= 1
+			end)
+		end
+		local deadline = os.clock() + 30
+		while waiting > 0 and os.clock() < deadline do task.wait(.1) end
+		local joined = 0
+		for _, player in ipairs(party) do
+			local ok, problem = pcall(function()
+				if not streamed[player] then error("streaming confirmation timed out") end
+				local character, root = playerReady(player)
+				local nowModel, nowExit = previewReady()
+				if not character or nowModel ~= model or nowExit ~= exit then error("the player or the level changed") end
+				local previous = character:GetPivot()
+				root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
+				character:PivotTo(frames[player])
+				local entered, reason = Runtime.Join(player, token)
+				if not entered then
+					character:PivotTo(previous)
+					error("join rejected: " .. tostring(reason))
+				end
+				joined += 1
+				transport:FireClient(player, "ArrivalFacing", frames[player], MODEL_NAME)
+				task.spawn(Runtime.Suit, player, frames[player])
+			end)
+			if not ok then warn("[Level6PreviewAccess] party launch, " .. player.Name .. ": " .. tostring(problem)) end
+			release(player)
+		end
+		if joined == 0 then letGo(token) end
+		return joined > 0, joined
+	end
+	launchParty.Parent = ServerStorage
+end
+
 local function hookDoor()
 	local door = lobbyPart("Level6SealedDoor")
 	if door and door:IsA("BasePart") then ensurePrompt(door, ENTER, "ENTER INDOOR PLAYGROUND", onEnter) end

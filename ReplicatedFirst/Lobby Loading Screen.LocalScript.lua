@@ -348,6 +348,12 @@ local function run()
 		-- A round server: the round's own loading cover owns this join.
 		return "round"
 	end
+	-- LIVE_LEVEL_SERVERS_20261008. A party's own server for Level 5 or 6 (`workspace.LiveLevelServer`, set by
+	-- ServerKind before GameManager answers the question above). The player was sent here for the level, not for
+	-- this lobby: nothing of the lobby is fetched, and the level's cover (the block at the end of this script)
+	-- takes this one's place without the lobby ever being shown.
+	local liveLevel = workspace:GetAttribute("LiveLevelServer")
+	if liveLevel == 5 or liveLevel == 6 then return "live" end
 	waitUntil(function()
 		return workspace:GetAttribute("LobbySpawnMigrationReady") == true
 			or workspace:GetAttribute("LobbySpawnMigrationError") ~= nil
@@ -470,20 +476,26 @@ print(string.format("[LobbyLoading] %s in %.1f s, %d assets, %d failed%s", outco
 
 finished = true
 recovery.Visible = false
-cover.Active = false
-player:SetAttribute("LobbyLoadingOpen", false)
-player:SetAttribute("LobbyLoadingDone", true)
-local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-TweenService:Create(cover, fade, { BackgroundTransparency = 1 }):Play()
-for _, child in ipairs(cover:GetDescendants()) do
-	if child:IsA("TextLabel") then
-		TweenService:Create(child, fade, { TextTransparency = 1 }):Play()
-	elseif child:IsA("Frame") then
-		TweenService:Create(child, fade, { BackgroundTransparency = 1 }):Play()
+if outcome == "live" then
+	-- LIVE_LEVEL_SERVERS_20261008: this cover stays, and the lobby stays "loading" for everything that waits on
+	-- it (the welcome card, the BADGES button), until the level's cover is up underneath. See `coverArrival`.
+	status.Text, detail.Text = "JOINING YOUR PARTY", ""
+else
+	cover.Active = false
+	player:SetAttribute("LobbyLoadingOpen", false)
+	player:SetAttribute("LobbyLoadingDone", true)
+	local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+	TweenService:Create(cover, fade, { BackgroundTransparency = 1 }):Play()
+	for _, child in ipairs(cover:GetDescendants()) do
+		if child:IsA("TextLabel") then
+			TweenService:Create(child, fade, { TextTransparency = 1 }):Play()
+		elseif child:IsA("Frame") then
+			TweenService:Create(child, fade, { BackgroundTransparency = 1 }):Play()
+		end
 	end
+	task.wait(0.65)
+	gui:Destroy()
 end
-task.wait(0.65)
-gui:Destroy()
 
 ---------------------------------------------------------------------------
 -- LEVEL_LOADING_20261004 (owner: "make sure a similar loading screen happens for every level, timed with the
@@ -705,8 +717,8 @@ do
 	end
 
 	-- Level 5 or 6: the level is a place on this server; the body is moved there.
-	local function coverLive(level)
-		local cover = raise(level)
+	local function coverLive(level, standing)
+		local cover = standing or raise(level)
 		up = cover
 		local function still() return player:GetAttribute("Level6PlaygroundPreview") == true end
 		local function root()
@@ -755,7 +767,48 @@ do
 		up = nil
 	end
 
+	-- LIVE_LEVEL_SERVERS_20261008. A party's own server for Level 5 or 6: the join is covered in the LEVEL's
+	-- colours from the first frame this block runs, the server is told this client is here, and the cover
+	-- holds until the level has taken the player, then loads the level as for any other way in. The server
+	-- says when there is nothing to wait for (player attribute `LiveLevelPending` false); 90 s is the last resort.
+	local function coverArrival(level)
+		local cover = raise(level)
+		up = cover
+		if gui.Parent then gui:Destroy() end             -- the lobby's cover, which stood over this one until now
+		local function inLevel() return player:GetAttribute("Level6PlaygroundPreview") == true end
+		cover.stage("JOINING YOUR PARTY", 0.03, "This server is for your party alone.")
+		local remote = game:GetService("ReplicatedStorage"):WaitForChild("LiveLevelArrival", 20)
+		local began = os.clock()
+		while os.clock() - began < 20 do                 -- the server needs a body standing here to move
+			local character = player.Character
+			if character and character:IsDescendantOf(workspace) and character:FindFirstChild("HumanoidRootPart") then break end
+			task.wait(0.1)
+		end
+		if remote then remote:FireServer("ready") end
+		cover.stage("WAITING FOR YOUR PARTY", 0.06, "The level opens when everyone has arrived.")
+		began = os.clock()
+		while not inLevel() and player:GetAttribute("LiveLevelPending") ~= false and os.clock() - began < 90 do
+			task.wait(0.1)
+		end
+		player:SetAttribute("LobbyLoadingOpen", false)
+		player:SetAttribute("LobbyLoadingDone", true)
+		if inLevel() then
+			task.wait(0.15)                              -- Level 5 sets its own marker next to the shared one
+			coverLive(player:GetAttribute("Level5VoidRound") == true and 5 or 6, cover)
+		else
+			-- The level did not take them. This is a lobby like any other, with the level's pad in it.
+			cover.stage("OPENING THE LOBBY", 1, "The level could not be started. Use its pad in the lobby.")
+			task.wait(1.6)
+			cover.drop()
+			up = nil
+		end
+	end
+
 	if workspace:GetAttribute("ReservedRoundServer") == true then task.spawn(coverRound, true) end
+	do
+		local arriving = workspace:GetAttribute("LiveLevelServer")
+		if (arriving == 5 or arriving == 6) and gui.Parent then task.spawn(coverArrival, arriving) end
+	end
 	local wasLive = player:GetAttribute("Level6PlaygroundPreview") == true
 	local wasFive = player:GetAttribute("Level5VoidRound") == true
 	while true do

@@ -94,12 +94,15 @@ return {
 		StartingTokens = 25,
 	},
 
-	Detector = {Range=120, HighRange=50, Cooldown=20, ReadingSeconds=4},
+	-- DETECTOR_LIVE_20261008 (owner): on for 30 seconds, its band following the entity the whole time
+	-- (RefreshSeconds), and ready again Cooldown seconds after it switches off. The wording in
+	-- Passes.EntityDetector below and in ZyntraDetectorVisual states these numbers: change them together.
+	Detector = {Range=120, HighRange=50, Cooldown=10, ReadingSeconds=30, RefreshSeconds=.5},
 	Passes = {
   EntityDetector = {
    Id=1982715834, IconId=87202894425080, Name="Zyntra Entity Detector", Price=149,
-   Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run to scan for nearby threats. It reads LOW / MEDIUM / HIGH for 4 seconds and is ready again after 20 seconds. It never shows exact positions and cannot guarantee safety. Free simulated demo in the lobby shop.",
-   PreviewDescription="PERMANENT · Scan nearby threats: LOW / MEDIUM / HIGH for 4 seconds. Ready again after 20 seconds. No exact positions, no guaranteed safety.",
+   Description="Permanent detector with a large screen. Press Z / D-pad left or tap SCAN during a run to switch it on. It reads LOW / MEDIUM / HIGH live for 30 seconds and is ready again 10 seconds after it switches off. Press again to put it away or bring it back. It never shows exact positions and cannot guarantee safety. Free simulated demo in the lobby shop.",
+   PreviewDescription="PERMANENT · Large-screen threat reading: LOW / MEDIUM / HIGH, live for 30 seconds. Ready again 10 seconds later. No exact positions, no guaranteed safety.",
   },
 		Supporter = {
 			Id = 1941938256,
@@ -292,8 +295,8 @@ return {
 		FirstClearLevel2 = 349186155479685,
 		FirstClearLevel3 = 457908347698355,
 		FirstClearLevel4 = 1275875713593023,
-		-- Awarded the first time all three levels have been cleared at least
-		-- once, which is NOT the same as clearing Level 3.
+		-- Awarded the first time all four levels have been cleared at least
+		-- once (Level 4 joined the campaign on 2026-10-05), which is NOT the same as clearing Level 4.
 		CampaignComplete = 2318404539475574,
 		-- ACHIEVEMENTS_20261004: every key below is an in-game achievement from the moment it is listed here and in
 		-- `Achievements`. It becomes a Roblox badge as well once its badge exists on the Creator Dashboard and its
@@ -316,7 +319,7 @@ return {
 		{Key = "FirstClearLevel4", Name = "The Last Show", Text = "Escape Level 4, the cinema.", Icon = 111445449955014},
 		{Key = "FirstClearLevel5", Name = "Over the Void", Text = "Reach the lit doorway at the top of Level 5.", Icon = 97552408465726},
 		{Key = "FirstClearLevel6", Name = "Ready or Not", Text = "Get out of Level 6, the playground.", Icon = 76439445644101},
-		{Key = "CampaignComplete", Name = "Three Doors Down", Text = "Clear Levels 1, 2 and 3.", Icon = 102083552353825},
+		{Key = "CampaignComplete", Name = "Four Doors Down", Text = "Clear Levels 1, 2, 3 and 4.", Icon = 102083552353825},
 		{Key = "AllSix", Name = "Every Door", Text = "Clear all six levels.", Icon = 123021326870125},
 		{Key = "BetterTogether", Name = "Better Together", Text = "Clear a level with a Roblox friend.", Icon = 103724028910737},
 		{Key = "L5Mint", Name = "Thin Ice", Text = "Reach the Mint room in Level 5.", Icon = 120651511342859},
@@ -342,8 +345,8 @@ return {
 	Challenges = {
 		Levels = {1, 2, 3, 4},
 		-- Levels whose RECORDS card stays hidden until the player has progress there (a clear, a record or a
-		-- challenge): Level 4 is developer-only, so other players never see an unreachable card.
-		HiddenUntilPlayed = {4},
+		-- challenge). Empty since Level 4 went public on 2026-10-05: every level is reachable for everyone.
+		HiddenUntilPlayed = {},
 		-- PROVISIONAL goals in seconds. Tune them from the escaped times in
 		-- zq_round_outcome once a week of data exists (first read 29/9).
 		-- Level 4: power, three reels, three projectors and the finale (QA solo runs ~2.5-3 min with teleports).

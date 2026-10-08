@@ -9,10 +9,21 @@ Visual.Colors = {
 }
 Visual.Labels = {LOW="SAFE DISTANCE", MEDIUM="ENTITY NEARBY", HIGH="ENTITY VERY CLOSE"}
 Visual.Explanations = {
- LOW="Blue: safe distance at the time of the scan. Keep listening as you move.",
+ LOW="Blue: safe distance. The reading stays live for 30 seconds, so watch it as you move.",
  MEDIUM="Yellow: an entity is nearby. Slow down and listen before moving on.",
  HIGH="Red: warning! An entity is very close. React to its sound and behaviour.",
 }
+-- DETECTOR_BIG_SCREEN_20261008 (owner: "a much larger screen when used and demoed"). The generated face had a
+-- screen opening of 61% x 29% of the housing, so the readout was about 110 x 80 pixels at its best. The device
+-- now has a face of its own with a screen Width x Height of the housing, centred CentreY studs above the
+-- housing's middle; Preview projects the readout onto exactly that glass. `ScreenBottom` is where the screen's
+-- lower edge falls in a Preview frame (0 top, 1 bottom), for callers that place the device by its screen.
+Visual.Screen = {Width=.86, Height=.64, CentreY=.2}
+local HOUSING = Vector3.new(1.3,1.95,.36)
+local GLASS_Z = HOUSING.Z/2+.052                 -- how far the glass stands in front of the housing's middle
+local CAMERA = {FieldOfView=35, Height=.25, Distance=5}
+local function viewHeight() return 2*math.tan(math.rad(CAMERA.FieldOfView/2))*(CAMERA.Distance-GLASS_Z) end
+Visual.ScreenBottom = .5+(CAMERA.Height-(Visual.Screen.CentreY-HOUSING.Y*Visual.Screen.Height/2))/viewHeight()
 local WHITE = Color3.fromRGB(228, 239, 242)
 local DARK = Color3.fromRGB(9, 14, 19)
 local function create(class, parent, properties)
@@ -36,9 +47,28 @@ function Visual.Build(parent)
    Material=material or Enum.Material.Metal,Shape=shape or Enum.PartType.Block,
    Anchored=true,CanCollide=false,CanTouch=false,CanQuery=false,CastShadow=false})
  end
- local body=part("ArmouredHousing",Vector3.new(1.3,1.95,.36),CFrame.new(),metal)
+ local body=part("ArmouredHousing",HOUSING,CFrame.new(),metal)
  model.PrimaryPart=body
- create("Decal",body,{Name="GeneratedFace",Face=Enum.NormalId.Front,Texture=Visual.Texture})
+ -- The face: a plate over the whole front, the screen in its bezel, and a control deck under it. (The generated
+ -- face picture, Visual.Texture, had the small screen painted into it and is no longer applied.)
+ local screen=Visual.Screen
+ local sw,sh,sy=HOUSING.X*screen.Width,HOUSING.Y*screen.Height,screen.CentreY
+ local front=-HOUSING.Z/2
+ part("FrontPlate",Vector3.new(HOUSING.X-.04,HOUSING.Y-.04,.03),CFrame.new(0,0,front-.012),Color3.fromRGB(31,34,35))
+ part("ScreenBezel",Vector3.new(sw+.1,sh+.1,.04),CFrame.new(0,sy,front-.03),rubber,Enum.Material.SmoothPlastic)
+ local glass=part("ScreenGlass",Vector3.new(sw,sh,.012),CFrame.new(0,sy,-GLASS_Z+.006),Color3.fromRGB(5,9,12),Enum.Material.SmoothPlastic)
+ glass.Reflectance=.08
+ local deck=sy-sh/2-.05                            -- top of the strip under the bezel
+ local low=-HOUSING.Y/2+.06
+ local flat=CFrame.Angles(0,math.pi/2,0)           -- a cylinder lying with its round face to the front
+ for i=-1,1 do
+  part("DeckButton",Vector3.new(.05,.2,.2),CFrame.new(i*.34,deck-.13,front-.04)*flat,i==0 and brass or rubber,
+   i==0 and Enum.Material.Metal or Enum.Material.SmoothPlastic,Enum.PartType.Cylinder)
+ end
+ for i=1,4 do
+  part("SpeakerSlat",Vector3.new(.5,.018,.02),CFrame.new(0,low+.02+(i-1)*.032,front-.03),rubber,Enum.Material.SmoothPlastic)
+ end
+ part("StatusLamp",Vector3.new(.07,.07,.07),CFrame.new(HOUSING.X/2-.13,HOUSING.Y/2-.07,front-.03),Visual.Colors.LOW,Enum.Material.Neon,Enum.PartType.Ball)
  -- Raised rubber ribs and rounded antenna supply an actual silhouette/depth.
  part("RearCasing",Vector3.new(1.18,1.83,.11),CFrame.new(0,0,.215),rubber,Enum.Material.SmoothPlastic)
  for _,side in ipairs({-1,1}) do
@@ -68,37 +98,39 @@ function Visual.Preview(parent)
  local world=create("WorldModel",viewport)
  local model=Visual.Build(world)
  model:PivotTo(CFrame.Angles(0,math.pi,0))
- local camera=create("Camera",viewport,{FieldOfView=35,CFrame=CFrame.new(0,.25,5)})
+ local camera=create("Camera",viewport,{FieldOfView=CAMERA.FieldOfView,CFrame=CFrame.new(0,CAMERA.Height,CAMERA.Distance)})
  viewport.CurrentCamera=camera
  local display=create("Frame",frame,{Name="DetectorScreen",BackgroundColor3=DARK,BorderSizePixel=0,ZIndex=2})
- create("UICorner",display,{CornerRadius=UDim.new(.06,0)})
- local header=label(display,"Mode","SNAPSHOT",UDim2.fromScale(.06,.035),UDim2.fromScale(.88,.15),12)
+ create("UICorner",display,{CornerRadius=UDim.new(.04,0)})
+ local edge=create("UIStroke",display,{Color=Visual.Colors.LOW,Thickness=2,Transparency=.25})
+ local header=label(display,"Mode","LIVE READING",UDim2.fromScale(.06,.03),UDim2.fromScale(.88,.11),12)
  local bars={}
  for i,key in ipairs({"LOW","MEDIUM","HIGH"}) do
-  bars[key]=create("Frame",display,{Name=key.."Bar",Position=UDim2.fromScale(.08,.21+(i-1)*.115),
-   Size=UDim2.fromScale(.84,.08),BackgroundColor3=Visual.Colors[key],BackgroundTransparency=.84,BorderSizePixel=0,ZIndex=3})
+  bars[key]=create("Frame",display,{Name=key.."Bar",Position=UDim2.fromScale(.08,.17+(i-1)*.105),
+   Size=UDim2.fromScale(.84,.075),BackgroundColor3=Visual.Colors[key],BackgroundTransparency=.84,BorderSizePixel=0,ZIndex=3})
   create("UICorner",bars[key],{CornerRadius=UDim.new(.35,0)})
  end
- local value=label(display,"Meaning","READY",UDim2.fromScale(.04,.58),UDim2.fromScale(.92,.26),16)
- local footer=label(display,"Readout","4 SECOND SNAPSHOT",UDim2.fromScale(.04,.86),UDim2.fromScale(.92,.11),10)
+ local value=label(display,"Meaning","READY",UDim2.fromScale(.04,.5),UDim2.fromScale(.92,.32),16)
+ local footer=label(display,"Readout","30 SECOND READING",UDim2.fromScale(.04,.85),UDim2.fromScale(.92,.11),10)
  header.ZIndex=3 value.ZIndex=3 footer.ZIndex=3
+ local lamp=model:FindFirstChild("StatusLamp")
  local current="LOW"
  local compactScreen=false
  local function layout()
   local h=frame.AbsoluteSize.Y
-  local pixels=h/(2*math.tan(math.rad(35/2))*(5-.18))
-  -- Screen interior measured from the generated 1024 x 1536 face texture.
-  local w,sh=1.3*.608*pixels,1.95*.294*pixels
-  display.Position=UDim2.fromOffset(frame.AbsoluteSize.X/2-w/2,h/2-(.4368-.25)*pixels-sh/2)
+  local pixels=h/viewHeight()
+  -- The glass of the device's own face (Visual.Screen), a hair inside its bezel.
+  local w,sh=HOUSING.X*Visual.Screen.Width*pixels*.97,HOUSING.Y*Visual.Screen.Height*pixels*.97
+  display.Position=UDim2.fromOffset(frame.AbsoluteSize.X/2-w/2,h/2-(Visual.Screen.CentreY-CAMERA.Height)*pixels-sh/2)
   display.Size=UDim2.fromOffset(w,sh)
-  header.TextSize=math.clamp(math.floor(sh*.12),8,13)
-  value.TextSize=math.clamp(math.floor(sh*.15),10,18)
-  footer.TextSize=math.clamp(math.floor(sh*.09),7,11)
+  edge.Thickness=math.max(1,math.floor(sh*.012))
+  header.TextSize=math.clamp(math.floor(sh*.068),8,20)
+  footer.TextSize=math.clamp(math.floor(sh*.072),7,20)
   compactScreen=sh<62
   header.Visible=not compactScreen footer.Visible=not compactScreen
-  value.Position=UDim2.fromScale(.035,compactScreen and .55 or .58)
-  value.Size=UDim2.fromScale(.93,compactScreen and .44 or .26)
-  value.TextSize=compactScreen and math.max(8,math.floor(sh*.19)) or math.clamp(math.floor(sh*.15),10,18)
+  value.Position=UDim2.fromScale(.035,compactScreen and .52 or .5)
+  value.Size=UDim2.fromScale(.93,compactScreen and .46 or .32)
+  value.TextSize=compactScreen and math.max(8,math.floor(sh*.19)) or math.clamp(math.floor(sh*.125),10,36)
   value.Text=compactScreen and ({LOW="SAFE\nDISTANCE",MEDIUM="ENTITY\nNEARBY",HIGH="VERY\nCLOSE"})[current] or Visual.Labels[current]
  end
  local changed=frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(layout)
@@ -108,10 +140,12 @@ function Visual.Preview(parent)
   current=key
   frame:SetAttribute("Reading",key)
   for band,bar in pairs(bars) do bar.BackgroundTransparency=band==key and 0 or .87 end
-  header.Text=demo and "SIMULATED DEMO" or "LIVE SNAPSHOT"
+  header.Text=demo and "SIMULATED DEMO" or "LIVE READING"
+  edge.Color=Visual.Colors[key]
+  if lamp then lamp.Color=Visual.Colors[key] end
   value.Text=compactScreen and ({LOW="SAFE\nDISTANCE",MEDIUM="ENTITY\nNEARBY",HIGH="VERY\nCLOSE"})[key] or Visual.Labels[key]
   value.TextColor3=Visual.Colors[key]
-  footer.Text=demo and "NO REAL ENTITY" or string.format("%.1fs REMAINING",math.max(0,seconds or 0))
+  footer.Text=demo and "NO REAL ENTITY" or string.format("%ds REMAINING",math.ceil(math.max(0,seconds or 0)))
  end
  function api:Destroy() changed:Disconnect() frame:Destroy() end
  layout()
@@ -152,7 +186,7 @@ function Visual.Demo(playerGui,onClose)
   create("Frame",b,{Name="Colour",Position=UDim2.fromOffset(0,0),Size=UDim2.new(0,5,1,0),BackgroundColor3=Visual.Colors[key],BorderSizePixel=0})
   buttons[key]=b
  end
- local note=label(panel,"UseInstructions","IN A RUN: Z / D-pad left / SCAN  •  4-second reading  •  20-second cooldown\nA snapshot, not a guarantee of safety. Demo never uses a real scan or buys anything.",UDim2.new(0,16,1,-54),UDim2.new(1,-32,0,46),12)
+ local note=label(panel,"UseInstructions","IN A RUN: Z / D-pad left / SCAN  •  live for 30 seconds  •  ready again 10 seconds later\nA reading, not a guarantee of safety. Demo never uses a real scan or buys anything.",UDim2.new(0,16,1,-54),UDim2.new(1,-32,0,46),12)
  local bandIndex=1 local began=os.clock() local manual=false local destroyed=false local conns={}
  local function setBand(index)
   bandIndex=index local key=({"LOW","MEDIUM","HIGH"})[index]
@@ -167,8 +201,9 @@ function Visual.Demo(playerGui,onClose)
  end
  local function layout()
   local safe=UIDevice.Layout().Safe
-  local w=math.min(860,math.max(280,safe.Width-24))
-  local h=math.min(610,math.max(230,safe.Height-24))
+  -- DETECTOR_BIG_SCREEN_20261008: the panel may grow with the display, and the device with it.
+  local w=math.min(1040,math.max(280,safe.Width-24))
+  local h=math.min(780,math.max(230,safe.Height-24))
   panel.Size=UDim2.fromOffset(w,h)
   panel.Position=UIDevice.LocalPosition(gui,(safe.Left+safe.Right)/2,(safe.Top+safe.Bottom)/2)
   local portrait=w<500 and h>450
@@ -200,8 +235,8 @@ function Visual.Demo(playerGui,onClose)
   end
   note.Position=UDim2.new(0,16,1,portrait and -76 or -54)
   note.Size=UDim2.new(1,-32,0,portrait and 68 or 46)
-  note.Text=portrait and "Z / D-pad left / SCAN during a run\n4-second snapshot / 20-second cooldown\nSIMULATED DEMO / No purchase or live scan\nKeep listening: no guaranteed safety."
-   or "IN A RUN: Z / D-pad left / SCAN  •  4-second reading  •  20-second cooldown\nA snapshot, not a guarantee of safety. Demo never uses a real scan or buys anything."
+  note.Text=portrait and "Z / D-pad left / SCAN during a run\nLive for 30 seconds / ready again 10 seconds later\nSIMULATED DEMO / No purchase or live scan\nKeep listening: no guaranteed safety."
+   or "IN A RUN: Z / D-pad left / SCAN  •  live for 30 seconds  •  ready again 10 seconds later\nA reading, not a guarantee of safety. Demo never uses a real scan or buys anything."
   title.TextSize=w<550 and 14 or 19
   note.TextSize=h<420 and 10 or 12
  end

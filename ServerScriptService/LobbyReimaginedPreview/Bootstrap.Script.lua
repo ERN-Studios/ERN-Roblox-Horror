@@ -1,6 +1,7 @@
 -- GameManager builds and validates the public revised lobby before loading characters.
 -- This script only reports bounded readiness; it never races a second Build transaction.
-if game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0 then
+-- SERVER_KIND_20261008: a reserved server can be a party's own lobby (Levels 5 and 6); that one has a lobby.
+if require(script.Parent.Parent:WaitForChild("ServerKind")).IsRoundServer() then
  script:SetAttribute("PreviewReady", false)
  script:SetAttribute("BuildStatus", "Reserved round server")
  return
