@@ -1797,3 +1797,100 @@ weight and button size on phones, no noise meter.
   their own publish finished (the player's log has the join time, Studio's log the publish). The lobby is built
   once per server: a new server shows it.
 
+
+### Added 2026-10-08 (night) - A server per party for Levels 5 and 6 (developer parties first); CONTINUE 4 -> 5
+
+- **Owner**: "Whatever is the case for the other levels like level 1, 2 and 3" (a server per party), and on the vote:
+  "let them decide for themselves. No majority decide. People can leave if they want without stopping the
+  continue" (that is how the result window already works: nothing changed there).
+- **How it works** (`SERVER_KIND_20261008`, `LIVE_LEVEL_SERVERS_20261008`). Levels 5 and 6 still run on a lobby
+  server, one map and one game per server; a party now gets a LOBBY SERVER OF ITS OWN:
+  1. `ServerScriptService.ServerKind` (new ModuleScript) answers what a reserved server is: a GameManager round
+     (`IsRoundServer()`), or one party's own lobby for a level (`LiveLevel()` = 5 or 6). The lobby that reserves the
+     server registers its `PrivateServerId` in the MemoryStore hash map `LiveLevelServersV1` (15 minutes) BEFORE
+     anybody is sent; the new server reads its own id in the module body (it yields, on reserved servers only).
+     If MemoryStore does not answer at all, the first arrival's teleport data decides (`LiveLevel` in it).
+     **GameManager's `IS_RESERVED_ROUND_SERVER` is `ServerKind.IsRoundServer()` now**: on a party's own lobby it
+     is false, so the lobby is built and every script that reads `workspace.ReservedRoundServer` behaves as in
+     a lobby. `workspace.LiveLevelServer` (replicated) is 5, 6 or nil.
+  2. `launchStation` (GameManager): for a Level 5/6 pad it calls `ServerKind.Reserve(level, players, token)`;
+     with a code it shows the round loading cover and teleports the party with `{LiveLevel, LiveSession, Expected}`.
+     Without one (Studio, the gate, Roblox refusing, a server that already is a party's own) it enters on the spot
+     as before, where `PARTY_LOCK_20261008` still keeps parties apart.
+  3. `ServerScriptService."Live Level Server"` (new Script, ends at once on any other server): groups arrivals by
+     session, waits for each client's "ready" on `ReplicatedStorage.LiveLevelArrival` (35 s cap) and for the party
+     (12 s for a pad launch, the decision deadline + 8 s for a continuation), then invokes
+     `ServerStorage.Level5LaunchParty` / `Level6LaunchParty(players, token)` (new, in the two access scripts: the
+     pad's checks, streaming, `QueueBridge.PartyLandings` for the arrival slots, join, round body). Player
+     attribute `LiveLevelPending` is true until the launch has been tried. OUT: a player who has been in the
+     level and is back in lobby state gets a black cover and is teleported to the public lobby with
+     `{ReturnToLobby = true}`; players who come out in the same tick travel in one teleport; four tries.
+  4. `Lobby Loading Screen`: on such a server `run()` returns `"live"` (no lobby assets fetched), the lobby cover
+     stays until `coverArrival` has raised the LEVEL's cover under it, fires "ready", holds until the level's
+     marker (or `LiveLevelPending` false, or 90 s) and hands on to `coverLive(level, cover)`.
+  5. **CONTINUE from Level 4 into Level 5**: `runPostWinIntermission` reserves and registers the Level 5 server
+     BEFORE "win" is fired (no server, no button; at most 4 s), sets `nextLevel = Routing.MaxLevel + 1` and
+     `session.NextServerCode`; `teleportPlayersToNextLevel` adds the three live fields to the packet. The round
+     packet's own `Level` is clamped to 4 and ignored by the lobby there.
+- **THE GATE: `ServerKind.OwnServers = "developers"`.** Only a party whose EVERY member passes
+  `DevAccess.IsLevel6PreviewAllowed` (mikkelczar, LaverSneglen, ZenMeister02) gets its own server or the 4 -> 5
+  button; everybody else plays exactly as before this change. Reserved servers, MemoryStore and teleports do not
+  exist in Studio, so none of the cross-server path has run yet. **To do with the owner: queue for Level 6 and
+  Level 5 on the live game with one of those accounts (alone, then two of them together), clear Level 4 and press
+  CONTINUE; then set the one word to "everyone" and publish.** `"off"` switches the whole thing off.
+- **Tested in Studio**: a normal boot (public lobby, `ReservedRoundServer` false, both launch hooks present, the
+  level-server script standing down); `Level6LaunchParty` and `Level5LaunchParty` called directly (in the level
+  in 6 s, round body, leave works); a SIMULATED party server (`workspace.DevLiveLevelServer = 5 | 6`, honoured in
+  Studio only) for both levels: arrival, the level's cover from the first frame ("[LobbyLoading] live in 0.8 s",
+  "[LevelLoading] level 6 covered for 24.3 s"), launch, leave, the teleport home refused by Studio and the cover
+  taken down again. **Not tested**: everything that needs a real reserved server (the reservation and
+  registration, the arrival of several players, a latecomer, the trip home, the 4 -> 5 continue), two parties.
+- **Left on the raw `PrivateServerId` test** (they stand down on a party's own lobby too, which only matters to
+  somebody whose trip home failed four times): `Lobby Tunnel Reach`, `LunaTribute`, the Level 1 and 2 Blender
+  preview scripts, and ZyntraAnalytics' `RESERVED` (right as it is: such a join is the same session going on).
+- **`workspace.DevLiveLevelServer` must never be left set in the place**: every Studio play would be a simulated
+  party server. It was set when Studio's Team Create link dropped and was still 5 after the restart; cleared.
+- **Studio hung on 2026-10-08 at about 03:46**: an `execute_luau` that read `.Source` of every script under four
+  services timed out, the Team Create heartbeat failed, the owner's publish at 03:47 timed out after four minutes
+  ("Internal server error") and every later MCP call timed out. `tell application "RobloxStudio" to quit` answered
+  "User cancelled"; the process was killed and the place reopened with the `roblox-studio:` URL. Everything pushed
+  before the hang was in the Team Create copy. Use `script_grep` (MCP) to search Studio's scripts, not a loop
+  over `.Source` in one call.
+
+### Added 2026-10-08 (night) - Token-earner upgrade passes off sale; Entity Detector: large screen, 30 s live, 10 s cooldown
+
+- **Owner**: remove the three "upgrade" passes (2x to 3x, 3x to 5x, 2x to 5x) from the store, keep 2x, 3x and 5x.
+  Done on Roblox, no publish needed: `isForSale` false on passes 1994282418, 1995812369, 1994252411
+  (`tools/store/token_earner_passes.py read | off`; before and after in `artifacts/store-passes-20261008`).
+  Prices and regional pricing are untouched, so switching one on again restores it as it was. **Owners keep
+  their tier** (`TokenEarner.Tier` still counts an upgrade on top of its prerequisite), and both in-game shops
+  only ever offer a pass whose product info says `IsForSale`, so a 2x owner is now offered the direct 3x or 5x.
+- **Game-pass calls from the dashboard tab** (signed-in page, `dashboard.TAB = 'create.roblox.com/dashboard'`):
+  `GET apis.roblox.com/game-passes/v1/universes/<u>/game-passes/<id>/creator`, the list
+  `.../universes/<u>/game-passes/creator?pageSize=50`, and `PATCH .../universes/<u>/game-passes/<id>` with form
+  fields (`isForSale`, `description`, ...; only what is sent changes; answers 204). The public view is
+  `.../universes/<u>/game-passes?passView=Full&pageSize=100` (no sign-in). The older `/game-passes/<id>/details`
+  answers "Failed to fetch" from the page. Chrome's scripting bridge dropped out several times that night
+  ("Application isn't running", -600): read first, retry, never write on top of a failed call.
+- **Entity Detector** (`DETECTOR_LIVE_20261008`, `DETECTOR_BIG_SCREEN_20261008`; owner: "a much larger screen when
+  used and demoed and also last for 30 seconds and have a cooldown of 10 seconds and change all info"):
+  - `ZyntraConfig.Detector = {Cooldown = 10, ReadingSeconds = 30, RefreshSeconds = .5, ...}`. The server keeps
+    the band LIVE for the thirty seconds (a loop per scan republishes `ZyntraDetectorReading`), and the cooldown
+    counts from the moment it switches off: `ZyntraDetectorReadyAt` = scan + 40 s, or now + 10 s when it is cut
+    short (death, exit, round end). Still only a band; nothing else leaves the server.
+  - `ZyntraDetectorVisual`: the generated face picture (screen opening 61% x 29% of the housing) is no longer
+    applied. `Build` makes a face of parts with a screen of `Visual.Screen` (86% x 64%); `Preview` projects the
+    readout onto that glass (`viewHeight()`), with a rim and a status lamp in the band's colour.
+    `Visual.ScreenBottom` (.724) is where the screen ends in a preview frame. The demo panel may grow to
+    1040 x 780. Readout at Studio's 1250 x 595: 119 x 133 px in a run (was about 100 x 73), 151 x 168 in the demo.
+  - `ZyntraDetectorClient`: device height 70% of the safe height (240 to 600, never wider than half the
+    screen), held low so the screen ends above the status line and the grip runs off the bottom edge.
+  - `ProtectionHUD`: while it is on, the detector's control is enabled and reads HIDE / SHOW; pressing it toggles
+    the client-local `ZyntraDetectorStowed` (the device goes, the status line stays). My addition, not asked for:
+    thirty seconds of a large device in the middle of a first-person view needed a way to put it down.
+  - Wording: the two descriptions in `ZyntraConfig.Passes.EntityDetector`, the demo's texts in the visual
+    module, and the pass's description on Roblox (changed after the publish, see below).
+  - Tested in a Studio Level 1 round: on for 30 s, band LOW / MEDIUM / HIGH / LOW as the body was moved to and
+    from the entity, gone at 30 s, ready 10 s later, Z scans again, Z hides, Z shows; the demo from the lobby.
+    **Not tested**: touch (the SCAN control on a phone), a gamepad, Levels 2 to 4, UIRegression.
+- **MCP `user_keyboard_input`** presses real game keys in a play session (Client): the way to test a key binding.
