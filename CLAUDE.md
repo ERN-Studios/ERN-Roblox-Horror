@@ -2287,3 +2287,20 @@ weight and button size on phones, no noise meter.
   `git add -A` them away, and do not put them back, before the owner says which they meant.
 - `mdfind` plus `find ~` for `.rbxl/.rbxlx/.rbxm/.rbxmx` is the whole search; `stat -f %b` (blocks) tells a file
   that is really on disk from one iCloud has evicted (`du` and `ls` sizes do not agree for those).
+
+### Added 2026-10-08 (16:30) - Restarting servers, and how to know what is really published
+
+- **Owner**: "How do we shut down the server and on again so we can push an update?" The page is Creator Hub >
+  the experience > **Server management** (left menu, under Configure):
+  `create.roblox.com/dashboard/creations/experiences/10559217407/server-management`. Tabs `Server Browser` and
+  `Server Restart Status`; the button **Restart Servers** opens a dialog with "Restart only servers with outdated
+  versions", "Delay server restart" and "Set custom payload". The owner ran one at 16:31 (Completed, 100%, within
+  a minute). The three-dots menus on the experience's header and on its Creations tile do NOT hold it.
+- **What is published is `isPublished` on the place's saved versions, not Studio's toast or log**:
+  `GET https://develop.roblox.com/v1/assets/131311258779917/saved-versions?sortOrder=Desc&limit=25` through the
+  dashboard tab (`dashboard.call`). Every Team Create save is a row; the newest row with `isPublished: true` is
+  the live build. On 2026-10-08 Studio said "publish failed" at 15:16 ("server publish request timed out", as at
+  03:47) and Roblox had published it all the same: v2838, saved 14:59, after the landscape lock and the
+  supporter-board fix went in. I had told the owner those two were not live on the strength of the log alone.
+- **Rows v2839 to v2841 (16:00, 16:09, 16:25) were saved while Studio on this Mac was closed**: somebody else was
+  editing the place. They were not published when this was written.
