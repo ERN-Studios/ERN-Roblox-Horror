@@ -429,9 +429,12 @@ local function computeStates()
   local reading=live and player:GetAttribute("ZyntraDetectorReading") or nil
   local owned=player:GetAttribute("ZyntraOwnsEntityDetector")==true
   local detail=reading or (remaining>0 and (math.ceil(remaining).."s") or "READY")
+  -- DETECTOR_BIG_SCREEN_20261008: while the detector is on (thirty seconds, a large device in the hand) the same
+  -- control puts it away and brings it back; `ZyntraDetectorStowed` is client-local and read by ZyntraDetectorClient.
   states[4]={Visible=available and owned and detectorRemote~=nil,
-   Enabled=available and owned and remaining<=0, Lit=live or remaining<=0,Live=live,
-   Title="Detector",Short="SCAN",Detail=detail,ShortDetail=detail}
+   Enabled=available and owned and (remaining<=0 or live), Lit=live or remaining<=0,Live=live,
+   Title="Detector",Short=live and (player:GetAttribute("ZyntraDetectorStowed")==true and "SHOW" or "HIDE") or "SCAN",
+   Detail=detail,ShortDetail=detail}
  end
 	return states
 end
@@ -652,7 +655,11 @@ local function press(index)
 		if index == 2 then
 			actionRemote:FireServer("UseSpeedPotion")
 		elseif index == 4 and detectorRemote then
-			detectorRemote:FireServer("scan")
+			if state.Live then
+				player:SetAttribute("ZyntraDetectorStowed", player:GetAttribute("ZyntraDetectorStowed") ~= true)
+			else
+				detectorRemote:FireServer("scan")
+			end
 		elseif index == 3 and markerRemote then
 			markerRemote:FireServer("place")
 		end
