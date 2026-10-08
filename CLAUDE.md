@@ -1736,3 +1736,64 @@ weight and button size on phones, no noise meter.
 - **A play test can be muted from the client**: set `Volume = 0` on every Sound and SoundGroup and hold it there
   with `GetPropertyChangedSignal("Volume")`, plus `DescendantAdded`. `UserGameSettings.MasterVolume` is out of an
   `execute_luau` call's reach (RobloxScript capability).
+
+### Added 2026-10-08 (before dawn) - Level 3: the way out is lit, exit signs, the slide's board, a pointer at the CD reader (in Studio, NOT published)
+
+- **Owner**: "when the CDs are put into the CD player the pathway doorframe should have a visible blue light so
+  people know they have to walk through there and down the corridor. Put very subtle lit exit signs down the
+  corridor", then: the signs "are to be made in Blender, the light effect is yours to work out"; at the Level 3
+  spawn "remove that NO EXIT sign at the end of the slide, just make sure one slides out of it if one tries to go
+  in"; and "a message and an arrow that points at the wayfinder with how to find the CDs, shown for a short while".
+  Markers `EXIT_WAY_20261008`, `SLIDE_MOUTH_20261008`, `CD_HINT_20261008`.
+- **Why the door was dark**: the blue frame WAS revealed at the unlock, but the unlock also starts the completion
+  blackout, and the Level 3 Lighting Controller paints every part in `blackoutParts` (the frame is one) dark and
+  switches every Light in the world off, on each client. The frame was also an eighth of a stud wide and its one
+  light was disabled by the server on purpose (`LEVEL3_COMPLETION_ESCAPE_GUIDE_DISABLED_20260824`: "the finale is
+  deliberately lightless"). The owner's request overrides that for the doorway and the corridor only.
+- **Now**: the frame is .34 wide and .16 proud with a strip of plain blue Neon set into its posts and head
+  (`WayGlow`, six parts) and three PointLights of its own (`WayLights`: hall side 7/34, mouth 6/30, 15 studs in
+  4/26; set by eye from 26 studs out in the blackout: 2.2 was invisible under exposure -0.85). The Objective
+  Controller brings both up in `unlockExit` and puts them out at session start and cleanup. **`Level3_ExitWay`
+  (attribute) is what the Lighting Controller never records, sweeps or fades, and what the Visual Adapter does not
+  hide.** The kit skin on the frame (`FluorescentDiffuser`) stays Neon blue once the exit is unlocked.
+- **The Visual Adapter hides EVERY part the World Builder made** (`legacy`, Transparency 1) except the arrival tube
+  and the waiting room, then dresses the level from the Blender kit. Anything the builder adds as a final look
+  needs `Level3_ExitWay` (or its own exemption), or it is built and never seen: the first exit signs were.
+- **Exit signs**: `tools/level3_exit_signs/build_sign.py` (Blender, headless: a box on two rods with ceiling roses,
+  a lens, the word EXIT and an arrow as flat geometry, vertex colours; saves the .blend, the numbers and a render
+  under `artifacts/level3-exit-signs-20261008`) and `install_sign.py` (uploads both meshes to the group, builds
+  `ServerStorage.Level3Assets.ExitSign`). `makeFinalHallExitSigns` hangs one every 56 studs from 24 studs in (ten in
+  the 560-stud hall), lettered toward the walkers. Light effect: the lens smoulders, the letters are a dim green
+  Neon, each lit sign has a faint green PointLight (1.1 over 16 studs, no shadows), signs 1, 4 and 8 are at half
+  strength and sign 5 is dead (`(n * 5 + 3) % 7`). With the finale's fog ending at 115 studs a runner has the next
+  one or two in sight. Nothing collides.
+- **`AssetService:CreateAssetAsync` worked that night** (the Beta Feature is on): mesh assets 111578488616320
+  (housing) and 139159946781572 (glow). One stray probe mesh exists in the group: 80879822235454 "BSQ upload probe".
+- **The slide**: the yellow NO EXIT / ONE-WAY ARRIVAL board over the mouth is gone. Nothing else was needed: the
+  slip loop already lays down anybody more than ten studs up the bore and carries them out (measured: a walker got
+  14.5 studs in and was slid back).
+- **The pointer** is in `Level 3 Reader Client`: a card `ReaderHint` beside the CD reader (under it where there is
+  no room beside it), "FIND THE 5 CDs / This reader points to the nearest CD. Turn until the mark is in the middle,
+  then walk." with arrows that drift toward the panel. Ten seconds, once per round, gone at the first CD, a toast,
+  a modal or the reader being put away; not under UIRegression's viewport fixture.
+- **Tested in Studio at full quality, as a player**: two rounds; five CDs collected and inserted through the real
+  prompts; the doorway from 26 studs in first person; through the door on foot and 103 studs down the corridor
+  (14.4 studs/s, nothing in the way); the signs in the dark; the card at round start; the slide; the test suite
+  loads and `ValidateConfiguration` passes; console clean. Pictures: `artifacts/level3-exit-way-20261008`.
+  **Not tested**: the run to the freight door with the Manager behind, more than one player, a phone (the card's
+  under-the-panel layout was not seen), the rest of the test suite (`ValidateRuntime` has new way-light checks).
+- **Driving a round**: a CD pickup from 3.5 studs on +X failed once behind furniture; try four sides
+  (`/tmp/l2sign/l3_server_rest.lua` did). In locked first person, write `camera.CFrame` for twenty frames to turn
+  the player's own view; one write does not stick.
+- **Another session had been in Studio**: `Routing.MaxLevel` is 4 since 2026-10-05 (a Level 3 clear offers CONTINUE
+  into the cinema) and the Level 4 bays are ordinary pads (`QueueBridge`: `previewOnly = level > 4`), so a Level 4
+  party gets a reserved server like Levels 1 to 3. Their GameManager, Routing and QueueBridge were pulled into the
+  repo with `tools/mac_pull_one.py` (named scripts only). Nothing of theirs was changed.
+- **Continue at the end of a level, as it stands**: 1 to 2, 2 to 3, 3 to 4 (GameManager, each player's choice shown
+  in the PartyChoices list) and 5 to 6 (in the same server). **4 to 5 does not exist**: Level 4 ends on a reserved
+  round server and Level 5 runs on a lobby server. It needs the same change as giving Levels 5 and 6 a server per
+  party; the owner was asked for a go and for what "vote" should mean (today each player chooses for themselves).
+- **The Level 2 sign "was not there"** for the owner because their client joined its server 13 seconds before
+  their own publish finished (the player's log has the join time, Studio's log the publish). The lobby is built
+  once per server: a new server shows it.
+

@@ -42,7 +42,7 @@ function Bridge.Build(model)
 			assert(title and title:IsA("TextLabel") and sub and sub:IsA("TextLabel"), "Missing queue text labels")
 			found[id] = {index = id, displayIndex = displayIndex, level = level,
 				zone = zone, title = title, sub = sub, color = zone.Color, busy = false,
-				revisionOwned = true, lobbyOwner = model, renderOwner = owner, previewOnly = level > 3, previewQueue = level > 3}
+				revisionOwned = true, lobbyOwner = model, renderOwner = owner, previewOnly = level > 4, previewQueue = level > 4}
 		end
 	end
 	for id = FIRST_ID, FIRST_ID + COUNT - 1 do
@@ -75,7 +75,8 @@ end
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local EXPECTED_CONTROLLERS = {
-    [4] = "Level4V4PreviewAccess", [5] = "Level5PreviewAccess", [6] = "Level6PreviewAccess",
+    -- Level 4 (the cinema) is a normal public round since 2026-10-05: its bays are ordinary pads, no preview
+    [5] = "Level5PreviewAccess", [6] = "Level6PreviewAccess",
 }
 local launchers = {}
 local contexts = setmetatable({}, {__mode = "k"})

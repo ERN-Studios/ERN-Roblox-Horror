@@ -35,18 +35,17 @@ local Routing = {}
 -- Bumped whenever the rules below change shape. GameManager publishes this on
 -- Workspace at load and answers a live probe with it, which is how the suite
 -- proves the production host really requires this module.
-Routing.Version = "2026-09-06.1"
+Routing.Version = "2026-10-05.1"
 Routing.LoadedAttribute = "RoundCompletionRoutingVersion"
 -- The host also answers a BindableFunction under this name in ServerStorage. An
 -- OnInvoke handler cannot be saved into a place file, so a reply can only come
 -- from a host that is running right now and holding this module.
 Routing.ProbeName = "RoundCompletionRoutingProbe"
 
--- The campaign ends at Level 3. There is no Level 4, so the last level offers
--- no Continue and no automatic route onward.
-Routing.MaxLevel = 3
--- Levels above MaxLevel exist for developers only (Level 4, the cinema round). They are
--- reachable through an explicit ceiling (GameManager devCeiling), never through NextLevel.
+-- The campaign ends at Level 4, the cinema round (public and part of the campaign since 2026-10-05, owner:
+-- a Level 3 clear offers Continue into it). The last level offers no Continue and no automatic route onward.
+Routing.MaxLevel = 4
+-- The explicit ceiling GameManager devCeiling hands out; no level above MaxLevel is routed today.
 Routing.DevMaxLevel = 4
 Routing.PostWinSeconds = 15
 
@@ -299,8 +298,8 @@ function Routing.ClampLevelTo(level: any, ceiling: any): number
 	return math.clamp(math.floor(requested), 1, limit)
 end
 
--- There is deliberately no dev-ceiling version of NextLevel: finishing Level 3
--- never continues past Level 3, for anyone (NO_LEVEL3_CONTINUE_20260923).
+-- There is deliberately no dev-ceiling version of NextLevel. NO_LEVEL3_CONTINUE_20260923 (Level 3 ended the
+-- campaign) was lifted on 2026-10-05, when the cinema became the public Level 4 and the campaign's last level.
 
 -- ---------------------------------------------------------------------------
 -- The session roster

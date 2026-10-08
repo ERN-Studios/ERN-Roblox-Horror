@@ -148,9 +148,10 @@ local LEVEL_GENERATORS = {
 }
 
 -- Rounds stop at Routing.MaxLevel for everyone. Level 4 "Den Sidste
--- Forestilling" (the cinema) is a round for developers only until
--- LEVEL4_PUBLIC is flipped: every member of the party must hold DevAccess.
--- Flipped on 2026-10-04 (owner: every level is open to the public). The map preview stays a developer tool.
+-- Forestilling" (the cinema) was a round for developers only while
+-- LEVEL4_PUBLIC was false (then every member of the party had to hold DevAccess).
+-- Flipped on 2026-10-04 (owner: every level is open to the public); since 2026-10-05 Level 4 is also the
+-- campaign's last level (Routing.MaxLevel 4: a Level 3 clear continues into it). The map preview stays a developer tool.
 local LEVEL4_PUBLIC = true
 
 local function groupIsDevelopers(group)
@@ -1235,6 +1236,8 @@ local function revisedQueueBridge()
  return module and module:IsA("ModuleScript") and require(module) or nil
 end
 
+-- Since 2026-10-05 (owner) the Level 4 bays are ordinary pads (QueueBridge previewOnly = level > 4) and the map
+-- preview is gone, so isLevel4Choice is never true and the code below is dormant.
 -- LEVEL4_QUEUE_CHOICE_20261002 (owner decision): the new lobby's Level 4 bays (revised-lobby ids 113-116, every
 -- level above 3 is previewOnly in QueueBridge) let the host choose the launch: "trial" = the real Level 4 round
 -- ("Den Sidste Forestilling", the normal round path: canAccessLevel / devCeiling, reserved server in production) or
@@ -1607,7 +1610,9 @@ queueConfig.OnServerEvent:Connect(function(player, stationIndex, requestedMax, r
     #modes > 0 and table.concat(modes, ",") or nil)
    return
   end
-  station.launchMode = chosen
+  -- only a host who was offered both launches is told which one runs: a public Level 4 party is just a round,
+  -- never a "TRIAL ROUND" on the station sign or in the countdown
+  station.launchMode = #modes > 1 and chosen or nil
   station.previewQueue = chosen ~= "trial"
  end
 
