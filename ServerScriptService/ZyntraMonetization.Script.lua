@@ -1513,6 +1513,18 @@ local function publishRowColumns(row, rank, name, robux)
 end
 
 local function publishSupportRows(entries)
+	-- SUPPORT_BOARD_NO_DEVS_20261008 (owner, with a picture of the board: "Why is MikkelCzar and LaverSneglen on
+	-- the supporter board?"). A developer is not a supporter of their own game: the three developer accounts are
+	-- never shown, whatever their profiles hold. (How they got there is at PASS_SPEND_20261008 below.)
+	do
+		local shown = {}
+		for _, entry in ipairs(entries) do
+			if #shown < SUPPORT_LEADERBOARD_SIZE and not DevAccess.IsLevel6PreviewAllowed(entry.UserId) then
+				shown[#shown + 1] = entry
+			end
+		end
+		entries = shown
+	end
 	for rank = 1, SUPPORT_LEADERBOARD_SIZE do
 		local entry = entries[rank]
 		if entry then
@@ -1554,13 +1566,22 @@ local function refreshSupportLeaderboard()
 		entries = studioSupportEntries()
 	else
 		local ok, result = pcall(function()
-			return supportStore:GetSortedAsync(false, SUPPORT_LEADERBOARD_SIZE):GetCurrentPage()
+			-- (three rows more than are shown: a developer's row is left out, and taken out of the store)
+			return supportStore:GetSortedAsync(false, SUPPORT_LEADERBOARD_SIZE + 3):GetCurrentPage()
 		end)
 		if ok then
 			for _, record in ipairs(result) do
 				local userId = tonumber(tostring(record.key):match("^u_(%d+)$"))
 				local value = normalizedSupportAmount(record.value)
-				if userId and value > 0 then
+				if userId and DevAccess.IsLevel6PreviewAllowed(userId) then
+					-- SUPPORT_BOARD_NO_DEVS_20261008: the store only ever raises a total, so a row that should
+					-- not be there has to be removed, not overwritten
+					local key = record.key
+					task.spawn(function()
+						local removed, err = pcall(function() supportStore:RemoveAsync(key) end)
+						if not removed then warn("[Zyntra] Support leaderboard: a developer's row was not removed:", err) end
+					end)
+				elseif userId and value > 0 then
 					entries[#entries + 1] = { UserId = userId, Value = value }
 				end
 			end
@@ -1581,6 +1602,8 @@ end
 local function syncSupportTotal(userId, total)
 	total = normalizedSupportAmount(total)
 	if RunService:IsStudio() or total <= 0 then return true end
+	-- SUPPORT_BOARD_NO_DEVS_20261008: a developer's total is never written to the board
+	if DevAccess.IsLevel6PreviewAllowed(userId) then return true end
 	local ok, err = pcall(function()
 		supportStore:UpdateAsync("u_" .. tostring(userId), function(current)
 			return math.max(normalizedSupportAmount(current), total)
@@ -2553,7 +2576,11 @@ local function refreshPasses(player)
 	-- refresh: at the profile load, which also picks up passes bought on the website or before this existed,
 	-- and right after a purchase in the game. Not in Studio (GrantAllPasses owns everything there) and not for
 	-- the one entitlement nobody paid for. No new top-level local: this script is at about 195 of 200.
-	if not RunService:IsStudio() and sessions[player] then
+	-- NOT FOR A DEVELOPER (SUPPORT_BOARD_NO_DEVS_20261008): Roblox answers "owns" for the account that CREATED a
+	-- pass, so on the day this went live MikkelCzar was credited the listed price of every pass there is, the
+	-- 20 000 R$ one included (21 942 R$ he never paid), and stood first on the board. Owning is only buying for
+	-- an account that cannot own a pass any other way.
+	if not RunService:IsStudio() and sessions[player] and not DevAccess.IsLevel6PreviewAllowed(player) then
 		local owned = {}
 		local function own(key, pass)
 			local id = math.floor(tonumber(pass and pass.Id) or 0)

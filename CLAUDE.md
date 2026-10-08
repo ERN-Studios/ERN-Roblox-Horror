@@ -2231,3 +2231,24 @@ weight and button size on phones, no noise meter.
   `PeakConcurrentPlayers`; `Visits` cannot be broken down by `AcquisitionSource`. The dashboard's scripts name
   about 200 more (funnels, share links, thumbnails); `Revenue` did not answer in 90 s.
 
+### Added 2026-10-08 (afternoon) - Developers are off the TOP SUPPORTERS board (in Studio, NOT published)
+
+- **Owner, with a picture of the board**: "Why is MikkelCzar and LaverSneglen on the supporter board?" (MikkelCzar
+  first with 21 942 R$, LaverSneglen third with 149 R$).
+- **Cause: `PASS_SPEND_20261008` of the same morning.** It credits every pass an account OWNS at its listed price,
+  and Roblox answers "owns" for the account that created a pass. 21 942 is exactly the four passes of
+  `Config.Passes` (496), the six token earners (1 347), the 20 000 R$ support pass and one 99 R$ skin: MikkelCzar
+  paid none of it. LaverSneglen's 149 is one 149 R$ pass that account owns (which, and whether it was bought, was
+  not looked up). I had also written that the 20K pass "is not in the config": it is (`Donation20K`, a game pass).
+- **Fix (`SUPPORT_BOARD_NO_DEVS_20261008`, four places in ZyntraMonetization)**: the three developer accounts
+  (`DevAccess.IsLevel6PreviewAllowed`: mikkelczar, LaverSneglen, ZenMeister02) are never shown
+  (`publishSupportRows`), never written (`syncSupportTotal`), their rows are REMOVED from the ordered store when a
+  refresh meets them (it reads three rows more than it shows; the store only ever raises a total, so a wrong row
+  has to be removed), and `PASS_SPEND` no longer runs for them. Their own profiles still hold the credited
+  `PassRobux` and markers: not reset.
+- **Tested**: thirteen stand-in rows with the three developers among them gave the ten others in order; the
+  script boots, loads a profile and publishes the board in Studio, no errors. **Not tested**: the real store (Studio
+  does not touch it): the removal and the live board after the publish.
+- **Owning is not buying for a pass's creator.** Any future "count what they own" rule has to leave the developer
+  accounts out, or ask the purchase history instead of ownership.
+
