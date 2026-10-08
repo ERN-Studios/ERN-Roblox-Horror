@@ -20,6 +20,7 @@ function Runtime.Leave(player, died)
 	player:SetAttribute(IN_PREVIEW, nil)
 	if was then player:SetAttribute("InRound", false) end
 	Playground.RemovePlayer(player)
+	if Runtime.Emptied then Runtime.Emptied() end              -- PARTY_LOCK_20261008: the last one out frees the level
 	if was and player.Parent == Players then
 		-- the same word GameManager sends a player it stands back up in the lobby: RoundUI clears its round state on it
 		local remotes = ReplicatedStorage:FindFirstChild("Remotes")
@@ -34,10 +35,88 @@ function Runtime.Leave(player, died)
 		end)
 	end
 end
-function Runtime.Join(player)
+-- PARTY_LOCK_20261008 (owner, from the live game: "everyone ends up in the same Level 6: one queues with at most 2
+-- and another queues later with 3 and they all join the same one"). This level is ONE map with ONE session per
+-- server, and the game module puts every later arrival into the session that is already running. Until a party
+-- gets a server of its own, the level takes ONE PARTY AT A TIME: a queue launch, an E entry or a CONTINUE from
+-- Level 5 is refused while another party is inside or on its way in, and the refused players are told why.
+-- A party is whatever token its entry path hands over: the queue's context, Level 5's group, or a fresh table.
+-- `entered` tells a party that is inside (or was: the level is free the moment it is empty) from one that is still
+-- streaming in, whose hold has to outlast its streaming whoever else comes and goes meanwhile.
+local partyLock = {token = nil, holdUntil = 0, entered = false}
+local function inLevel6(player)
+	return player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true
+end
+local function occupants(except)
+	local count = 0
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= except and inLevel6(player) then count += 1 end
+	end
+	return count
+end
+local function claim(token)
+	if token == nil then return false end
+	if occupants() > 0 then
+		if partyLock.token ~= token then return false end         -- in use: only its own party may add to it
+	elseif partyLock.token ~= nil and partyLock.token ~= token and os.clock() < partyLock.holdUntil then
+		return false                                              -- another party is streaming in right now
+	end
+	if partyLock.token ~= token then partyLock.entered = false end
+	partyLock.token, partyLock.holdUntil = token, os.clock() + 90
+	return true
+end
+-- letGo(token): that party did not get in and gives the level back. letGo(nil): somebody left; the level is free
+-- if that emptied it (a party still on its way in keeps its hold).
+local function letGo(token, except)
+	if occupants(except) > 0 then return end
+	if (token ~= nil and partyLock.token == token) or (token == nil and partyLock.entered) then
+		partyLock.token, partyLock.holdUntil, partyLock.entered = nil, 0, false
+	end
+end
+local function tellBusy(player)
+	if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players then return end
+	local playerGui = player:FindFirstChildOfClass("PlayerGui")
+	if not playerGui then return end
+	local old = playerGui:FindFirstChild("LiveLevelBusyNotice")
+	if old then old:Destroy() end
+	local gui = Instance.new("ScreenGui")
+	gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "LiveLevelBusyNotice", false, 60
+	local card = Instance.new("Frame")
+	card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.16), UDim2.new(0.9, 0, 0, 104)
+	card.BackgroundColor3, card.BackgroundTransparency, card.BorderSizePixel = Color3.fromRGB(17, 19, 22), 0.08, 0
+	local limit = Instance.new("UISizeConstraint"); limit.MaxSize = Vector2.new(560, 104); limit.Parent = card
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 10); corner.Parent = card
+	local edge = Instance.new("UIStroke"); edge.Color, edge.Thickness = Color3.fromRGB(255, 191, 41), 2; edge.Parent = card
+	local title = Instance.new("TextLabel")
+	title.BackgroundTransparency, title.Position, title.Size = 1, UDim2.new(0, 14, 0, 10), UDim2.new(1, -28, 0, 30)
+	title.Font, title.TextSize, title.TextColor3 = Enum.Font.GothamBold, 22, Color3.fromRGB(255, 191, 41)
+	title.Text = "LEVEL 6 IS IN USE"
+	title.Parent = card
+	local body = title:Clone()
+	body.Position, body.Size = UDim2.new(0, 14, 0, 42), UDim2.new(1, -28, 0, 52)
+	body.Font, body.TextSize, body.TextWrapped, body.TextColor3 = Enum.Font.GothamMedium, 16, true, Color3.fromRGB(242, 242, 236)
+	body.Text = "Another team is playing in there right now. Try again in a few minutes, or play another level."
+	body.Parent = card
+	card.Parent = gui
+	gui.Parent = playerGui
+	task.delay(7, function() gui:Destroy() end)
+end
+Players.PlayerRemoving:Connect(function(player) letGo(nil, player) end)
+function Runtime.Emptied() letGo(nil) end
+workspace:SetAttribute("Level6PartyLock", "PARTY_LOCK_20261008")
+-- replicated, for anything that wants to show it (a sign at the gate, a test): somebody is in the level or on the way in
+task.spawn(function()
+	while true do
+		workspace:SetAttribute("Level6InUse", occupants() > 0 or (partyLock.token ~= nil and os.clock() < partyLock.holdUntil))
+		task.wait(1)
+	end
+end)
+
+function Runtime.Join(player, party)
+	if not claim(party) then return false, "LEVEL_IN_USE" end
 	player:SetAttribute(IN_PREVIEW, true)
 	local ok, reason = Playground.AddPlayer(player)
-	if not ok then player:SetAttribute(IN_PREVIEW, nil) end
+	if ok then partyLock.entered = true else player:SetAttribute(IN_PREVIEW, nil); letGo(party) end
 	return ok, reason
 end
 local ENTER, RETURN = "Level6DeveloperPreviewPrompt", "Level6DeveloperPreviewReturnPrompt"
@@ -243,6 +322,12 @@ local function onEnter(player, prompt)
 	local door = prompt.Parent
 	if not character or not door or not door:IsA("BasePart")
   or not (door == lobbyPart("Level6SealedDoor") or isR3Entry(door)) or (root.Position - door.Position).Magnitude > 14 then return end
+	local party = {}                                            -- PARTY_LOCK_20261008: an E entry is a party of one
+	if not claim(party) then
+		tellBusy(player)
+		nextUse[player] = os.clock() + 2
+		return
+	end
 	nextUse[player] = math.huge
  local r3Owner = beginR3Entry(door)
 	local previous = character:GetPivot()
@@ -259,7 +344,7 @@ local function onEnter(player, prompt)
 			or not floorAt(model, exit.Position) then return end
 		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
 		character:PivotTo(upright(exit.CFrame))
-		local joined, reason = Runtime.Join(player)
+		local joined, reason = Runtime.Join(player, party)
 		if not joined then
 			character:PivotTo(previous)
 			error("Preview join rejected: " .. tostring(reason))
@@ -270,6 +355,7 @@ local function onEnter(player, prompt)
 	end)
  finishR3Entry(r3Owner)
 	release(player)
+	if player:GetAttribute(IN_PREVIEW) ~= true then letGo(party) end
 	if not ok then warn("[Level6PreviewAccess] " .. tostring(err)) end
 end
 onReturn = function(player, prompt)
@@ -334,18 +420,26 @@ do
    launch = function(context)
     local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)
     if not locked then return false, reason end
+    -- PARTY_LOCK_20261008: one party in the level at a time; the queue's context is this party
+    if not claim(context) then
+     for player, lock in pairs(queueLocks) do
+      if lock == context then tellBusy(player) end
+     end
+     return false, "LEVEL_IN_USE"
+    end
     local model, exit = Runtime.EnsureWorld()
     hookExit()
-    if not model or not exit or not floorAt(model, exit.Position) then return false, "PREVIEW_NOT_READY" end
+    if not model or not exit or not floorAt(model, exit.Position) then letGo(context); return false, "PREVIEW_NOT_READY" end
     local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, position)
      return streamReady(player, position, MODEL_NAME)
     end)
-    if not entries then return false, problem end
+    if not entries then letGo(context); return false, problem end
     local committed, commitProblem = bridge.CommitPreviewGroup(context, entries, function(entry)
-     local joined, reason = Runtime.Join(entry.player)
+     local joined, reason = Runtime.Join(entry.player, context)
      if joined then transport:FireClient(entry.player, "ArrivalFacing", entry.frame, MODEL_NAME) end
      return joined, reason
     end, function(entry) Runtime.Leave(entry.player) end)
+    if not committed then letGo(context) end
     -- The queue validates each member's lobby character through the commit, so the round body goes on after it.
     if committed then
      for _, entry in ipairs(entries) do task.spawn(Runtime.Suit, entry.player, entry.frame) end
@@ -366,14 +460,23 @@ do
 	if old then old:Destroy() end
 	local enter = Instance.new("BindableFunction")
 	enter.Name = "Level6EnterFromLevel"
-	enter.OnInvoke = function(player, step)
+	enter.OnInvoke = function(player, step, party)
 		if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players
 			or not DevAccess.IsLevel6Allowed(player) or workspace:GetAttribute("ReservedRoundServer") == true then return false end
 		local model, exit = Runtime.EnsureWorld()
 		hookExit()
 		if not model or not exit or not floorAt(model, exit.Position) then return false end
+		-- PARTY_LOCK_20261008: the party that finished Level 5 together comes in together, and only if nobody else is
+		-- in here; a caller without a party is a party of one.
+		party = if party ~= nil then party else player
+		if not claim(party) then
+			tellBusy(player)
+			return false
+		end
 		if step == "prepare" then
-			return streamReady(player, exit.Position, MODEL_NAME) == true
+			local streamed = streamReady(player, exit.Position, MODEL_NAME) == true
+			if not streamed then letGo(party, player) end
+			return streamed
 		elseif step == "enter" then
 			-- This level's round body first, at the arrival, and only THEN the round takes the player. The other
 			-- way round (the queue's order, which starts from a lobby avatar) the round's life watch sees the
@@ -386,12 +489,14 @@ do
 			if player.Parent ~= Players or not root or not humanoid or humanoid.Health <= 0
 				or (root.Position - frame.Position).Magnitude > 60 then
 				warn("[Level6PreviewAccess] continue: the round body did not arrive")
+				letGo(party, player)
 				return false
 			end
-			local joined, reason = Runtime.Join(player)
+			local joined, reason = Runtime.Join(player, party)
 			if not joined then
 				player:SetAttribute(IN_PREVIEW, true)      -- Join took the shared marker off: the level they came from still needs it
 				warn("[Level6PreviewAccess] continue rejected: " .. tostring(reason))
+				letGo(party, player)
 				return false
 			end
 			return true

@@ -1672,3 +1672,40 @@ weight and button size on phones, no noise meter.
 - **The owner's "slip" is Danish** ("drop it"), not the English word: "Slip STAY QUIET" was first read as "BE QUIET
   was a slip". Nothing was changed on that reading; when a short message can be read both ways, ask before a
   public change.
+
+### Added 2026-10-08 (small hours) - Levels 5 and 6 take ONE PARTY AT A TIME (in Studio; live once the owner publishes)
+
+- **Owner, from the live game, furious**: "everyone ends up in the same server in Level 6. If one queues with at
+  most 2 and another queues later with 3, they all join the same one. Fix it NOW and make sure it does not happen
+  with Level 5 either." True, and it was so from the day these became live levels (2026-10-03/04): each is ONE map
+  on the lobby server, `Level 6 Playground Game.AddPlayer` puts every later arrival into the session already
+  running, and Level 5's two parties shared doors and plates. Every note above lists "more than one player" as
+  not tested; this is what that hid.
+- **The fix (`PARTY_LOCK_20261008` in `Level6PreviewAccess` and `Level5PreviewAccess`)**: a lock per level. A party
+  is a token: the queue's context (Level 6), the launch's `group` table (Level 5), a fresh table for an E entry,
+  Level 5's group for CONTINUE (`Level6EnterFromLevel:Invoke(player, step, group)`). `claim` is taken before
+  anything is streamed and again inside `Runtime.Join` / `Void.Join`, so no entry path gets round it. Refused
+  players get a card on screen ("LEVEL n IS IN USE ...", a server-made ScreenGui `LiveLevelBusyNotice`, 7 s) and
+  the pad's own "PREVIEW ENTRY FAILED" from GameManager. The level is free the moment its last player is out;
+  a party still streaming in keeps its hold for 90 s (`entered` tells the two apart). Level 6's occupants are the
+  players with `Level6PlaygroundPreview` and without `Level5VoidRound`; Level 5's are its `members`.
+- **Replicated flags** `workspace.Level5InUse` / `Level6InUse` (1 s), and `Level5PartyLock` / `Level6PartyLock`
+  carry the marker. Nothing shows them at the gates yet.
+- **Level 5 sends a living member home after 5 minutes without moving** (four studs): with one party at a time an
+  idle body would close the level to the whole server. Not while an ending is up. Level 6 has no such rule (the
+  Counter finds a body that stands still; a dead player watching is supposed to stand still).
+- **THIS IS A STOPGAP, and the owner was told so.** What they expect is what Levels 1 to 4 do: a reserved server per
+  party. That means carrying a "live level" launch through GameManager's reserved-server path (no lobby is built
+  there, a dozen scripts stand down on `ReservedRoundServer`, the way home is a teleport) and it cannot be tested
+  in Studio (no TeleportService). Not started; it needs the owner's go and a live test.
+- **Tested in Studio, solo**: Level 6 through the pad; a second party (another token through
+  `Level6EnterFromLevel`) refused on "prepare" and "enter" with the card shown; free 0.9 s after leaving; a new
+  launch in; Level 5 through the pad, flag up, free 0.8 s after leaving; the Level 5 lock's lines run against a
+  stand-in member list (nine cases). **Not tested**: two real parties on two pads (needs two clients, which needs
+  clicks in Studio's toolbar), the CONTINUE from Level 5 into a busy Level 6, the idle rule's five minutes.
+- `execute_luau` has no `loadstring`. Studio updated itself on launch that night (0.741 to 0.742) and reopened
+  the place by itself; `open -g` did not take the front from the Roblox player.
+- **Left half done when this came in: the Level 2 maintenance sign** (block written in `/tmp/l2sign/block.lua`,
+  not in the Builder, never seen in play). Player locales for it, last 28 days: en 55%, es 9.7, ru 9.2, pt 3.6,
+  de 3.4, id 2.9, fr 2.5 (`analytics-query-gateway`, dimension `Locale`, through the dashboard tab).
+

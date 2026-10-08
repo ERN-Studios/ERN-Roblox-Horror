@@ -130,6 +130,12 @@ local function onEnter(player, prompt)
 		warn("[Level5PreviewAccess] ready preview, return prompt or landing floor is missing")
 		return
 	end
+	local group = {}                                            -- PARTY_LOCK_20261008: an E entry is a party of one
+	if not (Void.Claim and Void.Claim(group)) then
+		if Void.TellBusy then Void.TellBusy(player) end
+		nextUse[player] = os.clock() + COOLDOWN
+		return
+	end
 	nextUse[player] = math.huge
  local r3Owner = beginR3Entry(door)
 	local ok, err = pcall(function()
@@ -143,11 +149,11 @@ local function onEnter(player, prompt)
 			or not hasFloor(model, exit) then return end
 		local frame = upright(exit.Position, exit.CFrame.LookVector)
 		character:PivotTo(frame)
-		Void.Join(player, {})
-		task.spawn(Void.Suit, player, frame)
+		if Void.Join(player, group) then task.spawn(Void.Suit, player, frame) end
 	end)
  finishR3Entry(r3Owner)
 	release(player)
+	if player:GetAttribute(IN_LEVEL) ~= true then Void.LetGo(group) end
 	if not ok then warn("[Level5PreviewAccess] entry failed:", err) end
 end
 
@@ -193,16 +199,24 @@ do
    launch = function(context)
     local locked, reason = bridge.LockPreviewController(context, nextUse, queueLocks, release)
     if not locked then return false, reason end
+    -- PARTY_LOCK_20261008: one party in the level at a time
+    local group = {}
+    if not Void.Claim(group) then
+     for player, lock in pairs(queueLocks) do
+      if lock == context then Void.TellBusy(player) end
+     end
+     return false, "LEVEL_IN_USE"
+    end
     local model, exit = readyPreview()
     local returnPrompt = exit and exit:FindFirstChild(RETURN_PROMPT)
     if not model or not returnPrompt or not returnPrompt:IsA("ProximityPrompt")
-     or not returnPrompt.Enabled or not hasFloor(model, exit) then return false, "PREVIEW_NOT_READY" end
+     or not returnPrompt.Enabled or not hasFloor(model, exit) then Void.LetGo(group); return false, "PREVIEW_NOT_READY" end
     local entries, problem = bridge.PreparePreviewGroup(context, model, exit, stream)
-    if not entries then return false, problem end
-    local group = {}
+    if not entries then Void.LetGo(group); return false, problem end
     local committed, commitProblem = bridge.CommitPreviewGroup(context, entries, function(entry)
      return Void.Join(entry.player, group)
     end, function(entry) Void.Leave(entry.player, true) end)
+    if not committed then Void.LetGo(group) end
     -- The queue validates each member's lobby character through the commit, so the round body goes on after it.
     if committed then
      for _, entry in ipairs(entries) do task.spawn(Void.Suit, entry.player, entry.frame) end
@@ -391,9 +405,77 @@ do
 		if clip then clip:Play() end
 	end
 
+	-- PARTY_LOCK_20261008 (owner, from the live game, about Level 6: "everyone ends up in the same one ... make sure
+	-- it does not happen with Level 5 either"). This level is ONE map per server, and two parties in it shared its
+	-- doors and plates. Until a party gets a server of its own, the level takes ONE PARTY AT A TIME: a queue launch
+	-- or an E entry is refused while another party is inside or on its way in, and the refused players are told why.
+	-- A party is the `group` table of one launch. `entered` tells a party that is inside from one still streaming in,
+	-- whose hold has to outlast its streaming.
+	local hold = {token = nil, untilClock = 0, entered = false}
+	function Void.Claim(group)
+		if group == nil then return false end
+		if next(members) ~= nil then
+			if hold.token ~= group then return false end
+		elseif hold.token ~= nil and hold.token ~= group and os.clock() < hold.untilClock then
+			return false
+		end
+		if hold.token ~= group then hold.entered = false end
+		hold.token, hold.untilClock = group, os.clock() + 90
+		return true
+	end
+	-- LetGo(group): that party did not get in. LetGo(nil): somebody left; free if that emptied the level.
+	function Void.LetGo(group)
+		if next(members) ~= nil then return end
+		if (group ~= nil and hold.token == group) or (group == nil and hold.entered) then
+			hold.token, hold.untilClock, hold.entered = nil, 0, false
+		end
+	end
+	function Void.Notice(player, heading, text)
+		if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players then return end
+		local playerGui = player:FindFirstChildOfClass("PlayerGui")
+		if not playerGui then return end
+		local old = playerGui:FindFirstChild("LiveLevelBusyNotice")
+		if old then old:Destroy() end
+		local gui = Instance.new("ScreenGui")
+		gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "LiveLevelBusyNotice", false, 60
+		local card = Instance.new("Frame")
+		card.AnchorPoint, card.Position, card.Size = Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.16), UDim2.new(0.9, 0, 0, 104)
+		card.BackgroundColor3, card.BackgroundTransparency, card.BorderSizePixel = Color3.fromRGB(17, 19, 22), 0.08, 0
+		local limit = Instance.new("UISizeConstraint"); limit.MaxSize = Vector2.new(560, 104); limit.Parent = card
+		local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 10); corner.Parent = card
+		local edge = Instance.new("UIStroke"); edge.Color, edge.Thickness = Color3.fromRGB(255, 191, 41), 2; edge.Parent = card
+		local title = Instance.new("TextLabel")
+		title.BackgroundTransparency, title.Position, title.Size = 1, UDim2.new(0, 14, 0, 10), UDim2.new(1, -28, 0, 30)
+		title.Font, title.TextSize, title.TextColor3 = Enum.Font.GothamBold, 22, Color3.fromRGB(255, 191, 41)
+		title.Text = heading
+		title.Parent = card
+		local body = title:Clone()
+		body.Position, body.Size = UDim2.new(0, 14, 0, 42), UDim2.new(1, -28, 0, 52)
+		body.Font, body.TextSize, body.TextWrapped, body.TextColor3 = Enum.Font.GothamMedium, 16, true, Color3.fromRGB(242, 242, 236)
+		body.Text = text
+		body.Parent = card
+		card.Parent = gui
+		gui.Parent = playerGui
+		task.delay(7, function() gui:Destroy() end)
+	end
+	function Void.TellBusy(player)
+		Void.Notice(player, "LEVEL 5 IS IN USE", "Another team is playing in there right now. Try again in a few minutes, or play another level.")
+	end
+	workspace:SetAttribute("Level5PartyLock", "PARTY_LOCK_20261008")
+	-- replicated, for anything that wants to show it (a sign at the gate, a test): somebody is in the level or on the way in
+	task.spawn(function()
+		while true do
+			workspace:SetAttribute("Level5InUse", next(members) ~= nil or (hold.token ~= nil and os.clock() < hold.untilClock))
+			task.wait(1)
+		end
+	end)
+
 	function Void.Join(player, group)
 		if player.Parent ~= Players or members[player] then return false, "ALREADY_IN_LEVEL" end
-		members[player] = {cp = 1, group = group or {}, began = os.clock()}
+		group = group or {}
+		if not Void.Claim(group) then return false, "LEVEL_IN_USE" end
+		hold.entered = true
+		members[player] = {cp = 1, group = group, began = os.clock()}
 		members[player].group.total = (members[player].group.total or 0) + 1
 		player:SetAttribute(IN_LEVEL, true)
 		player:SetAttribute(LIVE, true)            -- before InRound: the round features read both
@@ -448,6 +530,7 @@ do
 	function Void.Leave(player, quiet)
 		local record = members[player]
 		members[player], leaving[player] = nil, nil
+		Void.LetGo(nil)                                 -- PARTY_LOCK_20261008: the last one out frees the level
 		local live = player:GetAttribute(LIVE) == true
 		player:SetAttribute(IN_LEVEL, nil)
 		if not record then return end
@@ -484,14 +567,14 @@ do
 		if not record or record.continuing then return end
 		record.continuing = true
 		local enter = ServerStorage:FindFirstChild("Level6EnterFromLevel")
-		local ok, ready = pcall(function() return enter ~= nil and enter:Invoke(player, "prepare") end)
+		local ok, ready = pcall(function() return enter ~= nil and enter:Invoke(player, "prepare", record.group) end)
 		if ok and ready == true and members[player] == record and player.Parent == Players then
 			tell(player, "lobby")                      -- clears LEVEL CLEARED
 			-- This level's own marker goes first: its client stands down and the loading cover for Level 6 comes
 			-- up while the body is still here. The shared marker and InRound stay set throughout.
 			player:SetAttribute(IN_LEVEL, nil)
 			local entered
-			ok, entered = pcall(function() return enter:Invoke(player, "enter") end)
+			ok, entered = pcall(function() return enter:Invoke(player, "enter", record.group) end)
 			if ok and entered == true then
 				members[player], leaving[player] = nil, nil
 				return
@@ -507,7 +590,30 @@ do
 		end)
 	end
 
-	Players.PlayerRemoving:Connect(function(player) members[player] = nil end)
+	Players.PlayerRemoving:Connect(function(player) members[player] = nil; Void.LetGo(nil) end)
+	-- PARTY_LOCK_20261008: with one party at a time, somebody standing in here away from the keyboard would close the
+	-- level to the whole server until Roblox's own 20 minutes are up. A living member who has not moved four studs
+	-- in five minutes goes back to the lobby. Not while they wait out an ending (the cleared screen, a death in
+	-- the last corridor): those have their own clocks.
+	task.spawn(function()
+		local IDLE_SECONDS = 300
+		while true do
+			task.wait(5)
+			for player, record in pairs(members) do
+				local character = player.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				local root = humanoid and humanoid.RootPart
+				if not root or humanoid.Health <= 0 or record.choice or record.dead or record.continuing or leaving[player] then
+					record.idleAt, record.idleSince = nil, nil
+				elseif not record.idleAt or (root.Position - record.idleAt).Magnitude > 4 then
+					record.idleAt, record.idleSince = root.Position, os.clock()
+				elseif os.clock() - record.idleSince > IDLE_SECONDS then
+					Void.Notice(player, "BACK IN THE LOBBY", "You did not move for 5 minutes, so the level was opened for the next team.")
+					Void.Leave(player)
+				end
+			end
+		end
+	end)
 	-- Back to lobby from inside the level (the exit chip sends this on the round remote). Level6PreviewAccess
 	-- answers the same word for the shared marker; whichever runs first does the work, the other finds it done.
 	task.spawn(function()
