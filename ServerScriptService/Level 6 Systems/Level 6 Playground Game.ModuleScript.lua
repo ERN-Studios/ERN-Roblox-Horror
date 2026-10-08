@@ -1595,6 +1595,12 @@ function Session:finalePhase()
 					-- out of the session (it goes on for whoever is still inside) and onto the ending every level has
 					self.players[player] = nil
 					if lifeWatch[player] then lifeWatch[player]:Disconnect(); lifeWatch[player] = nil end
+					-- LEVEL_LEADERBOARDS_20261008: the time of the player who really reached the way out (the fallen get
+					-- the same ending further down, but no time)
+					do
+						local board = game:GetService("ServerStorage"):FindFirstChild("LevelTimeReported")
+						if board then board:Fire(player, 6, os.clock() - self.startedAt) end
+					end
 					sendWin(self, player)
 				end
 			end

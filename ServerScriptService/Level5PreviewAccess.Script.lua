@@ -1052,6 +1052,11 @@ do
 					if not record.fell then achieve(player, "L5NoFall") end
 					-- The same LEVEL CLEARED screen every other level ends on, with its two choices.
 					record.group.done = (record.group.done or 0) + 1
+					-- LEVEL_LEADERBOARDS_20261008: this player's own time, from entering the level to their own finish
+					do
+						local board = ServerStorage:FindFirstChild("LevelTimeReported")
+						if board and record.began then board:Fire(player, 5, os.clock() - record.began) end
+					end
 					sendWin(player, record)
 				end
 			end
