@@ -1,0 +1,11 @@
+{
+  "bytes": 47577,
+  "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+  "editorMatches": true,
+  "class": "ModuleScript",
+  "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+  "beforeSha256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+  "afterSha256": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
+  "capturedAtUtc": "2026-10-09T18:38:29.819562+00:00",
+  "published": false
+}

@@ -1545,7 +1545,7 @@ local function startPuzzle()
 	end
 
 	-- Fuse boxes on walls, spread apart. A relaxed second pass preserves the
-	-- exact one-box-per-player contract if the first spacing target is too strict.
+	-- exact ceil(n / 2) box count if the first spacing target is too strict.
 	local boxFrames = pickWallSpots(boxCount, 4 * CELLv, false, stations)
 	if #boxFrames < boxCount then
 		for _, fallbackCF in ipairs(pickWallSpots(boxCount - #boxFrames, 1.4 * CELLv, false, stations)) do

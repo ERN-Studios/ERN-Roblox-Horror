@@ -1,0 +1,11 @@
+{
+  "bytes": 105520,
+  "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+  "editorMatches": true,
+  "class": "Script",
+  "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+  "beforeSha256": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+  "afterSha256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+  "capturedAtUtc": "2026-10-09T18:38:38.168419+00:00",
+  "published": false
+}

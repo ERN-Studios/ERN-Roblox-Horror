@@ -1,0 +1,129 @@
+{
+  "finding": "LE-34",
+  "mode": "installed verification",
+  "status": "installed source compiler identity verified; native receipts/commits owned by root",
+  "productionMutations": 0,
+  "studioCalls": 0,
+  "runtimeFeatureRemovals": 0,
+  "files": [
+    {
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad"
+      },
+      "beforeFile": "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.candidate.luau",
+      "beforeSha256Raw": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "candidateSha256Raw": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
+      "beforeSha256Lf": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "candidateSha256Lf": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
+      "beforeBytes": 47577,
+      "candidateBytes": 47577,
+      "line": 26,
+      "beforeComment": "-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.",
+      "candidateComment": "-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x5 room grid.",
+      "diff": "--- ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua\n+++ ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua\n@@ -24,5 +24,5 @@\n local MAX_SEED = 2147483646\n \n--- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.\n+-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x5 room grid.\n -- Configuration.Layout advertises the same numbers to the test suite and world\n -- builder, so a config edit that the generator cannot honor must fail loudly\n",
+      "results": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "functions": 29,
+          "rawBytecodeIdentical": true,
+          "rawBytecodeSHA256": "b1c2a9e4e2ce94cd4aaf21a0a54c54482c12156fe5c67b8b7a2d94390995c42a",
+          "rawBytecodeBytes": 33226,
+          "canonicalBytecodeSHA256": "536f11164fd41bf883960e9ea98a0e89906bcf76f89989130372dbf55f8a3d16",
+          "canonicalBytecodeIdentical": true,
+          "protoMetadataIdentical": true,
+          "textWithConstantsIdentical": true,
+          "textSHA256": "216fd17bd6533d59bfb2bc2b020b78fd6db817fc4e1db70295aa3d0597e411b6",
+          "semanticNegativeControlRejected": true
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "functions": 29,
+          "rawBytecodeIdentical": true,
+          "rawBytecodeSHA256": "47916f6512499db31f56ea63e198b9d420c444a47cc7d78299f0b1704afef3e8",
+          "rawBytecodeBytes": 31038,
+          "canonicalBytecodeSHA256": "1727a3f4c4d2188945cbe8ce46a60fe8708a6a12f136a282e339c2e00e3b4849",
+          "canonicalBytecodeIdentical": true,
+          "protoMetadataIdentical": true,
+          "textWithConstantsIdentical": true,
+          "textSHA256": "a100fdefbd0b538da893054f0c323aa72ce2133700a3e88f545acbab2b562767",
+          "semanticNegativeControlRejected": true
+        }
+      ]
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "className": "Script",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "beforeFile": "artifacts/cleanup-20261009/le34-comments/PuzzleManager.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/le34-comments/PuzzleManager.candidate.luau",
+      "beforeSha256Raw": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "candidateSha256Raw": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "beforeSha256Lf": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "candidateSha256Lf": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "beforeBytes": 105526,
+      "candidateBytes": 105520,
+      "line": 1548,
+      "beforeComment": "\t-- exact one-box-per-player contract if the first spacing target is too strict.",
+      "candidateComment": "\t-- exact ceil(n / 2) box count if the first spacing target is too strict.",
+      "diff": "--- ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua\n+++ ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua\n@@ -1546,5 +1546,5 @@\n \n \t-- Fuse boxes on walls, spread apart. A relaxed second pass preserves the\n-\t-- exact one-box-per-player contract if the first spacing target is too strict.\n+\t-- exact ceil(n / 2) box count if the first spacing target is too strict.\n \tlocal boxFrames = pickWallSpots(boxCount, 4 * CELLv, false, stations)\n \tif #boxFrames < boxCount then\n",
+      "results": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "functions": 103,
+          "rawBytecodeIdentical": true,
+          "rawBytecodeSHA256": "f333313efd8deeecde4d56564b2d1b259268851d911604373f3680b79da57c52",
+          "rawBytecodeBytes": 77409,
+          "canonicalBytecodeSHA256": "74a1c64efe999f8d037099e4e9164ea1fb2de44085f9f934c790bac861546bbb",
+          "canonicalBytecodeIdentical": true,
+          "protoMetadataIdentical": true,
+          "textWithConstantsIdentical": true,
+          "textSHA256": "46aced3d170f6820570a1943d3774b883958f83f4a42b258cbe6327092995e07",
+          "semanticNegativeControlRejected": true
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "functions": 103,
+          "rawBytecodeIdentical": true,
+          "rawBytecodeSHA256": "7d97b9ef91da05995133478f1447cdfe608b0bdf8954529be2ac642e145729be",
+          "rawBytecodeBytes": 69017,
+          "canonicalBytecodeSHA256": "92284fac90737bfac6ef42332e210b9b404b970dce15bffb35b74e355a5df652",
+          "canonicalBytecodeIdentical": true,
+          "protoMetadataIdentical": true,
+          "textWithConstantsIdentical": true,
+          "textSHA256": "dc6f09f7a4c2308f97d3fd46fe2b6e778f4294cc4520d2e6035fa3d142ef47a4",
+          "semanticNegativeControlRejected": true
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "originalProposalEvidenceUnchanged": true,
+  "originalProposalEvidenceSHA256": {
+    "artifacts/cleanup-20261009/le34-comments/candidate-manifest.json": "24f172b6ee66c273e67fa79d505ae11356f6fa09ce4bb498344d70e6313aa85b",
+    "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.before.luau": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+    "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.candidate.luau": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
+    "artifacts/cleanup-20261009/le34-comments/PuzzleManager.before.luau": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+    "artifacts/cleanup-20261009/le34-comments/PuzzleManager.candidate.luau": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7"
+  },
+  "currentManifestSHA256": "06007e344323bedca57526dfdec65a2b37cd122417ec55de273e45eb6b824b97"
+}

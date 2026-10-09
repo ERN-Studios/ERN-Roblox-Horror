@@ -633,8 +633,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 105526,
-      "sha256": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "bytes": 105520,
+      "sha256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1124,7 +1124,7 @@
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
       "bytes": 47577,
-      "sha256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "sha256": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
