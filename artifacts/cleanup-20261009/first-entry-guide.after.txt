@@ -1,0 +1,4 @@
+First Entry Guide current WELCOME/HELP: 133 checks passed (entire actual script, offline Luau)
+6 negative fixtures rejected: onboarding gate/navigation/movement/rail/config/header
+C21 focus/processed-input: REPRODUCED; runtime retained
+C22 touch Skip: 54.27x25.84 effective authored px; native fonts/hit routing pending

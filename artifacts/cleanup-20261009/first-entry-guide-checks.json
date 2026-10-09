@@ -1,0 +1,21 @@
+{
+  "status": "PASS offline fixture only",
+  "luauVersion": "0.737",
+  "featureAssertions": 133,
+  "rejectedNegativeControls": 6,
+  "pythonAst": "PASS",
+  "generatedLuauCompile": "PASS",
+  "protectedInputsByteUnchanged": true,
+  "inputSha256": {
+    "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+    "ReplicatedStorage/ZyntraConfig.ModuleScript.lua": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+    "tools/tests/hud_harness.luau": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef"
+  },
+  "fixtureSha256": "28fc8e05bbbb29c9273eba6bd59992ff2e51d8475b6d587eaa750aa0dcbdcf43",
+  "checkpointSha256": "bdd88eaf25fc8f2e97f13f93e7f2fd895dfc5bf2e4ff8d41cd852c608d930cf9",
+  "diagnostics": {
+    "C21": "REPRODUCED processed/focused input; runtime retained",
+    "C22": "Skip 54.27x25.84 effective authored px at touch 568x320; native font and input routing pending"
+  },
+  "nativeUxStatus": "afventer test; no Studio calls, no runtime edits"
+}
