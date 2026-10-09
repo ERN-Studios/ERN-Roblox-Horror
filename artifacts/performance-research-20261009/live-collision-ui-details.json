@@ -1,0 +1,111 @@
+{
+  "capturedUtc": "2026-10-09T20:24:18Z",
+  "groups": [
+    {
+      "unionRenderFidelity": {
+        "Enum.RenderFidelity.Precise": 6605
+      },
+      "path": "Workspace.Level 6 Indoor Playground",
+      "unionCollisionFidelity": {
+        "Enum.CollisionFidelity.Hull": 6605
+      },
+      "unions": 6605,
+      "transparentQueryParts": 3948,
+      "visibleColliders": 5804,
+      "transparentShadowCasters": 1828,
+      "transparentColliders": 3948
+    },
+    {
+      "unionRenderFidelity": [],
+      "path": "Workspace.Level 4 Cinema Blender",
+      "unionCollisionFidelity": [],
+      "unions": 0,
+      "transparentQueryParts": 3574,
+      "visibleColliders": 805,
+      "transparentShadowCasters": 0,
+      "transparentColliders": 3574
+    },
+    {
+      "unionRenderFidelity": [],
+      "path": "Workspace.Level 5 Void",
+      "unionCollisionFidelity": [],
+      "unions": 0,
+      "transparentQueryParts": 0,
+      "visibleColliders": 1122,
+      "transparentShadowCasters": 632,
+      "transparentColliders": 0
+    },
+    {
+      "unionRenderFidelity": [],
+      "path": "ServerStorage.Level2PoolroomsMap",
+      "unionCollisionFidelity": [],
+      "unions": 0,
+      "transparentQueryParts": 23888,
+      "visibleColliders": 2,
+      "transparentShadowCasters": 0,
+      "transparentColliders": 23885
+    }
+  ],
+  "uiModules": [
+    {
+      "children": [
+        {
+          "class": "ModuleScript",
+          "name": "ShopBinder",
+          "descendants": 0
+        },
+        {
+          "class": "ModuleScript",
+          "name": "ShopData",
+          "descendants": 0
+        },
+        {
+          "class": "Folder",
+          "name": "Imports",
+          "descendants": 10396
+        },
+        {
+          "class": "Frame",
+          "name": "ZyntraShop_L4",
+          "descendants": 1736
+        },
+        {
+          "class": "Frame",
+          "name": "LobbyRail_L4",
+          "descendants": 108
+        },
+        {
+          "class": "Frame",
+          "name": "LuckyWheel_L4",
+          "descendants": 134
+        },
+        {
+          "class": "Frame",
+          "name": "DailyRewards_L4",
+          "descendants": 229
+        },
+        {
+          "class": "Frame",
+          "name": "DevMenu_L4",
+          "descendants": 772
+        }
+      ],
+      "path": "ReplicatedStorage.ZyntraShopUI"
+    },
+    {
+      "children": [
+        {
+          "class": "Folder",
+          "name": "Imports",
+          "descendants": 1661
+        },
+        {
+          "class": "Folder",
+          "name": "Templates",
+          "descendants": 1658
+        }
+      ],
+      "path": "ReplicatedStorage.ZyntraHUD"
+    }
+  ]
+}

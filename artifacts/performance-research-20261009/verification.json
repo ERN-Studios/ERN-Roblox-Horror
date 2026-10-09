@@ -1,0 +1,344 @@
+{
+  "verifiedUtc": "2026-10-09T20:30:02Z",
+  "mode": "Edit",
+  "count": 42,
+  "results": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "class": "LocalScript",
+      "sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "class": "LocalScript",
+      "sha256": "c42eafe2755344a2fbe1148db1b5df080a19a423a8866d1e4fa814a28bba6210",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "class": "LocalScript",
+      "sha256": "26ea6117a24bbed904ff0f22fb486148eb34332bd466b84fa19d47d3d6d72b39",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "class": "LocalScript",
+      "sha256": "a549b23d2d8b201b3d293c889c9efd5fccd4ee13f160b6c0459dd6352ccf49f0",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "class": "LocalScript",
+      "sha256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "class": "LocalScript",
+      "sha256": "4753898b930d00dcd3e0e0cae8745a94f9beeb5077c32162382bd298e30aa067",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "class": "LocalScript",
+      "sha256": "57ade12fbaee0f8507316b79987b26105f530823ff6eebd427c7330734a3d29a",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "class": "Script",
+      "sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "class": "ModuleScript",
+      "sha256": "ee5ef0360a0e2e45ed0af25ade662e8ac6fd6fb8c1b5e6bd7f9b8c266bc83e1a",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level2Generator",
+      "class": "ModuleScript",
+      "sha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "class": "ModuleScript",
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Round Loading Runtime",
+      "class": "ModuleScript",
+      "sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "class": "ModuleScript",
+      "sha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "class": "Script",
+      "sha256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Kit Warmup",
+      "class": "ModuleScript",
+      "sha256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "class": "ModuleScript",
+      "sha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+      "class": "ModuleScript",
+      "sha256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "sha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "sha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "class": "ModuleScript",
+      "sha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "class": "Script",
+      "sha256": "ae61bb7bed1d379cb2e0f27498d583eeed6c4aad521ad8188ea83dfea64bdd00",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.ServerKind",
+      "class": "ModuleScript",
+      "sha256": "f402876ad679c6f324368342239db8d850d2a8e18faf378051556e1ec3dcc31c",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Live Level Server",
+      "class": "Script",
+      "sha256": "dc28fc4665b08dc221aea5bba8bec49e844cf6a10953d37e5e0490b31ed9d316",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "class": "ModuleScript",
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "class": "ModuleScript",
+      "sha256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "sha256": "3b8e0734183af35e2aba7b258cd0e3c87c377cb9d323f4a5586bcb06f6663b3e",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "class": "Script",
+      "sha256": "f3bf0447db60f17eb6c83f005fbde4df9bb2d10232427c6494c0352d3851f106",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAI",
+      "class": "Script",
+      "sha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "class": "ModuleScript",
+      "sha256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "class": "ModuleScript",
+      "sha256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "class": "ModuleScript",
+      "sha256": "41b4e318bfaf693d95cdba96f4378524496884a236e74fbdb66ef03904afb1c8",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "class": "ModuleScript",
+      "sha256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ReplicatedStorage.RoundHud",
+      "class": "ModuleScript",
+      "sha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopBinder",
+      "class": "ModuleScript",
+      "sha256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopData",
+      "class": "ModuleScript",
+      "sha256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Poolrooms Runtime",
+      "class": "ModuleScript",
+      "sha256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "class": "LocalScript",
+      "sha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Daily L4",
+      "class": "LocalScript",
+      "sha256": "9b9772bdd2cb6f3bff76b779a7d05971b08c7a9b9512340e09ac4b637252e8f7",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Shop L4",
+      "class": "LocalScript",
+      "sha256": "36840bc50c391816388d98ace74548610e90ca386380fd43ee0e41fa9f8da364",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Dev L4",
+      "class": "LocalScript",
+      "sha256": "4a0c96c62010ba65d3a6953f4888e3714754f0a17e6d0df72deb62adb58fe476",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round HUD",
+      "class": "LocalScript",
+      "sha256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "localHashMatches": true,
+      "liveSourceChunksExact": true,
+      "editorMatchesSource": true
+    }
+  ],
+  "scope": "Selected research snapshots; no complete-place parity or gameplay claim."
+}

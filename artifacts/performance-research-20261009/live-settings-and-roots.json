@@ -1,0 +1,1026 @@
+{
+  "placeVersion": 2859,
+  "universeId": 10559217407,
+  "workspace": {
+    "GlobalWind": "0, 0, 0",
+    "StreamingEnabled": true
+  },
+  "roots": [
+    {
+      "children": [
+        {
+          "descendants": 0,
+          "class": "Terrain",
+          "name": "Terrain",
+          "path": "Workspace.Terrain"
+        },
+        {
+          "descendants": 20318,
+          "class": "Model",
+          "name": "Level 6 Indoor Playground",
+          "path": "Workspace.Level 6 Indoor Playground"
+        },
+        {
+          "descendants": 14464,
+          "class": "Model",
+          "name": "Level 4 Cinema Blender",
+          "path": "Workspace.Level 4 Cinema Blender"
+        },
+        {
+          "descendants": 2627,
+          "class": "Model",
+          "name": "Level 5 Void",
+          "path": "Workspace.Level 5 Void"
+        },
+        {
+          "descendants": 438,
+          "class": "Model",
+          "name": "StarterCharacter",
+          "path": "Workspace.StarterCharacter"
+        },
+        {
+          "descendants": 156,
+          "class": "Model",
+          "name": "Entity",
+          "path": "Workspace.Entity"
+        },
+        {
+          "descendants": 0,
+          "class": "Camera",
+          "name": "Camera",
+          "path": "Workspace.Camera"
+        }
+      ],
+      "service": "Workspace"
+    },
+    {
+      "children": [
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "DevAccess",
+          "path": "ReplicatedStorage.DevAccess"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraConfig",
+          "path": "ReplicatedStorage.ZyntraConfig"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "FlashlightProfiles",
+          "path": "ReplicatedStorage.FlashlightProfiles"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "UIDevice",
+          "path": "ReplicatedStorage.UIDevice"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "UIRegression",
+          "path": "ReplicatedStorage.UIRegression"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "MasterConfiguration",
+          "path": "ReplicatedStorage.MasterConfiguration"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ProtectionClient",
+          "path": "ReplicatedStorage.ProtectionClient"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level 2 Entity Audio Bank",
+          "path": "ReplicatedStorage.Level 2 Entity Audio Bank"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "UIStyle",
+          "path": "ReplicatedStorage.UIStyle"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "DeathAdvice",
+          "path": "ReplicatedStorage.DeathAdvice"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraDetectorVisual",
+          "path": "ReplicatedStorage.ZyntraDetectorVisual"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "SlideContinuationSafety",
+          "path": "ReplicatedStorage.SlideContinuationSafety"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraDailyResearch",
+          "path": "ReplicatedStorage.ZyntraDailyResearch"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraChallenges",
+          "path": "ReplicatedStorage.ZyntraChallenges"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraSkins",
+          "path": "ReplicatedStorage.ZyntraSkins"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level 4 Usher Animations",
+          "path": "ReplicatedStorage.Level 4 Usher Animations"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "RoundHud",
+          "path": "ReplicatedStorage.RoundHud"
+        },
+        {
+          "descendants": 9,
+          "class": "Folder",
+          "name": "Remotes",
+          "path": "ReplicatedStorage.Remotes"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "Level 2 Remotes",
+          "path": "ReplicatedStorage.Level 2 Remotes"
+        },
+        {
+          "descendants": 13,
+          "class": "Folder",
+          "name": "Level2Audio",
+          "path": "ReplicatedStorage.Level2Audio"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "Level 2 State",
+          "path": "ReplicatedStorage.Level 2 State"
+        },
+        {
+          "descendants": 25,
+          "class": "Folder",
+          "name": "Level 2 Sound Library",
+          "path": "ReplicatedStorage.Level 2 Sound Library"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "Level 1 Sound Library",
+          "path": "ReplicatedStorage.Level 1 Sound Library"
+        },
+        {
+          "descendants": 7,
+          "class": "Folder",
+          "name": "Level 2 Assets",
+          "path": "ReplicatedStorage.Level 2 Assets"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "Level 2 Pool Foam Remotes",
+          "path": "ReplicatedStorage.Level 2 Pool Foam Remotes"
+        },
+        {
+          "descendants": 12,
+          "class": "Folder",
+          "name": "Level 2 Pool Foam Audio",
+          "path": "ReplicatedStorage.Level 2 Pool Foam Audio"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "Level 3 State",
+          "path": "ReplicatedStorage.Level 3 State"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "Level 3 Remotes",
+          "path": "ReplicatedStorage.Level 3 Remotes"
+        },
+        {
+          "descendants": 6,
+          "class": "Folder",
+          "name": "Level 3 Sound Library",
+          "path": "ReplicatedStorage.Level 3 Sound Library"
+        },
+        {
+          "descendants": 7,
+          "class": "Folder",
+          "name": "Level 3 Assets",
+          "path": "ReplicatedStorage.Level 3 Assets"
+        },
+        {
+          "descendants": 1,
+          "class": "Folder",
+          "name": "MasterTuning",
+          "path": "ReplicatedStorage.MasterTuning"
+        },
+        {
+          "descendants": 13383,
+          "class": "Folder",
+          "name": "ZyntraShopUI",
+          "path": "ReplicatedStorage.ZyntraShopUI"
+        },
+        {
+          "descendants": 1,
+          "class": "Folder",
+          "name": "LobbyTunnelReach",
+          "path": "ReplicatedStorage.LobbyTunnelReach"
+        },
+        {
+          "descendants": 5,
+          "class": "Folder",
+          "name": "Level6ArenaSlideKit",
+          "path": "ReplicatedStorage.Level6ArenaSlideKit"
+        },
+        {
+          "descendants": 84,
+          "class": "Folder",
+          "name": "Level6Counter",
+          "path": "ReplicatedStorage.Level6Counter"
+        },
+        {
+          "descendants": 20,
+          "class": "Folder",
+          "name": "Level6PropKit",
+          "path": "ReplicatedStorage.Level6PropKit"
+        },
+        {
+          "descendants": 12,
+          "class": "Folder",
+          "name": "Level6SlideKit",
+          "path": "ReplicatedStorage.Level6SlideKit"
+        },
+        {
+          "descendants": 57,
+          "class": "Folder",
+          "name": "Level5Void",
+          "path": "ReplicatedStorage.Level5Void"
+        },
+        {
+          "descendants": 3321,
+          "class": "Folder",
+          "name": "ZyntraHUD",
+          "path": "ReplicatedStorage.ZyntraHUD"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "LoadingCardView",
+          "path": "ReplicatedStorage.LoadingCardView"
+        }
+      ],
+      "service": "ReplicatedStorage"
+    },
+    {
+      "children": [
+        {
+          "descendants": 0,
+          "class": "LocalScript",
+          "name": "Lobby Loading Screen",
+          "path": "ReplicatedFirst.Lobby Loading Screen"
+        }
+      ],
+      "service": "ReplicatedFirst"
+    },
+    {
+      "children": [
+        {
+          "descendants": 85711,
+          "class": "Model",
+          "name": "RBX_ANIMSAVES",
+          "path": "ServerStorage.RBX_ANIMSAVES"
+        },
+        {
+          "descendants": 1314,
+          "class": "Folder",
+          "name": "Archive",
+          "path": "ServerStorage.Archive"
+        },
+        {
+          "descendants": 0,
+          "class": "SurfaceAppearance",
+          "name": "Level 2 Column Tile Surface Template",
+          "path": "ServerStorage.Level 2 Column Tile Surface Template"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "Project Mirror",
+          "path": "ServerStorage.Project Mirror"
+        },
+        {
+          "descendants": 325,
+          "class": "Folder",
+          "name": "Level2Assets",
+          "path": "ServerStorage.Level2Assets"
+        },
+        {
+          "descendants": 223366,
+          "class": "Folder",
+          "name": "MongoTVEntityAnimations",
+          "path": "ServerStorage.MongoTVEntityAnimations"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "Level 2 Slide Assets",
+          "path": "ServerStorage.Level 2 Slide Assets"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "Level 2 Kids Round Skylight Templates",
+          "path": "ServerStorage.Level 2 Kids Round Skylight Templates"
+        },
+        {
+          "descendants": 2420,
+          "class": "Folder",
+          "name": "Level3Assets",
+          "path": "ServerStorage.Level3Assets"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+          "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26"
+        },
+        {
+          "descendants": 30869,
+          "class": "Model",
+          "name": "Level2PoolroomsMap",
+          "path": "ServerStorage.Level2PoolroomsMap"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Column Flare Template",
+          "path": "ServerStorage.Level 2 Column Flare Template"
+        },
+        {
+          "descendants": 100,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityValidation",
+          "path": "ServerStorage.TEMP_PipeEntityValidation"
+        },
+        {
+          "descendants": 3821,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded",
+          "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded"
+        },
+        {
+          "descendants": 4642,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityAnimations_20260909",
+          "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z",
+          "path": "ServerStorage.PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMultiplayerLaunch",
+          "path": "ServerStorage.TEMP_PipeEntityMultiplayerLaunch"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_0457Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_0457Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_0503Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_0503Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_0508Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_0508Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_0638Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_0638Z"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "PoolSlideContextDiagnosticBackup_0710",
+          "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_0706Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_0706Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityLobbyRigResult_0748Z",
+          "path": "ServerStorage.TEMP_PipeEntityLobbyRigResult_0748Z"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+          "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_1609Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_1609Z"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+          "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_1624Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_1624Z"
+        },
+        {
+          "descendants": 3,
+          "class": "Folder",
+          "name": "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+          "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_1633Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_1633Z"
+        },
+        {
+          "descendants": 2,
+          "class": "Folder",
+          "name": "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+          "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_1640Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_1640Z"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "TEMP_PipeEntityMPResult_1648Z",
+          "path": "ServerStorage.TEMP_PipeEntityMPResult_1648Z"
+        },
+        {
+          "descendants": 5373,
+          "class": "Folder",
+          "name": "PoolSlideContactAnimations_20260910",
+          "path": "ServerStorage.PoolSlideContactAnimations_20260910"
+        },
+        {
+          "descendants": 106,
+          "class": "Folder",
+          "name": "TrelloPoolSlideReleaseBackup_20260910",
+          "path": "ServerStorage.TrelloPoolSlideReleaseBackup_20260910"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatBaselineRig_20260924",
+          "path": "ServerStorage.HazmatBaselineRig_20260924"
+        },
+        {
+          "descendants": 4,
+          "class": "Model",
+          "name": "HazmatStaticWraithTopper_20260924",
+          "path": "ServerStorage.HazmatStaticWraithTopper_20260924"
+        },
+        {
+          "descendants": 4,
+          "class": "Model",
+          "name": "HazmatFalseSunTopper_20260924",
+          "path": "ServerStorage.HazmatFalseSunTopper_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_BaselineYellow_20260924",
+          "path": "ServerStorage.HazmatSkin_BaselineYellow_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_PoolService_20260924",
+          "path": "ServerStorage.HazmatSkin_PoolService_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_SuburbSurvey_20260924",
+          "path": "ServerStorage.HazmatSkin_SuburbSurvey_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_BlacksiteDirector_20260924",
+          "path": "ServerStorage.HazmatSkin_BlacksiteDirector_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_StaticWraith_20260924",
+          "path": "ServerStorage.HazmatSkin_StaticWraith_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_FalseSun_20260924",
+          "path": "ServerStorage.HazmatSkin_FalseSun_20260924"
+        },
+        {
+          "descendants": 108,
+          "class": "Model",
+          "name": "HazmatSkin_SignalArchitect_20260924",
+          "path": "ServerStorage.HazmatSkin_SignalArchitect_20260924"
+        },
+        {
+          "descendants": 2,
+          "class": "Model",
+          "name": "HazmatSignalArchitectTopper_20260925",
+          "path": "ServerStorage.HazmatSignalArchitectTopper_20260925"
+        },
+        {
+          "descendants": 100,
+          "class": "Folder",
+          "name": "Level 4 Templates",
+          "path": "ServerStorage.Level 4 Templates"
+        },
+        {
+          "descendants": 11,
+          "class": "Folder",
+          "name": "Level6CounterSource",
+          "path": "ServerStorage.Level6CounterSource"
+        },
+        {
+          "descendants": 287,
+          "class": "Folder",
+          "name": "Level1ElevatorInsetKit",
+          "path": "ServerStorage.Level1ElevatorInsetKit"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+          "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26"
+        },
+        {
+          "descendants": 130,
+          "class": "Folder",
+          "name": "Level6BlenderSource",
+          "path": "ServerStorage.Level6BlenderSource"
+        },
+        {
+          "descendants": 872,
+          "class": "Folder",
+          "name": "Level6BlenderSourceRevision20261001",
+          "path": "ServerStorage.Level6BlenderSourceRevision20261001"
+        },
+        {
+          "descendants": 0,
+          "class": "Folder",
+          "name": "Level6TextureImportReferences",
+          "path": "ServerStorage.Level6TextureImportReferences"
+        },
+        {
+          "descendants": 96,
+          "class": "Folder",
+          "name": "LobbyReimaginedBlenderSource20261001",
+          "path": "ServerStorage.LobbyReimaginedBlenderSource20261001"
+        },
+        {
+          "descendants": 96,
+          "class": "Folder",
+          "name": "LobbyReimaginedBlenderSource20261001R2",
+          "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R2"
+        },
+        {
+          "descendants": 103,
+          "class": "Folder",
+          "name": "LobbyReimaginedBlenderSource20261001R3",
+          "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3"
+        },
+        {
+          "descendants": 103,
+          "class": "Folder",
+          "name": "LobbyReimaginedBlenderSource20261001R3B",
+          "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R3B"
+        },
+        {
+          "descendants": 195,
+          "class": "Folder",
+          "name": "LobbyReimaginedBlenderSource20261001R4",
+          "path": "ServerStorage.LobbyReimaginedBlenderSource20261001R4"
+        },
+        {
+          "descendants": 1214,
+          "class": "Folder",
+          "name": "Level1BlenderKit",
+          "path": "ServerStorage.Level1BlenderKit"
+        },
+        {
+          "descendants": 1815,
+          "class": "Folder",
+          "name": "Level1BlenderKitV2",
+          "path": "ServerStorage.Level1BlenderKitV2"
+        },
+        {
+          "descendants": 7505,
+          "class": "Folder",
+          "name": "Level2LegacyArchive_20261009",
+          "path": "ServerStorage.Level2LegacyArchive_20261009"
+        },
+        {
+          "descendants": 14,
+          "class": "Folder",
+          "name": "Level6ArenaSlideSource",
+          "path": "ServerStorage.Level6ArenaSlideSource"
+        },
+        {
+          "descendants": 18,
+          "class": "Folder",
+          "name": "LobbyTunnelReachSource",
+          "path": "ServerStorage.LobbyTunnelReachSource"
+        },
+        {
+          "descendants": 1,
+          "class": "MeshPart",
+          "name": "Level 2 Column Flare Template 9.000:10.200",
+          "path": "ServerStorage.Level 2 Column Flare Template 9.000:10.200"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Open Slide End Cap Template",
+          "path": "ServerStorage.Level 2 Open Slide End Cap Template"
+        },
+        {
+          "descendants": 1,
+          "class": "MeshPart",
+          "name": "Level 2 Column Flare Template 4.500:7.200",
+          "path": "ServerStorage.Level 2 Column Flare Template 4.500:7.200"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Sealed Open Slide Segment Template",
+          "path": "ServerStorage.Level 2 Sealed Open Slide Segment Template"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Fitted Slide Cradle Template",
+          "path": "ServerStorage.Level 2 Fitted Slide Cradle Template"
+        },
+        {
+          "descendants": 1,
+          "class": "MeshPart",
+          "name": "Level 2 Column Flare Template 5.500:7.425",
+          "path": "ServerStorage.Level 2 Column Flare Template 5.500:7.425"
+        },
+        {
+          "descendants": 0,
+          "class": "MeshPart",
+          "name": "Level 2 Closed Slide End Cap Template",
+          "path": "ServerStorage.Level 2 Closed Slide End Cap Template"
+        }
+      ],
+      "service": "ServerStorage"
+    },
+    {
+      "children": [
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "NoiseRegistry",
+          "path": "ServerScriptService.NoiseRegistry"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "FlashlightSync",
+          "path": "ServerScriptService.FlashlightSync"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "GameManager",
+          "path": "ServerScriptService.GameManager"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "AvatarNormalize",
+          "path": "ServerScriptService.AvatarNormalize"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "TunnelLobbyBuilder",
+          "path": "ServerScriptService.TunnelLobbyBuilder"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "ZyntraMonetization",
+          "path": "ServerScriptService.ZyntraMonetization"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level2Generator",
+          "path": "ServerScriptService.Level2Generator"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level3Generator",
+          "path": "ServerScriptService.Level3Generator"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "LobbyPartyModeController",
+          "path": "ServerScriptService.LobbyPartyModeController"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Round Completion Routing",
+          "path": "ServerScriptService.Round Completion Routing"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Round Completion Test Suite",
+          "path": "ServerScriptService.Round Completion Test Suite"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Crouch State Server",
+          "path": "ServerScriptService.Crouch State Server"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Round Loading Runtime",
+          "path": "ServerScriptService.Round Loading Runtime"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Round Loading Test Suite",
+          "path": "ServerScriptService.Round Loading Test Suite"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "PlayerProtection",
+          "path": "ServerScriptService.PlayerProtection"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "PurchaseAlerts",
+          "path": "ServerScriptService.PurchaseAlerts"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "LobbyShopDisplay",
+          "path": "ServerScriptService.LobbyShopDisplay"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "RouteMarkerService",
+          "path": "ServerScriptService.RouteMarkerService"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "LunaTribute",
+          "path": "ServerScriptService.LunaTribute"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "FriendBoost",
+          "path": "ServerScriptService.FriendBoost"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "TeamObjectives",
+          "path": "ServerScriptService.TeamObjectives"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ReentryPlacement",
+          "path": "ServerScriptService.ReentryPlacement"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraDetectorSensing",
+          "path": "ServerScriptService.ZyntraDetectorSensing"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "ZyntraDetectorService",
+          "path": "ServerScriptService.ZyntraDetectorService"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ZyntraAnalytics",
+          "path": "ServerScriptService.ZyntraAnalytics"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Level6PreviewAccess",
+          "path": "ServerScriptService.Level6PreviewAccess"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level 3 Kit Warmup",
+          "path": "ServerScriptService.Level 3 Kit Warmup"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Lobby DJ",
+          "path": "ServerScriptService.Lobby DJ"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "HazmatSkinVisuals",
+          "path": "ServerScriptService.HazmatSkinVisuals"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "Level4RoundGenerator",
+          "path": "ServerScriptService.Level4RoundGenerator"
+        },
+        {
+          "descendants": 14,
+          "class": "Folder",
+          "name": "Level 6 Systems",
+          "path": "ServerScriptService.Level 6 Systems"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Level5PreviewAccess",
+          "path": "ServerScriptService.Level5PreviewAccess"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Lobby Tunnel Reach",
+          "path": "ServerScriptService.Lobby Tunnel Reach"
+        },
+        {
+          "descendants": 0,
+          "class": "ModuleScript",
+          "name": "ServerKind",
+          "path": "ServerScriptService.ServerKind"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Live Level Server",
+          "path": "ServerScriptService.Live Level Server"
+        },
+        {
+          "descendants": 0,
+          "class": "Script",
+          "name": "Level Leaderboards",
+          "path": "ServerScriptService.Level Leaderboards"
+        },
+        {
+          "descendants": 19,
+          "class": "Folder",
+          "name": "Level 2 Systems",
+          "path": "ServerScriptService.Level 2 Systems"
+        },
+        {
+          "descendants": 13,
+          "class": "Folder",
+          "name": "Level 3 Systems",
+          "path": "ServerScriptService.Level 3 Systems"
+        },
+        {
+          "descendants": 6,
+          "class": "Folder",
+          "name": "Level 1 Systems",
+          "path": "ServerScriptService.Level 1 Systems"
+        },
+        {
+          "descendants": 14,
+          "class": "Folder",
+          "name": "LobbyReimaginedPreview",
+          "path": "ServerScriptService.LobbyReimaginedPreview"
+        },
+        {
+          "descendants": 6,
+          "class": "Folder",
+          "name": "Level 4 Systems",
+          "path": "ServerScriptService.Level 4 Systems"
+        }
+      ],
+      "service": "ServerScriptService"
+    },
+    {
+      "children": [
+        {
+          "descendants": 3,
+          "class": "StarterCharacterScripts",
+          "name": "StarterCharacterScripts",
+          "path": "StarterPlayer.StarterCharacterScripts"
+        },
+        {
+          "descendants": 498,
+          "class": "Model",
+          "name": "StarterCharacter",
+          "path": "StarterPlayer.StarterCharacter"
+        },
+        {
+          "descendants": 59,
+          "class": "StarterPlayerScripts",
+          "name": "StarterPlayerScripts",
+          "path": "StarterPlayer.StarterPlayerScripts"
+        }
+      ],
+      "service": "StarterPlayer"
+    }
+  ],
+  "lighting": {
+    "ClockTime": 12,
+    "FogEnd": 100000,
+    "LightingStyle": "Enum.LightingStyle.Realistic",
+    "GlobalShadows": true,
+    "EnvironmentSpecularScale": 1,
+    "FogStart": 100000,
+    "Brightness": 2,
+    "EnvironmentDiffuseScale": 1,
+    "PrioritizeLightingQuality": true
+  },
+  "placeId": 131311258779917,
+  "capturedUtc": "2026-10-09T20:20:16Z",
+  "mode": "Edit"
+}

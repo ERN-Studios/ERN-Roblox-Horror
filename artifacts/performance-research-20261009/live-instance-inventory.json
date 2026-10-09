@@ -1,0 +1,944 @@
+{
+  "universeId": 10559217407,
+  "settings": {
+    "StreamingIntegrityMode": {
+      "readOk": false,
+      "error": "StreamingIntegrityMode is not a valid member of Workspace \"Workspace\""
+    },
+    "PredictiveStreamingMode": {
+      "readOk": false,
+      "error": "PredictiveStreamingMode is not a valid member of Workspace \"Workspace\""
+    },
+    "StreamingTargetRadius": {
+      "readOk": false,
+      "error": "StreamingTargetRadius is not a valid member of Workspace \"Workspace\""
+    },
+    "StreamingMinRadius": {
+      "readOk": false,
+      "error": "StreamingMinRadius is not a valid member of Workspace \"Workspace\""
+    },
+    "EnableSLIMAvatars": {
+      "readOk": false,
+      "error": "EnableSLIMAvatars is not a valid member of Workspace \"Workspace\""
+    },
+    "ModelStreamingBehavior": {
+      "readOk": false,
+      "error": "ModelStreamingBehavior is not a valid member of Workspace \"Workspace\""
+    },
+    "StreamOutBehavior": {
+      "readOk": false,
+      "error": "StreamOutBehavior is not a valid member of Workspace \"Workspace\""
+    },
+    "StreamingEnabled": {
+      "value": true,
+      "readOk": true
+    }
+  },
+  "groups": [
+    {
+      "fullyTransparent": 4481,
+      "streamingModes": [],
+      "class": "Model",
+      "enabledShadowLights": 0,
+      "descendants": 20318,
+      "attributes": {
+        "ExitPosition": null,
+        "Source": "tools/level6_playground/build_arena.py",
+        "Level6PreviewReady": true,
+        "Ready": true,
+        "PreviewOnly": true,
+        "PBR": "PBR_20261006",
+        "HomePosition": null,
+        "Origin": null,
+        "Arena": true,
+        "Level6Preview": true,
+        "ExitDoorPosition": null
+      },
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Box": 27,
+        "Enum.CollisionFidelity.Default": 46
+      },
+      "meanLightRange": 35.35231316725979,
+      "particles": 0,
+      "parts": 14300,
+      "lights": 281,
+      "uniqueTextureIds": 4,
+      "canTouch": 0,
+      "castShadow": 8440,
+      "path": "Workspace.Level 6 Indoor Playground",
+      "uniqueMeshIds": 7,
+      "enabledLightRanges": {
+        "12": 1,
+        "26": 1,
+        "30": 75,
+        "32": 70,
+        "34": 94,
+        "50": 3,
+        "52": 8,
+        "60": 25
+      },
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 73
+      },
+      "uniqueSurfaceAppearances": 0,
+      "meshes": 73,
+      "lodModes": [],
+      "bounds": {
+        "center": [
+          52000,
+          145.83399963378906,
+          15
+        ],
+        "size": [
+          328,
+          212.33200073242188,
+          358
+        ]
+      },
+      "canQuery": 10585,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "UIPadding": 3,
+        "Part": 7622,
+        "MeshPart": 73,
+        "SpotLight": 250,
+        "SurfaceGui": 3,
+        "Folder": 38,
+        "PointLight": 31,
+        "TextLabel": 3,
+        "UnionOperation": 6605,
+        "Attachment": 1,
+        "StringValue": 1,
+        "Texture": 5688
+      },
+      "unanchored": 0,
+      "enabledLights": 277,
+      "shadowLights": 0,
+      "maxLightRange": 60,
+      "partlyTransparent": 9,
+      "canCollide": 9752,
+      "enabledParticles": 0
+    },
+    {
+      "fullyTransparent": 4053,
+      "streamingModes": {
+        "Enum.ModelStreamingMode.Atomic": 25,
+        "Enum.ModelStreamingMode.Persistent": 1,
+        "Enum.ModelStreamingMode.Default": 1546
+      },
+      "class": "Model",
+      "enabledShadowLights": 3,
+      "descendants": 14464,
+      "attributes": {
+        "Level4Revision": 11,
+        "BoundsCenter": null,
+        "Level4Source": "Blender",
+        "SourceBlend": "G:/Blender/Level4_Cinema/Level4_Cinema.blend",
+        "BoundsSize": null,
+        "StudsPerMetre": 3.571428571428571,
+        "PartCount": 14465
+      },
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Box": 4051
+      },
+      "meanLightRange": 34.6366296114884,
+      "particles": 0,
+      "parts": 8909,
+      "lights": 254,
+      "uniqueTextureIds": 5,
+      "canTouch": 1204,
+      "castShadow": 3756,
+      "path": "Workspace.Level 4 Cinema Blender",
+      "uniqueMeshIds": 516,
+      "enabledLightRanges": {
+        "36": 9,
+        "60": 60,
+        "18.719999313354492": 25,
+        "34.31999969482422": 9,
+        "47.52000045776367": 1,
+        "31.979999542236328": 1,
+        "40.31999969482422": 12,
+        "30.576000213623047": 4,
+        "34.63199996948242": 1,
+        "28.079999923706055": 10,
+        "46.529998779296875": 2,
+        "21.84000015258789": 41,
+        "31.200000762939453": 3,
+        "7.800000190734863": 1,
+        "12.479999542236328": 5,
+        "37.439998626708984": 31,
+        "15.600000381469727": 5,
+        "14.039999961853027": 6,
+        "24.959999084472656": 21,
+        "10.920000076293945": 6,
+        "30.88800048828125": 1
+      },
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 4051
+      },
+      "uniqueSurfaceAppearances": 58,
+      "meshes": 4051,
+      "lodModes": {
+        "Enum.ModelLevelOfDetail.Automatic": 1572
+      },
+      "bounds": {
+        "center": [
+          29000,
+          -148.4499969482422,
+          63.949981689453125
+        ],
+        "size": [
+          756,
+          506.8999938964844,
+          607.9000244140625
+        ]
+      },
+      "canQuery": 4379,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "Decal": 20,
+        "Script": 2,
+        "Seat": 1204,
+        "Part": 3654,
+        "MeshPart": 4051,
+        "SurfaceAppearance": 3434,
+        "SurfaceGui": 49,
+        "SurfaceLight": 159,
+        "PointLight": 95,
+        "TextLabel": 49,
+        "Model": 1572,
+        "HingeConstraint": 25,
+        "Attachment": 50,
+        "WeldConstraint": 90,
+        "Folder": 10
+      },
+      "unanchored": 115,
+      "enabledLights": 254,
+      "shadowLights": 3,
+      "maxLightRange": 60,
+      "partlyTransparent": 55,
+      "canCollide": 4379,
+      "enabledParticles": 0
+    },
+    {
+      "fullyTransparent": 632,
+      "streamingModes": [],
+      "class": "Model",
+      "enabledShadowLights": 0,
+      "descendants": 2627,
+      "attributes": {
+        "BoundsCenter": null,
+        "Origin": null,
+        "Bottom": -420,
+        "Level5Preview": true,
+        "BoundsSize": null,
+        "PreviewOnly": true,
+        "Level5PreviewReady": true
+      },
+      "collisionFidelity": [],
+      "meanLightRange": 58.09379727685325,
+      "particles": 0,
+      "parts": 1947,
+      "lights": 661,
+      "uniqueTextureIds": 0,
+      "canTouch": 26,
+      "castShadow": 1883,
+      "path": "Workspace.Level 5 Void",
+      "uniqueMeshIds": 0,
+      "enabledLightRanges": {
+        "20": 1,
+        "30": 32,
+        "34": 10,
+        "60": 618
+      },
+      "renderFidelity": [],
+      "uniqueSurfaceAppearances": 0,
+      "meshes": 0,
+      "lodModes": [],
+      "bounds": {
+        "center": [
+          42180.8125,
+          735.8499755859375,
+          0
+        ],
+        "size": [
+          4384.98046875,
+          1111.699951171875,
+          269.6000061035156
+        ]
+      },
+      "canQuery": 1315,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "Folder": 14,
+        "PointLight": 661,
+        "TextLabel": 1,
+        "Part": 1947,
+        "StringValue": 3,
+        "SurfaceGui": 1
+      },
+      "unanchored": 26,
+      "enabledLights": 661,
+      "shadowLights": 0,
+      "maxLightRange": 60,
+      "partlyTransparent": 2,
+      "canCollide": 1122,
+      "enabledParticles": 0
+    },
+    {
+      "fullyTransparent": 1,
+      "streamingModes": {
+        "Enum.ModelStreamingMode.Default": 1
+      },
+      "class": "Model",
+      "enabledShadowLights": 0,
+      "descendants": 438,
+      "attributes": {
+        "RBX_AutoSetupInputAsset": "",
+        "RBX_ImportMethod": 0,
+        "RBX_AvatarPreviewer_shouldReimport": false,
+        "RBX_AutoSetup_OriginalScale": 1.1390525154997746,
+        "RBX_AutoSetupOriginalModelHash": "f5b6a1996d5fa3b8fa63cce3177d4d8f67a19e47812b5e37feac0110acda8119",
+        "RBX_AutoSetupped": true,
+        "RBX_AvatarPreviewer_ValidationResultReported": true,
+        "RBX_AvatarPreviewer_textured": true,
+        "RBX_AvatarPreviewer_stage": "CheckBody",
+        "RBX_AvatarPreviewer_initialImportComplete": true,
+        "RBX_AvatarPreviewer_completedAutoSetupSurvey": false,
+        "RBX_AvatarPreviewer_equippedItems": "[]"
+      },
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Default": 15
+      },
+      "meanLightRange": 0,
+      "particles": 0,
+      "parts": 19,
+      "lights": 0,
+      "uniqueTextureIds": 0,
+      "canTouch": 16,
+      "castShadow": 16,
+      "path": "Workspace.StarterCharacter",
+      "uniqueMeshIds": 15,
+      "enabledLightRanges": [],
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 15
+      },
+      "uniqueSurfaceAppearances": 1,
+      "meshes": 15,
+      "lodModes": {
+        "Enum.ModelLevelOfDetail.Automatic": 1
+      },
+      "bounds": {
+        "center": [
+          517.9999389648438,
+          -448.5579528808594,
+          -318.9999694824219
+        ],
+        "size": [
+          5.175335884094238,
+          6.174262523651123,
+          2.2604494094848633
+        ]
+      },
+      "canQuery": 16,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "Vector3Value": 68,
+        "Humanoid": 1,
+        "SurfaceAppearance": 15,
+        "MeshPart": 15,
+        "WeldConstraint": 3,
+        "Folder": 2,
+        "ObjectValue": 1,
+        "BallSocketConstraint": 14,
+        "Status": 1,
+        "CFrameValue": 189,
+        "AnimationConstraint": 15,
+        "WrapTarget": 15,
+        "BodyColors": 1,
+        "Animator": 1,
+        "Part": 4,
+        "NoCollisionConstraint": 19,
+        "FaceControls": 1,
+        "NumberValue": 6,
+        "StringValue": 15,
+        "Attachment": 52
+      },
+      "unanchored": 19,
+      "enabledLights": 0,
+      "shadowLights": 0,
+      "maxLightRange": 0,
+      "partlyTransparent": 0,
+      "canCollide": 4,
+      "enabledParticles": 0
+    },
+    {
+      "fullyTransparent": 1,
+      "streamingModes": [],
+      "class": "Model",
+      "enabledShadowLights": 0,
+      "descendants": 156,
+      "attributes": {
+        "RBX_ReimportId": "9ececbed-b908-40ff-ab9a-7b2a4ac90a2e",
+        "RigVersion": "v3-fingers"
+      },
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Default": 1
+      },
+      "meanLightRange": 0,
+      "particles": 0,
+      "parts": 2,
+      "lights": 0,
+      "uniqueTextureIds": 1,
+      "canTouch": 2,
+      "castShadow": 2,
+      "path": "Workspace.Entity",
+      "uniqueMeshIds": 1,
+      "enabledLightRanges": [],
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 1
+      },
+      "uniqueSurfaceAppearances": 0,
+      "meshes": 1,
+      "lodModes": [],
+      "bounds": {
+        "center": [
+          504.5293884277344,
+          -446.1553649902344,
+          -318.3828430175781
+        ],
+        "size": [
+          8.228287696838379,
+          10.999862670898438,
+          5.975722312927246
+        ]
+      },
+      "canQuery": 2,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "Humanoid": 1,
+        "Part": 1,
+        "MeshPart": 1,
+        "WeldConstraint": 1,
+        "Folder": 1,
+        "ObjectValue": 1,
+        "Bone": 51,
+        "Animator": 1,
+        "CFrameValue": 96,
+        "Attachment": 2
+      },
+      "unanchored": 2,
+      "enabledLights": 0,
+      "shadowLights": 0,
+      "maxLightRange": 0,
+      "partlyTransparent": 0,
+      "canCollide": 1,
+      "enabledParticles": 0
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraShopUI",
+      "canQuery": 0,
+      "uniqueMeshIds": 0,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 13383,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "meshes": 0,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": [],
+      "canTouch": 0,
+      "renderFidelity": [],
+      "classes": {
+        "UIPadding": 5,
+        "ModuleScript": 2,
+        "CanvasGroup": 38,
+        "UIAspectRatioConstraint": 13,
+        "Folder": 3,
+        "UIScale": 1716,
+        "TextButton": 435,
+        "UIStroke": 930,
+        "ImageLabel": 284,
+        "UICorner": 2374,
+        "UIGradient": 43,
+        "ScrollingFrame": 62,
+        "UIGridLayout": 5,
+        "ScreenGui": 8,
+        "UIListLayout": 279,
+        "NumberValue": 1716,
+        "Frame": 3518,
+        "UIShadow": 236,
+        "TextLabel": 1716
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 0,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraHUD",
+      "canQuery": 0,
+      "uniqueMeshIds": 0,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 3321,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "meshes": 0,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": [],
+      "canTouch": 0,
+      "renderFidelity": [],
+      "classes": {
+        "CanvasGroup": 2,
+        "UICorner": 392,
+        "UIGradient": 20,
+        "UIAspectRatioConstraint": 6,
+        "UIListLayout": 16,
+        "Folder": 2,
+        "UIStroke": 236,
+        "TextLabel": 602,
+        "UIScale": 602,
+        "TextButton": 110,
+        "NumberValue": 602,
+        "ScreenGui": 3,
+        "Frame": 728
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 0,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.Level6ArenaSlideKit",
+      "canQuery": 0,
+      "uniqueMeshIds": 5,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 5,
+      "attributes": {
+        "Upright": true
+      },
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 5,
+      "lights": 0,
+      "meshes": 5,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Box": 5
+      },
+      "canTouch": 0,
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 5
+      },
+      "classes": {
+        "MeshPart": 5
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 5,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.Level6Counter",
+      "canQuery": 0,
+      "uniqueMeshIds": 0,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 84,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "meshes": 0,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": [],
+      "canTouch": 0,
+      "renderFidelity": [],
+      "classes": {
+        "Folder": 2,
+        "Sound": 66,
+        "StringValue": 16
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 0,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.Level6PropKit",
+      "canQuery": 20,
+      "uniqueMeshIds": 20,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 20,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 20,
+      "lights": 0,
+      "meshes": 20,
+      "uniqueTextureIds": 18,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Default": 20
+      },
+      "canTouch": 20,
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 20
+      },
+      "classes": {
+        "MeshPart": 20
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 20,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.Level6SlideKit",
+      "canQuery": 12,
+      "uniqueMeshIds": 12,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 12,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 12,
+      "lights": 0,
+      "meshes": 12,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Default": 12
+      },
+      "canTouch": 12,
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 12
+      },
+      "classes": {
+        "MeshPart": 12
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 12,
+      "fullyTransparent": 0
+    },
+    {
+      "path": "ReplicatedStorage.Level5Void",
+      "canQuery": 0,
+      "uniqueMeshIds": 0,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 57,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "meshes": 0,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": [],
+      "canTouch": 0,
+      "renderFidelity": [],
+      "classes": {
+        "Folder": 1,
+        "Sound": 56
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 0,
+      "fullyTransparent": 0
+    },
+    {
+      "fullyTransparent": 0,
+      "streamingModes": [],
+      "class": "Model",
+      "enabledShadowLights": 0,
+      "descendants": 85711,
+      "attributes": [],
+      "collisionFidelity": [],
+      "meanLightRange": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "uniqueTextureIds": 0,
+      "canTouch": 0,
+      "castShadow": 0,
+      "path": "ServerStorage.RBX_ANIMSAVES",
+      "uniqueMeshIds": 0,
+      "enabledLightRanges": [],
+      "renderFidelity": [],
+      "uniqueSurfaceAppearances": 0,
+      "meshes": 0,
+      "lodModes": [],
+      "bounds": {
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "size": [
+          0,
+          0,
+          0
+        ]
+      },
+      "canQuery": 0,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Default",
+      "classes": {
+        "KeyframeSequence": 47,
+        "ObjectValue": 27,
+        "AnimationRigData": 20,
+        "Pose": 82425,
+        "Keyframe": 3192
+      },
+      "unanchored": 0,
+      "enabledLights": 0,
+      "shadowLights": 0,
+      "maxLightRange": 0,
+      "partlyTransparent": 0,
+      "canCollide": 0,
+      "enabledParticles": 0
+    },
+    {
+      "path": "ServerStorage.MongoTVEntityAnimations",
+      "canQuery": 0,
+      "uniqueMeshIds": 0,
+      "class": "Folder",
+      "maxLightRange": 0,
+      "enabledLights": 0,
+      "enabledLightRanges": [],
+      "descendants": 223366,
+      "attributes": [],
+      "partlyTransparent": 0,
+      "meanLightRange": 0,
+      "uniqueSurfaceAppearances": 0,
+      "particles": 0,
+      "parts": 0,
+      "lights": 0,
+      "meshes": 0,
+      "uniqueTextureIds": 0,
+      "canCollide": 0,
+      "lodModes": [],
+      "collisionFidelity": [],
+      "canTouch": 0,
+      "renderFidelity": [],
+      "classes": {
+        "KeyframeSequence": 59,
+        "Animation": 58,
+        "Pose": 218210,
+        "Keyframe": 5039
+      },
+      "unanchored": 0,
+      "streamingModes": [],
+      "shadowLights": 0,
+      "enabledParticles": 0,
+      "enabledShadowLights": 0,
+      "castShadow": 0,
+      "fullyTransparent": 0
+    },
+    {
+      "fullyTransparent": 24543,
+      "streamingModes": {
+        "Enum.ModelStreamingMode.Atomic": 1,
+        "Enum.ModelStreamingMode.Nonatomic": 3,
+        "Enum.ModelStreamingMode.Default": 3
+      },
+      "class": "Model",
+      "enabledShadowLights": 3,
+      "descendants": 30869,
+      "attributes": {
+        "Level2NewMap": true,
+        "Source": "G:/Blender/Level2_Poolrooms_New_20261006/Level2_Poolrooms_New.blend",
+        "Origin": null,
+        "Generated": "2026-10-08 14:16:25",
+        "SourceMtime": "Thu Oct  8 14:14:40 2026",
+        "BoundsCenter": null,
+        "A2LionTarget": null,
+        "Level2ArrivalSlot5": null,
+        "Level2ArrivalSlot4": null,
+        "L2NTerrainRegions": "[[69072,224,-4,69440,232,640],[69684,272,-44,69784,284,60],[69908,144,216,70048,164,340],[69468,164,152,69900,176,392],[69980,176,-20,70020,188,20],[69668,120,-488,69756,300,-272],[70000,156,144,70024,184,184],[70000,156,180,70024,168,200],[70000,172,92,70024,188,148]]",
+        "A2ReflectorNormal": null,
+        "CollisionPacket": "5a613ab5f50b009c",
+        "L2NReady": true,
+        "Level2ArrivalSlot2": null,
+        "StudsPerMetre": 2.86,
+        "Route": "P0 A1 P1 A3 P2 A4 P3 A2 P4 A5 P5 A6 EXIT",
+        "PromotionRevision": "live20261009",
+        "A2ReflectorCentre": null,
+        "TerrainPacket": "346bf330aa1ab565",
+        "Level2ArrivalSlot6": null,
+        "PartCount": 30281,
+        "Level2ArrivalSlot1": null,
+        "Level2ArrivalSlotCount": 6,
+        "BoundsSize": null,
+        "PreviewOnly": false,
+        "Level2ArrivalSlot3": null
+      },
+      "collisionFidelity": {
+        "Enum.CollisionFidelity.Box": 2860,
+        "Enum.CollisionFidelity.Default": 75,
+        "Enum.CollisionFidelity.Hull": 1
+      },
+      "meanLightRange": 40.25504885035881,
+      "particles": 9,
+      "parts": 27535,
+      "lights": 513,
+      "uniqueTextureIds": 0,
+      "canTouch": 0,
+      "castShadow": 2846,
+      "path": "ServerStorage.Level2PoolroomsMap",
+      "uniqueMeshIds": 619,
+      "enabledLightRanges": {
+        "25": 10,
+        "60": 26,
+        "120": 1,
+        "44.189998626708984": 4,
+        "7.21999979019165": 6,
+        "12.5": 71,
+        "39.52000045776367": 1,
+        "16.139999389648438": 8,
+        "47.040000915527344": 2,
+        "33.849998474121094": 8,
+        "6.25": 5,
+        "36.08000183105469": 14,
+        "11.40999984741211": 3,
+        "18.040000915527344": 6,
+        "32.27000045776367": 27,
+        "22.81999969482422": 2,
+        "45.63999938964844": 13,
+        "42.689998626708984": 1,
+        "26.760000228881836": 25,
+        "8.069999694824219": 1,
+        "10.819999694824219": 22,
+        "27.950000762939453": 4,
+        "19.760000228881836": 13,
+        "19.360000610351562": 1
+      },
+      "renderFidelity": {
+        "Enum.RenderFidelity.Automatic": 2931,
+        "Enum.RenderFidelity.Precise": 5
+      },
+      "uniqueSurfaceAppearances": 62,
+      "meshes": 2936,
+      "lodModes": {
+        "Enum.ModelLevelOfDetail.Automatic": 7
+      },
+      "bounds": {
+        "center": [
+          69547.6875,
+          197.6262969970703,
+          -424.821533203125
+        ],
+        "size": [
+          4424.525390625,
+          396.3674011230469,
+          3895.97216796875
+        ]
+      },
+      "canQuery": 23892,
+      "rootLevelOfDetail": "Enum.ModelLevelOfDetail.Automatic",
+      "rootStreamingMode": "Enum.ModelStreamingMode.Nonatomic",
+      "classes": {
+        "ParticleEmitter": 9,
+        "Part": 24599,
+        "MeshPart": 2936,
+        "SpotLight": 10,
+        "SurfaceLight": 175,
+        "PointLight": 328,
+        "Beam": 12,
+        "Model": 7,
+        "Attachment": 4,
+        "Folder": 36,
+        "SurfaceAppearance": 2753
+      },
+      "unanchored": 0,
+      "enabledLights": 274,
+      "shadowLights": 3,
+      "maxLightRange": 120,
+      "partlyTransparent": 66,
+      "canCollide": 23887,
+      "enabledParticles": 9
+    }
+  ],
+  "capturedUtc": "2026-10-09T20:22:48Z",
+  "mode": "Edit",
+  "placeId": 131311258779917
+}

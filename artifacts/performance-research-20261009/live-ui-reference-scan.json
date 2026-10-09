@@ -1,0 +1,378 @@
+{
+  "capturedUtc": "2026-10-09T20:25:55Z",
+  "matches": [
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "lines": [
+        {
+          "text": "-- of ReplicatedStorage.ZyntraHUD.Templates.HUD_Touch, mounted once on every client, PC included, so",
+          "line": 454
+        },
+        {
+          "text": "\tlocal shopUI = RS:FindFirstChild(\"ZyntraShopUI\")",
+          "line": 467
+        },
+        {
+          "text": "\t\twarn(\"[NoiseReporter] ReplicatedStorage.RoundHud or ZyntraShopUI.ShopBinder is missing: no touch cells\")",
+          "line": 493
+        },
+        {
+          "text": "-- The bar is a clone of ReplicatedStorage.ZyntraHUD.Templates.HUD_PC/StaminaBar, mounted through",
+          "line": 701
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "lines": [
+        {
+          "text": "\tlocal shopUI = RS:FindFirstChild(\"ZyntraShopUI\")",
+          "line": 251
+        },
+        {
+          "text": "\tlocal shopUI = RS:FindFirstChild(\"ZyntraShopUI\")",
+          "line": 355
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "lines": [
+        {
+          "text": "\tlocal Binder = require(RS:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 1300
+        },
+        {
+          "text": "\tlocal Binder = require(RS:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 4166
+        },
+        {
+          "text": "\tlocal Binder = require(RS:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 4488
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "lines": [
+        {
+          "text": "\tlocal Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 40
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "lines": [
+        {
+          "text": "-- (\"Zyntra Shop L4\", PlayerScripts.ZyntraShopUIOpen); J, DevPhoneCommand and the",
+          "line": 14
+        },
+        {
+          "text": "-- dropped and drawn wrong for 12 s). Off the main thread: if ZyntraShopUI never",
+          "line": 435
+        },
+        {
+          "text": "\tlocal ShopData = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopData\"))",
+          "line": 441
+        },
+        {
+          "text": "\tlocal alt = player:WaitForChild(\"PlayerScripts\"):FindFirstChild(\"ZyntraShopUIOpen\")",
+          "line": 1204
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraStore] PlayerScripts.ZyntraShopUIOpen is missing: Zyntra Shop L4 is not installed, so the shop cannot open\")",
+          "line": 1206
+        },
+        {
+          "text": "\tZyntraStoreOpen = {\"ZyntraShopUIOpen\", \"close\"},",
+          "line": 1231
+        },
+        {
+          "text": "\t\t\tlocal folder = ReplicatedStorage:FindFirstChild(\"ZyntraShopUI\")",
+          "line": 1341
+        },
+        {
+          "text": "\t\t\t\twarn(\"[ZyntraStore] ReplicatedStorage.ZyntraShopUI.ShopData is missing: the wall cannot sell \" .. key)",
+          "line": 1346
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "lines": [
+        {
+          "text": "local Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 310
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "lines": [
+        {
+          "text": "local Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 55
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "lines": [
+        {
+          "text": "local Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 66
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Daily L4",
+      "lines": [
+        {
+          "text": "-- ReplicatedStorage.ZyntraShopUI.DailyRewards_L4, mounted and fitted exactly",
+          "line": 4
+        },
+        {
+          "text": "local folder = ReplicatedStorage:WaitForChild(\"ZyntraShopUI\", 30)",
+          "line": 100
+        },
+        {
+          "text": "\twarn(\"[ZyntraDailyUI] ReplicatedStorage.ZyntraShopUI (ShopBinder, ShopData) is not installed: Daily Rewards cannot open\")",
+          "line": 104
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraDailyUI] L4 missing: ReplicatedStorage.ZyntraShopUI.DailyRewards_L4/DailyRewardsPanel: Daily Rewards cannot open\")",
+          "line": 499
+        },
+        {
+          "text": "\t\t\thandOver(\"ZyntraShopUIOpen\", \"BindableFunction\", \"Zyntra Shop L4\", function(bridge)",
+          "line": 648
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "lines": [
+        {
+          "text": "local P = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\")).Palette",
+          "line": 48
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "lines": [
+        {
+          "text": "local Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 24
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Found Footage HUD",
+      "lines": [
+        {
+          "text": "local Binder = require(RS:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 12
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Shop L4",
+      "lines": [
+        {
+          "text": "-- ReplicatedStorage.ZyntraShopUI.ZyntraShop_L4 (L4-ROBLOX-PLAN.md section 2.4).",
+          "line": 4
+        },
+        {
+          "text": "-- PlayerScripts.ZyntraShopUIOpen:Invoke(tab); this answers true only when it",
+          "line": 31
+        },
+        {
+          "text": "\tlocal old = playerScripts:FindFirstChild(\"ZyntraShopUIOpen\")",
+          "line": 90
+        },
+        {
+          "text": "\tbridge.Name = \"ZyntraShopUIOpen\"",
+          "line": 93
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 open failed: \" .. tostring(used))",
+          "line": 104
+        },
+        {
+          "text": "local folder = ReplicatedStorage:WaitForChild(\"ZyntraShopUI\", 30)",
+          "line": 112
+        },
+        {
+          "text": "\twarn(\"[ZyntraShopUI] ReplicatedStorage.ZyntraShopUI (ShopBinder, ShopData) is not installed: the shop cannot open\")",
+          "line": 116
+        },
+        {
+          "text": "\t\t\t\t\t\twarn((\"[ZyntraShopUI] L4 %s shows the import placeholder: %s\"):format(key,",
+          "line": 243
+        },
+        {
+          "text": "\t\t\twarn(\"[ZyntraShopUI] L4 developer suit card skipped: Page_Skins/SkinCard_\" .. fromId",
+          "line": 429
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 DEV button skipped: ShopWindow Records or Settings is missing,\"",
+          "line": 1037
+        },
+        {
+          "text": "\t\t\twarn(\"[ZyntraShopUI] DEV cannot open: PlayerScripts.ZyntraDevUIOpen (Zyntra Dev L4) is missing\")",
+          "line": 1069
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 header pages missing, their buttons are hidden: \" .. table.concat(lostPages, \", \"))",
+          "line": 1117
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 missing: ReplicatedStorage.ZyntraShopUI.ZyntraShop_L4\")",
+          "line": 1153
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 missing: ZyntraShop_L4/ShopWindow\")",
+          "line": 1162
+        },
+        {
+          "text": "\t\tfor _, path in ipairs(missing) do warn(\"[ZyntraShopUI] L4 missing: \" .. path) end",
+          "line": 1298
+        },
+        {
+          "text": "\tif #lost > 0 then warn(\"[ZyntraShopUI] L4 optional nodes missing: \" .. table.concat(lost, \", \")) end",
+          "line": 1343
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] L4 pages missing, their tabs are hidden: \" .. table.concat(hiddenTabs, \", \"))",
+          "line": 1345
+        },
+        {
+          "text": "\t\twarn((\"[ZyntraShopUI] %s skin skipped, missing: %s\"):format(surface, table.concat(missing, \", \")))",
+          "line": 1485
+        },
+        {
+          "text": "\t\t\treturn warn((\"[ZyntraShopUI] %s skin skipped: ReplicatedStorage.ZyntraShopUI.%s is missing\"):format(surface, templateName))",
+          "line": 1753
+        },
+        {
+          "text": "\t\t\tif not ok then warn((\"[ZyntraShopUI] %s skin failed: %s\"):format(surface, tostring(err))) end",
+          "line": 1757
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Dev L4",
+      "lines": [
+        {
+          "text": "-- the Framewisp import ReplicatedStorage.ZyntraShopUI.DevMenu_L4 (Figma",
+          "line": 4
+        },
+        {
+          "text": "local folder = ReplicatedStorage:WaitForChild(\"ZyntraShopUI\", 30)",
+          "line": 160
+        },
+        {
+          "text": "\twarn(\"[ZyntraDevUI] ReplicatedStorage.ZyntraShopUI.ShopBinder is not installed: the dev menu cannot open\")",
+          "line": 163
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraDevUI] L4 missing: ReplicatedStorage.ZyntraShopUI.DevMenu_L4/DevWindow: the dev menu cannot open\")",
+          "line": 784
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round HUD",
+      "lines": [
+        {
+          "text": "local hudModule, shopUI = RS:FindFirstChild(\"RoundHud\"), RS:FindFirstChild(\"ZyntraShopUI\")",
+          "line": 22
+        }
+      ],
+      "class": "LocalScript"
+    },
+    {
+      "path": "ReplicatedStorage.UIRegression",
+      "lines": [
+        {
+          "text": "\t-- ReplicatedStorage.ZyntraShopUI loaded, so a broken install fails here by",
+          "line": 1872
+        },
+        {
+          "text": "\t\t\tlocal shopUI = game:GetService(\"ReplicatedStorage\"):FindFirstChild(\"ZyntraShopUI\")",
+          "line": 5650
+        }
+      ],
+      "class": "ModuleScript"
+    },
+    {
+      "path": "ReplicatedStorage.RoundHud",
+      "lines": [
+        {
+          "text": "-- Framewisp into ReplicatedStorage.ZyntraHUD.Templates.<bundle> and is mounted through here. On one",
+          "line": 5
+        },
+        {
+          "text": "local Binder = require(ReplicatedStorage:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 74
+        },
+        {
+          "text": "\tlocal hud = ReplicatedStorage:FindFirstChild(\"ZyntraHUD\")",
+          "line": 111
+        }
+      ],
+      "class": "ModuleScript"
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopBinder",
+      "lines": [
+        {
+          "text": "-- ShopBinder (ReplicatedStorage.ZyntraShopUI.ShopBinder)",
+          "line": 1
+        }
+      ],
+      "class": "ModuleScript"
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraShopUI.ShopData",
+      "lines": [
+        {
+          "text": "-- ShopData (ReplicatedStorage.ZyntraShopUI.ShopData)",
+          "line": 1
+        },
+        {
+          "text": "\t\twarn(\"[ZyntraShopUI] prompt failed for \" .. key .. \": \" .. tostring(err))",
+          "line": 309
+        }
+      ],
+      "class": "ModuleScript"
+    },
+    {
+      "path": "ReplicatedStorage.LoadingCardView",
+      "lines": [
+        {
+          "text": "local Binder = require(RS:WaitForChild(\"ZyntraShopUI\"):WaitForChild(\"ShopBinder\"))",
+          "line": 5
+        }
+      ],
+      "class": "ModuleScript"
+    }
+  ],
+  "scriptsScanned": 220
+}
