@@ -1,0 +1,6 @@
+C:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:637: harness has no module ZyntraSkins
+stacktrace:
+[C] function error
+C:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:637 function require
+C:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:805 function world
+C:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:2018

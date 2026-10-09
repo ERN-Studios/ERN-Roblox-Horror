@@ -1,0 +1,441 @@
+COUNTER generated=128 repeats=128 next=65
+=== Round completion routing rules ===
+  ok   Level 1 continues to Level 2
+  ok   Level 2 continues to Level 3
+  ok   Level 3 continues to Level 4 (the cinema, since 2026-10-05)
+  ok   there is no route beyond Level 4
+  ok   Levels 1 to 3 offer Continue
+  ok   Level 4 offers no Continue -- Back to Lobby only
+  ok   the campaign ends at 4 and the window is 15 seconds
+  ok   level clamping is the module's, and holds for junk input
+  ok   a duplicated participant joins the roster once
+  ok   and every participant is in it
+  ok   everybody starts undecided
+  ok   somebody who was never in the window has no decision at all
+  ok   and cannot be given one
+  ok   a Continue press is recorded
+  ok   a second, different press is refused
+  ok   a refused transfer gives the choice back
+  ok   and they may then choose again
+  ok   Roblox accepted the transfer
+  ok   after departure the choice can no longer be taken back
+  ok   and leaving the server does not turn a departed continuer into a quitter
+  ok   a departed continuer is still a continuer
+  ok   and is still in the roster, which is what keeps the head count honest
+  ok   a departed continuer is still expected at the destination
+  ok   the departed one is not moved again
+  ok   the undecided one is carried by the countdown
+  ok   the opt-out goes to the lobby
+  ok   and nobody has quit
+  ok   leaving without choosing is recorded as gone
+  ok   and a quitter is never expected at the destination
+  ok   the quitter is in no transfer list
+  ok   a window with undecided players is not settled
+  ok   one chooser is not enough
+  ok   a disconnect settles the window instead of holding it open
+  ok   a window where everybody has chosen is settled
+  ok   an empty window is settled
+  ok   the sweep skips progressing players and anyone already in flight
+  ok   nobody is swept when everybody is progressing
+  ok   nobody is swept when everybody already holds a transfer claim
+  ok   a failed claim releases its player back to the settlement sweep
+  ok   branch "full" ran its declared 39 checks
+=== Production host loads the routing module ===
+  ok   the running host answers a live routing probe
+  ok   the probe replies
+  ok   and the host answering it is GameManager
+  ok   the host is holding THIS version of the module
+  ok   the host's campaign length and window come from the module
+  ok   and the host routes L1->L2, L2->L3 and stops, through the module
+  ok   the running host also published this module's version on Workspace
+  ok   and this suite shares the very table GameManager loaded
+  ok   the host routes every completion rule through the module
+  ok   and keeps no completion or transfer state of its own
+  ok   no duplicated campaign or settlement constants remain in the host
+  ok   no continuer is sent as a party of one, and the bootstrap does not size a round from one frozen PartySize
+  ok   the TeleportInitFailed handler is present
+  ok   and correlates every failure report through the module
+  ok   and starts no transfer of its own
+  ok   all five completion exits and loading failure settle
+  ok   and none of them discards the settlement result
+  ok   and every one of them holds the completed world when it does not resolve
+  FAIL the pre-round wipe settles the Loss endpoint inside its OWN body  (body found, no settlement call)
+  FAIL and holds the completed world instead of merely waiting and returning  (body found, result discarded)
+       MUTATION PROOF: reverting sendWipedPartyHome to a bare task.wait(1.6) fails the two checks above and drops settlementCalls/honoured back to 4.
+  ok   the host calls no transfer helper that does not exist
+  FAIL and the Studio next-level branch releases its claims through the surviving helper  (no release call in the branch)
+  ok   the host re-anchors an accepted attempt AND hands over the dispatch instant to clamp it
+  ok   and reports synchronous dispatch rejections into the runtime
+  ok   and the destination hands the source's declared horizon to ArrivalDecision
+       MUTATION PROOF: dropping the `at` argument at the RestampAttempt call site, or the CohortHorizon field in stageArrivingParty, fails these -- and both are places the routing module cannot defend itself.
+  FAIL the host announces the wipe window by name and clears it again  (partydown is not fired with a name, or announces a window other than the one wipeDeadline counts to, or the window is not cleared on re-entry recovery, teardown and the post-loop exit)
+  ok   branch "with-source" ran its declared 26 checks
+=== Post-win admission: one window, one round ===
+  ok   a departed continuer survives PlayerRemoving as a continuer
+  ok   and is not erased from the window's roster
+  ok   so the head count still says three are coming
+  ok   the first Continue does not start the round by itself
+  ok   the later continuer carries the SAME session id
+  ok   and is staged, not dropped into a running round
+  ok   only the undecided player is carried
+  ok   both early continuers already departed
+  ok   nobody opted out and nobody quit
+  ok   the settlement packet is final and names all THREE
+  ok   the round starts once all three have landed
+  ok   and every intended continuer is in it, none of them a spectator
+  ok   into Level 2
+  ok   the cohort is not undercounted by the early departure
+  ok   two of the three arriving is not enough to start
+  ok   leaving without choosing is recorded as gone
+  ok   and the destination expects two
+  ok   the departing continuer does not shrink it further
+  ok   and the round starts with exactly the two who were coming
+  ok   Level 2 continues to Level 3
+  ok   the opt-out is already subtracted from the head count
+  ok   the opt-out returns and the undecided player continues
+  ok   the round starts with two, never waiting for the third
+  ok   a duplicated arrival packet counts its player once
+  ok   and duplicates cannot fake the cohort into starting early
+  ok   the real cohort still admits exactly once each
+  ok   an empty reserved server waits for the transport
+  ok   a reserved server nobody reaches is abandoned, not left spinning
+  ok   a lobby-bound or malformed packet forms no round session
+  ok   a station launch waits for its whole party
+  ok   and starts the moment the whole party is there
+  ok   an unreachable deadline is bounded by the destination's own cap
+  ok   a stray reconnect cannot take the round from the real session
+  ok   both continuers arrive in Level 3's continuation bore, not on a pad
+  ok   the instant continuer and the timed-out continuer enter the same way
+  ok   and the early departure did not cost the cohort a member
+  ok   the early continuer's packet is a non-final estimate of two
+  ok   a refused Back to Lobby gives that player their choice back
+  ok   which makes the cohort GROW to three
+  ok   and the settlement packet is authoritative at three
+  ok   with bo carried onward rather than returned
+  ok   the destination takes the authoritative three
+  ok   and waits: one of three has landed
+  ok   the late stale estimate cannot un-finalise the session
+  ok   nor shrink the authoritative head count
+  ok   so the round still waits for the player who is still in transit
+  ok   and admits all three into one round once the last one lands
+  ok   a settlement packet outranks an estimate
+  ok   and anything unrecognisable ranks as an estimate
+  ok   the solo continuer leaves the completed server immediately
+  ok   and stays a continuer after PlayerRemoving
+  ok   the settlement has nobody left to carry, so no final packet is sent
+  ok   the destination still recognises them as this session's party
+  ok   with no authoritative packet to mark it final
+  ok   they are staged while the source's window is still open
+  ok   and admitted at the deadline plus the bounded transport grace
+  ok   never before the deadline
+  ok   and the local cap admits them even with no deadline at all
+  ok   a finished Level 4 has nowhere to continue to
+  ok   a finished Level 3 continues to Level 4
+  FAIL branch "full" ran 60 checks, expected 59
+=== Transfer claims, attempts and failure reports ===
+  ok   only one path may claim a player at a time
+  ok   an accepted TeleportAsync leaves the claim PENDING, not succeeded
+  ok   a pending claim is not a settled transfer
+  ok   one TeleportAsync call is one attempt, however many players ride it
+  ok   and the id is readable back out of the TeleportOptions Roblox returns
+  ok   every new attempt gets a new id
+  ok   options with no attempt id correlate to nothing
+  ok   the first report earns one retry
+  ok   and charges exactly one failure
+  ok   a SECOND report of the same attempt is a no-op
+  ok   so one rejection cannot consume the retry AND the fallback at once
+  ok   a late report of the superseded attempt is a no-op
+  ok   and cannot inflate the failure counter
+  ok   the retry's OWN failure is what escalates to the lobby fallback
+  ok   on exactly two charged attempts
+  ok   a next-level transfer that fails twice falls back
+  ok   and a fresh lobby claim can be taken
+  ok   the fresh claim starts with a clean failure count
+  ok   the dead next-level report cannot charge the fresh lobby claim
+  ok   its failure counter is untouched
+  ok   and the lobby transfer is still in flight
+  ok   a retry would rebuild the lobby request, not the dead next-level one
+  ok   and would not carry the old reservation code
+  ok   the live lobby attempt can still fail normally
+  ok   charging exactly one failure
+  ok   a lobby transfer has no fallback -- the lobby IS the fallback
+  ok   a report for an attempt this claim never made is a no-op
+  ok   a report for a player with no claim at all is a no-op
+  ok   and an uncorrelatable report is refused rather than guessed at
+  ok   a rejected early Back resolves its claim as failed
+  ok   and the session stops waiting on it
+  ok   the settlement sweep may now send that player to the lobby
+  ok   a failed claim can be re-taken by exactly one new authority
+  ok   the sweep skips both in-flight players and takes only the undecided one
+  ok   the session is not settled while either claim is pending
+  ok   and it can name exactly who it is still waiting for
+  ok   settlement completes once every claim has an answer
+  ok   the failed one rejoins the sweep while the departed one does not
+  ok   a TeleportInitFailed arriving after the player left is a no-op
+  ok   and cannot un-depart them
+  ok   a young attempt is left alone
+  ok   a silent attempt is eventually reported by the sweep
+  ok   which REPORTS and charges nothing -- charging is AttemptFailure's alone
+  ok   and the timeout enters the SAME transition a callback does
+  ok   exactly once, however many times it is swept
+  ok   branch "full" ran its declared 45 checks
+=== Completed-world teardown ===
+  ok   a reserved server whose party Roblox accepted just lets the world go
+  ok   a REFUSED reserved-server transfer keeps the map under the stranded party
+  ok   a public server tears down and stands them up in its own lobby
+  ok   and so does a public server whose transfer was accepted
+  ok   Studio always recovers locally: it has no destination to send anyone to
+  ok   including when its local transfer is refused
+  ok   the Level 3 endpoint: a refused reserved-server transfer keeps the world
+  ok   a lost round: a refused reserved-server transfer keeps the world
+  ok   a refused next-level fallback: a refused reserved-server transfer keeps the world
+  ok   an unknown context recovers locally rather than stranding anybody
+  ok   a player whose lobby transfer was refused is claimable again
+  ok   and holds nothing that would keep the settlement waiting
+  ok   branch "full" ran its declared 12 checks
+=== Endpoint settlement and the silent-transfer watchdog ===
+  ok   an endpoint waits long enough for the watchdog to have expired a silent attempt
+  ok   the settlement covers attempt + sweep + retry delay + retry + sweep + grace
+  ok   the sweep runs several times inside one stale window
+  ok   and the sweep cannot steal a retry it authorised itself
+       === T1 callback@24.5 then sweep@25 ===
+  ok   callback charges exactly one failure
+  ok   awards a retry without resolving
+  ok   sweep does not charge an already-charged attempt
+  ok   and does not cancel the retry
+  ok   nor steal its handoff
+  ok   and dispatches nothing of its own
+  ok   exactly one retry is dispatched
+  ok   to the SAME destination
+  ok   one rejection cost exactly one failure
+  ok   lineage still starts at the first attempt
+  ok   sweep-then-callback also charges once and retries once
+       === T2 silent first next-level attempt ===
+  ok   a young silent attempt is left alone
+  ok   the silent attempt charges exactly one failure
+  ok   enters the SAME policy as a callback
+  ok   without resolving the claim
+  ok   the retry goes to the NEXT LEVEL, not the lobby
+  ok   no lobby transfer was started
+  ok   and nobody was surrendered
+       === T3 silent retry -> fallback -> surrender ===
+  ok   the retry's silence charges the second failure
+  ok   the dead next-level claim is terminal and fell back
+  ok   exactly one lobby escape is opened
+  ok   on a FRESH claim with a clean budget
+  ok   which INHERITS the lineage clock so the cap stays reachable
+  ok   a lobby transfer retries once, and only once
+  ok   then surrenders exactly once -- the lobby IS the fallback
+  ok   leaving no pending claim behind
+       === T4 late retry extends settlement past 35s ===
+  ok   did not return at the old 35s deadline
+  ok   followed the lineage across attempt ids
+  ok   and reports the endpoint settled
+       === T5 repeated sweeps and duplicate callbacks ===
+  ok   ten sweeps charge nothing
+  ok   five duplicate callbacks charge nothing
+  ok   and none schedules a second retry
+  ok   sweep reports nothing while the handoff is fresh
+  ok   a late report of the superseded attempt is a no-op
+  ok   and cannot touch the attempt that replaced it
+       === T6 abandoned handoff ===
+  ok   the sweep re-drives the unacted handoff, charging nothing
+  ok   and does not charge again
+  ok   the authorisation itself is unchanged -- only its window was re-armed
+  ok   the retry finally dispatches
+  ok   and the dispatch discharges the handoff
+  ok   a permanently dead scheduler is re-driven a BOUNDED number of times
+  ok   and is never charged twice for it
+       === T6b superseded tokens and the re-drive window ===
+  ok   a lapsed handoff is re-driven once
+  ok   and an immediate second sweep re-drives NOTHING -- the window was re-armed
+  ok   however many times the settlement loop sweeps
+  ok   a superseded handoff token dispatches nothing
+  ok   the live claim has not fallen back
+  ok   a superseded token cannot mark the live claim fallen back
+  ok   nor resolve it
+  ok   nor open a lobby escape for a transfer that is still in flight
+       === T7a all four endpoints, full lineage ===
+  ok   continuation: must settle
+  ok   continuation: keeps the completed world
+  ok   continuation: a totally silent transfer still terminates through the policy
+  ok   continuation: ownership passes to local recovery exactly once
+  ok   continuation: and no claim is left pending
+  ok   level3: must settle
+  ok   level3: keeps the completed world
+  ok   level3: a totally silent transfer still terminates through the policy
+  ok   level3: ownership passes to local recovery exactly once
+  ok   level3: and no claim is left pending
+  ok   loss: must settle
+  ok   loss: keeps the completed world
+  ok   loss: a totally silent transfer still terminates through the policy
+  ok   loss: ownership passes to local recovery exactly once
+  ok   loss: and no claim is left pending
+  ok   fallback: must settle
+  ok   fallback: keeps the completed world
+  ok   fallback: a totally silent transfer still terminates through the policy
+  ok   fallback: ownership passes to local recovery exactly once
+  ok   fallback: and no claim is left pending
+       === T7b wedged claim -> hard cap -> ForceSettle ===
+  ok   continuation: a wedged claim reports an UNRESOLVED settlement
+  ok   continuation: at the hard cap, not before
+  ok   continuation: and every stranded player is handed to an owner
+  ok   continuation: leaving no pending claim
+  ok   level3: a wedged claim reports an UNRESOLVED settlement
+  ok   level3: at the hard cap, not before
+  ok   level3: and every stranded player is handed to an owner
+  ok   level3: leaving no pending claim
+  ok   loss: a wedged claim reports an UNRESOLVED settlement
+  ok   loss: at the hard cap, not before
+  ok   loss: and every stranded player is handed to an owner
+  ok   loss: leaving no pending claim
+  ok   fallback: a wedged claim reports an UNRESOLVED settlement
+  ok   fallback: at the hard cap, not before
+  ok   fallback: and every stranded player is handed to an owner
+  ok   fallback: leaving no pending claim
+  ok   an endpoint name the module does not know is refused rather than assumed
+  ok   but it still has to settle
+  ok   branch "full" ran its declared 92 checks
+=== Cohort timing, claim anchors and synchronous failures ===
+       === A1 (i) the source's retry horizon and the destination's window ===
+  ok   the destination's staging window contains the source's whole retry horizon
+  ok   and the local staging cap outlasts a whole result window plus that horizon
+  ok   the horizon is exactly accept grace + stale + sweep + retry delay + transport, and nothing more
+  ok   a cohort-bound claim earns the tight threshold and nothing else does
+  ok   and the watchdog ticks at least as often as the SHORTEST threshold in play
+       MUTATION PROOF: Routing.TimeoutForDestination handing a cohort claim the 25s lobby threshold, or Routing.SweepIntervalSeconds returning WatchdogIntervalSeconds, fails the two checks above and every timing assertion in A1 (ii).
+  ok   every packet declares the last moment its cohort can still land
+  ok   a packet with no deadline declares no horizon rather than a bogus one
+  ok   and the session carries the FURTHEST horizon any of its members declared
+  ok   a short FINAL cohort past the grace waits on the source's retry
+  ok   a TIGHTER declared horizon is honoured and admits sooner
+  ok   a forged horizon far in the future is clamped to the destination's own
+  ok   nothing is stale a moment before the cohort threshold
+  ok   the cohort-bound attempt alone goes stale at the cohort threshold
+  ok   while the lobby-bound one waits for the lobby threshold
+  ok   and an EXPLICIT timeout argument still overrides both, for every claim
+       === the attempt clock is re-anchored on acceptance ===
+  ok   a dispatch stamped before a slow accept looks stale on the pre-call clock
+  ok   the accepted attempt is re-anchored
+  ok   and is no longer stale until the threshold passes from ACCEPTANCE
+  ok   a stale attempt id may not move the clock
+  ok   and neither may a non-number stamp
+  ok   a CHARGED attempt is owned by its handoff and may not be re-anchored
+  ok   and a claim that is no longer pending may not be re-anchored at all
+       MUTATION PROOF: deleting the RestampAttempt loop from dispatchTransfer, or dropping its ChargedAttempt guard, fails the checks above.
+       === A1 (ii) one window, a silent continuer, one round ===
+  ok   the result window closes at PostWinSeconds
+  ok   her claim is cohort-bound and anchored at the moment it was taken
+  ok   her silent cohort attempt is charged within stale + one sweep of dispatch
+  ok   on the COHORT schedule, not the lobby one it used to share
+  ok   and the retry dispatches exactly one retry delay later
+  ok   to the SAME reserved server, never to the lobby
+  ok   charging exactly one failure and stranding nobody
+  ok   the retry is in flight BEFORE the destination's transport grace expires
+  ok   the settlement packet is final and names all THREE
+  ok   and declares the horizon the destination must respect
+  ok   the destination stages, and never starts, while the cohort is short
+  ok   AT deadline + transport grace it STILL waits: the final cohort is short
+  ok   for the token-aware reason, not by accident
+  ok   holding an AUTHORITATIVE three against two arrivals
+       MUTATION PROOF: deleting the (state.Final == true and expected and arrived < expected) branch from Routing.ArrivalDecision makes the three checks above admit a two-player round.
+  ok   and is still waiting a moment before she lands
+  ok   the retried arrival reaches the destination INSIDE the declared horizon
+  ok   and only THEN does the round start
+  ok   with exactly ana, bo and cy in it
+  ok   in ONE session: the early presser and the countdown carry the same id
+  ok   one Level 2 round, sized at the authoritative three
+  ok   the source endpoint settles with nobody left behind
+  ok   with nobody else coming it still waits at deadline + grace
+  ok   and a hundredth of a second before the horizon
+  ok   but admits AT the horizon, on the horizon's own reason
+  ok   running the round with the two who actually arrived
+  ok   and never, at any later poll, goes back to waiting
+  ok   the settlement resolves
+  ok   AwaitSettlement charges a silent cohort attempt within ONE sweep of it going stale -- on the cohort cadence, not the lobby one
+       MUTATION PROOF: Runtime:AwaitSettlement re-arming on Routing.WatchdogIntervalSeconds instead of SweepIntervalSeconds() pushes that expiry out to 5s and fails the check above.
+       === A2 the claim-time anchor and the unstarted claim ===
+  ok   a claim records WHEN it was taken, and starts its lineage there
+  ok   which is the settlement anchor even with no attempt on it at all
+  ok   so its settlement deadline is a fixed number rather than one that moves
+  ok   an undispatched claim is left alone before its own timeout
+  ok   and is reported UNSTARTED once that timeout passes -- it has no attempt to charge and no report will ever come
+  ok   the sweep itself still mutates nothing
+       MUTATION PROOF: dropping the `at` argument from Routing.ClaimTransfer leaves ClaimedAt nil, makes SweepTransfers' unstarted branch unreachable, and kills the four checks above.
+  ok   a pending claim nobody can date is EXPIRED at once, not waiting
+  ok   and stays expired however long the endpoint polls -- the old code recomputed now + the hard cap every pass and could never reach it
+  ok   the runtime leaves a young undispatched claim alone
+  ok   then surrenders it -- counted as a re-drive, never as a charge
+  ok   the claim ends FAILED and holds the settlement no longer
+  ok   its player is handed to local recovery exactly once
+  ok   and the warning says what actually happened
+  ok   a second sweep changes nothing -- ownership transfers once
+  ok   an endpoint holding an undispatched claim RETURNS
+  ok   at that claim's own timeout -- not at the hard cap, and not never
+  ok   having handed its one player to local recovery
+       === A3 the loss endpoint, behaviourally ===
+  ok   the LOSS endpoint runs the same settlement as every other one and names its stranded player
+  ok   waiting the full hard cap rather than a fixed 1.6 seconds
+  ok   and transferring ownership before it lets go of the completed world
+       MUTATION PROOF: sendWipedPartyHome's task.wait(1.6) returned here with the claim above still pending. The source-shape half of this is in Suite.Host.
+       === A4 idempotent force settle ===
+  ok   a live cohort claim is in flight, holding a retry authority
+  ok   the first force reports exactly one stranded player
+  ok   with one surrender and one warning
+  ok   and the claim is terminally marked
+  ok   holding no token, so no stale authority can resolve it afterwards
+  ok   a second force reports NOTHING
+  ok   and adds no second surrender and no second warning -- the second recovery used to cancel the first one's retry token
+  ok   nor does a concurrent force naming the same player twice
+  ok   a callback landing after the force is a no-op
+  ok   charging nothing, surrendering nobody, changing no state
+       MUTATION PROOF: Runtime:ForceSettle warning, spawning and appending unconditionally -- ignoring ForceSettleClaim's answer -- doubles every count above.
+  ok   a player mid-handover is still owned, though their claim has resolved
+  ok   the force reaches them
+  ok   the handover marker is cleared
+  ok   so the settlement can resolve at all
+  ok   and it still only ever happens once
+       === A5 a refused dispatch earns the same policy as a callback ===
+  ok   Roblox refuses the request synchronously, and it is still an ATTEMPT
+  ok   which the runtime charges into the SAME policy a callback earns
+  ok   one failure, and the claim is NOT resolved by hand
+  ok   a second report of the same refusal charges nothing
+  ok   and nothing re-dispatches before the retry delay
+  ok   the retry dispatches to the next level exactly one retry delay later
+  ok   and a SECOND refusal escalates to the fallback, on exactly two charges
+  ok   opening a FRESH lobby claim with a clean budget
+  ok   that inherits the lineage clock
+       MUTATION PROOF: resolving the claim Failed at the call site -- what the old failPendingTeleport did for a refused REAL dispatch -- fails every check in this block: no retry, no fallback, no lobby.
+  ok   the exhausted next-level lineage falls back to a lobby claim
+  ok   whose own synchronous refusal is charged once and earns ITS retry
+  ok   and the player is NOT surrendered while that live claim still owns them
+       MUTATION PROOF: dropping `not Routing.ClaimOwns(env.Claims[member])` from Runtime:_ApplyHandoff's fallback thread surrenders them here, a whole attempt early.
+  ok   the lobby retry's refusal is the second and last charge -- the lobby IS the fallback
+  ok   and only THEN is the player surrendered, exactly once
+  ok   building the request throws before anything is dispatched
+  ok   leaving a claim with no attempt on it -- the exact shape that used to be invisible to every sweep
+  ok   a stamped, reported unbuildable request earns a retry like any refusal
+  ok   the dispatching thread dies with the claim already taken
+  ok   the endpoint still settles finitely
+  ok   bounded by the undispatched-claim timeout
+  ok   and ownership is transferred exactly once rather than dropped
+       === A1 a slow accept may not push the retry past the declared horizon ===
+  ok   a slow accept re-anchors the attempt only as far as the accept grace
+  ok   so the retry's worst-case arrival still lands inside the horizon the packet declared
+  ok   and the destination has not admitted yet when it arrives
+  ok   a stamp BEFORE the dispatch cannot un-age the attempt either
+  ok   and a SECOND slow accept cannot ratchet the anchor another grace forward
+       MUTATION PROOF: dropping the clamp in Routing.RestampAttempt, dropping CohortAcceptGraceSeconds from CohortArrivalHorizonSeconds, or dropping the dispatch anchor at the GameManager call site, fails these.
+       === A2 an all-manual cohort still holds the destination ===
+  ok   with everyone already departed the settlement has nobody left to carry a packet
+  ok   so the destination never receives a FINAL packet at all
+  ok   an ESTIMATE that names three still holds the round past the transport grace
+  ok   because the estimate the early pressers carried already named the whole cohort
+  ok   and once the retry lands all three are admitted into ONE round
+       MUTATION PROOF: restoring `state.Final == true` to the token-aware branch in Routing.ArrivalDecision admits at the grace and fails the wait check above.
+       === A5 a timer-free settlement loop is caught, not survived ===
+  ok   the clock stops a settlement loop that schedules nothing at all
+  ok   and it is the ADVANCE counter that caught it, with no timer ever firing
+       MUTATION PROOF: deleting the clock.Advances assert, or the Horizon assert, turns this case back into the hang that wedged Studio for twenty minutes.
+  ok   branch "full" ran its declared 118 checks
+TOTAL: 399 checks, 5 failed

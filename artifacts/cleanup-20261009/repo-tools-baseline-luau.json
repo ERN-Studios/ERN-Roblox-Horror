@@ -1,0 +1,26 @@
+[
+  {
+    "path": "tools/tests/test_support_product_receipts.py",
+    "exit_code": 1,
+    "unchanged": true,
+    "output_tail": "C:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:637: harness has no module ZyntraSkins\nstacktrace:\n[C] function error\nC:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:637 function require\nC:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:805 function world\nC:/Users/mikke/AppData/Local/Temp/support-receipts-ir0onm5k/receipts.luau:2018\n"
+  },
+  {
+    "path": "tools/tests/test_item_inventory.py",
+    "exit_code": 1,
+    "unchanged": true,
+    "output_tail": "C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:794: attempt to index nil with 'content'\nstacktrace:\nC:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:794 function require\nC:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:959 function world\nC:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:2602 function fresh\nC:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:2612\n"
+  },
+  {
+    "path": "tools/tests/test_first_entry_guide.py",
+    "exit_code": 1,
+    "unchanged": true,
+    "output_tail": "C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:436: TweenService\nstacktrace:\n[C] function assert\nC:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:436 function GetService\nC:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:479 function boot\nC:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:1035 function fresh\nC:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:1040\nTraceback (most recent call last):\n  File \"G:\\Roblox\\MongoTV\\tools\\tests\\test_first_entry_guide.py\", line 381, in <module>\n    main()\n  File \"G:\\Roblox\\MongoTV\\tools\\tests\\test_first_entry_guide.py\", line 377, in main\n    subprocess.run([binary, str(path)], check=True, timeout=20)\n  File \"C:\\Users\\mikke\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\subprocess.py\", line 571, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command '['C:\\\\Users\\\\mikke\\\\AppData\\\\Local\\\\Temp\\\\codex-luau-0.737\\\\luau.exe', 'C:\\\\Users\\\\mikke\\\\AppData\\\\Local\\\\Temp\\\\first-entry-guide-n729xoax\\\\guide_test.luau']' returned non-zero exit status 1.\n"
+  },
+  {
+    "id": "T06 Unicode generated command",
+    "source_utf8_bytes": 34,
+    "exit_code": 1,
+    "output_tail": "C:/Users/mikke/AppData/Local/Temp/installer-baseline-wlx0klbb/probe.luau:1: String literal contains malformed escape sequence\nstacktrace:\n"
+  }
+]

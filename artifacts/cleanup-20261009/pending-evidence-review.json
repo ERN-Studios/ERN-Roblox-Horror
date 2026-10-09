@@ -1,0 +1,75 @@
+{
+  "scope": "offline read-only artifact review; no native parity or gameplay claim",
+  "productionWrites": 0,
+  "studioCalls": 0,
+  "protectedOwnerFiles": 7,
+  "ownerCheckpoint": ".git/mongotv-cleanup-20261009/concurrent-20261009T200540091097Z",
+  "ownerBytesUnchanged": true,
+  "core024BeforeHashesMatchCurrentRepo": true,
+  "core037OnlyResetCallDiff": true,
+  "core037KnownFailuresPreserved": 5,
+  "repoReceiptMatchesCurrentSources": 230,
+  "artifactCompiles": [
+    {
+      "file": "artifacts/cleanup-20261009/core024/Builder.before.luau",
+      "byteSHA256": "b016f11d7b01f38ee304cbd58e14013bf17ea52e9f4f4877cf24695263954273",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core024/Builder.candidate.luau",
+      "byteSHA256": "c6700c088f2e4fda7cd90d7c6aee6bf504204461c24d8a2dd7bc3a5ac347df08",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core024/EndBlockades.before.luau",
+      "byteSHA256": "8290bc5d3eff75bdd955806eb8f7c46b67ba2f8afc0dcb8b83f7c82e39c49dad",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core024/EndBlockades.candidate.luau",
+      "byteSHA256": "a9faaf4577c6352b319495d704bca7f2753e9ace352fea074a27285b6a3f7b44",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core024/native-fixture.luau",
+      "byteSHA256": "9fb499581332c2c13ba641e845d20b931fdc999d91fd9089aa0cc7c694a12dea",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core037/Suite.before.luau",
+      "byteSHA256": "7a79483f659df16b76837a01e20d06f895c1f3e142aa96b4138f5072be4018a0",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/core037/Suite.candidate.luau",
+      "byteSHA256": "8aae83c23dded79e4a69b72c8a8360a1e135c89e83238c49d54fe994875da92b",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.before.luau",
+      "byteSHA256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/le34-comments/LayoutGenerator.candidate.luau",
+      "byteSHA256": "cf309386c0cd5aef85c3f8208ea28d51f2c8206d27019d86e4d58902f2cc325f",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/le34-comments/PuzzleManager.before.luau",
+      "byteSHA256": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "compilePass": true
+    },
+    {
+      "file": "artifacts/cleanup-20261009/le34-comments/PuzzleManager.candidate.luau",
+      "byteSHA256": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "compilePass": true
+    }
+  ],
+  "artifactPythonAST": [
+    "artifacts/cleanup-20261009/check_current_repo.py",
+    "artifacts/cleanup-20261009/core009-l4-analytics-probe.py",
+    "artifacts/cleanup-20261009/probe_core037.py",
+    "artifacts/cleanup-20261009/core024/prepare_proposal.py"
+  ]
+}

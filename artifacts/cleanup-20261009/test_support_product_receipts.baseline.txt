@@ -1,0 +1,1 @@
+Set LUAU_BIN or put luau on PATH

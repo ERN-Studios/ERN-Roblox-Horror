@@ -1,0 +1,16 @@
+{
+  "before": {
+    "returncode": 1,
+    "stdout": "zyntra analytics: 111 checks passed\n",
+    "stderr": "C:/Users/mikke/AppData/Local/Temp/mongotv-core009-71y5qog3/before.luau:9: round start preserves Level 4 attribution: expected L4, got other\nstacktrace:\n[C] function assert\nC:/Users/mikke/AppData/Local/Temp/mongotv-core009-71y5qog3/before.luau:9 function equal\nC:/Users/mikke/AppData/Local/Temp/mongotv-core009-71y5qog3/before.luau:1395\n",
+    "sourceSHA256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818"
+  },
+  "candidate": {
+    "returncode": 0,
+    "stdout": "zyntra analytics: 111 checks passed\nL1-L4 captured analytics: 127 total checks passed\n",
+    "stderr": "",
+    "sourceSHA256": "7fc03f02000e0e20b99285a78c6363d898579b61d0646a3c8dc04314f0132347"
+  },
+  "scope": "Fake AnalyticsService, actual production module and catalogue; no network, DataStore or Studio mutation",
+  "candidateChange": "Only ALLOWED.L4=true; no new Level5/6 event semantics"
+}

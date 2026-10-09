@@ -1,0 +1,43 @@
+{
+  "finding": "CORE-037",
+  "status": "pending native isolated real-TeleportOptions/live-host test; proposal only",
+  "scope": "only RunAll automatic ResetAttemptIds call; no runtime Routing/GameManager changes",
+  "productionWrites": 0,
+  "studioCalls": 0,
+  "boundary": "offline fake engine host probe; not actual Studio host, TeleportOptions or teleport proof",
+  "tests": [
+    {
+      "version": "before",
+      "generatedAcrossTwoRuns": 128,
+      "reusedIDs": 128,
+      "nextID": 65,
+      "suiteChecksEachRun": 399,
+      "suiteFailuresEachRun": 5,
+      "suiteReportSHA256": "9474f4782c80cea0b35ddadc7cbb7f7f37e44d2acbfcd0643cf1727c32f5f556"
+    },
+    {
+      "version": "candidate",
+      "generatedAcrossTwoRuns": 128,
+      "reusedIDs": 0,
+      "nextID": 5129,
+      "suiteChecksEachRun": 399,
+      "suiteFailuresEachRun": 5,
+      "suiteReportSHA256": "9474f4782c80cea0b35ddadc7cbb7f7f37e44d2acbfcd0643cf1727c32f5f556"
+    }
+  ],
+  "file": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
+  "studioPath": "ServerScriptService.Round Completion Test Suite",
+  "className": "ModuleScript",
+  "properties": {
+    "Archivable": true,
+    "LinkedSource": ""
+  },
+  "attributes": [],
+  "beforeSHA256Lf": "7a79483f659df16b76837a01e20d06f895c1f3e142aa96b4138f5072be4018a0",
+  "candidateSHA256Lf": "8aae83c23dded79e4a69b72c8a8360a1e135c89e83238c49d54fe994875da92b",
+  "beforeBytesLf": 135637,
+  "candidateBytesLf": 135610,
+  "compileGates": 4,
+  "diff": "--- ServerScriptService/Round Completion Test Suite.ModuleScript.lua\n+++ ServerScriptService/Round Completion Test Suite.ModuleScript.lua\n@@ -2615,5 +2615,4 @@\n \n function Suite.RunAll()\n-\tRouting.ResetAttemptIds()\n \tlocal runs = {Suite.Module, Suite.Host, Suite.Admission, Suite.Transfers,\n \t\tSuite.Teardown, Suite.Endpoints, Suite.Cohort}\n",
+  "passedOffline": true
+}

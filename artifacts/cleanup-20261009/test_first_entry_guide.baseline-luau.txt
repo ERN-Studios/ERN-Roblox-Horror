@@ -1,0 +1,15 @@
+C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:436: TweenService
+stacktrace:
+[C] function assert
+C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:436 function GetService
+C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:479 function boot
+C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:1035 function fresh
+C:/Users/mikke/AppData/Local/Temp/first-entry-guide-n729xoax/guide_test.luau:1040
+Traceback (most recent call last):
+  File "G:\Roblox\MongoTV\tools\tests\test_first_entry_guide.py", line 381, in <module>
+    main()
+  File "G:\Roblox\MongoTV\tools\tests\test_first_entry_guide.py", line 377, in main
+    subprocess.run([binary, str(path)], check=True, timeout=20)
+  File "C:\Users\mikke\AppData\Local\Programs\Python\Python311\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['C:\\Users\\mikke\\AppData\\Local\\Temp\\codex-luau-0.737\\luau.exe', 'C:\\Users\\mikke\\AppData\\Local\\Temp\\first-entry-guide-n729xoax\\guide_test.luau']' returned non-zero exit status 1.

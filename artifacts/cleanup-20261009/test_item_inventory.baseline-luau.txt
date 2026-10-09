@@ -1,0 +1,6 @@
+C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:794: attempt to index nil with 'content'
+stacktrace:
+C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:794 function require
+C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:959 function world
+C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:2602 function fresh
+C:/Users/mikke/AppData/Local/Temp/item-inventory-0979y_tl/item_inventory.luau:2612

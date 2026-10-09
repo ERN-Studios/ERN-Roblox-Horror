@@ -1,1 +1,5 @@
 run_native_gate.before.py.txt -text
+# Historical proof bytes include CRLF; retain them and permit only CR-at-EOL.
+core024/*.luau -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+core037/*.luau -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+le34-comments/*.luau -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

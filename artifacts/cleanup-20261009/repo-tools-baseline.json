@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "path": "tools/tests/test_studio_source_contract.py",
+      "exit_code": 0,
+      "output_tail": "the recorded baseline is ready\n  ok   a flagged baseline may also carry the permitted newline\n  ok   real drift is a conflict even on a flagged entry\n  ok   a repo file that no longer matches its manifest entry is refused\n=== push phase 2: verify_written ===\n  ok   a byte-exact write verifies\n  ok   a flagged write that lands with the permitted newline verifies\n  ok   the same landing on an unflagged entry FAILS the push\n  ok   two trailing newlines fail the push whatever the flag says\n  ok   and a truncated or altered write fails it\n=== the live manifest obeys its own schema ===\n  ok   only scripts carry the trailing-newline flag\n  ok   and every flagged entry's hash is still the REPO file, not Studio's copy\n=== independent parity rejects wrong classes and duplicate paths ===\n  ok   a matching fingerprint with the wrong ClassName fails parity\n  ok   a duplicate Studio full path is rejected instead of overwritten\n  ok   the same source with the expected ClassName passes parity\n=== fallback bookkeeping reconciles exact and +LF landings ===\n  ok   record_synced_source removes the flag for an exact fallback landing\n  ok   record_synced_source retains the flag for a permitted +LF landing\n  ok   fallback bookkeeping republishes the reconciled flag count\n=== the release tools print on a default Windows console ===\n  ok   push_repo_to_studio --help survives a cp1252 console\n  ok   pull_source_from_studio --help survives a cp1252 console\n  ok   record_pending_push --help survives a cp1252 console\n  ok   sync_from_studio --help survives a cp1252 console\n\nAll contract checks passed.\n"
+    },
+    {
+      "path": "tools/tests/test_full_sync_contract.py",
+      "exit_code": 0,
+      "output_tail": "Script.lua\n[02/07] ServerScriptService.FlaggedCrlf -> ServerScriptService/FlaggedCrlf.ModuleScript.lua\n        keeping the mirrored file: Studio holds the one permitted trailing newline\n[03/07] ServerScriptService.NewScript -> ServerScriptService/NewScript.ModuleScript.lua\n[04/07] ServerScriptService.PlainCrlf -> ServerScriptService/PlainCrlf.ModuleScript.lua\n[05/07] ServerScriptService.PlainLf -> ServerScriptService/PlainLf.ModuleScript.lua\n[06/07] ServerScriptService.StaleExact -> ServerScriptService/StaleExact.ModuleScript.lua\n[07/07] ReplicatedStorage.RoundStatus -> ReplicatedStorage/RoundStatus.RemoteEvent.txt\n\n1 mirrored file(s) kept under the permitted trailing-newline contract:\n  +1 LF in Studio  ServerScriptService/FlaggedCrlf.ModuleScript.lua\n  ok   a second sync over a settled mirror changes nothing\n  ok   and still leaves the CRLF working files untouched\n  ok   the flag survived a second full rebuild too\n=== the PRODUCTION checkout reconciles, read-only ===\n  ok   the production checkout really does hold the CRLF files this guards\n  ok   every mirrored file in the real checkout reconciles and verifies\n  ok   and the live manifest already describes canonical content for all of them\n=== the live manifest keeps its contract ===\n  ok   finalNewlineContract is present\n  ok   the published trailing-newline count is the number of entries that carry the flag\n  ok   and the contract prose names that same number rather than a stale one\n  ok   counts still reconcile\n  ok   every .lua in the mirrored services is listed in the manifest\n\nAll full-sync contract checks passed.\n"
+    },
+    {
+      "path": "tools/tests/test_support_product_receipts.py",
+      "exit_code": 1,
+      "output_tail": "Set LUAU_BIN or put luau on PATH\n"
+    },
+    {
+      "path": "tools/tests/test_item_inventory.py",
+      "exit_code": 1,
+      "output_tail": "Set LUAU_BIN or put luau on PATH\n"
+    },
+    {
+      "path": "tools/tests/test_first_entry_guide.py",
+      "exit_code": 1,
+      "output_tail": "Set LUAU_BIN; no tests executed.\n"
+    }
+  ],
+  "protected_before": {
+    "tools/sync_from_studio.py": "a5ec8fb3bc9af326d5702a39d5d257e8f1cf5b58b6b7181743ce7df96416a67a",
+    "tools/pull_source_from_studio.py": "52a824a4a3a0d536c585968e2dfab8b0f92376a1cf8220f5f563633aade8fcea",
+    "tools/install_new_scripts.py": "17768b0db24778439b5347a558e87c51e14b9fca97d48201eeee3e264ab9ff23",
+    "tools/tests/test_full_sync_contract.py": "f8d9022c2dfc8e4229d0b286de6fe73e6a955e7fd1d6e4c004a23399d99991c7",
+    "tools/tests/test_studio_source_contract.py": "09eb677e8377c64fa932a2a38534afd0d2c2afd1949e7616ddef8d4e9e922b5a",
+    "tools/tests/test_support_product_receipts.py": "38799aa16492314bf662c40cbe1848959661429978865c549538c45c809bae35",
+    "tools/tests/test_item_inventory.py": "b1b0d852bdb57df608085a6c752052d640ca8a0f1dbc96f7cce6494d9ab82ae4",
+    "tools/tests/test_first_entry_guide.py": "bdd88eaf25fc8f2e97f13f93e7f2fd895dfc5bf2e4ff8d41cd852c608d930cf9",
+    "tools/tests/test_level2_kit_layout.py": "b6a8a70515e2c6f3025dc7806c5ee0a1257a0b590882efbd9bf6b2b978c4f379",
+    "tools/tests/test_level2_kit_import.py": "808bb478fe27482f051387288dad47a86b7ed09f8b680e3d1128dc7c3bb29d4d",
+    "tools/level4_blender/README.md": "67fe30012e9507b5fc195646281ba26c8132271866c499c14463bb9952295d70",
+    "tools/level2_poolrooms/smoke_tmp.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "protected_unchanged": true
+}
