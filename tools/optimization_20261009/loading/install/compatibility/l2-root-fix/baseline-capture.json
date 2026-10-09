@@ -1,0 +1,12 @@
+{
+  "bytes": 3532,
+  "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+  "parentPath": "StarterPlayer.StarterPlayerScripts",
+  "instanceId": "0_79286921",
+  "verifiedUtc": "2026-10-09T22:11:58Z",
+  "class": "LocalScript",
+  "parentId": "1_410029",
+  "name": "SceneEffectBudgetClient",
+  "parentClass": "StarterPlayerScripts",
+  "editorParity": true
+}

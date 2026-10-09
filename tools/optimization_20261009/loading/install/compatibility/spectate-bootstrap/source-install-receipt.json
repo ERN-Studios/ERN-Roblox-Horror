@@ -1,0 +1,30 @@
+{
+  "backupPath": null,
+  "backupPolicy": "Explicit owner instruction: do not take a backup (2026-10-09)",
+  "backupSha256": null,
+  "scripts": [
+    {
+      "bytes": 194825,
+      "path": "ServerScriptService.GameManager",
+      "editorMatches": true,
+      "class": "Script",
+      "verifiedUtc": "2026-10-09T22:56:58Z",
+      "otherOriginalsChecked": 212,
+      "beforeSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "afterSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "bytes": 20082,
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "verifiedUtc": "2026-10-09T22:57:02Z",
+      "otherOriginalsChecked": 212,
+      "beforeSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "afterSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    }
+  ],
+  "complete": true,
+  "mirrorsExported": false,
+  "published": false
+}

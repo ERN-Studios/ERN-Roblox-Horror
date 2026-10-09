@@ -1,0 +1,60 @@
+{
+  "batches": [
+    {
+      "Offset": 1,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 101,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 201,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 301,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 401,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 501,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 601,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 701,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 100
+    },
+    {
+      "Offset": 801,
+      "Mode": "apply",
+      "Total": 882,
+      "Changed": 82
+    }
+  ],
+  "complete": true,
+  "backupPolicy": "Owner requested no new backup"
+}

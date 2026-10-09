@@ -1,0 +1,314 @@
+{
+  "startedUtc": "2026-10-09T21:58:56.594082+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "backupPolicy": "Owner explicitly instructed no native backup (2026-10-09)",
+  "kind": "synthetic-native-contract",
+  "gameplay": false,
+  "performance": false,
+  "multiplayer": false,
+  "actualAssetFetches": false,
+  "realReplicationFocusCalls": false,
+  "realStreamingPass": false,
+  "expectedSources": [
+    {
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "class": "LocalScript",
+      "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Light Director"
+      ],
+      "class": "ModuleScript",
+      "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "class": "Script",
+      "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "class": "ModuleScript",
+      "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "class": "LocalScript",
+      "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be"
+    },
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "class": "LocalScript",
+      "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "class": "LocalScript",
+      "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    }
+  ],
+  "compatibilityInstallReceipt": "G:\\Roblox\\MongoTV\\tools\\optimization_20261009\\loading\\install\\compatibility\\source-install-receipt.json",
+  "complete": true,
+  "probes": [
+    {
+      "probe": "streaming-lifecycle-contract",
+      "startedUtc": "2026-10-09T21:58:56.626045+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\loading\\install\\compatibility\\native-contract-probe.luau",
+      "fixtureSha256": "862db3829b7944f2f75ec2a2d847b56a9c3248d08ade71e6dcd459cdb98158cd",
+      "stagedSourceSha256": "53b1362287a3f7bf8568f4dd7968cce06d942819bc6beccb991d6029b32a80f0",
+      "contract": {
+        "result": true,
+        "output": [
+          "STREAMING_LIFECYCLE_CHECKS=841"
+        ]
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 213,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        },
+        {
+          "id": "31079",
+          "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+          "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+          "class": "LocalScript"
+        },
+        {
+          "id": "31113",
+          "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+          "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:59:00Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 841,
+      "finishedUtc": "2026-10-09T21:59:00.241680+00:00"
+    },
+    {
+      "probe": "streaming-native-instances",
+      "startedUtc": "2026-10-09T21:59:00.242678+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\loading\\install\\compatibility\\native-instance-probe.luau",
+      "fixtureSha256": "205dd66be51670c0676bcf78286bcb5f63294293f088af3b5256a6525094c244",
+      "stagedSourceSha256": "7da721b7e36404f7a8db4e38dcd260983aee8a46b00e77f4a1f322c53eb30e11",
+      "contract": {
+        "result": {
+          "nativeFixtureChecks": 10,
+          "realStreamingGameplayPerformancePass": false
+        },
+        "output": []
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 213,
+          "installedChecked": 7,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 213,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        },
+        {
+          "id": "31079",
+          "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+          "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+          "class": "LocalScript"
+        },
+        {
+          "id": "31113",
+          "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+          "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:59:04Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 10,
+      "finishedUtc": "2026-10-09T21:59:04.303472+00:00"
+    }
+  ],
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "finishedUtc": "2026-10-09T21:59:04.304474+00:00"
+}

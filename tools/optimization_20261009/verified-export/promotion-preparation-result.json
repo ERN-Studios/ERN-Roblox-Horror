@@ -1,0 +1,10 @@
+{
+  "localGuardChecks": 20,
+  "syntheticLocalFixturesOnly": true,
+  "studioConnected": false,
+  "realRuntimeMirrorsWritten": false,
+  "nativeBackup": false,
+  "nativeCasCompiled": true,
+  "nativeCasCodeSha256": "1ec87484158c6ee37382df0cdaf6b02bcc58e60ef24a3fbde25a2391fd0d1ec8",
+  "compiler": "G:\\Roblox\\MongoTV\\_local\\optimization-20261009\\luau-0.741\\luau-compile.exe"
+}

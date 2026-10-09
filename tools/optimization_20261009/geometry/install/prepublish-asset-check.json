@@ -1,0 +1,742 @@
+{
+  "phase": "complete",
+  "startedUtc": "2026-10-09T23:08:11.769832+00:00",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "datamodel": "Edit",
+  "readOnly": true,
+  "nativeBackupCreated": false,
+  "studioInstancesCreated": false,
+  "sourceWritten": false,
+  "runnerReceiptSha256": "00af2101df25ba31e4c99a6e10dbe56b5225d31a5b39329e1ba5b370e589c4d4",
+  "expectedTotal": 6996,
+  "identityNormalization": "Decimal GetDebugId prefix is context-specific; exact decimal suffix, unique in bounded native scopes, is compared along with path, parent suffix and class. Native full IDs are captured.",
+  "limitations": [
+    "Hidden native union CSG/mesh/texture payload was not exposed by the captured properties and is not independently compared.",
+    "A sequential read-only Edit check is a time-window check, not an atomic publication lock.",
+    "This property/identity check alone does not establish gameplay, multiplayer, streaming or performance results."
+  ],
+  "localEvidence": {
+    "beforePages": [
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-000001.json",
+        "sha256": "d63e36b8ee0b0e5e167e22436c5d4edd19a034a9e67944f41eabe4cd3d8b196c"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-000251.json",
+        "sha256": "c36f3a0b7f0af48c801b9f5b52153b24221fb60a3677cb504f399c2f85c216fa"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-000501.json",
+        "sha256": "c62da59240cad0c9b7e20801247343b50d2c191e8a4fce36114b6a5f43142ac0"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-000751.json",
+        "sha256": "50377fbcc8175d795551dbfa4e81b835271776c0111da1d58120798a7297813a"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-001001.json",
+        "sha256": "f0b3e7570489e14f836a9e5e5fc2559e7ab437d8fccd554e10e654b50694710f"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-001251.json",
+        "sha256": "90320c452b1d5cae8f4817d6cc99daa9d6afea7c6b61d62578881f496bc45e4b"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-001501.json",
+        "sha256": "b759ae40477d859468737768cf4994bc53e4a49cac6ce81158cbe1340807d7c2"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-001751.json",
+        "sha256": "9e5cfa679c085d020d455a997606b31c3a8ed1c49757b109b12278f50148f25e"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-002001.json",
+        "sha256": "dee5c4a3266212f8b68220a832bfad1142715c22d4be6f332e6f8d821cf09ccd"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-002251.json",
+        "sha256": "d1ab6a7a024bf59dcdc6ecebaab350352e5945c8751990d7d093ea3ef651b8c3"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-002501.json",
+        "sha256": "7fddd5485ba1d17bd48234dbb9a6bed1ea6351a46122430603b6c163cf7a78b9"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-002751.json",
+        "sha256": "88b571574dc3a34a5fbb5b4e35e32488206256c99a27906e7781c58169003b1d"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-003001.json",
+        "sha256": "e6656541f894f0d06c92a5f90a6446fa21eb30e12ea5f7474c70330aa9271ed1"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-003251.json",
+        "sha256": "8cc3ffeaadcd24355e8a377eab13466a28f11b2c35bc47e0a3597e60c17ac4d7"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-003501.json",
+        "sha256": "0dd8edf760e73ec79902b35cde88bce44210646c9d7dd6f94fb79b2bc25313fa"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-003751.json",
+        "sha256": "bf1dd80bd69a7b300a94c163b9f39f3cdc4e5308ebcb2f772361f2d2ca119f58"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-004001.json",
+        "sha256": "85a28a760b096174bbd4e9bda999aa0f21037600e412458603c6a5198308f04e"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-004251.json",
+        "sha256": "d37f40bd966eb539a9f7e0b941c4e6e340bc571ba4ad27ae82cc6bbe6b4f91e9"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-004501.json",
+        "sha256": "2816e6dd0dc05b4c5a1454a36f1e69634741ea666b50fcc789c1ce267e5d833a"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-004751.json",
+        "sha256": "1a8965cd2ded80aa8962effaf2fd7e9d27cbd973a0b3f39dce5e253c29c42ee6"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-005001.json",
+        "sha256": "ec5c208c12f7860cf90b6c168efe6ef465baf7615bd5c46f61828a62e980f6d7"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-005251.json",
+        "sha256": "4688fa41ac5b9e339dc3f6ead95bf6df0aa0a7d42838e6808e5cd56a1bd651cb"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-005501.json",
+        "sha256": "8a090f5cf33d720ddef404e1c5f9f8dc7ac18f19034834da8ab13d33bcabba34"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-005751.json",
+        "sha256": "c293d1b92642033b43e235f676b779a05d21343e3540f0b005804a0afd9f4fcf"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-006001.json",
+        "sha256": "431eb02343121628d712a705c07f63167f58b90f55e8cd978cdaed9f67c01261"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-006251.json",
+        "sha256": "3c0cecc3aadf48c18527d843668bc2d73b20bc9a1a965b21e5fb3e0310222bda"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\manifest\\page-006501.json",
+        "sha256": "81793ca697bb5260e0880e8a0c6f7f9428b20a1bfb23018650207532d81bc84b"
+      }
+    ],
+    "postapplyPages": [
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-000001.json",
+        "sha256": "3bd9303674b136036265896ca323ef5393d4d1a91b46fe9184d6ea3c6263d1f8"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-000251.json",
+        "sha256": "c45a086f5dd768512a5505ff62b0c43e20da67d45c602442369208b706805b62"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-000501.json",
+        "sha256": "6a8f4d430f858866755357208b56b8ee9099512007e7e4e21ff684617cd15ed4"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-000751.json",
+        "sha256": "b19bfdc9b82d432099da8f02c98e486e8b62425daf434e6960fc2242d833a06b"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-001001.json",
+        "sha256": "21e6d24f5c5d2b324d6b68ef374fc2adfed312ce4288b54be29347f300bc8dd9"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-001251.json",
+        "sha256": "efcd73ed79a705368c4a6a26fbf9e7af8836f570b1be9e3c68c0af59a9e8be8a"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-001501.json",
+        "sha256": "5cd607cd92b9c8d7bd86d16294e9d9c6f18fe1b487de2bf24ab97867065f39a3"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-001751.json",
+        "sha256": "be4889eb854e79e582b7107c0e1b43e70b7b50f14f90adc68f0f49d9067e48ed"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-002001.json",
+        "sha256": "7f55072e9067aeb6c692bd8edf1f3f94223a87ff8c65ce1bc0c47460df10030d"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-002251.json",
+        "sha256": "c8806ef0c62d87d3bcf45f598a84b24fd893aa5561d6366fad79ab7566d28cc3"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-002501.json",
+        "sha256": "34b92dd8c049bd21ef8dafeb78755dd7f2df0057dee6ab62778b6170c6423cc6"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-002751.json",
+        "sha256": "08b3e87be7533b0cdad8ee8a85cbfaafac52bd45f31baecf2fb9841dbfe97e84"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-003001.json",
+        "sha256": "f487befe502e6f450e9412da7ed62d45f9f77c93f2498149f80ac6a5eedac8d7"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-003251.json",
+        "sha256": "bf430b8c572dba8a5408357ea6601e5e3d32b0b58239729d1d88e918b4484606"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-003501.json",
+        "sha256": "52230840c0178236f75e8600b6457c2811012ab1584005a80aa58de95e27e96a"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-003751.json",
+        "sha256": "b303d907c487a5c50c536a8d774602053f57ff703ade1189ada3d158415248a8"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-004001.json",
+        "sha256": "157a9348001db7ef27a5a36bce95d2cf098acb17c4326b3f9ada28d303597484"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-004251.json",
+        "sha256": "33fe49033a3eafde4130b141afc643a853131e86fab5b52494542291299ee7c9"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-004501.json",
+        "sha256": "e3e5f2d56711921c472463b488e675041cb5ce2f67628a3901f2ec485a72b527"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-004751.json",
+        "sha256": "fde532fd1238e1e880936b064435a336b4f777b094ceb862152520a915c28429"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-005001.json",
+        "sha256": "80bbbccfbb4f853ff8ed8ea7028db9655fa4b1727a60eda9d5061297b1238d4f"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-005251.json",
+        "sha256": "646815d6521e500bb5afb2fada0a72779e39dcf4aee90802a99baacf5b510654"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-005501.json",
+        "sha256": "8ff5c02145c8bc304fad1922a5ef04419c6bccec32b885d869ba94280dd11fdd"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-005751.json",
+        "sha256": "78e238288da8fb77d726078ef7c20dc74dc6a8a5fda48305f1e5563a679099a9"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-006001.json",
+        "sha256": "b595d05c49f17e1fbbbd38574878c858e9983739b2a56347e6fbbbeaf59d7e22"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-006251.json",
+        "sha256": "260c92ccc310ed7a7b187ec4d817fa383f44e64e72fbc2f3b6a9dc1afa56cb04"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-006501.json",
+        "sha256": "47d6bb62c35f4f8a15ddd681c400f56723314b9873c4872684b39744252ae5ea"
+      },
+      {
+        "path": "tools\\optimization_20261009\\geometry\\install\\postapply-manifest\\page-006751.json",
+        "sha256": "feb796b4b48fbe17f38f9fecb4fd4911549e51831a3d43d6f39c88534a3b3a0f"
+      }
+    ],
+    "targetKinds": {
+      "exactMergeProxy": 124,
+      "archivedMergedOriginal": 267,
+      "renderFidelity": 6605
+    }
+  },
+  "pages": [
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-000001.json",
+      "first": 1,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23793,
+      "compressedBytes": 8732,
+      "sha256": "7cbe63a89592a53ed4ec56fca45e60d9fb4eaa93c495446468438e6273e17237",
+      "compressedSha256": "4d6618a6a2e051521fdd1206f16069689c7c56050dbfa978f633f119c4d9b6e0",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-000201.json",
+      "first": 201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23825,
+      "compressedBytes": 8733,
+      "sha256": "80bd342f94cbe4eac015f4789dc66f1dfe17aa9f8a030b382ebb8c9d79ac9c75",
+      "compressedSha256": "e94a42f0c4cb1c719e4c3e7ba3ccb391927e6a5556cb73da9871bbb7bd033e07",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-000401.json",
+      "first": 401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23829,
+      "compressedBytes": 8197,
+      "sha256": "ed551a8fe544417562f8431983cba44c57ac6a58145eb1584e6f69df35c637c8",
+      "compressedSha256": "ab0813ad849ef9d72857ed5701f8c3c3fd4d741d214ec4f5dcf8cc64df4bb4f9",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-000601.json",
+      "first": 601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23829,
+      "compressedBytes": 8195,
+      "sha256": "d526216c4a168e780b105de57bc1971d4ba325a1f60e6606462a3e140e4057b9",
+      "compressedSha256": "6c5efb6f3c115b96ebbc1032b6f42249204572a60076b448f954ef95288891bc",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-000801.json",
+      "first": 801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23829,
+      "compressedBytes": 8171,
+      "sha256": "d264ef7fe8b8fff581487c21906e8f764958d599fda81c1a652d9aeb79ea872d",
+      "compressedSha256": "f35b9c6a589d55ff45d3f57fbbb9411aa9e7d4b2cd4b0070878625f3f7910d15",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-001001.json",
+      "first": 1001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8192,
+      "sha256": "0bb1dadae7474c5c039cae03bb7c7fb766052b0996c48f02700a51bd7114270c",
+      "compressedSha256": "2e879a337c342afeee0591349fdeff1975722c0bf8e5ca0d8ede4201729c0cdc",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-001201.json",
+      "first": 1201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8199,
+      "sha256": "39e6f1592c66fa85c29560db3c609fcd31fc99655726442be593807a93527f03",
+      "compressedSha256": "fbfd2dfc63ed97b5b68c71d27769a167419bf63e77349055f7b5abc30731400c",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-001401.json",
+      "first": 1401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8275,
+      "sha256": "e297966b08816ff47e627a07da68516f9e0748abac6030a22f638783561ed670",
+      "compressedSha256": "839b819cd1c3ceebbd41a9dffb48db93378825ff1b31712811f79769a5119522",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-001601.json",
+      "first": 1601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8161,
+      "sha256": "6af0e12e0a2f953813dd1ce3fe7dd41cf3375ff2891a33b237af3f0a8f772043",
+      "compressedSha256": "ea99775ec8cc44ef6ce4f070c9cd94e24bbbb820a81c543037cbd406b4e6050f",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-001801.json",
+      "first": 1801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8163,
+      "sha256": "805b3b74b4b924c79cfab5842ae02195e678d879cd959b10a80f4b9cef30dd68",
+      "compressedSha256": "c05e94e418bef73766a63e657bbb322e34fceed7a232c973170e42df6a5d59a1",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-002001.json",
+      "first": 2001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8187,
+      "sha256": "aa8b5945c9e1ba93b990c5a762454a6017cce3ce73b851c914c1b187d723fadd",
+      "compressedSha256": "5bc2dfa67781dcc4e9505d25262d3a9bc5601a2984677f95073c157e378bbd5f",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-002201.json",
+      "first": 2201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8225,
+      "sha256": "544a16529410888e6b9d15fc8392fd5e2c18cc10f4f8e0da220df81efa31a26f",
+      "compressedSha256": "b0dd591bc90fd8fe76528ec03885aca9ddb900c016d62143aa59c934a1c1c906",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-002401.json",
+      "first": 2401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8255,
+      "sha256": "1a61ecc1575a9cb79f19731ab3adf148b0eed2a924c8c3bbdb73a2fe68665ff8",
+      "compressedSha256": "4858b3f6eba071d736ba3e8ec14df2e574bc92536e1dc1541a839c47aef1fd9b",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-002601.json",
+      "first": 2601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8185,
+      "sha256": "6659876b3e1f6546fb971f9aae15d2f31350e39ebd7fe2becef734531e546929",
+      "compressedSha256": "a9ace5848955f8ae5e4bd3d915aee38df9efc4604e4c47288448014b6141cc4c",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-002801.json",
+      "first": 2801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8168,
+      "sha256": "02a818904d6de47431c7b58fa5576cdf4df7b10cf45acc650ecdfb441d2d6b91",
+      "compressedSha256": "88910558dd2672908af828a41bdaceffe5266de48308f32532d6aace93ec0048",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-003001.json",
+      "first": 3001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8182,
+      "sha256": "a3af8e5b8abc3a8ae3e9822bfd2535cdda8fb95728ba0fa40fdfb101feb3425d",
+      "compressedSha256": "d0b62a08f9c6bbb68d0753a70ddb2c550273acbdb2a683779bf109b9f6dc72e5",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-003201.json",
+      "first": 3201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8186,
+      "sha256": "634ac76931b02c05d5bacc79e5ba9491727a814d4cc3fe46379a0718f278d2df",
+      "compressedSha256": "c3c6afab31ff80eede2b90cc59c51a75ff5b5ff99216b9152de73afdaf02d96b",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-003401.json",
+      "first": 3401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8258,
+      "sha256": "a2ef1105bdaa056c72d500c62852416b7823b0ebdc5d7866c4c16badd6ea6d7c",
+      "compressedSha256": "ce1be61e6bf036d7018a5dc16d99607fde8efa98fcb8f6f3d4cc2a1962868159",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-003601.json",
+      "first": 3601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8160,
+      "sha256": "65706440780aaf400b4c15abf6a701f5f4550a612098d6bb6ab745d22c7dd48d",
+      "compressedSha256": "d3575577903d5f2dd78d28e6b061dd13817b84cd0f4abfce7cde3e1da20fded8",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-003801.json",
+      "first": 3801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8202,
+      "sha256": "826f4ac5b2f97a891a6b6350b763a5b55543d2d936093aefc08c4d549bd3ff34",
+      "compressedSha256": "d0a7608051a6b35d7ad00f54a5921084844159df7529949a22e7baf6df269049",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-004001.json",
+      "first": 4001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8210,
+      "sha256": "6aa938b9861e0707d15ddbdff5d5152ccb782fc89a09808683b5942e9c7c7c02",
+      "compressedSha256": "ec2af6df504e4bad1d79f72f0aa1ef744dd7f338c05ec9a16a6f584a8849f419",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-004201.json",
+      "first": 4201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8205,
+      "sha256": "8c2bae4ac1099c703a6b94a48a4716baf4fc9c03010cc4d0bd0d278152c30739",
+      "compressedSha256": "ee3ed89e6c0c4f19c471a64167a2690a17cfc8a542612cb4acb7f844a490978d",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-004401.json",
+      "first": 4401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8233,
+      "sha256": "84c57222bfce9d1dbb187015b6e3c487dd16dd9db9ec57ace7dff2f53fdf7623",
+      "compressedSha256": "ebfd0b7d528b9532a8bc7f645142b943a4f1d099a925297b3f077cbeb7bf7331",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-004601.json",
+      "first": 4601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8175,
+      "sha256": "964719b2634f494328eb351a8bc90c7f9e674be49d3e79daeb943b734ca74d10",
+      "compressedSha256": "ef0ee8c2c37354a301d5fca42a8b1f8ad86c4e8fecf72e40de74a7f2d5442d39",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-004801.json",
+      "first": 4801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8179,
+      "sha256": "2bc231f397eab716676480ba93d42032e3398d78a623453be8663d4cd33d2e4e",
+      "compressedSha256": "480029cc51b23b9ee3c8dd096fb4596028ae3f28db00d10c5a5e54c467a5d88e",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-005001.json",
+      "first": 5001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8199,
+      "sha256": "72be23d1991497031b797960ca3b54c53af396a73339cda77e7e923cb1e7eb92",
+      "compressedSha256": "c20db168950c2ce1ba6d9f9bbe63e5adfeb055b3788407aa2878279e81311593",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-005201.json",
+      "first": 5201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8185,
+      "sha256": "0d2a81cbf8fffce89fcf8f1abeb059d815fe52314c4da7209c8da1baee6c7101",
+      "compressedSha256": "d06cd1ecef3f18dcff507c88fb255335c42df5af594257cea8bf92a618a12d5e",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-005401.json",
+      "first": 5401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8263,
+      "sha256": "ccb8b750fe4c5f0e69e24befd162505112a3f6de911297f742e319645a5f694b",
+      "compressedSha256": "39544c2afab7397f45954ddec145f08d79b184247055b10d57fa9c69179fc632",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-005601.json",
+      "first": 5601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8183,
+      "sha256": "60c734c9116b7915d587aa99c39f7bbc816b204c24c81c8ec06344555ebb74a1",
+      "compressedSha256": "e79b8ec7edc86db8ebd203bd0d019b53e5b51ba99080748c2138ede1f5b49f61",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-005801.json",
+      "first": 5801,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8166,
+      "sha256": "650626c7eb0a351a52978feaeaa34269a4d84248e4c2384c918c37b5ef21b31f",
+      "compressedSha256": "0dcaf6bf04cf51fb167ef35ed61f782636a239923c1158427d89407a16ee0433",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-006001.json",
+      "first": 6001,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8224,
+      "sha256": "78cc62b8e7f80f0c7f09998983683f165237d80ddb0719ef8ebe094d40e9962e",
+      "compressedSha256": "79c44bf6ab0dd7742410caf95452984f6c28dff1e0732bb95b4beafd902dd3ef",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-006201.json",
+      "first": 6201,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8163,
+      "sha256": "9208a0eeb463ae783b54ef5cef008cada825db4bf9992f95b77e3907bf290f1b",
+      "compressedSha256": "f3bcf29fa8004355bec3d4a9d41fa0477233abe7fa56b7fbe8f64ebc23f8c7c1",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-006401.json",
+      "first": 6401,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8276,
+      "sha256": "0e10eff3d723ef4d9e6a3c1983ba642d9667dfb36e708afcdda58a53d792d176",
+      "compressedSha256": "f2b60b15ed6d778e2a0fe1ae85b323ff2e3576ef9c6aa4721f87f5643e1defcb",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-006601.json",
+      "first": 6601,
+      "rows": 200,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23830,
+      "compressedBytes": 8198,
+      "sha256": "f7a98aab4723276c8899f1e38dc074a8649f8e83129fafa0342e0e093c2f8b43",
+      "compressedSha256": "4b2db0ba93561ab96786a0438806cb151bb85211e3ea818880131ba5734c4eb9",
+      "nativeRoundtripExact": true
+    },
+    {
+      "path": "tools\\optimization_20261009\\geometry\\install\\prepublish-asset-native-pages\\page-006801.json",
+      "first": 6801,
+      "rows": 196,
+      "exact": true,
+      "mismatches": [],
+      "encoding": "zstd-base64",
+      "uncompressedBytes": 23366,
+      "compressedBytes": 8073,
+      "sha256": "7d519dd54826e0fab3a96ac800a38d7789b5f47aeda640bfbd889aa20e63cdba",
+      "compressedSha256": "777ed2a8ee080f6a81d49d42acdfaf4a2710e90bd1fcd54bfeb21246f0047ba1",
+      "nativeRoundtripExact": true
+    }
+  ],
+  "checked": 6996,
+  "exact": true,
+  "latestRoots": {
+    "level6": {
+      "id": "1_41645",
+      "path": "ServerStorage.Level 6 Indoor Playground",
+      "parentId": "1_409635",
+      "className": "Model"
+    },
+    "archive": {
+      "id": "0_79287982",
+      "path": "ServerStorage.PoolroomsContainedColliders_20261009",
+      "parentId": "1_409635",
+      "className": "Folder"
+    },
+    "collision": {
+      "id": "1_41647",
+      "path": "ServerStorage.Level2PoolroomsMap.Collision",
+      "parentId": "1_41646",
+      "className": "Model"
+    }
+  },
+  "latestRootCounts": {
+    "level6": 20318,
+    "archive": 267,
+    "collision": 23332
+  },
+  "lastCheckedUtc": "2026-10-09T23:08:40.516448+00:00",
+  "finishedUtc": "2026-10-09T23:08:40.516951+00:00",
+  "nativeFingerprintChecked": 6996,
+  "normalizedIdentityChecked": 6996,
+  "targetKinds": {
+    "exactMergeProxy": 124,
+    "archivedMergedOriginal": 267,
+    "renderFidelity": 6605
+  }
+}

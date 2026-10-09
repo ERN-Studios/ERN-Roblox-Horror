@@ -66,6 +66,9 @@ local function collect(root)
 			if id then
 				local zone = zoneFor(id)
 				remember(d, { "Enabled", "Brightness" })
+				if type(d:GetAttribute("SceneBudgetWantedEnabled")) == "boolean" then
+					d:SetAttribute("SceneBudgetWantedEnabled", d.Enabled)
+				end
 				-- clients stutter zone lights through Brightness; they need the authored value
 				if d:GetAttribute("L4Brightness") == nil then d:SetAttribute("L4Brightness", d.Brightness) end
 				table.insert(zone.Lights, d)
@@ -118,7 +121,11 @@ local function applyZone(zone, on)
 	for _, l in ipairs(zone.Lights) do
 		if l.Parent then
 			local o = originals[l]
-			l.Enabled = on and (o and o.Enabled ~= false)
+			local enabled = on and (o and o.Enabled ~= false)
+			if type(l:GetAttribute("SceneBudgetWantedEnabled")) == "boolean" then
+				l:SetAttribute("SceneBudgetWantedEnabled", enabled)
+			end
+			l.Enabled = enabled
 		end
 	end
 	for _, p in ipairs(zone.Neon) do
@@ -337,6 +344,9 @@ function LightDirector.Stop()
 	table.clear(screenLights)
 	for inst, saved in pairs(originals) do
 		if inst.Parent then
+			if saved.Enabled ~= nil and type(inst:GetAttribute("SceneBudgetWantedEnabled")) == "boolean" then
+				inst:SetAttribute("SceneBudgetWantedEnabled", saved.Enabled)
+			end
 			for k, v in pairs(saved) do pcall(function() inst[k] = v end) end
 		end
 	end

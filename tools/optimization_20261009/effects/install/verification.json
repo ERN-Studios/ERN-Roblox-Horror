@@ -1,0 +1,100 @@
+{
+    "Status":  "Fresh Edit baseline captured; prepared only",
+    "NativeWrites":  0,
+    "PlaceId":  131311258779917,
+    "UniverseId":  10559217407,
+    "DirectorSourceEditorParity":  true,
+    "FullNativeBackupCreated":  false,
+    "OwnerInstruction":  "User explicitly requested no new backups",
+    "Effects":  882,
+    "Batches":  9,
+    "GuardOfflineAssertions":  10,
+    "NativeProbe":  "Root-owned, pending",
+    "Files":  [
+                  {
+                      "File":  "actual-level-routes.json",
+                      "SHA256":  "497B0BB3775B72EB04A1E8B2C72DE289CF76BC3D6AD0F96F3F121B0AC3CB56BE",
+                      "Bytes":  7026
+                  },
+                  {
+                      "File":  "attribute-baselines.json",
+                      "SHA256":  "9AF222DA26BA3A72CEFDACB1A17D046FCDC295934229515E081E0B312A664D13",
+                      "Bytes":  798962
+                  },
+                  {
+                      "File":  "attributes-batch-01.json",
+                      "SHA256":  "340D90DCD3397195708F3E192B6C3DF1C11A7B334AD8308E6E624519214906C0",
+                      "Bytes":  36526
+                  },
+                  {
+                      "File":  "attributes-batch-02.json",
+                      "SHA256":  "834249BEE513C9181C84CB1B326537A26B4FAF82F46DF38F5CFC93B87B435BD7",
+                      "Bytes":  34985
+                  },
+                  {
+                      "File":  "attributes-batch-03.json",
+                      "SHA256":  "5D9FBE494E5333BC770E5BF9F86C726C1EA4BFF0902AD774FB8791E2FD6425B2",
+                      "Bytes":  30841
+                  },
+                  {
+                      "File":  "attributes-batch-04.json",
+                      "SHA256":  "E100E8FEC0D14A9490139B9C70FA21702684D1DFCC10912EB5E0A991566A1EA2",
+                      "Bytes":  27584
+                  },
+                  {
+                      "File":  "attributes-batch-05.json",
+                      "SHA256":  "E3AD37C6AE67CB44260D6BD9F8170E23D6E806015DAB66C46E97D807181F6A24",
+                      "Bytes":  28639
+                  },
+                  {
+                      "File":  "attributes-batch-06.json",
+                      "SHA256":  "32A78AC89098B954ED66C5DEBB5B8C590997E8F89201714833D549000E60AE8B",
+                      "Bytes":  28642
+                  },
+                  {
+                      "File":  "attributes-batch-07.json",
+                      "SHA256":  "FDA35625A981520B8E9E4C9ECC97D862CDA6DFD64C5B395153037392644EAC79",
+                      "Bytes":  28908
+                  },
+                  {
+                      "File":  "attributes-batch-08.json",
+                      "SHA256":  "E24698227F65D987589D82687C5700DBC95DF84BE422C6D879B0A80BA5BE746C",
+                      "Bytes":  29796
+                  },
+                  {
+                      "File":  "attributes-batch-09.json",
+                      "SHA256":  "A353B68F1CB7732E8B69650484C05F98624E669FDB164C60E37F4EFCEE1931C6",
+                      "Bytes":  24810
+                  },
+                  {
+                      "File":  "guarded_attribute_apply.luau",
+                      "SHA256":  "83564BE6C374FF6F3CAA795D9E2FB841786FF2917BA78E6063C0615F761973EB",
+                      "Bytes":  5280
+                  },
+                  {
+                      "File":  "Level4LightDirector.after.lua",
+                      "SHA256":  "5952C86FEB05085642A9FD27CCE02332C96DA3F7D3EBB09AB5D1AE46CBAFC861",
+                      "Bytes":  16515
+                  },
+                  {
+                      "File":  "Level4LightDirector.before.lua",
+                      "SHA256":  "1F99331F1EB98DA35FA0A5E5F0C7EEEEC4205B377205B77876625E03EB698A9E",
+                      "Bytes":  16038
+                  },
+                  {
+                      "File":  "README.md",
+                      "SHA256":  "0FCAE8C10C160D38149B61C50063DFFB4F047ECFCE4BD6C6D0528237E865D4D5",
+                      "Bytes":  4142
+                  },
+                  {
+                      "File":  "rollback-record.json",
+                      "SHA256":  "95CD8A74198FBD4BA09EA5A43F9F35AA87C316E2B550663948DE3590D8D53CE9",
+                      "Bytes":  870
+                  },
+                  {
+                      "File":  "test_guarded_attribute_apply.luau",
+                      "SHA256":  "11921D374CAF341F62F27B21984C6CA93D2197C77AE66B0538158DCE96499648",
+                      "Bytes":  3871
+                  }
+              ]
+}

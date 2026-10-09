@@ -1,0 +1,13 @@
+{
+  "offlineGuardChecks": 96,
+  "helperSha256": "f701a03518e726a82e58997b568c455475d5e2701d7fdcbd4a8361d74225e6e6",
+  "historicalSevenManifestSha256": "1fa980cf4c72c49699382da77d89809dd0d63c49a9b55e5905ff1ff657d09005",
+  "reviewedProposalManifestSha256": "c3316f8671970653a03a7f550d483de932339760f1ccc0208bbc92eef7cdf258",
+  "authoritativeStudioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "crossBaselineStudioGuardPassed": true,
+  "globalAndRuntimeWrites": false,
+  "studioConnected": false,
+  "backupCreated": false,
+  "allSimulatedWritesIntercepted": true,
+  "initial99ContractReceiptUntouched": true
+}

@@ -1,0 +1,37 @@
+{
+  "status": "Fresh Edit prepared; read-only task; root owns source CAS installation",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "scripts": [
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "class": "LocalScript",
+      "baselineInstanceId": "1_31079",
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/Level2Sound.before.luau",
+      "beforeSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "beforeBytes": 41458,
+      "afterFile": "tools/optimization_20261009/loading/install/compatibility/Level2Sound.proposed.luau",
+      "afterSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "afterBytes": 41930
+    },
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "class": "LocalScript",
+      "baselineInstanceId": "1_31113",
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/Level6Client.before.luau",
+      "beforeSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "beforeBytes": 65353,
+      "afterFile": "tools/optimization_20261009/loading/install/compatibility/Level6Client.proposed.luau",
+      "afterSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "afterBytes": 66128
+    }
+  ]
+}

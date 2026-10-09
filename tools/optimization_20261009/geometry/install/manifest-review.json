@@ -1,0 +1,34 @@
+{
+  "reviewed": true,
+  "exactManifestRows": 6729,
+  "uniqueBaselineIdentities": 6872,
+  "kinds": {
+    "exactColliderMerge": 124,
+    "renderFidelity": 6605
+  },
+  "classes": {
+    "Part": 267,
+    "UnionOperation": 6605
+  },
+  "archivedOriginals": 267,
+  "newProxies": 124,
+  "netColliderReduction": 143,
+  "lodOnlyChanges": 6605,
+  "originalsDeleted": false,
+  "nativeOccupancyQueryEvidence": {
+    "rays": 6696,
+    "maxHitPositionDifference": 0,
+    "overlaps": 1860,
+    "maxHitDistanceDifference": 0,
+    "queryDistanceToleranceStuds": 0.01,
+    "testObjectsCleaned": true,
+    "groups": 124,
+    "authoritativeOriginalsUnchanged": true,
+    "gameplayVerified": false,
+    "exactNativeProxyBounds": true,
+    "performanceVerified": false,
+    "queryPositionToleranceStuds": 0.01
+  },
+  "gameplayVerified": false,
+  "performanceVerified": false
+}

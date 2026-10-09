@@ -1,0 +1,27 @@
+[
+  {
+    "bytes": 36701,
+    "path": "ReplicatedFirst.Lobby Loading Screen",
+    "instanceId": "1_31065",
+    "class": "LocalScript",
+    "parity": true,
+    "editorOk": true,
+    "source_sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+    "source_file": "LobbyLoading.before.luau",
+    "datamodel": "Edit",
+    "authoritative": true
+  },
+  {
+    "bytes": 190167,
+    "path": "ServerScriptService.GameManager",
+    "lines": 4198,
+    "instanceId": "1_408341",
+    "editorOk": true,
+    "class": "Script",
+    "parity": true,
+    "source_sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+    "source_file": "GameManager.before.luau",
+    "datamodel": "Edit",
+    "authoritative": true
+  }
+]

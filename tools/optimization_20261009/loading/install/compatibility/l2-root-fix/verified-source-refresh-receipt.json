@@ -1,0 +1,448 @@
+{
+  "startedUtc": "2026-10-09T22:18:25.348484+00:00",
+  "nativeBegin": {
+    "verifiedUtc": "2026-10-09T22:18:25Z",
+    "pins": [
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "parentPath": "ReplicatedFirst",
+        "instanceId": "1_31065",
+        "class": "LocalScript",
+        "parentId": "1_9074",
+        "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "attributes": [],
+        "segments": [
+          "ReplicatedFirst",
+          "Lobby Loading Screen"
+        ],
+        "parentClass": "ReplicatedFirst",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 42196,
+        "name": "Lobby Loading Screen"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "parentPath": "ServerScriptService.Level 4 Systems",
+        "instanceId": "1_42773",
+        "class": "ModuleScript",
+        "parentId": "1_15624",
+        "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "attributes": [],
+        "segments": [
+          "ServerScriptService",
+          "Level 4 Systems",
+          "Level 4 Light Director"
+        ],
+        "parentClass": "Folder",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 16515,
+        "name": "Level 4 Light Director"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+        "attributes": [],
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 192559,
+        "name": "GameManager"
+      },
+      {
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "parentPath": "ReplicatedStorage",
+        "instanceId": "0_79286917",
+        "class": "ModuleScript",
+        "parentId": "1_408323",
+        "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "attributes": [],
+        "segments": [
+          "ReplicatedStorage",
+          "SceneEffectBudget"
+        ],
+        "parentClass": "ReplicatedStorage",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 10221,
+        "name": "SceneEffectBudget"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "0_79286921",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SceneEffectBudgetClient"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 3537,
+        "name": "SceneEffectBudgetClient"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31079",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 2 Sound Controller"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 41930,
+        "name": "Level 2 Sound Controller"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31113",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 66128,
+        "name": "Level 6 Playground Client"
+      }
+    ],
+    "readOnly": true,
+    "complete": true,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+  },
+  "scopedRawFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+  "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+  "rawBytes": 3537,
+  "previousSevenExportControllerRow": {
+    "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+    "parentPath": "StarterPlayer.StarterPlayerScripts",
+    "instanceId": "0_79286921",
+    "class": "LocalScript",
+    "parentId": "1_410029",
+    "reviewedCandidateMatches": true,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "SceneEffectBudgetClient"
+    ],
+    "parentClass": "StarterPlayerScripts",
+    "editorParity": true,
+    "rawBytes": 3532,
+    "name": "SceneEffectBudgetClient",
+    "rawFile": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "expectedRepositoryPath": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "rawSourceSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+    "reviewedCandidateSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+    "rawUtf8Verified": true,
+    "chunks": [
+      {
+        "offset": 0,
+        "rawBytes": 3532,
+        "exactSourceEditorIdentityCas": true
+      }
+    ],
+    "runtimeRepositoryMirrorWritten": false
+  },
+  "updatedSevenExportControllerRow": {
+    "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+    "parentPath": "StarterPlayer.StarterPlayerScripts",
+    "instanceId": "0_79286921",
+    "class": "LocalScript",
+    "parentId": "1_410029",
+    "reviewedCandidateMatches": true,
+    "segments": [
+      "StarterPlayer",
+      "StarterPlayerScripts",
+      "SceneEffectBudgetClient"
+    ],
+    "parentClass": "StarterPlayerScripts",
+    "editorParity": true,
+    "rawBytes": 3537,
+    "name": "SceneEffectBudgetClient",
+    "rawFile": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "expectedRepositoryPath": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "rawSourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+    "reviewedCandidateSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+    "rawUtf8Verified": true,
+    "chunks": [
+      {
+        "offset": 0,
+        "rawBytes": 3537,
+        "exactSourceEditorIdentityCas": true,
+        "transport": "JSON UTF-8 string"
+      }
+    ],
+    "runtimeRepositoryMirrorWritten": false,
+    "currentSourceVerifiedUtc": "2026-10-09T22:18:25Z",
+    "currentSourceCaptureTransport": "JSON UTF-8 string; full exact Source/editor/identity CAS",
+    "reviewedCandidateManifest": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-manifest.json",
+    "sourceRefreshReceipt": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-source-refresh-receipt.json"
+  },
+  "sevenExportManifestBeforeSha256": "c2ce5e14942e2159fa49efa4521f8f76324fe209e0912232f1815220d3ee7253",
+  "localCopies": [
+    {
+      "path": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "localBeforeExists": true,
+      "localBeforeRawSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "localBeforeRawBytes": 3532,
+      "localBeforeCanonicalSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "acceptedLocalState": "exact-native-before",
+      "nativeAfterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "nativeAfterBytes": 3537,
+      "capturedRawFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "localBeforePreservation": "Exact raw hash/byte-count record only; owner instructed no backups",
+      "copied": true,
+      "copiedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "localBeforeExists": true,
+      "localBeforeRawSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "localBeforeRawBytes": 3532,
+      "localBeforeCanonicalSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "acceptedLocalState": "exact-native-before",
+      "nativeAfterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "nativeAfterBytes": 3537,
+      "capturedRawFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "localBeforePreservation": "Exact raw hash/byte-count record only; owner instructed no backups",
+      "copied": true,
+      "copiedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    }
+  ],
+  "applyMirrors": true,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "globalManifestWritten": false,
+  "initialReceiptsOverwritten": false,
+  "complete": true,
+  "sevenExportManifestAfterSha256": "1fa980cf4c72c49699382da77d89809dd0d63c49a9b55e5905ff1ff657d09005",
+  "nativeEnd": {
+    "verifiedUtc": "2026-10-09T22:18:25Z",
+    "pins": [
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "parentPath": "ReplicatedFirst",
+        "instanceId": "1_31065",
+        "class": "LocalScript",
+        "parentId": "1_9074",
+        "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "attributes": [],
+        "segments": [
+          "ReplicatedFirst",
+          "Lobby Loading Screen"
+        ],
+        "parentClass": "ReplicatedFirst",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 42196,
+        "name": "Lobby Loading Screen"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "parentPath": "ServerScriptService.Level 4 Systems",
+        "instanceId": "1_42773",
+        "class": "ModuleScript",
+        "parentId": "1_15624",
+        "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "attributes": [],
+        "segments": [
+          "ServerScriptService",
+          "Level 4 Systems",
+          "Level 4 Light Director"
+        ],
+        "parentClass": "Folder",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 16515,
+        "name": "Level 4 Light Director"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+        "attributes": [],
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 192559,
+        "name": "GameManager"
+      },
+      {
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "parentPath": "ReplicatedStorage",
+        "instanceId": "0_79286917",
+        "class": "ModuleScript",
+        "parentId": "1_408323",
+        "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "attributes": [],
+        "segments": [
+          "ReplicatedStorage",
+          "SceneEffectBudget"
+        ],
+        "parentClass": "ReplicatedStorage",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 10221,
+        "name": "SceneEffectBudget"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "0_79286921",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SceneEffectBudgetClient"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 3537,
+        "name": "SceneEffectBudgetClient"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31079",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 2 Sound Controller"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 41930,
+        "name": "Level 2 Sound Controller"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31113",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "attributes": [],
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 66128,
+        "name": "Level 6 Playground Client"
+      }
+    ],
+    "readOnly": true,
+    "complete": true,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+  },
+  "finishedUtc": "2026-10-09T22:18:25.464683+00:00"
+}

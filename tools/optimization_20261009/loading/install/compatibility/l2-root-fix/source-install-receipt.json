@@ -1,0 +1,20 @@
+{
+  "backupPath": null,
+  "backupPolicy": "Explicit owner instruction: do not take a backup (2026-10-09)",
+  "backupSha256": null,
+  "scripts": [
+    {
+      "bytes": 3537,
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "verifiedUtc": "2026-10-09T22:14:29Z",
+      "otherOriginalsChecked": 212,
+      "beforeSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "afterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    }
+  ],
+  "complete": true,
+  "mirrorsExported": false,
+  "published": false
+}

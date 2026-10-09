@@ -1,0 +1,171 @@
+{
+  "kind": "authoring-archive-install",
+  "startedUtc": "2026-10-09T21:56:10.242643+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioName": "[UPDATE] BACKROOMS: STAY QUIET",
+  "complete": true,
+  "backupPolicy": "Owner explicitly instructed no native backup (2026-10-09)",
+  "utilitySha256": "4b2bb9b7b8ddd7542054cdc143003d982e96af60c62aeb9ee4179eddbf309377",
+  "stagedSourceSha256": "cf209c755b74b47f290afc69b0e2673ac17b23b0f2b80ca7cfeab278fc03e5e0",
+  "gameplay": false,
+  "performance": false,
+  "multiplayer": false,
+  "published": false,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "result": {
+    "contract": {
+      "applied": true,
+      "sourceReferenceRule": "Reject any literal Imports reference in every current Source/editor except exact fresh probe",
+      "scannedScripts": 212,
+      "scannedInstanceReferences": 3068,
+      "archivePath": "ServerStorage.OptimizationAuthoringArchive",
+      "originalsDeleted": false,
+      "report": {
+        "roots": [
+          {
+            "descendants": 10396,
+            "beforePath": "ReplicatedStorage.ZyntraShopUI.Imports",
+            "afterPath": "ServerStorage.OptimizationAuthoringArchive.ZyntraShopUI.Imports",
+            "class": "Folder"
+          },
+          {
+            "descendants": 1661,
+            "beforePath": "ReplicatedStorage.ZyntraHUD.Imports",
+            "afterPath": "ServerStorage.OptimizationAuthoringArchive.ZyntraHUD.Imports",
+            "class": "Folder"
+          }
+        ],
+        "scannedScripts": 212,
+        "archivedDescendants": 12057
+      },
+      "instanceReferenceRule": "Reject external references into either import root; verify reference/source pins immediately before parenting",
+      "archiveId": "79287173",
+      "excludedProbeId": "79287171",
+      "sourceAuditPasses": 2,
+      "moves": [
+        {
+          "ownerId": "15602",
+          "beforePath": "ReplicatedStorage.ZyntraShopUI.Imports",
+          "name": "ZyntraShopUI",
+          "id": "15603",
+          "class": "Folder",
+          "afterPath": "ServerStorage.OptimizationAuthoringArchive.ZyntraShopUI.Imports",
+          "descendants": 10396
+        },
+        {
+          "ownerId": "15616",
+          "beforePath": "ReplicatedStorage.ZyntraHUD.Imports",
+          "name": "ZyntraHUD",
+          "id": "15617",
+          "class": "Folder",
+          "afterPath": "ServerStorage.OptimizationAuthoringArchive.ZyntraHUD.Imports",
+          "descendants": 1661
+        }
+      ]
+    },
+    "originalsPreserved": true,
+    "phases": [
+      {
+        "phase": "before-create",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "before-staging",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "inside-staging-callback",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-staging",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-require-before-run",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-reference-audit-before-archive-apply",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-archive-apply",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-contract",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      },
+      {
+        "phase": "after-cleanup-success-or-failure",
+        "originalsChecked": 212,
+        "installedChecked": 5,
+        "conflicts": []
+      }
+    ],
+    "passed": true,
+    "multiplayer": false,
+    "performance": false,
+    "originalsCount": 212,
+    "cleanupPassed": true,
+    "actualAssetFetches": false,
+    "realReplicationFocusCalls": false,
+    "installed": [
+      {
+        "id": "31065",
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "class": "LocalScript"
+      },
+      {
+        "id": "42773",
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "class": "ModuleScript"
+      },
+      {
+        "id": "408341",
+        "path": "ServerScriptService.GameManager",
+        "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+        "class": "Script"
+      },
+      {
+        "id": "79286917",
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "class": "ModuleScript"
+      },
+      {
+        "id": "79286921",
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+        "class": "LocalScript"
+      }
+    ],
+    "gameplay": false,
+    "snapshotComplete": true,
+    "kind": "authoring-archive-install",
+    "verifiedUtc": "2026-10-09T21:56:21Z",
+    "probe": "authoring-archive",
+    "existingEditorConflicts": 0
+  },
+  "finishedUtc": "2026-10-09T21:56:21.020873+00:00"
+}

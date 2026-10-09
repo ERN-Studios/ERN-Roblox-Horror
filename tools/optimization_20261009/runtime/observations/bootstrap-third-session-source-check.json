@@ -1,0 +1,205 @@
+{
+  "kind": "fresh-third-two-client-actual-source-check",
+  "studioMutation": false,
+  "nativeBackup": false,
+  "scopes": [
+    {
+      "studioId": "fd916a7c-abb7-43de-be41-1c2a6fc7f45d",
+      "datamodel": "Server",
+      "result": {
+        "verifiedUtc": "2026-10-09T23:01:08Z",
+        "roundActive": true,
+        "pins": [
+          {
+            "bytes": 42196,
+            "path": "ReplicatedFirst.Lobby Loading Screen",
+            "id": "0_292005",
+            "class": "LocalScript",
+            "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+            "enabled": true
+          },
+          {
+            "bytes": 16515,
+            "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+            "id": "0_303761",
+            "class": "ModuleScript",
+            "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+          },
+          {
+            "bytes": 194825,
+            "path": "ServerScriptService.GameManager",
+            "id": "0_698693",
+            "class": "Script",
+            "sha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+            "enabled": true
+          },
+          {
+            "bytes": 10221,
+            "path": "ReplicatedStorage.SceneEffectBudget",
+            "id": "0_303686",
+            "class": "ModuleScript",
+            "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+          },
+          {
+            "bytes": 3537,
+            "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+            "id": "0_292070",
+            "class": "LocalScript",
+            "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+            "enabled": true
+          },
+          {
+            "bytes": 41930,
+            "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+            "id": "0_292023",
+            "class": "LocalScript",
+            "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+            "enabled": true
+          },
+          {
+            "bytes": 66128,
+            "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+            "id": "0_292057",
+            "class": "LocalScript",
+            "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+            "enabled": true
+          },
+          {
+            "bytes": 20082,
+            "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+            "id": "0_292017",
+            "class": "LocalScript",
+            "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+            "enabled": true
+          }
+        ],
+        "level": 2,
+        "covers": [],
+        "complete": true
+      }
+    },
+    {
+      "studioId": "b9e75db6-98fa-437b-b2fc-c63a057b6633",
+      "datamodel": "Client",
+      "result": {
+        "player": "Player1",
+        "verifiedUtc": "2026-10-09T23:01:08Z",
+        "roundActive": true,
+        "pins": [
+          {
+            "bytes": 42196,
+            "path": "ReplicatedFirst.Lobby Loading Screen",
+            "id": "1_292005",
+            "class": "LocalScript",
+            "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+            "enabled": true
+          },
+          {
+            "bytes": 10221,
+            "path": "ReplicatedStorage.SceneEffectBudget",
+            "id": "1_303686",
+            "class": "ModuleScript",
+            "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+          },
+          {
+            "bytes": 3537,
+            "path": "Players.Player1.PlayerScripts.SceneEffectBudgetClient",
+            "id": "0_325360",
+            "class": "LocalScript",
+            "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+            "enabled": true
+          },
+          {
+            "bytes": 41930,
+            "path": "Players.Player1.PlayerScripts.Level 2 Sound Controller",
+            "id": "0_325332",
+            "class": "LocalScript",
+            "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+            "enabled": true
+          },
+          {
+            "bytes": 66128,
+            "path": "Players.Player1.PlayerScripts.Level 6 Playground Client",
+            "id": "0_325330",
+            "class": "LocalScript",
+            "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+            "enabled": true
+          },
+          {
+            "bytes": 20082,
+            "path": "Players.Player1.PlayerScripts.SpectateController",
+            "id": "0_325366",
+            "class": "LocalScript",
+            "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+            "enabled": true
+          }
+        ],
+        "level": 2,
+        "covers": [],
+        "complete": true
+      }
+    },
+    {
+      "studioId": "205365d5-a0e8-4527-aa08-bf711263cd8a",
+      "datamodel": "Client",
+      "result": {
+        "player": "Player2",
+        "verifiedUtc": "2026-10-09T23:01:08Z",
+        "roundActive": true,
+        "pins": [
+          {
+            "bytes": 42196,
+            "path": "ReplicatedFirst.Lobby Loading Screen",
+            "id": "1_292005",
+            "class": "LocalScript",
+            "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+            "enabled": true
+          },
+          {
+            "bytes": 10221,
+            "path": "ReplicatedStorage.SceneEffectBudget",
+            "id": "1_303686",
+            "class": "ModuleScript",
+            "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+          },
+          {
+            "bytes": 3537,
+            "path": "Players.Player2.PlayerScripts.SceneEffectBudgetClient",
+            "id": "0_287834",
+            "class": "LocalScript",
+            "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+            "enabled": true
+          },
+          {
+            "bytes": 41930,
+            "path": "Players.Player2.PlayerScripts.Level 2 Sound Controller",
+            "id": "0_325299",
+            "class": "LocalScript",
+            "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+            "enabled": true
+          },
+          {
+            "bytes": 66128,
+            "path": "Players.Player2.PlayerScripts.Level 6 Playground Client",
+            "id": "0_325277",
+            "class": "LocalScript",
+            "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+            "enabled": true
+          },
+          {
+            "bytes": 20082,
+            "path": "Players.Player2.PlayerScripts.SpectateController",
+            "id": "0_325313",
+            "class": "LocalScript",
+            "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+            "enabled": true
+          }
+        ],
+        "level": 2,
+        "covers": [],
+        "complete": true
+      }
+    }
+  ],
+  "complete": true
+}

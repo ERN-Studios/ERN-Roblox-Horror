@@ -1,0 +1,14 @@
+{
+  "offlineChecks": 41,
+  "passed": true,
+  "checkedUtc": "2026-10-09T22:32:56.151219+00:00",
+  "realGitStaged": false,
+  "gitCommitted": false,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "files": {
+    "prepare_scoped_index.py": "fc2c584aea4d481e1bb0693dc851f8f37e692eec1d87bca0f4fc36c27046d31e",
+    "test_scoped_index.py": "cd1c0380d60d526b1867a0b960d25576907f76607b655c1cc913695a37bbe925",
+    "README.md": "30048ff01129a6cbb68d392df9d0a7c33192941c9ce08c3aca2838496d1fbd9b"
+  }
+}

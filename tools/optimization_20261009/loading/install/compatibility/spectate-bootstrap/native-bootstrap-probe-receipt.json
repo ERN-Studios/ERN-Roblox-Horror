@@ -1,0 +1,136 @@
+{
+  "kind": "isolated-native-production-extracted-mock-contract",
+  "startedUtc": "2026-10-09T22:58:24.068253+00:00",
+  "sourceScope": 8,
+  "compiled": true,
+  "fixtureSha256": "74a319d7aa4d4ea183a8ccfeca422b0638a26266ec124bd139d8cc988a51e575",
+  "stagedSourceSha256": "9abc8b6c643b08af6deafa0f90f1550677063e5ca6c9136b7f271574eefbf805",
+  "nativeBackup": false,
+  "gameplay": false,
+  "multiplayer": false,
+  "performance": false,
+  "realReplicationFocusCalls": false,
+  "complete": true,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "native": {
+    "contract": {
+      "result": {
+        "realGameplayStreamingPerformancePass": false,
+        "checks": 99
+      },
+      "output": [
+        "spectator bootstrap contract checks: 99"
+      ]
+    },
+    "originalsPreserved": true,
+    "phases": [
+      {
+        "phase": "before-create",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "before-staging",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "inside-staging-callback",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "after-staging",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "after-require-before-run",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "after-contract",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      },
+      {
+        "phase": "after-cleanup-success-or-failure",
+        "originalsChecked": 212,
+        "installedChecked": 8,
+        "conflicts": []
+      }
+    ],
+    "passed": true,
+    "multiplayer": false,
+    "performance": false,
+    "originalsCount": 212,
+    "cleanupPassed": true,
+    "actualAssetFetches": false,
+    "realReplicationFocusCalls": false,
+    "installed": [
+      {
+        "id": "31065",
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "class": "LocalScript"
+      },
+      {
+        "id": "42773",
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "class": "ModuleScript"
+      },
+      {
+        "id": "408341",
+        "path": "ServerScriptService.GameManager",
+        "sha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+        "class": "Script"
+      },
+      {
+        "id": "79286917",
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "class": "ModuleScript"
+      },
+      {
+        "id": "79286921",
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "class": "LocalScript"
+      },
+      {
+        "id": "31079",
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "class": "LocalScript"
+      },
+      {
+        "id": "31113",
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "class": "LocalScript"
+      },
+      {
+        "id": "31073",
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+        "class": "LocalScript"
+      }
+    ],
+    "gameplay": false,
+    "snapshotComplete": true,
+    "kind": "synthetic-native-contract",
+    "verifiedUtc": "2026-10-09T22:58:27Z",
+    "probe": "spectate-bootstrap-99",
+    "existingEditorConflicts": 0
+  },
+  "checks": 99,
+  "finishedUtc": "2026-10-09T22:58:27.821510+00:00"
+}

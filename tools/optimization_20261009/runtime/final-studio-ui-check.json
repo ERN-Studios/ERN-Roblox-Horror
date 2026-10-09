@@ -1,0 +1,18 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "authoritativeStudioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "datamodel": "Edit",
+  "verificationMethod": "Native Studio Workspace Properties exact filters and fresh UI readback after closing only root-created two-client sessions",
+  "values": {
+    "StreamingEnabled": true,
+    "StreamingTargetRadius": 384,
+    "StreamingMinRadius": 64,
+    "ModelStreamingBehavior": "Improved",
+    "StreamingIntegrityMode": "PauseOutsideLoadedArea",
+    "StreamOutBehavior": "Opportunistic"
+  },
+  "newNativeBackups": false,
+  "remainingAgentCreatedPlayWindows": 0,
+  "publicationVerified": false
+}

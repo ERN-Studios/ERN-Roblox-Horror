@@ -1,0 +1,52 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "status": "Fresh exact two-source proposal; no Studio writes",
+  "scripts": [
+    {
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "class": "Script",
+      "identity": {
+        "path": "ServerScriptService.GameManager",
+        "name": "GameManager",
+        "instanceId": "1_408341",
+        "parentId": "1_409634",
+        "parentPath": "ServerScriptService",
+        "parentClass": "ServerScriptService",
+        "class": "Script"
+      },
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.before.luau",
+      "beforeSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "beforeBytes": 192559,
+      "afterFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.proposed.luau",
+      "afterSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "afterBytes": 194825
+    },
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "class": "LocalScript",
+      "identity": {
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "name": "SpectateController",
+        "instanceId": "1_31073",
+        "parentId": "1_410029",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "parentClass": "StarterPlayerScripts",
+        "class": "LocalScript"
+      },
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.before.luau",
+      "beforeSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "beforeBytes": 18253,
+      "afterFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.proposed.luau",
+      "afterSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "afterBytes": 20082
+    }
+  ]
+}

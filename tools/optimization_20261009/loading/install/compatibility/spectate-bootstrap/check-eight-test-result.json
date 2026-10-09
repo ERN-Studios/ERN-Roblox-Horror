@@ -1,0 +1,14 @@
+{
+  "totalChecks": 78,
+  "offlineGuardChecks": 69,
+  "officialLuauCompileChecks": 9,
+  "helperSha256": "0a28d9c691cc54509e60529ae5370bd7357ae255210cab3a05b293b8afa56f68",
+  "manifestSha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b",
+  "authoritativeStudioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "compiledCurrentRuntimeSources": 8,
+  "nativeReadCodeCompiled": true,
+  "studioConnected": false,
+  "allSimulatedWritesIntercepted": true,
+  "runtimeAndGlobalPreserved": true,
+  "backupCreated": false
+}

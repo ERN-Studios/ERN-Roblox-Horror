@@ -1,0 +1,31 @@
+{
+  "kind": "actual-distant-first-spectate-smoke",
+  "startedUtc": "2026-10-09T23:01:23.948418+00:00",
+  "studioIds": {
+    "server": "fd916a7c-abb7-43de-be41-1c2a6fc7f45d",
+    "client1": "b9e75db6-98fa-437b-b2fc-c63a057b6633",
+    "client2": "205365d5-a0e8-4527-aa08-bf711263cd8a"
+  },
+  "editMutation": false,
+  "newInstances": false,
+  "newProbes": false,
+  "runtimeInputs": [
+    "safe actual Player2 relocation",
+    "intentional delayed Player1 ordinary death",
+    "optional Client1-only HRP/Head names borrowed"
+  ],
+  "normalQueueAndLeaveRootOwned": true,
+  "naturalStreamOutPass": false,
+  "fpsOrPerformancePass": false,
+  "connectionInitialized": true,
+  "moveRequested": true,
+  "scenarioPassed": false,
+  "error": "execute_luau failed: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.ExecuteLuauTool:86: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution:54: AssistantCommand:32: No safe actual target floor",
+  "targetPositionCleanup": {
+    "restored": false,
+    "unknownNativeMoveOutcome": true
+  },
+  "nameCleanupVerified": false,
+  "complete": false,
+  "finishedUtc": "2026-10-09T23:01:24.036303+00:00"
+}

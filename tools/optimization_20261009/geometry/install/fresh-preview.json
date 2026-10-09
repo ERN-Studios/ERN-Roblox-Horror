@@ -1,0 +1,46 @@
+{
+  "inspectionOnly": true,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "capturedInEdit": true,
+  "rootMustReprepareBeforeWrite": true,
+  "summary": {
+    "universeId": 10559217407,
+    "exactMergeGroups": 124,
+    "placeId": 131311258779917,
+    "archiveName": "PoolroomsContainedColliders_20261009",
+    "collisionBeforeDescendants": 23475,
+    "mergedOriginals": 267,
+    "limitations": "No native gameplay, multiplayer, streaming or actual-asset performance result",
+    "collisionPath": "ServerStorage.Level2PoolroomsMap.Collision",
+    "mergeReductionAreas": {
+      "A4": 43,
+      "A5": 25,
+      "A6": 27,
+      "P5": 1,
+      "A3": 18,
+      "A2": 24,
+      "A1": 4,
+      "P1": 1
+    },
+    "redundantColliders": 0,
+    "mergedProxies": 124,
+    "phase": "prepared",
+    "candidateCount": 11033,
+    "areas": [],
+    "referencedExcluded": 0,
+    "sourceEvidenceCount": 190,
+    "unionsToAutomatic": 6605,
+    "exactMergeReduction": 143,
+    "lodFolders": {
+      "Frame_DecksDeep": 2556,
+      "Frame_DeckPads": 3152,
+      "Frame_Decks": 897
+    },
+    "lodPath": "ServerStorage.Level 6 Indoor Playground",
+    "geometryPolicy": "Exact containment or continuous equal-cross-section native-float merge; no epsilon or removed volume",
+    "poolroomsPath": "ServerStorage.Level2PoolroomsMap"
+  },
+  "ownerBackupException": "Latest owner instruction explicitly forbids creating new native backups; root must record the exact user instruction in the apply receipt.",
+  "nativeQueriesRun": false,
+  "gameplayRun": false
+}

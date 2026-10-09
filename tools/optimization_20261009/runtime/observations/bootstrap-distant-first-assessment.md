@@ -1,0 +1,19 @@
+# Actual distant-first spectator verification
+
+Root ran this bounded test in the third normal two-client Level 2 session after installing the server candidate-ID/client pending-avatar fix. No Edit Source/editor/property change, new Instance, ModuleScript probe, manual spectate remote or additional test replication focus was performed by the driver. Its intentional runtime inputs were a guarded Player2 relocation and delayed ordinary Player1 death; the borrowed Player2 position was restored.
+
+The first attempt at **23:01:23 UTC** failed at `No safe actual target floor`. The initial marker+20/down80 ray encountered the vaulted ceiling instead of a valid floor. Root confirmed the guard aborted before region request, relocation, death scheduling or local name borrowing. The floor assertion appears before those operations in the driver. The raw [failed receipt](bootstrap-distant-first-actual.json) remains unchanged: its generic `unknownNativeMoveOutcome=true` and `nameCleanupVerified=false` express that the native call returned an error rather than a relocation result; they do not establish that those mutations occurred. This known pre-mutation guard failure was not reported as a passed scenario.
+
+The driver was corrected to raycast from **marker+2 downward 15 studs**, below the ceiling. The exact current driver then passed its separately pinned [offline correction checks](../distant-spectate-floor-correction-offline-result.json): 11 generated Client cleanup scenarios, eight Python orchestration scenarios, and all seven native payload compiles under official Luau 0.741. These stand-ins are not gameplay or native performance evidence. The [initial offline receipt](../distant-spectate-offline-result.json) retains its original source SHA; it was not rewritten to imply it tested the corrected driver.
+
+The corrected actual run at **23:02:32-23:02:36 UTC** [passed](bootstrap-distant-first-floor-corrected.json):
+
+- Player2 was **924.005 studs** from Player1; actual Client2 floor/arrival and health100 were confirmed.
+- Before Player1 died, Client1 had the target Humanoid but its **HRP and Head were naturally absent**. `fixtureMode=natural-missing-required-replica-parts`, `artificialNameAbsence=false` and `renamed=[]` confirm no borrowed target names.
+- The real `spectatecandidates` response had Serial=1/UserIds={-2}; the actual client selected target -2 while HRP/Head were still absent. SpectatorCount was one. No test-created focus or manually fired selection remote supplied that result.
+- The actual Scriptable camera subsequently followed the received head within **0.099065 stud**. The actual target collision floor was received at **y=171.300003**, and Player2 remained at health100.
+- Server names/identities remained unchanged; the borrowed Player2 position was restored. Player1's intentional normal death remained for root's normal leave-round cleanup. The separate [normal reset receipt](bootstrap-final-normal-reset.json) subsequently recorded both players health100/InRound=false and a Custom client camera; that later result is not inferred from this driver's `complete` flag.
+
+The raw successful receipt's top-level `naturalStreamOutPass=false` was conservative static driver metadata, not a computed result. It remains preserved. The nested `naturalPreFixtureAvailability`, `selectedWhileRequiredBodyMissing`, actual candidate/selection events and camera/floor observations establish this specific natural distant-first pass. Its `fpsOrPerformancePass=false` remains accurate.
+
+This resolves the identified distant-first selection blocker in the tested L2 route. It does not establish all spectator routes, long-term target churn, legacy pump/entity escalation, full wins/finale, mobile performance, matched before/after savings or successful publication. No Studio action or source write was made while preparing this assessment.

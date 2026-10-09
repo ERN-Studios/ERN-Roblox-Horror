@@ -11,9 +11,9 @@
   "universeId": 10559217407,
   "datamodel": "Edit",
   "counts": {
-    "scripts": 222,
+    "scripts": 224,
     "remoteEvents": 15,
-    "total": 237,
+    "total": 239,
     "created": 12,
     "updated": 18,
     "unchanged": 215,
@@ -29,8 +29,8 @@
       ],
       "className": "LocalScript",
       "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
-      "bytes": 36701,
-      "sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "bytes": 42196,
+      "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -489,8 +489,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 190167,
-      "sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "bytes": 194825,
+      "sha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1331,8 +1331,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
-      "bytes": 16038,
-      "sha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
+      "bytes": 16515,
+      "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3573,8 +3573,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 40174,
-      "sha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "bytes": 41930,
+      "sha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3786,8 +3786,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
-      "bytes": 65353,
-      "sha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "bytes": 66128,
+      "sha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4339,8 +4339,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
-      "bytes": 18253,
-      "sha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "bytes": 20082,
+      "sha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4750,6 +4750,45 @@
         "LinkedSource": ""
       },
       "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.SceneEffectBudget",
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "bytes": 10221,
+      "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "status": "synced",
+      "sourceEditorMatches": true
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "bytes": 3537,
+      "sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "status": "synced",
+      "sourceEditorMatches": true
     }
   ]
 }

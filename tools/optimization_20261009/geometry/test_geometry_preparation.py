@@ -4,11 +4,12 @@ This verifies the conservative containment algorithm and transactional guards.
 It deliberately makes no native gameplay/streaming/performance claim.
 """
 from pathlib import Path
+import os
 import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[3]
-UTILITY = Path(__file__).with_name("GeometryOptimization.luau")
+UTILITY = Path(os.environ.get("GEOMETRY_UTILITY", Path(__file__).with_name("GeometryOptimization.luau")))
 LUAU = ROOT / "_local/optimization-20261009/luau-0.741/luau.exe"
 
 MOCK = r'''
@@ -21,7 +22,7 @@ local function enum(name)
     return setmetatable({__type="EnumItem", Name=name}, {__tostring=function(self) return self.Name end})
 end
 local Enum = {
-    SurfaceType={Smooth=enum("Enum.SurfaceType.Smooth")},
+    SurfaceType={Smooth=enum("Enum.SurfaceType.Smooth"),Studs=enum("Enum.SurfaceType.Studs"),Inlet=enum("Enum.SurfaceType.Inlet"),Hinge=enum("Enum.SurfaceType.Hinge")},
     PartType={Block=enum("Enum.PartType.Block"),Cylinder=enum("Enum.PartType.Cylinder")},
     RenderFidelity={Precise=enum("Enum.RenderFidelity.Precise"),Automatic=enum("Enum.RenderFidelity.Automatic")},
     CollisionFidelity={Hull=enum("Enum.CollisionFidelity.Hull")},
@@ -32,6 +33,12 @@ local function cf(x,y,z,rotation)
     local v={x,y,z}; for _, n in ipairs(rotation or {1,0,0,0,1,0,0,0,1}) do table.insert(v,n) end
     return {__type="CFrame",GetComponents=function()return table.unpack(v)end}
 end
+local function f32(n)local b=buffer.create(4);buffer.writef32(b,0,n);return buffer.readf32(b,0)end
+local Vector3={new=function(x,y,z)return vec(f32(x),f32(y),f32(z))end}
+local CFrame={new=function(x,y,z,...)
+    local r={...};for i=1,#r do r[i]=f32(r[i])end
+    return cf(f32(x),f32(y),f32(z),#r>0 and r or nil)
+end}
 local function json(v)
     if type(v)=="string" then return string.format("%q",v) end
     if type(v)=="number" then return string.format("%.17g",v) end
@@ -82,6 +89,8 @@ function methods:IsA(name)
 end
 function methods:GetAttributes()return table.clone(self._attrs)end
 function methods:GetAttribute(name)return self._attrs[name]end
+function methods:SetAttribute(name,value)self._attrs[name]=value end
+function methods:Destroy()for _,child in ipairs(self:GetChildren())do child:Destroy()end;self.Parent=nil;self._destroyed=true end
 function methods:GetTags()return table.clone(self._tags)end
 function methods:FindFirstChild(name)for _,child in ipairs(self._children)do if child.Name==name then return child end end end
 function methods:IsDescendantOf(parent)local current=self.Parent;while current do if current==parent then return true end;current=current.Parent end;return false end
@@ -260,6 +269,53 @@ test("exception after partial writes restores collision and LOD",function()
     assert(source.Source=="return changed.Collision","concurrent source work must survive rollback")
     for _,row in ipairs(plan.LOD)do assert(row.Instance.RenderFidelity==Enum.RenderFidelity.Precise)end
 end)
+if Geometry.PrepareExactMerges then
+test("exact contiguous native-float merge preserves occupied union",function()
+    local plan,a,b,c=prepareCount(function(a,b)b.Size=a.Size;b.CFrame=cf(4,0,0)end,0)
+    assert(#plan.Merges==1 and #plan.Merges[1].Before==2)
+    local report=Geometry.Apply(plan,{ownerExplicitlyForbidsNewBackups=true,ownerInstruction="Owner explicitly instructed: Do not take backups."})
+    assert(report.nativeBackupReceipt==false and report.nativeBackupOwnerException.ownerExplicitlyForbidsNewBackups)
+    assert(#c:GetChildren()==1 and plan.Merges[1].Proxy.Size.X==8 and plan.Merges[1].Proxy.CFrame:GetComponents()==2)
+    assert(a.Parent==plan.Archive and b.Parent==plan.Archive)
+    Geometry.Rollback(plan);assert(a.Parent==c and b.Parent==c and plan.Merges[1].Proxy._destroyed)
+end)
+test("nonrepresentable native merge endpoints are rejected",function()
+    local plan=prepareCount(function(a,b)a.Size=vec(4,4,4);b.Size=vec(4,4,4);a.CFrame=cf(70000,0,0);b.CFrame=cf(70000+1/128,0,0)end,0)
+    assert(#plan.Merges==0,"float midpoint must not round the occupied volume")
+end)
+test("default passive Studs/Inlet surfaces permit same-rotation merge",function()
+    local plan=prepareCount(function(a,b)
+        for _,p in ipairs({a,b})do p.TopSurface=Enum.SurfaceType.Studs;p.BottomSurface=Enum.SurfaceType.Inlet end
+        b.Size=a.Size;b.CFrame=cf(4,0,0)
+    end,0)
+    assert(#plan.Merges==1)
+end)
+test("different world-face passive surfaces cannot merge",function()
+    local plan=prepareCount(function(a,b)
+        for _,p in ipairs({a,b})do p.TopSurface=Enum.SurfaceType.Studs;p.BottomSurface=Enum.SurfaceType.Inlet end
+        b.Size=a.Size;b.CFrame=cf(4,0,0,{1,0,0,0,-1,0,0,0,-1})
+    end,0)
+    assert(#plan.Merges==0)
+end)
+test("active joint-making surfaces are excluded",function()
+    local plan=prepareCount(function(a,b)a.TopSurface=Enum.SurfaceType.Hinge;b.TopSurface=Enum.SurfaceType.Hinge;b.Size=a.Size;b.CFrame=cf(4,0,0)end,0)
+    assert(#plan.Merges==0)
+end)
+test("apertures never enter exact merge groups",function()
+    local plan=prepareCount(function(a,b)b.Size=a.Size;b.CFrame=cf(4+2^-40,0,0)end,0)
+    assert(#plan.Merges==0)
+end)
+test("merge failure after proxy creation restores every original",function()
+    local plan,a,b,c,l=prepareCount(function(a,b)b.Size=a.Size;b.CFrame=cf(4,0,0)end,0)
+    for i=1,600 do instance("UnionOperation","added",l:FindFirstChild("Frame_DeckPads"))end
+    -- Reprepare because added LOD geometry must be included in the fresh baseline.
+    plan=Geometry.Prepare();local source=instance("ModuleScript","Runtime",game);source.Source="return world.Collision";plan=Geometry.Prepare()
+    local fired=false;task.wait=function()if not fired and plan.Archive then fired=true;source.Source="return changed.Collision"end end
+    assert(not pcall(Geometry.Apply,plan,{ownerExplicitlyForbidsNewBackups=true,ownerInstruction="Owner explicitly instructed: Do not take backups."}))
+    task.wait=function()end
+    assert(fired and a.Parent==c and b.Parent==c and #c:GetChildren()==2 and plan.Merges[1].Proxy._destroyed)
+end)
+end
 assert(subscriptions==0,"temporary read-only subscriptions leaked")
 print("Synthetic contract tests passed: "..count.."; native gameplay/performance NOT tested")
 '''

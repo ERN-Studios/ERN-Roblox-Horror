@@ -1,0 +1,65 @@
+{
+  "sources": [
+    {
+      "bytes": 42196,
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "instanceId": "1_31065",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "bytes": 16515,
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "instanceId": "1_42773",
+      "editorMatches": true,
+      "class": "ModuleScript",
+      "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "bytes": 192559,
+      "path": "ServerScriptService.GameManager",
+      "instanceId": "1_408341",
+      "editorMatches": true,
+      "class": "Script",
+      "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "bytes": 10221,
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "instanceId": "0_79286917",
+      "editorMatches": true,
+      "class": "ModuleScript",
+      "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "bytes": 3532,
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "instanceId": "0_79286921",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "sourceSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be"
+    },
+    {
+      "bytes": 41930,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "instanceId": "1_31079",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "bytes": 66128,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "instanceId": "1_31113",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    }
+  ],
+  "verifiedUtc": "2026-10-09T21:58:29Z",
+  "readOnly": true,
+  "datamodel": "Edit",
+  "complete": true,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+}

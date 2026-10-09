@@ -1,0 +1,437 @@
+{
+  "startedUtc": "2026-10-09T21:53:59.081858+00:00",
+  "studioName": "[UPDATE] BACKROOMS: STAY QUIET",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "backupPolicy": "Owner explicitly instructed no native backup (2026-10-09)",
+  "kind": "synthetic-native-contract",
+  "gameplay": false,
+  "performance": false,
+  "multiplayer": false,
+  "actualAssetFetches": false,
+  "realReplicationFocusCalls": false,
+  "complete": true,
+  "probes": [
+    {
+      "probe": "loading-contract",
+      "startedUtc": "2026-10-09T21:53:59.117410+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\loading\\install\\native-loading-contract-probe.luau",
+      "fixtureSha256": "c53abc6ad4c66a246c6cbe7c6e1c6faeda7b959bd7a400be8c7cc51cbfdf02db",
+      "stagedSourceSha256": "eb5fb1297254cc069f03815ba07f3f5a9845b9f22ee4f3d072556cf5f96e054c",
+      "contract": {
+        "output": [
+          "loading policy contract checks: 51"
+        ]
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 212,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:54:02Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 51,
+      "finishedUtc": "2026-10-09T21:54:02.778653+00:00"
+    },
+    {
+      "probe": "native-visibility",
+      "startedUtc": "2026-10-09T21:54:02.778653+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\loading\\native-visibility-probe.luau",
+      "fixtureSha256": "f5eaaceec99bf85378aa684c920a44fd1c0426e99374b3fdb7f8a51d0c042e15",
+      "stagedSourceSha256": "486fb824c342432e3c38fb73de2ddeac8d6f13cb5a68f50b12c2393d0a56b317",
+      "contract": {
+        "result": {
+          "assetsFetched": false,
+          "kind": "native-visibility-contract",
+          "gameplay": false,
+          "checks": 14
+        },
+        "output": []
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 212,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:54:06Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 14,
+      "finishedUtc": "2026-10-09T21:54:06.455101+00:00"
+    },
+    {
+      "probe": "spectate-contract",
+      "startedUtc": "2026-10-09T21:54:06.456605+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\loading\\install\\native-spectate-contract-probe.luau",
+      "fixtureSha256": "b4a24039367c698186a5716cb118956efa98f96d21523268f290d25a1074957b",
+      "stagedSourceSha256": "2fb88b1d4136eb624a3249abc16ba0f338480beaf0d753a82b11dcbefc3c09ea",
+      "contract": {
+        "output": [
+          "spectator focus contract checks: 51"
+        ]
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 212,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:54:10Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 51,
+      "finishedUtc": "2026-10-09T21:54:10.122615+00:00"
+    },
+    {
+      "probe": "effects-contract",
+      "startedUtc": "2026-10-09T21:54:10.123615+00:00",
+      "fixtureFile": "tools\\optimization_20261009\\effects\\native_contract_probe.luau",
+      "fixtureSha256": "ad8c5a53ecda5af0c0de1305ba9f86ab4e8d95281470281fa300bccaf7afe3b9",
+      "stagedSourceSha256": "bfe68d23758bd1e2e9a4bf856906cfded8bb53fed1b01c94b2230cce6685bb87",
+      "contract": {
+        "result": {
+          "Type": "Synthetic native effect contract",
+          "Passed": true,
+          "Checks": 14
+        },
+        "output": []
+      },
+      "originalsPreserved": true,
+      "phases": [
+        {
+          "phase": "before-create",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "before-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "inside-staging-callback",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-staging",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-require-before-run",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-contract",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        },
+        {
+          "phase": "after-cleanup-success-or-failure",
+          "originalsChecked": 212,
+          "installedChecked": 5,
+          "conflicts": []
+        }
+      ],
+      "passed": true,
+      "multiplayer": false,
+      "performance": false,
+      "originalsCount": 212,
+      "cleanupPassed": true,
+      "actualAssetFetches": false,
+      "realReplicationFocusCalls": false,
+      "installed": [
+        {
+          "id": "31065",
+          "path": "ReplicatedFirst.Lobby Loading Screen",
+          "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+          "class": "LocalScript"
+        },
+        {
+          "id": "42773",
+          "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+          "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "408341",
+          "path": "ServerScriptService.GameManager",
+          "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+          "class": "Script"
+        },
+        {
+          "id": "79286917",
+          "path": "ReplicatedStorage.SceneEffectBudget",
+          "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+          "class": "ModuleScript"
+        },
+        {
+          "id": "79286921",
+          "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+          "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+          "class": "LocalScript"
+        }
+      ],
+      "gameplay": false,
+      "snapshotComplete": true,
+      "kind": "synthetic-native-contract",
+      "verifiedUtc": "2026-10-09T21:54:13Z",
+      "existingEditorConflicts": 0,
+      "assertionChecks": 14,
+      "finishedUtc": "2026-10-09T21:54:13.865460+00:00"
+    }
+  ],
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "finishedUtc": "2026-10-09T21:54:13.865460+00:00"
+}

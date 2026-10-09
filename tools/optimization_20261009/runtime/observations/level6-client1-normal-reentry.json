@@ -1,0 +1,28 @@
+{
+  "studioId": "797b67e1-6765-4c02-b2d0-f0b025bfcac1",
+  "datamodel": "Client",
+  "label": "level6-client1-normal-reentry",
+  "code": "tools/optimization_20261009/runtime/l6_reentry_read.luau",
+  "startedUtc": "2026-10-09T22:34:10.556198+00:00",
+  "result": {
+    "bodyId": "900418",
+    "fullCountingFinalePassed": false,
+    "floor": "Workspace.Level 6 Indoor Playground.Floor_FoamTiles.tile_blue",
+    "floorClass": "Part",
+    "complete": true,
+    "priorChildId": "893644",
+    "loadingCoverVisible": false,
+    "childId": "900414",
+    "position": [
+      51999.99609375,
+      104.50469970703125,
+      181.90350341796875
+    ],
+    "priorBodyId": "893648",
+    "kind": "actual-normal-two-client-l6-reentry",
+    "lodAutomaticHull": 6605,
+    "health": 100
+  },
+  "completed": true,
+  "finishedUtc": "2026-10-09T22:34:10.653071+00:00"
+}

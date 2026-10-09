@@ -208,6 +208,15 @@ local function active()
 		and participantActive()
 end
 
+-- The rendered public map has a separate, section-aware environmental pack.
+-- Yield only after this participant's replacement pack loaded; authored cues and entity voices keep their owners.
+local function poolroomsEnvironmentOwned()
+	local world = workspace:FindFirstChild("Level 2 Generated World")
+	return player:GetAttribute("Level2PoolroomsAudioReady") == true
+		and player:GetAttribute("Level2PoolroomsAudioActive") == true
+		and world ~= nil and world:GetAttribute("Level2NewMap") == true
+end
+
 -- Contextual environmental one-shots. These are client-local and spatial so every
 -- player gets an unpredictable soundscape without adding replicated emitters.
 local ambientFolder
@@ -290,16 +299,26 @@ local function classifyAmbientAnchor(instance)
 	if not (instance:IsA("BasePart") and not ambientAnchorSeen[instance]) then return end
 	local name = instance.Name
 	if name:find("Level 2 Corridor Vault Light", 1, true) == 1 then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "Corridor"
 		table.insert(ambientAnchors.Corridor, instance)
 	elseif name:find("Level 2 Navigation Node ", 1, true) == 1
 		and instance:GetAttribute("Level2_Role") ~= "Kids Area" then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "WetHall"
 		table.insert(ambientAnchors.WetHall, instance)
 	elseif name == "Level 2 Pump Intake Pipe" then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "PumpPipe"
 		table.insert(ambientAnchors.PumpPipe, instance)
 	end
+end
+
+-- Streaming removes individual anchors while the world's Model can remain.
+local function forgetAmbientAnchor(instance)
+	local category = ambientAnchorSeen[instance]
+	if not category then return end
+	ambientAnchorSeen[instance] = nil
+	local list = ambientAnchors[category]
+	local index = table.find(list, instance)
+	if index then table.remove(list, index) end
 end
 
 local function startRandomSession(world)
@@ -313,6 +332,7 @@ local function startRandomSession(world)
 		classifyAmbientAnchor(instance)
 	end
 	table.insert(ambientConnections, world.DescendantAdded:Connect(classifyAmbientAnchor))
+	table.insert(ambientConnections, world.DescendantRemoving:Connect(forgetAmbientAnchor))
 	table.insert(ambientConnections, world.AncestryChanged:Connect(function(_, parent)
 		if not parent and ambientWorld == world then stopRandomSession() end
 	end))
@@ -506,7 +526,29 @@ end
 
 -- Ordinary environmental ambience remains separate from the four monster voices.
 
+local commonYielded = false
 local function updateRandomAmbience()
+	if poolroomsEnvironmentOwned() then
+		if not commonYielded then
+			commonYielded = true
+			-- Let an already audible environmental clip taper away; no shared cue/session folders are cleared.
+			local outgoing = ambientFolder
+			ambientFolder = nil
+			if outgoing and outgoing.Parent then
+				for _, emitter in ipairs(outgoing:GetChildren()) do
+					local sound = emitter:FindFirstChildOfClass("Sound")
+					if sound then TweenService:Create(sound, TweenInfo.new(1), {Volume = 0}):Play() end
+				end
+				Debris:AddItem(outgoing, 1.1)
+			end
+			ambientBusyUntil = 0
+		end
+		return
+	end
+	if commonYielded then
+		commonYielded = false
+		nextCommonAt = os.clock() + rng:NextNumber(COMMON_DELAY_MIN, COMMON_DELAY_MAX)
+	end
 	if not syncRandomSession() then return end
 	local now = os.clock()
 
@@ -740,7 +782,7 @@ RunService.Heartbeat:Connect(function(dt)
 	local blend = math.clamp(dt / FADE_SECONDS, 0, 1)
 	for _, entry in ipairs(AMBIENCE) do
 		local slotName, volume = entry[1], entry[2]
-		if active() then
+		if active() and not poolroomsEnvironmentOwned() then
 			local loop = ensureLoop(slotName, volume)
 			if loop then
 				loop.Volume += (volume - loop.Volume) * blend

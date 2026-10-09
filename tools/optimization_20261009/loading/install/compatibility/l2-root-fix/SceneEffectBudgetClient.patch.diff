@@ -1,0 +1,11 @@
+--- SceneEffectBudgetClient.before.luau
++++ SceneEffectBudgetClient.proposed.luau
+@@ -11,7 +11,7 @@
+ local CONFIG = {
+ 	["Level 4 Cinema Blender"] = {ActiveDistance = 320, Hysteresis = 48, ScanRoots = {"Lights", "Props"}},
+ 	["Level 5 Void"] = {ActiveDistance = 384, Hysteresis = 64, ScanRoots = {"Lights"}},
+-	["Level2PoolroomsMap"] = {ActiveDistance = 320, Hysteresis = 48, ScanRoots = {"Water FX"}},
++	["Level 2 Generated World"] = {ActiveDistance = 320, Hysteresis = 48, ScanRoots = {"Water FX"}},
+ }
+ -- The Level 6 arena's galleries share long sight lines; all stay visible.
+ -- Its union LOD is configured at authoring time, independently of this budget.

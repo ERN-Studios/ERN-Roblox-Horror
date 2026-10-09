@@ -1,0 +1,14 @@
+{
+  "offlineChecks": 9,
+  "passed": true,
+  "checkedUtc": "2026-10-09T22:55:23.595941+00:00",
+  "realGitStaged": false,
+  "gitCommitted": false,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "sourceScope": "optional source installer identity",
+  "files": {
+    "install_sources.py": "fdb358c730ee88e75e8b29af2668ff6785f65d41b11c3a7d10d53200570581fd",
+    "test_install_identity.py": "f6cb20a1809d304189332521e3ab8c5494ce3cb6c426f5ec21aa929367f45608"
+  }
+}

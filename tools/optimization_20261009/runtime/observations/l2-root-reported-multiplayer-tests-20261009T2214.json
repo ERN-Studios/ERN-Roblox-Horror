@@ -1,0 +1,56 @@
+{
+  "kind": "root-reported-actual-multiplayer-actions-and-results",
+  "recordedAfterFreshServerUtc": "2026-10-09T22:14:47Z",
+  "source": "Root collaboration report; these runtime actions were executed by root, not the effects agent.",
+  "serverStudioId": "4f7d4c8a-1135-4131-9e84-3d8f932b343e",
+  "clientStudioIds": {
+    "Player1": "85592f54-3adf-4795-8f22-48b0ab3f8286",
+    "Player2": "26cdf5be-2d38-4089-8de7-1e07c6241a88"
+  },
+  "tests": [
+    {
+      "name": "actual-client-streamed-subset-and-navigation-attempt",
+      "reportedResult": "Player2 initially had 2351 received map descendants / 1424 collision descendants versus Server 30726. A character_navigation attempt returned ToolSuccess; no before/after character position delta was recorded.",
+      "correction": "Root withdrew the earlier 16-stud movement claim after observing that the navigation tool can return Success without arriving. This attempt is not a verified movement distance or genuine WASD input pass.",
+      "actualMovementDistanceVerified": false
+    },
+    {
+      "name": "actual-death-and-spectating-pipeline",
+      "trigger": "Root set actual Player1 Humanoid.Health=0; runtime death pipeline.",
+      "reportedResult": "Automatic/scriptable camera followed Player2; RoundStatus spectatetarget -2 accepted, SpectatorCount=1."
+    },
+    {
+      "name": "actual-distant-spectator-streaming",
+      "trigger": "Root relocated actual Player2 about 925 studs to P2_01 after floor query and RequestStreamAroundAsync.",
+      "reportedResult": {
+        "Player1Camera": {
+          "x": 69999,
+          "y": 175.85,
+          "z": 181.32
+        },
+        "target": {
+          "x": 69999.13,
+          "y": 174.306,
+          "z": 181.156
+        },
+        "streamedCollisionFloorY": 171.3,
+        "console": "No SpectateStreaming errors reported by root."
+      }
+    },
+    {
+      "name": "actual-normal-mid-round-leave",
+      "trigger": "Root sent current ordinary RoundStatus leaveround request for Player2, then Player1.",
+      "reportedResult": "Player2 returned alive to lobby, InRound=false and SpectatorCount cleared. Afterwards both health100/InRound=false/RoundActive=false. Cached map presence was not interpreted as active gameplay."
+    }
+  ],
+  "limitations": {
+    "l2GenuineKeyboardMovement": false,
+    "pumpProgression": false,
+    "hostileEntitySpawnSafety": false,
+    "secondDistinctPump": false,
+    "thirdPumpSameEntityEscalation": false,
+    "navigationRetryPerformance": false,
+    "quantifiedBeforeAfterPerformance": false,
+    "note": "Current public authored L2 adapter bypasses old pump/entity controllers. Forced death/runtime relocation validate those live pipelines, not hostile gameplay or natural traversal of the whole route."
+  }
+}

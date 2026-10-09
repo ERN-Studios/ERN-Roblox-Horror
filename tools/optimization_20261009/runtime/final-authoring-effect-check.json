@@ -1,0 +1,8077 @@
+{
+  "kind": "final-read-only-authoring-archive-and-effect-check",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "mode": "Edit",
+  "observedUtc": "2026-10-09T22:43:55Z",
+  "mutations": false,
+  "newProbes": false,
+  "newBackups": false,
+  "gitIndexTouched": false,
+  "effectComparison": {
+    "expectedRecordSource": "tools/optimization_20261009/effects/install/attribute-baselines.json",
+    "expectedRecordSha256": "9af222da26ba3a72cefdacb1a17d046fcdc295934229515e081e0b312a664d13",
+    "expectedCount": 882,
+    "observedCount": 882,
+    "exactIdentityMapClassHolderEnabledWantedInfluenceMatches": 882,
+    "conflicts": [],
+    "extraIds": [],
+    "rowColumns": [
+      "instanceId",
+      "authoredMap",
+      "class",
+      "holderId",
+      "Enabled",
+      "SceneBudgetWantedEnabled",
+      "SceneBudgetInfluenceRadius (absent sentinel if nil)"
+    ],
+    "rows": [
+      [
+        "418490",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50711",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418489",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50710",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418491",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50712",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90568",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50721",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90563",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50716",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90575",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50728",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90566",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50719",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90565",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50718",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90564",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50717",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90573",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50726",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90572",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50725",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90571",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50724",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90574",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50727",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418488",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50709",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90570",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50723",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418608",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50891",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418603",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50886",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418602",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50885",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418601",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50884",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418606",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50889",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418605",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50888",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418604",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50887",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90569",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50722",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418607",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50890",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418612",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50895",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90567",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50720",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418610",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50893",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418609",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50892",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418611",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50894",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418615",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50898",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418613",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50896",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418619",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50902",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418617",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50900",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418616",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50899",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418622",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50905",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418600",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50883",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418620",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50903",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418623",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50906",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418621",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50904",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418624",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50907",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418576",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50859",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418577",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50860",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418581",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50864",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418574",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50857",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418579",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50862",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418580",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50863",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418578",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50861",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418584",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50867",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418583",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50866",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418618",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50901",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418586",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50869",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418585",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50868",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418614",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50897",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418582",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50865",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418590",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50873",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418592",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50875",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418594",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50877",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418588",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50871",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418587",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50870",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418591",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50874",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418575",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50858",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418599",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50882",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418598",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50881",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418593",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50876",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418596",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50879",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418595",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50878",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418597",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50880",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418549",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50832",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418554",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50837",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418553",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50836",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418552",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50835",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418551",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50834",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418560",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50843",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418589",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50872",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418559",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50842",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418558",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50841",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418557",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50840",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418555",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50838",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418512",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50789",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418556",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50839",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418566",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50849",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418565",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50848",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418511",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50788",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418567",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50850",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418563",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50846",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418515",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50792",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418569",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50852",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418562",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50845",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418514",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50791",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418573",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50856",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418564",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50847",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418561",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50844",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418572",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50855",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418510",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50787",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418571",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50854",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418506",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50783",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418550",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50833",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418513",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50790",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418570",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50853",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418568",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50851",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90617",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50781",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418508",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50785",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90616",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50780",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90618",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50782",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418509",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50786",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418527",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50810",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418507",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50784",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90624",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50806",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418528",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50811",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418526",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50809",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418524",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50807",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418535",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50818",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418529",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50812",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418533",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50816",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418534",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50817",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418531",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50814",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418532",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50815",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418530",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50813",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418540",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50823",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418539",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50822",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418536",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50819",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418541",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50824",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418538",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50821",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418537",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50820",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418547",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50830",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418546",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50829",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418545",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50828",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418542",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50825",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418525",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50808",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418520",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50797",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418548",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50831",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418522",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50799",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418544",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50827",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418543",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50826",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418500",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50763",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418498",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50761",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418499",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50762",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418503",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50766",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418501",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50764",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90600",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50756",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418502",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50765",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418504",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50767",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90601",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50757",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90604",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50760",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90599",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50755",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90602",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50758",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90620",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50802",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418627",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50910",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418523",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50800",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418626",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50909",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90623",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50805",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90622",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50804",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418628",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50911",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418629",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50912",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90625",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50914",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90621",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50803",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418630",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50913",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90619",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50801",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418518",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50795",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418517",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50794",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418516",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50793",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418521",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50798",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418625",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50908",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418519",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50796",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90609",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50773",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90607",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50771",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90608",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50772",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90605",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50769",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418505",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50768",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90606",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50770",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90614",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50778",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90613",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50777",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90615",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50779",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90611",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50775",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90612",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50776",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90603",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50759",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90579",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50732",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90578",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50731",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90580",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50733",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90577",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50730",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90587",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50740",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90586",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50739",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90588",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50741",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90584",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50737",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90585",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50738",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90583",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50736",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90610",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50774",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418495",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50745",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418497",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50747",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418496",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50746",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90589",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50742",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90591",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50744",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90590",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50743",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90597",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50753",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90595",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50751",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90596",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50752",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90598",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50754",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90594",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50750",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90592",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50748",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90582",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50735",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90581",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50734",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90593",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50749",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418487",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50708",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90576",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "50729",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418493",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50714",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418494",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50715",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418492",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "50713",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90552",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47332",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90553",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47333",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90557",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48736",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90537",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47317",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90535",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47315",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90534",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47314",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90536",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47316",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90540",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47320",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90538",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47318",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90539",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47319",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90558",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48935",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90559",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48936",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90533",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47313",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90532",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47312",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90531",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47311",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418483",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48992",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418479",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48988",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418481",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48990",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418482",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48991",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418484",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48993",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90554",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48733",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90555",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48734",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90556",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48735",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90542",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47322",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90541",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47321",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90543",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47323",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90544",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47324",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90546",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47326",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90545",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47325",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418480",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48989",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418486",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48995",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418485",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48994",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418476",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48985",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418477",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48986",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418475",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48984",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418474",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48983",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418478",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48987",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90562",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48980",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90561",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48979",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90560",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "48978",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418473",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48982",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "418472",
+        "Level 4 Cinema Blender",
+        "SurfaceLight",
+        "48981",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90547",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47327",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90549",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47329",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90548",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47328",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90550",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47330",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90551",
+        "Level 4 Cinema Blender",
+        "PointLight",
+        "47331",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90815",
+        "Level 5 Void",
+        "PointLight",
+        "52330",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91285",
+        "Level 5 Void",
+        "PointLight",
+        "52800",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91271",
+        "Level 5 Void",
+        "PointLight",
+        "52786",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91272",
+        "Level 5 Void",
+        "PointLight",
+        "52787",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90816",
+        "Level 5 Void",
+        "PointLight",
+        "52331",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91273",
+        "Level 5 Void",
+        "PointLight",
+        "52788",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91274",
+        "Level 5 Void",
+        "PointLight",
+        "52789",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91231",
+        "Level 5 Void",
+        "PointLight",
+        "52746",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91230",
+        "Level 5 Void",
+        "PointLight",
+        "52745",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91229",
+        "Level 5 Void",
+        "PointLight",
+        "52744",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91228",
+        "Level 5 Void",
+        "PointLight",
+        "52743",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91227",
+        "Level 5 Void",
+        "PointLight",
+        "52742",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91266",
+        "Level 5 Void",
+        "PointLight",
+        "52781",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91226",
+        "Level 5 Void",
+        "PointLight",
+        "52741",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91225",
+        "Level 5 Void",
+        "PointLight",
+        "52740",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91224",
+        "Level 5 Void",
+        "PointLight",
+        "52739",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91223",
+        "Level 5 Void",
+        "PointLight",
+        "52738",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91222",
+        "Level 5 Void",
+        "PointLight",
+        "52737",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91221",
+        "Level 5 Void",
+        "PointLight",
+        "52736",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91220",
+        "Level 5 Void",
+        "PointLight",
+        "52735",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91232",
+        "Level 5 Void",
+        "PointLight",
+        "52747",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91261",
+        "Level 5 Void",
+        "PointLight",
+        "52776",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91259",
+        "Level 5 Void",
+        "PointLight",
+        "52774",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91270",
+        "Level 5 Void",
+        "PointLight",
+        "52785",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91269",
+        "Level 5 Void",
+        "PointLight",
+        "52784",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91268",
+        "Level 5 Void",
+        "PointLight",
+        "52783",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91267",
+        "Level 5 Void",
+        "PointLight",
+        "52782",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91265",
+        "Level 5 Void",
+        "PointLight",
+        "52780",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91256",
+        "Level 5 Void",
+        "PointLight",
+        "52771",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91254",
+        "Level 5 Void",
+        "PointLight",
+        "52769",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91253",
+        "Level 5 Void",
+        "PointLight",
+        "52768",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91252",
+        "Level 5 Void",
+        "PointLight",
+        "52767",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91264",
+        "Level 5 Void",
+        "PointLight",
+        "52779",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91263",
+        "Level 5 Void",
+        "PointLight",
+        "52778",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91262",
+        "Level 5 Void",
+        "PointLight",
+        "52777",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91260",
+        "Level 5 Void",
+        "PointLight",
+        "52775",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91275",
+        "Level 5 Void",
+        "PointLight",
+        "52790",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90736",
+        "Level 5 Void",
+        "PointLight",
+        "52251",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90734",
+        "Level 5 Void",
+        "PointLight",
+        "52249",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90739",
+        "Level 5 Void",
+        "PointLight",
+        "52254",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90737",
+        "Level 5 Void",
+        "PointLight",
+        "52252",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90743",
+        "Level 5 Void",
+        "PointLight",
+        "52258",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90746",
+        "Level 5 Void",
+        "PointLight",
+        "52261",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90735",
+        "Level 5 Void",
+        "PointLight",
+        "52250",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90744",
+        "Level 5 Void",
+        "PointLight",
+        "52259",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90733",
+        "Level 5 Void",
+        "PointLight",
+        "52248",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90727",
+        "Level 5 Void",
+        "PointLight",
+        "52242",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90732",
+        "Level 5 Void",
+        "PointLight",
+        "52247",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90731",
+        "Level 5 Void",
+        "PointLight",
+        "52246",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90730",
+        "Level 5 Void",
+        "PointLight",
+        "52245",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90738",
+        "Level 5 Void",
+        "PointLight",
+        "52253",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90728",
+        "Level 5 Void",
+        "PointLight",
+        "52243",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90729",
+        "Level 5 Void",
+        "PointLight",
+        "52244",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90756",
+        "Level 5 Void",
+        "PointLight",
+        "52271",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90758",
+        "Level 5 Void",
+        "PointLight",
+        "52273",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90749",
+        "Level 5 Void",
+        "PointLight",
+        "52264",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90748",
+        "Level 5 Void",
+        "PointLight",
+        "52263",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90757",
+        "Level 5 Void",
+        "PointLight",
+        "52272",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90755",
+        "Level 5 Void",
+        "PointLight",
+        "52270",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90754",
+        "Level 5 Void",
+        "PointLight",
+        "52269",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90753",
+        "Level 5 Void",
+        "PointLight",
+        "52268",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90742",
+        "Level 5 Void",
+        "PointLight",
+        "52257",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90745",
+        "Level 5 Void",
+        "PointLight",
+        "52260",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90741",
+        "Level 5 Void",
+        "PointLight",
+        "52256",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90740",
+        "Level 5 Void",
+        "PointLight",
+        "52255",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90751",
+        "Level 5 Void",
+        "PointLight",
+        "52266",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90747",
+        "Level 5 Void",
+        "PointLight",
+        "52262",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90750",
+        "Level 5 Void",
+        "PointLight",
+        "52265",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90752",
+        "Level 5 Void",
+        "PointLight",
+        "52267",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90706",
+        "Level 5 Void",
+        "PointLight",
+        "52221",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90707",
+        "Level 5 Void",
+        "PointLight",
+        "52222",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90702",
+        "Level 5 Void",
+        "PointLight",
+        "52217",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90713",
+        "Level 5 Void",
+        "PointLight",
+        "52228",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90712",
+        "Level 5 Void",
+        "PointLight",
+        "52227",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90711",
+        "Level 5 Void",
+        "PointLight",
+        "52226",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90705",
+        "Level 5 Void",
+        "PointLight",
+        "52220",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90701",
+        "Level 5 Void",
+        "PointLight",
+        "52216",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90695",
+        "Level 5 Void",
+        "PointLight",
+        "52210",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90696",
+        "Level 5 Void",
+        "PointLight",
+        "52211",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90697",
+        "Level 5 Void",
+        "PointLight",
+        "52212",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90698",
+        "Level 5 Void",
+        "PointLight",
+        "52213",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90703",
+        "Level 5 Void",
+        "PointLight",
+        "52218",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90704",
+        "Level 5 Void",
+        "PointLight",
+        "52219",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90699",
+        "Level 5 Void",
+        "PointLight",
+        "52214",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90700",
+        "Level 5 Void",
+        "PointLight",
+        "52215",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90726",
+        "Level 5 Void",
+        "PointLight",
+        "52241",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90724",
+        "Level 5 Void",
+        "PointLight",
+        "52239",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90725",
+        "Level 5 Void",
+        "PointLight",
+        "52240",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90717",
+        "Level 5 Void",
+        "PointLight",
+        "52232",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90715",
+        "Level 5 Void",
+        "PointLight",
+        "52230",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90716",
+        "Level 5 Void",
+        "PointLight",
+        "52231",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90723",
+        "Level 5 Void",
+        "PointLight",
+        "52238",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90722",
+        "Level 5 Void",
+        "PointLight",
+        "52237",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90721",
+        "Level 5 Void",
+        "PointLight",
+        "52236",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90710",
+        "Level 5 Void",
+        "PointLight",
+        "52225",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90709",
+        "Level 5 Void",
+        "PointLight",
+        "52224",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90714",
+        "Level 5 Void",
+        "PointLight",
+        "52229",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90708",
+        "Level 5 Void",
+        "PointLight",
+        "52223",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90720",
+        "Level 5 Void",
+        "PointLight",
+        "52235",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90719",
+        "Level 5 Void",
+        "PointLight",
+        "52234",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90718",
+        "Level 5 Void",
+        "PointLight",
+        "52233",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90802",
+        "Level 5 Void",
+        "PointLight",
+        "52317",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91201",
+        "Level 5 Void",
+        "PointLight",
+        "52716",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90801",
+        "Level 5 Void",
+        "PointLight",
+        "52316",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90799",
+        "Level 5 Void",
+        "PointLight",
+        "52314",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90800",
+        "Level 5 Void",
+        "PointLight",
+        "52315",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91206",
+        "Level 5 Void",
+        "PointLight",
+        "52721",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90810",
+        "Level 5 Void",
+        "PointLight",
+        "52325",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90798",
+        "Level 5 Void",
+        "PointLight",
+        "52313",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90809",
+        "Level 5 Void",
+        "PointLight",
+        "52324",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91195",
+        "Level 5 Void",
+        "PointLight",
+        "52710",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91196",
+        "Level 5 Void",
+        "PointLight",
+        "52711",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91202",
+        "Level 5 Void",
+        "PointLight",
+        "52717",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90797",
+        "Level 5 Void",
+        "PointLight",
+        "52312",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90785",
+        "Level 5 Void",
+        "PointLight",
+        "52300",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91203",
+        "Level 5 Void",
+        "PointLight",
+        "52718",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90796",
+        "Level 5 Void",
+        "PointLight",
+        "52311",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91204",
+        "Level 5 Void",
+        "PointLight",
+        "52719",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90795",
+        "Level 5 Void",
+        "PointLight",
+        "52310",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91205",
+        "Level 5 Void",
+        "PointLight",
+        "52720",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91214",
+        "Level 5 Void",
+        "PointLight",
+        "52729",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91215",
+        "Level 5 Void",
+        "PointLight",
+        "52730",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90794",
+        "Level 5 Void",
+        "PointLight",
+        "52309",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90792",
+        "Level 5 Void",
+        "PointLight",
+        "52307",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91216",
+        "Level 5 Void",
+        "PointLight",
+        "52731",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90793",
+        "Level 5 Void",
+        "PointLight",
+        "52308",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90791",
+        "Level 5 Void",
+        "PointLight",
+        "52306",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91217",
+        "Level 5 Void",
+        "PointLight",
+        "52732",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90803",
+        "Level 5 Void",
+        "PointLight",
+        "52318",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91197",
+        "Level 5 Void",
+        "PointLight",
+        "52712",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91198",
+        "Level 5 Void",
+        "PointLight",
+        "52713",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91243",
+        "Level 5 Void",
+        "PointLight",
+        "52758",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91199",
+        "Level 5 Void",
+        "PointLight",
+        "52714",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91244",
+        "Level 5 Void",
+        "PointLight",
+        "52759",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91200",
+        "Level 5 Void",
+        "PointLight",
+        "52715",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91245",
+        "Level 5 Void",
+        "PointLight",
+        "52760",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91233",
+        "Level 5 Void",
+        "PointLight",
+        "52748",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91234",
+        "Level 5 Void",
+        "PointLight",
+        "52749",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91235",
+        "Level 5 Void",
+        "PointLight",
+        "52750",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91236",
+        "Level 5 Void",
+        "PointLight",
+        "52751",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91237",
+        "Level 5 Void",
+        "PointLight",
+        "52752",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91238",
+        "Level 5 Void",
+        "PointLight",
+        "52753",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90808",
+        "Level 5 Void",
+        "PointLight",
+        "52323",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90807",
+        "Level 5 Void",
+        "PointLight",
+        "52322",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90806",
+        "Level 5 Void",
+        "PointLight",
+        "52321",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90805",
+        "Level 5 Void",
+        "PointLight",
+        "52320",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90804",
+        "Level 5 Void",
+        "PointLight",
+        "52319",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91239",
+        "Level 5 Void",
+        "PointLight",
+        "52754",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91240",
+        "Level 5 Void",
+        "PointLight",
+        "52755",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91241",
+        "Level 5 Void",
+        "PointLight",
+        "52756",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91242",
+        "Level 5 Void",
+        "PointLight",
+        "52757",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90767",
+        "Level 5 Void",
+        "PointLight",
+        "52282",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90770",
+        "Level 5 Void",
+        "PointLight",
+        "52285",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90769",
+        "Level 5 Void",
+        "PointLight",
+        "52284",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90768",
+        "Level 5 Void",
+        "PointLight",
+        "52283",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90777",
+        "Level 5 Void",
+        "PointLight",
+        "52292",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90766",
+        "Level 5 Void",
+        "PointLight",
+        "52281",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90775",
+        "Level 5 Void",
+        "PointLight",
+        "52290",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90778",
+        "Level 5 Void",
+        "PointLight",
+        "52293",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90765",
+        "Level 5 Void",
+        "PointLight",
+        "52280",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90764",
+        "Level 5 Void",
+        "PointLight",
+        "52279",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90761",
+        "Level 5 Void",
+        "PointLight",
+        "52276",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90763",
+        "Level 5 Void",
+        "PointLight",
+        "52278",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90760",
+        "Level 5 Void",
+        "PointLight",
+        "52275",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90759",
+        "Level 5 Void",
+        "PointLight",
+        "52274",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90762",
+        "Level 5 Void",
+        "PointLight",
+        "52277",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90771",
+        "Level 5 Void",
+        "PointLight",
+        "52286",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90779",
+        "Level 5 Void",
+        "PointLight",
+        "52294",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90781",
+        "Level 5 Void",
+        "PointLight",
+        "52296",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90790",
+        "Level 5 Void",
+        "PointLight",
+        "52305",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90789",
+        "Level 5 Void",
+        "PointLight",
+        "52304",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90787",
+        "Level 5 Void",
+        "PointLight",
+        "52302",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90788",
+        "Level 5 Void",
+        "PointLight",
+        "52303",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90786",
+        "Level 5 Void",
+        "PointLight",
+        "52301",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90776",
+        "Level 5 Void",
+        "PointLight",
+        "52291",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90774",
+        "Level 5 Void",
+        "PointLight",
+        "52289",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90772",
+        "Level 5 Void",
+        "PointLight",
+        "52287",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90773",
+        "Level 5 Void",
+        "PointLight",
+        "52288",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90784",
+        "Level 5 Void",
+        "PointLight",
+        "52299",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90782",
+        "Level 5 Void",
+        "PointLight",
+        "52297",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90783",
+        "Level 5 Void",
+        "PointLight",
+        "52298",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90780",
+        "Level 5 Void",
+        "PointLight",
+        "52295",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91004",
+        "Level 5 Void",
+        "PointLight",
+        "52519",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91003",
+        "Level 5 Void",
+        "PointLight",
+        "52518",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91006",
+        "Level 5 Void",
+        "PointLight",
+        "52521",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91005",
+        "Level 5 Void",
+        "PointLight",
+        "52520",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91008",
+        "Level 5 Void",
+        "PointLight",
+        "52523",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91007",
+        "Level 5 Void",
+        "PointLight",
+        "52522",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91010",
+        "Level 5 Void",
+        "PointLight",
+        "52525",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91009",
+        "Level 5 Void",
+        "PointLight",
+        "52524",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91011",
+        "Level 5 Void",
+        "PointLight",
+        "52526",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91014",
+        "Level 5 Void",
+        "PointLight",
+        "52529",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91012",
+        "Level 5 Void",
+        "PointLight",
+        "52527",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91013",
+        "Level 5 Void",
+        "PointLight",
+        "52528",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90990",
+        "Level 5 Void",
+        "PointLight",
+        "52505",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90982",
+        "Level 5 Void",
+        "PointLight",
+        "52497",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90984",
+        "Level 5 Void",
+        "PointLight",
+        "52499",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90983",
+        "Level 5 Void",
+        "PointLight",
+        "52498",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90986",
+        "Level 5 Void",
+        "PointLight",
+        "52501",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90985",
+        "Level 5 Void",
+        "PointLight",
+        "52500",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90987",
+        "Level 5 Void",
+        "PointLight",
+        "52502",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90989",
+        "Level 5 Void",
+        "PointLight",
+        "52504",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90988",
+        "Level 5 Void",
+        "PointLight",
+        "52503",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90965",
+        "Level 5 Void",
+        "PointLight",
+        "52480",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90964",
+        "Level 5 Void",
+        "PointLight",
+        "52479",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90966",
+        "Level 5 Void",
+        "PointLight",
+        "52481",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90968",
+        "Level 5 Void",
+        "PointLight",
+        "52483",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90967",
+        "Level 5 Void",
+        "PointLight",
+        "52482",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90970",
+        "Level 5 Void",
+        "PointLight",
+        "52485",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90969",
+        "Level 5 Void",
+        "PointLight",
+        "52484",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90991",
+        "Level 5 Void",
+        "PointLight",
+        "52506",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90993",
+        "Level 5 Void",
+        "PointLight",
+        "52508",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90992",
+        "Level 5 Void",
+        "PointLight",
+        "52507",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90994",
+        "Level 5 Void",
+        "PointLight",
+        "52509",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90995",
+        "Level 5 Void",
+        "PointLight",
+        "52510",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90996",
+        "Level 5 Void",
+        "PointLight",
+        "52511",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90997",
+        "Level 5 Void",
+        "PointLight",
+        "52512",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90998",
+        "Level 5 Void",
+        "PointLight",
+        "52513",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90999",
+        "Level 5 Void",
+        "PointLight",
+        "52514",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91001",
+        "Level 5 Void",
+        "PointLight",
+        "52516",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91000",
+        "Level 5 Void",
+        "PointLight",
+        "52515",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91002",
+        "Level 5 Void",
+        "PointLight",
+        "52517",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91094",
+        "Level 5 Void",
+        "PointLight",
+        "52609",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90978",
+        "Level 5 Void",
+        "PointLight",
+        "52493",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91115",
+        "Level 5 Void",
+        "PointLight",
+        "52630",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90977",
+        "Level 5 Void",
+        "PointLight",
+        "52492",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91116",
+        "Level 5 Void",
+        "PointLight",
+        "52631",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90979",
+        "Level 5 Void",
+        "PointLight",
+        "52494",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91111",
+        "Level 5 Void",
+        "PointLight",
+        "52626",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91117",
+        "Level 5 Void",
+        "PointLight",
+        "52632",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90980",
+        "Level 5 Void",
+        "PointLight",
+        "52495",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91112",
+        "Level 5 Void",
+        "PointLight",
+        "52627",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90981",
+        "Level 5 Void",
+        "PointLight",
+        "52496",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90674",
+        "Level 5 Void",
+        "PointLight",
+        "52189",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91113",
+        "Level 5 Void",
+        "PointLight",
+        "52628",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91114",
+        "Level 5 Void",
+        "PointLight",
+        "52629",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90678",
+        "Level 5 Void",
+        "PointLight",
+        "52193",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90676",
+        "Level 5 Void",
+        "PointLight",
+        "52191",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90677",
+        "Level 5 Void",
+        "PointLight",
+        "52192",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91108",
+        "Level 5 Void",
+        "PointLight",
+        "52623",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91110",
+        "Level 5 Void",
+        "PointLight",
+        "52625",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91109",
+        "Level 5 Void",
+        "PointLight",
+        "52624",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90670",
+        "Level 5 Void",
+        "PointLight",
+        "52185",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90672",
+        "Level 5 Void",
+        "PointLight",
+        "52187",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91105",
+        "Level 5 Void",
+        "PointLight",
+        "52620",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90675",
+        "Level 5 Void",
+        "PointLight",
+        "52190",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91106",
+        "Level 5 Void",
+        "PointLight",
+        "52621",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90673",
+        "Level 5 Void",
+        "PointLight",
+        "52188",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91107",
+        "Level 5 Void",
+        "PointLight",
+        "52622",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90669",
+        "Level 5 Void",
+        "PointLight",
+        "52184",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91077",
+        "Level 5 Void",
+        "PointLight",
+        "52592",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90667",
+        "Level 5 Void",
+        "PointLight",
+        "52182",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91076",
+        "Level 5 Void",
+        "PointLight",
+        "52591",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90671",
+        "Level 5 Void",
+        "PointLight",
+        "52186",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91078",
+        "Level 5 Void",
+        "PointLight",
+        "52593",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90665",
+        "Level 5 Void",
+        "PointLight",
+        "52180",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91074",
+        "Level 5 Void",
+        "PointLight",
+        "52589",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90663",
+        "Level 5 Void",
+        "PointLight",
+        "52178",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91073",
+        "Level 5 Void",
+        "PointLight",
+        "52588",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90666",
+        "Level 5 Void",
+        "PointLight",
+        "52181",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90664",
+        "Level 5 Void",
+        "PointLight",
+        "52179",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91075",
+        "Level 5 Void",
+        "PointLight",
+        "52590",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90668",
+        "Level 5 Void",
+        "PointLight",
+        "52183",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90689",
+        "Level 5 Void",
+        "PointLight",
+        "52204",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91070",
+        "Level 5 Void",
+        "PointLight",
+        "52585",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90694",
+        "Level 5 Void",
+        "PointLight",
+        "52209",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91072",
+        "Level 5 Void",
+        "PointLight",
+        "52587",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90693",
+        "Level 5 Void",
+        "PointLight",
+        "52208",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90692",
+        "Level 5 Void",
+        "PointLight",
+        "52207",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91071",
+        "Level 5 Void",
+        "PointLight",
+        "52586",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91067",
+        "Level 5 Void",
+        "PointLight",
+        "52582",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90686",
+        "Level 5 Void",
+        "PointLight",
+        "52201",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90691",
+        "Level 5 Void",
+        "PointLight",
+        "52206",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91069",
+        "Level 5 Void",
+        "PointLight",
+        "52584",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91068",
+        "Level 5 Void",
+        "PointLight",
+        "52583",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91090",
+        "Level 5 Void",
+        "PointLight",
+        "52605",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90690",
+        "Level 5 Void",
+        "PointLight",
+        "52205",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91089",
+        "Level 5 Void",
+        "PointLight",
+        "52604",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90684",
+        "Level 5 Void",
+        "PointLight",
+        "52199",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91091",
+        "Level 5 Void",
+        "PointLight",
+        "52606",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90683",
+        "Level 5 Void",
+        "PointLight",
+        "52198",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90688",
+        "Level 5 Void",
+        "PointLight",
+        "52203",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91127",
+        "Level 5 Void",
+        "PointLight",
+        "52642",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90687",
+        "Level 5 Void",
+        "PointLight",
+        "52202",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90681",
+        "Level 5 Void",
+        "PointLight",
+        "52196",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91128",
+        "Level 5 Void",
+        "PointLight",
+        "52643",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90682",
+        "Level 5 Void",
+        "PointLight",
+        "52197",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91119",
+        "Level 5 Void",
+        "PointLight",
+        "52634",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90679",
+        "Level 5 Void",
+        "PointLight",
+        "52194",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91120",
+        "Level 5 Void",
+        "PointLight",
+        "52635",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90680",
+        "Level 5 Void",
+        "PointLight",
+        "52195",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90685",
+        "Level 5 Void",
+        "PointLight",
+        "52200",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91118",
+        "Level 5 Void",
+        "PointLight",
+        "52633",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91121",
+        "Level 5 Void",
+        "PointLight",
+        "52636",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91122",
+        "Level 5 Void",
+        "PointLight",
+        "52637",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91123",
+        "Level 5 Void",
+        "PointLight",
+        "52638",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91139",
+        "Level 5 Void",
+        "PointLight",
+        "52654",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91137",
+        "Level 5 Void",
+        "PointLight",
+        "52652",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91138",
+        "Level 5 Void",
+        "PointLight",
+        "52653",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91141",
+        "Level 5 Void",
+        "PointLight",
+        "52656",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91142",
+        "Level 5 Void",
+        "PointLight",
+        "52657",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91132",
+        "Level 5 Void",
+        "PointLight",
+        "52647",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91133",
+        "Level 5 Void",
+        "PointLight",
+        "52648",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91140",
+        "Level 5 Void",
+        "PointLight",
+        "52655",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91136",
+        "Level 5 Void",
+        "PointLight",
+        "52651",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91131",
+        "Level 5 Void",
+        "PointLight",
+        "52646",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91135",
+        "Level 5 Void",
+        "PointLight",
+        "52650",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90662",
+        "Level 5 Void",
+        "PointLight",
+        "52177",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91102",
+        "Level 5 Void",
+        "PointLight",
+        "52617",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90658",
+        "Level 5 Void",
+        "PointLight",
+        "52173",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90661",
+        "Level 5 Void",
+        "PointLight",
+        "52176",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91134",
+        "Level 5 Void",
+        "PointLight",
+        "52649",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90660",
+        "Level 5 Void",
+        "PointLight",
+        "52175",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91104",
+        "Level 5 Void",
+        "PointLight",
+        "52619",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91103",
+        "Level 5 Void",
+        "PointLight",
+        "52618",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91099",
+        "Level 5 Void",
+        "PointLight",
+        "52614",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90659",
+        "Level 5 Void",
+        "PointLight",
+        "52174",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91095",
+        "Level 5 Void",
+        "PointLight",
+        "52610",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91100",
+        "Level 5 Void",
+        "PointLight",
+        "52615",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91101",
+        "Level 5 Void",
+        "PointLight",
+        "52616",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91098",
+        "Level 5 Void",
+        "PointLight",
+        "52613",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91096",
+        "Level 5 Void",
+        "PointLight",
+        "52611",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91097",
+        "Level 5 Void",
+        "PointLight",
+        "52612",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91093",
+        "Level 5 Void",
+        "PointLight",
+        "52608",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91092",
+        "Level 5 Void",
+        "PointLight",
+        "52607",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91151",
+        "Level 5 Void",
+        "PointLight",
+        "52666",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91152",
+        "Level 5 Void",
+        "PointLight",
+        "52667",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91185",
+        "Level 5 Void",
+        "PointLight",
+        "52700",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91187",
+        "Level 5 Void",
+        "PointLight",
+        "52702",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90897",
+        "Level 5 Void",
+        "PointLight",
+        "52412",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91153",
+        "Level 5 Void",
+        "PointLight",
+        "52668",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91155",
+        "Level 5 Void",
+        "PointLight",
+        "52670",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91154",
+        "Level 5 Void",
+        "PointLight",
+        "52669",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90890",
+        "Level 5 Void",
+        "PointLight",
+        "52405",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91150",
+        "Level 5 Void",
+        "PointLight",
+        "52665",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90898",
+        "Level 5 Void",
+        "PointLight",
+        "52413",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90887",
+        "Level 5 Void",
+        "PointLight",
+        "52402",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91143",
+        "Level 5 Void",
+        "PointLight",
+        "52658",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90893",
+        "Level 5 Void",
+        "PointLight",
+        "52408",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91144",
+        "Level 5 Void",
+        "PointLight",
+        "52659",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90892",
+        "Level 5 Void",
+        "PointLight",
+        "52407",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91145",
+        "Level 5 Void",
+        "PointLight",
+        "52660",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91146",
+        "Level 5 Void",
+        "PointLight",
+        "52661",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90889",
+        "Level 5 Void",
+        "PointLight",
+        "52404",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91147",
+        "Level 5 Void",
+        "PointLight",
+        "52662",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90888",
+        "Level 5 Void",
+        "PointLight",
+        "52403",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91164",
+        "Level 5 Void",
+        "PointLight",
+        "52679",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90908",
+        "Level 5 Void",
+        "PointLight",
+        "52423",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91148",
+        "Level 5 Void",
+        "PointLight",
+        "52663",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91149",
+        "Level 5 Void",
+        "PointLight",
+        "52664",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91167",
+        "Level 5 Void",
+        "PointLight",
+        "52682",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90907",
+        "Level 5 Void",
+        "PointLight",
+        "52422",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91168",
+        "Level 5 Void",
+        "PointLight",
+        "52683",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90891",
+        "Level 5 Void",
+        "PointLight",
+        "52406",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91165",
+        "Level 5 Void",
+        "PointLight",
+        "52680",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90909",
+        "Level 5 Void",
+        "PointLight",
+        "52424",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91163",
+        "Level 5 Void",
+        "PointLight",
+        "52678",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90910",
+        "Level 5 Void",
+        "PointLight",
+        "52425",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91156",
+        "Level 5 Void",
+        "PointLight",
+        "52671",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91157",
+        "Level 5 Void",
+        "PointLight",
+        "52672",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91166",
+        "Level 5 Void",
+        "PointLight",
+        "52681",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91158",
+        "Level 5 Void",
+        "PointLight",
+        "52673",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90912",
+        "Level 5 Void",
+        "PointLight",
+        "52427",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91159",
+        "Level 5 Void",
+        "PointLight",
+        "52674",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90911",
+        "Level 5 Void",
+        "PointLight",
+        "52426",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91160",
+        "Level 5 Void",
+        "PointLight",
+        "52675",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90882",
+        "Level 5 Void",
+        "PointLight",
+        "52397",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91161",
+        "Level 5 Void",
+        "PointLight",
+        "52676",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90886",
+        "Level 5 Void",
+        "PointLight",
+        "52401",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91162",
+        "Level 5 Void",
+        "PointLight",
+        "52677",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91124",
+        "Level 5 Void",
+        "PointLight",
+        "52639",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91130",
+        "Level 5 Void",
+        "PointLight",
+        "52645",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91129",
+        "Level 5 Void",
+        "PointLight",
+        "52644",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90881",
+        "Level 5 Void",
+        "PointLight",
+        "52396",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91126",
+        "Level 5 Void",
+        "PointLight",
+        "52641",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90883",
+        "Level 5 Void",
+        "PointLight",
+        "52398",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90877",
+        "Level 5 Void",
+        "PointLight",
+        "52392",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91125",
+        "Level 5 Void",
+        "PointLight",
+        "52640",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90876",
+        "Level 5 Void",
+        "PointLight",
+        "52391",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91208",
+        "Level 5 Void",
+        "PointLight",
+        "52723",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91207",
+        "Level 5 Void",
+        "PointLight",
+        "52722",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90884",
+        "Level 5 Void",
+        "PointLight",
+        "52399",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91219",
+        "Level 5 Void",
+        "PointLight",
+        "52734",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90885",
+        "Level 5 Void",
+        "PointLight",
+        "52400",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90880",
+        "Level 5 Void",
+        "PointLight",
+        "52395",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91218",
+        "Level 5 Void",
+        "PointLight",
+        "52733",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91212",
+        "Level 5 Void",
+        "PointLight",
+        "52727",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90878",
+        "Level 5 Void",
+        "PointLight",
+        "52393",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91211",
+        "Level 5 Void",
+        "PointLight",
+        "52726",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91210",
+        "Level 5 Void",
+        "PointLight",
+        "52725",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90875",
+        "Level 5 Void",
+        "PointLight",
+        "52390",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90879",
+        "Level 5 Void",
+        "PointLight",
+        "52394",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91209",
+        "Level 5 Void",
+        "PointLight",
+        "52724",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90894",
+        "Level 5 Void",
+        "PointLight",
+        "52409",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91177",
+        "Level 5 Void",
+        "PointLight",
+        "52692",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90899",
+        "Level 5 Void",
+        "PointLight",
+        "52414",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91178",
+        "Level 5 Void",
+        "PointLight",
+        "52693",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91175",
+        "Level 5 Void",
+        "PointLight",
+        "52690",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90896",
+        "Level 5 Void",
+        "PointLight",
+        "52411",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91176",
+        "Level 5 Void",
+        "PointLight",
+        "52691",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90895",
+        "Level 5 Void",
+        "PointLight",
+        "52410",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91213",
+        "Level 5 Void",
+        "PointLight",
+        "52728",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91169",
+        "Level 5 Void",
+        "PointLight",
+        "52684",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91170",
+        "Level 5 Void",
+        "PointLight",
+        "52685",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91180",
+        "Level 5 Void",
+        "PointLight",
+        "52695",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90870",
+        "Level 5 Void",
+        "PointLight",
+        "52385",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91181",
+        "Level 5 Void",
+        "PointLight",
+        "52696",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90854",
+        "Level 5 Void",
+        "PointLight",
+        "52369",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90852",
+        "Level 5 Void",
+        "PointLight",
+        "52367",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91179",
+        "Level 5 Void",
+        "PointLight",
+        "52694",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91172",
+        "Level 5 Void",
+        "PointLight",
+        "52687",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91173",
+        "Level 5 Void",
+        "PointLight",
+        "52688",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90853",
+        "Level 5 Void",
+        "PointLight",
+        "52368",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91171",
+        "Level 5 Void",
+        "PointLight",
+        "52686",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90874",
+        "Level 5 Void",
+        "PointLight",
+        "52389",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90871",
+        "Level 5 Void",
+        "PointLight",
+        "52386",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91190",
+        "Level 5 Void",
+        "PointLight",
+        "52705",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90873",
+        "Level 5 Void",
+        "PointLight",
+        "52388",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91188",
+        "Level 5 Void",
+        "PointLight",
+        "52703",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90869",
+        "Level 5 Void",
+        "PointLight",
+        "52384",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91189",
+        "Level 5 Void",
+        "PointLight",
+        "52704",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90868",
+        "Level 5 Void",
+        "PointLight",
+        "52383",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91174",
+        "Level 5 Void",
+        "PointLight",
+        "52689",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91193",
+        "Level 5 Void",
+        "PointLight",
+        "52708",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91194",
+        "Level 5 Void",
+        "PointLight",
+        "52709",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90864",
+        "Level 5 Void",
+        "PointLight",
+        "52379",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91191",
+        "Level 5 Void",
+        "PointLight",
+        "52706",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90863",
+        "Level 5 Void",
+        "PointLight",
+        "52378",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91192",
+        "Level 5 Void",
+        "PointLight",
+        "52707",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90872",
+        "Level 5 Void",
+        "PointLight",
+        "52387",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91186",
+        "Level 5 Void",
+        "PointLight",
+        "52701",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90865",
+        "Level 5 Void",
+        "PointLight",
+        "52380",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90866",
+        "Level 5 Void",
+        "PointLight",
+        "52381",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91183",
+        "Level 5 Void",
+        "PointLight",
+        "52698",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91184",
+        "Level 5 Void",
+        "PointLight",
+        "52699",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90867",
+        "Level 5 Void",
+        "PointLight",
+        "52382",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91182",
+        "Level 5 Void",
+        "PointLight",
+        "52697",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90862",
+        "Level 5 Void",
+        "PointLight",
+        "52377",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90839",
+        "Level 5 Void",
+        "PointLight",
+        "52354",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90840",
+        "Level 5 Void",
+        "PointLight",
+        "52355",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90838",
+        "Level 5 Void",
+        "PointLight",
+        "52353",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90836",
+        "Level 5 Void",
+        "PointLight",
+        "52351",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90858",
+        "Level 5 Void",
+        "PointLight",
+        "52373",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90855",
+        "Level 5 Void",
+        "PointLight",
+        "52370",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90856",
+        "Level 5 Void",
+        "PointLight",
+        "52371",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90841",
+        "Level 5 Void",
+        "PointLight",
+        "52356",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90842",
+        "Level 5 Void",
+        "PointLight",
+        "52357",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90860",
+        "Level 5 Void",
+        "PointLight",
+        "52375",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90861",
+        "Level 5 Void",
+        "PointLight",
+        "52376",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90859",
+        "Level 5 Void",
+        "PointLight",
+        "52374",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90857",
+        "Level 5 Void",
+        "PointLight",
+        "52372",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90851",
+        "Level 5 Void",
+        "PointLight",
+        "52366",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90849",
+        "Level 5 Void",
+        "PointLight",
+        "52364",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90850",
+        "Level 5 Void",
+        "PointLight",
+        "52365",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90958",
+        "Level 5 Void",
+        "PointLight",
+        "52473",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90960",
+        "Level 5 Void",
+        "PointLight",
+        "52475",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90959",
+        "Level 5 Void",
+        "PointLight",
+        "52474",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90955",
+        "Level 5 Void",
+        "PointLight",
+        "52470",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90957",
+        "Level 5 Void",
+        "PointLight",
+        "52472",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90956",
+        "Level 5 Void",
+        "PointLight",
+        "52471",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90952",
+        "Level 5 Void",
+        "PointLight",
+        "52467",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90951",
+        "Level 5 Void",
+        "PointLight",
+        "52466",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90954",
+        "Level 5 Void",
+        "PointLight",
+        "52469",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90953",
+        "Level 5 Void",
+        "PointLight",
+        "52468",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90975",
+        "Level 5 Void",
+        "PointLight",
+        "52490",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90976",
+        "Level 5 Void",
+        "PointLight",
+        "52491",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90974",
+        "Level 5 Void",
+        "PointLight",
+        "52489",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90972",
+        "Level 5 Void",
+        "PointLight",
+        "52487",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90973",
+        "Level 5 Void",
+        "PointLight",
+        "52488",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90971",
+        "Level 5 Void",
+        "PointLight",
+        "52486",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90948",
+        "Level 5 Void",
+        "PointLight",
+        "52463",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90950",
+        "Level 5 Void",
+        "PointLight",
+        "52465",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90946",
+        "Level 5 Void",
+        "PointLight",
+        "52461",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90947",
+        "Level 5 Void",
+        "PointLight",
+        "52462",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90945",
+        "Level 5 Void",
+        "PointLight",
+        "52460",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90944",
+        "Level 5 Void",
+        "PointLight",
+        "52459",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90942",
+        "Level 5 Void",
+        "PointLight",
+        "52457",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90943",
+        "Level 5 Void",
+        "PointLight",
+        "52458",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90939",
+        "Level 5 Void",
+        "PointLight",
+        "52454",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90941",
+        "Level 5 Void",
+        "PointLight",
+        "52456",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90940",
+        "Level 5 Void",
+        "PointLight",
+        "52455",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90962",
+        "Level 5 Void",
+        "PointLight",
+        "52477",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90961",
+        "Level 5 Void",
+        "PointLight",
+        "52476",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90963",
+        "Level 5 Void",
+        "PointLight",
+        "52478",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90915",
+        "Level 5 Void",
+        "PointLight",
+        "52430",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90913",
+        "Level 5 Void",
+        "PointLight",
+        "52428",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90914",
+        "Level 5 Void",
+        "PointLight",
+        "52429",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90935",
+        "Level 5 Void",
+        "PointLight",
+        "52450",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90938",
+        "Level 5 Void",
+        "PointLight",
+        "52453",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90936",
+        "Level 5 Void",
+        "PointLight",
+        "52451",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90937",
+        "Level 5 Void",
+        "PointLight",
+        "52452",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90933",
+        "Level 5 Void",
+        "PointLight",
+        "52448",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90934",
+        "Level 5 Void",
+        "PointLight",
+        "52449",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90932",
+        "Level 5 Void",
+        "PointLight",
+        "52447",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90929",
+        "Level 5 Void",
+        "PointLight",
+        "52444",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90931",
+        "Level 5 Void",
+        "PointLight",
+        "52446",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90930",
+        "Level 5 Void",
+        "PointLight",
+        "52445",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90926",
+        "Level 5 Void",
+        "PointLight",
+        "52441",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90928",
+        "Level 5 Void",
+        "PointLight",
+        "52443",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90949",
+        "Level 5 Void",
+        "PointLight",
+        "52464",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90927",
+        "Level 5 Void",
+        "PointLight",
+        "52442",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90901",
+        "Level 5 Void",
+        "PointLight",
+        "52416",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90902",
+        "Level 5 Void",
+        "PointLight",
+        "52417",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90905",
+        "Level 5 Void",
+        "PointLight",
+        "52420",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90906",
+        "Level 5 Void",
+        "PointLight",
+        "52421",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90900",
+        "Level 5 Void",
+        "PointLight",
+        "52415",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90903",
+        "Level 5 Void",
+        "PointLight",
+        "52418",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90904",
+        "Level 5 Void",
+        "PointLight",
+        "52419",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90924",
+        "Level 5 Void",
+        "PointLight",
+        "52439",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90923",
+        "Level 5 Void",
+        "PointLight",
+        "52438",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90919",
+        "Level 5 Void",
+        "PointLight",
+        "52434",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90925",
+        "Level 5 Void",
+        "PointLight",
+        "52440",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90921",
+        "Level 5 Void",
+        "PointLight",
+        "52436",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90920",
+        "Level 5 Void",
+        "PointLight",
+        "52435",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90917",
+        "Level 5 Void",
+        "PointLight",
+        "52432",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90916",
+        "Level 5 Void",
+        "PointLight",
+        "52431",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90922",
+        "Level 5 Void",
+        "PointLight",
+        "52437",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90918",
+        "Level 5 Void",
+        "PointLight",
+        "52433",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91057",
+        "Level 5 Void",
+        "PointLight",
+        "52572",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91059",
+        "Level 5 Void",
+        "PointLight",
+        "52574",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91061",
+        "Level 5 Void",
+        "PointLight",
+        "52576",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91060",
+        "Level 5 Void",
+        "PointLight",
+        "52575",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91062",
+        "Level 5 Void",
+        "PointLight",
+        "52577",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91063",
+        "Level 5 Void",
+        "PointLight",
+        "52578",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91064",
+        "Level 5 Void",
+        "PointLight",
+        "52579",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91066",
+        "Level 5 Void",
+        "PointLight",
+        "52581",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91065",
+        "Level 5 Void",
+        "PointLight",
+        "52580",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91042",
+        "Level 5 Void",
+        "PointLight",
+        "52557",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91041",
+        "Level 5 Void",
+        "PointLight",
+        "52556",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91043",
+        "Level 5 Void",
+        "PointLight",
+        "52558",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91045",
+        "Level 5 Void",
+        "PointLight",
+        "52560",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91044",
+        "Level 5 Void",
+        "PointLight",
+        "52559",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91048",
+        "Level 5 Void",
+        "PointLight",
+        "52563",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91046",
+        "Level 5 Void",
+        "PointLight",
+        "52561",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91047",
+        "Level 5 Void",
+        "PointLight",
+        "52562",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91050",
+        "Level 5 Void",
+        "PointLight",
+        "52565",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91049",
+        "Level 5 Void",
+        "PointLight",
+        "52564",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91051",
+        "Level 5 Void",
+        "PointLight",
+        "52566",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91053",
+        "Level 5 Void",
+        "PointLight",
+        "52568",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91052",
+        "Level 5 Void",
+        "PointLight",
+        "52567",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91081",
+        "Level 5 Void",
+        "PointLight",
+        "52596",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91082",
+        "Level 5 Void",
+        "PointLight",
+        "52597",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91079",
+        "Level 5 Void",
+        "PointLight",
+        "52594",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91080",
+        "Level 5 Void",
+        "PointLight",
+        "52595",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91084",
+        "Level 5 Void",
+        "PointLight",
+        "52599",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91085",
+        "Level 5 Void",
+        "PointLight",
+        "52600",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91083",
+        "Level 5 Void",
+        "PointLight",
+        "52598",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91087",
+        "Level 5 Void",
+        "PointLight",
+        "52602",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91088",
+        "Level 5 Void",
+        "PointLight",
+        "52603",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91086",
+        "Level 5 Void",
+        "PointLight",
+        "52601",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91030",
+        "Level 5 Void",
+        "PointLight",
+        "52545",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91029",
+        "Level 5 Void",
+        "PointLight",
+        "52544",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91028",
+        "Level 5 Void",
+        "PointLight",
+        "52543",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91031",
+        "Level 5 Void",
+        "PointLight",
+        "52546",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91033",
+        "Level 5 Void",
+        "PointLight",
+        "52548",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91032",
+        "Level 5 Void",
+        "PointLight",
+        "52547",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91035",
+        "Level 5 Void",
+        "PointLight",
+        "52550",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91034",
+        "Level 5 Void",
+        "PointLight",
+        "52549",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91038",
+        "Level 5 Void",
+        "PointLight",
+        "52553",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91037",
+        "Level 5 Void",
+        "PointLight",
+        "52552",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91036",
+        "Level 5 Void",
+        "PointLight",
+        "52551",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91039",
+        "Level 5 Void",
+        "PointLight",
+        "52554",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91015",
+        "Level 5 Void",
+        "PointLight",
+        "52530",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91040",
+        "Level 5 Void",
+        "PointLight",
+        "52555",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91017",
+        "Level 5 Void",
+        "PointLight",
+        "52532",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91016",
+        "Level 5 Void",
+        "PointLight",
+        "52531",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90824",
+        "Level 5 Void",
+        "PointLight",
+        "52339",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90825",
+        "Level 5 Void",
+        "PointLight",
+        "52340",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91019",
+        "Level 5 Void",
+        "PointLight",
+        "52534",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91018",
+        "Level 5 Void",
+        "PointLight",
+        "52533",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90826",
+        "Level 5 Void",
+        "PointLight",
+        "52341",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90827",
+        "Level 5 Void",
+        "PointLight",
+        "52342",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91020",
+        "Level 5 Void",
+        "PointLight",
+        "52535",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91021",
+        "Level 5 Void",
+        "PointLight",
+        "52536",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91023",
+        "Level 5 Void",
+        "PointLight",
+        "52538",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90833",
+        "Level 5 Void",
+        "PointLight",
+        "52348",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91022",
+        "Level 5 Void",
+        "PointLight",
+        "52537",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90834",
+        "Level 5 Void",
+        "PointLight",
+        "52349",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91025",
+        "Level 5 Void",
+        "PointLight",
+        "52540",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91024",
+        "Level 5 Void",
+        "PointLight",
+        "52539",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90835",
+        "Level 5 Void",
+        "PointLight",
+        "52350",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91027",
+        "Level 5 Void",
+        "PointLight",
+        "52542",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90823",
+        "Level 5 Void",
+        "PointLight",
+        "52338",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91026",
+        "Level 5 Void",
+        "PointLight",
+        "52541",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91054",
+        "Level 5 Void",
+        "PointLight",
+        "52569",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90846",
+        "Level 5 Void",
+        "PointLight",
+        "52361",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90848",
+        "Level 5 Void",
+        "PointLight",
+        "52363",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91058",
+        "Level 5 Void",
+        "PointLight",
+        "52573",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91056",
+        "Level 5 Void",
+        "PointLight",
+        "52571",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90847",
+        "Level 5 Void",
+        "PointLight",
+        "52362",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91055",
+        "Level 5 Void",
+        "PointLight",
+        "52570",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90837",
+        "Level 5 Void",
+        "PointLight",
+        "52352",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91250",
+        "Level 5 Void",
+        "PointLight",
+        "52765",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90828",
+        "Level 5 Void",
+        "PointLight",
+        "52343",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91251",
+        "Level 5 Void",
+        "PointLight",
+        "52766",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90829",
+        "Level 5 Void",
+        "PointLight",
+        "52344",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91249",
+        "Level 5 Void",
+        "PointLight",
+        "52764",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91248",
+        "Level 5 Void",
+        "PointLight",
+        "52763",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90843",
+        "Level 5 Void",
+        "PointLight",
+        "52358",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91247",
+        "Level 5 Void",
+        "PointLight",
+        "52762",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90845",
+        "Level 5 Void",
+        "PointLight",
+        "52360",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91257",
+        "Level 5 Void",
+        "PointLight",
+        "52772",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90844",
+        "Level 5 Void",
+        "PointLight",
+        "52359",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91246",
+        "Level 5 Void",
+        "PointLight",
+        "52761",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90821",
+        "Level 5 Void",
+        "PointLight",
+        "52336",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91255",
+        "Level 5 Void",
+        "PointLight",
+        "52770",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90822",
+        "Level 5 Void",
+        "PointLight",
+        "52337",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91258",
+        "Level 5 Void",
+        "PointLight",
+        "52773",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90811",
+        "Level 5 Void",
+        "PointLight",
+        "52326",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "91286",
+        "Level 5 Void",
+        "PointLight",
+        "52801",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90812",
+        "Level 5 Void",
+        "PointLight",
+        "52327",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90817",
+        "Level 5 Void",
+        "PointLight",
+        "52332",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90818",
+        "Level 5 Void",
+        "PointLight",
+        "52333",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90819",
+        "Level 5 Void",
+        "PointLight",
+        "52334",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90820",
+        "Level 5 Void",
+        "PointLight",
+        "52335",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90830",
+        "Level 5 Void",
+        "PointLight",
+        "52345",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90831",
+        "Level 5 Void",
+        "PointLight",
+        "52346",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90832",
+        "Level 5 Void",
+        "PointLight",
+        "52347",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90813",
+        "Level 5 Void",
+        "PointLight",
+        "52328",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "90814",
+        "Level 5 Void",
+        "PointLight",
+        "52329",
+        true,
+        true,
+        "absent"
+      ],
+      [
+        "33155709",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155708",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155711",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155710",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155713",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155712",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155715",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155714",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155717",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155716",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155719",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155718",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155721",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155720",
+        true,
+        true,
+        32
+      ],
+      [
+        "33155723",
+        "Level2PoolroomsMap",
+        "ParticleEmitter",
+        "33155722",
+        true,
+        true,
+        32
+      ]
+    ],
+    "maps": [
+      {
+        "path": "ServerStorage.Level 4 Cinema Blender",
+        "name": "Level 4 Cinema Blender",
+        "id": "40071",
+        "class": "Model",
+        "counts": {
+          "wantedPresent": 254,
+          "wantedFalse": 0,
+          "wantedTrue": 254,
+          "markedEnabled": 254,
+          "influencePresent": 0
+        }
+      },
+      {
+        "path": "ServerStorage.Level 5 Void",
+        "name": "Level 5 Void",
+        "id": "41644",
+        "class": "Model",
+        "counts": {
+          "wantedPresent": 620,
+          "wantedFalse": 0,
+          "wantedTrue": 620,
+          "markedEnabled": 620,
+          "influencePresent": 0
+        }
+      },
+      {
+        "path": "ServerStorage.Level2PoolroomsMap",
+        "name": "Level2PoolroomsMap",
+        "id": "41646",
+        "class": "Model",
+        "counts": {
+          "wantedPresent": 8,
+          "wantedFalse": 0,
+          "wantedTrue": 8,
+          "markedEnabled": 8,
+          "influencePresent": 8
+        }
+      }
+    ]
+  },
+  "authoringArchive": {
+    "appliedReceipt": "tools/optimization_20261009/authoring-archive-receipt.json",
+    "expectedArchiveId": "79287173",
+    "observedArchiveId": "79287173",
+    "exactArchiveIdentity": true,
+    "owners": [
+      {
+        "owner": "ZyntraShopUI",
+        "originalImportsId": "15603",
+        "originalOwnerId": "15602",
+        "expectedDescendants": 10396,
+        "observedImports": {
+          "path": "ServerStorage.OptimizationAuthoringArchive.ZyntraShopUI.Imports",
+          "id": "15603",
+          "owner": "ZyntraShopUI",
+          "descendants": 10396,
+          "class": "Folder"
+        },
+        "rsOwner": {
+          "id": "15602",
+          "path": "ReplicatedStorage.ZyntraShopUI",
+          "name": "ZyntraShopUI",
+          "imports": []
+        },
+        "exactMatch": true
+      },
+      {
+        "owner": "ZyntraHUD",
+        "originalImportsId": "15617",
+        "originalOwnerId": "15616",
+        "expectedDescendants": 1661,
+        "observedImports": {
+          "path": "ServerStorage.OptimizationAuthoringArchive.ZyntraHUD.Imports",
+          "id": "15617",
+          "owner": "ZyntraHUD",
+          "descendants": 1661,
+          "class": "Folder"
+        },
+        "rsOwner": {
+          "id": "15616",
+          "path": "ReplicatedStorage.ZyntraHUD",
+          "name": "ZyntraHUD",
+          "imports": []
+        },
+        "exactMatch": true
+      }
+    ],
+    "originalImportsDescendants": 12057
+  },
+  "probeScan": {
+    "utc": "2026-10-09T22:44:31Z",
+    "scannedDataModelDescendants": true,
+    "prefixes": [
+      "_OptimizationContract_",
+      "_OptimizationGeometryInstall_",
+      "OptimizationCollisionProbe_"
+    ],
+    "exactNames": [
+      "OptimizationStreamingLifecycleFixture",
+      "_SceneEffectBudgetContractProbe",
+      "_NativeVisibilityContract"
+    ],
+    "matchedKnownTaskProbeNamesOrPrefixes": []
+  },
+  "complete": true,
+  "limits": "Read-only Edit identity/property census. Does not replay source-reference audit, gameplay, performance, native publication or validate objects outside known task-probe names in the DataModel."
+}

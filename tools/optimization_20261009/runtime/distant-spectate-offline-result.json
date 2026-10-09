@@ -1,0 +1,25 @@
+{
+  "kind": "offline-distant-spectate-driver-verification",
+  "luauVersion": "0.741",
+  "studioExecution": false,
+  "gameplayOrStreamingPass": false,
+  "generatedClientCleanupScenarios": [
+    "success",
+    "natural",
+    "partial-rename",
+    "selection-timeout",
+    "selection-error",
+    "connect-error",
+    "camera-error",
+    "camera-timeout",
+    "concurrent-name",
+    "disconnect-error",
+    "late"
+  ],
+  "orchestrationFailureScenarios": 8,
+  "allSevenPayloadsCompiled": true,
+  "sourceFiles": {
+    "distant_spectate_smoke.py": "f739817f704037fdf934e024df6f3866833211a58b418452189e27796f66244e",
+    "test_distant_spectate_smoke.py": "dc7a78be6ec925ebb66db377625ef5c08263e22d3b0adb1f40a620596c95aac8"
+  }
+}

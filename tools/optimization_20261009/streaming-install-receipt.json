@@ -1,0 +1,21 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "mode": "Edit",
+  "verificationMethod": "Authoritative Workspace selected; native Studio Properties exact filters; value rechecked after committing editor",
+  "backupPolicy": "Explicit owner instruction: no new backup",
+  "changes": [
+    {"property":"StreamingTargetRadius", "before":1024, "after":384, "verified":true},
+    {"property":"ModelStreamingBehavior", "before":"Default", "after":"Improved", "verified":true}
+  ],
+  "retainedAndVerified": {
+    "StreamOutBehavior":"Opportunistic",
+    "StreamingMinRadius":64,
+    "StreamingIntegrityMode":"PauseOutsideLoadedArea",
+    "StreamingEnabled":true
+  },
+  "propertyAccessNote":"These non-scriptable properties cannot be read through execute_luau. Exact Studio Properties filters expose them.",
+  "runtimeStreamingVerified":false,
+  "performanceVerified":false,
+  "published":false
+}

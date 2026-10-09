@@ -1,0 +1,21 @@
+{
+  "runner": "G:\\Roblox\\MongoTV\\_local\\optimization-20261009\\luau-0.741\\luau.exe",
+  "compiler": "G:\\Roblox\\MongoTV\\_local\\optimization-20261009\\luau-0.741\\luau-compile.exe",
+  "productionExtractedChecks": 841,
+  "focusedTransitionChecks": 41,
+  "cycleIterationChecks": 800,
+  "staticPreservationChecks": 5,
+  "compiled": [
+    "Level2Sound.proposed.luau",
+    "Level6Client.proposed.luau",
+    "lifecycle-contract.luau",
+    "native-contract-probe.luau",
+    "native-instance-probe.luau"
+  ],
+  "nativeProbeExecuted": false,
+  "gameplayStreamingPerformancePass": false,
+  "proposals": {
+    "Level2Sound.proposed.luau": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+    "Level6Client.proposed.luau": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+  }
+}

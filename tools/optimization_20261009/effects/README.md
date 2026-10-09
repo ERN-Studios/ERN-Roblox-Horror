@@ -1,10 +1,10 @@
 # Prepared scene-effect budget — 2026-10-09
 
-These files are reviewable proposals. No Studio instance, source, property or Play state was changed by this subtask. The owner explicitly asked to preserve the concurrent Play session, so deployment, native contract execution, gameplay checks and publication remain pending.
+These files are reviewable proposals. No Studio instance, source, property or Play state was changed by this subtask. The owner subsequently authorized installation after Edit returned and explicitly requested no new backups. Fresh installation baselines, guarded metadata batches and actual route plans are in [install/README.md](install/README.md); root owns execution and publication.
 
 ## Implementation
 
-Install `SceneEffectBudget.ModuleScript.lua` as a **new ModuleScript** at `game.ReplicatedStorage.SceneEffectBudget` and `SceneEffectBudgetClient.LocalScript.lua` as a **new LocalScript** at `game.StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient`, only after the root agent has backed up the native place, verified the exact live baselines, and obtained Edit mode.
+Install `SceneEffectBudget.ModuleScript.lua` as a **new ModuleScript** at `game.ReplicatedStorage.SceneEffectBudget` and `SceneEffectBudgetClient.LocalScript.lua` as a **new LocalScript** at `game.StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient`, only after root verifies the exact live baselines in Edit. The owner's newer instruction declines new backups; preserve exact read/rollback records and unrelated work.
 
 The client budgets **explicitly marked** decorative Lights and ParticleEmitters. It changes only Enabled. Brightness, Color, Angle, Range, material, collision and server game state remain owned by their existing controllers. XZ sectors restrict candidate searches; exact distance includes height. Camera and local body each retain nearby sectors, so a detached camera does not darken the player's immediate surroundings. A 0.25-second update, hysteresis, deduplicated pending queue, moved-mount reindexing and streaming addition/removal signals avoid whole-map per-frame scans. Bootstrap scans only the relevant Lights/Props or Water FX containers.
 

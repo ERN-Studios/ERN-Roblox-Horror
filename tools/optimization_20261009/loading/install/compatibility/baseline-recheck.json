@@ -1,0 +1,27 @@
+{
+  "verifiedUtc": "2026-10-09T21:56:12Z",
+  "records": [
+    {
+      "bytes": 41458,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "editorOk": true,
+      "instanceId": "1_31079",
+      "parity": true,
+      "class": "LocalScript",
+      "baselineMatches": true,
+      "expectedIdentity": true
+    },
+    {
+      "bytes": 65353,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "editorOk": true,
+      "instanceId": "1_31113",
+      "parity": true,
+      "class": "LocalScript",
+      "baselineMatches": true,
+      "expectedIdentity": true
+    }
+  ],
+  "datamodel": "Edit",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+}

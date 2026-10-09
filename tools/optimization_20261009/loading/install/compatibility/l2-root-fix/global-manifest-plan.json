@@ -1,0 +1,277 @@
+{
+  "headCommit": "9b0c046864d18789728e0ddcccade30606e6c651",
+  "headGlobalManifestSha256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d",
+  "currentGlobalManifestSha256": "c6dd9de755f84518ac4b715f872348ea8579c2f90c51614aeddda996afcfb44e",
+  "proposedGlobalManifestSha256": "3d4cfb09e91ad3dc5e2d48ad3e10b9dd5682bce04622536361b523b9cec29ca3",
+  "proposedFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/studio-sync-manifest.proposed.json",
+  "nativeVerifiedUtc": "2026-10-09T22:18:25Z",
+  "targets": [
+    {
+      "studioPath": "ReplicatedFirst.Lobby Loading Screen",
+      "action": "refresh-source-fields",
+      "currentSha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "verifiedNativeSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "runtimeMirrorSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "bytes": 42196,
+      "headSha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "headEntryPresent": true,
+      "currentDiffersFromHead": false
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "action": "refresh-source-fields",
+      "currentSha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
+      "verifiedNativeSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "runtimeMirrorSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "bytes": 16515,
+      "headSha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
+      "headEntryPresent": true,
+      "currentDiffersFromHead": false
+    },
+    {
+      "studioPath": "ServerScriptService.GameManager",
+      "action": "refresh-source-fields",
+      "currentSha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "verifiedNativeSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "runtimeMirrorSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "bytes": 192559,
+      "headSha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "headEntryPresent": true,
+      "currentDiffersFromHead": false
+    },
+    {
+      "studioPath": "ReplicatedStorage.SceneEffectBudget",
+      "action": "add-missing-verified-source",
+      "currentSha256": null,
+      "verifiedNativeSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "runtimeMirrorSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "bytes": 10221,
+      "headSha256": null,
+      "headEntryPresent": false,
+      "currentDiffersFromHead": false
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "action": "add-missing-verified-source",
+      "currentSha256": null,
+      "verifiedNativeSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "runtimeMirrorSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "bytes": 3537,
+      "headSha256": null,
+      "headEntryPresent": false,
+      "currentDiffersFromHead": false
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "action": "refresh-source-fields",
+      "currentSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "verifiedNativeSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "runtimeMirrorSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "bytes": 41930,
+      "headSha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "headEntryPresent": true,
+      "currentDiffersFromHead": true
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "action": "refresh-source-fields",
+      "currentSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "verifiedNativeSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "runtimeMirrorSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "bytes": 66128,
+      "headSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "headEntryPresent": true,
+      "currentDiffersFromHead": false
+    }
+  ],
+  "addedSourceEntries": 2,
+  "preservedAllNonTargetRows": true,
+  "preservedExistingTargetNonSourceFields": true,
+  "preservedUnrelatedTopLevelMetadata": true,
+  "countsBefore": {
+    "scripts": 222,
+    "remoteEvents": 15,
+    "total": 237,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "countsAfter": {
+    "scripts": 224,
+    "remoteEvents": 15,
+    "total": 239,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "nativeSourcePins": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "parentPath": "ReplicatedFirst",
+      "instanceId": "1_31065",
+      "class": "LocalScript",
+      "parentId": "1_9074",
+      "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "attributes": [],
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "parentClass": "ReplicatedFirst",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "editorParity": true,
+      "rawBytes": 42196,
+      "name": "Lobby Loading Screen"
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "parentPath": "ServerScriptService.Level 4 Systems",
+      "instanceId": "1_42773",
+      "class": "ModuleScript",
+      "parentId": "1_15624",
+      "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "attributes": [],
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Light Director"
+      ],
+      "parentClass": "Folder",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "editorParity": true,
+      "rawBytes": 16515,
+      "name": "Level 4 Light Director"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "parentPath": "ServerScriptService",
+      "instanceId": "1_408341",
+      "class": "Script",
+      "parentId": "1_409634",
+      "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "attributes": [],
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "parentClass": "ServerScriptService",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "editorParity": true,
+      "rawBytes": 192559,
+      "name": "GameManager"
+    },
+    {
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "parentPath": "ReplicatedStorage",
+      "instanceId": "0_79286917",
+      "class": "ModuleScript",
+      "parentId": "1_408323",
+      "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "attributes": [],
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "parentClass": "ReplicatedStorage",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "editorParity": true,
+      "rawBytes": 10221,
+      "name": "SceneEffectBudget"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "0_79286921",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "attributes": [],
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "editorParity": true,
+      "rawBytes": 3537,
+      "name": "SceneEffectBudgetClient"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "1_31079",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "attributes": [],
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "editorParity": true,
+      "rawBytes": 41930,
+      "name": "Level 2 Sound Controller"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "1_31113",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "attributes": [],
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "editorParity": true,
+      "rawBytes": 66128,
+      "name": "Level 6 Playground Client"
+    }
+  ],
+  "globalManifestWritten": false,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "gitStaged": false,
+  "gitCommitted": false
+}

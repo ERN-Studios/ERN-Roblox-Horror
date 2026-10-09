@@ -1,0 +1,1054 @@
+{
+  "studioId": "e5ae4d82-03b3-4abb-943e-95417a837eb1",
+  "datamodel": "Client",
+  "label": "level5-client2-entry",
+  "code": "tools/optimization_20261009/runtime/measure.luau",
+  "startedUtc": "2026-10-09T22:27:14.026764+00:00",
+  "result": {
+    "universeId": 10559217407,
+    "placeId": 131311258779917,
+    "optimizationPresence": {
+      "replicatedStorageImports": [
+        {
+          "absenceVerified": true,
+          "owner": "ZyntraShopUI",
+          "importsCount": 0,
+          "ownerCount": 1
+        },
+        {
+          "absenceVerified": true,
+          "owner": "ZyntraHUD",
+          "importsCount": 0,
+          "ownerCount": 1
+        }
+      ],
+      "budgetTemplate": {
+        "meaning": "Presence/enabled flags only; does not prove that the script ran without errors",
+        "present": true,
+        "available": true,
+        "matches": [
+          {
+            "enabled": {
+              "value": true,
+              "present": true,
+              "available": true
+            },
+            "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+            "class": "LocalScript"
+          }
+        ],
+        "count": 1
+      },
+      "budgetModule": {
+        "meaning": "Presence/enabled flags only; does not prove that the script ran without errors",
+        "present": true,
+        "available": true,
+        "matches": [
+          {
+            "class": "ModuleScript",
+            "path": "ReplicatedStorage.SceneEffectBudget"
+          }
+        ],
+        "count": 1
+      },
+      "actualLocalBudgetScript": {
+        "meaning": "Presence/enabled flags only; does not prove that the script ran without errors",
+        "present": true,
+        "available": true,
+        "matches": [
+          {
+            "enabled": {
+              "value": true,
+              "present": true,
+              "available": true
+            },
+            "path": "Players.Player2.PlayerScripts.SceneEffectBudgetClient",
+            "class": "LocalScript"
+          }
+        ],
+        "count": 1
+      }
+    },
+    "before": {
+      "players": [
+        {
+          "rootPresent": true,
+          "name": "Player2",
+          "position": {
+            "y": 603.6046142578125,
+            "x": 40016.09765625,
+            "z": -4.5054168701171875
+          },
+          "SelectedLevel": {
+            "present": false,
+            "available": true
+          },
+          "floor": {
+            "value": {
+              "normal": {
+                "y": 1,
+                "x": 0,
+                "z": 0
+              },
+              "path": "Workspace.Level 5 Void.Geometry.Rest",
+              "canCollide": {
+                "value": true,
+                "present": true,
+                "available": true
+              },
+              "class": "Part",
+              "rayDistanceStuds": 5.6046142578125,
+              "worldRoot": "Level 5 Void",
+              "hit": true,
+              "filter": "Include actual available workspace world roots/parts/terrain; all player characters and direct Humanoid models excluded",
+              "verticalDistanceBelowRootStuds": 3.6046142578125,
+              "position": {
+                "y": 600,
+                "x": 40016.09765625,
+                "z": -4.5054168701171875
+              }
+            },
+            "present": true,
+            "available": true
+          },
+          "userId": -2,
+          "InRound": {
+            "value": true,
+            "present": true,
+            "available": true
+          }
+        }
+      ],
+      "playerRecordsLimitedTo32": false,
+      "playerCount": 1,
+      "SelectedLevel": {
+        "value": 1,
+        "present": true,
+        "available": true
+      },
+      "loadingCovers": {
+        "playerGuiPath": "Players.Player2.PlayerGui",
+        "LevelLoadingOpen": {
+          "value": false,
+          "present": true,
+          "available": true
+        },
+        "lobbyCover": {
+          "present": false,
+          "available": true
+        },
+        "LobbyLoadingOpen": {
+          "value": false,
+          "present": true,
+          "available": true
+        },
+        "liveLevelCover": {
+          "present": false,
+          "available": true
+        },
+        "available": true,
+        "LoadingLevel": {
+          "value": 2,
+          "present": true,
+          "available": true
+        },
+        "LobbyLoadingDone": {
+          "value": true,
+          "present": true,
+          "available": true
+        },
+        "roundLevelLoading": {
+          "value": {
+            "meaning": "Actual visibility/Enabled/CanvasGroup flags and size; not a pixel or occlusion assertion",
+            "path": "Players.Player2.PlayerGui.RoundGui.LevelLoading",
+            "present": true,
+            "backgroundTransparency": 0,
+            "absoluteSize": {
+              "y": 443,
+              "x": 773
+            },
+            "class": "Frame",
+            "visibleWithPositiveSize": false,
+            "visibilityFlags": false
+          },
+          "present": true,
+          "available": true
+        }
+      },
+      "Level4RoundActive": {
+        "present": false,
+        "available": true
+      },
+      "camera": {
+        "lookVector": {
+          "y": -0.2588190734386444,
+          "x": 0.965925931930542,
+          "z": 0
+        },
+        "position": {
+          "y": 605.2340087890625,
+          "x": 40015.61328125,
+          "z": -4.5054168701171875
+        }
+      },
+      "Level4_Phase": {
+        "reason": "Level 4 State absent",
+        "available": false
+      },
+      "SceneEffectBudgetDisabled": {
+        "present": false,
+        "available": true
+      },
+      "Level4_PowerState": {
+        "reason": "Level 4 State absent",
+        "available": false
+      },
+      "WorldGenerated": {
+        "value": false,
+        "present": true,
+        "available": true
+      },
+      "floorQueryWorldRoots": [
+        "Workspace.Terrain",
+        "Workspace.Level 3 Local Fluorescent Emitter 1",
+        "Workspace.Level 3 Local Fluorescent Emitter 2",
+        "Workspace.Level 3 Local Fluorescent Emitter 3",
+        "Workspace.LobbyTunnelReachSound",
+        "Workspace.FlashlightMount",
+        "Workspace.RouteMarkers",
+        "Workspace.Level 5 Void",
+        "Workspace.MateLens",
+        "Workspace.Level5Falling"
+      ]
+    },
+    "sources": [
+      "https://create.roblox.com/docs/reference/engine/classes/Stats",
+      "https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/reference/engine/classes/Stats.yaml",
+      "https://create.roblox.com/docs/reference/engine/enums/DeveloperMemoryTag",
+      "https://create.roblox.com/docs/reference/engine/datatypes/RaycastParams"
+    ],
+    "requestedWindowSeconds": 3,
+    "gameplayCoverage": "Current scene only; this sampler does not trigger or verify round objectives",
+    "mutations": false,
+    "context": "Client",
+    "completeSampleWindow": true,
+    "censusTiming": "End snapshot after the 3-second Stats window; not synchronized to every Stats reading",
+    "samplingLimitReached": false,
+    "after": {
+      "players": [
+        {
+          "rootPresent": true,
+          "name": "Player2",
+          "position": {
+            "y": 603.6046142578125,
+            "x": 40016.09765625,
+            "z": -4.5054168701171875
+          },
+          "SelectedLevel": {
+            "present": false,
+            "available": true
+          },
+          "floor": {
+            "value": {
+              "normal": {
+                "y": 1,
+                "x": 0,
+                "z": 0
+              },
+              "path": "Workspace.Level 5 Void.Geometry.Rest",
+              "canCollide": {
+                "value": true,
+                "present": true,
+                "available": true
+              },
+              "class": "Part",
+              "rayDistanceStuds": 5.6046142578125,
+              "worldRoot": "Level 5 Void",
+              "hit": true,
+              "filter": "Include actual available workspace world roots/parts/terrain; all player characters and direct Humanoid models excluded",
+              "verticalDistanceBelowRootStuds": 3.6046142578125,
+              "position": {
+                "y": 600,
+                "x": 40016.09765625,
+                "z": -4.5054168701171875
+              }
+            },
+            "present": true,
+            "available": true
+          },
+          "userId": -2,
+          "InRound": {
+            "value": true,
+            "present": true,
+            "available": true
+          }
+        }
+      ],
+      "playerRecordsLimitedTo32": false,
+      "playerCount": 1,
+      "SelectedLevel": {
+        "value": 1,
+        "present": true,
+        "available": true
+      },
+      "loadingCovers": {
+        "playerGuiPath": "Players.Player2.PlayerGui",
+        "LevelLoadingOpen": {
+          "value": false,
+          "present": true,
+          "available": true
+        },
+        "lobbyCover": {
+          "present": false,
+          "available": true
+        },
+        "LobbyLoadingOpen": {
+          "value": false,
+          "present": true,
+          "available": true
+        },
+        "liveLevelCover": {
+          "present": false,
+          "available": true
+        },
+        "available": true,
+        "LoadingLevel": {
+          "value": 2,
+          "present": true,
+          "available": true
+        },
+        "LobbyLoadingDone": {
+          "value": true,
+          "present": true,
+          "available": true
+        },
+        "roundLevelLoading": {
+          "value": {
+            "meaning": "Actual visibility/Enabled/CanvasGroup flags and size; not a pixel or occlusion assertion",
+            "path": "Players.Player2.PlayerGui.RoundGui.LevelLoading",
+            "present": true,
+            "backgroundTransparency": 0,
+            "absoluteSize": {
+              "y": 443,
+              "x": 773
+            },
+            "class": "Frame",
+            "visibleWithPositiveSize": false,
+            "visibilityFlags": false
+          },
+          "present": true,
+          "available": true
+        }
+      },
+      "Level4RoundActive": {
+        "present": false,
+        "available": true
+      },
+      "camera": {
+        "lookVector": {
+          "y": -0.2588190734386444,
+          "x": 0.965925931930542,
+          "z": 0
+        },
+        "position": {
+          "y": 605.2340087890625,
+          "x": 40015.61328125,
+          "z": -4.5054168701171875
+        }
+      },
+      "Level4_Phase": {
+        "reason": "Level 4 State absent",
+        "available": false
+      },
+      "SceneEffectBudgetDisabled": {
+        "present": false,
+        "available": true
+      },
+      "Level4_PowerState": {
+        "reason": "Level 4 State absent",
+        "available": false
+      },
+      "WorldGenerated": {
+        "value": false,
+        "present": true,
+        "available": true
+      },
+      "floorQueryWorldRoots": [
+        "Workspace.Terrain",
+        "Workspace.Level 3 Local Fluorescent Emitter 1",
+        "Workspace.Level 3 Local Fluorescent Emitter 2",
+        "Workspace.Level 3 Local Fluorescent Emitter 3",
+        "Workspace.LobbyTunnelReachSound",
+        "Workspace.FlashlightMount",
+        "Workspace.RouteMarkers",
+        "Workspace.Level 5 Void",
+        "Workspace.MateLens",
+        "Workspace.Level5Falling"
+      ]
+    },
+    "actualSampleWindowSeconds": 3.015544299967587,
+    "verifiedUtc": "2026-10-09T22:27:14Z",
+    "stats": {
+      "MemoryTag.Animation": {
+        "minimum": 6.2293853759765625,
+        "maximum": 6.2293853759765625,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 6.2293853759765625,
+        "available": true,
+        "median": 6.2293853759765625
+      },
+      "MemoryTag.GraphicsTexture": {
+        "minimum": 121.83468627929688,
+        "maximum": 121.83468627929688,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 121.83468627929688,
+        "available": true,
+        "median": 121.83468627929688
+      },
+      "ContactsCount": {
+        "minimum": 19,
+        "maximum": 19,
+        "scope": "Simulation",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 19,
+        "available": true,
+        "median": 19
+      },
+      "MemoryTag.GraphicsSlimModels": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.GraphicsTextureCharacter": {
+        "minimum": 3.9893455505371094,
+        "maximum": 3.9893455505371094,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 3.9893455505371094,
+        "available": true,
+        "median": 3.9893455505371094
+      },
+      "MemoryTag.PhysicsCollision": {
+        "minimum": 0.01120758056640625,
+        "maximum": 0.01120758056640625,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.01120758056640625,
+        "available": true,
+        "median": 0.01120758056640625
+      },
+      "PhysicsStepTime": {
+        "minimum": 6.040735911483353e-08,
+        "maximum": 8.122176222968847e-05,
+        "scope": "Simulation",
+        "samples": 50,
+        "unit": "native time value",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 5.836154014104977e-05,
+        "available": true,
+        "median": 5.389625357565819e-06
+      },
+      "MovingPrimitivesCount": {
+        "minimum": 34,
+        "maximum": 34,
+        "scope": "Simulation",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 34,
+        "available": true,
+        "median": 34
+      },
+      "MemoryTag.GraphicsParticles": {
+        "minimum": 3.42431640625,
+        "maximum": 3.42431640625,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 3.42431640625,
+        "available": true,
+        "median": 3.42431640625
+      },
+      "MemoryTag.HttpCache": {
+        "minimum": 0.08062744140625,
+        "maximum": 0.08062744140625,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.08062744140625,
+        "available": true,
+        "median": 0.08062744140625
+      },
+      "MemoryTag.Sounds": {
+        "minimum": 136.85784912109375,
+        "maximum": 136.85784912109375,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 136.85784912109375,
+        "available": true,
+        "median": 136.85784912109375
+      },
+      "MemoryTag.GraphicsTerrain": {
+        "minimum": 36.05120849609375,
+        "maximum": 36.05120849609375,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 36.05120849609375,
+        "available": true,
+        "median": 36.05120849609375
+      },
+      "MemoryTag.GraphicsSpatialHash": {
+        "minimum": 0.6348876953125,
+        "maximum": 0.6348876953125,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.6348876953125,
+        "available": true,
+        "median": 0.6348876953125
+      },
+      "RenderCPUFrameTime": {
+        "minimum": 0.001841300050728023,
+        "maximum": 0.004347300156950951,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "native time value",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.003138200147077441,
+        "available": true,
+        "median": 0.002312249969691038
+      },
+      "MemoryTag.Instances": {
+        "minimum": 95.44029998779297,
+        "maximum": 95.44029998779297,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 95.44029998779297,
+        "available": true,
+        "median": 95.44029998779297
+      },
+      "UI3DDrawcallCount": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.Navigation": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.GraphicsMeshParts": {
+        "minimum": 10.822479248046875,
+        "maximum": 10.822479248046875,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 10.822479248046875,
+        "available": true,
+        "median": 10.822479248046875
+      },
+      "MemoryTag.BaseParts": {
+        "minimum": 14.175941467285156,
+        "maximum": 14.175941467285156,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 14.175941467285156,
+        "available": true,
+        "median": 14.175941467285156
+      },
+      "DataReceiveKbps": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Network",
+        "samples": 50,
+        "unit": "kilobytes/second",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.GraphicsSolidModels": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.GeometryCSG": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "UI2DDrawcallCount": {
+        "minimum": 1,
+        "maximum": 1,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 1,
+        "available": true,
+        "median": 1
+      },
+      "MemoryTag.Script": {
+        "minimum": 138.59535217285156,
+        "maximum": 138.59535217285156,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 138.59535217285156,
+        "available": true,
+        "median": 138.59535217285156
+      },
+      "DataSendKbps": {
+        "minimum": 0.7738658785820007,
+        "maximum": 0.9925026893615723,
+        "scope": "Network",
+        "samples": 50,
+        "unit": "kilobytes/second",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.9798397421836853,
+        "available": true,
+        "median": 0.9220125377178192
+      },
+      "TotalMemoryUsageMb": {
+        "minimum": 2118.4453125,
+        "maximum": 2119.12109375,
+        "scope": "OS-reported process/session memory, not sum of tags",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 2119.12109375,
+        "available": true,
+        "median": 2118.9140625
+      },
+      "ShadowsTriangleCount": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.TerrainVoxels": {
+        "minimum": 0.054168701171875,
+        "maximum": 0.054168701171875,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.054168701171875,
+        "available": true,
+        "median": 0.054168701171875
+      },
+      "PrimitivesCount": {
+        "minimum": 287,
+        "maximum": 287,
+        "scope": "Simulation",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 287,
+        "available": true,
+        "median": 287
+      },
+      "PhysicsSendKbps": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Network physics",
+        "samples": 50,
+        "unit": "kilobytes/second",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.Internal": {
+        "minimum": 931.2425537109375,
+        "maximum": 931.2425537109375,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 931.2425537109375,
+        "available": true,
+        "median": 931.2425537109375
+      },
+      "FrameTime": {
+        "minimum": 0.013619099743664265,
+        "maximum": 0.01865380071103573,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "seconds",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.01811949908733368,
+        "available": true,
+        "median": 0.016833550296723843
+      },
+      "MemoryTag.Gui": {
+        "minimum": 42.155494689941406,
+        "maximum": 42.155494689941406,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 42.155494689941406,
+        "available": true,
+        "median": 42.155494689941406
+      },
+      "RenderGPUFrameTime": {
+        "minimum": 0.00028374401153996587,
+        "maximum": 0.0022709760814905167,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "native time value",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.0019016959704458714,
+        "available": true,
+        "median": 0.0005110239726491272
+      },
+      "InstanceCount": {
+        "minimum": 58336,
+        "maximum": 58340,
+        "scope": "Current process/DataModel memory including unparented live Instances",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 58336,
+        "available": true,
+        "median": 58336
+      },
+      "SceneTriangleCount": {
+        "minimum": 16956,
+        "maximum": 16956,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 16956,
+        "available": true,
+        "median": 16956
+      },
+      "MemoryTag.StreamingSounds": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "PhysicsReceiveKbps": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Network physics",
+        "samples": 50,
+        "unit": "kilobytes/second",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "MemoryTag.GraphicsParts": {
+        "minimum": 2.1303558349609375,
+        "maximum": 2.1303558349609375,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 2.1303558349609375,
+        "available": true,
+        "median": 2.1303558349609375
+      },
+      "ShadowsDrawcallCount": {
+        "minimum": 0,
+        "maximum": 0,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": true,
+        "p95": 0,
+        "available": true,
+        "median": 0,
+        "zeroInterpretation": "Native API returned zero; not assumed to prove absence of work"
+      },
+      "SceneDrawcallCount": {
+        "minimum": 14,
+        "maximum": 14,
+        "scope": "Client renderer",
+        "samples": 50,
+        "unit": "count",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 14,
+        "available": true,
+        "median": 14
+      },
+      "MemoryTag.LuaHeap": {
+        "minimum": 475.265380859375,
+        "maximum": 475.265380859375,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 475.265380859375,
+        "available": true,
+        "median": 475.265380859375
+      },
+      "HeartbeatTime": {
+        "minimum": 9.156385203823447e-05,
+        "maximum": 0.00043937121517956257,
+        "scope": "Scheduler jobs; documented server metric",
+        "samples": 50,
+        "unit": "seconds",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 0.00038189906626939774,
+        "available": true,
+        "median": 0.00019198067457182333
+      },
+      "MemoryTag.Signals": {
+        "minimum": 10.623161315917969,
+        "maximum": 10.623161315917969,
+        "scope": "DeveloperMemoryTag",
+        "samples": 6,
+        "unit": "megabytes",
+        "unavailableSamples": 0,
+        "allReadingsWereZero": false,
+        "p95": 10.623161315917969,
+        "available": true,
+        "median": 10.623161315917969
+      }
+    },
+    "afterSampleCensusSeconds": 0.00031999999191612005,
+    "cpuSource": "Native Stats properties; scheduler wait is not CPU time",
+    "worlds": {
+      "meaning": "Client: currently received descendants, not complete authored maps. Count covers named L2/L4/L5/L6; candidates include other generated/lobby worlds.",
+      "knownAuthoredLoadedCount": 1,
+      "workspaceTopLevelWorldCandidates": [
+        {
+          "class": "Folder",
+          "name": "LobbyTunnelReachSound",
+          "path": "Workspace.LobbyTunnelReachSound"
+        },
+        {
+          "class": "Model",
+          "name": "StarterCharacter",
+          "path": "Workspace.StarterCharacter"
+        },
+        {
+          "class": "Folder",
+          "name": "RouteMarkers",
+          "path": "Workspace.RouteMarkers"
+        },
+        {
+          "class": "Model",
+          "name": "Level 5 Void",
+          "path": "Workspace.Level 5 Void"
+        },
+        {
+          "class": "Model",
+          "name": "Player2",
+          "path": "Workspace.Player2"
+        },
+        {
+          "class": "Model",
+          "name": "Player1",
+          "path": "Workspace.Player1"
+        },
+        {
+          "class": "Folder",
+          "name": "Level5Falling",
+          "path": "Workspace.Level5Falling"
+        }
+      ],
+      "knownAuthoredMaps": [
+        {
+          "loaded": false,
+          "matches": [],
+          "name": "Level 2 Generated World",
+          "duplicateRootCount": 0
+        },
+        {
+          "loaded": false,
+          "matches": [],
+          "name": "Level2PoolroomsMap",
+          "duplicateRootCount": 0
+        },
+        {
+          "loaded": false,
+          "matches": [],
+          "name": "Level 4 Cinema Blender",
+          "duplicateRootCount": 0
+        },
+        {
+          "loaded": true,
+          "matches": [
+            {
+              "lights": {
+                "enabled": 80,
+                "total": 80,
+                "disabled": 0,
+                "marked": 78,
+                "wantedTrueEnabled": 78,
+                "wantedFalseEnabled": 0,
+                "wantedTrue": 78,
+                "wantedTrueDisabled": 0,
+                "wantedFalseDisabled": 0,
+                "markedEnabled": 78,
+                "wantedFalse": 0
+              },
+              "path": "Workspace.Level 5 Void",
+              "loadedDescendants": 341,
+              "class": "Model",
+              "particles": {
+                "enabled": 0,
+                "total": 0,
+                "disabled": 0,
+                "marked": 0,
+                "wantedTrueEnabled": 0,
+                "wantedFalseEnabled": 0,
+                "wantedTrue": 0,
+                "wantedTrueDisabled": 0,
+                "wantedFalseDisabled": 0,
+                "markedEnabled": 0,
+                "wantedFalse": 0
+              },
+              "censusAvailable": true
+            }
+          ],
+          "name": "Level 5 Void",
+          "duplicateRootCount": 1
+        },
+        {
+          "loaded": false,
+          "matches": [],
+          "name": "Level 6 Indoor Playground",
+          "duplicateRootCount": 0
+        }
+      ]
+    },
+    "fpsClaim": false,
+    "readingTicks": 50,
+    "memoryTrackingEnabled": {
+      "value": true,
+      "present": true,
+      "available": true
+    },
+    "performanceComparison": false,
+    "kind": "actual-runtime-stats-smoke-sample",
+    "requestedSpacingSeconds": 0.05,
+    "percentileDefinition": "Median (average middle pair for even n), p95 nearest rank ceil(0.95*n) of spaced native readings"
+  },
+  "completed": true,
+  "finishedUtc": "2026-10-09T22:27:17.121652+00:00"
+}

@@ -1,0 +1,8 @@
+{
+  "kind": "offline-contract",
+  "stdout": "spectator focus contract checks: 51",
+  "source_sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+  "native_probe_run": false,
+  "gameplay_run": false,
+  "real_replication_focus_calls": false
+}

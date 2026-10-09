@@ -1,0 +1,25 @@
+{
+  "kind": "actual-multiplayer-normal-prompt-smoke",
+  "startedUtc": "2026-10-09T22:20:40.476868+00:00",
+  "testRelocation": true,
+  "fullWalkthrough": false,
+  "editMutation": false,
+  "steps": [],
+  "baseline": {
+    "progress": 1,
+    "text": "POWER\nA3  >  B3  >  B1  >  A1\n\n- in this order -",
+    "sequence": [
+      "A3",
+      "B3",
+      "B1",
+      "A1"
+    ],
+    "power": "Off"
+  },
+  "complete": false,
+  "error": "{'Level4_UsherActive': False, 'Level4_StarsOn': False, 'Level4_NotePosition': None, 'Level4_NavNodes': 5611, 'Level4_ReelsCollected': 0, 'Level4_BreakerEngaged': False, 'Level4_UsherTarget': 0, 'Level4_UsherState': 'Dormant', 'Level4_PowerState': 'Off', 'Level4_ExitUnlocked': False, 'Level4_SequenceProgress': 1, 'Level4_Phase': 'Dark', 'Level4_ZoneCount': 38, 'Level4_ReelGoal': 3, 'Level4_BreakerHolder': 0, 'Level4_ZoneSerial': 2, 'Level4_ZoneStates': '00000000000000000000000000000000000000', 'Level4_ReelRooms': \"Gallery|Women's room|Concessions\", 'Level4_Generation': 1, 'Level4_SequenceGoal': 4, 'Level4_FuseUntil': 0, 'Level4_ReelsLoaded': 0, 'Level4_ThreadScreen': 0, 'Level4_Escalation': 0}",
+  "ownershipRestored": {
+    "automatic": true
+  },
+  "finishedUtc": "2026-10-09T22:20:41.945926+00:00"
+}

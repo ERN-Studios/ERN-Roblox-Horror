@@ -1,0 +1,168 @@
+{
+  "kind": "fresh-actual-two-client-l2-budget-binding-smoke",
+  "startedUtc": "2026-10-09T22:25:51.542295+00:00",
+  "editMutation": false,
+  "testRelocation": true,
+  "temporaryExtraFocus": true,
+  "steps": [
+    {
+      "label": "near-waterfall",
+      "client": {
+        "root": [
+          69998.9140625,
+          172.64239501953125,
+          181.39892578125
+        ],
+        "camera": [
+          69998.90625,
+          174.24110412597656,
+          180.90687561035156
+        ],
+        "fx": [
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Toe Mist.ParticleEmitter",
+            "influence": 32,
+            "distance": 11.287213325500488,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 2.ParticleEmitter",
+            "influence": 32,
+            "distance": 22.164836883544922,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Crest Spray.ParticleEmitter",
+            "influence": 32,
+            "distance": 35.140193939208984,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 3.ParticleEmitter",
+            "influence": 32,
+            "distance": 17.460731506347656,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 5.ParticleEmitter",
+            "influence": 32,
+            "distance": 11.51268196105957,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 0.ParticleEmitter",
+            "influence": 32,
+            "distance": 32.786808013916016,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 1.ParticleEmitter",
+            "influence": 32,
+            "distance": 27.349205017089844,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 4.ParticleEmitter",
+            "influence": 32,
+            "distance": 13.739418029785156,
+            "wanted": true
+          }
+        ],
+        "mapDesc": 18944
+      }
+    },
+    {
+      "label": "far-region-retained-for-controller-check",
+      "relocation": {
+        "floor": "Workspace.Level 2 Generated World.Collision.Part",
+        "target": [
+          69252.3984375,
+          303,
+          710.423828125
+        ]
+      },
+      "client": {
+        "root": [
+          69252.359375,
+          301.3497009277344,
+          710.2413330078125
+        ],
+        "camera": [
+          69252.3671875,
+          303.0634765625,
+          709.8273315429688
+        ],
+        "fx": [
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Toe Mist.ParticleEmitter",
+            "influence": 32,
+            "distance": 932.6997680664062,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 2.ParticleEmitter",
+            "influence": 32,
+            "distance": 943.109130859375,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Crest Spray.ParticleEmitter",
+            "influence": 32,
+            "distance": 949.8319091796875,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 3.ParticleEmitter",
+            "influence": 32,
+            "distance": 940.3449096679688,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 5.ParticleEmitter",
+            "influence": 32,
+            "distance": 934.90283203125,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 0.ParticleEmitter",
+            "influence": 32,
+            "distance": 948.724609375,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 1.ParticleEmitter",
+            "influence": 32,
+            "distance": 945.9024658203125,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 2 Generated World.Water FX.Cascade Foam 4.ParticleEmitter",
+            "influence": 32,
+            "distance": 937.6099243164062,
+            "wanted": true
+          }
+        ],
+        "mapDesc": 20704
+      }
+    }
+  ],
+  "complete": true,
+  "extraFocusRemoved": true,
+  "finishedUtc": "2026-10-09T22:25:53.259054+00:00"
+}

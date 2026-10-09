@@ -1,0 +1,22 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "status": "Prepared one-line fix against fresh authoritative Edit source; root applies CAS",
+  "scripts": [
+    {
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "class": "LocalScript",
+      "baselineInstanceId": "0_79286921",
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.before.luau",
+      "beforeSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "beforeBytes": 3532,
+      "afterFile": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.proposed.luau",
+      "afterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "afterBytes": 3537
+    }
+  ]
+}

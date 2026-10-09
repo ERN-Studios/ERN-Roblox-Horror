@@ -1,0 +1,10 @@
+{
+  "source_sha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+  "before_sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+  "oneLineOnly": true,
+  "compiled": true,
+  "controllerChecks": 20,
+  "beforeRegressionConfirmed": true,
+  "nativeExecuted": false,
+  "gameplayStreamingPerformancePass": false
+}

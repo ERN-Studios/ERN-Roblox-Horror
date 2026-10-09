@@ -1,0 +1,145 @@
+--- SpectateController.before
++++ SpectateController.proposed
+@@ -111,26 +111,62 @@
+ 		and player:GetAttribute("RoundExitPromptOpen") ~= true
+ end
+ 
++local watch -- response handler and cycle controls share the existing owner
++-- SPECTATE_BOOTSTRAP_CLIENT_BEGIN
++local candidateUserIds = {}
++local candidateRequestSerial = 0 -- monotonic across stop/start; late old sessions cannot win
++local candidateSessionFirstSerial = 1
++local candidateLastAcceptedSerial = 0
++local function beginSpectateCandidateSession()
++ table.clear(candidateUserIds)
++ candidateSessionFirstSerial = candidateRequestSerial + 1
++ candidateLastAcceptedSerial = candidateRequestSerial
++end
++local function endSpectateCandidateSession()
++ table.clear(candidateUserIds)
++ candidateSessionFirstSerial = candidateRequestSerial + 1
++ candidateLastAcceptedSerial = candidateRequestSerial
++ targets = {}
++end
++local function requestSpectateCandidates()
++ if not spectating then return end
++ candidateRequestSerial += 1
++ remote:FireServer("spectatecandidates", candidateRequestSerial)
++end
+ local function livingOthers()
+-	local list = {}
+-	for _, p in ipairs(Players:GetPlayers()) do
+-		-- only players still ACTIVE in the maze: alive and not escaped (escapees
+-		-- sit parked in the safe room — nothing to watch there)
+-		-- In Level 6 (lobby server) only the others in the level, never somebody standing in the lobby.
+-		-- Level 5 is a live level on the same server and shares the marker: only the others in the SAME one.
+-		if p ~= player and p:GetAttribute("Escaped") ~= true
+-			and (player:GetAttribute("Level6PlaygroundPreview") ~= true
+-				or (p:GetAttribute("Level6PlaygroundPreview") == true
+-					and (p:GetAttribute("Level5VoidRound") == true) == (player:GetAttribute("Level5VoidRound") == true))) then
+-			local char = p.Character
+-			local hum = char and char:FindFirstChildOfClass("Humanoid")
+-			if hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then
+-				table.insert(list, p)
+-			end
+-		end
+-	end
+-	return list
+-end
++ local list = {}
++ for _, userId in ipairs(candidateUserIds) do
++  local target = Players:GetPlayerByUserId(userId)
++  if target and target ~= player and target.Parent == Players and target:GetAttribute("Escaped") ~= true
++   and (player:GetAttribute("Level6PlaygroundPreview") ~= true
++    or (target:GetAttribute("Level6PlaygroundPreview") == true
++     and (target:GetAttribute("Level5VoidRound") == true) == (player:GetAttribute("Level5VoidRound") == true))) then
++   -- Health and eligibility came from the server. Missing/stale local avatar
++   -- parts cannot discard the ID whose focus is needed to stream that avatar.
++   list[#list + 1] = target
++  end
++ end
++ return list
++end
++local function receiveSpectateCandidates(payload)
++ if not spectating or type(payload) ~= "table" or type(payload.UserIds) ~= "table" then return false end
++ local serial = payload.Serial
++ if type(serial) ~= "number" or serial ~= serial or serial % 1 ~= 0
++  or serial < candidateSessionFirstSerial or serial > candidateRequestSerial
++  or serial <= candidateLastAcceptedSerial then return false end
++ local ids, seen = {}, {}
++ for _, userId in ipairs(payload.UserIds) do
++  if type(userId) ~= "number" or userId ~= userId or math.abs(userId) >= 2^53 or userId % 1 ~= 0 then return false end
++  if not seen[userId] then seen[userId] = true; ids[#ids + 1] = userId end
++ end
++ candidateLastAcceptedSerial = serial
++ candidateUserIds = ids
++ targets = livingOthers()
++ local selected = spectated and table.find(targets, spectated)
++ if selected then idx = selected else watch(idx) end
++ return true
++end
++-- SPECTATE_BOOTSTRAP_CLIENT_END
+ 
+ -- borrowed flashlight: mirrors the spectated player's beam from their viewpoint
+ -- (their FlashlightOn flag is a replicated BoolValue on their character)
+@@ -162,7 +198,7 @@
+ 	end
+ end
+ 
+-local function watch(i)
++watch = function(i)
+ 	targets = livingOthers()
+ 	if #targets == 0 then
+ 		spectated = nil
+@@ -181,6 +217,10 @@
+ 	reportTarget(spectated.UserId)
+ 	band.copy(spectated, player:GetAttribute("Escaped") == true)
+ end
++
++remote.OnClientEvent:Connect(function(message, payload)
++ if message == "spectatecandidates" then receiveSpectateCandidates(payload) end
++end)
+ 
+ -- drive the POV camera + borrowed flashlight every frame while spectating
+ RunService.RenderStepped:Connect(function(dt)
+@@ -300,17 +340,20 @@
+ local function startSpectate()
+ 	if spectating or not (workspace:GetAttribute("RoundActive") or player:GetAttribute("Level6PlaygroundPreview") == true) then return end
+ 	spectating = true
++	beginSpectateCandidateSession()
+ 	-- Publish the state. "Spectating" was already being READ by the Level 2
+ 	-- Slidemouth client and (now) by the movement cluster, but nothing had ever
+ 	-- written it, so both checks were dead.
+ 	player:SetAttribute("Spectating", true)
+ 	applySpectateLayout()
+ 	watch(1)
++	requestSpectateCandidates()
+ 	applySpectateLayout()
+ end
+ 
+ local function stopSpectate()
+ 	spectating = false
++	endSpectateCandidateSession()
+ 	player:SetAttribute("Spectating", nil)
+ 	player:SetAttribute("SpectateTargetUserId", nil)
+ 	reportTarget(nil)
+@@ -402,12 +445,10 @@
+ 	while true do
+ 		task.wait(1)
+ 		if spectating then
+-			local hum = spectated and spectated.Character
+-				and spectated.Character:FindFirstChildOfClass("Humanoid")
+-			if not (hum and hum.Health > 0)
+-				or (spectated and spectated:GetAttribute("Escaped") == true) then
+-				watch(idx)
+-			end
+-		end
+-	end
+-end)
++			requestSpectateCandidates()
++			-- A missing body is pending streaming, not proof of death. The fresh
++			-- server list removes dead targets; local membership/escape still clears promptly.
++			if not spectated or not table.find(livingOthers(), spectated) then watch(idx) end
++		end
++	end
++end)

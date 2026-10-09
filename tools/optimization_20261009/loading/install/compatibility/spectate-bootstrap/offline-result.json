@@ -1,0 +1,21 @@
+{
+  "kind": "offline exact-production-helper contract",
+  "checks": 99,
+  "stdout": "spectator bootstrap contract checks: 99",
+  "serverSourceSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+  "clientSourceSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+  "productionSectionSha256": {
+    "server": "ff0f981724d608879b0f5ce561ef7657bb1cf0c9ed246e7bd45173c5f68dd80c",
+    "REPORT_SOURCE": "c4d20f3ee9c9588de46a0721c517b5396e1ec7ae0b6b4a9cc55b83a2b9fe1be8",
+    "CLIENT_HELPERS": "3190a2b89a3921bcf7f0d72eee0e83d450c5c2d294f846959ff21093de1d7550",
+    "WATCH_SOURCE": "79265f438578300e5a9800d4e49a67e3460483050682c1550753395ddd816e76",
+    "START_STOP_SOURCE": "34eae67198ae5639496064e28e8bb4543a845dd9ec0b83c7c4f7d3e156907daf",
+    "ROUND_END_SOURCE": "77ea45d6abdf42040abec67e998fc12d319825748ee8d37b6fc5b9139f8739c3",
+    "PERIODIC_SOURCE": "5dd8603a9f0099428133b758287cbf3aeb0f54444b0b58b0c57626e3a43d1025"
+  },
+  "fixtureSha256": "6167799f69575fb8badc5cd209fcf70ae3396a8ca67647479492e744e66cf78d",
+  "fullProposedSourcesCompiled": true,
+  "nativeProbeRun": false,
+  "realReplicationFocusCalls": false,
+  "realGameplayStreamingPerformancePass": false
+}

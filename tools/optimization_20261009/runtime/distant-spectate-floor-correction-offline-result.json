@@ -1,0 +1,25 @@
+{
+  "kind": "offline-distant-spectate-floor-correction-verification",
+  "verifiedUtc": "2026-10-09T23:10:23.770776+00:00",
+  "luauVersion": "0.741",
+  "studioExecution": false,
+  "editMutation": false,
+  "gameplayOrStreamingPass": false,
+  "sourceFiles": {
+    "distant_spectate_smoke.py": "a33289679f187afa5c04920f32ce9109fb5da06ed6b7e7116e4345dfc408d342",
+    "test_distant_spectate_smoke.py": "dc7a78be6ec925ebb66db377625ef5c08263e22d3b0adb1f40a620596c95aac8"
+  },
+  "correction": "SERVER_MOVE floor ray starts at P2_01 marker +2 studs and points downward 15 studs, below the vaulted ceiling; safe-floor assertion precedes streaming request and movement.",
+  "command": "python tools/optimization_20261009/runtime/test_distant_spectate_smoke.py --luau G:/Roblox/MongoTV/_local/optimization-20261009/luau-0.741/luau.exe --compiler G:/Roblox/MongoTV/_local/optimization-20261009/luau-0.741/luau-compile.exe",
+  "exitCode": 0,
+  "result": {
+    "offlineOnly": true,
+    "studioExecution": false,
+    "generatedClientCleanupScenarios": 11,
+    "orchestrationFailureScenarios": 8,
+    "allSevenPayloadsCompiled": true,
+    "gameplayOrStreamingPass": false
+  },
+  "historicalInitialReceiptPreserved": "distant-spectate-offline-result.json",
+  "actualScenarioSeparateReceipt": "observations/bootstrap-distant-first-floor-corrected.json"
+}

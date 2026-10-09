@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "status": "Capture only, not executed",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "restoreAttributesFrom": "attribute-baselines.json",
+  "applyFunction": "guarded_attribute_apply.luau",
+  "mode": "rollback",
+  "batchFiles": [
+    "attributes-batch-01.json",
+    "attributes-batch-02.json",
+    "attributes-batch-03.json",
+    "attributes-batch-04.json",
+    "attributes-batch-05.json",
+    "attributes-batch-06.json",
+    "attributes-batch-07.json",
+    "attributes-batch-08.json",
+    "attributes-batch-09.json"
+  ],
+  "sourceRestore": "Level4LightDirector.before.lua",
+  "newInstances": [
+    "game.ReplicatedStorage.SceneEffectBudget",
+    "game.StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient"
+  ],
+  "note": "Root preserves new instances or archives them under its scoped workflow; no destructive operation here."
+}

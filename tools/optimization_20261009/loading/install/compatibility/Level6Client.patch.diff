@@ -1,0 +1,49 @@
+--- Level6Client.before.luau
++++ Level6Client.proposed.luau
+@@ -885,6 +885,25 @@
+ local litBefore = {}
+ local FINALE_FOLDERS = {"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}
+ local exitLamp = {bulb = nil, base = 0, dipUntil = 0, nextDip = 0}
++-- Keep live finale baselines strong, but restore and release each removed replica.
++-- Deferred removal callbacks may run after Parent is nil; the saved values still belong to that instance.
++local function forgetFinaleInstance(item)
++	local before = litBefore[item]
++	litBefore[item] = nil
++	if before then
++		pcall(function()
++			item.Color = before[1]
++			if item:IsA("Light") then item.Brightness = before[2] end
++			if item:IsA("SpotLight") then item.Angle = before[3] end
++		end)
++	end
++	if exitLamp.bulb == item then
++		local base = exitLamp.base
++		exitLamp.bulb, exitLamp.base = nil, 0
++		pcall(function() item.Brightness = base end)
++	end
++end
++workspace.DescendantRemoving:Connect(forgetFinaleInstance)
+ task.spawn(function()
+ 	local last = os.clock()
+ 	while true do
+@@ -1160,16 +1179,17 @@
+ local rigs = setmetatable({}, {__mode = "k"})
+ 
+ local function rigOf(child)
++	local body = child:FindFirstChild("Body")
+ 	local rig = rigs[child]
+-	if rig then return rig end
+-	local body = child:FindFirstChild("Body")
++	if rig and rig.body == body and body.Parent == child then return rig end
++	rigs[child] = nil
+ 	if not body then return nil end
+ 	local bones = {}
+ 	for _, d in ipairs(body:GetDescendants()) do
+ 		if d:IsA("Bone") then bones[d.Name] = d end
+ 	end
+ 	if not bones.Hips or not bones.Head then return nil end   -- still streaming in
+-	rig = {bones = bones, last = {}, from = {}, fade = 1, t = 0, name = nil, serial = nil,
++	rig = {body = body, bones = bones, last = {}, from = {}, fade = 1, t = 0, name = nil, serial = nil,
+ 		nextTwitch = os.clock() + 3, twitchT = nil}
+ 	rigs[child] = rig
+ 	return rig

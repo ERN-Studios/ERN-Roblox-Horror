@@ -1,0 +1,34 @@
+{
+  "universeId": 10559217407,
+  "verifiedUtc": "2026-10-09T23:09:15Z",
+  "placeId": 131311258779917,
+  "readOnly": true,
+  "complete": true,
+  "archiveId": "79287173",
+  "archived": [
+    {
+      "id": "15603",
+      "owner": "ZyntraShopUI",
+      "path": "ServerStorage.OptimizationAuthoringArchive.ZyntraShopUI.Imports",
+      "descendants": 10396
+    },
+    {
+      "id": "15617",
+      "owner": "ZyntraHUD",
+      "path": "ServerStorage.OptimizationAuthoringArchive.ZyntraHUD.Imports",
+      "descendants": 1661
+    }
+  ],
+  "counts": {
+    "Level 5 Void": 620,
+    "Level 4 Cinema Blender": 254,
+    "Level2PoolroomsMap": 8
+  },
+  "effectExactMatches": 882,
+  "kind": "fresh-prepublish-authoring-read",
+  "previousRecord": "tools\\optimization_20261009\\runtime\\final-authoring-effect-check.json",
+  "previousRecordSha256": "f877b0b3652eb99c08852937e455b5b5474ef91128f2835ea64a2a8d93445d3c",
+  "nativeBackup": false,
+  "studioMutation": false,
+  "limits": "Exact current selected effect identities/properties and archived Imports counts; no full-place capture or performance claim."
+}

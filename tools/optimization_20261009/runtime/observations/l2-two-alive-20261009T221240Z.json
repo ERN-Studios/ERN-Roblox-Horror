@@ -1,0 +1,184 @@
+{
+  "utc": "2026-10-09T22:12:40Z",
+  "kind": "read-only-actual-multiplayer-round-snapshot",
+  "studioId": "4f7d4c8a-1135-4131-9e84-3d8f932b343e",
+  "side": "Server",
+  "workspace": {
+    "SelectedLevel": 2,
+    "RoundActive": true,
+    "WorldGenerated": true,
+    "Level2NewMapActive": true,
+    "Level2PumpGoal": 0,
+    "Level2Pumps": 0,
+    "Level2ValveGoal": 3,
+    "Level2Valves": 0,
+    "Level2ExitPowered": true,
+    "Level2FoamLethal": false,
+    "RoundLoadingState": "ready"
+  },
+  "players": [
+    {
+      "name": "Player1",
+      "userId": -1,
+      "living": true,
+      "health": 100,
+      "position": {
+        "y": 301.953125,
+        "x": 69252.3984375,
+        "z": 710.423828125
+      },
+      "inWorkspace": true,
+      "InRound": true
+    },
+    {
+      "name": "Player2",
+      "userId": -2,
+      "living": true,
+      "health": 100,
+      "position": {
+        "y": 303.005859375,
+        "x": 69256.3984375,
+        "z": 710.423828125
+      },
+      "inWorkspace": true,
+      "InRound": true
+    }
+  ],
+  "world": {
+    "name": "Level 2 Generated World",
+    "present": true,
+    "descendants": 30726,
+    "Level2NewMap": true,
+    "generation": 1,
+    "children": [
+      {
+        "class": "Folder",
+        "name": "Markers",
+        "path": "Workspace.Level 2 Generated World.Markers"
+      },
+      {
+        "class": "Folder",
+        "name": "Visual",
+        "path": "Workspace.Level 2 Generated World.Visual"
+      },
+      {
+        "class": "Folder",
+        "name": "Kit",
+        "path": "Workspace.Level 2 Generated World.Kit"
+      },
+      {
+        "class": "Model",
+        "name": "Collision",
+        "path": "Workspace.Level 2 Generated World.Collision"
+      },
+      {
+        "class": "Folder",
+        "name": "Lights",
+        "path": "Workspace.Level 2 Generated World.Lights"
+      },
+      {
+        "class": "Folder",
+        "name": "A2 Lion Reflection",
+        "path": "Workspace.Level 2 Generated World.A2 Lion Reflection"
+      },
+      {
+        "class": "Model",
+        "name": "Exit Slide",
+        "path": "Workspace.Level 2 Generated World.Exit Slide"
+      },
+      {
+        "class": "Folder",
+        "name": "Water FX",
+        "path": "Workspace.Level 2 Generated World.Water FX"
+      },
+      {
+        "class": "Folder",
+        "name": "A2 Skylight",
+        "path": "Workspace.Level 2 Generated World.A2 Skylight"
+      }
+    ],
+    "proximityPromptCount": 0,
+    "markers": [
+      {
+        "path": "Workspace.Level 2 Generated World.Markers.EXIT_SLIDE",
+        "name": "EXIT_SLIDE",
+        "position": {
+          "y": 339.6080017089844,
+          "x": 70097.09375,
+          "z": -462.1759948730469
+        },
+        "attributes": [],
+        "class": "Part",
+        "canCollide": false,
+        "size": {
+          "y": 1,
+          "x": 1,
+          "z": 1
+        }
+      },
+      {
+        "path": "Workspace.Level 2 Generated World.Markers.SPAWN",
+        "name": "SPAWN",
+        "position": {
+          "y": 303,
+          "x": 69256.3984375,
+          "z": 710.4240112304688
+        },
+        "attributes": [],
+        "class": "Part",
+        "canCollide": false,
+        "size": {
+          "y": 1,
+          "x": 1,
+          "z": 1
+        }
+      },
+      {
+        "path": "Workspace.Level 2 Generated World.Markers.EXIT",
+        "name": "EXIT",
+        "position": {
+          "y": 339.6080017089844,
+          "x": 70083.2265625,
+          "z": -462.3900146484375
+        },
+        "attributes": [],
+        "class": "Part",
+        "canCollide": false,
+        "size": {
+          "y": 1,
+          "x": 1,
+          "z": 1
+        }
+      }
+    ]
+  },
+  "state": [
+    {
+      "path": "ReplicatedStorage.Level 2 State",
+      "attributes": {
+        "Level2_PumpSoundDuration": 11.572244897959184,
+        "Level2_PoolFoamPhase": "Stopped",
+        "Level2_WorldDescendants": 30726,
+        "Level2_PoolFoamActive": false,
+        "Level2_Phase": "READY",
+        "Level2_PoolSlideState": "DISABLED",
+        "Level2_PoolSlidePhase": "DISABLED",
+        "Level2_PoolSlideEnabled": false,
+        "Level2_PoolFoamActiveMover": "",
+        "Level2_Generation": 1,
+        "Level2_ValveProgress": 0,
+        "Level2_PoolFoamGeneration": 0,
+        "Level2_LightingMode": "NORMAL",
+        "Level2_BuildSeconds": 0.16,
+        "Level2_PumpProgress": 0
+      },
+      "class": "Folder"
+    }
+  ],
+  "observations": {
+    "pumpsActivated": false,
+    "spawnSafetyOfHostileEntitiesMeasured": false,
+    "navigationRetriesMeasured": false,
+    "notes": "Two actual living participants; current public authored-map adapter does not run old pumps/foam controller."
+  }
+}

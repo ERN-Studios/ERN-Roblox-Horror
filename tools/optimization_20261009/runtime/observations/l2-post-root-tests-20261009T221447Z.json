@@ -1,0 +1,61 @@
+{
+  "players": [
+    {
+      "name": "Player1",
+      "position": {
+        "y": 25.241947174072266,
+        "x": 28866.54296875,
+        "z": 99.92090606689453
+      },
+      "health": 100,
+      "userId": -1,
+      "InRound": true
+    },
+    {
+      "name": "Player2",
+      "position": {
+        "y": 25.243377685546875,
+        "x": 28881.43359375,
+        "z": 98.99481201171875
+      },
+      "health": 100,
+      "userId": -2,
+      "InRound": true
+    }
+  ],
+  "workspaceAttributes": {
+    "Level2ExitPowered": false,
+    "Level2Pumps": 0,
+    "SelectedLevel": 4,
+    "Level2PumpGoal": 0,
+    "RoundActive": true,
+    "WorldGenerated": true,
+    "Level2NewMapActive": false,
+    "Level2Valves": 0,
+    "RoundLoadingState": "ready",
+    "Level4RoundActive": true,
+    "Level2ValveGoal": 3
+  },
+  "utc": "2026-10-09T22:14:47Z",
+  "lobby": [],
+  "worlds": [
+    {
+      "id": "301655",
+      "path": "Workspace.Level 4 Cinema Blender",
+      "class": "Model"
+    },
+    {
+      "id": "779989",
+      "path": "Workspace.ServerLobby",
+      "class": "Model"
+    },
+    {
+      "id": "301029",
+      "path": "ServerStorage.Level2PoolroomsMap",
+      "class": "Model"
+    }
+  ],
+  "kind": "fresh-read-only-post-l2-root-test-observation",
+  "studioId": "4f7d4c8a-1135-4131-9e84-3d8f932b343e",
+  "note": "Root had completed L2 death/spectating/normal-leave tests and entered actual public L4 before this snapshot. This snapshot verifies cleanup/next-world state, not earlier test transitions."
+}

@@ -1,0 +1,138 @@
+{
+  "kind": "bounded read-only current actual multiplayer observation",
+  "studioIds": {
+    "authoritativeEdit": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "server": "4f7d4c8a-1135-4131-9e84-3d8f932b343e",
+    "player1": "85592f54-3adf-4795-8f22-48b0ab3f8286",
+    "player2": "26cdf5be-2d38-4089-8de7-1e07c6241a88"
+  },
+  "authoritativeClient": {
+    "utc": "2026-10-09T22:20:05Z",
+    "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+    "class": "LocalScript",
+    "enabled": true,
+    "sourceBytes": 49585,
+    "editorOK": true,
+    "editorParity": true,
+    "unchangedAtReturn": true,
+    "placeId": 131311258779917,
+    "universeId": 10559217407
+  },
+  "actualClients": [
+    {
+      "utc": "2026-10-09T22:20:05Z",
+      "path": "Players.Player1.PlayerScripts.Level 4 Round Client",
+      "enabled": true,
+      "sourceExactlyMatchesAuthoritative": true,
+      "sourceBytes": 49585,
+      "unchangedAtReturn": true,
+      "route": {
+        "Level4RoundActive": true,
+        "SelectedLevel": 4,
+        "RoundActive": true
+      },
+      "state": {
+        "Level4_UsherActive": false,
+        "Level4_StarsOn": false,
+        "Level4_NotePosition": null,
+        "Level4_NavNodes": 5611,
+        "Level4_ReelsCollected": 0,
+        "Level4_BreakerEngaged": false,
+        "Level4_UsherTarget": 0,
+        "Level4_UsherState": "Dormant",
+        "Level4_PowerState": "Off",
+        "Level4_ExitUnlocked": false,
+        "Level4_SequenceProgress": 1,
+        "Level4_Phase": "Dark",
+        "Level4_ZoneCount": 38,
+        "Level4_ZoneStates": "00000000000000000000000000000000000000",
+        "Level4_BreakerHolder": 0,
+        "Level4_ZoneSerial": 2,
+        "Level4_ThreadScreen": 0,
+        "Level4_ReelRooms": "Gallery|Women's room|Concessions",
+        "Level4_Generation": 1,
+        "Level4_SequenceGoal": 4,
+        "Level4_FuseUntil": 0,
+        "Level4_ReelsLoaded": 0,
+        "Level4_ReelGoal": 3,
+        "Level4_Escalation": 0
+      },
+      "usher": "Workspace.Level4UsherLocal",
+      "usherRoot": {
+        "transparency": 1,
+        "position": [
+          0.03530000150203705,
+          4.713900089263916,
+          -0.1932000070810318
+        ]
+      },
+      "animation": {
+        "bytes": 36273,
+        "path": "ReplicatedStorage.Level 4 Usher Animations"
+      }
+    },
+    {
+      "utc": "2026-10-09T22:20:38Z",
+      "path": "Players.Player2.PlayerScripts.Level 4 Round Client",
+      "enabled": true,
+      "sourceExactlyMatchesAuthoritative": true,
+      "sourceBytes": 49585,
+      "unchangedAtReturn": true,
+      "route": {
+        "roundActive": true,
+        "level": 4,
+        "inRound": true,
+        "active": true
+      },
+      "guiEnabled": true,
+      "usherPresent": true
+    }
+  ],
+  "sender": {
+    "utc": "2026-10-09T22:20:05Z",
+    "proxy": [
+      {
+        "attrs": {
+          "State": "Dormant",
+          "ZyntraDetectorActive": false,
+          "ZyntraDetectorLevel": 4,
+          "UsherHeight": 7.6
+        },
+        "path": "Workspace.Level 4 Cinema Blender.Level 4 Round Runtime.L4Usher",
+        "position": [
+          0,
+          -600,
+          0
+        ]
+      }
+    ],
+    "sourceClips": [
+      "280:\tend\n281:\tproxy.PrimaryPart = root\n282:\tproxy.ModelStreamingMode = Enum.ModelStreamingMode.Persistent\n283:\tproxy:SetAttribute(\"UsherHeight\", C.Height)\n284:\tproxy:SetAttribute(\"State\", state)\n285:\tproxy:SetAttribute(\"ZyntraDetectorLevel\", Configuration.Level)\n286:\tproxy:SetAttribute(\"ZyntraDetectorActive\", false)\n287:\tgame:GetService(\"CollectionService\"):AddTag(proxy, \"ZyntraDetectableEntity\")\n288:\tproxy.Parent = manifest.Runtime\n289:end\n290:\n291:local function feetCFrame()\n292:\tlocal flat = Vector3.new(facing.X, 0, facing.Z)\n293:\tif flat.Magnitude < 0.01 then flat = Vector3.new(0, 0, -1) end\n294:\treturn CFrame.lookAt(position, position + flat.Unit)\n295:end\n296:\n297:local function syncProxy(force)\n298:\tif not root then return end\n299:\tlocal cf = feetCFrame()\n300:\troot.CFrame = cf + Vector3.new(0, hidden and -600 or ROOT_HEIGHT, 0)\n301:\tlocal detectable = active and not hidden\n302:\tif proxy:GetAttribute(\"ZyntraDetectorActive\") ~= detectable then proxy:SetAttribute(\"ZyntraDetectorActive\", detectable) end\n303:\thead.CFrame = cf + Vector3.new(0, hidden and -600 or C.Height - 0.7, 0)\n304:\tlocal t = os.clock()\n305:\tif motionRemote and (force or t - lastMotion >= 1 / C.MotionHz) then\n306:\t\tlastMotion = t\n307:\t\tmotionRemote:FireAllClients(cf, STATES[state] or 0, hidden, now())\n308:\tend\n309:end",
+      "739:\t\tend\n740:\t\tif t >= nextHopAt and math.random() < 0.35 then\n741:\t\t\tlocal spot = pickHopNode(focus, C.HopMinPlayerDistance, C.HopMaxTargetDistance)\n742:\t\t\tif spot then hopTo(spot, \"wander\", C.HopMinPlayerDistance); return end\n743:\t\tend\n744:\t\tlocal spot = pickHopNode(position:Lerp(focus, 0.5), 10, 60)\n745:\t\tif spot then goTowards(nodes[spot].Pos) end\n746:\tend\n747:end\n748:\n749:local function step(dt)\n750:\tif hidden or not active or capture or shush or state == \"Stunned\" or state == \"Wait\" or not validRound() then\n751:\t\tsyncProxy(false)\n752:\t\treturn\n753:\tend\n754:\tif path and pathIndex <= #path then\n755:\t\tlocal remaining = speedFor() * dt\n756:\t\twhile remaining > 0 and path and pathIndex <= #path do\n757:\t\t\tlocal nextI = path[pathIndex]\n758:\t\t\tif not nodeDark(nextI) then path = nil; nextReplanAt = 0; break end\n759:\t\t\tlocal goal = nodes[nextI].Pos\n760:\t\t\tlocal delta = goal - position\n761:\t\t\tlocal d = delta.Magnitude\n762:\t\t\tif d <= remaining then\n763:\t\t\t\tposition = goal\n764:\t\t\t\tcurrent = nextI\n765:\t\t\t\tpathIndex += 1\n766:\t\t\t\tremaining -= d\n767:\t\t\telse\n768:\t\t\t\tposition += delta / d * remaining\n769:\t\t\t\tif Vector3.new(delta.X, 0, delta.Z).Magnitude > 0.05 then facing = facing:Lerp(delta.Unit, math.min(1, dt * 8)) end\n770:\t\t\t\tremaining = 0\n771:\t\t\tend\n772:\t\tend\n773:\tend\n774:\tsyncProxy(false)\n775:end\n776:\n777:-- ---------------------------------------------------------------- zone hook: a blink is an opportunity\n778:\n779:local function onZoneChanged(zoneId, on)\n780:\tif on or not active or hidden or capture or shush or finale then return end\n781:\tif now() < nextHopAt or state == \"Stunned\" then return end\n782:\t-- a zone just went dark near its target (or any player): appear in it\n783:\tlocal r = target and select(3, bodyOf(target))\n784:\tif not r then return end\n785:\tlocal zoneCandidates = {}\n786:\tlocal positions = playerPositions()\n787:\tfor i, n in ipairs(nodes) do\n788:\t\tif n.Zone == zoneId and nodeDark(i) then\n789:\t\t\tlocal pd = minDistance(n.Pos, positions)\n790:\t\t\tif pd >= BLINK_HOP_MIN_DISTANCE and (n.Pos - r.Position).Magnitude <= 40 then\n791:\t\t\t\tzoneCandidates[#zoneCandidates + 1] = i\n792:\t\t\tend\n793:\t\tend\n794:\tend\n795:\tif #zoneCandidates > 0 and math.random() < 0.6 then\n796:\t\thopTo(zoneCandidates[math.random(1, #zoneCandidates)], \"blink\", BLINK_HOP_MIN_DISTANCE)\n797:\tend\n798:end\n799:\n800:-- ---------------------------------------------------------------- player noise intake\n801:-- NoiseReporter fires Remotes.ReportNoise (\"walk\"/\"sprint\") at 5 Hz on levels 1, 2 and 4. EntityAI is disabled in\n802:-- this round, so the Usher drains it. Module scope, once (like Pool Foam's intake): a session-scoped connection\n803:-- would leave the remote undrained whenever Start bailed. The server decides position and plausibility.\n804:do\n805:\tlocal remotes = ReplicatedStorage:FindFirstChild(\"Remotes\")\n806:\tlocal report = remotes and remotes:FindFirstChild(\"ReportNoise\")\n807:\tif report and report:IsA(\"RemoteEvent\") then\n808:\t\tlocal lastReport = {}\n809:\t\treport.OnServerEvent:Connect(function(player, stateName)\n810:\t\t\tif not active or not objectives or (stateName ~= \"walk\" and stateName ~= \"sprint\") then return end\n811:\t\t\tif workspace:GetAttribute(\"SelectedLevel\") ~= Configuration.Level then return end\n812:\t\t\tlocal t = os.clock()\n813:\t\t\tif (lastReport[player] or 0) > t then return end\n814:\t\t\tlastReport[player] = t + 0.15\n815:\t\t\tif player:GetAttribute(\"InRound\") ~= true or player:GetAttribute(\"Escaped\") == true then return end\n816:\t\t\tlocal _, _, r = bodyOf(player)\n817:\t\t\tif not r or r.AssemblyLinearVelocity.Magnitude < 2 or objectives.IsHidden(player) then return end\n818:\t\t\tNoiseRegistry.Add(r.Position, stateName, player)\n819:\t\tend)\n820:\t\tPlayers.PlayerRemoving:Connect(function(player) lastReport[player] = nil end)\n821:\tend\n822:end\n823:\n824:-- ---------------------------------------------------------------- public API\n825:\n826:function Usher.Start(m, generation, lightDirector, objectiveController)",
+      "838:\ttable.clear(battery); table.clear(refills); table.clear(batteryBody)\n839:\tbuildProxy()\n840:\tactive, finale, hidden = false, false, true\n841:\tsetState(\"Dormant\")\n842:\tif stateFolder then\n843:\t\tstateFolder:SetAttribute(\"Level4_UsherActive\", false)\n844:\t\tstateFolder:SetAttribute(\"Level4_UsherState\", \"Dormant\")\n845:\tend\n846:\tlights.OnZoneChanged = onZoneChanged\n847:\tlocal accum = 0\n848:\tconnect(RunService.Heartbeat, function(dt)\n849:\t\tif session == 0 then return end\n850:\t\tstep(dt)\n851:\t\taccum += dt\n852:\t\tif accum >= C.ThinkSeconds then\n853:\t\t\tlocal elapsed = accum\n854:\t\t\taccum = 0\n855:\t\t\tlocal ok, err = pcall(think, elapsed)\n856:\t\t\tif not ok then warn(\"[Level4 Usher] think failed: \" .. tostring(err)) end\n857:\t\tend\n858:\tend)\n859:\tconnect(PlayerProtection.Activated, function(player, character)\n860:\t\tif capture and capture.Player == player and capture.Character == character then finishCapture(capture, true) end\n861:\t\tif shush and shush.Player == player then shush = nil end\n862:\t\tif target == player then target = nil end\n863:\tend)\n864:\tconnect(Players.PlayerRemoving, function(player)\n865:\t\tif capture and capture.Player == player then finishCapture(capture, true) end\n866:\t\tbeamers[player] = nil\n867:\t\tbattery[player], refills[player], batteryBody[player] = nil, nil, nil\n868:\t\tif target == player then target = nil end\n869:\tend)\n870:\treturn count\n871:end\n872:\n873:-- called when the lights start failing (after the \"woooow\")\n874:function Usher.Activate()\n875:\tif active then return end\n876:\tlocal mySession = session\n877:\ttask.delay(C.ActivateGraceSeconds, function()\n878:\t\tif session ~= mySession then return end\n879:\t\tactive = true\n880:\t\thidden = true\n881:\t\tnextHopAt = 0\n882:\t\tif stateFolder then stateFolder:SetAttribute(\"Level4_UsherActive\", true) end\n883:\t\tsetState(\"Hop\")\n884:\tend)\n885:end\n886:\n887:function Usher.Finale()\n888:\tfinale = true\n889:\tnextHopAt = 0\n890:\tif not active then\n891:\t\tactive = true\n892:\t\thidden = true\n893:\t\tif stateFolder then stateFolder:SetAttribute(\"Level4_UsherActive\", true) end\n894:\t\tsetState(\"Hop\")\n895:\tend"
+    ]
+  },
+  "animation": {
+    "utc": "2026-10-09T22:20:38Z",
+    "path": "ReplicatedStorage.Level 4 Usher Animations",
+    "sourceBytes": 36273,
+    "unchanged": true,
+    "potentialYieldSearchMatches": [
+      "3:return { Fps=30, Joints={\"Hips\",\"Spine02\",\"Spine01\",\"Spine\",\"neck\",\"Head\",\"head_end\",\"headfront\",\"LeftShoulder\",\"LeftArm\",\"LeftForeArm\",\"LeftHand\",\"RightShoulder\",\"RightArm\",\"RightForeArm\",\"RightHand\",\"LeftUpLeg\",\"LeftLeg\",\"LeftFoot\",\"LeftToeBase\",\"RightUpLeg\",\"RightLeg\",\"RightFoot\",\"RightToeBase\"}, Clips={"
+    ]
+  },
+  "console": {
+    "player1ObservedAt": "2026-10-09T22:18:10Z and repeated after 22:20:38Z",
+    "player1Latest": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 9.8 s, 35 assets, 0 failed\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (1 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (2 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (4 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (8 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (16 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (32 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (64 events dropped)",
+    "player2ObservedAt": "2026-10-09T22:18:10Z and 22:20:38Z",
+    "player2Latest": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 9.2 s, 35 assets, 0 failed\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (1 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (2 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (4 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (8 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (16 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (32 events dropped)\nRemote event invocation discarded event for ReplicatedStorage.Level 4 Remotes.UsherMotion; did you forget to implement OnClientEvent? (64 events dropped)",
+    "highestReportedDropThresholdBoth": 64,
+    "noClientScriptStackTraceObserved": true
+  },
+  "classification": {
+    "observed": "Existing client listener starts after round gating/model setup; existing server broadcasts motion every 20 Hz even when hidden/Dormant. Both clients have identical enabled scripts and stable log threshold.",
+    "inference": "Warnings are consistent with startup before listener attachment. They do not establish a persistent missing listener or optimization regression.",
+    "limitation": "Active visible Usher motion, PowerUp/blackout progression, and complete switch route remain unverified. Stable log threshold is supporting evidence, not direct inspection of engine event connections."
+  },
+  "writesOrRequireCalls": "none"
+}

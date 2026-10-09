@@ -1,0 +1,30 @@
+{
+  "backupPath": null,
+  "backupPolicy": "Explicit owner instruction: do not take a backup (2026-10-09)",
+  "backupSha256": null,
+  "scripts": [
+    {
+      "bytes": 41930,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "verifiedUtc": "2026-10-09T21:56:42Z",
+      "otherOriginalsChecked": 212,
+      "beforeSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "afterSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "bytes": 66128,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "editorMatches": true,
+      "class": "LocalScript",
+      "verifiedUtc": "2026-10-09T21:56:46Z",
+      "otherOriginalsChecked": 212,
+      "beforeSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "afterSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    }
+  ],
+  "complete": true,
+  "mirrorsExported": false,
+  "published": false
+}

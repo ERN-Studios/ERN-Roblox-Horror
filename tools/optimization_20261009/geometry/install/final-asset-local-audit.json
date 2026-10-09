@@ -1,0 +1,23 @@
+{
+  "exact": true,
+  "nativeRows": 6996,
+  "uniqueNormalizedCurrentIds": 6996,
+  "fullDebugIdStringsAlsoExact": 6996,
+  "exactNativeFingerprintSha256Matches": 6996,
+  "nativePages": 35,
+  "pageHashesAndOrderExact": true,
+  "rootsStableAcrossAllBatches": true,
+  "rootCounts": {
+    "level6": 20318,
+    "archive": 267,
+    "collision": 23332
+  },
+  "targetKinds": {
+    "exactMergeProxy": 124,
+    "archivedMergedOriginal": 267,
+    "renderFidelity": 6605
+  },
+  "finishedUtc": "2026-10-09T22:38:30.892648+00:00",
+  "finalReceiptSha256": "32711c3d41fb68e441aaaee67e348b03985c8cfb09a08bcffda052af763f093a",
+  "studioAccessPerformed": false
+}

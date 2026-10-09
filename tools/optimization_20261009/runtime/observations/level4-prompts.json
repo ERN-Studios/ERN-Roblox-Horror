@@ -1,0 +1,106 @@
+{
+  "kind": "actual-multiplayer-normal-prompt-smoke",
+  "startedUtc": "2026-10-09T22:15:42.880319+00:00",
+  "testRelocation": true,
+  "fullWalkthrough": false,
+  "editMutation": false,
+  "steps": [
+    {
+      "name": "Note",
+      "relocation": {
+        "target": [
+          28801,
+          26.899999618530273,
+          223
+        ],
+        "prompt": "Workspace.Level 4 Cinema Blender.Level 4 Round Runtime.L4Note.Paper.L4PromptAnchor.ProximityPrompt",
+        "floor": "Workspace.Level 4 Cinema Blender.Collision.Occluder"
+      },
+      "clientInput": {
+        "distance": 3.7492661476135254,
+        "prompt": "Workspace.Level 4 Cinema Blender.Level 4 Round Runtime.L4Note.Paper.L4PromptAnchor.ProximityPrompt"
+      },
+      "serverState": {
+        "Level4_UsherActive": false,
+        "Level4_StarsOn": false,
+        "Level4_NotePosition": null,
+        "Level4_NavNodes": 5611,
+        "Level4_ReelsCollected": 0,
+        "Level4_BreakerEngaged": false,
+        "Level4_UsherTarget": 0,
+        "Level4_UsherState": "Dormant",
+        "Level4_PowerState": "Off",
+        "Level4_ExitUnlocked": false,
+        "Level4_SequenceProgress": 0,
+        "Level4_Phase": "Dark",
+        "Level4_ZoneCount": 38,
+        "Level4_ReelGoal": 3,
+        "Level4_BreakerHolder": 0,
+        "Level4_ZoneSerial": 2,
+        "Level4_ZoneStates": "00000000000000000000000000000000000000",
+        "Level4_ReelRooms": "Gallery|Women's room|Concessions",
+        "Level4_Generation": 1,
+        "Level4_SequenceGoal": 4,
+        "Level4_FuseUntil": 0,
+        "Level4_ReelsLoaded": 0,
+        "Level4_ThreadScreen": 0,
+        "Level4_Escalation": 0
+      }
+    },
+    {
+      "name": "A3",
+      "relocation": {
+        "target": [
+          28794.30078125,
+          26.899999618530273,
+          100.51000213623047
+        ],
+        "prompt": "Workspace.Level 4 Cinema Blender.Props.PowerCabinet_A.Breaker_A3.Handle.L4PromptAnchor.ProximityPrompt",
+        "floor": "Workspace.Level 4 Cinema Blender.Collision.Occluder"
+      },
+      "clientInput": {
+        "distance": 2.920553684234619,
+        "prompt": "Workspace.Level 4 Cinema Blender.Props.PowerCabinet_A.Breaker_A3.Handle.L4PromptAnchor.ProximityPrompt"
+      },
+      "serverState": {
+        "Level4_UsherActive": false,
+        "Level4_StarsOn": false,
+        "Level4_NotePosition": null,
+        "Level4_NavNodes": 5611,
+        "Level4_ReelsCollected": 0,
+        "Level4_BreakerEngaged": false,
+        "Level4_UsherTarget": 0,
+        "Level4_UsherState": "Dormant",
+        "Level4_PowerState": "Off",
+        "Level4_ExitUnlocked": false,
+        "Level4_SequenceProgress": 1,
+        "Level4_Phase": "Dark",
+        "Level4_ZoneCount": 38,
+        "Level4_ReelGoal": 3,
+        "Level4_BreakerHolder": 0,
+        "Level4_ZoneSerial": 2,
+        "Level4_ZoneStates": "00000000000000000000000000000000000000",
+        "Level4_ReelRooms": "Gallery|Women's room|Concessions",
+        "Level4_Generation": 1,
+        "Level4_SequenceGoal": 4,
+        "Level4_FuseUntil": 0,
+        "Level4_ReelsLoaded": 0,
+        "Level4_ThreadScreen": 0,
+        "Level4_Escalation": 0
+      }
+    }
+  ],
+  "baseline": {
+    "text": "POWER\nA3  >  B3  >  B1  >  A1\n\n- in this order -",
+    "sequence": [
+      "A3",
+      "B3",
+      "B1",
+      "A1"
+    ],
+    "power": "Off"
+  },
+  "complete": false,
+  "error": "{'Level4_UsherActive': False, 'Level4_StarsOn': False, 'Level4_NotePosition': None, 'Level4_NavNodes': 5611, 'Level4_ReelsCollected': 0, 'Level4_BreakerEngaged': False, 'Level4_UsherTarget': 0, 'Level4_UsherState': 'Dormant', 'Level4_PowerState': 'Off', 'Level4_ExitUnlocked': False, 'Level4_SequenceProgress': 1, 'Level4_Phase': 'Dark', 'Level4_ZoneCount': 38, 'Level4_ReelGoal': 3, 'Level4_BreakerHolder': 0, 'Level4_ZoneSerial': 2, 'Level4_ZoneStates': '00000000000000000000000000000000000000', 'Level4_ReelRooms': \"Gallery|Women's room|Concessions\", 'Level4_Generation': 1, 'Level4_SequenceGoal': 4, 'Level4_FuseUntil': 0, 'Level4_ReelsLoaded': 0, 'Level4_ThreadScreen': 0, 'Level4_Escalation': 0}",
+  "finishedUtc": "2026-10-09T22:15:44.938978+00:00"
+}

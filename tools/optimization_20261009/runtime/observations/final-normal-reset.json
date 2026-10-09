@@ -1,0 +1,38 @@
+{
+  "studioId": "9d580216-35c6-42af-b4ed-6f9bcd271304",
+  "datamodel": "Server",
+  "label": "final-normal-reset",
+  "code": "tools/optimization_20261009/runtime/final_reset_read.luau",
+  "startedUtc": "2026-10-09T22:35:34.802439+00:00",
+  "result": {
+    "players": [
+      {
+        "inRound": false,
+        "health": 100,
+        "name": "Player1",
+        "position": [
+          220.587890625,
+          34.13671875,
+          -860.919921875
+        ]
+      },
+      {
+        "inRound": false,
+        "health": 100,
+        "name": "Player2",
+        "position": [
+          220.86328125,
+          34.13671875,
+          -858.46875
+        ]
+      }
+    ],
+    "mapParkedInServerStorage": true,
+    "immediateParkingNotAssumed": true,
+    "kind": "actual-final-normal-reset",
+    "level6InUse": false,
+    "complete": true
+  },
+  "completed": true,
+  "finishedUtc": "2026-10-09T22:35:34.973381+00:00"
+}

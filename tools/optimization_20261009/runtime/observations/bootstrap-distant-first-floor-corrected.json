@@ -1,0 +1,212 @@
+{
+  "kind": "actual-distant-first-spectate-smoke",
+  "startedUtc": "2026-10-09T23:02:32.151167+00:00",
+  "studioIds": {
+    "server": "fd916a7c-abb7-43de-be41-1c2a6fc7f45d",
+    "client1": "b9e75db6-98fa-437b-b2fc-c63a057b6633",
+    "client2": "205365d5-a0e8-4527-aa08-bf711263cd8a"
+  },
+  "editMutation": false,
+  "newInstances": false,
+  "newProbes": false,
+  "runtimeInputs": [
+    "safe actual Player2 relocation",
+    "intentional delayed Player1 ordinary death",
+    "optional Client1-only HRP/Head names borrowed"
+  ],
+  "normalQueueAndLeaveRootOwned": true,
+  "naturalStreamOutPass": false,
+  "fpsOrPerformancePass": false,
+  "connectionInitialized": true,
+  "moveRequested": true,
+  "relocation": {
+    "ok": true,
+    "player2Health": 100,
+    "targetFloor": "Workspace.Level 2 Generated World.Collision.Part",
+    "player2Position": [
+      69999.140625,
+      174.90000915527344,
+      181.2530059814453
+    ],
+    "before": {
+      "angularVelocity": [
+        0,
+        0,
+        0
+      ],
+      "linearVelocity": [
+        0,
+        0.00244140625,
+        0
+      ],
+      "rootId": "883514",
+      "characterId": "883019",
+      "pivot": [
+        69256.390625,
+        299.5235595703125,
+        710.3273315429688,
+        -1,
+        8.742278367890322e-08,
+        -8.74227694680485e-08,
+        8.74227694680485e-08,
+        1,
+        8.742277657347586e-08,
+        8.742278367890322e-08,
+        8.74227694680485e-08,
+        -1
+      ],
+      "rootPosition": [
+        69256.3984375,
+        303.009765625,
+        710.423828125
+      ]
+    },
+    "player2UserId": -2,
+    "separationStuds": 924.0050659179688,
+    "player1UserId": -1,
+    "target": [
+      69999.140625,
+      174.90000915527344,
+      181.2530059814453
+    ],
+    "partialRestore": false,
+    "moveAttempted": true
+  },
+  "targetClientArrival": {
+    "targetDistance": 0.5909271836280823,
+    "health": 100,
+    "position": [
+      69999.140625,
+      174.30908203125,
+      181.2532501220703
+    ],
+    "floorNormalY": 1,
+    "ok": true,
+    "floor": "Workspace.Level 2 Generated World.Collision.Part"
+  },
+  "naturalPreFixtureAvailability": {
+    "rootPresent": false,
+    "headPresent": false,
+    "humanoidPresent": true,
+    "humanoidHealth": 100,
+    "characterId": "883019",
+    "characterPresent": true,
+    "requiredBodyNaturallyMissing": true,
+    "clientControllerBytes": 20082
+  },
+  "deathScheduleRequested": true,
+  "deathSchedule": {
+    "player2RootName": "HumanoidRootPart",
+    "deathDueServerTime": 1791586955.802679,
+    "extraReplicationFocus": false,
+    "manualSpectateRemote": false,
+    "player2HeadName": "Head",
+    "scheduled": true,
+    "player1HumanoidId": "882507"
+  },
+  "actualClientFixture": {
+    "selectionPassed": true,
+    "manualSpectateRemote": false,
+    "nameCleanup": {
+      "restored": [],
+      "conflicts": [],
+      "complete": true
+    },
+    "artificialNameAbsence": false,
+    "renamed": [],
+    "editMutation": false,
+    "selectedWhileRequiredBodyMissing": true,
+    "extraReplicationFocus": false,
+    "candidateResponses": [
+      {
+        "userIds": [
+          -2
+        ],
+        "serial": 1,
+        "serverTime": 1791586955.9469
+      }
+    ],
+    "complete": true,
+    "camera": {
+      "floorPosition": [
+        69999.140625,
+        171.3000030517578,
+        181.2529296875
+      ],
+      "targetRoot": [
+        69999.140625,
+        174.310546875,
+        181.2529296875
+      ],
+      "distanceToHead": 0.09906494617462158,
+      "position": [
+        69999.1171875,
+        175.8717041015625,
+        181.417724609375
+      ],
+      "floor": "Workspace.Level 2 Generated World.Collision.Part",
+      "targetHealth": 100,
+      "type": "Scriptable",
+      "targetHead": [
+        69999.1328125,
+        175.9695281982422,
+        181.4173126220703
+      ]
+    },
+    "cameraPassed": true,
+    "fixtureMode": "natural-missing-required-replica-parts",
+    "selectionEvents": [
+      {
+        "rootMissing": true,
+        "target": -2,
+        "humanoidMissing": false,
+        "serverTime": 1791586955.947415,
+        "headMissing": true
+      }
+    ],
+    "spectatorCount": 1,
+    "targetUserId": -2,
+    "kind": "actual-distant-first-spectate",
+    "afterBorrow": {
+      "rootPresent": false,
+      "headPresent": false,
+      "humanoidPresent": true,
+      "humanoidHealth": 100,
+      "characterPresent": true
+    },
+    "naturalBefore": {
+      "rootPresent": false,
+      "headPresent": false,
+      "humanoidPresent": true,
+      "humanoidHealth": 100,
+      "characterPresent": true
+    }
+  },
+  "actualServerAfter": {
+    "ok": true,
+    "player1InRound": true,
+    "serverRootName": "HumanoidRootPart",
+    "player2CharacterId": "883019",
+    "ordinaryLeaveStillRootOwned": true,
+    "player2InRound": true,
+    "player1Health": 0,
+    "serverHeadName": "Head",
+    "player2RootId": "883514",
+    "targetSpectatorCount": 1,
+    "player2Health": 100
+  },
+  "scenarioPassed": true,
+  "targetPositionCleanup": {
+    "restored": true,
+    "characterId": "883019",
+    "player2Health": 100,
+    "position": [
+      69256.3984375,
+      303.009765625,
+      710.423828125
+    ]
+  },
+  "nameCleanupVerified": true,
+  "complete": true,
+  "finishedUtc": "2026-10-09T23:02:36.235636+00:00"
+}

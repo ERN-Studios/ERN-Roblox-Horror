@@ -1,0 +1,35 @@
+{
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "records": [
+    {
+      "bytes": 41458,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "instanceId": "1_31079",
+      "editorOk": true,
+      "class": "LocalScript",
+      "parity": true,
+      "lines": 1075,
+      "datamodel": "Edit",
+      "baseline": "Level2Sound.before.luau",
+      "baselineSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "proposal": "Level2Sound.proposed.luau",
+      "proposalBytes": 41930,
+      "proposalSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "bytes": 65353,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "instanceId": "1_31113",
+      "editorOk": true,
+      "class": "LocalScript",
+      "parity": true,
+      "lines": 1382,
+      "datamodel": "Edit",
+      "baseline": "Level6Client.before.luau",
+      "baselineSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "proposal": "Level6Client.proposed.luau",
+      "proposalBytes": 66128,
+      "proposalSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    }
+  ]
+}

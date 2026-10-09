@@ -1,0 +1,167 @@
+{
+  "startedUtc": "2026-10-09T22:22:18.965129+00:00",
+  "kind": "actual-client-budget-controlled-light-smoke",
+  "normalPowerObjectivePassed": false,
+  "editMutation": false,
+  "steps": [
+    {
+      "label": "authoritative-on",
+      "server": [
+        {
+          "id": "394930",
+          "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+          "enabled": true,
+          "wanted": true
+        },
+        {
+          "id": "394935",
+          "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+          "enabled": true,
+          "wanted": true
+        }
+      ],
+      "client": {
+        "lights": [
+          {
+            "enabled": true,
+            "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+            "distance": 238.29058837890625,
+            "range": 37.439998626708984,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+            "distance": 508.3047180175781,
+            "range": 18.719999313354492,
+            "wanted": true
+          }
+        ],
+        "disabled": false
+      }
+    },
+    {
+      "label": "local-budget-disabled-restores-authority",
+      "server": [
+        {
+          "id": "394930",
+          "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+          "enabled": true,
+          "wanted": true
+        },
+        {
+          "id": "394935",
+          "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+          "enabled": true,
+          "wanted": true
+        }
+      ],
+      "client": {
+        "lights": [
+          {
+            "enabled": true,
+            "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+            "distance": 238.29400634765625,
+            "range": 37.439998626708984,
+            "wanted": true
+          },
+          {
+            "enabled": true,
+            "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+            "distance": 508.30810546875,
+            "range": 18.719999313354492,
+            "wanted": true
+          }
+        ],
+        "disabled": true
+      }
+    },
+    {
+      "label": "budget-reenabled",
+      "server": [
+        {
+          "id": "394930",
+          "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+          "enabled": true,
+          "wanted": true
+        },
+        {
+          "id": "394935",
+          "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+          "enabled": true,
+          "wanted": true
+        }
+      ],
+      "client": {
+        "lights": [
+          {
+            "enabled": true,
+            "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+            "distance": 238.29879760742188,
+            "range": 37.439998626708984,
+            "wanted": true
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+            "distance": 508.31298828125,
+            "range": 18.719999313354492,
+            "wanted": true
+          }
+        ],
+        "disabled": false
+      }
+    },
+    {
+      "label": "authoritative-off-while-locally-suppressed",
+      "server": [
+        {
+          "id": "394930",
+          "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+          "enabled": false,
+          "wanted": false
+        },
+        {
+          "id": "394935",
+          "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+          "enabled": false,
+          "wanted": false
+        }
+      ],
+      "client": {
+        "lights": [
+          {
+            "enabled": false,
+            "path": "Workspace.Level 4 Cinema Blender.Props.FlickerLens.L4C_L_Concourse_f0.PointLight",
+            "distance": 238.29515075683594,
+            "range": 37.439998626708984,
+            "wanted": false
+          },
+          {
+            "enabled": false,
+            "path": "Workspace.Level 4 Cinema Blender.Props.NeonFlicker.L4D_fl_acove_3589_13.PointLight",
+            "distance": 508.3089599609375,
+            "range": 18.719999313354492,
+            "wanted": false
+          }
+        ],
+        "disabled": false
+      }
+    }
+  ],
+  "before": [
+    {
+      "id": "394930",
+      "wanted": false,
+      "enabled": false
+    },
+    {
+      "id": "394935",
+      "wanted": false,
+      "enabled": false
+    }
+  ],
+  "complete": true,
+  "borrowedStateRestored": true,
+  "finishedUtc": "2026-10-09T22:22:22.392050+00:00"
+}

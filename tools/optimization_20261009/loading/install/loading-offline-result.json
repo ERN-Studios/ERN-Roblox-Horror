@@ -1,0 +1,9 @@
+{
+  "kind": "offline-contract",
+  "interpreter": "G:/Roblox/MongoTV/_local/optimization-20261009/luau-0.741/luau.exe",
+  "source_sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+  "stdout": "loading policy contract checks: 51",
+  "native_probe_run": false,
+  "gameplay_run": false,
+  "actual_asset_fetches": false
+}

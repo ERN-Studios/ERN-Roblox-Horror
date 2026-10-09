@@ -1,0 +1,25 @@
+{
+  "kind": "native-prepublish-studio-ui-readback",
+  "observedUtc": "2026-10-09 23:09:40 UTC",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "nativeWindowId": 220008602,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "mode": "Edit",
+  "rootCreatedTestWindowsRemaining": 0,
+  "originalOwnerPlayStopped": false,
+  "thirdTestEndedVia": "Server 39983318 Test > End Session after normal round leave and healthy lobby reset",
+  "nativePropertyReadbacks": {
+    "StreamingEnabled": true,
+    "StreamingTargetRadius": 384,
+    "StreamingMinRadius": 64,
+    "ModelStreamingBehavior": "Improved",
+    "StreamOutBehavior": "Opportunistic",
+    "StreamingIntegrityMode": "PauseOutsideLoadedArea"
+  },
+  "observationMethod": "@oai/sky native Workspace Properties filtered readbacks and MCP get_studio_state. No property writes in this final check.",
+  "newNativeBackup": false,
+  "published": false,
+  "complete": true,
+  "limits": "Sequential UI observations; not an atomic publishing lock or performance benchmark."
+}

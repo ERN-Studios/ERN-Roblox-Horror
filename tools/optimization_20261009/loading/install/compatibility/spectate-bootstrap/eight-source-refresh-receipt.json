@@ -1,0 +1,997 @@
+{
+  "startedUtc": "2026-10-09T23:06:48.837867+00:00",
+  "apply": true,
+  "complete": true,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "gitStaged": false,
+  "gitCommitted": false,
+  "historicalSevenManifestSha256": "1fa980cf4c72c49699382da77d89809dd0d63c49a9b55e5905ff1ff657d09005",
+  "historicalSevenGameManagerRow": {
+    "path": "ServerScriptService.GameManager",
+    "parentPath": "ServerScriptService",
+    "instanceId": "1_408341",
+    "class": "Script",
+    "parentId": "1_409634",
+    "reviewedCandidateMatches": true,
+    "segments": [
+      "ServerScriptService",
+      "GameManager"
+    ],
+    "parentClass": "ServerScriptService",
+    "editorParity": true,
+    "rawBytes": 192559,
+    "name": "GameManager",
+    "rawFile": "tools/optimization_20261009/verified-export/ServerScriptService/GameManager.Script.lua",
+    "expectedRepositoryPath": "ServerScriptService/GameManager.Script.lua",
+    "rawSourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+    "reviewedCandidateSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+    "rawUtf8Verified": true,
+    "chunks": [
+      {
+        "offset": 0,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 4096,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 8192,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 12288,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 16384,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 20480,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 24576,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 28672,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 32768,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 36864,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 40960,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 45056,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 49152,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 53248,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 57344,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 61440,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 65536,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 69632,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 73728,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 77824,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 81920,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 86016,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 90112,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 94208,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 98304,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 102400,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 106496,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 110592,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 114688,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 118784,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 122880,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 126976,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 131072,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 135168,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 139264,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 143360,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 147456,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 151552,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 155648,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 159744,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 163840,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 167936,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 172032,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 176128,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 180224,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 184320,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 188416,
+        "rawBytes": 4096,
+        "exactSourceEditorIdentityCas": true
+      },
+      {
+        "offset": 192512,
+        "rawBytes": 47,
+        "exactSourceEditorIdentityCas": true
+      }
+    ],
+    "runtimeRepositoryMirrorWritten": false
+  },
+  "reviewedTwoSourceManifestSha256": "c3316f8671970653a03a7f550d483de932339760f1ccc0208bbc92eef7cdf258",
+  "globalBeforeSha256": "0a9b6298857adc855fd6c0862bc569a46b25257f6e501319e17f42092c6f2668",
+  "globalShapePreflightPassed": true,
+  "plannedGlobalSourceChanges": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "beforeSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "afterSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "beforeSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "afterSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "beforeSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "afterSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "beforeSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "afterSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "beforeSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "afterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "beforeSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "afterSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "beforeSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "afterSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "beforeSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "afterSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    }
+  ],
+  "localCopies": [
+    {
+      "path": "ServerScriptService/GameManager.Script.lua",
+      "localBeforeExists": true,
+      "localBeforeRawSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "localBeforeRawBytes": 192559,
+      "localBeforeCanonicalSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "acceptedLocalState": "exact-native-before",
+      "nativeAfterSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "nativeAfterBytes": 194825,
+      "capturedRawFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/ServerScriptService/GameManager.Script.lua",
+      "localBeforePreservation": "Exact raw hash/byte-count record only; owner instructed no backups",
+      "copied": true,
+      "copiedRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "localBeforeExists": true,
+      "localBeforeRawSha256": "253b915c85055e82e903fd2baac29e425c4a46926f27b7be065d0d4e0e7fb2a1",
+      "localBeforeRawBytes": 18666,
+      "localBeforeCanonicalSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "acceptedLocalState": "native-before-with-CRLF-only",
+      "nativeAfterSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "nativeAfterBytes": 20082,
+      "capturedRawFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "localBeforePreservation": "Exact raw hash/byte-count record only; owner instructed no backups",
+      "copied": true,
+      "copiedRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    }
+  ],
+  "historicalReceiptsOverwritten": false,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "nativeBegin": {
+    "verifiedUtc": "2026-10-09T23:06:48Z",
+    "pins": [
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "parentPath": "ReplicatedFirst",
+        "instanceId": "1_31065",
+        "class": "LocalScript",
+        "parentId": "1_9074",
+        "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedFirst",
+          "Lobby Loading Screen"
+        ],
+        "parentClass": "ReplicatedFirst",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 42196,
+        "name": "Lobby Loading Screen"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "parentPath": "ServerScriptService.Level 4 Systems",
+        "instanceId": "1_42773",
+        "class": "ModuleScript",
+        "parentId": "1_15624",
+        "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "Level 4 Systems",
+          "Level 4 Light Director"
+        ],
+        "parentClass": "Folder",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 16515,
+        "name": "Level 4 Light Director"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 194825,
+        "name": "GameManager"
+      },
+      {
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "parentPath": "ReplicatedStorage",
+        "instanceId": "0_79286917",
+        "class": "ModuleScript",
+        "parentId": "1_408323",
+        "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedStorage",
+          "SceneEffectBudget"
+        ],
+        "parentClass": "ReplicatedStorage",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 10221,
+        "name": "SceneEffectBudget"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "0_79286921",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SceneEffectBudgetClient"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 3537,
+        "name": "SceneEffectBudgetClient"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31079",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 2 Sound Controller"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 41930,
+        "name": "Level 2 Sound Controller"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31113",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 66128,
+        "name": "Level 6 Playground Client"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31073",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SpectateController"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 20082,
+        "name": "SpectateController"
+      }
+    ],
+    "readOnly": true,
+    "complete": true
+  },
+  "nativeAfterRawCapture": {
+    "verifiedUtc": "2026-10-09T23:06:52Z",
+    "pins": [
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "parentPath": "ReplicatedFirst",
+        "instanceId": "1_31065",
+        "class": "LocalScript",
+        "parentId": "1_9074",
+        "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedFirst",
+          "Lobby Loading Screen"
+        ],
+        "parentClass": "ReplicatedFirst",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 42196,
+        "name": "Lobby Loading Screen"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "parentPath": "ServerScriptService.Level 4 Systems",
+        "instanceId": "1_42773",
+        "class": "ModuleScript",
+        "parentId": "1_15624",
+        "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "Level 4 Systems",
+          "Level 4 Light Director"
+        ],
+        "parentClass": "Folder",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 16515,
+        "name": "Level 4 Light Director"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 194825,
+        "name": "GameManager"
+      },
+      {
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "parentPath": "ReplicatedStorage",
+        "instanceId": "0_79286917",
+        "class": "ModuleScript",
+        "parentId": "1_408323",
+        "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedStorage",
+          "SceneEffectBudget"
+        ],
+        "parentClass": "ReplicatedStorage",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 10221,
+        "name": "SceneEffectBudget"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "0_79286921",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SceneEffectBudgetClient"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 3537,
+        "name": "SceneEffectBudgetClient"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31079",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 2 Sound Controller"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 41930,
+        "name": "Level 2 Sound Controller"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31113",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 66128,
+        "name": "Level 6 Playground Client"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31073",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SpectateController"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 20082,
+        "name": "SpectateController"
+      }
+    ],
+    "readOnly": true,
+    "complete": true
+  },
+  "eightExportManifestSha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b",
+  "globalAfterSha256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+  "scopedGlobalSourceRows": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "beforeSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "afterSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "beforeSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "afterSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "beforeSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "afterSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "beforeSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "afterSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "beforeSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "afterSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "beforeSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "afterSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "beforeSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "afterSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "beforeSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "afterSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    }
+  ],
+  "workingOtherGlobalRowsAndFieldsPreserved": true,
+  "nativeEnd": {
+    "verifiedUtc": "2026-10-09T23:06:52Z",
+    "pins": [
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "parentPath": "ReplicatedFirst",
+        "instanceId": "1_31065",
+        "class": "LocalScript",
+        "parentId": "1_9074",
+        "sourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedFirst",
+          "Lobby Loading Screen"
+        ],
+        "parentClass": "ReplicatedFirst",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 42196,
+        "name": "Lobby Loading Screen"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "parentPath": "ServerScriptService.Level 4 Systems",
+        "instanceId": "1_42773",
+        "class": "ModuleScript",
+        "parentId": "1_15624",
+        "sourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "Level 4 Systems",
+          "Level 4 Light Director"
+        ],
+        "parentClass": "Folder",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 16515,
+        "name": "Level 4 Light Director"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 194825,
+        "name": "GameManager"
+      },
+      {
+        "path": "ReplicatedStorage.SceneEffectBudget",
+        "parentPath": "ReplicatedStorage",
+        "instanceId": "0_79286917",
+        "class": "ModuleScript",
+        "parentId": "1_408323",
+        "sourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "ReplicatedStorage",
+          "SceneEffectBudget"
+        ],
+        "parentClass": "ReplicatedStorage",
+        "properties": {
+          "Archivable": true,
+          "LinkedSource": ""
+        },
+        "editorParity": true,
+        "rawBytes": 10221,
+        "name": "SceneEffectBudget"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "0_79286921",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SceneEffectBudgetClient"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 3537,
+        "name": "SceneEffectBudgetClient"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31079",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 2 Sound Controller"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 41930,
+        "name": "Level 2 Sound Controller"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31113",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "Level 6 Playground Client"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 66128,
+        "name": "Level 6 Playground Client"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31073",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+        "attributes": [],
+        "reviewedCandidateMatches": true,
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SpectateController"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "properties": {
+          "Disabled": false,
+          "LinkedSource": "",
+          "Archivable": true,
+          "RunContext": "Enum.RunContext.Legacy"
+        },
+        "editorParity": true,
+        "rawBytes": 20082,
+        "name": "SpectateController"
+      }
+    ],
+    "readOnly": true,
+    "complete": true
+  },
+  "finishedUtc": "2026-10-09T23:06:52.804418+00:00"
+}

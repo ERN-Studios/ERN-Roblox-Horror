@@ -1,74 +1,72 @@
-# Optimization implementation preparation — 2026-10-09
+# Installed optimization work - 2026-10-09 UTC
 
-Status: **prepared changes, not deployed**. The owner explicitly instructed us to
-preserve the running Level 4 playtest until further notice. No optimization Studio
-write, Play stop/start or publication has occurred. A user-reported native backup
-exists; its path/hash have not yet been recorded. We will take/verify a fresh native
-place backup after Edit is released, before applying non-script changes.
+Status: **implementation and bounded verification complete in authoritative Studio; publication pending**. Target: place `131311258779917`, universe `10559217407`. The distant-first spectator selection blocker found during final review was fixed and passed an actual two-client test with naturally missing target parts. Installation, gameplay testing, commit and publication are root-owned. The completed checks and remaining coverage limits are listed separately below.
 
-Studio is authoritative: place `131311258779917`, universe `10559217407`. Current
-concurrent cleanup already parks Levels 4–6 in ServerStorage via LevelWorldStorage;
-the proposals preserve that work. Repository state and fresh origin history were
-inspected before this task. The initial dirty checkout was checkpointed without
-reset/stash removal at `refs/checkpoints/optimization-20261009-before`, commit
-`cc8bf9546d16ccd0b209eb06269c25243cf533d1`. The original dirty/untracked files also
-remain in `_local/optimization-20261009/before-working-files.zip` with a hash listing.
-Later concurrent cleanup changes are separate work and must not enter our commit.
+The owner explicitly instructed **no new backups**. No new native place backup was created. Exact Source/editor guards, original-instance archives, property ledgers and rollback records preserve the scoped changes; they are not a full native backup. The earlier checkout checkpoint remains `refs/checkpoints/optimization-20261009-before`, commit `cc8bf9546d16ccd0b209eb06269c25243cf533d1`, with the initial dirty/untracked working files preserved in `_local/optimization-20261009/before-working-files.zip`.
 
-## Scope and prepared changes
+Studio remained the deployment baseline. Concurrent LevelWorldStorage map parking, dirty RoundUI, Poolrooms Ambience and unrelated cleanup work were preserved. Current source mirrors came from verified live Source/editor pairs. Initial receipts retain their historical pins; the later L2 root correction has its own receipts. A save, export, commit or receipt `complete` flag does not prove publication.
 
-| Requested area | Prepared change | Remaining before deployment |
+## Seven requested areas
+
+| Area | Installed scope | Evidence and limit |
 |---|---|---|
-| ReplicatedStorage | Reparent the two unused UI Imports folders to a named ServerStorage archive. Originals and runtime Templates remain intact. | Fresh full reference/source/editor scan, native backup, exact identity guards and UI regression check. The earlier census counted 12,057 descendants; this is not a fresh applied result. |
-| Loading priority | Arrival-world assets within 128 studs and visible UI form the critical gate; one background worker warms the remaining streamed lobby for at most 20 seconds. | Fresh Source/editor CAS, native contracts, cold join and level transition tests. |
-| Streaming/stream-out | Review native Workspace settings and a tentative 384-stud target with Opportunistic stream-out. Preserve the current minimum pending inspection. Add bounded spectate focus handling before reducing distance. | Native property baseline, spectator/teleport/slide testing with separated participants. Improved model behavior needs a separate compatibility decision after the fresh baseline. |
-| Poolrooms collision | Archive only anonymous transparent rectangular colliders entirely covered by an untouched collider with identical physical/query/Area properties. No resizing, epsilon or removed occupied volume. | Fresh exact plan and count, reference/CAS validation, actual map movement, hazards, exits and navigation tests. |
-| Level 6 geometry | Change scoped deck/deck-pad unions from Precise to Automatic render fidelity; preserve collision and native union data. | Fresh plan, native visual/geometry checks and actual frame measurements. Earlier Edit observations found 6,605 eligible unions. |
-| Room lights/effects | Explicitly marked decorative effects receive a client sector budget; the server carries the authoritative desired Enabled state, including L4 blackouts. | Fresh authored selections, additive Light Director patch, native contracts and gameplay lighting checks. Emergency/objective lights and gameplay beams are excluded. |
-| LOD and asset reuse | Union Automatic LOD above; preserve existing shared MeshIds and TextureIDs. | Native visual verification. Existing L6 meshes already share seven MeshIds and three texture IDs and already use Automatic. Changing asset IDs without a demonstrated duplicate would add risk without a verified saving. |
+| ReplicatedStorage content | Two reviewed UI `Imports` folders moved to `ServerStorage.OptimizationAuthoringArchive`: **12,057 descendants**, original identities retained. Runtime Templates remain available. | Native archive/source/cleanup guards passed; actual clients reported Imports absent. No join-time saving measured. [Receipt](authoring-archive-receipt.json). |
+| Loading priority | Arrival assets within **128 studs** and visible UI form the lobby critical gate; one background worker warms optional streamed assets for at most **20 seconds**. | Source/editor parity, native loading/visibility contracts and actual handovers checked. Matched cold-join improvement remains unmeasured. [Source receipt](source-install-receipt.json). |
+| Streaming / stream-out | Target **1024 to 384 studs**, ModelStreamingBehavior **Default to Improved**. Enabled=true, Min=64, Opportunistic and PauseOutsideLoadedArea retained. Bounded spectator focus ownership/cleanup, server-validated candidate IDs before avatar receipt, plus L2 sound-anchor and L6 light/child-rig lifecycle fixes installed. | Native Properties readback, actual L2 distant-first selection/camera/floor, earlier spectator leave, L5/L6 entry/leave and L6 normal re-entry passed. Whole routes and repeated long-term cycles remain unverified. [Settings](streaming-install-receipt.json), [compatibility](loading/install/compatibility/native-probe-receipt.json), [distant-first result](runtime/observations/bootstrap-distant-first-floor-corrected.json), [actual routes](runtime/observations/l5-l6-gameplay-verification.md). |
+| Poolrooms collision | **267 original Parts** archived; **124 exact native-float proxies** created across 124 merges: **143 fewer collision Parts**. Physical/query/Area values and occupied volume preserved. Post-apply Collision tree: **23,332 descendants**. | Native actual-collider test passed **6,696 rays / 1,860 overlap comparisons**, zero observed hit-position/distance differences; exact ledgers and cleanup passed. Conservative merge, not full collision redesign/gameplay coverage. [Receipt](geometry/install/runner-receipt.json). |
+| Level 6 render geometry | **6,605 deck/deck-pad unions** changed Precise to Automatic RenderFidelity; identities/native geometry and Hull collision fidelity retained. | Exact native ledger, actual lower/middle/upper deck-floor checks, normal entry/re-entry and genuine keyboard movement passed. Full finale and 250-500-stud visual LOD comparisons remain unverified; GPU/triangle savings unmeasured against a baseline. [Ledger](geometry/install/postapply-manifest), [actual decks](runtime/observations/level6-deck-smoke.json). |
+| Room lights / effects | Opt-in client budget: **254 L4 lights**, **620 ordinary L5 lights**, **8 L2 Water FX emitters**; **882 total**. Indexed sectors, descendant signals, bounded updates and hysteresis; L4 desired Enabled attribute is written before server Enabled. Emergency/objective lights and gameplay beams excluded. | Native contracts and controlled actual L4 light culling/authority/restoration passed. Full normal power/blackout gameplay unverified. [Attributes](effects/install/attribute-install-receipt.json), [real-light smoke](runtime/observations/level4-budget-controlled.json). |
+| LOD / asset reuse | Automatic union LOD above is the verified render change. Existing L6 meshes already shared **seven MeshIds / three texture IDs** and used Automatic; IDs retained. | No speculative reuploads or blanket replacements. Mesh/texture memory savings unmeasured. [Research](../../docs/PERFORMANCE_RESEARCH_2026-10-09.md). |
 
-Subfolder runbooks describe exact inputs, tests and apply/rollback contracts.
-All source proposals are task-owned files, not exported runtime changes.
+**Eight scoped source files are currently installed**: Lobby Loading Screen, GameManager, Level 4 Light Director, SceneEffectBudget, SceneEffectBudgetClient, Level 2 Sound Controller, Level 6 Playground Client and SpectateController. The initial seven-source installation/export remains historical; the later spectator fix revised GameManager and added SpectateController to the scoped set. The fresh eight-source Source/editor/identity export completed at 23:06:52 UTC without Studio mutation. [Current eight-source export](loading/install/compatibility/spectate-bootstrap/verified-export-eight/manifest.json), [refresh receipt](loading/install/compatibility/spectate-bootstrap/eight-source-refresh-receipt.json), [historical seven-source export](verified-export/README.md).
 
-## Verification and deployment sequence
+Actual L2 testing exposed the runtime root `Level 2 Generated World`; the budget client's previous `Level2PoolroomsMap` CONFIG key was corrected with fresh Source/editor CAS and exact mirror refresh. Radius 320, hysteresis 48 and Water FX scope are unchanged. The old running copy was replaced by a fresh two-client test, and actual corrected-root binding passed. [Correction receipts](loading/install/compatibility/l2-root-fix/README.md), [fresh binding result](runtime/observations/level2-fresh-budget-binding.json).
 
-1. Wait for the owner to release Play. Re-read Studio mode/identity, git status and
-   fresh remote history; preserve any further unrelated changes.
-2. Save a full native place backup and record its absolute path, byte length and
-   SHA256. A source mirror does not protect native geometry, UI and service settings.
-3. Re-read relevant live instances and exact Source/editor pairs. Reconcile any
-   changed proposal baseline against Studio before writing; never import an older
-   repository source over new Studio work.
-4. Stage contract probes only in fresh Instance.new("ModuleScript") objects with
-   exact empty Source/editor pins. Verify originals during staging and after success
-   and failure. Always clean up test-owned objects, connections and borrowed state.
-5. Apply reviewed source/property plans in bounded chunks with fresh guards inside
-   each write. Record exact paths, classes, hashes, archived original identities,
-   asset IDs and changed properties. Keep native data in before/after place backups.
-6. Test actual UI, join handover, room lighting and level routes. Poolrooms requires
-   safe spawn distances from all living participants, second distinct pump spawn,
-   third distinct pump escalation, active-round CPU/memory and navigation/retry
-   observation plus round-reset task/connection cleanup. Spectate needs separated
-   participants and target death/respawn/selection changes.
-7. Measure the same route/settings/device before and after: join-to-control, client
-   instances/memory, frame-time distribution and server CPU/memory. Synthetic
-   contracts and containment proof do not establish multiplayer, streaming, actual
-   asset visual quality or performance improvement. Mobile remains unverified until
-   tested on appropriate hardware.
-8. Export only freshly verified Studio changes. Inspect the exact scoped staged
-   diff, commit task work without including the concurrent cleanup, then publish the
-   current Studio place to the existing experience. Record successful Roblox publish
-   output and the resulting version; do not publish with a material blocker.
+## Completed verification and limits
 
-`install_sources.py` is a narrowly scoped source-CAS helper, **not run**. It requires
-an explicitly reviewed task-owned manifest, SHA256 pins, a native backup path and
-`--apply`. It refuses Play and the wrong place. New sources are fresh objects with
-empty editor pins; existing sources compare both live forms before/inside/after
-writes. Unrelated source/editor originals are rechecked after success/failure. It
-records partial receipts, performs no bulk synchronization, exports no mirrors and
-does not publish. After applying, verify actual Studio state before exporting it.
-`proposed-source-manifest.json` records the five scoped proposals. Rebuild its pins
-only after reconciling changed live baselines and reviewing the resulting patches.
+Four isolated native contracts passed **130 assertions**: loading 51, visibility 14, spectating 51 and effects 14. Compatibility tests then passed **841 lifecycle assertions / 10 native Instance checks**. Fresh empty ModuleScripts, exact original guards and cleanup were verified. These synthetic/native fixtures did not establish normal gameplay, real replication-focus behavior, actual streaming, asset fetches or performance. [Runner details](RUNNERS.md).
+
+Root applied and independently audited the exact native geometry ledgers, archived originals and removed staged objects. The controlled real-light smoke used the actual installed budget code and received L4 lights: near-on/far-suppressed, disable/restore-authority, re-enable/suppress, and server Wanted=false while already locally suppressed all passed. Borrowed server Enabled/Wanted and client budget-disable values were restored. `normalPowerObjectivePassed=false` remains explicit.
+
+The first actual two-client L2 test observed two living participants. Player2 received **2,351 map descendants / 1,424 Collision descendants** versus **30,726 server map descendants**. A character-navigation tool attempt returned Success, but no before/after position delta was recorded; the earlier 16-stud movement claim is withdrawn. Tool Success does not establish arrival or genuine keyboard movement. Player1's normal death/spectator flow selected the nearby target and subsequently followed Player2 about **925 studs** away with the actual collision floor streamed around that target. Both normal leave-round actions returned players with health 100/InRound=false. This is bounded floor/spectating/leave evidence; it did not establish distant-first selection, L2 traversal or all respawn/target coverage. [Corrected action record](runtime/observations/l2-root-reported-multiplayer-tests-20261009T2214.json), [fresh route assessment](runtime/observations/l2-gameplay-verification.md).
+
+The third actual two-client L2 session separately passed **distant-first selection** after the spectator fix. Before Player1 died, Player2 was **924.005 studs** away and its HRP/Head were naturally absent from Client1. The real serial-1 server candidate response selected target -2 while those parts were missing; SpectatorCount became one. The actual Scriptable camera subsequently followed the received head within **0.099 stud**, the target collision floor at y=171.3 was received, and Player2 stayed at health 100. No target names were borrowed, no manual spectate remote or test focus was added, and the borrowed Player2 position was restored. Subsequent normal leave/reset returned both players to health100/InRound=false and restored the client Custom camera. The earlier floor-query attempt stopped at its safe-floor assertion before relocation, scheduled death or name borrowing; its failed receipt is preserved. The corrected marker+2/down15 ray and all 11 Luau cleanup cases, eight Python orchestration cases and seven payload compiles were verified separately. [Fix and contracts](loading/install/compatibility/spectate-bootstrap/README.md), [actual result](runtime/observations/bootstrap-distant-first-floor-corrected.json), [normal reset](runtime/observations/bootstrap-final-normal-reset.json), [assessment and receipt caveats](runtime/observations/bootstrap-distant-first-assessment.md), [current-driver offline receipt](runtime/distant-spectate-floor-correction-offline-result.json).
+
+The restarted actual L2 test confirmed all **eight marked Water FX emitters** were Wanted=true/Enabled=true near the waterfall. At the start region, **932-950 studs** from the emitters, all eight stayed Wanted=true but became Enabled=false. A temporary extra replication focus retained the distant emitters specifically to test the installed budget; it was removed in cleanup. This proves actual generated-world binding and near/far effect suppression, not ordinary stream-out behavior or a performance gain. Both normal leave-round actions returned living players to the lobby; a bounded Server reset observation recorded both InRound=false. The cached map remained present and is not claimed removed on leave. [Fresh binding](runtime/observations/level2-fresh-budget-binding.json), [post-leave Server Stats/context](runtime/observations/fresh-after-l2-reset-server.json).
+
+Current public L2 intentionally uses the authored-map Round Adapter, sets PumpGoal=0, opens its exit and does not start the old pump/Pool Foam objective controllers. The map had zero ProximityPrompts. There is **no normal second/third-pump progression in this route**. Legacy pump spawn-distance, same-entity escalation and hostile navigation/retry CPU/memory remain unverified; no old controller was started to fabricate coverage. Full current-map hazards/traversal/finish verification also remains outstanding.
+
+L4 normal queue entry, note reading and A3 progressed the actual switch sequence to 1/4. The B3 follow-up fixture failed: relocation displaced the character around the physical cabinet and no normal prompt appeared. **Full power-up, subsequent blackouts, visible Usher and normal win flow remain unverified**; objective state was not forced. UsherMotion drops were examined separately: both enabled clients match fresh authoritative Source/editor; GUI/local Usher exists; drop threshold stayed 64 for over two minutes. Existing broadcast-before-listener ordering is consistent with startup warnings, without an identified optimization regression. It does not prove active visible motion. [Prompt result](runtime/observations/level4-prompts-resume.json), [Usher assessment](runtime/observations/l4-usher-listener-assessment.md).
+
+Actual L5 normal queue entry passed on both clients with health 100, controls available, loading covers closed and a collidable `Geometry.Rest` floor at y=600 under the root at about y=603.60. Player1 had 78 marked ordinary lights, all Wanted=true/Enabled=true near spawn; its Stats census recorded 301 map descendants, with a later root observation of 305, versus 2,638 on the server. Both normal leaves parked the map in ServerStorage and cleared Level5InUse. [Player1](runtime/observations/level5-client1-entry.json), [Player2](runtime/observations/level5-client2-entry.json).
+
+Actual L6 normal entry passed on both clients with the received FoamTiles floor, health 100 and loading covers closed. Player1 held W for 1.2 seconds and its recorded z changed 181.903 to 162.437, about **19.466 studs**, with health 100 and actual floor support. Controlled lower/middle/upper deck checks all hit actual Automatic/Hull unions with health 100, and restored the borrowed position. Both normal leaves parked the map and cleared Level6InUse. Normal re-entry received a fresh child/Body (893644/893648 to 900414/900418), actual floor/health100/cover closed, and all **6,605 Automatic/Hull unions**. Three-game win/finale, full unassisted traversal and distant visual LOD comparisons remain unverified. [Route summary](runtime/observations/l5-l6-gameplay-verification.md), [deck smoke](runtime/observations/level6-deck-smoke.json), [normal re-entry](runtime/observations/level6-client1-normal-reentry.json).
+
+## Actual native Stats
+
+Root captured read-only **three-second** native Stats windows, about 0.05 seconds between reads. Median/p95 summarize spaced engine readings, not every frame; wait duration is never CPU time. Missing/inaccessible/nonfinite fields retain unavailable reasons. Native zero does not establish absence of work. Server renderer metrics are context-inapplicable and produce no FPS claim. [Sampler and field units](runtime/README.md).
+
+| Actual observation | Client FrameTime median / p95 | OS-reported process/session memory median | Receipt |
+|---|---|---|---|
+| Lobby Player1 | 66.70 / 67.96 ms | 1,963.17 MB | [lobby](runtime/observations/lobby-client1.json) |
+| L2 active Player2 | 16.89 / 18.43 ms | 2,113.28 MB | [L2 client](runtime/observations/level2-client2-active.json) |
+| L4 dark Player1 | 17.00 / 18.58 ms | 2,351.71 MB | [L4 client](runtime/observations/level4-client1-dark.json) |
+| L5 entry Player1 | 66.49 / 68.95 ms | 2,203.75 MB | [L5 client](runtime/observations/level5-client1-entry.json) |
+| L6 entry Player1 | 66.37 / 68.93 ms | 2,273.48 MB | [L6 client](runtime/observations/level6-client1-entry.json) |
+
+L2 Server recorded HeartbeatTime median/p95 **0.068 / 0.119 ms**, memory median **2,565.68 MB**, in the current authored route without an active hostile. [Server receipt](runtime/observations/level2-server-active.json). Raw receipts also retain render CPU/GPU, physics, memory tags, network, instance/primitives, scene triangles/draw calls, floor, map/effect census and loading-cover context.
+
+Scenes, focus and loads differ: **these are not a matched before/after benchmark**. No percentage improvement, FPS increase, faster join or asset-memory saving is claimed. Mobile/hardware coverage, matched cold joins, repeated routes and long-term reset/retention remain unverified.
+
+## Completion and remaining coverage
+
+The bounded native contracts, exact geometry verification and current actual L2/L4/L5/L6 checks above are complete. The spectator-selection blocker found in final review is resolved: the server validates candidate IDs, the client retains a selected eligible ID while its avatar parts are pending, 99 extracted mocked contracts passed both offline and in an isolated native probe, and the actual naturally missing-part scenario passed. No material blocker remains identified by these scoped checks. Full win/finale routes, legacy L2 hostile objectives, distant visual LOD comparisons, mobile/hardware coverage and matched performance benchmarks retain the stated limits.
+
+Historical pre-bootstrap read-only Edit guards passed: all seven exact Source/editor/identity pairs at 22:42:42 UTC, all 6,996 geometry targets at 22:38:30 UTC, and all 882 effect records plus both original Imports archives at 22:43:55 UTC. Known task probe objects were absent in that census. Native Workspace Properties readback confirmed the installed streaming settings, and the earlier native UI check recorded closure of those root-created sessions. The subsequent fix has separate install/probe/runtime receipts and the fresh eight-source export above; the earlier seven-source/UI observations are not relabeled current after the third test session. These are sequential observations, not an atomic publish lock. [Historical sources](runtime/final-prepublish-source-check.json), [geometry](geometry/install/final-asset-local-audit.json), [effects/archive](runtime/final-authoring-effect-check.json), [historical native UI](runtime/final-studio-ui-check.json).
+
+Fresh checks after the third-session normal reset passed: **all eight** exact Source/editor/identity/property/attribute rows at 23:09:13 UTC; **6,996 geometry targets** at 23:08:40 UTC; **882 effects and 12,057 archived Imports descendants** at 23:09:15 UTC. The native UI check recorded Edit, no root-created test windows remaining and streaming Enabled=true/384/64/Improved/Opportunistic/PauseOutsideLoadedArea. These read-only observations created no backup or probe and did not publish. [Eight sources](runtime/final-eight-prepublish-source-check.json), [geometry](geometry/install/prepublish-asset-check.json), [independent geometry audit](geometry/install/prepublish-asset-local-audit.json), [effects/archive](runtime/prepublish-authoring-effect-check.json), [native UI](runtime/prepublish-studio-ui-check.json).
+
+Inspect and commit only exact task changes and verified mirrors. Publish the current authoritative place to the existing experience when required checks pass and no material blocker remains, then record Roblox's successful publish result. None of the current receipts establishes publication.
 
 ## Research references
 
@@ -80,4 +78,4 @@ Preloading should focus on required assets and preserve actual fetch status rath
 than treating the global request queue as asset-count progress. See
 [ContentProvider](https://create.roblox.com/docs/reference/engine/classes/ContentProvider).
 The complete project research remains in
-[`docs/PERFORMANCE_RESEARCH_2026-10-09.md`](../../../docs/PERFORMANCE_RESEARCH_2026-10-09.md).
+[`docs/PERFORMANCE_RESEARCH_2026-10-09.md`](../../docs/PERFORMANCE_RESEARCH_2026-10-09.md).

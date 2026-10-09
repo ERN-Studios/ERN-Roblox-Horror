@@ -1,0 +1,302 @@
+{
+  "status": "Read-only actual-map route plan; not gameplay or performance results",
+  "l4": {
+    "zones": [
+      {
+        "position": [
+          28688,
+          26.024999618530273,
+          -200
+        ],
+        "radius": 90.926,
+        "name": "L4LightZone_01",
+        "zone": 1,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 104,
+          "exitRetained": 125
+        }
+      },
+      {
+        "position": [
+          29344,
+          24.024999618530273,
+          -192
+        ],
+        "radius": 74.352,
+        "name": "L4LightZone_14",
+        "zone": 14,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 89,
+          "exitRetained": 118
+        }
+      },
+      {
+        "position": [
+          28696,
+          86.0250015258789,
+          -8
+        ],
+        "radius": 79.756,
+        "name": "L4LightZone_16",
+        "zone": 16,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 138,
+          "exitRetained": 154
+        }
+      },
+      {
+        "position": [
+          29280,
+          86.0250015258789,
+          0
+        ],
+        "radius": 118.285,
+        "name": "L4LightZone_19",
+        "zone": 19,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 149,
+          "exitRetained": 169
+        }
+      },
+      {
+        "position": [
+          28736,
+          24.024999618530273,
+          40
+        ],
+        "radius": 110.307,
+        "name": "L4LightZone_22",
+        "zone": 22,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 149,
+          "exitRetained": 165
+        }
+      },
+      {
+        "position": [
+          29288,
+          24.075000762939453,
+          144
+        ],
+        "radius": 28.627,
+        "name": "L4LightZone_34",
+        "zone": 34,
+        "policyCount": {
+          "fullAuthored": 254,
+          "entryEnabled": 123,
+          "exitRetained": 151
+        }
+      }
+    ],
+    "checks": [
+      "Accepted level entry and ground/stream readiness",
+      "Off -> PoweringUp -> On -> Failing -> Finale -> Stop using actual Light Director",
+      "WantedEnabled=false remains visually dark even after distant Enabled was suppressed",
+      "All room-side sight lines and doors retain illumination; no flare when toggling renderer/round state",
+      "Round reset parks map and releases all effect connections"
+    ]
+  },
+  "l5": {
+    "origin": [
+      40000,
+      600,
+      0
+    ],
+    "checkpoints": [
+      {
+        "y": 0,
+        "x": 19,
+        "z": 0,
+        "at": 0,
+        "sec": "rose",
+        "low": 0,
+        "i": 0,
+        "world": [
+          40019,
+          600,
+          0
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 80,
+          "exitRetained": 90
+        }
+      },
+      {
+        "y": 50.4,
+        "x": 809.79,
+        "z": -15.52,
+        "at": 55,
+        "sec": "blue",
+        "low": 50.4,
+        "i": 4,
+        "world": [
+          40809.79,
+          650.4,
+          -15.52
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 144,
+          "exitRetained": 168
+        }
+      },
+      {
+        "y": 50.4,
+        "x": 1427.12,
+        "z": -1.8,
+        "at": 103,
+        "sec": "amber",
+        "low": 47.4,
+        "i": 7,
+        "world": [
+          41427.12,
+          650.4,
+          -1.8
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 138,
+          "exitRetained": 152
+        }
+      },
+      {
+        "y": 65.3,
+        "x": 2556.23,
+        "z": 15.96,
+        "at": 232,
+        "sec": "violet",
+        "low": 31.8,
+        "i": 15,
+        "world": [
+          42556.23,
+          665.3,
+          15.96
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 92,
+          "exitRetained": 106
+        }
+      },
+      {
+        "y": -3.2,
+        "x": 3011.76,
+        "z": 3.47,
+        "at": 314,
+        "sec": "coral",
+        "low": -3.2,
+        "i": 19,
+        "world": [
+          43011.76,
+          596.8,
+          3.47
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 106,
+          "exitRetained": 140
+        }
+      },
+      {
+        "y": 48.9,
+        "x": 3198.76,
+        "z": 3.47,
+        "at": 378,
+        "sec": "orange",
+        "low": 48.9,
+        "i": 23,
+        "world": [
+          43198.76,
+          648.9,
+          3.47
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 138,
+          "exitRetained": 154
+        }
+      },
+      {
+        "y": 88.2,
+        "x": 3412.76,
+        "z": 0,
+        "at": 500,
+        "sec": "crimson",
+        "low": 88.2,
+        "i": 26,
+        "world": [
+          43412.76,
+          688.2,
+          0
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 142,
+          "exitRetained": 154
+        }
+      },
+      {
+        "y": 371.7,
+        "x": 4031.31,
+        "z": 0,
+        "at": 921,
+        "sec": "ivory",
+        "low": 371.7,
+        "i": 31,
+        "world": [
+          44031.31,
+          971.7,
+          0
+        ],
+        "policyCount": {
+          "fullAuthored": 620,
+          "entryEnabled": 82,
+          "exitRetained": 85
+        }
+      }
+    ],
+    "checks": [
+      "Follow actual Route.Value waypoints; checkpoints are route references, not blind teleport targets",
+      "Long corridor sight lines and narrow walkways retain the approved look",
+      "9 CrusherLights remain unaffected during waiting/slam/closing/reset",
+      "Camera and body separated across two sectors preserve both vicinities",
+      "Map park/unpark and repeated re-entry do not accumulate connections"
+    ]
+  },
+  "l2": {
+    "waterMidpoint": [
+      70009.1484375,
+      175.45499992370605,
+      164.33499908447266
+    ],
+    "nearestRouteMarker": {
+      "name": "P2_01",
+      "position": [
+        69999.140625,
+        174.3000030517578,
+        181.2530059814453
+      ],
+      "distanceSquared": 387.70928617538084
+    },
+    "particleEnvelope": 32,
+    "checks": [
+      "Walk along accepted Poolrooms route to cascade and back, with floor/streaming checks",
+      "Approach at full sprint; spray exists before it is visible in the cascade room",
+      "8 static water emitters respond locally; skylight/reflection/hazard assets remain untouched",
+      "Outstream/re-entry and round reset restore wanted state without clearing emitted particles"
+    ]
+  },
+  "measurement": [
+    "Before/after fixed-camera route captures",
+    "SceneEffectBudget profile tag CPU and total light/particle rendering time",
+    "Client p95/p99 frame time, memory/connection retention over three resets",
+    "Graphics quality, place version, device and streaming state documented",
+    "No mobile performance claim without actual hardware"
+  ]
+}

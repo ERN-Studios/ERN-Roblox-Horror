@@ -1,0 +1,736 @@
+{
+  "startedUtc": "2026-10-09T22:01:59.929740+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "datamodel": "Edit",
+  "readOnly": true,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "runtimeMirrorsWritten": false,
+  "reviewedSources": 7,
+  "transport": "raw-byte hexadecimal",
+  "chunkBytes": 4096,
+  "maxChunkOutputBytes": 12000,
+  "complete": true,
+  "scripts": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "parentPath": "ReplicatedFirst",
+      "instanceId": "1_31065",
+      "class": "LocalScript",
+      "parentId": "1_9074",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "parentClass": "ReplicatedFirst",
+      "editorParity": true,
+      "rawBytes": 42196,
+      "name": "Lobby Loading Screen",
+      "rawFile": "tools/optimization_20261009/verified-export/ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "expectedRepositoryPath": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "rawSourceSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "reviewedCandidateSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 12288,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 16384,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 20480,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 24576,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 28672,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 32768,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 36864,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 40960,
+          "rawBytes": 1236,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "parentPath": "ServerScriptService.Level 4 Systems",
+      "instanceId": "1_42773",
+      "class": "ModuleScript",
+      "parentId": "1_15624",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Light Director"
+      ],
+      "parentClass": "Folder",
+      "editorParity": true,
+      "rawBytes": 16515,
+      "name": "Level 4 Light Director",
+      "rawFile": "tools/optimization_20261009/verified-export/ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "expectedRepositoryPath": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "rawSourceSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "reviewedCandidateSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 12288,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 16384,
+          "rawBytes": 131,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "parentPath": "ServerScriptService",
+      "instanceId": "1_408341",
+      "class": "Script",
+      "parentId": "1_409634",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "parentClass": "ServerScriptService",
+      "editorParity": true,
+      "rawBytes": 192559,
+      "name": "GameManager",
+      "rawFile": "tools/optimization_20261009/verified-export/ServerScriptService/GameManager.Script.lua",
+      "expectedRepositoryPath": "ServerScriptService/GameManager.Script.lua",
+      "rawSourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "reviewedCandidateSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 12288,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 16384,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 20480,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 24576,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 28672,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 32768,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 36864,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 40960,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 45056,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 49152,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 53248,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 57344,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 61440,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 65536,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 69632,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 73728,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 77824,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 81920,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 86016,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 90112,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 94208,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 98304,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 102400,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 106496,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 110592,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 114688,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 118784,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 122880,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 126976,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 131072,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 135168,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 139264,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 143360,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 147456,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 151552,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 155648,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 159744,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 163840,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 167936,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 172032,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 176128,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 180224,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 184320,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 188416,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 192512,
+          "rawBytes": 47,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    },
+    {
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "parentPath": "ReplicatedStorage",
+      "instanceId": "0_79286917",
+      "class": "ModuleScript",
+      "parentId": "1_408323",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "ReplicatedStorage",
+        "SceneEffectBudget"
+      ],
+      "parentClass": "ReplicatedStorage",
+      "editorParity": true,
+      "rawBytes": 10221,
+      "name": "SceneEffectBudget",
+      "rawFile": "tools/optimization_20261009/verified-export/ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "expectedRepositoryPath": "ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "rawSourceSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "reviewedCandidateSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 2029,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "0_79286921",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SceneEffectBudgetClient"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "editorParity": true,
+      "rawBytes": 3537,
+      "name": "SceneEffectBudgetClient",
+      "rawFile": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "expectedRepositoryPath": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "rawSourceSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "reviewedCandidateSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 3537,
+          "exactSourceEditorIdentityCas": true,
+          "transport": "JSON UTF-8 string"
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false,
+      "currentSourceVerifiedUtc": "2026-10-09T22:18:25Z",
+      "currentSourceCaptureTransport": "JSON UTF-8 string; full exact Source/editor/identity CAS",
+      "reviewedCandidateManifest": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-manifest.json",
+      "sourceRefreshReceipt": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-source-refresh-receipt.json"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "1_31079",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "editorParity": true,
+      "rawBytes": 41930,
+      "name": "Level 2 Sound Controller",
+      "rawFile": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "expectedRepositoryPath": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "rawSourceSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "reviewedCandidateSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 12288,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 16384,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 20480,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 24576,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 28672,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 32768,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 36864,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 40960,
+          "rawBytes": 970,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "1_31113",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "reviewedCandidateMatches": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "editorParity": true,
+      "rawBytes": 66128,
+      "name": "Level 6 Playground Client",
+      "rawFile": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "expectedRepositoryPath": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "rawSourceSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "reviewedCandidateSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "rawUtf8Verified": true,
+      "chunks": [
+        {
+          "offset": 0,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 4096,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 8192,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 12288,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 16384,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 20480,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 24576,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 28672,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 32768,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 36864,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 40960,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 45056,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 49152,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 53248,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 57344,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 61440,
+          "rawBytes": 4096,
+          "exactSourceEditorIdentityCas": true
+        },
+        {
+          "offset": 65536,
+          "rawBytes": 592,
+          "exactSourceEditorIdentityCas": true
+        }
+      ],
+      "runtimeRepositoryMirrorWritten": false
+    }
+  ],
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "beginVerifiedUtc": "2026-10-09T22:02:00Z",
+  "endVerifiedUtc": "2026-10-09T22:02:06Z",
+  "finalPins": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "instanceId": "1_31065",
+      "reviewedCandidateMatches": true,
+      "class": "LocalScript",
+      "parentId": "1_9074",
+      "editorParity": true
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "instanceId": "1_42773",
+      "reviewedCandidateMatches": true,
+      "class": "ModuleScript",
+      "parentId": "1_15624",
+      "editorParity": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "instanceId": "1_408341",
+      "reviewedCandidateMatches": true,
+      "class": "Script",
+      "parentId": "1_409634",
+      "editorParity": true
+    },
+    {
+      "path": "ReplicatedStorage.SceneEffectBudget",
+      "instanceId": "0_79286917",
+      "reviewedCandidateMatches": true,
+      "class": "ModuleScript",
+      "parentId": "1_408323",
+      "editorParity": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "instanceId": "0_79286921",
+      "reviewedCandidateMatches": true,
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "editorParity": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "instanceId": "1_31079",
+      "reviewedCandidateMatches": true,
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "editorParity": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "instanceId": "1_31113",
+      "reviewedCandidateMatches": true,
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "editorParity": true
+    }
+  ],
+  "finishedUtc": "2026-10-09T22:02:06.653608+00:00"
+}

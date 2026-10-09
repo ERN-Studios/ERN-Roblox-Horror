@@ -1,0 +1,102 @@
+{
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "datamodel": "Edit",
+  "readOnly": true,
+  "studioMutation": false,
+  "nativeBackup": false,
+  "begin": {
+    "verifiedUtc": "2026-10-09T22:50:04Z",
+    "pins": [
+      {
+        "path": "ServerScriptService.GameManager",
+        "parentPath": "ServerScriptService",
+        "instanceId": "1_408341",
+        "class": "Script",
+        "parentId": "1_409634",
+        "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+        "segments": [
+          "ServerScriptService",
+          "GameManager"
+        ],
+        "parentClass": "ServerScriptService",
+        "editorParity": true,
+        "rawBytes": 192559,
+        "name": "GameManager"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "parentPath": "StarterPlayer.StarterPlayerScripts",
+        "instanceId": "1_31073",
+        "class": "LocalScript",
+        "parentId": "1_410029",
+        "sourceSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+        "segments": [
+          "StarterPlayer",
+          "StarterPlayerScripts",
+          "SpectateController"
+        ],
+        "parentClass": "StarterPlayerScripts",
+        "editorParity": true,
+        "rawBytes": 18253,
+        "name": "SpectateController"
+      }
+    ]
+  },
+  "complete": true,
+  "sources": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "parentPath": "ServerScriptService",
+      "instanceId": "1_408341",
+      "class": "Script",
+      "parentId": "1_409634",
+      "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "parentClass": "ServerScriptService",
+      "editorParity": true,
+      "rawBytes": 192559,
+      "name": "GameManager",
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.before.luau"
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "parentPath": "StarterPlayer.StarterPlayerScripts",
+      "instanceId": "1_31073",
+      "class": "LocalScript",
+      "parentId": "1_410029",
+      "sourceSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "parentClass": "StarterPlayerScripts",
+      "editorParity": true,
+      "rawBytes": 18253,
+      "name": "SpectateController",
+      "beforeFile": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.before.luau"
+    }
+  ],
+  "end": {
+    "verifiedUtc": "2026-10-09T22:50:08Z",
+    "pins": [
+      {
+        "editorParity": true,
+        "path": "ServerScriptService.GameManager",
+        "sourceSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+        "instanceId": "1_408341"
+      },
+      {
+        "editorParity": true,
+        "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+        "sourceSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+        "instanceId": "1_31073"
+      }
+    ]
+  }
+}

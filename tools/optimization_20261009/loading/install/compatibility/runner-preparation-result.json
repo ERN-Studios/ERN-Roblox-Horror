@@ -1,0 +1,31 @@
+{
+  "offlineOnly": true,
+  "studioMutation": false,
+  "nativeExecutedByThisCheck": false,
+  "compiler": "G:\\Roblox\\MongoTV\\_local\\optimization-20261009\\luau-0.741\\luau-compile.exe",
+  "compiled": [
+    {
+      "name": "streaming-lifecycle-contract.runner.luau",
+      "sha256": "c467eba0d1e4fdf5ab839918f0f32bfcc59c796ed5098e2bebece2891461d6bd"
+    },
+    {
+      "name": "streaming-lifecycle-contract.module.luau",
+      "sha256": "53b1362287a3f7bf8568f4dd7968cce06d942819bc6beccb991d6029b32a80f0"
+    },
+    {
+      "name": "streaming-native-instances.runner.luau",
+      "sha256": "aad2ad4d597d4f4b50ac574655520060e0878a028dd647ec988b5f6443755644"
+    },
+    {
+      "name": "streaming-native-instances.module.luau",
+      "sha256": "7da721b7e36404f7a8db4e38dcd260983aee8a46b00e77f4a1f322c53eb30e11"
+    }
+  ],
+  "receiptParserChecks": 8,
+  "productionFixtureHelpersVerified": true,
+  "expectedInstalledSources": 7,
+  "fixtures": {
+    "streaming-lifecycle-contract": "862db3829b7944f2f75ec2a2d847b56a9c3248d08ade71e6dcd459cdb98158cd",
+    "streaming-native-instances": "205dd66be51670c0676bcf78286bcb5f63294293f088af3b5256a6525094c244"
+  }
+}

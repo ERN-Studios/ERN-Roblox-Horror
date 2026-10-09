@@ -1,0 +1,164 @@
+{
+  "kind": "actual-two-client-l6-deck-smoke",
+  "startedUtc": "2026-10-09T22:30:46.599914+00:00",
+  "editMutation": false,
+  "testRelocation": true,
+  "fullUnassistedWalkthrough": false,
+  "steps": [
+    {
+      "site": "lower",
+      "server": {
+        "floor": [
+          52051.5546875,
+          100.95000457763672,
+          0
+        ],
+        "collision": "Hull",
+        "target": [
+          52051.5546875,
+          104.95000457763672,
+          0
+        ],
+        "class": "UnionOperation",
+        "deck": "Workspace.Level 6 Indoor Playground.Frame_Decks.yellow",
+        "fidelity": "Automatic"
+      },
+      "client": {
+        "camera": [
+          52051.5546875,
+          106.18416595458984,
+          0.482962965965271,
+          1,
+          0,
+          0,
+          0,
+          0.965925931930542,
+          0.2588190734386444,
+          0,
+          -0.2588190734386444,
+          0.965925931930542
+        ],
+        "health": 100,
+        "position": [
+          52051.5546875,
+          104.55475616455078,
+          0
+        ],
+        "collision": "Hull",
+        "floorClass": "UnionOperation",
+        "fidelity": "Automatic",
+        "floor": "Workspace.Level 6 Indoor Playground.Frame_Decks.yellow"
+      }
+    },
+    {
+      "site": "middle",
+      "server": {
+        "floor": [
+          51978.34375,
+          140.35000610351562,
+          -80.8239974975586
+        ],
+        "collision": "Hull",
+        "target": [
+          51978.34375,
+          144.35000610351562,
+          -80.8239974975586
+        ],
+        "class": "UnionOperation",
+        "deck": "Workspace.Level 6 Indoor Playground.Frame_Decks.mat_blue",
+        "fidelity": "Automatic"
+      },
+      "client": {
+        "camera": [
+          51978.34375,
+          145.58413696289062,
+          -80.34103393554688,
+          1,
+          0,
+          0,
+          0,
+          0.965925931930542,
+          0.2588190734386444,
+          0,
+          -0.2588190734386444,
+          0.965925931930542
+        ],
+        "health": 100,
+        "position": [
+          51978.34375,
+          143.95472717285156,
+          -80.8239974975586
+        ],
+        "collision": "Hull",
+        "floorClass": "UnionOperation",
+        "fidelity": "Automatic",
+        "floor": "Workspace.Level 6 Indoor Playground.Frame_Decks.mat_blue"
+      }
+    },
+    {
+      "site": "upper",
+      "server": {
+        "floor": [
+          52085.8515625,
+          220.35000610351562,
+          23.003999710083008
+        ],
+        "collision": "Hull",
+        "target": [
+          52085.8515625,
+          224.35000610351562,
+          23.003999710083008
+        ],
+        "class": "UnionOperation",
+        "deck": "Workspace.Level 6 Indoor Playground.Frame_Decks.mat_blue",
+        "fidelity": "Automatic"
+      },
+      "client": {
+        "camera": [
+          52085.8515625,
+          225.58413696289062,
+          23.486963272094727,
+          1,
+          0,
+          0,
+          0,
+          0.965925931930542,
+          0.2588190734386444,
+          0,
+          -0.2588190734386444,
+          0.965925931930542
+        ],
+        "health": 100,
+        "position": [
+          52085.8515625,
+          223.95472717285156,
+          23.003999710083008
+        ],
+        "collision": "Hull",
+        "floorClass": "UnionOperation",
+        "fidelity": "Automatic",
+        "floor": "Workspace.Level 6 Indoor Playground.Frame_Decks.mat_blue"
+      }
+    }
+  ],
+  "before": {
+    "pivot": [
+      52000,
+      101.01869201660156,
+      162.5334930419922,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "characterId": "893671"
+  },
+  "complete": true,
+  "testPositionRestored": true,
+  "finishedUtc": "2026-10-09T22:30:49.349209+00:00"
+}
