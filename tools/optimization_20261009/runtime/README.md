@@ -1,5 +1,7 @@
 # Actual runtime Stats sampler
 
+The older fixed-session smoke drivers in this directory are historical one-shot records. Their fixed Studio IDs and named output paths must not be replayed against a new session or overwrite these receipts. Completed-session cleanup is established by the actual cleanup and later normal-reset observations. The newer distant-spectate driver has separate transport/borrowed-state guards and a fresh receipt-path requirement; read-only current source verification uses the pinned eight-source reader.
+
 Root executes `measure.luau` directly in the active Client or Server Play DataModel after installation. It returns JSON and does not create fixtures, modify source/properties, call gameplay controls, or start/stop Play. The script rejects Edit and an unexpected place/universe.
 
 The Stats window lasts three seconds, with readings spaced about 0.05 seconds. Median/p95 describe these spaced native observations, including any engine averaging in the property; they are not an exhaustive distribution of every rendered frame. The return from `task.wait` is discarded. Native Stats supplies CPU/render/physics/scheduler values. The script produces no FPS claim, and server renderer fields are context-inapplicable.

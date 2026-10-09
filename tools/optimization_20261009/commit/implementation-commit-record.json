@@ -1,0 +1,2535 @@
+{
+  "kind": "verified-local-implementation-commit",
+  "complete": true,
+  "commit": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "parent": "2231f23babbe07876ddb5a86e5b55862ba7933b7",
+  "treeId": "9b22e11ccdf9d9fcf1ae7335e26e50b37404940f",
+  "headAppendedWithParentCas": true,
+  "preservedUnrelatedNormalIndexEntriesAndFlags": true,
+  "workingGlobalManifestUntouched": true,
+  "changedPaths": [
+    "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+    "ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+    "ServerScriptService/GameManager.Script.lua",
+    "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+    "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+    "studio-sync-manifest.json",
+    "tools/optimization_20261009/README.md",
+    "tools/optimization_20261009/RUNNERS.md",
+    "tools/optimization_20261009/apply_authoring_archive.py",
+    "tools/optimization_20261009/apply_effect_attributes.py",
+    "tools/optimization_20261009/authoring-archive-receipt.json",
+    "tools/optimization_20261009/commit/README.md",
+    "tools/optimization_20261009/commit/prepare_scoped_index.py",
+    "tools/optimization_20261009/commit/test-result-eight.json",
+    "tools/optimization_20261009/commit/test-result.json",
+    "tools/optimization_20261009/commit/test_scoped_index.py",
+    "tools/optimization_20261009/effects/README.md",
+    "tools/optimization_20261009/effects/install/Level4LightDirector.after.lua",
+    "tools/optimization_20261009/effects/install/Level4LightDirector.before.lua",
+    "tools/optimization_20261009/effects/install/README.md",
+    "tools/optimization_20261009/effects/install/actual-level-routes.json",
+    "tools/optimization_20261009/effects/install/attribute-baselines.json",
+    "tools/optimization_20261009/effects/install/attribute-install-receipt.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-01.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-02.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-03.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-04.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-05.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-06.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-07.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-08.json",
+    "tools/optimization_20261009/effects/install/attributes-batch-09.json",
+    "tools/optimization_20261009/effects/install/guarded_attribute_apply.luau",
+    "tools/optimization_20261009/effects/install/level4-gameplay-verification.md",
+    "tools/optimization_20261009/effects/install/rollback-record.json",
+    "tools/optimization_20261009/effects/install/test_guarded_attribute_apply.luau",
+    "tools/optimization_20261009/effects/install/verification.json",
+    "tools/optimization_20261009/geometry/install/GeometryOptimization.luau",
+    "tools/optimization_20261009/geometry/install/NativeMergeProbe.luau",
+    "tools/optimization_20261009/geometry/install/README.md",
+    "tools/optimization_20261009/geometry/install/audit_final_asset_check.py",
+    "tools/optimization_20261009/geometry/install/final-asset-check.json",
+    "tools/optimization_20261009/geometry/install/final-asset-local-audit.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005801.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006001.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006201.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006401.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006601.json",
+    "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006801.json",
+    "tools/optimization_20261009/geometry/install/final_asset_check.py",
+    "tools/optimization_20261009/geometry/install/fresh-preview.json",
+    "tools/optimization_20261009/geometry/install/manifest-review.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-000001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-000251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-000501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-000751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-001001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-001251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-001501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-001751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-002001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-002251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-002501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-002751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-003001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-003251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-003501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-003751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-004001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-004251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-004501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-004751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-005001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-005251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-005501.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-005751.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-006001.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-006251.json",
+    "tools/optimization_20261009/geometry/install/manifest/page-006501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-000001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-000251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-000501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-000751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-001001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-001251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-001501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-001751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-002001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-002251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-002501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-002751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-003001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-003251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-003501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-003751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-004001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-004251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-004501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-004751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-005001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-005251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-005501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-005751.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-006001.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-006251.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-006501.json",
+    "tools/optimization_20261009/geometry/install/postapply-manifest/page-006751.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-check.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-local-audit.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005801.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006001.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006201.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006401.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006601.json",
+    "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006801.json",
+    "tools/optimization_20261009/geometry/install/review_manifest.py",
+    "tools/optimization_20261009/geometry/install/run_geometry.py",
+    "tools/optimization_20261009/geometry/install/runner-receipt.json",
+    "tools/optimization_20261009/geometry/install/staged-payload.luau",
+    "tools/optimization_20261009/geometry/test_geometry_preparation.py",
+    "tools/optimization_20261009/install-identity-test-result.json",
+    "tools/optimization_20261009/install_sources.py",
+    "tools/optimization_20261009/loading/install/GameManager.before.luau",
+    "tools/optimization_20261009/loading/install/GameManager.proposed.luau",
+    "tools/optimization_20261009/loading/install/LobbyLoading.before.luau",
+    "tools/optimization_20261009/loading/install/LobbyLoading.patch.diff",
+    "tools/optimization_20261009/loading/install/LobbyLoading.proposed.luau",
+    "tools/optimization_20261009/loading/install/README.md",
+    "tools/optimization_20261009/loading/install/baseline-capture.json",
+    "tools/optimization_20261009/loading/install/compatibility/Level2Sound.before.luau",
+    "tools/optimization_20261009/loading/install/compatibility/Level2Sound.patch.diff",
+    "tools/optimization_20261009/loading/install/compatibility/Level2Sound.proposed.luau",
+    "tools/optimization_20261009/loading/install/compatibility/Level6Client.before.luau",
+    "tools/optimization_20261009/loading/install/compatibility/Level6Client.patch.diff",
+    "tools/optimization_20261009/loading/install/compatibility/Level6Client.proposed.luau",
+    "tools/optimization_20261009/loading/install/compatibility/README.md",
+    "tools/optimization_20261009/loading/install/compatibility/baseline-capture.json",
+    "tools/optimization_20261009/loading/install/compatibility/baseline-recheck.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/README.md",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.before.luau",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.patch.diff",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.proposed.luau",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/baseline-capture.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/controller-after-contract.luau",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/controller-before-contract.luau",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-plan-test-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-plan.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-refresh-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/native-controller-contract-probe.luau",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/offline-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/prepare_and_test.py",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/refresh_global_manifest.py",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/refresh_verified_source.py",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-manifest.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/studio-sync-manifest.proposed.json",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/test_global_manifest_plan.py",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-source-refresh-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/lifecycle-contract.luau",
+    "tools/optimization_20261009/loading/install/compatibility/native-contract-probe.luau",
+    "tools/optimization_20261009/loading/install/compatibility/native-instance-probe.luau",
+    "tools/optimization_20261009/loading/install/compatibility/native-probe-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/native_compatibility_runner.py",
+    "tools/optimization_20261009/loading/install/compatibility/offline-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/prepare_proposals.py",
+    "tools/optimization_20261009/loading/install/compatibility/proposal-manifest.json",
+    "tools/optimization_20261009/loading/install/compatibility/read-only-source-pins.json",
+    "tools/optimization_20261009/loading/install/compatibility/runner-preparation-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/source-install-manifest.json",
+    "tools/optimization_20261009/loading/install/compatibility/source-install-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.before.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.diff",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.proposed.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/README.md",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.before.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.diff",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.proposed.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/baseline-capture.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/bootstrap-contract.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/capture_fresh_sources.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/check-eight-test-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/check_eight_sources.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/client_checks.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-refresh-test-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-preflight-reviewed.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-preflight.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-refresh-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/fixture_preamble.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/integration_checks.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/native-bootstrap-probe-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/offline-contract-probe.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/offline-result.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/prepare_proposals.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/refresh_eight_sources.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/server_checks.luau",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/source-install-manifest.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/source-install-receipt.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/studio-sync-manifest.eight.proposed.json",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_check_eight_sources.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_eight_refresh.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_spectate_bootstrap.py",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/ServerScriptService/GameManager.Script.lua",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+    "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/manifest.json",
+    "tools/optimization_20261009/loading/install/compatibility/test_streaming_lifecycle.py",
+    "tools/optimization_20261009/loading/install/compatibility/verify_runner_preparation.py",
+    "tools/optimization_20261009/loading/install/loading-offline-result.json",
+    "tools/optimization_20261009/loading/install/native-loading-contract-probe.luau",
+    "tools/optimization_20261009/loading/install/native-spectate-contract-probe.luau",
+    "tools/optimization_20261009/loading/install/spectate-offline-result.json",
+    "tools/optimization_20261009/loading/install/spectate.before.luau",
+    "tools/optimization_20261009/loading/install/spectate.patch.diff",
+    "tools/optimization_20261009/loading/install/spectate.proposed.luau",
+    "tools/optimization_20261009/loading/install/verify_install_proposals.py",
+    "tools/optimization_20261009/native-probe-receipt.json",
+    "tools/optimization_20261009/native_probe_runner.py",
+    "tools/optimization_20261009/runtime/DISTANT_SPECTATE_SMOKE.md",
+    "tools/optimization_20261009/runtime/README.md",
+    "tools/optimization_20261009/runtime/budget_smoke.py",
+    "tools/optimization_20261009/runtime/distant-spectate-floor-correction-offline-result.json",
+    "tools/optimization_20261009/runtime/distant-spectate-offline-result.json",
+    "tools/optimization_20261009/runtime/distant_spectate_smoke.py",
+    "tools/optimization_20261009/runtime/final-authoring-effect-check.json",
+    "tools/optimization_20261009/runtime/final-eight-prepublish-source-check.json",
+    "tools/optimization_20261009/runtime/final-prepublish-source-check.json",
+    "tools/optimization_20261009/runtime/final-source-check.json",
+    "tools/optimization_20261009/runtime/final-studio-ui-check.json",
+    "tools/optimization_20261009/runtime/final_reset_read.luau",
+    "tools/optimization_20261009/runtime/l2_binding_smoke.py",
+    "tools/optimization_20261009/runtime/l4_prompt_smoke.py",
+    "tools/optimization_20261009/runtime/l6_deck_smoke.py",
+    "tools/optimization_20261009/runtime/l6_reentry_read.luau",
+    "tools/optimization_20261009/runtime/measure.luau",
+    "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-actual.json",
+    "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-assessment.md",
+    "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-floor-corrected.json",
+    "tools/optimization_20261009/runtime/observations/bootstrap-final-normal-reset.json",
+    "tools/optimization_20261009/runtime/observations/bootstrap-third-session-source-check.json",
+    "tools/optimization_20261009/runtime/observations/final-normal-reset.json",
+    "tools/optimization_20261009/runtime/observations/fresh-after-l2-reset-server.json",
+    "tools/optimization_20261009/runtime/observations/l2-gameplay-verification.md",
+    "tools/optimization_20261009/runtime/observations/l2-post-root-tests-20261009T221447Z.json",
+    "tools/optimization_20261009/runtime/observations/l2-root-reported-multiplayer-tests-20261009T2214.json",
+    "tools/optimization_20261009/runtime/observations/l2-route-current-source-excerpts-20261009T221325Z.json",
+    "tools/optimization_20261009/runtime/observations/l2-two-alive-20261009T221240Z.json",
+    "tools/optimization_20261009/runtime/observations/l2-valve-goal-literal-source-search-20261009T221447Z.json",
+    "tools/optimization_20261009/runtime/observations/l4-usher-listener-20261009T222005Z.json",
+    "tools/optimization_20261009/runtime/observations/l4-usher-listener-assessment.md",
+    "tools/optimization_20261009/runtime/observations/l5-l6-gameplay-verification.md",
+    "tools/optimization_20261009/runtime/observations/level2-client1-entry.json",
+    "tools/optimization_20261009/runtime/observations/level2-client2-active.json",
+    "tools/optimization_20261009/runtime/observations/level2-fresh-budget-binding.json",
+    "tools/optimization_20261009/runtime/observations/level2-server-active.json",
+    "tools/optimization_20261009/runtime/observations/level4-budget-controlled.json",
+    "tools/optimization_20261009/runtime/observations/level4-client1-dark.json",
+    "tools/optimization_20261009/runtime/observations/level4-prompts-resume.json",
+    "tools/optimization_20261009/runtime/observations/level4-prompts.json",
+    "tools/optimization_20261009/runtime/observations/level5-client1-entry.json",
+    "tools/optimization_20261009/runtime/observations/level5-client2-entry.json",
+    "tools/optimization_20261009/runtime/observations/level6-client1-entry.json",
+    "tools/optimization_20261009/runtime/observations/level6-client1-normal-reentry.json",
+    "tools/optimization_20261009/runtime/observations/level6-client2-entry.json",
+    "tools/optimization_20261009/runtime/observations/level6-deck-smoke.json",
+    "tools/optimization_20261009/runtime/observations/lobby-client1.json",
+    "tools/optimization_20261009/runtime/prepublish-authoring-effect-check.json",
+    "tools/optimization_20261009/runtime/prepublish-studio-ui-check.json",
+    "tools/optimization_20261009/runtime/run_call.py",
+    "tools/optimization_20261009/runtime/test_distant_spectate_smoke.py",
+    "tools/optimization_20261009/runtime/test_measure.py",
+    "tools/optimization_20261009/source-install-receipt.json",
+    "tools/optimization_20261009/streaming-install-receipt.json",
+    "tools/optimization_20261009/test_install_identity.py",
+    "tools/optimization_20261009/test_native_probe_runner.py",
+    "tools/optimization_20261009/verified-export/README.md",
+    "tools/optimization_20261009/verified-export/ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+    "tools/optimization_20261009/verified-export/ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+    "tools/optimization_20261009/verified-export/ServerScriptService/GameManager.Script.lua",
+    "tools/optimization_20261009/verified-export/ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+    "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+    "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+    "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+    "tools/optimization_20261009/verified-export/export_verified_sources.py",
+    "tools/optimization_20261009/verified-export/manifest.json",
+    "tools/optimization_20261009/verified-export/mirror-promotion-receipt.json",
+    "tools/optimization_20261009/verified-export/promote_verified_mirrors.py",
+    "tools/optimization_20261009/verified-export/promotion-native-read-cas.luau",
+    "tools/optimization_20261009/verified-export/promotion-preflight.json",
+    "tools/optimization_20261009/verified-export/promotion-preparation-result.json",
+    "tools/optimization_20261009/verified-export/test_promote_verified_mirrors.py"
+  ],
+  "stagedFiles": [
+    {
+      "path": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "stagedLfSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "stagedLfSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "path": "ServerScriptService/GameManager.Script.lua",
+      "deleted": false,
+      "stagedRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "stagedLfSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "stagedLfSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "stagedLfSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "stagedLfSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedLfSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "stagedLfSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    },
+    {
+      "path": "tools/optimization_20261009/README.md",
+      "deleted": false,
+      "stagedRawSha256": "d7304a74603dfb3c8c311d1fe28a3f0cb4ee5a8b3e5f5b129f71150ff815a5c8",
+      "stagedLfSha256": "d7304a74603dfb3c8c311d1fe28a3f0cb4ee5a8b3e5f5b129f71150ff815a5c8"
+    },
+    {
+      "path": "tools/optimization_20261009/RUNNERS.md",
+      "deleted": false,
+      "stagedRawSha256": "dc5256ff162411ae385862f22c3dafaa32e467f7ed8f47e2003bac0d5f7b880c",
+      "stagedLfSha256": "dc5256ff162411ae385862f22c3dafaa32e467f7ed8f47e2003bac0d5f7b880c"
+    },
+    {
+      "path": "tools/optimization_20261009/apply_authoring_archive.py",
+      "deleted": false,
+      "stagedRawSha256": "ed3a69519229b96cae32601a0a1629149b5bd46fc8a11806bde2b4c8ae054b7c",
+      "stagedLfSha256": "ed3a69519229b96cae32601a0a1629149b5bd46fc8a11806bde2b4c8ae054b7c"
+    },
+    {
+      "path": "tools/optimization_20261009/apply_effect_attributes.py",
+      "deleted": false,
+      "stagedRawSha256": "aac83283610507ed6ee2da7833c90e4a07d607efcac0370c463954ae037bea1c",
+      "stagedLfSha256": "aac83283610507ed6ee2da7833c90e4a07d607efcac0370c463954ae037bea1c"
+    },
+    {
+      "path": "tools/optimization_20261009/authoring-archive-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "0fdf62644e860b3cbc1815edea96c8f610d7e46eb67db9dd2fb045344353fdbe",
+      "stagedLfSha256": "82f2ad7af45b56a01e961042620f6dae560c7aa1028116687c4d4ee4173a47c7"
+    },
+    {
+      "path": "tools/optimization_20261009/commit/README.md",
+      "deleted": false,
+      "stagedRawSha256": "4461ed767cd3ca44355988d42e7e06c9105dc8f757a5d32e303f4b7ba9e5a2a7",
+      "stagedLfSha256": "4461ed767cd3ca44355988d42e7e06c9105dc8f757a5d32e303f4b7ba9e5a2a7"
+    },
+    {
+      "path": "tools/optimization_20261009/commit/prepare_scoped_index.py",
+      "deleted": false,
+      "stagedRawSha256": "c95837135ee056d9a9b70650d21f95b6ac0445aef7629279df915db8dca14305",
+      "stagedLfSha256": "c95837135ee056d9a9b70650d21f95b6ac0445aef7629279df915db8dca14305"
+    },
+    {
+      "path": "tools/optimization_20261009/commit/test-result-eight.json",
+      "deleted": false,
+      "stagedRawSha256": "4355fafb5432d622779ed20f8db7127f091e68b73dc475d776ae63a02931f351",
+      "stagedLfSha256": "7560c937538f8842a1234bbdaff0cf7f6151ea8c706abe4668e5df335e81616b"
+    },
+    {
+      "path": "tools/optimization_20261009/commit/test-result.json",
+      "deleted": false,
+      "stagedRawSha256": "fe66fecf1ee84b6aceafb10bc61f507b81af4e035679fee6b2e1ed9a005c14af",
+      "stagedLfSha256": "fe66fecf1ee84b6aceafb10bc61f507b81af4e035679fee6b2e1ed9a005c14af"
+    },
+    {
+      "path": "tools/optimization_20261009/commit/test_scoped_index.py",
+      "deleted": false,
+      "stagedRawSha256": "15ffabb814e54df6ec3c98e6f88f59f77e050c997dd322a9a905eaa0c8f5899e",
+      "stagedLfSha256": "15ffabb814e54df6ec3c98e6f88f59f77e050c997dd322a9a905eaa0c8f5899e"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/README.md",
+      "deleted": false,
+      "stagedRawSha256": "0521c01d1ce5332ee362d1d6c6fca5d8b6dab146f0145e7de0d78f4fbea27e4f",
+      "stagedLfSha256": "0521c01d1ce5332ee362d1d6c6fca5d8b6dab146f0145e7de0d78f4fbea27e4f"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/Level4LightDirector.after.lua",
+      "deleted": false,
+      "stagedRawSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "stagedLfSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/Level4LightDirector.before.lua",
+      "deleted": false,
+      "stagedRawSha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
+      "stagedLfSha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/README.md",
+      "deleted": false,
+      "stagedRawSha256": "0fcae8c10c160d38149b61c50063dffb4f047ecfce4bd6c6d0528237e865d4d5",
+      "stagedLfSha256": "0fcae8c10c160d38149b61c50063dffb4f047ecfce4bd6c6d0528237e865d4d5"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/actual-level-routes.json",
+      "deleted": false,
+      "stagedRawSha256": "497b0bb3775b72eb04a1e8b2c72de289cf76bc3d6ad0f96f3f121b0ac3cb56be",
+      "stagedLfSha256": "497b0bb3775b72eb04a1e8b2c72de289cf76bc3d6ad0f96f3f121b0ac3cb56be"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attribute-baselines.json",
+      "deleted": false,
+      "stagedRawSha256": "9af222da26ba3a72cefdacb1a17d046fcdc295934229515e081e0b312a664d13",
+      "stagedLfSha256": "9af222da26ba3a72cefdacb1a17d046fcdc295934229515e081e0b312a664d13"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attribute-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "625b838b98708c3f6c4f31352b76c7b792a8c8a9cc8777424b387fca5c9d8b4a",
+      "stagedLfSha256": "3a246593dd0cbaac9b53384d74e3620a260d903c5410ce19ba72553012aac7da"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-01.json",
+      "deleted": false,
+      "stagedRawSha256": "340d90dcd3397195708f3e192b6c3df1c11a7b334ad8308e6e624519214906c0",
+      "stagedLfSha256": "340d90dcd3397195708f3e192b6c3df1c11a7b334ad8308e6e624519214906c0"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-02.json",
+      "deleted": false,
+      "stagedRawSha256": "834249bee513c9181c84cb1b326537a26b4faf82f46df38f5cfc93b87b435bd7",
+      "stagedLfSha256": "834249bee513c9181c84cb1b326537a26b4faf82f46df38f5cfc93b87b435bd7"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-03.json",
+      "deleted": false,
+      "stagedRawSha256": "5d9fbe494e5333bc770e5bf9f86c726c1ea4bff0902ad774fb8791e2fd6425b2",
+      "stagedLfSha256": "5d9fbe494e5333bc770e5bf9f86c726c1ea4bff0902ad774fb8791e2fd6425b2"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-04.json",
+      "deleted": false,
+      "stagedRawSha256": "e100e8fec0d14a9490139b9c70fa21702684d1dfcc10912eb5e0a991566a1ea2",
+      "stagedLfSha256": "e100e8fec0d14a9490139b9c70fa21702684d1dfcc10912eb5e0a991566a1ea2"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-05.json",
+      "deleted": false,
+      "stagedRawSha256": "e3ad37c6ae67cb44260d6bd9f8170e23d6e806015dab66c46e97d807181f6a24",
+      "stagedLfSha256": "e3ad37c6ae67cb44260d6bd9f8170e23d6e806015dab66c46e97d807181f6a24"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-06.json",
+      "deleted": false,
+      "stagedRawSha256": "32a78ac89098b954ed66c5debb5b8c590997e8f89201714833d549000e60ae8b",
+      "stagedLfSha256": "32a78ac89098b954ed66c5debb5b8c590997e8f89201714833d549000e60ae8b"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-07.json",
+      "deleted": false,
+      "stagedRawSha256": "fda35625a981520b8e9e4c9ecc97d862cda6dfd64c5b395153037392644eac79",
+      "stagedLfSha256": "fda35625a981520b8e9e4c9ecc97d862cda6dfd64c5b395153037392644eac79"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-08.json",
+      "deleted": false,
+      "stagedRawSha256": "e24698227f65d987589d82687c5700dbc95df84be422c6d879b0a80ba5be746c",
+      "stagedLfSha256": "e24698227f65d987589d82687c5700dbc95df84be422c6d879b0a80ba5be746c"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/attributes-batch-09.json",
+      "deleted": false,
+      "stagedRawSha256": "a353b68f1cb7732e8b69650484c05f98624e669fdb164c60e37f4efcee1931c6",
+      "stagedLfSha256": "a353b68f1cb7732e8b69650484c05f98624e669fdb164c60e37f4efcee1931c6"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/guarded_attribute_apply.luau",
+      "deleted": false,
+      "stagedRawSha256": "83564be6c374ff6f3caa795d9e2fb841786ff2917ba78e6063c0615f761973eb",
+      "stagedLfSha256": "83564be6c374ff6f3caa795d9e2fb841786ff2917ba78e6063c0615f761973eb"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/level4-gameplay-verification.md",
+      "deleted": false,
+      "stagedRawSha256": "393711a4bcd33921e4e9631ae8df023f5f4217fb1ffb94aee60e841e7201c15f",
+      "stagedLfSha256": "393711a4bcd33921e4e9631ae8df023f5f4217fb1ffb94aee60e841e7201c15f"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/rollback-record.json",
+      "deleted": false,
+      "stagedRawSha256": "95cd8a74198fbd4ba09ea5a43f9f35aa87c316e2b550663948de3590d8d53ce9",
+      "stagedLfSha256": "95cd8a74198fbd4ba09ea5a43f9f35aa87c316e2b550663948de3590d8d53ce9"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/test_guarded_attribute_apply.luau",
+      "deleted": false,
+      "stagedRawSha256": "11921d374caf341f62f27b21984c6ca93d2197c77ae66b0538158dce96499648",
+      "stagedLfSha256": "11921d374caf341f62f27b21984c6ca93d2197c77ae66b0538158dce96499648"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/install/verification.json",
+      "deleted": false,
+      "stagedRawSha256": "eebd2d7460df9615b1bcb1abfd02b04c8d21da84d3e27098af8c3e35d5e91718",
+      "stagedLfSha256": "87e3a7c8ab5c1abfeff0f3245b52729816a66f632d724733d94e5cf33a11c4ab"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/GeometryOptimization.luau",
+      "deleted": false,
+      "stagedRawSha256": "792ed0bb4aae5e847c9de9bdc57af064cecb5e4b1004c3a688940a11cbc3e84f",
+      "stagedLfSha256": "792ed0bb4aae5e847c9de9bdc57af064cecb5e4b1004c3a688940a11cbc3e84f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/NativeMergeProbe.luau",
+      "deleted": false,
+      "stagedRawSha256": "50b21d60e441bd754587b32516f1b3ab9b8617e008f43a17da22821713557a87",
+      "stagedLfSha256": "50b21d60e441bd754587b32516f1b3ab9b8617e008f43a17da22821713557a87"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/README.md",
+      "deleted": false,
+      "stagedRawSha256": "844fde37d7d88859eb97e4bbca7dc243bd38ceaa09eeb16f3ce5978073871d4f",
+      "stagedLfSha256": "844fde37d7d88859eb97e4bbca7dc243bd38ceaa09eeb16f3ce5978073871d4f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/audit_final_asset_check.py",
+      "deleted": false,
+      "stagedRawSha256": "2ca4e218dc8b21e54acf927fbe9bcd8881d805b4d04e342ea5eb4b3cecb60c3e",
+      "stagedLfSha256": "2ca4e218dc8b21e54acf927fbe9bcd8881d805b4d04e342ea5eb4b3cecb60c3e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-check.json",
+      "deleted": false,
+      "stagedRawSha256": "32711c3d41fb68e441aaaee67e348b03985c8cfb09a08bcffda052af763f093a",
+      "stagedLfSha256": "be2910b3215564341f77bcce1e57c8505c6e8d5dd9d960d4473ab87ff97d6d88"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-local-audit.json",
+      "deleted": false,
+      "stagedRawSha256": "1b5a7553ab71b5bb666795aff14f2094d0188e87de914828dc49467f587944f9",
+      "stagedLfSha256": "bf0a9b9040f33532edee7f5c00f15273fa93ca627fdc4ed953283de68d8d5909"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000001.json",
+      "deleted": false,
+      "stagedRawSha256": "7cbe63a89592a53ed4ec56fca45e60d9fb4eaa93c495446468438e6273e17237",
+      "stagedLfSha256": "7cbe63a89592a53ed4ec56fca45e60d9fb4eaa93c495446468438e6273e17237"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000201.json",
+      "deleted": false,
+      "stagedRawSha256": "80bd342f94cbe4eac015f4789dc66f1dfe17aa9f8a030b382ebb8c9d79ac9c75",
+      "stagedLfSha256": "80bd342f94cbe4eac015f4789dc66f1dfe17aa9f8a030b382ebb8c9d79ac9c75"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000401.json",
+      "deleted": false,
+      "stagedRawSha256": "ed551a8fe544417562f8431983cba44c57ac6a58145eb1584e6f69df35c637c8",
+      "stagedLfSha256": "ed551a8fe544417562f8431983cba44c57ac6a58145eb1584e6f69df35c637c8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000601.json",
+      "deleted": false,
+      "stagedRawSha256": "d526216c4a168e780b105de57bc1971d4ba325a1f60e6606462a3e140e4057b9",
+      "stagedLfSha256": "d526216c4a168e780b105de57bc1971d4ba325a1f60e6606462a3e140e4057b9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-000801.json",
+      "deleted": false,
+      "stagedRawSha256": "d264ef7fe8b8fff581487c21906e8f764958d599fda81c1a652d9aeb79ea872d",
+      "stagedLfSha256": "d264ef7fe8b8fff581487c21906e8f764958d599fda81c1a652d9aeb79ea872d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001001.json",
+      "deleted": false,
+      "stagedRawSha256": "0bb1dadae7474c5c039cae03bb7c7fb766052b0996c48f02700a51bd7114270c",
+      "stagedLfSha256": "0bb1dadae7474c5c039cae03bb7c7fb766052b0996c48f02700a51bd7114270c"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001201.json",
+      "deleted": false,
+      "stagedRawSha256": "39e6f1592c66fa85c29560db3c609fcd31fc99655726442be593807a93527f03",
+      "stagedLfSha256": "39e6f1592c66fa85c29560db3c609fcd31fc99655726442be593807a93527f03"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001401.json",
+      "deleted": false,
+      "stagedRawSha256": "e297966b08816ff47e627a07da68516f9e0748abac6030a22f638783561ed670",
+      "stagedLfSha256": "e297966b08816ff47e627a07da68516f9e0748abac6030a22f638783561ed670"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001601.json",
+      "deleted": false,
+      "stagedRawSha256": "6af0e12e0a2f953813dd1ce3fe7dd41cf3375ff2891a33b237af3f0a8f772043",
+      "stagedLfSha256": "6af0e12e0a2f953813dd1ce3fe7dd41cf3375ff2891a33b237af3f0a8f772043"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-001801.json",
+      "deleted": false,
+      "stagedRawSha256": "805b3b74b4b924c79cfab5842ae02195e678d879cd959b10a80f4b9cef30dd68",
+      "stagedLfSha256": "805b3b74b4b924c79cfab5842ae02195e678d879cd959b10a80f4b9cef30dd68"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002001.json",
+      "deleted": false,
+      "stagedRawSha256": "aa8b5945c9e1ba93b990c5a762454a6017cce3ce73b851c914c1b187d723fadd",
+      "stagedLfSha256": "aa8b5945c9e1ba93b990c5a762454a6017cce3ce73b851c914c1b187d723fadd"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002201.json",
+      "deleted": false,
+      "stagedRawSha256": "544a16529410888e6b9d15fc8392fd5e2c18cc10f4f8e0da220df81efa31a26f",
+      "stagedLfSha256": "544a16529410888e6b9d15fc8392fd5e2c18cc10f4f8e0da220df81efa31a26f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002401.json",
+      "deleted": false,
+      "stagedRawSha256": "1a61ecc1575a9cb79f19731ab3adf148b0eed2a924c8c3bbdb73a2fe68665ff8",
+      "stagedLfSha256": "1a61ecc1575a9cb79f19731ab3adf148b0eed2a924c8c3bbdb73a2fe68665ff8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002601.json",
+      "deleted": false,
+      "stagedRawSha256": "6659876b3e1f6546fb971f9aae15d2f31350e39ebd7fe2becef734531e546929",
+      "stagedLfSha256": "6659876b3e1f6546fb971f9aae15d2f31350e39ebd7fe2becef734531e546929"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-002801.json",
+      "deleted": false,
+      "stagedRawSha256": "02a818904d6de47431c7b58fa5576cdf4df7b10cf45acc650ecdfb441d2d6b91",
+      "stagedLfSha256": "02a818904d6de47431c7b58fa5576cdf4df7b10cf45acc650ecdfb441d2d6b91"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003001.json",
+      "deleted": false,
+      "stagedRawSha256": "a3af8e5b8abc3a8ae3e9822bfd2535cdda8fb95728ba0fa40fdfb101feb3425d",
+      "stagedLfSha256": "a3af8e5b8abc3a8ae3e9822bfd2535cdda8fb95728ba0fa40fdfb101feb3425d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003201.json",
+      "deleted": false,
+      "stagedRawSha256": "634ac76931b02c05d5bacc79e5ba9491727a814d4cc3fe46379a0718f278d2df",
+      "stagedLfSha256": "634ac76931b02c05d5bacc79e5ba9491727a814d4cc3fe46379a0718f278d2df"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003401.json",
+      "deleted": false,
+      "stagedRawSha256": "a2ef1105bdaa056c72d500c62852416b7823b0ebdc5d7866c4c16badd6ea6d7c",
+      "stagedLfSha256": "a2ef1105bdaa056c72d500c62852416b7823b0ebdc5d7866c4c16badd6ea6d7c"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003601.json",
+      "deleted": false,
+      "stagedRawSha256": "65706440780aaf400b4c15abf6a701f5f4550a612098d6bb6ab745d22c7dd48d",
+      "stagedLfSha256": "65706440780aaf400b4c15abf6a701f5f4550a612098d6bb6ab745d22c7dd48d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-003801.json",
+      "deleted": false,
+      "stagedRawSha256": "826f4ac5b2f97a891a6b6350b763a5b55543d2d936093aefc08c4d549bd3ff34",
+      "stagedLfSha256": "826f4ac5b2f97a891a6b6350b763a5b55543d2d936093aefc08c4d549bd3ff34"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004001.json",
+      "deleted": false,
+      "stagedRawSha256": "6aa938b9861e0707d15ddbdff5d5152ccb782fc89a09808683b5942e9c7c7c02",
+      "stagedLfSha256": "6aa938b9861e0707d15ddbdff5d5152ccb782fc89a09808683b5942e9c7c7c02"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004201.json",
+      "deleted": false,
+      "stagedRawSha256": "8c2bae4ac1099c703a6b94a48a4716baf4fc9c03010cc4d0bd0d278152c30739",
+      "stagedLfSha256": "8c2bae4ac1099c703a6b94a48a4716baf4fc9c03010cc4d0bd0d278152c30739"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004401.json",
+      "deleted": false,
+      "stagedRawSha256": "84c57222bfce9d1dbb187015b6e3c487dd16dd9db9ec57ace7dff2f53fdf7623",
+      "stagedLfSha256": "84c57222bfce9d1dbb187015b6e3c487dd16dd9db9ec57ace7dff2f53fdf7623"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004601.json",
+      "deleted": false,
+      "stagedRawSha256": "964719b2634f494328eb351a8bc90c7f9e674be49d3e79daeb943b734ca74d10",
+      "stagedLfSha256": "964719b2634f494328eb351a8bc90c7f9e674be49d3e79daeb943b734ca74d10"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-004801.json",
+      "deleted": false,
+      "stagedRawSha256": "2bc231f397eab716676480ba93d42032e3398d78a623453be8663d4cd33d2e4e",
+      "stagedLfSha256": "2bc231f397eab716676480ba93d42032e3398d78a623453be8663d4cd33d2e4e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005001.json",
+      "deleted": false,
+      "stagedRawSha256": "72be23d1991497031b797960ca3b54c53af396a73339cda77e7e923cb1e7eb92",
+      "stagedLfSha256": "72be23d1991497031b797960ca3b54c53af396a73339cda77e7e923cb1e7eb92"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005201.json",
+      "deleted": false,
+      "stagedRawSha256": "0d2a81cbf8fffce89fcf8f1abeb059d815fe52314c4da7209c8da1baee6c7101",
+      "stagedLfSha256": "0d2a81cbf8fffce89fcf8f1abeb059d815fe52314c4da7209c8da1baee6c7101"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005401.json",
+      "deleted": false,
+      "stagedRawSha256": "ccb8b750fe4c5f0e69e24befd162505112a3f6de911297f742e319645a5f694b",
+      "stagedLfSha256": "ccb8b750fe4c5f0e69e24befd162505112a3f6de911297f742e319645a5f694b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005601.json",
+      "deleted": false,
+      "stagedRawSha256": "60c734c9116b7915d587aa99c39f7bbc816b204c24c81c8ec06344555ebb74a1",
+      "stagedLfSha256": "60c734c9116b7915d587aa99c39f7bbc816b204c24c81c8ec06344555ebb74a1"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-005801.json",
+      "deleted": false,
+      "stagedRawSha256": "650626c7eb0a351a52978feaeaa34269a4d84248e4c2384c918c37b5ef21b31f",
+      "stagedLfSha256": "650626c7eb0a351a52978feaeaa34269a4d84248e4c2384c918c37b5ef21b31f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006001.json",
+      "deleted": false,
+      "stagedRawSha256": "78cc62b8e7f80f0c7f09998983683f165237d80ddb0719ef8ebe094d40e9962e",
+      "stagedLfSha256": "78cc62b8e7f80f0c7f09998983683f165237d80ddb0719ef8ebe094d40e9962e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006201.json",
+      "deleted": false,
+      "stagedRawSha256": "9208a0eeb463ae783b54ef5cef008cada825db4bf9992f95b77e3907bf290f1b",
+      "stagedLfSha256": "9208a0eeb463ae783b54ef5cef008cada825db4bf9992f95b77e3907bf290f1b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006401.json",
+      "deleted": false,
+      "stagedRawSha256": "0e10eff3d723ef4d9e6a3c1983ba642d9667dfb36e708afcdda58a53d792d176",
+      "stagedLfSha256": "0e10eff3d723ef4d9e6a3c1983ba642d9667dfb36e708afcdda58a53d792d176"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006601.json",
+      "deleted": false,
+      "stagedRawSha256": "f7a98aab4723276c8899f1e38dc074a8649f8e83129fafa0342e0e093c2f8b43",
+      "stagedLfSha256": "f7a98aab4723276c8899f1e38dc074a8649f8e83129fafa0342e0e093c2f8b43"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final-asset-native-pages/page-006801.json",
+      "deleted": false,
+      "stagedRawSha256": "7d519dd54826e0fab3a96ac800a38d7789b5f47aeda640bfbd889aa20e63cdba",
+      "stagedLfSha256": "7d519dd54826e0fab3a96ac800a38d7789b5f47aeda640bfbd889aa20e63cdba"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/final_asset_check.py",
+      "deleted": false,
+      "stagedRawSha256": "64138bf854e96ac70884fcdd278f8a9c22adee9b122d508a62ecaa752953c99b",
+      "stagedLfSha256": "64138bf854e96ac70884fcdd278f8a9c22adee9b122d508a62ecaa752953c99b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/fresh-preview.json",
+      "deleted": false,
+      "stagedRawSha256": "337b6697fa0204c9aa50259f119a719f516b460f8795cf1c0a90b1074c2fb299",
+      "stagedLfSha256": "337b6697fa0204c9aa50259f119a719f516b460f8795cf1c0a90b1074c2fb299"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest-review.json",
+      "deleted": false,
+      "stagedRawSha256": "865f7b5a4a3028b62ccfabe39a1041782d5735178b28305af227a03a8af4c6b6",
+      "stagedLfSha256": "ece49711059c0d87613696030cc7a83b171f4abb272cb1b7f43db651c67dad6f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-000001.json",
+      "deleted": false,
+      "stagedRawSha256": "d63e36b8ee0b0e5e167e22436c5d4edd19a034a9e67944f41eabe4cd3d8b196c",
+      "stagedLfSha256": "d63e36b8ee0b0e5e167e22436c5d4edd19a034a9e67944f41eabe4cd3d8b196c"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-000251.json",
+      "deleted": false,
+      "stagedRawSha256": "c36f3a0b7f0af48c801b9f5b52153b24221fb60a3677cb504f399c2f85c216fa",
+      "stagedLfSha256": "c36f3a0b7f0af48c801b9f5b52153b24221fb60a3677cb504f399c2f85c216fa"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-000501.json",
+      "deleted": false,
+      "stagedRawSha256": "c62da59240cad0c9b7e20801247343b50d2c191e8a4fce36114b6a5f43142ac0",
+      "stagedLfSha256": "c62da59240cad0c9b7e20801247343b50d2c191e8a4fce36114b6a5f43142ac0"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-000751.json",
+      "deleted": false,
+      "stagedRawSha256": "50377fbcc8175d795551dbfa4e81b835271776c0111da1d58120798a7297813a",
+      "stagedLfSha256": "50377fbcc8175d795551dbfa4e81b835271776c0111da1d58120798a7297813a"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-001001.json",
+      "deleted": false,
+      "stagedRawSha256": "f0b3e7570489e14f836a9e5e5fc2559e7ab437d8fccd554e10e654b50694710f",
+      "stagedLfSha256": "f0b3e7570489e14f836a9e5e5fc2559e7ab437d8fccd554e10e654b50694710f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-001251.json",
+      "deleted": false,
+      "stagedRawSha256": "90320c452b1d5cae8f4817d6cc99daa9d6afea7c6b61d62578881f496bc45e4b",
+      "stagedLfSha256": "90320c452b1d5cae8f4817d6cc99daa9d6afea7c6b61d62578881f496bc45e4b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-001501.json",
+      "deleted": false,
+      "stagedRawSha256": "b759ae40477d859468737768cf4994bc53e4a49cac6ce81158cbe1340807d7c2",
+      "stagedLfSha256": "b759ae40477d859468737768cf4994bc53e4a49cac6ce81158cbe1340807d7c2"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-001751.json",
+      "deleted": false,
+      "stagedRawSha256": "9e5cfa679c085d020d455a997606b31c3a8ed1c49757b109b12278f50148f25e",
+      "stagedLfSha256": "9e5cfa679c085d020d455a997606b31c3a8ed1c49757b109b12278f50148f25e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-002001.json",
+      "deleted": false,
+      "stagedRawSha256": "dee5c4a3266212f8b68220a832bfad1142715c22d4be6f332e6f8d821cf09ccd",
+      "stagedLfSha256": "dee5c4a3266212f8b68220a832bfad1142715c22d4be6f332e6f8d821cf09ccd"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-002251.json",
+      "deleted": false,
+      "stagedRawSha256": "d1ab6a7a024bf59dcdc6ecebaab350352e5945c8751990d7d093ea3ef651b8c3",
+      "stagedLfSha256": "d1ab6a7a024bf59dcdc6ecebaab350352e5945c8751990d7d093ea3ef651b8c3"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-002501.json",
+      "deleted": false,
+      "stagedRawSha256": "7fddd5485ba1d17bd48234dbb9a6bed1ea6351a46122430603b6c163cf7a78b9",
+      "stagedLfSha256": "7fddd5485ba1d17bd48234dbb9a6bed1ea6351a46122430603b6c163cf7a78b9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-002751.json",
+      "deleted": false,
+      "stagedRawSha256": "88b571574dc3a34a5fbb5b4e35e32488206256c99a27906e7781c58169003b1d",
+      "stagedLfSha256": "88b571574dc3a34a5fbb5b4e35e32488206256c99a27906e7781c58169003b1d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-003001.json",
+      "deleted": false,
+      "stagedRawSha256": "e6656541f894f0d06c92a5f90a6446fa21eb30e12ea5f7474c70330aa9271ed1",
+      "stagedLfSha256": "e6656541f894f0d06c92a5f90a6446fa21eb30e12ea5f7474c70330aa9271ed1"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-003251.json",
+      "deleted": false,
+      "stagedRawSha256": "8cc3ffeaadcd24355e8a377eab13466a28f11b2c35bc47e0a3597e60c17ac4d7",
+      "stagedLfSha256": "8cc3ffeaadcd24355e8a377eab13466a28f11b2c35bc47e0a3597e60c17ac4d7"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-003501.json",
+      "deleted": false,
+      "stagedRawSha256": "0dd8edf760e73ec79902b35cde88bce44210646c9d7dd6f94fb79b2bc25313fa",
+      "stagedLfSha256": "0dd8edf760e73ec79902b35cde88bce44210646c9d7dd6f94fb79b2bc25313fa"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-003751.json",
+      "deleted": false,
+      "stagedRawSha256": "bf1dd80bd69a7b300a94c163b9f39f3cdc4e5308ebcb2f772361f2d2ca119f58",
+      "stagedLfSha256": "bf1dd80bd69a7b300a94c163b9f39f3cdc4e5308ebcb2f772361f2d2ca119f58"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-004001.json",
+      "deleted": false,
+      "stagedRawSha256": "85a28a760b096174bbd4e9bda999aa0f21037600e412458603c6a5198308f04e",
+      "stagedLfSha256": "85a28a760b096174bbd4e9bda999aa0f21037600e412458603c6a5198308f04e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-004251.json",
+      "deleted": false,
+      "stagedRawSha256": "d37f40bd966eb539a9f7e0b941c4e6e340bc571ba4ad27ae82cc6bbe6b4f91e9",
+      "stagedLfSha256": "d37f40bd966eb539a9f7e0b941c4e6e340bc571ba4ad27ae82cc6bbe6b4f91e9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-004501.json",
+      "deleted": false,
+      "stagedRawSha256": "2816e6dd0dc05b4c5a1454a36f1e69634741ea666b50fcc789c1ce267e5d833a",
+      "stagedLfSha256": "2816e6dd0dc05b4c5a1454a36f1e69634741ea666b50fcc789c1ce267e5d833a"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-004751.json",
+      "deleted": false,
+      "stagedRawSha256": "1a8965cd2ded80aa8962effaf2fd7e9d27cbd973a0b3f39dce5e253c29c42ee6",
+      "stagedLfSha256": "1a8965cd2ded80aa8962effaf2fd7e9d27cbd973a0b3f39dce5e253c29c42ee6"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-005001.json",
+      "deleted": false,
+      "stagedRawSha256": "ec5c208c12f7860cf90b6c168efe6ef465baf7615bd5c46f61828a62e980f6d7",
+      "stagedLfSha256": "ec5c208c12f7860cf90b6c168efe6ef465baf7615bd5c46f61828a62e980f6d7"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-005251.json",
+      "deleted": false,
+      "stagedRawSha256": "4688fa41ac5b9e339dc3f6ead95bf6df0aa0a7d42838e6808e5cd56a1bd651cb",
+      "stagedLfSha256": "4688fa41ac5b9e339dc3f6ead95bf6df0aa0a7d42838e6808e5cd56a1bd651cb"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-005501.json",
+      "deleted": false,
+      "stagedRawSha256": "8a090f5cf33d720ddef404e1c5f9f8dc7ac18f19034834da8ab13d33bcabba34",
+      "stagedLfSha256": "8a090f5cf33d720ddef404e1c5f9f8dc7ac18f19034834da8ab13d33bcabba34"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-005751.json",
+      "deleted": false,
+      "stagedRawSha256": "c293d1b92642033b43e235f676b779a05d21343e3540f0b005804a0afd9f4fcf",
+      "stagedLfSha256": "c293d1b92642033b43e235f676b779a05d21343e3540f0b005804a0afd9f4fcf"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-006001.json",
+      "deleted": false,
+      "stagedRawSha256": "431eb02343121628d712a705c07f63167f58b90f55e8cd978cdaed9f67c01261",
+      "stagedLfSha256": "431eb02343121628d712a705c07f63167f58b90f55e8cd978cdaed9f67c01261"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-006251.json",
+      "deleted": false,
+      "stagedRawSha256": "3c0cecc3aadf48c18527d843668bc2d73b20bc9a1a965b21e5fb3e0310222bda",
+      "stagedLfSha256": "3c0cecc3aadf48c18527d843668bc2d73b20bc9a1a965b21e5fb3e0310222bda"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/manifest/page-006501.json",
+      "deleted": false,
+      "stagedRawSha256": "81793ca697bb5260e0880e8a0c6f7f9428b20a1bfb23018650207532d81bc84b",
+      "stagedLfSha256": "81793ca697bb5260e0880e8a0c6f7f9428b20a1bfb23018650207532d81bc84b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-000001.json",
+      "deleted": false,
+      "stagedRawSha256": "3bd9303674b136036265896ca323ef5393d4d1a91b46fe9184d6ea3c6263d1f8",
+      "stagedLfSha256": "3bd9303674b136036265896ca323ef5393d4d1a91b46fe9184d6ea3c6263d1f8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-000251.json",
+      "deleted": false,
+      "stagedRawSha256": "c45a086f5dd768512a5505ff62b0c43e20da67d45c602442369208b706805b62",
+      "stagedLfSha256": "c45a086f5dd768512a5505ff62b0c43e20da67d45c602442369208b706805b62"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-000501.json",
+      "deleted": false,
+      "stagedRawSha256": "6a8f4d430f858866755357208b56b8ee9099512007e7e4e21ff684617cd15ed4",
+      "stagedLfSha256": "6a8f4d430f858866755357208b56b8ee9099512007e7e4e21ff684617cd15ed4"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-000751.json",
+      "deleted": false,
+      "stagedRawSha256": "b19bfdc9b82d432099da8f02c98e486e8b62425daf434e6960fc2242d833a06b",
+      "stagedLfSha256": "b19bfdc9b82d432099da8f02c98e486e8b62425daf434e6960fc2242d833a06b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-001001.json",
+      "deleted": false,
+      "stagedRawSha256": "21e6d24f5c5d2b324d6b68ef374fc2adfed312ce4288b54be29347f300bc8dd9",
+      "stagedLfSha256": "21e6d24f5c5d2b324d6b68ef374fc2adfed312ce4288b54be29347f300bc8dd9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-001251.json",
+      "deleted": false,
+      "stagedRawSha256": "efcd73ed79a705368c4a6a26fbf9e7af8836f570b1be9e3c68c0af59a9e8be8a",
+      "stagedLfSha256": "efcd73ed79a705368c4a6a26fbf9e7af8836f570b1be9e3c68c0af59a9e8be8a"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-001501.json",
+      "deleted": false,
+      "stagedRawSha256": "5cd607cd92b9c8d7bd86d16294e9d9c6f18fe1b487de2bf24ab97867065f39a3",
+      "stagedLfSha256": "5cd607cd92b9c8d7bd86d16294e9d9c6f18fe1b487de2bf24ab97867065f39a3"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-001751.json",
+      "deleted": false,
+      "stagedRawSha256": "be4889eb854e79e582b7107c0e1b43e70b7b50f14f90adc68f0f49d9067e48ed",
+      "stagedLfSha256": "be4889eb854e79e582b7107c0e1b43e70b7b50f14f90adc68f0f49d9067e48ed"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-002001.json",
+      "deleted": false,
+      "stagedRawSha256": "7f55072e9067aeb6c692bd8edf1f3f94223a87ff8c65ce1bc0c47460df10030d",
+      "stagedLfSha256": "7f55072e9067aeb6c692bd8edf1f3f94223a87ff8c65ce1bc0c47460df10030d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-002251.json",
+      "deleted": false,
+      "stagedRawSha256": "c8806ef0c62d87d3bcf45f598a84b24fd893aa5561d6366fad79ab7566d28cc3",
+      "stagedLfSha256": "c8806ef0c62d87d3bcf45f598a84b24fd893aa5561d6366fad79ab7566d28cc3"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-002501.json",
+      "deleted": false,
+      "stagedRawSha256": "34b92dd8c049bd21ef8dafeb78755dd7f2df0057dee6ab62778b6170c6423cc6",
+      "stagedLfSha256": "34b92dd8c049bd21ef8dafeb78755dd7f2df0057dee6ab62778b6170c6423cc6"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-002751.json",
+      "deleted": false,
+      "stagedRawSha256": "08b3e87be7533b0cdad8ee8a85cbfaafac52bd45f31baecf2fb9841dbfe97e84",
+      "stagedLfSha256": "08b3e87be7533b0cdad8ee8a85cbfaafac52bd45f31baecf2fb9841dbfe97e84"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-003001.json",
+      "deleted": false,
+      "stagedRawSha256": "f487befe502e6f450e9412da7ed62d45f9f77c93f2498149f80ac6a5eedac8d7",
+      "stagedLfSha256": "f487befe502e6f450e9412da7ed62d45f9f77c93f2498149f80ac6a5eedac8d7"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-003251.json",
+      "deleted": false,
+      "stagedRawSha256": "bf430b8c572dba8a5408357ea6601e5e3d32b0b58239729d1d88e918b4484606",
+      "stagedLfSha256": "bf430b8c572dba8a5408357ea6601e5e3d32b0b58239729d1d88e918b4484606"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-003501.json",
+      "deleted": false,
+      "stagedRawSha256": "52230840c0178236f75e8600b6457c2811012ab1584005a80aa58de95e27e96a",
+      "stagedLfSha256": "52230840c0178236f75e8600b6457c2811012ab1584005a80aa58de95e27e96a"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-003751.json",
+      "deleted": false,
+      "stagedRawSha256": "b303d907c487a5c50c536a8d774602053f57ff703ade1189ada3d158415248a8",
+      "stagedLfSha256": "b303d907c487a5c50c536a8d774602053f57ff703ade1189ada3d158415248a8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-004001.json",
+      "deleted": false,
+      "stagedRawSha256": "157a9348001db7ef27a5a36bce95d2cf098acb17c4326b3f9ada28d303597484",
+      "stagedLfSha256": "157a9348001db7ef27a5a36bce95d2cf098acb17c4326b3f9ada28d303597484"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-004251.json",
+      "deleted": false,
+      "stagedRawSha256": "33fe49033a3eafde4130b141afc643a853131e86fab5b52494542291299ee7c9",
+      "stagedLfSha256": "33fe49033a3eafde4130b141afc643a853131e86fab5b52494542291299ee7c9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-004501.json",
+      "deleted": false,
+      "stagedRawSha256": "e3e5f2d56711921c472463b488e675041cb5ce2f67628a3901f2ec485a72b527",
+      "stagedLfSha256": "e3e5f2d56711921c472463b488e675041cb5ce2f67628a3901f2ec485a72b527"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-004751.json",
+      "deleted": false,
+      "stagedRawSha256": "fde532fd1238e1e880936b064435a336b4f777b094ceb862152520a915c28429",
+      "stagedLfSha256": "fde532fd1238e1e880936b064435a336b4f777b094ceb862152520a915c28429"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-005001.json",
+      "deleted": false,
+      "stagedRawSha256": "80bbbccfbb4f853ff8ed8ea7028db9655fa4b1727a60eda9d5061297b1238d4f",
+      "stagedLfSha256": "80bbbccfbb4f853ff8ed8ea7028db9655fa4b1727a60eda9d5061297b1238d4f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-005251.json",
+      "deleted": false,
+      "stagedRawSha256": "646815d6521e500bb5afb2fada0a72779e39dcf4aee90802a99baacf5b510654",
+      "stagedLfSha256": "646815d6521e500bb5afb2fada0a72779e39dcf4aee90802a99baacf5b510654"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-005501.json",
+      "deleted": false,
+      "stagedRawSha256": "8ff5c02145c8bc304fad1922a5ef04419c6bccec32b885d869ba94280dd11fdd",
+      "stagedLfSha256": "8ff5c02145c8bc304fad1922a5ef04419c6bccec32b885d869ba94280dd11fdd"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-005751.json",
+      "deleted": false,
+      "stagedRawSha256": "78e238288da8fb77d726078ef7c20dc74dc6a8a5fda48305f1e5563a679099a9",
+      "stagedLfSha256": "78e238288da8fb77d726078ef7c20dc74dc6a8a5fda48305f1e5563a679099a9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-006001.json",
+      "deleted": false,
+      "stagedRawSha256": "b595d05c49f17e1fbbbd38574878c858e9983739b2a56347e6fbbbeaf59d7e22",
+      "stagedLfSha256": "b595d05c49f17e1fbbbd38574878c858e9983739b2a56347e6fbbbeaf59d7e22"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-006251.json",
+      "deleted": false,
+      "stagedRawSha256": "260c92ccc310ed7a7b187ec4d817fa383f44e64e72fbc2f3b6a9dc1afa56cb04",
+      "stagedLfSha256": "260c92ccc310ed7a7b187ec4d817fa383f44e64e72fbc2f3b6a9dc1afa56cb04"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-006501.json",
+      "deleted": false,
+      "stagedRawSha256": "47d6bb62c35f4f8a15ddd681c400f56723314b9873c4872684b39744252ae5ea",
+      "stagedLfSha256": "47d6bb62c35f4f8a15ddd681c400f56723314b9873c4872684b39744252ae5ea"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/postapply-manifest/page-006751.json",
+      "deleted": false,
+      "stagedRawSha256": "feb796b4b48fbe17f38f9fecb4fd4911549e51831a3d43d6f39c88534a3b3a0f",
+      "stagedLfSha256": "feb796b4b48fbe17f38f9fecb4fd4911549e51831a3d43d6f39c88534a3b3a0f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-check.json",
+      "deleted": false,
+      "stagedRawSha256": "2c241de5df8c335097d88a4eb812400ba901b4e59cfd7cb0bbe83d3d73922390",
+      "stagedLfSha256": "a3c740bd097675600e64f03ebbb39294f365a70d94182b9e48295984377898ae"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-local-audit.json",
+      "deleted": false,
+      "stagedRawSha256": "509c9f4d4f8aa80367549615a6d8c3641778758dd8c17b483eea7866984715c8",
+      "stagedLfSha256": "fa8c8043883af6bb232599bee7a33d928e0379e73662e0efdbfd18a51c9ca466"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000001.json",
+      "deleted": false,
+      "stagedRawSha256": "7cbe63a89592a53ed4ec56fca45e60d9fb4eaa93c495446468438e6273e17237",
+      "stagedLfSha256": "7cbe63a89592a53ed4ec56fca45e60d9fb4eaa93c495446468438e6273e17237"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000201.json",
+      "deleted": false,
+      "stagedRawSha256": "80bd342f94cbe4eac015f4789dc66f1dfe17aa9f8a030b382ebb8c9d79ac9c75",
+      "stagedLfSha256": "80bd342f94cbe4eac015f4789dc66f1dfe17aa9f8a030b382ebb8c9d79ac9c75"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000401.json",
+      "deleted": false,
+      "stagedRawSha256": "ed551a8fe544417562f8431983cba44c57ac6a58145eb1584e6f69df35c637c8",
+      "stagedLfSha256": "ed551a8fe544417562f8431983cba44c57ac6a58145eb1584e6f69df35c637c8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000601.json",
+      "deleted": false,
+      "stagedRawSha256": "d526216c4a168e780b105de57bc1971d4ba325a1f60e6606462a3e140e4057b9",
+      "stagedLfSha256": "d526216c4a168e780b105de57bc1971d4ba325a1f60e6606462a3e140e4057b9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-000801.json",
+      "deleted": false,
+      "stagedRawSha256": "d264ef7fe8b8fff581487c21906e8f764958d599fda81c1a652d9aeb79ea872d",
+      "stagedLfSha256": "d264ef7fe8b8fff581487c21906e8f764958d599fda81c1a652d9aeb79ea872d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001001.json",
+      "deleted": false,
+      "stagedRawSha256": "0bb1dadae7474c5c039cae03bb7c7fb766052b0996c48f02700a51bd7114270c",
+      "stagedLfSha256": "0bb1dadae7474c5c039cae03bb7c7fb766052b0996c48f02700a51bd7114270c"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001201.json",
+      "deleted": false,
+      "stagedRawSha256": "39e6f1592c66fa85c29560db3c609fcd31fc99655726442be593807a93527f03",
+      "stagedLfSha256": "39e6f1592c66fa85c29560db3c609fcd31fc99655726442be593807a93527f03"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001401.json",
+      "deleted": false,
+      "stagedRawSha256": "e297966b08816ff47e627a07da68516f9e0748abac6030a22f638783561ed670",
+      "stagedLfSha256": "e297966b08816ff47e627a07da68516f9e0748abac6030a22f638783561ed670"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001601.json",
+      "deleted": false,
+      "stagedRawSha256": "6af0e12e0a2f953813dd1ce3fe7dd41cf3375ff2891a33b237af3f0a8f772043",
+      "stagedLfSha256": "6af0e12e0a2f953813dd1ce3fe7dd41cf3375ff2891a33b237af3f0a8f772043"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-001801.json",
+      "deleted": false,
+      "stagedRawSha256": "805b3b74b4b924c79cfab5842ae02195e678d879cd959b10a80f4b9cef30dd68",
+      "stagedLfSha256": "805b3b74b4b924c79cfab5842ae02195e678d879cd959b10a80f4b9cef30dd68"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002001.json",
+      "deleted": false,
+      "stagedRawSha256": "aa8b5945c9e1ba93b990c5a762454a6017cce3ce73b851c914c1b187d723fadd",
+      "stagedLfSha256": "aa8b5945c9e1ba93b990c5a762454a6017cce3ce73b851c914c1b187d723fadd"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002201.json",
+      "deleted": false,
+      "stagedRawSha256": "544a16529410888e6b9d15fc8392fd5e2c18cc10f4f8e0da220df81efa31a26f",
+      "stagedLfSha256": "544a16529410888e6b9d15fc8392fd5e2c18cc10f4f8e0da220df81efa31a26f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002401.json",
+      "deleted": false,
+      "stagedRawSha256": "1a61ecc1575a9cb79f19731ab3adf148b0eed2a924c8c3bbdb73a2fe68665ff8",
+      "stagedLfSha256": "1a61ecc1575a9cb79f19731ab3adf148b0eed2a924c8c3bbdb73a2fe68665ff8"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002601.json",
+      "deleted": false,
+      "stagedRawSha256": "6659876b3e1f6546fb971f9aae15d2f31350e39ebd7fe2becef734531e546929",
+      "stagedLfSha256": "6659876b3e1f6546fb971f9aae15d2f31350e39ebd7fe2becef734531e546929"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-002801.json",
+      "deleted": false,
+      "stagedRawSha256": "02a818904d6de47431c7b58fa5576cdf4df7b10cf45acc650ecdfb441d2d6b91",
+      "stagedLfSha256": "02a818904d6de47431c7b58fa5576cdf4df7b10cf45acc650ecdfb441d2d6b91"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003001.json",
+      "deleted": false,
+      "stagedRawSha256": "a3af8e5b8abc3a8ae3e9822bfd2535cdda8fb95728ba0fa40fdfb101feb3425d",
+      "stagedLfSha256": "a3af8e5b8abc3a8ae3e9822bfd2535cdda8fb95728ba0fa40fdfb101feb3425d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003201.json",
+      "deleted": false,
+      "stagedRawSha256": "634ac76931b02c05d5bacc79e5ba9491727a814d4cc3fe46379a0718f278d2df",
+      "stagedLfSha256": "634ac76931b02c05d5bacc79e5ba9491727a814d4cc3fe46379a0718f278d2df"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003401.json",
+      "deleted": false,
+      "stagedRawSha256": "a2ef1105bdaa056c72d500c62852416b7823b0ebdc5d7866c4c16badd6ea6d7c",
+      "stagedLfSha256": "a2ef1105bdaa056c72d500c62852416b7823b0ebdc5d7866c4c16badd6ea6d7c"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003601.json",
+      "deleted": false,
+      "stagedRawSha256": "65706440780aaf400b4c15abf6a701f5f4550a612098d6bb6ab745d22c7dd48d",
+      "stagedLfSha256": "65706440780aaf400b4c15abf6a701f5f4550a612098d6bb6ab745d22c7dd48d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-003801.json",
+      "deleted": false,
+      "stagedRawSha256": "826f4ac5b2f97a891a6b6350b763a5b55543d2d936093aefc08c4d549bd3ff34",
+      "stagedLfSha256": "826f4ac5b2f97a891a6b6350b763a5b55543d2d936093aefc08c4d549bd3ff34"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004001.json",
+      "deleted": false,
+      "stagedRawSha256": "6aa938b9861e0707d15ddbdff5d5152ccb782fc89a09808683b5942e9c7c7c02",
+      "stagedLfSha256": "6aa938b9861e0707d15ddbdff5d5152ccb782fc89a09808683b5942e9c7c7c02"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004201.json",
+      "deleted": false,
+      "stagedRawSha256": "8c2bae4ac1099c703a6b94a48a4716baf4fc9c03010cc4d0bd0d278152c30739",
+      "stagedLfSha256": "8c2bae4ac1099c703a6b94a48a4716baf4fc9c03010cc4d0bd0d278152c30739"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004401.json",
+      "deleted": false,
+      "stagedRawSha256": "84c57222bfce9d1dbb187015b6e3c487dd16dd9db9ec57ace7dff2f53fdf7623",
+      "stagedLfSha256": "84c57222bfce9d1dbb187015b6e3c487dd16dd9db9ec57ace7dff2f53fdf7623"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004601.json",
+      "deleted": false,
+      "stagedRawSha256": "964719b2634f494328eb351a8bc90c7f9e674be49d3e79daeb943b734ca74d10",
+      "stagedLfSha256": "964719b2634f494328eb351a8bc90c7f9e674be49d3e79daeb943b734ca74d10"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-004801.json",
+      "deleted": false,
+      "stagedRawSha256": "2bc231f397eab716676480ba93d42032e3398d78a623453be8663d4cd33d2e4e",
+      "stagedLfSha256": "2bc231f397eab716676480ba93d42032e3398d78a623453be8663d4cd33d2e4e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005001.json",
+      "deleted": false,
+      "stagedRawSha256": "72be23d1991497031b797960ca3b54c53af396a73339cda77e7e923cb1e7eb92",
+      "stagedLfSha256": "72be23d1991497031b797960ca3b54c53af396a73339cda77e7e923cb1e7eb92"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005201.json",
+      "deleted": false,
+      "stagedRawSha256": "0d2a81cbf8fffce89fcf8f1abeb059d815fe52314c4da7209c8da1baee6c7101",
+      "stagedLfSha256": "0d2a81cbf8fffce89fcf8f1abeb059d815fe52314c4da7209c8da1baee6c7101"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005401.json",
+      "deleted": false,
+      "stagedRawSha256": "ccb8b750fe4c5f0e69e24befd162505112a3f6de911297f742e319645a5f694b",
+      "stagedLfSha256": "ccb8b750fe4c5f0e69e24befd162505112a3f6de911297f742e319645a5f694b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005601.json",
+      "deleted": false,
+      "stagedRawSha256": "60c734c9116b7915d587aa99c39f7bbc816b204c24c81c8ec06344555ebb74a1",
+      "stagedLfSha256": "60c734c9116b7915d587aa99c39f7bbc816b204c24c81c8ec06344555ebb74a1"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-005801.json",
+      "deleted": false,
+      "stagedRawSha256": "650626c7eb0a351a52978feaeaa34269a4d84248e4c2384c918c37b5ef21b31f",
+      "stagedLfSha256": "650626c7eb0a351a52978feaeaa34269a4d84248e4c2384c918c37b5ef21b31f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006001.json",
+      "deleted": false,
+      "stagedRawSha256": "78cc62b8e7f80f0c7f09998983683f165237d80ddb0719ef8ebe094d40e9962e",
+      "stagedLfSha256": "78cc62b8e7f80f0c7f09998983683f165237d80ddb0719ef8ebe094d40e9962e"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006201.json",
+      "deleted": false,
+      "stagedRawSha256": "9208a0eeb463ae783b54ef5cef008cada825db4bf9992f95b77e3907bf290f1b",
+      "stagedLfSha256": "9208a0eeb463ae783b54ef5cef008cada825db4bf9992f95b77e3907bf290f1b"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006401.json",
+      "deleted": false,
+      "stagedRawSha256": "0e10eff3d723ef4d9e6a3c1983ba642d9667dfb36e708afcdda58a53d792d176",
+      "stagedLfSha256": "0e10eff3d723ef4d9e6a3c1983ba642d9667dfb36e708afcdda58a53d792d176"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006601.json",
+      "deleted": false,
+      "stagedRawSha256": "f7a98aab4723276c8899f1e38dc074a8649f8e83129fafa0342e0e093c2f8b43",
+      "stagedLfSha256": "f7a98aab4723276c8899f1e38dc074a8649f8e83129fafa0342e0e093c2f8b43"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/prepublish-asset-native-pages/page-006801.json",
+      "deleted": false,
+      "stagedRawSha256": "7d519dd54826e0fab3a96ac800a38d7789b5f47aeda640bfbd889aa20e63cdba",
+      "stagedLfSha256": "7d519dd54826e0fab3a96ac800a38d7789b5f47aeda640bfbd889aa20e63cdba"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/review_manifest.py",
+      "deleted": false,
+      "stagedRawSha256": "b2eaa06aa08117392cf4b742162ab1cc304ef235bf7603d90e2bd04c02de18f6",
+      "stagedLfSha256": "b2eaa06aa08117392cf4b742162ab1cc304ef235bf7603d90e2bd04c02de18f6"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/run_geometry.py",
+      "deleted": false,
+      "stagedRawSha256": "4606b00cd29c9b85be3c6dc9808825429649002632d93d345ece12d846d76dd4",
+      "stagedLfSha256": "4606b00cd29c9b85be3c6dc9808825429649002632d93d345ece12d846d76dd4"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/runner-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "00af2101df25ba31e4c99a6e10dbe56b5225d31a5b39329e1ba5b370e589c4d4",
+      "stagedLfSha256": "b9c2d612ffc1b4be9e7038377ac4abf6ef44ba6002e7694208a77c572d334c20"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/install/staged-payload.luau",
+      "deleted": false,
+      "stagedRawSha256": "c5bce01b8a2c3fe862e00bd40fb7164ab57225eaf565333d6824d452c7f76b61",
+      "stagedLfSha256": "c5bce01b8a2c3fe862e00bd40fb7164ab57225eaf565333d6824d452c7f76b61"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/test_geometry_preparation.py",
+      "deleted": false,
+      "stagedRawSha256": "b5736ae40f7e087a2cb43fad0411a6bf48824512080546d45904b1e2133a2f80",
+      "stagedLfSha256": "b5736ae40f7e087a2cb43fad0411a6bf48824512080546d45904b1e2133a2f80"
+    },
+    {
+      "path": "tools/optimization_20261009/install-identity-test-result.json",
+      "deleted": false,
+      "stagedRawSha256": "899412a665368c8fbc32b33f19cfc3effee2c351837db7eacdbb21cb2a8be59c",
+      "stagedLfSha256": "fbecda2676842d4346968df184140a84b2f79784b8e04c3944acdae584ab36e7"
+    },
+    {
+      "path": "tools/optimization_20261009/install_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "fdb358c730ee88e75e8b29af2668ff6785f65d41b11c3a7d10d53200570581fd",
+      "stagedLfSha256": "fdb358c730ee88e75e8b29af2668ff6785f65d41b11c3a7d10d53200570581fd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/GameManager.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "stagedLfSha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/GameManager.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "stagedLfSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/LobbyLoading.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "stagedLfSha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/LobbyLoading.patch.diff",
+      "deleted": false,
+      "stagedRawSha256": "ca45af6f01526a810249152a8696ad1893d959fc33c9bc543a1fe0b87cc43e2e",
+      "stagedLfSha256": "ca45af6f01526a810249152a8696ad1893d959fc33c9bc543a1fe0b87cc43e2e"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/LobbyLoading.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "stagedLfSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/README.md",
+      "deleted": false,
+      "stagedRawSha256": "e02bb5f41064de78ca3223fb3141b04d3437f5b75d8790943d26da33cd14d055",
+      "stagedLfSha256": "e02bb5f41064de78ca3223fb3141b04d3437f5b75d8790943d26da33cd14d055"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/baseline-capture.json",
+      "deleted": false,
+      "stagedRawSha256": "9dae61047b1ce755034cbff90809a0319a2282001e92dc49544f652ed9c623eb",
+      "stagedLfSha256": "3f6a64f9cdbeef07bb0c204939f6e81254134fbd119c12f30586620dfa836ebb"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level2Sound.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "stagedLfSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level2Sound.patch.diff",
+      "deleted": false,
+      "stagedRawSha256": "35ea22aea3b832f8bb5e4e7432a1fa10d6a6183a0485a8f33c7f6f109f0afa6f",
+      "stagedLfSha256": "35ea22aea3b832f8bb5e4e7432a1fa10d6a6183a0485a8f33c7f6f109f0afa6f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level2Sound.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "stagedLfSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level6Client.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "stagedLfSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level6Client.patch.diff",
+      "deleted": false,
+      "stagedRawSha256": "45f8d7d7466ef1ac6fcb6b12be81543ebe4c49a2a75e40b5bd16f96f87a462fd",
+      "stagedLfSha256": "45f8d7d7466ef1ac6fcb6b12be81543ebe4c49a2a75e40b5bd16f96f87a462fd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/Level6Client.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "stagedLfSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/README.md",
+      "deleted": false,
+      "stagedRawSha256": "f24472018c6f25c22fb2315d4999795e0ade3b5522f539d77ab0831867171ec5",
+      "stagedLfSha256": "f24472018c6f25c22fb2315d4999795e0ade3b5522f539d77ab0831867171ec5"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/baseline-capture.json",
+      "deleted": false,
+      "stagedRawSha256": "541ebfd3a6521adef20723a81536f282cc3eb6c391678a52e621ea5998e779b3",
+      "stagedLfSha256": "541ebfd3a6521adef20723a81536f282cc3eb6c391678a52e621ea5998e779b3"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/baseline-recheck.json",
+      "deleted": false,
+      "stagedRawSha256": "bdf614fe27e7ee90fbcf2e6f605510831c267c3c47964cd158d80fbfde8fb8b7",
+      "stagedLfSha256": "bdf614fe27e7ee90fbcf2e6f605510831c267c3c47964cd158d80fbfde8fb8b7"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/README.md",
+      "deleted": false,
+      "stagedRawSha256": "a55a6f676a68796344389df4a63f67f5dabc1c215cdf47579172057b2a7baf7b",
+      "stagedLfSha256": "a55a6f676a68796344389df4a63f67f5dabc1c215cdf47579172057b2a7baf7b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be",
+      "stagedLfSha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.patch.diff",
+      "deleted": false,
+      "stagedRawSha256": "da3a69819668c87af4cf49c5120f3f3337c2d4d07d58d907fbd3317c6285e55e",
+      "stagedLfSha256": "da3a69819668c87af4cf49c5120f3f3337c2d4d07d58d907fbd3317c6285e55e"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/SceneEffectBudgetClient.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedLfSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/baseline-capture.json",
+      "deleted": false,
+      "stagedRawSha256": "76085b981467e4f3c2dd078a66704ab8f724ef17205bf1ccb7bc4c32972297e6",
+      "stagedLfSha256": "76085b981467e4f3c2dd078a66704ab8f724ef17205bf1ccb7bc4c32972297e6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/controller-after-contract.luau",
+      "deleted": false,
+      "stagedRawSha256": "5b2c2d3945c5c4a5542bcb0b9a19b52c778ae2d06d279a08b04b72d498c3b002",
+      "stagedLfSha256": "5b2c2d3945c5c4a5542bcb0b9a19b52c778ae2d06d279a08b04b72d498c3b002"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/controller-before-contract.luau",
+      "deleted": false,
+      "stagedRawSha256": "9302ec1f5f5d882713a3e9a97d6f6effe0809bc2933be25f591d2419b1561f04",
+      "stagedLfSha256": "9302ec1f5f5d882713a3e9a97d6f6effe0809bc2933be25f591d2419b1561f04"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-plan-test-result.json",
+      "deleted": false,
+      "stagedRawSha256": "88e1d99fb0116dbf91e79197a8b814e5b0d64f65c5e0da8fb48194106765f240",
+      "stagedLfSha256": "06ff57eed6e42d5c2336808bf0a1511dd637f32fd374b48594ac97354d12c157"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-plan.json",
+      "deleted": false,
+      "stagedRawSha256": "ceaf92841cee73da7b4062be14361e7c7eff4061cb33a178573bf2f7abfb2d30",
+      "stagedLfSha256": "63d9ab82ac1652fbb7ea2bfa75fa6059de008cfc5c033bbcbdd01affb85d1344"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/global-manifest-refresh-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "26ca578e3ab9366a0a79522d9fc89ac95901f852032118cb0111c77f855f69d8",
+      "stagedLfSha256": "aee45a051dd50dd2b10347f4a89cb9d5ec16c9f6673e83cbe908893640e4f647"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/native-controller-contract-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "10559a9b9729e369f141fc729906866ba6b670c3126a9034201ac275dd6520e6",
+      "stagedLfSha256": "10559a9b9729e369f141fc729906866ba6b670c3126a9034201ac275dd6520e6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "9f41b971b794974e44047855805e9e32c1586f4c9230b6f18420f23fca7355c6",
+      "stagedLfSha256": "88cde3cfe179392aef7cb4bfd8ad37b1d2689e6d88d0def930b8192ecff625db"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/prepare_and_test.py",
+      "deleted": false,
+      "stagedRawSha256": "650a4772b34ffc9672c4cc99a7b9b526d192bc3eb0bfa81e7e0446875d6b3d33",
+      "stagedLfSha256": "650a4772b34ffc9672c4cc99a7b9b526d192bc3eb0bfa81e7e0446875d6b3d33"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/refresh_global_manifest.py",
+      "deleted": false,
+      "stagedRawSha256": "6e9c7e4c780f919657ece825468f8b94fdf22d8dde9e6daf8bcd900185e4721f",
+      "stagedLfSha256": "6e9c7e4c780f919657ece825468f8b94fdf22d8dde9e6daf8bcd900185e4721f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/refresh_verified_source.py",
+      "deleted": false,
+      "stagedRawSha256": "7c571520eb609a76af82222979848e632a9fd5d29beee53b785d4d0deba09eb3",
+      "stagedLfSha256": "7c571520eb609a76af82222979848e632a9fd5d29beee53b785d4d0deba09eb3"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "0a2350939746fca3d647e97c5f91f9170550f59fffaf512a4a5329341f092c5e",
+      "stagedLfSha256": "b7d6463fc2c6a12896b7759e675a5fc0c392066443c6e9f142f587941b03653e"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/source-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "ddc95c7de8a70451753382a509301f8d5f9b31d319438a5fd03b3d3c888f66ec",
+      "stagedLfSha256": "39ddf5d53809dee8bb62be8b2de5107e0aa2ff9dbeaef50d961d9aeddb02ee72"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/studio-sync-manifest.proposed.json",
+      "deleted": false,
+      "stagedRawSha256": "3d4cfb09e91ad3dc5e2d48ad3e10b9dd5682bce04622536361b523b9cec29ca3",
+      "stagedLfSha256": "3d4cfb09e91ad3dc5e2d48ad3e10b9dd5682bce04622536361b523b9cec29ca3"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/test_global_manifest_plan.py",
+      "deleted": false,
+      "stagedRawSha256": "37c65d28123c08e892b3facf30297fdfd5e3e2f9141958b86f68c941641f91ea",
+      "stagedLfSha256": "37c65d28123c08e892b3facf30297fdfd5e3e2f9141958b86f68c941641f91ea"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedLfSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/l2-root-fix/verified-source-refresh-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "cf8fd228630c8afd6ca29317fc3e899047c2ea2a925a9e355f6d63342ab77f25",
+      "stagedLfSha256": "752d4791ed3d36a08769b373d371e72918232050284c600f03b612baf24f40ec"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/lifecycle-contract.luau",
+      "deleted": false,
+      "stagedRawSha256": "36e1d60de9d73383a567362c7801505f5feb37714613468405ad0614e71cf0ae",
+      "stagedLfSha256": "36e1d60de9d73383a567362c7801505f5feb37714613468405ad0614e71cf0ae"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/native-contract-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "862db3829b7944f2f75ec2a2d847b56a9c3248d08ade71e6dcd459cdb98158cd",
+      "stagedLfSha256": "862db3829b7944f2f75ec2a2d847b56a9c3248d08ade71e6dcd459cdb98158cd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/native-instance-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "205dd66be51670c0676bcf78286bcb5f63294293f088af3b5256a6525094c244",
+      "stagedLfSha256": "205dd66be51670c0676bcf78286bcb5f63294293f088af3b5256a6525094c244"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/native-probe-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "c3de1ad3ab3ea7b4080756839712489ece9a4bd6585c887ae166a661b08e9fde",
+      "stagedLfSha256": "8f18968d213f35cd24bef9c75995b1737536fcfaa93d2bfec294fb29e3e33f58"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/native_compatibility_runner.py",
+      "deleted": false,
+      "stagedRawSha256": "dd54746e7a72dc06e9fa2d833117c0f43abb3f5573d5752f08da58204db1371c",
+      "stagedLfSha256": "dd54746e7a72dc06e9fa2d833117c0f43abb3f5573d5752f08da58204db1371c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "ab4eebbfc4afc11977043df6db831e313c655a8859a1a34e010d7e60fb43fbe3",
+      "stagedLfSha256": "eaebc5c3615790798f7e0f1fa90dd3de192d6017ac2f759c32b4d92d2cf6b30f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/prepare_proposals.py",
+      "deleted": false,
+      "stagedRawSha256": "fbe8985197121b204e54a49a4583ba5fab9955c37d4f498cd316a3d8ed2e264c",
+      "stagedLfSha256": "fbe8985197121b204e54a49a4583ba5fab9955c37d4f498cd316a3d8ed2e264c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/proposal-manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "e686cd4776d8bb30064bba3017b75c9eb2f4cb97cd2d24b0ba6baf892882b65d",
+      "stagedLfSha256": "41df4d46c4c9638a2eb0a9c71c52303996f781c515d6b3e385ea6969ee233334"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/read-only-source-pins.json",
+      "deleted": false,
+      "stagedRawSha256": "5109f3d53dcf8df6c46cb5e9bea707fa72b509121c6a4f2ade04873ad54b170f",
+      "stagedLfSha256": "55ef5c34956867b0eabd2522ab54270e6209033b947510b68b1666d2ae4e00ad"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/runner-preparation-result.json",
+      "deleted": false,
+      "stagedRawSha256": "c641fa34a97003082fe16412e38f81a7aa061531e47de9eea034a42329a5e2d9",
+      "stagedLfSha256": "e19842ba0cc7dfda9629a6409ba45b1d5927f83e839f5391609258733e36439c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/source-install-manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "ddfd047ac1d5bcfcce57d1fa946d01bb2c5588384ef2930dc410985011741e69",
+      "stagedLfSha256": "cf30f4e4bc229d7e7754f69a2fb66ea626f64ebab87f909c181128e36cf92bc1"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/source-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "c79f56efcc3d95c0cb92ac80046b4b9bd7f4b0db63e8845bdd9f7e86472abb8c",
+      "stagedLfSha256": "d6e6592e09d918db75223465d468003693cf0280af4801ed0545f71a82d52d77"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "stagedLfSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.diff",
+      "deleted": false,
+      "stagedRawSha256": "2e4eb2182a9f391fb6609aba583632f72db02d6cdcec9b477558055b38985d3f",
+      "stagedLfSha256": "2e4eb2182a9f391fb6609aba583632f72db02d6cdcec9b477558055b38985d3f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/GameManager.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "stagedLfSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/README.md",
+      "deleted": false,
+      "stagedRawSha256": "d43a3085b93b9126c556ddc294fe8ed6ff595dd47309c34452fc63cbcdbadd7b",
+      "stagedLfSha256": "d43a3085b93b9126c556ddc294fe8ed6ff595dd47309c34452fc63cbcdbadd7b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "stagedLfSha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.diff",
+      "deleted": false,
+      "stagedRawSha256": "0cc5c9e7a8e367f82384daf063049f2a27c1a909a07123a2fdbeb89aeee3c15b",
+      "stagedLfSha256": "0cc5c9e7a8e367f82384daf063049f2a27c1a909a07123a2fdbeb89aeee3c15b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/SpectateController.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "stagedLfSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/baseline-capture.json",
+      "deleted": false,
+      "stagedRawSha256": "9de9362d8094b2ab0c3e68702f4017a30ded25ad214ad1255391b94113892c55",
+      "stagedLfSha256": "9de9362d8094b2ab0c3e68702f4017a30ded25ad214ad1255391b94113892c55"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/bootstrap-contract.luau",
+      "deleted": false,
+      "stagedRawSha256": "6167799f69575fb8badc5cd209fcf70ae3396a8ca67647479492e744e66cf78d",
+      "stagedLfSha256": "6167799f69575fb8badc5cd209fcf70ae3396a8ca67647479492e744e66cf78d"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/capture_fresh_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "1aff2b720d239f2ccb3033bf18cd890e0294b0920c80bbb3c5832217ede38bc5",
+      "stagedLfSha256": "1aff2b720d239f2ccb3033bf18cd890e0294b0920c80bbb3c5832217ede38bc5"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/check-eight-test-result.json",
+      "deleted": false,
+      "stagedRawSha256": "222ac197096d5d7ed7ba0dc96986c8cf7db2c90d61acb24ac1a67a5a8c4efd64",
+      "stagedLfSha256": "222ac197096d5d7ed7ba0dc96986c8cf7db2c90d61acb24ac1a67a5a8c4efd64"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/check_eight_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "0a28d9c691cc54509e60529ae5370bd7357ae255210cab3a05b293b8afa56f68",
+      "stagedLfSha256": "0a28d9c691cc54509e60529ae5370bd7357ae255210cab3a05b293b8afa56f68"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/client_checks.luau",
+      "deleted": false,
+      "stagedRawSha256": "86886f5d16fc00efe0852ab014b363d53a75e55664eb55e7c550d43923e605ec",
+      "stagedLfSha256": "86886f5d16fc00efe0852ab014b363d53a75e55664eb55e7c550d43923e605ec"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-refresh-test-result.json",
+      "deleted": false,
+      "stagedRawSha256": "c9eae6ed99b2c200dbb3465c36a609c86d51959161b1d73ad3bc12afbefe9042",
+      "stagedLfSha256": "c9eae6ed99b2c200dbb3465c36a609c86d51959161b1d73ad3bc12afbefe9042"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-preflight-reviewed.json",
+      "deleted": false,
+      "stagedRawSha256": "8859c3a881e90d7de600c69aa8b8cbb3ce12f0f8b9efd6be8f9e644998cb0dea",
+      "stagedLfSha256": "8859c3a881e90d7de600c69aa8b8cbb3ce12f0f8b9efd6be8f9e644998cb0dea"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-preflight.json",
+      "deleted": false,
+      "stagedRawSha256": "b2afa01f58ae1e2749f05849e42dd1da4c5406982fddd8cabcd77e82d28ba5d6",
+      "stagedLfSha256": "b2afa01f58ae1e2749f05849e42dd1da4c5406982fddd8cabcd77e82d28ba5d6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/eight-source-refresh-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "f9cab508a350dd84178d4e6ab1e69eb1e95d91cf63776f394f63b79c86302dbb",
+      "stagedLfSha256": "f9cab508a350dd84178d4e6ab1e69eb1e95d91cf63776f394f63b79c86302dbb"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/fixture_preamble.luau",
+      "deleted": false,
+      "stagedRawSha256": "f379b95c43df61bd36ceb8864b642a542aaa22479beaca0b538cc5218cce2541",
+      "stagedLfSha256": "f379b95c43df61bd36ceb8864b642a542aaa22479beaca0b538cc5218cce2541"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/integration_checks.luau",
+      "deleted": false,
+      "stagedRawSha256": "b9def5e753f15adad7e7ee7c85e86c4aa591d19a0dde8b21ea2e6148ed723e86",
+      "stagedLfSha256": "b9def5e753f15adad7e7ee7c85e86c4aa591d19a0dde8b21ea2e6148ed723e86"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/native-bootstrap-probe-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "f7aec28412b75d2ee8cf476a6fa39943f3a7c2fae23177796e56409bdd246892",
+      "stagedLfSha256": "4d45949b26eb532e7099ce2ebae9835c59766297b71eca9ae271799f4d263ba2"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/offline-contract-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "74a319d7aa4d4ea183a8ccfeca422b0638a26266ec124bd139d8cc988a51e575",
+      "stagedLfSha256": "74a319d7aa4d4ea183a8ccfeca422b0638a26266ec124bd139d8cc988a51e575"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "6c6f92685a1e35a1be5c4e381d6eb1c751d61bb0913f5d9b8a92d54e9af90618",
+      "stagedLfSha256": "7938835e1dfd2e4acbb617124be63ae342f7b9028350be618b54e2c8f3f90d2c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/prepare_proposals.py",
+      "deleted": false,
+      "stagedRawSha256": "952fa69ab92444c26cf38bb10af72ac81cb25b49b816c8a6c0e9a498d6ad758d",
+      "stagedLfSha256": "952fa69ab92444c26cf38bb10af72ac81cb25b49b816c8a6c0e9a498d6ad758d"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/refresh_eight_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "f701a03518e726a82e58997b568c455475d5e2701d7fdcbd4a8361d74225e6e6",
+      "stagedLfSha256": "f701a03518e726a82e58997b568c455475d5e2701d7fdcbd4a8361d74225e6e6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/server_checks.luau",
+      "deleted": false,
+      "stagedRawSha256": "8f97bde623e42d7559586dc6a9821de0ee5e2acaea788233ce3ac68d6069154e",
+      "stagedLfSha256": "8f97bde623e42d7559586dc6a9821de0ee5e2acaea788233ce3ac68d6069154e"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/source-install-manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "c3316f8671970653a03a7f550d483de932339760f1ccc0208bbc92eef7cdf258",
+      "stagedLfSha256": "c3316f8671970653a03a7f550d483de932339760f1ccc0208bbc92eef7cdf258"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/source-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "d3bad6bf759db9f2be6f6e2a5d947c3b12871ad4135be4e60c1ad20a10ccf23c",
+      "stagedLfSha256": "e91a375ba92253ff2916d41af858b10d3e480839756e64bc852aceb732c7a64c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/studio-sync-manifest.eight.proposed.json",
+      "deleted": false,
+      "stagedRawSha256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+      "stagedLfSha256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_check_eight_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "cf4f5845c09be2367daee803a674966f1440221b3bf169e947062cac548c32a8",
+      "stagedLfSha256": "cf4f5845c09be2367daee803a674966f1440221b3bf169e947062cac548c32a8"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_eight_refresh.py",
+      "deleted": false,
+      "stagedRawSha256": "9a240363ad69707db305788e8b29756fe2f02df39c88222f26511d7670575497",
+      "stagedLfSha256": "9a240363ad69707db305788e8b29756fe2f02df39c88222f26511d7670575497"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/test_spectate_bootstrap.py",
+      "deleted": false,
+      "stagedRawSha256": "08554a30e7395ec4b0a52e4eacecc310af6715bc223f8d951739ad860c2a982f",
+      "stagedLfSha256": "08554a30e7395ec4b0a52e4eacecc310af6715bc223f8d951739ad860c2a982f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/ServerScriptService/GameManager.Script.lua",
+      "deleted": false,
+      "stagedRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "stagedLfSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "stagedLfSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/spectate-bootstrap/verified-export-eight/manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b",
+      "stagedLfSha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/test_streaming_lifecycle.py",
+      "deleted": false,
+      "stagedRawSha256": "c5db178c905bb9ba9353170a4003c0304e0a7db23f1aa6c1cbe6fa3b4638c0f4",
+      "stagedLfSha256": "c5db178c905bb9ba9353170a4003c0304e0a7db23f1aa6c1cbe6fa3b4638c0f4"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/compatibility/verify_runner_preparation.py",
+      "deleted": false,
+      "stagedRawSha256": "e664165ac8f94509be49007406e4cd5dccaa87407b237261ea720b147418f3d2",
+      "stagedLfSha256": "e664165ac8f94509be49007406e4cd5dccaa87407b237261ea720b147418f3d2"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/loading-offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "b728e45e027d5721403e26e57bc6d2c049d2d0be8d7d40edf42e8a314bd1fb50",
+      "stagedLfSha256": "ef690be684337a13e2de5b659d20737a64e24ae8b1e21957988d31f5133d85d1"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/native-loading-contract-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "c53abc6ad4c66a246c6cbe7c6e1c6faeda7b959bd7a400be8c7cc51cbfdf02db",
+      "stagedLfSha256": "c53abc6ad4c66a246c6cbe7c6e1c6faeda7b959bd7a400be8c7cc51cbfdf02db"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/native-spectate-contract-probe.luau",
+      "deleted": false,
+      "stagedRawSha256": "b4a24039367c698186a5716cb118956efa98f96d21523268f290d25a1074957b",
+      "stagedLfSha256": "b4a24039367c698186a5716cb118956efa98f96d21523268f290d25a1074957b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/spectate-offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "6342c0e02dd4c1da275ffdb6457d753d518fcf7b55be646365620c21a3adeed1",
+      "stagedLfSha256": "c8af1627d6b2617aca21a86571703083e4b7c8494b15ac65e2f18fb5fed17108"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/spectate.before.luau",
+      "deleted": false,
+      "stagedRawSha256": "bfb932835ea8e8f18453730c0b0be311c0a9aa8cfaa891cf37079a50e259aba6",
+      "stagedLfSha256": "bfb932835ea8e8f18453730c0b0be311c0a9aa8cfaa891cf37079a50e259aba6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/spectate.patch.diff",
+      "deleted": false,
+      "stagedRawSha256": "149fd1f74c5b1cfb06ff48df229110cce60988412dc4a5c2dc2bc135df80ad0b",
+      "stagedLfSha256": "149fd1f74c5b1cfb06ff48df229110cce60988412dc4a5c2dc2bc135df80ad0b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/spectate.proposed.luau",
+      "deleted": false,
+      "stagedRawSha256": "08a9a0ccc9af0ca661d9914d4cc5d4c44e7d348f6862beee45535f643cf81e90",
+      "stagedLfSha256": "08a9a0ccc9af0ca661d9914d4cc5d4c44e7d348f6862beee45535f643cf81e90"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/install/verify_install_proposals.py",
+      "deleted": false,
+      "stagedRawSha256": "b07ab79cca8077f4fe3c08d60a6a29214f1d8f9c136847f28a319f79fdf5570f",
+      "stagedLfSha256": "b07ab79cca8077f4fe3c08d60a6a29214f1d8f9c136847f28a319f79fdf5570f"
+    },
+    {
+      "path": "tools/optimization_20261009/native-probe-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "ce7f179ec657cc9c2cfcef004ae2d9da7bd3d01bb9234eafb5ee76ef6e853056",
+      "stagedLfSha256": "ab2872aa9a282d1871487d5fbb4990621746316444b94b25c4af6e36cab43194"
+    },
+    {
+      "path": "tools/optimization_20261009/native_probe_runner.py",
+      "deleted": false,
+      "stagedRawSha256": "75130d8217aef164017c3191d6ac71f1ca5c652e8a071df6fb51a434c01440c5",
+      "stagedLfSha256": "75130d8217aef164017c3191d6ac71f1ca5c652e8a071df6fb51a434c01440c5"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/DISTANT_SPECTATE_SMOKE.md",
+      "deleted": false,
+      "stagedRawSha256": "d8b61bdf693dde4c4cddf0274b8627105d5deee379b1477e19eb3d3581808201",
+      "stagedLfSha256": "d8b61bdf693dde4c4cddf0274b8627105d5deee379b1477e19eb3d3581808201"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/README.md",
+      "deleted": false,
+      "stagedRawSha256": "54d08ce7cd8d0b42155b94bb914cecf37465b6a277dfadc7ce097295b9c232a2",
+      "stagedLfSha256": "54d08ce7cd8d0b42155b94bb914cecf37465b6a277dfadc7ce097295b9c232a2"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/budget_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "72d69d61582527d45f77023a3713a012aa16293249db3b9e77e03dd3d9329fb5",
+      "stagedLfSha256": "72d69d61582527d45f77023a3713a012aa16293249db3b9e77e03dd3d9329fb5"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/distant-spectate-floor-correction-offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "88ae5106879a562d54f0c53255ddea280beea486fcce274629e1af48bdf2964b",
+      "stagedLfSha256": "adaac143e727fd502a4062da7620e2ebe6a6af829d82d2680a5174bf29f46092"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/distant-spectate-offline-result.json",
+      "deleted": false,
+      "stagedRawSha256": "d73711619d07034a5facf1e3645455b608e179f638f8aba465bb54dc027c475a",
+      "stagedLfSha256": "adc63f36f0bfaaf2677400a7e02ae7d80b8c872885f298648d5e0219b5f9dfb6"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/distant_spectate_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "a33289679f187afa5c04920f32ce9109fb5da06ed6b7e7116e4345dfc408d342",
+      "stagedLfSha256": "a33289679f187afa5c04920f32ce9109fb5da06ed6b7e7116e4345dfc408d342"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final-authoring-effect-check.json",
+      "deleted": false,
+      "stagedRawSha256": "f877b0b3652eb99c08852937e455b5b5474ef91128f2835ea64a2a8d93445d3c",
+      "stagedLfSha256": "f877b0b3652eb99c08852937e455b5b5474ef91128f2835ea64a2a8d93445d3c"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final-eight-prepublish-source-check.json",
+      "deleted": false,
+      "stagedRawSha256": "1ebcb710189a6a7aa710bce7bfa7c87667ac530edb0b92992418c292194eae3a",
+      "stagedLfSha256": "1ebcb710189a6a7aa710bce7bfa7c87667ac530edb0b92992418c292194eae3a"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final-prepublish-source-check.json",
+      "deleted": false,
+      "stagedRawSha256": "3e2e25fdd0b33b2f2a01ca65833a0f2fec304872ca6218c27f86577ccb0bab78",
+      "stagedLfSha256": "5d408c0ff91505ccc20c372dc90f614f8639c778e53d5dca4ac307624aa1ad65"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final-source-check.json",
+      "deleted": false,
+      "stagedRawSha256": "08fdcec727ef9ad1029428cd98bc8423fc13309d1169dc30e0eaa8406ed53ea8",
+      "stagedLfSha256": "532ce947f1aa275291e906adf5fbaf6235cbb892f63a12507191074bd13b61aa"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final-studio-ui-check.json",
+      "deleted": false,
+      "stagedRawSha256": "d7191dbfc44848321621cc99f5a2fe5b4d9af90996492ed0c27bb66d5783efbe",
+      "stagedLfSha256": "d7191dbfc44848321621cc99f5a2fe5b4d9af90996492ed0c27bb66d5783efbe"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/final_reset_read.luau",
+      "deleted": false,
+      "stagedRawSha256": "6a0016d963ac0bdbdf3620faa48e6628b4ab57fff9dd08ccca983d86a72a8bda",
+      "stagedLfSha256": "6a0016d963ac0bdbdf3620faa48e6628b4ab57fff9dd08ccca983d86a72a8bda"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l2_binding_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "f9002432b96728445222f644b67a3edf2db3063d7ae8e1c3e66dee4c99ce2813",
+      "stagedLfSha256": "f9002432b96728445222f644b67a3edf2db3063d7ae8e1c3e66dee4c99ce2813"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l4_prompt_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "1fdff62df5f3e79cc7428aa1988332f255a3cccceb939543fda434f0a659fc9b",
+      "stagedLfSha256": "1fdff62df5f3e79cc7428aa1988332f255a3cccceb939543fda434f0a659fc9b"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l6_deck_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "b7c8976f1919b07a9a27c86557299c507ca6ff6ee78c67793c333cac4300f83a",
+      "stagedLfSha256": "b7c8976f1919b07a9a27c86557299c507ca6ff6ee78c67793c333cac4300f83a"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/l6_reentry_read.luau",
+      "deleted": false,
+      "stagedRawSha256": "d2d8840a79bb8b58c4080155fb1e614658310cf0d1458c741d5c456ded5f5645",
+      "stagedLfSha256": "d2d8840a79bb8b58c4080155fb1e614658310cf0d1458c741d5c456ded5f5645"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/measure.luau",
+      "deleted": false,
+      "stagedRawSha256": "7c70c0712aab95b09127466e9fdf6e6a31d9ab093dcbc9e5b8de5827a9e39ba5",
+      "stagedLfSha256": "7c70c0712aab95b09127466e9fdf6e6a31d9ab093dcbc9e5b8de5827a9e39ba5"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-actual.json",
+      "deleted": false,
+      "stagedRawSha256": "07e0aeedacc872e423dc835e50e3a7fec87bf8bb5b518a89f80dfcb337463b6a",
+      "stagedLfSha256": "f70b9e922b9bfdec6360803b811711bcc9e1e9e6db32e2504c826715a7c85e62"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-assessment.md",
+      "deleted": false,
+      "stagedRawSha256": "4b16cb7d4d12fabe0a53d7f2f1cdaf4b0ca369a67aa015314fd1eca1d6b45767",
+      "stagedLfSha256": "4b16cb7d4d12fabe0a53d7f2f1cdaf4b0ca369a67aa015314fd1eca1d6b45767"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/bootstrap-distant-first-floor-corrected.json",
+      "deleted": false,
+      "stagedRawSha256": "550dd06e5d2f5213b5817301b430e51a9d06482e865ac57a4db5b2b52ca638c8",
+      "stagedLfSha256": "cbc845332cfa20a9997ae325ea2f0d9772ca51938340d27c0d03ca499edca78c"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/bootstrap-final-normal-reset.json",
+      "deleted": false,
+      "stagedRawSha256": "927fae3ab32901f6348ed9e4c7da7b7742a6730f1eba23317b96e50502d9e234",
+      "stagedLfSha256": "927fae3ab32901f6348ed9e4c7da7b7742a6730f1eba23317b96e50502d9e234"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/bootstrap-third-session-source-check.json",
+      "deleted": false,
+      "stagedRawSha256": "3ec5305b15273169660887959620c305ac384024a11facea01db8e3d2a867d6e",
+      "stagedLfSha256": "233f113c48c022be75139e8a7eab3f7c4834bf8feb0233da114ee838228705fc"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/final-normal-reset.json",
+      "deleted": false,
+      "stagedRawSha256": "18c05478b87d859f33daaa6a659251d2b0ce2d08b977b96917487efcc5153a06",
+      "stagedLfSha256": "da998413cc7325f09302dcb886a0f2e8ea177218670653dab0489fcd746835b4"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/fresh-after-l2-reset-server.json",
+      "deleted": false,
+      "stagedRawSha256": "6ab991c7fcaf7ac990bd8080f17bc1775c5ff8abd06e7f281c6db852c51b0a9e",
+      "stagedLfSha256": "c5b01f49d2876e658e86d357918ad485e89001e92aacbbc2c8a4e2705fe104be"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-gameplay-verification.md",
+      "deleted": false,
+      "stagedRawSha256": "caa582488d724fc171b5fcdf5c0465669f2e54898b68f9f65814b46e03d5d5db",
+      "stagedLfSha256": "caa582488d724fc171b5fcdf5c0465669f2e54898b68f9f65814b46e03d5d5db"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-post-root-tests-20261009T221447Z.json",
+      "deleted": false,
+      "stagedRawSha256": "cb321e636a5d32337e269f160540746d26b1a3df271442fccc06bded9d51dc4f",
+      "stagedLfSha256": "cb321e636a5d32337e269f160540746d26b1a3df271442fccc06bded9d51dc4f"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-root-reported-multiplayer-tests-20261009T2214.json",
+      "deleted": false,
+      "stagedRawSha256": "53aca59e4fa816b42bd2c743200c38db1bd609b1ba994f4fbe017457e1ca7167",
+      "stagedLfSha256": "53aca59e4fa816b42bd2c743200c38db1bd609b1ba994f4fbe017457e1ca7167"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-route-current-source-excerpts-20261009T221325Z.json",
+      "deleted": false,
+      "stagedRawSha256": "aedc66c19d4b1172ffcb2605418ee0c89061e00f911fa6e0a8133f4b94cb0e34",
+      "stagedLfSha256": "aedc66c19d4b1172ffcb2605418ee0c89061e00f911fa6e0a8133f4b94cb0e34"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-two-alive-20261009T221240Z.json",
+      "deleted": false,
+      "stagedRawSha256": "02e25a748d040ac205cd78da15f23683939984c90b570ce0df141f94d0109820",
+      "stagedLfSha256": "02e25a748d040ac205cd78da15f23683939984c90b570ce0df141f94d0109820"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l2-valve-goal-literal-source-search-20261009T221447Z.json",
+      "deleted": false,
+      "stagedRawSha256": "410718ff50a3049ad914bc59ae92b0f1a593b5630b02fe305bf28bed74e542e4",
+      "stagedLfSha256": "410718ff50a3049ad914bc59ae92b0f1a593b5630b02fe305bf28bed74e542e4"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l4-usher-listener-20261009T222005Z.json",
+      "deleted": false,
+      "stagedRawSha256": "df106e04e40a730d89c83faae1d618d0fb3560cb11c0385a64f66a6d2234a1cd",
+      "stagedLfSha256": "df106e04e40a730d89c83faae1d618d0fb3560cb11c0385a64f66a6d2234a1cd"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l4-usher-listener-assessment.md",
+      "deleted": false,
+      "stagedRawSha256": "a449fa4bf2473e08d03f31b94c11aadad4756ec25819a8580319396f0d85d154",
+      "stagedLfSha256": "a449fa4bf2473e08d03f31b94c11aadad4756ec25819a8580319396f0d85d154"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/l5-l6-gameplay-verification.md",
+      "deleted": false,
+      "stagedRawSha256": "833410c0eefc2c53a10b24e5a82098fd59bd36db67672b0aa8870e7e31422947",
+      "stagedLfSha256": "833410c0eefc2c53a10b24e5a82098fd59bd36db67672b0aa8870e7e31422947"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level2-client1-entry.json",
+      "deleted": false,
+      "stagedRawSha256": "71f761819258387af121eeedd4b14dd1d9b8f2987b44cb401f459f1a5f7185a6",
+      "stagedLfSha256": "23fbee1f685681d3da5445205d1346a1a5a65ec990e708657453d4f6970ab8af"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level2-client2-active.json",
+      "deleted": false,
+      "stagedRawSha256": "be12830827e0a6f466a022df85864c65f0ab8b322ff1291217aea2e25affe519",
+      "stagedLfSha256": "1cd5571d873a61a630dee3891fd6ae13b302424e765fd2e499a19bdf1d553425"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level2-fresh-budget-binding.json",
+      "deleted": false,
+      "stagedRawSha256": "439ae7b68957c64e36e2805a2460c55447991b9365adf51aebf66eacdf3ca9e2",
+      "stagedLfSha256": "79ef0eaeee83e150db3f4bb3e9bda2b77279fb882aa3160bfa4bc303cf1a931f"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level2-server-active.json",
+      "deleted": false,
+      "stagedRawSha256": "e137cbb2273660a805c185c62ede6fa410865224f776373197feb11bd57aabc1",
+      "stagedLfSha256": "61a88aaa10f9805707b1fe3b036e5c8a97912f7e8766410811c6d6a4289f6724"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level4-budget-controlled.json",
+      "deleted": false,
+      "stagedRawSha256": "37065f43b08a31803c69bb2a85e877b23c6a3dafb667f7dc546a445a94fcbfb7",
+      "stagedLfSha256": "cccef8662be118335a3415f5520bd35141f680a5ecc673ba02e7b0b97aa32e31"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level4-client1-dark.json",
+      "deleted": false,
+      "stagedRawSha256": "7912618fa2124009b5a807ef3211d7dae9777c4df8e5089c367faa866eb70ce0",
+      "stagedLfSha256": "4e8901dd24788cb37e9bc48ef985ff6b216471ad19d404bda301b8080ad784d4"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level4-prompts-resume.json",
+      "deleted": false,
+      "stagedRawSha256": "917d42bd829bee93578461bbf29f7ec347ff9b43c965e8cfef948aaa306fce7f",
+      "stagedLfSha256": "9b8b36f444febd0eed26fa6abe5b05ea028b2ae53bd75f3adc2330f7ed24544c"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level4-prompts.json",
+      "deleted": false,
+      "stagedRawSha256": "0024db9ba3cbc961b11b4071e2b78a1a737a27b2fd1abdbfc9709f04bdb02abd",
+      "stagedLfSha256": "7e91aaf6935f4432adbd25111b9dce9febba3b50caaa183828a7c8d4664eb1c8"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level5-client1-entry.json",
+      "deleted": false,
+      "stagedRawSha256": "34bdf0cf526062c37d00dfc43fb47e9e96d46e6f6b21dc29753347c8e1b9b3fd",
+      "stagedLfSha256": "dd98127bea67ce9719fd0e72e94d092f0e913d781790e436913957ef46ed663a"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level5-client2-entry.json",
+      "deleted": false,
+      "stagedRawSha256": "7084b6f03e49ffca49ffe4eafc37d58df60854691818cb476ecf6fbff6093a1d",
+      "stagedLfSha256": "f4d0e11b5570aa38e5f28f49650700ca34d599b9334aab94d4e43f745e47eccc"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level6-client1-entry.json",
+      "deleted": false,
+      "stagedRawSha256": "f0cd09cc2556f2589d71974a6833f15c1efb94e4e506c353142ac18b4982da0b",
+      "stagedLfSha256": "bbedac87f80f829ff9e916b47c44371806ae34d81284f1e65b2414a2afc86a56"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level6-client1-normal-reentry.json",
+      "deleted": false,
+      "stagedRawSha256": "7340f885fc87fca7558e8406bf9d4797b75236eea382e1cdc97b28573b920bc4",
+      "stagedLfSha256": "e099c7c329028246cd02556807163ea85eb31d67a99dd66f7d9522ff8986e226"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level6-client2-entry.json",
+      "deleted": false,
+      "stagedRawSha256": "cbeb2480162b073b616fc049e755a32486c5485e7f74c2003ff46215dd6b4719",
+      "stagedLfSha256": "7385d5e1a3d04f60292ba522b8eee00c1cde8235df649a903db2277b10602e31"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/level6-deck-smoke.json",
+      "deleted": false,
+      "stagedRawSha256": "80d4d207d85f67433e63363cd081bf3fd7202d80a08d13ebe6b8db7566b2c0f2",
+      "stagedLfSha256": "a49847c486cc2ace37c9ab7ebfca1f6b7245ea0a0d6db9ae332d5a380eb8a47e"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/observations/lobby-client1.json",
+      "deleted": false,
+      "stagedRawSha256": "bbf08935b96bc446a6b2954bb87f6c0b68fabfea9e5130b63a8a57f74224a403",
+      "stagedLfSha256": "1cdd2f7793a15f5b202c8621e7e08a5502fa12cafc3f9bde94892a6b519f31ea"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/prepublish-authoring-effect-check.json",
+      "deleted": false,
+      "stagedRawSha256": "634ec4f5f2742b79f18f62cfee76f646bc9c15623ff222ba214b7de512024e08",
+      "stagedLfSha256": "3b3ea4084339d5c699181da972a2fe723a8a896212b41f16211da3ef02e253bc"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/prepublish-studio-ui-check.json",
+      "deleted": false,
+      "stagedRawSha256": "6472d2e06b00d112aff8979d1e87bf55b041a89b9c10e99ec7775ffe7186019f",
+      "stagedLfSha256": "6472d2e06b00d112aff8979d1e87bf55b041a89b9c10e99ec7775ffe7186019f"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/run_call.py",
+      "deleted": false,
+      "stagedRawSha256": "2277e337b6eff767e3b1760aef2230da8ad055b1eb65f0abdf4fb922b94c602b",
+      "stagedLfSha256": "2277e337b6eff767e3b1760aef2230da8ad055b1eb65f0abdf4fb922b94c602b"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/test_distant_spectate_smoke.py",
+      "deleted": false,
+      "stagedRawSha256": "dc7a78be6ec925ebb66db377625ef5c08263e22d3b0adb1f40a620596c95aac8",
+      "stagedLfSha256": "dc7a78be6ec925ebb66db377625ef5c08263e22d3b0adb1f40a620596c95aac8"
+    },
+    {
+      "path": "tools/optimization_20261009/runtime/test_measure.py",
+      "deleted": false,
+      "stagedRawSha256": "829a70a580bd0786ae1c655f6671e8283edcdc2495da91b26a3c2b72510ff4d7",
+      "stagedLfSha256": "829a70a580bd0786ae1c655f6671e8283edcdc2495da91b26a3c2b72510ff4d7"
+    },
+    {
+      "path": "tools/optimization_20261009/source-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "4e70cf18816e43e460c00ae045ef2e4a0d2512227bf321bc12e659e5b210e75c",
+      "stagedLfSha256": "310a3300bd1f1bf42f7c15625c9025ff61cd14b7c504952cb7e933d6abee5d89"
+    },
+    {
+      "path": "tools/optimization_20261009/streaming-install-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "fbff0e556b0065a64222a4f24815483aea5fe93cf8b2b178b8c0ac8e2be782a2",
+      "stagedLfSha256": "fbff0e556b0065a64222a4f24815483aea5fe93cf8b2b178b8c0ac8e2be782a2"
+    },
+    {
+      "path": "tools/optimization_20261009/test_install_identity.py",
+      "deleted": false,
+      "stagedRawSha256": "f6cb20a1809d304189332521e3ab8c5494ce3cb6c426f5ec21aa929367f45608",
+      "stagedLfSha256": "f6cb20a1809d304189332521e3ab8c5494ce3cb6c426f5ec21aa929367f45608"
+    },
+    {
+      "path": "tools/optimization_20261009/test_native_probe_runner.py",
+      "deleted": false,
+      "stagedRawSha256": "097b1ce6d72235d3f837dc3253f31653422fdb00497ea0e02d5354b8d57fdfc0",
+      "stagedLfSha256": "097b1ce6d72235d3f837dc3253f31653422fdb00497ea0e02d5354b8d57fdfc0"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/README.md",
+      "deleted": false,
+      "stagedRawSha256": "5f6114abd04f203061fd92335f8a405db2ff7415e77ff975d0f9902fbff6de17",
+      "stagedLfSha256": "5f6114abd04f203061fd92335f8a405db2ff7415e77ff975d0f9902fbff6de17"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "stagedLfSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "stagedLfSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/ServerScriptService/GameManager.Script.lua",
+      "deleted": false,
+      "stagedRawSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c",
+      "stagedLfSha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "stagedLfSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "stagedLfSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "stagedLfSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "deleted": false,
+      "stagedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedLfSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/export_verified_sources.py",
+      "deleted": false,
+      "stagedRawSha256": "a1234882e29fbf8c6352720391fa06bf1885aff93d6c5fd6f073dd1a5a1c6172",
+      "stagedLfSha256": "a1234882e29fbf8c6352720391fa06bf1885aff93d6c5fd6f073dd1a5a1c6172"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/manifest.json",
+      "deleted": false,
+      "stagedRawSha256": "1fa980cf4c72c49699382da77d89809dd0d63c49a9b55e5905ff1ff657d09005",
+      "stagedLfSha256": "4e2a109b8c5b992a254dcf8ecb2e41324b310db75196dd8e170a0daf18bf5bbc"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/mirror-promotion-receipt.json",
+      "deleted": false,
+      "stagedRawSha256": "4120dd9e676b1422eb15ecd9c122ae59de96b1f39a619f64e93f731c7eddf6ae",
+      "stagedLfSha256": "ecf8ea3ca3fced2fd483325e083653264f783919b259b26e0b64dd708b4a2ce2"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/promote_verified_mirrors.py",
+      "deleted": false,
+      "stagedRawSha256": "4509b4f5edb71e2dc63989ed3fe6fd94275b75ec834915f07bcceecf45d8e9bc",
+      "stagedLfSha256": "4509b4f5edb71e2dc63989ed3fe6fd94275b75ec834915f07bcceecf45d8e9bc"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/promotion-native-read-cas.luau",
+      "deleted": false,
+      "stagedRawSha256": "1ec87484158c6ee37382df0cdaf6b02bcc58e60ef24a3fbde25a2391fd0d1ec8",
+      "stagedLfSha256": "1ec87484158c6ee37382df0cdaf6b02bcc58e60ef24a3fbde25a2391fd0d1ec8"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/promotion-preflight.json",
+      "deleted": false,
+      "stagedRawSha256": "92edb4e11310f4d8bd91f0b36b101d6acde47905867bd1e52b350fbb667f898b",
+      "stagedLfSha256": "f160888cc7015d7f48e53d7951066cb1a3dae27bf07fc9ce9961e807a67b7c15"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/promotion-preparation-result.json",
+      "deleted": false,
+      "stagedRawSha256": "d71c0aae7934dbb8eefa68eca076a413c313a00808c2211df4706a324e2073b3",
+      "stagedLfSha256": "14c6362a1eafd3d523f36c76b8f335e81fd3b2107a1b1a4a0b85a2840ad559e5"
+    },
+    {
+      "path": "tools/optimization_20261009/verified-export/test_promote_verified_mirrors.py",
+      "deleted": false,
+      "stagedRawSha256": "601cd4a6ba7bc28fa9f45903ad1522b0530079215eb0e202dcb2671919d37817",
+      "stagedLfSha256": "601cd4a6ba7bc28fa9f45903ad1522b0530079215eb0e202dcb2671919d37817"
+    }
+  ],
+  "stagedSources": [
+    {
+      "path": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "nativeRawSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "stagedRawSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "stagedLfSha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "nativeRawSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "stagedRawSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "stagedLfSha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "ServerScriptService/GameManager.Script.lua",
+      "nativeRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "stagedRawSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "stagedLfSha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "ReplicatedStorage/SceneEffectBudget.ModuleScript.lua",
+      "nativeRawSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "stagedRawSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "stagedLfSha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SceneEffectBudgetClient.LocalScript.lua",
+      "nativeRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedRawSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "stagedLfSha256": "d87559348d39821adfb35191a3b8b030967537cc0d8da955222217d7686bcaa0",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "nativeRawSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "stagedRawSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "stagedLfSha256": "7a0fe4360e5ffa6871df1e8cdcded6c10dda8efaa4186e7dcba59a9d2b3438e8",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "nativeRawSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "stagedRawSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "stagedLfSha256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "crlfNormalizationOnly": false
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "nativeRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "stagedRawSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "stagedLfSha256": "f912a197184846e20cb1ba1c65a34bda3a2b6acdc3d263e0dc73abb3dc20645b",
+      "crlfNormalizationOnly": false
+    }
+  ],
+  "taskFiles": 342,
+  "reviewedPaths": 351,
+  "diffCheckPassed": true,
+  "credentialScan": "high-confidence-patterns-pass",
+  "reviewDiffSha256": "b8e1223f222cb7140a33259647c91c3ad253f9a417832990360f5a5c74e9b4fc",
+  "planSha256": "8fd0af21072aa8bf9de9399734e464be3d1c2a86c4f34af7281977de27fdace1",
+  "verifiedExportManifestSha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b",
+  "localOnly": true,
+  "gitHubPushed": false,
+  "robloxPublishedAtCommit": false,
+  "nativeBackup": false,
+  "finishedUtc": "2026-10-09T23:15:34.832280+00:00"
+}

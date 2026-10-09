@@ -1,5 +1,7 @@
 # Level 4 actual gameplay verification route
 
+Historical preparation note: MCP `require(Director)` diagnostics can use a different module cache from the running game's controller. The example below does not establish actual round power/AI state. Use normal gameplay events and replicated state for that evidence. Root's completed scope and the unverified full power/Usher/win route are recorded in the [current report](../../README.md).
+
 The installed Director API below comes from the exact Source/editor proposal verified by root's native source CAS. The gameplay route has not been run by the effects task. The Objective/Generator call relationships were inspected in repository mirrors; root should recheck their current live Sources before using any manual runtime control.
 
 Enter an actual Level 4 round through the public lobby queue. Let the round generator own `Start` and cleanup. Read the actual note and use the four switches in its order. The normal objective path advances to `Reels` and calls `PowerUp` with the callback that activates the Usher. Calling `PowerUp` alone exercises lighting while bypassing that objective/AI transition, so it cannot prove this gameplay route.

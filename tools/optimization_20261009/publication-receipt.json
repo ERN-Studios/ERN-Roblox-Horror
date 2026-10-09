@@ -1,0 +1,72 @@
+{
+  "kind": "verified-native-Studio-publication",
+  "complete": true,
+  "published": true,
+  "publishedVersion": 2924,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "nativeWindowId": 220008602,
+  "confirmedUtc": "2026-10-09T23:16:07.032Z",
+  "confirmedCopenhagenLocal": "2026-10-10 01:16:07.032 CEST",
+  "observedUtc": "2026-10-09T23:16:58.551Z",
+  "publishAction": "Original Studio File > Publish to Roblox, existing place",
+  "nativeOutput": "01:15:58.564  Sent message to server to publish.  -  Studio\n  01:16:06.975  Place published. Eligible players can now play this place in Roblox.  -  Studio\n  01:16:06.975  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––  -  Studio\n  01:16:06.975  Quick Links:  -  Studio\n  01:16:06.975  → Add publish notes to v2924  -  Studio\n  01:16:06.975  → Edit experience details & audience  -  Studio\n  01:16:06.975  → View performance  -  Studio\n  01:16:06.975  → View error reports  -  Studio\n  01:16:07.032  Published new changes in \"[UPDATE] BACKROOMS: STAY QUIET\" to Roblox.  -  Studio",
+  "postpublishIdentity": {
+    "universeId": 10559217407,
+    "readOnly": true,
+    "verifiedUtc": "2026-10-09T23:16:58Z",
+    "placeId": 131311258779917,
+    "placeVersionProperty": 2859,
+    "mode": "Edit"
+  },
+  "editPlaceVersionPropertyUse": "The loaded Edit DataModel property remains 2859; it is recorded separately and is not used as publication evidence. Studio's new Roblox success/version output is the publication receipt.",
+  "implementationCommit": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "implementationRecord": "commit/implementation-commit-record.json",
+  "studioWindows": [
+    {
+      "app": "process:C:\\Users\\mikke\\AppData\\Local\\Roblox\\Versions\\version-9b554450a0fc4e65\\RobloxStudioBeta.exe",
+      "id": 220008602,
+      "title": "[UPDATE] BACKROOMS: STAY QUIET - Roblox Studio"
+    }
+  ],
+  "newNativeBackup": false,
+  "gitHubPushed": false,
+  "activeServersRestarted": false,
+  "accessSettingsChanged": false,
+  "verificationLimits": "Bounded actual two-client routes and scoped source/property guards. No matched performance improvement, complete win/finale, mobile or legacy pump/hostile pass claimed. Sequential checks are not an atomic publication lock.",
+  "verifiedRecords": [
+    {
+      "path": "loading/install/compatibility/spectate-bootstrap/verified-export-eight/manifest.json",
+      "sha256": "c2fbf294c78a98025f3083aaa2ae992686a8d3539b985cdee101f2ec8e7a642b"
+    },
+    {
+      "path": "runtime/immediate-prepublish-eight-source-check.json",
+      "sha256": "36c535067058090fbecee64253f8895081a675e220ff88a6c4382095ae839864"
+    },
+    {
+      "path": "runtime/postpublish-eight-source-check.json",
+      "sha256": "46c509d723d35ca9a3e634a001e741b319af30288ef3d6d4dc63dda2330525c6"
+    },
+    {
+      "path": "geometry/install/prepublish-asset-check.json",
+      "sha256": "2c241de5df8c335097d88a4eb812400ba901b4e59cfd7cb0bbe83d3d73922390"
+    },
+    {
+      "path": "geometry/install/prepublish-asset-local-audit.json",
+      "sha256": "509c9f4d4f8aa80367549615a6d8c3641778758dd8c17b483eea7866984715c8"
+    },
+    {
+      "path": "runtime/prepublish-authoring-effect-check.json",
+      "sha256": "634ec4f5f2742b79f18f62cfee76f646bc9c15623ff222ba214b7de512024e08"
+    },
+    {
+      "path": "runtime/prepublish-studio-ui-check.json",
+      "sha256": "6472d2e06b00d112aff8979d1e87bf55b041a89b9c10e99ec7775ffe7186019f"
+    },
+    {
+      "path": "commit/implementation-commit-record.json",
+      "sha256": "9a4c1a54075fd983a5992da9052d677e4dd76dcd97a73e7fd0478da4037b16ba"
+    }
+  ]
+}
