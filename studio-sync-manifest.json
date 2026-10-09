@@ -11,9 +11,9 @@
   "universeId": 10559217407,
   "datamodel": "Edit",
   "counts": {
-    "scripts": 220,
+    "scripts": 222,
     "remoteEvents": 15,
-    "total": 235,
+    "total": 237,
     "created": 12,
     "updated": 18,
     "unchanged": 215,
@@ -3522,6 +3522,28 @@
       "attributes": []
     },
     {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Poolrooms Ambience"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+      "bytes": 18933,
+      "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "Enabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
       "segments": [
         "StarterPlayer",
@@ -4294,17 +4316,19 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 67762,
-      "sha256": "b382f0a7a0dbf70b368534440c72bb274e64229e3ba8074e871a6913411f14dc",
+      "bytes": 68062,
+      "sha256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
-        "Disabled": false,
+        "Enabled": true,
         "LinkedSource": "",
-        "Archivable": true,
-        "RunContext": "Enum.RunContext.Legacy"
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
       },
-      "attributes": []
+      "attributes": [],
+      "tags": []
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",

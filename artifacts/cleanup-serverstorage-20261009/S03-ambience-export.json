@@ -1,0 +1,178 @@
+{
+  "schema": "s03-ambience-downstream-export-v1",
+  "candidate": "S03",
+  "provenance": "Concurrent owner/session runtime addition, mirrored downstream; no cleanup/removal or implementation credit",
+  "sourceFile": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+  "sourceBytes": 18933,
+  "sourceRawSHA256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+  "sourceCanonicalSHA256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+  "sourceContract": "exact; terminal LF preserved; no studioTrailingNewline flag",
+  "nativeBefore": {
+    "editorRawSha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "universeId": 10559217407,
+    "childCount": 0,
+    "placeId": 131311258779917,
+    "sourceBytes": 18933,
+    "running": false,
+    "attributes": [],
+    "uniqueIdReadable": false,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "capturedAtUtc": "2026-10-09T21:28:52Z",
+    "tags": [],
+    "editorBytes": 18933,
+    "datamodel": "Edit",
+    "placeVersion": 2859,
+    "sourceRawSha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "className": "LocalScript",
+    "sourceEditorMatches": true,
+    "sourceEditorReadOK": true,
+    "schema": "scoped-native-source-read-v1",
+    "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience"
+  },
+  "nativeAfter": {
+    "editorRawSha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "universeId": 10559217407,
+    "childCount": 0,
+    "placeId": 131311258779917,
+    "sourceBytes": 18933,
+    "running": false,
+    "attributes": [],
+    "uniqueIdReadable": false,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "capturedAtUtc": "2026-10-09T21:29:23Z",
+    "tags": [],
+    "editorBytes": 18933,
+    "datamodel": "Edit",
+    "placeVersion": 2859,
+    "sourceRawSha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "className": "LocalScript",
+    "sourceEditorMatches": true,
+    "sourceEditorReadOK": true,
+    "schema": "scoped-native-source-read-v1",
+    "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience"
+  },
+  "nativeBeforeAfterStable": true,
+  "classPropertiesAttributesVerified": true,
+  "workingManifest": {
+    "beforeSHA256": "f45f49b23479295e2af58d99792875ca874fa1ff5fd365db2439e6d939c1b9d0",
+    "afterSHA256": "9a0027d4fdc1403d273728d8012528305b31026207373009f58017c3b9e4d5cd",
+    "beforeCounts": {
+      "scripts": 221,
+      "remoteEvents": 15,
+      "total": 236,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "afterCounts": {
+      "scripts": 222,
+      "remoteEvents": 15,
+      "total": 237,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "preexistingRows": 236,
+    "preexistingRowsBytePreserved": true,
+    "preexistingTopMetadataUnchanged": true,
+    "onlyScriptsAndTotalCountIncremented": true
+  },
+  "scopedCommitManifest": {
+    "baseCommit": "4c2aca107dfa64facb4f354af1016b84169d5699",
+    "privatePath": ".git/mongotv-cleanup-20261009/s03-ambience-before/manifest-head-scoped-for-commit.json",
+    "beforeSHA256": "3e73daf6551cb1e98106f6b2da28e0347ed9c4d06b53b6e73975445fb2569f94",
+    "afterSHA256": "6a3962ea022f8a3bd6dcde5d7c67058e186b5b2da2e11581efadab087c519086",
+    "beforeCounts": {
+      "scripts": 220,
+      "remoteEvents": 15,
+      "total": 235,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "afterCounts": {
+      "scripts": 221,
+      "remoteEvents": 15,
+      "total": 236,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "preexistingRows": 235,
+    "preexistingRowsBytePreserved": true,
+    "preexistingTopMetadataUnchanged": true,
+    "onlyScriptsAndTotalCountIncremented": true
+  },
+  "preexistingRowsBytePreserved": true,
+  "compileNativeSnapshot": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compiledBytes": 19979,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compiledBytes": 18959,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    }
+  ],
+  "compileActualMirror": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compiledBytes": 19979,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compiledBytes": 18959,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    }
+  ],
+  "postExportRowEqualsNativeMetadata": true,
+  "exclusiveMirrorCreate": true,
+  "ownedTempAtomicManifestReplace": true,
+  "rollbackNeeded": false,
+  "nativeWrites": 0,
+  "requireCalls": 0,
+  "modeSwitches": 0,
+  "staged": false,
+  "committed": false,
+  "publication": false,
+  "wholeProjectParityClaimed": false,
+  "gameplayMultiplayerStreamingOrPerformanceClaimed": false,
+  "sourceExposure": {
+    "utf8": true,
+    "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "lfSha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+    "bytes": 18933,
+    "terminalNewline": true,
+    "crlfCount": 0,
+    "suspiciousCredentialMarkers": {
+      "Authorization": 0,
+      "BearerCredential": 0,
+      "SecretAssignment": 0
+    }
+  }
+}

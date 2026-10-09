@@ -1,0 +1,20 @@
+{
+  "path": "StarterPlayer.StarterPlayerScripts.SoundController",
+  "parentPath": "StarterPlayer.StarterPlayerScripts",
+  "instanceId": "1_31070",
+  "properties": {
+    "Enabled": true,
+    "LinkedSource": "",
+    "Disabled": false,
+    "RunContext": "Enum.RunContext.Legacy",
+    "Archivable": true
+  },
+  "parentId": "1_410029",
+  "tags": [],
+  "attributes": [],
+  "className": "LocalScript",
+  "editorMatches": true,
+  "rawSourceSHA256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
+  "rawBytes": 68062,
+  "parentClass": "StarterPlayerScripts"
+}

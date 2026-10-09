@@ -1,0 +1,64 @@
+{
+  "schema": "s09-general-sound-downstream-export-v1",
+  "pass": true,
+  "nativeSourceWrites": 0,
+  "nativePropertyWrites": 0,
+  "modeSwitches": 0,
+  "target": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+  "headCommit": "9c6d713f4925ba8718bde0810797c333ab91fcbd",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "repoBeforeRawSHA256": "b382f0a7a0dbf70b368534440c72bb274e64229e3ba8074e871a6913411f14dc",
+  "headManifestRawSHA256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d",
+  "workingManifestBeforeRawSHA256": "3d4cfb09e91ad3dc5e2d48ad3e10b9dd5682bce04622536361b523b9cec29ca3",
+  "compiled": [
+    {
+      "file": "repo-before.raw.lua",
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+      "outputSHA256": "d2e7e635be78fcd993df8b429b41ba507cca661771ff009cec173772fab52135"
+    },
+    {
+      "file": "repo-before.raw.lua",
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+      "outputSHA256": "dcea1471e2b18426b03f39f8649a94cd5ebd01792776f726fe8668bf656bde83"
+    },
+    {
+      "file": "Source.raw.lua",
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+      "outputSHA256": "eeedac74df9dc0eb89e2f9f20733c137cad7c8b04605e4e825fd81ce8dc847f3"
+    },
+    {
+      "file": "Source.raw.lua",
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+      "outputSHA256": "c36a70425cb71967e5cf9282d43d2d6e334ceb950eeb5dbfe395205ddcd19ac3"
+    }
+  ],
+  "nativeSourceRawSHA256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
+  "canonicalSourceSHA256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02",
+  "nativeBytes": 68062,
+  "canonicalBytes": 68062,
+  "nativeEditorParity": true,
+  "allOtherManifestRawBytesPreserved": true,
+  "allOtherManifestRowsPreserved": true,
+  "workingManifestAfterSHA256": "0a9b6298857adc855fd6c0862bc569a46b25257f6e501319e17f42092c6f2668",
+  "scopedCommitManifestSHA256": "4ee2083b1f71fc3d30448e4f2e37433c638b31937f10fc39e205e827eb09f2c0",
+  "scopedCommitManifestFile": "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/manifest-head-S03-S09-scoped.bin",
+  "scopedRows": [
+    "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua"
+  ],
+  "actorLevel2SoundExcluded": true,
+  "changedLocalFiles": [
+    "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+    "studio-sync-manifest.json"
+  ],
+  "gameplayPassed": false,
+  "fullRepoStudioParityClaimed": false
+}

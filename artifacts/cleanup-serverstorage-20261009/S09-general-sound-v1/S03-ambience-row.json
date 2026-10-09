@@ -1,0 +1,22 @@
+{
+  "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience",
+  "segments": [
+    "StarterPlayer",
+    "StarterPlayerScripts",
+    "Level 2 Poolrooms Ambience"
+  ],
+  "className": "LocalScript",
+  "file": "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+  "bytes": 18933,
+  "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+  "status": "synced",
+  "sourceEditorMatches": true,
+  "properties": {
+    "Disabled": false,
+    "Enabled": true,
+    "LinkedSource": "",
+    "Archivable": true,
+    "RunContext": "Enum.RunContext.Legacy"
+  },
+  "attributes": []
+}

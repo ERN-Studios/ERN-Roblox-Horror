@@ -1,0 +1,134 @@
+{
+  "schema": "s03-s09-scoped-commit-v1",
+  "headBefore": "9c6d713f4925ba8718bde0810797c333ab91fcbd",
+  "nativeWrites": 0,
+  "workingManifestWrites": 0,
+  "sourceMutationsInThisStage": 0,
+  "sourceFiles": [
+    "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua"
+  ],
+  "provenance": "Authoritative owner/session changes mirrored downstream only; no gameplay/audio/performance/removal implementation credit.",
+  "scope": "Only S03 new row, S09 general Sound changed row and derived basic counts. Historical created/updated/unchanged counters and all other rows/meta preserved. Concurrent GameManager, Level2Sound, RoundUI and optimization work excluded.",
+  "headManifestBeforeSHA256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d",
+  "historicalScopedBlobSHA256": "4ee2083b1f71fc3d30448e4f2e37433c638b31937f10fc39e205e827eb09f2c0",
+  "commitManifestSHA256": "445a0e60b15e284c77052163b6c497e1e9b1f0afb8592d7e84e6059e22ca6155",
+  "countsBefore": {
+    "scripts": 220,
+    "remoteEvents": 15,
+    "total": 235,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "countsHistoricalScoped": {
+    "scripts": 221,
+    "remoteEvents": 15,
+    "total": 236,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "countsCommit": {
+    "scripts": 222,
+    "remoteEvents": 15,
+    "total": 237,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "inheritedBasicCountMismatchCorrected": true,
+  "files": {
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/.gitattributes": {
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/export-helper-source.py": {
+      "bytes": 15534,
+      "sha256": "bf528621d5340e3db656b2813787b207b23c9022c6e6c06ff80391b423fa384b"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/export-result.json": {
+      "bytes": 2877,
+      "sha256": "7a4b86be42a968f92828a7b044d3af44186955efecb25acbc26bcf76dd4731d2"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/manifest-head-before.bin": {
+      "bytes": 155622,
+      "sha256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/manifest-head-S03-S09-scoped.bin": {
+      "bytes": 156391,
+      "sha256": "4ee2083b1f71fc3d30448e4f2e37433c638b31937f10fc39e205e827eb09f2c0"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/manifest-working-before.bin": {
+      "bytes": 157578,
+      "sha256": "3d4cfb09e91ad3dc5e2d48ad3e10b9dd5682bce04622536361b523b9cec29ca3"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/manifest-working-S09-proposal.bin": {
+      "bytes": 157621,
+      "sha256": "0a9b6298857adc855fd6c0862bc569a46b25257f6e501319e17f42092c6f2668"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/native-after-capture.json": {
+      "bytes": 572,
+      "sha256": "60a02b623f79cfd3a63e4af99db315c06fe1e541414e7a29fa8dd93fd1a3bfac"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/native-before.json": {
+      "bytes": 572,
+      "sha256": "60a02b623f79cfd3a63e4af99db315c06fe1e541414e7a29fa8dd93fd1a3bfac"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/native-final.json": {
+      "bytes": 572,
+      "sha256": "60a02b623f79cfd3a63e4af99db315c06fe1e541414e7a29fa8dd93fd1a3bfac"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/native-read-guard.luau": {
+      "bytes": 2565,
+      "sha256": "6073ea3f4a12c4dafbc767ca48f2bd49c5bf70cad2e210f2da2d597c0c9db764"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/repo-before.raw.lua": {
+      "bytes": 67762,
+      "sha256": "b382f0a7a0dbf70b368534440c72bb274e64229e3ba8074e871a6913411f14dc"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/S03-ambience-row.json": {
+      "bytes": 637,
+      "sha256": "eee463cee86aeac4c09a3684c6c2f60c9b18430df08e4f420a5b2fb3c1c692ec"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/Source.canonical.lua": {
+      "bytes": 68062,
+      "sha256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S09-general-sound-v1/Source.raw.lua": {
+      "bytes": 68062,
+      "sha256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02"
+    },
+    "StarterPlayer/StarterPlayerScripts/Level 2 Poolrooms Ambience.LocalScript.lua": {
+      "bytes": 18933,
+      "sha256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e"
+    },
+    "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua": {
+      "bytes": 68062,
+      "sha256": "022342ec4e78d46d28319198f05174ffae84261e9e075cc42820b5219fc0bf02"
+    },
+    "tools/cleanup_20261009/export_general_sound.py": {
+      "bytes": 15534,
+      "sha256": "bf528621d5340e3db656b2813787b207b23c9022c6e6c06ff80391b423fa384b"
+    },
+    "tools/cleanup_20261009/.gitattributes": {
+      "bytes": 145,
+      "sha256": "775ebea8cdf31086648e291634184dd3cd7eddec47093556e013ee2691d52818"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S03-ambience-export.json": {
+      "bytes": 5944,
+      "sha256": "bd437fa0f1a026e122d9883f8e5fec4e6c5b51b494e75a4da10925bb547a8ed9"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S03-S09-scoped-commit-v1/.gitattributes": {
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    "artifacts/cleanup-serverstorage-20261009/S03-S09-scoped-commit-v1/manifest-counted.bin": {
+      "bytes": 156391,
+      "sha256": "445a0e60b15e284c77052163b6c497e1e9b1f0afb8592d7e84e6059e22ca6155"
+    }
+  }
+}
