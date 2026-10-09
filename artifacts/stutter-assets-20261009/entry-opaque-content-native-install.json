@@ -1,0 +1,51 @@
+{
+  "task": "stutter-assets-20261009",
+  "label": "entry-opaque-content",
+  "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+  "class": "LocalScript",
+  "mirror": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+  "baselineFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\loading-opaque-before\\sources.json",
+  "baselineSHA256": "5bc8ea6d64dd75f42842cad0fe43a88b2b52ff2054aab3429bb4fa63e92710bf",
+  "baselineRecord": {
+    "bytes": 11886,
+    "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+    "attributes": [],
+    "placeVersion": 2859,
+    "class": "LocalScript",
+    "sha256": "b2c27975ef4c836881e294068d17df4d3b6034984b0120d1f87877057742f0d1",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\loading-opaque-before\\StarterPlayer__StarterPlayerScripts__Round Entry Client.luau"
+  },
+  "beforeSHA256": "b2c27975ef4c836881e294068d17df4d3b6034984b0120d1f87877057742f0d1",
+  "afterSHA256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+  "candidateFile": "G:\\Roblox\\MongoTV\\artifacts\\stutter-assets-20261009\\candidates\\Round Entry Client.luau",
+  "candidateFileSHA256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+  "mirrorBeforeSHA256": "b2c27975ef4c836881e294068d17df4d3b6034984b0120d1f87877057742f0d1",
+  "manifestBeforeSHA256": "9994b5228d18ab26c604194782665fdebd6a905fd3550f6bc45e88d9b04a4922",
+  "checkpoint": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\install-entry-opaque-content",
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 11879,
+    "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+    "class": "LocalScript",
+    "sha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5"
+  },
+  "mirrorSha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+  "manifestSha256": "e16e5ada76d5eb0a50df97b157eff4aacbe871390f374395d7c1c151701f9526",
+  "capturedAtUtc": "2026-10-09T19:51:45.919379+00:00",
+  "limits": "Exact single native Source/editor install and scoped mirror export only; no compilation, gameplay, asset loading, performance or publication claim."
+}

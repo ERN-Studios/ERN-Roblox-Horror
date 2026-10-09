@@ -1,0 +1,143 @@
+{
+  "limits": "Native preload callback behavior only; no renderer or published-client guarantee.",
+  "observations": [
+    {
+      "preloadOk": true,
+      "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.StageDeck",
+      "callbacks": [],
+      "error": "nil",
+      "props": {
+        "TextureID": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "MeshId": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "TextureContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        },
+        "MeshContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        }
+      }
+    },
+    {
+      "preloadOk": true,
+      "name": "Workspace.LobbyReimaginedPreview.PreviewQueuePads.QueueBay_Level5.Level5 Queue 01.HologramBand01",
+      "callbacks": [],
+      "error": "nil",
+      "props": {
+        "TextureID": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "MeshId": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "TextureContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        },
+        "MeshContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        }
+      }
+    },
+    {
+      "preloadOk": true,
+      "name": "Workspace.LobbyReimaginedPreview.BlenderVisuals.R4WallMonitor",
+      "callbacks": [],
+      "error": "nil",
+      "props": {
+        "TextureID": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "MeshId": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "TextureContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        },
+        "MeshContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        }
+      }
+    },
+    {
+      "preloadOk": true,
+      "name": "Workspace.LobbyReimaginedPreview.R4BayPresentation.Theme Furniture.Office Terminal",
+      "callbacks": [],
+      "error": "nil",
+      "props": {
+        "TextureID": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "MeshId": {
+          "ok": true,
+          "type": "string",
+          "value": ""
+        },
+        "TextureContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        },
+        "MeshContent": {
+          "ok": true,
+          "type": "Content",
+          "source": "Enum.ContentSourceType.Opaque",
+          "uriOk": true,
+          "value": "Content{SourceType=Opaque}",
+          "uri": "nil"
+        }
+      }
+    }
+  ],
+  "capturedAtUtc": "2026-10-09T19:52:40.469256+00:00",
+  "phase": "opaque-mesh"
+}

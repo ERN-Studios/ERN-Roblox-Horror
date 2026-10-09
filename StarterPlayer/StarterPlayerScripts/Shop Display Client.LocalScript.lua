@@ -719,22 +719,31 @@ local function motionAllowed()
 		and player:GetAttribute("ReduceCameraShake") ~= true
 end
 
-local elapsed = 0
+local elapsed, scanElapsed = 0, 0.5
 RunService.Heartbeat:Connect(function(delta)
 	elapsed += delta
+	if player:GetAttribute("InRound") == true or workspace:GetAttribute("RoundActive") == true then
+		if animating then restoreMotion() end
+		scanElapsed = 0.5
+		return
+	end
+	scanElapsed += delta
 	local current = (shopModel and shopModel.Parent) and shopModel or lobbyShop()
 	if current ~= shopModel then
 		restoreMotion()
 		shopModel = current
 		collect(shopModel)
+		scanElapsed = 0
 	end
 	-- Replication hands a client the model BEFORE its boxes: measured in Studio
 	-- Play on 2026-09-16, the first collect found the model and none of the
 	-- eight boxes, and the row then stood still for the whole session. The
 	-- server stamps ShopItemCount on the model once every box is built, so
 	-- until this client holds that many it keeps collecting.
-	if shopModel and #boxes < (tonumber(shopModel:GetAttribute("ShopItemCount")) or 0) then
+	-- Streamed-out boxes may stay absent; retry at most twice a second.
+	if scanElapsed >= 0.5 and shopModel and #boxes < (tonumber(shopModel:GetAttribute("ShopItemCount")) or 0) then
 		collect(shopModel)
+		scanElapsed = 0
 	end
 	if not motionAllowed() then
 		if animating then restoreMotion() end

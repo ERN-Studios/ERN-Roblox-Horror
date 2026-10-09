@@ -1,0 +1,65 @@
+{
+  "task": "stutter-assets-20261009",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "creatorGroupId": 1039373905,
+  "assetId": 134572728354839,
+  "classification": "Optional Level 6 chase sound rejected by Roblox moderation; existing loaded fallback verified",
+  "openCloud": {
+    "observedAtUtc": "2026-10-09T19:34:32.497474Z",
+    "method": "GET",
+    "endpoint": "https://apis.roblox.com/assets/v1/assets/134572728354839?readMask=moderationResult,creationContext,state,displayName",
+    "httpStatus": 200,
+    "response": {
+      "displayName": "l6_chase_shriek",
+      "creationContext": {
+        "creator": {
+          "groupId": "1039373905"
+        }
+      },
+      "moderationResult": {
+        "moderationState": "Rejected"
+      },
+      "state": "Active"
+    }
+  },
+  "localSource": {
+    "path": "assets/level6-horror-pass-20261003/l6_chase_shriek.mp3",
+    "bytes": 57712,
+    "sha256": "6698ad7ef9881f224aae992236ed132436aa9e36f005d9de975db1db2b6bceca",
+    "generationManifest": "assets/level6-horror-pass-20261003/manifest.json",
+    "matchesGenerationManifest": true
+  },
+  "studioFallback": {
+    "observedAtUtc": "2026-10-09T19:34:43Z",
+    "datamodel": "Edit",
+    "sourcePath": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+    "sourceClass": "LocalScript",
+    "sourceBytes": 63894,
+    "sourceSha256": "4753898b930d00dcd3e0e0cae8745a94f9beeb5077c32162382bd298e30aa067",
+    "sourceEditorMatches": true,
+    "refusedAssetFallbackVerified": true,
+    "behavior": "Preload failures mark refused[key]; oneShot excludes refused keys; chase falls back from l6_chase_shriek to l6_sting_spotted.",
+    "sounds": [
+      {
+        "path": "ReplicatedStorage.Level6Counter.Voice.l6_chase_shriek",
+        "class": "Sound",
+        "SoundId": "rbxassetid://134572728354839",
+        "IsLoaded": false
+      },
+      {
+        "path": "ReplicatedStorage.Level6Counter.Voice.l6_sting_spotted",
+        "class": "Sound",
+        "SoundId": "rbxassetid://96999429368160",
+        "IsLoaded": true
+      }
+    ]
+  },
+  "publicationBlockerForLoadingStreamingFixes": false,
+  "publicationAssessment": "This pre-existing optional rejected sound alone does not block publishing the separately verified loading and streaming fixes; its configured fallback exists and is loaded.",
+  "assetPermissionChanges": false,
+  "assetUploads": false,
+  "studioChanges": false,
+  "moderationBypassAttempted": false,
+  "limits": "Read-only current moderation metadata and exact live Source/editor/fallback asset inspection. Does not establish heard Level 6 chase audio, real-player asset loading, multiplayer, streaming performance or publication. Moderation rejection cannot be repaired by a universe permission grant; no reupload or grant was attempted."
+}

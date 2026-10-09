@@ -1,0 +1,12 @@
+{
+  "capturedAtUtc": "2026-10-09 20:07:33 UTC",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "console": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 17.3 s, 87 assets, 0 failed\n[Roblox][sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Actions.ExecuteLuauActions] The execute_luau changed camera type. Resetting from Enum.CameraType.Custom back to Enum.CameraType.Fixed\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[EntityAnimations] Transition controller active\n[EntityKill] Cinematic ground-pin knockout sequence active\nMazeGenerator: plaza at (12,11) · 2 pit zone(s) at (23,17) (5,25) · elevator at (20,20)\n[EntityAI] learned the maze layout (40x40)\n[StutterAssetsQA] normal Level 1 released; atomic rooms=1600 nearby visible roof meshes=89\n[Roblox][sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Actions.ExecuteLuauActions] The execute_luau changed camera type. Resetting from Enum.CameraType.Custom back to Enum.CameraType.Fixed",
+  "lobbyLoading": {
+    "seconds": 17.3,
+    "assets": 87,
+    "failed": 0
+  },
+  "limits": "Single warm-cache Studio session. Assistant execute_luau camera restoration warnings are tooling effects; no camera-control or player-performance guarantee. The optional rejected Level6 sound has an existing fallback."
+}

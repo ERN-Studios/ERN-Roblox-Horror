@@ -1,0 +1,109 @@
+{
+  "worlds": {
+    "ServerLobby": {
+      "lights": 99,
+      "total": 3936,
+      "appearances": 0,
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 4,
+      "parts": 2593
+    },
+    "Level4Collision": {
+      "lights": 0,
+      "total": 1634,
+      "appearances": 0,
+      "meshes": 0,
+      "parts": 1634
+    },
+    "Level 4 Cinema Blender": {
+      "lights": 254,
+      "total": 14464,
+      "appearances": 3434,
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 4051,
+      "parts": 8909
+    },
+    "Level 6 Indoor Playground": {
+      "lights": 281,
+      "total": 20325,
+      "appearances": 0,
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 78,
+      "parts": 14305
+    },
+    "Level 5 Void": {
+      "lights": 661,
+      "total": 2637,
+      "appearances": 0,
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 0,
+      "parts": 1947
+    },
+    "Maze": {
+      "lights": 399,
+      "total": 64416,
+      "appearances": 15381,
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 19473,
+      "parts": 22934
+    }
+  },
+  "limits": "Normal active Studio round; Studio process memory includes editor/server/client; not multiplayer load.",
+  "active": true,
+  "samples": [
+    {
+      "physicsMs": 0.7118566036224365,
+      "memoryMB": 5688.39453125,
+      "heartbeatMs": 0.6452845335006714
+    },
+    {
+      "physicsMs": 0.6068955659866333,
+      "memoryMB": 5688.6015625,
+      "heartbeatMs": 0.7863287329673767
+    },
+    {
+      "physicsMs": 0.5572260022163391,
+      "memoryMB": 5688.3203125,
+      "heartbeatMs": 0.6950014233589172
+    },
+    {
+      "physicsMs": 0.7222235202789307,
+      "memoryMB": 5688.53515625,
+      "heartbeatMs": 0.5510302782058716
+    },
+    {
+      "physicsMs": 0.6270439624786377,
+      "memoryMB": 5688.58984375,
+      "heartbeatMs": 0.6892444491386414
+    },
+    {
+      "physicsMs": 0.5147876739501953,
+      "memoryMB": 5688.70703125,
+      "heartbeatMs": 0.6286588311195374
+    },
+    {
+      "physicsMs": 0.7666865587234497,
+      "memoryMB": 5688.75390625,
+      "heartbeatMs": 0.5332894921302795
+    },
+    {
+      "physicsMs": 0.7404440641403198,
+      "memoryMB": 5688.69921875,
+      "heartbeatMs": 0.5406204462051392
+    },
+    {
+      "physicsMs": 0.44801002740859985,
+      "memoryMB": 5688.82421875,
+      "heartbeatMs": 0.6632675528526306
+    },
+    {
+      "physicsMs": 0.49473705887794495,
+      "memoryMB": 5688.828125,
+      "heartbeatMs": 0.549568235874176
+    }
+  ],
+  "loadingState": "ready",
+  "level": 1,
+  "capturedAtUtc": "2026-10-09T20:06:32.362067+00:00",
+  "phase": "level1-server"
+}

@@ -12,12 +12,101 @@ local function allowReset(on) pcall(StarterGui.SetCore, StarterGui, "ResetButton
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local active
+local entryPreloadBusy = false
+
+local CONTENT_PROPERTIES = {
+	MeshPart = { "MeshContent", "TextureContent" },
+	SpecialMesh = { "MeshId", "TextureId" },
+	Decal = { "Texture" }, Texture = { "Texture" },
+	ImageLabel = { "Image" }, ImageButton = { "Image" },
+	ParticleEmitter = { "Texture" }, Beam = { "Texture" }, Trail = { "Texture" },
+}
+local MAP_PROPERTIES = { "ColorMapContent", "NormalMapContent", "RoughnessMapContent", "MetalnessMapContent" }
+
+local function contentKey(value)
+	if type(value) == "string" then return value ~= "" and value or nil end
+	if typeof(value) == "Content" then
+		if value.SourceType == Enum.ContentSourceType.Uri then return value.Uri ~= "" and value.Uri or nil end
+		if value.SourceType == Enum.ContentSourceType.Opaque then return value end
+	end
+	return nil
+end
+
+local function collectAsset(instance, ids, carriers)
+	local added = 0
+	local function add(key, imageId, keys)
+		if not key or ids[key] then return end
+		ids[key] = "pending"
+		added += 1
+		if imageId then
+			table.insert(carriers, {ImageId = imageId, Keys = {key}})
+		else
+			table.insert(keys, key)
+		end
+	end
+	if instance:IsA("SurfaceAppearance") then
+		-- PreloadAsync ignores SurfaceAppearance. Warm URI images through supported
+		-- Decals; this cannot certify that the renderer's processed PBR pack is ready.
+		for _, property in ipairs(MAP_PROPERTIES) do
+			local ok, value = pcall(function() return instance[property] end)
+			if ok and typeof(value) == "Content" and value.SourceType == Enum.ContentSourceType.Uri then
+				add(contentKey(value), value.Uri)
+			end
+		end
+	else
+		local keys = {}
+		for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName] or {}) do
+			local ok, value = pcall(function() return instance[property] end)
+			if ok then
+				local key = contentKey(value)
+				if typeof(key) == "Content" then
+					-- Embedded Opaque content without an asset ID has no remote fetch.
+					local legacy = property == "MeshContent" and "MeshId" or "TextureID"
+					local readable, id = pcall(function() return instance[legacy] end)
+					key = readable and type(id) == "string" and id ~= "" and id or nil
+				end
+				add(key, nil, keys)
+			end
+		end
+		if #keys > 0 then table.insert(carriers, {Instance = instance, Keys = keys}) end
+	end
+	return added
+end
+
+local function loadCarrier(carrier)
+	local instance = carrier.Instance
+	local reported, failed = false, false
+	local ok = pcall(function()
+		if carrier.ImageId then
+			instance = Instance.new("Decal")
+			instance.Texture = carrier.ImageId
+		end
+		-- Keep mesh instances: a MeshId string does not necessarily fetch the
+		-- same content as the actual MeshPart, especially DataModel-scoped meshes.
+		ContentProvider:PreloadAsync({instance}, function(_, fetchStatus)
+			reported = true
+			if fetchStatus ~= Enum.AssetFetchStatus.Success then failed = true end
+		end)
+	end)
+	if carrier.ImageId and instance then
+		local cleaned = pcall(function() instance:Destroy() end)
+		if not cleaned then ok = false end
+	end
+	-- A return or absent callback is not evidence of a successful download.
+	return ok and reported and not failed
+end
+
+
 
 local function finite(value)
 	return type(value) == "number" and value == value and math.abs(value) < math.huge
 end
 
 local function cancel()
+	if active then
+		for _, connection in ipairs(active.Connections) do connection:Disconnect() end
+		table.clear(active.Connections)
+	end
 	active = nil
 	player:SetAttribute("RoundEntryReadyToken", nil)
 	allowReset(true)
@@ -28,6 +117,26 @@ local function current(request)
 		and workspace:GetServerTimeNow() < request.Deadline
 end
 
+local function entryWorlds(level)
+	local allowed = {}
+	local function include(instance)
+		if instance then table.insert(allowed, instance) end
+	end
+	if level == 1 then
+		include(workspace:FindFirstChild("Maze"))
+		include(workspace:FindFirstChild("Elevator"))
+	elseif level == 4 then
+		-- the authored cinema (developer-only round, GameManager devCeiling)
+		include(workspace:FindFirstChild("Level 4 Cinema Blender"))
+	else
+		include(workspace:FindFirstChild("Level " .. level .. " Generated World"))
+	end
+	-- All entry adapters own this compatibility pad at the advertised position.
+	-- Including exact entry geometry avoids accepting a player or lobby floor.
+	include(workspace:FindFirstChild("ElevatorSpawn"))
+	return allowed
+end
+
 local function groundReady(request)
 	local character = request.Character
 	local root = character:FindFirstChild("HumanoidRootPart")
@@ -36,22 +145,7 @@ local function groundReady(request)
 		or not humanoid or humanoid.Health <= 0
 		or (root.Position - request.Position).Magnitude > 16
 		or workspace:GetAttribute("SelectedLevel") ~= request.Level then return false end
-	local allowed = {}
-	local function include(instance)
-		if instance then table.insert(allowed, instance) end
-	end
-	if request.Level == 1 then
-		include(workspace:FindFirstChild("Maze"))
-		include(workspace:FindFirstChild("Elevator"))
-	elseif request.Level == 4 then
-		-- the authored cinema (developer-only round, GameManager devCeiling)
-		include(workspace:FindFirstChild("Level 4 Cinema Blender"))
-	else
-		include(workspace:FindFirstChild("Level " .. request.Level .. " Generated World"))
-	end
-	-- All entry adapters own this compatibility pad at the advertised position.
-	-- Including exact entry geometry avoids accepting a player or lobby floor.
-	include(workspace:FindFirstChild("ElevatorSpawn"))
+	local allowed = entryWorlds(request.Level)
 	if #allowed == 0 then return false end
 	local params = request.Raycast
 	params.FilterDescendantsInstances = allowed
@@ -81,7 +175,7 @@ local function begin(payload)
 	local request = {
 		Token = payload.Token, Level = payload.Level, Character = payload.Character,
 		Position = payload.Position, Deadline = payload.Deadline,
-		AssetsReady = false, Raycast = RaycastParams.new(),
+		AssetsReady = false, Raycast = RaycastParams.new(), Connections = {},
 	}
 	request.Raycast.FilterType = Enum.RaycastFilterType.Include
 	request.Raycast.IgnoreWater = true
@@ -97,20 +191,69 @@ local function begin(payload)
 		end)
 	end)
 	task.spawn(function()
-		local assets = {}
-		for _, instance in ipairs(request.Character:GetDescendants()) do
-			if instance:IsA("MeshPart") or instance:IsA("SpecialMesh")
-				or instance:IsA("Decal") or instance:IsA("Texture") then
-				table.insert(assets, instance)
+		local ids, carriers, watched, queued = {}, {}, {}, {}
+		local lastArrival = os.clock()
+		local cursor = 1
+		local function nearby(instance)
+			local part = instance:IsA("BasePart") and instance or instance:FindFirstAncestorWhichIsA("BasePart")
+			-- Room art has CanQuery=false, so spatial overlap queries omit its ceiling.
+			return part and part.Transparency < 1
+				and (part.Position - request.Position).Magnitude <= 80 + part.Size.Magnitude * 0.5
+		end
+		local function enqueue(instance, character)
+			if not current(request) then return end
+			if not CONTENT_PROPERTIES[instance.ClassName] and not instance:IsA("SurfaceAppearance") then return end
+			if character or nearby(instance) then
+				table.insert(queued, instance)
+				lastArrival = os.clock()
+				request.AssetsReady = false
 			end
 		end
-		local failed = false
-		local ok = pcall(function()
-			ContentProvider:PreloadAsync(assets, function(_, status)
-				if status ~= Enum.AssetFetchStatus.Success then failed = true end
-			end)
-		end)
-		if current(request) then request.AssetsReady = ok and not failed end
+		local function watch(root, character)
+			if not root or watched[root] then return end
+			local connection = root.DescendantAdded:Connect(function(instance) enqueue(instance, character) end)
+			watched[root] = true
+			table.insert(request.Connections, connection)
+			for index, instance in ipairs(root:GetDescendants()) do
+				if not current(request) then return end
+				enqueue(instance, character)
+				if index % 200 == 0 then task.wait() end
+			end
+		end
+		watch(request.Character, true)
+		while current(request) do
+			local roots = entryWorlds(request.Level)
+			for _, root in ipairs(roots) do watch(root, false) end
+			local checks = 0
+			while cursor <= #queued and current(request) do
+				collectAsset(queued[cursor], ids, carriers)
+				cursor += 1
+				checks += 1
+				if checks % 200 == 0 then task.wait() end
+			end
+			if cursor > #queued then table.clear(queued) cursor = 1 end
+			local ready = #roots > 0
+			for _, carrier in ipairs(carriers) do
+				if carrier.Loaded ~= true and (carrier.Attempts or 0) < 2 then
+					while entryPreloadBusy and current(request) do task.wait(0.1) end
+					if not current(request) then break end
+					entryPreloadBusy = true
+					carrier.Attempts = (carrier.Attempts or 0) + 1
+					carrier.Loaded = loadCarrier(carrier)
+					entryPreloadBusy = false
+					if not carrier.Loaded and carrier.Attempts == 2 then
+						warn("[RoundEntry] could not fetch nearby visual: " .. tostring(carrier.Keys[1]))
+					end
+				end
+				if carrier.Loaded ~= true then ready = false end
+			end
+			if current(request) then
+				request.AssetsReady = ready and #queued == 0 and os.clock() - lastArrival >= 0.35
+			end
+			task.wait(0.1)
+		end
+		for _, connection in ipairs(request.Connections) do connection:Disconnect() end
+		table.clear(request.Connections)
 	end)
 	task.spawn(function()
 		local stable, lastAck = 0, 0

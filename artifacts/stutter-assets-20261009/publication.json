@@ -1,0 +1,28 @@
+{
+  "task": "stutter-assets-20261009",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "published": true,
+  "publishedVersion": 2910,
+  "loadedStudioPlaceVersion": 2859,
+  "localScreenshotCheckpoint": {
+    "path": ".git/stutter-assets-20261009/publication-studio.jpg",
+    "bytes": 175875,
+    "sha256": "eb3b115897ddbbdc81654be21688fdc746934f6f19860ff8d648696c7ad36b1c"
+  },
+  "method": "Roblox Studio Publish to Roblox (Alt+P), current authoritative place",
+  "evidence": {
+    "source": "Observed selected Roblox Studio Output",
+    "lines": [
+      "22:08:06.378 Sent message to server to publish.",
+      "22:08:17.371 Place published. Eligible players can now play this place in Roblox.",
+      "22:08:17.371 Add publish notes to v2910",
+      "22:08:17.477 Published new changes in \"[UPDATE] BACKROOMS: STAY QUIET\" to Roblox."
+    ]
+  },
+  "observedAtUtc": "2026-10-09 20:09:24 UTC",
+  "activeServersRestarted": false,
+  "accessSettingsChanged": false,
+  "githubPush": false,
+  "limits": "Roblox Studio publication confirmation; no published-client gameplay, cold-cache, mobile or multiplayer validation. Loaded Studio PlaceVersion remained2859; published version is reported by Studio Output."
+}

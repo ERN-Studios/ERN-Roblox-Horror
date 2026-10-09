@@ -1,0 +1,109 @@
+{
+  "capturedAtUtc": "2026-10-09T20:09:22.141398+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "sources": [
+    {
+      "bytes": 33136,
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "0abe08bcdf612c2b8d38b554a61ecdb55c70538326e124d75f73275c45cacfa1",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "mirror": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+      "sourceEditorMatches": true,
+      "mirrorMatchesNative": true,
+      "manifestMatchesNative": true,
+      "propertiesUnchanged": true,
+      "attributesUnchanged": true
+    },
+    {
+      "bytes": 18350,
+      "path": "StarterPlayer.StarterPlayerScripts.Lobby DJ Client",
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7"
+      },
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "mirror": "StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua",
+      "sourceEditorMatches": true,
+      "mirrorMatchesNative": true,
+      "manifestMatchesNative": true,
+      "propertiesUnchanged": true,
+      "attributesUnchanged": true
+    },
+    {
+      "bytes": 31759,
+      "path": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "ModuleScript",
+      "sha256": "0f217e5a3f56751e7672efc035861a2cec1b5f23d581a52020411a8d081790cf",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "mirror": "ServerScriptService/Level 1 Systems/BlenderRoomRenderer.ModuleScript.lua",
+      "sourceEditorMatches": true,
+      "mirrorMatchesNative": true,
+      "manifestMatchesNative": true,
+      "propertiesUnchanged": true,
+      "attributesUnchanged": true
+    },
+    {
+      "bytes": 36701,
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "mirror": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "sourceEditorMatches": true,
+      "mirrorMatchesNative": true,
+      "manifestMatchesNative": true,
+      "propertiesUnchanged": true,
+      "attributesUnchanged": true
+    },
+    {
+      "bytes": 11879,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "mirror": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+      "sourceEditorMatches": true,
+      "mirrorMatchesNative": true,
+      "manifestMatchesNative": true,
+      "propertiesUnchanged": true,
+      "attributesUnchanged": true
+    }
+  ],
+  "limits": "Five scoped native Source/editor exports only; not whole-place parity or a native place backup."
+}

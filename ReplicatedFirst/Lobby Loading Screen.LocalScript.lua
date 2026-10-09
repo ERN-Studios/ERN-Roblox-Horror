@@ -1,7 +1,7 @@
 -- Lobby loading cover. Shown from the first frame the client runs Lua and held
 -- until the lobby this client will stand in is really there: the server's own
 -- lobby-startup markers, the streamed model, ground under the character and
--- every mesh/texture/decal/material the lobby references. Nothing here is a
+-- supported meshes/images the lobby references. Nothing here is a
 -- cosmetic timer; the only clocks are stall detectors that OFFER a way out.
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local Players = game:GetService("Players")
@@ -9,7 +9,6 @@ local ContentProvider = game:GetService("ContentProvider")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
-local MaterialService = game:GetService("MaterialService")
 
 local player = Players.LocalPlayer
 local startedAt = os.clock()
@@ -19,8 +18,6 @@ local ORIGINAL_LOBBY = "ServerLobby"
 local STALL_SECONDS = 15          -- no progress at all for this long -> offer recovery
 local SETTLE_SECONDS = 0.75       -- lobby must stop receiving new instances for this long
 local SETTLE_CAP_SECONDS = 10     -- a lobby that never stops changing does not hold the door
-local WORKERS = 6
-local BATCH = 24
 local MINT = Color3.fromRGB(111, 255, 214)
 local AMBER = Color3.fromRGB(255, 196, 77)
 local INK = Color3.fromRGB(6, 11, 12)
@@ -203,113 +200,175 @@ end
 -- Asset census: every content id the lobby references, one entry per id
 ---------------------------------------------------------------------------
 local CONTENT_PROPERTIES = {
-	MeshPart = { "MeshId", "TextureID" },
+	MeshPart = { "MeshContent", "TextureContent" },
 	SpecialMesh = { "MeshId", "TextureId" },
-	Decal = { "Texture" },
-	Texture = { "Texture" },
-	SurfaceAppearance = { "ColorMap", "NormalMap", "RoughnessMap", "MetalnessMap" },
-	MaterialVariant = { "ColorMap", "NormalMap", "RoughnessMap", "MetalnessMap" },
-	ImageLabel = { "Image" },
-	ImageButton = { "Image" },
-	ParticleEmitter = { "Texture" },
-	Beam = { "Texture" },
-	Trail = { "Texture" },
+	Decal = { "Texture" }, Texture = { "Texture" },
+	ImageLabel = { "Image" }, ImageButton = { "Image" },
+	ParticleEmitter = { "Texture" }, Beam = { "Texture" }, Trail = { "Texture" },
 }
+local MAP_PROPERTIES = { "ColorMapContent", "NormalMapContent", "RoughnessMapContent", "MetalnessMapContent" }
 
-local function census(roots, ids, carriers)
-	-- Adds what is new since the last call and returns how many ids that was:
-	-- shop textures, bay dressing and the HUD's icons arrive after the model.
-	local variants = {}
-	local total = 0
-	local function consider(instance)
-		local properties = CONTENT_PROPERTIES[instance.ClassName]
-		if properties then
-			local fresh = false
-			for _, property in ipairs(properties) do
-				local ok, value = pcall(function() return instance[property] end)
-				if ok and type(value) == "string" and value ~= "" and not ids[value] then
-					ids[value] = "pending"
-					total += 1
-					fresh = true
-				end
-			end
-			if fresh then table.insert(carriers, instance) end
-		end
-		if instance:IsA("BasePart") and instance.MaterialVariant ~= "" then
-			variants[instance.MaterialVariant] = true
-		end
+local function contentKey(value)
+	if type(value) == "string" then return value ~= "" and value or nil end
+	if typeof(value) == "Content" then
+		if value.SourceType == Enum.ContentSourceType.Uri then return value.Uri ~= "" and value.Uri or nil end
+		if value.SourceType == Enum.ContentSourceType.Opaque then return value end
 	end
-	for _, root in ipairs(roots) do
-		for _, instance in ipairs(root:GetDescendants()) do consider(instance) end
-	end
-	for _, variant in ipairs(MaterialService:GetDescendants()) do
-		if variant:IsA("MaterialVariant") and variants[variant.Name] then consider(variant) end
-	end
-	if devFlag("DevLobbyLoadBadAsset") then
-		-- Studio-only failure injection: an id that cannot load.
-		local broken = Instance.new("Decal")
-		broken.Texture = "rbxassetid://999999999999999"
-		consider(broken)
-	end
-	return total
+	return nil
 end
 
-local settledCount = 0 -- ids settled so far, across every pass
-local function preload(ids, carriers, total)
-	-- Returns the number of ids that did not load. Workers pull batches so one
-	-- slow request cannot hold the rest; ids the engine never reports on are
-	-- settled when their batch returns.
-	local failed = 0
-	local function settle(id, ok)
-		if ids[id] ~= "pending" then return end
-		ids[id] = ok and "ok" or "failed"
-		settledCount += 1
-		if not ok then failed += 1 end
-		progress = math.max(progress, 0.3 + 0.7 * math.min(1, settledCount / math.max(1, total)))
-		status.Text = string.format("LOADING LOBBY ASSETS  %d / %d", math.min(settledCount, total), total)
-		touch()
+local function collectAsset(instance, ids, carriers)
+	local added = 0
+	local function add(key, imageId, keys)
+		if not key or ids[key] then return end
+		ids[key] = "pending"
+		added += 1
+		if imageId then
+			table.insert(carriers, {ImageId = imageId, Keys = {key}})
+		else
+			table.insert(keys, key)
+		end
 	end
-	local token = retryToken
-	local cursor, running = 1, 0
-	for _ = 1, WORKERS do
-		running += 1
-		task.spawn(function()
-			while cursor <= #carriers and token == retryToken and not enterAnyway do
-				while devFlag("DevLobbyLoadStall") do task.wait(0.2) end
-				local batch = table.move(carriers, cursor, math.min(#carriers, cursor + BATCH - 1), 1, {})
-				cursor += BATCH
-				pcall(function()
-					ContentProvider:PreloadAsync(batch, function(id, fetchStatus)
-						if token == retryToken then settle(id, fetchStatus == Enum.AssetFetchStatus.Success) end
-					end)
-				end)
-				if token ~= retryToken then break end
-				for _, instance in ipairs(batch) do
-					for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
-						local ok, value = pcall(function() return instance[property] end)
-						if ok and ids[value] == "pending" then settle(value, true) end
-					end
-				end
+	if instance:IsA("SurfaceAppearance") then
+		-- PreloadAsync ignores SurfaceAppearance. Warm URI images through supported
+		-- Decals; this cannot certify that the renderer's processed PBR pack is ready.
+		for _, property in ipairs(MAP_PROPERTIES) do
+			local ok, value = pcall(function() return instance[property] end)
+			if ok and typeof(value) == "Content" and value.SourceType == Enum.ContentSourceType.Uri then
+				add(contentKey(value), value.Uri)
 			end
-			running -= 1
-		end)
+		end
+	else
+		local keys = {}
+		for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName] or {}) do
+			local ok, value = pcall(function() return instance[property] end)
+			if ok then
+				local key = contentKey(value)
+				if typeof(key) == "Content" then
+					-- Embedded Opaque content without an asset ID has no remote fetch.
+					local legacy = property == "MeshContent" and "MeshId" or "TextureID"
+					local readable, id = pcall(function() return instance[legacy] end)
+					key = readable and type(id) == "string" and id ~= "" and id or nil
+				end
+				add(key, nil, keys)
+			end
+		end
+		if #keys > 0 then table.insert(carriers, {Instance = instance, Keys = keys}) end
 	end
-	while running > 0 and token == retryToken and not enterAnyway do task.wait(0.1) end
-	return failed, token ~= retryToken
+	return added
+end
+
+local function loadCarrier(carrier)
+	local instance = carrier.Instance
+	local reported, failed = false, false
+	local ok = pcall(function()
+		if carrier.ImageId then
+			instance = Instance.new("Decal")
+			instance.Texture = carrier.ImageId
+		end
+		-- Keep mesh instances: a MeshId string does not necessarily fetch the
+		-- same content as the actual MeshPart, especially DataModel-scoped meshes.
+		ContentProvider:PreloadAsync({instance}, function(_, fetchStatus)
+			reported = true
+			if fetchStatus ~= Enum.AssetFetchStatus.Success then failed = true end
+		end)
+	end)
+	if carrier.ImageId and instance then
+		local cleaned = pcall(function() instance:Destroy() end)
+		if not cleaned then ok = false end
+	end
+	-- A return or absent callback is not evidence of a successful download.
+	return ok and reported and not failed
 end
 
 local function pendingCarriers(ids, carriers, wanted)
 	local out = {}
-	for _, instance in ipairs(carriers) do
-		for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
-			local ok, value = pcall(function() return instance[property] end)
-			if ok and ids[value] == wanted then
-				table.insert(out, instance)
-				break
-			end
+	for _, carrier in ipairs(carriers) do
+		for _, key in ipairs(carrier.Keys) do
+			if ids[key] == wanted then table.insert(out, carrier) break end
 		end
 	end
 	return out
+end
+
+local function census(roots, ids, carriers, instances)
+	local total, checked = 0, 0
+	local function consider(instance)
+		total += collectAsset(instance, ids, carriers)
+		checked += 1
+		if checked % 200 == 0 then task.wait() end
+	end
+	if instances then
+		for _, instance in ipairs(instances) do consider(instance) end
+	else
+		for _, root in ipairs(roots) do
+			for _, instance in ipairs(root:GetDescendants()) do consider(instance) end
+		end
+	end
+	if devFlag("DevLobbyLoadBadAsset") then
+		local broken = Instance.new("Decal")
+		broken.Texture = "rbxassetid://999999999999999"
+		consider(broken)
+		-- Store the URI on a test-owned carrier so no destroyed probe is preloaded.
+		for _, carrier in ipairs(carriers) do
+			if carrier.Instance == broken then carrier.Instance, carrier.ImageId = nil, broken.Texture end
+		end
+		broken:Destroy()
+	end
+	return total
+end
+
+local settledCount = 0
+local preloadBusy = false
+local function preload(ids, carriers, total)
+	local failed, token, done = 0, retryToken, false
+	-- All workers from a retry/skip retain this owner until their engine calls drain.
+	while preloadBusy and token == retryToken and not enterAnyway do task.wait(0.1) end
+	if token ~= retryToken or enterAnyway then return 0, token ~= retryToken end
+	local cursor, running = 1, math.min(4, #carriers)
+	if running == 0 then return 0, false end
+	preloadBusy = true
+	for _ = 1, running do
+		task.spawn(function()
+			local ok, problem = pcall(function()
+				while cursor <= #carriers and token == retryToken and not enterAnyway do
+					-- Claim before yielding, so each typed carrier is requested once.
+					local carrier = carriers[cursor]
+					cursor += 1
+					while devFlag("DevLobbyLoadStall") and token == retryToken and not enterAnyway do task.wait(0.2) end
+					if token ~= retryToken or enterAnyway then break end
+					local loaded = loadCarrier(carrier)
+					if token ~= retryToken or enterAnyway then break end
+					for _, key in ipairs(carrier.Keys) do
+						if ids[key] == "pending" then
+							ids[key] = loaded and "ok" or "failed"
+							settledCount += 1
+							if not loaded then failed += 1 end
+						end
+					end
+					progress = math.max(progress, 0.3 + 0.7 * math.min(1, settledCount / math.max(1, total)))
+					status.Text = string.format("LOADING LOBBY ASSETS  %d / %d", math.min(settledCount, total), total)
+					touch()
+					task.wait()
+				end
+			end)
+			if not ok then warn("[LobbyLoading] worker: " .. tostring(problem)) end
+			running -= 1
+			if running == 0 then
+				if token == retryToken and not enterAnyway then
+					-- An unexpected worker error must not turn unreported work into success.
+					for _, carrier in ipairs(carriers) do
+						for _, key in ipairs(carrier.Keys) do
+							if ids[key] == "pending" then ids[key] = "failed" failed += 1 settledCount += 1 end
+						end
+					end
+				end
+				preloadBusy, done = false, true
+			end
+		end)
+	end
+	while not done and token == retryToken and not enterAnyway do task.wait(0.1) end
+	return failed, token ~= retryToken
 end
 
 ---------------------------------------------------------------------------
@@ -410,7 +469,7 @@ local function run()
 		return list
 	end
 	total = census(roots(), ids, carriers)
-	setStage(string.format("LOADING LOBBY ASSETS  0 / %d", total), 0.3, "Meshes, textures, decals and materials.")
+	setStage(string.format("LOADING LOBBY ASSETS  0 / %d", total), 0.3, "Meshes and image downloads.")
 	local failed, restarted = 0, false
 	repeat
 		local work = pendingCarriers(ids, carriers, "pending")
@@ -433,7 +492,7 @@ local function run()
 		detail.Text = string.format("Retrying %d assets that did not load.", failed)
 		failed = select(1, preload(ids, again, total))
 		for id, state in pairs(ids) do
-			if state == "failed" then warn("[LobbyLoading] did not load: " .. id) end
+			if state == "failed" then warn("[LobbyLoading] did not load: " .. tostring(id)) end
 		end
 	end
 	failedCount = failed
@@ -462,9 +521,8 @@ end
 
 if outcome == "lobby" and not enterAnyway then
 	-- TEXTURE_SETTLE_20261004 (owner: "all objects load in but some textures still need a couple of seconds").
-	-- PreloadAsync returns when the files are fetched; the renderer then still decodes and uploads them, and
-	-- surface/material maps arrive through the same request queue. Hold the cover until that queue has stayed
-	-- empty for a moment, then a beat more for the sharp mip levels. Capped, so a slow device is never trapped.
+	-- This is a bounded settling allowance after measured fetches. An empty
+	-- download queue cannot prove GPU upload, mip sharpness or processed PBR readiness.
 	progress = 0.98
 	status.Text = "FINISHING TEXTURES"
 	detail.Text = ""
@@ -582,46 +640,93 @@ do
 		return self
 	end
 
-	-- Fetch everything `roots` reference that is not fetched yet; `report(done, total)` as it goes. Stops at `cap`.
-	local seen, carriers = {}, {}
+	-- Index each streamed root once; arrivals add work without rescanning the map.
+	local seen, carriers, watched, queued = {}, {}, {}, {}
+	local fetching, fetchGeneration = false, 0
+	local function resetFetch()
+		fetchGeneration += 1
+		for _, state in pairs(watched) do state.Connection:Disconnect() end
+		seen, carriers, watched, queued = {}, {}, {}, {}
+		-- The old worker still owns `fetching` until its engine request returns.
+	end
+	local function track(roots, generation, deadline)
+		for root, state in pairs(watched) do
+			if not root.Parent then state.Connection:Disconnect() watched[root] = nil end
+		end
+		for _, root in ipairs(roots) do
+			if not watched[root] then
+				watched[root] = {
+					Connection = root.DescendantAdded:Connect(function(instance)
+						if generation == fetchGeneration then table.insert(queued, instance) end
+					end), Initial = root:GetDescendants(), Cursor = 1,
+				}
+			end
+			local state, added = watched[root], 0
+			while state.Initial and state.Cursor <= #state.Initial and added < 2000 do
+				if generation ~= fetchGeneration or os.clock() >= deadline then return end
+				table.insert(queued, state.Initial[state.Cursor])
+				state.Cursor += 1
+				added += 1
+				if added % 200 == 0 then task.wait() end
+			end
+			if state.Initial and state.Cursor > #state.Initial then state.Initial = nil end
+		end
+	end
 	local function fetch(roots, cap, report)
-		local fresh = census(roots, seen, carriers)
-		if fresh == 0 then return 0 end
-		local work = {}
-		for _, instance in ipairs(carriers) do
-			for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
-				local ok, value = pcall(function() return instance[property] end)
-				if ok and seen[value] == "pending" then table.insert(work, instance) break end
-			end
-		end
-		local done, cursor, running, deadline = 0, 1, 0, os.clock() + cap
-		local function settle(id)
-			if seen[id] == "pending" then
-				seen[id] = "ok"
-				done += 1
-				if report then report(math.min(done, fresh), fresh) end
-			end
-		end
-		for _ = 1, WORKERS do
-			running += 1
-			task.spawn(function()
-				while cursor <= #work and os.clock() < deadline do
-					local batch = table.move(work, cursor, math.min(#work, cursor + BATCH - 1), 1, {})
-					cursor += BATCH
-					pcall(function() ContentProvider:PreloadAsync(batch, function(id) settle(id) end) end)
-					for _, instance in ipairs(batch) do
-						for _, property in ipairs(CONTENT_PROPERTIES[instance.ClassName]) do
-							local ok, value = pcall(function() return instance[property] end)
-							if ok then settle(value) end
+		if fetching then return 0 end
+		fetching = true
+		local deadline, done, count, generation = os.clock() + cap, false, 0, fetchGeneration
+		task.spawn(function()
+			local ok, problem = pcall(function()
+				track(roots, generation, deadline)
+				if generation ~= fetchGeneration then return end
+				-- One bounded census slice per pass; the unprocessed queue remains queued.
+				local slice = table.move(queued, 1, math.min(#queued, 2000), 1, {})
+				queued = table.move(queued, #slice + 1, #queued, 1, {})
+				census(nil, seen, carriers, slice)
+				if generation ~= fetchGeneration then return end
+				local work = {}
+				for _, carrier in ipairs(carriers) do
+					if (carrier.Attempts or 0) < 2 then
+						for _, key in ipairs(carrier.Keys) do
+							if seen[key] ~= "ok" then table.insert(work, carrier) break end
 						end
 					end
 				end
-				running -= 1
+				count = #work
+				for index, carrier in ipairs(work) do
+					if generation ~= fetchGeneration or os.clock() >= deadline then break end
+					carrier.Attempts = (carrier.Attempts or 0) + 1
+					local loaded = loadCarrier(carrier)
+					if generation ~= fetchGeneration then break end
+					for _, key in ipairs(carrier.Keys) do seen[key] = loaded and "ok" or "failed" end
+					if not loaded and carrier.Attempts == 2 then
+						warn("[LevelLoading] could not fetch: " .. tostring(carrier.Keys[1]))
+					end
+					if report then report(index, count) end
+					task.wait()
+				end
 			end)
+			if not ok then warn("[LevelLoading] prefetch: " .. tostring(problem)) end
+			-- Only the worker releases ownership, even if PreloadAsync exceeded cap.
+			fetching, done = false, true
+		end)
+		while not done and os.clock() < deadline do task.wait(0.1) end
+		return count
+	end
+	local function needsFetch()
+		if fetching or #queued > 0 then return true end
+		for _, state in pairs(watched) do if state.Initial then return true end end
+		for _, carrier in ipairs(carriers) do
+			if (carrier.Attempts or 0) < 2 then
+				for _, key in ipairs(carrier.Keys) do if seen[key] ~= "ok" then return true end end
+			end
 		end
-		while running > 0 and os.clock() < deadline do task.wait(0.1) end
-		for id, value in pairs(seen) do if value == "pending" then seen[id] = "ok" end end      -- past the cap: not asked for again
-		return fresh
+		return false
+	end
+	local function failedFetch()
+		for _, state in pairs(seen) do if state == "failed" then return true end end
+		return false
 	end
 	local function quiet(cap, hold)                  -- the request queue has stayed empty for `hold` seconds
 		local began, calm = os.clock(), nil
@@ -638,13 +743,14 @@ do
 	local function announced()
 		return tonumber(player:GetAttribute("LoadingLevel")) or tonumber(workspace:GetAttribute("SelectedLevel")) or 0
 	end
-	local function levelWorlds()                     -- everything in the workspace that is not a lobby or a body
-		local list = {}
-		for _, child in ipairs(workspace:GetChildren()) do
-			if child.Name ~= REVISED_LOBBY and child.Name ~= ORIGINAL_LOBBY and not Players:GetPlayerFromCharacter(child)
-				and (child:IsA("Model") or child:IsA("Folder")) and child.Name ~= LIVE_MODELS[5] and child.Name ~= LIVE_MODELS[6] then
-				table.insert(list, child)
-			end
+	local function levelWorlds()
+		local level, list = announced(), {}
+		local names = level == 1 and {"Maze", "Elevator", "Decor", "PuzzleItems"}
+			or level == 4 and {"Level 4 Cinema Blender", "PuzzleItems"}
+			or {"Level " .. tostring(level) .. " Generated World"}
+		for _, name in ipairs(names) do
+			local root = workspace:FindFirstChild(name)
+			if root then table.insert(list, root) end
 		end
 		return list
 	end
@@ -652,6 +758,7 @@ do
 	-- GameManager owns release. This sentinel prevents concurrent/repeated workers
 	-- while the imported card is visible; bounded prefetch never owns presentation.
 	local function coverRound(joined)
+		resetFetch()
 		up = {round = true}
 		local began = os.clock()
 		if joined then
@@ -665,11 +772,13 @@ do
 			end
 			task.wait(0.15)
 		end
+		resetFetch()
 		up = nil
 	end
 
 	-- Level 5 or 6: the level is a place on this server; the body is moved there.
 	local function coverLive(level, standing)
+		resetFetch()
 		local cover = standing or raise(level)
 		up = cover
 		local function still() return player:GetAttribute("Level6PlaygroundPreview") == true end
@@ -707,14 +816,18 @@ do
 				if hit then break end
 				task.wait(0.1)
 			end
-			cover.stage("LOADING THE LEVEL", 0.45, "Meshes, textures, decals and materials.")
-			fetch({model}, 8, function(done, total)
-				cover.stage(string.format("LOADING THE LEVEL  %d / %d", done, total), 0.45 + 0.5 * done / math.max(1, total), "Meshes, textures, decals and materials.")
-			end)
+			cover.stage("LOADING THE LEVEL", 0.45, "Meshes and image downloads.")
+			local fetchDeadline = os.clock() + 8
+			repeat
+				fetch({model}, math.max(0.1, fetchDeadline - os.clock()), nil)
+				task.wait(0.1) -- An older generation may still own the engine request.
+			until not still() or os.clock() >= fetchDeadline or (watched[model] and not needsFetch())
 			cover.stage("FINISHING TEXTURES", 0.97)
 			quiet(2.5, 0.6)
 		end
-		cover.stage("LEVEL READY", 1)
+		local incomplete = not model or not watched[model] or needsFetch() or failedFetch()
+		resetFetch()
+		cover.stage(incomplete and "ENTERING THE LEVEL" or "LEVEL READY", 1)
 		cover.drop()
 		up = nil
 	end

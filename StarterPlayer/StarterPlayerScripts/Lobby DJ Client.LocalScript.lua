@@ -21,9 +21,15 @@ team = okAccess and team == true
 local VOLUME = 0.38
 local MAGENTA, CYAN, INK, PAPER = Color3.fromRGB(255, 64, 176), Color3.fromRGB(70, 230, 255), Color3.fromRGB(16, 10, 30), Color3.fromRGB(244, 240, 255)
 
+local trackJson, trackList = nil, {}
 local function tracks()
-	local ok, list = pcall(function() return HttpService:JSONDecode(workspace:GetAttribute("LobbyDJTracks")) end)
-	return ok and type(list) == "table" and list or {}
+	local raw = workspace:GetAttribute("LobbyDJTracks")
+	if raw ~= trackJson then
+		trackJson = raw
+		local ok, list = pcall(function() return HttpService:JSONDecode(raw) end)
+		trackList = ok and type(list) == "table" and list or {}
+	end
+	return trackList
 end
 
 -- the sound ----------------------------------------------------------------------------------------------
@@ -138,8 +144,12 @@ do
 		elapsed += dt
 		if elapsed < 1 / 20 then return end
 		elapsed = 0
+		if workspace:GetAttribute("ReservedRoundServer") == true or player:GetAttribute("InRound") == true then
+			if active then active = false; restore() end
+			return
+		end
 		local entry = tracks()[workspace:GetAttribute("LobbyDJTrack") or 0]
-		local on = entry ~= nil and workspace:GetAttribute("ReservedRoundServer") ~= true and player:GetAttribute("InRound") ~= true
+		local on = entry ~= nil
 		if not on then
 			if active then active = false; restore() end
 			return

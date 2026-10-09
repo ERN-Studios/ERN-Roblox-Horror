@@ -1,0 +1,23 @@
+{
+  "scope": "synthetic contracts only",
+  "results": [
+    {
+      "name": "shop",
+      "sourceFile": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+      "compiled": true,
+      "checks": "PASS shop: 12 scheduling/replication/restoration checks; incomplete scans <= 2 Hz"
+    },
+    {
+      "name": "dj",
+      "sourceFile": "StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua",
+      "compiled": true,
+      "checks": "PASS DJ: 129 cache/invalid-input/inactive-gate/restoration checks"
+    },
+    {
+      "name": "renderer",
+      "sourceFile": "ServerScriptService/Level 1 Systems/BlenderRoomRenderer.ModuleScript.lua",
+      "compiled": true,
+      "checks": "PASS renderer: 12 per-room scope/generation/original-preservation checks"
+    }
+  ]
+}

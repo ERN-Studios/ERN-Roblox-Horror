@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Lobby Loading Screen",
+    "baselineSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+    "baselineBytes": 32406,
+    "candidateSha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+    "candidateBytes": 36701,
+    "candidateFile": "artifacts/stutter-assets-20261009/candidates/Lobby Loading Screen.luau",
+    "scopedBaselineSha256": "cc4583a7bd4d5e2b7524b47c85b673a874da39430e7557c7f7fbb33dbb960881",
+    "scopedBaselineBytes": 35995,
+    "scopedBaselineFile": ".git/stutter-assets-20261009/loading-pool-before/ReplicatedFirst__Lobby Loading Screen.luau"
+  },
+  {
+    "name": "Round Entry Client",
+    "baselineSha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+    "baselineBytes": 6494,
+    "candidateSha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+    "candidateBytes": 11879,
+    "candidateFile": "artifacts/stutter-assets-20261009/candidates/Round Entry Client.luau",
+    "scopedBaselineSha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+    "scopedBaselineBytes": 11879,
+    "scopedBaselineFile": ".git/stutter-assets-20261009/loading-pool-before/StarterPlayer__StarterPlayerScripts__Round Entry Client.luau"
+  }
+]
