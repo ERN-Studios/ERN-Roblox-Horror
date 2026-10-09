@@ -1,0 +1,18 @@
+{
+  "gate": "actual offline native-Luau metadata paging",
+  "checks": 291,
+  "negative_fixtures": 11,
+  "exit_code": 0,
+  "response_record_limit": 40,
+  "encoded_response_byte_limit": 60000,
+  "original_response_overflow_fixture": true,
+  "snapshot_initial_final_consistency": true,
+  "same_length_raw_source_digest_drift_detected": true,
+  "python_ast_pass": 2,
+  "before_checkpoint": "G:\\Roblox\\MongoTV\\.git\\mongotv-cleanup-20261009\\tooling-before\\capture_baseline.pre-paging.py",
+  "before_sha256": "22afe4dcf776c6fc283ad43918d7454ae3abcae7830fe242f1ccccfff0d9bf91",
+  "after_sha256": "75d742ae64584e47d1b9a18f1a4a9dfd29f62ca44ab1056ff26efe214254ff22",
+  "test_sha256": "a7275ea76ddd92417474425bdc9f74f5546b79f4a8bd8b2763e7d4d0c652321d",
+  "native_calls": 0,
+  "studio_or_source_mutations": false
+}

@@ -1,0 +1,1 @@
+capture metadata paging: 291 checks passed; real offline Luau pages, 11 negative fixtures, no Studio calls
