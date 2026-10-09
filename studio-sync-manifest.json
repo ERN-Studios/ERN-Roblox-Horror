@@ -1290,8 +1290,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
-      "bytes": 30523,
-      "sha256": "cfefe031d09f0b5c1ae6c40cc03265fbd2b03c5d756cc38af9c9a11288544a8c",
+      "bytes": 30505,
+      "sha256": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1331,8 +1331,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
-      "bytes": 16188,
-      "sha256": "df1941137581616dbd1b916fc53ebdefed7bec82bf0b6732cbf0b63ab97afd88",
+      "bytes": 16038,
+      "sha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {

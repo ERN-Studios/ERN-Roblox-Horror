@@ -422,7 +422,7 @@ function Adapter.Apply(manifest)
     end
     local taskLamp = devicePart("CD Player Task Lamp", CFrame.new(0,7.06,1.52),
         Vector3.new(3.40,.10,.36), Color3.fromRGB(255,227,162), Enum.Material.Neon)
-    local lampShade = devicePart("CD Player Task Lamp Shade", CFrame.new(0,7.16,1.48),
+    devicePart("CD Player Task Lamp Shade", CFrame.new(0,7.16,1.48),
         Vector3.new(3.65,.13,.54), Color3.fromRGB(46,48,42))
     local taskLight = Instance.new("SurfaceLight")
     taskLight.Name = "CD Player Warm Task Light"

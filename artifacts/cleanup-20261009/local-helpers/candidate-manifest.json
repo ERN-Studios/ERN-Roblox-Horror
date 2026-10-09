@@ -1,0 +1,129 @@
+{
+  "status": "proposal only; root native baseline/CAS review required",
+  "productionWrites": 0,
+  "studioCalls": 0,
+  "scope": "pure private unused function; unused return binding with side-effectful call retained",
+  "testBoundary": "offline actual-source engine-boundary contract; no native, physics, clients, streaming or installed kit claim",
+  "files": [
+    {
+      "finding": "LE-32",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "beforeSHA256Lf": "df1941137581616dbd1b916fc53ebdefed7bec82bf0b6732cbf0b63ab97afd88",
+      "candidateSHA256Lf": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e",
+      "beforeBytesLf": 16188,
+      "candidateBytesLf": 16038,
+      "beforeFile": "artifacts/cleanup-20261009/local-helpers/LightDirector.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/local-helpers/LightDirector.candidate.luau",
+      "compile": [
+        {
+          "version": "before",
+          "optimization": 0,
+          "success": true,
+          "bytecodeBytes": 12806,
+          "bytecodeSHA256": "ec8f097e95ce5f1ab77ac02161441c35a21cc9d6e73ddee10659c0dfc1482245"
+        },
+        {
+          "version": "before",
+          "optimization": 1,
+          "success": true,
+          "bytecodeBytes": 12195,
+          "bytecodeSHA256": "c29fb8d6175f48e51ad70d8a7aec48c0a1c8c80390525df28e1081468149cdde"
+        },
+        {
+          "version": "candidate",
+          "optimization": 0,
+          "success": true,
+          "bytecodeBytes": 12690,
+          "bytecodeSHA256": "4d6daf7ecf9c46bd6954635f9cf2e22a0d7972b8969ba248086e91bd90f31df9"
+        },
+        {
+          "version": "candidate",
+          "optimization": 1,
+          "success": true,
+          "bytecodeBytes": 12072,
+          "bytecodeSHA256": "8b70b10d7f4e0f4d2003ee5a7a729afe19e3ea520c5ef61a907939fda2db2ba8"
+        }
+      ],
+      "diff": "--- ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua\n+++ ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua\n@@ -56,11 +56,4 @@\n local function zoneFor(id)\n \treturn zoneById[id] or newZone(id)\n-end\n-\n-local function isStar(part)\n-\tfor _, tag in ipairs(STAR_TAGS) do\n-\t\tif CollectionService:HasTag(part, tag) then return true end\n-\tend\n-\treturn false\n end\n \n"
+    },
+    {
+      "finding": "LE-34",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613"
+      },
+      "beforeSHA256Lf": "cfefe031d09f0b5c1ae6c40cc03265fbd2b03c5d756cc38af9c9a11288544a8c",
+      "candidateSHA256Lf": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035",
+      "beforeBytesLf": 30523,
+      "candidateBytesLf": 30505,
+      "beforeFile": "artifacts/cleanup-20261009/local-helpers/VisualAdapter.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/local-helpers/VisualAdapter.candidate.luau",
+      "compile": [
+        {
+          "version": "before",
+          "optimization": 0,
+          "success": true,
+          "bytecodeBytes": 23453,
+          "bytecodeSHA256": "a423102f323c2dd845592dcc53910ff78430ec6367cb518d1ffde5e0e128e5b7"
+        },
+        {
+          "version": "before",
+          "optimization": 1,
+          "success": true,
+          "bytecodeBytes": 21363,
+          "bytecodeSHA256": "3bdf550d1dd0f33f2ea1cd839a5ed03fa1478498f0c61bb1b7c11d5699821065"
+        },
+        {
+          "version": "candidate",
+          "optimization": 0,
+          "success": true,
+          "bytecodeBytes": 23453,
+          "bytecodeSHA256": "033bdfa2adddc307cb1fef378a74c3c4aab58d456a9c117fbbb2e71e70a068c0"
+        },
+        {
+          "version": "candidate",
+          "optimization": 1,
+          "success": true,
+          "bytecodeBytes": 21363,
+          "bytecodeSHA256": "6b03cc71e320a0604323a390be35a45385e3afeba5131000aaf40834f8f64965"
+        }
+      ],
+      "diff": "--- ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua\n+++ ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua\n@@ -423,5 +423,5 @@\n     local taskLamp = devicePart(\"CD Player Task Lamp\", CFrame.new(0,7.06,1.52),\n         Vector3.new(3.40,.10,.36), Color3.fromRGB(255,227,162), Enum.Material.Neon)\n-    local lampShade = devicePart(\"CD Player Task Lamp Shade\", CFrame.new(0,7.16,1.48),\n+    devicePart(\"CD Player Task Lamp Shade\", CFrame.new(0,7.16,1.48),\n         Vector3.new(3.65,.13,.54), Color3.fromRGB(46,48,42))\n     local taskLight = Instance.new(\"SurfaceLight\")\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "actual-source before/after contracts",
+      "passed": true,
+      "assertions": 173,
+      "traceSHA256": "0fc2d73ca8dd54e7d3c1f0ac25df35f089314fe436ed7be8c062171d3009946c",
+      "traceLines": 115
+    },
+    {
+      "name": "active STAR_TAG_C omitted",
+      "negativeControlRejected": true,
+      "expectedFailure": "every active STAR_TAG is off"
+    },
+    {
+      "name": "side-effectful shade constructor omitted",
+      "negativeControlRejected": true,
+      "expectedFailure": "all nine display/support/lamp/shade parts remain"
+    }
+  ],
+  "passed": true,
+  "currentManifestSHA256": "0403db8a6c34a3b5764ef99ff7fab8079d9ac3714e5750dc230fac4362f62e3e"
+}

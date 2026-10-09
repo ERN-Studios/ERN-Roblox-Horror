@@ -1,0 +1,11 @@
+{
+  "bytes": 30505,
+  "path": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+  "editorMatches": true,
+  "class": "ModuleScript",
+  "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
+  "beforeSha256": "cfefe031d09f0b5c1ae6c40cc03265fbd2b03c5d756cc38af9c9a11288544a8c",
+  "afterSha256": "0b5d4034c3a9016f6e4405024d713244ad936cf97988f13e03296ed016b39035",
+  "capturedAtUtc": "2026-10-09T19:25:04.273225+00:00",
+  "published": false
+}

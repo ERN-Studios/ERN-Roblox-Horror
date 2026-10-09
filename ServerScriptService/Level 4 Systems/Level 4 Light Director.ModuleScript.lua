@@ -57,13 +57,6 @@ local function zoneFor(id)
 	return zoneById[id] or newZone(id)
 end
 
-local function isStar(part)
-	for _, tag in ipairs(STAR_TAGS) do
-		if CollectionService:HasTag(part, tag) then return true end
-	end
-	return false
-end
-
 local function collect(root)
 	table.clear(zones); table.clear(zoneById)
 	for _, d in ipairs(root:GetDescendants()) do
