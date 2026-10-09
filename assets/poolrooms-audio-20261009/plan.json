@@ -1,5 +1,5 @@
 {
-  "revision": "poolrooms-audio-20261009-v1",
+  "revision": "poolrooms-audio-20261009-v2",
   "origin": [
     70000,
     300,
@@ -1814,7 +1814,7 @@
         "A5",
         "P2"
       ],
-      "volume": 0.55
+      "volume": 0.06
     },
     {
       "key": "bed_service",
@@ -1943,7 +1943,7 @@
         "A2",
         "A5"
       ],
-      "volume": 0.6,
+      "volume": 0.3,
       "dist": [
         24,
         55

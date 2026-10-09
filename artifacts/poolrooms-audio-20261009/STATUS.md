@@ -26,3 +26,21 @@ A full native pre-install backup was successfully downloaded and verified outsid
 The current authoritative Studio place was published to the existing experience. Creator Dashboard, filtered with Show published only, displays version 2915 (October 9, 2026 at 11:30 PM local time) with its published checkmark. roblox-publication-receipt.json records the exact place/universe and observed confirmation; studio-final-parity.json rechecks the two installed sources/editor parity and nine bank assets after publication. The still-open session PlaceVersion=2859 is not used as evidence of publication. Production-client auditory playback has not been verified. AssetService SavePlaceAsync is not used as a workaround because the official documentation says an active Team Create session blocks its saves. Do not change access settings or restart active servers.
 
 Repository handling: the original dirty checkout and unrelated developer work remain preserved. An isolated sparse worktree based on fetched origin/main 46073662c859eef421fc262177eb71be7c498ea6 is retained at /Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009 on codex/poolrooms-audio-20261009. The prepared runtime/assets were committed locally as dd86c10a9a51246a274a07dde631dc3bda52340c. Verified installation/native test records were committed as 9ad2aaed9b1e185b59fa9927ac87143dc8fcff6a; final publication records are committed separately after inspection. No GitHub push has been performed. A native whole-place backup plus script/property exports are kept distinct; a source-only mirror is not claimed to cover the whole game.
+
+## 2026-10-10, 00:15 — water bed turned down (plan revision v2, in Studio, NOT yet published)
+
+Owner, after playing v2915/v2916: "Der skal skrues en tand ned for de der bølgelyde i første sektion og andre hvis der også er der. Skrue det helt ned på et meget lavt niveau faktisk." (the wave sounds in the first section, and others if they are there too: right down to a very low level).
+
+Which sound: measured, not heard. `bed_water` is the only master with a rise-and-fall lapping pattern (9 swells per 22 s loop, laps up to 10 LU over the hall bed, 55% of the time 15 dB under its loud level) and the dominant audible layer in A1; one bed row plays it in A1, A2, A5 and P2. `bed_hall` is a steady low drone, the weir and lion loops are steady pours, and neither is in the first section. `shot_splash` is a rare slosh with after-ripples (A1, A2, A5).
+
+Changed, in `ReplicatedStorage.Level2Poolrooms.Plan` (compare-and-swap against the v1 value) and in `assets/poolrooms-audio-20261009/plan.json`:
+
+- `beds[bed_water].volume` 0.55 -> 0.06 (-19 dB): only the largest laps still reach the hall bed's ear-weighted level.
+- `shots[shot_splash].volume` 0.6 -> 0.3 (-6 dB).
+- `revision` and the bank attribute `AudioRevision` -> `poolrooms-audio-20261009-v2` (no script reads either).
+
+Nothing else in the Plan differs (three leaves; same 11 375 bytes). No script changed. The client reads the Plan once at start, so the new level reaches players only after a publish, on servers started after it.
+
+Not changed, and the other real water sound in A1: the player's own wade strides in `SoundController` (`LEVEL2_WADE_CORE_VOLUME` 0.49 x take gain 1.00 / 0.74 / 2.60, so 0.46 / 0.34 / 1.20 at a walk) plus a resistance loop at about 0.09. They play only while moving through the flooded floor (A1, A3, the P2 channel). If waves are still heard while walking and not while standing still, that is the knob.
+
+Not verified: listening (a session cannot hear), and the new level in a play session (the value was read back from Studio and the controller was run offline at 0.05 by the investigation, where every voice started, reached its target and cleaned up).
