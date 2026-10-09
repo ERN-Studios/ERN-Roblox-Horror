@@ -2,6 +2,11 @@
 
 Status: **afventer test/Studio**. Lokale før/efter-porte er bestået; ejerens aktuelle Play bevares, indtil ejeren selv er færdig. Derefter afventer root's friske native Source/editor/properties compare-and-swap og installerede efter-porte. Ingen af disse forslag er skrevet til produktionen af klientdelopgaven. Studio/manifest/commits er root's ansvar. Det eksisterende dirty `RoundUI` er ikke et ændringsmål og er aldrig skrevet af disse værktøjer.
 
+Seneste repo-snapshot kl20:06UTC har `announced():743`, aktiv caller i
+`levelWorlds():747` og round-prefetch`:771`. Nedenstående724/728/752-positioner
+og df0b…hash angiver den tidligere genkontrol. Begge nyere baselines afviser
+den gamle Loading-unit; frisk native genkontrol afventer stadig ejeren.
+
 **Forældet Loading-baseline — må ikke installeres:** Efter forberedelsen har ejeren ændret Loading og Round Entry. Den aktuelle `announced():724–726` kaldes nu af `levelWorlds():728`, der leverer round-prefetch-roots ved`:752`. Funktionen **beholdes**. Den gamle C04-removal og hele sammensatte Loading install-unit er derfor ugyldige, selv om historiske lokale testporte er grønne. Loading LF-SHA ved genkontrollen var `df0b347a37e096503c2cfd5fd04991f4be4f3167049711dccbd22b9106e69491`, mod gemt førhash `9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0`; root's exact-before guard afviste installationen før native mutation. De gamle blobs/hashes/receipts er bevaret som historisk bevis, ikke rebaset. C07's ubrugte Kicker/Tip-bindinger består ved`:59/:89`, men kræver ny C07-only kandidat og før/efter-port fra frisk native baseline, efter ejeren har afsluttet Play. Ingen gammel Loading-kandidat må skrives oven på ejerens kode.
 
 Forberedelsesværktøjet har nu en preflight **før enhver mkdir/input-/manifestskrivning**: den præcise helperdefinition skal forekomme én gang, og enhver `announced`-reference uden for den afvises konservativt. [client-loading-preflight-gate.json](client-loading-preflight-gate.json) beviser, at den virkelige CLI afviser den aktuelle caller`:728` uden at ændre59 prepared filer, checkpointinventar, raw receipts eller de to canonical owner-kilder. Den historiske uncalled definition accepteres; ny call, alias, dublet og ændret definition afvises. Reproducerbar readonly port: `python artifacts/cleanup-20261009/verify_client_loading_preflight.py`.

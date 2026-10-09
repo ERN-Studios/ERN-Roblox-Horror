@@ -6,15 +6,27 @@ Læst grundlag: projektets `AGENTS.md`, audit `HANDOFF.md`, `findings-index.md` 
 
 ## Baseline og allerede løste punkter
 
-- Aktuelt manifest: 230 scripts (129 ModuleScript, 72 LocalScript, 29 Script) og 15 RemoteEvent-stubs. Alle 245 filer findes og matcher deres SHA256 efter CRLF→LF-normalisering. Rå diskbytes varierer på 20 filer alene på grund af CRLF. Dette beviser manifest/repo-konsistens, ikke i sig selv native parity.
+- Oprindelig baseline-manifest: 230 scripts (129 ModuleScript, 72 LocalScript, 29 Script) og 15 RemoteEvent-stubs. Alle245 filer fandtes og matchede deres SHA256 efter CRLF→LF-normalisering. Rå diskbytes varierede på20 filer alene på grund af CRLF. Dette beviste manifest/repo-konsistens ved baseline, ikke i sig selv native parity. De senere samtidige DJ/Shop Display-ændringer nedenfor kræver ny root-parity.
 - Root har oplyst korrekt PlaceId og 230 native scripts med Source/editor-enighed. Native source-sammenligningen registreres af root separat.
 - C01: de tidligere driftede guide/preview/L5-kilder og DJ/Tunnel/DevESP er nu spejlet. Genimplementér ikke gammel source-sync.
 - C03: de fire Studio-fraværende gamle L6-klienter er allerede ude af kanoniske roots/manifest. Disabled L6 Reader, L6 Sound og SetRunAnimation består.
 - C31: den gamle L2 Pool Slide Dev ESP er allerede ude af kanoniske roots/manifest.
 - C30: tom `6430` er allerede fjernet. De to lokale `.claude-flow` JSON-filer findes, men er utrackede og ignorerede af `.gitignore:220`.
 - C22: auditens udsagn om direkte camera-viewport er delvist forældet: WELCOME bruger nu `UIDevice.Layout().Viewport` og `UIDevice.Changed`. Den utilstrækkelige hit-targetstørrelse efter UIScale består.
+- Senere samtidig ejer-/developerændring, checkpoint `concurrent-20261009T193459220110Z`: DJ har nu raw-attribute JSON-cache og tidlig round-guard; Shop Display har bounded0.5s retry og tidlig round-guard. De er ikke cleanupændringer/commits. C09/C15 er genkontrolleret mod disse aktuelle repo-kilder; native installation, workflowtests og målt gevinst påstås ikke her. Ingen af de samtidige kilder er skrevet af denne delopgave.
+- C04/C06/C07/C26 har portable byte-identiske før-/kandidat-inputs i [proof index](client-local-proofs/index.json). Alle lokale paired gates er reproduceret med portable inputs alene i [separat receipt](client-local-portability-gates.json); oprindelige raw receipts/checkpoints uændrede. De afventer stadig ejerens Play-afslutning og root's native CAS/installerede efter-porte.
+- Nyere samtidige Loading/Round Entry-ændringer gør den gamle Loading-unit **ugyldig**: `announced():724–726` er nu aktiv via `levelWorlds():728`→round-prefetch`:752` og skal beholdes. Root's exact-before guard afviste den gamle9483…baseline uden native installation. LF-hashes observeret ved denne genkontrol: Loading `df0b347a37e096503c2cfd5fd04991f4be4f3167049711dccbd22b9106e69491`; Round Entry `b2c27975ef4c836881e294068d17df4d3b6034984b0120d1f87877057742f0d1`. De ændringer er ejer-/developerarbejde, ikke cleanup. Gamle proof-inputs/receipts er uændrede historiske testresultater, ikke godkendelse af de nye kilder.
+- Ny Loading/Round Entry-closure: supported content-/carrier-census og pending/failed bookkeeping, request-owned busy/generation guards, bounded retry-attempts og DescendantAdded watchers er aktive. Round Entry overvåger character og nær entry-worldens synlige art, sætter AssetsReady=false ved nye arrivals og kræver0.35s quiet+existing UI/controls/ground gate før entryready; cancel/deadline/respawn afbryder request-owned connections. Loading bevarer roundcover ved RoundUI, mens live5/6 cover har bounded prefetch og særskilt incomplete status. Ingen af disse nye helpers/workers/watchers er fjernet eller behandlet som redundant kode.
+- Manglende nye flowporte: initial+late mesh/image/URI/opaque content, success/failed/no-callback/hanging PreloadAsync, retries/ENTER ANYWAY, obsolete generation under nyt entry, cancel/deadline/respawn/disconnect/reentry, ground/UI/controls stability samt multiplayer/streaming. Round5/6 reserved arrival kræver relevant Roblox-clienttest; native preload-return eller tom RequestQueue er ikke i sig selv renderer/PBR/mip-readiness. Den eksisterende offline `test_round_entry_client.py`-fixture skal genkontrolleres for nye DescendantAdded/nearby/content-boundaries, før den bruges til en ny pass-påstand. Ingen sådan pass er påstået her; root udfører fresh native før/efter efter ejerens Play.
 
 ## Udførte offline baseline-checks
+
+Seneste yderligere repo-snapshot kl20:06UTC flytter Loading's `announced()` til
+`:743`, caller til`:747` og round-prefetch til`:771`; kilden er36701 LF-bytes,
+SHA `872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583`.
+De tidligere hashes/linjer ovenfor er historiske. Funktionens aktive dependency
+består; ingen gammel Loading-kandidat må installeres. Det er stadig ejerarbejde,
+og den friske native Source/editor- og featureport er afventende.
 
 Kørt med eksisterende Luau 0.737 fra `C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737`, `PYTHONDONTWRITEBYTECODE=1`, uændret kode og midlertidige fixtures uden projektmutationer.
 
@@ -30,7 +42,7 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 ## C01 – tidligere source drift
 
 - **Præcis closure:** `StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua`; `Level 1 Sound Controller.LocalScript.lua`; `Level 5 Lighting Controller.LocalScript.lua`; `Level4PreviewPrompt.LocalScript.lua`; `Level6PreviewTransport.LocalScript.lua`; `R4DevGateController.LocalScript.lua`; nu spejlede `Lobby DJ Client.LocalScript.lua`, `Lobby Tunnel Reach Client.LocalScript.lua`, `Level 6 Dev ESP.LocalScript.lua`.
-- **Handling/bevis:** behold de aktuelle native spejle; ingen genskrivning fra auditens gamle repo. Aktuel guide har WELCOME/HELP og aktiv spawn-view; public L5/L6, DJ/Tunnel/ESP står i manifest. Alle aktuelle manifesthashes passer.
+- **Handling/bevis:** behold de verificerede native spejle; ingen genskrivning fra auditens gamle repo. Aktuel guide har WELCOME/HELP og aktiv spawn-view; public L5/L6, DJ/Tunnel/ESP står i manifest. Baseline-manifesthashes passede; nyere samtidige DJ/Shop-kilder må genafstemmes fra Studio af root.
 - **Dependencies:** DevAccess, UIDevice, ZyntraConfig, public PreviewAccess, Loading/RoundUI, LobbyDJ remote/attributes og authored maps. Source-sync/installer-tests er relevante authoring-callers.
 - **Risiko/gevinst:** lav ved at registrere allerede løst; høj ved at overskrive nyere Studio. Gevinst er korrekt grundlag.
 - **Før/efter-port:** root sammenligner fresh native Source/editor/class/Disabled/RunContext og manifest. Hvis ingen kodeændring, ingen ny gameplaytest til at genimplementere reconciliation.
@@ -44,6 +56,7 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 - **Risiko/gevinst:** lav runtime-risiko, lille reduktion af no-op scriptinventar; mulig navne/count-kontrakt i sync.
 - **Før/efter-port:** kontroller references og native kommentar-only source; Studio join/respawn, lobby Running, custom footsteps og objective-feed; sync/manifest-contract efter scoped deletion. Object/property rollback gemmes først.
 - **Status:** **afventer test**; ingen object-removal udført.
+- **Senere owner-entry-recheck:** begge marker-kilder er fortsat rene kommentarer; de nye Loading/Round Entry-diffs tilføjer ingen caller til dem. Den aktive RoundStatus entryprepare/entryready-kæde og gate-attributter er bevidst bevaret. Dette er fortsat ikke en successor-join/respawn/feed/footstep-før/eftertest; eventuel marker-removal skal vente på ny owner-flow baseline og exact native objektbackup/parity.
 
 ## C03 – gamle L6-klienter og animation-patch
 
@@ -56,12 +69,14 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 ## C04 – private literals og lokal helper
 
-- **Præcise steder:** `StarterPlayer/StarterCharacter/Animate.LocalScript.lua:594 origRoll, :863 climbFudge`; `StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua:25–27 MAXIMUM_RANGE/ACCURACY_DEGREES/DISTANCE_NOISE, :30 CD_SIGNAL_RANGE, :33 ROOM_BLINK_RATE, :44–45 MUTED/AMBER, :48 DANGER`; `Level 3 Table Hiding Client:382 HIDDEN_TEXT`; `Round Exit Client:55 HINT_HEIGHT`; `ReplicatedStorage/RoundHud.ModuleScript.lua:1084 TOUCH_LANE_X`; `ReplicatedFirst/Lobby Loading Screen.LocalScript.lua:638–640 announced()`.
-- **Handling/bevis:** fjern kun de identificerede lokale deklarationer/helper. Alle symboler har ingen aktuelle læsninger uden for definition. `announced` er uncalled. Initializers er literals/rene eksisterende opslag; ingen synlig objektkonstruktion eller require. Ved `TOUCH_LANE_X, TOUCH_LANE_Y` bevares Y=52 og dets callers.
+- **Præcise steder:** `StarterPlayer/StarterCharacter/Animate.LocalScript.lua:594 origRoll, :863 climbFudge`; `StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua:25–27 MAXIMUM_RANGE/ACCURACY_DEGREES/DISTANCE_NOISE, :30 CD_SIGNAL_RANGE, :33 ROOM_BLINK_RATE, :44–45 MUTED/AMBER, :48 DANGER`; `Level 3 Table Hiding Client:382 HIDDEN_TEXT`; `Round Exit Client:55 HINT_HEIGHT`; `ReplicatedStorage/RoundHud.ModuleScript.lua:1085 TOUCH_LANE_X/TOUCH_LANE_Y`. Loading's tidligere`:638–640 announced()` er nu`:724–726` og **beholdes**.
+- **Handling/bevis:** fjern kun de øvrige identificerede private deklarationer. `announced` er blevet aktiv i samtidig owner-kode: `levelWorlds():728` kalder den og `coverRound():752` bruger resultatet til aktiv round-prefetch. Den gamle helper-removal og sammensatte Loading install-unit er ugyldige; ingen rebase/fjernelse udføres. Øvrige symboler har ingen læsninger uden for definition; initializers er literals/rene eksisterende opslag, uden synlig objektkonstruktion eller require. Begge `TOUCH_LANE_X` og `TOUCH_LANE_Y` er ulæste; tidligere Y-caller-antagelse er afkræftet. Aktive `touchLane`/`placeDetector` statements bevares præcist. UIStyle.Color er en plain table uden metatable/mutation i den fulde aktuelle moduleclosure.
 - **Dependencies:** private lexical bindings, ingen remotes/attributes/API fjernes; reader, hiding, exit, detector-lane, animation og loading-successors bliver stående. Historiske tools/sourcepacks er ikke ændringsmål.
 - **Risiko/gevinst:** lav; mindre støj og små ubrugte tabeller; ingen målt runtimegevinst. Multiple-assignment og nabokode kræver præcis diff.
 - **Før/efter-port:** symbol/initializer-review af hele definitionens lexical closure; compile alle berørte sources; eksisterende RoundHud/UIRegression/controller/B6-B7-kontrakter før/efter. Hvis ændringen udvides til et runtimeflow, kræves idle/run/climb, L3 reader/hide/upgrade, exit keyboard/touch/gamepad, touch lane og loading failure/ENTER ANYWAY i isoleret Studio-test.
-- **Status:** **klar** som rent lokal cleanup efter fresh native baseline og afgrænset kontraktport; ingen ændring udført.
+- **Faktiske forberedte porte:** alle seks filer O0/O1 compile; actual Animate weighted/step/tool cleanup, current cover tree og helper closure; RoundHud185/shared387+74 og B6/B7 exit+hiding92 før/efter PASS. Hiding/exit/RoundHud har også O1 canonical binary identity; der påstås ikke compileridentity for de øvrige helperændringer.
+- **Status:** Loading `announced` **beholdes**; gamle Loading-kandidater er ugyldige. Øvrige private kandidater **afventer test/Studio**: ejerens Play afsluttes af ejeren; derefter fresh native CAS/manifest og installerede full/TouchTarget/lobby-porte ved root. [Review med stale-baseline warning](CLIENT_LOCALS_REVIEW.md) og [manifest med ugyldig Loading-status](remaining-clients-proposals.json) bevarer den historiske proof. Ingen productionændring udført.
+- **Fail-closed authoringport:** `prepare_client_locals.py` afviser nu aktiv/referenceændret `announced` før enhver prepared artifact/manifestskrivning. Actual CLI afvist ved caller`:728`;59 prepared filer, inventory, raw receipts og begge owner-kilder byte-uændrede. Historisk uncalled helper accepteres; ny call/alias/dublet/ændret definition afvises i [preflight receipt](client-loading-preflight-gate.json). Proof-blobs er ikke rettet eller regenereret.
 
 ## C05 – UIRegression private dead definitions
 
@@ -70,8 +85,10 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 - **Dependencies:** **bevar** `LONG_DISPATCH_CUE:1251` (aktive borrow/residue-callers), `MODAL_DEVICES`, alle offentlige UIRegression/Fit-metoder, aliases og RunAll. Relevante tools: `test_ui_regression_shared`, `test_round_hud_shared` og manuelle UIRegression-lanes.
 - **Risiko/gevinst:** lav; QA-script bliver kortere og allokerer færre ubrugte datatabeller. Ingen performancepåstand. Source-section extraction i tools kræver kontrol.
 - **Før/efter-port:** compile hele modul; eksisterende UIRegression shared og RoundHud-checks (baseline ovenfor PASS); sammenlign public-method names/lane-binding og aktive sections. Native RoundHudMatrix/RunAll kræves for en eventuel større authoringomskrivning; de er ikke kørt her.
-- **Yderligere native baseline fra root:** RunAllSummary udførte 935 checks/21 scenarios med 51 eksisterende failures (50 shared matrix, én shared-objective scenario). UIRegression/C05 er ikke ændret. Isoleret C05-kandidat i `.git/mongotv-cleanup-20261009/client-before/UIRegression.C05.candidate.lua` fjerner 13 private definitions/73 linjer/2.823 bytes, bevarer 102 public Fit/UIRegression signatures og alle øvrige statements, compiler PASS og samme shared90 PASS. Kandidaten er ikke installeret. Foundation-recheck af native anchor/glyph assertions undersøges særskilt; baselinefailures må ikke blot bortforklares eller assertions tilpasses til observationer.
-- **Status:** **afventer test**; cleanup pauset indtil native testgrundlaget er afklaret. Ingen production sourceændring.
+- **Historisk native baseline og forberedt kandidat:** Den oprindelige RunAllSummary havde935 checks/21 scenarios med51 failures (50 shared matrix, én shared-objective). N01 retter dokumenteret native glyph-coupling og QA-fixturekontrakter; afsluttende authoritative full har0 failures/all21 scenarios og separat TouchTarget261/0 med exact source/editor og attr/lock restoration. Ved dette forberedelsestrin var C05's definitions endnu ikke fjernet; de efterfølgende isolation-/install-porte står nedenfor. Temp-kandidaten fra installeret SHA419a7e3e… fjerner13 private definitions/73 linjer/2.823 bytes, bevarer102 named Fit/internal/UIRegression-declaration signatures, alle30 UIRegression-exports og alle øvrige statements. Den bevarer begge shared margin-callers og owned per-device reset; O0 compiler og shared105 PASS. `C05-prepared.json` og `.git/mongotv-cleanup-20261009/client-before/N01/UIRegression.C05.candidate.lua` bevarer beviset.
+- **Isolerede native porte:** `B07-C05-full.json` har0/all21/shared730; `B07-C05-touch.json` har261/0. Begge entire compact-reports er byte-identiske med N01's authoritative før-reports. Alle30 native public exports har identiske keys/type/arity/variadic flags; originale Source/editor uændrede, workspace/player/lock drift[] og probes destrueret. `C05-results.md` bevarer receipt-navnenes historiske B07-prefix; cleanup-batchen er B08.
+- **Installeret efter-port:** `B08-C05-native-install.json` beviser exact419→b57/editorSource-parity; manifest opdateret. Frisk Play `B08-after-full.json` har0/all21/shared730 og `B08-after-touch.json` har261/0. Entire compact-reports og alle30 public API rows er identiske med før; attr/lock drift[] og Source/editor uændrede under begge tests. Rollback-original `.git/mongotv-cleanup-20261009/client-before/N01/UIRegression.C05.before.lua`.
+- **Status:** **gennemført**, lokal commit `1dd48870`; alle13 private definitions og stale kommentar er ryddet med før/isolated/installeret-efter porte. Ingen aktiv public authoringmetode eller gameplayfeature fjernet.
 
 ## C06 – KEYS og no-op preview-special-case
 
@@ -79,17 +96,18 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 - **Handling/bevis:** fjern KEYS-table (ingen læsninger; TOPICS har inline strings) og kun nil→nil-tildelingerne med stale ZenMeister-kommentar. PROMPTS indeholder kun Level4DeveloperPreviewPrompt/ReturnPrompt fra starten; ingen kode kan tilføje L6-keys før branchen.
 - **Dependencies:** bevar HELP/TOPICS/touch-copy, DevAccess public L5/L6-politik, L4 cosmetic filter og workspace DescendantAdded watcher. Ingen active remote/attribute fjernes.
 - **Risiko/gevinst:** lav; mindre dead/no-op-kode og én ubrugt table per klient. Ingen measured performancegevinst.
-- **Før/efter-port:** native CAS; compile begge; statisk PROMPTS/top-level initialization-kontrakt. Brug aktuelt guideflow; `test_first_entry_guide.py` er stale (forventer tidligere guidefeature) og må ikke omfortolkes som ny guidebug. WELCOME/HELP-topic og ordinary/dev/special-user preview-door checks hvis flowet ændres ud over no-op removal.
-- **Status:** **klar** efter fresh source/afgrænset closure; ingen ændring udført.
+- **Før/efter-port:** compile begge O0/O1; private initializer/PROMPTS closure. Actual whole preview script testes ordinary/special/dev/missing/error/truthy, initial/late/re-enabled L4 og publicL5/L6. Actual current whole guide kører PC/touch10 topics og4 replay pages/skip/reentry/modal cleanup. Den tidligere stale guide-suite er nu erstattet af T09; den nye133-check suite og6 negative fixtures passer på begge immutable C06 inputs. C21 input-focus bug og C22 lille Skip-target reproduceres ens før/efter og forbliver urørte; de er ikke skjult af cleanup-porten.
+- **Status:** **afventer test/Studio**: temp-only lokale porte bestået; ejerens aktuelle Play bevares indtil ejeren er færdig, og root skal udføre fresh native CAS/manifest/installerede efter-porte. [Review/closure](CLIENT_LOCALS_REVIEW.md), [exact manifest](remaining-clients-proposals.json), [T09 paired receipt](client-local-T09-paired.json). Ingen produktion ændret.
 
 ## C07 – GUI-returbindinger
 
-- **Steder:** `ReplicatedFirst/Lobby Loading Screen.LocalScript.lua:62 kicker, :92 tip`; `StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua:276 shopButtonRing`.
+- **Steder:** `ReplicatedFirst/Lobby Loading Screen.LocalScript.lua:59 kicker, :89 tip` (tidligere`:62/:92`); `StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua:276 shopButtonRing`.
 - **Handling/bevis:** ændr kun `local name = call(...)` til samme `call(...)`. `label:46–59` bygger/parent'er TextLabel; `ZyntraStore.outline:72` bygger UIStroke. Ingen binding læses senere, men kaldet har nødvendig synlig sideeffect.
 - **Dependencies:** Kicker/Tip labels, shop-knappens stroke, layout/hover/visibility og store UI. Ingen API/remote fjernes.
 - **Risiko/gevinst:** lav ved binding-only; høj ved linje-/kaldsletning. Ren læsbarhedsgevinst.
 - **Før/efter-port:** compile; kald og argumenter token-identiske; loading Kicker/Tip samt shop outline visible-tree/authoring checks før/efter i keyboard/touch state.
-- **Status:** **klar** som binding-only cleanup; kald skal blive stående.
+- **Faktiske porte:** O0/O1 compile; actual before/candidate loading og store tree snapshots er identiske PC/touch; Kicker/Tip constructors og alle tre shop strokes beholdes. Actual store777 kontrakt PASS før/efter. Negative controls, der sletter Kicker-call eller accent outline-call, fejler som forventet.
+- **Status:** **afventer test/Studio/reconcile**: Kicker/Tip-bindinger og deres eksakte constructorcalls består i owner-koden, men gammelt Loading førhash/helkildekandidat matcher ikke længere. Den gamle C04/C07-unit må ikke installeres; ny C07-only kandidat fra frisk native baseline og egne before/after gates er nødvendig efter ejerens Play-afslutning. Store-kandidaten er separat og uændret. Ingen constructor slettes; [Review](CLIENT_LOCALS_REVIEW.md) og [manifest](remaining-clients-proposals.json) markerer stale Loading.
 
 ## C08 – gammel kommenteret jumpscare
 
@@ -98,19 +116,20 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 - **Dependencies:** aktive Remotes.Jumpscare, EntityKillCamera renderstep, PlayerModule controls, fade/capture records; legacyImageScare er kun kommentartekst og ingen initializer. Referencer er audit/historik.
 - **Risiko/gevinst:** runtime ingen; mindre støj, ingen FPS/memorypåstand.
 - **Før/efter-port:** hash før-source; exact comment-only patch/CAS; compile; executable token/statement parity. Ingen gameplaytest kræves alene for denne kommentarændring.
-- **Udført repo-trial:** den første fjernelse blev straks rullet tilbage, da en absolut `--binary -g0` byteidentitetsport fejlede. Aktuel Luau serialiserer `Proto.linedefined` også med debug=0. Ved genprøven er O0/O1 text-dumps med constants byte-identiske; fuld bytecode14/type3 parser bevarer alle bytes undtagen de 13 function-definition line-varints og deres enclosing proto-size, og de kanoniserede binaries er byte-identiske. 14 function protos, top-level line0 uændret, de øvrige definitioner rykkes præcis 14 linjer. En særskilt kandidat, som udskifter kommentarindholdet med 14 blanke linjer, giver fuld rå binaryidentitet ved både O0/O1. Officielt [serializer-layout](https://github.com/luau-lang/luau/blob/0.737/Bytecode/src/BytecodeBuilder.cpp#L912) og [loader-layout](https://github.com/luau-lang/luau/blob/0.737/VM/src/lvmload.cpp#L635) blev kontrolleret for det konkrete metadatafelt.
+- **Udført repo-trial:** den første fjernelse blev straks rullet tilbage, da en absolut `--binary -g0` byteidentitetsport fejlede. Aktuel Luau serialiserer `Proto.linedefined` også med debug=0. Ved genprøven er O0/O1 text-dumps med constants byte-identiske; fuld bytecode14/type3 parser bevarer alle bytes undtagen de 13 function-definition line-varints og deres enclosing proto-size, og de kanoniserede binaries er byte-identiske. 14 function protos, top-level line1 uændret, de øvrige definitioner rykkes præcis 14 linjer. En særskilt kandidat, som udskifter kommentarindholdet med 14 blanke linjer, giver fuld rå binaryidentitet ved både O0/O1. Officielt [serializer-layout](https://github.com/luau-lang/luau/blob/0.737/Bytecode/src/BytecodeBuilder.cpp#L912) og [loader-layout](https://github.com/luau-lang/luau/blob/0.737/VM/src/lvmload.cpp#L635) blev kontrolleret for det konkrete metadatafelt.
 - **Resultat:** B02 fjerner 461 bytes/14 kommentarlinjer; exact aktive prefix/suffix bevaret. Før SHA256 `07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88`; efter `7e5cedc84631a6af3f7edc126cb6775c9c498f42e851484c4980c3a3a6846a88`. `git diff --check` PASS, ingen aktive references til de kommenterede symboler/assets. Root har rapporteret native Source/editor CAS install og opdateret manifest; efter-smoke: 68 preload assets, 0 failed, levende karakter med Health100 og kun tidligere observeret audio-approval rejection. Root's B02-native-install/smoke indeholder de konkrete native receipts.
 - **Rollback/evidens:** `.git/mongotv-cleanup-20261009/client-before/JumpscareUI.LocalScript.lua` og `verify-c08.py` med rå bytecode/text-dumps; detaljer i `artifacts/cleanup-20261009/C08-candidate.json`. Første trial var en testportafvisning pga forventet debuglinjemetadata, ikke en gameplayregression.
+- **Reproducerbar check:** `python artifacts/cleanup-20261009/verify_C08.py --compiler C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau-compile.exe` PASS. Verifier læser native-originalens lokale checkpoint uden at kopiere fuld before-source ind i tracked artifacts; `--before` kan pege på en anden gendannet original. Kun automatisk opryddede temporary compiler-inputs skrives; ingen projekt-/manifest-/Studio-mutation. `--json` skriver fuld struktureret evidens til stdout.
 - **Status:** **gennemført**; root håndterer scoped commit/evidence. Ingen publicering.
 
 ## C09 – partial-stream shop collect
 
-- **Sted:** `StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua:688–705 collect, :723–739 Heartbeat`.
-- **Handling/bevis:** kandidat til model-owned dirty/coalesced collect og bounded fallback. Aktuel kode kalder GetDescendants hver frame så længe #boxes<ShopItemCount, før motionAllowed. Behovet for late replication er dokumenteret og aktivt.
+- **Sted:** `StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua:688–703 collect`, `:722–747 Heartbeat scan/round guards`, `:756–758 bob loop`.
+- **Handling/bevis:** samtidig ejer-/developerændring har allerede erstattet incomplete-model scans per frame med mindst0.5s mellem retries. Første/ny model collect sker stadig straks; InRound/RoundActive returnerer før modelopslag/scan og restore'er aktiv bob, med scanElapsed=.5 til hurtig incomplete-retry efter return. Genimplementér ikke denne rettelse. Behovet for late replication består. En separat stream-lifecycle-hypotese består: #boxes tæller stale parentless records; når den gamle count er ShopItemCount, er der ingen descendant-invalidation til at opfange replacement-parts. Den aktive bob-loop har ingen Parent-guard, mens restore har.
 - **Dependencies:** server LobbyShopDisplay stamped ShopItemCount/ShopBobOrigin/ShopBobPhase, ServerLobby.ZyntraShopDisplay, prompts/purchase, accessibility, model/part stream lifecycle. Origin må ikke recaptures fra bobbet CFrame.
-- **Risiko/gevinst:** mellem; mulig reduktion af scans, kræver måling. Forkert invalidation kan flytte/stivne bokse.
-- **Før/efter-port:** samme scene med model-before-parts, 1/8 streamed boxes, stream-out/in, lobby→round→lobby og begge accessibility flags; mål collect-count/CPU ved samme FPS/playercount; bob og purchase-prompts. Ingen perfmåling foretaget her.
-- **Status:** **afventer test**; runtime-rewrite holdes.
+- **Risiko/gevinst:** mellem for yderligere cache-invalidation; origin må fortsat komme fra serverens ShopBobOrigin, ikke aktuel bobbet CFrame. Server amplitude.35/period3.4, demo/purchase/events er uændrede i ejerens diff. Færre potentielle scans følger source-guard, men ingen målt FPS/CPU/MB-gevinst påstås.
+- **Før/efter-port:** native model-before-parts→late8, prolonged1/8 med scan-count højst2 retries/s, full8→stream-out1→newInstance tilbage, modeldestroy/rebuild, roundentry/return og begge accessibility flags. Kontroller authored origins/restoration, ingen stale-part CFrame-fejl, demo/purchase-prompts; mål collect-count/CPU ved samme scene/FPS/playercount. Ny guarded native parity for ejerens ændring mangler i denne delrapport.
+- **Status:** **beholdes**: bounded retry og round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Native/streaming/performanceverifikation og separat invalidation-kandidat **afventer test**; ingen runtime-rewrite udført her.
 
 ## C10 – statisk RoundHud rendering
 
@@ -159,17 +178,17 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 ## C15 – DJ JSON decode-cache
 
-- **Sted:** `StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua:24–27 tracks`, `:137–145 lights Heartbeat`.
-- **Handling/bevis:** JSONDecode ved hvert 20Hz light-step og andre calls består, også før off-guard. Candidate cache keyed by exact LobbyDJTracks attribute, invalid JSON→empty.
+- **Sted:** `StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua:24–33 tracks`, `:143–156 party Heartbeat`.
+- **Handling/bevis:** source-hypotesen er løst i samtidig ejer-/developerarbejde: tracks() lazy-cacher den eksakte LobbyDJTracks raw attribute og decoder kun ved ændring. Manglende initialnil returnerer empty uden decode; malformed/non-table JSON cacher empty indtil raw ændres. Alle tre aktuelle consumers (audio, lights, booth) læser alene returtable; GUI's senere local trackList shadow ændrer ikke cache-binding. Party-lights kontrollerer nu ReservedRoundServer/InRound før tracks() og restore'er aktive lamper én gang før return. Genimplementér ikke cache/roundguard.
 - **Dependencies:** Lobby DJ server, LobbyDJTracks/LobbyDJTrack/LobbyDJStartedAt/LobbyDJBy, booth/UI/party palette og sound tracks().
-- **Risiko/gevinst:** lav; decode-count kan blive attr-change afhængig, measured CPU ukendt.
-- **Før/efter-port:** missing/invalid list, replacement, track switch/STOP, ordinary/team panels, lights/ReduceFlashing; decode counter og same-scene CPU før/efter.
-- **Status:** **afventer test**.
+- **Risiko/gevinst:** lav for bevaret cache; consumers må fortsat ikke mutere den delte returtable. Source viser ændringsafhængig decode; målt CPU/FPS/hukommelse og faktisk native flow er ikke undersøgt her.
+- **Før/efter-port:** native missing/invalid→valid replacement, repeated identical invalidraw, valid JSON primitive→empty, track switch/STOP, ordinary/team panels, lights/ReduceFlashing; round/reserved entry restore af exact authored Color/Brightness og lobby return. Instrumentér decode-count i samme20Hz scenario og mål same-scene CPU. Ny Source/editor/manifest-parity for ejerens ændring mangler i denne delrapport.
+- **Status:** **beholdes**: cache og tidlig round-guard er allerede implementeret samtidigt, uden cleanup-kredit. Verifikation **afventer test**; ingen runtimeændring udført her.
 
 ## C16 – DJ streamed lights
 
-- **Sted:** `Lobby DJ Client:114–135 collect/restore`, `:147–164 party update`.
-- **Handling/bevis:** samme-model lampsFor-cache returnerer uden late-descendant capture. Kandidat til model-owned add/remove observers og exact base restoration.
+- **Sted:** `Lobby DJ Client:120–140 collect/restore`, `:157–175 party update`.
+- **Handling/bevis:** samme-model lampsFor-cache returnerer stadig uden late-descendant capture. Den samtidige C15 roundguard løser ikke dette. Kandidat til model-owned add/remove observers og exact base restoration.
 - **Dependencies:** LobbyReimaginedPreview.Ready, Light.Enabled/Brightness/Color, Lamp parenting/position, ceiling/gate flicker controllers og accessibility ownership.
 - **Risiko/gevinst:** mellem; correctness af late stream samt nødvendigt restore. Ingen målt performancegevinst.
 - **Før/efter-port:** partial lobby loaded ved PLAY, traverse/stream-out/in, STOP, normal flicker og ReduceFlashing; kontrollér base light values før/efter.
@@ -177,8 +196,8 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 ## C17 – DJ audio følger Playground
 
-- **Sted:** `Lobby DJ Client:35–37 eligible`, `:61–98 applyTrack/listeners`; `Level 6 Playground Client.LocalScript.lua:1021–1022`.
-- **Handling/bevis:** eligible mangler Level6PlaygroundPreview-guard og listener; direkte SoundService sound bliver ikke ducked gennem ZyntraLobbyMusic. restore har previewguard, men on-stien har ikke. Problemhypotese består, ikke live reproduceret her.
+- **Sted:** `Lobby DJ Client:41–44 eligible`, `:67–104 applyTrack/listeners`; `Level 6 Playground Client.LocalScript.lua:1021–1022`.
+- **Handling/bevis:** eligible mangler stadig Level6PlaygroundPreview-guard og listener efter den samtidige C15 ændring; direkte SoundService sound bliver ikke ducked gennem ZyntraLobbyMusic. restore har previewguard, men on-stien har ikke. Problemhypotese består, ikke live reproduceret her.
 - **Dependencies:** LobbyDJ sound/normal lobby SoundGroup, LobbyMusicEnabled/InRound/Level6PlaygroundPreview, Playground score/music lifecycle.
 - **Risiko/gevinst:** mellem; lydcorrectness, race med gruppevolumen. Ingen feature removal.
 - **Før/efter-port:** DJ→public L6→lobby, STOP/track change inde i L6, settings toggle, ordinary/team accounts, L5/round entry; kontroller begge sound owners og restoration.
@@ -186,8 +205,8 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 ## C18 – DJ Loaded wait
 
-- **Sted:** `Lobby DJ Client:73–79`.
-- **Handling/bevis:** task.spawn+Sound.Loaded:Wait uden timeout/generation består; gentagne applyTrack kan skabe waits ved failed asset. Bounded cancellable single-owner resync er kandidat.
+- **Sted:** `Lobby DJ Client:79–85`.
+- **Handling/bevis:** task.spawn+Sound.Loaded:Wait uden timeout/generation består efter den samtidige C15 ændring; gentagne applyTrack kan skabe waits ved failed asset. Bounded cancellable single-owner resync er kandidat.
 - **Dependencies:** SoundId/IsLoaded/TimeLength/started server clock; STOP/track replacement, Sound.Loaded listeners og sound lifetime.
 - **Risiko/gevinst:** lav/mellem; forebygger stalled tasks, men sync må ikke brydes. Faktisk leak/memory er ikke målt.
 - **Før/efter-port:** valid track synced på to clients, delayed/failing asset, rapid play-stop-play/metadata changes; task/wait ownership og TimePosition parity.
@@ -232,16 +251,16 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 ## C23 – WELCOME hybrid copy
 
 - **Sted:** `First Entry Guide:55 touch`, `:85–108 PAGES`, `:249–314 TOPICS`.
-- **Handling/bevis:** TouchEnabled and not KeyboardEnabled/ForceTouchUI vælges én gang. UIDevice-fit changes ændrer ikke allerede byggede copy-tables. Kandidat fælles caption-policy ved draw/topic og Changed.
+- **Handling/bevis:** TouchEnabled and not KeyboardEnabled/ForceTouchUI vælges stadig én gang; nyere Loading/Round Entry-diffs ændrer ikke denne guide-kode. UIDevice-fit changes ændrer ikke allerede byggede copy-tables. Guide venter fortsat LobbyLoadingDone før WELCOME; den nye preload/handoff ændrer derfor baseline-timing, ikke hybrid-caption-policy. Kandidat fælles caption-policy ved draw/topic og Changed.
 - **Dependencies:** UIDevice layout/glyph/input heuristics, phone/tablet keyboard, ForceTouchUI og tutorial/help replay.
 - **Risiko/gevinst:** lav/mellem; korrekt instructions på hybrid, men bevar keyboard/gamepad tips.
-- **Før/efter-port:** phone/tablet keyboard=true, touch laptop, device switch, ForceTouchUI, replay/HELP; sammenlign fælles HUD captions.
+- **Før/efter-port:** phone/tablet keyboard=true, touch laptop, device switch, ForceTouchUI, replay/HELP; sammenlign fælles HUD captions. Efter owner-ændringer kræves frisk lobby loadingDone→WELCOME/HELP baseline og reserved/round suppression før eventuel guideændring; historisk T09 må ikke udlægges som test af nyt asset-preload/entryflow.
 - **Status:** **afventer test**.
 
 ## C24 – WELCOME/DJ modal policy
 
 - **Steder:** `ReplicatedStorage/UIDevice.ModuleScript.lua:1656–1659 SCREEN_OWNING_MODALS`; `First Entry Guide:210 WelcomeCardOpen`; `Lobby DJ Client:327–330 LobbyDJOpen`.
-- **Handling/bevis:** flags mangler stadig i fælles modal-list; ingen fælles suppression. Screen-filling shade er ikke predicate integration. Eventuel registrering og standard close/suppress lifecycle kræver DJ panel-policy.
+- **Handling/bevis:** flags mangler stadig i fælles modal-list, også efter de samtidige Loading/Round Entry-diffs; ingen fælles suppression. Screen-filling shade er ikke predicate integration. Eventuel registrering og standard close/suppress lifecycle kræver DJ panel-policy. Nye asset/preload-workers er aktive, ikke no-op UI-integration eller slettebevis.
 - **Dependencies:** NoiseReporter movement, flashlight, RoundHud suppression/detector, store rail/chips, help/badges/daily/wheel, death/camera/round cleanup og flags/listeners.
 - **Risiko/gevinst:** mellem; påvirker docking/input interoperability på tværs af UI.
 - **Før/efter-port:** touch joystick/run/light, parallel modal opens, close/InRound/death/capture, camera transition; exact movement/rail restoration.
@@ -263,7 +282,8 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 - **Dependencies:** public BriefingFit/BriefingExclusion/ObjectiveCorner/DispatchCompact methods, Fit.lane token/borrow contracts, manual QA/tools, same pass/fail outputs. Native Welcome/DJ er ikke testet af disse aliaser.
 - **Risiko/gevinst:** lav som comment-only, mellem ved API-removal. Klarere QA-dækning.
 - **Før/efter-port:** public alias/function bodies token-identiske; compile og UIRegression shared baseline/after; samme lane maps/pass-fail. Ingen ny gameplaytest for kommentar-only correction.
-- **Status:** **klar** for kommentar-only dokumentation; public aliases **beholdes**.
+- **Faktiske porte:** temp comment-only proposal har197 native compiler functions med identisk O0/O1 canonical binary og instruction/constant dumps; kun Proto.linedefined-varints og enclosing Proto-size metadata ændres. Alle executable bytes, alias/public bodies, lane maps og DispatchReference metadata er bevaret. UIRegression105 PASS før/efter. Ingen legacy briefing/Welcome/DJ coverage opfindes.
+- **Status:** **afventer test/Studio**: comment-only proof passer, men root's fresh native CAS/manifest/installeret parity afventer ejerens Play-afslutning. Public aliases **beholdes**. [Review](CLIENT_LOCALS_REVIEW.md), [manifest med compiler-hashes](remaining-clients-proposals.json) og readonly installed-proof runner `run_client_local_contracts.py --verify-installed`.
 
 ## C27 – ShopData global pending-clear
 
@@ -285,8 +305,8 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 ## C29 – per-step subject scans
 
-- **Steder:** `StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua:168–230 PreSimulation`; `Lobby DJ Client:189–223 Stepped`.
-- **Handling/bevis:** Players:GetPlayers arrays per step består; L3 seen-table/eligibility/fading pose er aktiv. Cache kun active/fading subjects efter måling; nødvendige joint writes beholdes.
+- **Steder:** `StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua:168–230 PreSimulation`; `Lobby DJ Client:199–233 Stepped`.
+- **Handling/bevis:** Players:GetPlayers arrays per step består; L3 seen-table/eligibility/fading pose er aktiv. Den samtidige C15 guard gælder party Heartbeat, ikke Stepped pose-loop. Cache kun active/fading subjects efter måling; nødvendige joint writes beholdes.
 - **Dependencies:** player/character lifecycle, L3 hiding/crouch/track readiness, DJMode, Motor6D/AnimationConstraint/Animator, fade/cleanup og streaming.
 - **Risiko/gevinst:** mellem; remote-player poses og restore kan regrediere. Ukendt CPUgevinst.
 - **Før/efter-port:** 1/6/20 players, hide→unhide, DJ toggle, disconnect, respawn, rigs og streaming; pose parity og same-scene CPU.
@@ -320,4 +340,19 @@ Checkene er baseline, ikke gennemførte runtime-fjernelsesporte. Performance er 
 
 Saml produktspørgsmål: pensionér disabled L6 Reader/Sound? Pensionér SetRunAnimation eller gem som authoringmulighed? Skal DJ booth eje skærmen? Er ShopData global pending-clear bevidst ønsket? Bevar de nu ignorerede lokale agentstatefiler med mindre værktøjsworkflowet afklares.
 
-Kun C08's kommentarblok er fjernet som repo-kandidat; ingen klientfeature/runtimeomskrivning, performancegevinst eller offentlig Roblox-publication er påstået udført i denne recheck.
+C08's kommentarblok og C05's13 private authoring-definitioner er fjernet i C-fundene. N01 nedenfor retter dokumenterede baselinefejl og fixturekontrakter før C05's isolerede og installerede native porte. Ingen gameplayfeature er pensioneret, og ingen performancegevinst eller offentlig Roblox-publication er påstået udført.
+
+## N01 – native baselineport og bearing-glyph
+
+- **Præcise steder:** `ReplicatedStorage/RoundHud.ModuleScript.lua:704 paintCompass`; `ReplicatedStorage/UIRegression.ModuleScript.lua:4387 Fit.anchorProblems`, `:4782 Fit.bodyRoundHudMatrix` og `:3351 Fit.bodyTouchTargetMatrix` shared objective-kald/setup; `tools/tests/hud_harness.luau:147/252` native text-property model og de to eksisterende shared suites. Linjer identificerer før-blokke; senere edits forskyder dem.
+- **Bevis før:** root's `baseline-native-ui.json` registrerer RunAllSummary med 935 checks, 21 scenarios og 51 failures. `N01-native-gate.json` måler 11 Level1-devicecases: den aktuelle shared card har ekstra right margin 16 touch/24 PC, som `RoundHud.placeObjective` allerede reserverer; generisk legacy anchor forventede ingen ekstra margin. Safe containment og movement-zone-tests gælder stadig.
+- **Runtimefejl bekræftet:** `N01-textlabel-property-probe.json` fra isolerede native TextLabels viser, at `TextScaled=true` efterfulgt af `TextWrapped=false` ender false/false, også efter wait. Omvendt rækkefølge og scaled-only ender true/true. Luau O0-dump viser, at production-multiassignment udfører scaled før wrapped. [Roblox TextLabel-dokumentation](https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/reference/engine/classes/TextLabel.yaml) beskriver, at TextScaled automatisk aktiverer TextWrapped. Binder er ikke årsagen: glyph-clonen har allerede fjernet FigmaFontSize, så den deferred solve guard returnerer.
+- **Mindste ændring:** glyphens eksisterende TextScaled og TextWrapped sættes begge true; én glyph kan ikke danne ekstra tekstlinjer. Source template, imported slot, position, anchor, font-size constraint, readable copy floor og compass states beholdes. QA-anchor tager et optional rightInset med default0; begge shared-HUD callers angiver den nuværende16/24-reservation. TouchTargetMatrix bruger eksisterende `resetScenario(true)` før hvert devices objective-staging, så forrige fixtures PartyDownCard/modal ikke suppresses næste objective. Legacy anchor, AnchorSlack, safe containment, movement collision, hit44, text-bound assertions og native-frame resolver ændres ikke.
+- **Dependencies:** Level1/3 compass state/publisher, local og spectated character origin, current camera, Binder.scaleText clone attributes, UIDevice safe frame, HUD_PC/HUD_Touch imports, objective attention/remount/resize, test borrow/restore og offentlige UIRegression-APIer. Ingen remotes, persistent attributes, spillerdata eller entitlements ændres.
+- **Rollback:** alle fem før-filer med raw/LF hashes gemt i `.git/mongotv-cleanup-20261009/client-before/N01`; kilder rechecked byte-identiske umiddelbart før edit. Root alene ejer native fresh Source/editor CAS, manifest og rollback.
+- **Meningsfuld testport:** den korrigerede native coupling-fixture med original runtime reproducerer fejl ved wide/tall fallback glyph `locating`; den nye anchor-contract-fixture med original UIRegression reproducerer exact-slot failure. Begge prøver bruger før-kilder i isolerede offline programs, ingen midlertidig nedskrivning af canonical production. Efter candidate: shared HUD 387 + stamina 74; UIRegression 101 (11 nye tests inkluderer forkert margin, 5px drift, safe escape, movement hit og legacy-anchor); exit 92; controller 91/touch 86/stamina 74/POV 63; basic HUD 185; compiler O0 og scoped diff-check pass. Den eksisterende borrow/error-suites anchor stub bevares for dens egen fixture; den rigtige production anchor-body måles separat. Offline placement læser production position/size-writes, mens native gate stadig skal måle faktisk engine geometry.
+- **Risiko/gevinst:** lav/afgrænset correctness-fix og troværdigere QA baseline; ingen målt eller påstået performancegevinst. Hardware/input, multiplayer/streaming og ægte fonts må ikke påstås dækket af offline fixtures.
+- **Native efter-resultat:** root's B06 Source/editor CAS og manifest er installeret. `B06-native-ui-after.json` viser 935 checks/21 scenarios med 2 failures; shared matrix er nu 730/0 mod baseline 730/50, lock clear og levende Health100/loadingDone. De to scenariofailures `hiding-plus-reader` og `round-win-fullscreen` skal undersøges som mulige regressioner, før batchen kan godkendes. Summary udelader rå Contract/Offscreen-detaljer; den er derfor ikke tilstrækkelig til årsagsbestemmelse.
+- **Parret undersøgelse:** `run_N01_pair_probe.py pair-before` og `pair-current` stager hver sin helt ny ModuleScript (ingen clone) og bevarer eksakt live UIRegression/RoundHud instance, Source/editor og LF hash med guards før, i staging callback og efter også fejl. Temporary probe destrueres på alle paths. `CleanupScenarioPair` bruger de uændrede Scenarios setup og byte-identiske RunAll contract evaluators, original .3s settle samt egen lane/borrow/reset/restore/residue. Rå failures, rectangles, glyph flags og viewport/attribute context returneres. Begge QA-prober bruger current gameplay owner; fuld runtime-før/efter kræver frisk kontrolleret Play-fase eller isoleret place. Glyph-fix ændrer kun Chevron-ink; hiding forbids objektivet, og result-setup resetter shared HUD, men asynkron synlighed eller ændret gameplaycontext må først udelukkes ved måling.
+- **Afsluttende native bevis:** Parrede scenario-probes begge0 med samme rectangles/context og intet residue; efterfølgende frisk full-suite0/all21. Separat TouchTarget fandt8 eksisterende fixture-lifecyclefailures efter første device; exact før/reset probes målte261/9 (én gammel anchor + otte missing) mod261/0, originals uændrede og flags/lock restored. Offline reset reentry før reproducerer missing, efter105 checks PASS. Efter guarded reset419-installation målte authoritative `RunAllCompact`0/all21/shared730 og separat `Compact("TouchTargetMatrix")`261/0. Begge afsluttende reports har workspace/player/lock drift[], exact Source/editor unchanged og ingen temporary probe.
+- **Resultatfil/status:** `N01-candidate.json`, `N01-results.md` og `B06-final-full.json`/`B06-final-touch.json` indeholder før/efter hashes, forventede før-fejl og de fulde afsluttende reports. **Status: gennemført**, lokal commit `11faa990`; de historiske2 scenario- og8 Touch-fixturefejl er undersøgt/lukket med friske grønne native slutporte. C05 har siden bestået egne isolerede og installerede efter-porte. Ingen hardware/multiplayer/performancecheck påstås udført.

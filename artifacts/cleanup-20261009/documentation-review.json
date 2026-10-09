@@ -1,0 +1,62 @@
+{
+  "capturedAtUtc": "2026-10-09T20:15:05.726100+00:00",
+  "scope": "documentation/index review only",
+  "studioCalls": 0,
+  "productionWrites": 0,
+  "originalFindingCount": 129,
+  "uniqueFindingCount": 129,
+  "relativeLinksExist": 63,
+  "localCommitIdsExist": [
+    "0608a9f8",
+    "0efce872",
+    "11faa990",
+    "12947a34",
+    "1dd48870",
+    "2ca92003",
+    "46073662",
+    "6eb13e22",
+    "bce98752",
+    "e019a427",
+    "e3af7ab2",
+    "e55b2da0",
+    "f21bfdf4",
+    "f7507c95"
+  ],
+  "stagedDocsExactlyMatchReviewedSources": true,
+  "ownerRuntimeOrManifestStaged": false,
+  "finalNativeParity": "pending owner Play completion and fresh Edit export",
+  "documents": [
+    {
+      "file": "CLEANUP_PLAN.md",
+      "sha256Lf": "52dc8a65b90b7aa46537490f3e7d43282741cd25fdab0436607d96e303f91426"
+    },
+    {
+      "file": "CLEANUP_RESULTS.md",
+      "sha256Lf": "17eb594047a9500313d7c31b40506ce7f4a222ad1b29e65688026a677752a1fb"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/CLIENT_LOCALS_REVIEW.md",
+      "sha256Lf": "c2dc4391b1924231cd321ebaed78cff358213fbd18fc34b167363d3fcef148a0"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/N01-results.md",
+      "sha256Lf": "55c5ed6cb0546d82bb8c3478a35783451265bb6bc2ba1f8b35d05d70fbf0a83e"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/clients-recheck.md",
+      "sha256Lf": "61c5590c6cb24922eade11bf0ef1be038008ac99ab7c97772a3ee27ee51bdaf8"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/levels-core-recheck.md",
+      "sha256Lf": "17bed343522f65a5fa4f7c8d79c91292c3801aaf0a3da359322ad596b40c3832"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/local-helpers/REVIEW.md",
+      "sha256Lf": "c8d683645451551d5bea72f53b4752d48f70e95b02c05ef7f96040ebf6adeb39"
+    },
+    {
+      "file": "artifacts/cleanup-20261009/repo-tools-recheck.md",
+      "sha256Lf": "6ea2c10f18c032dfbc3bc8ea773fcbadfc1009841c90e620cc0bf8b1e4ae381d"
+    }
+  ]
+}

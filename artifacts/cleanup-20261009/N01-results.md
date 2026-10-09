@@ -28,4 +28,10 @@ Parret QA før/current bruger den samme aktuelle gameplay owner. Det beviser ing
 
 De første to efter-failures er bevaret som evidence: `hiding-plus-reader` og `round-win-fullscreen` var grønne i den præcise parrede test og efterfølgende friske fulde suite. Et mellemliggende fullcompact-run mistede sit resultat, fordi root-wrapperen kaldte den ikke-eksisterende `UI.LockState`; fejlen ligger i wrapperen og giver ingen konklusion om det run. `B06-full-ui-recheck.json` bevarer fejlsvaret. Den nye wrapper læser de eksisterende lock-attributter og bevarer hele compact-rapporten. Der er ikke ændret assertions for at skjule failures.
 
-N01 er gennemført: de afsluttende friske native full- og separate TouchTarget-porte passer på den autoritative installerede kilde, og offline shared fixture passer105. Alle originals og nødvendige hashes er bevaret under `.git/mongotv-cleanup-20261009/client-before/N01`; root ejer fresh native CAS, manifest og scoped commit. C05 private helper-oprydning står fortsat urørt i produktionen og afventer kandidatens isolerede porte. Ingen FPS-, memory- eller andre performancegevinster er målt eller påstået, og intet er publiceret.
+N01 er gennemført: de afsluttende friske native full- og separate TouchTarget-porte passer på den autoritative installerede kilde, og offline shared fixture passer105. Alle originals og nødvendige hashes er bevaret under `.git/mongotv-cleanup-20261009/client-before/N01`; root ejer fresh native CAS, manifest og scoped commit. C05 private helper-oprydning blev siden gennemført i den separate B08-batch med egne isolerede og installerede efter-porte, dokumenteret i `C05-results.md`. Ingen FPS-, memory- eller andre performancegevinster er målt eller påstået, og intet er publiceret.
+
+De fem historiske pair/touch-inputs er siden arkiveret bytepræcist i
+[N01-pair-proof](N01-pair-proof/README.md), lokal commit `f21bfdf4`. Den separate
+offline archive-port70 checks matcher fire gemte native probe-sourcehashes.
+Touch-current har ingen gemt receipt for den præcise kilde; det er input-only,
+og ingen ny native pass opfindes. Gamle receipts og lokale inputs er uændrede.

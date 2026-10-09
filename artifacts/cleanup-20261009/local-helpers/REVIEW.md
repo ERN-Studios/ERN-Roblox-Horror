@@ -1,7 +1,10 @@
 # LE-32 / LE-34: to afgrænsede lokale oprydninger
 
-Status: **klar til root-review og frisk native CAS; endnu ikke implementeret**.
-Forslag, før-kilder og receipt findes i [candidate-manifest.json](candidate-manifest.json).
+Status: **gennemført B10, lokal commit `2ca92003`**. Root installerede begge
+præcise native CAS-ændringer med properties/attributes bevaret og efterfølgende
+230-source parity (`B10-isStar-native-install.json`,
+`B10-lampShade-native-install.json`, `B10-after-native-hashes.json`).
+Forslag, før-kilder og oprindelig receipt findes i [candidate-manifest.json](candidate-manifest.json).
 `verify_local_helpers.py` har ikke skrevet produktionskilder, manifest eller Studio.
 
 ## LE-32 — privat `isStar`, Level 4 Light Director
@@ -31,6 +34,12 @@ Forslag, før-kilder og receipt findes i [candidate-manifest.json](candidate-man
 Alle bestod, og canonical source/manifest var byte-uændrede bagefter. Der er ingen
 native/client/physics/streaming-/fuld installer-kit-test i denne receipt. Testporten
 er passende for disse to private locals; den godkender ingen feature-fjernelse.
+
+Efter installation består den samme port igen med `--verify-installed`:
+173 assertions, otte compile-porte og to negative kontroller. Den nuværende
+canonical source/manifest svarer præcis til gemte candidates og metadata;
+alle fem oprindelige proposal-filer er byte-uændrede. Den særskilte receipt er
+[installed-contract-check.json](installed-contract-check.json).
 
 Foreslået prioritet: lavrisiko-batch efter fundamentet. Root skal før installation
 genlæse de to native Sources + editor Sources, bruge præcis scoped CAS fra den
