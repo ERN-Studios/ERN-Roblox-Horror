@@ -1,0 +1,2 @@
+native gate ownership: 275 checks passed
+23 staging/require/cleanup scenarios; old wrapper leak reproduced; 2 negative ownership mutants rejected

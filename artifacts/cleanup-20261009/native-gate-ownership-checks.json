@@ -1,0 +1,20 @@
+{
+  "status": "PASS offline wrapper ownership only",
+  "scenarios": 23,
+  "assertions": 275,
+  "beforeStagingLeakReproduced": true,
+  "rejectedNegativeControls": 2,
+  "pythonAst": "2/2 PASS",
+  "actualGeneratedLuauCompile": "PASS",
+  "studioCalls": 0,
+  "productionWrites": 0,
+  "toolSha256": "d62d728f442930854808d290d40bb9be176e623fc1c7ffa6887dee6a2a35d282",
+  "testSha256": "7a06a5181e92ae40fe490c6178befcc87f55b333e03f82e7810480ae4368db88",
+  "beforeCheckpointSha256": "dc8a5b964854b8b5ef53af178b8b53e7625f4ce009eb33bcc8b9c9ccab650a8b",
+  "portableBeforeArtifact": "artifacts/cleanup-20261009/run_native_gate.before.py.txt",
+  "portableBeforeArtifactSha256": "dc8a5b964854b8b5ef53af178b8b53e7625f4ce009eb33bcc8b9c9ccab650a8b",
+  "portableBeforePreferred": true,
+  "originalGitCheckpointBytesUnchanged": true,
+  "archiveGitAttribute": "-text (artifact-local .gitattributes)",
+  "nativeLimitations": "Fake services and tiny synthetic probe; proves wrapper ownership/error guards, not engine editor identity or gameplay."
+}

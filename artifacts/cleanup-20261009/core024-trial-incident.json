@@ -1,0 +1,22 @@
+{
+  "finding": "CORE-024",
+  "implemented": false,
+  "trialPassed": false,
+  "observed": "First isolated staging trial using live:Clone and ScriptEditorService:UpdateSourceAsync failed its clone Source/editor guard. A subsequent native read found original EndBlockades Source/editor equal to the exact candidate hash. Builder remained unchanged.",
+  "cause": "Not proven; an editor identity interaction was suspected. ScriptGuid was unreadable in this context. No causal claim is made.",
+  "initialGate": {
+    "Checks": 4,
+    "Error": "AssistantCommand:53: Isolated clone Source/editor contain exact test source",
+    "Passed": false,
+    "CleanupPassed": true,
+    "ObjectsAfterCleanup": 0
+  },
+  "baselineEndBlockadesSha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+  "observedEndBlockadesSha256": "02ba1ae64742559e8c4a1520af6342f7fa0eac45d75487baf94e9f69ff95a46f",
+  "unchangedBuilderSha256": "efd4d294e896e6a319211a791267470cf3378854447f56fbdf9c5044d5938e4b",
+  "recovery": "Guarded exact candidate-to-baseline UpdateSourceAsync rollback; baseline Source/editor SHA256 verified, then all 230 native Source/editor pairs matched the current manifest.",
+  "rollbackReceipt": "core024-trial-rollback.json",
+  "wholeMirrorRecheck": "post-trial-rollback-native-hashes.json",
+  "futureProbeRule": "Create new ModuleScript instances, verify empty staging Source/editor, guard authoritative originals during the callback and check them after success and failure. Never accept an isolated contract test as full gameplay proof.",
+  "publication": false
+}

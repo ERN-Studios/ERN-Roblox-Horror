@@ -29,6 +29,19 @@
   changes. Record commit IDs and distinguish local commits from a GitHub push.
   A commit requirement is not permission to force-push or rewrite history.
 
+## Isolated script probes — cleanup regression, 2026-10-09
+
+- Stage test source in a fresh `Instance.new("ModuleScript")`, with an exact
+  empty Source/editor baseline. Do not use a cloned LuaSourceContainer for
+  ScriptEditorService staging: one cleanup trial unexpectedly changed the
+  authoritative original while the clone's own verification failed. The
+  editor-identity cause was not proven; the original was restored exactly.
+- Verify authoritative originals during staging and after both success and
+  failure. Keep non-script clones test-owned, and destroy probe objects and
+  restore borrowed runtime state even when an assertion or callback throws.
+- A native contract probe on synthetic objects is not a gameplay, multiplayer,
+  streaming or actual-asset performance pass.
+
 ## Level 2 verification
 
 - Check safe spawn distance from every living participant, the second distinct
