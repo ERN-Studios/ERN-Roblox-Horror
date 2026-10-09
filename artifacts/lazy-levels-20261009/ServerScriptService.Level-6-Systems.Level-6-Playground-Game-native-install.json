@@ -1,0 +1,43 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+  "newModule": false,
+  "beforeSHA256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+  "afterSHA256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+  "baselineRecord": {
+    "bytes": 98696,
+    "path": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+    "attributes": {
+      "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+      "Level6SourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+    },
+    "placeVersion": 2859,
+    "class": "ModuleScript",
+    "sha256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-baseline\\ServerScriptService__Level 6 Systems__Level 6 Playground Game.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 99338,
+    "path": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+    "class": "ModuleScript",
+    "sha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2"
+  },
+  "mirrorSha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+  "manifestSha256": "abb59770fe72811a9826e06f4b1ad813d01ce291f6bb98dcdcd406c9da1d2861",
+  "capturedAtUtc": "2026-10-09T20:39:04.474382+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

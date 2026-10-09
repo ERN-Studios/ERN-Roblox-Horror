@@ -1,0 +1,22 @@
+{
+  "authoritativeSourcesPreserved": true,
+  "placeId": 131311258779917,
+  "compiled": [
+    {
+      "sourceSHA256": "0ba8eeef1d824195f6fd69abe899bd04471581e3de853503f1beb8783273cfef",
+      "name": "ServerScriptService__Level5PreviewAccess.luau",
+      "bytes": 69763
+    },
+    {
+      "sourceSHA256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+      "name": "ServerScriptService__Level6PreviewAccess.luau",
+      "bytes": 35534
+    },
+    {
+      "sourceSHA256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "name": "Level6DeferredAudio.candidate.luau",
+      "bytes": 65353
+    }
+  ],
+  "probesDestroyed": true
+}

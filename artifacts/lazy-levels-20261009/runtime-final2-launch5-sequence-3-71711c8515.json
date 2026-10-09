@@ -1,0 +1,31 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "launch5",
+  "label": "sequence-3",
+  "datamodel": "Server",
+  "codeSha256": "6235dc3083e2d1b1974250e2dbb37677b434aa346bf72adf427d8f9ebe727e32",
+  "startedAtUtc": "2026-10-09T21:31:12.328178+00:00",
+  "passed": true,
+  "result": {
+    "sequence": 1,
+    "launchedAsync": true,
+    "serverWorlds": {
+      "5": {
+        "location": "Workspace",
+        "sameOriginal": true
+      },
+      "4": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      },
+      "6": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      }
+    },
+    "level": 5,
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim."
+  },
+  "finishedAtUtc": "2026-10-09T21:31:12.432746+00:00"
+}

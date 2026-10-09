@@ -20,6 +20,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local TeleportService = game:GetService("TeleportService")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
 
 local ServerKind = require(script.Parent:WaitForChild("ServerKind"))
 local LEVEL = ServerKind.LiveLevel()
@@ -65,7 +66,7 @@ local function onPlayer(player)
 	local session = tostring(packet.LiveSession or "none")
 	local party = parties[session]
 	if not party then
-		party = {token = {}, firstAt = os.clock(), expected = 1, final = false}
+		party = {token = HttpService:GenerateGUID(false), firstAt = os.clock(), expected = 1, final = false}
 		parties[session] = party
 	end
 	local expected = tonumber(packet.Expected) or tonumber(packet.ExpectedContinuers) or 1

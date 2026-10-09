@@ -1,0 +1,27 @@
+{
+  "authoritativeSourcesPreserved": true,
+  "placeId": 131311258779917,
+  "compiled": [
+    {
+      "sourceSHA256": "ff194f5a78db23e318a9aec1fa774f11fe2f805391f984d97c6ae7cc389da23a",
+      "name": "ServerScriptService__Level5PreviewAccess.luau",
+      "bytes": 66177
+    },
+    {
+      "sourceSHA256": "449050dc8cfac584c3f02bd0e11ca15e4c7ae47417cac0073c5ee34e1cb576ef",
+      "name": "ServerScriptService__Level6PreviewAccess.luau",
+      "bytes": 31968
+    },
+    {
+      "sourceSHA256": "e93da983c1dc485dbe6435cf9cb09feb7f773167967d043f4473b9db8b262e00",
+      "name": "ServerScriptService__Live Level Server.luau",
+      "bytes": 10109
+    },
+    {
+      "sourceSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "name": "RoundEntryBatch.candidate.luau",
+      "bytes": 13218
+    }
+  ],
+  "probesDestroyed": true
+}

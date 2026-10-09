@@ -1,0 +1,28 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "ServerScriptService/LevelWorldStorage.ModuleScript.lua",
+  "newModule": true,
+  "beforeSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "afterSHA256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a",
+  "baselineRecord": null,
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 1205,
+    "path": "ServerScriptService.LevelWorldStorage",
+    "class": "ModuleScript",
+    "sha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a",
+    "attributes": [],
+    "universeId": 10559217407,
+    "sourceEditorMatches": true,
+    "placeId": 131311258779917,
+    "properties": {
+      "Archivable": true,
+      "LinkedSource": ""
+    },
+    "editorSha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a"
+  },
+  "capturedAtUtc": "2026-10-09T20:38:22.373588+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

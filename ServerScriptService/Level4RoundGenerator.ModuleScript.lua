@@ -1,14 +1,14 @@
 -- Level4RoundGenerator
 -- GameManager's Build/Cleanup doorway for the Level 4 round "Den Sidste Forestilling" (LEVEL_GENERATORS[4]).
--- The cinema itself is authored (Workspace."Level 4 Cinema Blender") and is never built or destroyed here: Build
--- collects its tagged anchors into a manifest, adds the compatibility parts GameManager expects (Elevator with
--- DoorL/DoorR, MazeStart, ElevatorSpawn), and starts the Light Director, Objective Controller and Usher. Cleanup stops
--- them (each restores what it changed) and destroys only what this module owns. The lobby is not parked: the cinema
--- sits at x=29000, far from it.
+-- The authored cinema stays in ServerStorage until Build mounts the same instance. Build collects its tagged
+-- anchors, adds the compatibility parts GameManager expects, and starts the round systems. Cleanup restores
+-- those systems before parking the cinema; only round-owned compatibility objects are destroyed.
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
+local WorldStorage = require(script.Parent:WaitForChild("LevelWorldStorage"))
 
 local Systems = script.Parent:WaitForChild("Level 4 Systems")
 local Configuration = require(Systems:WaitForChild("Level 4 Configuration"))
@@ -25,6 +25,105 @@ local LEVEL_ONE_RUNTIME_SCRIPTS = { "EntityAI", "EntityAnimation", "EntityKill",
 local generation = 0
 local activeManifest = nil
 local levelOneScriptStates = nil
+local doorStateWorld, doorStates = nil, {}
+local persistentCollision = nil
+local persistentPlayers, watchedPlayers, persistentConnections = {}, {}, {}
+
+-- Capture neutral authored doors before their first activation. PushDoors caches its leaf basis at startup,
+-- so every re-entry must restore that basis while physics and the embedded server script are parked.
+local function rememberDoors(world)
+	if doorStateWorld == world then return end
+	doorStateWorld = world
+	table.clear(doorStates)
+	local folder = world:FindFirstChild("Doors")
+	if not folder then return end
+	for _, door in ipairs(folder:GetChildren()) do
+		local hingePart = door:IsA("Model") and door:FindFirstChild("Hinge")
+		local leaf = door:IsA("Model") and door:FindFirstChild("Leaf")
+		local hinge = hingePart and hingePart:FindFirstChildOfClass("HingeConstraint")
+		if hinge and leaf and leaf:IsA("BasePart") then
+			doorStates[#doorStates + 1] = {
+				Leaf = leaf, CFrame = leaf.CFrame, Anchored = leaf.Anchored, CanCollide = leaf.CanCollide,
+				Hinge = hinge, Enabled = hinge.Enabled, TargetAngle = hinge.TargetAngle,
+			}
+		end
+	end
+end
+
+local function resetDoors(world)
+	if world ~= doorStateWorld then return end
+	for _, state in ipairs(doorStates) do
+		if state.Leaf:IsDescendantOf(world) and state.Hinge:IsDescendantOf(world) then
+			state.Hinge.Enabled = false
+			state.Leaf.CFrame = state.CFrame
+			state.Leaf.AssemblyLinearVelocity = Vector3.zero
+			state.Leaf.AssemblyAngularVelocity = Vector3.zero
+			state.Leaf.Anchored = state.Anchored
+			state.Leaf.CanCollide = state.CanCollide
+			state.Hinge.TargetAngle = state.TargetAngle
+			state.Hinge.Enabled = state.Enabled
+		end
+	end
+end
+
+local function removePersistentPlayer(player)
+	if persistentPlayers[player] then
+		persistentPlayers[player] = nil
+		if persistentCollision then persistentCollision:RemovePersistentPlayer(player) end
+	end
+end
+
+local function syncPersistentPlayer(player)
+	local eligible = player.Parent == Players and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Level6PlaygroundPreview") ~= true
+		and player:GetAttribute("Level2NewMapPreview") ~= true
+	if eligible and persistentCollision then
+		if not persistentPlayers[player] then
+			persistentCollision:AddPersistentPlayer(player)
+			persistentPlayers[player] = true
+		end
+	else
+		removePersistentPlayer(player)
+	end
+end
+
+local function unwatchPersistentPlayer(player)
+	for _, connection in ipairs(watchedPlayers[player] or {}) do connection:Disconnect() end
+	watchedPlayers[player] = nil
+	removePersistentPlayer(player)
+end
+
+local function watchPersistentPlayer(player)
+	if watchedPlayers[player] then return end
+	local connections = {}
+	watchedPlayers[player] = connections
+	for _, attribute in ipairs({"InRound", "Level6PlaygroundPreview", "Level2NewMapPreview"}) do
+		connections[#connections + 1] = player:GetAttributeChangedSignal(attribute):Connect(function()
+			syncPersistentPlayer(player)
+		end)
+	end
+	syncPersistentPlayer(player)
+end
+
+local function stopPersistence()
+	for _, connection in ipairs(persistentConnections) do connection:Disconnect() end
+	table.clear(persistentConnections)
+	for player in pairs(watchedPlayers) do unwatchPersistentPlayer(player) end
+	for player in pairs(persistentPlayers) do removePersistentPlayer(player) end
+	persistentCollision = nil
+end
+
+local function startPersistence(world)
+	stopPersistence()
+	local collision = world:FindFirstChild("Collision")
+	assert(collision and collision:IsA("Model"), "Level 4 Collision model is missing")
+	-- Lobby players do not receive the entire floor. Entrants keep the proven persistent floor contract.
+	collision.ModelStreamingMode = Enum.ModelStreamingMode.PersistentPerPlayer
+	persistentCollision = collision
+	persistentConnections[#persistentConnections + 1] = Players.PlayerAdded:Connect(watchPersistentPlayer)
+	persistentConnections[#persistentConnections + 1] = Players.PlayerRemoving:Connect(unwatchPersistentPlayer)
+	for _, player in ipairs(Players:GetPlayers()) do watchPersistentPlayer(player) end
+end
 
 local function ownedFolder(parent, name, className)
 	local folder = parent:FindFirstChild(name)
@@ -215,10 +314,12 @@ function Generator.GetManifest()
 end
 
 function Generator.Cleanup()
-	pcall(Usher.Stop)
-	pcall(Objectives.Stop)
-	pcall(LightDirector.Stop)
-	local world = workspace:FindFirstChild(Configuration.ModelName)
+	local stopErrors = {}
+	for _, system in ipairs({{"Usher", Usher}, {"Objectives", Objectives}, {"LightDirector", LightDirector}}) do
+		local ok, problem = pcall(system[2].Stop)
+		if not ok then stopErrors[#stopErrors + 1] = system[1] .. ": " .. tostring(problem) end
+	end
+	local world = WorldStorage.Get(4)
 	local runtime = world and world:FindFirstChild(Configuration.RuntimeName)
 	if runtime then runtime:Destroy() end
 	destroyCompatibilityObjects()
@@ -230,6 +331,13 @@ function Generator.Cleanup()
 	if folder then resetState(folder) end
 	workspace:SetAttribute("WorldGenerated", false)
 	workspace:SetAttribute("Level4RoundActive", false)
+	if #stopErrors > 0 then
+		workspace:SetAttribute("LoadStage", "WORLD_ERROR")
+		error("Level 4 cleanup failed: " .. table.concat(stopErrors, "; "))
+	end
+	stopPersistence()
+	WorldStorage.Deactivate(4)
+	resetDoors(world)
 	if workspace:GetAttribute("SelectedLevel") == Configuration.Level then
 		workspace:SetAttribute("SelectedLevel", 1)
 	end
@@ -238,8 +346,10 @@ end
 function Generator.Build()
 	Generator.Cleanup()
 	generation += 1
-	local world = workspace:FindFirstChild(Configuration.ModelName)
-	assert(world and world:IsA("Model"), "Workspace." .. Configuration.ModelName .. " is missing")
+	local world = WorldStorage.Get(4)
+	assert(world and world:IsA("Model"), "Authored " .. Configuration.ModelName .. " is missing")
+	rememberDoors(world)
+	resetDoors(world)
 	local stateFolder = ownedFolder(ReplicatedStorage, Configuration.StateName)
 	resetState(stateFolder)
 	stateFolder:SetAttribute("Level4_Generation", generation)
@@ -249,6 +359,8 @@ function Generator.Build()
 	isolateLevelOneRuntime()
 
 	local ok, result = xpcall(function()
+		startPersistence(world)
+		assert(WorldStorage.Activate(4) == world, "Level 4 authored map changed during activation")
 		local manifest = collectManifest(world)
 		manifest.State = stateFolder
 		manifest.ClientEvent = clientEvent

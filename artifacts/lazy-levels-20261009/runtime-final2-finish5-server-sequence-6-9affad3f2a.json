@@ -1,0 +1,30 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "finish5-server",
+  "label": "sequence-6",
+  "datamodel": "Server",
+  "codeSha256": "db4e8e62bb900537e4eb8cba20507a8d047c59c2c444737481c0dd669828f670",
+  "startedAtUtc": "2026-10-09T21:31:13.604919+00:00",
+  "passed": true,
+  "result": {
+    "movedBorrowedTestPlayerToAuthoredFinish": "Workspace.Level 5 Void.Level5Finish",
+    "serverFloor": "Workspace.Level 5 Void.Geometry.FinaleFloor",
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim.",
+    "serverWorlds": {
+      "5": {
+        "location": "Workspace",
+        "sameOriginal": true
+      },
+      "4": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      },
+      "6": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      }
+    }
+  },
+  "finishedAtUtc": "2026-10-09T21:31:13.704348+00:00"
+}

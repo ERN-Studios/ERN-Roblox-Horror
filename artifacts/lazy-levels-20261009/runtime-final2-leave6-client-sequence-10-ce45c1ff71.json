@@ -1,0 +1,16 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "leave6-client",
+  "label": "sequence-10",
+  "datamodel": "Client",
+  "codeSha256": "f1f5b050391c35095c02c72214cdac33eab73792bdd38ed05612ad0e1b14b626",
+  "startedAtUtc": "2026-10-09T21:31:15.225034+00:00",
+  "passed": true,
+  "result": {
+    "normalLeaveRequested": true,
+    "level": 6,
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim."
+  },
+  "finishedAtUtc": "2026-10-09T21:31:15.400588+00:00"
+}

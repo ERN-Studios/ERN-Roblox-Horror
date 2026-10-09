@@ -110,7 +110,7 @@ end
 
 local function watch(d)
 	local unit = unitOf(d)
-	if not unit or running[unit] then return end
+	if not model:IsDescendantOf(workspace) or not unit or running[unit] then return end
 	local state = { tweens = {} }
 	running[unit] = state
 	state.thread = task.spawn(function()
@@ -119,7 +119,7 @@ local function watch(d)
 		local dying = rng:NextNumber() < 0.25
 		local lo, hi = if dying then 2 else 6, if dying then 6 else 20
 		task.wait(rng:NextNumber(0, hi))
-		while running[unit] == state and unit:IsDescendantOf(model) do
+		while running[unit] == state and model:IsDescendantOf(workspace) and unit:IsDescendantOf(model) do
 			event(unit, rng, state)
 			task.wait(rng:NextNumber(lo, hi))
 		end
@@ -135,9 +135,20 @@ local function stop(unit)
 	set(state.lights or {}, state.lenses or {}, true)
 end
 
-for _, d in model:GetDescendants() do watch(d) end
+local function stopAll()
+	for unit in running do stop(unit) end
+end
+local function syncModel()
+	if model:IsDescendantOf(workspace) then
+		for _, d in model:GetDescendants() do watch(d) end
+	else
+		stopAll()
+	end
+end
 local added = model.DescendantAdded:Connect(watch)
 local removing = model.DescendantRemoving:Connect(stop)
+local ancestry = model.AncestryChanged:Connect(syncModel)
+syncModel()
 -- a round starting mid-blink: hand the brightness back at once (neon is re-rendered by the round client)
 local roundSignal = workspace:GetAttributeChangedSignal("Level4RoundActive"):Connect(function()
 	if not roundLive() then return end
@@ -149,6 +160,7 @@ end)
 script.Destroying:Connect(function()
 	added:Disconnect()
 	removing:Disconnect()
+	ancestry:Disconnect()
 	roundSignal:Disconnect()
-	for unit in running do stop(unit) end
+	stopAll()
 end)

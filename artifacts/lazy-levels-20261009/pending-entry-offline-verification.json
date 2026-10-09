@@ -1,0 +1,36 @@
+{
+  "status": "offline-pass-native-CAS-and-runtime-retest-required",
+  "candidateReceipt": "artifacts/lazy-levels-20261009/pending-entry-candidate-receipt.json",
+  "baselineCapture": ".git/stutter-assets-20261009/lazy-levels-final-edit/sources.json",
+  "sourceScope": [
+    "ServerScriptService.Level5PreviewAccess",
+    "ServerScriptService.Level6PreviewAccess"
+  ],
+  "candidateSha256": {
+    "ServerScriptService.Level5PreviewAccess": "0ba8eeef1d824195f6fd69abe899bd04471581e3de853503f1beb8783273cfef",
+    "ServerScriptService.Level6PreviewAccess": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655"
+  },
+  "testCommand": "python artifacts/lazy-levels-20261009/test_live_level_lifecycle.py --candidate --mutations --luau C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau.exe",
+  "actualSourceChecksPassed": 185,
+  "previousChecksPreserved": 119,
+  "mutationsCaught": 31,
+  "compile": {
+    "binary": "C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau-compile.exe",
+    "arguments": "--null <the two candidate files from candidateReceipt>",
+    "scriptsCompiled": 2,
+    "exitCode": 0
+  },
+  "coveredRegressions": [
+    "Last existing member leaves while multiple same-GUID live-party entries are still streaming",
+    "One same-party entry joins, fails or leaves while another entry remains pending",
+    "Per-player 90-second E and continuation deadlines expire while engine callbacks still wait",
+    "Late expired or cancelled callbacks cannot move, join, consume or release a newer entry",
+    "Continuation preparation persists through the prepare-to-enter gap and is consumed once",
+    "Disconnect and source-level leave cancel only the affected player's destination preparation",
+    "Queue stream, prepare and commit errors settle owned leases",
+    "Old queue rollback cannot remove a newer same-player membership or preparation",
+    "Rejected duplicate preparation cannot extend an existing ticket deadline",
+    "Throwing AddPlayer removes partial session membership and clears preview ownership"
+  ],
+  "limits": "Deterministic fixtures execute actual controller regions with synthetic engine boundaries. They do not establish native gameplay, cold-cache assets, real streaming, multiplayer, or performance. The default test command reads final canonical mirrors after promotion; --candidate is optional development validation. No Studio, mirror, manifest or index writes were performed by this implementation agent."
+}

@@ -1,0 +1,28 @@
+{
+  "task": "lazy-levels-20261009",
+  "phase": "configure",
+  "datamodel": "Client",
+  "passed": true,
+  "codeSHA256": "3dd204deaeca8707c294a7c4b1921660518b1687ea0d8bed75bf144d68e2672c",
+  "result": {
+    "normalQueueConfigured": true,
+    "level": 1,
+    "maps": [
+      {
+        "name": "Level 4 Cinema Blender",
+        "inWorkspace": false
+      },
+      {
+        "name": "Level 5 Void",
+        "inWorkspace": false
+      },
+      {
+        "name": "Level 6 Indoor Playground",
+        "inWorkspace": false
+      }
+    ],
+    "sourceWrites": 0
+  },
+  "capturedAtUtc": "2026-10-09T21:10:08.893908+00:00",
+  "limits": "One normal Studio client, warm asset cache; no mobile, multiplayer or cold-cache performance claim"
+}

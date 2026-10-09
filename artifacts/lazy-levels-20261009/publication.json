@@ -1,0 +1,27 @@
+{
+  "task": "lazy-levels-20261009",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "published": true,
+  "version": 2915,
+  "method": "Current authoritative Studio Edit place; observed Publish to Roblox keyboard shortcut Alt+P",
+  "observedStudioLocalDate": "2026-10-09",
+  "timezone": "Europe/Copenhagen",
+  "observedSentAt": "23:32:24.968",
+  "observedSuccessAt": "23:32:34.630",
+  "observedConfirmationAt": "23:32:34.703",
+  "capturedAtUtc": "2026-10-09 21:33:12 UTC",
+  "outputEvidence": [
+    "23:32:24.968 Sent message to server to publish.",
+    "23:32:34.630 Place published. Eligible players can now play this place in Roblox.",
+    "23:32:34.630 → Add publish notes to v2915",
+    "23:32:34.703 Published new changes in \"[UPDATE] BACKROOMS: STAY QUIET\" to Roblox."
+  ],
+  "nativeSourceParityReceipt": "final-source-parity-v2.json",
+  "nativeAssetReceipt": "final-native-assets-v2.json",
+  "nativeFinalSession": "final2",
+  "nativeFinalPhasesPassed": 18,
+  "nativeCleanupPhasesPassed": 2,
+  "scope": "Current place published to existing experience; no access-setting changes, active-server restart, or GitHub push. LoadedPlaceVersion was not used to infer published version."
+}

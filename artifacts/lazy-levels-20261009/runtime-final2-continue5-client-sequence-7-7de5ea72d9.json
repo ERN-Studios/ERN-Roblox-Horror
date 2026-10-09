@@ -1,0 +1,27 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "continue5-client",
+  "label": "sequence-7",
+  "datamodel": "Client",
+  "codeSha256": "adf4301e43431c95947589db694afbb1cc34861e3916594593cabe95d498086f",
+  "startedAtUtc": "2026-10-09T21:31:13.712520+00:00",
+  "passed": true,
+  "result": {
+    "normalContinueRequested": true,
+    "roundEvents": [
+      {
+        "message": "win",
+        "clock": 89254.3802135
+      }
+    ],
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim.",
+    "capturedWin": {
+      "clock": 89254.38021510001,
+      "nextLevel": 6,
+      "serial": 500001,
+      "deadline": 1791581488.736161
+    }
+  },
+  "finishedAtUtc": "2026-10-09T21:31:13.946547+00:00"
+}

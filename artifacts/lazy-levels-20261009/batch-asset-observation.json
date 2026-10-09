@@ -1,0 +1,18 @@
+{
+  "task": "lazy-levels-20261009",
+  "datamodel": "Client",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "productionSourceSHA256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+  "censusSession": "l4-batch4",
+  "actualCarriers": 315,
+  "nativePreloadCalls": 1,
+  "nativeCallbackCount": 331,
+  "nativeFailedCallbackCount": 0,
+  "nativeSeconds": 3.03287310001906,
+  "ownedDecalsDestroyedAfterReturn": 119,
+  "acknowledgementsSent": 0,
+  "sourceWrites": 0,
+  "limits": "Warm single Studio client. Count includes extra engine dependency callbacks; this independent probe recorded failures and counts, not every successful callback ID. It does not itself prove per-required-key coverage or fix production entry."
+}

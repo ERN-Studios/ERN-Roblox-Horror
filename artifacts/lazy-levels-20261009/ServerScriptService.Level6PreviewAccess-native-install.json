@@ -1,0 +1,45 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "ServerScriptService/Level6PreviewAccess.Script.lua",
+  "newModule": false,
+  "beforeSHA256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+  "afterSHA256": "7cfe9d33c49f2477207ee187d22b10332096c2dddabffcc788c3a2f3e077e3c4",
+  "baselineRecord": {
+    "bytes": 31298,
+    "path": "ServerScriptService.Level6PreviewAccess",
+    "attributes": {
+      "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+      "Level6SourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead"
+    },
+    "placeVersion": 2859,
+    "class": "Script",
+    "sha256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-baseline\\ServerScriptService__Level6PreviewAccess.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 31917,
+    "path": "ServerScriptService.Level6PreviewAccess",
+    "class": "Script",
+    "sha256": "7cfe9d33c49f2477207ee187d22b10332096c2dddabffcc788c3a2f3e077e3c4",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "7cfe9d33c49f2477207ee187d22b10332096c2dddabffcc788c3a2f3e077e3c4"
+  },
+  "mirrorSha256": "7cfe9d33c49f2477207ee187d22b10332096c2dddabffcc788c3a2f3e077e3c4",
+  "manifestSha256": "85f6c91918077f40df60235aec804a51780350e5b07af927774b89f2a2ccffc2",
+  "capturedAtUtc": "2026-10-09T20:39:03.084300+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

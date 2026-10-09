@@ -1,0 +1,42 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+  "newModule": false,
+  "beforeSHA256": "6e57bb0e05008fbe459afe6607fb732c6e2224beb88cbfa516d1ce5ab7b808e5",
+  "afterSHA256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+  "baselineRecord": {
+    "bytes": 64403,
+    "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+    "attributes": [],
+    "placeVersion": 2859,
+    "class": "LocalScript",
+    "sha256": "6e57bb0e05008fbe459afe6607fb732c6e2224beb88cbfa516d1ce5ab7b808e5",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-final-lease-baseline\\StarterPlayer__StarterPlayerScripts__Level 6 Playground Client.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 65353,
+    "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+    "class": "LocalScript",
+    "sha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396"
+  },
+  "mirrorSha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+  "manifestSha256": "ccf2898052d385b09da472bd6d1599ed4a0838112b8abae7e0a2e687dc1e70b4",
+  "capturedAtUtc": "2026-10-09T21:30:46.760419+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

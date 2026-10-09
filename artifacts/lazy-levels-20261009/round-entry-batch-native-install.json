@@ -1,0 +1,42 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+  "newModule": false,
+  "beforeSHA256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+  "afterSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+  "baselineRecord": {
+    "bytes": 11879,
+    "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+    "attributes": [],
+    "placeVersion": 2859,
+    "class": "LocalScript",
+    "sha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-baseline-v2\\StarterPlayer__StarterPlayerScripts__Round Entry Client.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 13218,
+    "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+    "class": "LocalScript",
+    "sha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb"
+  },
+  "mirrorSha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+  "manifestSha256": "f45f49b23479295e2af58d99792875ca874fa1ff5fd365db2439e6d939c1b9d0",
+  "capturedAtUtc": "2026-10-09T20:59:38.987246+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

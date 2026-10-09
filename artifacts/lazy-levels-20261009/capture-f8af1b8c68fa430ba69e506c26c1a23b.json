@@ -1,0 +1,143 @@
+{
+  "nativeTransfer": {
+    "bytes": 1334463,
+    "sha256": "7bb71371b76f41b22b9b07346c01d5fa82464c2c48b252b0b7e12caaf54384ef",
+    "parts": 2
+  },
+  "universeId": 10559217407,
+  "metadataTransfer": {
+    "bytes": 71831959,
+    "sha256": "213386879ef7c43a9977dc716d5d21b3730ccb83c69b49ef11b5f5642f55732a",
+    "parts": 96
+  },
+  "limits": "Same-instance native tree/property/source checks across yielding passes plus bounded non-yielding root/embedded-Source guards; descendant metadata is not checked atomically. No gameplay, streaming, performance or publication pass.",
+  "phase": "captured",
+  "placeId": 131311258779917,
+  "nodeCount": 37412,
+  "roots": [
+    {
+      "beforePath": "Workspace.Level 4 Cinema Blender",
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "descendants": 14464,
+      "class": "Model",
+      "pivot": {
+        "value": [
+          29000,
+          -148.4499969482422,
+          63.94999694824219,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "type": "CFrame"
+      },
+      "path": "Workspace.Level 4 Cinema Blender"
+    },
+    {
+      "beforePath": "Workspace.Level 5 Void",
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "descendants": 2627,
+      "class": "Model",
+      "pivot": {
+        "value": [
+          42180.8125,
+          735.8499755859375,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "type": "CFrame"
+      },
+      "path": "Workspace.Level 5 Void"
+    },
+    {
+      "beforePath": "Workspace.Level 6 Indoor Playground",
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "descendants": 20318,
+      "class": "Model",
+      "pivot": {
+        "value": [
+          52000,
+          145.83399963378906,
+          15,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "type": "CFrame"
+      },
+      "path": "Workspace.Level 6 Indoor Playground"
+    }
+  ],
+  "placeVersion": 2859,
+  "sources": [
+    {
+      "bytes": 6158,
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "sourceEditorMatches": true,
+      "class": "Script",
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991"
+    },
+    {
+      "bytes": 7028,
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "sourceEditorMatches": true,
+      "class": "Script",
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c"
+    }
+  ],
+  "treeSHA256": "0621b13a6545204abda47042b926fd637c3b33cbe17a2a3f057c82160a8cbef3",
+  "captureKey": "__lazyLevels_f8af1b8c68fa430ba69e506c26c1a23b",
+  "nativeBytes": 1334463,
+  "captureId": "f8af1b8c68fa430ba69e506c26c1a23b",
+  "task": "lazy-levels-20261009",
+  "nativeSHA256": "7bb71371b76f41b22b9b07346c01d5fa82464c2c48b252b0b7e12caaf54384ef",
+  "checkpoint": "G:\\Roblox\\MongoTV\\.git\\lazy-levels-20261009\\capture-f8af1b8c68fa430ba69e506c26c1a23b",
+  "baselineSourcesSHA256": "56369d5b48de20388edcd3678ee46c39063d9eed92c019ca375cf9207197d6b7",
+  "approvedSources": [
+    {
+      "path": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "class": "Script",
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {}
+    },
+    {
+      "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "class": "Script",
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Client"
+      },
+      "attributes": {}
+    }
+  ],
+  "capturedAtUtc": "2026-10-09T20:40:10.910130+00:00"
+}

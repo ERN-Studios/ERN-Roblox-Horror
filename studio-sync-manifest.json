@@ -1618,8 +1618,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
-      "bytes": 98696,
-      "sha256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+      "bytes": 99338,
+      "sha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1785,8 +1785,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level4RoundGenerator.ModuleScript.lua",
-      "bytes": 11276,
-      "sha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "bytes": 15758,
+      "sha256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1803,8 +1803,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level5PreviewAccess.Script.lua",
-      "bytes": 64927,
-      "sha256": "ae61bb7bed1d379cb2e0f27498d583eeed6c4aad521ad8188ea83dfea64bdd00",
+      "bytes": 69763,
+      "sha256": "0ba8eeef1d824195f6fd69abe899bd04471581e3de853503f1beb8783273cfef",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1823,8 +1823,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
-      "bytes": 31298,
-      "sha256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+      "bytes": 35534,
+      "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -1846,8 +1846,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Live Level Server.Script.lua",
-      "bytes": 10029,
-      "sha256": "dc28fc4665b08dc221aea5bba8bec49e844cf6a10953d37e5e0490b31ed9d316",
+      "bytes": 10109,
+      "sha256": "e93da983c1dc485dbe6435cf9cb09feb7f773167967d043f4473b9db8b262e00",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3698,8 +3698,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Round Client.LocalScript.lua",
-      "bytes": 48561,
-      "sha256": "05aa2da7877fb30fa4f3d43792d2ebb05a6987f143b09e0814dbd75fa3c38f03",
+      "bytes": 49585,
+      "sha256": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -3764,8 +3764,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
-      "bytes": 63894,
-      "sha256": "4753898b930d00dcd3e0e0cae8745a94f9beeb5077c32162382bd298e30aa067",
+      "bytes": 65353,
+      "sha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4187,8 +4187,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
-      "bytes": 11879,
-      "sha256": "a5026683f092bccc1eb106bdc1df56b42b49e18eafddbd8b1c4919010bab9bc5",
+      "bytes": 13218,
+      "sha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4454,15 +4454,15 @@
       "attributes": []
     },
     {
-      "studioPath": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "studioPath": "ServerStorage.Level 4 Cinema Blender.Doors.PushDoors",
       "segments": [
-        "Workspace",
+        "ServerStorage",
         "Level 4 Cinema Blender",
         "Doors",
         "PushDoors"
       ],
       "className": "Script",
-      "file": "Workspace/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
+      "file": "ServerStorage/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
       "bytes": 7028,
       "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
       "status": "synced",
@@ -4476,16 +4476,16 @@
       "attributes": []
     },
     {
-      "studioPath": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "studioPath": "ServerStorage.Level 4 Cinema Blender.OccasionalFixtureFlicker",
       "segments": [
-        "Workspace",
+        "ServerStorage",
         "Level 4 Cinema Blender",
         "OccasionalFixtureFlicker"
       ],
       "className": "Script",
-      "file": "Workspace/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
-      "bytes": 5853,
-      "sha256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+      "file": "ServerStorage/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+      "bytes": 6158,
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -4707,6 +4707,24 @@
       "bytes": 456,
       "sha256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
       "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.LevelWorldStorage",
+      "segments": [
+        "ServerScriptService",
+        "LevelWorldStorage"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LevelWorldStorage.ModuleScript.lua",
+      "bytes": 1205,
+      "sha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
       "attributes": []
     }
   ]

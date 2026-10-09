@@ -1,0 +1,42 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "ServerScriptService/Level5PreviewAccess.Script.lua",
+  "newModule": false,
+  "beforeSHA256": "3fd7c5c137d6aa440572e66994261473cf9f6841be21bc94320531e2bcba55db",
+  "afterSHA256": "ff194f5a78db23e318a9aec1fa774f11fe2f805391f984d97c6ae7cc389da23a",
+  "baselineRecord": {
+    "bytes": 65601,
+    "path": "ServerScriptService.Level5PreviewAccess",
+    "attributes": [],
+    "placeVersion": 2859,
+    "class": "Script",
+    "sha256": "3fd7c5c137d6aa440572e66994261473cf9f6841be21bc94320531e2bcba55db",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Legacy"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-baseline-v2\\ServerScriptService__Level5PreviewAccess.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 66177,
+    "path": "ServerScriptService.Level5PreviewAccess",
+    "class": "Script",
+    "sha256": "ff194f5a78db23e318a9aec1fa774f11fe2f805391f984d97c6ae7cc389da23a",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "ff194f5a78db23e318a9aec1fa774f11fe2f805391f984d97c6ae7cc389da23a"
+  },
+  "mirrorSha256": "ff194f5a78db23e318a9aec1fa774f11fe2f805391f984d97c6ae7cc389da23a",
+  "manifestSha256": "81f3ad2be41a640ecd70efa05a1994bb5efd12f6c0a582ef406872b296b22497",
+  "capturedAtUtc": "2026-10-09T20:58:58.131345+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

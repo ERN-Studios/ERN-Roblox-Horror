@@ -1,0 +1,21 @@
+{
+  "task": "lazy-levels-20261009",
+  "exported": true,
+  "manifestBeforeSHA256": "2bc0e4d1266dc3d657a1f15156d90107187755893cf34906ce72fc478d81fda3",
+  "manifestAfterSHA256": "bce9829cb7c02264d8bb7eef31c2b90b78f4b631c4e05c26b8c8efaf12c24733",
+  "renames": [
+    {
+      "before": "Workspace/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
+      "after": "ServerStorage/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c"
+    },
+    {
+      "before": "Workspace/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+      "after": "ServerStorage/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991"
+    }
+  ],
+  "unrelatedManifestEntriesPreserved": true,
+  "studioWrites": false,
+  "checkpoint": "G:\\Roblox\\MongoTV\\.git\\lazy-levels-20261009\\capture-f8af1b8c68fa430ba69e506c26c1a23b\\mirror-export"
+}

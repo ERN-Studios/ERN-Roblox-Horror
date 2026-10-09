@@ -1,0 +1,106 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "entry5-server",
+  "label": "sequence-4",
+  "datamodel": "Server",
+  "codeSha256": "8b6f6bf44876f41b155bd90a1ce275c07c1245d2295d2175f661614f3ab95989",
+  "startedAtUtc": "2026-10-09T21:31:12.440263+00:00",
+  "passed": true,
+  "result": {
+    "job": {
+      "ok": true,
+      "called": true,
+      "sequence": 1,
+      "finishedClock": 89253.14579790004,
+      "joined": 1,
+      "level": 5,
+      "done": true,
+      "startedClock": 89252.99805709999
+    },
+    "worlds": {
+      "5": {
+        "workspace": true
+      },
+      "4": {
+        "workspace": false
+      },
+      "6": {
+        "workspace": false
+      }
+    },
+    "serverFloor": "Workspace.Level 5 Void.Geometry.Rest",
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim.",
+    "position": "40016.09765625, 606.9862060546875, -0.0054168701171875",
+    "serverWorlds": {
+      "5": {
+        "location": "Workspace",
+        "sameOriginal": true
+      },
+      "4": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      },
+      "6": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      }
+    },
+    "health": 100,
+    "healthy": true,
+    "attributes": {
+      "ZyntraFirstLogin": false,
+      "Crouching": false,
+      "ZyntraLobbyBriefingPlayed": false,
+      "CaptionsEnabled": true,
+      "ZyntraPassRobux": 0,
+      "ZyntraOwnsDonation20K": true,
+      "ZyntraSpeedPotions": 0,
+      "FriendBoostFriends": 0,
+      "FriendBoostPercent": 0,
+      "ZyntraOwnsTokenEarner3x": true,
+      "ZyntraDeviceClass": "PC",
+      "Level6PlaygroundPreview": true,
+      "ZyntraDetectorReadingUntil": 0,
+      "ZyntraHazmatColor": null,
+      "ZyntraStaminaMultiplier": 2,
+      "ZyntraDonationRobux": 0,
+      "ZyntraOwnsEntityDetector": true,
+      "ReduceCameraShake": false,
+      "ZyntraReentryUsed": false,
+      "ReduceFlashing": false,
+      "ZyntraUtilityRobux": 0,
+      "ZyntraMuteDispatch": false,
+      "ZyntraAchievements": "Welcome",
+      "ZyntraDispatchPreferenceLoaded": true,
+      "Level5VoidRound": true,
+      "RouteMarkersActive": 0,
+      "ZyntraSpeedBoostUntil": 0,
+      "ZyntraGlowstickColor": null,
+      "ZyntraOwnsTokenEarner5x": true,
+      "ZyntraOwnsCosmeticEquipment": true,
+      "ZyntraOwnsAdvancedEquipment": true,
+      "ZyntraOwnsTokenEarnerUp2to3": true,
+      "GlowstickColor": null,
+      "ZyntraBatteryMultiplier": 2,
+      "ZyntraRouteMarkers": 0,
+      "ZyntraDailyAccruing": false,
+      "ZyntraOwnsSupporter": true,
+      "ZyntraSpeedPotionUsedThisRound": false,
+      "ZyntraProfileLoaded": true,
+      "ZyntraSkinId": "BaselineYellow",
+      "ZyntraSpeedBoostMultiplier": 1,
+      "ZyntraTokenEarnerMultiplier": 5,
+      "ZyntraOwnsTokenEarnerUp2to5": true,
+      "ZyntraOwnsTokenEarnerUp3to5": true,
+      "ZyntraOwnsTokenEarner2x": true,
+      "ZyntraOwnsFalseSun": true,
+      "ZyntraOwnsStaticWraith": true,
+      "DisableCaptions": false,
+      "LobbyMusicEnabled": true,
+      "InRound": true,
+      "ZyntraRecordedSupportRobux": 0
+    }
+  },
+  "finishedAtUtc": "2026-10-09T21:31:13.392235+00:00"
+}

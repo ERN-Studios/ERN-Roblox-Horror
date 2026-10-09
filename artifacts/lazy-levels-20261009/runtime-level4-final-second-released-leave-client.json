@@ -1,0 +1,23 @@
+{
+  "task": "lazy-levels-20261009",
+  "phase": "leave-client",
+  "label": "final-second-released-leave-client",
+  "datamodel": "Client",
+  "station": 113,
+  "partySize": 1,
+  "expectedPlayer": null,
+  "codeSHA256": "2c67e2eef5413e7e57d7fb40e60b655a1f45b993bc06cfcd6f3c1079e5f0e1c9",
+  "helperSHA256": "54220deab32fa06000ff789b39fb07baa8c21f12bfd0a57014fd62c86919d9ff",
+  "passed": true,
+  "studio": {
+    "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
+  },
+  "result": {
+    "phase": "leave-client",
+    "normalLeaveRequest": true,
+    "sourceWrites": 0
+  },
+  "capturedAtUtc": "2026-10-09T21:05:25.686458+00:00",
+  "limits": "This one explicitly invoked Studio QA phase only; no Source/map Parent edits, Play lifecycle, full gameplay or performance claim"
+}

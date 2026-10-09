@@ -1,0 +1,56 @@
+{
+  "source": "artifacts\\lazy-levels-20261009\\candidates\\Level6DeferredAudio.candidate.luau",
+  "sourceSHA256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+  "scope": "Offline actual-source audio eligibility, coroutine owner, cancellation drain, and fallback contract",
+  "exitCode": 0,
+  "stdout": "Level 6 deferred audio actual-source contract: 81 checks passed",
+  "stderr": "",
+  "nativeGameplayVerified": false,
+  "actualAssetPerformanceVerified": false,
+  "mutations": [
+    {
+      "mutation": "lobby eligibility ignored",
+      "rejected": true
+    },
+    {
+      "mutation": "Level 5 eligibility ignored",
+      "rejected": true
+    },
+    {
+      "mutation": "preload owner ignored",
+      "rejected": true
+    },
+    {
+      "mutation": "per-call eligibility ignored",
+      "rejected": true
+    },
+    {
+      "mutation": "completed cursor reset",
+      "rejected": true
+    },
+    {
+      "mutation": "real refusal ignored",
+      "rejected": true
+    },
+    {
+      "mutation": "drained owner retained",
+      "rejected": true
+    },
+    {
+      "mutation": "Level 5 transition signal removed",
+      "rejected": true
+    },
+    {
+      "mutation": "outer setup failure locks owner",
+      "rejected": true
+    }
+  ],
+  "command": [
+    "python",
+    "artifacts/lazy-levels-20261009/test_level6_deferred_audio.py",
+    "--candidate",
+    "--mutations",
+    "--luau",
+    "artifacts/hazmat-20260924/luau-0.737/luau.exe"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "authoritativeSourcesPreserved": true,
+  "placeId": 131311258779917,
+  "compiled": [
+    {
+      "sourceSHA256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a",
+      "name": "LevelWorldStorage.candidate.luau",
+      "bytes": 1205
+    },
+    {
+      "sourceSHA256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+      "name": "ServerScriptService__Level 6 Systems__Level 6 Playground Game.luau",
+      "bytes": 99338
+    },
+    {
+      "sourceSHA256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "name": "ServerScriptService__Level4RoundGenerator.luau",
+      "bytes": 15758
+    },
+    {
+      "sourceSHA256": "3fd7c5c137d6aa440572e66994261473cf9f6841be21bc94320531e2bcba55db",
+      "name": "ServerScriptService__Level5PreviewAccess.luau",
+      "bytes": 65601
+    },
+    {
+      "sourceSHA256": "7cfe9d33c49f2477207ee187d22b10332096c2dddabffcc788c3a2f3e077e3c4",
+      "name": "ServerScriptService__Level6PreviewAccess.luau",
+      "bytes": 31917
+    },
+    {
+      "sourceSHA256": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27",
+      "name": "StarterPlayer__StarterPlayerScripts__Level 4 Round Client.luau",
+      "bytes": 49585
+    },
+    {
+      "sourceSHA256": "6e57bb0e05008fbe459afe6607fb732c6e2224beb88cbfa516d1ce5ab7b808e5",
+      "name": "StarterPlayer__StarterPlayerScripts__Level 6 Playground Client.luau",
+      "bytes": 64403
+    },
+    {
+      "sourceSHA256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+      "name": "Workspace__Level 4 Cinema Blender__OccasionalFixtureFlicker.luau",
+      "bytes": 6158
+    }
+  ],
+  "probesDestroyed": true
+}

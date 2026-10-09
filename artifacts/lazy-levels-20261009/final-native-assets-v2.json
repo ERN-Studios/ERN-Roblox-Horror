@@ -1,0 +1,10 @@
+{
+  "bytes": 1334463,
+  "universeId": 10559217407,
+  "parkedAllThree": true,
+  "authoredModesPreserved": true,
+  "placeId": 131311258779917,
+  "passed": true,
+  "sha256": "7bb71371b76f41b22b9b07346c01d5fa82464c2c48b252b0b7e12caaf54384ef",
+  "scope": "Final Edit after final2 native QA; exact unchanged authored model serialization and three parked roots."
+}

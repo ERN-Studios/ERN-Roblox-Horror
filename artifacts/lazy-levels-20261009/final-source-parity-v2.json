@@ -1,0 +1,183 @@
+{
+  "passed": true,
+  "capturedAtUtc": "2026-10-09T21:31:44.857029+00:00",
+  "sources": [
+    {
+      "bytes": 15758,
+      "path": "ServerScriptService.Level4RoundGenerator",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "ModuleScript",
+      "sha256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "file": "ServerScriptService/Level4RoundGenerator.ModuleScript.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 69763,
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "Script",
+      "sha256": "0ba8eeef1d824195f6fd69abe899bd04471581e3de853503f1beb8783273cfef",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "ServerScriptService/Level5PreviewAccess.Script.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 35534,
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead"
+      },
+      "placeVersion": 2859,
+      "class": "Script",
+      "sha256": "62c22dbcde5c87ff6d0054be7d60a0890298ed5ebb9b1bf6f61e431f45e38655",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 99338,
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+      },
+      "placeVersion": 2859,
+      "class": "ModuleScript",
+      "sha256": "12cec0a73f8631026474661cc853856cf053f09d1c0d05291888100ef763abb2",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 10109,
+      "path": "ServerScriptService.Live Level Server",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "Script",
+      "sha256": "e93da983c1dc485dbe6435cf9cb09feb7f773167967d043f4473b9db8b262e00",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "ServerScriptService/Live Level Server.Script.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 6158,
+      "path": "ServerStorage.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "Script",
+      "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Client"
+      },
+      "file": "ServerStorage/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 7028,
+      "path": "ServerStorage.Level 4 Cinema Blender.Doors.PushDoors",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "Script",
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "ServerStorage/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 49585,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Round Client.LocalScript.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 65353,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "a812142882845810749b6c985a1bca22a4de37b6035f1c61741df9949a122396",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 1205,
+      "path": "ServerScriptService.LevelWorldStorage",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "ModuleScript",
+      "sha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "file": "ServerScriptService/LevelWorldStorage.ModuleScript.lua",
+      "sourceEditorMatches": true
+    },
+    {
+      "bytes": 13218,
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "attributes": [],
+      "placeVersion": 2859,
+      "class": "LocalScript",
+      "sha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+      "sourceEditorMatches": true
+    }
+  ],
+  "scope": "11 task native Source/editor/mirror/manifest rows only; unrelated current work preserved"
+}

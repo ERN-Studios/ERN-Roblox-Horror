@@ -1,0 +1,145 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "exit-client",
+  "label": "sequence-18",
+  "datamodel": "Client",
+  "codeSha256": "ddbccd7ea0912771cb1c4a2d9ec57cf90773037aa2e04740e1226f89ccf0ce6a",
+  "startedAtUtc": "2026-10-09T21:31:23.027203+00:00",
+  "passed": true,
+  "result": {
+    "worlds": {
+      "5": {
+        "workspace": false
+      },
+      "4": {
+        "workspace": false
+      },
+      "6": {
+        "workspace": false
+      }
+    },
+    "attributes": {
+      "ZyntraFirstLogin": false,
+      "Crouching": false,
+      "LevelThreeBriefingActive": false,
+      "CaptionsEnabled": true,
+      "ZyntraReentryCredits": 0,
+      "DevCheatEntityPaused": false,
+      "ZyntraSpeedBoostMultiplier": 1,
+      "FriendBoostFriends": 0,
+      "LobbyLoadingDone": true,
+      "DisableCaptions": false,
+      "DevCheatFastQueue": false,
+      "DevCheatThirdPerson": false,
+      "ZyntraDetectorReadingUntil": 0,
+      "ZyntraHazmatColor": null,
+      "DevCheatUnlimited": false,
+      "ZyntraOwnsStaticWraith": true,
+      "ReduceCameraShake": false,
+      "ZyntraReentryUsed": false,
+      "ReduceFlashing": false,
+      "ZyntraRouteMarkers": 0,
+      "ZyntraDailyAccruing": false,
+      "ZyntraAchievements": "FirstClearLevel5,L5NoFall,Welcome",
+      "RoundEntryUIReady": true,
+      "RouteMarkersActive": 0,
+      "ZyntraSpeedBoostUntil": 0,
+      "ZyntraSpeedPotionUsedThisRound": false,
+      "ZyntraOwnsCosmeticEquipment": true,
+      "ZyntraOwnsAdvancedEquipment": true,
+      "ZyntraOwnsTokenEarnerUp2to3": true,
+      "LobbyBriefingActive": false,
+      "ZyntraOwnsTokenEarner2x": true,
+      "ZyntraProfileLoaded": true,
+      "ZyntraSkinId": "BaselineYellow",
+      "RoundEntryControlsReady": true,
+      "Stamina": 1,
+      "LobbyMusicEnabled": true,
+      "DispatchBriefingOpen": false,
+      "ZyntraLobbyBriefingPlayed": false,
+      "LocalCrouching": false,
+      "ZyntraPassRobux": 0,
+      "ZyntraOwnsDonation20K": true,
+      "ZyntraSpeedPotions": 0,
+      "ZyntraOwnsFalseSun": true,
+      "ZyntraRailRight": 72,
+      "ZyntraOwnsTokenEarner3x": true,
+      "ZyntraDeviceClass": "PC",
+      "RoundEndingOpen": false,
+      "DevCheatEsp": true,
+      "ZyntraStaminaMultiplier": 2,
+      "ZyntraDonationRobux": 0,
+      "Level2NewMapLightingOwned": false,
+      "ZyntraOwnsEntityDetector": true,
+      "ZyntraMuteDispatch": false,
+      "DispatchTextActive": false,
+      "ZyntraDispatchPreferenceLoaded": true,
+      "GlowstickColor": null,
+      "LobbyBriefingPlayed": false,
+      "ZyntraReentryPrice": 29,
+      "MoveNoise": "walk",
+      "ZyntraGlowstickColor": null,
+      "ZyntraOwnsTokenEarner5x": true,
+      "ZyntraTokenEarnerMultiplier": 5,
+      "ZyntraOwnsTokenEarnerUp2to5": true,
+      "LobbyBriefingSkipped": false,
+      "LevelOneBriefingActive": false,
+      "ZyntraBatteryMultiplier": 2,
+      "QueueModalOpen": false,
+      "ZyntraReentryProductId": 3707755318,
+      "ZyntraOwnsSupporter": true,
+      "ZyntraDispatchClientActive": false,
+      "LevelLoadingOpen": true,
+      "Level2PoolroomsAudioReady": false,
+      "DevCheatPlayerEsp": false,
+      "DevEspEnabled": true,
+      "DevCheatPushImmune": false,
+      "DevCheatNoclip": false,
+      "LobbyLoadingOpen": false,
+      "ZyntraUtilityRobux": 0,
+      "Level2PoolroomsAudioActive": false,
+      "ZyntraRecordedSupportRobux": 0,
+      "ZyntraOwnsTokenEarnerUp3to5": true,
+      "InRound": false,
+      "FriendBoostPercent": 0
+    },
+    "position": "220.8948516845703, 34.13751983642578, -861.3480224609375",
+    "health": 100,
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim.",
+    "healthy": true,
+    "replicaEvents": [
+      {
+        "clock": 89253.04561500007,
+        "kind": "added",
+        "level": 5
+      },
+      {
+        "clock": 89254.9003337,
+        "kind": "added",
+        "level": 6
+      },
+      {
+        "clock": 89255.56565270002,
+        "kind": "removed",
+        "level": 5
+      },
+      {
+        "clock": 89257.37491820008,
+        "kind": "removed",
+        "level": 6
+      },
+      {
+        "clock": 89259.90576500003,
+        "kind": "added",
+        "level": 6
+      },
+      {
+        "clock": 89261.5703586,
+        "kind": "removed",
+        "level": 6
+      }
+    ]
+  },
+  "finishedAtUtc": "2026-10-09T21:31:23.120141+00:00"
+}

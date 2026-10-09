@@ -73,27 +73,59 @@ local function collectAsset(instance, ids, carriers)
 	return added
 end
 
-local function loadCarrier(carrier)
-	local instance = carrier.Instance
-	local reported, failed = false, false
-	local ok = pcall(function()
-		if carrier.ImageId then
-			instance = Instance.new("Decal")
-			instance.Texture = carrier.ImageId
+local function fetchKey(value)
+	value = tostring(value)
+	local id = string.match(value, "^rbxassetid://(%d+)$")
+	if not id then
+		local lower = string.lower(value)
+		if string.match(lower, "^https?://roblox%.com/")
+			or string.match(lower, "^https?://[^/]+%.roblox%.com/") then
+			id = string.match(lower, "[?&]id=(%d+)")
 		end
-		-- Keep mesh instances: a MeshId string does not necessarily fetch the
-		-- same content as the actual MeshPart, especially DataModel-scoped meshes.
-		ContentProvider:PreloadAsync({instance}, function(_, fetchStatus)
-			reported = true
-			if fetchStatus ~= Enum.AssetFetchStatus.Success then failed = true end
+	end
+	return id and "assetid:" .. id or value
+end
+
+local function loadCarriers(carriers)
+	local instances, owned, expected, reported, failed = {}, {}, {}, {}, {}
+	local unexpectedFailure = false
+	local ok = pcall(function()
+		for _, carrier in ipairs(carriers) do
+			local instance = carrier.Instance
+			if carrier.ImageId then
+				instance = Instance.new("Decal")
+				table.insert(owned, instance)
+				instance.Texture = carrier.ImageId
+			end
+			table.insert(instances, instance)
+			for _, key in ipairs(carrier.Keys) do expected[fetchKey(key)] = true end
+		end
+		-- Keep real mesh instances and owned URI Decals in the same engine request.
+		-- Each required asset still needs its own real successful callback.
+		ContentProvider:PreloadAsync(instances, function(id, fetchStatus)
+			local key = fetchKey(id)
+			if expected[key] then
+				reported[key] = true
+				if fetchStatus ~= Enum.AssetFetchStatus.Success then failed[key] = true end
+			elseif fetchStatus ~= Enum.AssetFetchStatus.Success then
+				-- A failed additional dependency cannot be assigned to one mesh safely.
+				unexpectedFailure = true
+			end
 		end)
 	end)
-	if carrier.ImageId and instance then
-		local cleaned = pcall(function() instance:Destroy() end)
-		if not cleaned then ok = false end
+	-- The caller keeps the shared preload owner until this request and all owned
+	-- temporary carrier cleanup have drained, including after cancellation.
+	for _, instance in ipairs(owned) do
+		if not pcall(function() instance:Destroy() end) then ok = false end
 	end
-	-- A return or absent callback is not evidence of a successful download.
-	return ok and reported and not failed
+	for _, carrier in ipairs(carriers) do
+		local loaded = ok and not unexpectedFailure
+		for _, key in ipairs(carrier.Keys) do
+			key = fetchKey(key)
+			if not reported[key] or failed[key] then loaded = false end
+		end
+		carrier.Loaded = loaded
+	end
 end
 
 
@@ -233,19 +265,28 @@ local function begin(payload)
 			end
 			if cursor > #queued then table.clear(queued) cursor = 1 end
 			local ready = #roots > 0
+			local pending = {}
 			for _, carrier in ipairs(carriers) do
 				if carrier.Loaded ~= true and (carrier.Attempts or 0) < 2 then
-					while entryPreloadBusy and current(request) do task.wait(0.1) end
-					if not current(request) then break end
-					entryPreloadBusy = true
-					carrier.Attempts = (carrier.Attempts or 0) + 1
-					carrier.Loaded = loadCarrier(carrier)
-					entryPreloadBusy = false
-					if not carrier.Loaded and carrier.Attempts == 2 then
+					table.insert(pending, carrier)
+				end
+			end
+			if #pending > 0 then
+				while entryPreloadBusy and current(request) do task.wait(0.1) end
+				if not current(request) then break end
+				entryPreloadBusy = true
+				for _, carrier in ipairs(pending) do carrier.Attempts = (carrier.Attempts or 0) + 1 end
+				loadCarriers(pending)
+				entryPreloadBusy = false
+			end
+			for _, carrier in ipairs(carriers) do
+				if carrier.Loaded ~= true then
+					ready = false
+					if carrier.Attempts == 2 and not carrier.Warned then
+						carrier.Warned = true
 						warn("[RoundEntry] could not fetch nearby visual: " .. tostring(carrier.Keys[1]))
 					end
 				end
-				if carrier.Loaded ~= true then ready = false end
 			end
 			if current(request) then
 				request.AssetsReady = ready and #queued == 0 and os.clock() - lastArrival >= 0.35

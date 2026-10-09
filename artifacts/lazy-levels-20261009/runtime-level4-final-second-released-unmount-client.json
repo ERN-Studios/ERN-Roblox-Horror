@@ -1,0 +1,73 @@
+{
+  "task": "lazy-levels-20261009",
+  "phase": "unmount-client",
+  "label": "final-second-released-unmount-client",
+  "datamodel": "Client",
+  "station": 113,
+  "partySize": 1,
+  "expectedPlayer": null,
+  "codeSHA256": "0923901a90e5e74b7babf45a44fddbbee0643ffe01a77b61fa92fc79d00e3440",
+  "helperSHA256": "54220deab32fa06000ff789b39fb07baa8c21f12bfd0a57014fd62c86919d9ff",
+  "passed": true,
+  "studio": {
+    "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
+  },
+  "result": {
+    "players": [
+      {
+        "inRound": false,
+        "name": "mikkelczar",
+        "health": 100,
+        "position": [
+          221.97914123535156,
+          34.13751983642578,
+          -860.3513793945312
+        ],
+        "uiReady": true,
+        "controlsReady": true,
+        "userId": 40920547,
+        "anchored": false
+      }
+    ],
+    "roundPhase": "Idle",
+    "maps": [
+      {
+        "inWorkspace": false,
+        "name": "Level 4 Cinema Blender",
+        "inServerStorage": false
+      },
+      {
+        "inWorkspace": false,
+        "name": "Level 5 Void",
+        "inServerStorage": false
+      },
+      {
+        "inWorkspace": false,
+        "name": "Level 6 Indoor Playground",
+        "inServerStorage": false
+      }
+    ],
+    "nativeWrites": 0,
+    "doors": [],
+    "attributes": {
+      "RoundLoadingState": "ready",
+      "RoundLoadingToken": ":entry:2",
+      "Level5InUse": false,
+      "SelectedLevel": 1,
+      "LoadStage": "READY",
+      "RoundLoadingDeadline": 1791579919.5532324,
+      "RoundActive": false,
+      "WorldGenerated": false,
+      "Level4RoundActive": false,
+      "Level6InUse": false
+    },
+    "cinemaParts": 0,
+    "usherVisual": false,
+    "mode": "client",
+    "filmGuis": 0,
+    "exitGuis": 0
+  },
+  "capturedAtUtc": "2026-10-09T21:05:31.686420+00:00",
+  "limits": "This one explicitly invoked Studio QA phase only; no Source/map Parent edits, Play lifecycle, full gameplay or performance claim"
+}

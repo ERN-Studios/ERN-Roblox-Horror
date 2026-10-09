@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "helper": "runtime_probe.py",
+  "helperSHA256": "4019a6aa41357c1d6624596cffc504246c6796abaa9f37ca51c714ac69246e6e",
+  "generatedCodeSHA256": "fce21d7bec865dbbc9b53ce602d5a293d1c855c15340d5fbef3e3c9b3722e332",
+  "compilerExitCode": 0,
+  "stderr": "",
+  "scope": "Compile-only updated read census batching; no native calls or new gameplay claim"
+}

@@ -1,0 +1,42 @@
+{
+  "task": "lazy-levels-20261009",
+  "mirror": "Workspace/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+  "newModule": false,
+  "beforeSHA256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+  "afterSHA256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+  "baselineRecord": {
+    "bytes": 5853,
+    "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+    "attributes": [],
+    "placeVersion": 2859,
+    "class": "Script",
+    "sha256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+    "properties": {
+      "Disabled": false,
+      "LinkedSource": "",
+      "Archivable": true,
+      "RunContext": "Enum.RunContext.Client"
+    },
+    "sourceFile": "G:\\Roblox\\MongoTV\\.git\\stutter-assets-20261009\\lazy-levels-baseline\\Workspace__Level 4 Cinema Blender__OccasionalFixtureFlicker.luau"
+  },
+  "nativeVerified": true,
+  "mirrorExported": true,
+  "published": false,
+  "nativeResult": {
+    "bytes": 6158,
+    "path": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+    "class": "Script",
+    "sha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+    "placeVersion": 2859,
+    "placeId": 131311258779917,
+    "propertiesUnchanged": true,
+    "sourceEditorMatches": true,
+    "universeId": 10559217407,
+    "attributesUnchanged": true,
+    "editorSha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991"
+  },
+  "mirrorSha256": "d7f63f21b4a827e4fcc91e0246424438fa871aa7f90013b8599ef18a51d64991",
+  "manifestSha256": "59dd2cc8f88ee06b305e05c070cf177f3bb8edc46bedeb389279a34b9e8b6a0f",
+  "capturedAtUtc": "2026-10-09T20:38:58.291133+00:00",
+  "limits": "One explicitly requested source install/export; no gameplay, model relocation or publication claim"
+}

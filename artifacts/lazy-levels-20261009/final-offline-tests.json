@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "world",
+      "chunk_id": "91ed9e",
+      "wall_time_seconds": 0.1806643,
+      "exit_code": 0,
+      "original_token_count": 51,
+      "output": "world storage checks=42\r\n{\"sourceSHA256\": \"42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a\", \"scope\": \"Offline container/identity contract; native streaming and gameplay are separate\"}\r\n"
+    },
+    {
+      "name": "level4",
+      "chunk_id": "adc6a4",
+      "wall_time_seconds": 1.10878,
+      "exit_code": 0,
+      "original_token_count": 167,
+      "output": "PASS Level4 generator: 109 ownership/door/persistence/lifecycle checks\r\nPASS Level4 flicker: 9 unload/reentry/takeover checks\r\nPASS Level4 client: 12 delayed streaming/unload/generation checks\r\nPASS mutation: missing park\r\nPASS mutation: missing door reset across reentry\r\nPASS mutation: nonblocking door collider leak\r\nPASS mutation: other level persistent floor\r\nPASS mutation: membership/connection leak\r\nPASS mutation: parking after failed system Stop\r\nPASS mutation: unmounted blink workers\r\nPASS mutation: late map arrival race\r\nPASS mutation: streamed screen strong cache leak\r\nPASS mutation: stale film ABA generation\r\nPASS 10/10 lifecycle mutations detected\r\n"
+    },
+    {
+      "name": "live",
+      "chunk_id": "cb640a",
+      "wall_time_seconds": 2.0078111,
+      "exit_code": 0,
+      "original_token_count": 889,
+      "output": "Live level lifecycle: 119 actual-source checks passed\r\nMutation caught: dormant-read-mounts.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-4399xuj_/dormant-read-mounts.luau:3: readiness probes neither mount maps nor pretend parked floor rays succeed\r\nMutation caught: continue-leaks-old-world.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-f53zud76/continue-leaks-old-world.luau:3: successful transfer releases old map and keeps selected map\r\nMutation caught: dead-member-world-removed.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-lm9dosbr/dead-member-world-removed.luau:3: Level 6 participant marker retains completed map during ending/reentry window\r\nMutation caught: unfinished-session-parked.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-y848hj9i/unfinished-session-parked.luau:3: last Level 6 leave waits for session cleanup\r\nMutation caught: fresh-claim-overlaps-old-session.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-a8bt4e6r/fresh-claim-overlaps-old-session.luau:3: fresh Level 6 claim cannot overlap unfinished previous session cleanup\r\nMutation caught: fresh-claim-overlaps-old-finale.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-buu8_t6g/fresh-claim-overlaps-old-finale.luau:3: fresh Level 5 party cannot overlap old finale reset\r\nMutation caught: late-slides-missing.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-u8lqem7n/late-slides-missing.luau:3: later remount starts a fresh bounded retry job without holding an idle map\r\nMutation caught: retry-wait-retains-empty-map.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-dx0ua156/retry-wait-retains-empty-map.luau:3: actual disconnect handler releases final Level 6 reservation\r\nMutation caught: late-bake-parents-into-parked-map.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-iv3hhf1y/late-bake-parents-into-parked-map.luau:3: external unmount after engine yield destroys unparented test-owned baked part\r\nMutation caught: client-retains-old-replica.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-0jcmzbrn/client-retains-old-replica.luau:3: replica removal releases all strong lamp references\r\nMutation caught: continue-passes-copied-table.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-bn2fpbk5/continue-passes-copied-table.luau:3: actual Continue removes old Level 5 membership\r\nMutation caught: continue-remints-cohort-identity.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-uq00boyl/continue-remints-cohort-identity.luau:3: both continuing cohort members release the old map across copied Invoke calls\r\nMutation caught: live-server-copied-party-table.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-lqbc2lj9/live-server-copied-party-table.luau:3: actual Live Level Server mints one scalar identity for Level 5\r\nMutation caught: level5-late-cohort-loses-group.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-ytjght6b/level5-late-cohort-loses-group.luau:3: late actual live-server cohort passes copied Invoke boundary for Level 5\r\nMutation caught: level6-rejects-scalar-live-token.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-ilojh775/level6-rejects-scalar-live-token.luau:3: first actual live-server cohort enters Level 6\r\nMutation caught: late-transfer-loses-live-identity.luau: C:/Users/mikke/AppData/Local/Temp/live-level-lifecycle-3_32p96z/late-transfer-loses-live-identity.luau:3: live cohort continuation reuses its stable cross-level identity after old map unload\r\n"
+    },
+    {
+      "name": "loader",
+      "chunk_id": "027797",
+      "wall_time_seconds": 1.4773915,
+      "exit_code": 0,
+      "original_token_count": 319,
+      "output": "{\r\n  \"source\": \"StarterPlayer\\\\StarterPlayerScripts\\\\Round Entry Client.LocalScript.lua\",\r\n  \"sourceSHA256\": \"ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb\",\r\n  \"scope\": \"Offline actual-source callback, retry, cancellation, cleanup, and readiness contract\",\r\n  \"exitCode\": 0,\r\n  \"stdout\": \"Round Entry actual-source contract: 124 checks passed\",\r\n  \"stderr\": \"\",\r\n  \"nativeGameplayVerified\": false,\r\n  \"actualAssetPerformanceVerified\": false,\r\n  \"mutations\": [\r\n    {\r\n      \"mutation\": \"required callback omitted\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"failed callback ignored\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"unknown dependency failure ignored\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"HTTP asset aliases lost\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"temporary carrier leaked\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"engine exception accepted\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"engine owner released early\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"unbounded retries\",\r\n      \"rejected\": true\r\n    },\r\n    {\r\n      \"mutation\": \"stale request readiness accepted\",\r\n      \"rejected\": true\r\n    }\r\n  ]\r\n}\r\n"
+    }
+  ],
+  "scope": "Actual canonical source contracts and mutation rejection; not a gameplay, streaming or device performance result"
+}

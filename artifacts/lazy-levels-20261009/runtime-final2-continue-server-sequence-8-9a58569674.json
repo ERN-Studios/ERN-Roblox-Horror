@@ -1,0 +1,150 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "continue-server",
+  "label": "sequence-8",
+  "datamodel": "Server",
+  "codeSha256": "37115d3b3c52f5d64d31bd9429ab774691711c4f74763b091dd9dcd6166e35ca",
+  "startedAtUtc": "2026-10-09T21:31:13.952906+00:00",
+  "passed": true,
+  "result": {
+    "observedOverlap": true,
+    "playground": {
+      "phase": "idle"
+    },
+    "transferLimits": "Polling may start after the overlap; observedOverlap=false does not establish that no overlap occurred.",
+    "transferSamples": [
+      {
+        "level6": "Workspace",
+        "marker5": true,
+        "clock": 89254.9247639,
+        "level5": "Workspace",
+        "inRound": true,
+        "shared": true
+      },
+      {
+        "level6": "Workspace",
+        "marker5": true,
+        "clock": 89255.03208120004,
+        "level5": "Workspace",
+        "inRound": true,
+        "shared": true
+      },
+      {
+        "level6": "Workspace",
+        "marker5": false,
+        "clock": 89255.1682491001,
+        "level5": "Workspace",
+        "inRound": true,
+        "shared": true
+      },
+      {
+        "level6": "Workspace",
+        "marker5": false,
+        "clock": 89255.33978120005,
+        "level5": "Workspace",
+        "inRound": true,
+        "shared": true
+      },
+      {
+        "level6": "Workspace",
+        "marker5": false,
+        "clock": 89255.45877810009,
+        "level5": "Workspace",
+        "inRound": true,
+        "shared": true
+      },
+      {
+        "level6": "Workspace",
+        "marker5": false,
+        "clock": 89255.5777574,
+        "level5": "ServerStorage",
+        "inRound": true,
+        "shared": true
+      }
+    ],
+    "worlds": {
+      "5": {
+        "workspace": false
+      },
+      "4": {
+        "workspace": false
+      },
+      "6": {
+        "workspace": true
+      }
+    },
+    "serverFloor": "Workspace.Level 6 Indoor Playground.Tunnel.lamp_warm",
+    "health": 100,
+    "position": "51999.99609375, 105.65933227539062, 181.9033203125",
+    "serverWorlds": {
+      "5": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      },
+      "4": {
+        "location": "ServerStorage",
+        "sameOriginal": true
+      },
+      "6": {
+        "location": "Workspace",
+        "sameOriginal": true
+      }
+    },
+    "attributes": {
+      "ZyntraFirstLogin": false,
+      "Crouching": false,
+      "ZyntraLobbyBriefingPlayed": false,
+      "CaptionsEnabled": true,
+      "ZyntraPassRobux": 0,
+      "ZyntraOwnsDonation20K": true,
+      "ZyntraSpeedPotions": 0,
+      "FriendBoostFriends": 0,
+      "FriendBoostPercent": 0,
+      "ZyntraOwnsTokenEarner3x": true,
+      "ZyntraDeviceClass": "PC",
+      "Level6PlaygroundPreview": true,
+      "ZyntraDetectorReadingUntil": 0,
+      "ZyntraHazmatColor": null,
+      "ZyntraStaminaMultiplier": 2,
+      "ZyntraDonationRobux": 0,
+      "ZyntraOwnsEntityDetector": true,
+      "ReduceCameraShake": false,
+      "ZyntraReentryUsed": false,
+      "ReduceFlashing": false,
+      "ZyntraUtilityRobux": 0,
+      "ZyntraMuteDispatch": false,
+      "ZyntraAchievements": "FirstClearLevel5,L5NoFall,Welcome",
+      "ZyntraDispatchPreferenceLoaded": true,
+      "GlowstickColor": null,
+      "RouteMarkersActive": 0,
+      "ZyntraSpeedBoostUntil": 0,
+      "ZyntraGlowstickColor": null,
+      "ZyntraOwnsTokenEarner5x": true,
+      "ZyntraOwnsCosmeticEquipment": true,
+      "ZyntraOwnsAdvancedEquipment": true,
+      "ZyntraOwnsTokenEarnerUp2to3": true,
+      "ZyntraBatteryMultiplier": 2,
+      "ZyntraRouteMarkers": 0,
+      "ZyntraDailyAccruing": false,
+      "ZyntraOwnsSupporter": true,
+      "ZyntraSpeedPotionUsedThisRound": false,
+      "ZyntraProfileLoaded": true,
+      "ZyntraSkinId": "BaselineYellow",
+      "ZyntraSpeedBoostMultiplier": 1,
+      "ZyntraTokenEarnerMultiplier": 5,
+      "ZyntraOwnsTokenEarnerUp2to5": true,
+      "ZyntraOwnsTokenEarnerUp3to5": true,
+      "ZyntraOwnsTokenEarner2x": true,
+      "ZyntraOwnsFalseSun": true,
+      "ZyntraOwnsStaticWraith": true,
+      "DisableCaptions": false,
+      "LobbyMusicEnabled": true,
+      "InRound": true,
+      "ZyntraRecordedSupportRobux": 0
+    },
+    "healthy": true,
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim."
+  },
+  "finishedAtUtc": "2026-10-09T21:31:14.985935+00:00"
+}

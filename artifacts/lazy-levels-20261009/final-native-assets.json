@@ -1,0 +1,112 @@
+{
+  "nativeBytes": 1334463,
+  "universeId": 10559217407,
+  "maps": [
+    {
+      "lights": 254,
+      "path": "ServerStorage.Level 4 Cinema Blender",
+      "class": "Model",
+      "descendants": 14464,
+      "attributes": {
+        "Level4Revision": 11,
+        "BoundsCenter": null,
+        "Level4Source": "Blender",
+        "SourceBlend": "G:/Blender/Level4_Cinema/Level4_Cinema.blend",
+        "BoundsSize": null,
+        "StudsPerMetre": 3.571428571428571,
+        "PartCount": 14465
+      },
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 4051,
+      "pivot": [
+        29000,
+        -148.4499969482422,
+        63.94999694824219,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "parts": 8909
+    },
+    {
+      "lights": 661,
+      "path": "ServerStorage.Level 5 Void",
+      "class": "Model",
+      "descendants": 2627,
+      "attributes": {
+        "BoundsCenter": null,
+        "Origin": null,
+        "Bottom": -420,
+        "Level5Preview": true,
+        "BoundsSize": null,
+        "PreviewOnly": true,
+        "Level5PreviewReady": true
+      },
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 0,
+      "pivot": [
+        42180.8125,
+        735.8499755859375,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "parts": 1947
+    },
+    {
+      "lights": 281,
+      "path": "ServerStorage.Level 6 Indoor Playground",
+      "class": "Model",
+      "descendants": 20318,
+      "attributes": {
+        "ExitPosition": null,
+        "Source": "tools/level6_playground/build_arena.py",
+        "Level6PreviewReady": true,
+        "Ready": true,
+        "PreviewOnly": true,
+        "PBR": "PBR_20261006",
+        "HomePosition": null,
+        "Origin": null,
+        "Arena": true,
+        "Level6Preview": true,
+        "ExitDoorPosition": null
+      },
+      "streaming": "Enum.ModelStreamingMode.Default",
+      "meshes": 73,
+      "pivot": [
+        52000,
+        145.83399963378906,
+        15,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "parts": 14300
+    }
+  ],
+  "loadedPlaceVersion": 2859,
+  "nativeSHA256": "7bb71371b76f41b22b9b07346c01d5fa82464c2c48b252b0b7e12caaf54384ef",
+  "placeId": 131311258779917,
+  "passed": true,
+  "sourceWrites": 0,
+  "capturedAtUtc": "2026-10-09 21:11:38 UTC"
+}

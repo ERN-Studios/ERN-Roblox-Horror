@@ -1,0 +1,16 @@
+{
+  "task": "lazy-levels-20261009",
+  "session": "final2",
+  "phase": "cleanup-client",
+  "label": "sequence-cleanup",
+  "datamodel": "Client",
+  "codeSha256": "28c4661003ec3bf39dd9f556e2a67a8eac23213a571f2df61ae2398fabc67143",
+  "startedAtUtc": "2026-10-09T21:31:23.126707+00:00",
+  "passed": true,
+  "result": {
+    "sessionNamespaceCleared": true,
+    "clientHooksDisconnected": 3,
+    "limits": "Single native Studio test client; no published/mobile, multiplayer or cold-cache performance claim."
+  },
+  "finishedAtUtc": "2026-10-09T21:31:23.218764+00:00"
+}
