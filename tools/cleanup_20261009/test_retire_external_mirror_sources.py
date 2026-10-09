@@ -1,0 +1,289 @@
+"""Actual S06 wrapper in owned temporary repos; native/MCP are fake boundaries.
+
+One success compiles every copied remaining actual source with Luau0.737.
+Failure ports preserve actor files/rows and exercise scoped rollback. No Studio
+or canonical mirror/manifest mutation; the real native before/after gate remains
+parent-owned. The public archive supplies portable12 historical source inputs.
+"""
+from pathlib import Path
+from contextlib import redirect_stdout
+import argparse
+import ast
+import copy
+import gzip
+import io
+import json
+import re
+import subprocess
+import tempfile
+from unittest import mock
+
+import retire_external_mirror_sources as actual
+
+
+def historical_manifests(directory):
+    """Pinned portable inputs; never depend on a clone's HEAD or private .git files."""
+    expected = {"head-manifest-before.json": actual.HEAD_MANIFEST_SHA,
+                "scoped-S03-S09-manifest-before.json": actual.COMBINED_SHA}
+    index = json.loads((directory / "index.json").read_bytes())
+    assert index["schema"] == "s06-offline-manifest-inputs-v1"
+    rows = {row["file"]: row for row in index["inputs"]}
+    assert len(rows) == len(index["inputs"]) == 2 and set(rows) == set(expected)
+    values = {}
+    for name, digest in expected.items():
+        raw = (directory / name).read_bytes()
+        assert actual.preflight.sha(raw) == rows[name]["rawSHA256"] == digest
+        assert len(raw) == rows[name]["rawBytes"]
+        values[name] = raw
+    return values["head-manifest-before.json"], values["scoped-S03-S09-manifest-before.json"]
+
+
+def archived_facts(directory):
+    """The Git artifact stores lossless gzip; a raw local receiver file is optional."""
+    metadata = json.loads((directory / "facts-compression.json").read_bytes())
+    packed = (directory / "facts.json.gz").read_bytes()
+    assert len(packed) == metadata["gzipBytes"] and actual.preflight.sha(packed) == metadata["gzipSHA256"]
+    raw = gzip.decompress(packed)
+    assert actual.preflight.sha(raw) == metadata["rawSHA256"] == "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33"
+    assert len(raw) == metadata["rawBytes"] == 41912358
+    path = directory / "facts.json"
+    assert not path.exists() or path.read_bytes() == raw
+    return raw
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--receipt", type=Path)
+    args = parser.parse_args()
+    if args.receipt:
+        assert not args.receipt.exists()
+    root = actual.ROOT
+    archive = actual.DEST
+    source_index_raw = (archive / "archive-preparation.json").read_bytes()
+    source_index = json.loads(source_index_raw)
+    baseline = json.loads((archive / "manifest-before.json").read_bytes())
+    # Mirror fixtures use current actual file bytes even if an owner is in the
+    # middle of a downstream export. This adjusts only the owned fixture rows.
+    sources = {}
+    for row in baseline["items"]:
+        if row["className"] in ("Script", "LocalScript", "ModuleScript"):
+            if row["studioPath"] in actual.preflight.PATHS:
+                entry = next(r for r in source_index["archived"] if r["studioPath"] == row["studioPath"])
+                raw = (root / entry["archiveFile"]).read_bytes()
+            else:
+                raw = (root / row["file"]).read_bytes()
+            canonical = actual.canonical_bytes(raw.decode("utf8"))
+            row["sha256"], row["bytes"] = actual.preflight.sha(canonical), len(canonical)
+            sources[row["file"]] = raw
+    baseline_raw = actual.preflight.encode(baseline)
+    input_directory = root / "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/offline-inputs-v3"
+    head_raw, combined_raw = historical_manifests(input_directory)
+    native_inputs = {name: (actual.NATIVE_ARCHIVE / name).read_bytes() for name in ("native.rbxm", "capture-completion.json")}
+    native_inputs["facts.json"] = archived_facts(actual.NATIVE_ARCHIVE)
+    guard_raw = actual.GUARD_PATH.read_bytes()
+    compiler = actual.COMPILER
+    real_run, real_unlink, real_replace = subprocess.run, Path.unlink, actual.os.replace
+    checks, cases = 0, []
+
+    def check(value, message):
+        nonlocal checks
+        checks += 1
+        assert value, message
+
+    with tempfile.TemporaryDirectory(prefix=".s06-input-fixture-", dir=root) as directory:
+        fixture_inputs = Path(directory)
+        for path in input_directory.glob("*.json"):
+            (fixture_inputs / path.name).write_bytes(path.read_bytes())
+        check(historical_manifests(fixture_inputs) == (head_raw, combined_raw), "Portable historical manifests reload exactly")
+        changed = fixture_inputs / "head-manifest-before.json"
+        changed.write_bytes(changed.read_bytes() + b"\n")
+        try:
+            historical_manifests(fixture_inputs)
+        except AssertionError:
+            check(True, "Changed portable manifest bytes reject")
+        else:
+            raise AssertionError("Changed portable manifest input accepted")
+
+    def scenario(label, fault=None, real_compiles=False, extra_native_sources=0):
+        with tempfile.TemporaryDirectory(prefix=".s06-fixture-", dir=root) as directory:
+            fixture = Path(directory).resolve()
+            check(fixture.parent == root and fixture.name.startswith(".s06-fixture-"), "Owned temporary root")
+            destination = fixture / archive.relative_to(root)
+            destination.mkdir(parents=True)
+            (destination / "archive-preparation.json").write_bytes(source_index_raw)
+            native_directory = fixture / actual.NATIVE_ARCHIVE.relative_to(root)
+            native_directory.mkdir(parents=True)
+            for name, raw in native_inputs.items():
+                (native_directory / name).write_bytes(raw)
+            manifest = fixture / "studio-sync-manifest.json"
+            manifest.write_bytes(baseline_raw)
+            for name, raw in sources.items():
+                target = fixture / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(raw)
+            for entry in source_index["archived"]:
+                target = fixture / entry["archiveFile"]
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(sources[entry["file"]])
+            combined = fixture / "combined-scoped.json"
+            combined.write_bytes(combined_raw)
+            native_guard_path = fixture / "guard-template.luau"
+            native_guard_path.write_bytes(guard_raw)
+            sentinel = fixture / "owner-unrelated.txt"
+            sentinel.write_bytes(b"preserve unrelated bytes\n")
+            checkpoint = fixture / ".git/s06-execution"
+            selected = [fixture / name for name in actual.preflight.FILES]
+            first = fixture / next(r["file"] for r in baseline["items"] if r["studioPath"] in actual.preflight.PATHS)
+            owner_source = b"-- actor reintroduced file\nreturn 'owner'\n"
+            actor_row = {"studioPath": "ReplicatedStorage.ActorAddedAfterCommit", "className": "ModuleScript",
+                         "file": "ReplicatedStorage/ActorAddedAfterCommit.ModuleScript.lua", "sha256": "owner", "bytes": 1,
+                         "sourceEditorMatches": True, "properties": {}, "attributes": []}
+            expected = [r for r in baseline["items"] if r["studioPath"] in actual.preflight.PATHS]
+            native_reports = [{"schema": "external-mirror-retirement-native-guard-v1", "placeId": 131311258779917,
+                "universeId": 10559217407, "datamodel": "Edit", "nativeWrites": 0, "sourceWrites": 0, "modeSwitches": 0,
+                "sourceEditorVerified": True, "remainingMirrorsVerified": len(sources) - 12,
+                "knownAbsent": sorted(actual.preflight.PATHS), "signatureSHA256": "1" * 64,
+                "liveSourceCount": len(sources) - 12 + extra_native_sources, "held": [{"studioPath": r["studioPath"], "path": r["studioPath"].removeprefix("ServerStorage."), "class": r["className"],
+                    "sourceSHA256": r["sha256"], "sourceBytes": r["bytes"], "properties": r["properties"], "attributes": r["attributes"]} for r in expected]}]
+            calls, closes, compilations, unlinks, guard_compiles = [], [], [], [], []
+
+            def check_output(command, **kwargs):
+                check(kwargs == {"cwd": fixture}, label + ": git stays in fixture")
+                if command == ["git", "rev-parse", "HEAD"]:
+                    return b"fixture-head\n"
+                check(command == ["git", "show", "HEAD:studio-sync-manifest.json"], label + ": scoped HEAD read only")
+                return head_raw
+
+            class FakeClient:
+                def initialize(self):
+                    if fault == "initialize-failure":
+                        raise RuntimeError("fixture initialize")
+                def call(self, name, payload):
+                    calls.append(name)
+                    check(payload["studio_id"] == "1b603e69-7ae1-4572-b210-d5bf05c684ff", label + ": exact Studio")
+                    if name == "get_studio_state":
+                        if fault == "Play-after-commit" and len(unlinks) == 12:
+                            return "Current Studio Mode: Play"
+                        return "Current Studio Mode: Edit"
+                    check(name == "execute_luau" and payload["datamodel_type"] == "Edit", label + ": GET guard only")
+                    check("__EXPECTED_" not in payload["code"] and not re.search(r"\.(Source|Parent)\s*=(?!=)", payload["code"]) and "Instance.new" not in payload["code"], label + ": read-only generated code")
+                    if real_compiles and not guard_compiles:
+                        for optimization in ("-O0", "-O1"):
+                            real_run([str(compiler), "--binary", optimization, str(checkpoint / "guard-used.luau")], stdout=subprocess.DEVNULL, check=True)
+                            guard_compiles.append(optimization)
+                    report = copy.deepcopy(native_reports[0])
+                    if fault == "native-before-class-drift":
+                        report["held"][0]["class"] = "Script"
+                    if fault == "native-before-path-drift":
+                        report["held"][0]["path"] += "OwnerRenamed"
+                    if fault in ("native-after-signature-drift", "actor-row-and-source-after-commit") and len(unlinks) == 12:
+                        report["signatureSHA256"] = "2" * 64
+                        if fault == "actor-row-and-source-after-commit":
+                            current = json.loads(manifest.read_bytes())
+                            current["items"].append(actor_row)
+                            current["ownerMetadata"] = {"retain": True}
+                            manifest.write_bytes(actual.preflight.encode(current))
+                            first.write_bytes(owner_source)
+                    return json.dumps(report)
+                def close(self):
+                    closes.append(True)
+                    if fault == "client-close-failure":
+                        raise RuntimeError("fixture client close")
+
+            def compile_run(command, **kwargs):
+                check(command[:2] == [str(compiler), "--binary"] and command[2] in ("-O0", "-O1"), label + ": actual compile port")
+                check(Path(command[-1]).is_relative_to(fixture), label + ": compile only owned file")
+                compilations.append(command[2])
+                if fault == "remaining-compile-failure":
+                    raise subprocess.CalledProcessError(1, command)
+                return real_run(command, **kwargs) if real_compiles else mock.Mock(returncode=0)
+
+            def unlink(path, *arguments, **keywords):
+                if path in selected:
+                    if fault == "selected-unlink-failure" and unlinks:
+                        raise OSError("fixture second unlink")
+                    result = real_unlink(path, *arguments, **keywords)
+                    unlinks.append(path)
+                    if fault == "actor-manifest-before-commit" and len(unlinks) == 1:
+                        current = json.loads(manifest.read_bytes())
+                        current["ownerMetadata"] = {"retain": True}
+                        manifest.write_bytes(actual.preflight.encode(current))
+                    return result
+                return real_unlink(path, *arguments, **keywords)
+
+            def replace(source, target):
+                check(Path(source).parent == fixture and Path(target) == manifest, label + ": scoped atomic replace")
+                if fault == "manifest-commit-failure" and not manifest.read_bytes() == baseline_raw:
+                    raise OSError("unexpected repeated fixture commit")
+                if fault == "manifest-commit-failure":
+                    raise OSError("fixture atomic replace")
+                return real_replace(source, target)
+
+            with mock.patch.multiple(actual, ROOT=fixture, DEST=destination, NATIVE_ARCHIVE=native_directory,
+                                     CHECKPOINT=checkpoint, COMBINED=combined, GUARD_PATH=native_guard_path), \
+                 mock.patch.object(actual, "find_mcp_batch", return_value="fake-mcp"), \
+                 mock.patch.object(actual, "StudioMcpClient", return_value=FakeClient()), \
+                 mock.patch.object(actual, "select_studio", return_value={"id": "1b603e69-7ae1-4572-b210-d5bf05c684ff"}), \
+                 mock.patch.object(actual.subprocess, "check_output", side_effect=check_output), \
+                 mock.patch.object(actual.subprocess, "run", side_effect=compile_run), \
+                 mock.patch.object(Path, "unlink", new=unlink), \
+                 mock.patch.object(actual.os, "replace", side_effect=replace), redirect_stdout(io.StringIO()):
+                error = None
+                try:
+                    actual.main()
+                except BaseException as problem:
+                    error = problem
+            check(sentinel.read_bytes() == b"preserve unrelated bytes\n", label + ": unrelated file preserved")
+            check(closes, label + ": client independently closed")
+            check(all((fixture / name).read_bytes() == raw for name, raw in sources.items() if name not in actual.preflight.FILES), label + ": all remaining actual sources preserved")
+            check(all((fixture / r["archiveFile"]).read_bytes() == sources[r["file"]] for r in source_index["archived"]), label + ": archive exact")
+            current = json.loads(manifest.read_bytes())
+            if fault is None:
+                check(error is None, label + ": success " + str(error))
+                check(all(not path.exists() for path in selected), label + ": exact12 removed")
+                check(set(r["studioPath"] for r in current["items"]) == set(r["studioPath"] for r in baseline["items"]) - actual.preflight.PATHS, label + ": only12 rows removed")
+                check(len(compilations) == 2 * (len(sources) - 12), label + ": all actual remaining sources compiled O0/O1")
+                check((destination / actual.SUCCESS_RECEIPT).is_file() and not (destination / actual.FAILURE_RECEIPT).exists(), label + ": success receipt")
+                receipt = json.loads((destination / actual.SUCCESS_RECEIPT).read_bytes())
+                for coverage in receipt["nativeMirrorCoverage"].values():
+                    check(coverage == {"liveSourceCount": len(sources) - 12 + extra_native_sources,
+                          "remainingMirrorsVerified": len(sources) - 12,
+                          "allLiveSourcesCovered": extra_native_sources == 0}, label + ": distinguish full/subset native coverage")
+            else:
+                check(error is not None, label + ": negative gate missing")
+                check(not (destination / actual.SUCCESS_RECEIPT).exists(), label + ": failed gate cannot claim success")
+                check(all(path.exists() for path in selected), label + ": all removed files restored or actor preserved")
+                if fault == "actor-row-and-source-after-commit":
+                    check(first.read_bytes() == owner_source, label + ": actor Source reintroduction preserved")
+                    check(actor_row in current["items"] and current["ownerMetadata"] == {"retain": True}, label + ": actor row/top metadata preserved")
+                else:
+                    check(all(path.read_bytes() == sources[path.relative_to(fixture).as_posix()] for path in selected), label + ": restored bytes exact")
+                if fault == "actor-manifest-before-commit":
+                    check(current["ownerMetadata"] == {"retain": True}, label + ": precommit actor metadata preserved")
+                check(actual.preflight.PATHS <= set(r["studioPath"] for r in current["items"]), label + ": scoped manifest rows restored")
+            cases.append({"name": label, "pass": True, "nativeCalls": 0, "realSourceCompiles": len(compilations) if real_compiles else 0, "generatedGuardCompiles": len(guard_compiles)})
+
+    scenario("actual remaining sources success", real_compiles=True)
+    scenario("native subset coverage remains explicit", extra_native_sources=1)
+    for fault in ("initialize-failure", "native-before-class-drift", "native-before-path-drift", "selected-unlink-failure",
+                  "actor-manifest-before-commit", "manifest-commit-failure", "remaining-compile-failure",
+                  "native-after-signature-drift", "actor-row-and-source-after-commit", "Play-after-commit", "client-close-failure"):
+        scenario(fault, fault)
+    for path in (Path(actual.__file__), Path(__file__)):
+        ast.parse(path.read_text(encoding="utf8"), filename=str(path))
+        check(True, "Actual wrapper/test AST")
+    receipt = {"schema": "external-mirror-source-retirement-offline-tests-v1", "pass": True, "cases": cases,
+               "checks": checks, "nativeCalls": 0, "canonicalMirrorWrites": 0, "canonicalManifestWrites": 0,
+               "portableHistoricalManifestInputsVerified": True, "changedHistoricalManifestInputRejected": True,
+               "losslessGzipFactsVerified": True,
+               "wrapperSHA256": actual.preflight.sha(Path(actual.__file__).read_bytes()),
+               "guardSHA256": actual.preflight.sha(actual.GUARD_PATH.read_bytes()),
+               "testSHA256": actual.preflight.sha(Path(__file__).read_bytes()),
+               "scope": "Actual wrapper filesystem/CAS/rollback/resource ports in owned temp repos, native boundary fake; no runtime/native/gameplay pass."}
+    if args.receipt:
+        actual.save_new(args.receipt, actual.preflight.encode(receipt))
+    print(json.dumps(receipt))
+
+
+if __name__ == "__main__":
+    main()

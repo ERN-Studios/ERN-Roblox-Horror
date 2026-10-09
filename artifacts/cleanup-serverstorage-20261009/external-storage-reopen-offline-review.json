@@ -1,0 +1,28 @@
+{
+  "schema": "external-storage-reopen-offline-review-v1",
+  "atUtc": "2026-10-09T22:11:07.879972+00:00",
+  "files": [
+    {
+      "file": "tools/cleanup_20261009/external_storage_archive_reopen.luau",
+      "bytes": 18912,
+      "sha256": "52a3fc3aa70acd4e60977594f96caee7a2bba583f021246aa5677a0a0f9305d7"
+    },
+    {
+      "file": "tools/cleanup_20261009/external_storage_archive_reopen.py",
+      "bytes": 9677,
+      "sha256": "d7e39a8630d3e242856679a906487e76783335b22359e1cc1aa4867a71f5ecf7"
+    }
+  ],
+  "luauCompilerRelease": "0.737",
+  "luauO0": "PASS",
+  "luauO1": "PASS",
+  "pythonAST": "PASS",
+  "port": 18915,
+  "nativeCalls": 0,
+  "originalWrites": 0,
+  "nativeReopenPass": false,
+  "restorationCertified": false,
+  "peerReview": "PASS: repo_tools independent read-only review of exact frozen hashes; no material code-review blocker",
+  "scope": "Full joint23forest nativeDeserialize on owned unparented copies; original12 Source/editor and dynamic live sources plus watched native property/hash guards. Canonical readable subtree digests include duplicate sibling names;10unique-path referents checked internally; full native copy reserialization exported even on readable mismatch. Bounded watcher release capped60000 after last guarded yield, observed native releaseCPU only.",
+  "limits": "Offline actual compiler/AST and code review only; no mock/native Deserialize/gameplay/asset performance pass claimed. Raw byte difference leaves opaque native identity/data classification pending; any exact readable mismatch fails."
+}

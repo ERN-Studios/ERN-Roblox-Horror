@@ -1,0 +1,18 @@
+{
+  "rootCount": 13,
+  "targetCount": 12,
+  "itemCount": 577,
+  "serializedRefCount": 105,
+  "serializedInboundReferences": [],
+  "placeAvatarRules": "serialized null",
+  "schema": "diagnostic-folder-serialized-reference-closure-v1",
+  "verified": true,
+  "factsSHA256": "7c3ad6569c43c467b51e518efdf0ca79b886135ef088094b7a25f40092f862eb",
+  "referencesSHA256": "74a893a614cc2ffb738e4a7ea4498101c23971074961af310583fe7390a0c821",
+  "referencesBytes": 1113488,
+  "xmlSHA256": "45c091afcaefac176825bd1aef7ff4ef428dccf22bfaed0365a6e6150e060f4f",
+  "canonicalSHA256": "babfe53cf874098a8f7880a6a2740ecef4ca3d59f6f8c574bd146e30871d9868",
+  "verifierSHA256": "78a8061d2cc159a81a00c9081be8fd4ce8239be8a6a75cc516b26390fd348e2d",
+  "helperSHA256": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+  "limits": "Only references serialized in the joint forest of these 12 Folders and StarterPlayer. Live global readable-property/ObjectValue scan, protected nonserialized exceptions, current selection and CAS are separate native gates. No gameplay or performance claim."
+}

@@ -1,0 +1,15 @@
+{
+  "error": "AssistantCommand:24: Original/mode/lease changed during held baseline yield\nAssistantCommand:24 function check\nAssistantCommand:162 function heldOriginals\nAssistantCommand:238 function begin\nAssistantCommand:329\nAssistantCommand:328\n\nfinal original guard: baseline not acquired\npost-cleanup original guard: baseline not acquired",
+  "stage": "mcp-completion",
+  "probeObjectsCreated": 0,
+  "passed": false,
+  "originalWrites": 0,
+  "modeSwitches": 0,
+  "postCleanupOriginalGuardPassed": false,
+  "watcherCleanupErrors": [],
+  "deletionApproved": false,
+  "postCleanupGuardSemantics": "Point-in-time inventory/Source/editor/readable facts/opaque native snapshot checks across bounded yielding reads after watchers were disconnected; no continuous epoch guarantee or restoration/removal certificate.",
+  "finalOriginalGuardPassed": false,
+  "schema": "retired-authoring-native-capture-result-v1",
+  "sourceWrites": 0
+}

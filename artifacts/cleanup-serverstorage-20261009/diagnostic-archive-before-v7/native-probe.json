@@ -1,0 +1,83 @@
+{
+  "concurrentArchiveSourceChanges": [],
+  "readErrors": [],
+  "nonserializedReadExceptions": [
+    {
+      "path": "GuiService",
+      "type": "Folder",
+      "serialized": false,
+      "property": "CoreEffectFolder",
+      "error": "The current thread cannot read 'CoreEffectFolder' (lacking capability RobloxScript)",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    },
+    {
+      "path": "GuiService",
+      "type": "Folder",
+      "serialized": false,
+      "property": "CoreGuiFolder",
+      "error": "The current thread cannot read 'CoreGuiFolder' (lacking capability RobloxScript)",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    },
+    {
+      "path": "Players.mikkelczar",
+      "type": "Instance",
+      "serialized": false,
+      "property": "PendingRequestedTool",
+      "error": "PendingRequestedTool is not a valid member of Player \"Players.mikkelczar\"",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    },
+    {
+      "path": "Players.ZenMeister02",
+      "type": "Instance",
+      "serialized": false,
+      "property": "PendingRequestedTool",
+      "error": "PendingRequestedTool is not a valid member of Player \"Players.ZenMeister02\"",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    },
+    {
+      "path": "Selection",
+      "type": "Instance",
+      "serialized": false,
+      "property": "ActiveInstance",
+      "error": "The current thread cannot read 'ActiveInstance' (lacking capability RobloxScript)",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    },
+    {
+      "path": "StudioService",
+      "type": "Instance",
+      "serialized": false,
+      "property": "HoverInstance",
+      "error": "The current thread cannot read 'HoverInstance' (lacking capability RobloxScript)",
+      "reason": "protected nonserialized engine/editor holder; current Selection checked separately; pointer itself remains unreadable and does not approve deletion"
+    }
+  ],
+  "referenceProperties": 609670,
+  "inboundReferences": [],
+  "editorMetadataExceptions": [
+    {
+      "class": "",
+      "name": "FilteredSelection",
+      "reason": "transient editor filtered selection; Selection:Get() checked separately"
+    }
+  ],
+  "deletionApproved": false,
+  "created": 12,
+  "capturedAtUtc": "2026-10-09T21:18:58Z",
+  "checks": 2472,
+  "serializedArchiveReferenceChecks": [
+    {
+      "path": "StarterPlayer",
+      "type": "Instance",
+      "serialized": true,
+      "property": "PlaceAvatarRules",
+      "error": "The current thread cannot read 'PlaceAvatarRules' (lacking capability RobloxScript)",
+      "reason": "capture-time joint archive only; fresh same-epoch reference guard still required before removal"
+    }
+  ],
+  "pass": true,
+  "classes": 231,
+  "limits": "Unparented Folder reconstruction/readable references only. Protected nonserialized authoring holders remain opaque; joint reference guard must be refreshed immediately before any removal.",
+  "destroyed": 12,
+  "schema": "storage-diagnostic-native-port-v1",
+  "selectedTargets": []
+}

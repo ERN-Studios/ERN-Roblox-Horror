@@ -1,0 +1,91 @@
+{
+  "schema": "external-mirror-source-retirement-offline-tests-v1",
+  "pass": true,
+  "cases": [
+    {
+      "name": "actual remaining sources success",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 420,
+      "generatedGuardCompiles": 2
+    },
+    {
+      "name": "initialize-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "native-before-class-drift",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "selected-unlink-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "actor-manifest-before-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "manifest-commit-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "remaining-compile-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "native-after-signature-drift",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "actor-row-and-source-after-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "Play-after-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "client-close-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    }
+  ],
+  "checks": 4538,
+  "nativeCalls": 0,
+  "canonicalMirrorWrites": 0,
+  "canonicalManifestWrites": 0,
+  "wrapperSHA256": "fdbc34330fd17602c380eeb9f4b10842ae17d8a3611509c518553b3e9171536a",
+  "guardSHA256": "d143300159b83e64f0252aabd9a0bea940db3ea18e13a31c6907fa1efd75ab79",
+  "testSHA256": "58792f27b24a3038dbbc6d716d4433f7e9505c5df5d2dffcdc421cd911219b20",
+  "scope": "Actual wrapper filesystem/CAS/rollback/resource ports in owned temp repos, native boundary fake; no runtime/native/gameplay pass."
+}

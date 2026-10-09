@@ -8,7 +8,8 @@ local CAPS=SecurityCapabilities.new(table.unpack(Enum.SecurityCapability:GetEnum
 local KEY="__MongoTVStorageCleanup20261009"
 assert(game.PlaceId==131311258779917 and game.GameId==10559217407 and not RS:IsRunning(),"wrong place/mode")
 local state=assert(shared[KEY],"no exact captured originals")
-assert(state.roots and not state.probeLease,"capture/probe already in progress")
+assert(state.roots and not state.probeLease and not state.portLease,"capture/probe/port already in progress")
+assert(not state.storagePort or next(state.storagePort.removed)==nil,"initial reconstruction probe cannot rerun after records were removed")
 local lease={} state.probeLease=lease
 state.nativeProbePass=false
 state.deletionApproved=false

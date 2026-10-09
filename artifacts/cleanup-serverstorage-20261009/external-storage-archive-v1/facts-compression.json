@@ -1,0 +1,11 @@
+{
+  "schema": "native-facts-lossless-compression-v1",
+  "rawFile": "facts.json",
+  "archiveFile": "facts.json.gz",
+  "rawBytes": 41912358,
+  "rawSHA256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33",
+  "gzipBytes": 3017503,
+  "gzipSHA256": "3ff1d40337cb4792c530ea0c1f0f7c2b5a1cacdbffbd1bfce5fb7be7353caa1f",
+  "byteExactDecompress": true,
+  "scope": "Complete immutable capture facts retained losslessly. Raw local receiver input remains; Git archive records the compressed bytes. No native data, source, property or runtime change."
+}

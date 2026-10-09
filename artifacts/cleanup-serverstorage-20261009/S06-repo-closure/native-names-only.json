@@ -1,0 +1,43 @@
+{
+  "knownAbsent": [
+    "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+    "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+    "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls"
+  ],
+  "universeId": 10559217407,
+  "sourceReads": 0,
+  "nativeWrites": 0,
+  "sourceCount": 213,
+  "placeId": 131311258779917,
+  "schema": "native-names-only-v1",
+  "newOnly": [
+    {
+      "studioPath": "ReplicatedStorage.SceneEffectBudget",
+      "name": "SceneEffectBudget",
+      "className": "ModuleScript"
+    },
+    {
+      "studioPath": "ServerStorage._OptimizationGeometryInstall_20261009",
+      "name": "_OptimizationGeometryInstall_20261009",
+      "className": "ModuleScript"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "name": "SceneEffectBudgetClient",
+      "className": "LocalScript"
+    }
+  ],
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "datamodel": "Edit",
+  "observedAtUtc": "2026-10-09 22:03:26 UTC",
+  "timestampMeaning": "Receipt stored after names-only native call; invocation timestamp not independently returned by the engine."
+}

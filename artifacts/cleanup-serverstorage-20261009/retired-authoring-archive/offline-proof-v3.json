@@ -1,0 +1,96 @@
+{
+  "schema": "s04-offline-archive-proof-v1",
+  "atUtc": "2026-10-09T22:24:20.572517+00:00",
+  "passed": true,
+  "toolHashesBeforeAfterExact": {
+    "tools\\cleanup_20261009\\retired_authoring_archive_capture.luau": "f414274393eac40b34668661ee00eea361279201451d006689be68830f7bb941",
+    "tools\\cleanup_20261009\\retired_authoring_archive_common.luau": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad",
+    "tools\\cleanup_20261009\\retired_authoring_archive_diagnostics_fixture.luau": "6ce0f1e392636b2b51972cf3e80379b972611800babc9b4f065e6d6ab2872e47",
+    "tools\\cleanup_20261009\\retired_authoring_archive_lifecycle_fixture.luau": "9dfbf813bb5d6b59cf6d8d91976004a676c9f061890288a0cd0f7c8537c705b7",
+    "tools\\cleanup_20261009\\retired_authoring_archive_proof.py": "29cdec0efe2fdfc6cb9d1ab46d62d093610659897d291c41fff70d6efca808a0",
+    "tools\\cleanup_20261009\\retired_authoring_archive_receiver.py": "6e79d6649c5776ad33a8f0d10256f9dcb0c9da5503bde22965a5d2684f8fd153",
+    "tools\\cleanup_20261009\\retired_authoring_archive_test.py": "3e0949d2bd9c3d6ded74c505cbedd75847a0b2ec632884de34539852412fb794",
+    "tools\\cleanup_20261009\\retired_authoring_archive_verify.luau": "ba2a98578513ebfa967de882c0ac1b3bd1e6f970a0940d77045ce568b586e266"
+  },
+  "pythonContractTests": 18,
+  "currentRealVerifierSyntheticLifecycleScenarios": 11,
+  "currentRealCommonSyntheticDiagnosticScenarios": 6,
+  "fiveRootScopePinnedByCurrentCommonFixture": {
+    "names": [
+      "LobbyReimaginedBlenderSource20261001",
+      "LobbyReimaginedBlenderSource20261001R2",
+      "LobbyReimaginedBlenderSource20261001R3",
+      "LobbyReimaginedBlenderSource20261001R3B",
+      "Level1BlenderKit"
+    ],
+    "rootCounts": [
+      97,
+      97,
+      104,
+      104,
+      1215
+    ],
+    "classes": {
+      "Folder": 365,
+      "StringValue": 244,
+      "Model": 283,
+      "Part": 51,
+      "MeshPart": 498,
+      "SurfaceAppearance": 176
+    },
+    "instances": 1617,
+    "scripts": 0
+  },
+  "testOutput": "..................\n----------------------------------------------------------------------\nRan 18 tests in 0.390s\n\nOK\n",
+  "compiledUnits": [
+    {
+      "name": "retired_authoring_archive_capture.luau",
+      "sourceSHA256": "f414274393eac40b34668661ee00eea361279201451d006689be68830f7bb941",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "1bb6bd78f49a78f47d9b53473ee23751caf09ba0e7a064cd40f59797c7efe6c4"
+    },
+    {
+      "name": "retired_authoring_archive_common.luau",
+      "sourceSHA256": "d9a783c71d56591580ceab53f914f1cc8832365b68f5fe275cf279cd5634f5ad",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "fd8eddf84a0704e8431f62e4cfb4997eb6a870eba646807977f7eab85bbd73d0"
+    },
+    {
+      "name": "retired_authoring_archive_diagnostics_fixture.luau",
+      "sourceSHA256": "6ce0f1e392636b2b51972cf3e80379b972611800babc9b4f065e6d6ab2872e47",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "1a8b1e7653ceef568e721d7d0a67433c5ca45387e0d44a92fdd94dee29e9cf8c"
+    },
+    {
+      "name": "retired_authoring_archive_lifecycle_fixture.luau",
+      "sourceSHA256": "9dfbf813bb5d6b59cf6d8d91976004a676c9f061890288a0cd0f7c8537c705b7",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "ebdcc6c53b9ce395907d9db7297142e3fd6ca8d67bfe6bc8085056eeb37378f2"
+    },
+    {
+      "name": "retired_authoring_archive_verify.luau",
+      "sourceSHA256": "ba2a98578513ebfa967de882c0ac1b3bd1e6f970a0940d77045ce568b586e266",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "d3acbfd5941fc858a649576866d9cf5840b5f2855c6f9d2ea3c762e6c80fa10c"
+    },
+    {
+      "name": "combined-capture.luau",
+      "sourceSHA256": "843edc80b7d7f8de3a9624c9e93fa02348b137518a1478b76e680d4cde694807",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "b7168789a714ec66405454bf369e5114e3651f5d20659a6257ff927a48264aa4"
+    },
+    {
+      "name": "combined-verify.luau",
+      "sourceSHA256": "a0c280a55f5f5b7a9674ff117c6b8c73e583f400421fe306398e7f0066c2dacd",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "38a036c025c49411c672e8a667be21e154da00d40fa4637cb2003b314509f56d"
+    }
+  ],
+  "nativeExecuted": false,
+  "studioConnected": false,
+  "originalWrites": 0,
+  "recoveryCertified": false,
+  "gameplayPassed": false,
+  "deletionApproved": false,
+  "limits": "Offline receiver/request/lifecycle contracts and syntax only; native engine archive/reopen and R4/V2 runtime/authoring ports remain pending."
+}

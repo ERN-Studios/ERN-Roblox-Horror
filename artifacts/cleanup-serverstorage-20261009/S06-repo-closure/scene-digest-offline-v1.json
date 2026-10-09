@@ -1,0 +1,73 @@
+{
+  "bucketUniqueLimit": 10000,
+  "cases": [
+    {
+      "name": "416276 nodes with duplicate structural rows",
+      "pass": true
+    },
+    {
+      "name": "100001 unique rows with real SHA256",
+      "pass": true
+    },
+    {
+      "name": "Reordered census preserves exact multiset digest",
+      "pass": true
+    },
+    {
+      "name": "One changed structural row changes signature",
+      "pass": true
+    },
+    {
+      "name": "Duplicate structural row multiplicity preserved",
+      "pass": true
+    },
+    {
+      "name": "500000 exact boundary succeeds",
+      "pass": true
+    },
+    {
+      "name": "500001 exceeds scene cap before hashing",
+      "pass": true
+    },
+    {
+      "name": "Declared census count differs from multiset",
+      "pass": true
+    },
+    {
+      "name": "Nonintegral or nonpositive multiplicity",
+      "pass": true
+    },
+    {
+      "name": "10001 distinct rows in one forced bucket reject",
+      "pass": true
+    },
+    {
+      "name": "Invalid hash cannot silently select a bucket",
+      "pass": true
+    },
+    {
+      "name": "Checkpoint failure propagates without further work",
+      "pass": true
+    }
+  ],
+  "checkpoints": 1846,
+  "checks": 14,
+  "currentLargeNodeCount": 416276,
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "nodeLimit": 500000,
+  "pass": true,
+  "scope": "Actual extracted pure scene digest with real offline SHA; no native getter, Source/editor, gameplay or performance certification.",
+  "uniqueLargeRows": 100001,
+  "schema": "s06-exact-scene-digest-offline-v1",
+  "guardSHA256": "d47a69e0f416c150ed7708e66e1f7a8f9d7118aa31971a117f87f44a6a8c23ef",
+  "extractedHelperSHA256": "e45293e7c5d10e35b8b6ebcf0eb984999af95654da3e564c2fce7445a8a73155",
+  "testSHA256": "27dbd3c9364b3a26c1990ab1eab1302c99c14df759a9e68f2bea6be295e7284a",
+  "luneSHA256": "43ec01e74923e8145e599237d6af573064748c0307716e9b125b12e0969e5057",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "actualHelperCompiles": [
+    "-O0",
+    "-O1"
+  ],
+  "fixtureSHA256": "8400053fdbe5b11b516ec1f6bc1a82c9bfb804e8b3faa1803c57f10c0e663bf7"
+}

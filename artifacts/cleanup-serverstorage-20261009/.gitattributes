@@ -9,3 +9,11 @@ retired-lobby-authoring/sources/** -text -whitespace
 retired-lobby-authoring-v2/sources/** -text -whitespace
 retired-repo-mirrors/manifest-before.json -text
 retired-repo-mirrors/sources/** -text
+capture-lifecycle-offline-v7.json -text
+console-after-readonly-archives.json -text
+external-storage-archive-offline-review.json -text
+external-storage-reopen-offline-review.json -text
+native-attempts.json -text
+S03-ambience-export.json -text
+S05-sound-export.json -text
+storage-records-port-offline-compile.json -text

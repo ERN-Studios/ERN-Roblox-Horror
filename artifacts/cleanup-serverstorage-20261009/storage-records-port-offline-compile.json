@@ -1,0 +1,37 @@
+{
+  "schema": "storage-records-port-offline-compile-v1",
+  "source": "tools/cleanup_20261009/storage_records_port.luau",
+  "sourceSHA256": "baa1f6e57b66dbb64e55175114a9d0f21784475abe14ccbe0bb05b3e9ee4877b",
+  "sourceBytes": 17614,
+  "capturedAtUtc": "2026-10-09T21:42:35.938205+00:00",
+  "compilerRelease": "0.737",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "compilePorts": [
+    {
+      "optimization": "-O0",
+      "passed": true
+    },
+    {
+      "optimization": "-O1",
+      "passed": true
+    }
+  ],
+  "reviewBaseSHA256": "4d525c2153a4131544695f7a7c26be731d719914d56321817f30e96d2473585d",
+  "independentReviewFinalSHA256": "baa1f6e57b66dbb64e55175114a9d0f21784475abe14ccbe0bb05b3e9ee4877b",
+  "independentCodeReview": "PASS; supplied shared lease/probe-eligibility closure, SHA checks after last serialize, same-original scoped rollback and cleanup-before-trial-publication; final config delta byte-diff reviewed",
+  "nativeCalls": 0,
+  "nativeTrialPass": false,
+  "nativeRemovalPass": false,
+  "opaqueReferencesProvenNull": false,
+  "fullStudioUIPass": false,
+  "staticScope": {
+    "DestroyCalls": 0,
+    "SourceSetters": 0,
+    "InstanceConstruction": 0,
+    "RequireCalls": 0,
+    "maxGroup": 4,
+    "maxCompatibleSlots": 10000
+  },
+  "pending": "Parent must externally verify fresh current reference pack, execute actual same-original trial, inspect after/console, then identical-group removal and final native parity.",
+  "limits": "Offline syntax/code review only; no Studio execution, gameplay, native failure injection, full UI, multiplayer, streaming or performance certification."
+}

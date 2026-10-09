@@ -1,0 +1,69 @@
+{
+  "concurrentArchiveSourceChanges": [
+    {
+      "kind": "removed",
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator"
+    },
+    {
+      "kind": "removed",
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator"
+    }
+  ],
+  "selectedTargets": [],
+  "nonserializedReadExceptions": [],
+  "referenceProperties": 0,
+  "inboundReferences": [],
+  "editorMetadataExceptions": [],
+  "deletionApproved": false,
+  "created": 0,
+  "capturedAtUtc": "2026-10-09T21:42:40Z",
+  "checks": 4,
+  "serializedArchiveReferenceChecks": [],
+  "pass": false,
+  "classes": 0,
+  "limits": "Unparented Folder reconstruction/readable references only. Protected nonserialized authoring holders remain opaque; joint reference guard must be refreshed immediately before any removal.",
+  "destroyed": 0,
+  "error": "AssistantCommand:27: original changed since archive\nAssistantCommand:27 function originals\nAssistantCommand:65\nAssistantCommand:45\n\nfinal originals check: AssistantCommand:27: original changed since archive",
+  "schema": "storage-diagnostic-native-port-v1",
+  "readErrors": []
+}

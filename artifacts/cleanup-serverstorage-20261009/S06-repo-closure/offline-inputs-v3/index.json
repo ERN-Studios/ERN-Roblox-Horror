@@ -1,0 +1,17 @@
+{
+  "schema": "s06-offline-manifest-inputs-v1",
+  "headRevisionAtCopy": "9c6d713f4925ba8718bde0810797c333ab91fcbd",
+  "inputs": [
+    {
+      "file": "head-manifest-before.json",
+      "rawBytes": 155622,
+      "rawSHA256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d"
+    },
+    {
+      "file": "scoped-S03-S09-manifest-before.json",
+      "rawBytes": 156391,
+      "rawSHA256": "4ee2083b1f71fc3d30448e4f2e37433c638b31937f10fc39e205e827eb09f2c0"
+    }
+  ],
+  "scope": "Immutable S03+S09 historical offline inputs; actor Level2Sound working7a excluded, HEAD77 retained. Actual retirement uses fresh HEAD/working CAS. No deployment or full native parity claim."
+}

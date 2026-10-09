@@ -1,0 +1,30 @@
+{
+  "schema": "external-storage-archive-offline-review-v1",
+  "atUtc": "2026-10-09T22:00:56.255136+00:00",
+  "files": [
+    {
+      "file": "tools/cleanup_20261009/external_storage_archive_capture.luau",
+      "bytes": 15540,
+      "sha256": "3ce9e0cf1f4861c5d6dc8151b9f352ebb4d83c7d2ae5e13011ab0e8a52983dab"
+    },
+    {
+      "file": "tools/cleanup_20261009/external_storage_archive.py",
+      "bytes": 10266,
+      "sha256": "dc2ce1b09ead7fc11aff3df3c95e9df8273b769867774dc2ede611ca46d7a7fb"
+    }
+  ],
+  "luauCompilerRelease": "0.737",
+  "luauO0": "PASS",
+  "luauO1": "PASS",
+  "pythonAST": "PASS",
+  "port": 18913,
+  "rootCount": 23,
+  "heldSourceCount": 12,
+  "expectedStudioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "nativeCalls": 0,
+  "nativeMutations": 0,
+  "nativeArchivePass": false,
+  "restorationCertified": false,
+  "scope": "Only held23originals from capturedrootRefs with Parentnil; no liveSSroots, no property/Source/Parent writes. Immutable observation/hash-bound transport. Readable properties/tags/attributes/source guards, complete native blob, raw opaque/externalref limits.",
+  "limits": "Offline compilation/AST and parent code review only. Native serialization, postHTTP/cleanup guards and reopen must be executed independently by parent; no native/source-stage/clone tests claimed."
+}

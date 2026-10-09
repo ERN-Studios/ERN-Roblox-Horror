@@ -85,6 +85,7 @@ local function guardCaptured()
  assert(epoch==0,"script/root set changed during yielding capture census")
  assert(shared[KEY]==lease and not RS:IsRunning(),"capture lease/mode changed after census")
 end
+local completedState
 local ok,result=xpcall(function()
  table.insert(ownedConnections,game.DescendantAdded:Connect(sourceTreeChanged))
  table.insert(ownedConnections,game.DescendantRemoving:Connect(sourceTreeChanged))
@@ -129,7 +130,7 @@ local ok,result=xpcall(function()
  local transfer={native=postParts("native",buffer.tostring(native)),references=postParts("references",buffer.tostring(references)),facts=postParts("facts",HS:JSONEncode(archive))}
  assert(HS:PostAsync(BASE.."/finalize",HS:JSONEncode(transfer),Enum.HttpContentType.ApplicationJson)=="saved","archive not finalized")
  guardCaptured() -- HTTP transfer yields too; a saved archive alone cannot bless stale state.
- shared[KEY]={roots=roots,facts=records,rootRefs=rootRefs,scriptRefs=scriptRefs,same=same,factsOf=facts,
+ completedState={roots=roots,facts=records,rootRefs=rootRefs,scriptRefs=scriptRefs,same=same,factsOf=facts,
   nativeSHA256=archive.nativeSHA256,referencesSHA256=archive.referencesSHA256,rootCountBefore=archive.rootCountBefore,
   deletionApproved=false,completed={},captureAtUtc=archive.capturedAtUtc}
  return {roots=#roots,nativeBytes=archive.nativeBytes,nativeSHA256=archive.nativeSHA256,scriptCount=#sourceRecords,rootCountBefore=archive.rootCountBefore}
@@ -138,5 +139,7 @@ for _,connection in ownedConnections do
  local clean,why=pcall(function() connection:Disconnect() end)
  if not clean then ok=false result=tostring(result).."\ncapture watcher cleanup failed: "..tostring(why) end
 end
+if ok and shared[KEY]~=lease then ok=false result="capture lease changed during watcher cleanup" end
 if not ok then if shared[KEY]==lease then shared[KEY]=nil end error(result) end
+shared[KEY]=completedState
 return HS:JSONEncode(result)

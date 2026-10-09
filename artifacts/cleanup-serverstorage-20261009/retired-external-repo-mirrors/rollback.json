@@ -1,0 +1,8 @@
+{
+  "pass": false,
+  "primaryError": "execute_luau failed: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.ExecuteLuauTool:86: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution:54: AssistantCommand:78: bounded scene census exceeded",
+  "restoredSources": [],
+  "preservedConcurrentSources": [],
+  "manifestCommittedBeforeRollback": false,
+  "notes": []
+}

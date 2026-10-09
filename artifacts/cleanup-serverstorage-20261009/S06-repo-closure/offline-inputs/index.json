@@ -1,0 +1,17 @@
+{
+  "schema": "s06-offline-manifest-inputs-v1",
+  "headRevisionAtCopy": "9b0c046864d18789728e0ddcccade30606e6c651",
+  "inputs": [
+    {
+      "file": "head-manifest-before.json",
+      "rawBytes": 155622,
+      "rawSHA256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d"
+    },
+    {
+      "file": "scoped-S03-S05-manifest-before.json",
+      "rawBytes": 156348,
+      "rawSHA256": "c9c459e06000f292bd3083d104138fa8edc1112bdf4913a52d0b113c49458ab3"
+    }
+  ],
+  "scope": "Immutable historical offline fixture inputs; actual retirement still uses fresh HEAD/working CAS and private checkpoint. No current deployment baseline or full native parity claim."
+}

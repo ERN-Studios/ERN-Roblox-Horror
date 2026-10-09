@@ -1,0 +1,62 @@
+{
+  "schema": "s04-offline-archive-proof-v1",
+  "atUtc": "2026-10-09T22:17:38.677056+00:00",
+  "passed": true,
+  "toolHashesBeforeAfterExact": {
+    "tools\\cleanup_20261009\\retired_authoring_archive_capture.luau": "21c08865468fce4004e83bd41d1b01af8f43d24ac9c11779e538ce37adc154c4",
+    "tools\\cleanup_20261009\\retired_authoring_archive_common.luau": "9eed0b6c6d61e8a55df6798e95fd2ab54d7ed48a34f1e5a17762159a58f280f7",
+    "tools\\cleanup_20261009\\retired_authoring_archive_lifecycle_fixture.luau": "d5bb79c112a6c3c8a9a8e65ad4d18e99a124efa4c4a4bcd434a0f550aceaf3f0",
+    "tools\\cleanup_20261009\\retired_authoring_archive_proof.py": "0ebb6696260ed28440d228957a6c70d1e49e8edbb4a56a31876eb158c22afc38",
+    "tools\\cleanup_20261009\\retired_authoring_archive_receiver.py": "6e79d6649c5776ad33a8f0d10256f9dcb0c9da5503bde22965a5d2684f8fd153",
+    "tools\\cleanup_20261009\\retired_authoring_archive_test.py": "452dcf515a5041923103d1f74ddee4393461939af50441217615eac0ce59f324",
+    "tools\\cleanup_20261009\\retired_authoring_archive_verify.luau": "9a3381318da808b2d053642fb6f31386fc5521b4a2bc800480ccec5f6f402955"
+  },
+  "pythonContractTests": 17,
+  "currentRealVerifierSyntheticLifecycleScenarios": 11,
+  "testOutput": ".................\n----------------------------------------------------------------------\nRan 17 tests in 0.355s\n\nOK\n",
+  "compiledUnits": [
+    {
+      "name": "retired_authoring_archive_capture.luau",
+      "sourceSHA256": "21c08865468fce4004e83bd41d1b01af8f43d24ac9c11779e538ce37adc154c4",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "1e80c2813498878ba004b35910e9ac1f127a0721efa886baf66cdbf4658807db"
+    },
+    {
+      "name": "retired_authoring_archive_common.luau",
+      "sourceSHA256": "9eed0b6c6d61e8a55df6798e95fd2ab54d7ed48a34f1e5a17762159a58f280f7",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "eb5cfb51be92c8abd3ed92d43cb5a5e513a7e7813e7669fc29ccbc20e24d8fbd"
+    },
+    {
+      "name": "retired_authoring_archive_lifecycle_fixture.luau",
+      "sourceSHA256": "d5bb79c112a6c3c8a9a8e65ad4d18e99a124efa4c4a4bcd434a0f550aceaf3f0",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "d4b78315ff04ecc0a6c150e7099e1dd0da8ac10711b5976532b869e95db71098"
+    },
+    {
+      "name": "retired_authoring_archive_verify.luau",
+      "sourceSHA256": "9a3381318da808b2d053642fb6f31386fc5521b4a2bc800480ccec5f6f402955",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "e21b8eabac4b5cc7058241057861c854afc2c9c7596ba739327958a9315e4598"
+    },
+    {
+      "name": "combined-capture.luau",
+      "sourceSHA256": "ab0b5009fe230dd9f19326d86361e21fe0b36dee17d34d7cc1b1c3a61b577936",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "a4eb9b25de5e3eb1e786d5f86e41fbddcebc9f7c25150c3da92be205c1bc1a41"
+    },
+    {
+      "name": "combined-verify.luau",
+      "sourceSHA256": "ec7ebe10890f71c17bf81c725a88195c596e72874a7a90a8790a947d02f515c6",
+      "compilerExitCode": 0,
+      "compilerOutputSHA256": "c0b18bd3aae6235a2c74e5dc24e475f6b2b1d0d090d7d33a901d72a3dbb8d8f3"
+    }
+  ],
+  "nativeExecuted": false,
+  "studioConnected": false,
+  "originalWrites": 0,
+  "recoveryCertified": false,
+  "gameplayPassed": false,
+  "deletionApproved": false,
+  "limits": "Offline receiver/request/lifecycle contracts and syntax only; native engine archive/reopen and R4/V2 runtime/authoring ports remain pending."
+}

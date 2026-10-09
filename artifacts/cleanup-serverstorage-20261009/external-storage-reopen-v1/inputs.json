@@ -1,0 +1,23 @@
+{
+  "schema": "external-held-storage-reopen-inputs-v1",
+  "archivePath": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1",
+  "files": {
+    "native.rbxm": {
+      "sha256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca",
+      "bytes": 2739764
+    },
+    "facts.json": {
+      "sha256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33",
+      "bytes": 41912358
+    },
+    "capture-completion.json": {
+      "sha256": "e326db60c8032345efe7346cc01f177d9e3124f9121227f8819b3c448d3e8a8d",
+      "bytes": 3665
+    }
+  },
+  "reopenSourceSHA256": "52a3fc3aa70acd4e60977594f96caee7a2bba583f021246aa5677a0a0f9305d7",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "restorationCertified": false,
+  "originalWrites": 0
+}

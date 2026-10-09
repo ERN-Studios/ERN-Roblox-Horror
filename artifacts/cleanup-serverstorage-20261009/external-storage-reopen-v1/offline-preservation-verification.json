@@ -1,0 +1,26 @@
+{
+  "schema": "s06-historical-artifact-preservation-verification-v1",
+  "pass": true,
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "historicalNativeReopenPass": false,
+  "restorationCertified": false,
+  "readableRootMatches": 21,
+  "readableRootMismatches": [
+    "TEMP_PipeEntityValidation",
+    "TrelloPoolSlideReleaseBackup_20260910"
+  ],
+  "createdRoots": 23,
+  "destroyedRoots": 23,
+  "originalSourcesUnchanged": true,
+  "originalNativeArchiveUnchanged": true,
+  "gzipByteExactDecompress": true,
+  "factsRawSHA256": "b6b86b7871bab31d8fdebd9afa5cf3367426fad4e6a5eaef9038e4e8b1434f33",
+  "factsRawBytes": 41912358,
+  "factsGzipSHA256": "3ff1d40337cb4792c530ea0c1f0f7c2b5a1cacdbffbd1bfce5fb7be7353caa1f",
+  "factsGzipBytes": 3017503,
+  "originalNativeSHA256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca",
+  "roundtripSHA256": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121",
+  "reopenResultSHA256": "03f29e1308f87adc045104700356a2865dc728adaca0faa04b3389a888ccfb82",
+  "scope": "Offline artifact preservation verification only; does not change or upgrade the failed native full-object restoration result."
+}

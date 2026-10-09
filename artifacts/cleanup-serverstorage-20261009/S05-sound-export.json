@@ -1,0 +1,195 @@
+{
+  "schema": "s05-sound-downstream-export-v1",
+  "candidate": "S05",
+  "provenance": "Concurrent owner/session native audio/performance edit, mirrored downstream only; no cleanup/implementation/performance gain credit",
+  "sourceFile": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+  "sourceBeforeRawSHA256": "73ddd8fd3ceccdc144d59d8723539cf08c05897f1e2ac76649be553a42c74711",
+  "sourceBeforeCanonicalSHA256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+  "sourceRawSHA256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+  "sourceCanonicalSHA256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+  "sourceBytes": 41458,
+  "sourceContract": "exact canonicalLF, terminalLF preserved",
+  "nativeBefore": {
+    "editorRawSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+    "universeId": 10559217407,
+    "childCount": 0,
+    "placeId": 131311258779917,
+    "sourceBytes": 41458,
+    "running": false,
+    "attributes": [],
+    "uniqueIdReadable": false,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "capturedAtUtc": "2026-10-09T21:44:26Z",
+    "tags": [],
+    "editorBytes": 41458,
+    "datamodel": "Edit",
+    "placeVersion": 2859,
+    "sourceRawSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "className": "LocalScript",
+    "sourceEditorMatches": true,
+    "sourceEditorReadOK": true,
+    "schema": "scoped-native-source-read-v1",
+    "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller"
+  },
+  "nativeAfter": {
+    "editorRawSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+    "universeId": 10559217407,
+    "childCount": 0,
+    "placeId": 131311258779917,
+    "sourceBytes": 41458,
+    "running": false,
+    "attributes": [],
+    "uniqueIdReadable": false,
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "capturedAtUtc": "2026-10-09T21:44:59Z",
+    "tags": [],
+    "editorBytes": 41458,
+    "datamodel": "Edit",
+    "placeVersion": 2859,
+    "sourceRawSha256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+    "properties": {
+      "Enabled": true,
+      "LinkedSource": "",
+      "Disabled": false,
+      "RunContext": "Enum.RunContext.Legacy",
+      "Archivable": true
+    },
+    "className": "LocalScript",
+    "sourceEditorMatches": true,
+    "sourceEditorReadOK": true,
+    "schema": "scoped-native-source-read-v1",
+    "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller"
+  },
+  "nativeBeforeAfterStable": true,
+  "classPropertiesAttributesVerified": true,
+  "workingManifest": {
+    "beforeSHA256": "ccf2898052d385b09da472bd6d1599ed4a0838112b8abae7e0a2e687dc1e70b4",
+    "afterSHA256": "c6dd9de755f84518ac4b715f872348ea8579c2f90c51614aeddda996afcfb44e",
+    "beforeCounts": {
+      "scripts": 222,
+      "remoteEvents": 15,
+      "total": 237,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "afterCounts": {
+      "scripts": 222,
+      "remoteEvents": 15,
+      "total": 237,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "beforeActualScripts": 222,
+    "afterActualScripts": 222,
+    "beforeRows": 237,
+    "afterRows": 237,
+    "preexistingNonSoundRowsBytePreserved": 236,
+    "soundRowChangedFieldsOnly": [
+      "bytes",
+      "sha256"
+    ],
+    "topMetadataUnchanged": true,
+    "countsRecomputed": false,
+    "ambienceAdded": 0
+  },
+  "scopedCommitManifest": {
+    "baseCommit": "9ccb7ee748bc7a75df7de00ede28dd570be4ed9d",
+    "privatePath": ".git/mongotv-cleanup-20261009/s05-sound-before/manifest-head-scoped-S03-S05-for-commit.json",
+    "beforeSHA256": "37a42a86da17e8ea8a39d716ff7278c572c1b5d370f2de576c1437481faf8c3d",
+    "afterSHA256": "c9c459e06000f292bd3083d104138fa8edc1112bdf4913a52d0b113c49458ab3",
+    "beforeCounts": {
+      "scripts": 220,
+      "remoteEvents": 15,
+      "total": 235,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "afterCounts": {
+      "scripts": 222,
+      "remoteEvents": 15,
+      "total": 237,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    },
+    "beforeActualScripts": 221,
+    "afterActualScripts": 222,
+    "beforeRows": 236,
+    "afterRows": 237,
+    "preexistingNonSoundRowsBytePreserved": 235,
+    "soundRowChangedFieldsOnly": [
+      "bytes",
+      "sha256"
+    ],
+    "topMetadataUnchanged": true,
+    "countsRecomputed": true,
+    "ambienceAdded": 1,
+    "rowsAdded": [
+      "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience"
+    ],
+    "rowsUpdated": [
+      "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller"
+    ],
+    "RoundUIHeadRowPreserved": true,
+    "ownerExistingRowsPreserved": true,
+    "countCorrection": "HEAD header220scripts/235total was stale for actual221scripts/236rows. Adding S03 gives actual222scripts/237rows; recomputed scripts/total, all other counts preserved."
+  },
+  "RoundUIWorktreeRowPreserved": true,
+  "rawCASAndOwnedAtomicReplaces": true,
+  "compileNativeSnapshot": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compiledBytes": 29044,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compiledBytes": 27180,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    }
+  ],
+  "compileActualMirror": [
+    {
+      "optimization": "-O0",
+      "exitCode": 0,
+      "compiledBytes": 29044,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    },
+    {
+      "optimization": "-O1",
+      "exitCode": 0,
+      "compiledBytes": 27180,
+      "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893"
+    }
+  ],
+  "rollbackNeeded": false,
+  "sourceExposureMarkers": {
+    "Authorization": 0,
+    "BearerCredential": 0,
+    "SecretAssignment": 0
+  },
+  "nativeWrites": 0,
+  "requireCalls": 0,
+  "modeSwitches": 0,
+  "staged": false,
+  "committed": false,
+  "publication": false,
+  "wholeProjectParityClaimed": false,
+  "gameplayMultiplayerStreamingOrPerformanceClaimed": false
+}

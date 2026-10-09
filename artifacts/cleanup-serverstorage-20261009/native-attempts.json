@@ -33,13 +33,28 @@
       "archive": "diagnostic-archive-before-v6",
       "status": "rejected before native capture",
       "reason": "Another session switched Studio to Play; no mode switch attempted"
+    },
+    {
+      "archive": "diagnostic-archive-before-v7",
+      "status": "native backup, offline gates and native reconstruction passed",
+      "nativeSHA256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098",
+      "nativeChecks": 2472,
+      "copiesCreated": 12,
+      "copiesDestroyed": 12,
+      "deletionApproved": false
+    },
+    {
+      "archive": "diagnostic-archive-before-v8",
+      "status": "native backup/offline gates passed; subsequent native probe rejected",
+      "reason": "Another actor detached all12 original roots after capture; probe rejected changed Parent baseline at check4, with0 copies and0 authoritative writes",
+      "deletionApproved": false
     }
   ],
   "pending": [
-    "Native unparented reconstruction",
+    "External23 full native archive and separate reopen verification",
     "Fresh same-epoch protected reference guard",
     "Opaque authoring holders review",
-    "Reversible removal/after port",
+    "Own reversible removal/after port never ran; do not repeat external removals",
     "Final fresh Edit parity"
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "schema": "external-mirror-retirement-preflight-tests-v1",
+  "pass": true,
+  "positives": [
+    "actual12 held-native Source/editor/digest/class/property contracts",
+    "canonical LF comparison accepts byte-recorded CRLF mirror",
+    "proposal preserves concurrent row/top metadata and recomputes stale actual counts"
+  ],
+  "negativeControls": [
+    "concurrent selected Source edit",
+    "selected source no longer equals HEAD",
+    "native editorMatchesSource guard",
+    "native editorReadable guard",
+    "native sourceMatchesCapture guard",
+    "native class guard",
+    "native sourceSHA256 guard",
+    "native sourceBytes guard",
+    "target root reintroduced",
+    "duplicate or expanded held-source identity",
+    "manifest className guard",
+    "manifest attributes guard",
+    "manifest properties guard",
+    "manifest file guard",
+    "manifest studioTrailingNewline guard",
+    "duplicate manifest identity",
+    "unexpected manifest formatting"
+  ],
+  "checks": 28,
+  "nativeCalls": 0,
+  "runtimeRequires": 0,
+  "canonicalSourceWrites": 0,
+  "manifestWrites": 0,
+  "helperSHA256": "adcb1da580241c984dcb5e9f0aac8d3af3c40f9a0f1ffc4e376bef4de0e74995",
+  "testSHA256": "170302a2cbab94ea658b4f2e23a2d0d6257f720110870b315d3f244f4308b7f3",
+  "manifestSHA256": "c6dd9de755f84518ac4b715f872348ea8579c2f90c51614aeddda996afcfb44e",
+  "nativeEvidenceSHA256": "20462292ab3dc232c86a6db13c0b9bd6debcf98bd33ffa00e168c95376f0e9d2",
+  "scope": "Actual read-only validator/proposal contracts; native full-object archive and gameplay tests are separate."
+}

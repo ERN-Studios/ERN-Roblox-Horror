@@ -1,0 +1,20 @@
+{
+  "schema": "cleanup-console-observation-v1",
+  "observedAfter": [
+    "S06 native capture",
+    "S06 owned native reopen failure",
+    "S04 read-only capture rejected"
+  ],
+  "rootRuntimeSourceWrites": 0,
+  "rootModeChanges": 0,
+  "interpretation": "Observed other sessions' Play logs. Rejected sound asset also occurs in the before-v7 console. No cleanup gameplay or performance pass inferred.",
+  "toolResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Failed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[EntityAnimations] Transition controller active\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[TunnelLobbyBuilder] bays open: 1, 2, 3, 4  |  launch stations: 16\nFailed to load sound rbxassetid://134572728354839: Asset is not approved for the requester\n[LobbyLoading] lobby in 20.0 s, 87 assets, 0 failed\n[LevelLoading] level 6 covered for 3.1 s\n[LevelLoading] level 6 covered for 3.5 s"
+      }
+    ],
+    "isError": false
+  }
+}

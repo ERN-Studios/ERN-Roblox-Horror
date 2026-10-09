@@ -1,0 +1,41 @@
+{
+  "schema": "capture-lifecycle-offline-v7",
+  "source": "tools/cleanup_20261009/capture_storage_records.luau",
+  "beforeSHA256": "923f5e10d16ef6251344c68d9441ec45a4404c62ba3710d8c98b4962f3ae0201",
+  "afterSHA256": "e08d236dfc49331e9f861b90c690db5fab537c47268e341de824fccae30d2739",
+  "beforeBytes": 8343,
+  "afterBytes": 8495,
+  "scope": "Private completed-state creation; publish only after all watcher Disconnect attempts succeed and exact owned lease remains.",
+  "exactThreeScopedReplacements": true,
+  "compilePorts": [
+    {
+      "source": "before",
+      "optimization": "-O0",
+      "passed": true
+    },
+    {
+      "source": "before",
+      "optimization": "-O1",
+      "passed": true
+    },
+    {
+      "source": "after",
+      "optimization": "-O0",
+      "passed": true
+    },
+    {
+      "source": "after",
+      "optimization": "-O1",
+      "passed": true
+    }
+  ],
+  "compilerRelease": "0.737",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "syntheticExactFooterCases": 6,
+  "syntheticOutput": "synthetic-cleanup-cases=6",
+  "syntheticFixtureSHA256": "73306901f925d7a6d91674482d4df2cef86755d8ac6e1186136cf709c958d066",
+  "nativeCalls": 0,
+  "nativeDisconnectFailureTested": false,
+  "authoritativeOriginalWrites": 0,
+  "limits": "Compiles exact actual sources; isolated plain Luau fixture executes exact changed footer with synthetic connections/state. No native RBXScriptConnection failure, capture transport, engine cleanup, gameplay, or Studio certification."
+}

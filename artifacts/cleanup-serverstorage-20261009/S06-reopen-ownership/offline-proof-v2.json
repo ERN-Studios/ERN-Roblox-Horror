@@ -1,0 +1,56 @@
+{
+  "schema": "s06-reopen-ownership-offline-proof-v1",
+  "atUtc": "2026-10-09T22:43:01.429157+00:00",
+  "pass": true,
+  "cases": 16,
+  "checks": 4235,
+  "compiledUnits": [
+    {
+      "name": "external_storage_archive_reopen.luau",
+      "sourceSHA256": "acb303cfca62b8a5955befee9c555d6537e21b588ec0cd830f11fd7e31dc9cdd",
+      "exitCode": 0
+    },
+    {
+      "name": "external_storage_reopen_ownership_fixture.luau",
+      "sourceSHA256": "5f7b2d3a0405fa7b2116f2eb20280ca1153c14feea48a4637813b8648270a6b4",
+      "exitCode": 0
+    },
+    {
+      "name": "new_reopen_contract.luau",
+      "sourceSHA256": "eff982c9cccc7e92b1ab67de4c4493d056c7be6d187a87bb5dd618008c53b813",
+      "exitCode": 0
+    },
+    {
+      "name": "before_reopen_contract.luau",
+      "sourceSHA256": "c3433d91af54e15970826ab83184f3d45d7a76b0287b37a07aa87bc61180cc16",
+      "exitCode": 0
+    }
+  ],
+  "actualSourceHashesBeforeAfterExact": {
+    "tools\\cleanup_20261009\\external_storage_archive_reopen.luau": "acb303cfca62b8a5955befee9c555d6537e21b588ec0cd830f11fd7e31dc9cdd",
+    "tools\\cleanup_20261009\\external_storage_reopen_ownership_fixture.luau": "5f7b2d3a0405fa7b2116f2eb20280ca1153c14feea48a4637813b8648270a6b4",
+    "tools\\cleanup_20261009\\test_external_storage_reopen_ownership.py": "f35202bc3dbfd53a5af6b341f24374be9382f68d5e80d8be7244d5503980d218"
+  },
+  "executedV1EvidenceHashesBeforeAfterExact": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "inputs.json": "9a2e834637868c1d1947c0b6757ee154bc57d5793dd3cab971e2be5fc3aa1267",
+    "offline-preservation-verification.json": "ee20310943a088241c28d111c0ff765ccb924dde2baebb1fde192d2f2004a373",
+    "reopen-result.txt": "03f29e1308f87adc045104700356a2865dc728adaca0faa04b3389a888ccfb82",
+    "reopen-source.luau": "52a3fc3aa70acd4e60977594f96caee7a2bba583f021246aa5677a0a0f9305d7",
+    "REVIEW.md": "6f76023766ebd148db6fc3566ee7ee3af690832c7db60837460b81f606087037",
+    "roundtrip-part-0000.bin": "895175ad63baceb240c5d231ae15ef698ccc56cce7176e06d583789bcba10522",
+    "roundtrip-part-0001.bin": "58f5143f916f2d7629c64f5a03e8e64e9956cfc3f3548611434fc2a1de8ce295",
+    "roundtrip-part-0002.bin": "90dc1632ab87c1b24420bccdf3427f825e866ece65db36b1927b57ae3ca1b728",
+    "roundtrip-part-0003.bin": "451c695b36cc0114600add87071234e4dfa3ee7710162a545886bb44e1fa8fc8",
+    "roundtrip.rbxm": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121",
+    "transfer-receipt.json": "cd8c04237c45eb000588c8596f92a47603bb42f0cf37c127d948410b84d7dbc0"
+  },
+  "oldActualFirstRootAndChildFailureLeakControls": 2,
+  "currentActualOwnershipScenarios": 14,
+  "nativeCalls": 0,
+  "studioConnected": false,
+  "productionSourceWrites": 0,
+  "originalInstanceWrites": 0,
+  "restorationCertified": false,
+  "scope": "Actual helper registration/adoption/call-site/cleanup code with fake instance/service boundaries; protects all game/ledger identities, cleans every later eligible root independently. Future helper hardening only; executed native v1 receipts remain exact. No new native engine, asset, runtime or removal approval."
+}

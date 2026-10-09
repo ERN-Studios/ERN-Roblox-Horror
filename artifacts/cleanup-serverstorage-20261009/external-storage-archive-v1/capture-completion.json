@@ -1,0 +1,86 @@
+{
+  "schema": "external-held-storage-capture-completion-v1",
+  "report": {
+    "heldSources": 12,
+    "liveSources": 213,
+    "nativeMutations": 0,
+    "dynamicObjectContentCount": 0,
+    "nativeSHA256": "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca",
+    "externalSerializedReferencesCount": 0,
+    "opaqueSerializedPropertiesCount": 98648,
+    "nativeBytes": 2739764,
+    "heldNodes": 14079,
+    "capturedAtUtc": "2026-10-09T22:03:03Z",
+    "dynamicObjectContent": [],
+    "checks": 2480618,
+    "liveRoots": 53,
+    "restorationCertified": false,
+    "pass": true,
+    "propertiesRead": 180153,
+    "modeSwitches": 0,
+    "externalSerializedReferences": [],
+    "limits": "Read-only raw native backup and concurrency evidence; offline reopen/native restoration/assets/reference completeness are separate ports. No deletion, UI, gameplay or performance certification.",
+    "opaqueSerializedProperties": [
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "AttributesSerialize is not a valid member of Folder \"PoolSlideContactAnimations_20260910\"",
+        "property": "AttributesSerialize"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "DefinesCapabilities is not a valid member of Folder \"PoolSlideContactAnimations_20260910\"",
+        "property": "DefinesCapabilities"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "HistoryId is not a valid member of Folder \"PoolSlideContactAnimations_20260910\"",
+        "property": "HistoryId"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "SerializedOverrides is not a valid member of Folder \"PoolSlideContactAnimations_20260910\"",
+        "property": "SerializedOverrides"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "The current thread cannot read 'SourceAssetId' (lacking capability RobloxScript)",
+        "property": "SourceAssetId"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "Tags is not a valid member of Folder \"PoolSlideContactAnimations_20260910\"",
+        "property": "Tags"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910",
+        "error": "The current thread cannot read 'UniqueId' (lacking capability RobloxScript)",
+        "property": "UniqueId"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910.Idle",
+        "error": "GuidBinaryString is not a valid member of KeyframeSequence \"PoolSlideContactAnimations_20260910.Idle\"",
+        "property": "GuidBinaryString"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910.Idle",
+        "error": "AttributesSerialize is not a valid member of KeyframeSequence \"PoolSlideContactAnimations_20260910.Idle\"",
+        "property": "AttributesSerialize"
+      },
+      {
+        "path": "PoolSlideContactAnimations_20260910.Idle",
+        "error": "DefinesCapabilities is not a valid member of KeyframeSequence \"PoolSlideContactAnimations_20260910.Idle\"",
+        "property": "DefinesCapabilities"
+      }
+    ],
+    "removalAttributedToCleanup": false,
+    "roots": 23,
+    "schema": "external-held-storage-archive-v1",
+    "sourceWrites": 0
+  },
+  "observationSHA256": "20462292ab3dc232c86a6db13c0b9bd6debcf98bd33ffa00e168c95376f0e9d2",
+  "captureSourceSHA256": "3ce9e0cf1f4861c5d6dc8151b9f352ebb4d83c7d2ae5e13011ab0e8a52983dab",
+  "transferReceiptSHA256": "8d867d81da57676eee31fc820da42b4f0da733ee6afab3a97c0a28445e43c231",
+  "nativeMutations": 0,
+  "removalAttributedToCleanup": false,
+  "restorationCertified": false
+}
