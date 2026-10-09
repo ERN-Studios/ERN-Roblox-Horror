@@ -1,0 +1,190 @@
+--- ReplicatedFirst.Lobby Loading Screen.before
++++ ReplicatedFirst.Lobby Loading Screen.proposed
+@@ -1,7 +1,7 @@
+ -- Lobby loading cover. Shown from the first frame the client runs Lua and held
+ -- until the lobby this client will stand in is really there: the server's own
+ -- lobby-startup markers, the streamed model, ground under the character and
+--- supported meshes/images the lobby references. Nothing here is a
++-- supported meshes/images in the lobby arrival area. Nothing here is a
+ -- cosmetic timer; the only clocks are stall detectors that OFFER a way out.
+ local ReplicatedFirst = game:GetService("ReplicatedFirst")
+ local Players = game:GetService("Players")
+@@ -371,6 +371,60 @@
+ 	return failed, token ~= retryToken
+ end
+ 
++-- PERFORMANCE_LOADING_20261009: the boot gate covers the arrival view. Further
++-- streamed lobby art is warmed after the cover leaves; hidden menus load on use.
++local BOOT_ASSET_RADIUS = 128
++local LOBBY_BACKGROUND_SECONDS = 20
++local lobbyLoadedIds = nil
++
++local function withinBootRadius(part, origin)
++	if not origin then return true end -- recovery must not silently omit the scene
++	local point = part.CFrame:PointToObjectSpace(origin)
++	local half = part.Size * 0.5
++	local outside = Vector3.new(
++		math.max(0, math.abs(point.X) - half.X),
++		math.max(0, math.abs(point.Y) - half.Y),
++		math.max(0, math.abs(point.Z) - half.Z))
++	return outside.Magnitude <= BOOT_ASSET_RADIUS
++end
++
++local function bootAssetVisible(instance, origin)
++	local host, screen = nil, false
++	local ancestor = instance
++	while ancestor do
++		if ancestor:IsA("GuiObject") and not ancestor.Visible then return false end
++		if ancestor:IsA("LayerCollector") then
++			if not ancestor.Enabled then return false end
++			if ancestor:IsA("ScreenGui") then
++				screen = true
++			elseif ancestor:IsA("SurfaceGui") or ancestor:IsA("BillboardGui") then
++				local adornee = ancestor.Adornee
++				if adornee and adornee:IsA("BasePart") then
++					host = adornee
++				elseif adornee and adornee:IsA("Attachment") then
++					host = adornee:FindFirstAncestorWhichIsA("BasePart")
++				end
++			end
++		end
++		if not host and ancestor:IsA("BasePart") then host = ancestor end
++		ancestor = ancestor.Parent
++	end
++	if screen and not host then return true end
++	return host ~= nil and withinBootRadius(host, origin)
++end
++
++local function criticalCensus(roots, origin, ids, carriers)
++	local instances, checked = {}, 0
++	for _, root in ipairs(roots) do
++		for _, instance in ipairs(root:GetDescendants()) do
++			if bootAssetVisible(instance, origin) then table.insert(instances, instance) end
++			checked += 1
++			if checked % 200 == 0 then task.wait() end
++		end
++	end
++	return census(nil, ids, carriers, instances)
++end
++
+ ---------------------------------------------------------------------------
+ -- The sequence
+ ---------------------------------------------------------------------------
+@@ -468,7 +522,10 @@
+ 		table.insert(list, player:WaitForChild("PlayerGui")) -- the lobby HUD's icons
+ 		return list
+ 	end
+-	total = census(roots(), ids, carriers)
++	local character = player.Character
++	local body = character and character:FindFirstChild("HumanoidRootPart")
++	local origin = body and body.Position or (spawnPart and spawnPart.Position)
++	total = criticalCensus(roots(), origin, ids, carriers)
+ 	setStage(string.format("LOADING LOBBY ASSETS  0 / %d", total), 0.3, "Meshes and image downloads.")
+ 	local failed, restarted = 0, false
+ 	repeat
+@@ -476,8 +533,8 @@
+ 		local missed
+ 		missed, restarted = preload(ids, work, total)
+ 		if not restarted then failed += missed end
+-		-- Anything that arrived while that pass ran is part of the lobby too.
+-		local arrived = census(roots(), ids, carriers)
++		-- Late arrivals in the arrival view still belong to the critical gate.
++		local arrived = criticalCensus(roots(), origin, ids, carriers)
+ 		total += arrived
+ 	until (not restarted and arrived == 0) or enterAnyway
+ 	if failed > 0 and not enterAnyway then
+@@ -496,6 +553,8 @@
+ 		end
+ 	end
+ 	failedCount = failed
++	lobbyLoadedIds = ids
++	player:SetAttribute("LobbyLoadingCriticalAssets", total)
+ 	return "lobby", total
+ end
+ 
+@@ -574,6 +633,85 @@
+ 		gui:Destroy()
+ 	end
+ end
++
++-- Lobby warming owns one engine request at a time, after the boot cover. It
++-- never delays control or queues the contents of unopened menus. A round/live
++-- entry stops new lobby requests; an in-flight PreloadAsync drains naturally.
++local function warmLobby()
++	local deadline = os.clock() + LOBBY_BACKGROUND_SECONDS
++	local connections, queued, cursor = {}, {}, 1
++	local ids, carriers, requested = {}, {}, 0
++	local function disconnectWatches()
++		for _, connection in ipairs(connections) do connection:Disconnect() end
++		table.clear(connections)
++	end
++	-- Engine fetches cannot be cancelled, but their arrival watches can.
++	task.delay(LOBBY_BACKGROUND_SECONDS, disconnectWatches)
++	for id in pairs(lobbyLoadedIds or {}) do ids[id] = "boot" end
++	local function active()
++		return os.clock() < deadline
++			and workspace:GetAttribute("ReservedRoundServer") ~= true
++			and workspace:GetAttribute("LiveLevelServer") ~= 5
++			and workspace:GetAttribute("LiveLevelServer") ~= 6
++			and player:GetAttribute("InRound") ~= true
++			and player:GetAttribute("Level6PlaygroundPreview") ~= true
++	end
++	local ok, problem = pcall(function()
++		-- A skip/retry may leave the foreground engine workers draining.
++		while preloadBusy and active() do task.wait(0.1) end
++		if not active() then return end
++		local roots = lobbyRoots()
++		table.insert(roots, player:WaitForChild("PlayerGui"))
++		local indexed = 0
++		for _, root in ipairs(roots) do
++			table.insert(connections, root.DescendantAdded:Connect(function(instance)
++				if active() then table.insert(queued, instance) end
++			end))
++			for _, instance in ipairs(root:GetDescendants()) do
++				if not active() then return end
++				table.insert(queued, instance)
++				indexed += 1
++				if indexed % 200 == 0 then task.wait() end
++			end
++		end
++		while active() do
++			-- Index a bounded slice. No rescan and no shared progress/readiness state.
++			local checked = 0
++			while cursor <= #queued and checked < 200 do
++				local instance = queued[cursor]
++				cursor += 1
++				checked += 1
++				-- Radius omitted: warm the rest of the currently streamed lobby.
++				if instance.Parent and bootAssetVisible(instance, nil) then
++					collectAsset(instance, ids, carriers)
++				end
++			end
++			local work = pendingCarriers(ids, carriers, "pending")
++			for _, carrier in ipairs(work) do
++				if not active() then return end
++				local loaded = loadCarrier(carrier)
++				if not active() then return end
++				requested += #carrier.Keys
++				for _, key in ipairs(carrier.Keys) do ids[key] = loaded and "ok" or "failed" end
++				if not loaded then
++					-- One bounded retry; failure never reopens or holds a cover.
++					if not active() then return end
++					loaded = loadCarrier(carrier)
++					if not active() then return end
++					for _, key in ipairs(carrier.Keys) do ids[key] = loaded and "ok" or "failed" end
++				end
++				task.wait(0.05)
++			end
++			-- Keep the bounded arrival watch alive while the player walks away
++			-- from spawn; a new streamed chunk adds work without a map rescan.
++			task.wait(cursor > #queued and 0.25 or 0.05)
++		end
++	end)
++	disconnectWatches()
++	if not ok then warn("[LobbyLoading] background: " .. tostring(problem)) end
++	player:SetAttribute("LobbyLoadingBackgroundAssets", requested)
++end
++if outcome == "lobby" then task.spawn(warmLobby) end
+ 
+ ---------------------------------------------------------------------------
+ -- LEVEL_LOADING_20261004 (owner: "make sure a similar loading screen happens for every level, timed with the

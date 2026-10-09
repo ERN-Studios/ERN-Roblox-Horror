@@ -1,0 +1,32 @@
+[
+  {
+    "editorOk": true,
+    "path": "ReplicatedFirst.Lobby Loading Screen",
+    "class": "LocalScript",
+    "editorLength": 36701,
+    "parity": true,
+    "source_sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583",
+    "source_file": "LobbyLoading.before.luau",
+    "bytes": 36701
+  },
+  {
+    "editorOk": true,
+    "path": "ServerScriptService.Round Loading Runtime",
+    "class": "ModuleScript",
+    "editorLength": 8712,
+    "parity": true,
+    "source_sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+    "source_file": "RoundLoadingRuntime.before.luau",
+    "bytes": 8712
+  },
+  {
+    "editorOk": true,
+    "path": "ReplicatedStorage.LoadingCardView",
+    "class": "ModuleScript",
+    "editorLength": 8831,
+    "parity": true,
+    "source_sha256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+    "source_file": "LoadingCardView.before.luau",
+    "bytes": 8831
+  }
+]

@@ -1,0 +1,275 @@
+{
+  "status": "Reviewed preparation only; owner Play preserved; no Studio writes or publish",
+  "exactStagedBytesMatch": true,
+  "sourceManifestPinsMatch": true,
+  "lightDirectorScopedReplacementsMatch": true,
+  "spectateScopedReplacementMatches": true,
+  "whitespaceCheck": "passed; unified diff context markers excluded via attribute",
+  "offlineContracts": {
+    "loading": 51,
+    "spectateFocus": 51,
+    "geometry": 36,
+    "effects": 36,
+    "archive": 12
+  },
+  "nativeContractsExecuted": false,
+  "gameplayVerified": false,
+  "performanceMeasured": false,
+  "files": [
+    {
+      "path": "tools/optimization_20261009/.gitattributes",
+      "bytes": 261,
+      "sha256": "bd80a6bb92d1199e449b8665fa282df088506df1085cedc4ecc8b41f04862af9"
+    },
+    {
+      "path": "tools/optimization_20261009/README.md",
+      "bytes": 7279,
+      "sha256": "a60b72774659809eec18e33e795d5bce239ee0049577c7b24879553d5c86b205"
+    },
+    {
+      "path": "tools/optimization_20261009/build_source_manifest.py",
+      "bytes": 1790,
+      "sha256": "dad12920186529be5cccdb5853c51068b5b58eb57d066251c95b77720afb379f"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/Level4LightDirector.baseline.lua",
+      "bytes": 16038,
+      "sha256": "1f99331f1eb98da35fa0a5e5f0c7eeeec4205b377205b77876625e03eb698a9e"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/Level4LightDirector.proposed.lua",
+      "bytes": 16515,
+      "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/Level4LightDirector.replacements.json",
+      "bytes": 1169,
+      "sha256": "878e431ed415616b50987dc5b2f237ed42a9f276031c109d8f283411a3273124"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/README.md",
+      "bytes": 8212,
+      "sha256": "ecb057f66222d8e83b99503a0fececb8d457733e5d540e3544f3cbff57c92266"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/SceneEffectBudget.ModuleScript.lua",
+      "bytes": 10221,
+      "sha256": "6021c4c5fa8cb3395b47ce417915d7f7cb54ced5f54e1466f67e1ecce33370aa"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/SceneEffectBudgetClient.LocalScript.lua",
+      "bytes": 3532,
+      "sha256": "f39408bcef93a6e6513d48a0806ddc736c28a69962eb23c992c0722f3487a5be"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/effect_selector.ModuleScript.lua",
+      "bytes": 3194,
+      "sha256": "b6749913f7a6454141aad18e775a5eed7fdbca367d0c1c06d16c3513c7b51aee"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/live_asset_summary.json",
+      "bytes": 4923,
+      "sha256": "926a38f0a49d01013dc86626c6a88687b466f139ffa2e1fdb55f793583e67ddb"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/live_controller_contracts.json",
+      "bytes": 7738,
+      "sha256": "e87ccb0d5ed7a797c21167b6f782ac4ea1a156ec63adfffebf648d5ad2fd31bf"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/live_particles_and_precise_meshes.json",
+      "bytes": 5467,
+      "sha256": "3d8af4e05f6507391c8e171200126bb1c73b0903a89defecad232732dbd1d530"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/live_water_particle_bounds.json",
+      "bytes": 1497,
+      "sha256": "01f7b758ae65844bfa9ea9adc86d17bd163f873fd1df2b9babb9444a6a352ad7"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/native_contract_probe.luau",
+      "bytes": 3658,
+      "sha256": "ad8c5a53ecda5af0c0de1305ba9f86ab4e8d95281470281fa300bccaf7afe3b9"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/test_budget.luau",
+      "bytes": 7858,
+      "sha256": "b4bc792309f5058dd496e59e364a5819a7bebd758b8aa231646be4c9d78a9eb7"
+    },
+    {
+      "path": "tools/optimization_20261009/effects/verification.json",
+      "bytes": 1765,
+      "sha256": "c6cb0ff10b708313ccedab792ae752759a8b0ddb637f8d2e625ec84d5d737ce9"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/GeometryOptimization.luau",
+      "bytes": 23202,
+      "sha256": "16885235c9e1ce46aef9661373d2c22752378fcf9ba31226da192c80a396c01d"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/README.md",
+      "bytes": 9172,
+      "sha256": "4f1f583d4f0bf5459d3134a0a5d10a0c7e6d7926088bbbbc0882f65409c20e0f"
+    },
+    {
+      "path": "tools/optimization_20261009/geometry/test_geometry_preparation.py",
+      "bytes": 16886,
+      "sha256": "cf4f77ecc9595f29542d76443434573ba817f390c6abc785a3f349ba0bb9daef"
+    },
+    {
+      "path": "tools/optimization_20261009/install_sources.py",
+      "bytes": 7653,
+      "sha256": "bea48297b3dc61689af87a2292ce8ee387bb1b80af8c4b4f537fbe8723183540"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/Builder.topology.before.luau",
+      "bytes": 54562,
+      "sha256": "efd4d294e896e6a319211a791267470cf3378854447f56fbdf9c5044d5938e4b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/LoadingCardView.before.luau",
+      "bytes": 8831,
+      "sha256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/LobbyLoading.before.luau",
+      "bytes": 36701,
+      "sha256": "872b9ed13fdc0e21332a844a6931b5ba2796a1ffd659a45f6cf0d5d945049583"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/LobbyLoading.patch.diff",
+      "bytes": 7714,
+      "sha256": "ca45af6f01526a810249152a8696ad1893d959fc33c9bc543a1fe0b87cc43e2e"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/LobbyLoading.proposed.luau",
+      "bytes": 42196,
+      "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/README.md",
+      "bytes": 6306,
+      "sha256": "40e6c311189d773509781037b1b76260d962868fd533fa00f3b8e31154a4c7a0"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/RoundLoadingRuntime.before.luau",
+      "bytes": 8712,
+      "sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/TunnelLobbyBuilder.topology.before.luau",
+      "bytes": 118461,
+      "sha256": "ee5ef0360a0e2e45ed0af25ade662e8ac6fd6fb8c1b5e6bd7f9b8c266bc83e1a"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/baseline-capture.json",
+      "bytes": 984,
+      "sha256": "b6b75c3f6f439d29b2b0b651da284755f61c43561791e565b7d3a814a61e99ca"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/client-asset-census.json",
+      "bytes": 483,
+      "sha256": "bbf4e45afba1bc635e2cdd4af936b15be35bab85cf3558dc4f14c5ccaaf2791f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/native-contract-probe.luau",
+      "bytes": 24343,
+      "sha256": "c53abc6ad4c66a246c6cbe7c6e1c6faeda7b959bd7a400be8c7cc51cbfdf02db"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/native-visibility-probe.luau",
+      "bytes": 3752,
+      "sha256": "f5eaaceec99bf85378aa684c920a44fd1c0426e99374b3fdb7f8a51d0c042e15"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/offline-result.json",
+      "bytes": 353,
+      "sha256": "b728e45e027d5721403e26e57bc6d2c049d2d0be8d7d40edf42e8a314bd1fb50"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/GameManager.before.luau",
+      "bytes": 190167,
+      "sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/GameManager.proposed.luau",
+      "bytes": 192559,
+      "sha256": "15771bdabc9fd070d6714a4386a5babe7354b3377c8e5c8f207d718c46ab804c"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/README.md",
+      "bytes": 4198,
+      "sha256": "6de697774d99c286e787b9507715d7017ffb5ebc509c9667727ba7a9b41138fd"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/baseline-capture.json",
+      "bytes": 222,
+      "sha256": "a5eaa495d871b410c7b16bd8d259e4e9ae941b6ad0bd719099a4d7aada6d6975"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/native-contract-probe.luau",
+      "bytes": 12780,
+      "sha256": "b4a24039367c698186a5716cb118956efa98f96d21523268f290d25a1074957b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/offline-result.json",
+      "bytes": 274,
+      "sha256": "6342c0e02dd4c1da275ffdb6457d753d518fcf7b55be646365620c21a3adeed1"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/spectate.before.luau",
+      "bytes": 2084,
+      "sha256": "bfb932835ea8e8f18453730c0b0be311c0a9aa8cfaa891cf37079a50e259aba6"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/spectate.patch.diff",
+      "bytes": 3682,
+      "sha256": "149fd1f74c5b1cfb06ff48df229110cce60988412dc4a5c2dc2bc135df80ad0b"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/spectate.proposed.luau",
+      "bytes": 4476,
+      "sha256": "08a9a0ccc9af0ca661d9914d4cc5d4c44e7d348f6862beee45535f643cf81e90"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/spectate/test_spectate_focus.py",
+      "bytes": 10356,
+      "sha256": "d955d852330afb80fd28174cddf3649823bf6d48c2455a92ec5473880340049f"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/streaming-compatibility-review.md",
+      "bytes": 4705,
+      "sha256": "98004226e4ce15c3c345c8ce9f1e9b72e70e155501dd7fb7cd0eb78bb52372e0"
+    },
+    {
+      "path": "tools/optimization_20261009/loading/test_loading_policy.py",
+      "bytes": 16691,
+      "sha256": "9ad7dffb8b450c4466186196f94eac773d47baab95b9a48d29529d31c817cb7c"
+    },
+    {
+      "path": "tools/optimization_20261009/proposed-source-manifest.json",
+      "bytes": 2882,
+      "sha256": "7cc64f96df19421b690274010ab85b601d6e2d823db30fa1d1d1988ee1f31fa1"
+    },
+    {
+      "path": "tools/optimization_20261009/replication/AuthoringArchive.luau",
+      "bytes": 8373,
+      "sha256": "4b2bb9b7b8ddd7542054cdc143003d982e96af60c62aeb9ee4179eddbf309377"
+    },
+    {
+      "path": "tools/optimization_20261009/replication/run_tests.py",
+      "bytes": 1005,
+      "sha256": "3a8d9e904aad38ca9dbb82e78ec09d8d48b5b086b9d7764066d4cd614c036523"
+    },
+    {
+      "path": "tools/optimization_20261009/replication/test_archive.luau",
+      "bytes": 6857,
+      "sha256": "289cd608f26a12301d0338865f81ed48668f22ccb51e1c498b3a22b788722769"
+    },
+    {
+      "path": "tools/optimization_20261009/review_preparation.py",
+      "bytes": 3085,
+      "sha256": "d645d511ea44cf079b19213608019d6d80bef69c518ac3480478729426042cf9"
+    }
+  ]
+}

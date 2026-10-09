@@ -1,0 +1,53 @@
+{
+  "Status": "Prepared; no Studio mutations; concurrent Play preserved",
+  "LuauVersion": "0.741",
+  "OfflineAssertions": 36,
+  "Compile": "passed",
+  "NativeProbe": "not executed",
+  "Gameplay": "not executed",
+  "DevicePerformance": "not measured",
+  "BaselineSourcePath": "game.ServerScriptService.Level 4 Systems.Level 4 Light Director",
+  "BaselineReadMode": "Server read-only; Source/editor parity verified",
+  "Files": [
+    {
+      "File": "SceneEffectBudget.ModuleScript.lua",
+      "SHA256": "6021C4C5FA8CB3395B47CE417915D7F7CB54CED5F54E1466F67E1ECCE33370AA",
+      "Bytes": 10221
+    },
+    {
+      "File": "SceneEffectBudgetClient.LocalScript.lua",
+      "SHA256": "F39408BCEF93A6E6513D48A0806DDC736C28A69962EB23C992C0722F3487A5BE",
+      "Bytes": 3532
+    },
+    {
+      "File": "Level4LightDirector.baseline.lua",
+      "SHA256": "1F99331F1EB98DA35FA0A5E5F0C7EEEEC4205B377205B77876625E03EB698A9E",
+      "Bytes": 16038
+    },
+    {
+      "File": "Level4LightDirector.proposed.lua",
+      "SHA256": "5952C86FEB05085642A9FD27CCE02332C96DA3F7D3EBB09AB5D1AE46CBAFC861",
+      "Bytes": 16515
+    },
+    {
+      "File": "Level4LightDirector.replacements.json",
+      "SHA256": "878E431ED415616B50987DC5B2F237ED42A9F276031C109D8F283411A3273124",
+      "Bytes": 1169
+    },
+    {
+      "File": "effect_selector.ModuleScript.lua",
+      "SHA256": "B6749913F7A6454141AAD18E775A5EED7FDBCA367D0C1C06D16C3513C7B51AEE",
+      "Bytes": 3194
+    },
+    {
+      "File": "native_contract_probe.luau",
+      "SHA256": "AD8C5A53ECDA5AF0C0DE1305BA9F86AB4E8D95281470281FA300BCCAF7AFE3B9",
+      "Bytes": 3658
+    },
+    {
+      "File": "test_budget.luau",
+      "SHA256": "B4BC792309F5058DD496E59E364A5819A7BEBD758B8AA231646BE4C9D78A9EB7",
+      "Bytes": 7858
+    }
+  ]
+}

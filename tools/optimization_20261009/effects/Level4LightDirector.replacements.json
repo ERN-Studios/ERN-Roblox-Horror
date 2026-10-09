@@ -1,0 +1,18 @@
+{
+  "baselinePath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+  "baselineClass": "ModuleScript",
+  "replacements": [
+    {
+      "old": "\t\t\t\tremember(d, { \"Enabled\", \"Brightness\" })",
+      "new": "\t\t\t\tremember(d, { \"Enabled\", \"Brightness\" })\n\t\t\t\tif type(d:GetAttribute(\"SceneBudgetWantedEnabled\")) == \"boolean\" then\n\t\t\t\t\td:SetAttribute(\"SceneBudgetWantedEnabled\", d.Enabled)\n\t\t\t\tend"
+    },
+    {
+      "old": "\t\t\tl.Enabled = on and (o and o.Enabled ~= false)",
+      "new": "\t\t\tlocal enabled = on and (o and o.Enabled ~= false)\n\t\t\tif type(l:GetAttribute(\"SceneBudgetWantedEnabled\")) == \"boolean\" then\n\t\t\t\tl:SetAttribute(\"SceneBudgetWantedEnabled\", enabled)\n\t\t\tend\n\t\t\tl.Enabled = enabled"
+    },
+    {
+      "old": "\t\t\tfor k, v in pairs(saved) do pcall(function() inst[k] = v end) end",
+      "new": "\t\t\tif saved.Enabled ~= nil and type(inst:GetAttribute(\"SceneBudgetWantedEnabled\")) == \"boolean\" then\n\t\t\t\tinst:SetAttribute(\"SceneBudgetWantedEnabled\", saved.Enabled)\n\t\t\tend\n\t\t\tfor k, v in pairs(saved) do pcall(function() inst[k] = v end) end"
+    }
+  ]
+}
