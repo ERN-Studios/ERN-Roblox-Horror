@@ -4,7 +4,7 @@
   "place_id": "131311258779917",
   "universe_id": "10559217407",
   "installed": true,
-  "published_verified": false,
+  "published_verified": true,
   "before_native_backup_verified": true,
   "after_native_backup_verified": true,
   "after_backup_receipt": "artifacts/poolrooms-audio-20261009/native-backup-after.json",
@@ -14,7 +14,9 @@
   "forced_restart_performed": false,
   "alternative_save_api_used": false,
   "alternative_save_api_reason": "Official AssetService:SavePlaceAsync documentation says an active Team Create session blocks saves.",
-  "pending": [
-    "Publish current Studio place and verify Roblox success"
-  ]
+  "pending": [],
+  "resolved": true,
+  "resolved_at_utc": "2026-10-09T21:33:50.296170+00:00",
+  "published_version": 2915,
+  "resolution": "CUA Studio window control recovered; normal current-place publication completed and published-only Version History shows 2915."
 }

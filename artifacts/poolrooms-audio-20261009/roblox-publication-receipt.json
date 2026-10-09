@@ -1,0 +1,31 @@
+{
+  "verified_at_utc": "2026-10-09T21:33:50.296170+00:00",
+  "place_id": "131311258779917",
+  "universe_id": "10559217407",
+  "published_version": 2915,
+  "roblox_publish_verified": true,
+  "method": "Current authoritative Studio File > Publish to Roblox; verified through Creator Dashboard",
+  "revision": "poolrooms-audio-20261009-v1",
+  "dashboard_url": "https://create.roblox.com/dashboard/creations/experiences/10559217407/places/131311258779917/version-history",
+  "dashboard_observation": {
+    "show_published_only": true,
+    "latest_version": "2915",
+    "local_updated_label": "October 9, 2026 at 11:30 PM",
+    "published_version_checkmark_visible": true,
+    "previous_published_versions": [
+      "2914",
+      "2913",
+      "2910"
+    ]
+  },
+  "proof": "Native CUA accessibility state and displayed screenshot of published-only Version History table",
+  "post_publish_source_and_bank_parity": "artifacts/poolrooms-audio-20261009/studio-final-parity.json",
+  "studio_session_place_version": 2859,
+  "studio_version_note": "The still-open session PlaceVersion is not used as the publication receipt.",
+  "install_commit": "9ad2aaed9b1e185b59fa9927ac87143dc8fcff6a",
+  "prepared_pack_commit": "dd86c10a9a51246a274a07dde631dc3bda52340c",
+  "production_playback_verified": false,
+  "active_servers_restarted": false,
+  "access_settings_changed": false,
+  "github_push_performed": false
+}

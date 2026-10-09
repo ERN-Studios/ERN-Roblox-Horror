@@ -1,10 +1,80 @@
 {
+  "sounds": {
+    "shot_splash": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.shot_splash",
+      "masterSHA256": "7ae4ce17002f19b2188032e7cbd66e0b4623949c46d1c5031b7c405eb1242cdc",
+      "id": "rbxassetid://129520630853843",
+      "looped": false,
+      "class": "Sound",
+      "volume": 0
+    },
+    "bed_water": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.bed_water",
+      "masterSHA256": "b6d651cff4c85796475687c6d7b5d98d02e79c1b761364e95ba80a87d7fed553",
+      "id": "rbxassetid://116500347461110",
+      "looped": true,
+      "class": "Sound",
+      "volume": 0
+    },
+    "bed_service": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.bed_service",
+      "masterSHA256": "39e67e8f700cc0d7ab71736a49f16b1dd8a81cb4f215b34010ac635ff9ff116a",
+      "id": "rbxassetid://79661425723233",
+      "looped": true,
+      "class": "Sound",
+      "volume": 0
+    },
+    "loop_weir": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.loop_weir",
+      "masterSHA256": "c29a6df7aeb735a150d04312f8966e62243545d7033d7db078f04830e525408b",
+      "id": "rbxassetid://70912311454622",
+      "looped": true,
+      "class": "Sound",
+      "volume": 0
+    },
+    "shot_pipe": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.shot_pipe",
+      "masterSHA256": "1452a444735c73610959de3b1731759b722e9d6496c6fa85c01aff8c105c062c",
+      "id": "rbxassetid://138400313124619",
+      "looped": false,
+      "class": "Sound",
+      "volume": 0
+    },
+    "bed_hall": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.bed_hall",
+      "masterSHA256": "a2b052d35256ace02c6e377db73dec4b13e00f7ee798169913c587c55ac7a9b0",
+      "id": "rbxassetid://80404926499766",
+      "looped": true,
+      "class": "Sound",
+      "volume": 0
+    },
+    "shot_drip": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.shot_drip",
+      "masterSHA256": "012f32c76c5bf97d0ca0aa82e93e6f5bf5a74b87a960fbe2553e926b8e7008f7",
+      "id": "rbxassetid://127883794297774",
+      "looped": false,
+      "class": "Sound",
+      "volume": 0
+    },
+    "loop_lion": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.loop_lion",
+      "masterSHA256": "4814157557b7347a394c9e4803e65aa17fb7af85c538faabcf21c39777711ebe",
+      "id": "rbxassetid://87608993842645",
+      "looped": true,
+      "class": "Sound",
+      "volume": 0
+    },
+    "shot_creak": {
+      "path": "ReplicatedStorage.Level2Poolrooms.Sounds.shot_creak",
+      "masterSHA256": "198d4abdadd98275fa4bd548444e53291f321bd7cf1da0a7187ac152ce19f7e9",
+      "id": "rbxassetid://90126161261127",
+      "looped": false,
+      "class": "Sound",
+      "volume": 0
+    }
+  },
   "universeId": 10559217407,
   "version": 2859,
-  "placeId": 131311258779917,
-  "revision": "poolrooms-audio-20261009-v1",
-  "soundCount": 9,
-  "verified_at_utc": "2026-10-09T21:24:56.510271+00:00",
   "scripts": {
     "Level 2 Poolrooms Ambience": {
       "editorMatches": true,
@@ -21,11 +91,14 @@
       "matches_installed_export": true
     }
   },
+  "placeId": 131311258779917,
   "edit_cleanup_check": {
     "generatedWorldExists": false,
-    "universeId": 10559217407,
-    "placeId": 131311258779917,
-    "emittersExist": false,
-    "bedsExist": false
-  }
+    "bedsExist": false,
+    "emittersExist": false
+  },
+  "revision": "poolrooms-audio-20261009-v1",
+  "soundCount": 9,
+  "verified_at_utc": "2026-10-09T21:33:20.967438+00:00",
+  "publication_version_verified_separately": 2915
 }
