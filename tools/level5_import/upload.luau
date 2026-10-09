@@ -11,23 +11,29 @@ local GROUP = 1039373905
 local function build(b)
 	local nv, nn, nf = buffer.readu32(b, 0), buffer.readu32(b, 4), buffer.readu32(b, 8)
 	local em = AS:CreateEditableMesh()
-	local vid, nid = table.create(nv), table.create(nn)
-	local o = 12
-	for i = 1, nv do
-		vid[i] = em:AddVertex(Vector3.new(buffer.readf32(b, o), buffer.readf32(b, o + 4), buffer.readf32(b, o + 8)))
-		o += 12
-	end
-	for i = 1, nn do
-		nid[i] = em:AddNormal(Vector3.new(buffer.readf32(b, o), buffer.readf32(b, o + 4), buffer.readf32(b, o + 8)))
-		o += 12
-	end
-	for _ = 1, nf do
-		local v1, n1 = buffer.readu32(b, o) + 1, buffer.readu32(b, o + 4) + 1
-		local v2, n2 = buffer.readu32(b, o + 8) + 1, buffer.readu32(b, o + 12) + 1
-		local v3, n3 = buffer.readu32(b, o + 16) + 1, buffer.readu32(b, o + 20) + 1
-		o += 24
-		local f = em:AddTriangle(vid[v1], vid[v2], vid[v3])
-		em:SetFaceNormals(f, {nid[n1], nid[n2], nid[n3]})
+	local ok, err = pcall(function()
+		local vid, nid = table.create(nv), table.create(nn)
+		local o = 12
+		for i = 1, nv do
+			vid[i] = em:AddVertex(Vector3.new(buffer.readf32(b, o), buffer.readf32(b, o + 4), buffer.readf32(b, o + 8)))
+			o += 12
+		end
+		for i = 1, nn do
+			nid[i] = em:AddNormal(Vector3.new(buffer.readf32(b, o), buffer.readf32(b, o + 4), buffer.readf32(b, o + 8)))
+			o += 12
+		end
+		for _ = 1, nf do
+			local v1, n1 = buffer.readu32(b, o) + 1, buffer.readu32(b, o + 4) + 1
+			local v2, n2 = buffer.readu32(b, o + 8) + 1, buffer.readu32(b, o + 12) + 1
+			local v3, n3 = buffer.readu32(b, o + 16) + 1, buffer.readu32(b, o + 20) + 1
+			o += 24
+			local f = em:AddTriangle(vid[v1], vid[v2], vid[v3])
+			em:SetFaceNormals(f, {nid[n1], nid[n2], nid[n3]})
+		end
+	end)
+	if not ok then
+		if em then em:Destroy() end
+		error(err, 0)
 	end
 	return em
 end
@@ -42,10 +48,11 @@ local function run()
 			if n >= LIMIT or shared.__l5stop then break end
 			n += 1
 			shared.__l5status = "chunk " .. id .. " (" .. n .. ")"
+			local em
 			local okc, res = pcall(function()
 				local b64 = HS:GetAsync(BASE .. "/chunk/" .. id, true)
 				local b = ENC:Base64Decode(buffer.fromstring(b64))
-				local em = build(b)
+				em = build(b)
 				local status, assetId
 				for attempt = 1, 4 do
 					status, assetId = AS:CreateAssetAsync(em, Enum.AssetType.Mesh, {
@@ -55,10 +62,10 @@ local function run()
 					if status == Enum.CreateAssetResult.Success then break end
 					task.wait(5 * attempt)
 				end
-				em:Destroy()
 				if status ~= Enum.CreateAssetResult.Success then error(tostring(status)) end
 				return assetId
 			end)
+			if em then em:Destroy() end
 			if okc then
 				HS:PostAsync(BASE .. "/result?id=" .. id .. "&asset=" .. tostring(res), "")
 			else

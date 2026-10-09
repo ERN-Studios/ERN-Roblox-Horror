@@ -156,11 +156,11 @@ def upload(client, sid, data, records):
         code = ('assert(game.PlaceId == %d,"Wrong place")\n' % PLACE +
                 'local AS=game:GetService("AssetService"); local ENC=game:GetService("EncodingService")\n' + helper +
                 'local out={}\nfor _,it in ipairs({' + items + '}) do\n' +
-                'local ok,id=pcall(function()\nlocal em=build(ENC:Base64Decode(buffer.fromstring(it[2])))\n' +
+                'local em\nlocal ok,id=pcall(function()\nem=build(ENC:Base64Decode(buffer.fromstring(it[2])))\n' +
                 'local status,id=AS:CreateAssetAsync(em,Enum.AssetType.Mesh,{Name="L1_ModularKit_"..it[1],'
                 'Description="Blender-built Level 1 yellow office kit",CreatorId=%d,CreatorType=Enum.AssetCreatorType.Group})\n' % GROUP +
-                'em:Destroy(); assert(status==Enum.CreateAssetResult.Success,tostring(status))\n'
-                'return id\nend)\ntable.insert(out,tostring(it[1]).."="..(ok and tostring(id) or "ERR:"..tostring(id)))\nend\nreturn table.concat(out,"\\n")')
+                'assert(status==Enum.CreateAssetResult.Success,tostring(status))\n'
+                'return id\nend)\nif em then em:Destroy() end\ntable.insert(out,tostring(it[1]).."="..(ok and tostring(id) or "ERR:"..tostring(id)))\nend\nreturn table.concat(out,"\\n")')
         response = client._request("tools/call", {"name": "execute_luau", "arguments":
                                    {"studio_id": sid, "datamodel_type": "Edit", "code": code}}, timeout=900)
         result = response.get("result", {})

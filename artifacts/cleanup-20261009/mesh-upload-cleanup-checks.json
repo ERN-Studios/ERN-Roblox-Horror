@@ -1,0 +1,123 @@
+{
+  "checks": [
+    {
+      "gate": "baseline",
+      "exit_code": 0,
+      "log": "mesh-upload-cleanup.baseline.txt"
+    },
+    {
+      "gate": "after",
+      "exit_code": 0,
+      "log": "mesh-upload-cleanup.after.txt"
+    },
+    {
+      "gate": "compile",
+      "payload": "l4_manual-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l5_manual-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l1_inline-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l4_studio-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l2_inline-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l2_sliced-0.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l2_sliced-1.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "compile",
+      "payload": "l2_sliced-2.luau",
+      "exit_code": 0
+    },
+    {
+      "gate": "Python AST",
+      "files": 3,
+      "exit_code": 0
+    },
+    {
+      "gate": "existing L1 importer",
+      "command": "python tools/tests/test_level1_blender_import.py",
+      "exit_code": 0,
+      "result": "PASS: V2 scoped no-overwrite/tint/glass generated installer compiles"
+    },
+    {
+      "gate": "existing L2 broader importer",
+      "exit_code": 1,
+      "status": "pending historical harness reconciliation",
+      "failure": "check_geometry: absent ServerScriptService/Level 2 Systems/Level 2 Kit World Builder.ModuleScript.lua; stopped before upload execution"
+    },
+    {
+      "gate": "scoped diff whitespace",
+      "command": "git diff --check -- B05 paths",
+      "exit_code": 0
+    }
+  ],
+  "files": [
+    {
+      "path": "tools/level4_blender/upload.luau",
+      "before_sha256": "5111a736d8cc4ad5477f0b043eead34bd96bc7b0a65224c5307ff70b95b03b75",
+      "after_sha256": "550f1f5dca742700307a6f936248b5e1fff5e703f349a31b2ff8931922834f84",
+      "before_bytes": 3342,
+      "after_bytes": 3499,
+      "rollback_path": "G:\\Roblox\\MongoTV\\.git\\mongotv-cleanup-20261009\\tooling-before\\tools\\level4_blender\\upload.luau"
+    },
+    {
+      "path": "tools/level5_import/upload.luau",
+      "before_sha256": "eb6a63cedc7d9f9c3ad8531a384eacd99467cf211fc8950bb37692901f3f4c0c",
+      "after_sha256": "01892e4188aa2ea9377ac2e699eb7da213b18d043919fc1d5fc5f284e717cbef",
+      "before_bytes": 3006,
+      "after_bytes": 3158,
+      "rollback_path": "G:\\Roblox\\MongoTV\\.git\\mongotv-cleanup-20261009\\tooling-before\\tools\\level5_import\\upload.luau"
+    },
+    {
+      "path": "tools/level1_blender/import_assets.py",
+      "before_sha256": "b7dff95d71f223920175d8246feef9081af9bc1d42d28684f3279e1544232757",
+      "after_sha256": "523ea6e2314f0655d53ae7170a589c7713030fdf6f14edc33e8f976a314584ba",
+      "before_bytes": 13216,
+      "after_bytes": 13235,
+      "rollback_path": "G:\\Roblox\\MongoTV\\.git\\mongotv-cleanup-20261009\\tooling-before\\tools\\level1_blender\\import_assets.py"
+    },
+    {
+      "path": "tools/level4_blender/studio_upload.py",
+      "before_sha256": "2cfe7288d6250475cd7c6285d69d330939b335382516a5bb607ca00a9134a81e",
+      "after_sha256": "d30533da70732bf43e2a3b37bb168864f92528e5c9d41ca55859f18eb3ece144",
+      "before_bytes": 5348,
+      "after_bytes": 5383,
+      "rollback_path": "G:\\Roblox\\MongoTV\\.git\\mongotv-cleanup-20261009\\tooling-before\\tools\\level4_blender\\studio_upload.py"
+    },
+    {
+      "path": "tools/tests/test_mesh_upload_cleanup.py",
+      "before": "absent",
+      "after_sha256": "06749326d2f414cda04f08470333ce4a362af634214d3d29ad1fac4b016dcaff"
+    }
+  ],
+  "unchanged_consumer": {
+    "path": "tools/level2_blender/import_kit.py",
+    "sha256": "8560ac0834f587ecf6726ef2070c12623e0b1dc9c44fb9182416d8deac13f72f"
+  },
+  "runtime_or_studio_mutations": false,
+  "actual_uploads_or_http_calls": 0,
+  "fresh_source_and_rollback_hash_verification": true,
+  "l2_consumer_unchanged_against_index": true
+}

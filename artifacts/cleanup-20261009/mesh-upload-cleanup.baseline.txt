@@ -1,0 +1,4 @@
+Uploaded batch 1/1: 1 meshes
+native mesh assertions=1653
+mesh upload contract: 93 actual-Luau scenarios; 12 Python wrapper/extraction checks
+BASELINE OBSERVATION: partial-build leaks and L1/L4 thrown-upload leaks reproduced; cleanup gate not passed

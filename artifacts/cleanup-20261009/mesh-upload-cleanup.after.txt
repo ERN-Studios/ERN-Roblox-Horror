@@ -1,0 +1,5 @@
+Uploaded batch 1/1: 1 meshes
+native mesh assertions=1775
+mesh upload contract: 93 actual-Luau scenarios; 12 Python wrapper/extraction checks
+negative fixture: removing partial-build cleanup is rejected
+negative fixtures: all four caller-owned thrown-upload cleanups are required

@@ -85,8 +85,9 @@ for bi, batch in enumerate(batches):
     items = ",\n".join('{%d, "%s"}' % (cid, b64) for cid, b64, _ in batch)
     code = ("local AS = game:GetService(\"AssetService\")\nlocal ENC = game:GetService(\"EncodingService\")\n" + BUILD +
             "\nlocal ITEMS = {\n" + items + "\n}\nlocal out = {}\nfor _, it in ipairs(ITEMS) do\n"
+            "  local em\n"
             "  local ok, res = pcall(function()\n"
-            "    local em = build(ENC:Base64Decode(buffer.fromstring(it[2])))\n"
+            "    em = build(ENC:Base64Decode(buffer.fromstring(it[2])))\n"
             "    local status, assetId\n"
             "    for attempt = 1, 4 do\n"
             "      status, assetId = AS:CreateAssetAsync(em, Enum.AssetType.Mesh, {Name = \"L4_Cinema_v3_\" .. it[1],"
@@ -94,10 +95,10 @@ for bi, batch in enumerate(batches):
             "      if status == Enum.CreateAssetResult.Success then break end\n"
             "      task.wait(5 * attempt)\n"
             "    end\n"
-            "    em:Destroy()\n"
             "    if status ~= Enum.CreateAssetResult.Success then error(tostring(status)) end\n"
             "    return assetId\n"
             "  end)\n"
+            "  if em then em:Destroy() end\n"
             "  table.insert(out, it[1] .. \"=\" .. (ok and tostring(res) or (\"ERR:\" .. tostring(res))))\n"
             "end\nreturn table.concat(out, \"\\n\")\n")
     t, e = call("execute_luau", {"studio_id": sid, "datamodel_type": "Edit", "code": code})
