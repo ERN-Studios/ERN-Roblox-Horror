@@ -12,20 +12,6 @@ local dying, capturing = false, false
 local controls, overlay = nil, nil
 local captureRecord, fadeRecord, lastCaptureId = nil, nil, nil
 
---[[
-LEGACY IMAGE JUMPSCARE (disabled, intentionally preserved for rollback)
-local JUMPSCARE_IMAGE = "rbxassetid://85716983692957"
-local function legacyImageScare(gui)
-	local img = Instance.new("ImageLabel")
-	img.Size = UDim2.fromScale(1, 1)
-	img.BackgroundTransparency = 1
-	img.ScaleType = Enum.ScaleType.Crop
-	img.Image = JUMPSCARE_IMAGE
-	img.Parent = gui
-	task.wait(0.7)
-	TweenService:Create(img, TweenInfo.new(1.2), { ImageTransparency = 1 }):Play()
-end
-]]
 
 local function getControls()
 	if controls then return controls end

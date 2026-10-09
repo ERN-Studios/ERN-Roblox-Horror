@@ -3565,8 +3565,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
-      "bytes": 7549,
-      "sha256": "07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88",
+      "bytes": 7088,
+      "sha256": "7e5cedc84631a6af3f7edc126cb6775c9c498f42e851484c4980c3a3a6846a88",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
