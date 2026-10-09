@@ -20,6 +20,8 @@ CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(en
 RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
 # ZyntraMonetization requires the challenge ledger since CHALLENGES_20260923.
 CHALLENGES = (ROOT / "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua").read_text(encoding="utf-8")
+SKINS = (ROOT / "ReplicatedStorage/ZyntraSkins.ModuleScript.lua").read_text(encoding="utf-8")
+DEV_ACCESS = (ROOT / "ReplicatedStorage/DevAccess.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -79,6 +81,9 @@ end)()
 local ZyntraChallengesModule = (function()
 CHALLENGES_SOURCE
 end)()
+local ZyntraSkinsModule = (function()
+SKINS_SOURCE
+end)()
 
 local function world(opts)
     opts = opts or {}
@@ -96,7 +101,7 @@ local function world(opts)
     }
     local game = {JobId = "job-1"}
     local RunService = {IsStudio = function() return w.studio end}
-    local DevAccess = {IsAllowed = function() return w.developer == true end}
+    function game:GetService(name) assert(name == "RunService"); return RunService end
 
     local task = {}
     local function enqueue(co, delay)
@@ -158,6 +163,9 @@ local function world(opts)
     local function typeof(value)
         return type(value) == "table" and value.ClassName and "Instance" or type(value)
     end
+    local DevAccess = (function()
+DEV_ACCESS_SOURCE
+    end)()
 
     -- A Roblox-shaped instance: enough of one that the real tag code and the real
     -- leaderboard attribute writes run unchanged.
@@ -212,6 +220,9 @@ local function world(opts)
     local challengesModule = instance("ModuleScript", "ZyntraChallenges")
     challengesModule.content = ZyntraChallengesModule
     challengesModule.Parent = ReplicatedStorage
+    local skinsModule = instance("ModuleScript", "ZyntraSkins")
+    skinsModule.content = ZyntraSkinsModule
+    skinsModule.Parent = ReplicatedStorage
     function ReplicatedStorage:WaitForChild(name) return self:FindFirstChild(name) end
     local function require(module) return module.content end
     local function advancedStaminaBonus() return 0 end
@@ -510,7 +521,8 @@ def main():
     pieces = [
         PRELUDE,
         CONFIG,
-        WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES),
+        WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES)
+            .replace("SKINS_SOURCE", SKINS).replace("DEV_ACCESS_SOURCE", DEV_ACCESS),
         section("local function colorData", "local function isDispatchPredecessorClosed"),
         section("local function accessibilityValue", "-- The switch a player"),
         section("local function publicProfile", "local function applyHazmatColor"),

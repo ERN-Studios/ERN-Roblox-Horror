@@ -1,0 +1,108 @@
+[
+  {
+    "file": "tools/sync_from_studio.py",
+    "bytes": 26484,
+    "sha256": "a5ec8fb3bc9af326d5702a39d5d257e8f1cf5b58b6b7181743ce7df96416a67a",
+    "after_exists": true,
+    "after_sha256": "f2055f5af65ec8c4f00d45e36fc2eda9d491a4556985655418b43394602a0c07",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/pull_source_from_studio.py",
+    "bytes": 14402,
+    "sha256": "52a824a4a3a0d536c585968e2dfab8b0f92376a1cf8220f5f563633aade8fcea",
+    "after_exists": true,
+    "after_sha256": "627c69abd3d71321c5d349d20ff6b5cacdb37f931391eb0a8b3194bb537aa98a",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/install_new_scripts.py",
+    "bytes": 6338,
+    "sha256": "17768b0db24778439b5347a558e87c51e14b9fca97d48201eeee3e264ab9ff23",
+    "after_exists": true,
+    "after_sha256": "4e9e6177f602f6b1519e682b70e661cec13928aec7ce3e608365163b3285292f",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_full_sync_contract.py",
+    "bytes": 25718,
+    "sha256": "f8d9022c2dfc8e4229d0b286de6fe73e6a955e7fd1d6e4c004a23399d99991c7",
+    "after_exists": true,
+    "after_sha256": "4592ab62c7350823709fd998429024d4c1f46cf56fd4e2615510e1dc0e91fa84",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_level2_kit_layout.py",
+    "bytes": 60812,
+    "sha256": "b6a8a70515e2c6f3025dc7806c5ee0a1257a0b590882efbd9bf6b2b978c4f379",
+    "after_exists": true,
+    "after_sha256": "ba0e359bd10bb647c11ebcf8d19b632c8a92b83273ddf32c8c495cb386a946a2",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_support_product_receipts.py",
+    "bytes": 20027,
+    "sha256": "38799aa16492314bf662c40cbe1848959661429978865c549538c45c809bae35",
+    "after_exists": true,
+    "after_sha256": "239d07560379630f499fe54f80aeaba631bf7e8d82ab2727652fdfdbf50ee0a5",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_item_inventory.py",
+    "bytes": 24361,
+    "sha256": "b1b0d852bdb57df608085a6c752052d640ca8a0f1dbc96f7cce6494d9ab82ae4",
+    "after_exists": true,
+    "after_sha256": "c7cdf205d401be381556444f1517dbeb32c6d100011732e454bd23c9cc0fad40",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/level4_blender/README.md",
+    "bytes": 13270,
+    "sha256": "67fe30012e9507b5fc195646281ba26c8132271866c499c14463bb9952295d70",
+    "after_exists": true,
+    "after_sha256": "7f72e285ef2c1c775ed0462f3d1d3ba5542832b39ed0372191559d8083692536",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/level2_poolrooms/smoke_tmp.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "after_exists": false,
+    "after_sha256": null,
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/fakestudio.py",
+    "bytes": 10052,
+    "sha256": "928cce8b6d48fd829ce3de2aad04b14149020e278ebf2033029a1ba2714f804f",
+    "after_exists": true,
+    "after_sha256": "e173277318fa78ea008e5f26a4ac643383b7915fe704939a3583d779af610522",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/level6_build/import/build_material_installer.py",
+    "bytes": 6404,
+    "sha256": "1450410633d8702120beae7d652bdefda8e37a7f48e5f109fec871d29b46d19c",
+    "after_exists": true,
+    "after_sha256": "17a1fda457b95cc5178008017074e7b6b598cadfb1fe09549be5ec328bab0b43",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_push_repo_to_studio.py",
+    "bytes": 51149,
+    "sha256": "5ad80a4c249568856d60f2cf7f8f616b67cf13cfb916c0db452f59095d8c8e6d",
+    "after_exists": true,
+    "after_sha256": "32a9a9ac6af23e02dbb796590be9e2ed995de9f6df712ab2e411af9ddcfcecef",
+    "rollback_copy_verified": true
+  },
+  {
+    "file": "tools/tests/test_install_new_scripts.py",
+    "new": true,
+    "after_sha256": "e78b961da5d7d1f514101ea1068b208b2a9f44d71466f96e8f9648daee29a721"
+  },
+  {
+    "file": "artifacts/cleanup-20261009/verify_tooling_batch.py",
+    "new": true,
+    "after_sha256": "213251437b79328cba66705929c0e02f75b9b8ae26a3b7569252f05911c02b4e"
+  }
+]

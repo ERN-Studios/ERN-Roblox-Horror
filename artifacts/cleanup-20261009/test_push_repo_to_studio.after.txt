@@ -1,0 +1,646 @@
+========================================================================
+FIXTURE -- the pending queue this suite pushes is SYNTHESIZED
+========================================================================
+This queue is SYNTHESIZED by fresh_repo() inside a temp copy;
+nothing here reflects live Studio or the real manifest's current
+queue state, and the real manifest is only ever read.
+synthesized pending entries: 9 of 245 manifest items
+     263773B  ModuleScript ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+     190250B  Script       ServerScriptService/GameManager.Script.lua
+     101081B  ModuleScript ReplicatedStorage/UIDevice.ModuleScript.lua
+      58827B  Script       ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+      11667B  Script       ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+       9611B  ModuleScript ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua  studioTrailingNewline
+       2920B  ModuleScript ReplicatedStorage/DevAccess.ModuleScript.lua
+       2587B  LocalScript  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua  studioTrailingNewline
+       1644B  LocalScript  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  PASS  the queue is not empty (the defect this fixture exists to fix)  [9 pending]
+  PASS  the queue has exactly the size fresh_repo() intended  [9 pending vs 9 requested]
+  PASS  live pending statuses cannot leak into the synthesized queue
+  PASS  every file the tests address by name is queued
+  PASS  every queued entry is a script class the push tool accepts
+  PASS  every studioSha256Before is the sha of the baseline the fake Studio is seeded with
+  PASS  flagged entries are seeded with the repo text plus exactly one newline; unflagged with the text itself
+  PASS  studio_source_contract.matches_hash accepts every seeded baseline
+  PASS  every pending entry's sha256 matches the modified file on disk
+  PASS  every pending entry's bytes matches the modified file on disk
+  PASS  every pending entry really differs from its baseline
+  PASS  push_repo_to_studio.classify_pending returns 'ready' for all of them
+  PASS  ...and 'conflict' once the fake Studio drifts
+  PASS  no non-pending entry carries a stray studioSha256Before
+  PASS  the queue spans a wide size range (TEST 1's 'largest file' check needs a real spread)  [1644B .. 263773B (Level 2 World Builder.ModuleScript.lua)]
+  PASS  the queue covers Script, LocalScript and ModuleScript  [['LocalScript', 'ModuleScript', 'Script']]
+  PASS  the queue includes studioTrailingNewline entries  [2 flagged]
+  PASS  the REAL manifest was not modified while building the fixture
+
+luau interpreter: C:\Users\mikke\AppData\Local\Temp\codex-luau-0.737\luau.exe  (executed the offline Luau probe successfully)
+
+========================================================================
+TEST 1 -- full push of all pending scripts (happy path)
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: ready
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: ready
+  [3/9] ServerScriptService/GameManager.Script.lua: ready
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: ready
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: ready
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: ready
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: ready
+
+ready: 9   already applied: 0   problems: 0
+
+Phase 2 -- writing 9 script(s):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: pushed (2920 bytes)
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: compiled
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: pushed (101081 bytes)
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: compiled
+  [3/9] ServerScriptService/GameManager.Script.lua: pushed (190250 bytes)
+  [3/9] ServerScriptService/GameManager.Script.lua: compiled
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: pushed (58827 bytes)
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: compiled
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: pushed (11667 bytes)
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: compiled
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: pushed (9611 bytes)
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: compiled
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: pushed (263773 bytes)
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: compiled
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (1644 bytes)
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: pushed (2587 bytes)
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: compiled
+
+Done: 9 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-w0ombsrp\repo\.studio-push-backups\20261009-181321
+  PASS  tool exited 0  [exit=0]
+  PASS  no Luau runtime errors
+  PASS  all 9 scripts byte-identical in Studio afterwards  [0 wrong: []]
+  PASS  manifest: nothing left pending
+  PASS  manifest: studioSha256Before cleared
+  PASS  manifest: exact writes remove historical trailing-newline flags
+  PASS  manifest: published trailing-newline count matches item facts
+  PASS  no transfer buffer left behind in ServerStorage
+  PASS  largest file transferred intact (Level 2 World Builder.ModuleScript.lua, 263773B)
+  (luau invocations: 102)
+
+========================================================================
+TEST 2 -- conflict detection: Studio drifted since the baseline
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: ready
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: ready
+  [3/9] ServerScriptService/GameManager.Script.lua: CONFLICT
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: ready
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: ready
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: ready
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: ready
+
+ready: 8   already applied: 0   problems: 1
+  ! ServerScriptService/GameManager.Script.lua: Studio drifted from the recorded baseline (live ba4f5348bc04, expected 0969202a4cbb); differs: repo 190210 chars, Studio 190161 chars
+
+Aborting before any write. Resolve the entries above, or re-run with --skip-conflicts to push the clean ones.
+  PASS  tool signals failure when a file conflicts  [exit=1]
+  PASS  conflicting file was NOT overwritten
+  PASS  conflicting entry recorded as studio-push-conflict with baseline kept  [studio-push-conflict]
+  PASS  DEFAULT: nothing at all was written when a conflict exists  [two-phase abort]
+
+========================================================================
+TEST 3 -- idempotency: re-running after a successful push
+========================================================================
+Nothing pending: no manifest entries with status 'pending-studio-push'.
+  PASS  second run is a clean no-op  [exit=0]
+
+========================================================================
+TEST 4 -- already-applied (Studio already has the new content)
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: already applied (identical)
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: already applied (identical)
+  [3/9] ServerScriptService/GameManager.Script.lua: already applied (identical)
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: already applied (identical)
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: already applied (identical)
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: already applied (identical apart from the one permitted trailing newline in Studio)
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: already applied (identical)
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: already applied (identical)
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: already applied (identical apart from the one permitted trailing newline in Studio)
+
+ready: 0   already applied: 9   problems: 0
+
+Done: 0 pushed, 9 already applied, 0 conflict(s), 0 failed.
+  PASS  already-applied files are accepted, not treated as conflicts  [exit=0]
+  PASS  already-applied entries marked synced
+  PASS  already-applied +LF sources retain their permitted flags
+
+========================================================================
+TEST 5 -- hostile content round-trip (unicode, escapes, CRLF, empty, huge)
+========================================================================
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (51 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-sjlvua83\repo\.studio-push-backups\20261009-181405
+  PASS  round-trip: unicode + emoji  [exit=0, len 41 vs 41]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (59 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-qss_1fn3\repo\.studio-push-backups\20261009-181407
+  PASS  round-trip: quotes and backslashes  [exit=0, len 59 vs 59]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (40 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-iasgchyu\repo\.studio-push-backups\20261009-181410
+  PASS  round-trip: control chars  [exit=0, len 40 vs 40]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (28 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-lfq5_5bj\repo\.studio-push-backups\20261009-181412
+  PASS  round-trip: no trailing newline  [exit=0, len 28 vs 28]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (22 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-7ipc_v2l\repo\.studio-push-backups\20261009-181415
+  PASS  round-trip: blank lines + trailing newlines  [exit=0, len 22 vs 22]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (0 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-nemqwlc9\repo\.studio-push-backups\20261009-181417
+  PASS  round-trip: empty file  [exit=0, len 0 vs 0]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (90013 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-7gbhfsz2\repo\.studio-push-backups\20261009-181420
+  PASS  round-trip: long single line  [exit=0, len 90013 vs 90013]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (46890 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-1ody53qp\repo\.studio-push-backups\20261009-181423
+  PASS  round-trip: many lines  [exit=0, len 46890 vs 46890]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (56 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-c8hlwg95\repo\.studio-push-backups\20261009-181426
+  PASS  round-trip: percent signs  [exit=0, len 56 vs 56]
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (58 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-nl2xuc1j\repo\.studio-push-backups\20261009-181429
+  PASS  round-trip: luau string edge  [exit=0, len 58 vs 58]
+
+========================================================================
+TEST 6 -- script missing from Studio (renamed/deleted)
+========================================================================
+1 script(s) pending push:
+  ServerScriptService/GameManager.Script.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] ServerScriptService/GameManager.Script.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] ServerScriptService/GameManager.Script.lua: pushed (190250 bytes)
+  [1/1] ServerScriptService/GameManager.Script.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-srxs33ua\repo\.studio-push-backups\20261009-181433
+  PASS  --file with a present script still works  [exit=0]
+
+========================================================================
+TEST 7 -- --file with spaces in the path
+========================================================================
+1 script(s) pending push:
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: pushed (263773 bytes)
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-f8e31vvy\repo\.studio-push-backups\20261009-181441
+  PASS  --file handles paths containing spaces  [exit=0]
+  PASS  that one file was pushed
+  PASS  other files left pending (not pushed)  [8 pending of 9]
+
+========================================================================
+TEST 8 -- --list must never write
+========================================================================
+  PASS  --list has something to list  [9 pending]
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+  PASS  --list exits 0  [exit=0]
+  PASS  --list made zero Studio calls  [0 calls]
+  PASS  --list left the manifest untouched
+
+========================================================================
+TEST 9 -- --skip-conflicts pushes the clean files, leaves the conflict
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: ready
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: ready
+  [3/9] ServerScriptService/GameManager.Script.lua: CONFLICT
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: ready
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: ready
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: ready
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: ready
+
+ready: 8   already applied: 0   problems: 1
+  ! ServerScriptService/GameManager.Script.lua: Studio drifted from the recorded baseline (live a4aa879aad22, expected 0969202a4cbb); differs: repo 190210 chars, Studio 190148 chars
+
+Phase 2 -- writing 8 script(s):
+  [1/8] ReplicatedStorage/DevAccess.ModuleScript.lua: pushed (2920 bytes)
+  [1/8] ReplicatedStorage/DevAccess.ModuleScript.lua: compiled
+  [2/8] ReplicatedStorage/UIDevice.ModuleScript.lua: pushed (101081 bytes)
+  [2/8] ReplicatedStorage/UIDevice.ModuleScript.lua: compiled
+  [3/8] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: pushed (58827 bytes)
+  [3/8] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: compiled
+  [4/8] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: pushed (11667 bytes)
+  [4/8] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: compiled
+  [5/8] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: pushed (9611 bytes)
+  [5/8] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: compiled
+  [6/8] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: pushed (263773 bytes)
+  [6/8] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: compiled
+  [7/8] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (1644 bytes)
+  [7/8] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+  [8/8] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: pushed (2587 bytes)
+  [8/8] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: compiled
+
+Done: 8 pushed, 0 already applied, 1 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-0b0le7ab\repo\.studio-push-backups\20261009-181459
+  PASS  --skip-conflicts still reports failure  [exit=1]
+  PASS  conflicting file untouched
+  PASS  all clean files pushed
+  PASS  conflict recorded as studio-push-conflict (baseline preserved)  [studio-push-conflict]
+
+========================================================================
+TEST 10 -- --overwrite-conflicts
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: ready
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: ready
+  [3/9] ServerScriptService/GameManager.Script.lua: ready (overwriting Studio's drifted copy)
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: ready
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: ready
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: ready
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: ready
+
+ready: 9   already applied: 0   problems: 0
+
+Phase 2 -- writing 9 script(s):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: pushed (2920 bytes)
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: compiled
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: pushed (101081 bytes)
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: compiled
+  [3/9] ServerScriptService/GameManager.Script.lua: pushed (190250 bytes)
+  [3/9] ServerScriptService/GameManager.Script.lua: compiled
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: pushed (58827 bytes)
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: compiled
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: pushed (11667 bytes)
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: compiled
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: pushed (9611 bytes)
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: compiled
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: pushed (263773 bytes)
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: compiled
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (1644 bytes)
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: pushed (2587 bytes)
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: compiled
+
+Done: 9 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-m9iplsfv\repo\.studio-push-backups\20261009-181529
+  PASS  --overwrite-conflicts succeeds  [exit=0]
+  PASS  drifted file overwritten with repo content
+
+========================================================================
+TEST 11 -- truncated staged transfer must abort BEFORE writing
+========================================================================
+1 script(s) pending push:
+  ServerScriptService/GameManager.Script.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] ServerScriptService/GameManager.Script.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] ServerScriptService/GameManager.Script.lua: FAILED -- staged transfer is short: Studio holds 0B, sent 24000B
+
+Done: 0 pushed, 0 already applied, 0 conflict(s), 1 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-wqi2p41j\repo\.studio-push-backups\20261009-181555
+  FAILED ServerScriptService/GameManager.Script.lua: staged transfer is short: Studio holds 0B, sent 24000B
+  PASS  the short-write injection actually fired
+  PASS  short transfer is detected  [exit=1]
+  PASS  live script NOT overwritten by the truncated body
+
+========================================================================
+TEST 12 -- compare-and-swap catches drift between check and write
+========================================================================
+1 script(s) pending push:
+  ServerScriptService/GameManager.Script.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] ServerScriptService/GameManager.Script.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] ServerScriptService/GameManager.Script.lua: FAILED -- Studio changed this script between the check and the write -- not applied
+
+Done: 0 pushed, 0 already applied, 0 conflict(s), 1 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-74zhxoho\repo\.studio-push-backups\20261009-181559
+  FAILED ServerScriptService/GameManager.Script.lua: Studio changed this script between the check and the write -- not applied
+  PASS  the race injection actually fired
+  PASS  racing write is refused  [exit=1]
+  PASS  the racer's edit survived (not clobbered)
+
+========================================================================
+TEST 13 -- no orphaned transfer buffer after a mid-transfer failure
+========================================================================
+  PASS  failed push left no __RepoPushBuffer in ServerStorage
+  PASS  refused CAS left no __RepoPushBuffer
+
+========================================================================
+TEST 14 -- pre-push backups written
+========================================================================
+  PASS  pre-push source backed up for every written file  [9 backups for 9 pending]
+  PASS  backup holds the PRE-push Studio source, not the new one  [GameManager.Script.lua]
+
+========================================================================
+TEST 15 -- --file that matches nothing is reported clearly
+========================================================================
+  PASS  there IS a pending queue to fail to match against
+--file did not match a pending entry: ServerScriptService/NoSuchFile.lua  (not in manifest)
+  PASS  unmatched --file exits 2 (not a misleading 'nothing pending')  [exit=2]
+  PASS  unmatched --file contacted Studio zero times
+
+========================================================================
+TEST 16 -- backslash paths (Windows tab-completion) still match
+========================================================================
+1 script(s) pending push:
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: pushed (263773 bytes)
+  [1/1] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-wo0tdp1m\repo\.studio-push-backups\20261009-181608
+  PASS  backslash --file path is normalized and matches  [exit=0]
+
+========================================================================
+TEST 17 -- stale buffer and compile probe from a previous crash are cleaned at startup
+========================================================================
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+  note: removed stale __RepoPushCompileProbe, __RepoPushBuffer (14 bytes) from ServerStorage -- a previous run was interrupted
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/9] ReplicatedStorage/DevAccess.ModuleScript.lua: ready
+  [2/9] ReplicatedStorage/UIDevice.ModuleScript.lua: ready
+  [3/9] ServerScriptService/GameManager.Script.lua: ready
+  [4/9] ServerScriptService/Level 1 Systems/EntityAI.Script.lua: ready
+  [5/9] ServerScriptService/Level 1 Systems/EntityKill.Script.lua: ready
+  [6/9] ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua: ready
+  [7/9] ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua: ready
+  [8/9] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+  [9/9] StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua: ready
+
+ready: 9   already applied: 0   problems: 0
+
+--audit: nothing was written.
+  PASS  --audit against live Studio classifies without writing  [exit=0]
+  PASS  stale buffer removed at startup
+  PASS  stale compile probe removed at startup
+  PASS  --audit wrote no script sources
+
+========================================================================
+TEST 18 -- a pushed script that does not compile is reported, not passed as clean
+========================================================================
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (35 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: COMPILE FAILED: [string "__RepoPushCompileProbe"]:5: Expected ')' (to close '(' at line 2), got 'end'
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-ijxuxw9p\repo\.studio-push-backups\20261009-181626
+
+!! 1 pushed, 1 do not compile -- fix and push again
+  !! StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: [string "__RepoPushCompileProbe"]:5: Expected ')' (to close '(' at line 2), got 'end'
+  PASS  a syntax error in a pushed script makes the tool exit non-zero  [exit=1]
+  PASS  the bytes still landed (the push itself succeeded)
+  PASS  the manifest still records what Studio actually holds  [synced]
+  PASS  no compile probe left behind in ServerStorage
+1 script(s) pending push:
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+
+Phase 1 -- checking live Studio sources (no writes):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready
+
+ready: 1   already applied: 0   problems: 0
+
+Phase 2 -- writing 1 script(s):
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (14 bytes)
+  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled
+
+Done: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.
+Pre-push sources saved under C:\Users\mikke\AppData\Local\Temp\pushtest-g_k5nw11\repo\.studio-push-backups\20261009-181629
+  PASS  a source that DOES compile pushes clean through the same check  [exit=0]
+
+========================================================================
+RESULT: 82 passed, 0 failed
+tests enumerated: 18   executed: 18   not executed: 0
+VERDICT: PASSED
+========================================================================

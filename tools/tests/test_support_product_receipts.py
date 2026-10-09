@@ -9,6 +9,8 @@ CONFIG = (ROOT / 'ReplicatedStorage/ZyntraConfig.ModuleScript.lua').read_text(en
 # profile section (daily research since 21/9, challenges since 23/9).
 RESEARCH = (ROOT / 'ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua').read_text(encoding='utf-8')
 CHALLENGES = (ROOT / 'ReplicatedStorage/ZyntraChallenges.ModuleScript.lua').read_text(encoding='utf-8')
+SKINS = (ROOT / 'ReplicatedStorage/ZyntraSkins.ModuleScript.lua').read_text(encoding='utf-8')
+DEV_ACCESS = (ROOT / 'ReplicatedStorage/DevAccess.ModuleScript.lua').read_text(encoding='utf-8')
 def section(start, stop):
     begin = SERVER.index(start)
     return SERVER[begin:SERVER.index(stop, begin)]
@@ -32,6 +34,9 @@ end)()
 local ZyntraChallengesModule = (function()
 CHALLENGES_SOURCE
 end)()
+local ZyntraSkinsModule = (function()
+SKINS_SOURCE
+end)()
 local function world(opts)
     opts=opts or {}
     -- Defined between two of the sliced sections; no pass is owned here.
@@ -41,6 +46,7 @@ local function world(opts)
     local function require(name)
         if name=="ZyntraDailyResearch" then return ZyntraDailyResearchModule end
         if name=="ZyntraChallenges" then return ZyntraChallengesModule end
+        if name=="ZyntraSkins" then return ZyntraSkinsModule end
         error("harness has no module "..tostring(name))
     end
     local w={db=opts.db or {},ranks=opts.ranks or {u_999=900},now=0,calls=0,callbacks=0,writes=0,
@@ -54,6 +60,10 @@ local function world(opts)
     function player:GetAttribute(k) return self.attributes[k] end
     Players.roster[123]=player
     local RunService={IsStudio=function()return w.studio end}
+    local game={GetService=function(_, name) assert(name=="RunService");return RunService end}
+    local DevAccess=(function()
+DEV_ACCESS_SOURCE
+    end)()
     local Enum={ProductPurchaseDecision={PurchaseGranted="Granted",NotProcessedYet="Retry"}}
     local MarketplaceService={}
     local sessions,mutationLocks={},{}
@@ -344,7 +354,8 @@ def main():
     leave=next(l.strip() for l in SERVER.splitlines() if 'queueSupportTotalSync(player.UserId, recordedSupportRobux(session.data))' in l)
     dirty=section('\t\tfor userId, total in pairs(pendingSupportSync)','\n\t\trefreshSupportLeaderboard()')
     tail=TAIL.replace('LOAD_REPAIR',load).replace('DIRTY_RETRY',dirty).replace('LEAVE_REPAIR',leave)
-    pieces=[COMMON,CONFIG,WORLD.replace('RESEARCH_SOURCE',RESEARCH).replace('CHALLENGES_SOURCE',CHALLENGES),
+    pieces=[COMMON,CONFIG,WORLD.replace('RESEARCH_SOURCE',RESEARCH).replace('CHALLENGES_SOURCE',CHALLENGES)
+        .replace('SKINS_SOURCE',SKINS).replace('DEV_ACCESS_SOURCE',DEV_ACCESS),
         section('local function colorData','local function isDispatchPredecessorClosed'),
         section('local function accessibilityValue','-- The switch a player'),
         section('local function publicProfile','local function clearPlayerTags'),

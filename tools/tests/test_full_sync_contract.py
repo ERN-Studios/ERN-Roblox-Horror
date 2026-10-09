@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -36,6 +37,8 @@ sys.path.insert(0, str(TOOLS))
 
 import studio_source_contract as contract  # noqa: E402
 import sync_from_studio as sync  # noqa: E402
+import push_repo_to_studio as push  # noqa: E402
+import pull_source_from_studio as pull  # noqa: E402
 
 REPO = "local x = 1\nreturn x\n"
 PLUS_NEWLINE = REPO + "\n"
@@ -54,7 +57,7 @@ def check(condition: bool, description: str, detail: str = "") -> None:
 
 
 # ---------------------------------------------------------------------------
-# A fake Studio that answers the four calls sync() makes.
+# A fake Studio that answers sync's native metadata/chunk reads.
 # ---------------------------------------------------------------------------
 
 
@@ -62,7 +65,7 @@ class FakeStudioClient:
     """Speaks the StudioMcpClient surface sync() uses: initialize/call/close.
 
     `sources` maps a Studio path to the text Studio serves for it. Everything
-    else -- the numbered script_read framing, the search_game_tree payload, the
+    else -- the native Source metadata/chunks, the search_game_tree payload, the
     Edit-mode handshake -- is reproduced exactly as the real proxy emits it, so
     the production decoders are under test too.
     """
@@ -73,6 +76,9 @@ class FakeStudioClient:
         self.initialized = False
         self.closed = False
         self.reads: list[str] = []
+        self.editor_sources = dict(sources)
+        self.editor_reads: list[str] = []
+        self.chunk_reads: list[tuple[str, int, int]] = []
 
     def initialize(self) -> None:
         self.initialized = True
@@ -115,8 +121,8 @@ class FakeStudioClient:
             )
         if tool == "script_read":
             target = arguments["target_file"].removeprefix("game.")
-            self.reads.append(target)
-            text = self.sources[target]
+            self.editor_reads.append(target)
+            text = self.editor_sources[target]
             # The proxy numbers every line with a rightwards arrow separator,
             # and the last line of a file ending in "\n" is an empty one that
             # still gets a number. Framing it exactly as the proxy does puts
@@ -125,6 +131,21 @@ class FakeStudioClient:
                 f"{index}\N{RIGHTWARDS ARROW}{line}"
                 for index, line in enumerate(text.split("\n"), start=1)
             )
+        if tool == "execute_luau":
+            code = arguments["code"]
+            for target, raw in self.sources.items():
+                literals = ", ".join(push.luau_string(s) for s in target.split("."))
+                text = contract.normalize(raw)
+                if code == push.READ_META_LUAU % literals:
+                    self.reads.append(target)
+                    data = text.encode("utf-8")
+                    return f"{len(data)}\t{push.djb2(data)}\t{text.count(chr(10)) + 1}\tModuleScript"
+                chunk = re.search(r"local first, count = (\d+), (\d+)", code)
+                if chunk:
+                    first, count = (int(value) for value in chunk.groups())
+                    if code == push.READ_CHUNK_LUAU % (literals, first, count):
+                        self.chunk_reads.append((target, first, count))
+                        return "\n".join(text.split("\n")[first - 1:first - 1 + count])
         raise AssertionError(f"fake Studio got an unexpected call: {tool}")
 
 
@@ -339,6 +360,8 @@ try:
           "sync() initialised and closed its client")
     check(len(client.reads) == 6,
           "sync() read every script out of Studio", str(len(client.reads)))
+    check(not client.editor_reads,
+          "sync() never substitutes an editor buffer for native Source")
 
     # --- the release blocker: an exact/permitted CRLF file survives untouched
     for path in (flagged_crlf, stale_exact, plain_crlf, plain_lf, remote_marker_path):
@@ -437,6 +460,83 @@ finally:
     shutil.rmtree(scratch, ignore_errors=True)
 
 # ---------------------------------------------------------------------------
+print("=== native reads, loading-service discovery and queued-work protection ===")
+# ---------------------------------------------------------------------------
+check(pull.SERVICES is sync.MIRRORED_SERVICES and "ReplicatedFirst" in pull.SERVICES,
+      "pull discovery and full-sync orphan discovery share the loading service")
+with tempfile.TemporaryDirectory(prefix="mongotv-native-fullsync-") as directory:
+    root = Path(directory)
+    loader = root / "ReplicatedFirst" / "Loader.ModuleScript.lua"
+    loader.parent.mkdir()
+    loader.write_text(REPO, encoding="utf-8")
+    orphan = loader.with_name("RemovedLoader.LocalScript.lua")
+    orphan.write_text("-- historical loader\n", encoding="utf-8")
+    # Many lines and multibyte text force more than one bounded native chunk.
+    fresh_source = ("-- \u00e6\u00f8\u00e5 \u00e9 \U0001f600 " + "x" * 80 + "\n") * 2600 + "return true\n"
+    client = FakeStudioClient({"ReplicatedFirst.Loader": fresh_source,
+                               "ReplicatedFirst.NewLoader": CHANGED}, [])
+    client.editor_sources["ReplicatedFirst.Loader"] = REPO
+    built = run_sync(root, client)
+    check(loader.read_bytes() == fresh_source.encode("utf-8"),
+          "stale editor text is ignored; large Unicode native Source is mirrored exactly")
+    check(len(client.chunk_reads) >= 3 and not client.editor_reads,
+          "large native Source is transferred in bounded chunks without script_read")
+    check((loader.parent / "NewLoader.ModuleScript.lua").read_text(encoding="utf-8") == CHANGED,
+          "a new ReplicatedFirst script is discovered and mirrored")
+    check("ReplicatedFirst/RemovedLoader.LocalScript.lua" in built["extraMirroredFilesNotInStudio"],
+          "an orphan ReplicatedFirst loader is reported without deleting it")
+
+    class CorruptNativeClient(FakeStudioClient):
+        def call(self, tool, arguments=None):
+            result = super().call(tool, arguments)
+            if tool == "execute_luau" and "local first, count =" in arguments["code"]:
+                return result + "tampered"
+            return result
+
+    before = {p.relative_to(root).as_posix(): p.read_bytes() for p in root.rglob("*") if p.is_file()}
+    refused = False
+    try:
+        run_sync(root, CorruptNativeClient({"ReplicatedFirst.Loader": CHANGED}, []))
+    except sync.StudioMcpError as error:
+        refused = "verification" in str(error)
+    check(refused, "inconsistent native fingerprint/chunks are refused")
+    check(all((root / name).read_bytes() == data for name, data in before.items()),
+          "failed native verification preserves this script and its existing manifest")
+
+for state in ("pending-studio-push", "studio-push-conflict"):
+    with tempfile.TemporaryDirectory(prefix="mongotv-pending-fullsync-") as directory:
+        root = Path(directory)
+        source = root / "Queued.ModuleScript.lua"
+        source.write_text(CHANGED, encoding="utf-8")
+        manifest_path = root / "studio-sync-manifest.json"
+        manifest_path.write_text(json.dumps({"items": [{"file": source.name, "status": state,
+                                                       "studioSha256Before": "baseline"}]}), encoding="utf-8")
+        before = (source.read_bytes(), manifest_path.read_bytes())
+        client = FakeStudioClient({}, [])
+        refused = False
+        try:
+            run_sync(root, client)
+        except sync.StudioMcpError as error:
+            refused = "queued/conflicted" in str(error)
+        check(refused and not client.initialized, f"{state} refuses sync before contacting Studio")
+        check((source.read_bytes(), manifest_path.read_bytes()) == before,
+              f"{state} keeps source and pending-baseline manifest byte-identical")
+
+with tempfile.TemporaryDirectory(prefix="mongotv-invalid-manifest-") as directory:
+    root = Path(directory)
+    manifest_path = root / "studio-sync-manifest.json"
+    manifest_path.write_bytes(b'{"items": [unfinished')
+    before = manifest_path.read_bytes()
+    client = FakeStudioClient({}, [])
+    refused = False
+    try:
+        run_sync(root, client)
+    except sync.StudioMcpError as error:
+        refused = "existing sync manifest" in str(error)
+    check(refused and not client.initialized and manifest_path.read_bytes() == before,
+          "an unreadable manifest cannot silently erase unclassified queued work")
+
+# ---------------------------------------------------------------------------
 print("=== the PRODUCTION checkout reconciles, read-only ===")
 # ---------------------------------------------------------------------------
 # The regression that mattered: on this machine 58 mirrored files are checked
@@ -528,8 +628,7 @@ check(counts["scripts"] + counts["remoteEvents"] == counts["total"] == len(live[
 mirrored = {entry["file"] for entry in live["items"]}
 on_disk = {
     path.relative_to(project_root).as_posix()
-    for service in ("ReplicatedStorage", "ServerScriptService", "ServerStorage",
-                    "StarterPlayer", "Workspace")
+    for service in sync.MIRRORED_SERVICES
     for path in (project_root / service).rglob("*.lua")
 }
 check(on_disk <= mirrored,

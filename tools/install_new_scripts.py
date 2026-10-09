@@ -24,6 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sync_from_studio import StudioMcpClient, find_mcp_batch, select_studio  # noqa: E402
+from push_repo_to_studio import luau_string  # noqa: E402
 from studio_source_contract import normalize, refresh_trailing_newline_metadata, sha256_of  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,21 +46,21 @@ def plan(mirror: str) -> tuple[str, str, str]:
 
 
 def lua_lookup(path: str) -> str:
-    names = json.dumps(path.split("."))
+    names = "{" + ", ".join(luau_string(name) for name in path.split(".")) + "}"
     return (
-        "local c=game;for _,n in " + names.replace("[", "{").replace("]", "}")
+        "local c=game;for _,n in " + names
         + " do c=c and c:FindFirstChild(n) end;"
         'return game:GetService("HttpService"):JSONEncode(c and {class=c.ClassName,source=c.Source} or {missing=true})'
     )
 
 
 def lua_update(path: str, source: str) -> str:
-    names = json.dumps(path.split("."))
+    names = "{" + ", ".join(luau_string(name) for name in path.split(".")) + "}"
     return (
-        "local c=game;for _,n in " + names.replace("[", "{").replace("]", "}")
+        "local c=game;for _,n in " + names
         + " do c=c and c:FindFirstChild(n) end;assert(c,'missing');"
         'game:GetService("ScriptEditorService"):UpdateSourceAsync(c,function() return '
-        + json.dumps(source) + " end);return 'ok'"
+        + luau_string(source) + " end);return 'ok'"
     )
 
 

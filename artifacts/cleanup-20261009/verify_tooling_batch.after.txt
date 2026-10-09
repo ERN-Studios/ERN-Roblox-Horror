@@ -1,0 +1,20 @@
+C:/Users/mikke/AppData/Local/Temp/support-receipts-xtj9lupe/receipts.luau:3: no duplicate grant: expected 6, got 10
+stacktrace:
+[C] function assert
+C:/Users/mikke/AppData/Local/Temp/support-receipts-xtj9lupe/receipts.luau:3 function check
+C:/Users/mikke/AppData/Local/Temp/support-receipts-xtj9lupe/receipts.luau:4 function eq
+C:/Users/mikke/AppData/Local/Temp/support-receipts-xtj9lupe/receipts.luau:2263
+PASS negative receipt: duplicate-grant handler fails the balance oracle
+C:/Users/mikke/AppData/Local/Temp/item-inventory-sk2mh3ia/item_inventory.luau:5: durably: expected 2, got 3
+stacktrace:
+[C] function assert
+C:/Users/mikke/AppData/Local/Temp/item-inventory-sk2mh3ia/item_inventory.luau:5 function check
+C:/Users/mikke/AppData/Local/Temp/item-inventory-sk2mh3ia/item_inventory.luau:8 function eq
+C:/Users/mikke/AppData/Local/Temp/item-inventory-sk2mh3ia/item_inventory.luau:2921
+PASS negative inventory: no-debit handler fails the durable balance oracle
+REPRODUCED CORE-004: unknown commit can spend an item without acknowledged effect; fresh retry spends again
+CORE-004 remains pending: this fixture is failure evidence, not a gameplay/economy pass
+PASS mutation: tunnel Length=68 produced expected FAIL (corridor Length must equal the exact wall gap)
+PASS mutation never wrote the source file
+PASS mutation safety: source writes rejected; interrupted real Luau child leaves originals untouched
+PASS authoritative runtime sources unchanged by all negative/safety fixtures

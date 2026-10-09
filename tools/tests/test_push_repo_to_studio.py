@@ -213,14 +213,17 @@ def detect_luau() -> tuple[Path | None, str]:
         return None, (f"no interpreter file at {candidate} and nothing named "
                       f"'{candidate.name}' on PATH")
     try:
-        proc = subprocess.run([str(resolved), "--version"],
-                              capture_output=True, text=True, timeout=60)
-    except OSError as error:
+        with tempfile.TemporaryDirectory(prefix="luau-interpreter-probe-") as directory:
+            probe = Path(directory) / "probe.luau"
+            probe.write_text('print("MONGOTV_LUAU_PROBE_OK")\n', encoding="utf-8")
+            proc = subprocess.run([str(resolved), str(probe)],
+                                  capture_output=True, text=True, encoding="utf-8", timeout=10)
+    except (OSError, subprocess.TimeoutExpired) as error:
         return None, f"{resolved} exists but could not be executed: {error}"
-    if proc.returncode != 0:
-        return None, (f"{resolved} --version exited {proc.returncode}: "
+    if proc.returncode != 0 or proc.stdout.strip() != "MONGOTV_LUAU_PROBE_OK":
+        return None, (f"{resolved} interpreter probe exited {proc.returncode}: "
                       f"{(proc.stderr or proc.stdout).strip()[:200]}")
-    return resolved, (proc.stdout or proc.stderr or "").strip()
+    return resolved, "executed the offline Luau probe successfully"
 
 
 LUAU_PATH: Path | None = None

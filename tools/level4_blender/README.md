@@ -122,7 +122,7 @@ The cinema is an ordinary round for everyone (`GameManager` `LEVEL4_PUBLIC = tru
 Level 4 bays 113-116 (plain pads), the old lobby's stations 13-16, and by CONTINUE after a Level 3 clear:
 `Routing.MaxLevel = 4`). The map preview and the old cinema versions were deleted on 2026-10-05. **Importer note:**
 `place.luau` still reads the original layout `Workspace."Level 4 Cinema Preview"` (`OLD_NAME`) for the signage carriers.
-Insert `G:\Roblox\_local\l4publicackup\Workspace__Level_4_Cinema_Preview.rbxm` before an import, and remove it afterwards. Flow: total darkness ->
+Insert `G:\Roblox\_local\l4public\backup\Workspace__Level_4_Cinema_Preview.rbxm` before an import, and remove it afterwards. Flow: total darkness ->
 a note (`L4NoteSpot`) gives a 4-switch order for the POWER A/B cabinets -> the power wave lights the whole cinema
 ("woooow", 15 s fully lit) -> the lights start failing and the Usher wakes -> 3 film reels (one may sit in the arcade
 prize case: the arcade HI-SCORE shows the keypad code) -> each booth projector is threaded (hold 5 s) while the main

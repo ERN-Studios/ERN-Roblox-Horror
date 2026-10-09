@@ -200,7 +200,9 @@ class FakeStudio:
         script = Path(temp_path)
         try:
             script.write_text(program, encoding="utf-8")
-            proc = subprocess.run([str(LUAU), str(script)], capture_output=True, text=True)
+            proc = subprocess.run(
+                [str(LUAU), str(script)], capture_output=True, text=True, encoding="utf-8"
+            )
         finally:
             try:
                 script.unlink()

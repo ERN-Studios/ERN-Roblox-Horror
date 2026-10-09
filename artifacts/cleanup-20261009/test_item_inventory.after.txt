@@ -1,0 +1,1 @@
+item inventory: 87 checks passed

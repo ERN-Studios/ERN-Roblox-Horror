@@ -59,10 +59,11 @@ def main() -> None:
         "local definitions = {",
     ]
     for key, d in definitions.items():
+        metalness = f"rbxassetid://{d['metalness']}" if d["metalness"] else ""
         lines.append(
             f'  {{key="{key}", name="{d["name"]}", base=Enum.Material.{d["base"]}, tile={d["tile"]}, '
             f'color="rbxassetid://{d["color"]}", normal="rbxassetid://{d["normal"]}", '
-            f'roughness="rbxassetid://{d["roughness"]}", metalness="{f"rbxassetid://{d["metalness"]}" if d["metalness"] else ""}"}},'
+            f'roughness="rbxassetid://{d["roughness"]}", metalness="{metalness}"}},'
         )
     lines += [
         "}",

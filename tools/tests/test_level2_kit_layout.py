@@ -1,7 +1,7 @@
 """Offline Level 2 kit contract: real Luau, 400 seeds, independent geometry oracle.
 
-Only this new module is mutated, briefly, by --mutation-check. Existing files are
-read only. Fixtures live in the OS temporary directory. Roblox RNG distributions
+Sources are read only, including during --mutation-check. Mutants are assembled
+in memory and fixtures live in the OS temporary directory. Roblox RNG distributions
 will differ: the stub uses Park-Miller integer arithmetic, not Roblox Random.
 """
 
@@ -854,33 +854,30 @@ def mutation_check(binary):
                    '\t\tfor _, c in ipairs(layout.Corridors) do\n'
                    '\t\t\tif c.Kind ~= "Narrow" then c.Length = 68 break end\n'
                    '\t\tend\n\t\treturn layout\n\tend')
+    text = original.decode("utf-8")
+    assert marker in text
+    mutant_source = text.replace(marker, replacement, 1)
+    # The mutated result is checked independently. Skip the module's own
+    # post-return Validate here so this proves the Python oracle catches it.
+    patched = PRELUDE.replace('assert(ok, tostring(reason))', '-- mutation bypasses the internal validator')
+    script = patched.replace("__CONFIG__", CONFIG.read_text(encoding="utf-8"))
+    script = script.replace("__MODULE__", mutant_source)
+    script = script.replace("__RUN__", 'emit(1, nil, "MUTANT")')
+    with tempfile.TemporaryDirectory(prefix="level2-kit-mutant-") as directory:
+        fixture = Path(directory) / "mutant.luau"
+        fixture.write_text(script, encoding="utf-8")
+        result = subprocess.run([binary, str(fixture)], capture_output=True, text=True, timeout=60)
+    assert result.returncode == 0, result.stderr
+    mutant = json.loads(result.stdout.split(" ", 1)[1])
     try:
-        text = original.decode("utf-8")
-        assert marker in text
-        MODULE.write_text(text.replace(marker, replacement, 1), encoding="utf-8")
-        # The mutated result is checked independently. Skip the module's own
-        # post-return Validate here so this proves the Python oracle catches it.
-        patched = PRELUDE.replace('assert(ok, tostring(reason))', '-- mutation bypasses the internal validator')
-        script = patched.replace("__CONFIG__", CONFIG.read_text(encoding="utf-8"))
-        script = script.replace("__MODULE__", MODULE.read_text(encoding="utf-8"))
-        script = script.replace("__RUN__", 'emit(1, nil, "MUTANT")')
-        with tempfile.TemporaryDirectory(prefix="level2-kit-mutant-") as directory:
-            fixture = Path(directory) / "mutant.luau"
-            fixture.write_text(script, encoding="utf-8")
-            result = subprocess.run([binary, str(fixture)], capture_output=True, text=True, timeout=60)
-        assert result.returncode == 0, result.stderr
-        mutant = json.loads(result.stdout.split(" ", 1)[1])
-        try:
-            validate(mutant, 1)
-        except AssertionError as error:
-            assert "Length must equal" in str(error), f"mutation failed for an unexpected reason: {error}"
-            print(f"PASS mutation: tunnel Length=68 produced expected FAIL ({error})")
-        else:
-            raise AssertionError("mutation survived the independent contract test")
-    finally:
-        MODULE.write_bytes(original)
-        assert MODULE.read_bytes() == original
-    print("PASS mutation restored byte-for-byte")
+        validate(mutant, 1)
+    except AssertionError as error:
+        assert "Length must equal" in str(error), f"mutation failed for an unexpected reason: {error}"
+        print(f"PASS mutation: tunnel Length=68 produced expected FAIL ({error})")
+    else:
+        raise AssertionError("mutation survived the independent contract test")
+    assert MODULE.read_bytes() == original, "source changed concurrently during mutation check"
+    print("PASS mutation never wrote the source file")
 
 
 def spiral_cap_mutation(binary, seeds):

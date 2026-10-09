@@ -34,6 +34,7 @@ for _stream in (sys.stdout, sys.stderr):
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sync_from_studio import (  # noqa: E402
+    MIRRORED_SERVICES,
     StudioMcpClient,
     StudioMcpError,
     find_mcp_batch,
@@ -53,14 +54,7 @@ from studio_source_contract import (  # noqa: E402
     refresh_trailing_newline_metadata,
 )
 STUDIO_NAME = "BACKROOMS: STAY QUIET [CO-OP HORROR]"
-SERVICES = (
-    "ServerScriptService",
-    "StarterPlayer",
-    "ReplicatedStorage",
-    "ServerStorage",
-    "Workspace",
-    "RobloxReplicatedStorage",
-)
+SERVICES = MIRRORED_SERVICES
 CHUNK_LINES = 1400
 INVALID_WINDOWS_NAME = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
 

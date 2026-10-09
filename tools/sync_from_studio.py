@@ -47,6 +47,15 @@ from studio_source_contract import (  # noqa: E402
 
 PROTOCOL_VERSION = "2024-11-05"
 SCRIPT_CLASSES = {"Script", "LocalScript", "ModuleScript"}
+MIRRORED_SERVICES = (
+    "ReplicatedFirst",
+    "ReplicatedStorage",
+    "ServerScriptService",
+    "ServerStorage",
+    "StarterPlayer",
+    "Workspace",
+    "RobloxReplicatedStorage",
+)
 LEGACY_STUDIO_NAME = "Backrooms: No Way Out"
 RELEASE_STUDIO_NAME = "BACKROOMS: STAY QUIET [CO-OP HORROR]"
 # The place was renamed for the update banner (2026-10-08); same place id, still checked below.
@@ -450,8 +459,8 @@ def load_manifest(project_root: Path) -> dict[str, Any]:
         return {}
     try:
         return json.loads(path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
-        return {}
+    except (json.JSONDecodeError, OSError) as error:
+        raise StudioMcpError(f"Cannot read the existing sync manifest: {path}: {error}") from error
 
 
 def trailing_newline_flags(manifest: dict[str, Any]) -> set[str]:
@@ -508,9 +517,8 @@ def mirrored_candidates(root: Path) -> set[str]:
         re.compile(r"\.(?:Script|LocalScript|ModuleScript)\.lua$", re.IGNORECASE),
         re.compile(r"\.RemoteEvent\.txt$", re.IGNORECASE),
     )
-    services = ["Workspace", "ReplicatedStorage", "ServerScriptService", "ServerStorage", "StarterPlayer"]
     result: set[str] = set()
-    for service in services:
+    for service in MIRRORED_SERVICES:
         service_root = root / service
         if not service_root.is_dir():
             continue
@@ -534,6 +542,22 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
     if not project_root.is_dir():
         raise StudioMcpError(f"Project root does not exist: {project_root}")
 
+    previous = load_manifest(project_root)
+    protected = [
+        item.get("file") or item.get("studioPath") or "<unnamed entry>"
+        for item in previous.get("items", [])
+        if item.get("status") in {"pending-studio-push", "studio-push-conflict"}
+    ]
+    if protected:
+        raise StudioMcpError(
+            "Full sync refused: queued/conflicted repo work must be reconciled "
+            "before pulling Studio: " + ", ".join(protected)
+        )
+
+    # The guarded push tool imports this MCP client, so resolve its shared
+    # native reader only after this module has finished loading.
+    from push_repo_to_studio import read_studio_source
+
     client = (client_factory or (lambda: StudioMcpClient(find_mcp_batch())))()
     try:
         client.initialize()
@@ -547,7 +571,6 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
         remotes = search_instances(client, studio_id, "RemoteEvent")
         items = scripts + remotes
 
-        previous = load_manifest(project_root)
         flagged_paths = trailing_newline_flags(previous)
 
         seen_paths: set[str] = set()
@@ -579,15 +602,9 @@ def sync(args: argparse.Namespace, client_factory=None) -> dict[str, Any]:
                     content = remote_marker(item)
                     status = write_if_changed(destination, content)
             else:
-                source = client.call(
-                    "script_read",
-                    {
-                        "studio_id": studio_id,
-                        "target_file": f"game.{full_path}",
-                        "should_read_entire_file": True,
-                    },
+                studio_text = read_studio_source(
+                    client, studio_id, checked_components(full_path)
                 )
-                studio_text = decode_script_read(source)
                 existing = read_canonical(destination) if destination.is_file() else None
                 flagged = full_path in flagged_paths
                 action, content, verdict = reconcile_source(

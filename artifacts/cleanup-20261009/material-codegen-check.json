@@ -1,0 +1,9 @@
+{
+  "python_version": "3.11.4",
+  "metal_and_nonmetal_golden_rows": true,
+  "generated_luau_compile": true,
+  "normalized_asset_ids": true,
+  "materials_json_roles": true,
+  "runtime_or_original_output_mutations": false,
+  "generated_sha256": "a921eb8a69f8112e8d18e199eadf6dcfaf14351c54024f14dddad203838fea7c"
+}

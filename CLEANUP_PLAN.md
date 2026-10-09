@@ -49,6 +49,31 @@ levende character, health100, LobbyLoadingDone=true, 68 assets/0 preload-fejl,
 kun samme eksisterende lydafvisning. Kommentaroprydning fjerner 461 bytes og
 14 linjer; den ændrer ingen aktive jumpscare-instruktioner eller konstanter.
 
+B01a/T03–T06 og B01b/T08 er **gennemført** efter offline integration og
+negative kontroller. T07's source-write er fjernet og interruption-porten
+bestået; den komplette pensionerede layout-suite er fortsat **afventer test**
+fordi dens aktuelle runtimeinputs ikke længere findes. B03/X05 og den ene
+T18 nul-byte helper er **gennemført**; øvrige tomme QA-/packagefiler bevares.
+Se [tooling-resultater](artifacts/cleanup-20261009/tooling-results.md).
+
+## Supplerende testfund og batchporte
+
+| ID / batch | Præcis kandidat og bevis | Dependencies / gevinst / risiko | Testport og status |
+|---|---|---|---|
+| N01 / B06 | `ReplicatedStorage/RoundHud.ModuleScript.lua` Chevron `TextScaled, TextWrapped = true, false`; native TextLabel-probe viser, at wrapped=false slår scaling fra. UIRegression shared anchor forventer kantplacering uden de allerede aktive 16/24 px margener. | RoundHud templates, Framewisp binding, UIDevice safe slots og shared UIRegression; små scoped rettelser, normal HUD skal bevares. | Native før-test 935/51; isolated propertyprobe; fake engine modellerer koblingen; eksisterende offline gates; native samme matrix/RunAll efter. **afventer test**. |
+| X02 / B05 | EditableMesh build/upload authoring-helpers og deres L1/L4 upload wrappers; exceptions forlader allocated meshes. | L1/L2 helper-extraction markers/signaturer og result/asset-ID-kontrakter bevares. Lav/moderat risiko; bounded resource cleanup uden målt MB-gevinst. | Actual offline Luau helpers med success/allocation/Add*/CreateAssetAsync error og nøjagtig Destroycount; alle importer-extraction paths. **afventer test**. |
+
+CORE-004 er nu **reproduceret i fake store**: commit efterfulgt af tabt svar
+kan debitere et item uden anerkendt effekt, og en ny retry kan debitere igen.
+Økonomikoden beholdes, indtil operation-ID/refund/disconnect-porten er opfyldt.
+
+CORE-024's første isolerede stagingforsøg fejlede og ændrede uventet original
+EndBlockades-source. Den præcise før-kilde er CAS-gendannet og hele native
+spejlets 230 hashes/editor-kilder genverificeret uden drift. Ingen publication.
+Batchen er **afventer test**. Nye isolerede scriptprobes bruger `Instance.new`
+og tjekker originalerne på både success og failure; den præcise årsag til den
+observerede klonadfærd er ikke bevist.
+
 Batches gennemføres sekventielt med før-kilder, frisk baseline, scoped diff,
 defineret testport og egen commit. En manglende nødvendig test medfører, at
 runtimekandidaten bliver stående. En regression medfører rollback af batchen.

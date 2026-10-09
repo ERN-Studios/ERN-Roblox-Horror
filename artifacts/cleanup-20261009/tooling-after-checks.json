@@ -1,0 +1,44 @@
+[
+  {
+    "path": "tools/tests/test_install_new_scripts.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_install_new_scripts.after.txt",
+    "output_tail": "generic installer payloads: 20 checks passed (actual offline Luau)\n"
+  },
+  {
+    "path": "tools/tests/test_support_product_receipts.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_support_product_receipts.after.txt",
+    "output_tail": "support product receipts: 299 checks passed\n"
+  },
+  {
+    "path": "tools/tests/test_full_sync_contract.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_full_sync_contract.after.txt",
+    "output_tail": "eckout reconciles and verifies\n  ok   and the live manifest already describes canonical content for all of them\n=== the live manifest keeps its contract ===\n  ok   finalNewlineContract is present\n  ok   the published trailing-newline count is the number of entries that carry the flag\n  ok   and the contract prose names that same number rather than a stale one\n  ok   counts still reconcile\n  ok   every .lua in the mirrored services is listed in the manifest\n\nAll full-sync contract checks passed.\n"
+  },
+  {
+    "path": "tools/tests/test_studio_source_contract.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_studio_source_contract.after.txt",
+    "output_tail": "for an exact fallback landing\n  ok   record_synced_source retains the flag for a permitted +LF landing\n  ok   fallback bookkeeping republishes the reconciled flag count\n=== the release tools print on a default Windows console ===\n  ok   push_repo_to_studio --help survives a cp1252 console\n  ok   pull_source_from_studio --help survives a cp1252 console\n  ok   record_pending_push --help survives a cp1252 console\n  ok   sync_from_studio --help survives a cp1252 console\n\nAll contract checks passed.\n"
+  },
+  {
+    "path": "tools/tests/test_push_repo_to_studio.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_push_repo_to_studio.after.txt",
+    "output_tail": "h:\n  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua\n\nPhase 1 -- checking live Studio sources (no writes):\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready\n\nready: 1   already applied: 0   problems: 0\n\nPhase 2 -- writing 1 script(s):\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (35 bytes)\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: COMPILE FAILED: [string \"__RepoPushCompileProbe\"]:5: Expected ')' (to close '(' at line 2), got 'end'\n\nDone: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.\nPre-push sources saved under C:\\Users\\mikke\\AppData\\Local\\Temp\\pushtest-ijxuxw9p\\repo\\.studio-push-backups\\20261009-181626\n\n!! 1 pushed, 1 do not compile -- fix and push again\n  !! StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: [string \"__RepoPushCompileProbe\"]:5: Expected ')' (to close '(' at line 2), got 'end'\n  PASS  a syntax error in a pushed script makes the tool exit non-zero  [exit=1]\n  PASS  the bytes still landed (the push itself succeeded)\n  PASS  the manifest still records what Studio actually holds  [synced]\n  PASS  no compile probe left behind in ServerStorage\n1 script(s) pending push:\n  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua\n\nPhase 1 -- checking live Studio sources (no writes):\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: ready\n\nready: 1   already applied: 0   problems: 0\n\nPhase 2 -- writing 1 script(s):\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: pushed (14 bytes)\n  [1/1] StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua: compiled\n\nDone: 1 pushed, 0 already applied, 0 conflict(s), 0 failed.\nPre-push sources saved under C:\\Users\\mikke\\AppData\\Local\\Temp\\pushtest-g_k5nw11\\repo\\.studio-push-backups\\20261009-181629\n  PASS  a source that DOES compile pushes clean through the same check  [exit=0]\n\n========================================================================\nRESULT: 82 passed, 0 failed\ntests enumerated: 18   executed: 18   not executed: 0\nVERDICT: PASSED\n========================================================================\n"
+  },
+  {
+    "path": "tools/tests/test_item_inventory.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/test_item_inventory.after.txt",
+    "output_tail": "item inventory: 87 checks passed\n"
+  },
+  {
+    "path": "artifacts/cleanup-20261009/verify_tooling_batch.py",
+    "exit_code": 0,
+    "log": "artifacts/cleanup-20261009/verify_tooling_batch.after.txt",
+    "output_tail": ": unknown commit can spend an item without acknowledged effect; fresh retry spends again\nCORE-004 remains pending: this fixture is failure evidence, not a gameplay/economy pass\nPASS mutation: tunnel Length=68 produced expected FAIL (corridor Length must equal the exact wall gap)\nPASS mutation never wrote the source file\nPASS mutation safety: source writes rejected; interrupted real Luau child leaves originals untouched\nPASS authoritative runtime sources unchanged by all negative/safety fixtures\n"
+  }
+]
