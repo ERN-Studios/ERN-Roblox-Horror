@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local ServerStorage = game:GetService("ServerStorage")
+local WorldStorage = require(script.Parent:WaitForChild("LevelWorldStorage"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local MODEL_NAME, EXIT_NAME = "Level 6 Indoor Playground", "Level6Exit"
 -- 2026-10-03: Level 6 is the static Indoor Playground map (tools/level6_playground). The generated
@@ -10,13 +11,14 @@ local MODEL_NAME, EXIT_NAME = "Level 6 Indoor Playground", "Level6Exit"
 local IN_PREVIEW = "Level6PlaygroundPreview"
 local Runtime = {}
 function Runtime.EnsureWorld()
-	local model = workspace:FindFirstChild(MODEL_NAME)
+	local model = WorldStorage.Get(6)
 	return model, model and model:FindFirstChild(EXIT_NAME, true)
 end
 -- The hide-and-seek round (the counting child) lives in "Level 6 Playground Game".
 local Playground = require(script.Parent:WaitForChild("Level 6 Systems"):WaitForChild("Level 6 Playground Game"))
 function Runtime.Leave(player, died)
 	local was = player:GetAttribute(IN_PREVIEW) == true
+	if Runtime.DropEntry then Runtime.DropEntry(player) end
 	player:SetAttribute(IN_PREVIEW, nil)
 	if was then player:SetAttribute("InRound", false) end
 	Playground.RemovePlayer(player)
@@ -44,6 +46,42 @@ end
 -- `entered` tells a party that is inside (or was: the level is free the moment it is empty) from one that is still
 -- streaming in, whose hold has to outlast its streaming whoever else comes and goes meanwhile.
 local partyLock = {token = nil, holdUntil = 0, entered = false}
+local letGo
+local entryLeases, joinedEntries = {}, {}
+local function pendingEntries()
+ local busy = false
+ for player, lease in pairs(entryLeases) do
+  if player.Parent ~= Players or os.clock() >= lease.deadline or lease.token ~= partyLock.token then
+   entryLeases[player] = nil
+  else busy = true end
+ end
+ return busy
+end
+function Runtime.PendingValid(player, lease)
+ return lease ~= nil and entryLeases[player] == lease and player.Parent == Players
+  and os.clock() < lease.deadline and partyLock.token == lease.token
+end
+function Runtime.BeginEntry(player, token, kind)
+ pendingEntries()
+ if player.Parent ~= Players or partyLock.token ~= token or entryLeases[player] then return nil end
+ local lease = {token = token, deadline = os.clock() + 90, kind = kind}
+ partyLock.holdUntil = math.max(partyLock.holdUntil, lease.deadline)
+ entryLeases[player] = lease
+ return lease
+end
+function Runtime.EndEntry(player, lease)
+ if lease and entryLeases[player] == lease then
+  entryLeases[player] = nil
+  letGo(lease.token)
+ end
+end
+function Runtime.DropEntry(player)
+ joinedEntries[player] = nil
+ Runtime.EndEntry(player, entryLeases[player])
+end
+function Runtime.RollbackEntry(player, lease)
+ if lease and (joinedEntries[player] == lease or Runtime.PendingValid(player, lease)) then Runtime.Leave(player) end
+end
 local function inLevel6(player)
 	return player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true
 end
@@ -56,19 +94,25 @@ local function occupants(except)
 end
 local function claim(token)
 	if token == nil then return false end
+	if occupants() == 0 and Playground.State().phase ~= "idle" and partyLock.token ~= token then return false end
 	if occupants() > 0 then
 		if partyLock.token ~= token then return false end         -- in use: only its own party may add to it
-	elseif partyLock.token ~= nil and partyLock.token ~= token and os.clock() < partyLock.holdUntil then
+	elseif partyLock.token ~= nil and partyLock.token ~= token and (os.clock() < partyLock.holdUntil or pendingEntries()) then
 		return false                                              -- another party is streaming in right now
 	end
 	if partyLock.token ~= token then partyLock.entered = false end
-	partyLock.token, partyLock.holdUntil = token, os.clock() + 90
+	if partyLock.token ~= token or not pendingEntries() then partyLock.holdUntil = os.clock() + 90 end
+	partyLock.token = token
+	if not WorldStorage.Activate(6) then
+		partyLock.token, partyLock.holdUntil, partyLock.entered = nil, 0, false
+		return false
+	end
 	return true
 end
 -- letGo(token): that party did not get in and gives the level back. letGo(nil): somebody left; the level is free
 -- if that emptied it (a party still on its way in keeps its hold).
-local function letGo(token, except)
-	if occupants(except) > 0 then return end
+letGo = function(token, except)
+	if occupants(except) > 0 or pendingEntries() then return end
 	if (token ~= nil and partyLock.token == token) or (token == nil and partyLock.entered) then
 		partyLock.token, partyLock.holdUntil, partyLock.entered = nil, 0, false
 	end
@@ -101,22 +145,30 @@ local function tellBusy(player)
 	gui.Parent = playerGui
 	task.delay(7, function() gui:Destroy() end)
 end
-Players.PlayerRemoving:Connect(function(player) letGo(nil, player) end)
+Players.PlayerRemoving:Connect(function(player) Runtime.DropEntry(player); letGo(nil, player) end)
 function Runtime.Emptied() letGo(nil) end
 workspace:SetAttribute("Level6PartyLock", "PARTY_LOCK_20261008")
 -- replicated, for anything that wants to show it (a sign at the gate, a test): somebody is in the level or on the way in
 task.spawn(function()
 	while true do
-		workspace:SetAttribute("Level6InUse", occupants() > 0 or (partyLock.token ~= nil and os.clock() < partyLock.holdUntil))
+		local busy = occupants() > 0 or pendingEntries() or (partyLock.token ~= nil and os.clock() < partyLock.holdUntil)
+		workspace:SetAttribute("Level6InUse", busy)
+		-- RemovePlayer interrupts first; finish owns the doll, kill cam and finale cleanup.
+		if not busy and Playground.State().phase == "idle" then WorldStorage.Deactivate(6) end
 		task.wait(1)
 	end
 end)
 
-function Runtime.Join(player, party)
+function Runtime.Join(player, party, lease)
+	if lease and not Runtime.PendingValid(player, lease) then return false, "ENTRY_EXPIRED" end
 	if not claim(party) then return false, "LEVEL_IN_USE" end
 	player:SetAttribute(IN_PREVIEW, true)
-	local ok, reason = Playground.AddPlayer(player)
-	if ok then partyLock.entered = true else player:SetAttribute(IN_PREVIEW, nil); letGo(party) end
+	local called, ok, reason = pcall(Playground.AddPlayer, player)
+	if not called then
+		pcall(Playground.RemovePlayer, player) -- AddPlayer may have installed partial session state
+		reason, ok = ok, false
+	end
+	if ok then partyLock.entered = true; joinedEntries[player] = lease else player:SetAttribute(IN_PREVIEW, nil); letGo(party) end
 	return ok, reason
 end
 local ENTER, RETURN = "Level6DeveloperPreviewPrompt", "Level6DeveloperPreviewReturnPrompt"
@@ -211,7 +263,7 @@ local function playerReady(player)
 	return character, root
 end
 local function previewReady()
-	local model = workspace:FindFirstChild(MODEL_NAME)
+	local model = WorldStorage.Get(6)
 	if not model or not model:IsA("Model") or model:GetAttribute("Level6Preview") ~= true
 		or model:GetAttribute("PreviewOnly") ~= true or model:GetAttribute("Level6PreviewReady") ~= true then return nil end
 	local exit = model:FindFirstChild(EXIT_NAME, true)
@@ -328,6 +380,8 @@ local function onEnter(player, prompt)
 		nextUse[player] = os.clock() + 2
 		return
 	end
+	local lease = Runtime.BeginEntry(player, party)
+	if not lease then letGo(party); return end
 	nextUse[player] = math.huge
  local r3Owner = beginR3Entry(door)
 	local previous = character:GetPivot()
@@ -335,7 +389,7 @@ local function onEnter(player, prompt)
 		local model, exit = Runtime.EnsureWorld()
 		hookExit()
 		if not model or not exit or not floorAt(model, exit.Position) then error("Preview landing floor unavailable") end
-		if not streamReady(player, exit.Position, MODEL_NAME) then error("Preview streaming confirmation timed out") end
+		if not streamReady(player, exit.Position, MODEL_NAME) or not Runtime.PendingValid(player, lease) then error("Preview streaming confirmation timed out") end
 		local currentCharacter, currentRoot = playerReady(player)
 		local currentModel, currentExit = previewReady()
 		if currentCharacter ~= character or currentModel ~= model or currentExit ~= exit
@@ -344,7 +398,7 @@ local function onEnter(player, prompt)
 			or not floorAt(model, exit.Position) then return end
 		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
 		character:PivotTo(upright(exit.CFrame))
-		local joined, reason = Runtime.Join(player, party)
+		local joined, reason = Runtime.Join(player, party, lease)
 		if not joined then
 			character:PivotTo(previous)
 			error("Preview join rejected: " .. tostring(reason))
@@ -354,6 +408,7 @@ local function onEnter(player, prompt)
 		task.spawn(Runtime.Suit, player, upright(exit.CFrame))
 	end)
  finishR3Entry(r3Owner)
+	Runtime.EndEntry(player, lease)
 	release(player)
 	if player:GetAttribute(IN_PREVIEW) ~= true then letGo(party) end
 	if not ok then warn("[Level6PreviewAccess] " .. tostring(err)) end
@@ -414,7 +469,7 @@ do
     local model, exit = previewReady()
     local prompt = returnPrompt(exit)
     if not model or not prompt or not prompt:IsA("ProximityPrompt") or not prompt.Enabled
-     or not floorAt(model, exit.Position) then return nil end
+     then return nil end
     return model, exit
    end,
    launch = function(context)
@@ -430,15 +485,33 @@ do
     local model, exit = Runtime.EnsureWorld()
     hookExit()
     if not model or not exit or not floorAt(model, exit.Position) then letGo(context); return false, "PREVIEW_NOT_READY" end
-    local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, position)
-     return streamReady(player, position, MODEL_NAME)
+    local leases = {}
+    for player, lock in pairs(queueLocks) do
+     if lock == context then
+      local lease = Runtime.BeginEntry(player, context)
+      if not lease then
+       for owner, owned in pairs(leases) do Runtime.EndEntry(owner, owned) end
+       letGo(context); return false, "ENTRY_PENDING"
+      end
+      leases[player] = lease
+     end
+    end
+    local ok, committed, commitProblem, entries = pcall(function()
+     local entries, problem = bridge.PreparePreviewGroup(context, model, exit, function(player, position)
+      return Runtime.PendingValid(player, leases[player]) and streamReady(player, position, MODEL_NAME) == true
+       and Runtime.PendingValid(player, leases[player])
+     end)
+     if not entries then return false, problem end
+     local joined, why = bridge.CommitPreviewGroup(context, entries, function(entry)
+      local entered, reason = Runtime.Join(entry.player, context, leases[entry.player])
+      if entered then transport:FireClient(entry.player, "ArrivalFacing", entry.frame, MODEL_NAME) end
+      return entered, reason
+     end, function(entry) Runtime.RollbackEntry(entry.player, leases[entry.player]) end)
+     return joined, why, entries
     end)
-    if not entries then letGo(context); return false, problem end
-    local committed, commitProblem = bridge.CommitPreviewGroup(context, entries, function(entry)
-     local joined, reason = Runtime.Join(entry.player, context)
-     if joined then transport:FireClient(entry.player, "ArrivalFacing", entry.frame, MODEL_NAME) end
-     return joined, reason
-    end, function(entry) Runtime.Leave(entry.player) end)
+    -- Keep the leases through the whole cohort commit, including yielding callbacks.
+    for player, lease in pairs(leases) do Runtime.EndEntry(player, lease) end
+    if not ok then letGo(context); return false, tostring(committed) end
     if not committed then letGo(context) end
     -- The queue validates each member's lobby character through the commit, so the round body goes on after it.
     if committed then
@@ -461,47 +534,51 @@ do
 	local enter = Instance.new("BindableFunction")
 	enter.Name = "Level6EnterFromLevel"
 	enter.OnInvoke = function(player, step, party)
-		if typeof(player) ~= "Instance" or not player:IsA("Player") or player.Parent ~= Players
-			or not DevAccess.IsLevel6Allowed(player) or workspace:GetAttribute("ReservedRoundServer") == true then return false end
-		local model, exit = Runtime.EnsureWorld()
-		hookExit()
-		if not model or not exit or not floorAt(model, exit.Position) then return false end
-		-- PARTY_LOCK_20261008: the party that finished Level 5 together comes in together, and only if nobody else is
-		-- in here; a caller without a party is a party of one.
+		if typeof(player) ~= "Instance" or not player:IsA("Player") then return false end
 		party = if party ~= nil then party else player
-		if not claim(party) then
-			tellBusy(player)
-			return false
+		local lease = entryLeases[player]
+		if step == "cancel" then
+			if lease and lease.token == party and lease.kind == "continue" then Runtime.EndEntry(player, lease) end
+			return true
 		end
-		if step == "prepare" then
-			local streamed = streamReady(player, exit.Position, MODEL_NAME) == true
-			if not streamed then letGo(party, player) end
-			return streamed
-		elseif step == "enter" then
-			-- This level's round body first, at the arrival, and only THEN the round takes the player. The other
-			-- way round (the queue's order, which starts from a lobby avatar) the round's life watch sees the
-			-- living body they came in being torn down by the load, and counts it a death.
+		if player.Parent ~= Players or not DevAccess.IsLevel6Allowed(player)
+			or workspace:GetAttribute("ReservedRoundServer") == true then return false end
+		if step ~= "prepare" and step ~= "enter" then return false end
+		-- A preparation is retained across Invoke calls, and enter consumes it once.
+		if step == "enter" then
+			if not Runtime.PendingValid(player, lease) or lease.token ~= party
+				or lease.kind ~= "continue" or lease.consuming then return false end
+			lease.consuming = true
+		else
+			if not claim(party) then tellBusy(player); return false end
+			lease = Runtime.BeginEntry(player, party, "continue")
+			if not lease then return false end
+		end
+		local ok, result = pcall(function()
+			local model, exit = Runtime.EnsureWorld()
+			hookExit()
+			if not model or not exit or model.Parent ~= workspace or not floorAt(model, exit.Position) then return false end
+			if step == "prepare" then
+				return streamReady(player, exit.Position, MODEL_NAME) == true and Runtime.PendingValid(player, lease)
+			end
+			-- Load the destination body before AddPlayer installs its life watcher.
 			local frame = upright(exit.CFrame)
 			Runtime.Suit(player, frame)
 			local character = player.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-			if player.Parent ~= Players or not root or not humanoid or humanoid.Health <= 0
-				or (root.Position - frame.Position).Magnitude > 60 then
-				warn("[Level6PreviewAccess] continue: the round body did not arrive")
-				letGo(party, player)
-				return false
-			end
-			local joined, reason = Runtime.Join(player, party)
+			if not Runtime.PendingValid(player, lease) or not root or not humanoid or humanoid.Health <= 0
+				or (root.Position - frame.Position).Magnitude > 60 then return false end
+			local joined, reason = Runtime.Join(player, party, lease)
 			if not joined then
-				player:SetAttribute(IN_PREVIEW, true)      -- Join took the shared marker off: the level they came from still needs it
+				player:SetAttribute(IN_PREVIEW, true) -- the source level still owns the shared marker
 				warn("[Level6PreviewAccess] continue rejected: " .. tostring(reason))
-				letGo(party, player)
-				return false
 			end
-			return true
-		end
-		return false
+			return joined == true
+		end)
+		if step == "enter" or not ok or result ~= true then Runtime.EndEntry(player, lease) end
+		if not ok then warn("[Level6PreviewAccess] continue: " .. tostring(result)) end
+		return ok and result == true
 	end
 	enter.Parent = ServerStorage
 end
@@ -517,24 +594,34 @@ do
 	local launchParty = Instance.new("BindableFunction")
 	launchParty.Name = "Level6LaunchParty"
 	launchParty.OnInvoke = function(players, token)
-		if type(players) ~= "table" or type(token) ~= "table" then return false, 0, "BAD_REQUEST" end
+		if type(players) ~= "table" or not (type(token) == "table" or (type(token) == "string" and token ~= "")) then return false, 0, "BAD_REQUEST" end
 		local model, exit = Runtime.EnsureWorld()
 		hookExit()
-		if not model or not exit or not previewReady() or not floorAt(model, exit.Position) then return false, 0, "PREVIEW_NOT_READY" end
+		if not model or not exit or not previewReady() then return false, 0, "PREVIEW_NOT_READY" end
 		if not claim(token) then
 			for _, player in ipairs(players) do tellBusy(player) end
 			return false, 0, "LEVEL_IN_USE"
 		end
-		local party = {}
+		if not floorAt(model, exit.Position) then letGo(token); return false, 0, "PREVIEW_NOT_READY" end
+		local party, selected = {}, {}
 		for _, player in ipairs(players) do
 			if typeof(player) == "Instance" and player:IsA("Player") and (nextUse[player] or 0) <= os.clock()
 				and player:GetAttribute(IN_PREVIEW) ~= true and playerReady(player) then
-				table.insert(party, player)
+				if not selected[player] then table.insert(party, player); selected[player] = true end
 			end
 		end
 		local bridge = r3Bridge()
 		local frames = bridge and bridge.PartyLandings and bridge.PartyLandings(model, exit, party) or {}
 		-- everybody's client has the place before anybody is moved, so the party arrives together
+		local leases = {}
+		for _, player in ipairs(party) do
+			local lease = Runtime.BeginEntry(player, token)
+			if not lease then
+				for owner, owned in pairs(leases) do Runtime.EndEntry(owner, owned) end
+				letGo(token); return false, 0, "ENTRY_PENDING"
+			end
+			leases[player] = lease
+		end
 		local streamed, waiting = {}, #party
 		for _, player in ipairs(party) do
 			nextUse[player] = math.huge
@@ -550,6 +637,7 @@ do
 		local joined = 0
 		for _, player in ipairs(party) do
 			local ok, problem = pcall(function()
+				if not Runtime.PendingValid(player, leases[player]) then error("entry expired") end
 				if not streamed[player] then error("streaming confirmation timed out") end
 				local character, root = playerReady(player)
 				local nowModel, nowExit = previewReady()
@@ -557,7 +645,7 @@ do
 				local previous = character:GetPivot()
 				root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
 				character:PivotTo(frames[player])
-				local entered, reason = Runtime.Join(player, token)
+				local entered, reason = Runtime.Join(player, token, leases[player])
 				if not entered then
 					character:PivotTo(previous)
 					error("join rejected: " .. tostring(reason))
@@ -567,6 +655,7 @@ do
 				task.spawn(Runtime.Suit, player, frames[player])
 			end)
 			if not ok then warn("[Level6PreviewAccess] party launch, " .. player.Name .. ": " .. tostring(problem)) end
+			Runtime.EndEntry(player, leases[player])
 			release(player)
 		end
 		if joined == 0 then letGo(token) end

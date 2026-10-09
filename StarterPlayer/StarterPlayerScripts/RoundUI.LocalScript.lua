@@ -4245,7 +4245,7 @@ do
 		pd.reentry.Selectable = pd.reentry.Active
 		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or credits > 0
 			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
-			or ("BUY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--") .. " \u{B7} 0 OWNED"))
+			or ("REVIVE \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")))
 		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
 		for _, node in ipairs(pd.reentry:GetDescendants()) do
 			if node:IsA("UIStroke") then node.Color = colour end
@@ -4310,6 +4310,24 @@ do
 		pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
 		pd.card.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2,
 			(layout.Safe.Top + layout.Safe.Bottom) / 2 + (touch and 18 or 0))
+		-- Stack rows start at the left edge; keep the narrower imported timer track centered.
+		local track = pd.parts.PartyDownTrack
+		local trackRow = Instance.new("Frame")
+		trackRow.Name = "PartyDownTrackRow"
+		trackRow.BackgroundTransparency = 1
+		trackRow.BorderSizePixel = 0
+		trackRow.LayoutOrder = track.LayoutOrder
+		local function syncTrackRow()
+			trackRow.Visible = track.Visible
+			trackRow.Size = UDim2.new(1, 0, 0, track.Size.Y.Offset)
+		end
+		syncTrackRow()
+		trackRow.Parent = pd.card
+		track.Parent = trackRow
+		track.AnchorPoint = Vector2.new(0.5, 0)
+		track.Position = UDim2.fromScale(0.5, 0)
+		track:GetPropertyChangedSignal("Visible"):Connect(syncTrackRow)
+		track:GetPropertyChangedSignal("Size"):Connect(syncTrackRow)
 		for _, node in ipairs(pd.card:GetDescendants()) do
 			if node:IsA("GuiObject") then node.ZIndex = 114 end
 		end

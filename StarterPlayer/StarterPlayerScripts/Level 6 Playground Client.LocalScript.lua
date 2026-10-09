@@ -434,20 +434,40 @@ end
 -- The effects are checked once in the background; a refused one reports "not there", so its caller's
 -- fallback is heard instead of silence.
 local refused = {}
-task.spawn(function()
-	local voice = counter:WaitForChild("Voice", 30)
-	if not voice then return end
-	for _, key in ipairs({"l6_chase_shriek", "l6_chase_loop", "l6_rage_scream", "l6_rage_loop", "l6_kill_grab", "l6_kill_breath"}) do
-		local sound = voice:FindFirstChild(key)
-		if sound then
-			pcall(function()
-				game:GetService("ContentProvider"):PreloadAsync({sound}, function(_, status)
-					if status ~= Enum.AssetFetchStatus.Success then refused[key] = true end
-				end)
-			end)
-		end
-	end
-end)
+local effectKeys = {"l6_chase_shriek", "l6_chase_loop", "l6_rage_scream", "l6_rage_loop", "l6_kill_grab", "l6_kill_breath"}
+local effectCursor, effectPreloadBusy = 1, false
+local function effectsEligible()
+	return player:GetAttribute(IN_PREVIEW) == true and player:GetAttribute("Level5VoidRound") ~= true
+end
+local function preloadEffects()
+	if effectPreloadBusy or effectCursor > #effectKeys or not effectsEligible() then return end
+	effectPreloadBusy = true
+	task.spawn(function()
+		local ok, problem = pcall(function()
+			local voice = counter:WaitForChild("Voice", 30)
+			if not voice then return end
+			while effectCursor <= #effectKeys and effectsEligible() do
+				local key = effectKeys[effectCursor]
+				local sound = voice:FindFirstChild(key)
+				if sound then
+					pcall(function()
+						game:GetService("ContentProvider"):PreloadAsync({sound}, function(_, status)
+							if status ~= Enum.AssetFetchStatus.Success then refused[key] = true end
+						end)
+					end)
+				end
+				effectCursor += 1
+			end
+		end)
+		-- Keep ownership while an uncancellable engine request drains. A later
+		-- entry resumes only the remaining effects, with no duplicate fetches.
+		effectPreloadBusy = false
+		if not ok then warn("[Level6PlaygroundAudio] preload: " .. tostring(problem)) end
+	end)
+end
+player:GetAttributeChangedSignal(IN_PREVIEW):Connect(preloadEffects)
+player:GetAttributeChangedSignal("Level5VoidRound"):Connect(preloadEffects)
+preloadEffects()
 
 local function oneShot(key, volume)
 	local voice = counter:FindFirstChild("Voice")
@@ -865,6 +885,25 @@ local RED = Color3.fromRGB(255, 40, 28)
 local litBefore = {}
 local FINALE_FOLDERS = {"Lights", "Ceiling_Fixtures", "Frame_Lamps", "PartyRooms", "StaffOnly", "SnackShack"}
 local exitLamp = {bulb = nil, base = 0, dipUntil = 0, nextDip = 0}
+-- Keep live finale baselines strong, but restore and release each removed replica.
+-- Deferred removal callbacks may run after Parent is nil; the saved values still belong to that instance.
+local function forgetFinaleInstance(item)
+	local before = litBefore[item]
+	litBefore[item] = nil
+	if before then
+		pcall(function()
+			item.Color = before[1]
+			if item:IsA("Light") then item.Brightness = before[2] end
+			if item:IsA("SpotLight") then item.Angle = before[3] end
+		end)
+	end
+	if exitLamp.bulb == item then
+		local base = exitLamp.base
+		exitLamp.bulb, exitLamp.base = nil, 0
+		pcall(function() item.Brightness = base end)
+	end
+end
+workspace.DescendantRemoving:Connect(forgetFinaleInstance)
 task.spawn(function()
 	local last = os.clock()
 	while true do
@@ -921,6 +960,19 @@ task.spawn(function()
 			end
 		end
 
+		if not model then
+			-- Parking removes the replica: release strong references before the next arrival.
+			for item, before in pairs(litBefore) do
+				if item.Parent then
+					item.Color = before[1]
+					if item:IsA("Light") then item.Brightness = before[2] end
+					if item:IsA("SpotLight") then item.Angle = before[3] end
+				end
+			end
+			table.clear(litBefore)
+			if exitLamp.bulb and exitLamp.bulb.Parent then exitLamp.bulb.Brightness = exitLamp.base end
+			exitLamp.bulb, exitLamp.base = nil, 0
+		end
 		local enraged = on and model:GetAttribute("Level6Enraged") == true
 		-- music: the tape, the tape backwards in the finale, nothing outside a round
 		if not (on and music.wanted) then
@@ -1127,16 +1179,17 @@ local FADE = 0.16
 local rigs = setmetatable({}, {__mode = "k"})
 
 local function rigOf(child)
-	local rig = rigs[child]
-	if rig then return rig end
 	local body = child:FindFirstChild("Body")
+	local rig = rigs[child]
+	if rig and rig.body == body and body.Parent == child then return rig end
+	rigs[child] = nil
 	if not body then return nil end
 	local bones = {}
 	for _, d in ipairs(body:GetDescendants()) do
 		if d:IsA("Bone") then bones[d.Name] = d end
 	end
 	if not bones.Hips or not bones.Head then return nil end   -- still streaming in
-	rig = {bones = bones, last = {}, from = {}, fade = 1, t = 0, name = nil, serial = nil,
+	rig = {body = body, bones = bones, last = {}, from = {}, fade = 1, t = 0, name = nil, serial = nil,
 		nextTwitch = os.clock() + 3, twitchT = nil}
 	rigs[child] = rig
 	return rig

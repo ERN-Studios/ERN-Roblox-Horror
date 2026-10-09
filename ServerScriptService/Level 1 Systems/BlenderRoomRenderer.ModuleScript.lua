@@ -208,6 +208,7 @@ function Renderer.Begin(maze)
 				local choices = roomsByMask[mask] or roomsByMask[15] -- only the elevator cell may have no open sockets
 				assert(choices and #choices > 0, "Missing Blender room socket mask")
 				local room = Renderer.PickRoom(choices, math.random()):Clone()
+				room.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
 				local base = CFrame.new(origin + (x - .5) * cell, 0, origin + (z - .5) * cell)
 				local pivot = room:GetPivot()
 				for _, part in ipairs(room:GetDescendants()) do

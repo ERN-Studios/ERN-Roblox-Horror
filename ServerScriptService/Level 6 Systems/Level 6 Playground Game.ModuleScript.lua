@@ -79,6 +79,7 @@ local CONFIG = {
 	WinChoiceSeconds = 15,              -- LEVEL 6 CLEARED stays up this long, as every level's ending does
 }
 
+local arenaSlides = {busy = false, job = false}
 local Game = {}
 Game.Config = CONFIG
 
@@ -2068,7 +2069,7 @@ end
 
 function Game.State()
 	local s = session
-	if not s then return {phase = "idle"} end
+	if not s then return {phase = arenaSlides.busy and "preparing" or "idle"} end
 	local list = {}
 	for player, state in pairs(s.players) do
 		list[#list + 1] = {name = player.Name, caught = state.caught == true, dunked = state.dunked == true}
@@ -2174,7 +2175,6 @@ end)
 -- ServerStorage.Level6ArenaSlideSource and they are built once per server, the way the Counter's own mesh is.
 -- What you ride is the unseen trough the import made; these are only what you see. A mesh of the same name that
 -- already stands in the level (an uploaded asset placed by the import) is left alone.
-local arenaSlides = {busy = false}
 function arenaSlides.build()
 	local model = workspace:FindFirstChild(MODEL_NAME)
 	local source = ServerStorage:FindFirstChild("Level6ArenaSlideSource")
@@ -2184,6 +2184,7 @@ function arenaSlides.build()
 	arenaSlides.busy = true
 	local missing = 0
 	for _, item in ipairs(source:GetChildren()) do
+		if model.Parent ~= workspace then arenaSlides.busy = false; return false end
 		if not slides:FindFirstChild(item.Name) then
 			local ok, why = pcall(function()
 				local text = {}
@@ -2218,6 +2219,7 @@ function arenaSlides.build()
 				-- vertex colours show through it; if that variant is not in the place this is plain plastic, as before
 				part.MaterialVariant = "L6 Slide Plastic"
 				part.CFrame = CFrame.new(origin + item:GetAttribute("Centre"))
+				if model.Parent ~= workspace then part:Destroy(); error("Level 6 was parked during slide bake") end
 				part.Parent = slides
 			end)
 			if not ok then
@@ -2229,11 +2231,22 @@ function arenaSlides.build()
 	arenaSlides.busy = false
 	return missing == 0
 end
-task.spawn(function()
-	for _ = 1, 40 do                      -- the level may not be there yet when this module is first required
-		if arenaSlides.build() then break end
-		task.wait(6)
-	end
-end)
+local function prepareSlides(model)
+	if arenaSlides.job or not model or model.Name ~= MODEL_NAME or model.Parent ~= workspace then return end
+	arenaSlides.job = true
+	task.spawn(function()
+		local ok, problem = pcall(function()
+			for _ = 1, 40 do
+				if model.Parent ~= workspace then break end
+				if arenaSlides.build() then break end
+				task.wait(6)
+			end
+		end)
+		if not ok then warn("[Level6] slide preparation: " .. tostring(problem)) end
+		arenaSlides.busy, arenaSlides.job = false, false
+	end)
+end
+workspace.ChildAdded:Connect(prepareSlides)
+prepareSlides(workspace:FindFirstChild(MODEL_NAME))
 
 return Game

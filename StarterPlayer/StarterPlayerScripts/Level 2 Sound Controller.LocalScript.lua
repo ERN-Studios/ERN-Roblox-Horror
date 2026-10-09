@@ -299,16 +299,26 @@ local function classifyAmbientAnchor(instance)
 	if not (instance:IsA("BasePart") and not ambientAnchorSeen[instance]) then return end
 	local name = instance.Name
 	if name:find("Level 2 Corridor Vault Light", 1, true) == 1 then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "Corridor"
 		table.insert(ambientAnchors.Corridor, instance)
 	elseif name:find("Level 2 Navigation Node ", 1, true) == 1
 		and instance:GetAttribute("Level2_Role") ~= "Kids Area" then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "WetHall"
 		table.insert(ambientAnchors.WetHall, instance)
 	elseif name == "Level 2 Pump Intake Pipe" then
-		ambientAnchorSeen[instance] = true
+		ambientAnchorSeen[instance] = "PumpPipe"
 		table.insert(ambientAnchors.PumpPipe, instance)
 	end
+end
+
+-- Streaming removes individual anchors while the world's Model can remain.
+local function forgetAmbientAnchor(instance)
+	local category = ambientAnchorSeen[instance]
+	if not category then return end
+	ambientAnchorSeen[instance] = nil
+	local list = ambientAnchors[category]
+	local index = table.find(list, instance)
+	if index then table.remove(list, index) end
 end
 
 local function startRandomSession(world)
@@ -322,6 +332,7 @@ local function startRandomSession(world)
 		classifyAmbientAnchor(instance)
 	end
 	table.insert(ambientConnections, world.DescendantAdded:Connect(classifyAmbientAnchor))
+	table.insert(ambientConnections, world.DescendantRemoving:Connect(forgetAmbientAnchor))
 	table.insert(ambientConnections, world.AncestryChanged:Connect(function(_, parent)
 		if not parent and ambientWorld == world then stopRandomSession() end
 	end))

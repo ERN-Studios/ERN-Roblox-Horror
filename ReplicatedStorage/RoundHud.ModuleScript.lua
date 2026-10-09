@@ -701,7 +701,8 @@ local function paintCompass(state)
 	local fit = chevron:FindFirstChildOfClass("UITextSizeConstraint")
 	if not fit then fit = Instance.new("UITextSizeConstraint"); fit.Parent = chevron end
 	fit.MinTextSize, fit.MaxTextSize = 1, math.max(12, glyphSize)
-	chevron.TextScaled, chevron.TextWrapped = true, false
+	-- Roblox disables TextScaled when wrapping is disabled; this single glyph keeps both enabled.
+	chevron.TextScaled, chevron.TextWrapped = true, true
 	chevron.Text, chevron.TextColor3, readout.Text, readout.TextColor3 = glyph, color, text, readColor
 	-- Position along the authored tick strip, not the entire compass part (readout occupies its end).
 	if ticks then
