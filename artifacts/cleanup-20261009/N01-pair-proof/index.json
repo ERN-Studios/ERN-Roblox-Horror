@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "scope": "historical immutable N01 pair/touch proof inputs; no runtime deployment baseline",
+  "files": [
+    {
+      "file": "UIRegression.N01.pair-before.lua",
+      "rawSha256": "3538ab55abc952bebefddf5c9572adcfd7426787a5c52d1b4df215df97335736",
+      "lfSha256": "3538ab55abc952bebefddf5c9572adcfd7426787a5c52d1b4df215df97335736",
+      "rawBytes": 333465,
+      "lfBytes": 333465,
+      "historicalLocalInput": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.N01.pair-before.lua",
+      "receipt": "B06-pair-before.json",
+      "receiptRawSha256": "4cbaf9e5f3a97c3affa63581393d72f74e8329ef6518156827880414b3e26de9",
+      "receiptLfSha256": "ad881e826ae0ff404cbb241794cc1dfbe5b9d7b43eb5669389cc373b88644b8f",
+      "receiptRawBytes": 7895,
+      "receiptLfBytes": 7894
+    },
+    {
+      "file": "UIRegression.N01.pair-current.lua",
+      "rawSha256": "9eb0749a60443df8aba71da89743d6845d49917388c6082fe033c83366b9e951",
+      "lfSha256": "9eb0749a60443df8aba71da89743d6845d49917388c6082fe033c83366b9e951",
+      "rawBytes": 333695,
+      "lfBytes": 333695,
+      "historicalLocalInput": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.N01.pair-current.lua",
+      "receipt": "B06-pair-current.json",
+      "receiptRawSha256": "31bf131fcb0199dae52510b0fc48ca39b2be77084d07dc6e2695e2bccfb27948",
+      "receiptLfSha256": "0dcd8510f666f742a76ea345e75ea48f30b5187e6ec56ebd7837cdd45fe729b0",
+      "receiptRawBytes": 7896,
+      "receiptLfBytes": 7895
+    },
+    {
+      "file": "UIRegression.N01.touch-probe-before.lua",
+      "rawSha256": "5b1a67dac9c14e977c660d45ffaaf966c6d86faf71dcac6b3a8f36ea757c4c46",
+      "lfSha256": "5b1a67dac9c14e977c660d45ffaaf966c6d86faf71dcac6b3a8f36ea757c4c46",
+      "rawBytes": 324967,
+      "lfBytes": 324967,
+      "historicalLocalInput": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.N01.touch-probe-before.lua",
+      "receipt": "B06-touch-before.json",
+      "receiptRawSha256": "77e8855b16c7cecb490562b197ccda791e470a0bb9f597b0f47967cfba7f13ef",
+      "receiptLfSha256": "3d16b0fdeaee7e47b90584c357c35f565e4cc57b10f9b2d91a5bda6251466fd4",
+      "receiptRawBytes": 14401,
+      "receiptLfBytes": 14400
+    },
+    {
+      "file": "UIRegression.N01.touch-probe-current.lua",
+      "rawSha256": "40de1004e0b6ce62793cad6032881eccb21872f06006d5bc06b336743a46ff8d",
+      "lfSha256": "40de1004e0b6ce62793cad6032881eccb21872f06006d5bc06b336743a46ff8d",
+      "rawBytes": 325226,
+      "lfBytes": 325226,
+      "historicalLocalInput": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.N01.touch-probe-current.lua",
+      "receipt": null,
+      "receiptNote": "Historical input only; no saved native probeSha256 receipt found for this exact touch-current source. No native pass is inferred."
+    },
+    {
+      "file": "UIRegression.N01.touch-probe-reset.lua",
+      "rawSha256": "afbda7183420de6dabde39ef4953b4bb1fe17bbff855a17737c263eb04a5fe2a",
+      "lfSha256": "afbda7183420de6dabde39ef4953b4bb1fe17bbff855a17737c263eb04a5fe2a",
+      "rawBytes": 325340,
+      "lfBytes": 325340,
+      "historicalLocalInput": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.N01.touch-probe-reset.lua",
+      "receipt": "B06-touch-reset.json",
+      "receiptRawSha256": "6b1bfd69a3e6970876523aade569ecd2630d2042802c9b2934925f905e0a9ac7",
+      "receiptLfSha256": "0cbe6e176cc4b41d3a32ba8a7e792ee35df9faf023a919eca4e41f9047d87560",
+      "receiptRawBytes": 13713,
+      "receiptLfBytes": 13712
+    }
+  ]
+}

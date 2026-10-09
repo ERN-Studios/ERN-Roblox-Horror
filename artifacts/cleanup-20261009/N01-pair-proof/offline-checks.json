@@ -1,0 +1,18 @@
+{
+  "status": "PASS offline archive port only",
+  "checks": 70,
+  "inputCount": 5,
+  "receiptHashesMatched": 4,
+  "unrecordedNativeReceipt": "touch-probe-current; historical input only",
+  "alteredInputOrIndexControlsRejected": 6,
+  "receiptOverwriteAndUnsafeLabelControlsRejected": 2,
+  "pythonAst": "2/2 PASS",
+  "fullProofAndActualWrapperCompile": 20,
+  "studioCalls": 0,
+  "productionWrites": 0,
+  "historicalReceiptsAndInputsUnchanged": true,
+  "localOriginalInputsCheckedIfPresent": 5,
+  "toolSha256": "50fb5429432bf63dde8a1f7fc512d62d8caa065b6fc1f6a80dd3341d4fb93850",
+  "verifierSha256": "73ff7eca99d8435ef3f2c7019652e5e5f19bbcac0bf5f1a9a3298210c0e859ef",
+  "indexRawSha256": "cab586bf28762377116a6a4c60b0d0f0353286169a06e265460cdb8ae5ac5c6e"
+}
