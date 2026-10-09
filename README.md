@@ -500,10 +500,11 @@ ServerScriptService/
   LobbyPartyModeController.Script.lua  lobby party mode
   Crouch State Server.Script.lua    server side of sneak
   FlashlightSync / AvatarNormalize / NoiseRegistry   shared services
-ServerStorage/                      retired backups (`Archive/`, two
-                                    `CodexBackup_20260902_*` folders) plus an
-                                    unused third-party asset (`Project Mirror`);
-                                    see House rules in CLAUDE.md
+ServerStorage/                      active asset/source kits and authoring
+                                    caches, plus retired backups (`Archive/`)
+                                    and `Project Mirror` pending its own gate.
+                                    The two old Codex folders are absent in
+                                    Studio; their sources are archived off-mirror.
 Workspace/                          one marker file for the `Entity` rig; the rig
                                     itself is model data, not mirrored source
 StarterPlayer/

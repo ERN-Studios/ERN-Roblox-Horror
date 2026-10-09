@@ -1,0 +1,100 @@
+{
+  "schema": "storage-receiver-lifecycle-offline-tests-v1",
+  "passed": true,
+  "checks": 235,
+  "cases": [
+    {
+      "name": "success creates exact receipt and cleans all owned resources",
+      "passed": true
+    },
+    {
+      "name": "find_mcp_batch failure",
+      "passed": true
+    },
+    {
+      "name": "client.create failure",
+      "passed": true
+    },
+    {
+      "name": "client.initialize failure",
+      "passed": true
+    },
+    {
+      "name": "select_studio failure",
+      "passed": true
+    },
+    {
+      "name": "client.state failure",
+      "passed": true
+    },
+    {
+      "name": "client.capture failure",
+      "passed": true
+    },
+    {
+      "name": "Play mode refused without capture",
+      "passed": true
+    },
+    {
+      "name": "partial transfer retained without final receipt",
+      "passed": true
+    },
+    {
+      "name": "client.close failure still attempts remaining cleanup",
+      "passed": true
+    },
+    {
+      "name": "server.shutdown failure still attempts remaining cleanup",
+      "passed": true
+    },
+    {
+      "name": "server.server_close failure still attempts remaining cleanup",
+      "passed": true
+    },
+    {
+      "name": "thread.join failure still attempts remaining cleanup",
+      "passed": true
+    },
+    {
+      "name": "primary failure survives all cleanup failures",
+      "passed": true
+    },
+    {
+      "name": "first cleanup failure survives later failures",
+      "passed": true
+    },
+    {
+      "name": "server.create failure never shuts down or joins unstarted server thread",
+      "passed": true
+    },
+    {
+      "name": "thread.create failure never shuts down or joins unstarted server thread",
+      "passed": true
+    },
+    {
+      "name": "thread.start failure never shuts down or joins unstarted server thread",
+      "passed": true
+    },
+    {
+      "name": "thread start primary survives close failure",
+      "passed": true
+    },
+    {
+      "name": "interrupt primary survives cleanup failure",
+      "passed": true
+    },
+    {
+      "name": "outside-workspace destination rejected",
+      "passed": true
+    },
+    {
+      "name": "existing archive preserved",
+      "passed": true
+    }
+  ],
+  "caseCount": 22,
+  "wrapperSHA256": "c2dae97ccd1c04be6020142c3a438637dff5e3c30671f560d138950123991b2e",
+  "testSHA256": "3cc73b9d6ee56d7fb9e434e9a5660c7d4e6c51ce935d7c07d67e49634634bdad",
+  "noNetworkOrStudio": true,
+  "limits": "Actual Python main/Handler with fake resource boundaries and transport bytes; not native serializer, gameplay or real thread/socket certification."
+}

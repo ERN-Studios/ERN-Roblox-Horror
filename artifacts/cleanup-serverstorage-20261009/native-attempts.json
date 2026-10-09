@@ -1,0 +1,45 @@
+{
+  "schema": "storage-readonly-attempt-record-v1",
+  "authoritativeObjectWrites": 0,
+  "studioModeChanges": 0,
+  "nativeRemovals": 0,
+  "attempts": [
+    {
+      "archive": "diagnostic-archive-before",
+      "status": "rejected before transfer",
+      "reason": "SourceAssetId read lacks RobloxScript capability; opaque value kept in native serialization instead"
+    },
+    {
+      "archive": "diagnostic-archive-before-v2",
+      "status": "backup passed",
+      "nativeSHA256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098"
+    },
+    {
+      "archive": "diagnostic-archive-before-v3",
+      "status": "backup passed; native reference probe failed",
+      "reason": "Protected Folder-compatible pointers require serialized/authoring coverage"
+    },
+    {
+      "archive": "diagnostic-archive-before-v4",
+      "status": "complete native data/reference backup and offline gates passed",
+      "nativeSHA256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098"
+    },
+    {
+      "archive": "diagnostic-archive-before-v5",
+      "status": "rejected before transfer",
+      "reason": "Concurrent original Source edit during yielding capture; no valid archive produced"
+    },
+    {
+      "archive": "diagnostic-archive-before-v6",
+      "status": "rejected before native capture",
+      "reason": "Another session switched Studio to Play; no mode switch attempted"
+    }
+  ],
+  "pending": [
+    "Native unparented reconstruction",
+    "Fresh same-epoch protected reference guard",
+    "Opaque authoring holders review",
+    "Reversible removal/after port",
+    "Final fresh Edit parity"
+  ]
+}

@@ -126,6 +126,12 @@ scripts in the place on 2026-09-02 that the repo knew nothing about; its own
 backups sit in the ServerStorage root as `CodexBackup_20260902_*`. Run the
 audit before you edit, not just before you commit.
 
+2026-10-09 cleanup recheck: both `CodexBackup_20260902_*` folders and all ten
+of their scripts are already absent from native Studio. The old mirror files
+are archived byte-exact under `artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/`;
+they are removed from the runtime mirror/manifest without a Studio write.
+The preceding 2026-09-02 paragraph is historical, not a restore instruction.
+
 **Level 2 has exactly one hostile: Pool Foam.** Two others came and went. The
 Slidemouth was retired on 2026-08-31 in favour of the Pool Slide; the Pool Slide
 was measured on 2026-09-02 to never once spawn successfully on a generated map —

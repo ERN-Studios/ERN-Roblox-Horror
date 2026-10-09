@@ -1,0 +1,24 @@
+{
+  "schema": "diagnostic-archive-offline-toolchain-v1",
+  "luneVersion": "0.10.5",
+  "portablePath": "%TEMP%/codex-lune-0.10.5/lune.exe",
+  "officialRelease": "https://github.com/lune-org/lune/releases/tag/v0.10.5",
+  "officialAsset": "https://github.com/lune-org/lune/releases/download/v0.10.5/lune-0.10.5-windows-x86_64.zip",
+  "assetSHA256": "ad0305f5cc6d7ff20996644b40bf7de0de613812f431ca241456e16f9fc89cda",
+  "officialAssetDigestMatched": true,
+  "exeSHA256": "43ec01e74923e8145e599237d6af573064748c0307716e9b125b12e0969e5057",
+  "ownedLuauCompileO0O1": "4/4 PASS Luau0.737",
+  "ownedPythonAST": "2/2 PASS Python3.11",
+  "files": {
+    "tools/cleanup_20261009/diagnostic_folder_archive.luau": "4063fd7ceb74c0bf7656f1bdec582e4fbae209be361d09b7d7c837927bff49a9",
+    "tools/cleanup_20261009/verify_diagnostic_folder_archive.luau": "63396a000ab80d700ef16604da6a690954a4b3ceae4ee23ce04037e812575ef8",
+    "tools/cleanup_20261009/test_diagnostic_folder_archive.luau": "f5ab5259065fcb9044796fdd6f74a6abeac8a1fafba87ecf43a513cbbcd973b7",
+    "tools/cleanup_20261009/dump_diagnostic_reference_forest.luau": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+    "tools/cleanup_20261009/verify_diagnostic_folder_references.py": "78a8061d2cc159a81a00c9081be8fd4ce8239be8a6a75cc516b26390fd348e2d",
+    "tools/cleanup_20261009/test_diagnostic_folder_references.py": "f5bcb9528891a9a7ce1d3b6eec03b60f55b278669f5ca7d5651c191f7c4cdf09",
+    "tools/cleanup_20261009/.gitattributes": "88c2f46b34c812f58955739b8eeac443620d7a927c44c859197375a4c495256c",
+    "tools/cleanup_20261009/README.md": "6cbcb433b9e4f91b92b354e8917061abf303e06b8e0bc1e1fb9a55d591bfe89e"
+  },
+  "nativeAPIsCalled": false,
+  "scope": "Only local immutable archive reading and owned new evidence files; no Studio, source, manifest or main-document changes."
+}

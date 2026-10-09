@@ -1,0 +1,229 @@
+{
+  "cases": [
+    {
+      "expected": "accept",
+      "name": "actual captured archive",
+      "passed": true
+    },
+    {
+      "expected": "accept",
+      "name": "fact order independent",
+      "passed": true
+    },
+    {
+      "expected": "accept",
+      "name": "native order independent",
+      "passed": true
+    },
+    {
+      "expected": "accept",
+      "name": "typed attributes, exact strings and unordered tags",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong schema",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong place",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong universe",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong digest",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong length",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "missing fact root",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "duplicate fact root",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "unknown fact root",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "non-array root facts",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact class",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact children",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact archivable",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact attribute type",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "missing fact attribute",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "extra fact attribute",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact tags",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "duplicate fact tags",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "non-array fact tags",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact sandboxed",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact icon tint",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "wrong fact capabilities",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "unsupported fact property",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "same-length native byte corruption",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native byte truncation",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "unexpected native root name",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "duplicate native root name",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native class mutation",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native missing root",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native extra root",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native extra child",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native attribute removal",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native attribute addition",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native attribute type change",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native result string change",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native numeric metadata change",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native tag addition",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native sandbox change",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native nonzero capability bitset",
+      "passed": true
+    },
+    {
+      "expected": "reject",
+      "name": "native icon tint change",
+      "passed": true
+    }
+  ],
+  "checks": 89,
+  "factsSHA256": "1fbf859ef30c5b1cd5a354a2ae15cd50b43a3721c098bb6fe8f1ac9baac6d416",
+  "limits": "All mutations are local deserialized copies; no Studio connection, gameplay or place-restore claim.",
+  "nativeSHA256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098",
+  "negativeCases": 39,
+  "passed": true,
+  "positiveCases": 4,
+  "schema": "diagnostic-folder-archive-offline-tests-v1",
+  "testSHA256": "f5ab5259065fcb9044796fdd6f74a6abeac8a1fafba87ecf43a513cbbcd973b7",
+  "verifierSHA256": "4063fd7ceb74c0bf7656f1bdec582e4fbae209be361d09b7d7c837927bff49a9"
+}

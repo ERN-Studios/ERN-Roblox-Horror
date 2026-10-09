@@ -1,0 +1,270 @@
+{
+  "schema": "already-absent-mirror-retirement-v1",
+  "batch": "S02",
+  "completedAtUtc": "2026-10-09T20:45:48.155247+00:00",
+  "nativeEvidence": "artifacts/cleanup-serverstorage-20261009/native-script-metadata.json",
+  "nativeEvidenceSHA256": "3fa995eadd3639939ffdf8de5be8b7355b2a394eeb04bed47251bf3d1a9413a9",
+  "nativeMutations": 0,
+  "studioModeChanges": 0,
+  "removedMirrorFiles": 10,
+  "removedCanonicalBytes": 333941,
+  "archived": [
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
+      "bytes": 96252,
+      "sha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "OriginalPath": "ServerScriptService.TunnelLobbyBuilder",
+        "BackupReason": "Before Levels 4-6 COMING SOON gate redesign"
+      },
+      "rawBytes": 96252,
+      "rawSHA256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua",
+      "bytes": 6740,
+      "sha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "rawBytes": 6740,
+      "rawSHA256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "bytes": 5736,
+      "sha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "rawBytes": 5736,
+      "rawSHA256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua",
+      "bytes": 42420,
+      "sha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "rawBytes": 42420,
+      "rawSHA256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
+      "bytes": 16436,
+      "sha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "rawBytes": 16436,
+      "rawSHA256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua",
+      "bytes": 95466,
+      "sha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": [],
+      "rawBytes": 95466,
+      "rawSHA256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua",
+      "bytes": 8095,
+      "sha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "rawBytes": 8095,
+      "rawSHA256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua",
+      "bytes": 28932,
+      "sha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "rawBytes": 28932,
+      "rawSHA256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
+      "bytes": 6350,
+      "sha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "rawBytes": 6350,
+      "rawSHA256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua"
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua",
+      "bytes": 27514,
+      "sha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "rawBytes": 27514,
+      "rawSHA256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua"
+    }
+  ],
+  "manifestRawBeforeSHA256": "bce9829cb7c02264d8bb7eef31c2b90b78f4b631c4e05c26b8c8efaf12c24733",
+  "manifestRawAfterSHA256": "bb16c917abe6277be17ddbe4a19cefd130c58e30dc9609648fd87ea5e50d0414",
+  "countsBefore": {
+    "scripts": 230,
+    "remoteEvents": 15,
+    "total": 245,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "countsAfter": {
+    "scripts": 221,
+    "remoteEvents": 15,
+    "total": 236,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "archiveReloadByteExact": true,
+  "compilesBeforeO0": 10,
+  "compilesArchiveO1": 10,
+  "scope": "Only downstream mirror absence; no runtime feature removal or native folder restoration claim"
+}

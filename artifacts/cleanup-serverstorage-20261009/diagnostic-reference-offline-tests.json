@@ -1,0 +1,166 @@
+{
+  "schema": "diagnostic-reference-offline-tests-v1",
+  "passed": true,
+  "checks": 34,
+  "positiveCases": 5,
+  "negativeCases": 25,
+  "cases": [
+    {
+      "name": "actual native joint forest",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "independent null-reference forest",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "root-order independence",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "genuine non-target ObjectValue reference",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "CDATA/source and comment pseudo-tags ignored",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "protected PlaceAvatarRules points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "nested ObjectValue.Value points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unknown serialized property points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate root referent",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "nested referent collision",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing referent",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong target class",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong StarterPlayer identity",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing direct root",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "extra direct root",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate target name",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unknown target name",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate Name property",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "target Folder gains child",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Ref outside Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Ref contains child markup",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unresolved Ref",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong PlaceAvatarRules type",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "DOCTYPE/entity expansion refused",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "malformed XML refused",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "actual binary digest corruption",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "actual reference length metadata corruption",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "existing CLI receipt preserved",
+      "expected": "reject",
+      "passed": true
+    }
+  ],
+  "actualSerializedRefCount": 105,
+  "factsSHA256": "768ff790f417498205736fee3c4852639ec9e9d6607044309d44f0e386b07cd3",
+  "referencesSHA256": "590ca74c6a4c6fbfbcc03f3f1ab7cc574268e22c52b8df95170c41ef5c45d0a7",
+  "verifierSHA256": "cd93d44be6eaaaeb4f8833c484c34014dfa32eb4782726bd2c4b72353c1b20a0",
+  "helperSHA256": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+  "testSHA256": "2a7299c16f89db452c44b53d93f50ae1cfbe354222e4bc5f1d785c5f23366103",
+  "limits": "Local XML/native fixtures only; no Studio or deletion/CAS operation."
+}

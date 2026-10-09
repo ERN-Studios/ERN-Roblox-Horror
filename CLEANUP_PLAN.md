@@ -3,6 +3,47 @@
 Studio er source of truth. PlaceId **131311258779917**, universe **10559217407**.
 Denne opgave publicerer ikke det offentlige spil. Ingen GitHub-push er planlagt.
 
+## Aktuel ServerStorage-batch efter ny tilladelse
+
+Ejeren har igen godkendt Studio-arbejde og oplyst, at to andre sessions arbejder
+samtidigt. Den tidligere pause nedenfor er historisk. Ingen anden sessions Play
+stoppes. [Den præcise storage-plan](artifacts/cleanup-serverstorage-20261009/PLAN.md)
+har aktuelle targets, closures, rollback og porte.
+
+- **S02 / T01,T16 gennemført lokalt:** ti gamle Codex-spejlfiler, allerede fraværende
+  i native, flyttet byte-identisk off-mirror (333.941 canonical bytes/9.134 linjer);
+  kun deres manifestentries fjernet. Ingen native runtimefeature fjernet.
+  20 arkiv-compiles, source/full-sync-kontrakter og221 resterende mirror-compiles/
+  hashes bestod. Ejerens samtidige LevelWorldStorage-entry er bevaret;221 er
+  231 aktuelle før-entries minus ti, ikke230 minus ti.
+- **S01 / T17,N05 afventer native port:**12 diagnostikrecord-Folders er komplet
+  native-arkiveret, typed/Lune reload/canonical roundtrip og serialized inbound
+  reference-scan bestået. Ingen mapper er endnu fjernet. Native unparented
+  rekonstruktion, frisk CAS og reversibel after-port afventer Edit; en anden
+  session har igen startet Play. Source-/mode-/referencekontroller blokerede
+  før originals blev ændret. Aktive kits/caches/maps/authoring bevares.
+
+Seneste capture viste73 ServerStorage-rødder/221 scripts efter ejerens tre
+parkede maps og nye LevelWorldStorage-modul. Disse ændringer tilskrives ikke
+oprydningen. Modulets generiske root-scan udvælger kun de tre præcise mapnavne;
+det forbruger ingen af de12 records. Frisk afsluttende Edit-parity afventer
+tilgængelig Edit og skal genlæses, fordi andre sessions fortsætter.
+
+**B17 / T12 klar til afgrænset lokal tooling-batch:**
+`tools/vault/build_vault.py` og `build_systems.py` indeholder samme hardkodede
+connector-token. Ignoreret eksisterende Obsidian-pluginconfig har allerede den
+samme bearer og endpoint-port; ny brugerconfig er ikke nødvendig. Fjern kun
+literal TOKEN og læs credential lazy ved faktisk `mcp()`-kald gennem en lille
+fælles helper; eksplicit miljøoverride understøttes. Endpoint, payload, IDs,
+retry og timeout bevares. `fix_folders.py`-import/caller og configfri dry-run
+bevares; `graph_cfg.py` og builders køres ikke. Risiko: lokal auth-regression;
+gevinst: ingen hardkodet credential i de aktuelle tracked kilder.
+Før-kilder/credentials checkpointes privat under `.git`, aldrig i proof-artifacts.
+Port: faktisk helper + begge mcp-funktioner med fake urlopen før/efter, eksisterende
+config matcher uden værdiprint, env override, manglende/blank/defekt config,
+errors uden læk, retry/timeout/IDs og configfri import/dry-run. Ingen live netværk,
+vault-mutation, credentialrotation eller Studioændring. Status: afventer test.
+
 ## Nye afgrænsede batches efter genkontrol
 
 | Batch | Fund og præcis closure | Ændring og bevis | Risiko/gevinst | Før/efter-port | Status |

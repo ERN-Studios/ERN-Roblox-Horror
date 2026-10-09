@@ -1,0 +1,1 @@
+{"created":0,"capturedAtUtc":"2026-10-09T20:37:47Z","checks":1238,"selectedTargets":[],"pass":false,"referenceProperties":72173,"inboundReferences":[],"destroyed":0,"error":"AssistantCommand:37: attempt to iterate over a nil value\nAssistantCommand:37\nAssistantCommand:28\n","classes":86,"schema":"storage-diagnostic-native-port-v1","readErrors":[]}

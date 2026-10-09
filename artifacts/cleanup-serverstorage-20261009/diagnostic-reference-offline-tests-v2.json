@@ -1,0 +1,186 @@
+{
+  "schema": "diagnostic-reference-offline-tests-v1",
+  "passed": true,
+  "checks": 39,
+  "positiveCases": 6,
+  "negativeCases": 28,
+  "cases": [
+    {
+      "name": "actual native joint forest",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "independent null-reference forest",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "root-order independence",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "genuine non-target ObjectValue reference",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "CDATA/source and comment pseudo-tags ignored",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "protected PlaceAvatarRules points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "nested ObjectValue.Value points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unknown serialized property points at target",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate root referent",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "nested referent collision",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing referent",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong target class",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong StarterPlayer identity",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing direct root",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "extra direct root",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate target name",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unknown target name",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate Name property",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "missing Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "duplicate Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "target Folder gains child",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Ref outside Properties",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Item outside native hierarchy",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Ref contains child markup",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "unresolved Ref",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "wrong PlaceAvatarRules type",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "DOCTYPE/entity expansion refused",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "malformed XML refused",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "actual binary digest corruption",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "actual reference length metadata corruption",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "existing CLI receipt preserved",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "actual Folder public CLI",
+      "expected": "accept",
+      "passed": true
+    },
+    {
+      "name": "Folder CLI existing receipt preserved",
+      "expected": "reject",
+      "passed": true
+    },
+    {
+      "name": "Folder CLI invalid facts produce no receipt",
+      "expected": "reject",
+      "passed": true
+    }
+  ],
+  "actualSerializedRefCount": 105,
+  "factsSHA256": "768ff790f417498205736fee3c4852639ec9e9d6607044309d44f0e386b07cd3",
+  "referencesSHA256": "590ca74c6a4c6fbfbcc03f3f1ab7cc574268e22c52b8df95170c41ef5c45d0a7",
+  "verifierSHA256": "78a8061d2cc159a81a00c9081be8fd4ce8239be8a6a75cc516b26390fd348e2d",
+  "helperSHA256": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+  "testSHA256": "f5bcb9528891a9a7ce1d3b6eec03b60f55b278669f5ca7d5651c191f7c4cdf09",
+  "limits": "Local XML/native fixtures only; no Studio or deletion/CAS operation."
+}

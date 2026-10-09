@@ -1,9 +1,10 @@
 # MongoTV oprydningsresultater — 2026-10-09
 
 Studio er source of truth: place **131311258779917**, universe **10559217407**.
-De gennemførte, testede batches er lokalt committed. Intet er publiceret eller
-pushet til GitHub. Yderligere Studio-edits og afsluttende Edit-parity **afventer
-ejerens tilbagemelding**: ejeren har bedt om at bevare sin aktuelle Play-session.
+De tidligere gennemførte, testede batches er lokalt committed. Intet er publiceret eller
+pushet til GitHub. Ejeren har igen godkendt Studio-arbejde; to andre sessions
+arbejder samtidig og har igen startet Play. Deres session bevares. Yderligere
+native porte og afsluttende Edit-parity afventer tilgængelig Edit.
 Vores valgte afventende runtimeforslag står stadig uimplementeret; eksternt
 implementerede ændringer beskrives særskilt uden oprydningskredit.
 
@@ -14,6 +15,53 @@ Alle **129** oprindelige fund er genkontrolleret og disponeret i
 [levels/core](artifacts/cleanup-20261009/levels-core-recheck.md).
 De er hypoteser; eksisterende rettelser er ikke implementeret igen. Afgrænsede
 dele af blandede fund har deres egen status og testport.
+
+## Aktuel ServerStorage-oprydning
+
+S02 har fjernet ti stale Codex-mirrors fra runtime-mapperne og manifestet.
+Studio havde allerede fjernet begge folders; batchen ændrede ingen native
+instans. Alle10 gamle filer/entries er bevaret byte-identisk i
+[historikarkivet](artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/removal-receipt.json).
+Det rydder333.941 kildebytes/9.134 linjer fra runtime-spejlet. Før-O0/arkiv-O1
+compile20/20, begge source/full-sync-kontrakter samt221 aktuelle resterende
+mirrorhashes/compiles bestod; ingen samtidig filændring under den målte port.
+Ejerens manifestentries og nye LevelWorldStorage-modul er bevaret.
+
+S01 er endnu ikke installeret: de12 gamle TEMP-resultat-Folders har ingen
+children/callers/tags, men deres store attributes er historiske testdata.
+Komplet native archive148.531 bytes, SHA
+`9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098`,
+typed facts/Lune reload/canonical roundtrip bestod. Joint native referencepack
+med StarterPlayer bestod105 serialized Ref-kontroller uden inbound references;
+den beskyttede PlaceAvatarRules-reference er serialiseret null. Den fulde
+native-port skal stadig bestå efter sidste yield før en fjernelse.
+De uafhængige offline porte bestod89 folderchecks (39 negative cases) og
+39 referencechecks (28 negative cases); skjulte refs, forkerte bytes/typer og
+Source/CDATA/comment-falske tags afvises. Seks Python AST og12 Luau O0/O1
+tool-compiles bestod. Disse tal er arkiv-/værktøjskontroller, ikke gameplay.
+[Plan, præcise targets og begrænsninger](artifacts/cleanup-serverstorage-20261009/PLAN.md).
+
+Kontrollerne afviste først beskyttet SourceAssetId-read, manglende public
+editor-reflection metadata, og senere samtidige sourceændringer. Ingen af
+disse fejl ændrede eller fjernede authoritative originals, og ingen runtimebatch
+skulle rulles tilbage. Metadata-scanningen blev udvidet med officielle
+ReflectionService descriptors; serialized beskyttede refs dækkes separat af
+native referencepack. Andre sessions ændrede syv scripts, tilføjede et modul
+og parkerede tre maps i ServerStorage. Deres arbejde er bevaret og får ingen
+oprydningskredit. Ingen FPS-/memorygevinst er målt eller påstået.
+
+Peer-review før native removal lukkede capture-/probe-lease, catalog/property/
+attribute-epoch og guard efter HTTP-yields. Protected nonserialized holders er
+fortsat opaque for denne tråd; authoringbetydningen og et friskt joint-reference-
+snapshot skal afklares ved den senere native port. Ingen capture/probe giver
+automatisk sletningstilladelse. Ny Edit-capture blev afvist ved sourceændring,
+og næste forsøg blev afvist ved et nyt Play-skift; originals står stadig.
+
+Receiver- og repo-retirement-wrappers er desuden rettet for uafhængig resource-
+cleanup, pinned metadata, atomisk manifestfil og rollback uden at overskrive
+samtidige filer. De faktiske wrappers bestod37 offline scenarier/1.104 checks,
+herunder20 actual Luau compiles i en midlertidig kopis succesflow. Historisk S02v1
+og inputarkiver er uændrede; ingen live batch blev genkørt af disse tests.
 
 ## Gennemførte batches
 

@@ -1,0 +1,7 @@
+*.json text eol=lf
+*.luau text eol=lf
+*.md text eol=lf
+*.rbxm binary
+diagnostic-archive-before-v4/* -text
+retired-repo-mirrors/manifest-before.json -text
+retired-repo-mirrors/sources/** -text

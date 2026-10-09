@@ -1,0 +1,10 @@
+{
+  "scope": "Read-only current local mirror; other-session Play preserved",
+  "scriptsInManifest": 221,
+  "countsConsistent": true,
+  "missingFiles": [],
+  "hashDrift": [],
+  "compilePassed": 221,
+  "compileFailed": 0,
+  "concurrentAfterRead": []
+}

@@ -1,0 +1,714 @@
+{
+  "universeId": 10559217407,
+  "roots": [
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Archive",
+      "children": 11
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatBaselineRig_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatFalseSunTopper_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSignalArchitectTopper_20260925",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_BaselineYellow_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_BlacksiteDirector_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_FalseSun_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_PoolService_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [
+        "DevSuitSource"
+      ],
+      "class": "Model",
+      "name": "HazmatSkin_SignalArchitect_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_StaticWraith_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatSkin_SuburbSurvey_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "HazmatStaticWraithTopper_20260924",
+      "children": 1
+    },
+    {
+      "attributeKeys": [
+        "CodexUploadedAssetId",
+        "Level2_ArchRibMeshKey"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "CodexUploadedAssetId",
+        "Level2_ArchRibMeshKey"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Level2_BaseRadius",
+        "Level2_InnerRadius",
+        "Level2_OuterRadius",
+        "Level2_TemplateKind"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Closed Slide End Cap Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [],
+      "class": "MeshPart",
+      "name": "Level 2 Column Flare Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Level2_ColumnFlareShaftDiameter",
+        "Level2_ColumnFlareTileStuds"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Column Flare Template 4.500:7.200",
+      "children": 1
+    },
+    {
+      "attributeKeys": [
+        "Level2_ColumnFlareShaftDiameter",
+        "Level2_ColumnFlareTileStuds"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Column Flare Template 5.500:7.425",
+      "children": 1
+    },
+    {
+      "attributeKeys": [
+        "Level2_ColumnFlareShaftDiameter",
+        "Level2_ColumnFlareTileStuds"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Column Flare Template 9.000:10.200",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "SurfaceAppearance",
+      "name": "Level 2 Column Tile Surface Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Level2_BaseLength",
+        "Level2_BaseRadius",
+        "Level2_CenterYOffset",
+        "Level2_InnerRadius",
+        "Level2_OuterRadius",
+        "Level2_TemplateKind"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Fitted Slide Cradle Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Level2_Purpose",
+        "Level2_TemplateVersion"
+      ],
+      "class": "Folder",
+      "name": "Level 2 Kids Round Skylight Templates",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "Level2_BaseRadius",
+        "Level2_CenterYOffset",
+        "Level2_TemplateKind"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Open Slide End Cap Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Level2_BaseLength",
+        "Level2_BaseRadius",
+        "Level2_CenterYOffset",
+        "Level2_TemplateKind"
+      ],
+      "class": "MeshPart",
+      "name": "Level 2 Sealed Open Slide Segment Template",
+      "children": 0
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Level 2 Slide Assets",
+      "children": 1
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Level 4 Templates",
+      "children": 5
+    },
+    {
+      "attributeKeys": [
+        "Build",
+        "Complete",
+        "ManifestSha256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "Level1BlenderKit",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "Build",
+        "Complete",
+        "ManifestSha256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "Level1BlenderKitV2",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "Build",
+        "Complete",
+        "ManifestSha256",
+        "Ready",
+        "SteelAlbedo",
+        "SteelMetal",
+        "SteelNormal",
+        "SteelRough",
+        "SteelTint"
+      ],
+      "class": "Folder",
+      "name": "Level1ElevatorInsetKit",
+      "children": 2
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Level2Assets",
+      "children": 4
+    },
+    {
+      "attributeKeys": [
+        "Level2PromotionBackup"
+      ],
+      "class": "Folder",
+      "name": "Level2LegacyArchive_20261009",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "A2LionTarget",
+        "A2ReflectorCentre",
+        "A2ReflectorNormal",
+        "BoundsCenter",
+        "BoundsSize",
+        "CollisionPacket",
+        "Generated",
+        "L2NReady",
+        "L2NTerrainRegions",
+        "Level2ArrivalSlot1",
+        "Level2ArrivalSlot2",
+        "Level2ArrivalSlot3",
+        "Level2ArrivalSlot4",
+        "Level2ArrivalSlot5",
+        "Level2ArrivalSlot6",
+        "Level2ArrivalSlotCount",
+        "Level2NewMap",
+        "Origin",
+        "PartCount",
+        "PreviewOnly",
+        "PromotionRevision",
+        "Route",
+        "Source",
+        "SourceMtime",
+        "StudsPerMetre",
+        "TerrainPacket"
+      ],
+      "class": "Model",
+      "name": "Level2PoolroomsMap",
+      "children": 9
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Level3Assets",
+      "children": 5
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Level6ArenaSlideSource",
+      "children": 5
+    },
+    {
+      "attributeKeys": [
+        "Level6Owned",
+        "Ready",
+        "Version"
+      ],
+      "class": "Folder",
+      "name": "Level6BlenderSource",
+      "children": 4
+    },
+    {
+      "attributeKeys": [
+        "InstalledCount",
+        "Level6Owned",
+        "Ready",
+        "SourceBlendSHA256",
+        "Version"
+      ],
+      "class": "Folder",
+      "name": "Level6BlenderSourceRevision20261001",
+      "children": 4
+    },
+    {
+      "attributeKeys": [
+        "FeetY",
+        "StudsPerMetre",
+        "Texture"
+      ],
+      "class": "Folder",
+      "name": "Level6CounterSource",
+      "children": 11
+    },
+    {
+      "attributeKeys": [
+        "Level6Owned"
+      ],
+      "class": "Folder",
+      "name": "Level6TextureImportReferences",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "AtlasSHA256",
+        "LobbyReimaginedOwned",
+        "ManifestSHA256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "LobbyReimaginedOwned",
+        "ManifestSHA256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001R2",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "ChangedSources",
+        "LobbyReimaginedOwned",
+        "ManifestSHA256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001R3",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "LobbyReimaginedOwned",
+        "ManifestSHA256",
+        "Ready"
+      ],
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001R3B",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "LobbyReimaginedOwned",
+        "ManifestSHA256",
+        "Ready",
+        "RecoveryCaptureId"
+      ],
+      "class": "Folder",
+      "name": "LobbyReimaginedBlenderSource20261001R4",
+      "children": 6
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "LobbyTunnelReachSource",
+      "children": 9
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "MongoTVEntityAnimations",
+      "children": 117
+    },
+    {
+      "attributeKeys": [
+        "ArtifactOnly",
+        "KnownBlendMinimumGap",
+        "NativeAnimationAccepted",
+        "NativeAnimationReviewScore",
+        "PreviewScale",
+        "ReviewEvidence"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContactAnimations_20260910",
+      "children": 4
+    },
+    {
+      "attributeKeys": [
+        "Status"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContextDiagnosticBackup_0710",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "Status",
+        "TestToken"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "Status",
+        "TestToken"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "Status",
+        "TestToken"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+      "children": 3
+    },
+    {
+      "attributeKeys": [
+        "Status",
+        "TestToken"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+      "children": 2
+    },
+    {
+      "attributeKeys": [
+        "ApprovalToken",
+        "Mode",
+        "PlaceVersion",
+        "Status"
+      ],
+      "class": "Folder",
+      "name": "PoolSlideInstallBackup_pipe-scale4-stage-20260909T0407Z",
+      "children": 3
+    },
+    {
+      "attributeKeys": [],
+      "class": "Folder",
+      "name": "Project Mirror",
+      "children": 2
+    },
+    {
+      "attributeKeys": [],
+      "class": "Model",
+      "name": "RBX_ANIMSAVES",
+      "children": 27
+    },
+    {
+      "attributeKeys": [
+        "AuthoringOwner",
+        "BuilderVersion",
+        "NormalizedModelScale"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityAnimations_20260909",
+      "children": 10
+    },
+    {
+      "attributeKeys": [
+        "AuthoringOwner",
+        "BuilderVersion",
+        "NormalizedModelScale",
+        "Superseded",
+        "SupersededReason"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityAnimations_20260909_Scale3_7_Superseded",
+      "children": 6
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "StartedAtUTC",
+        "State",
+        "TaskCreated",
+        "TestToken"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityLobbyRigResult_0748Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "Result001",
+        "StartedUtc",
+        "State"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_0457Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "Result001",
+        "StartedUtc",
+        "State"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_0503Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "Result001",
+        "Result002",
+        "Result003",
+        "StartedUtc",
+        "State"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_0508Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "Result001",
+        "Result002",
+        "Result003",
+        "Result004",
+        "Result005",
+        "StartedAt",
+        "State",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_0638Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Bytes",
+        "Chunks",
+        "Complete",
+        "Result001",
+        "Result002",
+        "Result003",
+        "Result004",
+        "Result005",
+        "State"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_0706Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "ByteLength",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "StartedAtUTC",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_1609Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "ByteLength",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "Result002",
+        "Result003",
+        "Result004",
+        "Result005",
+        "Result006",
+        "Result007",
+        "StartedAtUTC",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_1624Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "ByteLength",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "Result002",
+        "Result003",
+        "Result004",
+        "StartedAtUTC",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_1633Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "ByteLength",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "Result002",
+        "Result003",
+        "Result004",
+        "StartedAtUTC",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_1640Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "ByteLength",
+        "Chunks",
+        "Complete",
+        "FinishedAtUTC",
+        "Result001",
+        "StartedAtUTC",
+        "Token"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMPResult_1648Z",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "Complete",
+        "Result",
+        "State",
+        "Success"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityMultiplayerLaunch",
+      "children": 0
+    },
+    {
+      "attributeKeys": [
+        "TaskCreated"
+      ],
+      "class": "Folder",
+      "name": "TEMP_PipeEntityValidation",
+      "children": 1
+    },
+    {
+      "attributeKeys": [
+        "Purpose"
+      ],
+      "class": "Folder",
+      "name": "TrelloPoolSlideReleaseBackup_20260910",
+      "children": 1
+    }
+  ],
+  "scope": "read-only authoritative Edit top-level inventory; attribute values not included",
+  "placeId": 131311258779917,
+  "rootCount": 70,
+  "running": false,
+  "capturedAtUtc": "2026-10-09 20:27:08 UTC",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "noStudioMutations": true,
+  "authorityForRemoval": false
+}

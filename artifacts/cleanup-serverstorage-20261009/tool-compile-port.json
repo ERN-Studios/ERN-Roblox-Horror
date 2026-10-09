@@ -1,0 +1,20 @@
+{
+  "pythonAST": 6,
+  "luauCompilesO0O1": 12,
+  "passed": true,
+  "scope": "Offline current tool syntax only; no native mutation/reconstruction certification",
+  "inputs": {
+    "tools/cleanup_20261009/retire_absent_codex_mirrors.py": "b7c90b0dfbf4057fdad5147c3b20ad05b338735786aa66ed017f55a761c7df6b",
+    "tools/cleanup_20261009/storage_record_archive.py": "c2dae97ccd1c04be6020142c3a438637dff5e3c30671f560d138950123991b2e",
+    "tools/cleanup_20261009/test_diagnostic_folder_references.py": "f5bcb9528891a9a7ce1d3b6eec03b60f55b278669f5ca7d5651c191f7c4cdf09",
+    "tools/cleanup_20261009/test_retire_absent_codex_mirrors.py": "f5166894fef66158386e86aa6d5e7f172bc2432f3581ffdc60a57e7130a6efd6",
+    "tools/cleanup_20261009/test_storage_receiver_lifecycle.py": "3cc73b9d6ee56d7fb9e434e9a5660c7d4e6c51ce935d7c07d67e49634634bdad",
+    "tools/cleanup_20261009/verify_diagnostic_folder_references.py": "78a8061d2cc159a81a00c9081be8fd4ce8239be8a6a75cc516b26390fd348e2d",
+    "tools/cleanup_20261009/capture_storage_records.luau": "923f5e10d16ef6251344c68d9441ec45a4404c62ba3710d8c98b4962f3ae0201",
+    "tools/cleanup_20261009/diagnostic_folder_archive.luau": "4063fd7ceb74c0bf7656f1bdec582e4fbae209be361d09b7d7c837927bff49a9",
+    "tools/cleanup_20261009/dump_diagnostic_reference_forest.luau": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+    "tools/cleanup_20261009/probe_storage_records.luau": "b52035ee8ec99efd7693c5c34240d7097122a698c368737baaffc2014e9e6bd3",
+    "tools/cleanup_20261009/test_diagnostic_folder_archive.luau": "f5ab5259065fcb9044796fdd6f74a6abeac8a1fafba87ecf43a513cbbcd973b7",
+    "tools/cleanup_20261009/verify_diagnostic_folder_archive.luau": "63396a000ab80d700ef16604da6a690954a4b3ceae4ee23ce04037e812575ef8"
+  }
+}

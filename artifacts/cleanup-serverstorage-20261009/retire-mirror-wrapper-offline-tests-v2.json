@@ -1,0 +1,107 @@
+{
+  "schema": "retire-mirror-wrapper-offline-tests-v2",
+  "passed": true,
+  "checks": 869,
+  "caseCount": 15,
+  "cases": [
+    {
+      "name": "actual historical inputs archive and atomic commit",
+      "passed": true,
+      "realLuauCompiles": 20
+    },
+    {
+      "name": "partial-temp-write",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "atomic-replace-failure",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "owner-reintroduced-on-replace-failure",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "rollback-write-failure",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "temp-write-and-cleanup-failure",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "short-temp-write",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "metadata-during-initial-compiles",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "metadata-during-archive-compiles",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "metadata-before-unlink",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "metadata-after-first-unlink",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "metadata-after-atomic-commit",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "manifest-before-unlink",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "source-before-unlink",
+      "passed": true,
+      "realLuauCompiles": 0
+    },
+    {
+      "name": "manifest-after-first-unlink",
+      "passed": true,
+      "realLuauCompiles": 0
+    }
+  ],
+  "wrapperSHA256": "b7c90b0dfbf4057fdad5147c3b20ad05b338735786aa66ed017f55a761c7df6b",
+  "testSHA256": "f5166894fef66158386e86aa6d5e7f172bc2432f3581ffdc60a57e7130a6efd6",
+  "actualLuauCompiles": 20,
+  "historicS02ReceiptSHA256": "2d0673eb25fc182e5c9731fd23294fcdae1ba92b48264be35d7747ec0449dcb8",
+  "inputSHA256": {
+    "tools/cleanup_20261009/retire_absent_codex_mirrors.py": "b7c90b0dfbf4057fdad5147c3b20ad05b338735786aa66ed017f55a761c7df6b",
+    "artifacts/cleanup-serverstorage-20261009/native-script-metadata.json": "3fa995eadd3639939ffdf8de5be8b7355b2a394eeb04bed47251bf3d1a9413a9",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/manifest-before.json": "bce9829cb7c02264d8bb7eef31c2b90b78f4b631c4e05c26b8c8efaf12c24733",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/removal-receipt.json": "2d0673eb25fc182e5c9731fd23294fcdae1ba92b48264be35d7747ec0449dcb8",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+    "artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/sources/ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd"
+  },
+  "historicalInputsUnchanged": true,
+  "canonicalBatchRerun": false,
+  "noStudio": true,
+  "limits": "Actual wrapper in temporary copies. Compiler real for success, mocked for fault fixtures. Ordinary guarded atomic replacement is not a lock against uncooperative concurrent writes between guard and replace. No native deletion, gameplay or serializer proof."
+}
