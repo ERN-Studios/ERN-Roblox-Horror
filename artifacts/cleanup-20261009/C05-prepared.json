@@ -1,0 +1,202 @@
+{
+  "candidate": "C05",
+  "status": "gennemført",
+  "currentBeforeSha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+  "candidateSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+  "removedLines": 73,
+  "removedBytes": 2823,
+  "publicFitUIRegressionDefinitions": 102,
+  "publicSignaturesIdentical": true,
+  "allRemainingStatementsPreserved": true,
+  "all13PrivateNamesAbsentAfter": true,
+  "N01BothSharedAnchorFixesPreserved": true,
+  "removedDefinitions": [
+    "setLongDispatchCue",
+    "briefingDevices",
+    "analyticalOverlap",
+    "BRIEFING_STRESS_CORPUS",
+    "BRIEFING_CONTROL_CAPTIONS",
+    "BRIEFING_CONTROL_ORDER",
+    "BRIEFING_LANDSCAPE_ROWS",
+    "BRIEFING_EXCLUSION_VIEWPORTS",
+    "DEV_CAPTION_KEYS",
+    "DEV_EYEBROW_BASE",
+    "DEV_EYEBROW_KEYBOARD",
+    "DEV_NOCLIP_KEYBOARD",
+    "DEV_NOCLIP_TOUCH"
+  ],
+  "tempPath": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\UIRegression.C05.candidate.lua",
+  "changes": [
+    {
+      "beforeLines": [
+        1253,
+        1265
+      ],
+      "removedBytes": 590,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        2589,
+        2591
+      ],
+      "removedBytes": 196,
+      "addedBytes": 87
+    },
+    {
+      "beforeLines": [
+        4154,
+        4163
+      ],
+      "removedBytes": 368,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4168,
+        4174
+      ],
+      "removedBytes": 170,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4180,
+        4187
+      ],
+      "removedBytes": 338,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4189,
+        4198
+      ],
+      "removedBytes": 287,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4212,
+        4215
+      ],
+      "removedBytes": 152,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4264,
+        4267
+      ],
+      "removedBytes": 162,
+      "addedBytes": 0
+    },
+    {
+      "beforeLines": [
+        4275,
+        4289
+      ],
+      "removedBytes": 647,
+      "addedBytes": 0
+    }
+  ],
+  "compileO0": {
+    "exitCode": 0,
+    "stdout": "Compiled 6 KLOC into 200 KB bytecode (read 0.01s, parse 0.00s, compile 0.00s)\n",
+    "stderr": ""
+  },
+  "offlineSharedAfter": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\n",
+  "productionApplied": true,
+  "nativeApplied": true,
+  "requiredGate": null,
+  "N01OwnedPerDeviceResetPreserved": true,
+  "publicUIRegressionDeclaredExports": 30,
+  "namedFitAndUIRegressionDeclarationsPreserved": 102,
+  "definitionCountMeaning": "102 named Fit/local internal and UIRegression declarations, with 30 public UIRegression table exports; native API keys/types/function arity must match",
+  "authoritativeBaseline": {
+    "fullReceipt": "B06-final-full.json",
+    "fullFailures": 0,
+    "scenarios": 21,
+    "touchReceipt": "B06-final-touch.json",
+    "touchChecks": 261,
+    "touchFailures": 0,
+    "contextAndSourceRestored": true
+  },
+  "isolatedNative": {
+    "full": {
+      "receipt": "B07-C05-full.json",
+      "failures": 0,
+      "reportExactlyMatchesBefore": true,
+      "publicApiExactlyMatchesBefore": true,
+      "publicExports": 30,
+      "originalSourcesUnchanged": true,
+      "temporaryDestroyed": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "scenarios": 21,
+      "sharedChecks": 730
+    },
+    "touch": {
+      "receipt": "B07-C05-touch.json",
+      "failures": 0,
+      "reportExactlyMatchesBefore": true,
+      "publicApiExactlyMatchesBefore": true,
+      "publicExports": 30,
+      "originalSourcesUnchanged": true,
+      "temporaryDestroyed": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "checks": 261
+    }
+  },
+  "initializerExternalCalls": [
+    "Vector2.new(705,338): immutable value constructor"
+  ],
+  "removedNameClosure": {
+    "briefingDevices": [
+      "BRIEFING_LANDSCAPE_ROWS"
+    ],
+    "DEV_EYEBROW_KEYBOARD": [
+      "DEV_EYEBROW_BASE"
+    ],
+    "otherRemovedNames": "definitions only"
+  },
+  "batch": "B08 (historical probe receipt filenames B07-C05)",
+  "installedAfterNative": {
+    "full": {
+      "receipt": "B08-after-full.json",
+      "failures": 0,
+      "reportExactlyMatchesBefore": true,
+      "publicApiExactlyMatchesBefore": true,
+      "publicExports": 30,
+      "currentAuthoritativeModule": true,
+      "probeCreated": false,
+      "originalSourcesUnchanged": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "scenarios": 21,
+      "sharedChecks": 730
+    },
+    "touch": {
+      "receipt": "B08-after-touch.json",
+      "failures": 0,
+      "reportExactlyMatchesBefore": true,
+      "publicApiExactlyMatchesBefore": true,
+      "publicExports": 30,
+      "currentAuthoritativeModule": true,
+      "probeCreated": false,
+      "originalSourcesUnchanged": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "checks": 261
+    }
+  },
+  "nativeInstallReceipt": "B08-C05-native-install.json",
+  "manifestUpdated": true,
+  "rollbackOriginal": ".git/mongotv-cleanup-20261009/client-before/N01/UIRegression.C05.before.lua",
+  "noPublishing": true
+}

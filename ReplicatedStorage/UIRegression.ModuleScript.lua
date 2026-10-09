@@ -1250,19 +1250,6 @@ end
 
 local LONG_DISPATCH_CUE = "Keep moving through the flooded service halls. The water is above your knees, so listen for every heavy step and follow the green exit lights."
 
-local function setLongDispatchCue()
-	task.wait(.05)
-	local guide = findGui("LevelOneGuideGui")
-	local subtitle = guide and guide:FindFirstChild("Subtitle", true)
-	if subtitle and subtitle:IsA("TextLabel") then subtitle.Text = LONG_DISPATCH_CUE end
-	-- The panel is sized for the copy, so changing the copy has to re-run the
-	-- layout. Through the production function, via its Studio seam.
-	local relayout = guide and guide:FindFirstChild("UIRegressionRelayoutGuide")
-	if relayout and relayout:IsA("BindableFunction") then
-		pcall(function() relayout:Invoke() end)
-	end
-	task.wait(.05)
-end
 
 -- NOT LOCKED, AND CORRECTLY SO -- but say why, because it is the one public
 -- entry point in this file that is next door to a mutating lane and is not
@@ -2586,9 +2573,7 @@ function Fit.borrow()
 	-- behaving; when it does not, residue says a transition happened instead of
 	-- quietly forgiving the widgets that moved.
 	saved.DispatchOpen = Players.LocalPlayer:GetAttribute("DispatchTextActive") == true
-	-- The live dispatch caption. setLongDispatchCue overwrites it in place, and
-	-- nothing put it back -- so every run left the player's briefing showing a
-	-- test string until the next real cue.
+	-- Preserve the live dispatch caption so every QA lane restores the copy it borrowed.
 	local guide = playerGui():FindFirstChild("LevelOneGuideGui")
 	local subtitle = guide and guide:FindFirstChild("Subtitle", true)
 	if subtitle and subtitle:IsA("TextLabel") then
@@ -4151,51 +4136,16 @@ end
 -- 181 characters, a German localisation of that deleted line, kept unchanged as
 -- the stress case. German is the useful shape here -- the same sentence runs
 -- long AND carries compounds the wrapper cannot break.
-local BRIEFING_STRESS_CORPUS = {
-	{
-		Name = "LONG_DISPATCH_CUE (142 chars)",
-		Text = LONG_DISPATCH_CUE,
-	},
-	{
-		Name = "a synthetic 1.60x localisation (181 chars)",
-		Text = "Noch wichtiger: das Aktivieren einer Pumpstation alarmiert offenbar eine bislang nicht identifizierte, ungewoehnlich grosse Entitaet und verraet ihr eure derzeitige Position sofort.",
-	},
-}
 
 -- Speech is disabled for now, so MUTE is deliberately absent from the input
 -- stack. Keep its instance for a future voice release, but measure only the
 -- visible dismiss control and the caption it actually prints.
-local BRIEFING_CONTROL_CAPTIONS = {
-	DispatchStopButton = {
-		Binding = "[N]  ",
-		Captions = {"SKIP BRIEF"},
-	},
-}
-local BRIEFING_CONTROL_ORDER = {"DispatchStopButton"}
 
 -- The rows of MODAL_DEVICES this matrix sweeps: every PORTRAIT row, plus the
 -- four short landscape shapes where the panel has the least vertical room and
 -- the layout is driven into its compromise pass. Landscape rows are keyed by
 -- size rather than by device name, so a renamed row cannot silently drop out.
-local BRIEFING_LANDSCAPE_ROWS = {
-	-- The reference device for the compact-briefing repair.
-	["956x440"] = true,
-	["705x338"] = true,  -- Galaxy A06, the shape the panel shipped broken on
-	["568x320"] = true,  -- the smallest viewport in the matrix
-	["844x390"] = true,  -- iPhone landscape
-	["667x375"] = true,  -- iPhone SE landscape
-}
 
-local function briefingDevices(): {any}
-	local rows = {}
-	for _, device in ipairs(MODAL_DEVICES) do
-		local key = string.format("%.0fx%.0f", device.Size.X, device.Size.Y)
-		if device.Portrait or BRIEFING_LANDSCAPE_ROWS[key] then
-			table.insert(rows, device)
-		end
-	end
-	return rows
-end
 
 -- The overlap predicate for ANALYTICAL rects.
 --
@@ -4209,10 +4159,6 @@ end
 -- rectsOverlap COMMENT describes: a shared edge (subtitle top 74, controls
 -- bottom 74) is abutment and passes; one pixel of real penetration (subtitle
 -- top 73) is an overlap and fails.
-local function analyticalOverlap(a: any, b: any): boolean
-	return a.Left < b.Right and a.Right > b.Left
-		and a.Top < b.Bottom and a.Bottom > b.Top
-end
 
 function Fit.bodyBriefingFitMatrix(): (string, number)
 	return Fit.bodyRoundHudMatrix()
@@ -4261,10 +4207,6 @@ end
 -- UIDevice.SuppressesKeyboardGlyphs(), which is true for EITHER touch input or
 -- a handheld form factor, and they are re-rendered on UIDevice.Changed rather
 -- than only at build time.
-local BRIEFING_EXCLUSION_VIEWPORTS = {
-	{Name = "phone-landscape", Size = Vector2.new(705, 338), Touch = true},
-	{Name = "desktop", Size = nil, Touch = false},
-}
 
 -- command -> the key the caption must name when glyphs are shown. Mirrored by
 -- hand from Zyntra Dev L4's ROWS (the legacy DEV tab's control table, which
@@ -4272,21 +4214,6 @@ local BRIEFING_EXCLUSION_VIEWPORTS = {
 -- Each row Dev_<command> draws them on its KeyChip as "KEY <key>".
 -- B really does drive esp and fastQueue together (DevCheats' InputBegan toggles
 -- both), so the repeat is correct and must not be "fixed".
-local DEV_CAPTION_KEYS = {
-	{Command = "esp", Key = "B"},
-	{Command = "fastQueue", Key = "B"},
-	{Command = "noclip", Key = "V"},
-	{Command = "pauseEntity", Key = "P"},
-	{Command = "immunePush", Key = "I"},
-	{Command = "unlimited", Key = "U"},
-	{Command = "thirdPerson", Key = "C"},
-	{Command = "level3PreBlackout", Key = "K"},
-	{Command = "level5Fall", Key = "O"},
-}
-local DEV_EYEBROW_BASE = "WHITELISTED DEVELOPER CONTROLS"
-local DEV_EYEBROW_KEYBOARD = DEV_EYEBROW_BASE .. " \u{B7} KEY J"
-local DEV_NOCLIP_KEYBOARD = "Fly through geometry with WASD, Space and Left Ctrl."
-local DEV_NOCLIP_TOUCH = "Fly through geometry using the movement stick."
 
 function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	return Fit.bodyRoundHudMatrix()

@@ -247,8 +247,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 323553,
-      "sha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+      "bytes": 320730,
+      "sha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
