@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "sameActiveAuthoringSemantics": true,
+  "sameOtherFreshPayloadEndpoints": 90,
+  "semanticManifestSHA256": "0ff5fbbaf9fe9a6fa93a9046ee2b8d77c1e55985d326cce3c27be60977d5708a",
+  "isolatedBlendSHA256": [
+    "32df39e634ed9a52714a7f6e5b485a8c992091d19eb9f7cffce25824a8ea0666",
+    "a8dea32ea2280eb11bb008b4558540661a3d05cbc6e5bca20dfbcd20b334c09a"
+  ],
+  "excludedFromEquality": [
+    "freshR4Payload./manifest hash only after full parsed manifest equality except sourceBlendSha256"
+  ],
+  "scope": "Generated private Blender output metadata only. No production/source/asset/receipt normalization."
+}

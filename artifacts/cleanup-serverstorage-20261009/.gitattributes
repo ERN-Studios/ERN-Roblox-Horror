@@ -3,5 +3,9 @@
 *.md text eol=lf
 *.rbxm binary
 diagnostic-archive-before-v4/* -text
+diagnostic-archive-before-v7/* -text
+diagnostic-archive-before-v8/* -text
+retired-lobby-authoring/sources/** -text -whitespace
+retired-lobby-authoring-v2/sources/** -text -whitespace
 retired-repo-mirrors/manifest-before.json -text
 retired-repo-mirrors/sources/** -text

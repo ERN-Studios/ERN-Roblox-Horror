@@ -4,7 +4,7 @@ Studio er source of truth: place **131311258779917**, universe **10559217407**.
 De tidligere gennemførte, testede batches er lokalt committed. Intet er publiceret eller
 pushet til GitHub. Ejeren har igen godkendt Studio-arbejde; to andre sessions
 arbejder samtidig og har igen startet Play. Deres session bevares. Yderligere
-native porte og afsluttende Edit-parity afventer tilgængelig Edit.
+native porte og afsluttende Edit-parity gennemføres, når Edit er tilgængelig.
 Vores valgte afventende runtimeforslag står stadig uimplementeret; eksternt
 implementerede ændringer beskrives særskilt uden oprydningskredit.
 
@@ -18,6 +18,17 @@ dele af blandede fund har deres egen status og testport.
 
 ## Aktuel ServerStorage-oprydning
 
+S07 har pensioneret17 lokale Lobby R1/R2/R3/R3B-authoringfiler og bevaret alle
+133.791 originalbytes i off-mirror arkiv. 162 andre authoringfiler er identiske.
+Faktisk R4 package-validering og ny isoleret Blender R4-build/prop-QA bestod
+før/efter:90 payloads matcher byte/hash; fuld manifest matcher bortset fra
+hashen af den genererede private Blender-fil. En uændret gentagelse beviste
+samme metadataforskel. Alle øvrige portrecords matcher;48 actual compiles og
+otte Python AST-checks bestod. Første trial blev tilbagerullet med alle17
+filer gendannet, før den præcise metadataforskel blev afklaret. Ingen Studio-
+ændring eller gameplay-/performancepass udledes af denne lokale pensionering.
+[Endeligt review og rollback](artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/REVIEW.md).
+
 S02 har fjernet ti stale Codex-mirrors fra runtime-mapperne og manifestet
 (lokal commit `52be2b82`).
 Studio havde allerede fjernet begge folders; batchen ændrede ingen native
@@ -28,7 +39,7 @@ compile20/20, begge source/full-sync-kontrakter samt221 aktuelle resterende
 mirrorhashes/compiles bestod; ingen samtidig filændring under den målte port.
 Ejerens manifestentries og nye LevelWorldStorage-modul er bevaret.
 
-S01 er endnu ikke installeret: de12 gamle TEMP-resultat-Folders har ingen
+S01's egen fjernelsesport blev aldrig kørt: de12 gamle TEMP-resultat-Folders har ingen
 children/callers/tags, men deres store attributes er historiske testdata.
 Komplet native archive148.531 bytes, SHA
 `9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098`,
@@ -36,6 +47,17 @@ typed facts/Lune reload/canonical roundtrip bestod. Joint native referencepack
 med StarterPlayer bestod105 serialized Ref-kontroller uden inbound references;
 den beskyttede PlaceAvatarRules-reference er serialiseret null. Den fulde
 native-port skal stadig bestå efter sidste yield før en fjernelse.
+Frisk v7 Edit-capture og unparented native rekonstruktion bestod2.472 checks,
+12 kopier oprettet/fjernet,609.670 reference-property-reads og nul kendte refs/
+selection/source-/rootdrift. Det er historisk v7-status. En anden Studio-session
+har siden taget alle12 ud af ServerStorage sammen med11 øvrige gamle rødder.
+V8-capture bestod, men rekonstruktionsproben afviste den eksternt ændrede
+Parent-baseline ved check4, før nogen testkopi eller originalændring.
+Ny referencepack dækker577 objekter/105 serialized refs og samme null-reference.
+S01 bruger same-original Parent=nil med rollback/nativearkiv, aldrig Destroy;
+opaque referenter bevarer identitet. Før remove mangler samme-original trial/
+restore og frisk efter-sidste-yield reference-/authoring-port. Disse manglende
+porte er ikke godkendt af den eksterne fjernelse; vi gentager den ikke.
 De uafhængige offline porte bestod89 folderchecks (39 negative cases) og
 39 referencechecks (28 negative cases); skjulte refs, forkerte bytes/typer og
 Source/CDATA/comment-falske tags afvises. Seks Python AST og12 Luau O0/O1
@@ -56,7 +78,16 @@ attribute-epoch og guard efter HTTP-yields. Protected nonserialized holders er
 fortsat opaque for denne tråd; authoringbetydningen og et friskt joint-reference-
 snapshot skal afklares ved den senere native port. Ingen capture/probe giver
 automatisk sletningstilladelse. Ny Edit-capture blev afvist ved sourceændring,
-og næste forsøg blev afvist ved et nyt Play-skift; originals står stadig.
+og næste forsøg blev afvist ved et nyt Play-skift; originals var intakte ved
+disse historiske gates. De23 senere unparented træer er stadig intakte via
+sessionreferencer og bevares nu i separat S06-nativearkiv.
+
+Frisk read-only observation21:54:29Z:50 ServerStorage-rødder/212 scripts;
+23 held-originals med Parent=nil,12 gamle Source/editor-par identiske med v8.
+[Præcise navne og kildehashes](artifacts/cleanup-serverstorage-20261009/external-storage-observation.json).
+Ejeren har særskilt pensioneret animations-previewworkflowet i den eksternt
+fjernede TEMP-pakke. Senere Source-/rootændringer fra andre sessions registreres
+som samtidige arbejde; de historiske tal er ingen afsluttende paritypåstand.
 
 Receiver- og repo-retirement-wrappers er desuden rettet for uafhængig resource-
 cleanup, pinned metadata, atomisk manifestfil og rollback uden at overskrive
@@ -75,12 +106,21 @@ identisk ved testporten og blev aldrig skrevet af batchen; et senere eksternt
 configskift er bevaret, og frisk peer-review bekræfter stadig samme auth/port.
 Rollback-kopier med credentials ligger privat under `.git`, uden for commits.
 
-18 actual-module offline-tests og fem AST/compile-checks bestod, inklusive
+Lokal commit `4c2aca10`.18 actual-module offline-tests og fem AST/compile-checks bestod, inklusive
 refresh, override, retry, fejlhåndtering og ugyldige headertegn før HTTP med
 neutrale fejlbeskeder. Ingen rigtig builder, vault-regeneration, netværks-/MCP-
 kald eller Studioændring. Den eksisterende credential og Git-historik er
 bevaret; testen godkender ingen live Obsidian-forbindelse.
 [Review og reproducerbare receipts](artifacts/cleanup-serverstorage-20261009/vault-auth/REVIEW.md).
+
+## Afklaret pensionering, afventer test
+
+Ejeren har godkendt pensionering af de fire gamle lobby-sourcepakker
+`LobbyReimaginedBlenderSource20261001`, R2, R3 og R3B samt deres manuelle
+authoringworkflows, og af det gamle `Level1BlenderKit` legacy import/export/QA-
+workflow. R4, Level1BlenderKitV2 og gameplay bevares. Fuld dependency-closure,
+native arkiv/reopen og aktive R4/V2-porte skal bestå før fjernelse. Ingen af
+disse fem pakker er endnu fjernet; afklaringen tilskrives ikke en gennemført batch.
 
 ## Gennemførte batches
 

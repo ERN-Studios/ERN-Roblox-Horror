@@ -1,0 +1,24 @@
+{
+  "pass": false,
+  "reason": "Active actual R4 authoring results changed",
+  "restored": [
+    "tools/lobby_reimagined/build.py",
+    "tools/lobby_reimagined/serve.py",
+    "tools/lobby_reimagined/install.py",
+    "tools/lobby_reimagined/revision_install.py",
+    "tools/lobby_reimagined/revision_install_r3.py",
+    "tools/lobby_reimagined/revision_install_r3b.py",
+    "tools/lobby_reimagined/source_module_manifest.json",
+    "tools/lobby_reimagined/source_module_manifest_r3.json",
+    "tools/lobby_reimagined/runtime_bake.ModuleScript.luau",
+    "tools/lobby_reimagined/preview_builder.ModuleScript.luau",
+    "tools/lobby_reimagined/preview_bootstrap.Script.luau",
+    "tools/lobby_reimagined/queue_controller.LocalScript.luau",
+    "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+    "tools/lobby_reimagined/compile_candidates.luau",
+    "tools/lobby_reimagined/verify_import_helpers.py",
+    "tools/lobby_reimagined/verify_r3_geometry.py",
+    "tools/lobby_reimagined/verify_r3_native_scope.luau"
+  ],
+  "preservedConcurrentFiles": []
+}

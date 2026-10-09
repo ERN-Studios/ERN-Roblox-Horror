@@ -1,5 +1,20 @@
 # Isolated lobby preview import
 
+The R1/R2/R3/R3B workflows described below were retired by the owner during the
+2026-10-09 cleanup. Their17 helpers/candidates are preserved byte-for-byte in
+[the retirement archive](../../artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/REVIEW.md).
+The remainder of this document records historical commands and observations;
+they are not current installation instructions.
+
+Current R4 authoring retains `build_r4.py`, `serve_r4.py`, `install_r4.py`, the
+shared props/bay/PBR/prefab helpers and `verify_props.py`. R4 source/kit and all
+active gameplay remain in Studio. Use isolated output for authoring QA, and a
+fresh Studio Source/editor/native backup for any scoped game change.
+The existing final catalog preserves8 Sources while the historical R4 loader
+expects7; its catalog verify-only gate currently rejects that baseline. Cleanup
+did not regenerate the catalog or execute an installer. Real R4 package validation,
+prop QA and isolated fresh R4 builds passed before and after retirement.
+
 These helpers target only this task's separate `LobbyReimagined` preview. Initial installation adds unique namespaces; the active R2 correction compares and updates exactly four already installed preview Sources against their fresh Studio/editor baseline. It preserves the original lobby, round systems and previous raw payload. Helpers do not connect to Studio, upload assets or publish; parent owns the reviewed application and publication.
 
 ## Package contract
@@ -22,7 +37,7 @@ Optional source-module manifest:
 
 Relative file paths resolve from this JSON file's directory. The default `ServerScriptService.LobbyReimaginedPreview.RuntimeBake` is included automatically; do not duplicate it. Direct new ModuleScript children under `ReplicatedStorage.LobbyReimaginedPreview` are also supported. Existing namespaces and arbitrary targets are forbidden.
 
-## Active R2 correction and transport
+## Historical R2 correction and transport — retired
 
 ```sh
 python3 tools/lobby_reimagined/serve.py PACKAGE --verify-only --sources-manifest SOURCES.json

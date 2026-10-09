@@ -1,0 +1,119 @@
+{
+  "schema": "retired-lobby-authoring-removal-v1",
+  "pass": true,
+  "atUtc": "2026-10-09T22:07:43.982719+00:00",
+  "files": [
+    {
+      "file": "tools/lobby_reimagined/build.py",
+      "bytes": 31470,
+      "sha256": "b62766d8d62b2d5cc387468a16495be5e4ac4a3ef2370c005ffe42195e9cb7a7",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/build.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/serve.py",
+      "bytes": 9600,
+      "sha256": "9627e7a3f37e3cf0a7c73436b80f6f17e4fbae1764148b4d1fe3fc5bc57d650b",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/serve.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/install.py",
+      "bytes": 8072,
+      "sha256": "fe7cb4ee88be9d8c7060018a5a98569ae13148da70f9b5b6ec5928f024d12fd1",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/install.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/revision_install.py",
+      "bytes": 6259,
+      "sha256": "89449a87d57d5b3b972b28a2b2f2dbc761c6182707fac7776e00cf572d0630a2",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/revision_install.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/revision_install_r3.py",
+      "bytes": 9066,
+      "sha256": "f3ca8ed3b7de88821ff4e9a68d349bb33baf93eaa2af74c995570b95a72d7de9",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/revision_install_r3.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/revision_install_r3b.py",
+      "bytes": 1852,
+      "sha256": "619dc55aca61f189c2fff7cf3172c0a92631032e0a160a617d071167b8a48266",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/revision_install_r3b.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/source_module_manifest.json",
+      "bytes": 489,
+      "sha256": "f77eed03b449ff0e9e2e84bc4d1c61ae7b658cb2943f56bedb0c683112a5bf55",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/source_module_manifest.json"
+    },
+    {
+      "file": "tools/lobby_reimagined/source_module_manifest_r3.json",
+      "bytes": 1738,
+      "sha256": "f62294c9c3a532f25fe4e2f3240b9e1d91e85e9f0d8378735ae1a6c498a61061",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/source_module_manifest_r3.json"
+    },
+    {
+      "file": "tools/lobby_reimagined/runtime_bake.ModuleScript.luau",
+      "bytes": 8671,
+      "sha256": "90df66a8383970ad6026ee7862721c2cbc9ea0d942e66411aef91ad9acedff1c",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/runtime_bake.ModuleScript.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/preview_builder.ModuleScript.luau",
+      "bytes": 11294,
+      "sha256": "ac8a420b73cdd449acfbf91c3ba4cdc3228707f7c715316c686bed8b147eaee2",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/preview_builder.ModuleScript.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/preview_bootstrap.Script.luau",
+      "bytes": 1240,
+      "sha256": "db442e3c0cd2210340ff378872aa8e593f877c92e916a74a0fadcd2418055b01",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/preview_bootstrap.Script.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/queue_controller.LocalScript.luau",
+      "bytes": 4190,
+      "sha256": "236172f80e62765d55a89f70b5ab56bc6b21e40cfc5485ad87521a513733d9aa",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/queue_controller.LocalScript.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/queue_bridge.ModuleScript.luau",
+      "bytes": 3670,
+      "sha256": "00b0431a6e16e9a569eaaa404e1b5d54ed22b45430f6e766975de3d3a5ab91b3",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/queue_bridge.ModuleScript.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/compile_candidates.luau",
+      "bytes": 1091,
+      "sha256": "17c76f6da13a3ba7d10540fa9555dafaecf095fd0a8a7209ac491f44ceabd90b",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/compile_candidates.luau"
+    },
+    {
+      "file": "tools/lobby_reimagined/verify_import_helpers.py",
+      "bytes": 5772,
+      "sha256": "6efb49813ef185e3bfad0a7a1d68a220aa61b43869e7de3a0276c68da5356769",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/verify_import_helpers.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/verify_r3_geometry.py",
+      "bytes": 18745,
+      "sha256": "43c53758d182212b13576fd31c8342d2479a0aa11f04e42468f60ac9a3145cc5",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/verify_r3_geometry.py"
+    },
+    {
+      "file": "tools/lobby_reimagined/verify_r3_native_scope.luau",
+      "bytes": 10572,
+      "sha256": "fc516da0aed1e58776902ead0db4246943cadc0f2ae0c52d19ef57485174947b",
+      "archiveFile": "artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/sources/tools/lobby_reimagined/verify_r3_native_scope.luau"
+    }
+  ],
+  "filesRemoved": 17,
+  "rawBytesOffActiveTools": 133791,
+  "pythonAstChecks": 8,
+  "beforeLuauCompiles": 14,
+  "archiveLuauCompiles": 14,
+  "preservedFiles": 162,
+  "sameActiveAuthoringSemantics": true,
+  "beforePortSHA256": "8a74a4c667385d6dd2f68126ca3c4653764fee90599f061ed71bc7a499ed8732",
+  "afterPortSHA256": "f478fa38aa32aef7f1b4e83530751a187259a417f43ddec5bb8f8b75cf47b78f",
+  "scope": "Retired local workflow closure only; native five-pack removal and active gameplay ports remain separate."
+}

@@ -1,0 +1,7 @@
+{
+  "sources": [
+    {"key":"builder","path":"ServerScriptService.LobbyReimaginedPreview.Builder","class":"ModuleScript","file":"preview_builder.ModuleScript.luau"},
+    {"key":"bootstrap","path":"ServerScriptService.LobbyReimaginedPreview.Bootstrap","class":"Script","file":"preview_bootstrap.Script.luau"},
+    {"key":"queue-client","path":"StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController","class":"LocalScript","file":"queue_controller.LocalScript.luau"}
+  ]
+}

@@ -1,0 +1,1358 @@
+{
+  "schema": "retired-lobby-authoring-active-port-v1",
+  "pass": true,
+  "actualR4Payload": {
+    "/chunk/0": {
+      "bytes": 79324,
+      "sha256": "ee0d3964558f230ef627a63ba7f2c5495faefa65a1f8c2a7a919695a230b4e93"
+    },
+    "/chunk/1": {
+      "bytes": 7208,
+      "sha256": "76ad8fb7d66937b82fd445286142bd01131e235636b0497e463676934e57a797"
+    },
+    "/chunk/10": {
+      "bytes": 1000,
+      "sha256": "36125ffeede4c0a19fa3427124f6fb3ba8d408ebf48e3ab6fc12dac26ee9bea9"
+    },
+    "/chunk/11": {
+      "bytes": 49180,
+      "sha256": "27759be124a18201d20d58e513e0535c54eb7215202da96e636ea40c0c2b00f4"
+    },
+    "/chunk/12": {
+      "bytes": 34684,
+      "sha256": "768106f2bcea4c0dbc162c2fb004aa2d4b5ac359dc6ff1c720447c8955da582c"
+    },
+    "/chunk/13": {
+      "bytes": 71480,
+      "sha256": "2d3bb687828b40eca10e14053e07cf42547befe35c650e8255d54992cf2630e3"
+    },
+    "/chunk/14": {
+      "bytes": 34684,
+      "sha256": "5a8214b5cf9e58cec0da390b36cd72801b4da1e53bee79bcaa6bbf54d1becfe3"
+    },
+    "/chunk/15": {
+      "bytes": 137928,
+      "sha256": "25ee6242cb2b74cbef2971dd067e0729fbd4aeb273b02e96e1cf565dbcd85174"
+    },
+    "/chunk/16": {
+      "bytes": 34684,
+      "sha256": "8e2d4872450bbe3fbed0847c5d2c72200d013daf36a5c00e963666825bf5651c"
+    },
+    "/chunk/17": {
+      "bytes": 71192,
+      "sha256": "b0831fd0b02d77bad02983b124079a75ba6989d25d3ce44fd79aafd2659b6943"
+    },
+    "/chunk/18": {
+      "bytes": 31996,
+      "sha256": "95c909ef5ed6ed47e135c9f4b20da2ad2f7f61141f31eb4866c27eadda7385ef"
+    },
+    "/chunk/19": {
+      "bytes": 132912,
+      "sha256": "799dbe7682614aba39db3759839dd62c6690f05063b52362a14a4f6b91f90e46"
+    },
+    "/chunk/2": {
+      "bytes": 19644,
+      "sha256": "158755b7371bcef1c68076f8db8e3655d0a3c58abc6913654dd524463384beaa"
+    },
+    "/chunk/20": {
+      "bytes": 105816,
+      "sha256": "2390da027a47ebcffe886a6b514f3aeee4848786c7feea5633b4ac4f829d9fb1"
+    },
+    "/chunk/21": {
+      "bytes": 34684,
+      "sha256": "768106f2bcea4c0dbc162c2fb004aa2d4b5ac359dc6ff1c720447c8955da582c"
+    },
+    "/chunk/22": {
+      "bytes": 34684,
+      "sha256": "8e2d4872450bbe3fbed0847c5d2c72200d013daf36a5c00e963666825bf5651c"
+    },
+    "/chunk/23": {
+      "bytes": 71192,
+      "sha256": "b0831fd0b02d77bad02983b124079a75ba6989d25d3ce44fd79aafd2659b6943"
+    },
+    "/chunk/24": {
+      "bytes": 31996,
+      "sha256": "f7902c37268c34c4fdce5bceead1d6035388e7c6349ca9cfb5d5322cc769f062"
+    },
+    "/chunk/25": {
+      "bytes": 187052,
+      "sha256": "2c8be74edc8286518b19658033538caccdca739f59befd89c53ec308d6ebda4c"
+    },
+    "/chunk/26": {
+      "bytes": 51640,
+      "sha256": "6b671b803cca63bbb78613babb341a59f6c5d4eb6e4ab8bbb7acdaf737a9a045"
+    },
+    "/chunk/27": {
+      "bytes": 36380,
+      "sha256": "a0042cc8b9bb368649d007817520100f8d9ab7e33d4d6cb559b1aefee7aff01c"
+    },
+    "/chunk/28": {
+      "bytes": 12176,
+      "sha256": "9dfddc15898fc538cf1cf57cd3369f045239eb5ae5b574055081f553882f5d8e"
+    },
+    "/chunk/29": {
+      "bytes": 5136,
+      "sha256": "c18502ccc87c05111a6a40de8ab0adcf4d8c1dfe6152b1291a544a0b6eff3546"
+    },
+    "/chunk/3": {
+      "bytes": 67408,
+      "sha256": "d5dba360b1c66562d674eaf7fec22cbd288a2c63b64e5316a3bcf5ddb3bc02c2"
+    },
+    "/chunk/30": {
+      "bytes": 621488,
+      "sha256": "66ba47f931c86456aee7da46d0ccacfa84c30521200fc854d8056818299566bb"
+    },
+    "/chunk/31": {
+      "bytes": 60540,
+      "sha256": "f579de1c1fce9cde18a54dd5b91ba474194314d1576fc162e77c639e74de812f"
+    },
+    "/chunk/32": {
+      "bytes": 872,
+      "sha256": "92225d0f99b0bfa48fdf98fdcd8023652c9343b47f02941c6ffae5253811689d"
+    },
+    "/chunk/33": {
+      "bytes": 956,
+      "sha256": "431707705ba606938ca1f27abec7bbc9ee341b57d121cc2fcc18b114fef1fdf2"
+    },
+    "/chunk/34": {
+      "bytes": 956,
+      "sha256": "dd646581d6c5700fb84b43f70c194ca12c64070de1ca3a5d16e0ba5f833263b4"
+    },
+    "/chunk/35": {
+      "bytes": 4432,
+      "sha256": "7abfffb97b4a69b572b26b59dd7457e4f3e79faa587a3d6e1c263c5c73c94387"
+    },
+    "/chunk/36": {
+      "bytes": 1000,
+      "sha256": "0fcdda20c555e8c4df778152776b05ede424a22a3bfb3a7388efa01eda5acc34"
+    },
+    "/chunk/37": {
+      "bytes": 2640,
+      "sha256": "1edbec703ca4e63486f1d85f11f54a08239b7ec2c3ac6a1c0647b43dfe95d379"
+    },
+    "/chunk/38": {
+      "bytes": 66748,
+      "sha256": "1a93a2c7ff5fad53ce7c26fb29844b9331ffab7ead65754667b4a74ac66884ea"
+    },
+    "/chunk/39": {
+      "bytes": 3068,
+      "sha256": "03406c8b00987867814aff43c165095633005de82dba98fc3f9bf10a61277bcd"
+    },
+    "/chunk/4": {
+      "bytes": 1000,
+      "sha256": "36125ffeede4c0a19fa3427124f6fb3ba8d408ebf48e3ab6fc12dac26ee9bea9"
+    },
+    "/chunk/40": {
+      "bytes": 9288,
+      "sha256": "3096f1659f8e19ca3f77c6396c6076bfd68a57156996eb6831309f77007cfb1e"
+    },
+    "/chunk/41": {
+      "bytes": 32828,
+      "sha256": "a8ac2d07270aa7853110470f1ac2eb6f4d5c00d2ffed9eb0fbff38c580eeb6f6"
+    },
+    "/chunk/42": {
+      "bytes": 23568,
+      "sha256": "66929f4c6ce702e84b08aa7d43abe1dca5830b5f3af1a677c37fe6640d8bae0b"
+    },
+    "/chunk/43": {
+      "bytes": 96744,
+      "sha256": "59d5641d4fe3285df61e46e65a85e4de5017053c59effb094bb6900488736b44"
+    },
+    "/chunk/44": {
+      "bytes": 69160,
+      "sha256": "3dff908cefcda2366493810ee72abc88f2ddca078b841035bce5619c759d9c4a"
+    },
+    "/chunk/45": {
+      "bytes": 173948,
+      "sha256": "f8b9d2e7cc94ae70bfc317e7112eefd9c653623369f861e905ebfa8b5215f972"
+    },
+    "/chunk/46": {
+      "bytes": 143484,
+      "sha256": "42014c3f92dd547da3d23dc131ebee7a3a14f4c4acbefefb88c7854054cc4c35"
+    },
+    "/chunk/47": {
+      "bytes": 65800,
+      "sha256": "c46d3d9c2321f075fd0807dc9915894e72def0bb1e1ed62201b0beccc5429b91"
+    },
+    "/chunk/48": {
+      "bytes": 3068,
+      "sha256": "d25b41cfe7701303fec43a68f126907318bc17a1e6073d2d501ebf1ab79b3573"
+    },
+    "/chunk/49": {
+      "bytes": 3068,
+      "sha256": "daef0e4073ae403d0de86baf0bce64423bb654d206b8ec99f5a2a9fb03220740"
+    },
+    "/chunk/5": {
+      "bytes": 16504,
+      "sha256": "9518580a6549c3758be5b1d570e53c85ac95e5831699a6058c743ebdb6b75696"
+    },
+    "/chunk/50": {
+      "bytes": 42064,
+      "sha256": "dfb0635930a7386a9822545474ecc7b9577df9cc4399cd7de990d4de0aea945b"
+    },
+    "/chunk/51": {
+      "bytes": 10188,
+      "sha256": "1f5f46818ff972497dd08111225c57502eae048e6fbb36ced96c706cd564b93c"
+    },
+    "/chunk/52": {
+      "bytes": 1616,
+      "sha256": "9223f96403beb7c63039c65a1ccd93f30ca57dbfde529aa083e74e168662e6c5"
+    },
+    "/chunk/53": {
+      "bytes": 25000,
+      "sha256": "9527dc257292d9b60917b1df176e2d83adc8dee91243f915db324daed82bf29a"
+    },
+    "/chunk/54": {
+      "bytes": 3728,
+      "sha256": "db3c0e271f074af44c3309de8b5e4b86af35ae38034256d470e0e4ecceac3f4f"
+    },
+    "/chunk/55": {
+      "bytes": 956,
+      "sha256": "2b61d2cf0ffe8e2853acba481b27fc4459f59d87583558a932e347b380db9aec"
+    },
+    "/chunk/56": {
+      "bytes": 4392,
+      "sha256": "4f4af48170a254b0c299440b3e6cc37379b38cb44687af8d77592e4380ef8489"
+    },
+    "/chunk/57": {
+      "bytes": 138956,
+      "sha256": "cfe0410aeee242f1819e5a26fabf7cca573f15ec985ce7c4d20bda46a8216bce"
+    },
+    "/chunk/58": {
+      "bytes": 5884,
+      "sha256": "9dd7b638bb723e64c080b70bcfd2ef357754cf61c21b6e300e337027e0ed33b2"
+    },
+    "/chunk/59": {
+      "bytes": 55164,
+      "sha256": "a8822505461415ee6c475d17fac79f4e0a4e6a2402309f023f83f281dfecab2c"
+    },
+    "/chunk/6": {
+      "bytes": 65160,
+      "sha256": "34f5d02393643fa329433bddbc6edfd43c955eed2a701b0234a96b556a32fbaf"
+    },
+    "/chunk/60": {
+      "bytes": 956,
+      "sha256": "942aa29b342365b2c6a188c28d6ab2c7602bb2f45430d75f791b2f1aead72cc8"
+    },
+    "/chunk/61": {
+      "bytes": 96752,
+      "sha256": "00fdacfa4ca37908d2eb4389834f115d1a328d2e263c2b7f63c23ff949d05f3b"
+    },
+    "/chunk/62": {
+      "bytes": 365036,
+      "sha256": "6aa91e4b7f06124902cc65e78b6372caf14e2bc77505cf844f753e38eacaed6c"
+    },
+    "/chunk/63": {
+      "bytes": 38844,
+      "sha256": "7b8b147da701869a3554787f0e0236cc8c4115802ca11c6d620c0e90348cf5e4"
+    },
+    "/chunk/64": {
+      "bytes": 10064,
+      "sha256": "d034e6793007392f8bfcb3afae90da3ff21c1cc5567eb6ed36492ac3dea5f878"
+    },
+    "/chunk/65": {
+      "bytes": 5136,
+      "sha256": "ef48fc68174d7fcd35bf5f96f64635839974ff77b436dbf06e712b06c07951b2"
+    },
+    "/chunk/66": {
+      "bytes": 68184,
+      "sha256": "4009423326421fbf9bc7237e39ad4cae10392e168282d2a7ce9f4e764ed64cf6"
+    },
+    "/chunk/67": {
+      "bytes": 49128,
+      "sha256": "cfd304591d5e82388e47cf897fbfce9d2ba1039658a00405246c7ecd1ad14639"
+    },
+    "/chunk/68": {
+      "bytes": 177576,
+      "sha256": "a607fb2cc2dadb697db5ef43f5bb0ca772a4dfaca4ab3b36b6eda5c8727c0874"
+    },
+    "/chunk/69": {
+      "bytes": 177576,
+      "sha256": "7bc775caca6bad7f2c9ced627493a2cb3a76eb09bf72960ec20a42c15b4b0051"
+    },
+    "/chunk/7": {
+      "bytes": 2748,
+      "sha256": "a943ab22cfa93804916cfc58efe263b09c6a1a7759369c84724115a9c3e213e5"
+    },
+    "/chunk/70": {
+      "bytes": 102668,
+      "sha256": "140da15d413b59212a271119d80bf9a78a778eec3e53274bb78c456c16ccd893"
+    },
+    "/chunk/8": {
+      "bytes": 2920,
+      "sha256": "f8c012bbd33d7f96ed02bc295f2205855d955c4d1b9c75392f98598516bd538f"
+    },
+    "/chunk/9": {
+      "bytes": 57824,
+      "sha256": "59cec8bdc1e6ca33400f18dcdaa3b5d6d445fc60258b47d6c84731bd69bc9e96"
+    },
+    "/manifest": {
+      "bytes": 367360,
+      "sha256": "8d637ec152665e878076415ad3458577133b176edbb7d1728e20eaf7e0ace465"
+    },
+    "/pixels/asphalt_road/color": {
+      "bytes": 5592408,
+      "sha256": "cc5252d258fb8d05bbce04998c902163933fc144d3a9ddea9625fd67cca7f792"
+    },
+    "/pixels/asphalt_road/normal": {
+      "bytes": 5592408,
+      "sha256": "60c8cab9547daeaf0ab64dc30b83c48d2bdb50889d33a17ba6a8cea838e2ac44"
+    },
+    "/pixels/asphalt_road/roughness": {
+      "bytes": 5592408,
+      "sha256": "84c0a7b76e6cf0e0d386d891777c8ac56f2e214c4603f97262d05e19cfcf5cdf"
+    },
+    "/pixels/atlas": {
+      "bytes": 5592408,
+      "sha256": "f6cd5714c697a2874794a202fefa2a5700abe16e686e03c3839169a463442819"
+    },
+    "/pixels/sidewalk_concrete/color": {
+      "bytes": 5592408,
+      "sha256": "f28c98a77548b32f92eaf00d942dbcc475d823b5932e739ecf7ecbb86a40bbfa"
+    },
+    "/pixels/sidewalk_concrete/normal": {
+      "bytes": 5592408,
+      "sha256": "df3b4aa305a1c741c57dcd7d47fefe9395e2f223a0f3e5e02b9a9b76299a4ba3"
+    },
+    "/pixels/sidewalk_concrete/roughness": {
+      "bytes": 5592408,
+      "sha256": "fc1d755a33b50716c2a06b3ddc934768ce65e9f2c52980558a4778055ade825b"
+    },
+    "/pixels/tunnel_concrete/color": {
+      "bytes": 5592408,
+      "sha256": "97ca0fddb118b890c4099e5cd65f097f976de3820c0758b874cad3a90f301b65"
+    },
+    "/pixels/tunnel_concrete/normal": {
+      "bytes": 5592408,
+      "sha256": "50841202a1a786e748c7ee2c11137ef1a39c6ac43d7bebd27f735a85d4161e76"
+    },
+    "/pixels/tunnel_concrete/roughness": {
+      "bytes": 5592408,
+      "sha256": "0b82cb4d96383d566cbfd3e8b5a19c35ccdcb37c66a0929bdff9bb8839da912d"
+    },
+    "/texture/asphalt_road/color.png": {
+      "bytes": 1176801,
+      "sha256": "ffbfd2d8098355696f0d491b3544d00654c0c9f97a644e3d6ac1036b2bba1dde"
+    },
+    "/texture/asphalt_road/normal.png": {
+      "bytes": 1569488,
+      "sha256": "47b9084b178bd89e6376722e37c533ce40e16f6dace5c1b4cc06109b9e061636"
+    },
+    "/texture/asphalt_road/roughness.png": {
+      "bytes": 741936,
+      "sha256": "772bd6f0988c6fb748abdf9f5ccec8f5fa00a50188d62726a0eb0a9d272ea239"
+    },
+    "/texture/sidewalk_concrete/color.png": {
+      "bytes": 1844368,
+      "sha256": "f49486eff7a5cb2efa60689aac3c5b93c43491c06f5e53927e72fdbe011d2289"
+    },
+    "/texture/sidewalk_concrete/normal.png": {
+      "bytes": 2180500,
+      "sha256": "6a38c1a0b17d1fde94f8795469d34a664e637731795452c7331d57d7a64d0ead"
+    },
+    "/texture/sidewalk_concrete/roughness.png": {
+      "bytes": 667274,
+      "sha256": "c4b9aba746b93d545b9a4e003d4ff1403ccc98fcf5f4adc3a67e6a95f16642aa"
+    },
+    "/texture/tunnel_concrete/color.png": {
+      "bytes": 863843,
+      "sha256": "b23eba4560166b0deb6fa2e3d75c671ae2dc9ed93e93dd4267d5bb33f5491427"
+    },
+    "/texture/tunnel_concrete/normal.png": {
+      "bytes": 738532,
+      "sha256": "3eb9eb90cf939583ace020ddcfe91b12de2ce374d3ad5cf2d37618301d53b1d9"
+    },
+    "/texture/tunnel_concrete/roughness.png": {
+      "bytes": 346942,
+      "sha256": "64a576a561f8c8134e3b20ea3ba73797344b4c0aa9be31a8b1cafdf365ed9550"
+    }
+  },
+  "preservedCatalogGate": {
+    "blocked": true,
+    "sourceCount": 8,
+    "catalogSHA256": "adffbf76f6c89af904e8dbc86e506ee25e0f737cadea591323199cf3bff2f392"
+  },
+  "generatedInstallerSHA256": "2066533e453b7dbf831900c12002782fba28058aa89f16e338f3bbe75ebf8e20",
+  "generatedInstallerCompiles": [
+    {
+      "optimization": "-O0",
+      "bytes": 26963,
+      "sha256": "c9f0e8f4aa75690d6bd0536fd5a12d1bcddb61f1a26ffebd271632e473a0d24b"
+    },
+    {
+      "optimization": "-O1",
+      "bytes": 26764,
+      "sha256": "2819889d56d9c9bebb94675403da020deb2e35b817ab6d871e30de8fe1e7a289"
+    }
+  ],
+  "quoteCompileChecks": 8,
+  "props": {
+    "schema": "lobby-reimagined-props/1",
+    "builder": "tools/lobby_reimagined/props.py",
+    "coordinates": {
+      "up": "+Z",
+      "front": "-Y",
+      "unit": "Roblox stud"
+    },
+    "triangle_limit_per_mesh": 20000,
+    "total_original_triangles": 37096,
+    "assets": {
+      "FloralSofa90s": {
+        "asset": "FloralSofa90s",
+        "vertices": 1416,
+        "triangles": 1456,
+        "materials": [
+          "wood_edge",
+          "fabric_shadow",
+          "fabric_olive",
+          "fabric_flower"
+        ],
+        "bounds_xyz": [
+          [
+            -3.8000001907348633,
+            -1.6200000047683716,
+            0.0
+          ],
+          [
+            3.8000001907348633,
+            1.6800000667572021,
+            3.6700000762939453
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Budget 1990s olive/gold damask sofa, three seat cushions, piping and low feet."
+      },
+      "OliveVinylBench": {
+        "asset": "OliveVinylBench",
+        "vertices": 440,
+        "triangles": 808,
+        "materials": [
+          "chrome_dull",
+          "rubber",
+          "steel_black",
+          "vinyl_olive",
+          "vinyl_brown"
+        ],
+        "bounds_xyz": [
+          [
+            -2.799999952316284,
+            -1.1099998950958252,
+            0.0
+          ],
+          [
+            2.799999952316284,
+            1.0600000619888306,
+            3.690000057220459
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "LaminateOfficeDesk": {
+        "asset": "LaminateOfficeDesk",
+        "vertices": 528,
+        "triangles": 972,
+        "materials": [
+          "wood_edge",
+          "laminate_worn",
+          "wood_laminate",
+          "chrome_dull",
+          "steel_black",
+          "label_dark",
+          "tape"
+        ],
+        "bounds_xyz": [
+          [
+            -3.4000000953674316,
+            -1.5,
+            0.0
+          ],
+          [
+            3.4000000953674316,
+            1.5,
+            3.2089998722076416
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "FourDrawerFilingCabinet": {
+        "asset": "FourDrawerFilingCabinet",
+        "vertices": 608,
+        "triangles": 1080,
+        "materials": [
+          "cabinet_olive",
+          "steel_black",
+          "steel_edge",
+          "cabinet_light",
+          "chrome_dull",
+          "paper",
+          "label_dark"
+        ],
+        "bounds_xyz": [
+          [
+            -1.2400000095367432,
+            -1.524999976158142,
+            0.0
+          ],
+          [
+            1.2400000095367432,
+            1.3049999475479126,
+            4.980000019073486
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "BeigeCRTMonitor": {
+        "asset": "BeigeCRTMonitor",
+        "vertices": 331,
+        "triangles": 564,
+        "materials": [
+          "plastic_edge",
+          "plastic_beige",
+          "screen_dark",
+          "led_green"
+        ],
+        "bounds_xyz": [
+          [
+            -1.3,
+            -1.28,
+            0.0
+          ],
+          [
+            1.3,
+            1.0175000429153442,
+            2.64
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "OfficePhotocopier": {
+        "asset": "OfficePhotocopier",
+        "vertices": 816,
+        "triangles": 1520,
+        "materials": [
+          "rubber",
+          "plastic_edge",
+          "plastic_beige",
+          "plastic_ivory",
+          "label_dark",
+          "paper",
+          "screen_cold",
+          "led_green"
+        ],
+        "bounds_xyz": [
+          [
+            -2.4850001335144043,
+            -1.5290000438690186,
+            -1.4901161193847656e-08
+          ],
+          [
+            1.965000033378601,
+            1.5649999380111694,
+            3.2845001220703125
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "BrownOfficeChair": {
+        "asset": "BrownOfficeChair",
+        "vertices": 412,
+        "triangles": 748,
+        "materials": [
+          "steel_black",
+          "rubber",
+          "chrome_dull",
+          "vinyl_brown"
+        ],
+        "bounds_xyz": [
+          [
+            -1.25,
+            -1.2580046653747559,
+            0.008809760212898254
+          ],
+          [
+            1.2999999523162842,
+            1.2701338529586792,
+            4.039801120758057
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "BrownStackChair": {
+        "asset": "BrownStackChair",
+        "vertices": 320,
+        "triangles": 584,
+        "materials": [
+          "chrome_dull",
+          "rubber",
+          "vinyl_brown"
+        ],
+        "bounds_xyz": [
+          [
+            -1.0362000465393066,
+            -1.0343999862670898,
+            0.0
+          ],
+          [
+            1.0362000465393066,
+            1.1519216299057007,
+            3.5238702297210693
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "WireServiceTrolley": {
+        "asset": "WireServiceTrolley",
+        "vertices": 980,
+        "triangles": 1660,
+        "materials": [
+          "rubber",
+          "chrome_dull",
+          "steel_grey",
+          "cardboard",
+          "tape"
+        ],
+        "bounds_xyz": [
+          [
+            -1.9249999523162842,
+            -1.3649998903274536,
+            -2.9802322387695312e-08
+          ],
+          [
+            1.9249999523162842,
+            1.9162917137145996,
+            3.8650002479553223
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Open front lip and rear/side cage; purely cosmetic collision should remain simple."
+      },
+      "RolledCarpet": {
+        "asset": "RolledCarpet",
+        "vertices": 1336,
+        "triangles": 2064,
+        "materials": [
+          "carpet_roll",
+          "fabric_shadow",
+          "tape"
+        ],
+        "bounds_xyz": [
+          [
+            -2.240999937057495,
+            -0.6800000667572021,
+            -2.384185791015625e-07
+          ],
+          [
+            2.240999937057495,
+            0.6800000667572021,
+            1.371999979019165
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "BeigeKeyboard": {
+        "asset": "BeigeKeyboard",
+        "vertices": 1728,
+        "triangles": 3240,
+        "materials": [
+          "plastic_edge",
+          "plastic_beige"
+        ],
+        "bounds_xyz": [
+          [
+            -1.4500000476837158,
+            -0.5,
+            0.0
+          ],
+          [
+            1.4500000476837158,
+            0.5,
+            0.3375000059604645
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "TwinDeckDJConsole": {
+        "asset": "TwinDeckDJConsole",
+        "vertices": 5356,
+        "triangles": 9844,
+        "materials": [
+          "flightcase",
+          "chrome_dull",
+          "steel_edge",
+          "rubber",
+          "steel_black",
+          "steel_grey",
+          "plastic_ivory",
+          "led_green",
+          "led_amber",
+          "label_dark",
+          "tape"
+        ],
+        "bounds_xyz": [
+          [
+            -5.385000228881836,
+            -2.0899999141693115,
+            0.0
+          ],
+          [
+            5.5092363357543945,
+            2.042721748352051,
+            4.175000190734863
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Raised-stage console asset only; stage platform/stairs supplied by caller. Two physical turntables with offset pickup tonearms/counterweights/needles, mixer, headphones, flightcase hardware and cable runs. Record discs are separate meshes for slow client rotation.",
+        "anchors_xyz": {
+          "left_record_base": [
+            -2.96,
+            -0.21,
+            3.773
+          ],
+          "right_record_base": [
+            2.64,
+            -0.21,
+            3.773
+          ]
+        },
+        "record_assets": {
+          "left_record_base": "VinylDiscAmber",
+          "right_record_base": "VinylDiscCyan"
+        },
+        "record_animation": {
+          "axis": "+Z Blender / +Y Roblox",
+          "suggested_degrees_per_second": 12,
+          "authoring_preview_only": true
+        }
+      },
+      "VinylDiscAmber": {
+        "asset": "VinylDiscAmber",
+        "vertices": 1424,
+        "triangles": 2824,
+        "materials": [
+          "rubber",
+          "steel_black",
+          "record_label_amber",
+          "paper",
+          "label_dark",
+          "chrome_dull"
+        ],
+        "bounds_xyz": [
+          [
+            -1.3450000286102295,
+            -1.3450000286102295,
+            0.0
+          ],
+          [
+            1.3450000286102295,
+            1.3450000286102295,
+            0.07999999821186066
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "VinylDiscCyan": {
+        "asset": "VinylDiscCyan",
+        "vertices": 1424,
+        "triangles": 2824,
+        "materials": [
+          "rubber",
+          "steel_black",
+          "record_label_cyan",
+          "paper",
+          "label_dark",
+          "chrome_dull"
+        ],
+        "bounds_xyz": [
+          [
+            -1.3450000286102295,
+            -1.3450000286102295,
+            0.0
+          ],
+          [
+            1.3450000286102295,
+            1.3450000286102295,
+            0.07999999821186066
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      },
+      "FestivalTrussSpeakerTower": {
+        "asset": "FestivalTrussSpeakerTower",
+        "vertices": 3272,
+        "triangles": 5820,
+        "materials": [
+          "steel_black",
+          "steel_grey",
+          "chrome_dull",
+          "steel_edge",
+          "grille",
+          "rubber"
+        ],
+        "bounds_xyz": [
+          [
+            -2.4149999618530273,
+            -3.1041388511657715,
+            0.0
+          ],
+          [
+            2.4149999618530273,
+            1.1399999856948853,
+            22.267000198364258
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Independent ground-mounted four-upright lattice, low outriggers, cantilever, five downward-angled hanging cabinets. Keep outside deck and check roof clearance at all corners."
+      },
+      "TwinSubwoofer": {
+        "asset": "TwinSubwoofer",
+        "vertices": 576,
+        "triangles": 1088,
+        "materials": [
+          "steel_black",
+          "grille",
+          "cone",
+          "rubber",
+          "steel_edge",
+          "steel_grey"
+        ],
+        "bounds_xyz": [
+          [
+            -2.0900001525878906,
+            -1.5329999923706055,
+            0.0
+          ],
+          [
+            2.0900001525878906,
+            1.4500000476837158,
+            2.759999990463257
+          ]
+        ],
+        "origin_xyz": [
+          0,
+          0,
+          0
+        ],
+        "up": "+Z",
+        "front": "-Y",
+        "unit": "stud",
+        "collision": "Caller supplies simple separate collision; visual meshes do not authorize hull collision.",
+        "notes": "Reusable worn backrooms furniture; placement controlled by caller."
+      }
+    },
+    "blender_version": "5.2.0 LTS",
+    "builder_sha256": "2d78de78e58ceb7e95d7127e5ff42c08b5b54346cc2530ae18b035ad626a0a08",
+    "checks": {
+      "triangles_below_20000_per_mesh": true,
+      "total_below_60000": true,
+      "all_grounded": true,
+      "no_degenerate_triangles": true,
+      "palette_uvs_inside_0_1": true,
+      "all_vertices_finite": true,
+      "existing_names_preserved": true,
+      "live_blender_or_studio_mutated": false,
+      "single_atlas_export_keeps_authoring_materials": true
+    }
+  },
+  "freshR4Payload": {
+    "/chunk/0": {
+      "bytes": 79324,
+      "sha256": "ee0d3964558f230ef627a63ba7f2c5495faefa65a1f8c2a7a919695a230b4e93"
+    },
+    "/chunk/1": {
+      "bytes": 7208,
+      "sha256": "76ad8fb7d66937b82fd445286142bd01131e235636b0497e463676934e57a797"
+    },
+    "/chunk/10": {
+      "bytes": 1000,
+      "sha256": "36125ffeede4c0a19fa3427124f6fb3ba8d408ebf48e3ab6fc12dac26ee9bea9"
+    },
+    "/chunk/11": {
+      "bytes": 49180,
+      "sha256": "27759be124a18201d20d58e513e0535c54eb7215202da96e636ea40c0c2b00f4"
+    },
+    "/chunk/12": {
+      "bytes": 34684,
+      "sha256": "768106f2bcea4c0dbc162c2fb004aa2d4b5ac359dc6ff1c720447c8955da582c"
+    },
+    "/chunk/13": {
+      "bytes": 71480,
+      "sha256": "2d3bb687828b40eca10e14053e07cf42547befe35c650e8255d54992cf2630e3"
+    },
+    "/chunk/14": {
+      "bytes": 34684,
+      "sha256": "5a8214b5cf9e58cec0da390b36cd72801b4da1e53bee79bcaa6bbf54d1becfe3"
+    },
+    "/chunk/15": {
+      "bytes": 137928,
+      "sha256": "25ee6242cb2b74cbef2971dd067e0729fbd4aeb273b02e96e1cf565dbcd85174"
+    },
+    "/chunk/16": {
+      "bytes": 34684,
+      "sha256": "8e2d4872450bbe3fbed0847c5d2c72200d013daf36a5c00e963666825bf5651c"
+    },
+    "/chunk/17": {
+      "bytes": 71192,
+      "sha256": "b0831fd0b02d77bad02983b124079a75ba6989d25d3ce44fd79aafd2659b6943"
+    },
+    "/chunk/18": {
+      "bytes": 31996,
+      "sha256": "95c909ef5ed6ed47e135c9f4b20da2ad2f7f61141f31eb4866c27eadda7385ef"
+    },
+    "/chunk/19": {
+      "bytes": 132912,
+      "sha256": "799dbe7682614aba39db3759839dd62c6690f05063b52362a14a4f6b91f90e46"
+    },
+    "/chunk/2": {
+      "bytes": 19644,
+      "sha256": "158755b7371bcef1c68076f8db8e3655d0a3c58abc6913654dd524463384beaa"
+    },
+    "/chunk/20": {
+      "bytes": 105816,
+      "sha256": "2390da027a47ebcffe886a6b514f3aeee4848786c7feea5633b4ac4f829d9fb1"
+    },
+    "/chunk/21": {
+      "bytes": 34684,
+      "sha256": "768106f2bcea4c0dbc162c2fb004aa2d4b5ac359dc6ff1c720447c8955da582c"
+    },
+    "/chunk/22": {
+      "bytes": 34684,
+      "sha256": "8e2d4872450bbe3fbed0847c5d2c72200d013daf36a5c00e963666825bf5651c"
+    },
+    "/chunk/23": {
+      "bytes": 71192,
+      "sha256": "b0831fd0b02d77bad02983b124079a75ba6989d25d3ce44fd79aafd2659b6943"
+    },
+    "/chunk/24": {
+      "bytes": 31996,
+      "sha256": "f7902c37268c34c4fdce5bceead1d6035388e7c6349ca9cfb5d5322cc769f062"
+    },
+    "/chunk/25": {
+      "bytes": 187052,
+      "sha256": "2c8be74edc8286518b19658033538caccdca739f59befd89c53ec308d6ebda4c"
+    },
+    "/chunk/26": {
+      "bytes": 51640,
+      "sha256": "6b671b803cca63bbb78613babb341a59f6c5d4eb6e4ab8bbb7acdaf737a9a045"
+    },
+    "/chunk/27": {
+      "bytes": 36380,
+      "sha256": "a0042cc8b9bb368649d007817520100f8d9ab7e33d4d6cb559b1aefee7aff01c"
+    },
+    "/chunk/28": {
+      "bytes": 12176,
+      "sha256": "9dfddc15898fc538cf1cf57cd3369f045239eb5ae5b574055081f553882f5d8e"
+    },
+    "/chunk/29": {
+      "bytes": 5136,
+      "sha256": "c18502ccc87c05111a6a40de8ab0adcf4d8c1dfe6152b1291a544a0b6eff3546"
+    },
+    "/chunk/3": {
+      "bytes": 67408,
+      "sha256": "d5dba360b1c66562d674eaf7fec22cbd288a2c63b64e5316a3bcf5ddb3bc02c2"
+    },
+    "/chunk/30": {
+      "bytes": 621484,
+      "sha256": "6926b2d954460bb1e7da55eca35290c2fef9240473e40ffbcb7c6470fe296c09"
+    },
+    "/chunk/31": {
+      "bytes": 60540,
+      "sha256": "f579de1c1fce9cde18a54dd5b91ba474194314d1576fc162e77c639e74de812f"
+    },
+    "/chunk/32": {
+      "bytes": 872,
+      "sha256": "92225d0f99b0bfa48fdf98fdcd8023652c9343b47f02941c6ffae5253811689d"
+    },
+    "/chunk/33": {
+      "bytes": 956,
+      "sha256": "431707705ba606938ca1f27abec7bbc9ee341b57d121cc2fcc18b114fef1fdf2"
+    },
+    "/chunk/34": {
+      "bytes": 956,
+      "sha256": "dd646581d6c5700fb84b43f70c194ca12c64070de1ca3a5d16e0ba5f833263b4"
+    },
+    "/chunk/35": {
+      "bytes": 4432,
+      "sha256": "7abfffb97b4a69b572b26b59dd7457e4f3e79faa587a3d6e1c263c5c73c94387"
+    },
+    "/chunk/36": {
+      "bytes": 1000,
+      "sha256": "0fcdda20c555e8c4df778152776b05ede424a22a3bfb3a7388efa01eda5acc34"
+    },
+    "/chunk/37": {
+      "bytes": 2640,
+      "sha256": "1edbec703ca4e63486f1d85f11f54a08239b7ec2c3ac6a1c0647b43dfe95d379"
+    },
+    "/chunk/38": {
+      "bytes": 66748,
+      "sha256": "1a93a2c7ff5fad53ce7c26fb29844b9331ffab7ead65754667b4a74ac66884ea"
+    },
+    "/chunk/39": {
+      "bytes": 3068,
+      "sha256": "03406c8b00987867814aff43c165095633005de82dba98fc3f9bf10a61277bcd"
+    },
+    "/chunk/4": {
+      "bytes": 1000,
+      "sha256": "36125ffeede4c0a19fa3427124f6fb3ba8d408ebf48e3ab6fc12dac26ee9bea9"
+    },
+    "/chunk/40": {
+      "bytes": 9288,
+      "sha256": "3096f1659f8e19ca3f77c6396c6076bfd68a57156996eb6831309f77007cfb1e"
+    },
+    "/chunk/41": {
+      "bytes": 32828,
+      "sha256": "a8ac2d07270aa7853110470f1ac2eb6f4d5c00d2ffed9eb0fbff38c580eeb6f6"
+    },
+    "/chunk/42": {
+      "bytes": 23568,
+      "sha256": "66929f4c6ce702e84b08aa7d43abe1dca5830b5f3af1a677c37fe6640d8bae0b"
+    },
+    "/chunk/43": {
+      "bytes": 96744,
+      "sha256": "59d5641d4fe3285df61e46e65a85e4de5017053c59effb094bb6900488736b44"
+    },
+    "/chunk/44": {
+      "bytes": 69160,
+      "sha256": "3dff908cefcda2366493810ee72abc88f2ddca078b841035bce5619c759d9c4a"
+    },
+    "/chunk/45": {
+      "bytes": 173948,
+      "sha256": "f8b9d2e7cc94ae70bfc317e7112eefd9c653623369f861e905ebfa8b5215f972"
+    },
+    "/chunk/46": {
+      "bytes": 143484,
+      "sha256": "42014c3f92dd547da3d23dc131ebee7a3a14f4c4acbefefb88c7854054cc4c35"
+    },
+    "/chunk/47": {
+      "bytes": 65800,
+      "sha256": "c46d3d9c2321f075fd0807dc9915894e72def0bb1e1ed62201b0beccc5429b91"
+    },
+    "/chunk/48": {
+      "bytes": 3068,
+      "sha256": "d25b41cfe7701303fec43a68f126907318bc17a1e6073d2d501ebf1ab79b3573"
+    },
+    "/chunk/49": {
+      "bytes": 3068,
+      "sha256": "daef0e4073ae403d0de86baf0bce64423bb654d206b8ec99f5a2a9fb03220740"
+    },
+    "/chunk/5": {
+      "bytes": 16504,
+      "sha256": "9518580a6549c3758be5b1d570e53c85ac95e5831699a6058c743ebdb6b75696"
+    },
+    "/chunk/50": {
+      "bytes": 42064,
+      "sha256": "dfb0635930a7386a9822545474ecc7b9577df9cc4399cd7de990d4de0aea945b"
+    },
+    "/chunk/51": {
+      "bytes": 10188,
+      "sha256": "1f5f46818ff972497dd08111225c57502eae048e6fbb36ced96c706cd564b93c"
+    },
+    "/chunk/52": {
+      "bytes": 1616,
+      "sha256": "9223f96403beb7c63039c65a1ccd93f30ca57dbfde529aa083e74e168662e6c5"
+    },
+    "/chunk/53": {
+      "bytes": 25000,
+      "sha256": "9527dc257292d9b60917b1df176e2d83adc8dee91243f915db324daed82bf29a"
+    },
+    "/chunk/54": {
+      "bytes": 3728,
+      "sha256": "db3c0e271f074af44c3309de8b5e4b86af35ae38034256d470e0e4ecceac3f4f"
+    },
+    "/chunk/55": {
+      "bytes": 956,
+      "sha256": "2b61d2cf0ffe8e2853acba481b27fc4459f59d87583558a932e347b380db9aec"
+    },
+    "/chunk/56": {
+      "bytes": 4392,
+      "sha256": "4f4af48170a254b0c299440b3e6cc37379b38cb44687af8d77592e4380ef8489"
+    },
+    "/chunk/57": {
+      "bytes": 139068,
+      "sha256": "cbe0e5fe41bdbab1b3ca28d435eb9ae8139478209ec0283992993bcd75ce7757"
+    },
+    "/chunk/58": {
+      "bytes": 5884,
+      "sha256": "9dd7b638bb723e64c080b70bcfd2ef357754cf61c21b6e300e337027e0ed33b2"
+    },
+    "/chunk/59": {
+      "bytes": 55164,
+      "sha256": "a8822505461415ee6c475d17fac79f4e0a4e6a2402309f023f83f281dfecab2c"
+    },
+    "/chunk/6": {
+      "bytes": 65160,
+      "sha256": "34f5d02393643fa329433bddbc6edfd43c955eed2a701b0234a96b556a32fbaf"
+    },
+    "/chunk/60": {
+      "bytes": 956,
+      "sha256": "942aa29b342365b2c6a188c28d6ab2c7602bb2f45430d75f791b2f1aead72cc8"
+    },
+    "/chunk/61": {
+      "bytes": 96752,
+      "sha256": "00fdacfa4ca37908d2eb4389834f115d1a328d2e263c2b7f63c23ff949d05f3b"
+    },
+    "/chunk/62": {
+      "bytes": 365036,
+      "sha256": "6aa91e4b7f06124902cc65e78b6372caf14e2bc77505cf844f753e38eacaed6c"
+    },
+    "/chunk/63": {
+      "bytes": 38844,
+      "sha256": "7b8b147da701869a3554787f0e0236cc8c4115802ca11c6d620c0e90348cf5e4"
+    },
+    "/chunk/64": {
+      "bytes": 10064,
+      "sha256": "d034e6793007392f8bfcb3afae90da3ff21c1cc5567eb6ed36492ac3dea5f878"
+    },
+    "/chunk/65": {
+      "bytes": 5136,
+      "sha256": "ef48fc68174d7fcd35bf5f96f64635839974ff77b436dbf06e712b06c07951b2"
+    },
+    "/chunk/66": {
+      "bytes": 68184,
+      "sha256": "4009423326421fbf9bc7237e39ad4cae10392e168282d2a7ce9f4e764ed64cf6"
+    },
+    "/chunk/67": {
+      "bytes": 49128,
+      "sha256": "cfd304591d5e82388e47cf897fbfce9d2ba1039658a00405246c7ecd1ad14639"
+    },
+    "/chunk/68": {
+      "bytes": 177576,
+      "sha256": "a607fb2cc2dadb697db5ef43f5bb0ca772a4dfaca4ab3b36b6eda5c8727c0874"
+    },
+    "/chunk/69": {
+      "bytes": 177576,
+      "sha256": "7bc775caca6bad7f2c9ced627493a2cb3a76eb09bf72960ec20a42c15b4b0051"
+    },
+    "/chunk/7": {
+      "bytes": 2748,
+      "sha256": "a943ab22cfa93804916cfc58efe263b09c6a1a7759369c84724115a9c3e213e5"
+    },
+    "/chunk/70": {
+      "bytes": 102776,
+      "sha256": "21026ffab93a31b0cea382a00305d5687d1e3d41e05c657a590ba7cb2ecc45fb"
+    },
+    "/chunk/8": {
+      "bytes": 2920,
+      "sha256": "f8c012bbd33d7f96ed02bc295f2205855d955c4d1b9c75392f98598516bd538f"
+    },
+    "/chunk/9": {
+      "bytes": 57824,
+      "sha256": "59cec8bdc1e6ca33400f18dcdaa3b5d6d445fc60258b47d6c84731bd69bc9e96"
+    },
+    "/manifest": {
+      "bytes": 366161,
+      "sha256": "3dfd1f5ad47075ed7f0fcd82faec9521a9b744b44acc56b59bff58372713c061"
+    },
+    "/pixels/asphalt_road/color": {
+      "bytes": 5592408,
+      "sha256": "cc5252d258fb8d05bbce04998c902163933fc144d3a9ddea9625fd67cca7f792"
+    },
+    "/pixels/asphalt_road/normal": {
+      "bytes": 5592408,
+      "sha256": "60c8cab9547daeaf0ab64dc30b83c48d2bdb50889d33a17ba6a8cea838e2ac44"
+    },
+    "/pixels/asphalt_road/roughness": {
+      "bytes": 5592408,
+      "sha256": "84c0a7b76e6cf0e0d386d891777c8ac56f2e214c4603f97262d05e19cfcf5cdf"
+    },
+    "/pixels/atlas": {
+      "bytes": 5592408,
+      "sha256": "f6cd5714c697a2874794a202fefa2a5700abe16e686e03c3839169a463442819"
+    },
+    "/pixels/sidewalk_concrete/color": {
+      "bytes": 5592408,
+      "sha256": "f28c98a77548b32f92eaf00d942dbcc475d823b5932e739ecf7ecbb86a40bbfa"
+    },
+    "/pixels/sidewalk_concrete/normal": {
+      "bytes": 5592408,
+      "sha256": "df3b4aa305a1c741c57dcd7d47fefe9395e2f223a0f3e5e02b9a9b76299a4ba3"
+    },
+    "/pixels/sidewalk_concrete/roughness": {
+      "bytes": 5592408,
+      "sha256": "fc1d755a33b50716c2a06b3ddc934768ce65e9f2c52980558a4778055ade825b"
+    },
+    "/pixels/tunnel_concrete/color": {
+      "bytes": 5592408,
+      "sha256": "97ca0fddb118b890c4099e5cd65f097f976de3820c0758b874cad3a90f301b65"
+    },
+    "/pixels/tunnel_concrete/normal": {
+      "bytes": 5592408,
+      "sha256": "50841202a1a786e748c7ee2c11137ef1a39c6ac43d7bebd27f735a85d4161e76"
+    },
+    "/pixels/tunnel_concrete/roughness": {
+      "bytes": 5592408,
+      "sha256": "0b82cb4d96383d566cbfd3e8b5a19c35ccdcb37c66a0929bdff9bb8839da912d"
+    },
+    "/texture/asphalt_road/color.png": {
+      "bytes": 1176801,
+      "sha256": "ffbfd2d8098355696f0d491b3544d00654c0c9f97a644e3d6ac1036b2bba1dde"
+    },
+    "/texture/asphalt_road/normal.png": {
+      "bytes": 1569488,
+      "sha256": "47b9084b178bd89e6376722e37c533ce40e16f6dace5c1b4cc06109b9e061636"
+    },
+    "/texture/asphalt_road/roughness.png": {
+      "bytes": 741936,
+      "sha256": "772bd6f0988c6fb748abdf9f5ccec8f5fa00a50188d62726a0eb0a9d272ea239"
+    },
+    "/texture/sidewalk_concrete/color.png": {
+      "bytes": 1844368,
+      "sha256": "f49486eff7a5cb2efa60689aac3c5b93c43491c06f5e53927e72fdbe011d2289"
+    },
+    "/texture/sidewalk_concrete/normal.png": {
+      "bytes": 2180500,
+      "sha256": "6a38c1a0b17d1fde94f8795469d34a664e637731795452c7331d57d7a64d0ead"
+    },
+    "/texture/sidewalk_concrete/roughness.png": {
+      "bytes": 667274,
+      "sha256": "c4b9aba746b93d545b9a4e003d4ff1403ccc98fcf5f4adc3a67e6a95f16642aa"
+    },
+    "/texture/tunnel_concrete/color.png": {
+      "bytes": 863843,
+      "sha256": "b23eba4560166b0deb6fa2e3d75c671ae2dc9ed93e93dd4267d5bb33f5491427"
+    },
+    "/texture/tunnel_concrete/normal.png": {
+      "bytes": 738532,
+      "sha256": "3eb9eb90cf939583ace020ddcfe91b12de2ce374d3ad5cf2d37618301d53b1d9"
+    },
+    "/texture/tunnel_concrete/roughness.png": {
+      "bytes": 346942,
+      "sha256": "64a576a561f8c8134e3b20ea3ba73797344b4c0aa9be31a8b1cafdf365ed9550"
+    }
+  },
+  "freshR4Counts": {
+    "uniqueTriangles": 66872,
+    "instantiatedTriangles": 217804
+  },
+  "scope": "Actual preserved R4 package/loaders/quoting/generated compile and fresh isolated Blender prop QA + R4 build. No Studio/runtime/gameplay/installer/upload/performance pass."
+}

@@ -16,18 +16,34 @@ har aktuelle targets, closures, rollback og porte.
   20 arkiv-compiles, source/full-sync-kontrakter og221 resterende mirror-compiles/
   hashes bestod. Ejerens samtidige LevelWorldStorage-entry er bevaret;221 er
   231 aktuelle før-entries minus ti, ikke230 minus ti. Lokal commit `52be2b82`.
-- **S01 / T17,N05 afventer native port:**12 diagnostikrecord-Folders er komplet
+- **S01 / T17,N05 arkiveret; eksternt fjernet:**12 diagnostikrecord-Folders er komplet
   native-arkiveret, typed/Lune reload/canonical roundtrip og serialized inbound
-  reference-scan bestået. Ingen mapper er endnu fjernet. Native unparented
-  rekonstruktion, frisk CAS og reversibel after-port afventer Edit; en anden
-  session har igen startet Play. Source-/mode-/referencekontroller blokerede
-  før originals blev ændret. Aktive kits/caches/maps/authoring bevares.
+  reference-scan bestået. En anden Studio-session har siden taget dem ud af
+  ServerStorage sammen med11 andre gamle rødder. Oprydningen udførte ikke denne
+  fjernelse. Frisk v7 Edit-capture og
+  native unparented rekonstruktion bestod2.472 checks;12 testkopier er fjernet,
+  originals intakte. V8-proben afviste den senere ændrede Parent-baseline før
+  nogen testkopi eller originalændring. Vores Parent=nil→restore-port blev aldrig
+  kørt og godkender ikke den eksterne fjernelse. De oprindelige træer er stadig
+  intakte via de gemte sessionreferencer og arkiveres separat som S06.
+  Permanent fjernelse bruger samme originals via Parent=nil med nativearkiv og
+  sessionlokal rollback, så opaque pointers bevarer identitet. Ingen Destroy.
+  Source-/mode-/referencekontroller bevarer andre sessioners samtidige arbejde.
+  Aktive kits/caches/maps/authoring bevares.
 
-Seneste capture viste73 ServerStorage-rødder/221 scripts efter ejerens tre
-parkede maps og nye LevelWorldStorage-modul. Disse ændringer tilskrives ikke
+Historisk v7-capture viste73 ServerStorage-rødder/222 scripts efter ejerens tre
+parkede maps, nye LevelWorldStorage-modul og Level 2 Poolrooms Ambience-script.
+Disse ændringer tilskrives ikke
 oprydningen. Modulets generiske root-scan udvælger kun de tre præcise mapnavne;
 det forbruger ingen af de12 records. Frisk afsluttende Edit-parity afventer
 tilgængelig Edit og skal genlæses, fordi andre sessions fortsætter.
+
+Frisk read-only observation21:54:29Z viste50 ServerStorage-rødder/212 scripts;
+23 gamle rødder har Parent=nil, og12 tilhørende Source/editor-par er stadig
+identiske med det tidligere arkiv. To nye scripts er samtidige ændringer.
+[Observation og præcise navne](artifacts/cleanup-serverstorage-20261009/external-storage-observation.json).
+S06 bevarer de23 komplette native træer og afstemmer kun allerede fraværende
+downstream-mirrors efter arkiv-/compile-/caller-port. Ingen geninstallation.
 
 **B17 / T12 gennemført lokalt:** `tools/vault/build_vault.py` og
 `build_systems.py` har fået fjernet deres hardkodede credential. Den nye
@@ -44,9 +60,47 @@ tracked builders eller deres to lokale noter; historik/config er bevaret.
 Port:18 tests af faktiske moduler med fake HTTP og isoleret dry-branch bestået,
 inklusive refresh, override, manglende/blank/defekt config, neutrale fejl før
 Request/retry og afvisning af headerkontroltegn. Fem AST/compile-checks og
-præcis AST-/note-/config-byteport ved den registrerede gate bestået. Ingen rigtig builder, regeneration,
+præcis AST-/note-/config-byteport ved den registrerede gate bestået. Lokal commit
+`4c2aca10`. Ingen rigtig builder, regeneration,
 Obsidian/network/MCP-kald, rotation eller Studioændring.
 [Præcis closure og receipts](artifacts/cleanup-serverstorage-20261009/vault-auth/REVIEW.md).
+
+**S03 / native-only mirror eksporteret; scoped commit afventer:** den anden sessions aktive
+`StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience` er LocalScript,
+Enabled=true/Disabled=false/RunContext.Legacy og er nu i working mirror/manifest.
+Frisk bounded Source/editor-read viste18.933 identiske bytes/SHA og nul attrs/tags.
+Eksportér kun den verificerede kilde og dens nye manifestrow, med privat før-
+checkpoint og friske CAS-/missing-file-guards. Bevar alle eksisterende dirty
+actor-rows/topmetadata; scoped commit må kun tilføje den nye row til HEAD.
+Port: frisk native/editor/props før/efter, compileO0/O1 og nøjagtig source/hash/
+count/row-delta. Lav risiko ved downstream-export; paritygevinst uden native
+ændring. Featuretilføjelsen krediteres ikke oprydningen.
+
+**S07 / T16,T17 gennemført lokalt:**17 gamle lobby-authoringfiler er flyttet
+byte-identisk til off-mirror arkiv (133.791 bytes). R4 package-validering,
+isolated Blender prop-QA og faktisk ny R4-build bestod før/efter; alle meshes,
+teksturer, placeringer, colliders og øvrige portrecords matcher. Kun den
+verificerede private Blender-fils metadatahash varierer også i uændrede
+gentagelser. 162 øvrige authoringfiler er bytebevarede. 48 actual compiles og
+otte Python AST-checks bestod. Første strenge trial blev tilbagerullet med
+alle17 originalbytes gendannet; årsag og gentaget baseline er dokumenteret.
+Native fem-pakkers fjernelse er stadig S04, ikke godkendt af denne lokale port.
+[Closure, rollback og endelige receipts](artifacts/cleanup-serverstorage-20261009/retired-lobby-authoring-v2/REVIEW.md).
+
+**S04 / T16,T17 produktbeslutning afklaret af ejeren:** pensionér de manuelle
+authoringworkflows for `ServerStorage.LobbyReimaginedBlenderSource20261001`,
+`...R2`, `...R3`, `...R3B` og `ServerStorage.Level1BlenderKit`. Den aktuelle R4-
+pakke, Level1BlenderKitV2 og alle aktive gameplayfeatures bevares.
+Det er ikke i sig selv et slettebevis. Før ændringer kræves frisk fuld caller-/
+dependency-closure, inklusive dynamiske native lookups, shared helpers og
+authoring-/testværktøjer; præcise funktions-/fil-targets tilføjes efter review.
+Port: komplette native objekt-/property-/attribute-/asset-/referencearkiver,
+verificeret reopen/reconstruction, bytebevarede før-kilder, aktive R4/V2-
+forbrugerchecks før/efter, guarded reversibel fjernelse i små grupper og præcis
+repo/Studio/manifest-delta. Risiko: tab af kildeassets/shared dependencies;
+gevinst: pensionerede revisioner og workflows ude af den aktive projektstruktur.
+Status: afventer dependency- og arkiv-/authoringtest; ingen af de fem pakker er
+endnu fjernet. Aktive fallbackcallers kræver særskilt bevaret/remedieret closure.
 
 ## Nye afgrænsede batches efter genkontrol
 
