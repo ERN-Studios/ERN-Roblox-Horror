@@ -1,0 +1,23 @@
+{
+  "schema": "s06-v4-doc-only-head-reconciliation-v1",
+  "executedWrapperSHA256": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+  "executedExpectedHead": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "observedCurrentHead": "9635a38c3b434d1d573e33786eee2f11167bac60",
+  "unchangedHeadManifestSHA256": "13ae3b1cd77fdf447a646b4798961af5ba4175d8ee42cc8e232aa7349e9f6c5b",
+  "changedPaths": [
+    "tools/optimization_20261009/README.md",
+    "tools/optimization_20261009/RUNNERS.md",
+    "tools/optimization_20261009/commit/implementation-commit-record.json",
+    "tools/optimization_20261009/effects/install/level4-gameplay-verification.md",
+    "tools/optimization_20261009/geometry/install/README.md",
+    "tools/optimization_20261009/publication-receipt.json",
+    "tools/optimization_20261009/runtime/README.md",
+    "tools/optimization_20261009/runtime/immediate-prepublish-eight-source-check.json",
+    "tools/optimization_20261009/runtime/postpublish-eight-source-check.json"
+  ],
+  "rootReportedRejectionPhase": "Exact HEAD assertion before checkpoint/client/native/removal/manifest writes",
+  "sourceOrManifestPathsChangedByOwnerCommit": false,
+  "nativeCallsByThisReconciliation": 0,
+  "actualRejectionReceiptOwnedByParent": true,
+  "scope": "Only expected current HEAD literal; no guard relaxation, Source or manifest write."
+}

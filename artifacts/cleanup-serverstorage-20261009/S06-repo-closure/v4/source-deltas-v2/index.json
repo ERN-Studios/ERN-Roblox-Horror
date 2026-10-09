@@ -1,0 +1,19 @@
+{
+  "schema": "s06-v4-offline-source-deltas-v1",
+  "headRevision": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "workingManifestSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+  "provenance": "Pre-existing concurrent owner RoundUI Source snapshot, observed before S06. Offline fixture input only; no cleanup implementation/export credit, no future authoritative state, no initialization. Unchanged HEAD Source bodies are not duplicated.",
+  "files": [
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "className": "LocalScript",
+      "rawSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+      "rawBytes": 244971,
+      "sourceSHA256": "c42eafe2755344a2fbe1148db1b5df080a19a423a8866d1e4fa814a28bba6210",
+      "sourceBytes": 239616,
+      "headRawSHA256": "98d2c871dd5cbd33e3a0d633e6afcc3a7a0012c777418bd57cc272c5f35eb5dc",
+      "headSourceSHA256": "98d2c871dd5cbd33e3a0d633e6afcc3a7a0012c777418bd57cc272c5f35eb5dc"
+    }
+  ]
+}

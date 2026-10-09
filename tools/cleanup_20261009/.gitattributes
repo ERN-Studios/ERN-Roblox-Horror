@@ -26,3 +26,5 @@ test_external_mirror_retirement_preflight.py -text
 test_external_mirror_scene_digest.py -text
 test_external_storage_reopen_ownership.py -text
 test_retire_external_mirror_sources.py -text
+retire_external_mirror_sources_v4.py -text
+test_retire_external_mirror_sources_v4.py -text

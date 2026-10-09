@@ -1,0 +1,14 @@
+{
+  "schema": "root-observed-early-head-rejection-v1",
+  "actualInvocation": true,
+  "executedWrapperSHA256": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+  "expectedHead": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "observedHead": "9635a38c3b434d1d573e33786eee2f11167bac60",
+  "exceptionMessage": "Current HEAD revision changed; re-review scoped base",
+  "phase": "Initial exact HEAD assertion before checkpoint/client/native/transaction",
+  "sourceWrites": 0,
+  "manifestWrites": 0,
+  "nativeCalls": 0,
+  "filesRemoved": 0,
+  "scope": "Parent observation recorded after actual rejection; not a second invocation or native test."
+}

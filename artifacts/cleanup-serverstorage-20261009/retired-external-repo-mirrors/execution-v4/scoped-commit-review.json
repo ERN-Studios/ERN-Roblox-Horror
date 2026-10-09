@@ -1,0 +1,42 @@
+{
+  "schema": "s06-v4-scoped-commit-review-v1",
+  "currentHeadBeforeCommit": "9635a38c3b434d1d573e33786eee2f11167bac60",
+  "actualReceiptSHA256": "9fbc41c598d1c6efd8f00afab0eefc1aba0a53a6fd70c5b7f4697caa487101f8",
+  "generatedGuardSHA256": "3a95fa3534f169e2364c699797aa842d7ed2a57d2bfbf248354a01f1adec9095",
+  "headManifestBeforeSHA256": "13ae3b1cd77fdf447a646b4798961af5ba4175d8ee42cc8e232aa7349e9f6c5b",
+  "scopedManifestSHA256": "a0279ba2fb2547db8207d700ee58f30bb25ab07d6b3102d10bda7813ffcd0ebe",
+  "workingManifestPreservedSHA256": "cab2d235d9636d19d89686219b74e25dfba7fe7b360a520fe7db6c93ef043cca",
+  "roundUIRawPreservedSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "removedFiles": [
+    "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Controller.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Navigator.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Controller.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Navigator.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Controller.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Navigator.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Controller.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Navigator.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/NavigatorBeforeBudgetFix.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Controller.ModuleScript.lua",
+    "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Navigator.ModuleScript.lua",
+    "ServerStorage/TEMP_PipeEntityAnimations_20260909/PreviewControls.ModuleScript.lua"
+  ],
+  "sourceArchiveByteMatchesHead": true,
+  "manifestRowChanges": 12,
+  "survivingHeadRowsUnchanged": true,
+  "countChangesOnly": [
+    "scripts",
+    "remoteEvents",
+    "total"
+  ],
+  "countsAfter": {
+    "scripts": 212,
+    "remoteEvents": 15,
+    "total": 227
+  },
+  "nativeBeforeAfterSignatureExact": true,
+  "allLiveSourcesCovered": true,
+  "nativeSourceWrites": 0,
+  "nativeObjectWrites": 0,
+  "scope": "Downstream mirrors only; preserve pre-existing dirty RoundUI and working manifest row. Full native asset restoration and gameplay are separate pending ports."
+}

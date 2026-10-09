@@ -1,0 +1,298 @@
+"""S06 v4 scoped downstream retirement of12 externally absent native mirrors.
+
+Use only after owner-approved scope/review. Fresh read-only native guards bracket
+local changes. Full23 native archive is retained; opaque reopen certification is
+separate. No native write, source staging, require, modeswitch, or publication.
+"""
+from pathlib import Path
+from datetime import datetime, timezone
+import copy
+import json
+import os
+import subprocess
+import sys
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+from sync_from_studio import StudioMcpClient, find_mcp_batch, select_studio, RELEASE_STUDIO_NAME
+from studio_source_contract import canonical_bytes
+import prepare_external_mirror_retirement as preflight
+from retire_absent_codex_mirrors import prepare_manifest_temp
+
+DEST = ROOT / "artifacts/cleanup-serverstorage-20261009/retired-external-repo-mirrors"
+NATIVE_ARCHIVE = ROOT / "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1"
+EVIDENCE = DEST / "execution-v4"
+CHECKPOINT = ROOT / ".git/mongotv-cleanup-20261009/s06-retirement-execution-before-v4"
+SUCCESS_RECEIPT = "removal-receipt.json"
+FAILURE_RECEIPT = "rollback.json"
+EXPECTED_HEAD_REVISION = "37f09c9c0cdfa936717b659ac26e26a06677263b"
+PINNED_HEAD = ROOT / "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs-v2/head-manifest-before.json"
+HEAD_MANIFEST_SHA = "13ae3b1cd77fdf447a646b4798961af5ba4175d8ee42cc8e232aa7349e9f6c5b"
+NATIVE_SHA = "139a76d70022770ac30b0a4e9cfaeaea967668955ab0930666de0d3ab1f23dca"
+COMPILER = preflight.COMPILER
+GUARD_PATH = Path(__file__).with_name("external_mirror_retirement_guard.luau")
+
+
+def save_new(path, raw):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as stream:
+        assert stream.write(raw) == len(raw), "Incomplete checkpoint/evidence write"
+    assert path.read_bytes() == raw, "Checkpoint/evidence reload mismatch"
+
+
+def lua_json(value):
+    raw = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    level = "="
+    while "]" + level + "]" in raw:
+        level += "="
+    return "[" + level + "[" + raw + "]" + level + "]"
+
+
+def source_contracts(manifest):
+    records = {}
+    seen = set()
+    for row in manifest["items"]:
+        assert row["studioPath"] not in seen, "Duplicate manifest path"
+        seen.add(row["studioPath"])
+        if row["className"] not in ("Script", "LocalScript", "ModuleScript"):
+            continue
+        path = ROOT / row["file"]
+        assert path.resolve().is_relative_to(ROOT) and not path.is_symlink() and path.is_file()
+        assert path.name.endswith("." + row["className"] + ".lua"), "Mirror filename/class contract"
+        raw = path.read_bytes()
+        canonical = canonical_bytes(raw.decode("utf8"))
+        assert len(canonical) == row["bytes"] and preflight.sha(canonical) == row["sha256"], "Mirror/manifest Source contract: " + row["studioPath"]
+        assert row["sourceEditorMatches"] is True and not row.get("studioTrailingNewline", False)
+        records[row["file"]] = raw
+    return records
+
+
+def native_guard(client, studio, code, expected, remaining_count):
+    mode = client.call("get_studio_state", {"studio_id": studio["id"]})
+    assert "Current Studio Mode: Edit" in mode, "Edit unavailable; preserve active Play"
+    result = client.call("execute_luau", {"studio_id": studio["id"], "datamodel_type": "Edit", "code": code})
+    report = json.loads(result)
+    assert report["schema"] == "external-mirror-retirement-native-guard-v1"
+    assert (report["placeId"], report["universeId"], report["datamodel"]) == (131311258779917, 10559217407, "Edit")
+    assert report["nativeWrites"] == report["sourceWrites"] == report["modeSwitches"] == 0
+    assert report["sourceEditorVerified"] is True and report["remainingMirrorsVerified"] == remaining_count
+    assert set(report["knownAbsent"]) == preflight.PATHS and len(report["knownAbsent"]) == 12
+    held = {row["studioPath"]: row for row in report["held"]}
+    assert len(held) == len(report["held"]) == 12
+    for row in expected:
+        native = held[row["studioPath"]]
+        assert native["path"] == row["studioPath"].removeprefix("ServerStorage."), "Held Source path/name changed"
+        assert native["class"] == row["className"] and native["sourceSHA256"] == row["sha256"] and native["sourceBytes"] == row["bytes"]
+        assert native["properties"] == row["properties"] and (native["attributes"] or {}) == (row["attributes"] or {})
+    assert len(report["signatureSHA256"]) == 64
+    return report
+
+
+def rollback_rows(current_raw, before_raw):
+    """Add back only our missing rows; preserve any actor row/top metadata/order."""
+    current, before = json.loads(current_raw), json.loads(before_raw)
+    assert preflight.encode(current) == current_raw, "Concurrent manifest formatting; keep actor file"
+    rows = current["items"]
+    identities = {row["studioPath"] for row in rows}
+    assert len(identities) == len(rows), "Concurrent duplicate manifest; preserve for manual reconcile"
+    for index, row in enumerate(before["items"]):
+        path = row["studioPath"]
+        if path not in preflight.PATHS or path in identities:
+            continue
+        following = {r["studioPath"] for r in before["items"][index + 1:]}
+        insertion = next((i for i, candidate in enumerate(rows) if candidate["studioPath"] in following), len(rows))
+        rows.insert(insertion, copy.deepcopy(row))
+        identities.add(path)
+    current["counts"]["scripts"] = sum(r["className"] in ("Script", "LocalScript", "ModuleScript") for r in rows)
+    current["counts"]["remoteEvents"] = sum(r["className"] == "RemoteEvent" for r in rows)
+    current["counts"]["total"] = len(rows)
+    return preflight.encode(current)
+
+
+def main():
+    assert not CHECKPOINT.exists() and not EVIDENCE.exists(), "Refuse owned checkpoint/evidence overwrite"
+    manifest_path = ROOT / "studio-sync-manifest.json"
+    before_raw = manifest_path.read_bytes()
+    before = json.loads(before_raw)
+    current_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
+    head_manifest = subprocess.check_output(["git", "show", "HEAD:studio-sync-manifest.json"], cwd=ROOT)
+    assert current_head == EXPECTED_HEAD_REVISION, "Current HEAD revision changed; re-review scoped base"
+    assert preflight.sha(head_manifest) == HEAD_MANIFEST_SHA, "Current HEAD manifest changed; re-review scoped base"
+    pinned_head_raw = PINNED_HEAD.read_bytes()
+    assert pinned_head_raw == head_manifest, "Portable HEAD input differs from reviewed current HEAD"
+    preparation_raw = (DEST / "archive-preparation.json").read_bytes()
+    preparation = json.loads(preparation_raw)
+    assert preparation["schema"] == "external-mirror-source-archive-v1" and len(preparation["archived"]) == 12
+    archive_rows = {r["studioPath"]: r for r in preparation["archived"]}
+    assert set(archive_rows) == preflight.PATHS
+    native_inputs = {name: (NATIVE_ARCHIVE / name).read_bytes() for name in ("native.rbxm", "facts.json", "capture-completion.json")}
+    facts, completion = json.loads(native_inputs["facts.json"]), json.loads(native_inputs["capture-completion.json"])
+    assert preflight.sha(native_inputs["native.rbxm"]) == NATIVE_SHA == facts["nativeSHA256"] == completion["report"]["nativeSHA256"]
+    assert facts["nativeBytes"] == len(native_inputs["native.rbxm"]) == 2739764
+    assert facts["schema"] == "external-held-storage-archive-v1" and len(facts["roots"]) == 23 and len(facts["heldSources"]) == 12
+    assert (facts["placeId"], facts["universeId"]) == (131311258779917, 10559217407)
+    assert len({r["name"] for r in facts["roots"]}) == 23 and all(r["parentIsNil"] and r["originalHeldReference"] for r in facts["roots"])
+    assert facts["nativeMutations"] == facts["sourceWrites"] == facts["modeSwitches"] == 0
+    assert completion["schema"] == "external-held-storage-capture-completion-v1" and completion["report"]["pass"] is True
+    assert completion["report"]["sourceWrites"] == completion["report"]["nativeMutations"] == completion["report"]["modeSwitches"] == 0
+    all_sources = source_contracts(before)
+    expected = [r for r in before["items"] if r["studioPath"] in preflight.PATHS]
+    assert len(expected) == 12 and {r["file"] for r in expected} == preflight.FILES
+    native_archived_sources = {r["pathBefore"]: r for r in facts["heldSources"]}
+    assert len(native_archived_sources) == 12 and set(native_archived_sources) == preflight.PATHS
+    for row in expected:
+        native = native_archived_sources[row["studioPath"]]
+        assert native["editorMatchesSource"] and native["sourceMatchesV8"]
+        assert native["class"] == row["className"] and native["sourceSHA256"] == row["sha256"] and native["bytes"] == row["bytes"]
+    selected = {r["file"]: all_sources[r["file"]] for r in expected}
+    remaining = {name: raw for name, raw in all_sources.items() if name not in selected}
+    assert len(remaining) >= 210, "Concurrent owner Source rows disappeared; re-review scope"
+    for row in expected:
+        archived = archive_rows[row["studioPath"]]
+        assert archived["file"] == row["file"] and archived["rawSHA256"] == preflight.sha(selected[row["file"]])
+        assert (ROOT / archived["archiveFile"]).read_bytes() == selected[row["file"]], "Public Source archive differs"
+    encoded = preflight.proposal(before_raw)
+    scoped = preflight.proposal(head_manifest)
+    assert json.loads(scoped)["counts"]["scripts"] == 212 and json.loads(scoped)["counts"]["total"] == 227
+    guard_raw = GUARD_PATH.read_bytes()
+    live_expected = [r for r in before["items"] if r["className"] in ("Script", "LocalScript", "ModuleScript") and r["studioPath"] not in preflight.PATHS]
+    code = guard_raw.decode("utf8").replace("__EXPECTED_HELD__", lua_json(expected))
+    code = code.replace("__EXPECTED_LIVE__", lua_json(live_expected))
+    assert "__EXPECTED_" not in code
+    CHECKPOINT.mkdir(parents=True)
+    for name, raw in {"manifest-working-before.json": before_raw, "manifest-current-head-before.json": head_manifest,
+                      "manifest-head-scoped-S06-for-commit.json": scoped, "guard-used.luau": code.encode(),
+                      "manifest-working-after.prepared.json": encoded}.items():
+        save_new(CHECKPOINT / name, raw)
+    for name, raw in selected.items():
+        save_new(CHECKPOINT / "sources" / name, raw)
+
+    def inputs_guard():
+        assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip() == current_head, "Concurrent HEAD change"
+        assert PINNED_HEAD.read_bytes() == pinned_head_raw and GUARD_PATH.read_bytes() == guard_raw
+        assert (DEST / "archive-preparation.json").read_bytes() == preparation_raw
+        assert all((NATIVE_ARCHIVE / name).read_bytes() == raw for name, raw in native_inputs.items())
+        assert all((ROOT / r["archiveFile"]).read_bytes() == selected[r["file"]] for r in archive_rows.values())
+        assert all((ROOT / name).read_bytes() == raw for name, raw in remaining.items()), "Concurrent preserved mirror edit"
+
+    def before_guard():
+        inputs_guard()
+        assert manifest_path.read_bytes() == before_raw, "Concurrent working manifest change"
+        assert all((ROOT / name).read_bytes() == raw for name, raw in selected.items()), "Concurrent selected Source change"
+
+    client, removed, temporary, committed = None, [], None, False
+    before_native = after_native = None
+    try:
+        client = StudioMcpClient(find_mcp_batch())
+        client.initialize()
+        studio = select_studio(client, RELEASE_STUDIO_NAME, 15)
+        assert studio["id"] == "1b603e69-7ae1-4572-b210-d5bf05c684ff"
+        before_native = native_guard(client, studio, code, expected, len(remaining))
+        save_new(CHECKPOINT / "native-before.json", preflight.encode(before_native))
+        before_guard()
+        temporary = prepare_manifest_temp(manifest_path, encoded)
+        before_guard()
+        for name, raw in selected.items():
+            inputs_guard()
+            assert manifest_path.read_bytes() == before_raw
+            assert (ROOT / name).read_bytes() == raw
+            (ROOT / name).unlink()
+            removed.append(name)
+        inputs_guard()
+        assert manifest_path.read_bytes() == before_raw
+        os.replace(temporary, manifest_path)
+        temporary, committed = None, True
+        after = json.loads(manifest_path.read_bytes())
+        assert manifest_path.read_bytes() == encoded and all(not (ROOT / name).exists() for name in selected)
+        assert source_contracts(after) == remaining, "Remaining Source/class/hash/attribute contract changed"
+        compiles = 0
+        for name in remaining:
+            for optimization in ("-O0", "-O1"):
+                subprocess.run([str(COMPILER), "--binary", optimization, str(ROOT / name)], stdout=subprocess.DEVNULL, check=True)
+                compiles += 1
+        inputs_guard()
+        assert manifest_path.read_bytes() == encoded
+        after_native = native_guard(client, studio, code, expected, len(remaining))
+        save_new(CHECKPOINT / "native-after.json", preflight.encode(after_native))
+        assert after_native["signatureSHA256"] == before_native["signatureSHA256"], "Concurrent native Source/editor/metadata/scene-structure change"
+        inputs_guard()
+        assert manifest_path.read_bytes() == encoded and all(not (ROOT / name).exists() for name in selected)
+        # A transport cleanup failure is still within our reversible transaction.
+        # It cannot leave a success receipt with an uncompleted resource gate.
+        client.close()
+        client = None
+        receipt = {"schema": "external-mirror-source-retirement-v1", "batch": "S06", "pass": True,
+                   "atUtc": datetime.now(timezone.utc).isoformat(), "filesRemoved": 12, "rawBytesOffCanonicalMirror": sum(map(len, selected.values())),
+                   "manifestBeforeSHA256": preflight.sha(before_raw), "manifestAfterSHA256": preflight.sha(encoded),
+                   "currentHeadRevision": current_head, "headManifestBeforeSHA256": preflight.sha(head_manifest),
+                   "scopedCommitManifestSHA256": preflight.sha(scoped), "countsAfter": after["counts"],
+                   "remainingSourceContracts": len(remaining), "remainingSourceCompilesO0O1": compiles,
+                   "nativeBefore": before_native, "nativeAfter": after_native, "nativeMutations": 0, "modeSwitches": 0,
+                   "nativeMirrorCoverage": {phase: {"liveSourceCount": report["liveSourceCount"],
+                       "remainingMirrorsVerified": report["remainingMirrorsVerified"],
+                       "allLiveSourcesCovered": report["liveSourceCount"] == report["remainingMirrorsVerified"]}
+                       for phase, report in (("before", before_native), ("after", after_native))},
+                   "nativeFullObjectArchiveSHA256": NATIVE_SHA, "opaqueRestorationCertified": False,
+                   "archived": preparation["archived"], "guardSHA256": preflight.sha(guard_raw),
+                   "wrapperSHA256": preflight.sha(Path(__file__).read_bytes()),
+                   "scope": "Downstream12 mirrors/rows already externally absent; no runtime feature removal, native restoration, publication, performance or whole-project final parity claim."}
+        save_new(EVIDENCE / SUCCESS_RECEIPT, preflight.encode(receipt))
+        print(json.dumps({k: receipt[k] for k in ("batch", "pass", "filesRemoved", "remainingSourceCompilesO0O1", "countsAfter")}))
+    except BaseException as error:
+        restored, conflicts = [], []
+        for name in removed:
+            try:
+                save_new(ROOT / name, selected[name])
+                restored.append(name)
+            except FileExistsError:
+                conflicts.append(name)
+            except BaseException as recovery:
+                error.add_note(f"Exclusive Source restore failed for {name}: {recovery}")
+        if committed:
+            rollback_temporary = None
+            try:
+                current = manifest_path.read_bytes()
+                recovered = rollback_rows(current, before_raw)
+                rollback_temporary = prepare_manifest_temp(manifest_path, recovered)
+                assert manifest_path.read_bytes() == current, "Actor manifest changed during scoped rollback"
+                os.replace(rollback_temporary, manifest_path)
+                rollback_temporary = None
+            except BaseException as recovery:
+                error.add_note(f"Scoped manifest rollback pending: {recovery}")
+            finally:
+                if rollback_temporary is not None:
+                    try:
+                        rollback_temporary.unlink(missing_ok=True)
+                    except BaseException as recovery:
+                        error.add_note(f"Owned rollback temporary cleanup failed: {recovery}")
+        try:
+            save_new(EVIDENCE / FAILURE_RECEIPT, preflight.encode({"pass": False, "primaryError": str(error),
+                "restoredSources": restored, "preservedConcurrentSources": conflicts,
+                "manifestCommittedBeforeRollback": committed, "notes": getattr(error, "__notes__", [])}))
+        except BaseException as evidence_error:
+            error.add_note(f"Rollback evidence write failed: {evidence_error}")
+        raise
+    finally:
+        primary = sys.exc_info()[1]
+        errors = []
+        if temporary is not None:
+            try:
+                temporary.unlink(missing_ok=True)
+            except BaseException as error:
+                errors.append(("owned manifest temporary", error))
+        if client is not None:
+            try:
+                client.close()
+            except BaseException as error:
+                errors.append(("client.close", error))
+        if errors:
+            error = primary if primary is not None else errors[0][1]
+            for label, problem in errors:
+                error.add_note(f"Cleanup {label} failed: {problem}")
+            if primary is None:
+                raise error
+
+
+if __name__ == "__main__":
+    main()

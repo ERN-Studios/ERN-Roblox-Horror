@@ -1,0 +1,20 @@
+{
+  "schema": "s06-v4-head-cas-negative-v1",
+  "pass": true,
+  "cases": [
+    {
+      "name": "different HEAD with identical manifest",
+      "pass": true,
+      "nativeCalls": 0,
+      "canonicalWrites": 0
+    },
+    {
+      "name": "changed portable HEAD input",
+      "pass": true,
+      "nativeCalls": 0,
+      "canonicalWrites": 0
+    }
+  ],
+  "wrapperSHA256": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+  "testSHA256": "00b7c2a1a5b6e3ac9682e7f43d346dc0915b5d00571e7ff0b53fc12b01861e6c"
+}

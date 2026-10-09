@@ -1,0 +1,18 @@
+{
+  "schema": "s06-v4-freeze-invariants-v1",
+  "pass": true,
+  "historicalToolsUnchanged": {
+    "retire_external_mirror_sources.py": "c3ede5545cb56698d1cf5c890ec675f157bb24d060a7416e1de4467b05eb5504",
+    "test_retire_external_mirror_sources.py": "c4c6460d23251c623115222cc040ed60607b6d68d3ac0b9ae3c0484b8800dcd9",
+    "external_mirror_retirement_guard.luau": "d47a69e0f416c150ed7708e66e1f7a8f9d7118aa31971a117f87f44a6a8c23ef"
+  },
+  "currentTools": {
+    "retire_external_mirror_sources_v4.py": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+    "test_retire_external_mirror_sources_v4.py": "8080e8b3275795f11f954997cb0a02a9c1640319ac5b13e7bde3cff4b0d47a25"
+  },
+  "nativeCalls": 0,
+  "canonicalSourceWrites": 0,
+  "canonicalManifestWrites": 0,
+  "implementationScope": "NEW v4 tool/test, fixture metadata+one preexisting owner Source snapshot, offline evidence; no old execution evidence change",
+  "actualExecutionPending": true
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "external-mirror-source-retirement-offline-tests-v1",
+  "pass": true,
+  "cases": [
+    {
+      "name": "actual remaining sources success",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 424,
+      "generatedGuardCompiles": 2
+    },
+    {
+      "name": "native subset coverage remains explicit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "initialize-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "native-before-class-drift",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "native-before-path-drift",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "selected-unlink-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "actor-manifest-before-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "manifest-commit-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "remaining-compile-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "native-after-signature-drift",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "actor-row-and-source-after-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "Play-after-commit",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    },
+    {
+      "name": "client-close-failure",
+      "pass": true,
+      "nativeCalls": 0,
+      "realSourceCompiles": 0,
+      "generatedGuardCompiles": 0
+    }
+  ],
+  "checks": 5503,
+  "nativeCalls": 0,
+  "canonicalMirrorWrites": 0,
+  "canonicalManifestWrites": 0,
+  "pinnedWorkingSourceContractsVerified": 224,
+  "historicalFailureReceiptsPreserved": true,
+  "portableOwnerSourceSnapshotsVerified": 1,
+  "changedOwnerSourceSnapshotRejected": true,
+  "sourceBase": "supplied read-only sparse source copy",
+  "portableHistoricalManifestInputsVerified": true,
+  "changedHistoricalManifestInputRejected": true,
+  "losslessGzipFactsVerified": true,
+  "wrapperSHA256": "734d57f9d29f9672c05a7a376a0f8843f3a3d944130ae8af52b83e5e598fdf1e",
+  "guardSHA256": "d47a69e0f416c150ed7708e66e1f7a8f9d7118aa31971a117f87f44a6a8c23ef",
+  "testSHA256": "5be596cffb1149db20797a6389b69d2dc865fe6e031ee38762f6f5d42b52205f",
+  "scope": "Actual wrapper filesystem/CAS/rollback/resource ports in owned temp repos, native boundary fake; no runtime/native/gameplay pass."
+}

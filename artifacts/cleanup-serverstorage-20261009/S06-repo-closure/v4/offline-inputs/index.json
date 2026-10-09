@@ -1,0 +1,19 @@
+{
+  "schema": "s06-offline-manifest-inputs-v1",
+  "currentHeadRevision": "2231f23babbe07876ddb5a86e5b55862ba7933b7",
+  "scope": "Reviewed current HEAD and working snapshots; Source metadata only, no Source strings. v1-v3 inputs remain immutable.",
+  "inputs": [
+    {
+      "file": "head-manifest-before.json",
+      "rawSHA256": "445a0e60b15e284c77052163b6c497e1e9b1f0afb8592d7e84e6059e22ca6155",
+      "rawBytes": 156391,
+      "lfSHA256": "445a0e60b15e284c77052163b6c497e1e9b1f0afb8592d7e84e6059e22ca6155"
+    },
+    {
+      "file": "working-manifest-before.json",
+      "rawSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+      "rawBytes": 157621,
+      "lfSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf"
+    }
+  ]
+}

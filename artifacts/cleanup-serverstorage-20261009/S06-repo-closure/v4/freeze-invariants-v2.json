@@ -1,0 +1,33 @@
+{
+  "schema": "s06-v4-freeze-invariants-v2",
+  "pass": true,
+  "historicalToolsUnchanged": {
+    "retire_external_mirror_sources.py": "c3ede5545cb56698d1cf5c890ec675f157bb24d060a7416e1de4467b05eb5504",
+    "test_retire_external_mirror_sources.py": "c4c6460d23251c623115222cc040ed60607b6d68d3ac0b9ae3c0484b8800dcd9",
+    "external_mirror_retirement_guard.luau": "d47a69e0f416c150ed7708e66e1f7a8f9d7118aa31971a117f87f44a6a8c23ef"
+  },
+  "currentTools": {
+    "retire_external_mirror_sources_v4.py": "734d57f9d29f9672c05a7a376a0f8843f3a3d944130ae8af52b83e5e598fdf1e",
+    "test_retire_external_mirror_sources_v4.py": "5be596cffb1149db20797a6389b69d2dc865fe6e031ee38762f6f5d42b52205f"
+  },
+  "currentExpectedHeadRevision": "9635a38c3b434d1d573e33786eee2f11167bac60",
+  "historicalSourceBaseRevision": "37f09c9c0cdfa936717b659ac26e26a06677263b",
+  "headManifestSHA256": "13ae3b1cd77fdf447a646b4798961af5ba4175d8ee42cc8e232aa7349e9f6c5b",
+  "workingManifestFixtureSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+  "guardUnchanged": true,
+  "latestWrapperOnlyExpectedHeadLiteralChanged": true,
+  "executedPriorWrapperPreserved": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+  "nativeCallsByPreparation": 0,
+  "canonicalSourceWritesByPreparation": 0,
+  "canonicalManifestWritesByPreparation": 0,
+  "actualTransactionOwnedByParent": true,
+  "currentOfflineProof": {
+    "path": "offline-clean-head-tests-v3.json",
+    "rawSHA256": "cb9341a0f3fc0f37fbb2990049a339884e2a26ede71fea3bc278495eadfe7e1d",
+    "cases": 13,
+    "checks": 5503,
+    "actualSourceCompiles": 424,
+    "generatedGuardCompiles": 2
+  },
+  "scope": "Preparation/fake-boundary gates only; parent execution receipts, publication and parity claims remain separate."
+}

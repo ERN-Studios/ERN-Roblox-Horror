@@ -1,0 +1,106 @@
+{
+  "schema": "s06-v4-curated-allowlist-v1",
+  "scope": "New task preparation/proof paths only; no staging/commit performed. Existing133 scope unchanged. Shared tools .gitattributes adds only2 v4 -text rules. Actual execution receipt will be added by parent only after execution.",
+  "paths": [
+    {
+      "path": "tools/cleanup_20261009/retire_external_mirror_sources_v4.py",
+      "rawSHA256": "7e10cbec990804553c83797b79c3ae91b2260eace73ee687a8388584b8c2060e",
+      "rawBytes": 18142
+    },
+    {
+      "path": "tools/cleanup_20261009/test_retire_external_mirror_sources_v4.py",
+      "rawSHA256": "8080e8b3275795f11f954997cb0a02a9c1640319ac5b13e7bde3cff4b0d47a25",
+      "rawBytes": 22629
+    },
+    {
+      "path": "tools/cleanup_20261009/.gitattributes",
+      "rawSHA256": "cd02157e44d0f51c7d324234bfc3f9b596f52c3023b39119cfd4d6727d77b406",
+      "rawBytes": 1289
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/.gitattributes",
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+      "rawBytes": 8
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/freeze-invariants.json",
+      "rawSHA256": "a4c59f0d7f6483053d9c3f4a2e4d8b79e011da9924d6d2f9f379cb2ca4a329c5",
+      "rawBytes": 956
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/head-cas-negative.json",
+      "rawSHA256": "2aa521309a7f25b54fbd4430eda01f3becece217c19b47d492d10ee43a8317b8",
+      "rawBytes": 519
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/head-cas-negative.py",
+      "rawSHA256": "00b7c2a1a5b6e3ac9682e7f43d346dc0915b5d00571e7ff0b53fc12b01861e6c",
+      "rawBytes": 2783
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-clean-head-tests-v2.json",
+      "rawSHA256": "19a3c135f76a2e9f060fc33e7cb965c98aa6820cc8e60615e27686f2e3bf9928",
+      "rawBytes": 3139
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs/head-manifest-before.json",
+      "rawSHA256": "445a0e60b15e284c77052163b6c497e1e9b1f0afb8592d7e84e6059e22ca6155",
+      "rawBytes": 156391
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs/index.json",
+      "rawSHA256": "b8d1b5679967a8d0a4bd0e5bd72bc830bbc469fde9dc37d392e0cdba9f2fdaf9",
+      "rawBytes": 778
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs/working-manifest-before.json",
+      "rawSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+      "rawBytes": 157621
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs-v2/head-manifest-before.json",
+      "rawSHA256": "13ae3b1cd77fdf447a646b4798961af5ba4175d8ee42cc8e232aa7349e9f6c5b",
+      "rawBytes": 157621
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs-v2/index.json",
+      "rawSHA256": "f2189ed689bb1e144e0fa6c7803e676d0d87556078e637ec49bd0455abfcad6a",
+      "rawBytes": 771
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-inputs-v2/working-manifest-before.json",
+      "rawSHA256": "0532d938dde5cb53b9273ffbb6fbff4c053e1d87ec226c3266a8e045ece77faf",
+      "rawBytes": 157621
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/offline-tests.json",
+      "rawSHA256": "3ea4e68978aec3b4ba9b9b7e3570b4dad2edf5daf1ec5771c372a00e2cce75b3",
+      "rawBytes": 2991
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/retire_external_mirror_sources_v4.py.before-owner-commit.txt",
+      "rawSHA256": "fab2f5f13cd29e7feefa8c13e65d16cb04db319da9cd0c40c36208f7384458df",
+      "rawBytes": 18139
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/REVIEW.md",
+      "rawSHA256": "370b1690a2bd7d6053b43621a12f7ad682d7244029dcf12275e2a2498b2e5d99",
+      "rawBytes": 6597
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/source-deltas-v2/index.json",
+      "rawSHA256": "48a0a96edb667acb98e06f9869456ed846136b365d2bb56bf07446ab17e2b811",
+      "rawBytes": 1092
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/source-deltas-v2/sources/StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "rawSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+      "rawBytes": 244971
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/S06-repo-closure/v4/test_retire_external_mirror_sources_v4.py.before-owner-commit.txt",
+      "rawSHA256": "90e5482a9162538aaf0757245c335132256926dc074e2833c852f986b90bff3b",
+      "rawBytes": 19396
+    }
+  ]
+}
