@@ -1,0 +1,7 @@
+{
+  "schema": "s12-offline-metadata-input-v1",
+  "file": "manifest-before.json",
+  "rawBytes": 149762,
+  "rawSHA256": "cab2d235d9636d19d89686219b74e25dfba7fe7b360a520fe7db6c93ef043cca",
+  "scope": "Historical downstream metadata test input only. Tests replace Source hashes/text in owned temporary fixtures; native/runtime initialization never occurs."
+}

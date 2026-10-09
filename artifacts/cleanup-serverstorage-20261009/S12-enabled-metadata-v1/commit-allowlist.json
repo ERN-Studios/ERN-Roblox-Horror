@@ -1,0 +1,238 @@
+{
+  "schema": "s12-actual-metadata-evidence-allowlist-v1",
+  "files": [
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/console-api-result.json",
+      "rawBytes": 977,
+      "rawSHA256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/console-comparison.json",
+      "rawBytes": 1056,
+      "rawSHA256": "97d5e4c23f27ead71aba329b6c16c7b6940f69087fcc626cbe9d3455af644bc0"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/.gitattributes",
+      "rawBytes": 20,
+      "rawSHA256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-begin.json",
+      "rawBytes": 339,
+      "rawSHA256": "d899bdf39bc5371bde894914947e14ac9de30923450c8d7f1ccb5e3a4f99aa50"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-end.json",
+      "rawBytes": 339,
+      "rawSHA256": "6dd3271304cfa9dade4a5a4255d3cb28fb8c2f57e68dd1ee9fe4286309fda5cf"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-00.json",
+      "rawBytes": 15028,
+      "rawSHA256": "9cbb0d4f58f1314611238d1a57b811ce473257910dd21087e8fd5bf06bbf576d"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-01.json",
+      "rawBytes": 25635,
+      "rawSHA256": "d21d388a5c72be2c0515aaf40475fc13ac6ab1da01e724587aad723430c26365"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-02.json",
+      "rawBytes": 26313,
+      "rawSHA256": "b204c00579968b5b457ba93d1dfcc57d7bcfcd7455593bf2f9bf04b2741d9aca"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-03.json",
+      "rawBytes": 26129,
+      "rawSHA256": "4c70fab1a9fd75370b829304251055996c5cb829db717f42332b811250f42269"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-04.json",
+      "rawBytes": 26140,
+      "rawSHA256": "b42401afa8cb7c48707d9e9267f018db04811c9d91897e3fd700619328d267c8"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-05.json",
+      "rawBytes": 25717,
+      "rawSHA256": "2dcb114f3928bb2b9c069da674317ac37838d40d7c3b0816735b8a8320286ea0"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-06.json",
+      "rawBytes": 27971,
+      "rawSHA256": "57dfe328ec419c8f4a1b64ccbbb1308103f021fa9df9c59a955c3a99ffee9705"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-07.json",
+      "rawBytes": 28332,
+      "rawSHA256": "07f13c3bbb8ed1dbcf2501e37aa0269191ba4d3d4995053be7ccb6fbaa3289a9"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-08.json",
+      "rawBytes": 28178,
+      "rawSHA256": "046468e7f38fdf8e1c89fd0569ae83aaa367b1a259ae5551bcffa68495afc615"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-page-09.json",
+      "rawBytes": 13056,
+      "rawSHA256": "c5827b8dc7ffc0ca9efa02cf54d373693300de3555fce21e4aab130fcfaadac4"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/native-reader.luau",
+      "rawBytes": 3293,
+      "rawSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/parity-reader.py",
+      "rawBytes": 12746,
+      "rawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/repo-after-metadata.json",
+      "rawBytes": 62993,
+      "rawSHA256": "c999cb049e88c71876be186d93945b231dd3d86571b3f926d7cc69ea7c413eec"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/repo-before-metadata.json",
+      "rawBytes": 63173,
+      "rawSHA256": "58b6bcb17c40ac9e402ffe1cab92ed89675349aa401d2e2c991a025ad63bf458"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/result.json",
+      "rawBytes": 2044,
+      "rawSHA256": "4acec5721de358dc291f268092b028ec9465353ec6795cd92378094467917ea1"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/studio-state-before.json",
+      "rawBytes": 128,
+      "rawSHA256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-after/studio-state-before.txt",
+      "rawBytes": 98,
+      "rawSHA256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/.gitattributes",
+      "rawBytes": 20,
+      "rawSHA256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-begin.json",
+      "rawBytes": 339,
+      "rawSHA256": "79b910e0aec929f2edd1071429efffb4975e85c2ded3b204b9a64477db0c2d39"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-end.json",
+      "rawBytes": 339,
+      "rawSHA256": "2862518f9cfb3def8a6f52f824ae9c084ae473e1b9b04865a73bbeee4ef0bb55"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-00.json",
+      "rawBytes": 15028,
+      "rawSHA256": "270c2746bc1ba3b3adab3803328893e6257df66de3a0964ac76331b06b816ca0"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-01.json",
+      "rawBytes": 25635,
+      "rawSHA256": "89a43b64caaa80c18444be678db7430dfaa1665532e732390f1fb09800c6f440"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-02.json",
+      "rawBytes": 26313,
+      "rawSHA256": "dfb3643bf052000150bc491cb983be5512de06b228b41b306c8c77b78d929b32"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-03.json",
+      "rawBytes": 26129,
+      "rawSHA256": "1ac030cd352e4b00a9cb8609c36457d087b9ac83836dac01cbe6c5522f2bbf1d"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-04.json",
+      "rawBytes": 26140,
+      "rawSHA256": "f698a584932e0e30868915edc727242734014bbec3d0b249a51190deb99753e8"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-05.json",
+      "rawBytes": 25717,
+      "rawSHA256": "bc7f0031dd458e2bba759608338c98e7e8673c4869804fca30e929ef256eca5b"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-06.json",
+      "rawBytes": 27971,
+      "rawSHA256": "c7e03c5e7d2dd164470c42800cbefdde4bc299907251d4bef0074b28216a9860"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-07.json",
+      "rawBytes": 28332,
+      "rawSHA256": "fb723b6fa8065f902f3b8c8dc623a7f7b84eb35eb5fd1997ab38c006b11c6445"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-08.json",
+      "rawBytes": 28178,
+      "rawSHA256": "cce988bda2957ba1a514c9eb476ce738a756b42b931d341327982f9cdc255315"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-page-09.json",
+      "rawBytes": 13056,
+      "rawSHA256": "c84cfc770c00fc427a5efe4976bcbbc3ee47ca3d7404935df42d2fc93fd66dac"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/native-reader.luau",
+      "rawBytes": 3293,
+      "rawSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/parity-reader.py",
+      "rawBytes": 12746,
+      "rawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/repo-after-metadata.json",
+      "rawBytes": 62993,
+      "rawSHA256": "12ea6788e76b0d2d675225588b5e6173ec0066bba4c2df435b31bd81c7416045"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/repo-before-metadata.json",
+      "rawBytes": 63173,
+      "rawSHA256": "55dff4ba21f9e04b436202b7cd348ab8ef2494894f9d2bf78931eed1095e72ba"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/result.json",
+      "rawBytes": 16506,
+      "rawSHA256": "cafac6558910f676de9c8ee23fbb2aec76a48d3048d1790b7812f7dacf870bc8"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/studio-state-before.json",
+      "rawBytes": 128,
+      "rawSHA256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/native-before/studio-state-before.txt",
+      "rawBytes": 98,
+      "rawSHA256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/receipt.json",
+      "rawBytes": 42549,
+      "rawSHA256": "a558943fce76bb619671698573a885cea449d5a261583df93780551af5c18a8b"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/REVIEW.md",
+      "rawBytes": 1863,
+      "rawSHA256": "1c444947086e084d25ed77592591f64053ef497c15061b70855d8e8a2268867a"
+    }
+  ],
+  "plusThisFile": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/commit-allowlist.json",
+  "excluded": [
+    ".git/checkpoints",
+    "canonical manifest (stage separate private scoped blob)",
+    "runtime Source bodies/files",
+    "generic source pull outputs"
+  ],
+  "scope": "Exact root-owned actual metadata snapshots and console comparison only."
+}

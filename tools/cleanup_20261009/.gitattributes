@@ -29,3 +29,5 @@ test_retire_external_mirror_sources.py -text
 retire_external_mirror_sources_v4.py -text
 test_retire_external_mirror_sources_v4.py -text
 retire_transport_parts.py -text
+add_enabled_manifest_metadata.py -text
+test_enabled_manifest_metadata.py -text

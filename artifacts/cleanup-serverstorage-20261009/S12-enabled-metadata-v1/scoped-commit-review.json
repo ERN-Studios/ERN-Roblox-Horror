@@ -1,0 +1,16 @@
+{
+  "schema": "s12-root-scoped-staging-v1",
+  "currentHeadBeforeCommit": "9ca01fc0207d9e1460b2795fa6689a40ccbd39b3",
+  "actualReceiptHead": "5a3a06e7ba065615f35b54884b7a984e4ab155a2",
+  "workingManifestSHA256": "5d9f3c420467eae38fa02ffdfbaf18d5fd27464d74bb6d84c4b74de4e2239cb4",
+  "headBeforeSHA256": "a0279ba2fb2547db8207d700ee58f30bb25ab07d6b3102d10bda7813ffcd0ebe",
+  "scopedManifestSHA256": "ccf4be0dd066a800c3ab44a9ed2e15fa896f909ed44e3d7f1838d2f4e4fb0605",
+  "EnabledFieldsAdded": 96,
+  "otherHeadRowsFieldsCountsPreserved": true,
+  "workingRoundUIRawPreservedSHA256": "bd0d1dd235aace6d8be5b7ffedca8d16db2d4423c4d98895c8af274ca960ae73",
+  "canonicalSourcesStaged": 0,
+  "nativeSourceWrites": 0,
+  "nativeObjectWrites": 0,
+  "modeSwitches": 0,
+  "scope": "Root metadata only. Preserve actor RoundUI Source/hash/bytes row and unrelated staged work; two own tool attributes only."
+}

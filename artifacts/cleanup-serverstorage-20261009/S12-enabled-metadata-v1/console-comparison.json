@@ -1,0 +1,17 @@
+{
+  "schema": "s12-console-before-after-comparison-v1",
+  "beforeFile": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/console-api-result.json",
+  "afterFile": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-v1/console-api-result.json",
+  "beforeFileSHA256": "e10681e6df212ecb82c88b83e2268ba8ce44511215845dd50a4198403ba54296",
+  "afterFileSHA256": "c66f1f6ce41461f5c93db3e43faa90db3f9548f2f1a39c6d394b118f93618f29",
+  "apiWrapperValuesEqual": true,
+  "apiContentValuesEqual": true,
+  "consoleTextBytesEqual": true,
+  "beforeTextBytes": 861,
+  "afterTextBytes": 861,
+  "beforeTextSHA256": "61a3abc0c4d35cb2d8cd996d63a7790d5aa37b98a29ab20f6b5aeafe570084b0",
+  "afterTextSHA256": "61a3abc0c4d35cb2d8cd996d63a7790d5aa37b98a29ab20f6b5aeafe570084b0",
+  "cleanConsoleClaimed": false,
+  "logsCleared": false,
+  "limits": "Exact API snapshots only; no timestamps, causal attribution or full-history/gameplay certificate. Existing unapproved sound failures and historical probe/assert/invalid-radius entries remain present."
+}

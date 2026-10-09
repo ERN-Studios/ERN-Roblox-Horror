@@ -1,0 +1,545 @@
+{
+  "schema": "mongotv-final-parity-diagnostic-v1",
+  "complete": true,
+  "nativeWrites": 0,
+  "repositorySourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "limits": "Metadata/hash snapshot of authoritative Edit Sources. No gameplay, full native assets, publication or continuous epoch guarantee. Failed stability guards leave partial evidence.",
+  "nativeBegin": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-09T23:53:59Z",
+    "sceneCount": 416276,
+    "placeId": 131311258779917,
+    "rowCount": 227,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "nativeEnd": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-09T23:54:09Z",
+    "sceneCount": 416276,
+    "placeId": 131311258779917,
+    "rowCount": 227,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "repoSnapshotStable": true,
+  "nativeSourceEditorConflictCount": 0,
+  "counts": {
+    "nativeScripts": 212,
+    "nativeRemotes": 15,
+    "nativeTotal": 227,
+    "actualManifestScripts": 212,
+    "actualManifestRemotes": 15,
+    "actualManifestTotal": 227,
+    "declaredManifest": {
+      "scripts": 212,
+      "remoteEvents": 15,
+      "total": 227,
+      "created": 12,
+      "updated": 18,
+      "unchanged": 215,
+      "studioTrailingNewline": 0
+    }
+  },
+  "declaredManifestCountsMatchActual": true,
+  "mismatches": [],
+  "missingNative": [],
+  "extraNative": [],
+  "extraWorkingFiles": [],
+  "manifestPropertyCoverageGaps": [
+    {
+      "path": "ReplicatedFirst.Lobby Loading Screen",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.AvatarNormalize",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Crouch State Server",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.FlashlightSync",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAI",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityKill",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level Leaderboards",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Live Level Server",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Lobby DJ",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.Lobby Tunnel Reach",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.LunaTribute",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.RouteMarkerService",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerScriptService.ZyntraMonetization",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerStorage.Level 4 Cinema Blender.Doors.PushDoors",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerStorage.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "ServerStorage.Project Mirror.IMPORTANT",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "ServerStorage.Project Mirror.Script",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacter.Animate",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Achievements Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Found Footage HUD",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Hardware Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Dev ESP",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "unrecordedManifestProperty": "Enabled",
+      "native": false
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Lobby DJ Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Lobby Tunnel Reach Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round HUD",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SceneEffectBudgetClient",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Daily L4",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Dev L4",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Zyntra Shop L4",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "unrecordedManifestProperty": "Enabled",
+      "native": true
+    }
+  ],
+  "manifestPropertyCoverageGapCount": 96,
+  "nativeScriptPropertyReadErrors": [],
+  "sourceAndRecordedPropertyParity": true,
+  "attributesTagsAndNonScriptNativeAssetsCompared": false,
+  "finishedUtc": "2026-10-09T23:54:09.738420+00:00"
+}

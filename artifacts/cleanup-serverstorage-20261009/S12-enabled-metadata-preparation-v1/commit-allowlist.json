@@ -1,0 +1,51 @@
+{
+  "schema": "s12-preparation-commit-allowlist-v1",
+  "files": [
+    {
+      "file": "tools/cleanup_20261009/add_enabled_manifest_metadata.py",
+      "rawBytes": 12892,
+      "rawSHA256": "e8986d62656ae4c630b7aea7d01d37735c47dc3a5ef788f1b0b6a962de6b65b2"
+    },
+    {
+      "file": "tools/cleanup_20261009/test_enabled_manifest_metadata.py",
+      "rawBytes": 14304,
+      "rawSHA256": "e0f274b3fd99aa458ffe0877b2e9d77dfd03871fc8ff21af45fd44776b9d60e8"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/.gitattributes",
+      "rawBytes": 8,
+      "rawSHA256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/inputs/index.json",
+      "rawBytes": 355,
+      "rawSHA256": "52b636b90793014689679dec1dc239e97721ec37f666cdecd633bdda017fbf0b"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/inputs/manifest-before.json",
+      "rawBytes": 149762,
+      "rawSHA256": "cab2d235d9636d19d89686219b74e25dfba7fe7b360a520fe7db6c93ef043cca"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/offline-proof-v1.json",
+      "rawBytes": 2715,
+      "rawSHA256": "7726dcbb969cada41cf4c4c8182cd81c30a1189a98ab8f625a278fe0d1636efc"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/preflight.json",
+      "rawBytes": 603,
+      "rawSHA256": "4a64c176ec3a78b81c9689cd22d718cd2e49828f32d4a7d8b75025a02979cc37"
+    },
+    {
+      "file": "artifacts/cleanup-serverstorage-20261009/S12-enabled-metadata-preparation-v1/REVIEW.md",
+      "rawBytes": 4215,
+      "rawSHA256": "5844638be165e486b0ee65e51d46648abcaae2c596bb79f8e59de63b61d1f81a"
+    }
+  ],
+  "excluded": [
+    ".git checkpoints",
+    "canonical manifest/runtime sources",
+    "native execution evidence not yet created"
+  ],
+  "scope": "Preparation only; root reviews/stages exact paths. tools/.gitattributes has only two specific appended -text rules, retain all pre-existing rules."
+}

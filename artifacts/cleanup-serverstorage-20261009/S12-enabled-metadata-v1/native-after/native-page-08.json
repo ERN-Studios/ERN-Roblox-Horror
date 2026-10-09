@@ -1,0 +1,736 @@
+{
+  "meta": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-09T23:54:19Z",
+    "sceneCount": 416276,
+    "placeId": 131311258779917,
+    "rowCount": 227,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "rows": [
+    {
+      "minusOneTrailingLFSHA256": "86fcf465a618d5dad90345c6e4f58b6c1487c18a35208f661e63ee890b1dfcf5",
+      "instanceId": "1_31108",
+      "rawEditorSHA256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 5 Lighting Controller"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 46203,
+      "readStable": true,
+      "canonicalBytes": 46203,
+      "sourceSHA256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "rawSourceSHA256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller"
+    },
+    {
+      "minusOneTrailingLFSHA256": "d23029ecb3d1797acde4d7122da930d80d23680d171a2bb863cc50602af70c8c",
+      "instanceId": "1_31092",
+      "rawEditorSHA256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Dev ESP"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5003,
+      "readStable": true,
+      "canonicalBytes": 5003,
+      "sourceSHA256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "rawSourceSHA256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Dev ESP"
+    },
+    {
+      "minusOneTrailingLFSHA256": "c18831e1b77d1646527185962b2a8338033ac72b9c8e254509ac4e12511f28d0",
+      "instanceId": "1_31113",
+      "rawEditorSHA256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 66128,
+      "readStable": true,
+      "canonicalBytes": 66128,
+      "sourceSHA256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "rawSourceSHA256": "008eb778b3349b1c81ed168ccb13dacb744a2f6d945fa061d24d99d6c884131c",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "7e44b94855150a6a73261fb0ed8654bad0fd3686efd2e2c893bb6ae3f7a773ad",
+      "instanceId": "1_31109",
+      "rawEditorSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Reader Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 59188,
+      "readStable": true,
+      "canonicalBytes": 59188,
+      "sourceSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "rawSourceSHA256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "65af69232e4e177ebf4ceff109124425fd24eaa7c26a02d74203e92c3af4f69d",
+      "instanceId": "1_31110",
+      "rawEditorSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Sound Controller"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 46887,
+      "readStable": true,
+      "canonicalBytes": 46887,
+      "sourceSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "rawSourceSHA256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "path": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller"
+    },
+    {
+      "minusOneTrailingLFSHA256": "9caf556a16d8b071ec9243d77b0e24f464d4cc747a7e6adca30660010e42c07c",
+      "instanceId": "1_31075",
+      "rawEditorSHA256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 2219,
+      "readStable": true,
+      "canonicalBytes": 2219,
+      "sourceSHA256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4",
+      "rawSourceSHA256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4",
+      "path": "StarterPlayer.StarterPlayerScripts.Level2AlertClient"
+    },
+    {
+      "minusOneTrailingLFSHA256": "bd8867567a1e650908d140e2b818ca0ed76eb66813b4e03f68ab49b2b6704bad",
+      "instanceId": "1_31119",
+      "rawEditorSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2PoolroomsPresentation"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 14552,
+      "readStable": true,
+      "canonicalBytes": 14552,
+      "sourceSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "rawSourceSHA256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "path": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation"
+    },
+    {
+      "minusOneTrailingLFSHA256": "2133879b08b2ff0c6bcc10f1deac02f4e224319d5392f50f630d65140f7e500a",
+      "instanceId": "1_31106",
+      "rawEditorSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level4PreviewPrompt"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 1622,
+      "readStable": true,
+      "canonicalBytes": 1622,
+      "sourceSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "rawSourceSHA256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt"
+    },
+    {
+      "minusOneTrailingLFSHA256": "b5fa82e2452f3658be21cf4d750df359e9b221534dddf6ea57d995e54420bed4",
+      "instanceId": "1_31112",
+      "rawEditorSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level6PreviewTransport"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 2561,
+      "readStable": true,
+      "canonicalBytes": 2561,
+      "sourceSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "rawSourceSHA256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport"
+    },
+    {
+      "minusOneTrailingLFSHA256": "40be6dd1fd54f79de17db54557eb66ed83b2efa9f7d7ace9ccb90c3d1f6c9afa",
+      "instanceId": "1_31111",
+      "rawEditorSHA256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby DJ Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 18350,
+      "readStable": true,
+      "canonicalBytes": 18350,
+      "sourceSHA256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163",
+      "rawSourceSHA256": "5722867c4602ee8d248473dd78f3ce9afe9ec494c8d1767c8a91b7c7d9635163",
+      "path": "StarterPlayer.StarterPlayerScripts.Lobby DJ Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "d541cec741ca8203963ac8c73a1a1e429d7bbf8f6c9cec8fd30c62d57c47baff",
+      "instanceId": "1_31122",
+      "rawEditorSHA256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby Tunnel Reach Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 31937,
+      "readStable": true,
+      "canonicalBytes": 31937,
+      "sourceSHA256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "rawSourceSHA256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "path": "StarterPlayer.StarterPlayerScripts.Lobby Tunnel Reach Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "ddca81f0c6be669a73f8ce490c37f45e40315a7769fa0852d12c413463afa781",
+      "instanceId": "1_31094",
+      "rawEditorSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 7021,
+      "readStable": true,
+      "canonicalBytes": 7021,
+      "sourceSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "rawSourceSHA256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f26dfa92f7aa0984e5e9cc4066f3329fe806f9f747941f63c2645a69b2fa54b4",
+      "instanceId": "1_31091",
+      "rawEditorSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5033,
+      "readStable": true,
+      "canonicalBytes": 5033,
+      "sourceSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "rawSourceSHA256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker"
+    },
+    {
+      "minusOneTrailingLFSHA256": "00304ea3d3924959f0e04bae0f10745b6cc87e769539424109cc5ef788090c45",
+      "instanceId": "1_31089",
+      "rawEditorSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 10226,
+      "readStable": true,
+      "canonicalBytes": 10226,
+      "sourceSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "rawSourceSHA256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController"
+    },
+    {
+      "minusOneTrailingLFSHA256": "dfa9837ec6ec7991ed8c99fddf1dde801a693935b0abd04451b51b329ac8a79a",
+      "instanceId": "1_31115",
+      "rawEditorSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyReimaginedQueueController"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 4848,
+      "readStable": true,
+      "canonicalBytes": 4848,
+      "sourceSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "rawSourceSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController"
+    },
+    {
+      "minusOneTrailingLFSHA256": "31b31e33e7f26ddfcefbee2dc25da028233613280c70ca6a385632d1039b6f8a",
+      "instanceId": "1_31102",
+      "rawEditorSHA256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 40738,
+      "readStable": true,
+      "canonicalBytes": 40738,
+      "sourceSHA256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576",
+      "rawSourceSHA256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576",
+      "path": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "975a9fb7e471fcf7264d1e7745b3defc5812a12145e3d809075aff81b64c6849",
+      "instanceId": "1_31088",
+      "rawEditorSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 10614,
+      "readStable": true,
+      "canonicalBytes": 10614,
+      "sourceSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "rawSourceSHA256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "path": "StarterPlayer.StarterPlayerScripts.MasterTuningClient"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f57ea421dc66ef1653c9d5c9dd17d7da7e5a000b93facc7c5599bd4fc0b2221a",
+      "instanceId": "1_31066",
+      "rawEditorSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 49115,
+      "readStable": true,
+      "canonicalBytes": 49115,
+      "sourceSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "rawSourceSHA256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter"
+    },
+    {
+      "minusOneTrailingLFSHA256": "09147fc91f8208217fb09402b3564ff86ffb1c1263879afb46cd5df1b6a53833",
+      "instanceId": "1_31093",
+      "rawEditorSHA256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 44987,
+      "readStable": true,
+      "canonicalBytes": 44987,
+      "sourceSHA256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c",
+      "rawSourceSHA256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c",
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD"
+    },
+    {
+      "minusOneTrailingLFSHA256": "82768ac5d915723e629130a367b967b5f96ecb0a9410483f9f3f6f96ad1d30b1",
+      "instanceId": "1_31071",
+      "rawEditorSHA256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5602,
+      "readStable": true,
+      "canonicalBytes": 5602,
+      "sourceSHA256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "rawSourceSHA256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI"
+    },
+    {
+      "minusOneTrailingLFSHA256": "69c10d6f6cd9974a7cd45230f3c29aea5d906c2d704b6c080169e9eb0e2a27bf",
+      "instanceId": "1_31117",
+      "rawEditorSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "R4DevGateController"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 15632,
+      "readStable": true,
+      "canonicalBytes": 15632,
+      "sourceSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "rawSourceSHA256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "path": "StarterPlayer.StarterPlayerScripts.R4DevGateController"
+    },
+    {
+      "minusOneTrailingLFSHA256": "619524cf95bcfc91d581d7b4f22347a4236f5119f013ceba8a8ecb265fde1f19",
+      "instanceId": "1_31090",
+      "rawEditorSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 13218,
+      "readStable": true,
+      "canonicalBytes": 13218,
+      "sourceSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "rawSourceSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb",
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "ec4785afe78648497aeb48ba93782b2b5c3021050ed4b3d13fa290343b381334",
+      "instanceId": "1_31096",
+      "rawEditorSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 17956,
+      "readStable": true,
+      "canonicalBytes": 17956,
+      "sourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "rawSourceSHA256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client"
+    },
+    {
+      "minusOneTrailingLFSHA256": "7efea5047d1a7b8c21bb8426dd3ce648eb0af00b004e960c4c676d35156a52cd",
+      "instanceId": "0_17377448",
+      "rawEditorSHA256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round HUD"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 15589,
+      "readStable": true,
+      "canonicalBytes": 15589,
+      "sourceSHA256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "parentId": "1_410029",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "rawSourceSHA256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "path": "StarterPlayer.StarterPlayerScripts.Round HUD"
+    }
+  ]
+}

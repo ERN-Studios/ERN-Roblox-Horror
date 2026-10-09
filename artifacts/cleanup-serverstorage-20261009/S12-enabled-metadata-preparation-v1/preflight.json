@@ -1,0 +1,14 @@
+{
+  "schema": "s12-enabled-metadata-preparation-preflight-v1",
+  "pass": true,
+  "pythonASTUnits": 2,
+  "frozenReaderSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+  "toolSHA256": "e8986d62656ae4c630b7aea7d01d37735c47dc3a5ef788f1b0b6a962de6b65b2",
+  "testSHA256": "e0f274b3fd99aa458ffe0877b2e9d77dfd03871fc8ff21af45fd44776b9d60e8",
+  "nativeEnabledFields": 98,
+  "alreadyRecordedEnabledFields": 2,
+  "missingEnabledFields": 96,
+  "canonicalWrites": 0,
+  "nativeCalls": 0,
+  "scope": "Metadata-only offline preparation, not actual application/native/runtime certificate."
+}
