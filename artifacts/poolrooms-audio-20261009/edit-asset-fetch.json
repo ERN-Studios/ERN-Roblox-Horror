@@ -1,0 +1,97 @@
+{
+  "pending": 0,
+  "placeId": 131311258779917,
+  "version": 2859,
+  "results": {
+    "shot_creak": {
+      "ok": true,
+      "seconds": 0.01858220831491053,
+      "statuses": {
+        "rbxassetid://90126161261127": "Success"
+      },
+      "asset_id": "90126161261127",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "bed_water": {
+      "ok": true,
+      "seconds": 0.019185291603207588,
+      "statuses": {
+        "rbxassetid://116500347461110": "Success"
+      },
+      "asset_id": "116500347461110",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "loop_lion": {
+      "ok": true,
+      "seconds": 0.01847087498754263,
+      "statuses": {
+        "rbxassetid://87608993842645": "Success"
+      },
+      "asset_id": "87608993842645",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "loop_weir": {
+      "ok": true,
+      "seconds": 0.01902229164261371,
+      "statuses": {
+        "rbxassetid://70912311454622": "Success"
+      },
+      "asset_id": "70912311454622",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "shot_pipe": {
+      "ok": true,
+      "seconds": 0.018952999962493777,
+      "statuses": {
+        "rbxassetid://138400313124619": "Success"
+      },
+      "asset_id": "138400313124619",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "bed_hall": {
+      "ok": true,
+      "seconds": 0.018882291624322534,
+      "statuses": {
+        "rbxassetid://80404926499766": "Success"
+      },
+      "asset_id": "80404926499766",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "shot_drip": {
+      "ok": true,
+      "seconds": 0.018815791583620012,
+      "statuses": {
+        "rbxassetid://127883794297774": "Success"
+      },
+      "asset_id": "127883794297774",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "shot_splash": {
+      "ok": true,
+      "seconds": 0.021160750067792833,
+      "statuses": {
+        "rbxassetid://129520630853843": "Success"
+      },
+      "asset_id": "129520630853843",
+      "isLoaded": false,
+      "timeLength": 0
+    },
+    "bed_service": {
+      "ok": true,
+      "seconds": 0.019078458310104907,
+      "statuses": {
+        "rbxassetid://79661425723233": "Success"
+      },
+      "asset_id": "79661425723233",
+      "isLoaded": false,
+      "timeLength": 0
+    }
+  }
+}

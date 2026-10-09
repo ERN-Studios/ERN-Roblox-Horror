@@ -1,0 +1,760 @@
+{
+  "seconds": 48.69568204169627,
+  "reentered": true,
+  "fade": [
+    {
+      "emitters": true,
+      "t": 2.4875043891370296e-05,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.5
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.550000011920929
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": true
+    },
+    {
+      "emitters": true,
+      "t": 0.21644650003872812,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.5
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.550000011920929
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": true
+    },
+    {
+      "emitters": true,
+      "t": 0.432811833336018,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.4860150218009949
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.5346165299415588
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 0.6329167500371113,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.4478837847709656
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.4926721751689911
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 0.8494126250734553,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.3868541717529297
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.42553961277008057
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 1.0495082916459069,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.3180335760116577
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.34983694553375244
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 1.2660280833952129,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.2376173436641693
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.26137909293174744
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 1.466920041712001,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.16415034234523773
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.18056537210941315
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 1.683220541686751,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.0925147607922554
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.10176623612642288
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 1.8997392917517573,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.03715731203556061
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.04087304323911667
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": true,
+      "t": 2.115969041711651,
+      "beds": [
+        {
+          "playing": true,
+          "key": "bed_hall",
+          "volume": 0.004938452038913965
+        },
+        {
+          "playing": true,
+          "key": "bed_water",
+          "volume": 0.005432297009974718
+        },
+        {
+          "playing": false,
+          "key": "bed_service",
+          "volume": 0
+        }
+      ],
+      "active": false
+    },
+    {
+      "emitters": false,
+      "t": 2.332752166665159,
+      "beds": [],
+      "active": false
+    },
+    {
+      "emitters": false,
+      "t": 2.53292916668579,
+      "beds": [],
+      "active": false
+    },
+    {
+      "emitters": false,
+      "t": 2.7494757917011157,
+      "beds": [],
+      "active": false
+    }
+  ],
+  "cleaned": true,
+  "found": true,
+  "key": "shot_creak",
+  "completed": true,
+  "kind": "Actual random one-shot completion and entitlement cancellation",
+  "shot": [
+    {
+      "playing": true,
+      "t": 29.829710416612215,
+      "volume": 0.022086337208747864,
+      "pos": 0.043
+    },
+    {
+      "playing": true,
+      "t": 29.9462061249651,
+      "volume": 0.3507162630558014,
+      "pos": 0.163
+    },
+    {
+      "playing": true,
+      "t": 30.04630704165902,
+      "volume": 0.5373850464820862,
+      "pos": 0.271
+    },
+    {
+      "playing": true,
+      "t": 30.16343512502499,
+      "volume": 0.5379079580307007,
+      "pos": 0.39
+    },
+    {
+      "playing": true,
+      "t": 30.28036199999042,
+      "volume": 0.5379079580307007,
+      "pos": 0.509
+    },
+    {
+      "playing": true,
+      "t": 30.396502458374016,
+      "volume": 0.5379079580307007,
+      "pos": 0.618
+    },
+    {
+      "playing": true,
+      "t": 30.51380791666452,
+      "volume": 0.5379079580307007,
+      "pos": 0.737
+    },
+    {
+      "playing": true,
+      "t": 30.630361333373003,
+      "volume": 0.5379079580307007,
+      "pos": 0.856
+    },
+    {
+      "playing": true,
+      "t": 30.746770874946378,
+      "volume": 0.5379079580307007,
+      "pos": 0.976
+    },
+    {
+      "playing": true,
+      "t": 30.86298408336006,
+      "volume": 0.5379079580307007,
+      "pos": 1.095
+    },
+    {
+      "playing": true,
+      "t": 30.963617958361283,
+      "volume": 0.5379079580307007,
+      "pos": 1.203
+    },
+    {
+      "playing": true,
+      "t": 31.079650916624814,
+      "volume": 0.5379079580307007,
+      "pos": 1.322
+    },
+    {
+      "playing": true,
+      "t": 31.196004541707225,
+      "volume": 0.5379079580307007,
+      "pos": 1.442
+    },
+    {
+      "playing": true,
+      "t": 31.312989041674882,
+      "volume": 0.5379079580307007,
+      "pos": 1.55
+    },
+    {
+      "playing": true,
+      "t": 31.41311745834537,
+      "volume": 0.5379079580307007,
+      "pos": 1.648
+    },
+    {
+      "playing": true,
+      "t": 31.529503958299756,
+      "volume": 0.5379079580307007,
+      "pos": 1.767
+    },
+    {
+      "playing": true,
+      "t": 31.62975454167463,
+      "volume": 0.5379079580307007,
+      "pos": 1.875
+    },
+    {
+      "playing": true,
+      "t": 31.74669604166411,
+      "volume": 0.5379079580307007,
+      "pos": 1.994
+    },
+    {
+      "playing": true,
+      "t": 31.846842624945566,
+      "volume": 0.5379079580307007,
+      "pos": 2.092
+    },
+    {
+      "playing": true,
+      "t": 31.963490874972194,
+      "volume": 0.5379079580307007,
+      "pos": 2.211
+    },
+    {
+      "playing": true,
+      "t": 32.07940995832905,
+      "volume": 0.5379079580307007,
+      "pos": 2.33
+    },
+    {
+      "playing": true,
+      "t": 32.17962504166644,
+      "volume": 0.5379079580307007,
+      "pos": 2.428
+    },
+    {
+      "playing": true,
+      "t": 32.29667554167099,
+      "volume": 0.5379079580307007,
+      "pos": 2.547
+    },
+    {
+      "playing": true,
+      "t": 32.396948416600935,
+      "volume": 0.5379079580307007,
+      "pos": 2.656
+    },
+    {
+      "playing": true,
+      "t": 32.512764041661285,
+      "volume": 0.5379079580307007,
+      "pos": 2.775
+    },
+    {
+      "playing": true,
+      "t": 32.61374354164582,
+      "volume": 0.5379079580307007,
+      "pos": 2.872
+    },
+    {
+      "playing": true,
+      "t": 32.7295973750297,
+      "volume": 0.5379079580307007,
+      "pos": 2.992
+    },
+    {
+      "playing": true,
+      "t": 32.84606479166541,
+      "volume": 0.5379079580307007,
+      "pos": 3.111
+    },
+    {
+      "playing": true,
+      "t": 32.94631495827343,
+      "volume": 0.5379079580307007,
+      "pos": 3.208
+    },
+    {
+      "playing": true,
+      "t": 33.06278462498449,
+      "volume": 0.5379079580307007,
+      "pos": 3.328
+    },
+    {
+      "playing": true,
+      "t": 33.17941812495701,
+      "volume": 0.5379079580307007,
+      "pos": 3.447
+    },
+    {
+      "playing": true,
+      "t": 33.29606399999466,
+      "volume": 0.5379079580307007,
+      "pos": 3.577
+    },
+    {
+      "playing": true,
+      "t": 33.39627554162871,
+      "volume": 0.5379079580307007,
+      "pos": 3.664
+    },
+    {
+      "playing": true,
+      "t": 33.51270550000481,
+      "volume": 0.5379079580307007,
+      "pos": 3.783
+    },
+    {
+      "playing": true,
+      "t": 33.62927525001578,
+      "volume": 0.5379079580307007,
+      "pos": 3.902
+    },
+    {
+      "playing": true,
+      "t": 33.72952029167209,
+      "volume": 0.5379079580307007,
+      "pos": 4.01
+    },
+    {
+      "playing": true,
+      "t": 33.84599750000052,
+      "volume": 0.5379079580307007,
+      "pos": 4.13
+    },
+    {
+      "playing": true,
+      "t": 33.94613295828458,
+      "volume": 0.5379079580307007,
+      "pos": 4.238
+    },
+    {
+      "playing": true,
+      "t": 34.04635383328423,
+      "volume": 0.5379079580307007,
+      "pos": 4.325
+    },
+    {
+      "playing": true,
+      "t": 34.162933208281174,
+      "volume": 0.5379079580307007,
+      "pos": 4.444
+    },
+    {
+      "playing": true,
+      "t": 34.279553958331235,
+      "volume": 0.5379079580307007,
+      "pos": 4.563
+    },
+    {
+      "playing": true,
+      "t": 34.39635658334009,
+      "volume": 0.5379079580307007,
+      "pos": 4.683
+    },
+    {
+      "playing": true,
+      "t": 34.51293441664893,
+      "volume": 0.5379079580307007,
+      "pos": 4.802
+    },
+    {
+      "playing": true,
+      "t": 34.629453916684724,
+      "volume": 0.5379079580307007,
+      "pos": 4.921
+    },
+    {
+      "playing": true,
+      "t": 34.7296530000167,
+      "volume": 0.5379079580307007,
+      "pos": 5.019
+    },
+    {
+      "playing": true,
+      "t": 34.84658483334351,
+      "volume": 0.5379079580307007,
+      "pos": 5.138
+    },
+    {
+      "playing": true,
+      "t": 34.96354254160542,
+      "volume": 0.5379079580307007,
+      "pos": 5.257
+    },
+    {
+      "playing": true,
+      "t": 35.07954616670031,
+      "volume": 0.5379079580307007,
+      "pos": 5.376
+    },
+    {
+      "playing": true,
+      "t": 35.1798367917072,
+      "volume": 0.5379079580307007,
+      "pos": 5.485
+    },
+    {
+      "playing": true,
+      "t": 35.295912708272226,
+      "volume": 0.5379079580307007,
+      "pos": 5.604
+    },
+    {
+      "playing": true,
+      "t": 35.396091083297506,
+      "volume": 0.5379079580307007,
+      "pos": 5.691
+    },
+    {
+      "playing": true,
+      "t": 35.512638666667044,
+      "volume": 0.5379079580307007,
+      "pos": 5.81
+    },
+    {
+      "playing": true,
+      "t": 35.629377208300866,
+      "volume": 0.5379079580307007,
+      "pos": 5.94
+    },
+    {
+      "playing": true,
+      "t": 35.72951912495773,
+      "volume": 0.5379079580307007,
+      "pos": 6.037
+    },
+    {
+      "playing": true,
+      "t": 35.83028424996883,
+      "volume": 0.5379079580307007,
+      "pos": 6.146
+    },
+    {
+      "playing": true,
+      "t": 35.94942408334464,
+      "volume": 0.5379079580307007,
+      "pos": 6.265
+    },
+    {
+      "playing": true,
+      "t": 36.15066741663031,
+      "volume": 0.5379079580307007,
+      "pos": 6.46
+    },
+    {
+      "playing": true,
+      "t": 36.26264274993446,
+      "volume": 0.5379079580307007,
+      "pos": 6.579
+    },
+    {
+      "playing": true,
+      "t": 36.36338716663886,
+      "volume": 0.5379079580307007,
+      "pos": 6.688
+    },
+    {
+      "playing": true,
+      "t": 36.48024479160085,
+      "volume": 0.5379079580307007,
+      "pos": 6.807
+    },
+    {
+      "playing": true,
+      "t": 36.596331666689366,
+      "volume": 0.5379079580307007,
+      "pos": 6.926
+    },
+    {
+      "playing": true,
+      "t": 36.7131630416261,
+      "volume": 0.5379079580307007,
+      "pos": 7.045
+    },
+    {
+      "playing": true,
+      "t": 36.813409916707315,
+      "volume": 0.5379079580307007,
+      "pos": 7.143
+    },
+    {
+      "playing": true,
+      "t": 36.93022450001445,
+      "volume": 0.5379079580307007,
+      "pos": 7.262
+    },
+    {
+      "playing": true,
+      "t": 37.04630625003483,
+      "volume": 0.5379079580307007,
+      "pos": 7.381
+    },
+    {
+      "playing": true,
+      "t": 37.146466541686095,
+      "volume": 0.5379079580307007,
+      "pos": 7.479
+    },
+    {
+      "playing": true,
+      "t": 37.24678104161285,
+      "volume": 0.5379079580307007,
+      "pos": 7.587
+    },
+    {
+      "playing": true,
+      "t": 37.363779958337545,
+      "volume": 0.5379079580307007,
+      "pos": 7.707
+    },
+    {
+      "playing": true,
+      "t": 37.47937016666401,
+      "volume": 0.5353277325630188,
+      "pos": 7.815
+    },
+    {
+      "playing": true,
+      "t": 37.596228666603565,
+      "volume": 0.5181233882904053,
+      "pos": 7.934
+    },
+    {
+      "playing": true,
+      "t": 37.71281333337538,
+      "volume": 0.4824284315109253,
+      "pos": 8.054
+    },
+    {
+      "playing": true,
+      "t": 37.8293521249434,
+      "volume": 0.4363153278827667,
+      "pos": 8.173
+    },
+    {
+      "playing": true,
+      "t": 37.92963504162617,
+      "volume": 0.3911702036857605,
+      "pos": 8.281
+    },
+    {
+      "playing": true,
+      "t": 38.04603916662745,
+      "volume": 0.32879841327667236,
+      "pos": 8.4
+    },
+    {
+      "playing": true,
+      "t": 38.14612241659779,
+      "volume": 0.27553287148475647,
+      "pos": 8.487
+    },
+    {
+      "playing": true,
+      "t": 38.26285012497101,
+      "volume": 0.21004962921142578,
+      "pos": 8.606
+    },
+    {
+      "playing": true,
+      "t": 38.379525791620836,
+      "volume": 0.14759711921215057,
+      "pos": 8.726
+    },
+    {
+      "playing": true,
+      "t": 38.49614375003148,
+      "volume": 0.09294909983873367,
+      "pos": 8.845
+    },
+    {
+      "playing": true,
+      "t": 38.5965501666069,
+      "volume": 0.05239583179354668,
+      "pos": 8.953
+    },
+    {
+      "playing": true,
+      "t": 38.71263424993958,
+      "volume": 0.019939029589295387,
+      "pos": 9.072
+    },
+    {
+      "playing": true,
+      "t": 38.81317479163408,
+      "volume": 0.005921464879065752,
+      "pos": 9.181
+    }
+  ],
+  "length": 9.25
+}

@@ -1,0 +1,31 @@
+{
+  "universeId": 10559217407,
+  "version": 2859,
+  "placeId": 131311258779917,
+  "revision": "poolrooms-audio-20261009-v1",
+  "soundCount": 9,
+  "verified_at_utc": "2026-10-09T21:24:56.510271+00:00",
+  "scripts": {
+    "Level 2 Poolrooms Ambience": {
+      "editorMatches": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Poolrooms Ambience",
+      "class": "LocalScript",
+      "sourceSHA256": "486b6cc4883fa35e55772d80dda456c512d315427efa52f52c49c296883f0f4e",
+      "matches_installed_export": true
+    },
+    "Level 2 Sound Controller": {
+      "editorMatches": true,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "class": "LocalScript",
+      "sourceSHA256": "9f8ea507c2f3e5e6a8215f117c7a0f9d33fc3cdade1c6a3a50119006ae9abb7c",
+      "matches_installed_export": true
+    }
+  },
+  "edit_cleanup_check": {
+    "generatedWorldExists": false,
+    "universeId": 10559217407,
+    "placeId": 131311258779917,
+    "emittersExist": false,
+    "bedsExist": false
+  }
+}

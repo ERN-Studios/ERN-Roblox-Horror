@@ -16,7 +16,11 @@
     "shot_creak": "90126161261127"
   },
   "moderation_verified": false,
-  "experience_load_verified": false,
-  "studio_installed": false,
-  "published": false
+  "experience_load_verified": true,
+  "studio_installed": true,
+  "published": false,
+  "installed_revision": "poolrooms-audio-20261009-v1",
+  "experience_load_context": "Normal Studio Play client after Level 2 bay queue in place 131311258779917; all nine templates initialized",
+  "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json",
+  "studio_install_receipt": "artifacts/poolrooms-audio-20261009/studio-installed-export.json"
 }

@@ -1,0 +1,20 @@
+{
+  "recorded_at_utc": "2026-10-09T21:26:51.177145+00:00",
+  "studio_id": "d51c2f2a-40f9-4b61-9da2-35b0450b2e93",
+  "place_id": "131311258779917",
+  "universe_id": "10559217407",
+  "installed": true,
+  "published_verified": false,
+  "before_native_backup_verified": true,
+  "after_native_backup_verified": true,
+  "after_backup_receipt": "artifacts/poolrooms-audio-20261009/native-backup-after.json",
+  "ui_error": "Computer Use server error -10005: timeoutReached on CUA Studio getApp/getAXState",
+  "studio_edit_mcp_responsive": true,
+  "source_editor_parity_verified": true,
+  "forced_restart_performed": false,
+  "alternative_save_api_used": false,
+  "alternative_save_api_reason": "Official AssetService:SavePlaceAsync documentation says an active Team Create session blocks saves.",
+  "pending": [
+    "Publish current Studio place and verify Roblox success"
+  ]
+}

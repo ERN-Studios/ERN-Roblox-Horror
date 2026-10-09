@@ -1,0 +1,12 @@
+{
+  "path": "/Users/zeanjuul4/Projects/Roblox-place-backups/poolrooms-audio-20261009/StayQuiet-poolrooms-with-audio-20261009.rbxl",
+  "bytes": 45249335,
+  "sha256": "7779b16730251c2762b7e7ac7470a4ae3450357b01074c3edb4df2219cd4779e",
+  "place_id": "131311258779917",
+  "method": "Studio File > Download a Copy",
+  "stage": "after audio install and native Play QA",
+  "mtime": 1791580799.6751165,
+  "verified_at_utc": "2026-10-09T21:26:51.160074+00:00",
+  "ui_save_click_initially_timed_out": true,
+  "source_property_export": "artifacts/poolrooms-audio-20261009/studio-installed-export.json"
+}

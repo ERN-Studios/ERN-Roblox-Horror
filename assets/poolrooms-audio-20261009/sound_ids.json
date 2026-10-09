@@ -4,80 +4,116 @@
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "a2b052d35256ace02c6e377db73dec4b13e00f7ee798169913c587c55ac7a9b0",
-    "seconds": 22.0
+    "seconds": 22.0,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "bed_water": {
     "asset_id": "116500347461110",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "b6d651cff4c85796475687c6d7b5d98d02e79c1b761364e95ba80a87d7fed553",
-    "seconds": 22.0
+    "seconds": 22.0,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "bed_service": {
     "asset_id": "79661425723233",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "39e67e8f700cc0d7ab71736a49f16b1dd8a81cb4f215b34010ac635ff9ff116a",
-    "seconds": 22.0
+    "seconds": 22.0,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "loop_weir": {
     "asset_id": "70912311454622",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "c29a6df7aeb735a150d04312f8966e62243545d7033d7db078f04830e525408b",
-    "seconds": 18.0
+    "seconds": 18.0,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "loop_lion": {
     "asset_id": "87608993842645",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "4814157557b7347a394c9e4803e65aa17fb7af85c538faabcf21c39777711ebe",
-    "seconds": 18.0
+    "seconds": 18.0,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "shot_drip": {
     "asset_id": "127883794297774",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "012f32c76c5bf97d0ca0aa82e93e6f5bf5a74b87a960fbe2553e926b8e7008f7",
-    "seconds": 8.25
+    "seconds": 8.25,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "shot_pipe": {
     "asset_id": "138400313124619",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "1452a444735c73610959de3b1731759b722e9d6496c6fa85c01aff8c105c062c",
-    "seconds": 10.25
+    "seconds": 10.25,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "shot_splash": {
     "asset_id": "129520630853843",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "7ae4ce17002f19b2188032e7cbd66e0b4623949c46d1c5031b7c405eb1242cdc",
-    "seconds": 9.25
+    "seconds": 9.25,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   },
   "shot_creak": {
     "asset_id": "90126161261127",
     "owner_group_id": "1039373905",
     "upload_state": "Uploaded",
     "moderation_state": "Not verified",
-    "asset_fetch_status": "Not verified",
+    "asset_fetch_status": "Success",
     "master_sha256": "198d4abdadd98275fa4bd548444e53291f321bd7cf1da0a7187ac152ce19f7e9",
-    "seconds": 9.25
+    "seconds": 9.25,
+    "asset_fetch_context": "Studio Edit ContentProvider.PreloadAsync; client instance initialization checked separately",
+    "experience_load_verified": true,
+    "experience_load_context": "Studio Play normal public Level 2 queue; not production client",
+    "experience_load_receipt": "artifacts/poolrooms-audio-20261009/native-marker-qa.json"
   }
 }

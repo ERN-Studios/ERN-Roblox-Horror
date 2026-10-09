@@ -3,5 +3,6 @@
   "archived_survey_terrain_packet_matches_live": true,
   "route_marker_count": 123,
   "max_marker_difference_studs": 0.07872707116771954,
-  "limits": "Collision bounds inherited from matching export packets; fresh live box check still pending while Studio dialog is blocked."
+  "limits": "All authored section IDs occur in the current collision map. Box Y maxima include matching visual ceilings beyond collision ceilings; floor Area raycasts remain primary. Engine section transitions are verified separately.",
+  "fresh_collision_bounds_checked": true
 }

@@ -1,0 +1,1526 @@
+{
+  "ok": true,
+  "LuaHeapMb": 805.49853515625,
+  "samples": [
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.44999998807907104,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.92,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.4817459634869593e-22
+        }
+      ],
+      "position": [
+        69252.3984375,
+        303.60467529296875,
+        710.4240112304688
+      ],
+      "label": "S",
+      "active": true,
+      "t": 0,
+      "section": "S",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.44999998807907104,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 11.283,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.2333151104243719e-22
+        }
+      ],
+      "position": [
+        69256.3984375,
+        237.36000061035156,
+        312.3840026855469
+      ],
+      "label": "A1_03",
+      "active": true,
+      "t": 0.35,
+      "section": "S",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.05969275161623955,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 2.222,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.06566202640533447,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.355,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.3392663598060608,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 11.965,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.0716312974691391,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 10.607,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 7.361933326359638e-23
+        }
+      ],
+      "position": [
+        69256.3984375,
+        237.36000061035156,
+        312.3840026855469
+      ],
+      "label": "A1_03",
+      "active": true,
+      "t": 1,
+      "section": "A1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.49954667687416077,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 4.537,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.549501359462738,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 12.669,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.5994560122489929,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 12.922,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.328110127267629e-23
+        }
+      ],
+      "position": [
+        69256.3984375,
+        237.36000061035156,
+        312.3840026855469
+      ],
+      "label": "A1_03",
+      "active": true,
+      "t": 3.3,
+      "section": "A1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.5,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 4.889,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.550000011920929,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 13.021,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.6000000238418579,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 13.278175958333357,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.0384909688544981e-23
+        }
+      ],
+      "position": [
+        69383.5234375,
+        177.3000030517578,
+        272.343994140625
+      ],
+      "label": "P1_01",
+      "active": true,
+      "t": 0.35,
+      "section": "A1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.3918323516845703,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 5.54,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.43101558089256287,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 13.672,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.04687664657831192,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 8.068,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.6000000238418579,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 13.929100750000096,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 6.712559437488529e-24
+        }
+      ],
+      "position": [
+        69383.5234375,
+        177.3000030517578,
+        272.343994140625
+      ],
+      "label": "P1_01",
+      "active": true,
+      "t": 1,
+      "section": "P1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.4489727318286896,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.393,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.6000000238418579,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 16.24544291666667,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.3244843450535295e-24
+        }
+      ],
+      "position": [
+        69383.5234375,
+        177.3000030517578,
+        272.343994140625
+      ],
+      "label": "P1_01",
+      "active": true,
+      "t": 3.3,
+      "section": "P1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.44999998807907104,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.766,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.6000000238418579,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 16.618004916666685,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.0482365959206437e-24
+        }
+      ],
+      "position": [
+        69920.0625,
+        177.3000030517578,
+        218.2899932861328
+      ],
+      "label": "A3_08",
+      "active": true,
+      "t": 0.35,
+      "section": "P1",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.03241025283932686,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 8,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.3881576359272003,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 11.332,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0.5175434947013855,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 17.18658600000004,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.04537435621023178,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 7.817,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.04861538112163544,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 7.547337916666675,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 7.103328589422678e-25
+        }
+      ],
+      "position": [
+        69920.0625,
+        177.3000030517578,
+        218.2899932861328
+      ],
+      "label": "A3_08",
+      "active": true,
+      "t": 1,
+      "section": "A3",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.49963656067848206,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.325,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.6994912028312683,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 10.143,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.7494548559188843,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 10.028845958333317,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.3214335980659103e-25
+        }
+      ],
+      "position": [
+        69920.0625,
+        177.3000030517578,
+        218.2899932861328
+      ],
+      "label": "A3_08",
+      "active": true,
+      "t": 3.3,
+      "section": "A3",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.4996003210544586,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 10.699,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.00019612247706390917,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 16.154,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.699999988079071,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 10.510108291666723,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 10.402,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.0264407265619849e-25
+        }
+      ],
+      "position": [
+        69999.140625,
+        177.3000030517578,
+        181.2530059814453
+      ],
+      "label": "P2_01",
+      "active": true,
+      "t": 0.35,
+      "section": "P2",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.3691430687904358,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 11.349,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.07011058926582336,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 16.804,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.699999988079071,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 11.163871125000027,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 11.053,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 6.685596171748075e-26
+        }
+      ],
+      "position": [
+        69999.140625,
+        177.3000030517578,
+        181.2530059814453
+      ],
+      "label": "P2_01",
+      "active": true,
+      "t": 1,
+      "section": "P2",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.5499983429908752,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 19.108,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.699999988079071,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 13.46924575000004,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 13.357,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.3244996169076165e-26
+        }
+      ],
+      "position": [
+        69999.140625,
+        177.3000030517578,
+        181.2530059814453
+      ],
+      "label": "P2_01",
+      "active": true,
+      "t": 3.3,
+      "section": "P2",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.550000011920929,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 19.482,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.699999988079071,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 13.83814425000004,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 13.733428375000006,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.0416184103784371e-26
+        }
+      ],
+      "position": [
+        70023.1640625,
+        203.04000854492188,
+        -12.940999984741211
+      ],
+      "label": "A4_06",
+      "active": true,
+      "t": 0.35,
+      "section": "P2",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.03307009115815163,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 16.212,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0.4729327857494354,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 20.132,
+          "playing": true
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.6019144654273987,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 14.494739375000007,
+          "playing": true
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 14.390023499999973,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 6.731092800010324e-27
+        }
+      ],
+      "position": [
+        70023.1640625,
+        203.04000854492188,
+        -12.940999984741211
+      ],
+      "label": "A4_06",
+      "active": true,
+      "t": 1,
+      "section": "A4",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.4927917420864105,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 18.538,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 16.709110791666706,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.4171448013233129e-27
+        }
+      ],
+      "position": [
+        70023.1640625,
+        203.04000854492188,
+        -12.940999984741211
+      ],
+      "label": "A4_06",
+      "active": true,
+      "t": 3.3,
+      "section": "A4",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.5,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 18.89,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 17.05932574999996,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 1.1122151058269012e-27
+        }
+      ],
+      "position": [
+        70017.15625,
+        280.260009765625,
+        -57.986000061035156
+      ],
+      "label": "A4_50",
+      "active": true,
+      "t": 0.35,
+      "section": "A4",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.5,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 19.53,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 17.714374916666646,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 7.129806135631158e-28
+        }
+      ],
+      "position": [
+        70017.15625,
+        280.260009765625,
+        -57.986000061035156
+      ],
+      "label": "A4_50",
+      "active": true,
+      "t": 1,
+      "section": "A4",
+      "ready": true
+    },
+    {
+      "sounds": [
+        {
+          "key": "bed_hall",
+          "volume": 0.5,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 21.802,
+          "playing": true
+        },
+        {
+          "key": "bed_water",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Level2PoolroomsBeds",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "bed_service",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Pump House Resonance",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0,
+          "loaded": true,
+          "owner": "A3 Weir",
+          "pos": 0,
+          "playing": false
+        },
+        {
+          "key": "loop_weir",
+          "volume": 0.75,
+          "loaded": true,
+          "owner": "P2 Cascade",
+          "pos": 1.912916916666621,
+          "playing": true
+        },
+        {
+          "key": "loop_lion",
+          "volume": 0,
+          "loaded": true,
+          "owner": "Lion Spouts",
+          "pos": 0,
+          "playing": false
+        }
+      ],
+      "legacy": [
+        {
+          "playing": false,
+          "key": "Level 2 Ambience - Level 2 Room Tone",
+          "volume": 2.466359609033148e-28
+        }
+      ],
+      "position": [
+        70017.15625,
+        280.260009765625,
+        -57.986000061035156
+      ],
+      "label": "A4_50",
+      "active": true,
+      "t": 3.3,
+      "section": "A4",
+      "ready": true
+    }
+  ],
+  "frames": {
+    "maxms": 716.1229848861694,
+    "p95ms": 34.9259153008461,
+    "count": 849,
+    "p50ms": 18.142040818929672
+  },
+  "templateLoads": [
+    {
+      "loaded": true,
+      "length": 22,
+      "key": "bed_water"
+    },
+    {
+      "loaded": true,
+      "length": 18,
+      "key": "loop_lion"
+    },
+    {
+      "loaded": true,
+      "length": 22,
+      "key": "bed_hall"
+    },
+    {
+      "loaded": true,
+      "length": 22,
+      "key": "bed_service"
+    },
+    {
+      "loaded": true,
+      "length": 9.25,
+      "key": "shot_creak"
+    },
+    {
+      "loaded": true,
+      "length": 18,
+      "key": "loop_weir"
+    },
+    {
+      "loaded": true,
+      "length": 10.25,
+      "key": "shot_pipe"
+    },
+    {
+      "loaded": true,
+      "length": 9.25,
+      "key": "shot_splash"
+    },
+    {
+      "loaded": true,
+      "length": 8.25,
+      "key": "shot_drip"
+    }
+  ],
+  "seconds": 20.383009333279915,
+  "SoundsMb": 249.30714416503906,
+  "kind": "Native client audio QA in normal Level 2 bay round; controlled marker moves",
+  "memoryMb": 6881.6259765625
+}

@@ -1,0 +1,419 @@
+{
+  "samples": [
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "round": true,
+      "section": "S",
+      "active": true,
+      "t": 5.1041715778410435e-05,
+      "inRound": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 0.5096479166531935,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 1.0267181666567922,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 1.5431384583935142,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 2.04342375008855,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 2.560389458318241,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 3.077144291717559,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 3.592935041640885,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 4.093613874982111,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 4.59420283336658,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 5.110177708324045,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 5.61030066665262,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 6.110619541723281,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 6.610992250032723,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 7.227665958344005,
+      "inRound": true,
+      "escaped": true
+    },
+    {
+      "sounds": [
+        {
+          "playing": false,
+          "key": "bed_hall",
+          "volume": 0
+        },
+        {
+          "playing": false,
+          "key": "bed_water",
+          "volume": 0
+        },
+        {
+          "playing": true,
+          "key": "bed_service",
+          "volume": 0.44999998807907104
+        }
+      ],
+      "transition": true,
+      "round": false,
+      "section": "EXIT",
+      "active": true,
+      "t": 7.743100750027224,
+      "inRound": true,
+      "escaped": true
+    }
+  ],
+  "kind": "Real Poolrooms finish-zone transition"
+}

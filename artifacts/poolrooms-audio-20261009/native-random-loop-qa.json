@@ -1,0 +1,290 @@
+{
+  "shots": [
+    {
+      "key": "shot_splash",
+      "position": 0.161,
+      "t": 32.27024687489029,
+      "length": 9.25,
+      "volume": 0.40445879101753235,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 0.386,
+      "t": 32.48675820825156,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 0.579,
+      "t": 32.6869545832742,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 0.804,
+      "t": 32.903506833245046,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 1.018,
+      "t": 33.120320999994874,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 1.232,
+      "t": 33.33698249992449,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 1.457,
+      "t": 33.55348724999931,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 1.661,
+      "t": 33.770202124956995,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 1.886,
+      "t": 33.98676237498876,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 2.111,
+      "t": 34.203653666656464,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 2.314,
+      "t": 34.420387999969535,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 2.54,
+      "t": 34.636748958262615,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 2.765,
+      "t": 34.85320645826869,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 2.957,
+      "t": 35.05355895822868,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 3.182,
+      "t": 35.27009895828087,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 3.397,
+      "t": 35.48686362488661,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 3.611,
+      "t": 35.703165166662075,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    },
+    {
+      "key": "shot_splash",
+      "position": 3.815,
+      "t": 35.903375666588545,
+      "length": 9.25,
+      "volume": 0.6218237280845642,
+      "playing": true
+    }
+  ],
+  "seconds": 36.12082824995741,
+  "loopWraps": [
+    {
+      "before": 17.692699333333344,
+      "key": "loop_lion",
+      "volume": 0.75,
+      "t": 7.187777416664176,
+      "owner": "Lion Spouts",
+      "after": 0.1927204583333335,
+      "playing": true
+    },
+    {
+      "before": 21.879,
+      "key": "bed_hall",
+      "volume": 0.5,
+      "t": 13.854227958247066,
+      "owner": "Level2PoolroomsBeds",
+      "after": 0.103,
+      "playing": true
+    },
+    {
+      "before": 21.8,
+      "key": "bed_water",
+      "volume": 0.550000011920929,
+      "t": 16.20429791661445,
+      "owner": "Level2PoolroomsBeds",
+      "after": 0.013,
+      "playing": true
+    },
+    {
+      "before": 17.925431916666703,
+      "key": "loop_lion",
+      "volume": 0.75,
+      "t": 25.1209027916193,
+      "owner": "Lion Spouts",
+      "after": 0.12569624999998297,
+      "playing": true
+    },
+    {
+      "before": 21.948,
+      "key": "bed_hall",
+      "volume": 0.5,
+      "t": 35.903375666588545,
+      "owner": "Level2PoolroomsBeds",
+      "after": 0.151,
+      "playing": true
+    }
+  ],
+  "frameStats": {
+    "maxms": 326.9686996936798,
+    "p95ms": 17.199916765093803,
+    "count": 2132,
+    "p50ms": 16.6681669652462
+  },
+  "maxSounds": 8,
+  "kind": "Native stationary A2 random/loop playback sample",
+  "states": [
+    {
+      "sounds": 7,
+      "section": "S",
+      "t": 2.0826701074838638e-07,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 3.1715475833043456,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 6.371352541609667,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 9.372299041599035,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 12.570855624973774,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 15.77073087496683,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 18.988878374919295,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 22.187190833268687,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 25.33714029158,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 28.50351958326064,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 7,
+      "section": "A2",
+      "t": 31.637100874911994,
+      "active": true,
+      "ready": true
+    },
+    {
+      "sounds": 8,
+      "section": "A2",
+      "t": 34.85320645826869,
+      "active": true,
+      "ready": true
+    }
+  ]
+}
