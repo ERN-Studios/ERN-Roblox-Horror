@@ -1,0 +1,110 @@
+{
+  "scope": "Offline Level 4 investigation; no new native or network calls",
+  "capture": {
+    "source": "Read-only native capture acquired before the owner requested offline-only work",
+    "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "repositoryHeadAtReview": "5a3a06e7ba065615f35b54884b7a984e4ab155a2",
+    "sourceEditorPairsMatched": true,
+    "sources": [
+      {
+        "path": "ServerScriptService.Level4RoundGenerator",
+        "class": "ModuleScript",
+        "bytes": 15758,
+        "sha256": "e52aedfa7ca13f98af4a4381fedd8ed87ca818c638e65872d0be533119077566"
+      },
+      {
+        "path": "ServerScriptService.LevelWorldStorage",
+        "class": "ModuleScript",
+        "bytes": 1205,
+        "sha256": "42a3baf2011c779ab72e8e6ff71eda8add9da05e2ac0cb44c79ec91de323bc7a"
+      },
+      {
+        "path": "ServerScriptService.GameManager",
+        "class": "Script",
+        "bytes": 194825,
+        "sha256": "0610a0361dcdeec62ac603a72f0948309b7aa95d638056a38fcd0f0a3fa7b3a4"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+        "class": "ModuleScript",
+        "bytes": 7425,
+        "sha256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+        "class": "ModuleScript",
+        "bytes": 16515,
+        "sha256": "5952c86feb05085642a9fd27cce02332c96da3f7d3ebb09ab5d1ae46cbafc861"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+        "class": "ModuleScript",
+        "bytes": 50254,
+        "sha256": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2"
+      },
+      {
+        "path": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+        "class": "ModuleScript",
+        "bytes": 34745,
+        "sha256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3"
+      },
+      {
+        "path": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+        "class": "ModuleScript",
+        "bytes": 22645,
+        "sha256": "6c7135608842a9a2ca5b7588d7c1327dddd768f6b71e31900f7f757b44a092c5"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+        "class": "LocalScript",
+        "bytes": 13218,
+        "sha256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb"
+      },
+      {
+        "path": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+        "class": "LocalScript",
+        "bytes": 49585,
+        "sha256": "6909fa9518d2c6ff5d58f6958871bdf7ec18eb8115118a8311900c04f38bfd27"
+      },
+      {
+        "path": "ReplicatedFirst.Lobby Loading Screen",
+        "class": "LocalScript",
+        "bytes": 42196,
+        "sha256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92"
+      }
+    ]
+  },
+  "offlineContracts": {
+    "level4Lifecycle": {
+      "checksPassed": 130,
+      "mutationsRejected": 10
+    },
+    "roundEntryBatch": {
+      "checksPassed": 124,
+      "sourceSHA256": "ff730eb9216f3376e17766ec6b19abaa68f3fa106ba91bfe558c25ef88cb7adb"
+    }
+  },
+  "generatedSnapshots": [
+    {
+      "mode": "server",
+      "bytes": 7985,
+      "sha256": "ec3f312690d925004c34632082f2ae8ffc318a72ae0349e9eadffa483f7ba396",
+      "offlineLuauCompilationPassed": true,
+      "forbiddenOperationTextScanPassed": true
+    },
+    {
+      "mode": "client",
+      "bytes": 13873,
+      "sha256": "395b815ca1a9457bd779f68b961ab034089b1bab9f74e48a3d7fea4493bbb5c9",
+      "offlineLuauCompilationPassed": true,
+      "forbiddenOperationTextScanPassed": true
+    }
+  ],
+  "reproductionVerified": false,
+  "nativeGameplayVerified": false,
+  "actualAssetPerformanceVerified": false,
+  "studioWritePerformed": false,
+  "publicationPerformed": false
+}
