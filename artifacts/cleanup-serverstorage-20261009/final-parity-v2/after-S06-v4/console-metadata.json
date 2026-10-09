@@ -1,0 +1,17 @@
+{
+  "schema": "mongotv-s06-final-console-metadata-v1",
+  "tool": "get_console_output",
+  "studioId": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+  "observedUtc": "2026-10-09T23:29:31.872827+00:00",
+  "modeBefore": "Edit",
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "responseBytes": 861,
+  "responseSHA256": "61a3abc0c4d35cb2d8cd996d63a7790d5aa37b98a29ab20f6b5aeafe570084b0",
+  "responseLines": 21,
+  "errorWordCount": 0,
+  "warningWordCount": 0,
+  "rawLogStored": false,
+  "sourceBodyExported": false,
+  "limits": "Separate bounded MCP console text snapshot. Lexical error/warning counts only, no full history or gameplay certification; native logs were not cleared."
+}

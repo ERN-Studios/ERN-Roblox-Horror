@@ -1,0 +1,11 @@
+{
+  "pass": false,
+  "scope": "Read-only final-review helper; failed before proof-file write, no deletion/native/tool execution",
+  "error": "Overstrict raw-byte equality of inventory JSON; v1/v2 key-value file hashes equal, serialized dictionary order differs",
+  "reviewSourceAtFailureSHA256": "bb40c60005fc2e228ffe783a783aec8e33016a81c2caeb381f9f726c28549f16",
+  "v1InventorySHA256": "effcd887a88284990b4497314eb6080b8a82ffb56a7caa3e1da66a25e5899de5",
+  "v2InventorySHA256": "6c22b5131fdacdb1d68253c7bffb11160ee44dbfe7b939bd965db75f969ab6fb",
+  "all138InventoryKeysAndFileHashesEqual": true,
+  "filesRemoved": 0,
+  "nativeCalls": 0
+}

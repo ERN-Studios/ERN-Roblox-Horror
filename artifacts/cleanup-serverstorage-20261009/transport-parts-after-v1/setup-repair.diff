@@ -1,0 +1,30 @@
+--- executed-v1
++++ prepared-v2
+@@ -10,8 +10,8 @@
+ ROOT = Path(__file__).resolve().parents[2]
+ BASE = ROOT / 'artifacts/cleanup-serverstorage-20261009'
+ REVIEW = BASE / 'transport-parts-review-v1'
+-AFTER = BASE / 'transport-parts-after-v1'
+-CHECKPOINT = ROOT / '.git/mongotv-cleanup-20261009/transport-parts-before-v1'
++AFTER = BASE / 'transport-parts-after-v2'
++CHECKPOINT = ROOT / '.git/mongotv-cleanup-20261009/transport-parts-before-v2'
+ ALLOWED = {'diagnostic-archive-before-v7', 'diagnostic-archive-before-v8', 'external-storage-archive-v1', 'retired-authoring-archive-v3'}
+ CANDIDATE_SHA = 'fbe29bc1276790f25cec4b1cc6952e72627c7f185c750634ba780ae11875d212'
+ CONSUMER_SHA = '3044bce8c8496d47c21ac03425cc7f0d81780dad0d2150250d90173a05d6cfe6'
+@@ -77,7 +77,6 @@
+     save_new(CHECKPOINT/'candidate-before.json',candidate_raw)
+     save_new(CHECKPOINT/'inventory-before.json',encoded(initial))
+     AFTER.mkdir()
+-    save_new(AFTER/'.gitattributes',b'* -text -whitespace\n')
+     save_new(AFTER/'prepare-review.py',consumer)
+     removed = []
+     def inputs_guard():
+@@ -126,5 +125,8 @@
+             except BaseException as recovery: error.add_note('Owned rollback failure: '+str(recovery))
+         save_new(AFTER/'rollback.json',encoded({'pass':False,'error':str(error),'restored':restored,'preservedConcurrent':preserved,'notes':getattr(error,'__notes__',[])}))
+         raise
++    finally:
++        if not (AFTER/'.gitattributes').exists():
++            save_new(AFTER/'.gitattributes',b'* -text -whitespace\n')
+ 
+ if __name__ == '__main__': main()

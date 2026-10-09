@@ -1,0 +1,131 @@
+{
+  "schema": "mongotv-final-parity-v2-allowlist-v1",
+  "paths": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/.gitattributes",
+      "rawSHA256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+      "rawBytes": 20
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/console-api-result.json",
+      "rawSHA256": "e10681e6df212ecb82c88b83e2268ba8ce44511215845dd50a4198403ba54296",
+      "rawBytes": 938
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/console-before-after-comparison.json",
+      "rawSHA256": "9db2a173976467e0b0ff83724b8dce6f5d28b31d419521720b8214d2395ab7f3",
+      "rawBytes": 1389
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/console-metadata.json",
+      "rawSHA256": "e41a09c6efe93779e3e8ec679d317a2db9b1e6b13e8b3f12dce34fdcb502ec5b",
+      "rawBytes": 667
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-begin.json",
+      "rawSHA256": "17dd6f70b5da20c497d954ba46d72f2ecadb6fd18d5f4c42d2b507e8240072c4",
+      "rawBytes": 339
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-end.json",
+      "rawSHA256": "7a11d37a89586a02cda8ec814d14283fe6572732016d5e508b8de91fcbaf6ffc",
+      "rawBytes": 339
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-00.json",
+      "rawSHA256": "25b1e35f019939103d51ad383d20d2efdeaf321f97663237c22c8250599932cb",
+      "rawBytes": 15028
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-01.json",
+      "rawSHA256": "6f38247e93a6c1f13a5bfc49fb0e509ca64ff8e4b45d43e3ae0f5211ff92748c",
+      "rawBytes": 25635
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-02.json",
+      "rawSHA256": "1c42ae28d1302ada9ffd950b0ef8c6d16280169bf1f92e1d34ce81eb58d9c7ae",
+      "rawBytes": 26313
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-03.json",
+      "rawSHA256": "9c113451cc5ae630b9a1185dc1dba3a717def7223cfb7ffa9dc6541988da9889",
+      "rawBytes": 26129
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-04.json",
+      "rawSHA256": "f1d260c66e741af24ebfd3d0164e3fa0462f0d17819e1244371650fb6d1d030e",
+      "rawBytes": 26140
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-05.json",
+      "rawSHA256": "20522706110f2db862f8c9b228ca8dd955dc59bddba4369d97b1922b10a03148",
+      "rawBytes": 25717
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-06.json",
+      "rawSHA256": "76a470e25173e472588c8b92a92b629616785bfe310e26959d728c23dc8e9142",
+      "rawBytes": 27971
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-07.json",
+      "rawSHA256": "36682b8f4f5c1834ce15fd76d0965f00fc3d4726604d73bbaaa94d982b83a786",
+      "rawBytes": 28332
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-08.json",
+      "rawSHA256": "ec528ef1acafaf894b704d847effdcf096134ecbf80b9a263ce13586aa726573",
+      "rawBytes": 28178
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-page-09.json",
+      "rawSHA256": "7e374e8a91c9476bf0b27856f3b4f4afe235c22eea6a03a186f3d50f6cf3f1b3",
+      "rawBytes": 13056
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/native-reader.luau",
+      "rawSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+      "rawBytes": 3293
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/parity-reader.py",
+      "rawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+      "rawBytes": 12746
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/reader-preflight.json",
+      "rawSHA256": "ecf69ffcce98299859298ca9ff003b57925e98ddb2683ffbe2857210f6e225bd",
+      "rawBytes": 691
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/repo-after-metadata.json",
+      "rawSHA256": "12ea6788e76b0d2d675225588b5e6173ec0066bba4c2df435b31bd81c7416045",
+      "rawBytes": 62993
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/repo-before-metadata.json",
+      "rawSHA256": "55dff4ba21f9e04b436202b7cd348ab8ef2494894f9d2bf78931eed1095e72ba",
+      "rawBytes": 63173
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/result.json",
+      "rawSHA256": "709275740366b2a9e339282566f40aea71f75dd9098f4d6ae7c426817ac317d0",
+      "rawBytes": 16506
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/REVIEW.md",
+      "rawSHA256": "e589d85185c82026b063c3efb34a0fa83cf2a3b3eafbae28bf1f631f42205aac",
+      "rawBytes": 2033
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/studio-state-before.json",
+      "rawSHA256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a",
+      "rawBytes": 128
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/studio-state-before.txt",
+      "rawSHA256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f",
+      "rawBytes": 98
+    }
+  ],
+  "scope": "Final read-only Source/hash/class/recorded-property and console comparison evidence only; no source bodies/private checkpoints/caches. Include this allowlist itself separately."
+}

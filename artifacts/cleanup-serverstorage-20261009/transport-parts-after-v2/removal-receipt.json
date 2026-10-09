@@ -1,0 +1,663 @@
+{
+  "schema": "local-transport-retirement-v1",
+  "pass": true,
+  "filesRemoved": 92,
+  "bytesRemoved": 60168414,
+  "candidateSHA256": "fbe29bc1276790f25cec4b1cc6952e72627c7f185c750634ba780ae11875d212",
+  "toolSHA256": "17618f16d82d29346072df635bdbdc690ffad4aee81d68069bb01e23e25dbb48",
+  "consumerSHA256": "3044bce8c8496d47c21ac03425cc7f0d81780dad0d2150250d90173a05d6cfe6",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "canonicalSourceWrites": 0,
+  "manifestWrites": 0,
+  "excludedRoundtripChunksPreserved": true,
+  "retainedInputsVerifiedExact": true,
+  "actualPostRemovalConsumersPass": true,
+  "removed": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/facts-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "885b20d07f02d5a207f2de7d5e7e7e88d50e55efb68d4192d9b8a31505162dfb",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/facts.json",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/facts-part-0001.bin",
+      "bytes": 500535,
+      "sha256": "0c975764bc6cb7d5047c03e04be508383591870fe1663625cb83040e408dafa1",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/facts.json",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/native-part-0000.bin",
+      "bytes": 148531,
+      "sha256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/native.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/references-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "9d9b2aec110218fe009620f46a017e8a74f1e0ff470975aa4e069419a026d2dd",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/references.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/references-part-0001.bin",
+      "bytes": 363488,
+      "sha256": "c28ab78a4f363d2650db60248144e29670b490ee7ac36d8e384e5b26a33fe563",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v7/references.rbxm",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/facts-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "f7b91ec4c4a12e4524a84fe86d17c280869e1cf57f96227ed1fec7587fe6f565",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/facts.json",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/facts-part-0001.bin",
+      "bytes": 500535,
+      "sha256": "b5ec8065f60c7999eb0d91476b9de0cf4739493f9f49cd8773fab150188aaac2",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/facts.json",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/native-part-0000.bin",
+      "bytes": 148531,
+      "sha256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/native.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/references-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "ee69c7d322a308e269ad983bc0d826974f4fb9df216afa42fc73f65739f130df",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/references.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/references-part-0001.bin",
+      "bytes": 363999,
+      "sha256": "f826b134fdf01ed02139800562244fd306b45ab476221cc78c1e1c7eea0606eb",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/diagnostic-archive-before-v8/references.rbxm",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "d8d553917f173137cae2c53e10a4b115fc6c1c8991f5caf3a59b3a65f45b378c",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0001.bin",
+      "bytes": 750000,
+      "sha256": "db203c7a3feaa7b06b86fd60f015c3a168e17ce88f479a25bca7335b07935c9a",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0002.bin",
+      "bytes": 750000,
+      "sha256": "e3b93b71477786fc2b01e528688d57c483644570d941a52a921fd84060ae00dd",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 1500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0003.bin",
+      "bytes": 750000,
+      "sha256": "ff212e851605b575f2f313104bd3814b0a3004fcddfd597ad12f9e3307345e6e",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 2250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0004.bin",
+      "bytes": 750000,
+      "sha256": "1a209e6fc6ec7db7aa6c8005c77971354ca4091149cb4f1f9d5890172ad0208b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 3000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0005.bin",
+      "bytes": 750000,
+      "sha256": "2806712eba864d793cd90dc420f5094f1e546ca9ddee31adc5688dfd243e9027",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 3750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0006.bin",
+      "bytes": 750000,
+      "sha256": "a949a4e3f43ac3ddc26d543dfde43d9db44098c851ef731e2ecb52ff18c5db51",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 4500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0007.bin",
+      "bytes": 750000,
+      "sha256": "41789c12eebaf4bbe6e87fafd5c7d30efcb4292ff669a02322e917455e8fb0c7",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 5250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0008.bin",
+      "bytes": 750000,
+      "sha256": "8cb69645c9eb1b381c918a1c8b7258b6a13f02c6ae1cae5251d8c20fbedbc727",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 6000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0009.bin",
+      "bytes": 750000,
+      "sha256": "48c885c2eb3b6d8eb4b289d823ce63123685fa41da4bc52f8450faced504e177",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 6750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0010.bin",
+      "bytes": 750000,
+      "sha256": "59a4a2f70142b276d711e54635e3eec36a69afe987cbffdbb8b553d1c69631f8",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 7500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0011.bin",
+      "bytes": 750000,
+      "sha256": "5db3d005698be34803d5413e2d79f3a1517bfc7c2675c2f766fa89a6adc42061",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 8250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0012.bin",
+      "bytes": 750000,
+      "sha256": "03615afb5aa36c03c50d511071898bec3a6270b6be7835961ed5311bc4eefaf6",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 9000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0013.bin",
+      "bytes": 750000,
+      "sha256": "831ab602cb0d72c84613b321290ecd895b2acce276b4814294cf6d0da1ca4ff9",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 9750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0014.bin",
+      "bytes": 750000,
+      "sha256": "286c78bfdc659ed39fe8c224d50a9497dd388ce81b21734da6ca3294d688c56d",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 10500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0015.bin",
+      "bytes": 750000,
+      "sha256": "cee067e56efc70a9003ce2eaee276e41599e9775ef9d4375a1c8274f79ad045d",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 11250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0016.bin",
+      "bytes": 750000,
+      "sha256": "6f173be248115b5837bac69965d4662b642962242648d19139bbb6466e2b35b1",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 12000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0017.bin",
+      "bytes": 750000,
+      "sha256": "1c03ed7d1f1acfed9c192801871fb979ffaf3366e30edaa77535074feff99c95",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 12750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0018.bin",
+      "bytes": 750000,
+      "sha256": "cc2a0f18cdc8f22a6ed737d87631fea7d5b8c0d3fea05ab2e07223a19644aec3",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 13500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0019.bin",
+      "bytes": 750000,
+      "sha256": "745efe68a5120a8f6328ab18179068ee487e26038dcd9eb5f354c75c3b67dd9a",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 14250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0020.bin",
+      "bytes": 750000,
+      "sha256": "cb1b8ae371665d10e7e28d281f21787ecad596a63e6452633549b2a406a3adcc",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 15000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0021.bin",
+      "bytes": 750000,
+      "sha256": "a16d61533fe1d75b76bd253911e9d1a1a0bf3e1026d461b3325738cd81b5eba4",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 15750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0022.bin",
+      "bytes": 750000,
+      "sha256": "1a6018b7337127d7843842853b58cbe53ff327fa9913fbc1933bf659ce8cbe30",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 16500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0023.bin",
+      "bytes": 750000,
+      "sha256": "a1d1d5796fa1541774e44de77e1c0530f16b225adb053f6e7139aedf8d591630",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 17250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0024.bin",
+      "bytes": 750000,
+      "sha256": "66032c2b0778b94b0c2a8bc40c339bc5c651ba9083663217c41562eb68be0e35",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 18000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0025.bin",
+      "bytes": 750000,
+      "sha256": "4459dc9bdfea1d03950dcc90c48abde66c8e9baab6addc13c25785932060c69b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 18750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0026.bin",
+      "bytes": 750000,
+      "sha256": "ae1d27c2609274b1f8891b2f6b9a4bccc4391c205620057dbb0b44ed6c578a60",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 19500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0027.bin",
+      "bytes": 750000,
+      "sha256": "29ee54d6557110686e011aa7053b903acf2008ca3ce13d9c0fd35666c0058cd7",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 20250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0028.bin",
+      "bytes": 750000,
+      "sha256": "ff8f64ab5b79f58a69abe6825a3776f5ab800a7367be92e88bdd99de87945cc9",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 21000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0029.bin",
+      "bytes": 750000,
+      "sha256": "9cb1606dbb9c8e2fa1398c6fd433f6247ebfee6b73905326e593bdfb6b7353d1",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 21750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0030.bin",
+      "bytes": 750000,
+      "sha256": "18e07624909fa0bd7c911edc2d70f1b6596e90e0b9ddbc68f3d8cf8fef5bd0ab",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 22500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0031.bin",
+      "bytes": 750000,
+      "sha256": "f658d4e3109c6c93205aca3d1a68a9daeab6d096303391e922939a391fe160e7",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 23250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0032.bin",
+      "bytes": 750000,
+      "sha256": "206758c037e5af47d244eb3c2ff4eb70ebf67a67b6d10c324ea515de1d3cac80",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 24000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0033.bin",
+      "bytes": 750000,
+      "sha256": "952a24a864b346930ed770d42c185dcd3f3d72060a762e95195811e5c6e0f542",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 24750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0034.bin",
+      "bytes": 750000,
+      "sha256": "6b7075c99735bd3cc35b0c4e25b9cba31219f1d5bf13279b0858635c40237320",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 25500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0035.bin",
+      "bytes": 750000,
+      "sha256": "7f8f41b8f04b9562e9cd6068b85582c4b93edc5ea2d1fd290b763a1beb49f779",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 26250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0036.bin",
+      "bytes": 750000,
+      "sha256": "347e062a7584b64a912704a4c6a324f238c1cefc3a28d380ae536e39f2a76f65",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 27000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0037.bin",
+      "bytes": 750000,
+      "sha256": "e18b2db30e466f4bd8e7d19e08bd4445923b4798cdc7e1eaa52b53125bb8f833",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 27750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0038.bin",
+      "bytes": 750000,
+      "sha256": "63ed6c6f396fa04c52cdd56efbc6403e6891ca7eb2581887f9c9da63fe78e495",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 28500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0039.bin",
+      "bytes": 750000,
+      "sha256": "a45febd3cbb45d572dd2a9c7ade23a9d12f7de835fd4bb6ac8ba9fc539fc56e0",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 29250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0040.bin",
+      "bytes": 750000,
+      "sha256": "c3aed03cf615fc192566ecca89a7668f0c57d5af929cd44ef5d89318265e77de",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 30000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0041.bin",
+      "bytes": 750000,
+      "sha256": "d2e08e3c874d2d53497a6e83c232229df168e5731b9c458c0d111b803dc10846",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 30750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0042.bin",
+      "bytes": 750000,
+      "sha256": "1a5e969f9183337e6b4ec94c752aa6cc872162e3e1fc12de3a3e7c352cc40dfc",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 31500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0043.bin",
+      "bytes": 750000,
+      "sha256": "eb2356139ab2e9334c41126d0236e59410c2e3abd7a1d90ae356579cc3cc6279",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 32250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0044.bin",
+      "bytes": 750000,
+      "sha256": "95dc1fd753f4ec17e9364ac437fd7928050b2a8b275882bda0ba87e4425e6170",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 33000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0045.bin",
+      "bytes": 750000,
+      "sha256": "06f5f3af14dc6a9ce0d2b42c554c5882e5c67040a8798b2db278686153d478e9",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 33750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0046.bin",
+      "bytes": 750000,
+      "sha256": "ff87275679c79697943ac6f0f55e89851b6fe015f2fa62b53a4f64a587fcad9b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 34500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0047.bin",
+      "bytes": 750000,
+      "sha256": "38cf3415937368ea5a40ef46bfd7257677c8cc6f051cea14a7c47eb6ada28f90",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 35250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0048.bin",
+      "bytes": 750000,
+      "sha256": "fb4f4c5ac9ab9f4e0219950b118bfe8b99bd1120d2c0160a974dd01466875eb2",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 36000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0049.bin",
+      "bytes": 750000,
+      "sha256": "3aaf05732edcc48a5084e135aa751dcf806377840af737a78073c6d347be808c",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 36750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0050.bin",
+      "bytes": 750000,
+      "sha256": "2c60524c8b0054aa8174f19436ce835d1c8146de8c25a956e86ffbf56e044e11",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 37500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0051.bin",
+      "bytes": 750000,
+      "sha256": "f3d93e2ace7567220a8250064310a36bf3a8fba82da7c8e4aeba4622460b801b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 38250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0052.bin",
+      "bytes": 750000,
+      "sha256": "1e19232fbacb64506f6804e68ca1045f151746959c96726c2f5f5511b13d306a",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 39000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0053.bin",
+      "bytes": 750000,
+      "sha256": "00bf9aaaedf7b34dedb90c15bc6f311547f0ca2a2196ebefd2d61418302f31e7",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 39750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0054.bin",
+      "bytes": 750000,
+      "sha256": "2a2456a6c14cb273fc9606ca049c25ab2e39ebcbedf7ea7e612b906a86a085d3",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 40500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts-part-0055.bin",
+      "bytes": 662358,
+      "sha256": "b27efbba42fe1a50d754500138b298ef542e6310ccd8df5d57445261ed1a5d19",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/facts.json",
+      "offset": 41250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native-part-0000.bin",
+      "bytes": 750000,
+      "sha256": "79f1e7021a6a2205d55b355b909a12ad1b53cdccad9c75134a79d128847e356b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native-part-0001.bin",
+      "bytes": 750000,
+      "sha256": "58f5143f916f2d7629c64f5a03e8e64e9956cfc3f3548611434fc2a1de8ce295",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "offset": 750000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native-part-0002.bin",
+      "bytes": 750000,
+      "sha256": "90dc1632ab87c1b24420bccdf3427f825e866ece65db36b1927b57ae3ca1b728",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "offset": 1500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native-part-0003.bin",
+      "bytes": 489764,
+      "sha256": "451c695b36cc0114600add87071234e4dfa3ee7710162a545886bb44e1fa8fc8",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-archive-v1/native.rbxm",
+      "offset": 2250000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts-part-0000.bin",
+      "bytes": 500000,
+      "sha256": "43124695f9711c73a3c1f82439ff2a63037785586e846d03491f3ff932157973",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts-part-0001.bin",
+      "bytes": 500000,
+      "sha256": "784beaaab63d2a451a9f0e45f4e6b6159f9af083c098c1b5f60d79ac6d46782b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "offset": 500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts-part-0002.bin",
+      "bytes": 500000,
+      "sha256": "d39ff38c8945a87e5fc24278947eed436f1ce80dbde177d03983b6ecd66aad26",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "offset": 1000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts-part-0003.bin",
+      "bytes": 500000,
+      "sha256": "a9c942ad6834f0821e092cc7d847b6aa5806df8063e886979ac0c52454311ead",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "offset": 1500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts-part-0004.bin",
+      "bytes": 439804,
+      "sha256": "5b03418a843ac2c68b5d58f5b3bfc8db68d66957b626e64c41c9005b30aec1b0",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/facts.json",
+      "offset": 2000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0000.bin",
+      "bytes": 500000,
+      "sha256": "f6bb51f9c2bd4ca1478327dc1174ed0745415f9c10566ac7b3770fa609c1dcf1",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 0
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0001.bin",
+      "bytes": 500000,
+      "sha256": "7f4acee35cdc7e3451b787d4d635a04cf2c96d4e3c24f75d49f5333ebc631337",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0002.bin",
+      "bytes": 500000,
+      "sha256": "a52fc30c63e641ae4855314f9de71644ba8fc68ab39f4ee6c238de12ee22177d",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 1000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0003.bin",
+      "bytes": 500000,
+      "sha256": "4b9c69664386ac7d640933cdc56200ab597f90d860bc3424e6bb844550f45d5e",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 1500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0004.bin",
+      "bytes": 500000,
+      "sha256": "9851a5204eb6915722e670080d270a2df4ebc5e213c2393ecc3e4ccc07ff3960",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 2000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0005.bin",
+      "bytes": 500000,
+      "sha256": "0405acdf915e6d8a4164d1b6ee688f4585ef5a99071b01406c8e5eaf99304cb8",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 2500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0006.bin",
+      "bytes": 500000,
+      "sha256": "4c6d8a5a1b52009254dbf9ce4f09e7ee333e053819e4b87c171acc75f557d3b8",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 3000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0007.bin",
+      "bytes": 500000,
+      "sha256": "f227080a51722051a01cbb7318851bfc59c6fb9f96e59c4cf3354c6a284498b7",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 3500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0008.bin",
+      "bytes": 500000,
+      "sha256": "a3ec131bacce6c738aa0b89259859eb4f0911c59bc6dfd34a6002b2ff283a65f",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 4000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0009.bin",
+      "bytes": 500000,
+      "sha256": "59a7edab6f0a31488f1c6258f80ffc6336fa734e831800e95d73e61de6fb70f4",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 4500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0010.bin",
+      "bytes": 500000,
+      "sha256": "998cddc6a4fe751769e847691e04acf8f136a71f5d5b0202e3ee976ad29bf53a",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 5000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0011.bin",
+      "bytes": 500000,
+      "sha256": "2b4c26dbfcdaeb231af0880eb257018a3ca5eab2e6d1feeff8fa1c049d24b9be",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 5500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0012.bin",
+      "bytes": 500000,
+      "sha256": "b1c60ec4c8afb800d392416685c18042f0bba47f25faafee522d883d81687c60",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 6000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0013.bin",
+      "bytes": 500000,
+      "sha256": "d5d06cb9ed3c370fa03274adba4444daf1836d10f987c5cab8acc9f488c02d5a",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 6500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0014.bin",
+      "bytes": 500000,
+      "sha256": "893ae335b9530bf65b6adac7ed4076537092f77d9839b0e8aee2b3f47ed150b0",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 7000000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0015.bin",
+      "bytes": 500000,
+      "sha256": "78e00d41453f047fe673e674ece42631774bfa6bda451865683d6bfad53c8e8b",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 7500000
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native-part-0016.bin",
+      "bytes": 50869,
+      "sha256": "bb32519a6c984dd6952071635eb6623dfe1b27582463f45f38affaf410a17306",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/retired-authoring-archive-v3/native.rbxm",
+      "offset": 8000000
+    }
+  ],
+  "scope": "Local duplicate transport files only. Full archives/facts/receipts retained. Disk file bytes, no runtime/performance/restoration certificate."
+}

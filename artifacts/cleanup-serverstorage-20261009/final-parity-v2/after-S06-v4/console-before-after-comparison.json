@@ -1,0 +1,23 @@
+{
+  "schema": "mongotv-s06-console-before-after-comparison-v1",
+  "apiContentValuesEqual": true,
+  "consoleTextBytesEqual": true,
+  "beforeConsoleFile": "artifacts/cleanup-serverstorage-20261009/final-console-v1/before-s06-v4.json",
+  "beforeConsoleFileSHA256": "947335a5070d11acfa56605ecc146fd787d54344502b712c775210c1a6a8d407",
+  "afterConsoleFile": "artifacts/cleanup-serverstorage-20261009/final-parity-v2/after-S06-v4/console-api-result.json",
+  "afterConsoleFileSHA256": "e10681e6df212ecb82c88b83e2268ba8ce44511215845dd50a4198403ba54296",
+  "beforeTextSHA256": "61a3abc0c4d35cb2d8cd996d63a7790d5aa37b98a29ab20f6b5aeafe570084b0",
+  "afterTextSHA256": "61a3abc0c4d35cb2d8cd996d63a7790d5aa37b98a29ab20f6b5aeafe570084b0",
+  "textBytes": 861,
+  "observedUtc": "2026-10-09T23:30:29.138671+00:00",
+  "nativeWrites": 0,
+  "modeSwitches": 0,
+  "sourceBodyExported": false,
+  "cleanConsoleClaimed": false,
+  "knownExistingMessages": [
+    "Unapproved sound asset 134572728354839 (twice)",
+    "Historical AssistantCommand assertion/bounded-scene probe output",
+    "Historical StreamingMinRadius invalid output"
+  ],
+  "limits": "Exact returned API content/console text comparison only. Existing sound approval/probe output retained; lexical error/warning=0 never means clean console. No log timestamps sufficient for causal attribution, no full-history/gameplay claim and no logs cleared."
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "s06-final-parity-frozen-reader-preflight-v1",
+  "pass": true,
+  "nativeCalls": 0,
+  "canonicalWrites": 0,
+  "readerRawSHA256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+  "nativeReaderRawSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+  "pythonAST": true,
+  "actualLuauO0O1Compiles": 2,
+  "source": "final-parity-v1/retry-v2",
+  "destination": "final-parity-v2/after-S06-v4",
+  "identicalReaders": true,
+  "currentExpectedCount": {
+    "scripts": 212,
+    "remoteEvents": 15,
+    "total": 227
+  },
+  "limit": "Metadata/hash-only, read-only final diagnostic; no full property/assets/gameplay/publication certification."
+}

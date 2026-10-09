@@ -1,0 +1,478 @@
+{
+  "meta": {
+    "universeId": 10559217407,
+    "readAtUtc": "2026-10-09T23:07:27Z",
+    "sceneCount": 416276,
+    "placeId": 131311258779917,
+    "rowCount": 227,
+    "serverStorageRootCount": 52,
+    "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc",
+    "datamodel": "Edit",
+    "conflicts": [],
+    "sourceEditorConflictCount": 0
+  },
+  "rows": [
+    {
+      "minusOneTrailingLFSHA256": "7630daa83efdf3f2a8bca332384b82a78fc23994f5d5c4a508862aaddd2220f4",
+      "instanceId": "1_31065",
+      "rawEditorSHA256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 42196,
+      "readStable": true,
+      "canonicalBytes": 42196,
+      "sourceSHA256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "parentId": "1_9074",
+      "editorReadable": true,
+      "className": "LocalScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "rawSourceSHA256": "80818a55cab10e8bd85c5c48ac6953280f4013bd9272736eda781219fc6fce92",
+      "path": "ReplicatedFirst.Lobby Loading Screen"
+    },
+    {
+      "minusOneTrailingLFSHA256": "367ac178396dd57540ee9e3a3b9bcc13a43017f0b507b63dbe3ba12dad183c4a",
+      "instanceId": "1_42705",
+      "rawEditorSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 8952,
+      "readStable": true,
+      "canonicalBytes": 8952,
+      "sourceSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "rawSourceSHA256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "path": "ReplicatedStorage.DeathAdvice"
+    },
+    {
+      "minusOneTrailingLFSHA256": "2c5ba1cd540a6a93794a1685c72f7fd66c1fed172eb2f97cc1d98d2586174195",
+      "instanceId": "1_42694",
+      "rawEditorSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 2835,
+      "readStable": true,
+      "canonicalBytes": 2835,
+      "sourceSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "rawSourceSHA256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "path": "ReplicatedStorage.DevAccess"
+    },
+    {
+      "minusOneTrailingLFSHA256": "f3636ce3a41a39f14cdc130e82083795b0447eb631a40feb12c1d0ce3a3e4aca",
+      "instanceId": "1_42696",
+      "rawEditorSHA256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 3110,
+      "readStable": true,
+      "canonicalBytes": 3110,
+      "sourceSHA256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230",
+      "rawSourceSHA256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230",
+      "path": "ReplicatedStorage.FlashlightProfiles"
+    },
+    {
+      "minusOneTrailingLFSHA256": "2e8270c571b7512035b21333767d5eb7832ce22a77ffa7f8d5e48b70fd4846a5",
+      "instanceId": "1_42701",
+      "rawEditorSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 5063,
+      "readStable": true,
+      "canonicalBytes": 5063,
+      "sourceSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "rawSourceSHA256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank"
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Pool Foam Remotes",
+        "ClientEvent"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15594",
+      "instanceId": "1_408320"
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Pool Foam Remotes",
+        "ClientReport"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15594",
+      "instanceId": "1_408319"
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Remotes.Level 2 Alert Event",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Remotes",
+        "Level 2 Alert Event"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15588",
+      "instanceId": "1_408317"
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Remotes.Level 2 Sound Event",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Remotes",
+        "Level 2 Sound Event"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15588",
+      "instanceId": "1_408318"
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 3 Remotes",
+        "ClientEvent"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15597",
+      "instanceId": "1_408321"
+    },
+    {
+      "path": "ReplicatedStorage.Level 3 Remotes.Level3HideRequest",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 3 Remotes",
+        "Level3HideRequest"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15597",
+      "instanceId": "1_408322"
+    },
+    {
+      "minusOneTrailingLFSHA256": "3787d1c1686bf32ea5d1e8dad4cb4726521f2c55e30d60f5682285a2f8a50ac2",
+      "instanceId": "1_42711",
+      "rawEditorSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "Level 4 Usher Animations"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 36273,
+      "readStable": true,
+      "canonicalBytes": 36273,
+      "sourceSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "rawSourceSHA256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "path": "ReplicatedStorage.Level 4 Usher Animations"
+    },
+    {
+      "minusOneTrailingLFSHA256": "7f49fa3904cca09cae6ce2ddab0040d1f548291113ac2d44b1e84bf1f666e797",
+      "instanceId": "0_43635647",
+      "rawEditorSHA256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "LoadingCardView"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 8831,
+      "readStable": true,
+      "canonicalBytes": 8831,
+      "sourceSHA256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "rawSourceSHA256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "path": "ReplicatedStorage.LoadingCardView"
+    },
+    {
+      "minusOneTrailingLFSHA256": "2f3bfe3d94d67c38a0ed86d9caee4075eeda7d4cc7819897481534940958b77d",
+      "instanceId": "1_42699",
+      "rawEditorSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 21208,
+      "readStable": true,
+      "canonicalBytes": 21208,
+      "sourceSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "rawSourceSHA256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "path": "ReplicatedStorage.MasterConfiguration"
+    },
+    {
+      "minusOneTrailingLFSHA256": "6bac4267f65fb61fcf31d4ec97b09bdf363e74c517a543a99071accf82d7e83a",
+      "instanceId": "1_42700",
+      "rawEditorSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "sourceReadable": true,
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "propertyReadErrors": [],
+      "rawBytes": 6906,
+      "readStable": true,
+      "canonicalBytes": 6906,
+      "sourceSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "parentId": "1_408323",
+      "editorReadable": true,
+      "className": "ModuleScript",
+      "sourceEditorMatches": true,
+      "editorSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "rawSourceSHA256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "path": "ReplicatedStorage.ProtectionClient"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.DevControl",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DevControl"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408313"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.DevTuning",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DevTuning"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408315"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.DropGlowstick",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DropGlowstick"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408314"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.Jumpscare",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "Jumpscare"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408310"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.PuzzleStatus",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "PuzzleStatus"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408312"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.ReportNoise",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "ReportNoise"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408308"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.RoundStatus",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "RoundStatus"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408311"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.SetCrouching",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "SetCrouching"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408316"
+    },
+    {
+      "path": "ReplicatedStorage.Remotes.ToggleFlashlight",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "ToggleFlashlight"
+      ],
+      "className": "RemoteEvent",
+      "propertyReadErrors": [],
+      "properties": {
+        "Archivable": true
+      },
+      "parentId": "1_15587",
+      "instanceId": "1_408309"
+    }
+  ]
+}

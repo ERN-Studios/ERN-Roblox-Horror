@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "G:\Roblox\MongoTV\artifacts\cleanup-serverstorage-20261009\transport-parts-after-v1\prepare-review.py", line 161, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "G:\Roblox\MongoTV\artifacts\cleanup-serverstorage-20261009\transport-parts-after-v1\prepare-review.py", line 45, in main
+    save('.gitattributes',b'* -text -whitespace\n')
+  File "G:\Roblox\MongoTV\artifacts\cleanup-serverstorage-20261009\transport-parts-after-v1\prepare-review.py", line 29, in save
+    with (HERE/name).open('xb') as stream:assert stream.write(raw)==len(raw)
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mikke\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: 'G:\\Roblox\\MongoTV\\artifacts\\cleanup-serverstorage-20261009\\transport-parts-after-v1\\.gitattributes'

@@ -1,0 +1,870 @@
+{
+  "schema": "mongotv-final-parity-offline-reader-review-v1",
+  "reviewPass": true,
+  "checkedUtc": "2026-10-09T23:16:39.376112+00:00",
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "productionSourceWrites": 0,
+  "manifestWrites": 0,
+  "modeSwitches": 0,
+  "compiler": "C:\\Users\\mikke\\AppData\\Local\\Temp\\codex-luau-0.737\\luau-compile.exe",
+  "compilerSHA256": "4b3ce3b5c16532088037ee8a8f2bb1a8611e538f700bd358ea1a141b66bb6893",
+  "pythonASTUnits": 2,
+  "luauCompileInvocations": 52,
+  "retryCompilePassed": 26,
+  "initialCompileExpectedFailures": 26,
+  "initialFrozenReaderSyntaxDiagnostic": "<owned-offline-temp>/final-parity-v1-reader-alone.luau(45,34): SyntaxError: Malformed string; did you forget to finish it?\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(46,1): SyntaxError: Expected ')' (to close '(' at line 45), got \",\"\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(47,1): SyntaxError: Expected identifier when parsing expression, got malformed string\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(49,28): SyntaxError: Malformed string; did you forget to finish it?\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(50,1): SyntaxError: Expected 'then' when parsing if statement, got malformed string\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(52,87): SyntaxError: Malformed string; did you forget to finish it?\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(53,1): SyntaxError: Expected ')' (to close '(' at line 52), got \",\"\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(54,1): SyntaxError: Expected ')' (to close '(' at line 52), got malformed string\r\n<owned-offline-temp>/final-parity-v1-reader-alone.luau(69,1): SyntaxError: Expected 'end' (to close 'do' at line 29), got <eof>; did you forget to close 'then' at line 52?\r\n",
+  "initialFailureExplanation": "Initial Python CODE is a normal triple string: escaped CR/LF in Luau quoted gsub literals become literal line breaks. Offline exact-native-reader compilation fails. Retry uses raw CODE and exact native reader plus all requested suffixes compile. Native first-attempt error body was not captured, so its JSON parsing failure is not independently causally proven by this offline check.",
+  "frozenInputsUnchanged": true,
+  "inputs": {
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/.gitattributes": {
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/native-reader.luau": {
+      "bytes": 3286,
+      "sha256": "e6bfca4ca0babe093b04e27edce36fdca960138f9e3f5043e84d606fc8e343c2"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py": {
+      "bytes": 12521,
+      "sha256": "26cc6527d6ffb9d1eccf22def39a4b59a2009e544546ed85a42b8d5b070d0f44"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/repo-before-metadata.json": {
+      "bytes": 66800,
+      "sha256": "4e4096c11a5c8531100aaf8cb38c99dde1d516813c3ee1b6f8a5fefd61a2f134"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/result.json": {
+      "bytes": 526,
+      "sha256": "8f92f374f82ed0579a5a6c021f705aaf7330470ffd1a9fad9b6538edfb66ddae"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/.gitattributes": {
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-begin.json": {
+      "bytes": 339,
+      "sha256": "6429a75a75a16f446341491018702b61133b47832f6c89fd15419025a1f2d251"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-end.json": {
+      "bytes": 339,
+      "sha256": "55387793b830a9cb1cedc921d02d98a196c13c0e96ab71f7e64d341d65be9fd4"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-00.json": {
+      "bytes": 15028,
+      "sha256": "b8a44079348a2b516df622abd64b8a095f162084cbe756c8b319620eb409f77d"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-01.json": {
+      "bytes": 25635,
+      "sha256": "0e5ec0157e3d6a5cca9be5d791e74f1affdb6d37987fa25faf14cc91e9117965"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-02.json": {
+      "bytes": 26313,
+      "sha256": "d3aab42a3e6625faee8fc6aacc47efb62b7e06e5b2f9bbd7ababdda27999b89e"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-03.json": {
+      "bytes": 26129,
+      "sha256": "8285d5cadb6d6d85a9496d454a565960b5c5d03f956558190d099a3ad4afd131"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-04.json": {
+      "bytes": 26140,
+      "sha256": "26a7227558bafad25809cb5636191b0a5e2230160b5457ab666bec40ed438fe2"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-05.json": {
+      "bytes": 25717,
+      "sha256": "af9d3dfda07601f1451698befdfd788a1c094b03368d67a6974ec0d5b3e7c441"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-06.json": {
+      "bytes": 27971,
+      "sha256": "6b269370905343bd8505828890b4186c0d4c9449182105c5da12e2bcbcdccca0"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-07.json": {
+      "bytes": 28332,
+      "sha256": "2dcc9d3edf9e30d832b2697e4fd60e904b86d5e4a562724baa754af93cb122c8"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-08.json": {
+      "bytes": 28178,
+      "sha256": "60184a5852f7ec7ed6ff9b94218d4c4bb4ee03deeb55aceb066afbe008aa2834"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-09.json": {
+      "bytes": 13056,
+      "sha256": "a88b467abcdd112e22a4f5aef7ff67b57a30fa1c378e46b949c4672ae50e1ea0"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-reader.luau": {
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py": {
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/repo-after-metadata.json": {
+      "bytes": 66620,
+      "sha256": "82bb00b71fc43242d28d77fd5732e6c7de3bf5fd66ca4bf967d2f192b6b9434a"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/repo-before-metadata.json": {
+      "bytes": 66800,
+      "sha256": "d04882fd6722e3f8f72cc5f3dc00373745aea63aabe50fa6540095d17e061e78"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/result.json": {
+      "bytes": 20957,
+      "sha256": "18fc002f650119e28e2b5499b7538d35528ad7e2e4993a47859d884a8dae0cb3"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/studio-state-before.json": {
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a"
+    },
+    "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/studio-state-before.txt": {
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f"
+    }
+  },
+  "compiledRequests": [
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "reader-alone",
+      "optimization": "-O0",
+      "sourceBytes": 3286,
+      "sourceSHA256": "e6bfca4ca0babe093b04e27edce36fdca960138f9e3f5043e84d606fc8e343c2",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1671,
+      "diagnosticSHA256": "7cdff61e6bcda2e0ac422a3d79e9e8e7b8291a74133ac420e3b729634f27c68a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "reader-alone",
+      "optimization": "-O1",
+      "sourceBytes": 3286,
+      "sourceSHA256": "e6bfca4ca0babe093b04e27edce36fdca960138f9e3f5043e84d606fc8e343c2",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1671,
+      "diagnosticSHA256": "7cdff61e6bcda2e0ac422a3d79e9e8e7b8291a74133ac420e3b729634f27c68a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "begin",
+      "optimization": "-O0",
+      "sourceBytes": 3337,
+      "sourceSHA256": "ee451a51a1342e1431df516792742e8035682977ab8e67296fcd8936ec680335",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1609,
+      "diagnosticSHA256": "b0f4bb4eb41d437c5ba34f18a0a946a5d76f145cbaf459a4e5c03a066e76ca2a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "begin",
+      "optimization": "-O1",
+      "sourceBytes": 3337,
+      "sourceSHA256": "ee451a51a1342e1431df516792742e8035682977ab8e67296fcd8936ec680335",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1609,
+      "diagnosticSHA256": "b0f4bb4eb41d437c5ba34f18a0a946a5d76f145cbaf459a4e5c03a066e76ca2a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-00",
+      "optimization": "-O0",
+      "sourceBytes": 3584,
+      "sourceSHA256": "e1a564a6403ca241efed8b21c73ff487f9bd6710c352bc33a246966d188c1b7d",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "5af4f6c9b68082fe80f19c40ba23957b28d46cb05903a752acc639cc7c27fb89"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-00",
+      "optimization": "-O1",
+      "sourceBytes": 3584,
+      "sourceSHA256": "e1a564a6403ca241efed8b21c73ff487f9bd6710c352bc33a246966d188c1b7d",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "5af4f6c9b68082fe80f19c40ba23957b28d46cb05903a752acc639cc7c27fb89"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-01",
+      "optimization": "-O0",
+      "sourceBytes": 3585,
+      "sourceSHA256": "df539777f1c24bc6e93f053d4fa98f8ca37966c2fc895f3c83254a02ba79b8e1",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "f2c5f07492d7b1613c8790e3f73eb8c43bb562e95b2c8671bb990d3ea6c9196a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-01",
+      "optimization": "-O1",
+      "sourceBytes": 3585,
+      "sourceSHA256": "df539777f1c24bc6e93f053d4fa98f8ca37966c2fc895f3c83254a02ba79b8e1",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "f2c5f07492d7b1613c8790e3f73eb8c43bb562e95b2c8671bb990d3ea6c9196a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-02",
+      "optimization": "-O0",
+      "sourceBytes": 3585,
+      "sourceSHA256": "4d6ed2ae909d36fae9d967a58b164f502b02f6d8858d0eb43137443b80d5c0eb",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "d9bbedb90db0ce90993f0731a750dd8c0ef2cd0690d5fc5040be8f7fbd71b444"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-02",
+      "optimization": "-O1",
+      "sourceBytes": 3585,
+      "sourceSHA256": "4d6ed2ae909d36fae9d967a58b164f502b02f6d8858d0eb43137443b80d5c0eb",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "d9bbedb90db0ce90993f0731a750dd8c0ef2cd0690d5fc5040be8f7fbd71b444"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-03",
+      "optimization": "-O0",
+      "sourceBytes": 3585,
+      "sourceSHA256": "dc610b6caf458c67914b99dc03c6f266f2fc8ff45b2395281e1393dd5c2fc7b1",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "38c2bc08a5d5c2b842a3b0977da43c06bbba096f5a9912a3a2e8c95d3a78fd7b"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-03",
+      "optimization": "-O1",
+      "sourceBytes": 3585,
+      "sourceSHA256": "dc610b6caf458c67914b99dc03c6f266f2fc8ff45b2395281e1393dd5c2fc7b1",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "38c2bc08a5d5c2b842a3b0977da43c06bbba096f5a9912a3a2e8c95d3a78fd7b"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-04",
+      "optimization": "-O0",
+      "sourceBytes": 3586,
+      "sourceSHA256": "ae8a5727e11bc40bf9dd2f9b333d6ae70ecd69b2fd5c9491c3e55baf10b26387",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "8aefe4bb09e41815f6f337754037e15f1b0e2955c04ad8aec2c02357862f0ca2"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-04",
+      "optimization": "-O1",
+      "sourceBytes": 3586,
+      "sourceSHA256": "ae8a5727e11bc40bf9dd2f9b333d6ae70ecd69b2fd5c9491c3e55baf10b26387",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "8aefe4bb09e41815f6f337754037e15f1b0e2955c04ad8aec2c02357862f0ca2"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-05",
+      "optimization": "-O0",
+      "sourceBytes": 3587,
+      "sourceSHA256": "91f481bb33a1ec74449418e62218d4401e47e0932edb1db3f8ccb7e332e13fbb",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "7bc765ae64e39b3af95d298386ae6f319b92b6ff7e74473a337dbaec02a9f48a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-05",
+      "optimization": "-O1",
+      "sourceBytes": 3587,
+      "sourceSHA256": "91f481bb33a1ec74449418e62218d4401e47e0932edb1db3f8ccb7e332e13fbb",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "7bc765ae64e39b3af95d298386ae6f319b92b6ff7e74473a337dbaec02a9f48a"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-06",
+      "optimization": "-O0",
+      "sourceBytes": 3587,
+      "sourceSHA256": "34514d99300bf5c8851775980a26a9e84af728c717e12556a18b9a735a05baa8",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "54b474441142c8e8e1e5b4befd9f0a30d8c6ae22675ffc80a693d440455ece76"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-06",
+      "optimization": "-O1",
+      "sourceBytes": 3587,
+      "sourceSHA256": "34514d99300bf5c8851775980a26a9e84af728c717e12556a18b9a735a05baa8",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "54b474441142c8e8e1e5b4befd9f0a30d8c6ae22675ffc80a693d440455ece76"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-07",
+      "optimization": "-O0",
+      "sourceBytes": 3587,
+      "sourceSHA256": "9409daf4a03b900d540a93312c3ffd8321211321ad334b6bd7f976fe9c2d216c",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "e211cbea8bc0195cb5abd451b10be4438ecb9d3440fb8f44580acc0749ab2e47"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-07",
+      "optimization": "-O1",
+      "sourceBytes": 3587,
+      "sourceSHA256": "9409daf4a03b900d540a93312c3ffd8321211321ad334b6bd7f976fe9c2d216c",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "e211cbea8bc0195cb5abd451b10be4438ecb9d3440fb8f44580acc0749ab2e47"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-08",
+      "optimization": "-O0",
+      "sourceBytes": 3587,
+      "sourceSHA256": "d795d776623b1fa10bf756331530a027a0649a7ea16ec40fdcfc5940b2f6b05d",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "e89fdacd9611fefc1a14168d77c894794bfc4bc20cd169aaa918f67c43795978"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-08",
+      "optimization": "-O1",
+      "sourceBytes": 3587,
+      "sourceSHA256": "d795d776623b1fa10bf756331530a027a0649a7ea16ec40fdcfc5940b2f6b05d",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "e89fdacd9611fefc1a14168d77c894794bfc4bc20cd169aaa918f67c43795978"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-09",
+      "optimization": "-O0",
+      "sourceBytes": 3587,
+      "sourceSHA256": "473a5f7766ed2199725ff189b611e263c06d4b3f1012b129ba06353db6be5053",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "347940877b377aca1720b3de77200fb38c18c7af9a17b1f3cc3ec3e158046f68"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "page-09",
+      "optimization": "-O1",
+      "sourceBytes": 3587,
+      "sourceSHA256": "473a5f7766ed2199725ff189b611e263c06d4b3f1012b129ba06353db6be5053",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1628,
+      "diagnosticSHA256": "347940877b377aca1720b3de77200fb38c18c7af9a17b1f3cc3ec3e158046f68"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "end",
+      "optimization": "-O0",
+      "sourceBytes": 3463,
+      "sourceSHA256": "ca0b61731f705f41ee16e75910e8192b8ec9767edfe181248b2b713b71bcb50e",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1592,
+      "diagnosticSHA256": "4df7b7a6aa0928ec5194f39a6742ae2e72434811a03d00065c9ae1d76863eb58"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "request": "end",
+      "optimization": "-O1",
+      "sourceBytes": 3463,
+      "sourceSHA256": "ca0b61731f705f41ee16e75910e8192b8ec9767edfe181248b2b713b71bcb50e",
+      "exitCode": 1,
+      "expectedHistoricalFailure": true,
+      "outputBytes": 0,
+      "outputSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnosticBytes": 1592,
+      "diagnosticSHA256": "4df7b7a6aa0928ec5194f39a6742ae2e72434811a03d00065c9ae1d76863eb58"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "reader-alone",
+      "optimization": "-O0",
+      "sourceBytes": 3293,
+      "sourceSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 4902,
+      "outputSHA256": "a237b36b7e2ab3d60aac73b8f54c1243396f35ae81468d9ec11753fdddf39fe5",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "reader-alone",
+      "optimization": "-O1",
+      "sourceBytes": 3293,
+      "sourceSHA256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 4764,
+      "outputSHA256": "72b9211b1e034892acaef3e9e550c100459e98dda9136d73df5b0cb2ea24ec8f",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "begin",
+      "optimization": "-O0",
+      "sourceBytes": 3344,
+      "sourceSHA256": "56d2c315c413a897f953f4008b52cd10ea4158cc52ef428e7468ed59474fb75c",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 4933,
+      "outputSHA256": "1725db9708694a02ca1d68c19883c50ad526e6961d0a036efd822aa2189935b9",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "begin",
+      "optimization": "-O1",
+      "sourceBytes": 3344,
+      "sourceSHA256": "56d2c315c413a897f953f4008b52cd10ea4158cc52ef428e7468ed59474fb75c",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 4795,
+      "outputSHA256": "5dfa9a3dc00043a3be8a1dedfc031d1ece8003949027fab506af5abe5dfdf8d4",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-00",
+      "optimization": "-O0",
+      "sourceBytes": 3591,
+      "sourceSHA256": "004be70511b616c765ae62c28687294e1ac542694d31c67567bc6d4bcbbcc0d4",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5288,
+      "outputSHA256": "b8a1246ec53322b5b9e2ad64d2842fce3c712a1e7c9d4076f01a1f06ae63194f",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-00",
+      "optimization": "-O1",
+      "sourceBytes": 3591,
+      "sourceSHA256": "004be70511b616c765ae62c28687294e1ac542694d31c67567bc6d4bcbbcc0d4",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "e2b3a3d421c87d51fa1dcd9522a9efe75ad0333323ec7210b912357ef34ba0c2",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-01",
+      "optimization": "-O0",
+      "sourceBytes": 3592,
+      "sourceSHA256": "6676638d178279b65d908a1e28768374900e153471828ce5128626814e374c6d",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "81cfbc9dc7dc8c38eed967a4d1f4ab561c5137ca8020f839818510292b513e2e",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-01",
+      "optimization": "-O1",
+      "sourceBytes": 3592,
+      "sourceSHA256": "6676638d178279b65d908a1e28768374900e153471828ce5128626814e374c6d",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "9c41427eb615c66e304ede35d0b55ebfd8cbc3e0477af6da316c75062d719bec",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-02",
+      "optimization": "-O0",
+      "sourceBytes": 3592,
+      "sourceSHA256": "b01b81906e171e4fd2d77a991e12fd2d3227c9ad150d5007358a909a58a5334b",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "c35d1f4ca9a5f9ba1307b28cc421ff90a2ce2f3ab764ef791b80ede7566642eb",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-02",
+      "optimization": "-O1",
+      "sourceBytes": 3592,
+      "sourceSHA256": "b01b81906e171e4fd2d77a991e12fd2d3227c9ad150d5007358a909a58a5334b",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "76ce5f110400a0a05519f31a6a7d72d52896968527c1a7886084e45ae7e974a4",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-03",
+      "optimization": "-O0",
+      "sourceBytes": 3592,
+      "sourceSHA256": "e504dcb00bc98e12ef16a1072f617185720cc1d569ec91c2d5affe58660e1780",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "b1fb447b4b94cfd74372e3f2ab13ed8bb8fe947bde78433b8439f63045532e10",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-03",
+      "optimization": "-O1",
+      "sourceBytes": 3592,
+      "sourceSHA256": "e504dcb00bc98e12ef16a1072f617185720cc1d569ec91c2d5affe58660e1780",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "c675cd771950152f9e9735a540423508f6ce2512fc77eb8a2d474fdbf471fbc6",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-04",
+      "optimization": "-O0",
+      "sourceBytes": 3593,
+      "sourceSHA256": "92ee21e59812975d39956f01a9cb1a1d377b33d547eef429d9c5ed0490253855",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "43de329c5eda86c1c700142505147919176ef6d2a0709689d6de87db2bfdb471",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-04",
+      "optimization": "-O1",
+      "sourceBytes": 3593,
+      "sourceSHA256": "92ee21e59812975d39956f01a9cb1a1d377b33d547eef429d9c5ed0490253855",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "eb2f3fa42b16962e0f8c008f10717ae0803bce92cee74ef93e79145a8dda5e39",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-05",
+      "optimization": "-O0",
+      "sourceBytes": 3594,
+      "sourceSHA256": "3ffadbd7792178d1e6e2f66e04aacb0b6d26d7736694fdf6220f64ece81165e3",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "68938c5f7b7cce4a2020c8f9b4eb114c65202f622e35fd12ad636dc82df0e264",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-05",
+      "optimization": "-O1",
+      "sourceBytes": 3594,
+      "sourceSHA256": "3ffadbd7792178d1e6e2f66e04aacb0b6d26d7736694fdf6220f64ece81165e3",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "6bd7fedd1a4a4cbeb16c6b4b257cfb97dd14eb8055fed4b52fefd9694b2a1434",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-06",
+      "optimization": "-O0",
+      "sourceBytes": 3594,
+      "sourceSHA256": "7300361860fcdd4cbdb50b07ff60c3df0f8f16b90a2cbd3b188bf018b4842053",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "ad2d50a4c665a410c910df2560f9f0824b12a19267b19e3d5425a6321656cfeb",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-06",
+      "optimization": "-O1",
+      "sourceBytes": 3594,
+      "sourceSHA256": "7300361860fcdd4cbdb50b07ff60c3df0f8f16b90a2cbd3b188bf018b4842053",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "659f4d69225d6b92eb85142013b494c29a7b9c54065e3d57016f87507feba7b5",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-07",
+      "optimization": "-O0",
+      "sourceBytes": 3594,
+      "sourceSHA256": "cd746af70f5ce61128dfcd3fe00967a55fdc56359e6f67078560c611e271483c",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "7c8de529ed2e2298764b57d700054365aa3701f95936ccc46378350d7bf39c55",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-07",
+      "optimization": "-O1",
+      "sourceBytes": 3594,
+      "sourceSHA256": "cd746af70f5ce61128dfcd3fe00967a55fdc56359e6f67078560c611e271483c",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "095a0d6deb74948a6adc643faffa414f98269628c56639a7b94202c64ef1dd14",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-08",
+      "optimization": "-O0",
+      "sourceBytes": 3594,
+      "sourceSHA256": "b091c53e2091c51d1518469c6a5ec282c38b3538a8b00132698707670dd1b98f",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "392fa5eb07e28dbba5b940012b399226dd583096d5ffb522d1ddc34ade0944d8",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-08",
+      "optimization": "-O1",
+      "sourceBytes": 3594,
+      "sourceSHA256": "b091c53e2091c51d1518469c6a5ec282c38b3538a8b00132698707670dd1b98f",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "cdd404938798eefe88ed6544154d2b2890ba6e03f33dfc62dbc60d19c388d9cd",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-09",
+      "optimization": "-O0",
+      "sourceBytes": 3594,
+      "sourceSHA256": "dd48ffcd6642cdcd8dc02d442546f41b4c0088a561db09f3a4037820697653d2",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5297,
+      "outputSHA256": "12137b78ee9e93b4dfa92ebfb97b387cc5c5e61ccb2c493450900290be91b706",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "page-09",
+      "optimization": "-O1",
+      "sourceBytes": 3594,
+      "sourceSHA256": "dd48ffcd6642cdcd8dc02d442546f41b4c0088a561db09f3a4037820697653d2",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5160,
+      "outputSHA256": "bb10123ffd5350c3639532fced1e292004016ae4c025a0d67feff21ab70e68bf",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "end",
+      "optimization": "-O0",
+      "sourceBytes": 3470,
+      "sourceSHA256": "c2ded9d6b2e906ee18efa32eaeb26cf4bf2e1d1db0d76163a442f50f21cb8138",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 5090,
+      "outputSHA256": "1d02a227690ac9b740815002e7926fe7fb3693a8216f03ccb801e10c3cca7a5e",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "reader": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "request": "end",
+      "optimization": "-O1",
+      "sourceBytes": 3470,
+      "sourceSHA256": "c2ded9d6b2e906ee18efa32eaeb26cf4bf2e1d1db0d76163a442f50f21cb8138",
+      "exitCode": 0,
+      "expectedHistoricalFailure": false,
+      "outputBytes": 4962,
+      "outputSHA256": "59631d1ac62fbe00f96818f928f1b7dd315cac0b07f8fed4b2c64e43f85cf78e",
+      "diagnosticBytes": 0,
+      "diagnosticSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "savedMetadataConsistency": {
+    "pages": [
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-00.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-01.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-02.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-03.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-04.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-05.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-06.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-07.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-08.json",
+        "rows": 24,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      },
+      {
+        "file": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-09.json",
+        "rows": 11,
+        "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc"
+      }
+    ],
+    "rows": 227,
+    "nativeScripts": 212,
+    "nativeRemoteEvents": 15,
+    "catalogSHA256": "0b02eece7620b78d6cbc5ae5cda31c876260b070612b2396f0b68c01ccf5e8cc",
+    "workingSnapshotsStable": true,
+    "missingNativeMirrors": 12,
+    "sourceEditorConflicts": 0,
+    "recordedSourceClassPropertyMismatches": 0,
+    "unrecordedEnabledManifestProperties": 96,
+    "attributesTagsNonScriptAssetsCompared": false,
+    "initialSnapshotDiffersFromRetry": true,
+    "initialToRetryChangedFiles": [
+      "ServerScriptService/GameManager.Script.lua",
+      "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua"
+    ],
+    "retryBeforeOnlyKey": "declaredCounts"
+  },
+  "limits": "Offline syntax/compile and saved metadata consistency only. Frozen readers were not executed; no fresh Studio certification, gameplay, full native assets, continuous epoch or retirement approval. Failed initial compile evidence is retained, never reported as compile pass."
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "completed-transport-parts-review-v1",
+  "pass": true,
+  "filesRemoved": 0,
+  "nativeCalls": 0,
+  "nativeWrites": 0,
+  "temporaryCopiesCleaned": true,
+  "originalFiveArchiveInventoriesBeforeAfterExact": true,
+  "consumerSourceHashes": {
+    "verify_diagnostic_folder_archive.luau": "63396a000ab80d700ef16604da6a690954a4b3ceae4ee23ce04037e812575ef8",
+    "diagnostic_folder_archive.luau": "4063fd7ceb74c0bf7656f1bdec582e4fbae209be361d09b7d7c837927bff49a9",
+    "verify_diagnostic_folder_references.py": "78a8061d2cc159a81a00c9081be8fd4ce8239be8a6a75cc516b26390fd348e2d",
+    "dump_diagnostic_reference_forest.luau": "cc8c9b50f51232ec14aa09b8bfd54c0ab080a2493b49fbf5acb3b4ca1276744a",
+    "external_storage_archive_reopen.py": "d7e39a8630d3e242856679a906487e76783335b22359e1cc1aa4867a71f5ecf7",
+    "external_storage_archive.py": "dc2ce1b09ead7fc11aff3df3c95e9df8273b769867774dc2ede611ca46d7a7fb",
+    "retired_authoring_archive_receiver.py": "6e79d6649c5776ad33a8f0d10256f9dcb0c9da5503bde22965a5d2684f8fd153"
+  },
+  "luneSHA256": "43ec01e74923e8145e599237d6af573064748c0307716e9b125b12e0969e5057",
+  "eligibleGroups": [],
+  "excludedGroups": [
+    {
+      "directory": "external-storage-reopen-v1",
+      "kind": "roundtrip",
+      "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+      "fullFileSHA256": "dbfb34d6dc742c50c4b743fd7a5fc0e374599f3b8c81ea1e8f5d6baa455eb121",
+      "bytes": 2739764,
+      "receiptFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/transfer-receipt.json",
+      "receiptSHA256": "cd8c04237c45eb000588c8596f92a47603bb42f0cf37c127d948410b84d7dbc0",
+      "parts": [
+        {
+          "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip-part-0000.bin",
+          "bytes": 750000,
+          "sha256": "895175ad63baceb240c5d231ae15ef698ccc56cce7176e06d583789bcba10522",
+          "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+          "offset": 0
+        },
+        {
+          "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip-part-0001.bin",
+          "bytes": 750000,
+          "sha256": "58f5143f916f2d7629c64f5a03e8e64e9956cfc3f3548611434fc2a1de8ce295",
+          "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+          "offset": 750000
+        },
+        {
+          "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip-part-0002.bin",
+          "bytes": 750000,
+          "sha256": "90dc1632ab87c1b24420bccdf3427f825e866ece65db36b1927b57ae3ca1b728",
+          "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+          "offset": 1500000
+        },
+        {
+          "path": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip-part-0003.bin",
+          "bytes": 489764,
+          "sha256": "451c695b36cc0114600add87071234e4dfa3ee7710162a545886bb44e1fa8fc8",
+          "fullFile": "artifacts/cleanup-serverstorage-20261009/external-storage-reopen-v1/roundtrip.rbxm",
+          "offset": 2250000
+        }
+      ],
+      "status": "afventer test",
+      "reason": "Conservatively retained: historical ownership proofs explicitly hash these four chunks; strict native readable reconstruction failed. No completed successful full-reopen consumer port was substituted."
+    }
+  ],
+  "actualOfflineConsumerPorts": [
+    {
+      "directory": "diagnostic-archive-before-v7",
+      "pass": true,
+      "actualConsumers": [
+        "verify_diagnostic_folder_archive.luau",
+        "verify_diagnostic_folder_references.verify_archive"
+      ],
+      "pairedFullfileResultsExact": true,
+      "rootCount": 12,
+      "serializedReferenceCount": 105
+    },
+    {
+      "directory": "diagnostic-archive-before-v8",
+      "pass": true,
+      "actualConsumers": [
+        "verify_diagnostic_folder_archive.luau",
+        "verify_diagnostic_folder_references.verify_archive"
+      ],
+      "pairedFullfileResultsExact": true,
+      "rootCount": 12,
+      "serializedReferenceCount": 105
+    },
+    {
+      "directory": "retired-authoring-archive-v3",
+      "pass": true,
+      "actualConsumer": "Archive.__init__(phase=verify) + context",
+      "pairedNativeAndValidatedContextExact": true,
+      "nativeBytes": 8050869,
+      "nativeSHA256": "e808f055403bd331b76e0831955b192abc8b4a914865c3936aa9b2d23ed2a8d7",
+      "historicalNativeReopenPassed": true,
+      "newNativeExecuted": false
+    },
+    {
+      "directory": "external-storage-archive-v1",
+      "pass": true,
+      "actualConsumer": "external_storage_archive_reopen.main exact input preflight AST statements",
+      "extractionScope": "archive/dest guards through native=inputs; excludes context/server/Studio construction",
+      "pairedInputsAndValidatedFactsExact": true,
+      "heldRoots": 23,
+      "heldNodes": 14079,
+      "heldSources": 12,
+      "newNativeExecuted": false,
+      "fullNativeRestorationCertified": false
+    }
+  ],
+  "candidateFiles": 0,
+  "candidateBytes": 0,
+  "allowedPaths": [],
+  "rollbackRecipe": [
+    "Verify exact root/relative fullfile path inside the five pinned directories; refuse symlinks and traversal.",
+    "Before removal verify fullfile+transfer receipt SHA and each current chunk SHA/size/offset against this manifest; preserve concurrently changed files.",
+    "Recreate any missing owned chunk by seeking its retained verified fullFile to offset and reading bytes; confirm chunk SHA before exclusive write, never overwrite an existing foreign chunk.",
+    "Recheck all fullfiles/receipts/helpers and rerun the same actual partless consumer gates; no runtime/native restoration claim."
+  ],
+  "keptFullFiles": "Every native.rbxm/references.rbxm/facts.json/roundtrip.rbxm, facts.json.gz, all receipts, source/proof records remain; raw41MB facts.json remains for v4.",
+  "limits": "Preparation/offline completed-archive input-consumer proof only. No authored asset/package duplicate cleanup, gameplay/performance/native recovery/removal certificate."
+}

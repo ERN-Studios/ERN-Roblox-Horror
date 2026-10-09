@@ -1,0 +1,223 @@
+{
+  "schema": "mongotv-final-parity-curated-commit-allowlist-v1",
+  "createdUtc": "2026-10-09T23:17:37.194831+00:00",
+  "scope": "Explicit historical final-parity failed attempt and corrected retry evidence, with offline review. No staging, native calls or production changes. Parent owns final staging and fresh current parity decisions.",
+  "files": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+      "role": "Scoped raw-byte evidence attributes",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/native-reader.luau",
+      "bytes": 3286,
+      "sha256": "e6bfca4ca0babe093b04e27edce36fdca960138f9e3f5043e84d606fc8e343c2",
+      "role": "Exact Luau CODE counterpart of frozen Python reader; intentional execution-provenance duplicate",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/offline-reader-check-v1.json",
+      "bytes": 41202,
+      "sha256": "7b26a4b8318fca687aaa632dc9dd289bf497dcfe7165e631e8ff71d17c75bb3f",
+      "role": "Offline review:26retry request compiles pass,26expected initial failures, saved metadata consistency",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/parity-reader.py",
+      "bytes": 12521,
+      "sha256": "26cc6527d6ffb9d1eccf22def39a4b59a2009e544546ed85a42b8d5b070d0f44",
+      "role": "Frozen actually attempted Python metadata reader; imports/main not executed by this review",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/repo-before-metadata.json",
+      "bytes": 66800,
+      "sha256": "4e4096c11a5c8531100aaf8cb38c99dde1d516813c3ee1b6f8a5fefd61a2f134",
+      "role": "Repository/manifest metadata-only snapshot; distinct gates retained",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/result.json",
+      "bytes": 526,
+      "sha256": "8f92f374f82ed0579a5a6c021f705aaf7330470ffd1a9fad9b6538edfb66ddae",
+      "role": "Immutable initial failure or retry historical point-in-time outcome",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+      "role": "Scoped raw-byte evidence attributes",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-begin.json",
+      "bytes": 339,
+      "sha256": "6429a75a75a16f446341491018702b61133b47832f6c89fd15419025a1f2d251",
+      "role": "Native catalog metadata stability bracket",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-end.json",
+      "bytes": 339,
+      "sha256": "55387793b830a9cb1cedc921d02d98a196c13c0e96ab71f7e64d341d65be9fd4",
+      "role": "Native catalog metadata stability bracket",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-00.json",
+      "bytes": 15028,
+      "sha256": "b8a44079348a2b516df622abd64b8a095f162084cbe756c8b319620eb409f77d",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-01.json",
+      "bytes": 25635,
+      "sha256": "0e5ec0157e3d6a5cca9be5d791e74f1affdb6d37987fa25faf14cc91e9117965",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-02.json",
+      "bytes": 26313,
+      "sha256": "d3aab42a3e6625faee8fc6aacc47efb62b7e06e5b2f9bbd7ababdda27999b89e",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-03.json",
+      "bytes": 26129,
+      "sha256": "8285d5cadb6d6d85a9496d454a565960b5c5d03f956558190d099a3ad4afd131",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-04.json",
+      "bytes": 26140,
+      "sha256": "26a7227558bafad25809cb5636191b0a5e2230160b5457ab666bec40ed438fe2",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-05.json",
+      "bytes": 25717,
+      "sha256": "af9d3dfda07601f1451698befdfd788a1c094b03368d67a6974ec0d5b3e7c441",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-06.json",
+      "bytes": 27971,
+      "sha256": "6b269370905343bd8505828890b4186c0d4c9449182105c5da12e2bcbcdccca0",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-07.json",
+      "bytes": 28332,
+      "sha256": "2dcc9d3edf9e30d832b2697e4fd60e904b86d5e4a562724baa754af93cb122c8",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-08.json",
+      "bytes": 28178,
+      "sha256": "60184a5852f7ec7ed6ff9b94218d4c4bb4ee03deeb55aceb066afbe008aa2834",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-page-09.json",
+      "bytes": 13056,
+      "sha256": "a88b467abcdd112e22a4f5aef7ff67b57a30fa1c378e46b949c4672ae50e1ea0",
+      "role": "Bounded native metadata/hash page; no game Source payload",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/native-reader.luau",
+      "bytes": 3293,
+      "sha256": "3a082090d083d14188bbf742e30de6d3bbe76af63920a145caeed6de999909df",
+      "role": "Exact Luau CODE counterpart of frozen Python reader; intentional execution-provenance duplicate",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/parity-reader.py",
+      "bytes": 12746,
+      "sha256": "fcad91d8cdc4f32723393d995ae2ef4540fcf689bc661b6e792de75be9bf9a3d",
+      "role": "Frozen actually attempted Python metadata reader; imports/main not executed by this review",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/repo-after-metadata.json",
+      "bytes": 66620,
+      "sha256": "82bb00b71fc43242d28d77fd5732e6c7de3bf5fd66ca4bf967d2f192b6b9434a",
+      "role": "Repository/manifest metadata-only snapshot; distinct gates retained",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/repo-before-metadata.json",
+      "bytes": 66800,
+      "sha256": "d04882fd6722e3f8f72cc5f3dc00373745aea63aabe50fa6540095d17e061e78",
+      "role": "Repository/manifest metadata-only snapshot; distinct gates retained",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/result.json",
+      "bytes": 20957,
+      "sha256": "18fc002f650119e28e2b5499b7538d35528ad7e2e4993a47859d884a8dae0cb3",
+      "role": "Immutable initial failure or retry historical point-in-time outcome",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/studio-state-before.json",
+      "bytes": 128,
+      "sha256": "cfec3c6eefac0d8b6a7b4b5cb66ed015049a38533a7f7597a4a9ff92fa10802a",
+      "role": "Initial Studio state text or linked exact-size/hash metadata",
+      "gitTextAttribute": "unset"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/retry-v2/studio-state-before.txt",
+      "bytes": 98,
+      "sha256": "468832371ef314e6b747656d478af6c841e116d9cfea9f2f3ea1d5cc2fbf1b5f",
+      "role": "Initial Studio state text or linked exact-size/hash metadata",
+      "gitTextAttribute": "unset"
+    }
+  ],
+  "fileCount": 26,
+  "totalBytes": 538194,
+  "allowlistSelf": "artifacts/cleanup-serverstorage-20261009/final-parity-v1/commit-allowlist-v1.json",
+  "pointInTimeResult": {
+    "failedAttemptPreserved": true,
+    "retryComplete": true,
+    "retryReadStartUtc": "2026-10-09T23:07:26Z",
+    "retryReadEndUtc": "2026-10-09T23:07:37Z",
+    "nativeScripts": 212,
+    "nativeRemoteEvents": 15,
+    "nativeMetadataRows": 227,
+    "remainingAbsentMirrors": 12,
+    "sourceEditorConflicts": 0,
+    "recordedSourceClassPropertyMismatches": 0,
+    "unrecordedEnabledPropertyCoverageGaps": 96,
+    "nonScriptAssetsAttributesTagsCompared": false
+  },
+  "duplicatesReview": {
+    "privateOrGameSourcePayloadFilesFound": false,
+    "unnecessaryExactPayloadDuplicatesFound": false,
+    "intentionalExecutionProvenanceDuplicate": "Each Python CODE equals its native-reader.luau exactly. Both retained to reproduce the exact executed boundary.",
+    "snapshotRetention": "Initial vs retry before snapshots differ in GameManager, SpectateController and manifest; retry before/after files and raw manifest match, but before also records declaredCounts. All snapshots retain independent before/after gate evidence.",
+    "stateRetention": "studio-state-before.txt and .json are linked raw state and independent exact-byte/hash metadata, not repeated game Source."
+  },
+  "exclude": [
+    ".git private checkpoints",
+    "runtime mirrors and studio-sync-manifest.json",
+    "optimization actor tools/receipts",
+    "temporary .s06-fixture-* directories",
+    "caches and credentials",
+    "raw game Source payload copies",
+    "part chunks"
+  ],
+  "limits": "Historical metadata/hash evidence only. Initial exact reader does not compile; retry alone compiles and succeeded natively. No current continuous epoch, all-property, full-native-asset, gameplay, removal, publication or performance certification."
+}

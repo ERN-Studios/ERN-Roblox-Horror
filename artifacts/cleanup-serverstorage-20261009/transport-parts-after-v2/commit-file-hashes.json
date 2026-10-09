@@ -1,0 +1,232 @@
+{
+  "schema": "transport-commit-curation-v1",
+  "paths": 45,
+  "hashRows": 44,
+  "selfPath": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/commit-file-hashes.json",
+  "selfHash": "Report separately to avoid a self-referential hash",
+  "files": [
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/consumer-stderr.log",
+      "bytes": 1056,
+      "sha256": "ff46cc88acb3f73c9f2adb17f4fb4c041f694ea9319f00be0623e6c296dd28b6"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/consumer-stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/prepare-review.py",
+      "bytes": 12020,
+      "sha256": "3044bce8c8496d47c21ac03425cc7f0d81780dad0d2150250d90173a05d6cfe6"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/review-setup-repair.py",
+      "bytes": 7731,
+      "sha256": "c181d2b48ea455dafb0ed0123dacdd2da80dd440580884677c36bf78b02b64ce"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/rollback.json",
+      "bytes": 9049,
+      "sha256": "390b6b36731ed8e1065422aef3c997b3cd0d932640b3c05d4476f90dbfba12ec"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/setup-repair-review.json",
+      "bytes": 2020,
+      "sha256": "79dc9b2d074e01f62549ce5551a9c29a44822d892849f0dbd4528c59d858fa3c"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/setup-repair.diff",
+      "bytes": 1557,
+      "sha256": "4de1339e8b045c5f85d930974099879d7f76a64bdf79d2c457a1d9f4e36e19bf"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v1/source-before-trial.py",
+      "bytes": 7916,
+      "sha256": "54d4961f3117f8ebb7136259edfa269b1017895b836afc80f373ffd9679ecfda"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/REVIEW.md",
+      "bytes": 5213,
+      "sha256": "571896eebb4a94fb93f03d5c516cebc82e8991a819d4bcca4aa298de1a251537"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/actual-external-preflight-extracted.py",
+      "bytes": 1790,
+      "sha256": "f0ff0a162b197c6184da15521a4099793982318606223ab95836b8b29386bb38"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/candidate.json",
+      "bytes": 6150,
+      "sha256": "ca4886f0cde2fe691b71c5372192591706fc0e0fdb5ac7f3d635da0c6f5b267f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/commit-allowlist.txt",
+      "bytes": 4308,
+      "sha256": "a59793e45cadf8c0949821e92c8ec552b643863841dc1d629c5552800f7f243e"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/consumer-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/consumer-stdout.log",
+      "bytes": 109,
+      "sha256": "6b8757b736542d507df909f81ca29d4bff6a775e686c99369e9d4d56818a330c"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v7-before-folders.json",
+      "bytes": 1463,
+      "sha256": "038c0bdce3b16537dece2bd7ffe2b60a460a95484b7652ab7a0d77eb35b65b26"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v7-before-references.json",
+      "bytes": 1078,
+      "sha256": "e0f9eca240da6a8313d7b631ea3ea523f7f2e4fa09f9a288c35140afb4fb65f4"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v7-partless-folders.json",
+      "bytes": 1463,
+      "sha256": "038c0bdce3b16537dece2bd7ffe2b60a460a95484b7652ab7a0d77eb35b65b26"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v7-partless-references.json",
+      "bytes": 1078,
+      "sha256": "e0f9eca240da6a8313d7b631ea3ea523f7f2e4fa09f9a288c35140afb4fb65f4"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v8-before-folders.json",
+      "bytes": 1463,
+      "sha256": "27e9d8b6b3fafdfd6a9abe116e80ecfd8f1d2f8e130b70806e188dcc78b144b7"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v8-before-references.json",
+      "bytes": 1078,
+      "sha256": "93bf23c9ad1a178b40eed1d29e4a575ce819ca878ea8548ebb3f1c69928c0aa3"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v8-partless-folders.json",
+      "bytes": 1463,
+      "sha256": "27e9d8b6b3fafdfd6a9abe116e80ecfd8f1d2f8e130b70806e188dcc78b144b7"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/diagnostic-archive-before-v8-partless-references.json",
+      "bytes": 1078,
+      "sha256": "93bf23c9ad1a178b40eed1d29e4a575ce819ca878ea8548ebb3f1c69928c0aa3"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/final-review-attempt-v1.json",
+      "bytes": 637,
+      "sha256": "012b2b9ef840d9e337006166d8d27e14b4d128537cfe6dcc2ffe54221982b23f"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/final-review.json",
+      "bytes": 10882,
+      "sha256": "d73ccd4a5d4aa16e1d803e24a90bbef36a4c093b9c179ada90e56253ce7fa46d"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/prepare-review.py",
+      "bytes": 12020,
+      "sha256": "3044bce8c8496d47c21ac03425cc7f0d81780dad0d2150250d90173a05d6cfe6"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/removal-receipt.json",
+      "bytes": 33184,
+      "sha256": "60e100e3688c7740a71c10067363b0c873d42bcb30ae82bcb1411e27541c2b73"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-after-v2/verify-final-review.py",
+      "bytes": 8762,
+      "sha256": "fc66244cae2950e49ee27b9a9d7994595616d20d6d1b156d7ba9f9cffd033f93"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/.gitattributes",
+      "bytes": 20,
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/REVIEW.md",
+      "bytes": 3566,
+      "sha256": "90bdffca919b08d5a4d8ec1532f3cb2b3b34860c185c53a48426c4a6ef1cddae"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/actual-external-preflight-extracted.py",
+      "bytes": 1790,
+      "sha256": "f0ff0a162b197c6184da15521a4099793982318606223ab95836b8b29386bb38"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/candidate.json",
+      "bytes": 79559,
+      "sha256": "fbe29bc1276790f25cec4b1cc6952e72627c7f185c750634ba780ae11875d212"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v7-before-folders.json",
+      "bytes": 1463,
+      "sha256": "038c0bdce3b16537dece2bd7ffe2b60a460a95484b7652ab7a0d77eb35b65b26"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v7-before-references.json",
+      "bytes": 1078,
+      "sha256": "e0f9eca240da6a8313d7b631ea3ea523f7f2e4fa09f9a288c35140afb4fb65f4"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v7-partless-folders.json",
+      "bytes": 1463,
+      "sha256": "038c0bdce3b16537dece2bd7ffe2b60a460a95484b7652ab7a0d77eb35b65b26"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v7-partless-references.json",
+      "bytes": 1078,
+      "sha256": "e0f9eca240da6a8313d7b631ea3ea523f7f2e4fa09f9a288c35140afb4fb65f4"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v8-before-folders.json",
+      "bytes": 1463,
+      "sha256": "27e9d8b6b3fafdfd6a9abe116e80ecfd8f1d2f8e130b70806e188dcc78b144b7"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v8-before-references.json",
+      "bytes": 1078,
+      "sha256": "93bf23c9ad1a178b40eed1d29e4a575ce819ca878ea8548ebb3f1c69928c0aa3"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v8-partless-folders.json",
+      "bytes": 1463,
+      "sha256": "27e9d8b6b3fafdfd6a9abe116e80ecfd8f1d2f8e130b70806e188dcc78b144b7"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/diagnostic-archive-before-v8-partless-references.json",
+      "bytes": 1078,
+      "sha256": "93bf23c9ad1a178b40eed1d29e4a575ce819ca878ea8548ebb3f1c69928c0aa3"
+    },
+    {
+      "path": "artifacts/cleanup-serverstorage-20261009/transport-parts-review-v1/prepare-review.py",
+      "bytes": 12020,
+      "sha256": "3044bce8c8496d47c21ac03425cc7f0d81780dad0d2150250d90173a05d6cfe6"
+    },
+    {
+      "path": "tools/cleanup_20261009/.gitattributes",
+      "bytes": 1321,
+      "sha256": "42d39bd2c8c4ec199b4fee86d1a21f033b3b630a604e1e6e7c59851fe9934544"
+    },
+    {
+      "path": "tools/cleanup_20261009/retire_transport_parts.py",
+      "bytes": 7987,
+      "sha256": "17618f16d82d29346072df635bdbdc690ffad4aee81d68069bb01e23e25dbb48"
+    }
+  ],
+  "rawArchivesPartsPrivateCheckpointsTempBinsIncluded": false,
+  "stageExecuted": false,
+  "nativeCalls": 0
+}

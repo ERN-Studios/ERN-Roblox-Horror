@@ -1,0 +1,32 @@
+{
+  "canonicalBytes": 148637,
+  "canonicalSHA256": "474938cbc01ac24812c2bd2d647f98ec0084365da1db59d0e7c7a3df38a88974",
+  "factsSHA256": "9a1806675cb3e22deae7d7fc6f5cd3f100608de56af2d11ecfd81423df1f824e",
+  "limits": "Offline Lune native decode/re-encode/reopen and typed facts only; nonzero capabilities refused. Not Studio referent/CAS, gameplay, restore-to-place or performance certification.",
+  "names": [
+    "TEMP_PipeEntityLobbyRigResult_0748Z",
+    "TEMP_PipeEntityMPResult_0457Z",
+    "TEMP_PipeEntityMPResult_0503Z",
+    "TEMP_PipeEntityMPResult_0508Z",
+    "TEMP_PipeEntityMPResult_0638Z",
+    "TEMP_PipeEntityMPResult_0706Z",
+    "TEMP_PipeEntityMPResult_1609Z",
+    "TEMP_PipeEntityMPResult_1624Z",
+    "TEMP_PipeEntityMPResult_1633Z",
+    "TEMP_PipeEntityMPResult_1640Z",
+    "TEMP_PipeEntityMPResult_1648Z",
+    "TEMP_PipeEntityMultiplayerLaunch"
+  ],
+  "nativeBytes": 148531,
+  "nativeReloadEqual": true,
+  "nativeSHA256": "9613ba71dbe8255cf67b28ac4fa58e9d3e5e034a231dcf79cf72dff81f395098",
+  "placeId": 131311258779917,
+  "propertyRead": "Sandboxed getter; preserved XML DOM for IconTint and zero Capabilities",
+  "rootCount": 12,
+  "runnerSHA256": "63396a000ab80d700ef16604da6a690954a4b3ceae4ee23ce04037e812575ef8",
+  "runtime": "Lune @lune/roblox",
+  "schema": "folder-diagnostic-archive-verification-v1",
+  "universeId": 10559217407,
+  "verified": true,
+  "verifierSHA256": "4063fd7ceb74c0bf7656f1bdec582e4fbae209be361d09b7d7c837927bff49a9"
+}
