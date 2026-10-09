@@ -1,0 +1,25 @@
+{
+  "expected": "All four actual-source behavioral regressions must fail; original production never changed",
+  "controls": [
+    {
+      "name": "drop-loading-label",
+      "exitCode": 1,
+      "stdout": "C:/Users/mikke/AppData/Local/Temp/client-authoring-r2thyq_t/authoring.luau:5135: CHECK FAILED: loading Kicker was constructed/parented\r\nstacktrace:\r\n[C] function error\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-r2thyq_t/authoring.luau:4504 function check\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-r2thyq_t/authoring.luau:5135\r\n\r\n"
+    },
+    {
+      "name": "drop-shop-outline",
+      "exitCode": 1,
+      "stdout": "C:/Users/mikke/AppData/Local/Temp/client-authoring-hvu6f0gz/authoring.luau:5155: CHECK FAILED: shop outline still constructed/parented\r\nstacktrace:\r\n[C] function error\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-hvu6f0gz/authoring.luau:4504 function check\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-hvu6f0gz/authoring.luau:5155\r\n\r\n"
+    },
+    {
+      "name": "hide-public-level6",
+      "exitCode": 1,
+      "stdout": "C:/Users/mikke/AppData/Local/Temp/client-authoring-da2u7e6m/authoring.luau:5189: CHECK FAILED: public L5/L6 prompts remain available ordinary\r\nstacktrace:\r\n[C] function error\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-da2u7e6m/authoring.luau:4505 function check\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-da2u7e6m/authoring.luau:5189\r\n\r\n"
+    },
+    {
+      "name": "change-controls-copy",
+      "exitCode": 1,
+      "stdout": "C:/Users/mikke/AppData/Local/Temp/client-authoring-jq4j8x1o/authoring.luau:5224: CHECK FAILED: current controls copy follows device\r\nstacktrace:\r\n[C] function error\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-jq4j8x1o/authoring.luau:4505 function check\r\nC:/Users/mikke/AppData/Local/Temp/client-authoring-jq4j8x1o/authoring.luau:5224\r\n\r\n"
+    }
+  ]
+}

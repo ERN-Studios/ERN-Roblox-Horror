@@ -1,0 +1,71 @@
+{
+  "finding": "LE-32",
+  "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+  "status": "proposal only; root native/CAS review required",
+  "productionWrites": 0,
+  "studioCalls": 0,
+  "boundary": "offline actual chooseTarget/think/setState/setBeamers/Stop; unrelated private perception/nav/capture bodies are controlled boundaries",
+  "compile": [
+    {
+      "version": "before",
+      "optimization": 0,
+      "success": true,
+      "bytecodeBytes": 26356,
+      "bytecodeSHA256": "d2ad20e89a8a187ddb89e8d448f668c0fea538668f09af5e1c5ba235733bbb79"
+    },
+    {
+      "version": "before",
+      "optimization": 1,
+      "success": true,
+      "bytecodeBytes": 25025,
+      "bytecodeSHA256": "efc085609fd188c3d7b2986ada157a0cef766b7ae552e5264cc2dacf91a6db41"
+    },
+    {
+      "version": "candidate",
+      "optimization": 0,
+      "success": true,
+      "bytecodeBytes": 26324,
+      "bytecodeSHA256": "fd7eaedc550f213c6cf3f04b6bc930656e12ae9b458fe09a23c1de87065c853a"
+    },
+    {
+      "version": "candidate",
+      "optimization": 1,
+      "success": true,
+      "bytecodeBytes": 24993,
+      "bytecodeSHA256": "bd943473260d03401ca8aab60160416b97a66c575df59f7fd954004b35f3917f"
+    }
+  ],
+  "tests": [
+    {
+      "name": "same actual targeting/stun/Stop contract",
+      "passed": true,
+      "assertions": 59,
+      "output": "USHER PASS assertions=59"
+    },
+    {
+      "name": "active target reason lost",
+      "negativeControlRejected": true,
+      "expectedFailure": "reason still controls target mode holder"
+    },
+    {
+      "name": "active stun cooldown removed",
+      "negativeControlRejected": true,
+      "expectedFailure": "held stun keeps existing cooldown"
+    }
+  ],
+  "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+  "className": "ModuleScript",
+  "properties": {
+    "Archivable": true,
+    "LinkedSource": ""
+  },
+  "attributes": [],
+  "beforeSHA256Lf": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+  "candidateSHA256Lf": "ec4252424a0a513ca370851a5ff45b212bab4c2bfcbe20cba58c0a740a2b2a2f",
+  "beforeBytesLf": 34745,
+  "candidateBytesLf": 34659,
+  "beforeFile": "artifacts/cleanup-20261009/usher-locals/Usher.before.luau",
+  "candidateFile": "artifacts/cleanup-20261009/usher-locals/Usher.candidate.luau",
+  "diff": "--- ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua\n+++ ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua\n@@ -39,8 +39,8 @@\n local path, pathIndex = nil, 1\n local state = \"Dormant\"\n-local target, targetReason = nil, nil\n+local target = nil\n local lastKnown = nil\n-local nextHopAt, nextThinkAt, nextReplanAt = 0, 0, 0\n-local beamTime, stunUntil, stunCooldownUntil = 0, 0, 0\n+local nextHopAt, nextReplanAt = 0, 0\n+local beamTime, stunCooldownUntil = 0, 0\n local beamers = {}\n local shush = nil                 -- { Player, Character, EndsAt }\n@@ -674,5 +674,4 @@\n \t\tnextReplanAt = 0\n \tend\n-\ttargetReason = reason\n \tif stateFolder then stateFolder:SetAttribute(\"Level4_UsherTarget\", target and target.UserId or 0) end\n \tif target then\n@@ -925,5 +924,5 @@\n \t\tstateFolder:SetAttribute(\"Level4_UsherTarget\", 0)\n \tend\n-\tbeamTime, stunUntil, stunCooldownUntil, nextHopAt = 0, 0, 0, 0\n+\tbeamTime, stunCooldownUntil, nextHopAt = 0, 0, 0\n end\n \n",
+  "passed": true
+}

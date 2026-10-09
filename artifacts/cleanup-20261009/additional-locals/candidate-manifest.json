@@ -1,0 +1,139 @@
+{
+  "finding": "LE-34",
+  "status": "proposal only; root native baseline/CAS review required",
+  "productionWrites": 0,
+  "studioCalls": 0,
+  "testBoundary": "offline actual-source authoring/prompt contracts; no native assets/pathfinding/clients/teleport claim",
+  "files": [
+    {
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "className": "ModuleScript",
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d"
+      },
+      "beforeSHA256Lf": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "candidateSHA256Lf": "89fc2abec94362a1759d572346513092c72d718a780b3da679712ced0df6b53b",
+      "beforeBytesLf": 18304,
+      "candidateBytesLf": 18179,
+      "beforeFile": "artifacts/cleanup-20261009/additional-locals/RoomDressing.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/additional-locals/RoomDressing.candidate.luau",
+      "compile": [
+        {
+          "version": "before",
+          "optimization": 0,
+          "success": true,
+          "bytecodeSHA256": "60937e6d53293533cea75af8fd747cf5fb0ee30208501bbd7566b50eb4c93a08",
+          "bytecodeBytes": 18528
+        },
+        {
+          "version": "before",
+          "optimization": 1,
+          "success": true,
+          "bytecodeSHA256": "566f34130867473772823893592dce2d46df5ed99263ca865f1629722deef286",
+          "bytecodeBytes": 17346
+        },
+        {
+          "version": "candidate",
+          "optimization": 0,
+          "success": true,
+          "bytecodeSHA256": "8f680fcaa6647cbb34de0045a2d506d07c770471ecb6d13db9388983530dc260",
+          "bytecodeBytes": 18447
+        },
+        {
+          "version": "candidate",
+          "optimization": 1,
+          "success": true,
+          "bytecodeSHA256": "668030ffcd8f740233ef460cebb3220c3bf21f6df320d75d936250c8d5af9248",
+          "bytecodeBytes": 17275
+        }
+      ],
+      "diff": "--- ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua\n+++ ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua\n@@ -59,6 +59,6 @@\n end\n \n-local function safeRect(rect, room, blocked, reservePerimeter)\n-\tlocal inset = if reservePerimeter then 11.5 else WALL_INSET\n+local function safeRect(rect, room, blocked)\n+\tlocal inset = WALL_INSET\n \tif math.abs(rect.x)+rect.hx > room.W*.5-inset+.001\n \t\tor math.abs(rect.z)+rect.hz > room.D*.5-inset+.001 then\n@@ -87,5 +87,5 @@\n \t\tlocal pocket={sx=sx,sz=sz,x=sx*(room.W*.5-10),z=sz*(room.D*.5-13),hx=9,hz=12}\n \t\tlocal withPartition={x=pocket.x-sx*.45,z=pocket.z,hx=9.45,hz=12}\n-\t\tlocal fits=safeRect(withPartition,room,blocked,false)\n+\t\tlocal fits=safeRect(withPartition,room,blocked)\n \t\tif fits then\n \t\t\tpocket.xInner=room.W*.5-19\n@@ -250,8 +250,7 @@\n \tlocal function interactive(model,cf,kind,asset)\n \t\tif not model then return end\n-\t\tlocal localPosition=if kind==\"breaker\" then V(.98,6.70,.42)\n+\t\tlocal localPosition=if kind==\"breaker\" then V(.98,2.15,.42)\n \t\t\telseif kind==\"claw\" then V(.52,2.65,1.94) else V(0,4.2,1.8)\n \t\t-- Breaker asset base is already mounted high; inspect at its latch +2.15.\n-\t\tif kind==\"breaker\" then localPosition=V(.98,2.15,.42) end\n \t\tlocal anchor=carrier(model,cf:PointToWorldSpace(localPosition),\"Interaction Origin\")\n \t\tlocal prompt=Instance.new(\"ProximityPrompt\")\n@@ -402,5 +401,5 @@\n \t\t\t\t\t\tlocal z=signs[2]*(room.D*.5-1.4-size.Z*.5)\n \t\t\t\t\t\tlocal rect={x=x,z=z,hx=size.X*.5,hz=size.Z*.5}\n-\t\t\t\t\t\tif safeRect(rect,room,blocked,false) then\n+\t\t\t\t\t\tif safeRect(rect,room,blocked) then\n \t\t\t\t\t\t\tlocal cf=faceCF(base+V(x,0,z),V(0,0,-signs[2]))\n \t\t\t\t\t\t\tlocal model=placed(asset,cf,group,true,nil)\n"
+    },
+    {
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "className": "Script",
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": [],
+      "beforeSHA256Lf": "6cde618088f7aff94385e7348c830f07b597b011bb64640def7395b7a53b2ad7",
+      "candidateSHA256Lf": "40fce9298d29bfca01e20c0307591b545dfb125b2b66a9ab7e2d4092f6b85d8c",
+      "beforeBytesLf": 105520,
+      "candidateBytesLf": 105502,
+      "beforeFile": "artifacts/cleanup-20261009/additional-locals/PuzzleManager.before.luau",
+      "candidateFile": "artifacts/cleanup-20261009/additional-locals/PuzzleManager.candidate.luau",
+      "compile": [
+        {
+          "version": "before",
+          "optimization": 0,
+          "success": true,
+          "bytecodeSHA256": "f333313efd8deeecde4d56564b2d1b259268851d911604373f3680b79da57c52",
+          "bytecodeBytes": 77409
+        },
+        {
+          "version": "before",
+          "optimization": 1,
+          "success": true,
+          "bytecodeSHA256": "7d97b9ef91da05995133478f1447cdfe608b0bdf8954529be2ac642e145729be",
+          "bytecodeBytes": 69017
+        },
+        {
+          "version": "candidate",
+          "optimization": 0,
+          "success": true,
+          "bytecodeSHA256": "fb7ed715a668c7e912f14e20ce9cf83add85757bcfd26387c9a2f097d76ea1b9",
+          "bytecodeBytes": 77383
+        },
+        {
+          "version": "candidate",
+          "optimization": 1,
+          "success": true,
+          "bytecodeSHA256": "d05ef46926254b623b32205dccf37d7a5958d4d937e77ab45034ba0bfc98a5e7",
+          "bytecodeBytes": 68999
+        }
+      ],
+      "diff": "--- ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua\n+++ ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua\n@@ -1371,5 +1371,5 @@\n \t\tactive = true, stage = \"fuses\", conns = {}, folder = folder,\n \t\tboxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,\n-\t\tboxesDone = 0, boxCount = boxCount, latchMode = true,\n+\t\tboxesDone = 0, boxCount = boxCount,\n \t\tescaped = {}, escapeAnnounced = false, -- who's out + first-escape latch\n \t\tparticipants = roundPlayerSet, fuseCharacters = {},\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "same actual complete RoomDressing Plan/Apply",
+      "passed": true,
+      "assertions": 1477,
+      "output": "AUTHORING PASS assertions=1477"
+    },
+    {
+      "name": "actual production session initializer + existing actual three prompt handlers",
+      "passed": true,
+      "identicalBeforeAfter": true,
+      "output": "server ok (21 checks)"
+    },
+    {
+      "name": "wall inset changes active placement",
+      "negativeControlRejected": true,
+      "expectedFailure": "authoring seed0 chooses positive corner"
+    },
+    {
+      "name": "breaker latch positioned at discarded height",
+      "negativeControlRejected": true,
+      "expectedFailure": "breaker latch prompt uses mounted +2.15 position"
+    },
+    {
+      "name": "session active initializer removed",
+      "negativeControlRejected": true,
+      "expectedFailure": "one team event per in-round player"
+    }
+  ],
+  "passed": true,
+  "currentManifestSHA256": "0403db8a6c34a3b5764ef99ff7fab8079d9ac3714e5750dc230fac4362f62e3e"
+}

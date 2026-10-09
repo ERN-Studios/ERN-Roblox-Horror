@@ -1,0 +1,16 @@
+{
+  "productionWrites": false,
+  "studioCalls": false,
+  "gates": [
+    {
+      "name": "paired-authoring",
+      "exitCode": 0,
+      "stdout": "Client local authoring: 287 checks passed (actual source, paired tree/copy/access/lifecycle contracts; offline engine boundaries)\r\n\r\n"
+    },
+    {
+      "name": "C26-final-shared-authoring",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\r\n"
+    }
+  ]
+}

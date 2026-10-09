@@ -1,0 +1,65 @@
+{
+  "sourceInputs": "Exact proposed before/candidate paths via source-reader substitution only; immutable original project files untouched",
+  "gates": [
+    {
+      "name": "test_round_hud",
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "RoundHud: 185 checks passed (offline Luau; real HUD_PC and HUD_Touch imports)\r\n"
+    },
+    {
+      "name": "test_round_hud",
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "RoundHud: 185 checks passed (offline Luau; real HUD_PC and HUD_Touch imports)\r\n"
+    },
+    {
+      "name": "test_round_hud_shared",
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "RoundHud shared APIs: 387 checks passed (real3 Framewisp imports)\r\nNoiseReporter B3 stamina bar: 74 checks passed (real RoundHud, ShopBinder and HUD_PC import)\r\n"
+    },
+    {
+      "name": "test_round_hud_shared",
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "RoundHud shared APIs: 387 checks passed (real3 Framewisp imports)\r\nNoiseReporter B3 stamina bar: 74 checks passed (real RoundHud, ShopBinder and HUD_PC import)\r\n"
+    },
+    {
+      "name": "test_hud_b6_b7",
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)\r\n"
+    },
+    {
+      "name": "test_hud_b6_b7",
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)\r\n"
+    },
+    {
+      "name": "test_ui_regression_shared",
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\r\n"
+    },
+    {
+      "name": "test_ui_regression_shared",
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\r\n"
+    },
+    {
+      "name": "test_zyntra_store_compact",
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "ok  777 checks: no terminal, 5-button rail with MUSIC's switch, every shop entry (RECORDS and SETTINGS included) routed to the L4 shop (rail 123, layout 134, routing 105, music 54, chipskin 57, railmodal 187, modals 23, wallbuy 19)\r\n"
+    },
+    {
+      "name": "test_zyntra_store_compact",
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "ok  777 checks: no terminal, 5-button rail with MUSIC's switch, every shop entry (RECORDS and SETTINGS included) routed to the L4 shop (rail 123, layout 134, routing 105, music 54, chipskin 57, railmodal 187, modals 23, wallbuy 19)\r\n"
+    }
+  ]
+}

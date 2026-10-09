@@ -1,0 +1,1226 @@
+{
+  "productionWrites": false,
+  "studioCalls": false,
+  "compiler": "C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau-compile.exe",
+  "proposals": [
+    {
+      "candidate": "C04",
+      "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "beforeSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "candidateSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c.lua",
+      "beforeBytes": 28802,
+      "candidateBytes": 28757,
+      "removedBytes": 45,
+      "symbols": [
+        "origRoll",
+        "climbFudge"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "cc5de335039abe3606cd60e485288d0751432f7c047d3db098858ce0ae7ae8b0",
+          "candidateBinarySha256": "39a6bd667a3f6109b096290efeffc6457d0c3a7624c9e02da56edc8d62a1300a",
+          "canonicalBeforeSha256": "3c70599f604f99af91052b6684f1581aca2a2512fef66eaa24f33cf7c456b483",
+          "canonicalCandidateSha256": "05792f12bddeddd8f722e04d9f54b8f6c49ef744e21022d3d7593152cd48865e",
+          "beforeFunctionCount": 60,
+          "candidateFunctionCount": 60
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "02cb94d905146b260ee00fd892ae9d7c56ec2890044098377aef173f9bc5f788",
+          "candidateBinarySha256": "7f2742fe13e94e0b8ab5d9bebfe09f393b2e63cc1c8c4f2e8d7d303022e8d355",
+          "canonicalBeforeSha256": "27e29e89c2b572c59a3fece00bc9564f839a267647a0616f20641ec1c4ba0bfa",
+          "canonicalCandidateSha256": "b7f3e406401b99b4a34d59d16535dd5728cbe6c6eee40f47d3ac6bc0eabceb66",
+          "beforeFunctionCount": 60,
+          "candidateFunctionCount": 60
+        }
+      ],
+      "requiredGate": "actual weighted animation-selection and stepAnimate unchanged-body contracts; O0/O1 compile",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0.lua",
+      "beforeByteSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c.lua",
+      "candidateByteSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c"
+    },
+    {
+      "candidate": "C04",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "beforeSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "candidateSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce.lua",
+      "beforeBytes": 35699,
+      "candidateBytes": 34986,
+      "removedBytes": 713,
+      "symbols": [
+        "MAXIMUM_RANGE",
+        "ACCURACY_DEGREES",
+        "DISTANCE_NOISE",
+        "CD_SIGNAL_RANGE",
+        "ROOM_BLINK_RATE",
+        "MUTED",
+        "AMBER",
+        "DANGER"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "9e360fc3188cc578c4cffb8bd07aa0e1e1957cbf3a4a0e38d2661caac21c9ff7",
+          "candidateBinarySha256": "87d091e328e6b39e06f9aba3d9ef7ffd2d8b6783b34a1a1ea72c3cbcbabfc136",
+          "canonicalBeforeSha256": "067c106b8bf00b0a2e38081becd8a2131166695def453bbe6f29c3b11fe56a1c",
+          "canonicalCandidateSha256": "7d9d33460fb0832c3f4a02b7b9a4bd2177caf8fcb2d21a7368ebb3f9809b0332",
+          "beforeFunctionCount": 40,
+          "candidateFunctionCount": 40
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "e7df9493b4fefd8fd3a009374998c6e57d85230a6911a52676a8c4f430260aef",
+          "candidateBinarySha256": "87847a48a2e446b36c836140a784a8c24ba66ede5208b5475271db0fdb8b647c",
+          "canonicalBeforeSha256": "9ccc4a9f9c8ac66c1387dc2c0699aa899ab52f6fe10d5f342b4004a8f9f3c41a",
+          "canonicalCandidateSha256": "1162fdc8eea1ea8ee906216bca4d0031cbb0a83da70fbb367b8f6e460323dfad",
+          "beforeFunctionCount": 40,
+          "candidateFunctionCount": 40
+        }
+      ],
+      "requiredGate": "pure local initializer closure and exact remaining executable source; UIStyle plain table contract and actual RoundHud reader/device/respawn contracts",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5.lua",
+      "beforeByteSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce.lua",
+      "candidateByteSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce"
+    },
+    {
+      "candidate": "C04",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+      "beforeSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "candidateSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b.lua",
+      "beforeBytes": 21498,
+      "candidateBytes": 21457,
+      "removedBytes": 41,
+      "symbols": [
+        "HIDDEN_TEXT"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "bc21beebeb3c904dacf05bd755fea96d7de39dddd15a8e97228f46c7f90d694d",
+          "candidateBinarySha256": "3d5b0118e8045ac6e315445a0929bf972c5d21a60699a12699ad68f7b3c2405c",
+          "canonicalBeforeSha256": "99b9f82655fe8ec68eb0faca7a26f34add95c7bd57c25d7d49e57822eb99b7ac",
+          "canonicalCandidateSha256": "1727b45cbe3e9b4b7af957bb2f314288344d0baaef120e332691ae3aed934946",
+          "beforeFunctionCount": 23,
+          "candidateFunctionCount": 23
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "2c97e10c426ecce57b8b7a2b9ef9b9c9f25c5399639812316d80cf7da1da1953",
+          "candidateBinarySha256": "5bd23a4fb6af9c403cc24eba20e922da804214ef85464c487635b48ae282ea89",
+          "canonicalBeforeSha256": "54023b5a94f16acf6332f975dcc6b8c4c935460dd5cdc4e8842d6355dc4b67e2",
+          "canonicalCandidateSha256": "54023b5a94f16acf6332f975dcc6b8c4c935460dd5cdc4e8842d6355dc4b67e2",
+          "beforeFunctionCount": 23,
+          "candidateFunctionCount": 23
+        }
+      ],
+      "requiredGate": "pure string literal/no initializer sideeffect, exact all remaining source and O0/O1 compile",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612.lua",
+      "beforeByteSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b.lua",
+      "candidateByteSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b"
+    },
+    {
+      "candidate": "C04",
+      "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "beforeSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "candidateSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752.lua",
+      "beforeBytes": 17956,
+      "candidateBytes": 17883,
+      "removedBytes": 73,
+      "symbols": [
+        "HINT_HEIGHT"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "4b9d22bb7febea45295f11f81cd5c4fc804b4880c3197004a1250a985597f9d4",
+          "candidateBinarySha256": "6ae27089dd31b426b74eef71457072c6766753b83c1589e5666f662497887d32",
+          "canonicalBeforeSha256": "fdb472c6bfd6d533131610d9cfcded793ade4849f29f3cb10047a607eb6818d7",
+          "canonicalCandidateSha256": "3b327dfbb62a577d2c6dfe56226dd13d152ed4832d6f6e0fb332d57a34bfebb6",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "165db1386b356149b23febbd134d5407878cefd0835f904f68a2ab01a4d35485",
+          "candidateBinarySha256": "af22b83254f9bc33fe1e5af9ef503f1ccedbed15e6605bed09231b162571364c",
+          "canonicalBeforeSha256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+          "canonicalCandidateSha256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        }
+      ],
+      "requiredGate": "actual RoundExit hold/error/cancel/device/lifecycle contracts before/after",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3.lua",
+      "beforeByteSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752.lua",
+      "candidateByteSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "candidate": "C04",
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "beforeSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "candidateSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a.lua",
+      "beforeBytes": 64014,
+      "candidateBytes": 63972,
+      "removedBytes": 42,
+      "symbols": [
+        "TOUCH_LANE_X",
+        "TOUCH_LANE_Y"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "13b1dc00f2ce4c89e2a9cda0c79963c8146ad5869cef6c44ddbfe73cd29a2919",
+          "candidateBinarySha256": "bc5257428322dc734c714a2668105a5a2e6cd83b119e64d2f8bc2aaf27daf83e",
+          "canonicalBeforeSha256": "e6cd9e69ffa411a406077a80808b0d35360d136315a92e9385fd9885ef98004c",
+          "canonicalCandidateSha256": "3e0739cf1ed12d1c6c2e8f7f8386c4c6d6fb6e2ebeda7455923efb14ca401cd0",
+          "beforeFunctionCount": 81,
+          "candidateFunctionCount": 81
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "463a968eda96e9df2837e392cf7558362501d17983d983049bf2422e4a58a5d4",
+          "candidateBinarySha256": "dd17b2973bf4a5eb6e4f5539bf1fe4d62336a56e402e19c98cde336db2f9383f",
+          "canonicalBeforeSha256": "bd9d702edddf42820ce91c467db306305a2f09251940502acd193a4852e44114",
+          "canonicalCandidateSha256": "bd9d702edddf42820ce91c467db306305a2f09251940502acd193a4852e44114",
+          "beforeFunctionCount": 81,
+          "candidateFunctionCount": 81
+        }
+      ],
+      "requiredGate": "both literals unused currently; actual RoundHud detector PC/touch/layout/device flip/clear contracts before/after",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4.lua",
+      "beforeByteSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a.lua",
+      "candidateByteSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a"
+    },
+    {
+      "candidate": "C04",
+      "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "beforeSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateSha256": "42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c.lua",
+      "beforeBytes": 32406,
+      "candidateBytes": 32260,
+      "removedBytes": 146,
+      "symbols": [
+        "announced"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "cc05e269f26c4edbc493f6095f924e7e26a765162b54ef214c425d1057ed0cc9",
+          "candidateBinarySha256": "02f129509211abd44f54159d20acb62c4d88a20b381c5f0ab52776619dc03a62",
+          "canonicalBeforeSha256": "a0267b7e57e5638050dfbe47e9ff2527d3f4d2bbc68c02be478856edeb2bae5b",
+          "canonicalCandidateSha256": "54dce3b8c7d3e5d368e4130f58899bd073d775f946be7dc7aa1cca1b41fa9412",
+          "beforeFunctionCount": 61,
+          "candidateFunctionCount": 60
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "51f373c59fd2b823eaf5ffa2d8f61489f5711a8bf167337c2b685e9709b28cc6",
+          "candidateBinarySha256": "27250c952d1ff579edcab7c8ae593f271d3ffca420aca36c68d61ad244c29b8a",
+          "canonicalBeforeSha256": "089532b83ebe9a81eb2ad1afc03679861df20649077166adba523d5824c35c77",
+          "canonicalCandidateSha256": "e744a8367330f0cb2eaef8ac3135e5c14a59f72c09284c8fe150f8ebcbd49546",
+          "beforeFunctionCount": 61,
+          "candidateFunctionCount": 60
+        }
+      ],
+      "requiredGate": "uncalled private local function has no initializer execution; exact loading worker/recovery/callers retained, O0/O1 compile",
+      "status": "beholdes: announced now active via levelWorlds() -> round prefetch; old helper-removal proposal invalid/stale; do not install; preserve immutable historical inputs",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "beforeByteSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c.lua",
+      "candidateByteSha256": "42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c"
+    },
+    {
+      "candidate": "C06",
+      "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+      "beforeSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "candidateSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0.lua",
+      "beforeBytes": 31986,
+      "candidateBytes": 31769,
+      "removedBytes": 217,
+      "symbols": [
+        "KEYS"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "126db2d1148de2f1fea2792752ee35eaeb93a5dbc7fe44f15ba300b9d85db79b",
+          "candidateBinarySha256": "13a6dd828deca73dccc3ddac61d5c9374a0ab53c514806100af8af6a962faf3d",
+          "canonicalBeforeSha256": "86903fff4866c3752a534df98fd8eeb7d85f9770d07fe7407fe65a04dd1f2195",
+          "canonicalCandidateSha256": "dab281102154e04ca8eccbf5b9936144e178c5a824cfc30ee190445845d72b93",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "7cb529e4cfa83445c74546e0aeb871a18ac70c45c611c73572a506067a8d4c84",
+          "candidateBinarySha256": "32423abe6bb0625990c5b29c1fa54da2911188939730278730143a335700fe67",
+          "canonicalBeforeSha256": "f241bfb1ba5cf04fad4a2e54cd4f6382c895387ed2d4b6d0c7271c90d99377a2",
+          "canonicalCandidateSha256": "b87d87c042a6a98f8234cd7c1121dc7dae00a027264f78016135b9b8a3252d2d",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        }
+      ],
+      "requiredGate": "pure literal table branch; actual current HELP/TOPICS controls/config copy renderer before/after; old first-entry suite is stale and not a pass",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788.lua",
+      "beforeByteSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0.lua",
+      "candidateByteSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0"
+    },
+    {
+      "candidate": "C06",
+      "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+      "beforeSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "candidateSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3.lua",
+      "beforeBytes": 1622,
+      "candidateBytes": 1407,
+      "removedBytes": 215,
+      "symbols": [],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "664d184a1f1f9867f0a2f6d74c4065393edbe25fc64c4e43aca49dc56d728751",
+          "candidateBinarySha256": "c5e1ebd988bf58124c2b6d72ee22f1c0b8c8e5c93ab7f3a0f4f16507945bf812",
+          "canonicalBeforeSha256": "9052c8a72643365f86a0261ba8d6b974858ab3bb7e8a02316153874b7320ff1b",
+          "canonicalCandidateSha256": "f95d63c68723225b9990457ea0a65905b2652c064c93f78c311e16657b3c585d",
+          "beforeFunctionCount": 4,
+          "candidateFunctionCount": 4
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "c68942bc8fbd477c5553dc30b1e306365618721a84f501e733ff0abf66feb4ad",
+          "candidateBinarySha256": "1ce9951f0f9ddfbc9388020148c071a77f18dbcfaf5f26d3409365059886a6ef",
+          "canonicalBeforeSha256": "6e8587b98e6dea2f5ab010a170da12c2bf200cdbbcc7005f625ed2797ee1f10b",
+          "canonicalCandidateSha256": "aef02ba5e3ce1285c23e1e8c22832428c64062c8202dc5ae63cc0da330c94891",
+          "beforeFunctionCount": 4,
+          "candidateFunctionCount": 4
+        }
+      ],
+      "requiredGate": "whole source ordinary/special/dev/missing/error allowlist; initial+late+reenabled L4 prompts, public L5/L6 and nonprompt objects before/after",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436.lua",
+      "beforeByteSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3.lua",
+      "candidateByteSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "candidate": "C07",
+      "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "beforeSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateSha256": "26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc.lua",
+      "beforeBytes": 32406,
+      "candidateBytes": 32379,
+      "removedBytes": 27,
+      "symbols": [
+        "kicker",
+        "tip"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "cc05e269f26c4edbc493f6095f924e7e26a765162b54ef214c425d1057ed0cc9",
+          "candidateBinarySha256": "18fa3925713ecff2469bdc60e047e73e038e7af636e81a852ad15df63a27817b",
+          "canonicalBeforeSha256": "a0267b7e57e5638050dfbe47e9ff2527d3f4d2bbc68c02be478856edeb2bae5b",
+          "canonicalCandidateSha256": "21902a3f911960886cb48adb4a021bd848598b2106ddb054081a776e4e0e5c74",
+          "beforeFunctionCount": 61,
+          "candidateFunctionCount": 61
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "51f373c59fd2b823eaf5ffa2d8f61489f5711a8bf167337c2b685e9709b28cc6",
+          "candidateBinarySha256": "2c26c86c57cac21eb9cae211932296d3a1713d7eb8aae9f38b59abf7a343be5e",
+          "canonicalBeforeSha256": "089532b83ebe9a81eb2ad1afc03679861df20649077166adba523d5824c35c77",
+          "canonicalCandidateSha256": "65494b215021f8a8fbaa83ab8a2af86e9b4924e2ef0d305605d43dea6885a4de",
+          "beforeFunctionCount": 61,
+          "candidateFunctionCount": 61
+        }
+      ],
+      "requiredGate": "exact unchanged constructor arguments; actual loading cover authoring subtree snapshots before/after inclKicker/Tip",
+      "status": "afventer test/Studio/reconcile: Kicker/Tip binding-only scope still present, but owner Loading beforehash changed; old whole-source candidate must not install; fresh native C07-only proposal and gates required after owner Play completes",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-9-Lobby Loading Screen.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "beforeByteSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-9-Lobby Loading Screen.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc.lua",
+      "candidateByteSha256": "26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc"
+    },
+    {
+      "candidate": "C07",
+      "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+      "beforeSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "candidateSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309.lua",
+      "beforeBytes": 64900,
+      "candidateBytes": 64877,
+      "removedBytes": 23,
+      "symbols": [
+        "shopButtonRing"
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "3abc1bc0a960f39c6ac96047e2a089dbfc1a3bb9e21662a24e7f3a40e19226f5",
+          "candidateBinarySha256": "18893049297c4408b6ec1ba8fc0e0c17301ddc030453dc026da195ffd7cc9d57",
+          "canonicalBeforeSha256": "ce07ef08e3f2107e694f981fdb56646782e2c93cf2fa263f9bb045c777fa1caf",
+          "canonicalCandidateSha256": "033c9a032770d475f16186a995f0dab9b7dae9c3268b9ded41b3453a8faac4bd",
+          "beforeFunctionCount": 68,
+          "candidateFunctionCount": 68
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "837e31fa00d63084a695ec121ce9a1e150759d2164fd26ce4c74c7d9ba91f62a",
+          "candidateBinarySha256": "04c3eeff17853b64877d35eca06164694517589bbba289c8702a6dee57f54606",
+          "canonicalBeforeSha256": "2c84c339e2a3e5fd4c328a3c44ac762ec26407d2c6ef6fbcc58cd0c6c0eebabb",
+          "canonicalCandidateSha256": "c5ab09307efba378588720ef842756ec6cfcd4daa12ec1f1df5edbe87714984b",
+          "beforeFunctionCount": 68,
+          "candidateFunctionCount": 68
+        }
+      ],
+      "requiredGate": "exact unchanged outline call; actual store rail construction/outline snapshot and current store authoring contract before/after",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5.lua",
+      "beforeByteSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309.lua",
+      "candidateByteSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309"
+    },
+    {
+      "candidate": "C26",
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "beforeSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "candidateSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua",
+      "beforeBytes": 320730,
+      "candidateBytes": 313536,
+      "removedBytes": 7194,
+      "symbols": [],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "c5b2361eefa690d640577f10ffd6f820a6122b8cecd3f238b769f288b0211196",
+          "candidateBinarySha256": "213b7483762ae441a4e3d34d401e4c1bbe6f8e1ad92adc52f0648f282048d08b",
+          "canonicalBeforeSha256": "cd0fd2374c155a203f72b7a7f70d21c095e7b0c06cd804e9f3d10625f90302fa",
+          "canonicalCandidateSha256": "cd0fd2374c155a203f72b7a7f70d21c095e7b0c06cd804e9f3d10625f90302fa",
+          "beforeFunctionCount": 197,
+          "candidateFunctionCount": 197
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "be1d63a33c9077a6030b985a7f39bdd47713b1e02719f30fa614dba978cb4aba",
+          "candidateBinarySha256": "bb15536cbd706ef9d83729422ed89223076bfbb2283db768887d7eee9970d765",
+          "canonicalBeforeSha256": "d04059ceec2802fb84120f2889a49ed62737b879d9ce26c0aa64930f5d643177",
+          "canonicalCandidateSha256": "d04059ceec2802fb84120f2889a49ed62737b879d9ce26c0aa64930f5d643177",
+          "beforeFunctionCount": 197,
+          "candidateFunctionCount": 197
+        }
+      ],
+      "requiredGate": "comment-only: all instruction/constants/upvalues/function structure binary identical after only linedefined/proto-size canonicalization; shared authoring suite and exact public alias bodies unchanged",
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "nativeApplied": false,
+      "manifestUpdated": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+      "beforeByteSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua",
+      "candidateByteSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150"
+    }
+  ],
+  "installUnits": [
+    {
+      "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C04"
+      ],
+      "beforeSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "candidateSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c.lua",
+      "removedBytes": 45,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 594,
+          "beforeLastLine": 594,
+          "replacementLines": 0
+        },
+        {
+          "beforeFirstLine": 863,
+          "beforeLastLine": 863,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "cc5de335039abe3606cd60e485288d0751432f7c047d3db098858ce0ae7ae8b0",
+          "candidateBinarySha256": "39a6bd667a3f6109b096290efeffc6457d0c3a7624c9e02da56edc8d62a1300a",
+          "canonicalBeforeSha256": "3c70599f604f99af91052b6684f1581aca2a2512fef66eaa24f33cf7c456b483",
+          "canonicalCandidateSha256": "05792f12bddeddd8f722e04d9f54b8f6c49ef744e21022d3d7593152cd48865e",
+          "beforeFunctionCount": 60,
+          "candidateFunctionCount": 60
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "02cb94d905146b260ee00fd892ae9d7c56ec2890044098377aef173f9bc5f788",
+          "candidateBinarySha256": "7f2742fe13e94e0b8ab5d9bebfe09f393b2e63cc1c8c4f2e8d7d303022e8d355",
+          "canonicalBeforeSha256": "27e29e89c2b572c59a3fece00bc9564f839a267647a0616f20641ec1c4ba0bfa",
+          "canonicalCandidateSha256": "b7f3e406401b99b4a34d59d16535dd5728cbe6c6eee40f47d3ac6bc0eabceb66",
+          "beforeFunctionCount": 60,
+          "candidateFunctionCount": 60
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0.lua",
+      "beforeByteSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-1-Animate.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c.lua",
+      "candidateByteSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C04"
+      ],
+      "beforeSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "candidateSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce.lua",
+      "removedBytes": 713,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 25,
+          "beforeLastLine": 33,
+          "replacementLines": 0
+        },
+        {
+          "beforeFirstLine": 44,
+          "beforeLastLine": 48,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "9e360fc3188cc578c4cffb8bd07aa0e1e1957cbf3a4a0e38d2661caac21c9ff7",
+          "candidateBinarySha256": "87d091e328e6b39e06f9aba3d9ef7ffd2d8b6783b34a1a1ea72c3cbcbabfc136",
+          "canonicalBeforeSha256": "067c106b8bf00b0a2e38081becd8a2131166695def453bbe6f29c3b11fe56a1c",
+          "canonicalCandidateSha256": "7d9d33460fb0832c3f4a02b7b9a4bd2177caf8fcb2d21a7368ebb3f9809b0332",
+          "beforeFunctionCount": 40,
+          "candidateFunctionCount": 40
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "e7df9493b4fefd8fd3a009374998c6e57d85230a6911a52676a8c4f430260aef",
+          "candidateBinarySha256": "87847a48a2e446b36c836140a784a8c24ba66ede5208b5475271db0fdb8b647c",
+          "canonicalBeforeSha256": "9ccc4a9f9c8ac66c1387dc2c0699aa899ab52f6fe10d5f342b4004a8f9f3c41a",
+          "canonicalCandidateSha256": "1162fdc8eea1ea8ee906216bca4d0031cbb0a83da70fbb367b8f6e460323dfad",
+          "beforeFunctionCount": 40,
+          "candidateFunctionCount": 40
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5.lua",
+      "beforeByteSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-2-Level 3 Reader Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce.lua",
+      "candidateByteSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C04"
+      ],
+      "beforeSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "candidateSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b.lua",
+      "removedBytes": 41,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 382,
+          "beforeLastLine": 382,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "bc21beebeb3c904dacf05bd755fea96d7de39dddd15a8e97228f46c7f90d694d",
+          "candidateBinarySha256": "3d5b0118e8045ac6e315445a0929bf972c5d21a60699a12699ad68f7b3c2405c",
+          "canonicalBeforeSha256": "99b9f82655fe8ec68eb0faca7a26f34add95c7bd57c25d7d49e57822eb99b7ac",
+          "canonicalCandidateSha256": "1727b45cbe3e9b4b7af957bb2f314288344d0baaef120e332691ae3aed934946",
+          "beforeFunctionCount": 23,
+          "candidateFunctionCount": 23
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "2c97e10c426ecce57b8b7a2b9ef9b9c9f25c5399639812316d80cf7da1da1953",
+          "candidateBinarySha256": "5bd23a4fb6af9c403cc24eba20e922da804214ef85464c487635b48ae282ea89",
+          "canonicalBeforeSha256": "54023b5a94f16acf6332f975dcc6b8c4c935460dd5cdc4e8842d6355dc4b67e2",
+          "canonicalCandidateSha256": "54023b5a94f16acf6332f975dcc6b8c4c935460dd5cdc4e8842d6355dc4b67e2",
+          "beforeFunctionCount": 23,
+          "candidateFunctionCount": 23
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612.lua",
+      "beforeByteSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-3-Level 3 Table Hiding Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b.lua",
+      "candidateByteSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C04"
+      ],
+      "beforeSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "candidateSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752.lua",
+      "removedBytes": 73,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 55,
+          "beforeLastLine": 55,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "4b9d22bb7febea45295f11f81cd5c4fc804b4880c3197004a1250a985597f9d4",
+          "candidateBinarySha256": "6ae27089dd31b426b74eef71457072c6766753b83c1589e5666f662497887d32",
+          "canonicalBeforeSha256": "fdb472c6bfd6d533131610d9cfcded793ade4849f29f3cb10047a607eb6818d7",
+          "canonicalCandidateSha256": "3b327dfbb62a577d2c6dfe56226dd13d152ed4832d6f6e0fb332d57a34bfebb6",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "165db1386b356149b23febbd134d5407878cefd0835f904f68a2ab01a4d35485",
+          "candidateBinarySha256": "af22b83254f9bc33fe1e5af9ef503f1ccedbed15e6605bed09231b162571364c",
+          "canonicalBeforeSha256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+          "canonicalCandidateSha256": "d94c6bf87444391acacd37da96cb8bfddccaedbd89cead998b76ce8709202866",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3.lua",
+      "beforeByteSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-4-Round Exit Client.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752.lua",
+      "candidateByteSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752"
+    },
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "class": "ModuleScript",
+      "candidateIds": [
+        "C04"
+      ],
+      "beforeSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "candidateSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a.lua",
+      "removedBytes": 42,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 1085,
+          "beforeLastLine": 1085,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "13b1dc00f2ce4c89e2a9cda0c79963c8146ad5869cef6c44ddbfe73cd29a2919",
+          "candidateBinarySha256": "bc5257428322dc734c714a2668105a5a2e6cd83b119e64d2f8bc2aaf27daf83e",
+          "canonicalBeforeSha256": "e6cd9e69ffa411a406077a80808b0d35360d136315a92e9385fd9885ef98004c",
+          "canonicalCandidateSha256": "3e0739cf1ed12d1c6c2e8f7f8386c4c6d6fb6e2ebeda7455923efb14ca401cd0",
+          "beforeFunctionCount": 81,
+          "candidateFunctionCount": 81
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "463a968eda96e9df2837e392cf7558362501d17983d983049bf2422e4a58a5d4",
+          "candidateBinarySha256": "dd17b2973bf4a5eb6e4f5539bf1fe4d62336a56e402e19c98cde336db2f9383f",
+          "canonicalBeforeSha256": "bd9d702edddf42820ce91c467db306305a2f09251940502acd193a4852e44114",
+          "canonicalCandidateSha256": "bd9d702edddf42820ce91c467db306305a2f09251940502acd193a4852e44114",
+          "beforeFunctionCount": 81,
+          "candidateFunctionCount": 81
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4.lua",
+      "beforeByteSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-5-RoundHud.ModuleScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a.lua",
+      "candidateByteSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a"
+    },
+    {
+      "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C04",
+        "C07"
+      ],
+      "beforeSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateSha256": "e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17.lua",
+      "removedBytes": 173,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 62,
+          "beforeLastLine": 62,
+          "replacementLines": 1
+        },
+        {
+          "beforeFirstLine": 92,
+          "beforeLastLine": 92,
+          "replacementLines": 1
+        },
+        {
+          "beforeFirstLine": 638,
+          "beforeLastLine": 640,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "exitCode": 0,
+          "stdout": "Compiled 0 KLOC into 24 KB bytecode (read 0.01s, parse 0.00s, compile 0.00s)\n",
+          "stderr": ""
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "exitCode": 0,
+          "stdout": "Compiled 0 KLOC into 22 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\n",
+          "stderr": ""
+        }
+      ],
+      "status": "INVALID/stale baseline: combined C04/C07 unit must not install; retain active announced(); fresh C07-only proposal/gates await owner Play completion and native rebaseline",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "beforeByteSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-6-Lobby Loading Screen.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17.lua",
+      "candidateByteSha256": "e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C06"
+      ],
+      "beforeSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "candidateSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0.lua",
+      "removedBytes": 217,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 247,
+          "beforeLastLine": 248,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "126db2d1148de2f1fea2792752ee35eaeb93a5dbc7fe44f15ba300b9d85db79b",
+          "candidateBinarySha256": "13a6dd828deca73dccc3ddac61d5c9374a0ab53c514806100af8af6a962faf3d",
+          "canonicalBeforeSha256": "86903fff4866c3752a534df98fd8eeb7d85f9770d07fe7407fe65a04dd1f2195",
+          "canonicalCandidateSha256": "dab281102154e04ca8eccbf5b9936144e178c5a824cfc30ee190445845d72b93",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "7cb529e4cfa83445c74546e0aeb871a18ac70c45c611c73572a506067a8d4c84",
+          "candidateBinarySha256": "32423abe6bb0625990c5b29c1fa54da2911188939730278730143a335700fe67",
+          "canonicalBeforeSha256": "f241bfb1ba5cf04fad4a2e54cd4f6382c895387ed2d4b6d0c7271c90d99377a2",
+          "canonicalCandidateSha256": "b87d87c042a6a98f8234cd7c1121dc7dae00a027264f78016135b9b8a3252d2d",
+          "beforeFunctionCount": 37,
+          "candidateFunctionCount": 37
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788.lua",
+      "beforeByteSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-7-First Entry Guide.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0.lua",
+      "candidateByteSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C06"
+      ],
+      "beforeSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "candidateSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3.lua",
+      "removedBytes": 215,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 19,
+          "beforeLastLine": 23,
+          "replacementLines": 0
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "664d184a1f1f9867f0a2f6d74c4065393edbe25fc64c4e43aca49dc56d728751",
+          "candidateBinarySha256": "c5e1ebd988bf58124c2b6d72ee22f1c0b8c8e5c93ab7f3a0f4f16507945bf812",
+          "canonicalBeforeSha256": "9052c8a72643365f86a0261ba8d6b974858ab3bb7e8a02316153874b7320ff1b",
+          "canonicalCandidateSha256": "f95d63c68723225b9990457ea0a65905b2652c064c93f78c311e16657b3c585d",
+          "beforeFunctionCount": 4,
+          "candidateFunctionCount": 4
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "c68942bc8fbd477c5553dc30b1e306365618721a84f501e733ff0abf66feb4ad",
+          "candidateBinarySha256": "1ce9951f0f9ddfbc9388020148c071a77f18dbcfaf5f26d3409365059886a6ef",
+          "canonicalBeforeSha256": "6e8587b98e6dea2f5ab010a170da12c2bf200cdbbcc7005f625ed2797ee1f10b",
+          "canonicalCandidateSha256": "aef02ba5e3ce1285c23e1e8c22832428c64062c8202dc5ae63cc0da330c94891",
+          "beforeFunctionCount": 4,
+          "candidateFunctionCount": 4
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436.lua",
+      "beforeByteSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-8-Level4PreviewPrompt.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3.lua",
+      "candidateByteSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3"
+    },
+    {
+      "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+      "class": "LocalScript",
+      "candidateIds": [
+        "C07"
+      ],
+      "beforeSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "candidateSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309.lua",
+      "removedBytes": 23,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 276,
+          "beforeLastLine": 276,
+          "replacementLines": 1
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "3abc1bc0a960f39c6ac96047e2a089dbfc1a3bb9e21662a24e7f3a40e19226f5",
+          "candidateBinarySha256": "18893049297c4408b6ec1ba8fc0e0c17301ddc030453dc026da195ffd7cc9d57",
+          "canonicalBeforeSha256": "ce07ef08e3f2107e694f981fdb56646782e2c93cf2fa263f9bb045c777fa1caf",
+          "canonicalCandidateSha256": "033c9a032770d475f16186a995f0dab9b7dae9c3268b9ded41b3453a8faac4bd",
+          "beforeFunctionCount": 68,
+          "candidateFunctionCount": 68
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": false,
+          "instructionConstantDumpIdentical": false,
+          "beforeBinarySha256": "837e31fa00d63084a695ec121ce9a1e150759d2164fd26ce4c74c7d9ba91f62a",
+          "candidateBinarySha256": "04c3eeff17853b64877d35eca06164694517589bbba289c8702a6dee57f54606",
+          "canonicalBeforeSha256": "2c84c339e2a3e5fd4c328a3c44ac762ec26407d2c6ef6fbcc58cd0c6c0eebabb",
+          "canonicalCandidateSha256": "c5ab09307efba378588720ef842756ec6cfcd4daa12ec1f1df5edbe87714984b",
+          "beforeFunctionCount": 68,
+          "candidateFunctionCount": 68
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5.lua",
+      "beforeByteSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-9-ZyntraStore.LocalScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309.lua",
+      "candidateByteSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309"
+    },
+    {
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "class": "ModuleScript",
+      "candidateIds": [
+        "C26"
+      ],
+      "beforeSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "candidateSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150",
+      "beforePath": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+      "candidatePath": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua",
+      "removedBytes": 7194,
+      "sourceRegions": [
+        {
+          "beforeFirstLine": 23,
+          "beforeLastLine": 23,
+          "replacementLines": 1
+        },
+        {
+          "beforeFirstLine": 1897,
+          "beforeLastLine": 1898,
+          "replacementLines": 2
+        },
+        {
+          "beforeFirstLine": 4087,
+          "beforeLastLine": 4087,
+          "replacementLines": 1
+        },
+        {
+          "beforeFirstLine": 4089,
+          "beforeLastLine": 4161,
+          "replacementLines": 4
+        },
+        {
+          "beforeFirstLine": 4172,
+          "beforeLastLine": 4172,
+          "replacementLines": 1
+        },
+        {
+          "beforeFirstLine": 4174,
+          "beforeLastLine": 4216,
+          "replacementLines": 3
+        },
+        {
+          "beforeFirstLine": 4230,
+          "beforeLastLine": 4235,
+          "replacementLines": 4
+        },
+        {
+          "beforeFirstLine": 4254,
+          "beforeLastLine": 4254,
+          "replacementLines": 2
+        },
+        {
+          "beforeFirstLine": 4772,
+          "beforeLastLine": 4782,
+          "replacementLines": 3
+        },
+        {
+          "beforeFirstLine": 6378,
+          "beforeLastLine": 6380,
+          "replacementLines": 3
+        }
+      ],
+      "compiler": [
+        {
+          "optimization": 0,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "c5b2361eefa690d640577f10ffd6f820a6122b8cecd3f238b769f288b0211196",
+          "candidateBinarySha256": "213b7483762ae441a4e3d34d401e4c1bbe6f8e1ad92adc52f0648f282048d08b",
+          "canonicalBeforeSha256": "cd0fd2374c155a203f72b7a7f70d21c095e7b0c06cd804e9f3d10625f90302fa",
+          "canonicalCandidateSha256": "cd0fd2374c155a203f72b7a7f70d21c095e7b0c06cd804e9f3d10625f90302fa",
+          "beforeFunctionCount": 197,
+          "candidateFunctionCount": 197
+        },
+        {
+          "optimization": 1,
+          "debug": 0,
+          "compile": "PASS",
+          "canonicalBinaryIdentical": true,
+          "instructionConstantDumpIdentical": true,
+          "beforeBinarySha256": "be1d63a33c9077a6030b985a7f39bdd47713b1e02719f30fa614dba978cb4aba",
+          "candidateBinarySha256": "bb15536cbd706ef9d83729422ed89223076bfbb2283db768887d7eee9970d765",
+          "canonicalBeforeSha256": "d04059ceec2802fb84120f2889a49ed62737b879d9ce26c0aa64930f5d643177",
+          "canonicalCandidateSha256": "d04059ceec2802fb84120f2889a49ed62737b879d9ce26c0aa64930f5d643177",
+          "beforeFunctionCount": 197,
+          "candidateFunctionCount": 197
+        }
+      ],
+      "status": "afventer test/Studio: local before/after ports passed; preserve owner active Play, then root fresh Source/editor CAS/manifest/installed native after gates",
+      "productionApplied": false,
+      "beforeCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.before.lua",
+      "beforePortablePath": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+      "beforeByteSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "candidateCheckpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-10-UIRegression.ModuleScript.lua.candidate.lua",
+      "candidatePortablePath": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua",
+      "candidateByteSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150"
+    }
+  ],
+  "overlap": "C04/C07 LobbyLoading are composed as one verified install unit, preserving both edits against their same baseline; never replace one single-purpose candidate with the other",
+  "excluded": "Preexisting dirty RoundUI is untouched and not a proposal target",
+  "status": "afventer owner Play completion and fresh native rebaseline; WARNING old Loading C04 removal/combined Loading unit INVALID because announced now has active levelWorlds caller; preserve function and all owner Loading/RoundEntry edits; all old proof blobs/receipts historical and immutable",
+  "preparedCanonicalSourceHashesUnchanged": true,
+  "evidence": {
+    "review": "CLIENT_LOCALS_REVIEW.md",
+    "existingPairedGates": "client-local-existing-gates.json",
+    "authoringPairedGate": "client-local-authoring-gate.json",
+    "negativeControls": "client-local-negative-controls.json",
+    "T09PairedGate": "client-local-T09-paired.json",
+    "T09BeforeAfterChecks": 133,
+    "T09BeforeAfterNegativeFixtures": 6,
+    "installedProofCommand": "python artifacts/cleanup-20261009/run_client_local_contracts.py --verify-installed",
+    "installedReceipt": "client-locals-installed-gates.json (separate; not yet produced)",
+    "installedGuardNegativeControl": "Before actual installation, --verify-installed rejected exact Animate source/candidate hash mismatch before running tests or writing receipt; expected"
+  },
+  "removedSourceBytes": 8736,
+  "notPerformanceMeasurement": true,
+  "protectedExistingWork": "Dirty RoundUI never targeted or written; no Studio calls; no source/manifest/commit/publish mutations",
+  "nativeGatePending": "Root fresh exact current Source/editor/class/properties validation/CAS, scoped metadata/manifest parity, then fresh Play full UI/TouchTarget/lobby loadingDone/health/console. Reconcile fresh Studio drift instead of applying stale repo baseline.",
+  "portableProofIndex": "artifacts/cleanup-20261009/client-local-proofs/index.json",
+  "proofInputsPortable": true
+}

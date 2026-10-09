@@ -1,0 +1,40 @@
+{
+  "productionWrites": false,
+  "studioCalls": false,
+  "historicalUncalledDefinitionAccepted": true,
+  "unsafeClosuresRejected": [
+    {
+      "case": "current_active_caller",
+      "rejected": true,
+      "reason": "REFUSED C04 Loading: announced has outside-definition references at lines [728]; retain active helper; no prepared artifacts written"
+    },
+    {
+      "case": "new_call",
+      "rejected": true,
+      "reason": "REFUSED C04 Loading: announced has outside-definition references at lines [786]; retain active helper; no prepared artifacts written"
+    },
+    {
+      "case": "new_alias",
+      "rejected": true,
+      "reason": "REFUSED C04 Loading: announced has outside-definition references at lines [786]; retain active helper; no prepared artifacts written"
+    },
+    {
+      "case": "duplicate_definition",
+      "rejected": true,
+      "reason": "REFUSED C04 Loading: exact announced definition changed; no prepared artifacts written"
+    },
+    {
+      "case": "changed_definition",
+      "rejected": true,
+      "reason": "REFUSED C04 Loading: exact announced definition changed; no prepared artifacts written"
+    }
+  ],
+  "actualCliExitCode": 1,
+  "actualCliStdout": "",
+  "actualCliStderr": "Traceback (most recent call last):\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261009\\prepare_client_locals.py\", line 181, in <module>\n    main()\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261009\\prepare_client_locals.py\", line 61, in main\n    preflight_loading_helper((ROOT / LOADING).read_text(encoding='utf8'))\n  File \"G:\\Roblox\\MongoTV\\artifacts\\cleanup-20261009\\prepare_client_locals.py\", line 38, in preflight_loading_helper\n    assert not uses, f'REFUSED C04 Loading: announced has outside-definition references at lines {lines}; retain active helper; no prepared artifacts written'\nAssertionError: REFUSED C04 Loading: announced has outside-definition references at lines [728]; retain active helper; no prepared artifacts written\n",
+  "preparedFilesChecked": 59,
+  "noPreparedArtifactWrites": true,
+  "checkpointInventoryUnchanged": true,
+  "canonicalSourcesUnchanged": true,
+  "rawReceiptsUnchanged": true
+}

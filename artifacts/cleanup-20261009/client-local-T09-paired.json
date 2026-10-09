@@ -1,0 +1,17 @@
+{
+  "gate": "Current actual guide T09, exact immutable saved C06 before/candidate source",
+  "productionWrites": false,
+  "studioCalls": false,
+  "results": [
+    {
+      "phase": "before",
+      "exitCode": 0,
+      "stdout": "First Entry Guide current WELCOME/HELP: 133 checks passed (entire actual script, offline Luau)\r\n6 negative fixtures rejected: onboarding gate/navigation/movement/rail/config/header\r\nC21 focus/processed-input: REPRODUCED; runtime retained\r\nC22 touch Skip: 54.27x25.84 effective authored px; native fonts/hit routing pending\r\n"
+    },
+    {
+      "phase": "candidate",
+      "exitCode": 0,
+      "stdout": "First Entry Guide current WELCOME/HELP: 133 checks passed (entire actual script, offline Luau)\r\n6 negative fixtures rejected: onboarding gate/navigation/movement/rail/config/header\r\nC21 focus/processed-input: REPRODUCED; runtime retained\r\nC22 touch Skip: 54.27x25.84 effective authored px; native fonts/hit routing pending\r\n"
+    }
+  ]
+}

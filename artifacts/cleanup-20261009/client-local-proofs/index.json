@@ -1,0 +1,487 @@
+{
+  "productionWrites": false,
+  "studioCalls": false,
+  "byteIdenticalCopies": true,
+  "originalCheckpointsUnchanged": true,
+  "preparedReceiptsUnchanged": {
+    "client-local-existing-gates.json": "e3aec6f2e200fc0334dcc22b678bfd72da48107ad2c3e55f64acf7baa2ad3dc4",
+    "client-local-authoring-gate.json": "661742a27f085ba75484cb71f9a83783dfded39686dc4407f4d14f35d55bce0d",
+    "client-local-negative-controls.json": "25edc3d65191b80244f0e14479d39a31f4a25c4aebf13550774e63b4051be205",
+    "client-local-T09-paired.json": "47c8038364b552efaf7b96c7120f45040f620def5c5800e64f04c41fc0938aa1"
+  },
+  "uniquePortableInputs": 22,
+  "portableBytes": 1295129,
+  "copies": [
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0.lua",
+      "byteSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "sourceLfSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "bytes": 28802,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 0,
+          "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 0,
+          "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c.lua",
+      "byteSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c",
+      "sourceLfSha256": "3dbb8b19abf354c7c89d4af5204a7520c3c2e420d07abc4dad3a19ca360c809c",
+      "bytes": 28757,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 0,
+          "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-1-Animate.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 0,
+          "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-1-Animate.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5.lua",
+      "byteSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "sourceLfSha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "bytes": 35699,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 1,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 1,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce.lua",
+      "byteSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce",
+      "sourceLfSha256": "2a8f169efbf0f2c3a074873140bb13d82adba2b791f0eb7eea115fc2f3cc8cce",
+      "bytes": 34986,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 1,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-2-Level 3 Reader Client.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 1,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-2-Level 3 Reader Client.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612.lua",
+      "byteSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "sourceLfSha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "bytes": 21498,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 2,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 2,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b.lua",
+      "byteSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b",
+      "sourceLfSha256": "ef5eb55ea060b253291b50308f5b1b2ee6f65d539b62ccc876f046a98293a85b",
+      "bytes": 21457,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 2,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-3-Level 3 Table Hiding Client.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 2,
+          "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-3-Level 3 Table Hiding Client.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3.lua",
+      "byteSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "sourceLfSha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "bytes": 17956,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 3,
+          "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 3,
+          "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752.lua",
+      "byteSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+      "sourceLfSha256": "bd1cdb46003ae1dd4f151f1c1a0cc7c2ca85ed4add9dd9fe18a27bd765e20752",
+      "bytes": 17883,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 3,
+          "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-4-Round Exit Client.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 3,
+          "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-4-Round Exit Client.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4.lua",
+      "byteSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "sourceLfSha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "bytes": 64014,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 4,
+          "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 4,
+          "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a.lua",
+      "byteSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a",
+      "sourceLfSha256": "32cc678e918f353177f12a94842baaab41e62cb414d847f3fcfcef220015492a",
+      "bytes": 63972,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 4,
+          "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-5-RoundHud.ModuleScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 4,
+          "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-5-RoundHud.ModuleScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0.lua",
+      "byteSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "sourceLfSha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "bytes": 32406,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 5,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "proposals",
+          "index": 8,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-9-Lobby Loading Screen.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 5,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c.lua",
+      "byteSha256": "42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c",
+      "sourceLfSha256": "42917957052530229092200fac3a7391491e1ece7d52418440194cfcba98a99c",
+      "bytes": 32260,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 5,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C04-6-Lobby Loading Screen.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788.lua",
+      "byteSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "sourceLfSha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "bytes": 31986,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 6,
+          "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 6,
+          "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0.lua",
+      "byteSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0",
+      "sourceLfSha256": "8163c9aaab1f6a6870e34efd7d91ff0879346c4c2d85dad6c4464860639acba0",
+      "bytes": 31769,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 6,
+          "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-7-First Entry Guide.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 6,
+          "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-7-First Entry Guide.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436.lua",
+      "byteSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "sourceLfSha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "bytes": 1622,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 7,
+          "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 7,
+          "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3.lua",
+      "byteSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+      "sourceLfSha256": "e024ae800bea7082e72a590e948c0b54e9db503db70ef24e50f51024726ad4d3",
+      "bytes": 1407,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 7,
+          "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C06-8-Level4PreviewPrompt.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 7,
+          "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-8-Level4PreviewPrompt.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc.lua",
+      "byteSha256": "26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc",
+      "sourceLfSha256": "26dfc1124d1c6ab759df79d070c0d5b5b07066216b8aa61389d853b8faf00cdc",
+      "bytes": 32379,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 8,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-9-Lobby Loading Screen.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5.lua",
+      "byteSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "sourceLfSha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "bytes": 64900,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 9,
+          "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 8,
+          "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309.lua",
+      "byteSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309",
+      "sourceLfSha256": "ca31cda6848cfcde677825fb4931ddb16d56ef49c6e327c0744ca21088126309",
+      "bytes": 64877,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 9,
+          "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C07-10-ZyntraStore.LocalScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 8,
+          "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-9-ZyntraStore.LocalScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64.lua",
+      "byteSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "sourceLfSha256": "b57a2b848f7981d76225c5bb850cdcfb3de12743afadab674ee826d4747ccc64",
+      "bytes": 320730,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 10,
+          "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.before.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 9,
+          "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+          "phase": "before",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.before.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150.lua",
+      "byteSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150",
+      "sourceLfSha256": "e2fe98285dcb94e9ecb5a71c33a768c76dc494e3029cde56d62ef066fb0c8150",
+      "bytes": 313536,
+      "roles": [
+        {
+          "group": "proposals",
+          "index": 10,
+          "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\C26-11-UIRegression.ModuleScript.lua.candidate.lua"
+        },
+        {
+          "group": "installUnits",
+          "index": 9,
+          "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-10-UIRegression.ModuleScript.lua.candidate.lua"
+        }
+      ]
+    },
+    {
+      "portablePath": "artifacts/cleanup-20261009/client-local-proofs/e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17.lua",
+      "byteSha256": "e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17",
+      "sourceLfSha256": "e96b75eb5a366f9bdf98cb2684d7077a4eefbe93d41c977bbe2166caa609fc17",
+      "bytes": 32233,
+      "roles": [
+        {
+          "group": "installUnits",
+          "index": 5,
+          "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+          "phase": "candidate",
+          "checkpointPath": ".git\\mongotv-cleanup-20261009\\client-proposals\\Install-6-Lobby Loading Screen.LocalScript.lua.candidate.lua"
+        }
+      ]
+    }
+  ],
+  "note": "Source equality identifies reusable proof bytes, never native object/backup equivalence."
+}
