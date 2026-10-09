@@ -16,13 +16,13 @@ import shutil
 import sys
 import time
 import urllib.request
+from vault_auth import get_token
 from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO = Path(r"G:\Roblox\MongoTV")
 VAULT = REPO / "Backrooms Stay Quiet"
 MCP_URL = "http://127.0.0.1:27200/mcp"
-TOKEN = "eUGfeGxbX5CV8Hzrlm0DVT44hmzIlprwmjWOMCy7qT8"
 TODAY = "2026-09-03"
 
 P_DOCS = "01 Projekt"
@@ -44,7 +44,7 @@ def mcp(name, args, retries=3):
                            "params": {"name": name, "arguments": args}}).encode("utf-8")
         req = urllib.request.Request(
             MCP_URL, data=body, method="POST",
-            headers={"Authorization": "Bearer " + TOKEN,
+            headers={"Authorization": "Bearer " + get_token(),
                      "Content-Type": "application/json",
                      "Accept": "application/json, text/event-stream"})
         try:

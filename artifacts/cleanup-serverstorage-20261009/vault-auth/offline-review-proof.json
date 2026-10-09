@@ -1,0 +1,120 @@
+{
+  "schema": "vault-auth-review-proof-v1",
+  "findingId": "T12",
+  "batch": "B17",
+  "privateCheckpoint": {
+    "path": ".git/mongotv-cleanup-20261009/vault-auth-before",
+    "files": 4,
+    "allBeforeCopiesVerified": true,
+    "containsCredentials": "Private only; never stage or publish"
+  },
+  "configuration": {
+    "path": "Backrooms Stay Quiet/.obsidian/plugins/mcp-tools-istefox/data.json",
+    "sha256": "ac745a41dc34c9a3ec3aa2bb0eb022282b371e4972c228b83eb57487a828a81b",
+    "unchanged": true,
+    "legacyPort": 27200,
+    "currentCredentialPrintableAscii": true
+  },
+  "builders": [
+    {
+      "path": "tools/vault/build_vault.py",
+      "beforeSha256": "78b29d7f289f6abc52f2300d41941591cfc878ba3362d231d13bda1324cd69d8",
+      "afterSha256": "22efcac3a6de888d2035c6907fed45ac8b543282830eada9c82cdaa542a8c1b3",
+      "onlyAuthorizedAstChanges": true,
+      "originalCredentialOccurrencesAfter": 0,
+      "endpointUnchanged": "http://127.0.0.1:27200/mcp"
+    },
+    {
+      "path": "tools/vault/build_systems.py",
+      "beforeSha256": "6ad376c7066cfc4a0df9a3ac8ac977ac6cad53ddbf85317eee198e703e59f98d",
+      "afterSha256": "c10a9b0b05cc9dc4b3d74c0d5c61c41afbd20393e5879f358f474ffd8cacff94",
+      "onlyAuthorizedAstChanges": true,
+      "originalCredentialOccurrencesAfter": 0,
+      "endpointUnchanged": "http://127.0.0.1:27200/mcp"
+    }
+  ],
+  "generatedNotes": [
+    {
+      "path": "Backrooms Stay Quiet/05 V\u00e6rkt\u00f8jer/build_vault.py.md",
+      "beforeSha256": "87952b57abeb3db8a8aaffca308456f20ff9ef6a57c6971c120cc9fe918f42ed",
+      "afterSha256": "0defaa8fb3544efa58adf534f2f7ee93caa3266079b6b121649a9031454e1802",
+      "beforeBytes": 34302,
+      "afterBytes": 34287,
+      "exactOneSourceFence": true,
+      "beforeFenceEqualsOriginalSource": true,
+      "afterFenceEqualsCurrentSource": true,
+      "outerBytesLinksAndNewlinesUnchanged": true,
+      "originalCredentialOccurrencesAfter": 0,
+      "metadata": "Outer generated metadata retained as instructed; next authorized regeneration may refresh it"
+    },
+    {
+      "path": "Backrooms Stay Quiet/05 V\u00e6rkt\u00f8jer/build_systems.py.md",
+      "beforeSha256": "d6f079f7f317b1bb154a5ff120032f42f3f08ffca9d35a0ca561b0fc46f5c1f7",
+      "afterSha256": "29736759a540f93d7404e01ff77294582b19f68472d4ddd2afa1e8a609096313",
+      "beforeBytes": 36227,
+      "afterBytes": 36212,
+      "exactOneSourceFence": true,
+      "beforeFenceEqualsOriginalSource": true,
+      "afterFenceEqualsCurrentSource": true,
+      "outerBytesLinksAndNewlinesUnchanged": true,
+      "originalCredentialOccurrencesAfter": 0,
+      "metadata": "Outer generated metadata retained as instructed; next authorized regeneration may refresh it"
+    }
+  ],
+  "pythonCompile": [
+    {
+      "path": "tools/vault/vault_auth.py",
+      "sha256": "2dc6fef3cb7f71ec58b652753f24169b64285baa59013ac7c043faeac075098c",
+      "lfSha256": "2dc6fef3cb7f71ec58b652753f24169b64285baa59013ac7c043faeac075098c",
+      "astPass": true,
+      "compilePass": true
+    },
+    {
+      "path": "tools/vault/build_vault.py",
+      "sha256": "22efcac3a6de888d2035c6907fed45ac8b543282830eada9c82cdaa542a8c1b3",
+      "lfSha256": "22efcac3a6de888d2035c6907fed45ac8b543282830eada9c82cdaa542a8c1b3",
+      "astPass": true,
+      "compilePass": true
+    },
+    {
+      "path": "tools/vault/build_systems.py",
+      "sha256": "c10a9b0b05cc9dc4b3d74c0d5c61c41afbd20393e5879f358f474ffd8cacff94",
+      "lfSha256": "c10a9b0b05cc9dc4b3d74c0d5c61c41afbd20393e5879f358f474ffd8cacff94",
+      "astPass": true,
+      "compilePass": true
+    },
+    {
+      "path": "tools/vault/fix_folders.py",
+      "sha256": "bff0bcd0a9d435a6d90b9582a01c44719c0f6514a78f75f9e639c1f15c3de52c",
+      "lfSha256": "bff0bcd0a9d435a6d90b9582a01c44719c0f6514a78f75f9e639c1f15c3de52c",
+      "astPass": true,
+      "compilePass": true
+    },
+    {
+      "path": "tools/vault/test_vault_auth.py",
+      "sha256": "c1a8a843a4af138839043a41aed825cb68ccb5025212c95f3c7dc3405c2a8559",
+      "lfSha256": "c1a8a843a4af138839043a41aed825cb68ccb5025212c95f3c7dc3405c2a8559",
+      "astPass": true,
+      "compilePass": true
+    }
+  ],
+  "nativeOrObsidianCalls": 0,
+  "realBuilderOrGraphCfgRuns": 0,
+  "trackedConfigOrCredentialCopiesAdded": 0,
+  "offlineGate": {
+    "receipt": "artifacts/cleanup-serverstorage-20261009/vault-auth/offline-tests-final.json",
+    "receiptSha256": "b458366871f09afb73b01e1996febaf71ceea4d1480659deb75305187aca46a9",
+    "passed": true,
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "sourcesUnchangedDuringTests": true
+  },
+  "preservedDependencies": {
+    "fix_folders.py": "Unchanged; actual import/request closure covered",
+    "graph_cfg.py": "Not run or changed",
+    "pluginConfiguration": "Unchanged",
+    "publicationsOrGitChanges": 0,
+    "credentialRotation": "Not performed; existing vault credential and history preserved"
+  }
+}

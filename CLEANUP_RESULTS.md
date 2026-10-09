@@ -18,7 +18,8 @@ dele af blandede fund har deres egen status og testport.
 
 ## Aktuel ServerStorage-oprydning
 
-S02 har fjernet ti stale Codex-mirrors fra runtime-mapperne og manifestet.
+S02 har fjernet ti stale Codex-mirrors fra runtime-mapperne og manifestet
+(lokal commit `52be2b82`).
 Studio havde allerede fjernet begge folders; batchen ændrede ingen native
 instans. Alle10 gamle filer/entries er bevaret byte-identisk i
 [historikarkivet](artifacts/cleanup-serverstorage-20261009/retired-repo-mirrors/removal-receipt.json).
@@ -62,6 +63,24 @@ cleanup, pinned metadata, atomisk manifestfil og rollback uden at overskrive
 samtidige filer. De faktiske wrappers bestod37 offline scenarier/1.104 checks,
 herunder20 actual Luau compiles i en midlertidig kopis succesflow. Historisk S02v1
 og inputarkiver er uændrede; ingen live batch blev genkørt af disse tests.
+
+## B17 / T12 — lokal værktøjsoprydning
+
+De to vault-builders læser nu deres eksisterende lokale credential lazy gennem
+`vault_auth.py` med et eksplicit miljøoverride. Hardkodede TOKEN-literals er
+fjernet; endpoint, payload, IDs, retry, timeout, `fix_folders` og configfri import/
+dry-run er bevaret. To ignorerede lokale værktøjsnoter fik kun deres sourcefence
+udskiftet. Øvrige note-bytes/links/newlines er bytebevaret. Pluginconfig var
+identisk ved testporten og blev aldrig skrevet af batchen; et senere eksternt
+configskift er bevaret, og frisk peer-review bekræfter stadig samme auth/port.
+Rollback-kopier med credentials ligger privat under `.git`, uden for commits.
+
+18 actual-module offline-tests og fem AST/compile-checks bestod, inklusive
+refresh, override, retry, fejlhåndtering og ugyldige headertegn før HTTP med
+neutrale fejlbeskeder. Ingen rigtig builder, vault-regeneration, netværks-/MCP-
+kald eller Studioændring. Den eksisterende credential og Git-historik er
+bevaret; testen godkender ingen live Obsidian-forbindelse.
+[Review og reproducerbare receipts](artifacts/cleanup-serverstorage-20261009/vault-auth/REVIEW.md).
 
 ## Gennemførte batches
 

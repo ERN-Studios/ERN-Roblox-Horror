@@ -2,9 +2,9 @@
 """Skriver de haandskrevne systemoversigter i '02 Systemer' gennem MCP."""
 import json
 import urllib.request
+from vault_auth import get_token
 
 MCP_URL = "http://127.0.0.1:27200/mcp"
-TOKEN = "eUGfeGxbX5CV8Hzrlm0DVT44hmzIlprwmjWOMCy7qT8"
 P = "02 Systemer"
 _id = [500]
 
@@ -14,7 +14,7 @@ def mcp(name, args):
     body = json.dumps({"jsonrpc": "2.0", "id": _id[0], "method": "tools/call",
                        "params": {"name": name, "arguments": args}}).encode("utf-8")
     req = urllib.request.Request(MCP_URL, data=body, method="POST", headers={
-        "Authorization": "Bearer " + TOKEN, "Content-Type": "application/json",
+        "Authorization": "Bearer " + get_token(), "Content-Type": "application/json",
         "Accept": "application/json, text/event-stream"})
     with urllib.request.urlopen(req, timeout=120) as r:
         out = json.loads(r.read().decode("utf-8"))

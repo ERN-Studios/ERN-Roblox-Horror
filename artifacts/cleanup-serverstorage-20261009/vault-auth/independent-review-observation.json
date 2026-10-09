@@ -1,0 +1,26 @@
+{
+  "schema": "vault-auth-independent-review-observation-v1",
+  "batch": "B17",
+  "findingId": "T12",
+  "observedAtUtc": "2026-10-09T21:20:29.557715+00:00",
+  "authorizedBuilderAstDeltaPass": true,
+  "privateBeforeSourcesEqualGitHead": true,
+  "localNoteFenceAndOuterBytesPass": true,
+  "freshActualModuleTests": 18,
+  "failures": 0,
+  "errors": 0,
+  "allFiveSourceHashesAndFrozenReceiptUnchanged": true,
+  "configuration": {
+    "path": "Backrooms Stay Quiet/.obsidian/plugins/mcp-tools-istefox/data.json",
+    "capturedGateSha256": "ac745a41dc34c9a3ec3aa2bb0eb022282b371e4972c228b83eb57487a828a81b",
+    "observationSha256": "c03e3874c00796b44675ce20f37208e5ca13f490e741debf9457954b8dbfe888",
+    "changedOutsideBatchAfterGate": true,
+    "currentBearerStillMatchesBothPrivateOriginals": true,
+    "livePort": 27200,
+    "headerCompatible": true,
+    "configurationWritesByBatchOrReviewer": 0
+  },
+  "reviewScope": "Independent read-only HEAD AST comparison, private checkpoint and ignored-note byte checks; actual offline contracts with synthetic files/fake HTTP",
+  "realBuilderMainOrObsidianOrNetworkOrStudioCalls": 0,
+  "limitations": "Config unchanged applies at the captured gate only. Later concurrent config changes were preserved; no live connector test or credential rotation."
+}

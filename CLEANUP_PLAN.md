@@ -15,7 +15,7 @@ har aktuelle targets, closures, rollback og porte.
   kun deres manifestentries fjernet. Ingen native runtimefeature fjernet.
   20 arkiv-compiles, source/full-sync-kontrakter og221 resterende mirror-compiles/
   hashes bestod. Ejerens samtidige LevelWorldStorage-entry er bevaret;221 er
-  231 aktuelle før-entries minus ti, ikke230 minus ti.
+  231 aktuelle før-entries minus ti, ikke230 minus ti. Lokal commit `52be2b82`.
 - **S01 / T17,N05 afventer native port:**12 diagnostikrecord-Folders er komplet
   native-arkiveret, typed/Lune reload/canonical roundtrip og serialized inbound
   reference-scan bestået. Ingen mapper er endnu fjernet. Native unparented
@@ -29,20 +29,24 @@ oprydningen. Modulets generiske root-scan udvælger kun de tre præcise mapnavne
 det forbruger ingen af de12 records. Frisk afsluttende Edit-parity afventer
 tilgængelig Edit og skal genlæses, fordi andre sessions fortsætter.
 
-**B17 / T12 klar til afgrænset lokal tooling-batch:**
-`tools/vault/build_vault.py` og `build_systems.py` indeholder samme hardkodede
-connector-token. Ignoreret eksisterende Obsidian-pluginconfig har allerede den
-samme bearer og endpoint-port; ny brugerconfig er ikke nødvendig. Fjern kun
-literal TOKEN og læs credential lazy ved faktisk `mcp()`-kald gennem en lille
-fælles helper; eksplicit miljøoverride understøttes. Endpoint, payload, IDs,
-retry og timeout bevares. `fix_folders.py`-import/caller og configfri dry-run
-bevares; `graph_cfg.py` og builders køres ikke. Risiko: lokal auth-regression;
-gevinst: ingen hardkodet credential i de aktuelle tracked kilder.
-Før-kilder/credentials checkpointes privat under `.git`, aldrig i proof-artifacts.
-Port: faktisk helper + begge mcp-funktioner med fake urlopen før/efter, eksisterende
-config matcher uden værdiprint, env override, manglende/blank/defekt config,
-errors uden læk, retry/timeout/IDs og configfri import/dry-run. Ingen live netværk,
-vault-mutation, credentialrotation eller Studioændring. Status: afventer test.
+**B17 / T12 gennemført lokalt:** `tools/vault/build_vault.py` og
+`build_systems.py` har fået fjernet deres hardkodede credential. Den nye
+`vault_auth.py:get_token` læser lazy ved faktisk `mcp()`-kald fra eksisterende
+ignoreret pluginconfig eller eksplicit `MONGOTV_OBSIDIAN_MCP_TOKEN` override.
+Configens bearer/port er verificeret uden værdiprint; config var byteidentisk
+ved testporten og blev ikke skrevet af batchen. Et senere eksternt configskift
+er bevaret; frisk peer-review bekræfter stadig samme bearer/port. Endpoint,
+payload, IDs, retry, timeout, `fix_folders.py`-import/caller og configfri dry-run
+er bevaret. To ignorerede lokale værktøjsnoter fik kun deres præcise sourcefence
+opdateret; alle øvrige bytes/links/newlines er identiske. Før-kopier findes kun
+privat under `.git`. Gevinst: ingen hardkodet credential i de aktuelle to
+tracked builders eller deres to lokale noter; historik/config er bevaret.
+Port:18 tests af faktiske moduler med fake HTTP og isoleret dry-branch bestået,
+inklusive refresh, override, manglende/blank/defekt config, neutrale fejl før
+Request/retry og afvisning af headerkontroltegn. Fem AST/compile-checks og
+præcis AST-/note-/config-byteport ved den registrerede gate bestået. Ingen rigtig builder, regeneration,
+Obsidian/network/MCP-kald, rotation eller Studioændring.
+[Præcis closure og receipts](artifacts/cleanup-serverstorage-20261009/vault-auth/REVIEW.md).
 
 ## Nye afgrænsede batches efter genkontrol
 

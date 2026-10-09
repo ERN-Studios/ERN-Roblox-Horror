@@ -85,7 +85,7 @@ mirrorhash/class/count/sourcekontrakt/compile; diff og ejerfiler bytebevares.
 Studio Play bevares. Full Edit-parity tages, når Edit er tilgængelig; andre
 sessioners nye maps/scripts/migrations tilskrives ikke denne batch.
 
-Status: gennemført. Alle10 arkivfiler er byteidentiske og compile20/20 bestået;
+Status: gennemført, lokal commit `52be2b82`. Alle10 arkivfiler er byteidentiske og compile20/20 bestået;
 221 resterende mirrors har nul hash-/compile-/count-fejl. Source- og full-sync-
 kontrakter bestået. Kun ti rows/filer fjernet; native er uændret.
 

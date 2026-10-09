@@ -1,0 +1,52 @@
+{
+  "schema": "vault-auth-offline-tests-v1",
+  "passed": true,
+  "tests": 18,
+  "failures": 0,
+  "errors": 0,
+  "testCases": [
+    "test_actual_dry_branch_exits_before_side_effects",
+    "test_bom_config",
+    "test_both_actual_requests_keep_contracts_and_refresh",
+    "test_existing_plugin_credential_and_refresh",
+    "test_explicit_blank_override_is_rejected",
+    "test_fix_folders_uses_actual_shared_request",
+    "test_generated_tool_notes_do_not_embed_runtime_credentials",
+    "test_imports_are_config_and_write_free",
+    "test_invalid_json_shapes_and_tokens",
+    "test_io_and_encoding_errors_are_bounded",
+    "test_missing_and_malformed_config_fail_without_leaks",
+    "test_missing_config_blocks_both_before_http_or_sleep",
+    "test_no_builder_token_assignment_or_reference",
+    "test_override_precedes_missing_and_invalid_config",
+    "test_systems_errors_are_single_request",
+    "test_unsafe_header_credentials_fail_without_leaks_or_retries",
+    "test_vault_error_retries_preserve_final_exception",
+    "test_vault_transport_retry_success"
+  ],
+  "sourcesUnchanged": true,
+  "scope": "Actual module imports and isolated dry branch; synthetic vault and fake HTTP only",
+  "nativeOrObsidianCalls": 0,
+  "sources": {
+    "vault_auth.py": {
+      "sha256": "2dc6fef3cb7f71ec58b652753f24169b64285baa59013ac7c043faeac075098c",
+      "lfSha256": "2dc6fef3cb7f71ec58b652753f24169b64285baa59013ac7c043faeac075098c"
+    },
+    "build_vault.py": {
+      "sha256": "22efcac3a6de888d2035c6907fed45ac8b543282830eada9c82cdaa542a8c1b3",
+      "lfSha256": "22efcac3a6de888d2035c6907fed45ac8b543282830eada9c82cdaa542a8c1b3"
+    },
+    "build_systems.py": {
+      "sha256": "c10a9b0b05cc9dc4b3d74c0d5c61c41afbd20393e5879f358f474ffd8cacff94",
+      "lfSha256": "c10a9b0b05cc9dc4b3d74c0d5c61c41afbd20393e5879f358f474ffd8cacff94"
+    },
+    "fix_folders.py": {
+      "sha256": "bff0bcd0a9d435a6d90b9582a01c44719c0f6514a78f75f9e639c1f15c3de52c",
+      "lfSha256": "bff0bcd0a9d435a6d90b9582a01c44719c0f6514a78f75f9e639c1f15c3de52c"
+    },
+    "test_vault_auth.py": {
+      "sha256": "c1a8a843a4af138839043a41aed825cb68ccb5025212c95f3c7dc3405c2a8559",
+      "lfSha256": "c1a8a843a4af138839043a41aed825cb68ccb5025212c95f3c7dc3405c2a8559"
+    }
+  }
+}
