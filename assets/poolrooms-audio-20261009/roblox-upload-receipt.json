@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-09",
+  "group_id": "1039373905",
+  "group_name": "ERN Roblox Studios",
+  "method": "Creator Dashboard native file chooser and Upload 9 assets",
+  "result": "9 files uploaded successfully",
+  "assets": {
+    "bed_hall": "80404926499766",
+    "bed_water": "116500347461110",
+    "bed_service": "79661425723233",
+    "loop_weir": "70912311454622",
+    "loop_lion": "87608993842645",
+    "shot_drip": "127883794297774",
+    "shot_pipe": "138400313124619",
+    "shot_splash": "129520630853843",
+    "shot_creak": "90126161261127"
+  },
+  "moderation_verified": false,
+  "experience_load_verified": false,
+  "studio_installed": false,
+  "published": false
+}

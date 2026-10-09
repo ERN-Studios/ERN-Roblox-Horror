@@ -1,0 +1,312 @@
+{
+  "auditioned": false,
+  "date": "2026-10-09",
+  "generation_manifest_sha256": "4795033d542cd758a7ee360e4839d69c386cc744ef946b6fef551bdd024810de",
+  "generation_metadata": {
+    "date": "2026-10-09",
+    "fan_replacement_takes": [
+      {
+        "id": "1iod1Fm2tLWtRm3d6KZg",
+        "key": "bed_hall",
+        "take": 9
+      },
+      {
+        "id": "KdGwondRnmacAnascEcS",
+        "key": "bed_hall",
+        "take": 10
+      },
+      {
+        "id": "i0SLulFGMVuoVlhSShgz",
+        "key": "bed_hall",
+        "take": 11
+      },
+      {
+        "id": "ECU9swXtXU2UcdXmCtVx",
+        "key": "bed_hall",
+        "take": 12
+      }
+    ],
+    "flow_id": "UdCwCcleFO6Zoz0oFwt4",
+    "model": "eleven_text_to_sound_v2",
+    "prompt_influence": 0.55,
+    "provider": "ElevenLabs",
+    "recipes": [
+      {
+        "duration_seconds": 24,
+        "key": "bed_hall",
+        "loop": true,
+        "prompt": "A cavernous empty tiled indoor swimming pool hall, very quiet hollow air pressure and softly resonant low ventilation, subtle calm water movement far away. Cold liminal Poolrooms realism, vast smooth tile reverberation. No voices, music, footsteps, scary stinger, radio noise, crackle or high hiss. Stable seamless background loop."
+      },
+      {
+        "duration_seconds": 24,
+        "key": "bed_water",
+        "loop": true,
+        "prompt": "Deserted tiled indoor pool, gentle slow water lapping against ceramic walls, quiet reflected ripples and deep hollow room resonance. Spacious submerged architecture, subtle uneasy natural atmosphere. Smooth clean recording, no voices, music, footsteps, birds, wind, electronic static or sharp hiss. Consistent seamless loop."
+      },
+      {
+        "duration_seconds": 24,
+        "key": "bed_service",
+        "loop": true,
+        "prompt": "Very distant pool circulation machinery through thick tiled walls, warm low hollow motor resonance with faint irregular water movement inside pipes. Quiet empty maintenance poolroom, subtle restrained mechanical ambience. No music, speech, alarms, electrical crackling or broadband hiss. Stable seamless loop."
+      },
+      {
+        "duration_seconds": 20,
+        "key": "loop_weir",
+        "loop": true,
+        "prompt": "Soft continuous spill of shallow water over a low indoor pool weir, rounded watery burble rather than sizzling spray. Empty tiled chamber natural reverberation, moderate distance. Clean close recording without voices, music, surf, wind, static or sharp treble. Even seamless loop."
+      },
+      {
+        "duration_seconds": 20,
+        "key": "loop_lion",
+        "loop": true,
+        "prompt": "Small steady water spout pouring into an indoor shallow pool, gentle rounded trickle and droplets merging into soft pool ripples, smooth long ceramic rotunda reverberation. No people, music, outdoor sounds, white-noise hiss or electrical static. Consistent seamless loop."
+      },
+      {
+        "duration_seconds": 8,
+        "key": "shot_drip",
+        "loop": false,
+        "prompt": "One isolated soft water droplet falling into a still indoor pool, then two quieter separated droplets. Hollow ceramic hall reflections and a long natural decay all the way to silence. Clean restrained realistic recording, no continuous background noise, voices, music, static or jump scare."
+      },
+      {
+        "duration_seconds": 10,
+        "key": "shot_pipe",
+        "loop": false,
+        "prompt": "A single distant low metal pipe expansion groan heard through tiled swimming pool walls. Subtle smooth hollow resonance slowly rises and relaxes, long naturally fading reverb into complete silence. No voices, music, monster, continuous hum, crackles, white noise or abrupt impact."
+      },
+      {
+        "duration_seconds": 9,
+        "key": "shot_splash",
+        "loop": false,
+        "prompt": "One gentle unexplained water displacement far across an empty indoor swimming pool. Low rounded small splash, widening ripples, deep tiled reverberation fading naturally into complete silence. No footsteps, voices, music, monster roar, hiss, static or jump scare."
+      },
+      {
+        "duration_seconds": 9,
+        "key": "shot_creak",
+        "loop": false,
+        "prompt": "A quiet distant structural creak in a vast abandoned indoor tiled pool hall, slow resonant ceramic and metal settling, slightly unsettling, long soft decaying reflections into complete silence. No voices, music, harsh scrape, background hiss, crackle or sudden loud stinger."
+      }
+    ],
+    "replacement_reason": "Original bed_hall takes failed restrained loudness target and would require excessive amplification of the noise floor.",
+    "replacement_takes": [
+      {
+        "id": "8LFTZsspauYh6nBH8bZX",
+        "key": "bed_hall",
+        "take": 5
+      },
+      {
+        "id": "glUGwgsQTIFIzy8iZQx8",
+        "key": "bed_hall",
+        "take": 6
+      },
+      {
+        "id": "8GFHhaYImWxV7sQOPfLT",
+        "key": "bed_hall",
+        "take": 7
+      },
+      {
+        "id": "nN17twvEPPoUOtokJYZf",
+        "key": "bed_hall",
+        "take": 8
+      }
+    ],
+    "takes": [
+      {
+        "id": "geAltyzrMXFJl0cjbr71",
+        "key": "bed_hall",
+        "take": 1
+      },
+      {
+        "id": "jpdXJFQCowGvshITefM7",
+        "key": "bed_hall",
+        "take": 2
+      },
+      {
+        "id": "ChWuNFVlMUZvvdwimt56",
+        "key": "bed_hall",
+        "take": 3
+      },
+      {
+        "id": "nNesvQoNhwACR9PfLcqt",
+        "key": "bed_hall",
+        "take": 4
+      },
+      {
+        "id": "RJblc9HQPZueoNpd3M31",
+        "key": "bed_water",
+        "take": 1
+      },
+      {
+        "id": "3mbWt3AtWzZ74jAxIjul",
+        "key": "bed_water",
+        "take": 2
+      },
+      {
+        "id": "FR6lwx5NnmeFnx23gBC3",
+        "key": "bed_water",
+        "take": 3
+      },
+      {
+        "id": "ehUrWP76r0721c8ZlGR2",
+        "key": "bed_water",
+        "take": 4
+      },
+      {
+        "id": "qbgWsMkMUad8iLhiYADg",
+        "key": "bed_service",
+        "take": 1
+      },
+      {
+        "id": "3ZVksJgP2GJiLNiVOKsF",
+        "key": "bed_service",
+        "take": 2
+      },
+      {
+        "id": "OlB5Agu9cfqIXr5tIsX8",
+        "key": "bed_service",
+        "take": 3
+      },
+      {
+        "id": "VfcTKHeZ8RblYMwOpnj5",
+        "key": "bed_service",
+        "take": 4
+      },
+      {
+        "id": "SDYDc0HVg7aNPjaZ9ORy",
+        "key": "loop_weir",
+        "take": 1
+      },
+      {
+        "id": "pEuiPGMaspAVIzBcm7qW",
+        "key": "loop_weir",
+        "take": 2
+      },
+      {
+        "id": "31g2H2UHWN9ldrUahg9i",
+        "key": "loop_weir",
+        "take": 3
+      },
+      {
+        "id": "EF691lA7dEXmoaWiqcqJ",
+        "key": "loop_weir",
+        "take": 4
+      },
+      {
+        "id": "Q4yM8IugG5OPbZhj6Aii",
+        "key": "loop_lion",
+        "take": 1
+      },
+      {
+        "id": "uBWe54D24mR1mGrEfYbT",
+        "key": "loop_lion",
+        "take": 2
+      },
+      {
+        "id": "95UWny8bDUUpLokdWots",
+        "key": "loop_lion",
+        "take": 3
+      },
+      {
+        "id": "zWd2qs3JEUV3uBkOlIIq",
+        "key": "loop_lion",
+        "take": 4
+      },
+      {
+        "id": "NyD4fyBF2hD6jZSbnA06",
+        "key": "shot_drip",
+        "take": 1
+      },
+      {
+        "id": "jls8JKZVeo7R63u2g7bJ",
+        "key": "shot_drip",
+        "take": 2
+      },
+      {
+        "id": "T40Yaei1uCkvRKTY2hwg",
+        "key": "shot_drip",
+        "take": 3
+      },
+      {
+        "id": "xcug8NfW9Dnb4EmHx3rU",
+        "key": "shot_drip",
+        "take": 4
+      },
+      {
+        "id": "SIIs8Eb07dSBOmsM0Vsr",
+        "key": "shot_pipe",
+        "take": 1
+      },
+      {
+        "id": "KdDpWghvhrSsVNpkChR8",
+        "key": "shot_pipe",
+        "take": 2
+      },
+      {
+        "id": "V14Y76aJ2UykV2keWcLP",
+        "key": "shot_pipe",
+        "take": 3
+      },
+      {
+        "id": "Ihcjp5pMHVSRobbaRdn5",
+        "key": "shot_pipe",
+        "take": 4
+      },
+      {
+        "id": "P4dMBo9qb27gUflv45Bl",
+        "key": "shot_splash",
+        "take": 1
+      },
+      {
+        "id": "9MX45n7lkkJTwT7bQla1",
+        "key": "shot_splash",
+        "take": 2
+      },
+      {
+        "id": "Twfg1fx4k8z63b2Z24jQ",
+        "key": "shot_splash",
+        "take": 3
+      },
+      {
+        "id": "EopKy2kzXC7sf76Gl6B7",
+        "key": "shot_splash",
+        "take": 4
+      },
+      {
+        "id": "sSSo9Hj1c0CN2I9E75Kv",
+        "key": "shot_creak",
+        "take": 1
+      },
+      {
+        "id": "GUFMRHtysire96lHpaBB",
+        "key": "shot_creak",
+        "take": 2
+      },
+      {
+        "id": "dKEWWbLvxRnf5bQEYN2V",
+        "key": "shot_creak",
+        "take": 3
+      },
+      {
+        "id": "JEfLbwBZxNPFkz50N1s0",
+        "key": "shot_creak",
+        "take": 4
+      }
+    ]
+  },
+  "generator_parameters": null,
+  "model_id": "eleven_text_to_sound_v2",
+  "provenance_source": "assets/poolrooms-audio-20261009/generation-provenance.json",
+  "provider": "ElevenLabs",
+  "script_sha256": "283e162afd6c7ce119cd2b6eb7184076b3abf669635ff0f0bfc2e80a12dc4584",
+  "sound_count": 9,
+  "take_counts_per_sound": {
+    "bed_hall": 12,
+    "bed_service": 4,
+    "bed_water": 4,
+    "loop_lion": 4,
+    "loop_weir": 4,
+    "shot_creak": 4,
+    "shot_drip": 4,
+    "shot_pipe": 4,
+    "shot_splash": 4
+  }
+}

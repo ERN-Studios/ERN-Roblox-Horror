@@ -1,0 +1,98 @@
+{
+  "bed_hall": {
+    "comb_from": 800,
+    "cross": 2.0,
+    "highpass": 45,
+    "kind": "bed",
+    "lowpass": 3800,
+    "physical_water": false,
+    "seconds": 24,
+    "target_lufs": -27
+  },
+  "bed_service": {
+    "comb_from": 1400,
+    "cross": 2.0,
+    "highpass": 50,
+    "kind": "bed",
+    "lowpass": 3500,
+    "machinery": true,
+    "physical_water": false,
+    "seconds": 24,
+    "target_lufs": -27
+  },
+  "bed_water": {
+    "comb_from": 900,
+    "cross": 2.0,
+    "highpass": 45,
+    "kind": "bed",
+    "lowpass": 4800,
+    "physical_water": true,
+    "seconds": 24,
+    "target_lufs": -27
+  },
+  "loop_lion": {
+    "comb_from": 900,
+    "cross": 2.0,
+    "highpass": 60,
+    "kind": "loop",
+    "lowpass": 6000,
+    "physical_water": true,
+    "seconds": 20,
+    "target_lufs": -24
+  },
+  "loop_weir": {
+    "comb_from": 900,
+    "cross": 2.0,
+    "highpass": 60,
+    "kind": "loop",
+    "lowpass": 5800,
+    "physical_water": true,
+    "seconds": 20,
+    "target_lufs": -24
+  },
+  "shot_creak": {
+    "attack": 0.25,
+    "comb_from": 1600,
+    "highpass": 60,
+    "kind": "shot",
+    "lowpass": 4800,
+    "physical_water": false,
+    "seconds": 9,
+    "tail": 2.0,
+    "target_lufs": -25
+  },
+  "shot_drip": {
+    "attack": 0.15,
+    "comb_from": 1200,
+    "highpass": 60,
+    "kind": "shot",
+    "lowpass": 5500,
+    "physical_water": true,
+    "seconds": 8,
+    "tail": 1.5,
+    "target_lufs": -25
+  },
+  "shot_pipe": {
+    "attack": 0.25,
+    "comb_from": 1400,
+    "highpass": 50,
+    "kind": "shot",
+    "lowpass": 4500,
+    "machinery": true,
+    "physical_water": false,
+    "seconds": 10,
+    "tail": 2.0,
+    "target_lufs": -25
+  },
+  "shot_splash": {
+    "attack": 0.18,
+    "comb_from": 1200,
+    "highpass": 60,
+    "kind": "shot",
+    "lowpass": 5800,
+    "physical_water": true,
+    "seconds": 9,
+    "tail": 1.8,
+    "target_lufs": -25
+  }
+}

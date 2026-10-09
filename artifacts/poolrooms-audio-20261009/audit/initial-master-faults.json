@@ -1,0 +1,822 @@
+{
+  "auditioned": false,
+  "phase": "First mastering pass, before seam rotation and bounded linked limiting",
+  "sounds": {
+    "bed_hall": {
+      "encoder_overshoot_reduction_db": 0,
+      "faults": [
+        "Integrated loudness lies more than 3 LU from the restrained target"
+      ],
+      "final_decoded_metrics": {
+        "above_1p3_cutoff_dbfs": -134.71,
+        "above_cutoff_relative_db": -89.58,
+        "all_tonal_peaks": [
+          {
+            "hz": 1001.29,
+            "on_50hz_grid": true,
+            "persistence": 1.0,
+            "power_dbfs": -90.1,
+            "prominence_db": 21.24
+          },
+          {
+            "hz": 1399.66,
+            "on_50hz_grid": true,
+            "persistence": 1.0,
+            "power_dbfs": -92.39,
+            "prominence_db": 23.86
+          },
+          {
+            "hz": 1598.84,
+            "on_50hz_grid": true,
+            "persistence": 1.0,
+            "power_dbfs": -91.03,
+            "prominence_db": 24.01
+          },
+          {
+            "hz": 1800.71,
+            "on_50hz_grid": true,
+            "persistence": 1.0,
+            "power_dbfs": -94.05,
+            "prominence_db": 21.47
+          },
+          {
+            "hz": 1999.9,
+            "on_50hz_grid": true,
+            "persistence": 1.0,
+            "power_dbfs": -91.89,
+            "prominence_db": 24.25
+          }
+        ],
+        "audible_steady_grid_tones_over800": 0,
+        "audible_steady_tones_over800": 0,
+        "bands_dbfs": {
+          "150_1k": -69.66,
+          "1k_4k": -82.11,
+          "4k_8k": -107.49,
+          "over8k": -185.43,
+          "under150": -45.15
+        },
+        "high_band_flatness": 0.0,
+        "loop_seam_channels": [
+          {
+            "end_vs_start_250ms_db": -0.29,
+            "hf_vs_median_db": 0.73,
+            "hf_vs_p99_db": -2.5,
+            "step_dbfs": -79.93,
+            "step_vs_diff_rms_db": 3.91
+          },
+          {
+            "end_vs_start_250ms_db": -1.02,
+            "hf_vs_median_db": -1.27,
+            "hf_vs_p99_db": -4.54,
+            "step_dbfs": -81.34,
+            "step_vs_diff_rms_db": -0.4
+          }
+        ],
+        "lufs": -42.5,
+        "quiet10_2p5k_8k_dbfs": -88.63,
+        "quiet10_rms_dbfs": -55.4,
+        "quiet_to_median_db": 7.81,
+        "rms_dbfs": -45.1,
+        "sample_peak_dbfs": -25.01,
+        "seconds": 22.0,
+        "stereo_correlation": -0.0918,
+        "true_peak_dbfs": -25.0
+      },
+      "listening_verified": false,
+      "master_sha256": "9ba3680c8a44d44bef9937a0817568775c885147efdf6419eb32d41835e74e60",
+      "normalization_gain_db": 9,
+      "numeric_pass": false,
+      "peak_guard_reduction_db": 0,
+      "pre_gain_clean_loudness": {
+        "lufs": -51.6,
+        "true_peak_dbfs": -34.2
+      },
+      "processing": [
+        {
+          "broadband_reduction": {
+            "applied": false,
+            "depth_db": 0,
+            "profile_high_flatness": 0.3791,
+            "quiet_to_median_db": 4.54,
+            "reason": "No isolated stationary broadband floor identified; retain intended ambience and use band limiting/comb removal only."
+          },
+          "removed_comb_candidates": []
+        },
+        {
+          "broadband_reduction": {
+            "applied": false,
+            "depth_db": 0,
+            "profile_high_flatness": 0.3804,
+            "quiet_to_median_db": 3.32,
+            "reason": "No isolated stationary broadband floor identified; retain intended ambience and use band limiting/comb removal only."
+          },
+          "removed_comb_candidates": []
+        }
+      ],
+      "recipe": {
+        "comb_from": 800,
+        "cross": 2.0,
+        "highpass": 45,
+        "kind": "bed",
+        "lowpass": 3800,
+        "physical_water": false,
+        "seconds": 24,
+        "target_lufs": -27
+      },
+      "selected_raw_sha256": "1ced4eac04a68b336a443491e8fb63ab87c1a090edfa432e82556f0dbf959d02",
+      "selected_raw_wav_sha256": "7c8e659fe42c5bdc4e2e2f91c7f4bf68f752b9cfd8162b49536db5d3b538339a",
+      "selected_take": "bed_hall__take1.mp3",
+      "selection_candidates": [
+        {
+          "file": "bed_hall__take1.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -94.77,
+            "above_cutoff_relative_db": -55.33,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -78.66,
+              "1k_4k": -90.84,
+              "4k_8k": -94.59,
+              "over8k": -101.12,
+              "under150": -39.44
+            },
+            "first20ms_peak_dbfs": -34.23,
+            "first_sample_peak": 0.01178525760769844,
+            "high_band_flatness": 0.2164,
+            "last20ms_peak_dbfs": -34.72,
+            "last_sample_peak": 0.014587420970201492,
+            "lufs": -48.0,
+            "quiet10_2p5k_8k_dbfs": -93.4,
+            "quiet10_rms_dbfs": -46.95,
+            "quiet_to_median_db": 7.36,
+            "rms_dbfs": -39.53,
+            "sample_peak_dbfs": -26.42,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.7513,
+            "true_peak_dbfs": -26.4
+          },
+          "score": 15.0,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 15.0,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "1ced4eac04a68b336a443491e8fb63ab87c1a090edfa432e82556f0dbf959d02"
+        },
+        {
+          "file": "bed_hall__take3.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -96.21,
+            "above_cutoff_relative_db": -49.22,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -72.51,
+              "1k_4k": -91.42,
+              "4k_8k": -95.73,
+              "over8k": -102.54,
+              "under150": -47.01
+            },
+            "first20ms_peak_dbfs": -43.25,
+            "first_sample_peak": 0.0014596617547795177,
+            "high_band_flatness": 0.2338,
+            "last20ms_peak_dbfs": -44.07,
+            "last_sample_peak": 0.001728137256577611,
+            "lufs": -53.1,
+            "quiet10_2p5k_8k_dbfs": -94.32,
+            "quiet10_rms_dbfs": -54.58,
+            "quiet_to_median_db": 6.69,
+            "rms_dbfs": -46.99,
+            "sample_peak_dbfs": -32.92,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.8903,
+            "true_peak_dbfs": -32.9
+          },
+          "score": 20.1,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 20.1,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "76807b25d2a019b6c2d78f6483b152ad90fd398eaf07a9a610764fb51d525d57"
+        },
+        {
+          "file": "bed_hall__take2.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -97.03,
+            "above_cutoff_relative_db": -43.4,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -74.19,
+              "1k_4k": -91.83,
+              "4k_8k": -96.3,
+              "over8k": -103.25,
+              "under150": -53.66
+            },
+            "first20ms_peak_dbfs": -45.88,
+            "first_sample_peak": 0.0008450662135146558,
+            "high_band_flatness": 0.2269,
+            "last20ms_peak_dbfs": -49.55,
+            "last_sample_peak": 0.0009744518902152777,
+            "lufs": -53.7,
+            "quiet10_2p5k_8k_dbfs": -94.65,
+            "quiet10_rms_dbfs": -65.82,
+            "quiet_to_median_db": 10.45,
+            "rms_dbfs": -53.64,
+            "sample_peak_dbfs": -34.74,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.0532,
+            "true_peak_dbfs": -34.7
+          },
+          "score": 20.7,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 20.7,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "36d7653d668efa90ac3738efb36423508b4d55a94346054caff0203d1f670ee8"
+        },
+        {
+          "file": "bed_hall__take4.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -97.34,
+            "above_cutoff_relative_db": -42.26,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -70.8,
+              "1k_4k": -91.3,
+              "4k_8k": -96.35,
+              "over8k": -103.49,
+              "under150": -55.2
+            },
+            "first20ms_peak_dbfs": -53.74,
+            "first_sample_peak": 0.00044127387809567153,
+            "high_band_flatness": 0.2525,
+            "last20ms_peak_dbfs": -56.54,
+            "last_sample_peak": 0.0005571747315116227,
+            "lufs": -57.9,
+            "quiet10_2p5k_8k_dbfs": -93.97,
+            "quiet10_rms_dbfs": -61.39,
+            "quiet_to_median_db": 5.81,
+            "rms_dbfs": -55.09,
+            "sample_peak_dbfs": -42.57,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.999,
+            "true_peak_dbfs": -42.6
+          },
+          "score": 24.9,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 24.9,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "3f204187a1aa64b596fe336123bca88644b1bae9ad802d4733365575cc050680"
+        }
+      ],
+      "selection_rationale": "Lowest bounded technical-artifact score among four takes: stationary grid tones, out-of-band residue, clipping, duration, unintended loop silence, and excessive normalization. This does not establish artistic or auditory superiority."
+    },
+    "bed_water": {
+      "encoder_overshoot_reduction_db": 0,
+      "faults": [
+        "Integrated loudness lies more than 3 LU from the restrained target",
+        "Final encoded loop seam is anomalous against ordinary waveform differences, HF transients, or local level"
+      ],
+      "final_decoded_metrics": {
+        "above_1p3_cutoff_dbfs": -103.35,
+        "above_cutoff_relative_db": -66.81,
+        "all_tonal_peaks": [],
+        "audible_steady_grid_tones_over800": 0,
+        "audible_steady_tones_over800": 0,
+        "bands_dbfs": {
+          "150_1k": -40.34,
+          "1k_4k": -38.98,
+          "4k_8k": -56.14,
+          "over8k": -138.76,
+          "under150": -61.33
+        },
+        "high_band_flatness": 0.0033,
+        "loop_seam_channels": [
+          {
+            "end_vs_start_250ms_db": 2.17,
+            "hf_vs_median_db": -10.73,
+            "hf_vs_p99_db": -36.04,
+            "step_dbfs": -82.39,
+            "step_vs_diff_rms_db": -32.46
+          },
+          {
+            "end_vs_start_250ms_db": 11.89,
+            "hf_vs_median_db": -14.78,
+            "hf_vs_p99_db": -42.75,
+            "step_dbfs": -78.65,
+            "step_vs_diff_rms_db": -29.6
+          }
+        ],
+        "lufs": -30.2,
+        "quiet10_2p5k_8k_dbfs": -69.08,
+        "quiet10_rms_dbfs": -59.85,
+        "quiet_to_median_db": 10.63,
+        "rms_dbfs": -36.4,
+        "sample_peak_dbfs": -4.0,
+        "seconds": 22.0,
+        "stereo_correlation": 0.832,
+        "true_peak_dbfs": -4.0
+      },
+      "listening_verified": false,
+      "master_sha256": "9df777939d63253d799d849b00e878f3557b6f2d1156f3bfe949370734fea8b0",
+      "normalization_gain_db": 3.4,
+      "numeric_pass": false,
+      "peak_guard_reduction_db": 3.128,
+      "pre_gain_clean_loudness": {
+        "lufs": -30.4,
+        "true_peak_dbfs": -4.3
+      },
+      "processing": [
+        {
+          "broadband_reduction": {
+            "applied": false,
+            "depth_db": 0,
+            "reason": "Physical water retains its natural broadband texture; no spectral gate."
+          },
+          "removed_comb_candidates": []
+        },
+        {
+          "broadband_reduction": {
+            "applied": false,
+            "depth_db": 0,
+            "reason": "Physical water retains its natural broadband texture; no spectral gate."
+          },
+          "removed_comb_candidates": []
+        }
+      ],
+      "recipe": {
+        "comb_from": 900,
+        "cross": 2.0,
+        "highpass": 45,
+        "kind": "bed",
+        "lowpass": 4800,
+        "physical_water": true,
+        "seconds": 24,
+        "target_lufs": -27
+      },
+      "selected_raw_sha256": "c9ec8b710375ffc5fbf03bb2b00f61d956e797ea06a3569071fcfd2af817859a",
+      "selected_raw_wav_sha256": "03a928ce302571b9b0d7307784e24b7b581df38aa647af69269b1110418e23e9",
+      "selected_take": "bed_water__take2.mp3",
+      "selection_candidates": [
+        {
+          "file": "bed_water__take2.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -55.21,
+            "above_cutoff_relative_db": -20.32,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -40.92,
+              "1k_4k": -39.33,
+              "4k_8k": -52.55,
+              "over8k": -57.44,
+              "under150": -39.23
+            },
+            "first20ms_peak_dbfs": -39.07,
+            "first_sample_peak": 0.0052698221988976,
+            "high_band_flatness": 0.539,
+            "last20ms_peak_dbfs": -33.65,
+            "last_sample_peak": 0.006821846589446068,
+            "lufs": -30.5,
+            "quiet10_2p5k_8k_dbfs": -63.02,
+            "quiet10_rms_dbfs": -50.31,
+            "quiet_to_median_db": 10.72,
+            "rms_dbfs": -34.97,
+            "sample_peak_dbfs": -4.16,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.5826,
+            "true_peak_dbfs": -4.1
+          },
+          "score": 0.0,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 0,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "c9ec8b710375ffc5fbf03bb2b00f61d956e797ea06a3569071fcfd2af817859a"
+        },
+        {
+          "file": "bed_water__take3.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -59.87,
+            "above_cutoff_relative_db": -21.91,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -45.77,
+              "1k_4k": -41.42,
+              "4k_8k": -55.56,
+              "over8k": -62.94,
+              "under150": -42.36
+            },
+            "first20ms_peak_dbfs": -40.54,
+            "first_sample_peak": 0.003985382150858641,
+            "high_band_flatness": 0.4813,
+            "last20ms_peak_dbfs": -42.63,
+            "last_sample_peak": 0.004330646712332964,
+            "lufs": -32.5,
+            "quiet10_2p5k_8k_dbfs": -65.61,
+            "quiet10_rms_dbfs": -48.92,
+            "quiet_to_median_db": 8.53,
+            "rms_dbfs": -38.08,
+            "sample_peak_dbfs": -5.49,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.7567,
+            "true_peak_dbfs": -5.5
+          },
+          "score": 0.0,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 0,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "53d3381c01156161ad0b230cff251cc2d67ee62ad417784be4934707bb20d157"
+        },
+        {
+          "file": "bed_water__take4.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -59.98,
+            "above_cutoff_relative_db": -21.17,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -48.89,
+              "1k_4k": -45.9,
+              "4k_8k": -57.22,
+              "over8k": -62.76,
+              "under150": -40.43
+            },
+            "first20ms_peak_dbfs": -33.09,
+            "first_sample_peak": 0.009646240621805191,
+            "high_band_flatness": 0.6909,
+            "last20ms_peak_dbfs": -35.1,
+            "last_sample_peak": 0.010030842386186123,
+            "lufs": -37.9,
+            "quiet10_2p5k_8k_dbfs": -62.69,
+            "quiet10_rms_dbfs": -50.76,
+            "quiet_to_median_db": 10.41,
+            "rms_dbfs": -39.1,
+            "sample_peak_dbfs": -8.39,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.762,
+            "true_peak_dbfs": -8.3
+          },
+          "score": 4.9,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 4.9,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "7b36e3c808305572d74cbdc7c5a5434ac854a98f589e6aa86273bd8585d12ace"
+        },
+        {
+          "file": "bed_water__take1.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -63.96,
+            "above_cutoff_relative_db": -19.7,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -52.41,
+              "1k_4k": -49.81,
+              "4k_8k": -59.66,
+              "over8k": -68.01,
+              "under150": -46.97
+            },
+            "first20ms_peak_dbfs": -43.37,
+            "first_sample_peak": 0.002157976385205984,
+            "high_band_flatness": 0.6778,
+            "last20ms_peak_dbfs": -47.73,
+            "last_sample_peak": 0.002123346319422126,
+            "lufs": -41.1,
+            "quiet10_2p5k_8k_dbfs": -69.67,
+            "quiet10_rms_dbfs": -55.24,
+            "quiet_to_median_db": 8.53,
+            "rms_dbfs": -44.37,
+            "sample_peak_dbfs": -17.0,
+            "seconds": 24.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.6416,
+            "true_peak_dbfs": -17.0
+          },
+          "score": 8.1,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 8.1,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 0.0,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "cb118122e9b3b26751e5d0660419d62ece8065db13d35462d2c4b8440228186e"
+        }
+      ],
+      "selection_rationale": "Lowest bounded technical-artifact score among four takes: stationary grid tones, out-of-band residue, clipping, duration, unintended loop silence, and excessive normalization. This does not establish artistic or auditory superiority."
+    },
+    "loop_lion": {
+      "encoder_overshoot_reduction_db": 0,
+      "faults": [
+        "Integrated loudness lies more than 3 LU from the restrained target"
+      ],
+      "final_decoded_metrics": {
+        "above_1p3_cutoff_dbfs": -86.12,
+        "above_cutoff_relative_db": -47.8,
+        "all_tonal_peaks": [],
+        "audible_steady_grid_tones_over800": 0,
+        "audible_steady_tones_over800": 0,
+        "bands_dbfs": {
+          "150_1k": -66.02,
+          "1k_4k": -39.78,
+          "4k_8k": -43.82,
+          "over8k": -92.77,
+          "under150": -70.29
+        },
+        "high_band_flatness": 0.2206,
+        "loop_seam_channels": [
+          {
+            "end_vs_start_250ms_db": -2.53,
+            "hf_vs_median_db": 4.41,
+            "hf_vs_p99_db": -9.86,
+            "step_dbfs": -41.94,
+            "step_vs_diff_rms_db": 3.02
+          },
+          {
+            "end_vs_start_250ms_db": -2.53,
+            "hf_vs_median_db": 4.41,
+            "hf_vs_p99_db": -9.86,
+            "step_dbfs": -41.94,
+            "step_vs_diff_rms_db": 3.02
+          }
+        ],
+        "lufs": -29.7,
+        "quiet10_2p5k_8k_dbfs": -48.94,
+        "quiet10_rms_dbfs": -47.63,
+        "quiet_to_median_db": 5.2,
+        "rms_dbfs": -38.07,
+        "sample_peak_dbfs": -7.05,
+        "seconds": 18.0,
+        "stereo_correlation": 1.0,
+        "true_peak_dbfs": -4.0
+      },
+      "listening_verified": false,
+      "master_sha256": "8d3751d4bd7b64e65efdd5407549da6fed6696bfa179db756395bb92a7e87489",
+      "normalization_gain_db": 9,
+      "numeric_pass": false,
+      "peak_guard_reduction_db": 2.499,
+      "pre_gain_clean_loudness": {
+        "lufs": -36.0,
+        "true_peak_dbfs": -10.5
+      },
+      "processing": [
+        {
+          "broadband_reduction": {
+            "applied": false,
+            "depth_db": 0,
+            "reason": "Physical water retains its natural broadband texture; no spectral gate."
+          },
+          "removed_comb_candidates": []
+        }
+      ],
+      "recipe": {
+        "comb_from": 900,
+        "cross": 2.0,
+        "highpass": 60,
+        "kind": "loop",
+        "lowpass": 5800,
+        "physical_water": true,
+        "seconds": 20,
+        "target_lufs": -24
+      },
+      "selected_raw_sha256": "c9481a9d5fa45696a8749f4af095b70c5fe241009b36c2988a41aca87f1c8fef",
+      "selected_raw_wav_sha256": "358842e519aed23f43d8e3c6deda0711be569e7e40a043d7d84074996194e079",
+      "selected_take": "loop_lion__take4.mp3",
+      "selection_candidates": [
+        {
+          "file": "loop_lion__take4.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -39.85,
+            "above_cutoff_relative_db": -2.95,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -69.35,
+              "1k_4k": -42.72,
+              "4k_8k": -42.53,
+              "over8k": -40.23,
+              "under150": -71.31
+            },
+            "first20ms_peak_dbfs": -26.52,
+            "first_sample_peak": 0.008841587230563164,
+            "high_band_flatness": 0.89,
+            "last20ms_peak_dbfs": -31.11,
+            "last_sample_peak": 0.014300918206572533,
+            "lufs": -30.8,
+            "quiet10_2p5k_8k_dbfs": -48.21,
+            "quiet10_rms_dbfs": -43.66,
+            "quiet_to_median_db": 4.92,
+            "rms_dbfs": -36.92,
+            "sample_peak_dbfs": -8.67,
+            "seconds": 20.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.9944,
+            "true_peak_dbfs": -8.4
+          },
+          "score": 3.004,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 0.8,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 2.204,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "c9481a9d5fa45696a8749f4af095b70c5fe241009b36c2988a41aca87f1c8fef"
+        },
+        {
+          "file": "loop_lion__take2.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -44.3,
+            "above_cutoff_relative_db": -5.92,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -60.73,
+              "1k_4k": -41.16,
+              "4k_8k": -44.52,
+              "over8k": -44.87,
+              "under150": -75.43
+            },
+            "first20ms_peak_dbfs": -30.24,
+            "first_sample_peak": 0.00831514224410057,
+            "high_band_flatness": 0.8567,
+            "last20ms_peak_dbfs": -24.45,
+            "last_sample_peak": 0.0004287597839720547,
+            "lufs": -32.7,
+            "quiet10_2p5k_8k_dbfs": -56.3,
+            "quiet10_rms_dbfs": -51.19,
+            "quiet_to_median_db": 7.76,
+            "rms_dbfs": -38.21,
+            "sample_peak_dbfs": -8.77,
+            "seconds": 20.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.9972,
+            "true_peak_dbfs": -8.7
+          },
+          "score": 4.401,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 2.7,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 1.701,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "1c6ee743bb30678bcc3b74259899ec97003aa4f086c30b5fcac8bdc31761df32"
+        },
+        {
+          "file": "loop_lion__take1.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -44.39,
+            "above_cutoff_relative_db": -4.82,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -63.99,
+              "1k_4k": -43.02,
+              "4k_8k": -45.5,
+              "over8k": -44.97,
+              "under150": -74.8
+            },
+            "first20ms_peak_dbfs": -38.33,
+            "first_sample_peak": 0.0034246782306581736,
+            "high_band_flatness": 0.8434,
+            "last20ms_peak_dbfs": -25.1,
+            "last_sample_peak": 0.0035062844399362803,
+            "lufs": -33.4,
+            "quiet10_2p5k_8k_dbfs": -54.98,
+            "quiet10_rms_dbfs": -49.74,
+            "quiet_to_median_db": 6.44,
+            "rms_dbfs": -39.73,
+            "sample_peak_dbfs": -7.77,
+            "seconds": 20.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.8098,
+            "true_peak_dbfs": -7.8
+          },
+          "score": 5.314,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 3.4,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 1.914,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "e046c8bd802f28dc10748bcfe0c1af98371814f1e8b6df7f37f235d5c4292231"
+        },
+        {
+          "file": "loop_lion__take3.mp3",
+          "metrics": {
+            "above_1p3_cutoff_dbfs": -48.46,
+            "above_cutoff_relative_db": -5.58,
+            "all_tonal_peaks": [],
+            "audible_steady_grid_tones_over800": 0,
+            "audible_steady_tones_over800": 0,
+            "bands_dbfs": {
+              "150_1k": -64.32,
+              "1k_4k": -45.23,
+              "4k_8k": -51.02,
+              "over8k": -48.77,
+              "under150": -78.77
+            },
+            "first20ms_peak_dbfs": -38.2,
+            "first_sample_peak": 0.003770465962588787,
+            "high_band_flatness": 0.9291,
+            "last20ms_peak_dbfs": -35.56,
+            "last_sample_peak": 0.00017585283785592765,
+            "lufs": -37.1,
+            "quiet10_2p5k_8k_dbfs": -57.75,
+            "quiet10_rms_dbfs": -52.81,
+            "quiet_to_median_db": 7.46,
+            "rms_dbfs": -42.88,
+            "sample_peak_dbfs": -13.38,
+            "seconds": 20.0,
+            "silence_fraction_below_body_minus25": 0.0,
+            "stereo_correlation": 0.9976,
+            "true_peak_dbfs": -13.0
+          },
+          "score": 8.917,
+          "score_terms": {
+            "clipped_peak": 0,
+            "excess_gain_needed": 7.1,
+            "loop_silence": 0.0,
+            "out_of_band_energy": 1.816,
+            "steady_grid_tones": 0.0,
+            "steady_other_tones": 0.0,
+            "unexpected_length": 0.0
+          },
+          "sha256": "c379a70315b378bca444920a52c2cf2b90678f80817b774be9397e3b4e802367"
+        }
+      ],
+      "selection_rationale": "Lowest bounded technical-artifact score among four takes: stationary grid tones, out-of-band residue, clipping, duration, unintended loop silence, and excessive normalization. This does not establish artistic or auditory superiority."
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "archived_survey_collision_packet_matches_live": true,
+  "archived_survey_terrain_packet_matches_live": true,
+  "route_marker_count": 123,
+  "max_marker_difference_studs": 0.07872707116771954,
+  "limits": "Collision bounds inherited from matching export packets; fresh live box check still pending while Studio dialog is blocked."
+}

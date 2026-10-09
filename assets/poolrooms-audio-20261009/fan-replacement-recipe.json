@@ -1,0 +1,9 @@
+{
+  "prompt": "A steadily operating indoor swimming pool ventilation fan: a broad rounded mechanical whirr with full audible midrange body and a low motor hum. Recognizable running fan throughout, consistent normal recording level, slow air circulation through a large tiled hall, moderate distance with hollow concrete reflections. No music, musical drone, pure sub-bass, speech, crackling or electronic static. Seamless continuous loop.",
+  "duration_seconds": 24,
+  "prompt_influence": 0.7,
+  "loop": true,
+  "model": "eleven_text_to_sound_v2",
+  "node_id": "sgXdT4iEIVaNY12r5wvD",
+  "flow_id": "UdCwCcleFO6Zoz0oFwt4"
+}

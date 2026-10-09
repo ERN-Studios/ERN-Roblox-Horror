@@ -1,0 +1,27 @@
+Poolrooms audio — prepared, uploaded, not installed
+Date: 2026-10-09
+
+The nine ElevenLabs sound effects are uploaded to ERN Roblox Studios (group 1039373905). Roblox displayed “9 files uploaded successfully”; exact asset IDs, master hashes and unverified delivery states are in assets/poolrooms-audio-20261009/sound_ids.json. Upload does not establish moderation approval or playback authorization in the experience.
+
+The source pack contains three room beds, two spatial water sources reused at the authored weir/cascade/lion positions, and four rare environmental one-shots. The selected hall source is fan-body replacement take 10. The first eight hall takes were rejected because matching the target would amplify their noise floor excessively.
+
+The masters use selective removal of sustained artificial grid tones, source-dependent high-frequency/floor treatment, restrained loudness and peaks, cyclic crossfades without periodic silence, and gradual shot attacks/tails with endpoint guards. Physical water receives no aggressive broadband noise gate. Every final native-decoded OGG passed peak, noise/tonal and loop-boundary numeric checks. Nine selected raw WAVs, 44 take IDs/prompts, recipes and full numerical QC are retained. The 83-second technical-audition.ogg reel has a timestamped timeline.
+
+The new client controller follows the promoted public map, detects authored areas with bounded collision raycasts and box/route fallback, supports living spectator subjects, waits for initialized audio, uses three-second entry and two-second exit/section envelopes, fades cancellation before destroying emitters, and follows actual TimePosition for shot endings. It retains legacy audio until the replacement is ready. Only common legacy environmental beds/randoms yield; gameplay and entity cues keep their owners. The cascade fallback crossfades client-locally. Seven persistent records and at most two shots are allowed.
+
+Validation: the official Luau compiler accepted both changed scripts; eight offline behavior suites executed the actual new LocalScript. These cover lobby/escape/spectator entitlement, initial loading, exact fades, route fallback, cascade restoration, round/generation/origin cleanup, random budgets, delayed playback and paused/stalled voices. Source checks and numeric measurements do not establish auditory quality or engine gameplay/performance.
+
+Studio before the blocker: correct place 131311258779917, universe 10559217407, Edit mode, PlaceVersion 2859. Live legacy controller Source and editor Source agreed and exactly matched origin/main 46073662. Live new map: ServerStorage.Level2PoolroomsMap, Level2NewMap=true, PromotionRevision=live20261009, Origin=(70000,300,0), matching archived collision/terrain packets. All 123 archived route markers matched fresh live markers within 0.079 studs. Map bounds inherited from those matching packets still need a final fresh check.
+
+Material blocker: File → Download a Copy entered the macOS Save panel, after which Studio UI and main-thread MCP execution stopped responding. Bounded process sampling shows the native save-panel modal loop. Multiple native Studio / save-panel control attempts failed. The pending read-only MCP orchestration cell was cancelled. No Studio source/object writes, game asset installation, native place backup, or publish occurred. A historical server.rbxl dated October 3 was found and never restored or treated as a current backup. Creator Dashboard shows concurrent newer saved versions; these are not substituted for the authoritative Studio session.
+
+Resume without regenerating/uploading:
+1. Resolve the Studio save dialog and obtain a full native backup of the current authoritative place. If Studio requires a forced restart, get explicit permission because unsaved concurrent edits may be lost.
+2. Reidentify the correct Edit Studio. Reread exact legacy/new-script/folder and map identities; reconcile any changed live baseline into the scoped patch. Do not overwrite newer live work from this repository.
+3. Check all nine uploaded asset IDs in this experience with bounded ContentProvider preload and exact success receipts. Retain honest moderation/load states.
+4. Update the exact baseline record and prepare_studio_install.py output only after those checks. Its UpdateSourceAsync callback rechecks the current source inside the write and rejects concurrent changes.
+5. Install the small client pack, verify Source/editor parity, export exact script hashes and bank properties/assets, and take a final native place backup.
+6. Test a normal Level 2 bay queue, authored sections/seams, first load, spectator changes, exit/reset and second round in Studio. Measure bounded sound counts/client memory/frame behavior; report any multiplayer or subjective-listening checks not performed.
+7. Inspect and commit the actual verified Studio mirrors/receipts, then publish the current correct place and verify Roblox success. Do not restart live servers.
+
+Repository handling: the original dirty checkout was not reconciled or modified by these implementation changes. A sparse isolated worktree based on fetched origin/main was used, then moved to /Users/zeanjuul4/Projects/stayquiet-poolrooms-audio-20261009 for durability. Existing unrelated work and original untracked historical audio tools remain preserved. The local task branch is codex/poolrooms-audio-20261009; no GitHub push has been authorized or performed.

@@ -1,0 +1,70 @@
+{
+  "auditioned": false,
+  "seconds": 83.0,
+  "timeline": [
+    {
+      "key": "bed_hall",
+      "start_seconds": 0,
+      "end_seconds": 8.0,
+      "gain": 0.5,
+      "loop_file_seam_seconds": 4
+    },
+    {
+      "key": "bed_water",
+      "start_seconds": 8.75,
+      "end_seconds": 16.75,
+      "gain": 0.55,
+      "loop_file_seam_seconds": 12.75
+    },
+    {
+      "key": "bed_service",
+      "start_seconds": 17.5,
+      "end_seconds": 25.5,
+      "gain": 0.45,
+      "loop_file_seam_seconds": 21.5
+    },
+    {
+      "key": "loop_weir",
+      "start_seconds": 26.25,
+      "end_seconds": 34.25,
+      "gain": 0.7,
+      "loop_file_seam_seconds": 30.25
+    },
+    {
+      "key": "loop_lion",
+      "start_seconds": 35.0,
+      "end_seconds": 43.0,
+      "gain": 0.6,
+      "loop_file_seam_seconds": 39.0
+    },
+    {
+      "key": "shot_drip",
+      "start_seconds": 43.75,
+      "end_seconds": 52.0,
+      "gain": 0.6,
+      "loop_file_seam_seconds": null
+    },
+    {
+      "key": "shot_pipe",
+      "start_seconds": 52.75,
+      "end_seconds": 63.0,
+      "gain": 0.6,
+      "loop_file_seam_seconds": null
+    },
+    {
+      "key": "shot_splash",
+      "start_seconds": 63.75,
+      "end_seconds": 73.0,
+      "gain": 0.6,
+      "loop_file_seam_seconds": null
+    },
+    {
+      "key": "shot_creak",
+      "start_seconds": 73.75,
+      "end_seconds": 83.0,
+      "gain": 0.6,
+      "loop_file_seam_seconds": null
+    }
+  ],
+  "purpose": "Review reel at proposed gains. Loops present their last four then first four seconds so the encoded file seam is in the middle. Mono files duplicate into both headphone channels. Spatial mix and gameplay are not represented."
+}

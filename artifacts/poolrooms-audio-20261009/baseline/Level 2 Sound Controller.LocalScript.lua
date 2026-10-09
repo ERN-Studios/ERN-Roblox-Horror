@@ -208,15 +208,6 @@ local function active()
 		and participantActive()
 end
 
--- The rendered public map has a separate, section-aware environmental pack.
--- Yield only after this participant's replacement pack loaded; authored cues and entity voices keep their owners.
-local function poolroomsEnvironmentOwned()
-	local world = workspace:FindFirstChild("Level 2 Generated World")
-	return player:GetAttribute("Level2PoolroomsAudioReady") == true
-		and player:GetAttribute("Level2PoolroomsAudioActive") == true
-		and world ~= nil and world:GetAttribute("Level2NewMap") == true
-end
-
 -- Contextual environmental one-shots. These are client-local and spatial so every
 -- player gets an unpredictable soundscape without adding replicated emitters.
 local ambientFolder
@@ -515,29 +506,7 @@ end
 
 -- Ordinary environmental ambience remains separate from the four monster voices.
 
-local commonYielded = false
 local function updateRandomAmbience()
-	if poolroomsEnvironmentOwned() then
-		if not commonYielded then
-			commonYielded = true
-			-- Let an already audible environmental clip taper away; no shared cue/session folders are cleared.
-			local outgoing = ambientFolder
-			ambientFolder = nil
-			if outgoing and outgoing.Parent then
-				for _, emitter in ipairs(outgoing:GetChildren()) do
-					local sound = emitter:FindFirstChildOfClass("Sound")
-					if sound then TweenService:Create(sound, TweenInfo.new(1), {Volume = 0}):Play() end
-				end
-				Debris:AddItem(outgoing, 1.1)
-			end
-			ambientBusyUntil = 0
-		end
-		return
-	end
-	if commonYielded then
-		commonYielded = false
-		nextCommonAt = os.clock() + rng:NextNumber(COMMON_DELAY_MIN, COMMON_DELAY_MAX)
-	end
 	if not syncRandomSession() then return end
 	local now = os.clock()
 
@@ -771,7 +740,7 @@ RunService.Heartbeat:Connect(function(dt)
 	local blend = math.clamp(dt / FADE_SECONDS, 0, 1)
 	for _, entry in ipairs(AMBIENCE) do
 		local slotName, volume = entry[1], entry[2]
-		if active() and not poolroomsEnvironmentOwned() then
+		if active() then
 			local loop = ensureLoop(slotName, volume)
 			if loop then
 				loop.Volume += (volume - loop.Volume) * blend
