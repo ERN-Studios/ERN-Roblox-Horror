@@ -61,56 +61,19 @@ if not prompt then
 	prompt.Parent = playerScripts
 end
 
--- UI_STYLE_20260915 (Trello #98). Chrome and faces only -- the chip, the
--- confirm card and the "leaveround" request behave exactly as card 74 froze
--- them. The teal accent this file invented is gone; the card now wears the
--- Mission Brief card's own surface, stroke and typography.
-local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
-local MUTED = UIStyle.Color.Muted
-
+-- B6: authored Framewisp controls, shared request/hold lifecycle below.
+local Hud = require(ReplicatedStorage:WaitForChild("RoundHud"))
+local Binder = require(ReplicatedStorage:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
 local gui = Instance.new("ScreenGui")
 gui.Name = "RoundExitGui"
 gui.ResetOnSpawn = false
-gui.DisplayOrder = 70 -- above the HUD and spectate band, under PARTY DOWN (100)
+gui.ScreenInsets = Enum.ScreenInsets.None
+gui.DisplayOrder = 70
 gui.Parent = playerGui
-
-local function makeButton(parent, name, text)
-	local button = Instance.new("TextButton")
-	button.Name = name
-	button.AutoButtonColor = true
-	button.Text = text
-	button.Parent = parent
-	return UIStyle.button(button)
-end
-
-local chip = makeButton(gui, "LeaveChip", "BACK TO LOBBY")
-chip.Visible = false
-chip.Active = false
--- The refusal copy is longer than the chip is wide, and the chip is sized to the
--- resting prompt rather than to its worst case, so it wraps instead of clipping.
-chip.TextWrapped = true
-chip.ClipsDescendants = true
-
--- The progress bar. It is a CHILD of the chip, and under ZIndexBehavior.Sibling
--- every descendant draws over its ancestor's own text no matter what ZIndex
--- says -- so it is a translucent wash the label stays readable through, not an
--- opaque fill that would hide the very words it is counting down.
-local fill = Instance.new("Frame")
-fill.Name = "HoldFill"
-fill.Size = UDim2.fromScale(0, 1)
-fill.BackgroundColor3 = UIStyle.Color.Accent
-fill.BackgroundTransparency = 0.62
-fill.BorderSizePixel = 0
-fill.Parent = chip
--- Rounded to the chip's own radius: ClipsDescendants alone leaves a square
--- corner poking out of the chip's left edge on engine versions that clip to the
--- rectangle rather than to the UICorner.
-local fillCorner = Instance.new("UICorner")
-fillCorner.CornerRadius = UDim.new(0, UIStyle.Radius.Control)
-fillCorner.Parent = fill
-
--- The confirm card. The shade is Active so a stray tap behind the card cannot
--- reach the movement controls or the HUD while the question is up.
+local restChip = Hud.Mount("HUD_PC", "LeaveChip", gui)
+local wideChip = Hud.Mount("HUD_PC", "LeaveChipWide", gui)
+local touchChip = Hud.Mount("HUD_Touch", "LeaveChipTouch", gui)
+local noticeRoot = Hud.Mount("HUD_PC", "RoundExitNotice", gui)
 local shade = Instance.new("Frame")
 shade.Name = "RoundExitShade"
 shade.Size = UDim2.fromScale(1, 1)
@@ -120,72 +83,54 @@ shade.BorderSizePixel = 0
 shade.Active = true
 shade.Visible = false
 shade.Parent = gui
-
-local card = Instance.new("Frame")
-card.Name = "RoundExitCard"
-card.AnchorPoint = Vector2.new(0.5, 0.5)
-card.Position = UDim2.fromScale(0.5, 0.5)
-card.Size = UDim2.fromOffset(340, 176)
-card.Parent = shade
-UIStyle.panel(card, {
-	Background = UIStyle.Color.Card,
-	Transparency = UIStyle.Transparency.Card,
-	Radius = UIStyle.Radius.Card,
-	StrokeTransparency = UIStyle.Stroke.CardTransparency,
-})
-
-local title = Instance.new("TextLabel")
-title.Name = "Title"
-title.Position = UDim2.fromOffset(16, 14)
-title.Size = UDim2.new(1, -32, 0, 24)
-title.BackgroundTransparency = 1
-UIStyle.title(title, {TextSize = 17})
-title.Text = "RETURN TO THE LOBBY?"
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = card
-
-local body = Instance.new("TextLabel")
-body.Name = "Body"
-body.Position = UDim2.fromOffset(16, 42)
-body.Size = UDim2.new(1, -32, 0, 40)
-body.BackgroundTransparency = 1
-UIStyle.body(body, {TextSize = 14})
-body.Text = "Your run ends here. The others keep playing."
-body.TextWrapped = true
-body.TextXAlignment = Enum.TextXAlignment.Left
-body.TextYAlignment = Enum.TextYAlignment.Top
-body.Parent = card
-
-local notice = Instance.new("TextLabel")
-notice.Name = "Notice"
-notice.Position = UDim2.fromOffset(16, 84)
-notice.Size = UDim2.new(1, -32, 0, 18)
-notice.BackgroundTransparency = 1
-UIStyle.readout(notice, {TextColor = MUTED, TextSize = 12})
-notice.Text = ""
-notice.TextXAlignment = Enum.TextXAlignment.Left
-notice.Parent = card
-
-local confirm = makeButton(card, "Confirm", "BACK TO LOBBY")
-local stay = makeButton(card, "Stay", "STAY")
--- One step quieter than the action it sits next to: same chrome, body face.
-stay.TextColor3 = UIStyle.Color.Body
-
--- What the hold is FOR, in the player's own words, under the chip while it runs.
--- The round does not pause and nothing here pretends it does.
-local hint = Instance.new("TextLabel")
-hint.Name = "HoldHint"
-hint.Visible = false
-hint.Text = "Leaving ends your run. The others keep playing."
-hint.TextWrapped = true
-hint.TextXAlignment = Enum.TextXAlignment.Left
-UIStyle.caption(hint)
-UIStyle.body(hint, {TextColor = MUTED, TextSize = 12})
-hint.Parent = gui
-local hintPad = Instance.new("UIPadding")
-hintPad.PaddingLeft = UDim.new(0, 8)
-hintPad.PaddingRight = UDim.new(0, 8)
-hintPad.Parent = hint
+local card = Hud.Mount("HUD_PC", "RoundExitCard", shade, {Touch = UIDevice.Layout().IsTouch})
+if not (restChip and wideChip and touchChip and noticeRoot and card) then
+	warn("Round Exit Client: missing imported HUD templates")
+	gui:Destroy()
+	return
+end
+local chip = restChip
+local hovered = false
+local fill = Binder.at(wideChip, "HoldFill")
+local fillWidth = fill.Size.X.Scale
+local hint = Binder.text(Binder.at(wideChip, "HoldHint"))
+local notice = Binder.text(Binder.at(noticeRoot, "Notice"))
+local wideLabel = Binder.text(Binder.at(wideChip, "Label"))
+local confirm = Binder.at(card, "BackToLobby")
+local stay = Binder.at(card, "Stay")
+stay.Modal = true -- release first-person cursor while this confirmation is visible
+local confirmLabel = Binder.text(Binder.at(confirm, "Label"))
+local ring = Hud.Ring(Binder.at(touchChip, "RingSlot"))
+Hud.Keycap(Binder.at(wideChip, "KeyChip"), HOLD_KEY, Enum.KeyCode.ButtonSelect)
+restChip.Selectable, wideChip.Selectable, touchChip.Selectable = false, false, false
+for _, control in ipairs({restChip, wideChip, touchChip}) do
+	control.Visible = false
+	control.Active = false
+end
+notice.Text, noticeRoot.Visible, hint.Visible = "", false, false
+local function setFill(fraction)
+	fill.Size = UDim2.new(fillWidth * fraction, 0, fill.Size.Y.Scale, fill.Size.Y.Offset)
+	ring(fraction, Binder.Palette.RailTeal)
+end
+local function placeControls()
+	local layout = UIDevice.Layout()
+	local safe = layout.Safe
+	local left = safe.Left + (layout.IsTouch and 12 or 24)
+	local top = safe.Top + (layout.IsTouch and 6 or 16)
+	for _, control in ipairs({restChip, wideChip, touchChip}) do
+		control.Position = UIDevice.LocalPosition(gui, left, top)
+	end
+	chip = layout.IsTouch and touchChip or restChip
+	card.AnchorPoint = Vector2.new(0.5, 0.5)
+	card.Position = UIDevice.LocalPosition(gui, (safe.Left + safe.Right) / 2, (safe.Top + safe.Bottom) / 2)
+	card.Size = UDim2.fromOffset(math.min(380, safe.Right - safe.Left - 24), 144)
+	-- Keep both confirmation targets at least 44 high on a phone.
+	if layout.IsTouch then
+		confirm.Size = UDim2.new(confirm.Size.X.Scale, 0, 0, 44)
+		stay.Size = UDim2.new(stay.Size.X.Scale, 0, 0, 44)
+	end
+	noticeRoot.Position = UIDevice.LocalPosition(gui, left, top + 48)
+end
 
 local requestPending = false
 local requestSerial = 0 -- bumped by every answer, so an old timeout stays dead
@@ -196,16 +141,14 @@ local holdInput = nil   -- the touch/mouse/gamepad InputObject driving that hold
 local held = 0          -- seconds accumulated by the current hold
 local holdLatched = false -- a finished hold, waiting for the key/finger to lift
 
--- "HOLD L • LOBBY" on a keyboard, "HOLD • LOBBY" on a phone. UIDevice.Binding
+-- "HOLD L \u{2022} LOBBY" on a keyboard, "HOLD \u{2022} LOBBY" on a phone. UIDevice.Binding
 -- returns "" for every touchscreen (and for a gamepad-only device, where no L
 -- key exists), so a finger is never told to press a key it does not have.
 local function paint()
-	if label then
-		chip.Text = label
-		return
-	end
-	local binding = UIDevice.Binding(HOLD_KEY.Name, "")
-	chip.Text = binding == "" and "HOLD • LOBBY" or ("HOLD " .. binding .. " • LOBBY")
+	wideLabel.Text = "\u{B7} BACK TO LOBBY"
+	-- The separate notice preserves a 44px phone door even for a long refusal.
+	if label then notice.Text = label end
+	noticeRoot.Visible = label ~= nil and label ~= ""
 end
 
 -- `seconds` nil means the copy stays until something replaces it. The serial is
@@ -223,98 +166,9 @@ local function say(text, seconds)
 	end)
 end
 
-local hudObstacles = {
-	{"PuzzleGui", "Level1Objectives"},
-	{"PuzzleGui", "Level1ObjectivesToggle"},
-	{"Level2ObjectiveGui", "Level2ObjectivePanel"},
-	{"Level3ReaderGui", "ReaderPanel"},
-	{"LevelOneGuideGui", "ObjectivesButton"},
-	{"Level6PlaygroundHUD", "Objective"},     -- MOBILE_HUD_20261007: Level 6's card is in that corner on a handheld too
-	-- MOBILE_QA_20261008: on a 568x320 phone LEAVE HIDING and its status line reach the chip's column and lay on it
-	{"Level3TableHideUI", "LeaveHiding"},
-	{"Level3TableHideUI", "HiddenStatus"},
-}
-
 local function applyLayout()
-	local layout = UIDevice.Layout()
-	local touch = layout.IsTouch
-	local tap = touch and 44 or 30
-	-- Sized to the resting prompt, not measured: TextService is not available to
-	-- the offline fit tests, so the widths are stated and the copy is kept short.
-	local chipWidth = touch and 164 or 156
-	local left, top = layout.SafeLeft + 12, layout.SafeTop + 12
-	if touch then
-		-- A portrait objective card reaches into the left column. Reserve its
-		-- actual height, then the Mission Brief below it, instead of a fixed row.
-		for _, names in ipairs(hudObstacles) do
-			local owner = playerGui:FindFirstChild(names[1])
-			local object = owner and owner:FindFirstChild(names[2])
-			if object and owner.Enabled and object.Visible then
-				local pos, size = object.AbsolutePosition, object.AbsoluteSize
-				if left < pos.X + size.X + 8 and left + chipWidth > pos.X - 8 then
-					top = math.max(top, pos.Y + size.Y + 8)
-				end
-			end
-		end
-		-- MOBILE_QA_20261008: under the Mission Brief the chip stood wholly inside the thumbstick's zone on every phone
-		-- (measured 667x375 to 956x440): a dead spot for the thumb, on the button that leaves the round. Where the row
-		-- BESIDE what it dodged is free, and clear of the zone, it goes there instead.
-		if UIDevice.OverlapsMovementZone(left, top, left + chipWidth, top + tap) then
-			local rowTop = layout.SafeTop + 12
-			-- the first free place in the top row for a chip of this width: step right past whatever stands there
-			local function rowSpot(width)
-				local rowLeft = layout.SafeLeft + 12
-				for _ = 1, #hudObstacles do
-					local moved = false
-					for _, names in ipairs(hudObstacles) do
-						local owner = playerGui:FindFirstChild(names[1])
-						local object = owner and owner:FindFirstChild(names[2])
-						if object and owner.Enabled and object.Visible then
-							local pos, size = object.AbsolutePosition, object.AbsoluteSize
-							if rowLeft < pos.X + size.X + 8 and rowLeft + width > pos.X - 8
-								and rowTop < pos.Y + size.Y + 8 and rowTop + tap > pos.Y - 8 then
-								rowLeft, moved = pos.X + size.X + 8, true
-							end
-						end
-					end
-					if not moved then break end
-				end
-				if rowLeft + width <= layout.SafeRight - 12
-					and not UIDevice.OverlapsMovementZone(rowLeft, rowTop, rowLeft + width, rowTop + tap) then
-					return rowLeft
-				end
-				return nil
-			end
-			-- at its own width, else 140 wide (the label needs about 110): the row between the brief and the objective
-			-- card is 147 px on a 667x375 phone
-			local spot = rowSpot(chipWidth)
-			if not spot then
-				spot = rowSpot(140)
-				if spot then chipWidth = 140 end
-			end
-			if spot then left, top = spot, rowTop end
-		end
-	end
-	local x, y = UIDevice.LocalOffset(gui, left, top)
-	chip.Size = UDim2.fromOffset(chipWidth, tap)
-	chip.Position = UDim2.fromOffset(x, y)
-	chip.TextSize = touch and 13 or 12
-
-	-- The explanation band sits directly under the chip and never wider than the
-	-- safe rect, so it cannot reach the objectives/briefing column on its right.
-	-- It is drawn only during a hold, so it costs the corner nothing at rest.
-	local room = layout.SafeRight - layout.SafeLeft - 24
-	hint.Size = UDim2.fromOffset(math.max(chipWidth, math.min(chipWidth + 120, room)),
-		HINT_HEIGHT)
-	hint.Position = UDim2.fromOffset(x, y + tap + 6)
-
-	local width = math.min(340, math.max(240, layout.SafeRight - layout.SafeLeft - 24))
-	local height = 110 + tap + 14
-	card.Size = UDim2.fromOffset(width, height)
-	confirm.Size = UDim2.new(0.5, -22, 0, tap)
-	confirm.Position = UDim2.new(0, 14, 1, -(tap + 14))
-	stay.Size = UDim2.new(0.5, -22, 0, tap)
-	stay.Position = UDim2.new(0.5, 8, 1, -(tap + 14))
+	placeControls()
+	paint()
 end
 
 local function alive()
@@ -331,8 +185,7 @@ local function chipAvailable()
 		and player:GetAttribute("Level2_ExitTransition") ~= true
 		and player:GetAttribute("RoundEntryControlsReady") == true
 		and player:GetAttribute("DispatchBriefingOpen") ~= true
-		and player:GetAttribute("LevelOneGuideObjectivesOpen") ~= true
-		and player:GetAttribute("Level4CardOpen") ~= true      -- Level 4's keypad or note, on touch (MOBILE_QA_20261008)
+				and player:GetAttribute("Level4CardOpen") ~= true      -- Level 4's keypad or note, on touch (MOBILE_QA_20261008)
 		and player:GetAttribute("PartyDownCardOpen") ~= true
 		and not UIDevice.ScreenOwningModalOpen()
 		and not GuiService.MenuIsOpen
@@ -352,7 +205,7 @@ end
 local function stopHold()
 	if holdConn then holdConn:Disconnect() end
 	holdConn, held = nil, 0
-	fill.Size = UDim2.fromScale(0, 1)
+	setFill(0)
 	hint.Visible = false
 end
 
@@ -366,12 +219,29 @@ end
 
 local function refresh()
 	if holdConn and holdBlocked() then stopHold() end
-	UIDevice.SetInteractive(chip, chipAvailable())
+	local available = chipAvailable()
+	local touch = UIDevice.Layout().IsTouch
+	local expanded = not touch and (hovered or holdConn ~= nil)
+	UIDevice.SetInteractive(restChip, available and not touch and not expanded)
+	UIDevice.SetInteractive(wideChip, available and expanded)
+	UIDevice.SetInteractive(touchChip, available and touch)
+	hint.Visible = available and not touch and holdConn ~= nil
+	-- Quiet resting chrome, bright during a deliberate hold or hover.
+	for _, control in ipairs({restChip, touchChip}) do
+		for _, node in ipairs(control:GetDescendants()) do
+			if node:IsA("UIStroke") then node.Transparency = holdConn and 0.12 or 0.5 end
+		end
+	end
+	if shade.Visible then
+		noticeRoot.Position = UIDevice.LocalPosition(gui,
+			card.AbsolutePosition.X, card.AbsolutePosition.Y + card.AbsoluteSize.Y + 8)
+	end
 end
 
 local function closeCard()
 	if not shade.Visible then return end
 	shade.Visible = false
+	placeControls()
 	player:SetAttribute("RoundExitPromptOpen", nil)
 	if GuiService.SelectedObject == stay or GuiService.SelectedObject == confirm then
 		GuiService.SelectedObject = nil
@@ -385,7 +255,7 @@ local function openCard()
 	stopHold()
 	-- The card RENDERS the shared latch rather than clearing it: a request that
 	-- is already in flight (held down, then died) must not become a second one.
-	confirm.Text = requestPending and "RETURNING..." or "BACK TO LOBBY"
+	confirmLabel.Text = requestPending and "RETURNING..." or "BACK TO LOBBY"
 	notice.Text = requestPending and "Returning to the lobby..." or ""
 	UIDevice.SetEnabled(confirm, not requestPending)
 	shade.Visible = true
@@ -401,7 +271,7 @@ local function resetRequest()
 	requestPending = false
 	stopHold()
 	say(nil)
-	confirm.Text = "BACK TO LOBBY"
+	confirmLabel.Text = "BACK TO LOBBY"
 	UIDevice.SetEnabled(confirm, true)
 	notice.Text = ""
 end
@@ -413,7 +283,7 @@ local function sendLeave()
 	requestSerial += 1
 	local serial = requestSerial
 	say("RETURNING...")
-	confirm.Text = "RETURNING..."
+	confirmLabel.Text = "RETURNING..."
 	UIDevice.SetEnabled(confirm, false)
 	notice.Text = "Returning to the lobby..."
 	remote:FireServer("leaveround")
@@ -421,8 +291,8 @@ local function sendLeave()
 		-- No answer at all: let the player ask again rather than sit forever.
 		if requestSerial ~= serial then return end
 		requestPending = false
-		say("NO ANSWER — HOLD AGAIN", MESSAGE_SECONDS)
-		confirm.Text = "TRY AGAIN"
+		say("NO ANSWER \u{B7} HOLD AGAIN", MESSAGE_SECONDS)
+		confirmLabel.Text = "TRY AGAIN"
 		UIDevice.SetEnabled(confirm, true)
 		notice.Text = "No answer from the server yet."
 	end)
@@ -434,51 +304,61 @@ local function step(delta)
 	-- a transition), and a hold must never outlive the state that allowed it.
 	if holdBlocked() then
 		stopHold()
+		refresh()
 		return
 	end
 	held += delta
-	fill.Size = UDim2.fromScale(math.min(1, held / HOLD_SECONDS), 1)
+	setFill(math.min(1, held / HOLD_SECONDS))
 	if held < HOLD_SECONDS then return end
 	holdLatched = true -- no auto-repeat: the key/finger has to come up first
 	stopHold()
 	sendLeave()
+	refresh()
 end
 
 local function beginHold(input)
 	if holdConn or holdLatched or requestPending or holdBlocked() then return end
 	holdInput = input
 	held = 0
-	fill.Size = UDim2.fromScale(0, 1)
+	setFill(0)
 	hint.Visible = true
 	holdConn = RunService.RenderStepped:Connect(step)
+	refresh()
 end
 
 UserInputService.InputBegan:Connect(function(input, processed)
-	if input.KeyCode ~= HOLD_KEY or processed then return end
+	if (input.KeyCode ~= HOLD_KEY and input.KeyCode ~= Enum.KeyCode.ButtonSelect) or processed then return end
 	if input.UserInputState ~= Enum.UserInputState.Begin then return end
 	beginHold(input)
 end)
 UserInputService.InputEnded:Connect(function(input)
 	-- Matched on the input OBJECT for a finger that slid off the chip before
 	-- lifting: the chip's own InputEnded cannot be relied on to see that one.
-	if input.KeyCode == HOLD_KEY or (holdInput ~= nil and input == holdInput) then
+	if input.KeyCode == HOLD_KEY or input.KeyCode == Enum.KeyCode.ButtonSelect or (holdInput ~= nil and input == holdInput) then
 		releaseHold()
+		refresh()
 	end
 end)
 -- A key held while the window loses focus never reports its InputEnded, so this
 -- is the only thing that can clear the latch in that case.
-UserInputService.WindowFocusReleased:Connect(releaseHold)
+UserInputService.WindowFocusReleased:Connect(function() releaseHold() refresh() end)
 UserInputService.TextBoxFocused:Connect(refresh)
 UserInputService.TextBoxFocusReleased:Connect(refresh)
 
-chip.InputBegan:Connect(function(input)
-	local kind = input.UserInputType
-	if kind ~= Enum.UserInputType.Touch and kind ~= Enum.UserInputType.MouseButton1
-		and kind ~= Enum.UserInputType.Gamepad1 then return end
-	beginHold(input)
-end)
-chip.InputEnded:Connect(function(input)
-	if holdInput ~= nil and input == holdInput then releaseHold() end
+for _, control in ipairs({restChip, wideChip, touchChip}) do
+	control.InputBegan:Connect(function(input)
+		local kind = input.UserInputType
+		if kind == Enum.UserInputType.Touch or kind == Enum.UserInputType.MouseButton1 then beginHold(input) end
+	end)
+	control.InputEnded:Connect(function(input)
+		if holdInput ~= nil and input == holdInput then releaseHold() refresh() end
+	end)
+end
+restChip.MouseEnter:Connect(function() hovered = true refresh() end)
+wideChip.MouseLeave:Connect(function() hovered = false refresh() end)
+UserInputService.InputBegan:Connect(function(input, processed)
+	if not processed and input.KeyCode == Enum.KeyCode.ButtonB and shade.Visible
+		and not GuiService.MenuIsOpen and UserInputService:GetFocusedTextBox() == nil then closeCard() end
 end)
 
 prompt.Event:Connect(openCard)
@@ -498,7 +378,7 @@ remote.OnClientEvent:Connect(function(event)
 		requestSerial += 1
 		requestPending = false
 		say("NOT AVAILABLE IN THIS TEST ROUND", MESSAGE_SECONDS)
-		confirm.Text = "BACK TO LOBBY"
+		confirmLabel.Text = "BACK TO LOBBY"
 		UIDevice.SetEnabled(confirm, true)
 		notice.Text = "Not available in this test round."
 	elseif event == "lobby" or event == "loadinggame" or event == "lose" or event == "win" then
@@ -531,25 +411,12 @@ GuiService:GetPropertyChangedSignal("MenuIsOpen"):Connect(function()
 	refresh()
 end)
 UIDevice.Changed:Connect(function()
+	releaseHold()
+	hovered = false
 	applyLayout()
 	paint() -- the binding glyph is device-dependent
 	refresh()
 end)
-
-local function watchHudObstacle(object)
-	for _, names in ipairs(hudObstacles) do
-		if object.Name == names[2] and object.Parent and object.Parent.Name == names[1] then
-			for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
-				object:GetPropertyChangedSignal(property):Connect(applyLayout)
-			end
-			object.Parent:GetPropertyChangedSignal("Enabled"):Connect(applyLayout)
-			applyLayout()
-			break
-		end
-	end
-end
-playerGui.DescendantAdded:Connect(watchHudObstacle)
-for _, object in ipairs(playerGui:GetDescendants()) do watchHudObstacle(object) end
 
 local function bindCharacter(character)
 	stopHold()

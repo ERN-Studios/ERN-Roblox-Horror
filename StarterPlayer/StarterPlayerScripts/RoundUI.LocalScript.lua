@@ -129,7 +129,7 @@ end
 function dispatchAudio.captionPosition(clock, speech)
 	if dispatchAudio.voiceEnabled then return speech.TimePosition end
 	local now = os.clock()
-	if dispatchAudio.panel and dispatchAudio.panel.Visible then
+	if dispatchAudio.captionClockRunning then
 		clock.elapsed += now - clock.sampledAt
 	end
 	clock.sampledAt = now
@@ -171,24 +171,29 @@ function dispatchAudio.refresh()
 		and not UIDevice.ScreenOwningModalOpen()
 		and player:GetAttribute("ZyntraShopDetailOpen") ~= true
 		and player:GetAttribute("PartyDownCardOpen") ~= true
-		and player:GetAttribute("LevelOneGuideObjectivesOpen") ~= true
 		and player:GetAttribute("Level2AlertOwnsBand") ~= true
+	dispatchAudio.captionClockRunning = shown -- caption preferences never stall the transport
+	dispatchAudio.captionVisible = shown and player:GetAttribute("CaptionsEnabled") ~= false
+		and player:GetAttribute("DisableCaptions") ~= true
 	if dispatchAudio.panel then
-		dispatchAudio.panel.Visible = shown
+		dispatchAudio.panel.Visible = false -- RoundHud.Caption is the sole subtitle renderer
 	end
 	-- This is the old blocking-briefing contract consumed by detector,
 	-- protection, exit and store UIs. The caption panel is now non-modal.
 	if player:GetAttribute("DispatchBriefingOpen") ~= false then
 		player:SetAttribute("DispatchBriefingOpen", false)
 	end
-	if dispatchAudio.subtitleLabel then
-		dispatchAudio.subtitleLabel.Text = hasSubtitle
-			and dispatchAudio.subtitleCopy
-			or active and "ESTABLISHING COMMAND LINK..."
-			or ""
-		dispatchAudio.subtitleLabel.TextColor3 = hasSubtitle
-			and Color3.fromRGB(240, 242, 235)
-			or Color3.fromRGB(127, 190, 169)
+	if dispatchAudio.Hud then
+		if not dispatchAudio.captionVisible then
+			dispatchAudio.captionSent = nil
+		elseif shown and hasSubtitle and dispatchAudio.captionSent ~= dispatchAudio.subtitleCopy then
+			if dispatchAudio.Hud.Caption("COMMAND CENTER", dispatchAudio.subtitleCopy) then
+				dispatchAudio.captionSent = dispatchAudio.subtitleCopy
+			end
+		elseif not hasSubtitle and dispatchAudio.captionSent then
+			dispatchAudio.Hud.Caption("COMMAND CENTER", "", 0)
+			dispatchAudio.captionSent = nil
+		end
 	end
 	if dispatchAudio.controls then
 		-- The controls belong to the briefing panel, including its radio lead-in;
@@ -317,8 +322,9 @@ UIDevice.Changed:Connect(function() dispatchAudio.refresh() end)
 player:GetAttributeChangedSignal("ZyntraStoreOpen"):Connect(dispatchAudio.refresh)
 player:GetAttributeChangedSignal("ZyntraShopDetailOpen"):Connect(dispatchAudio.refresh)
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(dispatchAudio.refresh)
-player:GetAttributeChangedSignal("LevelOneGuideObjectivesOpen"):Connect(dispatchAudio.refresh)
 player:GetAttributeChangedSignal("Level2AlertOwnsBand"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("CaptionsEnabled"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("DisableCaptions"):Connect(dispatchAudio.refresh)
 UIDevice.OnScreenOwningModalChanged(dispatchAudio.refresh)
 if RunService:IsStudio() then
 	player:GetAttributeChangedSignal("UIRegressionForceDispatchActive"):Connect(dispatchAudio.refresh)
@@ -372,6 +378,7 @@ function revisedLobbyLighting.restore()
  -- A nonparticipant can leave R4 while another party keeps the old global
  -- level markers set. Restore only our own pass before those guards return.
  local globalsOwned = player:GetAttribute("Level4LightingOwned") == true
+  or player:GetAttribute("Level2NewMapLightingOwned") == true
   or player:GetAttribute("InRound") == true or player:GetAttribute("Level6InRound") == true
  if not globalsOwned and revisedLobbyLighting.lighting then
   for property, baseline in pairs(revisedLobbyLighting.lighting) do
@@ -379,10 +386,11 @@ function revisedLobbyLighting.restore()
   end
   revisedLobbyLighting.lighting=nil; revisedLobbyLighting.applied=nil
  end
- -- Level4 captures the current atmosphere at entry, then restores that
+ -- Level4 (and the Level 2 new-map preview) captures the current atmosphere at entry, then restores that
  -- snapshot on exit. Keep our pre-R4 density pending through its ownership;
  -- otherwise its saved zero would leak into the original lobby on return.
  local atmosphereOwned = player:GetAttribute("Level4LightingOwned") == true
+  or player:GetAttribute("Level2NewMapLightingOwned") == true
   or (player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 2
    and workspace:FindFirstChild("Level 2 Generated World") ~= nil
    and workspace:GetAttribute("Level2LightingOwnedByController") == true)
@@ -439,7 +447,7 @@ local function applyPlayerLighting()
  if not inRevisedLobby then revisedLobbyLighting.restore() end
  if player:GetAttribute("Level4LightingOwned") == true or player:GetAttribute("Level6PlaygroundLightingOwned") == true
   or player:GetAttribute("Level5LightingOwned") == true or player:GetAttribute("Level2NewMapLightingOwned") == true then
-  -- Level2NewMapLightingOwned: the Level 2 new-map developer preview keeps the place's daylight, no lobby grade
+  -- Level2NewMapLightingOwned: the Level 2 new-map developer preview grades itself (Level2BlenderPreviewButton)
   -- the Level 4 cinema preview and the Level 6 playground grade themselves (Level 4 Lighting Controller); stand down while it owns it
   revisedLobbyLighting.restore()
   lobbyGrade.Enabled = false
@@ -1086,7 +1094,7 @@ refreshQueuePanel()
 -- result screen and live here rather than as file locals: this script sits on
 -- Luau's 200-local limit for a chunk's main body.
 local completion = {returnVisible = false,
-	color = Color3.fromRGB(127, 218, 166)}
+	color = Color3.fromRGB(68, 221, 196)}
 local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
@@ -1178,25 +1186,9 @@ RunService.RenderStepped:Connect(function()
  end
 end)
 
--- The loading cover wears the colour of the level it is covering. Level 1 keeps
--- its terminal green. Level 2 uses the complex's own water blue — Status is
--- literally Configuration.Colors.Water from "Level 2 Configuration", and the
--- other three are luminance-matched to the greens they replace (within .007 of
--- relative luminance) so the screen reads with identical weight and contrast.
-local LOADING_PALETTES = {
-	[1] = {
-		Background = Color3.fromRGB(3, 5, 4),
-		Title = Color3.fromRGB(105, 230, 135),
-		Status = Color3.fromRGB(65, 165, 90),
-		TitleDone = Color3.fromRGB(125, 255, 155),
-	},
-	[2] = {
-		Background = Color3.fromRGB(3, 6, 8),
-		Title = Color3.fromRGB(105, 222, 238),
-		Status = Color3.fromRGB(48, 150, 159),
-		TitleDone = Color3.fromRGB(155, 244, 255),
-	},
-}
+-- Every loading cover is opaque black. Imported card accents use the owner's
+-- six level colours; the status and inactive track slots stay Sage.
+local LOADING_PALETTES = require(RS:WaitForChild("LoadingCardView")).Palettes
 local function loadingPaletteFor(level)
 	return LOADING_PALETTES[tonumber(level) or 0] or LOADING_PALETTES[1]
 end
@@ -1205,46 +1197,56 @@ end
 local loadingFrame = Instance.new("Frame")
 loadingFrame.Name = "LevelLoading"
 loadingFrame.Size = UDim2.fromScale(1, 1)
-loadingFrame.BackgroundColor3 = Color3.fromRGB(3, 5, 4)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- pure black for every level (owner, 2026-10-08)
+loadingFrame.BackgroundTransparency = 0 -- opaque: the world never shows through (owner, 2026-10-08)
 loadingFrame.BorderSizePixel = 0
 loadingFrame.ZIndex = 100
 loadingFrame.Visible = false -- the server lobby is visible first
 loadingFrame.Parent = gui
 
-local loadingTitle = Instance.new("TextLabel")
-loadingTitle.AnchorPoint = Vector2.new(0.5, 0.5)
-loadingTitle.Position = UDim2.new(0.5, 0, 0.46, 0)
-loadingTitle.Size = UDim2.new(0.9, 0, 0, 78)
-loadingTitle.BackgroundTransparency = 1
-loadingTitle.Font = Enum.Font.Code
-loadingTitle.TextSize = 45
-loadingTitle.TextXAlignment = Enum.TextXAlignment.Center
-loadingTitle.TextYAlignment = Enum.TextYAlignment.Center
-loadingTitle.TextColor3 = Color3.fromRGB(105, 230, 135)
-loadingTitle.Text = "> ENTERING LEVEL"
-loadingTitle.ZIndex = 101
-loadingTitle.Parent = loadingFrame
-
-local loadingStatus = Instance.new("TextLabel")
-loadingStatus.AnchorPoint = Vector2.new(0.5, 0.5)
-loadingStatus.Position = UDim2.new(0.5, 0, 0.53, 0)
-loadingStatus.Size = UDim2.new(0.9, 0, 0, 54)
-loadingStatus.BackgroundTransparency = 1
-loadingStatus.Font = Enum.Font.Code
-loadingStatus.TextSize = 27
-loadingStatus.TextXAlignment = Enum.TextXAlignment.Center
-loadingStatus.TextYAlignment = Enum.TextYAlignment.Center
-loadingStatus.TextColor3 = Color3.fromRGB(65, 165, 90)
-loadingStatus.Text = "GENERATING LEVEL"
-loadingStatus.ZIndex = 101
-loadingStatus.Parent = loadingFrame
-
+local loadingTitle = nil
+local loadingStatus = nil
 local activeLoadingPalette = loadingPaletteFor(1)
 local function applyLoadingPalette(level)
 	activeLoadingPalette = loadingPaletteFor(level)
-	loadingFrame.BackgroundColor3 = activeLoadingPalette.Background
-	loadingTitle.TextColor3 = activeLoadingPalette.Title
-	loadingStatus.TextColor3 = activeLoadingPalette.Status
+	if dispatchAudio.loadingCards then dispatchAudio.loadingCards.show(level) end
+end
+
+-- HUD_B8_LOADING: presentation only; the server's tokenized entry barrier owns release.
+do
+	local Hud = require(RS:WaitForChild("RoundHud"))
+	local View = require(RS:WaitForChild("LoadingCardView"))
+	local loadingCards = {MysteryTitles = View.MysteryTitles, MysteryTitlePool = View.MysteryTitlePool,
+		MysteryTitleMode = View.MysteryTitleMode, Cards = View.Cards, level = 1, progress = 0}
+	dispatchAudio.Hud = Hud
+	dispatchAudio.loadingCards = loadingCards
+	local function mounted(view)
+		loadingCards.root, loadingCards.fill = view.Root, view.Fill
+		loadingTitle, loadingStatus = view.Title, view.Status
+		loadingCards.level, loadingCards.progress, loadingCards.title = view.Level, view.Progress, view.MysteryText
+	end
+	function loadingCards.mysteryTitle(level)
+		return View.MysteryTitle(level, loadingCards.MysteryTitleMode)
+	end
+	function loadingCards.mount()
+		if loadingCards.view then loadingCards.view:_mount() end
+	end
+	function loadingCards.paint()
+		if loadingCards.view then loadingCards.view:_paint() end
+	end
+	function loadingCards.show(level)
+		if not loadingCards.view then
+			loadingCards.view = View.new(loadingFrame, level, mounted)
+		else
+			loadingCards.view.MysteryTitleMode = loadingCards.MysteryTitleMode
+			loadingCards.view:SetLevel(level)
+		end
+	end
+	function loadingCards.stage(fraction)
+		loadingCards.view:SetStatus(nil, fraction)
+		loadingCards.progress = loadingCards.view.Progress
+	end
+	loadingCards.show(1)
 end
 
 -- Full-screen round payoff. It is intentionally separate from the objective bar so
@@ -1257,6 +1259,7 @@ endFrame.BackgroundTransparency = 1
 endFrame.BorderSizePixel = 0
 endFrame.Active = true
 endFrame.Visible = false
+player:SetAttribute("RoundEndingOpen", false)
 endFrame.ZIndex = 120
 endFrame.Parent = gui
 
@@ -1287,352 +1290,242 @@ endLine.BorderSizePixel = 0
 endLine.ZIndex = 122
 endLine.Parent = endFrame
 
-local endTitle = Instance.new("TextLabel")
-endTitle.Name = "EndingTitle"
-endTitle.AnchorPoint = Vector2.new(0.5, 0.5)
-endTitle.Position = UDim2.fromScale(0.5, 0.43)
-endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
-endTitle.BackgroundTransparency = 1
-endTitle.Font = Enum.Font.GothamBlack
-endTitle.Text = ("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED")
-endTitle.TextColor3 = Color3.fromRGB(127, 218, 166)
-endTitle.TextScaled = true
-endTitle.TextStrokeColor3 = Color3.new(0, 0, 0)
-endTitle.TextStrokeTransparency = 0.35
-endTitle.TextTransparency = 1
-endTitle.TextWrapped = true
-endTitle.ZIndex = 123
-endTitle.Parent = endFrame
-local endTitleSize = Instance.new("UITextSizeConstraint")
-endTitleSize.MinTextSize = 24
-endTitleSize.MaxTextSize = 62
-endTitleSize.Parent = endTitle
+local endTitle = nil
+local endStats = nil
+local endHint = nil
 
-local endStats = Instance.new("TextLabel")
-endStats.Name = "EndingStats"
-endStats.AnchorPoint = Vector2.new(0.5, 0.5)
-endStats.Position = UDim2.fromScale(0.5, 0.63)
-endStats.Size = UDim2.new(0.86, 0, 0, 44)
-endStats.BackgroundTransparency = 1
-endStats.Font = Enum.Font.Code
-endStats.Text = "TIME 00:00  •  SURVIVORS 1/1"
-endStats.TextColor3 = Color3.fromRGB(205, 235, 210)
-endStats.TextSize = 25
-endStats.TextTransparency = 1
-endStats.TextWrapped = true
-endStats.ZIndex = 123
-endStats.Parent = endFrame
-
-local endHint = Instance.new("TextLabel")
-endHint.Name = "EndingHint"
-endHint.AnchorPoint = Vector2.new(0.5, 0.5)
-endHint.Position = UDim2.fromScale(0.5, 0.72)
-endHint.Size = UDim2.new(0.86, 0, 0, 32)
-endHint.BackgroundTransparency = 1
-endHint.Font = Enum.Font.Code
-endHint.Text = "RETURNING TO BASE"
-endHint.TextColor3 = Color3.fromRGB(112, 145, 120)
-endHint.TextSize = 17
-endHint.TextTransparency = 1
-endHint.TextWrapped = true
-endHint.ZIndex = 123
-endHint.Parent = endFrame
-
--- Two actions, built identically and laid out together so neither can drift.
--- Both are DIRECT children of endFrame rather than sitting inside a container:
--- UIRegression asserts the internal composition of RoundEnding, and a wrapper
--- frame would hide the two buttons from exactly the overlap test they most
--- need. Text is TextScaled between 11 and 18 so "BACK TO LOBBY" cannot spill
--- out of a narrow phone button.
+-- HUD_B8_RESULTS: every visual part comes from the actual imported Results tree.
 do
-local function makeCompletionButton(name, text)
-	local button = Instance.new("TextButton")
-	button.Name = name
-	button.AnchorPoint = Vector2.new(0.5, 0.5)
-	button.Position = UDim2.fromScale(0.5, 0.83)
-	button.Size = UDim2.fromOffset(240, 48)
-	button.BackgroundColor3 = Color3.fromRGB(13, 37, 29)
-	button.BackgroundTransparency = 0.08
-	button.BorderSizePixel = 0
-	button.AutoButtonColor = true
-	button.Active = false
-	button.Selectable = false
-	button.Modal = true
-	button.Font = Enum.Font.GothamBold
-	button.Text = text
-	button.TextColor3 = Color3.fromRGB(130, 255, 184)
-	button.TextScaled = true
-	button.TextTransparency = 1
-	button.Visible = false
-	button.ZIndex = 124
-	button.Parent = endFrame
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = button
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(83, 204, 145)
-	stroke.Transparency = 0.28
-	stroke.Thickness = 1.5
-	stroke.Parent = button
-	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0, 10)
-	padding.PaddingRight = UDim.new(0, 10)
-	padding.PaddingTop = UDim.new(0, 8)
-	padding.PaddingBottom = UDim.new(0, 8)
-	padding.Parent = button
-	local textSize = Instance.new("UITextSizeConstraint")
-	textSize.MinTextSize = 11
-	textSize.MaxTextSize = 18
-	textSize.Parent = button
-	return button
+	local Hud = require(RS:WaitForChild("RoundHud"))
+	local Binder = require(RS:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
+	completion.Hud = Hud
+	completion.choiceMembers = {}
+	completion.roster = {}
+	completion.choiceRows = {}
+	function completion.caption(button, text)
+		local caption = Binder.find(button, "Label")
+		if caption then caption.Text = text end
+		local action = button:GetAttribute("CompletionAction")
+		if action then
+			completion.captions = completion.captions or {}
+			completion.captions[action] = text
+		end
+	end
+	function completion.opacity(value)
+		if not completion.window then return end
+		for _, node in ipairs(completion.window:GetDescendants()) do
+			if node:IsA("TextLabel") then node.TextTransparency = value end
+		end
+	end
+	function completion.displayName(member)
+		local other = tonumber(member.UserId) and Players:GetPlayerByUserId(tonumber(member.UserId))
+		return other and other.DisplayName or member.DisplayName or member.Name
+	end
+	function completion.render()
+		if not completion.window then return end
+		local data = completion.resultData or {}
+		endTitle.Text = data.Title or ""
+		endTitle.TextColor3 = completion.color or Color3.fromRGB(68, 221, 196)
+		endHint.Text = data.Hint or ""
+		endStats.Visible = not data.Temporary
+		for name, value in pairs({Stat_Time = data.Time or "--:--", Stat_Survivors = data.Survivors or "--"}) do
+			local num = Binder.at(endStats, name .. "/Num")
+			if num then num.Text = value end
+		end
+		local counter = data.Counter
+		local tile = Binder.find(endStats, "Stat_Counter")
+		if tile then
+			tile.Visible = data.Loss == true and counter ~= nil
+			if tile.Visible then
+				Binder.find(tile, "Label").Text = tostring(counter.Label or "PROGRESS")
+				Binder.find(tile, "Num").Text = tostring(counter.Current or 0) .. "/" .. tostring(counter.Max or 0)
+			end
+		end
+		completion.parts.Party.Visible = #(completion.choiceMembers or {}) > 0
+		completion.layoutChoices()
+	end
+	function completion.layoutChoices()
+		if not completion.choiceList then return end
+		local members = completion.choiceMembers or {}
+		local list = completion.choiceList
+		local count = #members
+		list.Visible = count > 0
+		list.Active = count > 0 and endFrame.Visible
+		local layout = UIDevice.Layout()
+		local rowHeight = completion.compact and 36 or 68 * completion.scale
+		local room = math.max(rowHeight, layout.Safe.Height - (completion.headHeight + completion.footerHeight + completion.partyHeight + 32))
+		list.Size = UDim2.fromOffset(completion.width, math.min(count * rowHeight, room))
+		list.CanvasSize = UDim2.fromOffset(0, count * rowHeight)
+		list.ScrollingEnabled = count * rowHeight > room
+		list.ScrollBarThickness = list.ScrollingEnabled and 3 or 0
+		list.CanvasPosition = Vector2.new(0, math.min(list.CanvasPosition.Y, math.max(0, count * rowHeight - room)))
+		for i, row in ipairs(completion.choiceRows) do
+			local member = members[i]
+			row.Visible = member ~= nil
+			if member then
+				row.AnchorPoint = Vector2.new(0, 0)
+				row.Position = UDim2.fromOffset(0, (i - 1) * rowHeight)
+				row.Size = UDim2.fromOffset(completion.width, rowHeight)
+				local display = completion.displayName(member) or "PLAYER"
+				Binder.find(row, "Who").Text = display
+				Binder.at(row, "Initial/Letter").Text = string.upper(utf8.char(utf8.codepoint(display, 1)))
+				local other = tonumber(member.UserId) and Players:GetPlayerByUserId(tonumber(member.UserId))
+				local hum = other and other.Character and other.Character:FindFirstChildOfClass("Humanoid")
+				local gotOut = other and other:GetAttribute("Escaped") == true
+				local fell = hum and hum.Health <= 0
+				Binder.find(row, "Sub").Text = gotOut and "GOT OUT" or fell and "FELL" or "WATCHING NEXT"
+				local choice = member.Choice == "continuing" and "CONTINUE" or member.Choice == "returning" and "LOBBY"
+					or completion.returnVisible and "DECIDING" or gotOut and "GOT OUT" or fell and "DOWN" or "INSIDE"
+				Binder.at(row, "Chip/Label").Text = choice
+			end
+		end
+	end
+	function completion.mount()
+		local layout = UIDevice.Layout()
+		local touch = layout.IsTouch or layout.Safe.Height < 620 or layout.Safe.Width < 800
+		completion.compact = touch
+		local template = touch and "ResultsTouch" or "Results"
+		local designWidth = touch and 726 or 1040
+		completion.width = math.min(designWidth, layout.Safe.Width - 24)
+		completion.scale = completion.width / designWidth
+		local focusAction = game:GetService("GuiService").SelectedObject
+		focusAction = focusAction and focusAction:GetAttribute("CompletionAction")
+		if completion.window then completion.window:Destroy() end
+		completion.window, completion.parts = Hud.Stack("HUD_Screens", template, endFrame,
+			{Name = "ResultsWindow", Scale = completion.scale, Touch = touch})
+		if not completion.window then return end
+		completion.window.AnchorPoint = Vector2.new(0.5, 0.5)
+		completion.window.Position = UIDevice.LocalPosition(gui,
+			(layout.Safe.Left + layout.Safe.Right) / 2, (layout.Safe.Top + layout.Safe.Bottom) / 2)
+		for _, node in ipairs(completion.window:GetDescendants()) do
+			if node:IsA("GuiObject") then node.ZIndex = 123 end
+		end
+		endTitle = Binder.find(completion.window, "EndingTitle")
+		endStats = Binder.find(completion.window, "EndingStats")
+		endHint = Binder.find(completion.window, "EndingHint")
+		completion.continueButton = Binder.find(completion.parts.Footer, "ContinueRun")
+		completion.button = Binder.find(completion.parts.Footer, "ReturnToLobby")
+		completion.buttons = {completion.continueButton, completion.button}
+		completion.countdown = Binder.find(completion.parts.Footer, "Countdown")
+		completion.countNum = Binder.find(completion.parts.Footer, "CountNum")
+		completion.headHeight = completion.parts.Head.Size.Y.Offset
+		completion.partyHeight = completion.parts.Party.Size.Y.Offset
+		completion.footerHeight = completion.parts.Footer.Size.Y.Offset
+		if touch then
+			-- Imported actions are 52 high at the authored 726 width. A portrait
+			-- resize must preserve their touch targets, so resize only this row.
+			completion.footerHeight = 82
+			completion.parts.Footer.Size = UDim2.fromOffset(completion.width, completion.footerHeight)
+			for i, button in ipairs(completion.buttons) do
+				button.AnchorPoint = Vector2.new(0, 1)
+				button.Position = UDim2.new((i - 1) * 0.5, i == 1 and 0 or 6, 1, 0)
+				button.Size = UDim2.new(0.5, -6, 0, 52)
+			end
+			completion.countdown.AnchorPoint = Vector2.new(0, 0)
+			completion.countdown.Position = UDim2.fromOffset(0, 0)
+			completion.countdown.Size = UDim2.new(1, -48, 0, 24)
+			completion.countNum.AnchorPoint = Vector2.new(1, 0)
+			completion.countNum.Position = UDim2.new(1, 0, 0, 0)
+			completion.countNum.Size = UDim2.fromOffset(44, 24)
+			if completion.width < 520 then
+				completion.headHeight = math.max(completion.headHeight, 130)
+				completion.parts.Head.Size = UDim2.fromOffset(completion.width, completion.headHeight)
+				endTitle.TextWrapped = true
+			end
+		end
+		local list = Instance.new("ScrollingFrame")
+		list.Name = "PartyChoices"
+		list.BackgroundTransparency = 1
+		list.BorderSizePixel = 0
+		list.ScrollingDirection = Enum.ScrollingDirection.Y
+		list.ScrollBarImageColor3 = Color3.fromRGB(167, 184, 174)
+		list.CanvasSize = UDim2.fromOffset(0, 0)
+		list.CanvasPosition = Vector2.new(0, 0)
+		list.ClipsDescendants = true
+		list.LayoutOrder = 3
+		list.ZIndex = 123
+		list.Parent = completion.window
+		completion.choiceList = list
+		completion.choiceRows = {}
+		for i = 1, 6 do
+			local row = completion.parts["PartyChoice" .. i]
+			row.Parent = list
+			completion.choiceRows[i] = row
+		end
+		completion.parts.Footer.LayoutOrder = 10
+		for i, button in ipairs(completion.buttons) do
+			button:SetAttribute("CompletionAction", i == 1 and "continuenow" or "returntolobby")
+			button:SetAttribute("CompletionPressedText", i == 1 and "CONTINUING..." or "RETURNING...")
+			button.Visible = completion.returnVisible == true and (i == 2 or completion.nextLevel ~= nil)
+			button.Active = button.Visible and not completion.pending
+			button.Selectable = button.Active
+			button.Modal = true
+			button.Activated:Connect(function() completion.activate(button) end)
+			if focusAction == button:GetAttribute("CompletionAction") and button.Active then
+				game:GetService("GuiService").SelectedObject = button
+			end
+		end
+		if not completion.continueButton.Visible and completion.button.Visible then
+			completion.button.AnchorPoint = Vector2.new(0.5, 1)
+			completion.button.Position = UDim2.new(0.5, 0, 1, 0)
+		end
+		if not completion.continueButton.Visible and not completion.button.Visible then
+			completion.footerHeight = 30
+			completion.parts.Footer.Size = UDim2.fromOffset(completion.width, completion.footerHeight)
+		end
+		completion.caption(completion.continueButton, completion.captions and completion.captions.continuenow or "CONTINUE")
+		completion.caption(completion.button, completion.captions and completion.captions.returntolobby or "BACK TO LOBBY")
+		Hud.Paint(completion.window, "Results", workspace:GetAttribute("SelectedLevel") or 1)
+		completion.render()
+	end
+	function completion.clearChoices()
+		completion.lastChoiceRequestAt = nil
+		completion.choiceRevision = 0
+		completion.choiceMembers = {}
+		if completion.choiceList then
+			completion.choiceList.Visible = false
+			completion.choiceList.CanvasPosition = Vector2.new(0, 0)
+		end
+		for _, row in ipairs(completion.choiceRows) do row.Visible = false end
+	end
+	function completion.setRoster(packet)
+		if type(packet) ~= "table" or type(packet.Members) ~= "table" then return end
+		local members = {}
+		for _, member in ipairs(packet.Members) do
+			if type(member) == "table" and type(member.Name) == "string" and member.Name ~= "" and tonumber(member.UserId) then
+				members[#members + 1] = {Name = member.Name, UserId = tonumber(member.UserId), Choice = member.Choice}
+			end
+		end
+		completion.roster = members
+		completion.choiceMembers = members
+		completion.render()
+	end
+	function completion.suspend()
+		local navigation = game:GetService("GuiService")
+		if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
+		for _, button in ipairs(completion.buttons) do button.Active = false; button.Selectable = false end
+	end
+	function completion.applyChoices(packet)
+		if type(packet) ~= "table" or packet.Serial ~= completion.serverSerial
+			or type(packet.Revision) ~= "number" or packet.Revision <= (completion.choiceRevision or 0)
+			or type(packet.Members) ~= "table" or not completion.returnVisible then return end
+		completion.choiceRevision = packet.Revision
+		if packet.Closed == true then completion.pending = true end
+		local editable = not completion.pending and completion.deadline
+			and workspace:GetServerTimeNow() < completion.deadline
+		for _, button in ipairs(completion.buttons) do
+			button.Active = button.Visible and editable == true
+			button.Selectable = button.Active
+		end
+		completion.setRoster(packet)
+	end
+	function completion.applyLayout(color)
+		completion.color = color or completion.color
+		completion.mount()
+	end
+	completion.mount()
+	UIDevice.Changed:Connect(function() completion.applyLayout(completion.color) end)
 end
-
-completion.continueButton = makeCompletionButton("ContinueRun", "CONTINUE")
-completion.button = makeCompletionButton("ReturnToLobby", "BACK TO LOBBY")
-completion.buttons = {completion.continueButton, completion.button}
-completion.continueButton:SetAttribute("CompletionAction", "continuenow")
-completion.continueButton:SetAttribute("CompletionPressedText", "CONTINUING...")
-completion.button:SetAttribute("CompletionAction", "returntolobby")
-completion.button:SetAttribute("CompletionPressedText", "RETURNING...")
-end
-
--- Observational party choices above the original result composition.
--- It never changes buttons, countdowns, cursor policy or transport decisions.
-do
- local list = Instance.new("ScrollingFrame")
- list.Name = "PartyChoices"
- list.BackgroundTransparency = 1
- list.BorderSizePixel = 0
- list.ScrollBarThickness = 3
- list.ScrollBarImageColor3 = Color3.fromRGB(112, 145, 120)
- list.ScrollingDirection = Enum.ScrollingDirection.Y
- list.CanvasSize = UDim2.fromOffset(0, 0)
- list.Active = true
- list.Visible = false
- list.ZIndex = 123
- list.Parent = endFrame
- completion.choiceList = list
- completion.choiceRows = {}
-end
-
-function completion.layoutChoices()
- local list = completion.choiceList
- local count = #(completion.choiceMembers or {})
- list.Visible = count > 0 and completion.returnVisible and endFrame.Visible
- if not list.Visible then list.Active = false; list.Selectable = false; return end
- local layout = UIDevice.Layout()
- local width = math.min(620, layout.Safe.Width - 24)
- local columns = width >= 480 and 2 or 1
- -- The full-frame parent uses this ScreenGui's inset area. UIDevice returns
- -- the native rectangle (or the same fixture rectangle as LocalPosition).
- -- Keep the original heading and the core-safe viewport distinct.
- local frame = UIDevice.InsetArea(gui.ScreenInsets)
- local top = math.max(layout.Safe.Top + 6, frame.Top + 6)
- local titleTop = frame.Top + frame.Height * .34
- local availableHeight = math.max(0, math.floor(titleTop - top - 2))
- -- A native short window can leave only 27px above the unchanged title.
- -- Keep each complete name/choice together in one line when two cannot fit.
- local compact = availableHeight < 32
- -- A full-width line keeps long names and their accepted choice together.
- if compact then columns = 1 end
- local rowHeight = math.min(32, availableHeight)
- local totalHeight = math.ceil(count / columns) * rowHeight
- local height = math.min(totalHeight, availableHeight)
- list.Position = UIDevice.LocalPosition(gui, layout.Safe.Left + (layout.Safe.Width - width) / 2, top)
- list.Size = UDim2.fromOffset(width, height)
- list.CanvasSize = UDim2.fromOffset(0, totalHeight)
- list.ScrollingEnabled = totalHeight > height
- list.Active = list.ScrollingEnabled
- list.Selectable = list.ScrollingEnabled
- list.CanvasPosition = Vector2.new(0, math.min(list.CanvasPosition.Y, math.max(0, totalHeight - height)))
- -- Every name remains available; compact screens scroll within the spare
- -- top strip rather than shrinking/moving the old title or action controls.
- for i, row in ipairs(completion.choiceRows) do
-  local member = completion.choiceMembers[i]
-  row.Visible = member ~= nil
-  if member then
-   row.Position = UDim2.new((i - 1) % columns / columns, 4, 0, math.floor((i - 1) / columns) * rowHeight)
-   row.Size = UDim2.new(1 / columns, -12, 0, rowHeight)
-   row.TextWrapped = not compact
-   row.Text = member.Name .. (compact and " — " or "\n")
-    .. (member.Choice == "continuing" and "CONTINUE" or "LOBBY")
-  end
- end
-end
-
-function completion.clearChoices()
- completion.lastChoiceRequestAt = nil
- completion.choiceRevision = 0
- completion.choiceMembers = {}
- completion.choiceList.Visible = false
- completion.choiceList.Active = false
- completion.choiceList.Selectable = false
- completion.choiceList.CanvasPosition = Vector2.new(0, 0)
- for _, row in ipairs(completion.choiceRows) do row.Visible = false end
-end
-
-function completion.applyChoices(packet)
- if type(packet) ~= "table" or packet.Serial ~= completion.serverSerial
-  or type(packet.Revision) ~= "number" or packet.Revision <= (completion.choiceRevision or 0)
-  or type(packet.Members) ~= "table" or not completion.returnVisible then return end
- completion.choiceRevision = packet.Revision
- -- A closed server snapshot is terminal for this window. Later open snapshots
- -- cannot re-arm it; only a fresh completion.start/reset opens another window.
- if packet.Closed == true then completion.pending = true end
- local editable = not completion.pending and completion.deadline
-  and workspace:GetServerTimeNow() < completion.deadline
- for _, button in ipairs(completion.buttons) do
-  button.Active = button.Visible and editable == true
-  button.Selectable = button.Active
- end
- local members = {}
- for _, member in ipairs(packet.Members) do
-  if type(member) == "table" and type(member.Name) == "string"
-   and (member.Choice == "continuing" or member.Choice == "returning") then
-   members[#members + 1] = member
-  end
- end
- completion.choiceMembers = members
- for i, member in ipairs(members) do
-  local row = completion.choiceRows[i]
-  if not row then
-   row = Instance.new("TextLabel")
-   row.Name = "PartyChoice" .. i
-   row.BackgroundTransparency = 1
-   row.Font = Enum.Font.Gotham
-   row.TextScaled = true
-   row.TextWrapped = true
-   row.TextXAlignment = Enum.TextXAlignment.Left
-   row.TextTruncate = Enum.TextTruncate.None
-   row.ZIndex = 123
-   row.Parent = completion.choiceList
-   local textSize = Instance.new("UITextSizeConstraint")
-   textSize.MinTextSize = 11
-   textSize.MaxTextSize = 14
-   textSize.Parent = row
-   completion.choiceRows[i] = row
-  end
-  local continued = member.Choice == "continuing"
-  row.TextColor3 = continued and Color3.fromRGB(130, 255, 184) or Color3.fromRGB(205, 235, 210)
- end
- completion.layoutChoices()
-end
-
--- Which shape the result screen is wearing, and in what accent, so a viewport
--- or orientation change can re-measure the card without waiting for the next
--- result to arrive.
-function completion.applyLayout(color)
- completion.color = color or completion.color
- endFrame.AnchorPoint = Vector2.new(0, 0)
- endFrame.Position = UDim2.fromScale(0, 0)
- endFrame.Size = UDim2.fromScale(1, 1)
- endFlash.Visible = true
- endLine.Visible = true
-
- endTitle.AnchorPoint = Vector2.new(0.5, 0.5)
- endTitle.Position = UDim2.fromScale(0.5, 0.43)
- endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
- endTitle.TextXAlignment = Enum.TextXAlignment.Center
- endTitle.TextWrapped = true
- -- Min BEFORE Max: a UITextSizeConstraint with Min > Max is invalid, and it
- -- throws out of showRoundEnding before the screen is ever shown.
- endTitleSize.MinTextSize = 24
- endTitleSize.MaxTextSize = 62
-
- -- Fixed 44px and 32px boxes at 0.63 and 0.72 of the height are 63px apart on
- -- a 720px screen and 32px apart on a 353px one, where the two boxes genuinely
- -- collided. The rows scale with the viewport so the stack stays separated.
- local deviceLayout = UIDevice.Layout()
- local viewportHeight = deviceLayout.Height
- local statsHeight = math.clamp(viewportHeight * .06, 22, 44)
- local hintHeight = math.clamp(viewportHeight * .045, 18, 32)
-
- endStats.AnchorPoint = Vector2.new(0.5, 0.5)
- endStats.Position = UDim2.fromScale(0.5, 0.63)
- endStats.Size = UDim2.new(0.86, 0, 0, statsHeight)
- endStats.TextSize = math.clamp(math.floor(statsHeight * .58), 14, 25)
- endStats.TextXAlignment = Enum.TextXAlignment.Center
- endStats.TextTruncate = Enum.TextTruncate.None
-
- endHint.AnchorPoint = Vector2.new(0.5, 0.5)
- endHint.Position = UDim2.fromScale(0.5, 0.72)
- endHint.Size = UDim2.new(0.86, 0, 0, hintHeight)
- endHint.TextSize = math.clamp(math.floor(hintHeight * .55), 12, 17)
- endHint.TextXAlignment = Enum.TextXAlignment.Center
- endHint.TextTruncate = Enum.TextTruncate.None
-
- -- The action row. One button is centred; two share a row, and fall back to a
- -- stack when the row would squeeze either below a comfortable tap size.
- -- UIListLayout is deliberately not used here: see makeCompletionButton.
- local visible = {}
- for _, button in ipairs(completion.buttons) do
-  if button.Visible then table.insert(visible, button) end
- end
- if #visible == 0 then return end
- -- A phone in landscape is only ~375 tall, and .075 of that is 28px. The floor
- -- has to be the 44px minimum tap target on any touch device, or the result
- -- screen ships actions nobody can reliably hit.
- local buttonHeight = math.clamp(math.floor(viewportHeight * .075),
-  deviceLayout.IsTouch and 44 or 40, 54)
- local gap = math.clamp(math.floor(viewportHeight * .022), 10, 18)
- local rowWidth = math.min(deviceLayout.Width * .86, 620)
- local paired = math.floor((rowWidth - gap) * .5)
- local stacked = #visible > 1 and paired < 168
-
- -- The row is positioned from the COUNTDOWN'S REAL BOTTOM EDGE, not from a
- -- fixed fraction of the height. A stacked pair anchored at .80 of a 390x844
- -- portrait overlapped the countdown by 11px, and by 19px at 375x667, because
- -- the two were laid out against the viewport independently and nothing ever
- -- compared them.
- local hintBottom = viewportHeight * .72 + hintHeight * .5
- local rowHeight = stacked and (buttonHeight * 2 + gap) or buttonHeight
- local bottomLimit = viewportHeight - rowHeight - 8
- local preferred = viewportHeight * (stacked and .80 or .83) - rowHeight * .5
- local rowTop = math.max(preferred, hintBottom + gap)
- if rowTop > bottomLimit then
-  -- Not enough room for the full gap. Keep the row on screen and take the
-  -- separation down to whatever is left, never below zero.
-  rowTop = math.max(bottomLimit, math.min(rowTop, hintBottom + 2))
- end
-
- if #visible == 1 then
-  local width = math.clamp(math.floor(rowWidth * .55), 180, 340)
-  visible[1].Size = UDim2.fromOffset(width, buttonHeight)
-  visible[1].Position = UDim2.fromOffset(
-   math.floor(deviceLayout.Width * .5), math.floor(rowTop + buttonHeight * .5))
- elseif stacked then
-  local width = math.clamp(math.floor(rowWidth), 160, 340)
-  local centreX = math.floor(deviceLayout.Width * .5)
-  visible[1].Size = UDim2.fromOffset(width, buttonHeight)
-  visible[1].Position = UDim2.fromOffset(centreX, math.floor(rowTop + buttonHeight * .5))
-  visible[2].Size = UDim2.fromOffset(width, buttonHeight)
-  visible[2].Position = UDim2.fromOffset(centreX,
-   math.floor(rowTop + buttonHeight + gap + buttonHeight * .5))
- else
-  -- Side by side, symmetrical about the centre.
-  local offset = math.floor((paired + gap) * .5)
-  local centreX = math.floor(deviceLayout.Width * .5)
-  local centreY = math.floor(rowTop + buttonHeight * .5)
-  visible[1].Size = UDim2.fromOffset(paired, buttonHeight)
-  visible[1].Position = UDim2.fromOffset(centreX - offset, centreY)
-  visible[2].Size = UDim2.fromOffset(paired, buttonHeight)
-  visible[2].Position = UDim2.fromOffset(centreX + offset, centreY)
- end
-end
-
-do
- local originalLayout = completion.applyLayout
- function completion.applyLayout(color)
-  originalLayout(color)
-  completion.layoutChoices()
- end
-end
-
--- The layout is viewport-dependent, so a resize or an orientation change
--- re-measures it.
-UIDevice.Changed:Connect(function()
- if endFrame.Visible then completion.applyLayout(completion.color) end
-end)
 
 -- C_ONE_SPECTATE_CAMERA_20260904: the SpectateBanner that used to live here is
 -- gone. It was built, worded and hidden, and nothing ever set it Visible --
@@ -1661,14 +1554,16 @@ local function formatRoundTime(seconds)
 end
 
 function completion.reset()
+	if not endFrame.Visible then player:SetAttribute("RoundEndingOpen", false) end
 	completion.clearChoices()
 	completion.deadline = nil
+	completion.watchDeadline = nil
 	completion.nextLevel = nil
 	completion.serverSerial = nil
 	completion.pending = false
 	completion.returnVisible = false
-	completion.continueButton.Text = "CONTINUE"
-	completion.button.Text = "BACK TO LOBBY"
+	completion.caption(completion.continueButton, "CONTINUE")
+	completion.caption(completion.button, "BACK TO LOBBY")
 	-- AUDIT_FIX_20260924: hand back the controller focus start() gave out.
 	local navigation = game:GetService("GuiService")
 	if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
@@ -1676,7 +1571,6 @@ function completion.reset()
 		button.Visible = false
 		button.Active = false
 		button.Selectable = false
-		button.TextTransparency = 1
 	end
 	refreshCursor()
 end
@@ -1686,23 +1580,20 @@ end
 -- Back to Lobby alone and cannot route anyone to a level that does not exist.
 function completion.start(deadline, nextLevel, serverSerial)
 	completion.clearChoices()
+	completion.choiceMembers = completion.roster or {}
 	completion.deadline = tonumber(deadline) or (workspace:GetServerTimeNow() + 15)
 	completion.nextLevel = tonumber(nextLevel)
 	completion.serverSerial = tonumber(serverSerial)
 	completion.pending = false
 	completion.returnVisible = completion.serverSerial ~= nil
-	completion.continueButton.Text = "CONTINUE"
-	completion.button.Text = "BACK TO LOBBY"
+	completion.caption(completion.continueButton, "CONTINUE")
+	completion.caption(completion.button, "BACK TO LOBBY")
 	completion.continueButton.Visible = completion.returnVisible
 		and completion.nextLevel ~= nil
 	completion.button.Visible = completion.returnVisible
 	for _, button in ipairs(completion.buttons) do
 		button.Active = button.Visible
 		button.Selectable = button.Visible
-		button.TextTransparency = 1
-		if button.Visible then
-			TweenService:Create(button, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
-		end
 	end
 	-- Re-measure: the row is one button wide on the last level and two on every
 	-- other, and start() is what decides which.
@@ -1734,14 +1625,9 @@ function completion.activate(button)
 	completion.lastChoiceRequestAt = now
 	-- Keep both choices available. The existing server roster is the only
 	-- displayed selection; a click never pretends travel has already begun.
+	completion.caption(button, button:GetAttribute("CompletionPressedText"))
 	remote:FireServer(action, completion.serverSerial)
 	return true
-end
-
-for _, completionButton in ipairs(completion.buttons) do
-	completionButton.Activated:Connect(function()
-		completion.activate(completionButton)
-	end)
 end
 
 -- `remaining` only ticks once a second; cache it (and the expired state) so
@@ -1749,39 +1635,40 @@ end
 -- Scoped in a do-block: this chunk sits at Luau's 200-local register limit,
 -- and block locals hand their registers back at `end` (the closure keeps them).
 do
-	local completionLastDeadline = nil
-	local completionLastRemaining = nil
+	local completionLastDeadline, completionLastRemaining = nil, nil
 	local completionButtonsDisabled = false
-
 	RunService.RenderStepped:Connect(function()
-		if not completion.deadline or not endFrame.Visible then return end
-		if completion.deadline ~= completionLastDeadline then
-			completionLastDeadline = completion.deadline
-			completionLastRemaining = nil
+		if not endFrame.Visible then return end
+		if completion.watchDeadline then
+			local remaining = math.max(0, math.ceil(completion.watchDeadline - os.clock()))
+			local id = tonumber(player:GetAttribute("SpectateTargetUserId"))
+			local target = id and Players:GetPlayerByUserId(id)
+			completion.countdown.Text = "WATCHING " .. (target and string.upper(target.DisplayName) or "THE OTHERS") .. " IN"
+			completion.countNum.Text = tostring(remaining)
+			return
+		end
+		local deadline = completion.deadline
+		if not deadline then
+			completion.countdown.Text = completion.resultData and completion.resultData.Hint or ""
+			completion.countNum.Text = ""
+			return
+		end
+		if deadline ~= completionLastDeadline then
+			completionLastDeadline, completionLastRemaining = deadline, nil
 			completionButtonsDisabled = false
 		end
-		local remaining = math.max(0, math.ceil(completion.deadline - workspace:GetServerTimeNow()))
+		local remaining = math.max(0, math.ceil(deadline - workspace:GetServerTimeNow()))
 		if remaining ~= completionLastRemaining then
 			completionLastRemaining = remaining
-			if completion.nextLevel then
-				endHint.Text = remaining > 0
-					and ("LEVEL " .. tostring(completion.nextLevel) .. " BEGINS IN " .. tostring(remaining))
-					or ("ENTERING LEVEL " .. tostring(completion.nextLevel))
-			else
-				endHint.Text = remaining > 0
-					and ("RETURNING TO LOBBY IN " .. tostring(remaining))
-					or "RETURNING TO LOBBY"
-			end
+			completion.countdown.Text = completion.nextLevel
+				and ("LEVEL " .. completion.nextLevel .. " BEGINS IN") or "RETURNING TO LOBBY IN"
+			completion.countNum.Text = tostring(remaining)
 		end
 		if remaining <= 0 and not completionButtonsDisabled then
 			completionButtonsDisabled = true
-			-- AUDIT_FIX_20260924: no dead focus on a button that just went unselectable.
 			local navigation = game:GetService("GuiService")
 			if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
-			for _, button in ipairs(completion.buttons) do
-				button.Active = false
-				button.Selectable = false
-			end
+			for _, button in ipairs(completion.buttons) do button.Active = false; button.Selectable = false end
 		end
 	end)
 end
@@ -1839,42 +1726,49 @@ local function hideRoundEnding(immediate)
  local token = endingSerial
  if immediate then
   endFrame.Visible = false
+  player:SetAttribute("RoundEndingOpen", false)
   endFrame.BackgroundTransparency = 1
   endFlash.BackgroundTransparency = 1
   return
  end
+ completion.opacity(1)
  TweenService:Create(endFrame, TweenInfo.new(0.42), {BackgroundTransparency = 1}):Play()
- TweenService:Create(endTitle, TweenInfo.new(0.28), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
- TweenService:Create(endStats, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
- TweenService:Create(endHint, TweenInfo.new(0.25), {TextTransparency = 1}):Play()
  TweenService:Create(endLine, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
  task.delay(0.46, function()
-  if endingSerial == token then endFrame.Visible = false end
+  if endingSerial == token then
+   endFrame.Visible = false
+   player:SetAttribute("RoundEndingOpen", false)
+  end
  end)
 end
 
 local function showRoundEnding(title, stats, hint, color, temporary)
+ -- Capture before Clear: objective progress remains the truthful loss counter.
+ local objective = completion.Hud.LastObjective()
  completion.reset()
  endingSerial += 1
  local token = endingSerial
- color = color or Color3.fromRGB(127, 218, 166)
+ color = color or Color3.fromRGB(68, 221, 196)
+ completion.resultData = {
+  Title = title, Hint = hint or "", Temporary = temporary == true,
+  Loss = title == "NO ONE FOUND A WAY OUT",
+  Time = type(stats) == "string" and stats:match("TIME%s+(%d+:%d+)") or "--:--",
+  Survivors = type(stats) == "string" and stats:match("SURVIVORS%s+(%d+/%d+)") or "--",
+  Counter = objective and objective.Counter,
+ }
+ completion.choiceMembers = completion.roster or {}
+ completion.watchDeadline = temporary and os.clock() + 2.75 or nil
  completion.applyLayout(color)
+ completion.Hud.Clear()
  loadingFrame.Visible = false
  queueShade.Visible = false
  label.Visible = false
  endFrame.Visible = true
+ player:SetAttribute("RoundEndingOpen", temporary ~= true)
  endFrame.BackgroundTransparency = 1
  endFlash.BackgroundColor3 = color
- endFlash.BackgroundTransparency = 0.08
- endTitle.Text = title
- endTitle.TextColor3 = color
- endTitle.TextTransparency = 1
- endTitle.TextStrokeTransparency = 1
- endStats.Text = stats or ""
- endStats.TextColor3 = color:Lerp(Color3.new(1, 1, 1), 0.68)
- endStats.TextTransparency = 1
- endHint.Text = hint or ""
- endHint.TextTransparency = 1
+ endFlash.BackgroundTransparency = player:GetAttribute("ReduceFlashing") == true and 1 or 0.08
+ completion.opacity(0)
  endLine.BackgroundColor3 = color
  endLine.BackgroundTransparency = 0
  endLine.Size = UDim2.new(0, 0, 0, 2)
@@ -1884,13 +1778,12 @@ local function showRoundEnding(title, stats, hint, color, temporary)
  exitThud.TimePosition = 0
  exitChime.TimePosition = 0
  exitThud:Play()
- task.delay(0.12, function() if endFrame.Visible then exitChime:Play() end end)
- TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
+ task.delay(0.12, function() if endingSerial == token and endFrame.Visible then exitChime:Play() end end)
+ if player:GetAttribute("ReduceFlashing") ~= true then
+  TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
+ end
  TweenService:Create(endFrame, TweenInfo.new(0.42, Enum.EasingStyle.Quad),
   {BackgroundTransparency = 0.08}):Play()
- TweenService:Create(endTitle, TweenInfo.new(0.48), {TextTransparency = 0, TextStrokeTransparency = 0.35}):Play()
- TweenService:Create(endStats, TweenInfo.new(0.42), {TextTransparency = 0}):Play()
- TweenService:Create(endHint, TweenInfo.new(0.55), {TextTransparency = 0}):Play()
  TweenService:Create(endLine, TweenInfo.new(0.55, Enum.EasingStyle.Quart), {Size = UDim2.new(0.70, 0, 0, 2)}):Play()
 
  if temporary then
@@ -1925,21 +1818,21 @@ if RunService:IsStudio() then
  player:GetAttributeChangedSignal("DevRoundEnding"):Connect(function()
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
-   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(127, 218, 166), true)
+   showRoundEnding("YOU GOT OUT", "", "WAITING FOR THE OTHERS", Color3.fromRGB(68, 221, 196), true)
 	-- "winfinal" is tested BEFORE "win": find() is a substring match and the
 	-- final-level mode would otherwise be swallowed by the ordinary one.
 	elseif mode:find("winfinal", 1, true) then
 		-- The last level: no next level exists, so no Continue action does either.
-		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 3) .. " CLEARED"), "TIME 05:08  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(127, 218, 166), false)
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 3) .. " CLEARED"), "TIME 05:08  •  SURVIVORS 2/3", "RETURNING TO LOBBY", Color3.fromRGB(68, 221, 196), false)
 		completion.start(workspace:GetServerTimeNow() + 15, nil, -1)
 	elseif mode:find("win", 1, true) then
-		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(127, 218, 166), false)
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO LOBBY", Color3.fromRGB(68, 221, 196), false)
 		-- Exercise the complete production win state in UIRegression: the overlay
 		-- is not valid unless its countdown and BOTH actions are present too. A
 		-- negative serial is intentionally Studio-only.
 		completion.start(workspace:GetServerTimeNow() + 15, 2, -1)
   elseif mode:find("lose", 1, true) then
-   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 116, 96), false)
+   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO LOBBY", Color3.fromRGB(242, 112, 95), false)
   elseif mode:find("hide", 1, true) then
    hideRoundEnding(true)
   end
@@ -1973,7 +1866,7 @@ end
 
 -- All levels share the server's party barrier. Only an explicit successful
 -- release can lift the cover; the sequence below is presentation, never proof.
-local entryState = {Active = false, Token = nil, Error = nil,
+local entryState = {Active = false, Token = nil, KnownLevel = nil, Error = nil,
 	ErrorArmed = true, ErrorSerial = 0, MessageSerial = 0}
 
 local function finishLoadingWhenReady()
@@ -1996,21 +1889,26 @@ local function startLoadingSequence()
 			"STABILIZING ENTRY ENERGY",
 			"VERIFYING CONTAINMENT",
 		}
-		for _, stage in ipairs(stages) do
+		for i, stage in ipairs(stages) do
 			if loadingRun ~= run then return end
 			loadingBaseText = stage
+			dispatchAudio.loadingCards.stage(i / (#stages + 1))
 			loadingClock = 0
 			task.wait(1.35)
 		end
 		if loadingRun ~= run then return end
 
-		loadingTitle.Text = "> SYNCHRONIZING PARTY"
-		loadingTitle.TextColor3 = activeLoadingPalette.TitleDone
+		loadingBaseText = "SYNCHRONIZING PARTY"
+		dispatchAudio.loadingCards.stage(0.9)
+		loadingClock = 0
+		task.wait(0.35)
+		if loadingRun ~= run then return end
 		loadingBaseText = "WAITING FOR EVERYONE TO LOAD"
 		loadingClock = 0
 		task.wait(1.6)
 		if loadingRun ~= run then return end
 		loadingSequenceFinished = true
+		dispatchAudio.loadingCards.stage(1)
 		finishLoadingWhenReady()
 	end)
 end
@@ -2072,7 +1970,7 @@ function entryState.ShowError(reason)
 		if entryState.ErrorSerial ~= serial then return end
 		entryState.Error = nil
 		-- Expiry retires the incident, even if another status has replaced it.
-		-- The text check also protects the direct MISSION BRIEF label writer.
+		-- The text check also protects a later status written by another flow.
 		if entryState.ErrorMessageSerial == entryState.MessageSerial and label.Text == message then
 			setMsg("")
 		end
@@ -2085,9 +1983,10 @@ end
 local LEVEL_ONE_BRIEFING_ID = "rbxassetid://110249611823719"
 local LEVEL_ONE_RADIO_CUE_ID = "rbxassetid://73198577463663"
 local LEVEL_ONE_BRIEFING_DELAY = 2.5 -- radio cue leads in; speech still begins about 2.5s after placement
-local LEVEL_TWO_BRIEFING_ID = "rbxassetid://139075030898721"
-local LEVEL_TWO_RADIO_CUE_ID = "rbxassetid://121765399252460"
-local LEVEL_TWO_BRIEFING_DELAY = 2.5 -- measured from the moment the Poolrooms cover clears
+-- The Level 2 briefing (voice, radio cue, captions, run state and functions) is
+-- deleted whole: it told the party the pumps alert an entity, and the new
+-- Level 2 has none (owner, 2026-10-08). Its asset ids stay in
+-- assets/live-asset-manifest.json.
 local levelThreeBriefing = {
 	speechId = "rbxassetid://113751783401897",
 	radioId = "rbxassetid://105627123289647",
@@ -2220,7 +2119,7 @@ dispatchAudio.controls.BackgroundTransparency = 1
 dispatchAudio.controls.BorderSizePixel = 0
 dispatchAudio.controls.Visible = false
 dispatchAudio.controls.ZIndex = 23
-dispatchAudio.controls.Parent = subtitleFrame
+dispatchAudio.controls.Parent = guideGui -- transport controls are independent of the retired subtitle panel
 
 local briefingControlsLayout = Instance.new("UIListLayout")
 briefingControlsLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -2298,269 +2197,6 @@ ContextActionService:BindAction("ZyntraStopCurrentDispatch", function(_, inputSt
 end, false, Enum.KeyCode.N, Enum.KeyCode.ButtonB)
 dispatchAudio.refresh()
 
-local objectivesButton = Instance.new("TextButton")
-objectivesButton.Name = "ObjectivesButton"
-objectivesButton.Position = UDim2.fromOffset(12, 12)
-objectivesButton.Size = UDim2.fromOffset(256, 36)
-objectivesButton.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
-objectivesButton.BackgroundTransparency = 0.04
-objectivesButton.BorderSizePixel = 0
-objectivesButton.AutoButtonColor = false
-objectivesButton.Active = true
-objectivesButton.Selectable = true
-objectivesButton.Font = Enum.Font.GothamBold
-objectivesButton.Text = ""
-objectivesButton.TextColor3 = Color3.fromRGB(230, 237, 232)
-objectivesButton.TextSize = 13
-objectivesButton.Visible = false
-objectivesButton.ZIndex = 30
-objectivesButton.Parent = guideGui
-roundAndStroke(objectivesButton, 9, Color3.fromRGB(75, 94, 83), 0.28, 1)
-
-dispatchAudio.objectivesButtonSetup = (function()
-	local gradient = Instance.new("UIGradient")
-	gradient.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 29, 24)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 14, 12)),
-	})
-	gradient.Parent = objectivesButton
-
-	local accent = Instance.new("Frame")
-	accent.Name = "Accent"
-	accent.Position = UDim2.fromOffset(0, 8)
-	accent.Size = UDim2.new(0, 3, 1, -16)
-	accent.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
-	accent.BorderSizePixel = 0
-	accent.ZIndex = 31
-	accent.Parent = objectivesButton
-	local accentCorner = Instance.new("UICorner")
-	accentCorner.CornerRadius = UDim.new(1, 0)
-	accentCorner.Parent = accent
-
-	local label = Instance.new("TextLabel")
-	label.Name = "BriefLabel"
-	label.Position = UDim2.fromOffset(17, 0)
-	label.Size = UDim2.new(1, -66, 1, 0)
-	label.BackgroundTransparency = 1
-	label.Font = Enum.Font.GothamBold
-	label.Text = "MISSION BRIEF"
-	label.TextColor3 = Color3.fromRGB(223, 232, 226)
-	label.TextSize = 12
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.ZIndex = 31
-	label.Parent = objectivesButton
-
-	local keycap = Instance.new("Frame")
-	keycap.Name = "Keycap"
-	keycap.AnchorPoint = Vector2.new(1, 0.5)
-	keycap.Position = UDim2.new(1, -7, 0.5, 0)
-	keycap.Size = UDim2.fromOffset(28, 24)
-	keycap.BackgroundColor3 = Color3.fromRGB(29, 39, 34)
-	keycap.BorderSizePixel = 0
-	keycap.ZIndex = 31
-	keycap.Parent = objectivesButton
-	local keyCorner = Instance.new("UICorner")
-	keyCorner.CornerRadius = UDim.new(0, 6)
-	keyCorner.Parent = keycap
-	local keyStroke = Instance.new("UIStroke")
-	keyStroke.Color = Color3.fromRGB(101, 127, 113)
-	keyStroke.Transparency = 0.35
-	keyStroke.Thickness = 1
-	keyStroke.Parent = keycap
-
-	local key = Instance.new("TextLabel")
-	key.Name = "Key"
-	key.Size = UDim2.fromScale(1, 1)
-	key.BackgroundTransparency = 1
-	key.Font = Enum.Font.GothamBold
-	key.Text = "H"
-	key.TextColor3 = Color3.fromRGB(139, 218, 172)
-	key.TextSize = 11
-	key.ZIndex = 32
-	key.Parent = keycap
-end)()
-
-objectivesButton.MouseEnter:Connect(function()
-	objectivesButton.BackgroundColor3 = Color3.fromRGB(25, 34, 29)
-end)
-objectivesButton.MouseLeave:Connect(function()
-	objectivesButton.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
-end)
-
-local objectivesPanel = Instance.new("Frame")
-objectivesPanel.Name = "ObjectivesPanel"
-objectivesPanel.Position = UDim2.fromOffset(12, 64)
-objectivesPanel.Size = UDim2.fromOffset(420, 360)
-objectivesPanel.BackgroundColor3 = Color3.fromRGB(8, 12, 10)
-objectivesPanel.BackgroundTransparency = 0.035
-objectivesPanel.BorderSizePixel = 0
-objectivesPanel.Active = true
-objectivesPanel.Visible = false
-objectivesPanel.ZIndex = 30
-objectivesPanel.Parent = guideGui
-roundAndStroke(objectivesPanel, 12, Color3.fromRGB(75, 94, 83), 0.25, 1)
-
-dispatchAudio.objectivesPanelSetup = (function()
-	local gradient = Instance.new("UIGradient")
-	gradient.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 25, 21)),
-		ColorSequenceKeypoint.new(0.58, Color3.fromRGB(10, 15, 12)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(6, 9, 8)),
-	})
-	gradient.Rotation = 90
-	gradient.Parent = objectivesPanel
-
-	local eyebrow = Instance.new("TextLabel")
-	eyebrow.Name = "Eyebrow"
-	eyebrow.Position = UDim2.fromOffset(18, 9)
-	eyebrow.Size = UDim2.new(1, -82, 0, 14)
-	eyebrow.BackgroundTransparency = 1
-	eyebrow.Font = Enum.Font.Code
-	eyebrow.Text = "FIELD BRIEF  //  LEVEL 1"
-	eyebrow.TextColor3 = Color3.fromRGB(100, 188, 143)
-	eyebrow.TextSize = 10
-	eyebrow.TextXAlignment = Enum.TextXAlignment.Left
-	eyebrow.ZIndex = 31
-	eyebrow.Parent = objectivesPanel
-end)()
-
-local objectivesTitle = Instance.new("TextLabel")
-objectivesTitle.Name = "Title"
-objectivesTitle.Position = UDim2.fromOffset(18, 24)
-objectivesTitle.Size = UDim2.new(1, -82, 0, 30)
-objectivesTitle.BackgroundTransparency = 1
-objectivesTitle.Font = Enum.Font.GothamBold
-objectivesTitle.Text = "ESCAPE PROCEDURE"
-objectivesTitle.TextColor3 = Color3.fromRGB(232, 239, 234)
-objectivesTitle.TextSize = 20
-objectivesTitle.TextXAlignment = Enum.TextXAlignment.Left
-objectivesTitle.ZIndex = 31
-objectivesTitle.Parent = objectivesPanel
-
-local objectivesClose = Instance.new("TextButton")
-objectivesClose.Name = "Close"
-objectivesClose.AnchorPoint = Vector2.new(1, 0)
-objectivesClose.Position = UDim2.new(1, -10, 0, 10)
-objectivesClose.Size = UDim2.fromOffset(36, 36)
-objectivesClose.BackgroundColor3 = Color3.fromRGB(25, 33, 29)
-objectivesClose.BackgroundTransparency = 0.08
-objectivesClose.BorderSizePixel = 0
-objectivesClose.AutoButtonColor = true
-objectivesClose.Font = Enum.Font.GothamBold
-objectivesClose.Text = "×"
-objectivesClose.TextColor3 = Color3.fromRGB(176, 191, 182)
-objectivesClose.TextSize = 20
-objectivesClose.ZIndex = 32
-objectivesClose.Parent = objectivesPanel
-roundAndStroke(objectivesClose, 8, Color3.fromRGB(84, 101, 92), 0.46, 1)
-
-local objectivesDivider = Instance.new("Frame")
-objectivesDivider.Name = "Divider"
-objectivesDivider.Position = UDim2.fromOffset(18, 62)
-objectivesDivider.Size = UDim2.new(1, -36, 0, 1)
-objectivesDivider.BackgroundColor3 = Color3.fromRGB(72, 91, 80)
-objectivesDivider.BackgroundTransparency = 0.30
-objectivesDivider.BorderSizePixel = 0
-objectivesDivider.ZIndex = 31
-objectivesDivider.Parent = objectivesPanel
-
-local objectivesBody = Instance.new("ScrollingFrame")
-objectivesBody.Name = "NumberedObjectives"
-objectivesBody.Position = UDim2.fromOffset(16, 74)
-objectivesBody.Size = UDim2.new(1, -32, 1, -88)
-objectivesBody.BackgroundTransparency = 1
-objectivesBody.BorderSizePixel = 0
-objectivesBody.CanvasSize = UDim2.new()
-objectivesBody.AutomaticCanvasSize = Enum.AutomaticSize.Y
-objectivesBody.ScrollBarThickness = 2
-objectivesBody.ScrollBarImageColor3 = Color3.fromRGB(91, 138, 111)
-objectivesBody.ScrollingDirection = Enum.ScrollingDirection.Y
-objectivesBody.ZIndex = 31
-objectivesBody.Parent = objectivesPanel
-
-local objectivesLayout = Instance.new("UIListLayout")
-objectivesLayout.Padding = UDim.new(0, 10)
-objectivesLayout.SortOrder = Enum.SortOrder.LayoutOrder
-objectivesLayout.Parent = objectivesBody
-
-local objectiveCopy = {
-	{badge = "01", copy = "<b>Locate the fuse relays</b>\nSearch beneath unusually bright ceiling lights and extract each fuse."},
-	{badge = "02", copy = "<b>Restore the circuits</b>\nFollow the colored cables and insert one fuse into every fuse box."},
-	{badge = "03", copy = "<b>Pull the levers</b>\nOnce every box is powered, activate each lever. They stay on — no time limit."},
-	{badge = "04", copy = "<b>Find the powered exit</b>\nFollow the energy reader to the exit door."},
-	{badge = "!", warning = true, copy = "<b>Threat protocol</b>\nKeep your distance from the entity. Do not engage."},
-}
-
-for index, step in ipairs(objectiveCopy) do
-	local row = Instance.new("Frame")
-	row.Name = "Objective" .. index
-	row.Size = UDim2.new(1, -6, 0, 0)
-	row.AutomaticSize = Enum.AutomaticSize.Y
-	row.BackgroundColor3 = step.warning
-		and Color3.fromRGB(42, 34, 20)
-		or Color3.fromRGB(18, 25, 21)
-	row.BackgroundTransparency = 0.42
-	row.BorderSizePixel = 0
-	row.LayoutOrder = index
-	row.ZIndex = 31
-	row.Parent = objectivesBody
-	step.rowSetup = (function()
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 7)
-		corner.Parent = row
-		local stroke = Instance.new("UIStroke")
-		stroke.Color = step.warning
-			and Color3.fromRGB(139, 111, 58)
-			or Color3.fromRGB(56, 72, 63)
-		stroke.Transparency = 0.48
-		stroke.Thickness = 1
-		stroke.Parent = row
-	end)()
-
-	local number = Instance.new("TextLabel")
-	number.Name = "Number"
-	number.Position = UDim2.fromOffset(8, 8)
-	number.Size = UDim2.fromOffset(30, 30)
-	number.BackgroundColor3 = step.warning
-		and Color3.fromRGB(78, 59, 29)
-		or Color3.fromRGB(28, 47, 37)
-	number.BackgroundTransparency = 0.12
-	number.BorderSizePixel = 0
-	number.Font = Enum.Font.GothamBold
-	number.Text = step.badge
-	number.TextColor3 = step.warning
-		and Color3.fromRGB(224, 188, 111)
-		or Color3.fromRGB(111, 216, 161)
-	number.TextSize = 11
-	number.ZIndex = 32
-	number.Parent = row
-	step.badgeSetup = (function()
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 7)
-		corner.Parent = number
-	end)()
-
-	local description = Instance.new("TextLabel")
-	description.Name = "Description"
-	description.Position = UDim2.fromOffset(48, 7)
-	description.Size = UDim2.new(1, -58, 0, 0)
-	description.AutomaticSize = Enum.AutomaticSize.Y
-	description.BackgroundTransparency = 1
-	description.Font = Enum.Font.GothamMedium
-	description.RichText = true
-	description.Text = step.copy
-	description.TextColor3 = step.warning
-		and Color3.fromRGB(224, 202, 151)
-		or Color3.fromRGB(204, 216, 208)
-	description.TextSize = 13
-	description.LineHeight = 1.08
-	description.TextWrapped = true
-	description.TextXAlignment = Enum.TextXAlignment.Left
-	description.TextYAlignment = Enum.TextYAlignment.Top
-	description.ZIndex = 32
-	description.Parent = row
-end
-
 local levelOneBriefingSound = Instance.new("Sound")
 levelOneBriefingSound.Name = "LevelOneCommandBriefing"
 levelOneBriefingSound.SoundId = LEVEL_ONE_BRIEFING_ID
@@ -2576,22 +2212,6 @@ levelOneRadioCue.Volume = 0
 levelOneRadioCue.Looped = false
 levelOneRadioCue.SoundGroup = dispatchAudio.group
 levelOneRadioCue.Parent = guideGui
-
-local levelTwoBriefingSound = Instance.new("Sound")
-levelTwoBriefingSound.Name = "LevelTwoCommandBriefing"
-levelTwoBriefingSound.SoundId = LEVEL_TWO_BRIEFING_ID
-levelTwoBriefingSound.Volume = 1
-levelTwoBriefingSound.Looped = false
-levelTwoBriefingSound.SoundGroup = dispatchAudio.group
-levelTwoBriefingSound.Parent = guideGui
-
-local levelTwoRadioCue = Instance.new("Sound")
-levelTwoRadioCue.Name = "LevelTwoRadioOpen"
-levelTwoRadioCue.SoundId = LEVEL_TWO_RADIO_CUE_ID
-levelTwoRadioCue.Volume = 0 -- Keep the cue asset for later review; it may contain processed speech.
-levelTwoRadioCue.Looped = false
-levelTwoRadioCue.SoundGroup = dispatchAudio.group
-levelTwoRadioCue.Parent = guideGui
 
 levelThreeBriefing.sound = Instance.new("Sound")
 levelThreeBriefing.sound.Name = "LevelThreeCommandBriefing"
@@ -2653,23 +2273,6 @@ local briefingCues = {
 	{45.61, 47.10, "Command Center, over and out."},
 }
 
-local levelTwoBriefingCues = {
-	{0.00, 4.70, "Team Alpha, this is Command Center. Stand by for briefing."},
-	{4.70, 7.55, "Good work making it safely to Level Two."},
-	{7.55, 12.20, "This space appears to contain three inactive pump stations. Locate and activate all three."},
-	{12.20, 17.10, "Be advised... we have detected poolfoam-like entities near what appear to be children's play areas."},
-	{17.10, 18.65, "Avoid close contact."},
-	{18.65, 25.00, "Even more important: activating a pump appears to alert an unidentified, unusually large entity to your location."},
-	{25.00, 26.65, "Once a pump is running, move quickly."},
-	{26.65, 31.10, "After all three pumps are active, the main pool chamber should unlock."},
-	{31.10, 33.45, "Enter it, reach the upper floor, and locate the exit tube."},
-	{33.45, 37.75, "At that point... assume the entity knows where you are—and where you are headed."},
-	{37.75, 39.00, "Stay alert."},
-	{39.00, 41.30, "And I repeat: do not stop moving."},
-	{41.30, 42.55, "Good luck, Team Alpha."},
-	{42.55, 44.13, "Command Center, over and out."},
-}
-
 -- Timed against the uploaded 52.610612-second Level 3 recording.
 levelThreeBriefing.cues = {
 	{0.00, 3.90, "Team Alpha. Come in. This is Command Center. Stand by for briefing."},
@@ -2708,17 +2311,11 @@ levelThreeBriefing.jitterOctaves = {0.84, 1.07, 0.91, 1.02}
 local briefingRun = 0
 local briefingPreloaded = false
 local elevatorBriefingStarted = false
-local objectivesAvailable = false
-local levelTwoBriefingRun = 0
-local levelTwoBriefingPreloaded = false
-local levelTwoBriefingStarted = false
 player:SetAttribute("LevelOneBriefingActive", false)
-player:SetAttribute("LevelTwoBriefingActive", false)
 player:SetAttribute("LevelThreeBriefingActive", false)
 player:SetAttribute("LobbyBriefingActive", false)
 player:SetAttribute("LobbyBriefingPlayed", false)
 player:SetAttribute("LobbyBriefingSkipped", false)
-player:SetAttribute("LevelOneGuideObjectivesOpen", nil)
 
 local function isLevelOneParticipant()
 	return workspace:GetAttribute("SelectedLevel") == 1
@@ -2727,51 +2324,7 @@ local function isLevelOneParticipant()
 		and not dead
 end
 
--- The one rule for whether the OBJECTIVES button is on screen.
---
--- On touch the panel takes UIDevice's whole safe band, which begins above the
--- button; the panel is Active, so wherever they overlap the button stops
--- responding to the tap that would close it. They are alternatives rather than
--- companions -- the panel carries its own Close -- so the button stands down
--- while the panel is up. Its published state also lets PuzzleUI yield its
--- lower-right counter stack while this larger help panel owns that corner.
-local function refreshObjectivesButton()
-	local panelOpen = objectivesAvailable and objectivesPanel.Visible
-	local published = panelOpen and true or nil
-	if player:GetAttribute("LevelOneGuideObjectivesOpen") ~= published then
-		player:SetAttribute("LevelOneGuideObjectivesOpen", published)
-	end
-	if not objectivesAvailable then
-		objectivesButton.Visible = false
-		return
-	end
-	-- The guide stands down entirely under a screen-owning modal. This gui is
-	-- DisplayOrder 110, well above the terminal's 55, so both the panel and the
-	-- button painted over an open terminal and -- being Active -- took its taps.
-	if UIDevice.ScreenOwningModalOpen() then
-		objectivesButton.Visible = false
-		objectivesPanel.Visible = false
-		return
-	end
-	-- The compact card and its MISSION BRIEF footer are one composition. Once the
-	-- full brief is open, the panel's own close control takes over; leaving the
-	-- footer below it is the duplicate slab that made the old HUD feel broken.
-	objectivesButton.Visible = not panelOpen
-end
-UIDevice.OnScreenOwningModalChanged(function()
-	refreshObjectivesButton()
-end)
-player:GetAttributeChangedSignal("DispatchBriefingOpen"):Connect(function()
-	refreshObjectivesButton()
-end)
-
-local function setObjectivesAvailable(available)
-	objectivesAvailable = available == true
-	if not objectivesAvailable then
-		objectivesPanel.Visible = false
-	end
-	refreshObjectivesButton()
-end
+ContextActionService:UnbindAction("ToggleObjectiveHelp")
 
 local function setSubtitle(text)
 	local nextCopy = text or ""
@@ -3009,46 +2562,7 @@ local function cancelLevelOneBriefing(hideObjectives)
 	levelOneBriefingSound:Stop()
 	player:SetAttribute("LevelOneBriefingActive", false)
 	setSubtitle(nil)
-	if hideObjectives then
-		setObjectivesAvailable(false)
-	end
 end
-
-local function toggleObjectives()
-	if objectivesAvailable and isLevelOneParticipant() then
-		objectivesPanel.Visible = not objectivesPanel.Visible
-	else
-		objectivesPanel.Visible = false
-	end
-	refreshObjectivesButton()
-end
-
-objectivesButton.Activated:Connect(toggleObjectives)
-objectivesClose.Activated:Connect(function()
-	objectivesPanel.Visible = false
-	refreshObjectivesButton()
-end)
-local OBJECTIVES_ACTION = "ToggleObjectiveHelp"
-ContextActionService:UnbindAction(OBJECTIVES_ACTION)
-ContextActionService:BindActionAtPriority(
-	OBJECTIVES_ACTION,
-	function(_, inputState)
-		if inputState ~= Enum.UserInputState.Begin then
-			return Enum.ContextActionResult.Pass
-		end
-		-- Availability, not button visibility: on touch the button hides itself
-		-- while the panel is open, and gating on it would make the binding a
-		-- one-way door that could open the panel but never close it.
-		if UIS:GetFocusedTextBox() or not objectivesAvailable or dispatchAudio.inputBlocked() then
-			return Enum.ContextActionResult.Pass
-		end
-		toggleObjectives()
-		return Enum.ContextActionResult.Sink
-	end,
-	false,
-	Enum.ContextActionPriority.High.Value,
-	Enum.KeyCode.H, Enum.KeyCode.DPadUp
-)
 
 -- The longest line the dispatch panel can ever be asked to render, read off the
 -- cue tables themselves so it cannot drift from the script, plus the face
@@ -3064,7 +2578,7 @@ ContextActionService:BindActionAtPriority(
 -- now on has to go onto an existing table.
 dispatchAudio.longestLine = (function()
 	local longest = ""
-	for _, set in ipairs({briefingCues, levelTwoBriefingCues, levelThreeBriefing.cues, lobbyBriefing.cues}) do
+	for _, set in ipairs({briefingCues, levelThreeBriefing.cues, lobbyBriefing.cues}) do
 		for _, cue in ipairs(set or {}) do
 			local caption = cue[3]
 			if type(caption) == "string" and #caption > #longest then longest = caption end
@@ -3138,112 +2652,12 @@ dispatchAudio.copyHeightFor = function(text, face, width)
 		text, face, subtitleText.Font, Vector2.new(math.max(1, width), 100000)).Y
 end
 
+-- Dormant subtitle layout remains available; RoundHud owns every objective surface.
 local function updateLevelOneGuideLayout()
 	local layout = UIDevice.Layout()
 	local viewport = layout.Viewport
 	local narrow = layout.Narrow
 	local touch = layout.IsTouch
-
-	-- A touch target never goes under 44px. Pointer gets a quiet 256x36 footer:
-	-- together with PuzzleUI's 36px chevron and their 8px gap it is exactly the
-	-- 300px width of the live objective card above.
-	local touchFloor = touch and 44 or nil
-	objectivesButton.Size = touch
-		and UDim2.fromOffset(168, 44)
-		or UDim2.fromOffset(256, 36)
-	objectivesButton.TextSize = touch and 13 or 12
-	objectivesButton.Text = ""
-	objectivesClose.Size = UDim2.fromOffset(touchFloor or 40, touchFloor or 40)
-	local briefLabel = objectivesButton:FindFirstChild("BriefLabel")
-	local briefKeycap = objectivesButton:FindFirstChild("Keycap")
-	if briefLabel then
-		briefLabel.Position = touch and UDim2.fromOffset(12, 0) or UDim2.fromOffset(17, 0)
-		briefLabel.Size = touch and UDim2.new(1, -24, 1, 0) or UDim2.new(1, -66, 1, 0)
-		briefLabel.TextXAlignment = touch and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
-		briefLabel.TextSize = touch and 12 or 12
-	end
-	if briefKeycap then
-		local binding = UIDevice.Binding("H", "↑")
-		briefKeycap.Visible = binding ~= ""
-		local key = briefKeycap:FindFirstChild("Key")
-		if key then key.Text = binding end
-	end
-	if touch then
-		objectivesButton.AnchorPoint = Vector2.new(0, 0)
-		local left, top = layout.SafeLeft + 12, layout.SafeTop + 12
-		local puzzle = player.PlayerGui:FindFirstChild("PuzzleGui")
-		local counter = puzzle and puzzle:FindFirstChild("Level1Objectives")
-		-- Portrait phones cannot fit the brief beside the objective card.
-		-- Follow its measured bottom, including changing objective messages.
-		if counter and counter.Visible and left + 168 > counter.AbsolutePosition.X - 8 then
-			top = math.max(top, counter.AbsolutePosition.Y + counter.AbsoluteSize.Y + 8)
-		end
-		dispatchAudio.objectiveBottom = top + 44
-		objectivesButton.Position = UIDevice.LocalPosition(guideGui, left, top)
-	else
-		-- PuzzleUI owns the final 36px at the bottom-right. This guide completes
-		-- the footer row immediately to its left.
-		objectivesButton.AnchorPoint = Vector2.new(1, 1)
-		objectivesButton.Position = UDim2.new(1, -(18 + 36 + 8), 1, -18)
-	end
-
-	-- The objectives panel is Active and nearly full-bleed, so on touch it is the
-	-- single most likely element to swallow the movement controls. It takes the
-	-- safe band EXACTLY -- no minimum-height floor, because a floor is what
-	-- silently defeated the first attempt at this clamp and put a 160px panel
-	-- back on top of the thumbstick at 667x375.
-	if touch then
-		local band = layout.TopBand
-		-- MOBILE_QA_20261008 -- WHAT SHIPPED BROKEN. On a landscape phone the band above the thumbstick is about
-		-- 54px high: the header fits in it and not one objective does, so MISSION BRIEF opened a title bar with
-		-- nothing under it on every phone (measured 568x320 to 956x440; a tablet's band holds two rows and scrolls).
-		-- Where the band cannot hold the header and two rows, the brief is a SHEET over the modal viewport: it is
-		-- Active, so it takes the controls it covers for as long as it is up, and it is closed with its own X.
-		-- That is the trade the clamp above refused for a panel that stayed open during play; a brief that cannot
-		-- be read is the worse fault.
-		if band.Height < 150 then band = layout.ModalViewport end
-		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
-		objectivesPanel.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
-		objectivesPanel.Size = UDim2.fromOffset(band.Width, band.Height)
-		-- The panel takes the WHOLE safe band on touch, which starts 8px under
-		-- the top inset -- above the button that opened it. On a phone's 36px
-		-- inset the two overlap, and the panel is Active, so the button it covers
-		-- stops responding. They are alternatives rather than companions: the
-		-- panel carries its own Close, so the button stands down while it is up.
-		refreshObjectivesButton()
-		objectivesTitle.TextSize = narrow and 15 or 18
-		subtitleText.TextSize = narrow and 16 or 20
-	else
-		-- C_L1_GUIDE_HEIGHT_FROM_THE_FRAME_20260831 -- WHAT SHIPPED BROKEN.
-		--
-		-- Both pointer branches sized this panel from `viewport.Y`, the CAMERA
-		-- height, while anchoring it 70px off the bottom of a gui whose frame is
-		-- the CoreUI safe area. Those are not the same rectangle: on a 831x418
-		-- window with a 58px topbar the frame is 360 tall, so 418 - 82 = 336
-		-- was drawn from a bottom edge only 290px down and the panel's title ran
-		-- 46px ABOVE the top of the screen, under the topbar. It never showed on
-		-- a 1080p monitor because 1080 - 82 is smaller than the 338 cap there;
-		-- it is every windowed and every emulated desktop that loses the title.
-		--
-		-- The height now comes from the space the panel is actually anchored
-		-- inside: the safe height, less the 70px it is lifted and the 8px gutter
-		-- it keeps at the top.
-		local anchoredRoom = math.floor(layout.Safe.Height - 18 - 8)
-		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
-		if narrow then
-			objectivesPanel.Position = UDim2.new(1, -10, 1, -10)
-			objectivesPanel.Size = UDim2.new(1, -20, 0,
-				math.max(120, math.min(360, anchoredRoom)))
-			objectivesTitle.TextSize = 17
-			subtitleText.TextSize = 16
-		else
-			objectivesPanel.Position = UDim2.new(1, -18, 1, -18)
-			objectivesPanel.Size = UDim2.fromOffset(420,
-				math.max(120, math.min(360, anchoredRoom)))
-			objectivesTitle.TextSize = 20
-			subtitleText.TextSize = 20
-		end
-	end
 
 	-- The briefing panel was the single biggest overlap offender: at 0.76 width
 	-- anchored 64px off the bottom it landed straight on RUN and JUMP in every
@@ -3812,15 +3226,6 @@ local function updateLevelOneGuideLayout()
 				if nextTop + panelHeight <= band.Bottom then captionTop = nextTop end
 			end
 		end
-		-- Level 1's objective button is available throughout the text-only
-		-- briefing. On portrait screens put captions below that live control
-		-- whenever the safe band has room; landscape already uses ModalArea.
-		if not dispatchAudio.voiceEnabled and objectivesAvailable
-			and band == layout.TopBand
-			and dispatchAudio.objectiveBottom
-			and dispatchAudio.objectiveBottom + 8 + panelHeight <= band.Bottom then
-			captionTop = dispatchAudio.objectiveBottom + 8
-		end
 		placeBelowHud("PuzzleGui", "Level1Objectives")
 		placeBelowHud("Level2ObjectiveGui", "Level2ObjectivePanel")
 		placeBelowHud("Level3ReaderGui", "ReaderPanel")
@@ -3932,6 +3337,10 @@ local function updateLevelOneGuideLayout()
 	-- on a phone, naming a key the device has not got. This is the one signal
 	-- that fires on a form-factor change, so the captions are rebuilt from it.
 	-- refresh() never calls back into the layout, so there is no cycle here.
+	-- Preserve the real stop/mute controls without restoring a subtitle plate.
+	dispatchAudio.controls.AnchorPoint = Vector2.new(0.5, 1)
+	dispatchAudio.controls.Position = UIDevice.LocalPosition(guideGui,
+		(layout.Safe.Left + layout.Safe.Right) / 2, layout.Safe.Bottom - 156)
 	dispatchAudio.refresh()
 end
 
@@ -3953,33 +3362,6 @@ end
 
 UIDevice.Changed:Connect(updateLevelOneGuideLayout)
 player:GetAttributeChangedSignal("Level3_Hiding"):Connect(updateLevelOneGuideLayout)
-task.spawn(function()
-	local puzzle = player.PlayerGui:WaitForChild("PuzzleGui")
-	local counter = puzzle:WaitForChild("Level1Objectives")
-	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
-		counter:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
-	end
-	local message = puzzle:WaitForChild("PuzzleMessage")
-	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
-		message:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
-	end
-	updateLevelOneGuideLayout()
-end)
-for _, target in ipairs({
-	{"Level2ObjectiveGui", "Level2ObjectivePanel"},
-	{"Level3ReaderGui", "ReaderPanel"},
-}) do
-	task.spawn(function()
-		local hudGui = player.PlayerGui:WaitForChild(target[1])
-		local hud = hudGui:WaitForChild(target[2])
-		hudGui:GetPropertyChangedSignal("Enabled"):Connect(updateLevelOneGuideLayout)
-		for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
-			hud:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
-		end
-		updateLevelOneGuideLayout()
-	end)
-end
-
 local viewportConnection = nil
 local function connectGuideViewport()
 	if viewportConnection then viewportConnection:Disconnect() end
@@ -3997,7 +3379,6 @@ local function playLevelOneBriefing()
 	local run = briefingRun
 	local speechAt = os.clock() + LEVEL_ONE_BRIEFING_DELAY
 	player:SetAttribute("LevelOneBriefingActive", false)
-	setObjectivesAvailable(isLevelOneParticipant())
 	setSubtitle(nil)
 	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level; the objectives are up from the start
 
@@ -4018,7 +3399,6 @@ local function playLevelOneBriefing()
 			if run ~= briefingRun then return end
 			cancelLevelOneBriefing(false)
 			if isLevelOneParticipant() then
-				setObjectivesAvailable(true)
 			end
 		end)
 		levelOneRadioCue:Stop()
@@ -4058,7 +3438,6 @@ local function playLevelOneBriefing()
 			player:SetAttribute("LevelOneBriefingActive", false)
 			dispatchAudio.finishTransmission("level1", run)
 			if run == briefingRun and isLevelOneParticipant() then
-				setObjectivesAvailable(true)
 			end
 			return
 		end
@@ -4102,133 +3481,7 @@ local function playLevelOneBriefing()
 		if run ~= briefingRun then return end
 		setSubtitle(nil)
 		if isLevelOneParticipant() then
-			setObjectivesAvailable(true)
 		end
-	end)
-end
-
-local function cancelLevelTwoBriefing()
-	levelTwoBriefingRun += 1
-	dispatchAudio.clearTransmission("level2")
-	levelTwoRadioCue:Stop()
-	levelTwoBriefingSound:Stop()
-	player:SetAttribute("LevelTwoBriefingActive", false)
-	setSubtitle(nil)
-end
-
-local function isLevelTwoParticipant()
-	return workspace:GetAttribute("SelectedLevel") == 2
-		and workspace:GetAttribute("RoundActive") == true
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
-		and not dead
-end
-
-local function preloadLevelTwoBriefing()
-	if levelTwoBriefingPreloaded then return true end
-	local ok = pcall(function()
-		ContentProvider:PreloadAsync(dispatchAudio.voiceEnabled
-			and {levelTwoRadioCue, levelTwoBriefingSound} or {levelTwoRadioCue})
-	end)
-	levelTwoBriefingPreloaded = ok and levelTwoRadioCue.IsLoaded
-		and (not dispatchAudio.voiceEnabled or levelTwoBriefingSound.IsLoaded)
-	return levelTwoBriefingPreloaded
-end
-
-task.spawn(preloadLevelTwoBriefing)
-
-local function playLevelTwoBriefing()
-	levelTwoBriefingRun += 1
-	local run = levelTwoBriefingRun
-	local speechAt = os.clock() + LEVEL_TWO_BRIEFING_DELAY
-	player:SetAttribute("LevelTwoBriefingActive", false)
-	setSubtitle(nil)
-	do return end -- BRIEFINGS_OFF_20261004 (owner): no Command Center briefing, voice or subtitle, in the lobby or in any level
-
-	task.spawn(function()
-		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
-		preloadLevelTwoBriefing()
-
-		local radioLength = levelTwoRadioCue.TimeLength > 0.05 and levelTwoRadioCue.TimeLength or 1
-		local remaining = speechAt - radioLength - os.clock()
-		if remaining > 0 then task.wait(remaining) end
-		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then return end
-
-		setMsg("")
-		dispatchAudio.beginTransmission("level2", run, function()
-			if run ~= levelTwoBriefingRun then return end
-			cancelLevelTwoBriefing()
-		end)
-		levelTwoRadioCue:Stop()
-		levelTwoRadioCue.TimePosition = 0
-		local radioPlayed = pcall(function() levelTwoRadioCue:Play() end)
-		if radioPlayed then
-			local radioStarted = levelTwoRadioCue.IsPlaying
-			local radioStartDeadline = os.clock() + 0.5
-			local radioDeadline = os.clock() + radioLength + 1
-			while run == levelTwoBriefingRun and isLevelTwoParticipant() and os.clock() < radioDeadline do
-				if levelTwoRadioCue.IsPlaying then
-					radioStarted = true
-				elseif radioStarted or os.clock() >= radioStartDeadline then
-					break
-				end
-				RunService.Heartbeat:Wait()
-			end
-		else
-			local waitForSpeech = speechAt - os.clock()
-			if waitForSpeech > 0 then task.wait(waitForSpeech) end
-		end
-		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then
-			dispatchAudio.finishTransmission("level2", run)
-			return
-		end
-
-		levelTwoBriefingSound:Stop()
-		levelTwoBriefingSound.TimePosition = 0
-		player:SetAttribute("LevelTwoBriefingActive", dispatchAudio.voiceEnabled)
-		local played = true
-		if dispatchAudio.voiceEnabled then
-			played = pcall(function() levelTwoBriefingSound:Play() end)
-		end
-		if not played then
-			player:SetAttribute("LevelTwoBriefingActive", false)
-			dispatchAudio.finishTransmission("level2", run)
-			return
-		end
-
-		local currentText = nil
-		local playbackStarted = levelTwoBriefingSound.IsPlaying
-		local playbackStartDeadline = os.clock() + 4
-		local deadline = os.clock() + 50
-		local captionClock = dispatchAudio.newCaptionClock()
-		while run == levelTwoBriefingRun and isLevelTwoParticipant()
-			and (not dispatchAudio.voiceEnabled or os.clock() < deadline) do
-			local position = dispatchAudio.captionPosition(captionClock, levelTwoBriefingSound)
-			local cueText = nil
-			for _, cue in ipairs(levelTwoBriefingCues) do
-				if position >= cue[1] and position < cue[2] then
-					cueText = cue[3]
-					break
-				end
-			end
-			if cueText ~= currentText then
-				currentText = cueText
-				setSubtitle(cueText)
-			end
-			if not dispatchAudio.voiceEnabled then
-				if position >= levelTwoBriefingCues[#levelTwoBriefingCues][2] then break end
-			elseif levelTwoBriefingSound.IsPlaying then
-				playbackStarted = true
-			elseif playbackStarted or os.clock() >= playbackStartDeadline then
-				break
-			end
-			RunService.Heartbeat:Wait()
-		end
-
-		player:SetAttribute("LevelTwoBriefingActive", false)
-		dispatchAudio.finishTransmission("level2", run)
-		if run ~= levelTwoBriefingRun then return end
-		setSubtitle(nil)
 	end)
 end
 
@@ -4401,7 +3654,6 @@ end
 local function cancelAllCommandBriefings(hideLevelOneObjectives)
 	lobbyBriefing.cancel()
 	cancelLevelOneBriefing(hideLevelOneObjectives)
-	cancelLevelTwoBriefing()
 	levelThreeBriefing.cancel()
 end
 
@@ -4419,16 +3671,6 @@ if RunService:IsStudio() then
 		player:SetAttribute("UIRegressionSilenceDispatch", nil)
 	end)
 end
-
-local function validateLevelTwoBriefing()
-	if not isLevelTwoParticipant() then
-		cancelLevelTwoBriefing()
-	end
-end
-workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(validateLevelTwoBriefing)
-workspace:GetAttributeChangedSignal("RoundActive"):Connect(validateLevelTwoBriefing)
-player:GetAttributeChangedSignal("InRound"):Connect(validateLevelTwoBriefing)
-player:GetAttributeChangedSignal("Escaped"):Connect(validateLevelTwoBriefing)
 
 function levelThreeBriefing.validate()
 	if not levelThreeBriefing.isParticipant() then
@@ -4575,6 +3817,7 @@ end
 remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	if ev == "lobby" then
 		entryState.Active = false
+		entryState.KnownLevel = nil
 		entryState.Token = nil
 		loadingRun += 1
 		-- GameManager also uses "lobby" for queue resets. Preserve a welcome
@@ -4627,6 +3870,13 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		setMsg((stationNumber and ("STATION " .. stationNumber .. "  •  ") or "") .. "HOST CHOOSING PARTY SETTINGS", Color3.fromRGB(220, 210, 155))
 		label.Size = UDim2.new(0, 700, 0, 68)
 
+	elseif ev == "queueaccessdenied" then
+		queueShade.Visible = false
+		queueStation = nil
+		queueSubmitting = false
+		setMsg(tostring(b), Color3.fromRGB(255, 205, 110))
+		label.Size = UDim2.new(0, 700, 0, 92)
+
 	elseif ev == "queueprivate" then
 		queueShade.Visible = false
 		local stationNumber = tonumber(a)
@@ -4666,13 +3916,21 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		setMsg("GAME IN PROGRESS — WAIT FOR THE NEXT GROUP", Color3.fromRGB(255, 215, 120))
 
 	elseif ev == "loadinggame" then
+		local announcedLevel = (type(a) == "number" or type(a) == "string") and tonumber(a) or nil
+		if not announcedLevel or announcedLevel % 1 ~= 0 or announcedLevel < 1 or announcedLevel > 6 then
+			announcedLevel = nil
+			-- A late untyped bootstrap cannot reset a confirmed entry or its token.
+			if entryState.Active and entryState.KnownLevel ~= nil then return end
+		end
+		completion.roster = {}
+		completion.resultData = nil
 		entryState.Active = true
+		entryState.KnownLevel = announcedLevel
 		entryState.Token = nil
 		entryState.ClearError(true)
 		serverReadyForEntry = false
 		cancelAllCommandBriefings(true)
 		elevatorBriefingStarted = false
-		levelTwoBriefingStarted = false
 		levelThreeBriefing.started = false
 		-- Re-arm the elevator shake for Studio-fallback servers that host
 		-- several rounds in a row ("start" only fires after the ride).
@@ -4684,15 +3942,12 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueStation = nil
 		queueSubmitting = false
 		setMsg("")
-		-- GameManager sends the level with this event because it sets
-		-- SelectedLevel later, inside ensureWorld — reading the attribute here
-		-- would paint the cover in the PREVIOUS round's colour.
-		local announcedLevel = tonumber(a)
-		local launchingLevel = announcedLevel
-			or workspace:GetAttribute("SelectedLevel") or 1
-		applyLoadingPalette(launchingLevel)
-		player:SetAttribute("LoadingLevel", launchingLevel)        -- for the level loading cover (Lobby Loading Screen)
-		loadingTitle.Text = "> ENTERING ANOMALOUS SPACE"
+		-- SelectedLevel and LoadingLevel can still describe the previous round during arrival.
+		-- Hold the opaque cover without its old card until the server confirms this entry's level.
+		if announcedLevel then applyLoadingPalette(announcedLevel) end
+		player:SetAttribute("LoadingLevel", announcedLevel)
+		local card = dispatchAudio.loadingCards.root
+		if card then card.Visible = announcedLevel ~= nil end
 		loadingClock = 0
 		loadingBaseText = "PREPARING YOUR PARTY"
 		-- Paint the status line BEFORE uncovering. RenderStepped only refreshes
@@ -4710,6 +3965,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "entryreleased" then
 		if entryState.Active and type(a) == "table" and a.Token == entryState.Token then
 			entryState.Active = false
+			entryState.KnownLevel = nil
 			loadingRun += 1
 			loadingSequenceFinished = true
 			serverReadyForEntry = true
@@ -4719,6 +3975,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "entrycancel" then
 		if type(a) == "table" and a.Token == entryState.Token then
 			entryState.Active = false
+			entryState.KnownLevel = nil
 			entryState.Token = nil
 			loadingRun += 1
 		end
@@ -4726,6 +3983,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "loadfailed" then
 		if not entryState.ErrorArmed then return end
 		entryState.Active = false
+		entryState.KnownLevel = nil
 		entryState.Token = nil
 		loadingRun += 1
 		cancelAllCommandBriefings(true)
@@ -4734,7 +3992,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 
 	elseif ev == "poolaccess" then
 		dead = false
-		setMsg("POOL ACCESS READY", Color3.fromRGB(105, 230, 210))
+		if player:GetAttribute("InRound") == true then
+			completion.Hud.Feed({Kind = "SYSTEM", Detail = "POOL ACCESS READY", Key = "poolaccess"})
+		end
 		-- The shared entry barrier releases this cover for the whole party.
 
 	elseif ev == "level3access" then
@@ -4744,7 +4004,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			finishLoadingWhenReady()
 		end
 		dead = false
-		setMsg("SERVICE LEVEL ACCESS READY", Color3.fromRGB(95, 235, 215))
+		if player:GetAttribute("InRound") == true then
+			completion.Hud.Feed({Kind = "SYSTEM", Detail = "SERVICE LEVEL ACCESS READY", Key = "level3access"})
+		end
 
 	elseif ev == "elevator" then
 		if not entryState.Active then
@@ -4760,7 +4022,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		end
 
 	elseif ev == "start" then
+		completion.roster = {}
+		completion.resultData = nil
 		entryState.Active = false
+		entryState.KnownLevel = nil
 		entryState.Token = nil
 		entryState.ClearError(false)
 		loadingRun += 1
@@ -4773,10 +4038,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		dead = false
 		setMsg("")
 		local selectedLevel = workspace:GetAttribute("SelectedLevel")
-		if selectedLevel == 2 and not levelTwoBriefingStarted then
-			levelTwoBriefingStarted = true
-			playLevelTwoBriefing()
-		elseif selectedLevel == 3 and not levelThreeBriefing.started then
+		if selectedLevel == 3 and not levelThreeBriefing.started then
 			levelThreeBriefing.started = true
 			levelThreeBriefing.play()
 		end
@@ -4797,28 +4059,15 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		if a == player.Name then
 			cancelAllCommandBriefings(true)
 			showRoundEnding(
-				("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
-				"SIGNAL LOST",
+				"YOU GOT OUT",
+				"",
 				"WAITING FOR THE OTHERS",
-				Color3.fromRGB(127, 218, 166),
+				Color3.fromRGB(68, 221, 196),
 				true
 			)
 		elseif player:GetAttribute("InRound") == true
 			and player:GetAttribute("Escaped") ~= true then
-			-- The escaper's NAME was already in `a` and was thrown away, so every
-			-- escape after the first read "One player has successfully escaped" --
-			-- and the server only ever announced the first one anyway. It now
-			-- fires per escape on every level, so the line has to say who.
-			-- The InRound guard is PuzzleUI's: a lobby player watching the next
-			-- group's round start must never inherit their party's messages.
-			local msg = tostring(a) .. " found a way out. Follow the green lights."
-			setMsg(msg, Color3.fromRGB(150, 235, 175))
-			-- Replaces rather than stacks: setMsg owns the one status line, and
-			-- the delayed clear only fires while its OWN text is still showing,
-			-- so a second escape's message is not wiped by the first one's timer.
-			task.delay(8, function()
-				if label.Text == msg then setMsg("") end
-			end)
+			completion.Hud.Feed({Kind = "SYSTEM", Actor = a, Detail = "got out", Key = "escape:" .. tostring(a)})
 		end
 
 	elseif ev == "lose" then
@@ -4828,8 +4077,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		showRoundEnding(
 			"NO ONE FOUND A WAY OUT",
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS 0/" .. totalPlayers,
-			"RETURNING TO BASE",
-			Color3.fromRGB(255, 116, 96),
+			"RETURNING TO LOBBY",
+			Color3.fromRGB(242, 112, 95),
 			false
 		)
 
@@ -4839,12 +4088,13 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local survivors = math.max(0, math.floor(tonumber(b) or 0))
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or math.max(1, survivors)))
 		showRoundEnding(
-			-- Level 5 runs on the lobby server, where SelectedLevel stays 1: it says its own number.
+			-- Level 5 runs on the lobby server, where SelectedLevel stays 1: it says its own number (so does the
+			-- Level 2 new-map preview's exit slide).
 			dead and "THE OTHERS FOUND A WAY OUT" or ("LEVEL " .. tostring(player:GetAttribute("Level5VoidRound") == true and 5 or player:GetAttribute("Level6PlaygroundPreview") == true and 6
-				or workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
+				or player:GetAttribute("Level2NewMapPreview") == true and 2 or workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
-			"RETURNING TO BASE",
-			Color3.fromRGB(127, 218, 166),
+			"RETURNING TO LOBBY",
+			Color3.fromRGB(68, 221, 196),
 			false
 		)
 		completion.start(d, e, f)
@@ -4852,11 +4102,12 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "returnpending" then
 		if tonumber(a) == completion.serverSerial then
 			completion.pending = true
-			completion.button.Active = false
-			completion.button.Selectable = false
-			completion.button.Text = "RETURNING..."
+			completion.suspend()
+			completion.caption(completion.button, "RETURNING...")
 		end
 
+	elseif ev == "resultroster" then
+		if player:GetAttribute("InRound") == true then completion.setRoster(a) end
 	elseif ev == "postwinchoices" then
 		completion.applyChoices(a)
 	elseif ev == "continuefailed" then
@@ -4865,8 +4116,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			-- The transfer did not start. Re-arm both actions; the countdown is
 			-- still running and will carry this player onward if they do nothing.
 			completion.pending = false
-			completion.continueButton.Text = "TRY CONTINUE"
-			completion.button.Text = "BACK TO LOBBY"
+			completion.caption(completion.continueButton, "TRY CONTINUE")
+			completion.caption(completion.button, "BACK TO LOBBY")
 			for _, button in ipairs(completion.buttons) do
 				button.Active = button.Visible
 				button.Selectable = button.Visible
@@ -4877,8 +4128,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		if tonumber(a) == completion.serverSerial and completion.deadline
 			and workspace:GetServerTimeNow() < completion.deadline then
 			completion.pending = false
-			completion.continueButton.Text = "CONTINUE"
-			completion.button.Text = "TRY BACK TO LOBBY"
+			completion.caption(completion.continueButton, "CONTINUE")
+			completion.caption(completion.button, "TRY BACK TO LOBBY")
 			for _, button in ipairs(completion.buttons) do
 				button.Active = button.Visible
 				button.Selectable = button.Visible
@@ -4888,9 +4139,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "transitionfailed" then
 		completion.deadline = nil
 		completion.pending = true
-		completion.button.Active = false
-		completion.button.Selectable = false
-		completion.button.Text = "RETURNING..."
+		completion.suspend()
+		completion.caption(completion.button, "RETURNING...")
 		endHint.Text = "NEXT LEVEL UNAVAILABLE  •  RETURNING TO LOBBY"
 	end
 end)
@@ -4908,345 +4158,228 @@ end)
 -- 200-local limit, and block locals hand their registers back at `end` while
 -- the closures keep them as upvalues. Everything else is a field of one table
 -- for the same reason.
+-- HUD_B8_PARTY_DOWN: local presentation clock; the server settles the round.
 do
 	local GuiService = game:GetService("GuiService")
-	-- The product id, its price and the credit count are all read from the three
-	-- attributes ZyntraStore publishes out of its own updateReentry -- the same
-	-- one function that already runs at spawn, on every death, on every profile
-	-- change and on every round transition, so they are set long before a wipe.
-	--
-	-- Requiring ZyntraConfig here instead would put an UNBOUNDED WaitForChild
-	-- four thousand lines into this chunk, and everything below this block waits
-	-- behind it: the readiness announce (whose own note says sending it late
-	-- permanently loses a new player's welcome), the Mimic, the ambient scares
-	-- and the PuzzleStatus wiring. Every other dependency in this file is
-	-- resolved in the first sixteen lines precisely so a missing instance fails
-	-- before any UI is built rather than halfway through it.
-
-	local function corner(instance, radius)
-		local shape = Instance.new("UICorner")
-		shape.CornerRadius = UDim.new(0, radius)
-		shape.Parent = instance
-	end
-
+	local MarketplaceService = game:GetService("MarketplaceService")
+	local Hud = require(RS:WaitForChild("RoundHud"))
+	local Binder = require(RS:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
 	local pd = {
-		-- os.clock(), NOT the server clock: the window is 15 wall-clock seconds
-		-- from the moment this client heard about it, so a laggy or late remote
-		-- shortens the bar rather than desynchronising it.
-		deadline = nil,
-		window = 15,
-		armAt = 0,
-		armed = false,
-		declined = false,
-		lastSeconds = nil,
-		statusText = nil,
-		-- DEV_FREE_RESPAWN_OFFER_20260915 (card 81): whitelisted developers get a
-		-- third button, the free server-only respawn. The gate here is cosmetic:
-		-- GameManager re-checks DevAccess and the dead InRound body, and the free
-		-- path never reserves a credit. FindFirstChild + pcall, never a
-		-- WaitForChild, for the reason given above.
+		deadline = nil, window = 15, armAt = 0, armed = false, declined = false,
+		lastSeconds = nil, waiting = false,
 		dev = (function()
 			local ok, access = pcall(require, RS:FindFirstChild("DevAccess"))
 			return ok and type(access) == "table" and access.IsAllowed(player) == true
 		end)(),
 	}
-	pd.height = pd.dev and 316 or 268
-
 	pd.frame = Instance.new("Frame")
 	pd.frame.Name = "PartyDownOverlay"
 	pd.frame.Size = UDim2.fromScale(1, 1)
-	pd.frame.BackgroundColor3 = Color3.fromRGB(6, 2, 3)
-	-- Dimmed, not blacked out. The player is watching a teammate's POV through
-	-- SpectateController and the point of the window is that they can still see
-	-- what is happening to the run they are being asked to pay for.
-	pd.frame.BackgroundTransparency = 0.45
+	pd.frame.BackgroundColor3 = Color3.fromRGB(4, 7, 16)
+	pd.frame.BackgroundTransparency = 0.1
 	pd.frame.BorderSizePixel = 0
-	pd.frame.Active = true
 	pd.frame.Visible = false
 	pd.frame.ZIndex = 112
 	pd.frame.Parent = gui
-
-	pd.card = Instance.new("Frame")
-	pd.card.Name = "PartyDownCard"
-	pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
-	pd.card.Position = UDim2.fromScale(0.5, 0.5)
-	pd.card.Size = UDim2.new(1, -32, 0, pd.height)
-	pd.card.BackgroundColor3 = Color3.fromRGB(9, 5, 6)
-	pd.card.BackgroundTransparency = 0.06
-	pd.card.BorderSizePixel = 0
-	pd.card.ZIndex = 113
-	pd.card.Parent = pd.frame
-	corner(pd.card, 10)
-	pd.cardSize = Instance.new("UISizeConstraint")
-	pd.cardSize.MinSize = Vector2.new(280, pd.height)
-	pd.cardSize.MaxSize = Vector2.new(460, pd.height)
-	pd.cardSize.Parent = pd.card
-	pd.cardStroke = Instance.new("UIStroke")
-	pd.cardStroke.Color = Color3.fromRGB(255, 116, 96)
-	pd.cardStroke.Transparency = 0.2
-	pd.cardStroke.Thickness = 1
-	pd.cardStroke.Parent = pd.card
-	-- A 268px card does not fit a 320-tall landscape phone. One UIScale, driven
-	-- from the viewport, keeps the whole card on screen instead of cropping the
-	-- decline button off the bottom of it.
-	pd.cardScale = Instance.new("UIScale")
-	pd.cardScale.Parent = pd.card
-
-	pd.title = Instance.new("TextLabel")
-	pd.title.Name = "PartyDownTitle"
-	pd.title.Position = UDim2.fromOffset(16, 14)
-	pd.title.Size = UDim2.new(1, -32, 0, 42)
-	pd.title.BackgroundTransparency = 1
-	pd.title.Font = Enum.Font.GothamBlack
-	pd.title.Text = "PARTY DOWN"
-	pd.title.TextColor3 = Color3.fromRGB(255, 116, 96)
-	pd.title.TextScaled = true
-	pd.title.TextXAlignment = Enum.TextXAlignment.Left
-	pd.title.ZIndex = 114
-	pd.title.Parent = pd.card
-	pd.titleSize = Instance.new("UITextSizeConstraint")
-	pd.titleSize.MinTextSize = 20
-	pd.titleSize.MaxTextSize = 38
-	pd.titleSize.Parent = pd.title
-
-	pd.fallen = Instance.new("TextLabel")
-	pd.fallen.Name = "PartyDownFallen"
-	pd.fallen.Position = UDim2.fromOffset(16, 60)
-	pd.fallen.Size = UDim2.new(1, -32, 0, 24)
-	pd.fallen.BackgroundTransparency = 1
-	pd.fallen.Font = Enum.Font.Code
-	pd.fallen.Text = "THE WHOLE PARTY IS DOWN"
-	pd.fallen.TextColor3 = Color3.fromRGB(198, 176, 176)
-	pd.fallen.TextSize = 15
-	pd.fallen.TextTruncate = Enum.TextTruncate.AtEnd
-	pd.fallen.TextXAlignment = Enum.TextXAlignment.Left
-	pd.fallen.ZIndex = 114
-	pd.fallen.Parent = pd.card
-
-	pd.track = Instance.new("Frame")
-	pd.track.Name = "PartyDownTrack"
-	pd.track.Position = UDim2.fromOffset(16, 94)
-	pd.track.Size = UDim2.new(1, -32, 0, 8)
-	pd.track.BackgroundColor3 = Color3.fromRGB(48, 20, 20)
-	pd.track.BorderSizePixel = 0
-	pd.track.ZIndex = 114
-	pd.track.Parent = pd.card
-	corner(pd.track, 4)
-
-	pd.fill = Instance.new("Frame")
-	pd.fill.Name = "PartyDownFill"
-	pd.fill.Size = UDim2.fromScale(1, 1)
-	pd.fill.BackgroundColor3 = Color3.fromRGB(255, 116, 96)
-	pd.fill.BorderSizePixel = 0
-	pd.fill.ZIndex = 115
-	pd.fill.Parent = pd.track
-	corner(pd.fill, 4)
-
-	pd.timer = Instance.new("TextLabel")
-	pd.timer.Name = "PartyDownTimer"
-	pd.timer.Position = UDim2.fromOffset(16, 108)
-	pd.timer.Size = UDim2.new(1, -32, 0, 26)
-	pd.timer.BackgroundTransparency = 1
-	pd.timer.Font = Enum.Font.Code
-	pd.timer.Text = "15 SECONDS LEFT"
-	pd.timer.TextColor3 = Color3.fromRGB(255, 140, 130)
-	pd.timer.TextSize = 20
-	pd.timer.TextXAlignment = Enum.TextXAlignment.Left
-	pd.timer.ZIndex = 114
-	pd.timer.Parent = pd.card
-
-	local function makeButton(name, y, height, text, colour)
-		local button = Instance.new("TextButton")
-		button.Name = name
-		button.Position = UDim2.fromOffset(16, y)
-		button.Size = UDim2.new(1, -32, 0, height)
-		button.BackgroundColor3 = Color3.fromRGB(24, 14, 15)
-		button.BackgroundTransparency = 0.05
-		button.BorderSizePixel = 0
-		button.AutoButtonColor = true
-		-- Both start INERT and are armed 0.6s after the card appears: this card
-		-- lands on a player who is already mashing a key at a death screen, and
-		-- one of the two buttons opens a Robux purchase prompt.
-		button.Active = false
-		button.Selectable = false
-		button.Modal = true
-		button.Font = Enum.Font.GothamBold
-		button.Text = text
-		button.TextColor3 = colour
-		button.TextScaled = true
-		button.ZIndex = 114
-		button.Parent = pd.card
-		corner(button, 8)
-		local stroke = Instance.new("UIStroke")
-		stroke.Color = colour
-		stroke.Transparency = 0.35
-		stroke.Thickness = 1.5
-		stroke.Parent = button
-		local padding = Instance.new("UIPadding")
-		padding.PaddingLeft = UDim.new(0, 10)
-		padding.PaddingRight = UDim.new(0, 10)
-		padding.PaddingTop = UDim.new(0, 8)
-		padding.PaddingBottom = UDim.new(0, 8)
-		padding.Parent = button
-		local textSize = Instance.new("UITextSizeConstraint")
-		textSize.MinTextSize = 11
-		textSize.MaxTextSize = 18
-		textSize.Parent = button
-		return button
+	pd.brackets = Instance.new("Frame")
+	pd.brackets.Name = "CornerBrackets"
+	pd.brackets.Visible = not UIDevice.Layout().IsTouch
+	pd.brackets.Size = UDim2.fromScale(1, 1)
+	pd.brackets.BackgroundTransparency = 1
+	pd.brackets.ZIndex = 113
+	pd.brackets.Parent = pd.frame
+	for _, corner in ipairs({{0,0}, {1,0}, {0,1}, {1,1}}) do
+		for _, size in ipairs({Vector2.new(26,2), Vector2.new(2,26)}) do
+			local line = Instance.new("Frame")
+			line.AnchorPoint = Vector2.new(corner[1], corner[2])
+			line.Position = UDim2.new(corner[1], corner[1] == 0 and 24 or -24, corner[2], corner[2] == 0 and 24 or -24)
+			line.Size = UDim2.fromOffset(size.X, size.Y)
+			line.BorderSizePixel = 0
+			line.BackgroundColor3 = Color3.fromRGB(242,235,219)
+			line.BackgroundTransparency = 0.65
+			line.ZIndex = 113
+			line.Parent = pd.brackets
+		end
 	end
-
-	pd.reentry = makeButton("PartyDownReentry", 146, 48, "USE RE-ENTRY",
-		Color3.fromRGB(255, 120, 110))
-	if pd.dev then
-		pd.free = makeButton("PartyDownFreeRespawn", 200, 44, "FREE RESPAWN  //  DEV",
-			dispatchAudio.accent)
+	function pd.caption(button, text)
+		local caption = Binder.find(button, "Label")
+		if caption then caption.Text = text end
 	end
-	pd.decline = makeButton("PartyDownDecline", pd.dev and 254 or 206, 44, "NO THANKS",
-		Color3.fromRGB(186, 196, 190))
-
-	function pd.applyLayout()
-		local deviceLayout = UIDevice.Layout()
-		pd.cardScale.Scale = math.clamp((deviceLayout.Height - 24) / pd.height, 0.6, 1)
+	function pd.offerLayout()
+		local layout = UIDevice.Layout()
+		local items = Binder.find(pd.parts.Offer, "Items")
+		local flow = items:FindFirstChildOfClass("UIListLayout")
+		local visible = {}
+		for _, button in ipairs({pd.reentry, pd.free, pd.decline}) do
+			if button.Visible then visible[#visible + 1] = button end
+		end
+		local vertical = pd.compact and pd.width < 500
+		local height = pd.compact and 52 or math.max(44, 106 * pd.scale)
+		local gap = 8
+		flow.FillDirection = vertical and Enum.FillDirection.Vertical or Enum.FillDirection.Horizontal
+		flow.HorizontalAlignment = Enum.HorizontalAlignment.Center
+		flow.VerticalAlignment = Enum.VerticalAlignment.Center
+		flow.Padding = UDim.new(0, gap)
+		local offerHeight = vertical and (#visible * height + math.max(0, #visible - 1) * gap) or height
+		pd.parts.Offer.Size = UDim2.fromOffset(pd.width, offerHeight)
+		items.AnchorPoint = Vector2.new(0, 0)
+		items.Position = UDim2.fromOffset(0, 0)
+		items.Size = UDim2.fromOffset(pd.width, offerHeight)
+		for _, button in ipairs(visible) do
+			button.AnchorPoint = Vector2.new(0, 0)
+			button.Size = UDim2.fromOffset(vertical and pd.width or (pd.width - gap * (#visible - 1)) / #visible, height)
+			local caption = Binder.find(button, "Label")
+			caption.TextWrapped = true
+		end
 	end
-	pd.applyLayout()
-	UIDevice.Changed:Connect(function()
-		if pd.frame.Visible then pd.applyLayout() end
-	end)
-
-	-- Eligibility is the same three facts ZyntraStore's own re-entry modal reads,
-	-- and the credit count, price and product id come from the three attributes
-	-- it publishes -- its `profile` is file-local and this card cannot see it.
 	function pd.refresh()
-		if not pd.frame.Visible then return end
+		if not pd.card then return end
 		local eligible = player:GetAttribute("InRound") == true
 			and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
 			and player:GetAttribute("ZyntraReentryUsed") ~= true
 		local credits = tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0
+		if credits > 0 then pd.waiting = false end
 		pd.reentry.Visible = eligible
-		pd.reentry.Active = eligible and pd.armed
+		pd.parts.Reentry.Visible = eligible
+		pd.reentry.Active = eligible and pd.armed and not pd.waiting
 		pd.reentry.Selectable = pd.reentry.Active
-		pd.reentry.Text = credits > 0
-			and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
-			-- No published price means ZyntraStore has not run at all, which is
-			-- also the state in which the purchase below refuses to prompt. The
-			-- button says so rather than printing "nil R$".
-			or (tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")
-				.. " R$  //  BUY CREDIT")
+		pd.caption(pd.reentry, pd.waiting and "WAITING FOR ROBLOX..." or credits > 0
+			and ("USE CREDIT \u{B7} " .. credits .. " OWNED")
+			or ("BUY \u{B7} R$ " .. tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--") .. " \u{B7} 0 OWNED"))
+		local colour = credits > 0 and Color3.fromRGB(68,221,196) or Color3.fromRGB(232,160,36)
+		for _, node in ipairs(pd.reentry:GetDescendants()) do
+			if node:IsA("UIStroke") then node.Color = colour end
+		end
+		Binder.find(pd.reentry, "Label").TextColor3 = colour
 		pd.decline.Active = pd.armed
 		pd.decline.Selectable = pd.armed
-		if pd.free then
-			-- The free path ignores ZyntraReentryUsed (the server does too); it
-			-- only needs a live round this player is still part of, and no
-			-- request already in flight.
-			local busy = player:GetAttribute("DevRespawnBusy") == true
-			pd.free.Text = busy and "RESPAWNING..." or "FREE RESPAWN  //  DEV"
-			pd.free.Active = pd.armed and not busy
-				and player:GetAttribute("InRound") == true
-				and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
-			pd.free.Selectable = pd.free.Active
-		end
+		pd.free.Visible = pd.dev
+		local busy = player:GetAttribute("DevRespawnBusy") == true
+		pd.caption(pd.free, busy and "RESPAWNING..." or "FREE RESPAWN")
+		pd.free.Active = pd.dev and pd.armed and not busy
+			and player:GetAttribute("InRound") == true
+			and (workspace:GetAttribute("RoundActive") == true or player:GetAttribute("Level6PlaygroundPreview") == true)
+		pd.free.Selectable = pd.free.Active
+		pd.offerLayout()
 	end
-
-	-- The CARD comes and goes; the WINDOW is what `pd.deadline` says. Declining
-	-- takes the card away without ending the window, so the re-entry surface
-	-- stays claimed (ZyntraStore's own modal must not pop straight back up in
-	-- its place) and the countdown carries on in the status line.
-	--
-	-- Hence TWO published flags, not one. They mean different things the instant
-	-- NO THANKS is pressed, and the one flag that used to carry both meanings was
-	-- read as "a modal is up": a declined player kept a forced-visible cursor, a
-	-- suppressed touch movement cluster and an unavailable flashlight for the
-	-- rest of the window with nothing on screen at all. CardOpen is exactly
-	-- "this card is drawn" and follows the frame it names; WindowOpen is "the
-	-- wipe window owns the re-entry purchase" and outlives the card.
-	function pd.setCardVisible(visible)
-		pd.frame.Visible = visible
-		player:SetAttribute("PartyDownCardOpen", visible or nil)
-		if visible then
-			pd.applyLayout()
-			pd.refresh()
-		elseif GuiService.SelectedObject == pd.decline
-			or GuiService.SelectedObject == pd.reentry
-			or (pd.free and GuiService.SelectedObject == pd.free) then
-			GuiService.SelectedObject = nil
-		end
-	end
-
-	function pd.show(seconds, faller)
-		-- Lobby players never see it, whatever the server sent.
-		if player:GetAttribute("InRound") ~= true then return end
-		pd.window = math.max(1, tonumber(seconds) or 15)
-		pd.deadline = os.clock() + pd.window
-		pd.declined = false
-		pd.armed = false
-		pd.armAt = os.clock() + 0.6
-		pd.lastSeconds = nil
-		pd.fill.Size = UDim2.fromScale(1, 1)
-		pd.fallen.Text = type(faller) == "string" and faller ~= ""
-			and (string.upper(faller) .. " WAS THE LAST TO FALL")
-			or "THE WHOLE PARTY IS DOWN"
-		player:SetAttribute("PartyDownWindowOpen", true)
-		pd.setCardVisible(true)
-	end
-
-	function pd.hide()
-		if pd.statusText and label.Text == pd.statusText then setMsg("") end
-		pd.statusText = nil
-		pd.deadline = nil
-		pd.declined = false
-		pd.armed = false
+	function pd.declineNow()
+		if not (pd.frame.Visible and pd.decline.Active) then return false end
+		pd.declined = true
 		pd.lastSeconds = nil
 		pd.setCardVisible(false)
-		player:SetAttribute("PartyDownWindowOpen", nil)
+		return true
 	end
-
-	pd.reentry.Activated:Connect(function()
-		if not pd.reentry.Active then return end
-		-- ZyntraStore's rule, exactly: spend a stored credit if there is one,
-		-- otherwise open the product prompt, otherwise say it is not configured.
+	function pd.requestReentry()
+		if not pd.reentry.Active or GuiService.MenuIsOpen then return end
 		if (tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0) > 0 then
+			if pd.lastUse and os.clock() - pd.lastUse < 0.5 then return end
+			pd.lastUse = os.clock()
 			dispatchAudio.action:FireServer("UseReentry")
 			return
 		end
 		local productId = tonumber(player:GetAttribute("ZyntraReentryProductId")) or 0
 		if productId <= 0 then
-			setMsg("Emergency Re-entry Product ID is not configured yet.",
-				Color3.fromRGB(255, 120, 110))
+			completion.Hud.Feed({Kind = "SYSTEM", Detail = "Emergency Re-entry is not configured yet.", Key = "reentryerror"})
 			return
 		end
-		game:GetService("MarketplaceService"):PromptProductPurchase(player, productId)
-	end)
-
-	pd.decline.Activated:Connect(function()
-		if not pd.decline.Active then return end
-		pd.declined = true
-		pd.lastSeconds = nil -- force the status line to be written this frame
-		pd.setCardVisible(false)
-	end)
-
-	if pd.free then
-		pd.free.Activated:Connect(function()
-			if not pd.free.Active then return end
-			-- The terminal's DEV row bridge: DevCheats owns the DevControl dispatch
-			-- and GameManager answers through DevRespawnStatus/Serial. A success
-			-- arrives as our own "reentry" event, which hides the card above.
-			local command = script.Parent:FindFirstChild("DevCheatCommand")
-			if command and command:IsA("BindableEvent") then
-				command:Fire("freeRespawn")
-			else
-				setMsg("Developer controls are still loading. Try again.",
-					Color3.fromRGB(255, 120, 110))
-			end
-		end)
-		player:GetAttributeChangedSignal("DevRespawnBusy"):Connect(pd.refresh)
-		player:GetAttributeChangedSignal("DevRespawnSerial"):Connect(function()
-			local status = tostring(player:GetAttribute("DevRespawnStatus") or "")
-			if status ~= "RESPAWNED" and pd.frame.Visible then
-				setMsg("FREE RESPAWN  //  " .. status, Color3.fromRGB(255, 120, 110))
-			end
-		end)
+		pd.waiting = true
+		pd.refresh()
+		MarketplaceService:PromptProductPurchase(player, productId)
 	end
-
+	function pd.freeRespawn()
+		if not pd.free.Active then return end
+		local command = script.Parent:FindFirstChild("DevCheatCommand")
+		if command and command:IsA("BindableEvent") then command:Fire("freeRespawn")
+		else completion.Hud.Feed({Kind = "SYSTEM", Detail = "Developer controls are still loading. Try again.", Key = "freeerror"}) end
+	end
+	function pd.applyLayout()
+		local layout = UIDevice.Layout()
+		local touch = layout.IsTouch
+		local compact = touch or layout.Safe.Height < 650 or layout.Safe.Width < 900
+		local name = compact and "PartyDownCardTouch" or "PartyDownCard"
+		pd.compact = compact
+		local designWidth = compact and 726 or 1440
+		pd.width = math.min(designWidth, layout.Safe.Width - 32)
+		pd.scale = pd.width / designWidth
+		local focus = GuiService.SelectedObject
+		focus = focus and focus.Name
+		if pd.card then pd.card:Destroy() end
+		pd.card, pd.parts = Hud.Stack("HUD_Screens", name, pd.frame,
+			{Name = "PartyDownCard", Scale = pd.scale, Touch = compact})
+		if not pd.card then return end
+		pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
+		pd.card.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2,
+			(layout.Safe.Top + layout.Safe.Bottom) / 2 + (touch and 18 or 0))
+		for _, node in ipairs(pd.card:GetDescendants()) do
+			if node:IsA("GuiObject") then node.ZIndex = 114 end
+		end
+		pd.reentry = Binder.find(pd.card, "PartyDownReentry")
+		pd.free = Binder.find(pd.card, "PartyDownFreeRespawn")
+		pd.decline = Binder.find(pd.card, "PartyDownDecline")
+		pd.fallen = Binder.find(pd.card, "PartyDownFallen")
+		pd.timer = Binder.find(pd.card, "PartyDownTimer")
+		pd.fill = Binder.find(pd.card, "PartyDownFill")
+		Binder.find(pd.card, "NoSignal").Text = "NO SIGNAL"
+		Binder.find(pd.card, "PartyDownTitle").Text = "PARTY DOWN"
+		pd.caption(pd.decline, "NO THANKS")
+		pd.fallen.Visible = pd.faller ~= nil
+		pd.fallen.Text = pd.faller and (string.upper(pd.faller) .. " FELL") or ""
+		pd.fill.Size = UDim2.fromScale(pd.deadline and math.clamp((pd.deadline - os.clock()) / pd.window, 0, 1) or 1, 1)
+		pd.timer.Text = string.format("%02d:%02d", 0, pd.lastSeconds or pd.window)
+		pd.brackets.Visible = not touch
+		pd.reentry.Activated:Connect(pd.requestReentry)
+		pd.free.Activated:Connect(pd.freeRespawn)
+		pd.decline.Activated:Connect(pd.declineNow)
+		pd.refresh()
+		for _, button in ipairs({pd.reentry, pd.free, pd.decline}) do
+			button.Modal = true
+			if focus == button.Name and button.Active then GuiService.SelectedObject = button end
+		end
+	end
+	function pd.setCardVisible(visible)
+		pd.frame.Visible = visible
+		player:SetAttribute("PartyDownCardOpen", visible or nil)
+		if visible then pd.applyLayout()
+		elseif GuiService.SelectedObject and GuiService.SelectedObject:IsDescendantOf(pd.frame) then
+			GuiService.SelectedObject = nil
+		end
+	end
+	function pd.show(seconds, faller)
+		if player:GetAttribute("InRound") ~= true then return end
+		pd.window = math.max(1, tonumber(seconds) or 15)
+		pd.deadline = os.clock() + pd.window
+		pd.declined, pd.armed, pd.waiting = false, false, false
+		pd.armAt = os.clock() + 0.6
+		pd.lastSeconds, pd.lastUse = nil, nil
+		local other = type(faller) == "string" and Players:FindFirstChild(faller)
+		pd.faller = type(faller) == "string" and faller ~= "" and (other and other.DisplayName or faller) or nil
+		player:SetAttribute("PartyDownWindowOpen", true)
+		pd.setCardVisible(true)
+	end
+	function pd.hide()
+		if pd.statusText and label.Text == pd.statusText then
+			setMsg("")
+			label.Position, label.Size, label.AnchorPoint = pd.labelPosition, pd.labelSize, pd.labelAnchor
+		end
+		pd.statusText = nil
+		pd.deadline = nil
+		pd.declined, pd.armed, pd.waiting = false, false, false
+		pd.lastSeconds = nil
+		pd.setCardVisible(false)
+		player:SetAttribute("PartyDownWindowOpen", nil)
+	end
+	MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, productId)
+		if userId == player.UserId and productId == tonumber(player:GetAttribute("ZyntraReentryProductId")) then
+			pd.waiting = false
+			pd.refresh()
+		end
+	end)
+	ContextActionService:UnbindAction("PartyDownDecline")
+	ContextActionService:BindActionAtPriority("PartyDownDecline", function(_, state)
+		if state ~= Enum.UserInputState.Begin or GuiService.MenuIsOpen or UIS:GetFocusedTextBox()
+			or not pd.frame.Visible then return Enum.ContextActionResult.Pass end
+		return pd.declineNow() and Enum.ContextActionResult.Sink or Enum.ContextActionResult.Pass
+	end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
 	RunService.RenderStepped:Connect(function()
 		if not pd.deadline then return end
 		local left = pd.deadline - os.clock()
@@ -5254,74 +4387,57 @@ do
 		if not pd.armed and left > 0 and os.clock() >= pd.armAt then
 			pd.armed = true
 			pd.refresh()
-			-- Gamepad selection lands on the DECLINE button and only once the
-			-- pair is armed -- selecting an inactive button drops the selection,
-			-- and pre-selecting the purchase is the accident this guards.
-			if pd.frame.Visible and UIDevice.LastInput() == "Gamepad" then
-				GuiService.SelectedObject = pd.decline
+			if pd.frame.Visible and UIDevice.LastInput() == "Gamepad" and not GuiService.MenuIsOpen then
+				GuiService.SelectedObject = pd.reentry.Active and pd.reentry or pd.free.Active and pd.free or pd.decline
 			end
 		end
 		local remaining = math.max(0, math.ceil(left))
 		if remaining ~= pd.lastSeconds then
 			pd.lastSeconds = remaining
-			local unit = remaining == 1 and " SECOND LEFT" or " SECONDS LEFT"
-			pd.timer.Text = tostring(remaining) .. unit
+			pd.timer.Text = string.format("%02d:%02d", math.floor(remaining / 60), remaining % 60)
 			if pd.declined then
-				pd.statusText = "PARTY DOWN  •  " .. remaining .. unit
-				setMsg(pd.statusText, Color3.fromRGB(255, 120, 110))
+				if not pd.statusText then pd.labelPosition, pd.labelSize, pd.labelAnchor = label.Position, label.Size, label.AnchorPoint end
+				pd.statusText = "PARTY DOWN \u{B7} " .. remaining .. " s"
+				setMsg(pd.statusText, Color3.fromRGB(242,112,95))
+				local layout = UIDevice.Layout()
+				label.AnchorPoint = Vector2.new(0.5, 0)
+				label.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2, layout.Safe.Top + (layout.IsTouch and 94 or 112))
+				label.Size = UDim2.fromOffset(math.min(460, layout.Safe.Width - 24), 32)
 			end
 		end
 		if left <= 0 then
-			-- Time is up on THIS clock. Stand the actions down at once -- a
-			-- credit bought now cannot be spent on this round -- but leave the
-			-- card up: the server settles the round with lose/partydownclear and
-			-- its own deadline may land a moment after ours. The five-second
-			-- grace is the backstop for an event that never arrives at all, so a
-			-- dropped one cannot leave the card up for the rest of the round.
-			if pd.armed then
-				pd.armed = false
-				pd.armAt = math.huge -- and it never re-arms inside this window
-				pd.refresh()
-			end
+			if pd.armed then pd.armed = false; pd.armAt = math.huge; pd.refresh() end
 			if left <= -5 then pd.hide() end
 		end
 	end)
-
 	remote.OnClientEvent:Connect(function(ev, a, b)
-		if ev == "partydown" then
-			pd.show(a, b)
-		elseif ev == "partydownclear" or ev == "lose" or ev == "win"
-			or ev == "start" or ev == "lobby" or ev == "loadinggame" then
-			pd.hide()
-		elseif ev == "reentry" and a == player.Name then
-			-- Somebody else coming back does not end the window; the server
-			-- closes it with partydownclear when it survives. Our own re-entry
-			-- does: there is nothing left on this card to press.
-			pd.hide()
+		if ev == "partydown" then pd.show(a, b)
+		elseif ev == "partydownclear" or ev == "lose" or ev == "win" or ev == "start" or ev == "lobby" or ev == "loadinggame" then pd.hide()
+		elseif ev == "reentry" and a == player.Name then pd.hide() end
+	end)
+	UIDevice.Changed:Connect(function()
+		pd.brackets.Visible = not UIDevice.Layout().IsTouch
+		if pd.card then pd.applyLayout() end
+	end)
+	player:GetAttributeChangedSignal("InRound"):Connect(function() if player:GetAttribute("InRound") ~= true then pd.hide() end end)
+	for _, attr in ipairs({"ZyntraReentryUsed", "ZyntraReentryCredits", "ZyntraReentryPrice", "DevRespawnBusy"}) do
+		player:GetAttributeChangedSignal(attr):Connect(pd.refresh)
+	end
+	workspace:GetAttributeChangedSignal("RoundActive"):Connect(pd.refresh)
+	player:GetAttributeChangedSignal("DevRespawnSerial"):Connect(function()
+		local status = tostring(player:GetAttribute("DevRespawnStatus") or "")
+		if pd.dev and status ~= "RESPAWNED" and pd.frame.Visible then
+			completion.Hud.Feed({Kind = "SYSTEM", Detail = "FREE RESPAWN \u{B7} " .. status, Key = "freerespawn"})
 		end
 	end)
-
-	player:GetAttributeChangedSignal("InRound"):Connect(function()
-		if player:GetAttribute("InRound") ~= true then pd.hide() end
-	end)
-	player:GetAttributeChangedSignal("ZyntraReentryUsed"):Connect(pd.refresh)
-	player:GetAttributeChangedSignal("ZyntraReentryCredits"):Connect(pd.refresh)
-	workspace:GetAttributeChangedSignal("RoundActive"):Connect(pd.refresh)
-
 	if RunService:IsStudio() then
-		-- Studio-only drive for UIRegression's party-down row, the same seam the
-		-- result overlay uses: a positive number opens the real card, anything
-		-- else closes it.
 		player:GetAttributeChangedSignal("DevPartyDown"):Connect(function()
 			local seconds = tonumber(player:GetAttribute("DevPartyDown"))
-			if seconds and seconds > 0 then
-				pd.show(seconds, "DEV TESTER")
-			else
-				pd.hide()
-			end
+			if seconds and seconds > 0 then pd.show(seconds, "DEV TESTER") else pd.hide() end
 		end)
 	end
 end
+
 
 -- ── DEATH CARD ─────────────────────────────────────────────────────────────
 -- WHAT KILLED YOU, and the one thing that would have stopped it.
@@ -5341,191 +4457,116 @@ end
 -- block above gives: this chunk sits at Luau's 200-local limit and a block's
 -- locals hand their registers back at `end` while the closures keep them as
 -- upvalues. Everything else is a field of one table for the same reason.
+-- HUD_B8_DEATH: closing cancels this death's timers and both presentations.
 do
-	-- FindFirstChild + pcall, never WaitForChild: everything below this line in
-	-- the chunk -- the readiness announce, the Mimic, the ambient scares --
-	-- would otherwise wait behind a module that a not-yet-updated place does not
-	-- have. Without it the card simply reads SIGNAL LOST, which is still true.
 	local copyFor = function()
 		return {Title = "SIGNAL LOST", Cause = "Your signal cut out.", Tip = ""}
 	end
 	do
 		local ok, module = pcall(require, RS:FindFirstChild("DeathAdvice"))
-		if ok and type(module) == "table" and type(module.Copy) == "function" then
-			copyFor = module.Copy
-		end
+		if ok and type(module) == "table" and type(module.Copy) == "function" then copyFor = module.Copy end
 	end
-
-	-- UIStyle's tokens, by value. This file requires no module below its first
-	-- sixteen lines (see above) and the PARTY DOWN card next door states the same
-	-- palette the same way: Danger 255,116,96 / Body 201,213,205 /
-	-- AccentText 101,177,139 / Card 8,12,10 / LineSoft 84,101,92.
-	local dc = {
-		serial = 0,
-		dwell = 12,           -- seconds on screen before it fades on its own
-		heightWithTip = 142,
-		heightPlain = 88,
-	}
-
-	dc.card = Instance.new("Frame")
-	dc.card.Name = "DeathCause"
-	-- Bottom centre, clear of the spectate band (SpectateGui's label sits at
-	-- 1,-20 with the exit button above it) and of the status label at the top.
-	dc.card.AnchorPoint = Vector2.new(0.5, 1)
-	dc.card.Position = UDim2.new(0.5, 0, 1, -116)
-	dc.card.Size = UDim2.new(1, -32, 0, dc.heightWithTip)
-	dc.card.BackgroundColor3 = Color3.fromRGB(8, 12, 10)
-	dc.card.BackgroundTransparency = 0.035
-	dc.card.BorderSizePixel = 0
-	dc.card.Visible = false
-	dc.card.ZIndex = 96 -- under PARTY DOWN (112): that card owns the decision
-	dc.card.Parent = gui
-	local dcCorner = Instance.new("UICorner")
-	dcCorner.CornerRadius = UDim.new(0, 12)
-	dcCorner.Parent = dc.card
-	-- One constraint covers all three tiers: it fills a phone's width minus the
-	-- 16px gutters, and stops growing into a banner on a monitor.
-	dc.size = Instance.new("UISizeConstraint")
-	dc.size.MinSize = Vector2.new(260, 0)
-	dc.size.MaxSize = Vector2.new(440, math.huge)
-	dc.size.Parent = dc.card
-	dc.stroke = Instance.new("UIStroke")
-	dc.stroke.Color = Color3.fromRGB(84, 101, 92)
-	dc.stroke.Transparency = 0.25
-	dc.stroke.Thickness = 1
-	dc.stroke.Parent = dc.card
-
-	local function row(name, y, height, font, size, colour)
-		local text = Instance.new("TextLabel")
-		text.Name = name
-		text.Position = UDim2.fromOffset(16, y)
-		text.Size = UDim2.new(1, -32, 0, height)
-		text.BackgroundTransparency = 1
-		text.Font = font
-		text.TextSize = size
-		text.TextColor3 = colour
-		text.TextWrapped = true
-		text.TextXAlignment = Enum.TextXAlignment.Left
-		text.TextYAlignment = Enum.TextYAlignment.Top
-		text.Text = ""
-		text.ZIndex = 97
-		text.Parent = dc.card
-		return text
-	end
-
-	dc.title = row("DeathCauseTitle", 14, 22, Enum.Font.GothamBold, 17,
-		Color3.fromRGB(255, 116, 96))
-	dc.cause = row("DeathCauseBody", 40, 36, Enum.Font.GothamMedium, 14,
-		Color3.fromRGB(201, 213, 205))
-	dc.eyebrow = row("DeathCauseEyebrow", 82, 12, Enum.Font.Code, 10,
-		Color3.fromRGB(101, 177, 139))
-	dc.eyebrow.Text = "NEXT TIME"
-	dc.tip = row("DeathCauseTip", 96, 34, Enum.Font.GothamMedium, 13,
-		Color3.fromRGB(201, 213, 205))
-
-	-- A SOLO death is also a PARTY DOWN, and that modal is a centred 268-316px
-	-- card over a full-screen shade: on a phone it covers the whole authored
-	-- position, and everywhere it dims it. While it is up the card therefore
-	-- rises above the shade, and where there is no room under the modal (short
-	-- viewports) it docks at the top as title + tip only -- the tip is the part a
-	-- first-time solo player must not miss, and nothing is laid over the buttons.
-	-- The authored spot is 116 px up, clear of the spectate band, but at laptop
-	-- heights (about 620-830 px) the centred PARTY DOWN card reaches below its
-	-- top: 13 px of overlap measured at 1539x809. So the modal is measured as
-	-- drawn, and an overlap docks the card at the top like a short viewport.
-	function dc.overlapsModal()
-		local overlay = gui:FindFirstChild("PartyDownOverlay")
-		local modal = overlay and overlay:FindFirstChild("PartyDownCard")
-		if not (modal and modal:IsA("GuiObject") and modal.AbsoluteSize.Y > 0) then return false end
-		local cardTop = gui.AbsolutePosition.Y + gui.AbsoluteSize.Y - 116
-			- (dc.hasTip and dc.heightWithTip or dc.heightPlain)
-		return cardTop < modal.AbsolutePosition.Y + modal.AbsoluteSize.Y + 8
-	end
-
-	function dc.layout()
-		local docked = player:GetAttribute("PartyDownCardOpen") == true
-		local camera = workspace.CurrentCamera
-		local compact = docked and camera ~= nil and (camera.ViewportSize.Y < 620 or dc.overlapsModal())
-		local z = docked and 118 or 96
-		dc.card.ZIndex = z
-		for _, text in ipairs({dc.title, dc.cause, dc.eyebrow, dc.tip}) do text.ZIndex = z + 1 end
-		if compact then
-			dc.card.AnchorPoint = Vector2.new(0.5, 0)
-			dc.card.Position = UDim2.new(0.5, 0, 0, 6)
-			dc.card.Size = UDim2.new(1, -32, 0, dc.hasTip and 64 or 34)
-			dc.title.Position, dc.title.TextSize = UDim2.fromOffset(16, 8), 14
-			dc.cause.Visible, dc.eyebrow.Visible = false, false
-			dc.tip.Position, dc.tip.TextSize = UDim2.fromOffset(16, 28), 12
-		else
-			dc.card.AnchorPoint = Vector2.new(0.5, 1)
-			dc.card.Position = UDim2.new(0.5, 0, 1, -116)
-			dc.card.Size = UDim2.new(1, -32, 0, dc.hasTip and dc.heightWithTip or dc.heightPlain)
-			dc.title.Position, dc.title.TextSize = UDim2.fromOffset(16, 14), 17
-			dc.cause.Visible, dc.eyebrow.Visible = true, dc.hasTip == true
-			dc.tip.Position, dc.tip.TextSize = UDim2.fromOffset(16, 96), 13
-		end
-	end
-
+	local Hud = require(RS:WaitForChild("RoundHud"))
+	local Binder = require(RS:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
+	local GuiService = game:GetService("GuiService")
+	local dc = {serial = 0, dwell = 12, active = false, closed = false}
 	function dc.hide()
 		dc.serial += 1
-		dc.card.Visible = false
+		dc.active = false
+		if dc.card then dc.card.Visible = false end
+		if dc.docked then dc.docked.Visible = false end
 	end
-
-	function dc.show(causeKey)
-		local advice = copyFor(causeKey)
-		dc.title.Text = advice.Title
-		dc.cause.Text = advice.Cause
-		-- No tip, no promise of one: the eyebrow goes with it and the card
-		-- shrinks, so an unexplained death never looks like a withheld hint.
-		local hasTip = type(advice.Tip) == "string" and advice.Tip ~= ""
-		dc.hasTip = hasTip
-		dc.tip.Text = hasTip and advice.Tip or ""
-		dc.tip.Visible = hasTip
+	function dc.close()
+		dc.closed = true
+		dc.hide()
+	end
+	function dc.layout()
+		if not (dc.card and dc.docked) then return end
+		local layout = UIDevice.Layout()
+		local docked = player:GetAttribute("PartyDownCardOpen") == true
+		dc.card.AnchorPoint = Vector2.new(0.5, 1)
+		dc.card.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2, layout.Safe.Bottom - 112)
+		dc.docked.AnchorPoint = Vector2.new(0.5, 0)
+		dc.docked.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2,
+			layout.Safe.Top + (layout.IsTouch and 6 or 16))
+		dc.card.Visible = dc.active and not dc.closed and not docked
+		dc.docked.Visible = dc.active and not dc.closed and docked
+	end
+	function dc.mount()
+		local layout = UIDevice.Layout()
+		local touch = layout.IsTouch or layout.Safe.Height < 344
+		local width = touch and 420 or 480
+		local scale = math.min(1, (layout.Safe.Width - 32) / width)
+		if dc.card then dc.card:Destroy() end
+		if dc.docked then dc.docked:Destroy() end
+		dc.card, dc.parts = Hud.Stack("HUD_Screens", touch and "DeathCauseTouch" or "DeathCause", gui,
+			{Name = "DeathCause", Scale = scale, Touch = touch})
+		dc.docked = Hud.Mount("HUD_Screens", touch and "DeathCauseDockedTouch" or "DeathCauseDocked", gui,
+			{Name = "DeathCauseDocked", Scale = scale, Touch = touch})
+		if not dc.card or not dc.docked then return end
+		dc.title = Binder.find(dc.card, "DeathCauseTitle")
+		dc.cause = Binder.find(dc.card, "DeathCauseBody")
+		dc.tip = Binder.find(dc.card, "DeathCauseTip")
+		Binder.find(dc.card, "WhatHappened").Text = "WHAT HAPPENED"
+		Binder.find(dc.card, "DeathCauseEyebrow").Text = "NEXT TIME"
+		for _, root in ipairs({dc.card, dc.docked}) do
+			local z = root == dc.card and 96 or 118
+			root.ZIndex = z
+			for _, node in ipairs(root:GetDescendants()) do if node:IsA("GuiObject") then node.ZIndex = z + 1 end end
+			local close = Binder.find(root, "Close")
+			close.Size = UDim2.fromOffset(44, 44)
+			close.AnchorPoint = Vector2.new(1, 0)
+			close.Position = UDim2.new(1, 0, 0, 0)
+			close.Activated:Connect(dc.close)
+		end
+		local chip = Binder.at(dc.card, "Head/CloseHint/KeyChip")
+		if chip then Hud.Keycap(chip, Enum.KeyCode.Escape, Enum.KeyCode.ButtonB) end
+		if dc.advice then
+			dc.title.Text = dc.advice.Title
+			dc.cause.Text = dc.advice.Cause
+			dc.tip.Text = dc.advice.Tip or ""
+			dc.parts.Advice.Visible = type(dc.advice.Tip) == "string" and dc.advice.Tip ~= ""
+			Binder.find(dc.docked, "DeathCauseTitle").Text = dc.advice.Title
+		end
 		dc.layout()
-		dc.serial += 1
-		local token = dc.serial
-		dc.card.Visible = true
-		-- Nothing here flashes; ReduceFlashing only decides whether it fades in
-		-- at all, because a fade IS a brightness ramp on a dark screen.
-		if player:GetAttribute("ReduceFlashing") == true then
-			dc.card.BackgroundTransparency = 0.035
-		else
-			dc.card.BackgroundTransparency = 1
-			TweenService:Create(dc.card, TweenInfo.new(0.3, Enum.EasingStyle.Quad),
-				{BackgroundTransparency = 0.035}):Play()
-		end
-		task.delay(dc.dwell, function()
-			-- PARTY DOWN runs 15 s and the card must outlast the modal that was
-			-- covering it; "lose"/"lobby" still take it down with the round.
-			while dc.serial == token and player:GetAttribute("PartyDownCardOpen") == true do
-				task.wait(0.5)
-			end
-			if dc.serial == token then dc.hide() end
-		end)
 	end
-	player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function()
-		if dc.card.Visible then dc.layout() end
-		-- Again next frame: the modal may not have been measured yet.
-		task.defer(function() if dc.card.Visible then dc.layout() end end)
+	function dc.expire(token)
+		if dc.serial ~= token or not dc.active then return end
+		if player:GetAttribute("PartyDownCardOpen") == true then
+			task.delay(0.5, function() dc.expire(token) end)
+		else dc.hide() end
+	end
+	function dc.show(causeKey)
+		dc.serial += 1
+		dc.active, dc.closed = true, false
+		dc.advice = copyFor(causeKey)
+		dc.mount()
+		local token = dc.serial
+		task.delay(dc.dwell, function() dc.expire(token) end)
+	end
+	player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(dc.layout)
+	UIDevice.Changed:Connect(dc.mount)
+	ContextActionService:UnbindAction("DeathCauseClose")
+	ContextActionService:BindActionAtPriority("DeathCauseClose", function(_, state)
+		if state ~= Enum.UserInputState.Begin or not dc.active or dc.closed
+			or player:GetAttribute("PartyDownCardOpen") == true or GuiService.MenuIsOpen
+			or UIS:GetFocusedTextBox() then return Enum.ContextActionResult.Pass end
+		dc.close()
+		return Enum.ContextActionResult.Sink
+	end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
+	-- Roblox owns Escape. MenuOpened is also wired because it can consume Esc
+	-- before InputBegan reaches a game script; either path closes this life once.
+	UIS.InputBegan:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.Escape and dc.active then dc.close() end
 	end)
-
+	GuiService.MenuOpened:Connect(function() if dc.active then dc.close() end end)
 	remote.OnClientEvent:Connect(function(ev, a, _b, c)
-		if ev == "death" then
-			if a == player.Name then dc.show(c) end
-		elseif ev == "start" or ev == "lobby" or ev == "loadinggame"
-			or ev == "win" or ev == "lose" then
-			dc.hide()
-		elseif ev == "reentry" and a == player.Name then
-			dc.hide()
-		end
+		if ev == "death" and a == player.Name then dc.show(c)
+		elseif ev == "start" or ev == "lobby" or ev == "loadinggame" or ev == "win" or ev == "lose" then dc.hide()
+		elseif ev == "reentry" and a == player.Name then dc.hide() end
 	end)
-	-- An Emergency Re-entry loads a fresh character without a round event, the
-	-- same hole the spectate flag above had to close.
 	player.CharacterAdded:Connect(dc.hide)
-
 	if RunService:IsStudio() then
-		-- Studio seam for a UIRegression capture, shaped like DevPartyDown: set
-		-- the attribute to a cause key to draw that card, to nothing to close it.
 		player:GetAttributeChangedSignal("DevDeathCause"):Connect(function()
 			local key = player:GetAttribute("DevDeathCause")
 			if type(key) == "string" and key ~= "" then dc.show(key) else dc.hide() end

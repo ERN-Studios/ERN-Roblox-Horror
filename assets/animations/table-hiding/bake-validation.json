@@ -1,0 +1,18 @@
+{
+  "sampledFrames": 121,
+  "minRootSpace": [
+    -1.451865127137158,
+    -2.1798975587819984,
+    -2.053129278439461
+  ],
+  "maxRootSpace": [
+    1.5005161760986567,
+    0.471786818053445,
+    1.9271268870603095
+  ],
+  "floorClearance": 0.020102441218001754,
+  "colliderClearance": 0.08821318194655503,
+  "loopSeamMax": 0,
+  "blenderRoundtripMaxError": 2.5331974029541016e-07,
+  "proxyGeometryOnly": true
+}

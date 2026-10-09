@@ -1,4 +1,0 @@
-phone 820x1180, 4 ScreenGuis copied (LuckyWheelGui, ZyntraStore, ZyntraLobbyPillL4, FriendBoostGui), 48 pieces measured, 3 findings
-CUT     LuckyWheelGui.WheelShade 'LUCKY WHEEL' (51,186)-(299,224)
-CUT     LuckyWheelGui.WheelShade 'ZYNTRA DAILY SPIN' (53,134)-(215,154)
-CUT     ZyntraLobbyPillL4.TokenPill '+' (789,21)-(798,37)

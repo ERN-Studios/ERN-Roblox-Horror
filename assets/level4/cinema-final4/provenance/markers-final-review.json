@@ -1,0 +1,161 @@
+{
+  "native_build_path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\build.blend",
+  "frozen_source_sha256": "03dc0f5c00870140aae8b67e1062fcebc25fcdffd8210fc46fdaeb38ca2186bb",
+  "contract_counts": {
+    "L4Projector": 3,
+    "L4ArcadeCode": 1,
+    "L4PrizeCase": 1,
+    "L4Breaker": 6,
+    "L4EntrySpawn": 6,
+    "L4ExitSafeSpawn": 6,
+    "L4ExitScreen": 1,
+    "L4FuseSocket": 1,
+    "L4HideZone": 41,
+    "L4MainBreaker": 1,
+    "L4NoteSpot": 6,
+    "L4PowerCabinet": 2,
+    "L4PrizeKeypad": 1,
+    "L4ReelSpot": 10,
+    "L4Screen": 3
+  },
+  "entry_and_safe_slots": {
+    "L4EntrySpawn": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "L4ExitSafeSpawn": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "cabinet_ids": [
+    "A",
+    "B"
+  ],
+  "breaker_ids": [
+    [
+      "A",
+      1
+    ],
+    [
+      "A",
+      2
+    ],
+    [
+      "A",
+      3
+    ],
+    [
+      "B",
+      1
+    ],
+    [
+      "B",
+      2
+    ],
+    [
+      "B",
+      3
+    ]
+  ],
+  "screen_projector_ids": {
+    "L4Screen": [
+      1,
+      2,
+      3
+    ],
+    "L4Projector": [
+      1,
+      2,
+      3
+    ]
+  },
+  "reel_attributes": {
+    "Reel_Prize": {
+      "SpotName": "Præmemontren",
+      "Locked": true
+    },
+    "Reel_Popcorn": {
+      "SpotName": "Popcornmaskinen"
+    },
+    "Reel_Men": {
+      "SpotName": "Herretoilettet"
+    },
+    "Reel_Women": {
+      "SpotName": "Dametoilettet"
+    },
+    "Reel_ServiceShelf": {
+      "SpotName": "Servicereolen"
+    },
+    "Reel_Cafe": {
+      "SpotName": "Cafébordet"
+    },
+    "Reel_BackCounter": {
+      "SpotName": "Bag disken"
+    },
+    "Reel_Cinema1": {
+      "SpotName": "Sædet i Cinema 1"
+    },
+    "Reel_Gallery": {
+      "SpotName": "Skabene på galleriet"
+    },
+    "Reel_TicketBooth": {
+      "SpotName": "Billetlugen"
+    }
+  },
+  "hide_kind_counts": {
+    "Seats": 36,
+    "Stall": 4,
+    "Counter": 1
+  },
+  "blank_attribute_contracts": true,
+  "screen_surface_and_exit_size": true,
+  "marker_invisibility_noncollision_export": true,
+  "moving_part_identity_and_pivots": true,
+  "support_surfaces_verified": true,
+  "exit_access": {
+    "floor_tops": [
+      26.000000749315532,
+      28.000000544956748,
+      29.999998637608115,
+      32.00000013623919,
+      34.00000163487025,
+      35.99999972752162,
+      35.99999972752162
+    ],
+    "step_max": 2,
+    "platform_root": [
+      23000,
+      39,
+      -235.6
+    ],
+    "exit_obb_reachable": true,
+    "seat_overlaps": 0,
+    "headroom": [
+      78.0,
+      76.0,
+      74.0,
+      72.0,
+      70.0,
+      68.0,
+      68.0
+    ]
+  },
+  "exit_access_floor_boxes": 7,
+  "sealed_safe_room_collision_only_boxes": 6,
+  "zones": 38,
+  "light_zones_scalar_ids": true,
+  "lights": 260,
+  "nav_node_marker_count": 5607,
+  "prior_actual_export_packet_smoke": "export_smoke_checks.json (all fields pass; pre-exit-access snapshot)",
+  "all_checks_pass": true,
+  "limitations": "Offline authored geometry and packet checks; no Studio import or gameplay execution."
+}

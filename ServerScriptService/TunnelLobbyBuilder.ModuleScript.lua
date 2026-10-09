@@ -2936,13 +2936,13 @@ function Builder.Build(center)
 		{level = 1, side = -1, z = -80, active = true},
 		{level = 2, side = 1, z = -80, active = true},
 		{level = 3, side = -1, z = 0, active = true},
-		{level = 4, side = 1, z = 0, active = false},
+		{level = 4, side = 1, z = 0, active = true},
 		{level = 5, side = -1, z = 80, active = false},
 		{level = 6, side = 1, z = 80, active = false},
 	}
 	for _, def in ipairs(levelDefs) do
 		addDoorway(doors, center, def.level, def.side, def.z, def.active)
-		addRoom(rooms, center, def.level, def.side, def.z, def.active or def.level == 4, stations)
+		addRoom(rooms, center, def.level, def.side, def.z, def.active, stations)
 	end
 
 	-- Startup fingerprint. This is the fastest way to tell a stale server apart

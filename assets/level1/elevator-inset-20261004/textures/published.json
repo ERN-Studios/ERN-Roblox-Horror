@@ -1,0 +1,42 @@
+{
+  "wallpaper_albedo.png": {
+    "assetId": "rbxassetid://87947439437597",
+    "sourceAssetId": 87947439437597,
+    "sha256": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980",
+    "file": "wallpaper_albedo.png"
+  },
+  "wallpaper_rough.png": {
+    "assetId": "rbxassetid://133006943807590",
+    "sha256": "d1d35a86fcbeea6e63ce58db28ef92931e7b6dd22bd73a3f0b861fadd0b89221",
+    "file": "wallpaper_rough.png"
+  },
+  "wallpaper_normal.png": {
+    "assetId": "rbxassetid://122804131972663",
+    "sha256": "e6870bf029a5bd8323e15a2a58e0e24ed6ad2a0760d99a265898fe6d407d2203",
+    "file": "wallpaper_normal.png"
+  },
+  "steel_albedo.png": {
+    "assetId": "rbxassetid://91807512336692",
+    "sha256": "4ada3a88d6e1a6456b761153c97c19e7f3e226ef6d6a629fcba9989a8d39dc0b",
+    "file": "steel_albedo.png",
+    "uploadReceipt": "MCP upload_image successful 2026-10-04T14:45Z"
+  },
+  "steel_metal.png": {
+    "assetId": "rbxassetid://76319635380604",
+    "sha256": "702a09b9549b64b7c7d5c660d974201a9123d33bc63fb817fdfd5ec9d9e464ea",
+    "file": "steel_metal.png",
+    "uploadReceipt": "MCP upload_image successful 2026-10-04T14:45Z"
+  },
+  "steel_normal.png": {
+    "assetId": "rbxassetid://115249450797513",
+    "sha256": "78ffdf725bd3decf898cf8c0f35c7471cf731901c6b934aa02818f20aaf0a66d",
+    "file": "steel_normal.png",
+    "uploadReceipt": "MCP upload_image successful 2026-10-04T14:45Z"
+  },
+  "steel_rough.png": {
+    "assetId": "rbxassetid://105745940919181",
+    "sha256": "6ab3d4cd503bc40879ac4690de48782822eb4eec43ed44df3b785ea5c81e961e",
+    "file": "steel_rough.png",
+    "uploadReceipt": "MCP upload_image successful 2026-10-04T14:45Z"
+  }
+}

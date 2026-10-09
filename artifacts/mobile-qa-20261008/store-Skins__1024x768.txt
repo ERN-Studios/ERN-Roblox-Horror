@@ -1,7 +1,0 @@
-phone 1024x768, 19 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, Level3ReaderGui, ZyntraShopL4, SpectateGui, StaminaGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, ZyntraStore, FriendBoostGui), 123 pieces measured, 6 findings
-CUT     ZyntraLobbyPillL4.TokenPill '+' (993,21)-(1002,37)
-CUT     ZyntraShopL4.Root '+' (875,171)-(888,196)
-CUT     ZyntraShopL4.Root '35' (721,166)-(752,201)
-CUT     ZyntraShopL4.Root 'SKINS' (518,649)-(569,668)
-CUT     ZyntraShopL4.Root 'UPGRADES' (273,649)-(369,668)
-CUT     ZyntraShopL4.Root 'X' (946,159)-(975,206)

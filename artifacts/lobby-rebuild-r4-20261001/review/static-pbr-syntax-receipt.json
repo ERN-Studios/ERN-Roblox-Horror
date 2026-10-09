@@ -1,7 +1,0 @@
-{
-  "bytes": 12341,
-  "file": "artifacts/lobby-rebuild-r4-20261001/review/RuntimeBake.static-pbr.candidate.ModuleScript.luau",
-  "passed": true,
-  "scope": "Local syntax check only; no Studio execution or gameplay claim",
-  "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28"
-}

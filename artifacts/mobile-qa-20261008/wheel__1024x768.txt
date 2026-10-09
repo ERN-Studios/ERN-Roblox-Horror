@@ -1,2 +1,0 @@
-phone 1024x768, 4 ScreenGuis copied (LuckyWheelGui, ZyntraLobbyPillL4, ZyntraStore, FriendBoostGui), 47 pieces measured, 1 findings
-CUT     ZyntraLobbyPillL4.TokenPill '+' (993,21)-(1002,37)

@@ -1,0 +1,3 @@
+## Level 1 elevator inset takeover - 2026-10-04T13:46:14.059053+00:00
+
+Owner requests wallpaper exterior right up to one slim steel elevator opening and a light gray steel cabin matching reference2, retaining the guide. Fresh repository status/remote history inspected; Studio authoritative Edit/noPlay and latest coordinator13:01UTC says previous release remains. Level1 now reserves scoped Maze/Renderer CAS, actual preview QA, tested native publication and outdated-only migration attempt. Level2 remains offline; no foreign Level4/lobby or gameplay/lighting progression changes. No native place backup.

@@ -1,0 +1,9 @@
+# Lobby Dispatch availability and capitalized captions
+
+Prepared Store delta only, from installed `cdae3e9610561db95fa281edfb5ca6a735ff817dd2ddf51e68bb9f4852d478c0` to `cb9396a4a796810a1725426c5f3732c808f96fe6e0c5c60740c601756ae290b0`. `prepare.py` checks the captured baseline, writes only this artifact directory, compiles both whole sources, and verifies an exact inverse. Production is not changed.
+
+The existing shared `modalBlocksStore` function guarded visibility, `toggleMain`, `openKioskShop`, and the final `setMainVisible` write. Its briefing term now applies only while InRound is true. Lobby Dispatch therefore allows all three controls and both terminal entry paths. Queue exclusion and the existing in-round DEV briefing behavior remain. Opening the terminal still owns the screen through `ZyntraStoreOpen`; the existing RoundUI modal listener suppresses its briefing while that terminal is open. Closing it restores the available rail.
+
+The visible labels become Shops, Upgrades, Music before loading, and Mute / Unmute afterward. Full hidden music button text is likewise capitalized. The shared music-state block changes only those strings; requests, pending/serial, acknowledgements, and timeouts are untouched. Pauli's separate investigation of the observed missing music acknowledgement must be composed independently.
+
+Validation reuses the 261-check actual layout/UIDevice host and adds actual shared-gate/final-write/Upgrades/Shop flow coverage for 304 checks total. The old unconditional briefing gate fails the specific new availability check. A copy-only inverse confirms the changed music refresh fragment adds no state behavior. Both whole files compile. No native input or font result is inferred: the capital U in Upgrades must have its actual 56 px button/50 px caption TextFits rechecked, alongside opening/closing both terminal routes during real Dispatch and retained queue/modal exclusion.

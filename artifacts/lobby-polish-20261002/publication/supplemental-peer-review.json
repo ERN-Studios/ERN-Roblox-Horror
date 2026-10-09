@@ -1,9 +1,0 @@
-{
-  "schema": "lobby-polish-publication-supplemental-peer-review-v1",
-  "reviewer": "/root/lobby_polish_bays",
-  "validatorSHA256": "de82f8e27488136b15a573521a6279b95f0fb3deb1fd535a0a05cd394156c090",
-  "reviewSHA256": "fe7cf667901c566351c374aa14558332ade87d58963320b02015728f3db60dd4",
-  "passed": true,
-  "conclusion": "Exact one Test Suite class/byte/hash delta and two pinned QA removals only; recomputed source catalogs and eleven pins reject any other Source delta. Both capture/catalog/native/recovery/gate/durable hashes bind, actual forest/place durable bytes are rehashed. Prior failed preflight and strict audit remain false; no global normalization or publish claim. Fresh all227 live recheck remains required.",
-  "studioOrGitWrites": false
-}

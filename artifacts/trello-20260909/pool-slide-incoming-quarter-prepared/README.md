@@ -1,0 +1,11 @@
+# Incoming Walk quarter-phase candidate
+
+Artifact only. Run `realtime-incoming-quarter.luau` only in an already running normal Studio Play server, after the reviewed v2 local copies and exact cached mesh folder are present. It creates disposable rigs and its own `TrelloPoolSlideIncomingQuarterRealtimeFull` report; it refuses an existing report and preserves all prior native reports. Root owns execution.
+
+This is 48 fresh Animator/track cases: 16 uniform outgoing Idle phases `0/16` through `15/16`, each at incoming Walk speed `.05`, `.5` and `10/10.82`, all with `.16` fade and incoming Walk phase `.25`. Rates are constant during each fade. The middle rate samples an intermediate speed; it does **not** simulate a continuously changing acceleration profile.
+
+Only the source track is primed. The destination is loaded and remains unused until its first real `Play`; its quarter TimePosition is assigned immediately after that call, with no intervening yield. Initial phase/speed and every captured destination speed are checked. Freshness, complete mesh reconstruction, active/fading track weights, source Ended and isolated exact-phase endpoint-bone comparisons remain the reviewed original evaluator. Skin reconstruction occurs after frame capture. All changes are single-match seams and reversing them recovers the complete cached original byte for byte after normal LF decoding.
+
+The probe tests geometric feasibility, not a production seek strategy. The native adapter currently has a nonyielding Attach/Motion path and tracks may have cold Length=0; no runtime seek, load wait, animation ID or curve is implemented here. A passing result still needs visual/live gait checks and the chosen production mechanism (for example a separately verified rotated clip) must preserve animation channels, loop continuity and Attack markers. Finite phases and frame samples are not continuous collision certification. The former phase-zero penetration and earlier reports remain valid baseline evidence.
+
+`test_candidate.py` executes the actual changed case generation, first-Play/seek and live rate/reset guards, including negative inactive/wrong-rate/reset cases. It also verifies full inherited-source restoration and whole-script compilation. Those offline tests do not fabricate Roblox Animator results.

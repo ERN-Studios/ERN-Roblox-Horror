@@ -1804,7 +1804,7 @@ local function acquireVisibleTarget(session: any, dt: number): (Player?, BasePar
 	local present: {[Player]: boolean} = {}
 	for _, player in ipairs(Players:GetPlayers()) do
 		local character, _, root = livingPlayer(player, session)
-		if character and root then
+		if character and root and not HidingController.IsHidden(player, session.Generation) then
 			present[player] = true
 			local visible, distance = visionGeometry(session, player)
 			local suspicion = session.Suspicion[player] or 0
@@ -1855,7 +1855,7 @@ local function acquireHeardTarget(session: any): (Player?, BasePart?)
 	local bestScore = math.huge
 	for _, player in ipairs(Players:GetPlayers()) do
 		local character, humanoid, root = livingPlayer(player, session)
-		if character and humanoid and root then
+		if character and humanoid and root and not HidingController.IsHidden(player, session.Generation) then
 			local velocity = Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude
 			if velocity >= 2 then
 				local hearingRange: number
@@ -1930,39 +1930,25 @@ local function blackoutSweepLegDuration(distance: number): number
 			+ Tuning.BlackoutSweepSlackSeconds)
 end
 
--- Which occupied table, if any, this sweep leg should aim at. Three independent
--- gates keep the Manager from being omniscient: table checks can be off, the
--- global interval has to have elapsed, and the bias only wins a coin flip
--- (TableCheck.SweepBiasChance). A table on per-anchor cooldown is never a
--- candidate, so the same hiding place is not farmed.
-local function chooseTableCheckAnchor(session: any, now: number): BasePart?
-	if debugTableChecksSuspended then return nil end
-	-- Nothing may be aimed at before the spawn grace has elapsed; the Manager is
-	-- still being revealed, and Controller.Start seeds a route on that frame.
-	if now < session.ActivatedAt then return nil end
-	if now < session.NextTableCheckAt then return nil end
-	local candidates = {}
-	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation, true)) do
-		if now >= (session.AnchorCheckCooldown[anchor] or 0) then
-			table.insert(candidates, anchor)
-		end
+local function tablePatrolLegDuration(session: any, destination: Vector3): number
+	-- Rooms that look adjacent may require a long detour through the maze.
+	-- Budget the route selected by setGoal, rather than abandoning a reachable
+	-- table after only enough time for a straight walk through the walls.
+	local previous = flat(session.Root.Position, session.FloorY)
+	local directDistance = planarDistance(previous, destination)
+	local routeDistance = 0
+	local points = session.StrategicPoints or {}
+	for index = session.StrategicIndex or 1, #points do
+		routeDistance += planarDistance(previous, points[index])
+		previous = points[index]
 	end
-	-- The coin flip is drawn only when there is something to bias toward, so a
-	-- round where nobody hides consumes exactly the RNG stream it always did.
-	if #candidates == 0 then return nil end
-	if session.Random:NextNumber() > TableCheckTuning.SweepBiasChance then return nil end
-	return candidates[session.Random:NextInteger(1, #candidates)]
+	routeDistance += planarDistance(previous, destination)
+	return blackoutSweepLegDuration(math.max(directDistance, routeDistance))
 end
 
--- A leg aimed at a table that never arrived still costs that table its cooldown.
--- Only beginTableCheck clears TargetAnchor on success, so a TargetAnchor still
--- set when the next goal is chosen means the last attempt was abandoned -- the
--- leg timed out, or the chase reclaimed the Manager. Without charging it here,
--- the very next draw can pick the same unreachable anchor (the global interval
--- is only consumed by an actual check), and the sweep ping-pongs at one table
--- instead of covering the mall. Charged BEFORE the next draw, so that draw
--- filters it out; charging at selection time would make updateTableCheck reject
--- the anchor it had just chosen.
+-- Arrival and inspection clear the route's anchor. A route still owning an
+-- anchor when replaced was abandoned or timed out, so charge its cooldown
+-- before selecting again rather than repeatedly choosing an unreachable table.
 local function abandonTableCheckTarget(session: any, now: number)
 	local anchor = session.TableCheckTargetAnchor
 	if not anchor then return end
@@ -1970,22 +1956,53 @@ local function abandonTableCheckTarget(session: any, now: number)
 	session.AnchorCheckCooldown[anchor] = now + TableCheckTuning.AnchorCooldownSeconds
 end
 
+-- An occupied table attracts a walk around its perimeter, never a chase to
+-- the hidden player's exact position. Navigation still validates the full rig.
+-- Selection is independent of the global inspection interval: after a failed
+-- check the Manager must already be travelling toward the next hiding place.
+local function chooseNearbyTablePatrolGoal(session: any, now: number): boolean
+	local candidates = {}
+	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation, true)) do
+		if now >= (session.AnchorCheckCooldown[anchor] or 0) then
+			table.insert(candidates, anchor)
+		end
+	end
+	while #candidates > 0 do
+		local anchor = table.remove(candidates, session.Random:NextInteger(1, #candidates))
+		local roomId = roomIdContaining(anchor.Position)
+		local angle = session.Random:NextNumber(0, math.pi * 2)
+		-- A 12-stud circle can have every sampled point inside the rotated,
+		-- rectangular table envelope. Try another ring still within check range
+		-- before falling back to wider walking space, and sample finer angles.
+		for _, radius in ipairs({TableCheckTuning.PatrolRadius, TableCheckTuning.StartRange - .5,
+			TableCheckTuning.PatrolRadius + 6, TableCheckTuning.PatrolRadius + 12}) do
+			for step = 0, 15 do
+				local heading = angle + step * math.pi / 8
+				local position = flat(anchor.Position, session.FloorY)
+					+ Vector3.new(math.cos(heading) * radius, 0, math.sin(heading) * radius)
+				if planarDistance(session.Root.Position, position) > Tuning.GoalTolerance + 1
+					and roomId ~= nil and roomIdContaining(position) == roomId
+					and navigationPointClear(session, position) then
+					session.TableCheckTargetAnchor = anchor
+					session.PatrolGoal = position
+					session.PatrolWaitUntil = nil
+					setGoal(session, position, true)
+					session.PatrolLegUntil = now + tablePatrolLegDuration(session,
+						session.ResolvedFinalGoal or position)
+					publishState(session, "PATROL")
+					return true
+				end
+			end
+		end
+		-- Do not repeatedly select a table with no clear perimeter destination.
+		session.AnchorCheckCooldown[anchor] = now + TableCheckTuning.AnchorCooldownSeconds
+	end
+	return false
+end
+
 local function choosePatrolGoal(session: any, now: number)
 	abandonTableCheckTarget(session, now)
-	local checkAnchor = chooseTableCheckAnchor(session, now)
-	if checkAnchor then
-		-- Same sweep-leg bookkeeping as an ordinary room goal, so the distance
-		-- and leg-timeout escapes below still rescue a table the Manager cannot
-		-- actually reach.
-		session.TableCheckTargetAnchor = checkAnchor
-		session.PatrolGoal = flat(checkAnchor.Position, session.FloorY)
-		session.PatrolWaitUntil = nil
-		session.PatrolLegUntil = now + blackoutSweepLegDuration(
-			planarDistance(session.Root.Position, session.PatrolGoal))
-		setGoal(session, session.PatrolGoal, true)
-		publishState(session, "PATROL")
-		return
-	end
+	if chooseNearbyTablePatrolGoal(session, now) then return end
 	local candidates = {}
 	for _, room in ipairs(layoutRooms()) do
 		if room.Id ~= "Arrival" and room.Id ~= "Exit" then
@@ -2019,18 +2036,19 @@ local function choosePatrolGoal(session: any, now: number)
 	publishState(session, "PATROL")
 end
 
-local function nearestLivingPlayer(session: any): (Player?, BasePart?)
+local function nearestLivingPlayer(session: any, exposedOnly: boolean?): (Player?, BasePart?)
 	local selected: Player? = nil
 	local selectedRoot: BasePart? = nil
 	local bestDistance = math.huge
 	local selectedInFinalHall = false
 	for _, candidate in ipairs(Players:GetPlayers()) do
 		local _, _, candidateRoot = livingPlayer(candidate, session)
-		if candidateRoot then
+		if candidateRoot and (not exposedOnly
+			or not HidingController.IsHidden(candidate, session.Generation)) then
 			local distance = planarDistance(session.Root.Position, candidateRoot.Position)
 			-- During the finale, a nearby player in an adjacent room must not pull
 			-- the ambush away from runners in the exit lane. Normal hunts are unchanged.
-			local inFinalHall = session.FinalHallChase and insideFinalHall(session, candidateRoot.Position)
+			local inFinalHall = session.FinalHallChase == true and insideFinalHall(session, candidateRoot.Position)
 			if (inFinalHall and not selectedInFinalHall)
 				or (inFinalHall == selectedInFinalHall and (distance < bestDistance - .001
 					or (math.abs(distance - bestDistance) <= .001
@@ -2045,49 +2063,70 @@ local function nearestLivingPlayer(session: any): (Player?, BasePart?)
 	return selected, selectedRoot
 end
 
-local function trackNearestBlackoutPlayer(session: any, now: number): boolean
-	local nearestPlayer, nearestRoot = nearestLivingPlayer(session)
-	if not nearestPlayer or not nearestRoot then
-		if session.Attacking then
-			session.AttackToken += 1
-			session.Attacking = false
-			session.AttackCooldownUntil = now
-		end
+local function trackHiddenPlayers(session: any, now: number)
+	if now < session.ActivatedAt then
 		publishTarget(session, nil)
-		session.LastKnownPosition = nil
-		session.LastKnownPlayer = nil
-		session.LastKnownCharacter = nil
-		session.LastSenseAt = -math.huge
-		session.SearchUntil = nil
-		if session.FinalHallChase then
-			-- A finale without a runner holds position; never switch to random mall patrol.
-			session.PatrolGoal = nil
-			session.PatrolLegUntil = nil
-			clearGoal(session)
-			publishState(session, "WAITING")
-			publishTargetTelemetry(session, "NO_LIVING_PLAYER", -1, nil)
-			return false
-		end
-		-- Patrol only when no living round participant remains. Hiding players
-		-- remain chase targets and therefore never enter this fallback.
-		local sweepGoal = arrivalGoal(session)
-		if session.PatrolGoal and (not sweepGoal
-			or planarDistance(session.Root.Position, sweepGoal) <= Tuning.GoalTolerance + 1) then
-			session.PatrolGoal = nil
-		end
-		-- Second, independent reason to move on: a sweep leg that has taken longer
-		-- than any honest walk across the mall is stuck, whether or not the
-		-- distance test agrees. Without this the hunt can still stall on a goal
-		-- navigation quietly gave up on.
-		if session.PatrolGoal and session.PatrolLegUntil and now >= session.PatrolLegUntil then
-			session.PatrolGoal = nil
-		end
-		if not session.PatrolGoal then
-			choosePatrolGoal(session, now)
-		else
-			publishState(session, "PATROL")
-		end
+		clearGoal(session)
+		publishState(session, "AWAKENING")
+		return
+	end
+	if session.Attacking then
+		session.AttackToken += 1
+		session.Attacking = false
+		session.AttackCooldownUntil = now
+	end
+	publishTarget(session, nil)
+	session.LastKnownPosition = nil
+	session.LastKnownPlayer = nil
+	session.LastKnownCharacter = nil
+	session.LastSenseAt = -math.huge
+	session.SearchUntil = nil
+	if session.FinalHallChase then
+		-- Preserve the finale: without a runner it waits in the exit lane.
+		session.PatrolGoal = nil
+		session.PatrolLegUntil = nil
+		clearGoal(session)
+		publishState(session, "WAITING")
 		publishTargetTelemetry(session, "NO_LIVING_PLAYER", -1, nil)
+		return
+	end
+	-- Clear chase ownership and memory when the player hides. Keep the current
+	-- patrol leg until arrival or its bounded navigation timeout.
+	local anchor = session.TableCheckTargetAnchor
+	if anchor and (not anchor.Parent or HidingController.OccupantCount(anchor, true) == 0
+		or now < (session.AnchorCheckCooldown[anchor] or 0)) then
+		session.PatrolGoal = nil
+	end
+	local sweepGoal = arrivalGoal(session)
+	if session.PatrolGoal and (not sweepGoal
+		or planarDistance(session.Root.Position, sweepGoal) <= Tuning.GoalTolerance + 1) then
+		-- Reaching a perimeter point is a successful walk, not a failed check.
+		-- Keep moving around eligible tables while the global check timer runs;
+		-- only a genuinely abandoned/timed-out route charges their cooldown.
+		if sweepGoal then session.TableCheckTargetAnchor = nil end
+		session.PatrolGoal = nil
+	end
+	-- Second, independent reason to move on: a sweep leg that has taken longer
+	-- than any honest walk across the mall is stuck, whether or not the
+	-- distance test agrees. Without this the hunt can still stall on a goal
+	-- navigation quietly gave up on.
+	if session.PatrolGoal and session.PatrolLegUntil and now >= session.PatrolLegUntil then
+		session.PatrolGoal = nil
+	end
+	if not session.PatrolGoal then
+		choosePatrolGoal(session, now)
+	else
+		publishState(session, "PATROL")
+	end
+	publishTargetTelemetry(session,
+		if #HidingController.GetOccupiedAnchors(session.Generation, true) > 0
+			then "HIDDEN_PATROL" else "NO_LIVING_PLAYER", -1, session.PatrolGoal)
+end
+
+local function trackNearestBlackoutPlayer(session: any, now: number): boolean
+	local nearestPlayer, nearestRoot = nearestLivingPlayer(session, not session.FinalHallChase)
+	if not nearestPlayer or not nearestRoot then
+		trackHiddenPlayers(session, now)
 		return false
 	end
 
@@ -2104,9 +2143,8 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 	publishTarget(session, nearestPlayer)
 	local targetAnchor = HidingController.GetAnchor(nearestPlayer, session.Generation)
 	session.TargetTableAnchor = targetAnchor
-	-- The nearest player owns the chase. A prior random patrol-table leg cannot
-	-- divert it, whether that player is exposed or underneath a table.
-	session.TableCheckTargetAnchor = nil
+	-- An exposed player can reclaim the chase from a nearby table patrol.
+	abandonTableCheckTarget(session, now)
 
 	local targetPosition = flat(nearestRoot.Position, session.FloorY)
 	local velocity = Vector3.new(nearestRoot.AssemblyLinearVelocity.X, 0,
@@ -2126,8 +2164,7 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 	session.SearchUntil = nil
 	session.PatrolGoal = nil
 	session.AlertUntil = 0
-	-- Aim at the table centre so safe-goal resolution selects its clear outer
-	-- perimeter, rather than trying to squeeze the rig into an occupant slot.
+	-- Final-hall pursuit keeps its existing direct target behavior.
 	local navigationTarget = if targetAnchor then targetAnchor.Position else targetPosition
 	setGoal(session, navigationTarget, switchedTarget)
 
@@ -2175,16 +2212,15 @@ local function updateBrain(session: any, now: number, dt: number)
 		publishState(session, "AWAKENING")
 		return
 	end
-	-- During the blackout hunt the Manager is supernatural: every think tick it
-	-- chooses the nearest eligible player and feeds that moving position straight
-	-- into the existing strategic/PFS route system. Normal non-blackout behavior
-	-- still uses sight, suspicion, hearing, memory, and search below.
+	-- Blackout chases exposed players, but patrols around hidden players until a
+	-- nearby inspection actually sees them. Hiding never feeds a direct chase.
 	if session.Blackout then
 		trackNearestBlackoutPlayer(session, now)
 		return
 	end
 	if session.Target and HidingController.IsHidden(session.Target, session.Generation) then
-		trackNearestBlackoutPlayer(session, now)
+		session.PatrolGoal = nil
+		trackHiddenPlayers(session, now)
 		return
 	end
 	if session.Attacking then return end
@@ -2294,6 +2330,10 @@ local function updateBrain(session: any, now: number, dt: number)
 		session.SearchUntil = nil
 	end
 
+	if #HidingController.GetOccupiedAnchors(session.Generation, true) > 0 then
+		trackHiddenPlayers(session, now)
+		return
+	end
 	publishTarget(session, nil)
 	local reachedPatrol = arrivalGoal(session)
 	if session.PatrolGoal and (not reachedPatrol
@@ -2320,21 +2360,31 @@ local function facePosition(session: any, position: Vector3)
 	session.Root.CFrame = CFrame.lookAt(current, current + session.Heading)
 end
 
-local function endTableCheck(session: any, flush: boolean)
+local function endTableCheck(session: any, completed: boolean): number
 	local anchor = session.TableCheckAnchor
 	session.TableCheckAnchor = nil
 	session.TableCheckTargetPlayer = nil
+	session.TableCheckTargetCharacter = nil
 	session.TableCheckEndsAt = 0
 	if session.TableCheckSound then
 		session.TableCheckSound:Destroy()
 		session.TableCheckSound = nil
 	end
 	publishTableCheck(session, nil, 0)
-	if not anchor then return end
+	if not anchor then return 0 end
 	session.AnchorCheckCooldown[anchor] = os.clock() + TableCheckTuning.AnchorCooldownSeconds
-	-- A completed inspection is a scare, not an involuntary exit. The hiding
-	-- controller keeps the player anchored and non-colliding until they leave.
-
+	if not completed then return 0 end
+	-- Exactly one server roll per completed warning; leaving or cancellation
+	-- never consumes a skill check. A failed roll still consumes table cooldown.
+	session.TableCheckSerial += 1
+	local succeeded = session.Random:NextNumber() < TableCheckTuning.SkillCheckSuccessChance
+	local flushed = if succeeded then HidingController.FlushAnchor(anchor, session.Root.Position) else {}
+	session.TableCheckFlushCount = #flushed
+	session.LastTableCheckResult = if succeeded then "SUCCESS" else "FAILED"
+	session.StateFolder:SetAttribute("Level3_MallManagerTableCheckSerial", session.TableCheckSerial)
+	session.StateFolder:SetAttribute("Level3_MallManagerLastTableCheckResult", session.LastTableCheckResult)
+	session.StateFolder:SetAttribute("Level3_MallManagerTableCheckFlushCount", #flushed)
+	return #flushed
 end
 
 -- Cancel only this exact protected life; unrelated players and CD noise survive.
@@ -2390,9 +2440,10 @@ local function forgetProtectedPlayer(session: any, player: Player?, character: M
 	end
 end
 
-local function beginTableCheck(session: any, anchor: BasePart, now: number)
+local function beginTableCheck(session: any, anchor: BasePart, now: number, player: Player)
 	session.TableCheckAnchor = anchor
-	session.TableCheckTargetPlayer = if session.TargetTableAnchor == anchor then session.Target else nil
+	session.TableCheckTargetPlayer = player
+	session.TableCheckTargetCharacter = player.Character
 	-- The reaction window is the one clock a player is SHOWN -- the client counts
 	-- its banner down against this exact number -- and os.clock is CPU time in the
 	-- server datamodel, materially behind the wall clock. Measuring the window on
@@ -2432,6 +2483,43 @@ local function tableCheckApproachClear(session: any, anchor: BasePart): boolean
 			flat(anchor.Position, session.FloorY))
 end
 
+local function hasTableInspectionSight(session: any, anchor: BasePart,
+	character: Model, targetRoot: BasePart): boolean
+	local params = sightParams(session, character)
+	local ignored = params.FilterDescendantsInstances
+	-- This synthetic box hides the player from ordinary standing vision. A
+	-- close, kneeling inspection can look underneath this table, while real
+	-- walls, furniture and other tables' occluders continue to block the rays.
+	local parent = anchor.Parent
+	if parent then
+		for _, object in ipairs(parent:GetChildren()) do
+			if object:IsA("BasePart") and object:GetAttribute("Level3_HideSightOccluder") == true
+				and planarDistance(object.Position, anchor.Position) <= .1 then
+				table.insert(ignored, object)
+			end
+		end
+	end
+	params.FilterDescendantsInstances = ignored
+	local origin = flat(session.Root.Position, session.FloorY) + Vector3.new(0, 1.6, 0)
+	for _, target in ipairs({targetRoot.Position, targetRoot.Position - Vector3.new(0, 2.1, 0)}) do
+		local result = workspace:Raycast(origin, target - origin, params)
+		if not result or result.Instance:IsDescendantOf(character) then return true end
+	end
+	return false
+end
+
+local function spottedTableOccupant(session: any, anchor: BasePart): Player?
+	if not anchor.Parent or not tableCheckApproachClear(session, anchor) then return nil end
+	for _, player in ipairs(Players:GetPlayers()) do
+		local character, _, root = livingPlayer(player, session)
+		if character and root and HidingController.GetAnchor(player, session.Generation) == anchor
+			and hasTableInspectionSight(session, anchor, character, root) then
+			return player
+		end
+	end
+	return nil
+end
+
 -- Returns true while a check owns the Manager: the brain, the attack test and
 -- ordinary steering all stand down for the reaction window.
 local function updateTableCheck(session: any, now: number): boolean
@@ -2441,56 +2529,57 @@ local function updateTableCheck(session: any, now: number): boolean
 			endTableCheck(session, false)
 			return false
 		end
-		if HidingController.OccupantCount(anchor, true) == 0 then
-			endTableCheck(session, false)
-			return false
-		end
 		local checkPlayer = session.TableCheckTargetPlayer
-		if checkPlayer and (nearestLivingPlayer(session) ~= checkPlayer
+		local character: Model? = nil
+		local root: BasePart? = nil
+		-- Keep the same discovered life throughout its warning. Other hidden
+		-- players cannot steal this check simply by being nearer.
+		if checkPlayer then
+			local checkCharacter, _, checkRoot = livingPlayer(checkPlayer, session)
+			character, root = checkCharacter, checkRoot
+		end
+		if not checkPlayer or not character or not root
+			or character ~= session.TableCheckTargetCharacter
 			or HidingController.GetAnchor(checkPlayer, session.Generation) ~= anchor
-			or not tableCheckApproachClear(session, anchor)) then
-			-- Leaving, dying, changing tables or a nearer player interrupts this
-			-- check immediately. A newly closed wall also cancels the flush.
+			or not tableCheckApproachClear(session, anchor)
+			or not hasTableInspectionSight(session, anchor, character, root) then
 			endTableCheck(session, false)
+			session.PatrolGoal = nil
 			trackNearestBlackoutPlayer(session, now)
 			return false
 		end
 		-- Server time: TableCheckEndsAt is the value the occupants' banner counts
 		-- down against, so the inspection ends when the warning says it will.
 		if workspace:GetServerTimeNow() < session.TableCheckEndsAt then return true end
-		endTableCheck(session, true)
-		trackNearestBlackoutPlayer(session, now)
+		local flushCount = endTableCheck(session, true)
+		session.PatrolGoal = nil
+		session.PatrolWaitUntil = nil
+		session.PatrolLegUntil = nil
+		if flushCount > 0 then
+			trackNearestBlackoutPlayer(session, now)
+		else
+			-- Choose the next perimeter leg in this same Heartbeat. In particular,
+			-- do not leave TABLE_CHECK with speed zero or reacquire this table.
+			trackHiddenPlayers(session, now)
+		end
 		return false
 	end
 	if debugTableChecksSuspended or not validRound(session) then return false end
 	if now < session.ActivatedAt then return false end
-	local targetAnchor = session.TargetTableAnchor
-	if session.State == "CHASE" and targetAnchor and session.Target then
-		if nearestLivingPlayer(session) ~= session.Target
-			or HidingController.GetAnchor(session.Target, session.Generation) ~= targetAnchor then
-			trackNearestBlackoutPlayer(session, now)
-			return false
-		end
-		-- The selected player remains the target under the table. Approach its
-		-- clear perimeter, announce the existing warning, then resume
-		-- its search without moving the occupants. Respect the inspection cooldown.
-		if now < (session.AnchorCheckCooldown[targetAnchor] or 0) then return false end
-		if not tableCheckApproachClear(session, targetAnchor) then return false end
-		beginTableCheck(session, targetAnchor, now)
-		return true
-	end
 	-- An untargeted patrol check cannot interrupt a chase past another table.
 	if session.State ~= "PATROL" and session.State ~= "PATROL_LISTEN" then return false end
-	local anchor = session.TableCheckTargetAnchor
-	if not anchor or not anchor.Parent
-		or HidingController.OccupantCount(anchor, true) <= 0
-		or now < (session.AnchorCheckCooldown[anchor] or 0) then
-		session.TableCheckTargetAnchor = nil
-		return false
+	if now < session.NextTableCheckAt then return false end
+	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation, true)) do
+		if now >= (session.AnchorCheckCooldown[anchor] or 0) then
+			local player = spottedTableOccupant(session, anchor)
+			if player then
+				abandonTableCheckTarget(session, now)
+				beginTableCheck(session, anchor, now, player)
+				return true
+			end
+		end
 	end
-	if not tableCheckApproachClear(session, anchor) then return false end
-	beginTableCheck(session, anchor, now)
-	return true
+	return false
 end
 
 local function attackLineClear(session: any, player: Player, maximumRange: number): (boolean, Humanoid?)
@@ -3248,6 +3337,9 @@ local function resetPublishedState()
 	state:SetAttribute("Level3_MallManagerLastChaseScreamName", "")
 	state:SetAttribute("Level3_MallManagerTableCheckIndex", 0)
 	state:SetAttribute("Level3_MallManagerTableCheckEndsAt", 0)
+	state:SetAttribute("Level3_MallManagerTableCheckSerial", 0)
+	state:SetAttribute("Level3_MallManagerLastTableCheckResult", "")
+	state:SetAttribute("Level3_MallManagerTableCheckFlushCount", 0)
 	workspace:SetAttribute("Level3MallManagerActive", false)
 	workspace:SetAttribute("Level3MallManagerState", "OFF")
 	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
@@ -3790,10 +3882,14 @@ function Controller.Start(manifest: any, generation: number)
 		TableCheckAnchor = nil,
 		TargetTableAnchor = nil,
 		TableCheckTargetPlayer = nil,
+		TableCheckTargetCharacter = nil,
 		TableCheckTargetAnchor = nil,
 		TableCheckEndsAt = 0,
 		TableCheckSound = nil,
 		NextTableCheckAt = 0,
+		TableCheckSerial = 0,
+		LastTableCheckResult = "",
+		TableCheckFlushCount = 0,
 		AnchorCheckCooldown = {},
 		WorldNoise = nil,
 		MotionRemote = motionRemote,
@@ -3802,6 +3898,9 @@ function Controller.Start(manifest: any, generation: number)
 		SpawnSerial = 0,
 	}
 	activeSession = session
+	state:SetAttribute("Level3_MallManagerTableCheckSerial", 0)
+	state:SetAttribute("Level3_MallManagerLastTableCheckResult", "")
+	state:SetAttribute("Level3_MallManagerTableCheckFlushCount", 0)
 	table.insert(session.Connections, chaseScream.Ended:Connect(function()
 		if activeSession ~= session then return end
 		session.ChaseScreamPlaying = false
@@ -3951,7 +4050,7 @@ function Controller.Start(manifest: any, generation: number)
 	if session.Blackout and validRound(session) then
 		trackNearestBlackoutPlayer(session, os.clock())
 	else
-		local seedPlayer, seedRoot = nearestLivingPlayer(session)
+		local seedPlayer, seedRoot = nearestLivingPlayer(session, true)
 		if seedPlayer and seedRoot then
 			session.LastKnownPosition = flat(seedRoot.Position, floorY)
 			session.LastKnownPlayer = seedPlayer
@@ -4005,6 +4104,9 @@ function Controller.GetSnapshot()
 		Attacking = session.Attacking,
 		AttackSerial = session.AttackSerial,
 		TableCheckActive = session.TableCheckAnchor ~= nil,
+		TableCheckSerial = session.TableCheckSerial,
+		LastTableCheckResult = session.LastTableCheckResult,
+		TableCheckFlushCount = session.TableCheckFlushCount,
 		TableCheckIndex = if session.TableCheckAnchor
 			then (tonumber(session.TableCheckAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
 			else 0,
@@ -4015,6 +4117,7 @@ function Controller.GetSnapshot()
 			then (tonumber(session.TableCheckTargetAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
 			else 0,
 		TableChecksSuspended = debugTableChecksSuspended,
+		PatrolLegSecondsRemaining = math.max(0, (session.PatrolLegUntil or 0) - os.clock()),
 		WalkMoving = session.WalkMoving,
 		WalkPoseHeld = session.WalkPoseHeld,
 		WalkPlaybackSpeed = session.WalkPlaybackSpeed,

@@ -1,0 +1,17 @@
+[
+ {"asset": "ArcadeUprightA", "glb": "G:/Roblox/_local/l4meshy/ArcadeUprightA/ArcadeUprightA.glb", "dims": [null, null, 2.07], "tris": 6000, "sem": "wood", "col_slices": 3},
+ {"asset": "ArcadeUprightB", "glb": "G:/Roblox/_local/l4meshy/ArcadeUprightB/ArcadeUprightB.glb", "dims": [null, null, 2.07], "tris": 6000, "sem": "wood", "col_slices": 3},
+ {"asset": "ArcadeRacing", "glb": "G:/Roblox/_local/l4meshy/ArcadeRacing/ArcadeRacing.glb", "dims": [1.1, 2.3, 2.3], "tris": 8000, "sem": "plastic", "col_slices": 2, "col_axis": "y"},
+ {"asset": "Pinball", "glb": "G:/Roblox/_local/l4meshy/Pinball/Pinball.glb", "dims": [0.95, 1.75, 2.05], "tris": 8000, "sem": "wood", "col_slices": 2},
+ {"asset": "ToiletFlush", "glb": "G:/Roblox/_local/l4meshy/ToiletFlush/ToiletFlush.glb", "dims": [1.11, 1.01, 1.12], "tris": 3000, "sem": "plastic", "col_slices": 2},
+ {"asset": "Urinal", "glb": "G:/Roblox/_local/l4meshy/Urinal/Urinal.glb", "dims": [null, null, 1.45], "tris": 2500, "sem": "plastic", "col_slices": 1},
+ {"asset": "PopcornMachine", "glb": "G:/Roblox/_local/l4meshy/PopcornMachine/PopcornMachine.glb", "dims": [null, 1.0, 2.4], "tris": 8000, "sem": "metal", "col_slices": 2},
+ {"asset": "SodaFountain", "glb": "G:/Roblox/_local/l4meshy/SodaFountain/SodaFountain.glb", "dims": [2.0, 1.2, 1.4], "tris": 6000, "sem": "metal", "col_slices": 1},
+ {"asset": "Projector35", "glb": "G:/Roblox/_local/l4meshy/Projector35/Projector35.glb", "dims": [1.7, 1.7, 2.24], "tris": 8000, "sem": "metal", "col_slices": 2},
+ {"asset": "LitterPopcornSpill", "glb": "G:/Roblox/_local/l4meshy/LitterPopcornSpill/LitterPopcornSpill.glb", "dims": [0.45, 0.45, 0.45], "tris": 1200, "sem": "prop", "col_slices": 0, "tex_size": 512, "collide": false, "sharp_angle": 180},
+ {"asset": "LitterCups", "glb": "G:/Roblox/_local/l4meshy/LitterCups/LitterCups.glb", "dims": [0.4, 0.4, 0.4], "tris": 1200, "sem": "prop", "col_slices": 0, "tex_size": 512, "collide": false, "sharp_angle": 75},
+ {"asset": "LitterPopcornPile", "glb": "G:/Roblox/_local/l4meshy/LitterPopcornPile/LitterPopcornPile.glb", "dims": [0.35, 0.35, 0.35], "tris": 1200, "sem": "prop", "col_slices": 0, "tex_size": 512, "collide": false, "sharp_angle": 180},
+ {"asset": "LitterPaper", "glb": "G:/Roblox/_local/l4meshy/LitterPaper/LitterPaper.glb", "dims": [0.4, 0.4, 0.4], "tris": 1200, "sem": "prop", "col_slices": 0, "tex_size": 512, "collide": false, "sharp_angle": 75},
+ {"asset": "LockerBank", "glb": "G:/Roblox/_local/l4meshy/LockerBank/LockerBank.glb", "dims": [null, null, 1.8], "tris": 3000, "sem": "metal", "col_slices": 2},
+ {"asset": "SupplyCabinet", "glb": "G:/Roblox/_local/l4meshy/SupplyCabinet/SupplyCabinet.glb", "dims": [null, null, 1.8], "tris": 3000, "sem": "metal", "col_slices": 2}
+]

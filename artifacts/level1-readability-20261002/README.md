@@ -1,0 +1,18 @@
+# Level 1 readability proposals
+
+Owner feedback after v2520: still too dark; distant walls should be visible, elevator should read raw gray steel. Three conceptual lighting references use the same scene and original wallpaper texture. C is recommended for longest visibility; B retains more shadow, A is moody. Built-in Imagegen outputs/prompts are in concepts/. They are generated concept images, not engine screenshots or a tested runtime state.
+
+The previous production change raised normal local fixture brightness .7 to .85, elevator lamp 1 to 1.65 and MongoGrade brightness -.02 to +.01. It did not brighten wallpaper/carpet textures. Ambient (4,4,3), OutdoorAmbient 0, Lighting.Brightness .3 and fog 30..220 remained dark. Fresh live Maze and RoundUI reads confirm the client reapplies that dark baseline; a server-only ambient change would be overridden.
+
+The elevator uses existing PBR Steel, but the renderer multiplies its appearance by proxy colors: yellow shell 197/180/116, near-black frame 14/14/17, gray doors 70/75/80. A future elevator-only tint/material correction must preserve shared MetalPanel puzzleprops/cables and geometry. Wallpaper asset 87947439437597 stays original.
+
+No Studio source/property, Play/UI, Level 4/lobby or native-place changes in this proposal turn. No native place backup or new publication. The owner has been asked whether their screenshot is from the facelift preview or ordinary Level 1, and which A/B/C lighting they want. Implementation/runtime QA/publication follow the chosen direction; the previous completed v2520 receipt remains unchanged.
+
+
+Owner-approved follow-up: start at C, then B/A by permanent successful relay extractions. Thresholds are one-third and two-thirds of actually placed relays; the current solo/duo three-relay spawn gives C0, B1, A2+. Existing red ALERT when boxes are powered, followed by the lever's POWERDOWN/ESCAPE, overrides these normal presets. Circuit/relay counts and all original gameplay conditions are preserved. Server-owned extraction count survives drops/deaths and avoids StreamingEnabled client undercounts; reset clears it.
+
+Four scoped candidates are ready: preview fixture coverage 1.05/range44/angle160, elevator-only neutral gray Steel/PBR tint, three PuzzleManager count hooks, and one normal-preview lighting branch in RoundUI after its existing foreign lighting ownership guards. C/B/A use real ambient/light/fog changes; original wallpaper/carpet PBR assets are untouched. progression-patch.json contains only the eight scoped source hunks, and install_scoped.py derives each candidate from a new authoritative Studio Source/editor read with an inside-write CAS. Its default dry run performs no Studio write.
+
+Offline validation passes 156 actual client branch assertions, 17 actual extraction callback/lifecycle checks, elevator scope/PBR controls and compilation of all four scripts. Fresh full Edit inventory contains228 sources with0 Source/editor conflicts. These are code checks, not runtime/visual/gameplay QA.
+
+Status: prepared only, not installed/published. Cinema's current17:50UTC Studio reservation has not been handed back; no Level1 Play/native UI was started. The pending real preview must check C/B/A via actual relay prompts, installed-fuses red ALERT, natural lever powerdown/escape, reset/new-round C, visible distant walls, raw gray elevator and retained flush fixtures/cable glow. Shared Level4 lighting ownership is protected in the runnable branch check and needs a smoke test after the shared RoundUI change. Publication/migration follow the stable shared handback and passing actual QA. No place backup or GitHub push.

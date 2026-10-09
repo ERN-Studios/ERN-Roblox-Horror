@@ -1,0 +1,19 @@
+{
+ "_comment": "Meshy props for the Level 2 kit. dims = target bounding box in STUDS (x width, y height, z depth; null = keep proportion) relative to a ~5-stud player. tris = after decimation. tex = atlas size (px). collide = one box collider (true) or none. wall = mounted on a wall (its back at local z = +depth/2 faces the wall). yaw_deg = turn so the prop's front faces -Z. glb = G:/Roblox/_local/l2blender/meshy/<name>/<name>.glb",
+ "bench":      {"dims": [6.0, 1.4, null],  "tris": 1200, "tex": 512,  "collide": true},
+ "bulkhead":   {"dims": [1.1, null, null], "tris": 400,  "tex": 512,  "collide": false, "wall": true},
+ "drums":      {"dims": [null, 2.6, null], "tris": 1200, "tex": 512,  "collide": true},
+ "filter":     {"dims": [null, 4.6, null], "tris": 2000, "tex": 1024, "collide": true},
+ "floatring":  {"dims": [2.4, null, null], "tris": 600,  "tex": 512,  "collide": false},
+ "hosereel":   {"dims": [null, 2.4, null], "tris": 900,  "tex": 512,  "collide": false, "wall": true},
+ "kickboards": {"dims": [null, 3.6, null], "tris": 1500, "tex": 512,  "collide": true},
+ "lanereel":   {"dims": [5.5, null, null], "tris": 2000, "tex": 1024, "collide": true},
+ "lifebuoy":   {"dims": [null, 2.2, null], "tris": 600,  "tex": 512,  "collide": false, "wall": true},
+ "lifeguard":  {"dims": [null, 7.0, null], "tris": 1800, "tex": 1024, "collide": true},
+ "lockers":    {"dims": [6.0, 5.6, null],  "tris": 1500, "tex": 1024, "collide": true, "wall": true},
+ "lounger":    {"dims": [null, null, 5.6], "tris": 1200, "tex": 512,  "collide": true},
+ "mopbucket":  {"dims": [null, 3.0, null], "tris": 800,  "tex": 512,  "collide": false},
+ "pumpshell":  {"dims": [6.4, null, null], "tris": 2500, "tex": 1024, "collide": true},
+ "startblock": {"dims": [null, 2.2, null], "tris": 800,  "tex": 512,  "collide": true},
+ "vacuum":     {"dims": [null, 3.4, null], "tris": 900,  "tex": 512,  "collide": false}
+}

@@ -1,0 +1,12 @@
+{
+  "mode": "built-in image_gen",
+  "intent": "generate",
+  "prompt": "Use case: photorealistic-natural\nAsset type: seamless square PBR base-color source texture for the interior wall and door panels of a realistic Roblox elevator cabin.\nPrimary request: an orthographic flat material scan of pristine light cool gray brushed stainless steel. Smooth fine horizontal parallel brushed grain across the entire image, extremely fine shallow machining lines, moderate satin finish.\nComposition/framing: surface only, edge-to-edge flat square texture, no cabin geometry or visible borders. Truly seamless left/right and top/bottom for tiling.\nLighting: uniform flat diffuse illumination for an albedo map, no directional highlights, no shadows, no gradients, no reflected scene.\nColor palette: very light neutral cool gray, average RGB around 190, 192, 194; subtle grain tonal range, no warm cast.\nConstraints: continuous fine horizontal grain; realistic clean new elevator stainless steel; retain a smooth gray overall appearance at a distance. No rust, corrosion, scratches, dents, dirt, patina, streaking, blotches, seams, bevels, rivets, logos, text, watermark, brown, bronze, gold, or dramatic reflections. Opaque background.",
+  "timestamp": "2026-10-04",
+  "originalGeneratedPath": "C:/Users/mikke/.codex/generated_images/01a10744-b1e4-71f3-95ce-9db278f91f34/exec-e858cd83-a84b-4242-bebb-d83a87981396.png",
+  "projectSourcePath": "assets/level1/elevator-inset-20261004/textures/source/steel-imagegen.png",
+  "sha256": "68867cf7b8b712a0104f94f121153d6b50e2bf3da3c72a8f731262e470ff47b0",
+  "inputImages": [],
+  "alpha": false,
+  "notes": "Original generated image copied unchanged; clean horizontal light cool gray brushed stainless steel source for elevator only."
+}

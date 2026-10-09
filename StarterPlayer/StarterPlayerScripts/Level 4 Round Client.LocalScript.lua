@@ -13,11 +13,15 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
+local GuiService = game:GetService("GuiService")
 
 local player = Players.LocalPlayer
 -- MOBILE_QA_20261008: where the card, the keypad and the note stand on a touch screen is asked of UIDevice
 -- (see placeForDevice): at their desktop places they lay under the phone's buttons.
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+local RoundHud = require(ReplicatedStorage:WaitForChild("RoundHud"))
+local Binder = require(ReplicatedStorage:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
 local MODEL_NAME = "Level 4 Cinema Blender"
 local STATE_NAME = "Level 4 State"
 local REMOTES_NAME = "Level 4 Remotes"
@@ -85,7 +89,7 @@ end
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level4RoundGui"
 gui.ResetOnSpawn = false
-gui.DisplayOrder = 6
+gui.DisplayOrder = 60
 gui.Enabled = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
@@ -101,42 +105,9 @@ local function label(parent, props)
 	return l
 end
 
-local panel = Instance.new("Frame")
-panel.Name = "Objective"
-panel.AnchorPoint = Vector2.new(1, 0)
-panel.Position = UDim2.new(1, -18, 0, 110)
-panel.Size = UDim2.fromOffset(300, 96)
-panel.BackgroundColor3 = Color3.fromRGB(10, 6, 18)
-panel.BackgroundTransparency = 0.35
-panel.Parent = gui
-Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 8)
-local stroke = Instance.new("UIStroke", panel)
-stroke.Color = MAGENTA
-stroke.Transparency = 0.4
-stroke.Thickness = 1.5
-local pad = Instance.new("UIPadding", panel)
-pad.PaddingLeft, pad.PaddingRight, pad.PaddingTop = UDim.new(0, 12), UDim.new(0, 12), UDim.new(0, 8)
-local titleLine = label(panel, { Size = UDim2.new(1, 0, 0, 14), Text = "THE LAST SHOW", TextSize = 12, TextColor3 = MAGENTA })
-local mainLine = label(panel, { Position = UDim2.fromOffset(0, 18), Size = UDim2.new(1, 0, 0, 22), TextSize = 18, Text = "" })
-local subLine = label(panel, { Position = UDim2.fromOffset(0, 44), Size = UDim2.new(1, 0, 0, 18), TextSize = 14,
-	Font = Enum.Font.Gotham, TextColor3 = CYAN, Text = "" })
-local extraLine = label(panel, { Position = UDim2.fromOffset(0, 64), Size = UDim2.new(1, 0, 0, 18), TextSize = 13,
-	Font = Enum.Font.Gotham, TextColor3 = Color3.fromRGB(200, 190, 220), Text = "" })
-
-local caption = label(gui, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 0.66, 0),
-	Size = UDim2.new(0.8, 0, 0, 30), TextSize = 22, Font = Enum.Font.GothamMedium, TextXAlignment = Enum.TextXAlignment.Center,
-	TextTransparency = 1, TextStrokeTransparency = 1, Text = "" })
-local captionSerial = 0
-local function say(text, color, seconds)
-	captionSerial += 1
-	local mine = captionSerial
-	caption.Text = text
-	caption.TextColor3 = color or WHITE
-	caption.TextTransparency, caption.TextStrokeTransparency = 0, 0.5
-	task.delay(seconds or 3.5, function()
-		if captionSerial ~= mine then return end
-		TweenService:Create(caption, TweenInfo.new(0.6), { TextTransparency = 1, TextStrokeTransparency = 1 }):Play()
-	end)
+-- B5: all transient level messages share the event feed; Shush uses captions below.
+local function say(text, _color, _seconds)
+    RoundHud.Feed({Kind = "LEVEL", Detail = tostring(text or "")})
 end
 
 local title = label(gui, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.new(0.9, 0, 0, 60),
@@ -159,16 +130,6 @@ local function showTitle(text, sub, seconds)
 	end)
 end
 
-local function chip(text, color, y)
-	local c = label(gui, { AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 18, 1, y), Size = UDim2.fromOffset(150, 26),
-		TextSize = 15, Text = text, TextColor3 = color, TextXAlignment = Enum.TextXAlignment.Center, Visible = false,
-		BackgroundTransparency = 0.35, BackgroundColor3 = Color3.fromRGB(10, 6, 18) })
-	Instance.new("UICorner", c).CornerRadius = UDim.new(0, 6)
-	return c
-end
-local hiddenChip = chip("HIDDEN", Color3.fromRGB(150, 255, 170), -170)
-local carryChip = chip("", Color3.fromRGB(255, 220, 140), -200)
-
 local flash = Instance.new("Frame")
 flash.Size = UDim2.fromScale(1, 1)
 flash.BackgroundColor3 = Color3.fromRGB(255, 245, 255)
@@ -184,42 +145,138 @@ local function nameOf(userId)
 	return p and p.DisplayName or nil
 end
 
-local function refreshPanel()
-	local phase = st("Level4_Phase")
-	if phase == "Dark" then
-		mainLine.Text = "RESTORE THE POWER"
-		-- once this player has read the note, the order replaces the "find the note" hint
-		local order = player:GetAttribute("Level4_NoteOrder")
-		subLine.Text = ("%s   Breakers %d/%d"):format(type(order) == "string" and ("Order: " .. order) or "Find the note.",
-			st("Level4_SequenceProgress") or 0, st("Level4_SequenceGoal") or 4)
-		extraLine.Text = "Service room: POWER A and POWER B"
-	elseif phase == "Reels" then
-		local goal = st("Level4_ReelGoal") or 3
-		mainLine.Text = "LOAD THE PROJECTORS"
-		subLine.Text = ("Reels found %d/%d   loaded %d/%d"):format(st("Level4_ReelsCollected") or 0, goal, st("Level4_ReelsLoaded") or 0, goal)
-		local holder = nameOf(st("Level4_BreakerHolder"))
-		local fuse = (st("Level4_FuseUntil") or 0) - workspace:GetServerTimeNow()
-		if holder then
-			extraLine.Text = "Main breaker: held by " .. holder
-		elseif fuse > 0 then
-			extraLine.Text = ("Main breaker: fuse %ds"):format(math.ceil(fuse))
-		else
-			extraLine.Text = "Main breaker: OFF (service room)"
+-- TORCH_GLINT_20261008 (owner: the reels must be easier to find): a loose reel caught in this player's flashlight
+-- beam flashes (sparkles + a short warm light, a gentler swell with ReduceFlashing). Client-local: only the torch holder
+-- sees it, and the instances never replicate.
+local glintReels
+do
+	local nextGlint = setmetatable({}, { __mode = "k" })   -- reel model -> os.clock() it may glint again
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Include
+	local CONE, RANGE, WARM = math.cos(math.rad(16)), 55, Color3.fromRGB(255, 230, 175)
+	local function burst(part, distance)
+		local emitter = part:FindFirstChild("L4TorchGlint")
+		if not emitter then
+			emitter = Instance.new("ParticleEmitter")
+			emitter.Name = "L4TorchGlint"
+			emitter.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+			emitter.Color = ColorSequence.new(WARM)
+			emitter.LightEmission, emitter.LightInfluence, emitter.Brightness = 1, 0, 3
+			emitter.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) })
+			emitter.Lifetime = NumberRange.new(0.45, 0.8)
+			emitter.Speed = NumberRange.new(1, 3)
+			emitter.SpreadAngle = Vector2.new(180, 180)
+			emitter.Rate = 0
+			emitter.Parent = part
 		end
-	elseif phase == "Finale" then
-		mainLine.Text = "GET OUT"
-		subLine.Text = "The screen in Cinema 2 is the exit"
-		local exit = st("Level4_ExitPosition")
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		extraLine.Text = (typeof(exit) == "Vector3" and root) and ("%d studs"):format(math.floor((exit - root.Position).Magnitude)) or ""
-	else
-		mainLine.Text, subLine.Text, extraLine.Text = "", "", ""
+		-- the sparkles grow with distance, so a reel 45 studs down a corridor still reads as a flash
+		local grow = math.clamp(distance / 15, 1, 3)
+		emitter.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.2 * grow), NumberSequenceKeypoint.new(0.3, 1.3 * grow),
+			NumberSequenceKeypoint.new(1, 0) })
+		emitter:Emit(8)
+		local light = Instance.new("PointLight")
+		light.Color, light.Range, light.Shadows = WARM, 8, false
+		local gentle = reduceFlashing()
+		light.Brightness = gentle and 0 or 2.5
+		light.Parent = part
+		if gentle then
+			TweenService:Create(light, TweenInfo.new(0.35, Enum.EasingStyle.Sine), { Brightness = 1.4 }):Play()
+			task.delay(0.35, function()
+				if light.Parent then TweenService:Create(light, TweenInfo.new(0.6, Enum.EasingStyle.Sine), { Brightness = 0 }):Play() end
+			end)
+		else
+			TweenService:Create(light, TweenInfo.new(0.45, Enum.EasingStyle.Quad), { Brightness = 0 }):Play()
+		end
+		task.delay(1.1, function() light:Destroy() end)
 	end
-	hiddenChip.Visible = player:GetAttribute("Level4_Hidden") == true
-	local carried = player:GetAttribute("Level4_ReelsCarried") or 0
-	carryChip.Visible = carried > 0
-	carryChip.Text = carried == 1 and "CARRYING 1 REEL" or ("CARRYING %d REELS"):format(carried)
+	function glintReels()
+		local character = player.Character
+		local flag = character and character:FindFirstChild("FlashlightOn")
+		local model = cinema()
+		local runtime = model and model:FindFirstChild("Level 4 Round Runtime")
+		if not (flag and flag.Value and runtime) then return end
+		local camera = workspace.CurrentCamera
+		local origin, look = camera.CFrame.Position, camera.CFrame.LookVector
+		-- walls (Collision) and the door leaves (Doors: a closed door hides the reel behind it) block the beam
+		params.FilterDescendantsInstances = { model:FindFirstChild("Collision") or model, model:FindFirstChild("Doors") }
+		local now = os.clock()
+		for _, reel in ipairs(runtime:GetChildren()) do
+			if reel:IsA("Model") and reel.Name:match("^L4FilmReel") and (nextGlint[reel] or 0) <= now then
+				local part = reel.PrimaryPart or reel:FindFirstChildWhichIsA("BasePart", true)
+				local to = part and part.Position - origin
+				local distance = to and to.Magnitude or 0
+				if part and distance > 1 and distance < RANGE and to.Unit:Dot(look) >= CONE then
+					local hit = workspace:Raycast(origin, to, params)
+					if not hit or (hit.Position - origin).Magnitude >= distance - 1.5 then
+						nextGlint[reel] = now + 1.1
+						burst(part, distance)
+					end
+				end
+			end
+		end
+	end
+end
+
+local reopenNote -- filled beside the note's existing close/open interaction
+local function objectiveSubject()
+    if player:GetAttribute("Spectating") == true then
+        local id = player:GetAttribute("SpectateTargetUserId")
+        local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+        if not watched or watched:GetAttribute("InRound") ~= true or watched:GetAttribute("Escaped") == true then return nil end
+        local hum = watched.Character and watched.Character:FindFirstChildOfClass("Humanoid")
+        return hum and hum.Health > 0 and watched or nil
+    end
+    local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+    return involved() and hum and hum.Health > 0 and player or nil
+end
+-- B4_LEVEL4_STATE_BEGIN
+local function reelRooms(text)
+    -- REEL_ROOMS_20261008: retain stable first occurrence and duplicate counts.
+    local order, count = {}, {}
+    for room in string.gmatch(text or "", "[^|]+") do
+        if not count[room] then order[#order + 1] = room end
+        count[room] = (count[room] or 0) + 1
+    end
+    for i, room in ipairs(order) do
+        if count[room] > 1 then order[i] = room .. " x" .. count[room] end
+    end
+    return #order > 0 and ("Reels: " .. table.concat(order, ", ")) or nil
+end
+local function breakerStatus(holder, fuse)
+    if holder then return {Text = "Main breaker: held by " .. holder, Kind = "positive"} end
+    if fuse > 0 then return {Text = ("Main breaker: fuse %d s"):format(math.ceil(fuse)), Kind = "warning"} end
+    return {Text = "Main breaker: off, in the service room", Kind = "danger"}
+end
+-- B4_LEVEL4_STATE_END
+local function refreshPanel()
+    local subject = objectiveSubject()
+    if not roundLive() or not subject then return end
+    local phase = st("Level4_Phase")
+    local state = {Level = 4, Lines = {}, Done = false}
+    if phase == "Dark" then
+        state.Title, state.Tag = "RESTORE THE POWER", "BREAKERS"
+        state.Count, state.Goal = st("Level4_SequenceProgress") or 0, st("Level4_SequenceGoal") or 4
+        local order = subject:GetAttribute("Level4_NoteOrder")
+        state.Lines = {type(order) == "string" and ("Order: " .. order) or "Find the note with the breaker order.",
+            "Service room: POWER A and POWER B."}
+        if type(order) == "string" and subject == player then state.OnOrderActivate = reopenNote end
+        state.Done = state.Count >= state.Goal
+    elseif phase == "Reels" then
+        state.Title, state.Tag = "LOAD THE PROJECTORS", "PROJECTORS LOADED"
+        state.Count, state.Goal = st("Level4_ReelsLoaded") or 0, st("Level4_ReelGoal") or 3
+        local carried = math.max(0, tonumber(subject:GetAttribute("Level4_ReelsCarried")) or 0)
+        state.Lines = {("You carry %d reel%s."):format(carried, carried == 1 and "" or "s")}
+        local rooms = reelRooms(st("Level4_ReelRooms"))
+        if rooms then state.Lines[2] = rooms end
+        state.Status = breakerStatus(nameOf(st("Level4_BreakerHolder")),
+            (st("Level4_FuseUntil") or 0) - workspace:GetServerTimeNow())
+        state.Done = state.Count >= state.Goal
+    elseif phase == "Finale" then
+        state.Title, state.Lines, state.Done = "GET OUT", {"The screen in Cinema 2 is the exit."}, true
+        local target = st("Level4_ExitPosition")
+        state.Compass = {State = typeof(target) == "Vector3" and "locked" or "locating", Target = target}
+    else return end
+    RoundHud.SetObjective(state)
 end
 
 -- ---------------------------------------------------------------- zone rendering
@@ -464,206 +521,253 @@ local function exitScreen(part)
 	end
 end
 
--- ---------------------------------------------------------------- keypad
-
-local keypad = Instance.new("Frame")
-keypad.Name = "Keypad"
-keypad.AnchorPoint = Vector2.new(0.5, 0.5)
-keypad.Position = UDim2.fromScale(0.5, 0.5)
-keypad.Size = UDim2.fromOffset(240, 330)
-keypad.BackgroundColor3 = Color3.fromRGB(12, 8, 24)
-keypad.Visible = false
-keypad.ZIndex = 10
-keypad.Parent = gui
-Instance.new("UICorner", keypad).CornerRadius = UDim.new(0, 10)
-local kStroke = Instance.new("UIStroke", keypad)
-kStroke.Color = CYAN
-local display = label(keypad, { Position = UDim2.fromOffset(16, 14), Size = UDim2.new(1, -62, 0, 44), TextSize = 34,
-	Font = Enum.Font.Arcade, TextXAlignment = Enum.TextXAlignment.Center, TextColor3 = CYAN, Text = "----", ZIndex = 11,
-	BackgroundTransparency = 0, BackgroundColor3 = Color3.fromRGB(2, 4, 10) })
-local entered = ""
-local keypadOrigin = nil
-local function renderEntry() display.Text = (entered .. string.rep("-", 4 - #entered)) end
-local function closeKeypad() keypad.Visible = false; entered = ""; renderEntry(); keypadOrigin = nil end
-local function submit()
-	local remotes = ReplicatedStorage:FindFirstChild(REMOTES_NAME)
-	local remote = remotes and remotes:FindFirstChild("KeypadSubmit")
-	if remote and #entered == 4 then remote:FireServer(entered) end
-end
-local function press(key)
-	if key == "C" then entered = ""
-	elseif key == "OK" then submit(); return
-	elseif #entered < 4 then entered ..= key end
-	renderEntry()
-	playSound(AUDIO.Keypad, nil, 0.5)
-end
-local keys = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "OK" }
-for i, key in ipairs(keys) do
-	local b = Instance.new("TextButton")
-	b.Name = "Key" .. key
-	local col, row = (i - 1) % 3, math.floor((i - 1) / 3)
-	b.Position = UDim2.fromOffset(16 + col * 72, 70 + row * 58)
-	b.Size = UDim2.fromOffset(64, 50)
-	b.BackgroundColor3 = Color3.fromRGB(30, 22, 52)
-	b.TextColor3 = WHITE
-	b.Font = Enum.Font.GothamBold
-	b.TextSize = 22
-	b.Text = key
-	b.ZIndex = 11
-	b.Parent = keypad
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
-	b.Activated:Connect(function() press(key) end)
-end
-local closeButton = Instance.new("TextButton")
-closeButton.AnchorPoint = Vector2.new(1, 0)
-closeButton.Position = UDim2.new(1, -10, 0, 21)
-closeButton.Size = UDim2.fromOffset(30, 30)
-closeButton.Text = "X"
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 18
-closeButton.TextColor3 = WHITE
-closeButton.BackgroundColor3 = Color3.fromRGB(60, 20, 40)
-closeButton.ZIndex = 11
--- rounds lock the camera in first person: a visible Modal button frees the mouse so the keys can be clicked
-closeButton.Modal = true
-closeButton.Parent = keypad
-closeButton.Activated:Connect(closeKeypad)
--- typed digits: the Backpack CoreGui marks the top-row digits as processed even with no tools, so only a focused text
--- box (chat) stops them here
-local function typingInChat()
-	if UserInputService:GetFocusedTextBox() then return true end
-	local bar = game:GetService("TextChatService"):FindFirstChildOfClass("ChatInputBarConfiguration")
-	return bar ~= nil and bar.IsFocused
-end
-UserInputService.InputBegan:Connect(function(input)
-	if not keypad.Visible or typingInChat() then return end
-	local code = input.KeyCode
-	local digit = code.Value >= Enum.KeyCode.Zero.Value and code.Value <= Enum.KeyCode.Nine.Value and tostring(code.Value - Enum.KeyCode.Zero.Value)
-		or (code.Value >= Enum.KeyCode.KeypadZero.Value and code.Value <= Enum.KeyCode.KeypadNine.Value and tostring(code.Value - Enum.KeyCode.KeypadZero.Value))
-	if digit then press(digit)
-	elseif code == Enum.KeyCode.Return or code == Enum.KeyCode.KeypadEnter then press("OK")
-	elseif code == Enum.KeyCode.Backspace then press("C")
-	elseif code == Enum.KeyCode.Escape then closeKeypad() end
-end)
-
--- ---------------------------------------------------------------- the note card (FINDABILITY_20261003)
-
-local noteCard = Instance.new("Frame")
-noteCard.Name = "NoteCard"
-noteCard.AnchorPoint = Vector2.new(0.5, 0.5)
-noteCard.Position = UDim2.fromScale(0.5, 0.48)
-noteCard.Size = UDim2.fromOffset(380, 270)
-noteCard.BackgroundColor3 = Color3.fromRGB(226, 220, 196)
-noteCard.Rotation = -2
-noteCard.Visible = false
-noteCard.ZIndex = 10
-noteCard.Parent = gui
-Instance.new("UICorner", noteCard).CornerRadius = UDim.new(0, 4)
-local noteText = label(noteCard, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52),
-	Size = UDim2.new(1, -56, 1, -56), Font = Enum.Font.PatrickHand, TextScaled = true, TextWrapped = true,
-	TextColor3 = Color3.fromRGB(40, 30, 40), TextStrokeTransparency = 1, TextXAlignment = Enum.TextXAlignment.Center,
-	ZIndex = 11, Text = "" })
-local noteHint = label(noteCard, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -8), Size = UDim2.new(1, -20, 0, 16),
-	Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = Color3.fromRGB(110, 96, 90), TextStrokeTransparency = 1,
-	TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 11, Text = "click to close" })
-local noteOrigin = nil
--- RoundUI hides the pointer in rounds: a Level 4 card shows it while open and hands it back when the last one closes
+-- ---------------------------------------------------------------- note and keypad (B7 imported screens)
+-- MOBILE_QA_20261008: the cards stay left of the touch control cluster and publish Level4CardOpen.
+-- Their mounted artwork retains fixed template geometry; a device change remounts at the measured scale.
+local keypad, noteCard, display, keypadStatus, closeButton
+local keypadOrigin, noteOrigin = nil, nil
+local entered, noteCopy = "", ""
+local keypadKeys, previousSelection = {}, nil
 local cursorForced = false
 local function syncCursor()
-	if not UserInputService.MouseEnabled then return end
-	if noteCard.Visible or keypad.Visible then
-		UserInputService.MouseIconEnabled = true
-		cursorForced = true
-	elseif cursorForced then
-		cursorForced = false
-		UserInputService.MouseIconEnabled = player:GetAttribute("InRound") ~= true
-	end
+    if not UserInputService.MouseEnabled then return end
+    if (noteCard and noteCard.Visible) or (keypad and keypad.Visible) then
+        UserInputService.MouseIconEnabled = true
+        cursorForced = true
+    elseif cursorForced then
+        cursorForced = false
+        UserInputService.MouseIconEnabled = player:GetAttribute("InRound") ~= true
+    end
 end
-local function closeNote() noteCard.Visible = false; noteOrigin = nil; syncCursor() end
--- the whole card closes it on a click or tap
-local noteHit = Instance.new("TextButton")
-noteHit.Size = UDim2.fromScale(1, 1)
-noteHit.BackgroundTransparency = 1
-noteHit.Text = ""
-noteHit.AutoButtonColor = false
-noteHit.ZIndex = 10
-noteHit.Parent = noteCard
-noteHit.Activated:Connect(closeNote)
-local noteClose = Instance.new("TextButton")
-noteClose.AnchorPoint = Vector2.new(1, 0)
-noteClose.Position = UDim2.new(1, -10, 0, 10)
-noteClose.Size = UDim2.fromOffset(30, 30)
-noteClose.Text = "X"
-noteClose.Font = Enum.Font.GothamBold
-noteClose.TextSize = 18
-noteClose.TextColor3 = WHITE
-noteClose.BackgroundColor3 = Color3.fromRGB(60, 20, 40)
-noteClose.ZIndex = 11
-noteClose.Modal = true
-noteClose.Parent = noteCard
-noteClose.Activated:Connect(closeNote)
-
--- MOBILE_QA_20261008 -- WHAT SHIPPED BROKEN. This gui draws at DisplayOrder 6, under every touch control, and all
--- three of its panels stood at desktop places. Measured on 844x390: the objective card (18 px from the right edge,
--- 110 down) lay behind SCAN, SHIELD and the torch with its last line unreadable; on 568x320 it was wholly covered.
--- The keypad is 330 px high in a safe area of 262 to 332, so its OK row ran off the bottom of a small phone, and it
--- stood centred, partly under the equipment slots.
---   card    on touch: the upper right corner every level's readout has (UIDevice.TopRightPanel), only as tall as
---           the room above the control cluster
---   keypad, note   scaled to the safe area, and on touch standing left of the control cluster; their close
---           buttons are 44 px there
-local keypadScale, noteScale = Instance.new("UIScale"), Instance.new("UIScale")
-keypadScale.Parent, noteScale.Parent = keypad, noteCard
+local function restoreSelection()
+    local selected = GuiService.SelectedObject
+    if selected and keypad and selected:IsDescendantOf(keypad) then GuiService.SelectedObject = previousSelection end
+    previousSelection = nil
+end
+local function renderEntry()
+    if display then display.Text = entered .. string.rep("-", 4 - #entered) end
+    if keypadStatus then keypadStatus.Visible = false end
+end
+local function closeKeypad()
+    restoreSelection()
+    if keypad then keypad.Visible = false end
+    entered, keypadOrigin = "", nil
+    renderEntry()
+    syncCursor()
+end
+local function closeNote()
+    if noteCard then noteCard.Visible = false end
+    noteOrigin = nil
+    syncCursor()
+end
+local function publishCard()
+    local open = gui.Enabled and ((keypad and keypad.Visible) or (noteCard and noteCard.Visible)) and UIDevice.IsTouch()
+    if (player:GetAttribute("Level4CardOpen") == true) ~= (open == true) then
+        player:SetAttribute("Level4CardOpen", open and true or nil)
+    end
+end
+local function submit()
+    local remotes = ReplicatedStorage:FindFirstChild(REMOTES_NAME)
+    local remote = remotes and remotes:FindFirstChild("KeypadSubmit")
+    if remote and #entered == 4 then remote:FireServer(entered) end
+end
+-- B7_KEYPAD_LOGIC_BEGIN
+local function focusNeighbours(index)
+    local col, row = (index - 1) % 3, math.floor((index - 1) / 3)
+    return row * 3 + (col + 2) % 3 + 1, row * 3 + (col + 1) % 3 + 1,
+        ((row + 3) % 4) * 3 + col + 1, ((row + 1) % 4) * 3 + col + 1
+end
+local function press(key)
+    if key == "C" then entered = ""
+    elseif key == "OK" then submit(); return
+    elseif #entered < 4 then entered ..= key end
+    renderEntry()
+    playSound(AUDIO.Keypad, nil, 0.5)
+end
+local function noteLines(text, order)
+    local lines = {}
+    for line in string.gmatch(tostring(text or "") .. "\n", "([^\n]*)\n") do
+        if #lines >= 4 then break end
+        lines[#lines + 1] = line
+    end
+    if #lines < 2 or lines[2] == "" then lines = {"POWER", tostring(order or ""), "", "in this order"} end
+    lines[2] = string.gsub(lines[2], "%s*>%s*", " \u{203A} ")
+    lines[4] = "in this order"
+    return lines
+end
+-- B7_KEYPAD_LOGIC_END
+local function renderNote()
+    if not noteCard then return end
+    local lines = noteLines(noteCopy, player:GetAttribute("Level4_NoteOrder"))
+    for index = 1, 4 do
+        local line = Binder.at(noteCard, "Body/Items/BodyLine" .. index)
+        if line then
+            line.Font = Enum.Font.PatrickHand
+            line.TextScaled = false
+            line.Text = lines[index] or ""
+        end
+    end
+end
+local function openKeypad()
+    if not keypad then return end
+    closeNote()
+    previousSelection = GuiService.SelectedObject
+    keypad.Visible = true
+    entered = ""
+    renderEntry()
+    if not UIDevice.IsTouch() and (UIDevice.IsGamepadOnly() or UIDevice.LastInput() == "Gamepad") then GuiService.SelectedObject = keypadKeys[1] end
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    keypadOrigin = root and root.Position
+    syncCursor()
+end
+local function openNote(text, pickedUp)
+    if not noteCard then return end
+    closeKeypad()
+    if type(text) == "string" then noteCopy = text end
+    renderNote()
+    noteCard.Visible = true
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    noteOrigin = pickedUp and root and root.Position or nil
+    syncCursor()
+end
+reopenNote = function()
+    if objectiveSubject() ~= player or type(player:GetAttribute("Level4_NoteOrder")) ~= "string"
+        or UIDevice.ScreenOwningModalOpen() or player:GetAttribute("ZyntraDispatchClientActive") == true then return end
+    -- A reread has no world-note distance leash; the original pickup retains it.
+    openNote(nil, false)
+end
+local function gamepadInput()
+    return not UIDevice.IsTouch() and (UIDevice.IsGamepadOnly() or UIDevice.LastInput() == "Gamepad")
+end
+local keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "OK"}
+local function focusRing(button)
+    local ring = Instance.new("Frame")
+    ring.Name = "FocusRing"
+    ring.BackgroundTransparency = 1
+    ring.Size = UDim2.fromScale(1, 1)
+    local stroke = Instance.new("UIStroke")
+    stroke.Color, stroke.Thickness = Binder.Palette.RailTeal, 2
+    stroke.Parent = ring
+    button.SelectionImageObject = ring
+    button.Destroying:Once(function() ring:Destroy() end)
+end
+local function cardPlacement(root, width, height, down)
+    if not root then return end
+    local layout = UIDevice.Layout()
+    local safe = layout.Safe
+    root.AnchorPoint = Vector2.new(.5, .5)
+    if layout.IsTouch then
+        local half = width * .5
+        local x = math.max(safe.Left + half + 8,
+            math.min((safe.Left + safe.Right) * .5, layout.Zones.Controls.Left - 8 - half))
+        local y = math.clamp(safe.Top + safe.Height * down, safe.Top + height * .5 + 8, safe.Bottom - height * .5 - 8)
+        root.Position = UIDevice.LocalPosition(gui, x, y)
+    else root.Position = UIDevice.LocalPosition(gui, (safe.Left + safe.Right) * .5, safe.Top + safe.Height * down) end
+end
 local function placeForDevice()
-	local layout = UIDevice.Layout()
-	local safe, touch = layout.Safe, layout.IsTouch
-	if touch then
-		local slot = UIDevice.TopRightPanel(300, 96)
-		panel.AnchorPoint = Vector2.new(0, 0)
-		panel.Position = UIDevice.LocalPosition(gui, slot.Left, slot.Top)
-		panel.Size = UDim2.fromOffset(slot.Width, slot.Height)
-	else
-		panel.AnchorPoint = Vector2.new(1, 0)
-		panel.Position = UDim2.new(1, -18, 0, 110)
-		panel.Size = UDim2.fromOffset(300, 96)
-	end
-	panel.ClipsDescendants = touch
-	local function fit(frame, scale, width, height, down)
-		local s = math.min(1, (safe.Height - 16) / height, (safe.Width - 16) / width)
-		scale.Scale = s
-		if touch then
-			local half = width * s / 2
-			local x = math.max(safe.Left + half + 8, math.min((safe.Left + safe.Right) / 2, layout.Zones.Controls.Left - 8 - half))
-			frame.Position = UIDevice.LocalPosition(gui, x, safe.Top + safe.Height * down)
-		else
-			frame.Position = UDim2.fromScale(0.5, down)
-		end
-	end
-	fit(keypad, keypadScale, 240, 330, 0.5)
-	fit(noteCard, noteScale, 400, 290, 0.48)          -- the card is turned two degrees: a little more than its 380 x 270
-	local tap = touch and 44 or 30
-	closeButton.Size, closeButton.Position = UDim2.fromOffset(tap, tap), UDim2.new(1, -10, 0, touch and 14 or 21)
-	display.Size = UDim2.new(1, touch and -76 or -62, 0, 44)
-	noteClose.Size = UDim2.fromOffset(tap, tap)
-	noteHint.Text = touch and "tap to close" or "click to close"
+    local layout = UIDevice.Layout()
+    local touch = layout.IsTouch
+    local keypadOpen, noteOpen = keypad and keypad.Visible, noteCard and noteCard.Visible
+    local selected = GuiService.SelectedObject
+    local selectionIndex
+    for i, key in ipairs(keypadKeys) do if selected == key then selectionIndex = i end end
+    if keypad then keypad:Destroy() end
+    if noteCard then noteCard:Destroy() end
+    local keypadScale = math.min(touch and 300/330 or 1, (layout.Safe.Height - 16)/330, (layout.Safe.Width - 16)/240)
+    local noteScale = math.min(touch and 340/380 or 1, (layout.Safe.Height - 16)/270, (layout.Safe.Width - 16)/380)
+    keypad = RoundHud.Mount("HUD_Screens", "Keypad", gui, {Name = "Keypad", Scale = keypadScale, Touch = touch})
+    noteCard = RoundHud.Mount("HUD_Screens", "Level4Note", gui, {Name = "NoteCard", Scale = noteScale, Touch = touch})
+    -- Missing imported components disable only these optional interactions; world rendering still starts.
+    if keypad then
+        keypad.Visible = keypadOpen == true
+        display, keypadStatus = Binder.at(keypad, "DisplayBox/Display"), Binder.at(keypad, "Status")
+        closeButton = Binder.at(keypad, "Close")
+        if closeButton then
+            closeButton.Modal = true
+            closeButton.Activated:Connect(closeKeypad)
+            if touch then
+                local hit = Instance.new("TextButton")
+                hit.Name = "CloseHit"
+                hit.AnchorPoint, hit.Position = closeButton.AnchorPoint, closeButton.Position
+                hit.Size = UDim2.fromOffset(44, 44)
+                hit.BackgroundTransparency, hit.Text, hit.AutoButtonColor = 1, "", false
+                hit.ZIndex, hit.Modal = closeButton.ZIndex + 1, true
+                hit.Parent = keypad
+                hit.Activated:Connect(closeKeypad)
+            end
+        end
+        table.clear(keypadKeys)
+        for i, key in ipairs(keys) do
+            local button = Binder.at(keypad, "Key" .. key)
+            if button then
+                keypadKeys[i] = button
+                button.Selectable = true
+                focusRing(button)
+                button.Activated:Connect(function() press(key) end)
+            end
+        end
+        for i, button in ipairs(keypadKeys) do
+            local left, right, up, down = focusNeighbours(i)
+            button.NextSelectionLeft, button.NextSelectionRight = keypadKeys[left], keypadKeys[right]
+            button.NextSelectionUp, button.NextSelectionDown = keypadKeys[up], keypadKeys[down]
+        end
+        local pressHint, closeHint = Binder.at(keypad, "PressHint"), Binder.at(keypad, "CloseHint")
+        if pressHint then pressHint.Visible = gamepadInput(); RoundHud.Keycap(Binder.at(pressHint, "KeyChip"), nil, Enum.KeyCode.ButtonA) end
+        if closeHint then closeHint.Visible = not touch; RoundHud.Keycap(Binder.at(closeHint, "KeyChip"), Enum.KeyCode.Escape, Enum.KeyCode.ButtonB) end
+        renderEntry()
+        cardPlacement(keypad, 240*keypadScale, 330*keypadScale, .5)
+        keypad:GetPropertyChangedSignal("Visible"):Connect(publishCard)
+        if keypadOpen and gamepadInput() then GuiService.SelectedObject = keypadKeys[selectionIndex or 1] end
+    else
+        table.clear(keypadKeys)
+        display, keypadStatus, closeButton = nil, nil, nil
+    end
+    if noteCard then
+        noteCard.Visible = noteOpen == true
+        noteCard.Modal, noteCard.AutoButtonColor, noteCard.Selectable = true, false, false
+        noteCard.Activated:Connect(closeNote)
+        local hint, tap = Binder.at(noteCard, "CloseHint"), Binder.at(noteCard, "TapToClose")
+        if hint then hint.Visible = not touch; RoundHud.Keycap(Binder.at(hint, "KeyChip"), Enum.KeyCode.E, Enum.KeyCode.ButtonB) end
+        if tap then tap.Visible = touch end
+        renderNote()
+        cardPlacement(noteCard, 380*noteScale, 270*noteScale, .48)
+        noteCard:GetPropertyChangedSignal("Visible"):Connect(publishCard)
+    end
+    publishCard()
+    syncCursor()
 end
 placeForDevice()
 UIDevice.Changed:Connect(placeForDevice)
--- On touch an open keypad or note publishes `Level4CardOpen`: the LOBBY chip (it lay on the code display on a
--- 568x320 phone) and the equipment slots stand down on it and come back when the card closes. Deliberately NOT one
--- of UIDevice's screen-owning modals: tried, and with movement suppressed the touch cluster re-forms as a column
--- across the objective card instead of going away. The cluster stays where it is; the cards stand left of it.
-local function publishCard()
-	local open = gui.Enabled and (keypad.Visible or noteCard.Visible) and UIDevice.IsTouch()
-	if (player:GetAttribute("Level4CardOpen") == true) ~= open then
-		player:SetAttribute("Level4CardOpen", open or nil)
-	end
-end
-keypad:GetPropertyChangedSignal("Visible"):Connect(publishCard)
-noteCard:GetPropertyChangedSignal("Visible"):Connect(publishCard)
 gui:GetPropertyChangedSignal("Enabled"):Connect(publishCard)
-UIDevice.Changed:Connect(publishCard)
 player:SetAttribute("Level4CardOpen", nil)
+local function typingInChat()
+    if UserInputService:GetFocusedTextBox() then return true end
+    local bar = game:GetService("TextChatService"):FindFirstChildOfClass("ChatInputBarConfiguration")
+    return bar ~= nil and bar.IsFocused
+end
+UserInputService.InputBegan:Connect(function(input)
+    if not keypad or not keypad.Visible or typingInChat() then return end
+    local code = input.KeyCode
+    local digit = code.Value >= Enum.KeyCode.Zero.Value and code.Value <= Enum.KeyCode.Nine.Value and tostring(code.Value - Enum.KeyCode.Zero.Value)
+        or (code.Value >= Enum.KeyCode.KeypadZero.Value and code.Value <= Enum.KeyCode.KeypadNine.Value and tostring(code.Value - Enum.KeyCode.KeypadZero.Value))
+    if digit then press(digit)
+    elseif code == Enum.KeyCode.Return or code == Enum.KeyCode.KeypadEnter then press("OK")
+    elseif code == Enum.KeyCode.Backspace then press("C")
+    elseif code == Enum.KeyCode.Escape then closeKeypad() end
+end)
+ContextActionService:BindActionAtPriority("Level4CloseCard", function(_, state, input)
+    if state ~= Enum.UserInputState.Begin or typingInChat() or GuiService.MenuIsOpen then return Enum.ContextActionResult.Pass end
+    if noteCard and noteCard.Visible then closeNote(); return Enum.ContextActionResult.Sink end
+    if keypad and keypad.Visible and input.KeyCode == Enum.KeyCode.ButtonB then closeKeypad(); return Enum.ContextActionResult.Sink end
+    return Enum.ContextActionResult.Pass
+end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.E, Enum.KeyCode.ButtonB)
+ContextActionService:BindActionAtPriority("Level4ReopenNote", function(_, state)
+    if state ~= Enum.UserInputState.Begin or typingInChat() or GuiService.MenuIsOpen
+        or objectiveSubject() ~= player or type(player:GetAttribute("Level4_NoteOrder")) ~= "string"
+        or UIDevice.ScreenOwningModalOpen() or player:GetAttribute("ZyntraDispatchClientActive") == true then return Enum.ContextActionResult.Pass end
+    reopenNote()
+    return Enum.ContextActionResult.Sink
+end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.N, Enum.KeyCode.DPadUp)
 
 -- ---------------------------------------------------------------- the Usher (local rig)
 
@@ -884,10 +988,11 @@ local function onClientEvent(payload)
 	elseif kind == "Shush" then
 		if captionsOn() then
 			local me = payload.Player == player.UserId
-			local character = player.Character
+			local subject = objectiveSubject()
+			local character = subject and subject.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			local near = root and typeof(payload.Position) == "Vector3" and (payload.Position - root.Position).Magnitude < 60
-			if me or near then say(me and "[ a whisper, right behind you: \"shhh...\" ]" or "[ \"shhh...\" ]", Color3.fromRGB(220, 200, 255), 2.5) end
+			if me or near then RoundHud.Caption("USHER", "Shhh...") end
 		end
 	elseif kind == "Stun" then
 		if payload.By == player.UserId then say("It recoils from your light.", Color3.fromRGB(255, 240, 200), 2.5) end
@@ -895,28 +1000,15 @@ local function onClientEvent(payload)
 		local victim = payload.Player ~= player.UserId and nameOf(payload.Player)
 		if victim then say(victim .. " was shushed.", Color3.fromRGB(255, 110, 130)) end
 	elseif kind == "Note" then
-		closeKeypad()
-		noteText.Text = tostring(payload.Text or "")
-		noteCard.Visible = true
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		noteOrigin = root and root.Position
-		syncCursor()
-	elseif kind == "Keypad" then
-		closeNote()
-		keypad.Visible = true
-		syncCursor()
-		entered = ""
-		renderEntry()
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		keypadOrigin = root and root.Position
+        openNote(tostring(payload.Text or ""), true)
+    elseif kind == "Keypad" then
+        openKeypad()
 	elseif kind == "KeypadResult" then
 		if payload.Ok then
 			closeKeypad()
-			say("ACCESS GRANTED. The prize case opens.", Color3.fromRGB(140, 255, 170))
+			say("Access granted. The prize case opens.", Color3.fromRGB(140, 255, 170))
 		else
-			display.Text = "DENY"
+			if keypadStatus then keypadStatus.Text = "WRONG CODE"; keypadStatus.Visible = true end
 			entered = ""
 			task.delay(0.8, renderEntry)
 		end
@@ -987,21 +1079,26 @@ local function startRound()
 			end
 		end
 	end
-	local accum = 0
+	local accum, glintAccum = 0, 0
 	table.insert(roundConnections, RunService.RenderStepped:Connect(function(dt)
 		stepUsher(dt)
+		glintAccum += dt
+		if glintAccum >= 0.1 then
+			glintAccum = 0
+			glintReels()
+		end
 		accum += dt
 		if accum >= 0.25 then
 			accum = 0
 			-- escapees spectate (world rendering stays on) but the objective HUD is not theirs any more
-			gui.Enabled = player:GetAttribute("Escaped") ~= true
+			gui.Enabled = involved() or objectiveSubject() ~= nil
 			refreshPanel()
-			if keypad.Visible and keypadOrigin then
+			if keypad and keypad.Visible and keypadOrigin then
 				local character = player.Character
 				local root = character and character:FindFirstChild("HumanoidRootPart")
 				if not root or (root.Position - keypadOrigin).Magnitude > 10 then closeKeypad() end
 			end
-			if noteCard.Visible and noteOrigin then
+			if noteCard and noteCard.Visible and noteOrigin then
 				local character = player.Character
 				local root = character and character:FindFirstChild("HumanoidRootPart")
 				if not root or (root.Position - noteOrigin).Magnitude > 12 then closeNote() end
@@ -1053,6 +1150,9 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(sync)
 player:GetAttributeChangedSignal("InRound"):Connect(sync)
 player:GetAttributeChangedSignal("Spectating"):Connect(sync)
 player:GetAttributeChangedSignal("Escaped"):Connect(sync)
+player:GetAttributeChangedSignal("SpectateTargetUserId"):Connect(function() sync(); refreshPanel() end)
+player:GetAttributeChangedSignal("Level4_NoteOrder"):Connect(refreshPanel)
+player:GetAttributeChangedSignal("Level4_ReelsCarried"):Connect(refreshPanel)
 sync()
 
 local remotes = ReplicatedStorage:WaitForChild("Remotes")

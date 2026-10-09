@@ -1,0 +1,870 @@
+{
+  "version": 2,
+  "studsPerMetre": 3.571428571428571,
+  "materials": {
+    "L4T_Usher": {
+      "name": "L4T_Usher",
+      "sem": "prop",
+      "color": [
+        255,
+        255,
+        255
+      ],
+      "tex": "L4T_Usher_base_color.png",
+      "normal": "L4T_Usher_normal.png",
+      "rough": "L4T_Usher_roughness.png",
+      "metal": "L4T_Usher_metallic.png",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "mesh",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_TorchBlack": {
+      "name": "L4T_TorchBlack",
+      "sem": "prop",
+      "color": [
+        19,
+        19,
+        22
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_TicketRed": {
+      "name": "L4T_TicketRed",
+      "sem": "neon",
+      "color": [
+        215,
+        3,
+        7
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "Neon",
+      "emit": 2.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_FilmReel": {
+      "name": "L4T_FilmReel",
+      "sem": "prop",
+      "color": [
+        255,
+        255,
+        255
+      ],
+      "tex": "L4T_FilmReel_base_color.png",
+      "normal": "L4T_FilmReel_normal.png",
+      "rough": "L4T_FilmReel_roughness.png",
+      "metal": "L4T_FilmReel_metallic.png",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "mesh",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_Brass": {
+      "name": "L4T_Brass",
+      "sem": "metal",
+      "color": [
+        170,
+        126,
+        45
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "Metal",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_FuseGlass": {
+      "name": "L4T_FuseGlass",
+      "sem": "glass",
+      "color": [
+        202,
+        222,
+        224
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 0.28,
+      "roblox": "Glass",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_FuseWire": {
+      "name": "L4T_FuseWire",
+      "sem": "metal",
+      "color": [
+        93,
+        84,
+        69
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "Metal",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_BatteryBlack": {
+      "name": "L4T_BatteryBlack",
+      "sem": "prop",
+      "color": [
+        28,
+        30,
+        33
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_BatteryStripe": {
+      "name": "L4T_BatteryStripe",
+      "sem": "prop",
+      "color": [
+        151,
+        9,
+        12
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_BatteryLabel": {
+      "name": "L4T_BatteryLabel",
+      "sem": "prop",
+      "color": [
+        190,
+        174,
+        134
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    },
+    "L4T_NotePaper": {
+      "name": "L4T_NotePaper",
+      "sem": "prop",
+      "color": [
+        223,
+        213,
+        182
+      ],
+      "tex": "",
+      "normal": "",
+      "rough": "",
+      "metal": "",
+      "tile": 0.28,
+      "alpha": 1.0,
+      "roblox": "SmoothPlastic",
+      "emit": 0.0,
+      "uv": "box",
+      "tags": [],
+      "tinted": false
+    }
+  },
+  "chunks": [
+    {
+      "id": 50000,
+      "group": 50000,
+      "material": "L4T_Usher",
+      "tris": 1057,
+      "verts": 1222,
+      "center": [
+        -0.0077,
+        4.8934,
+        -0.0669
+      ],
+      "size": [
+        0.9547,
+        1.1784,
+        0.7865
+      ],
+      "name": "Hips",
+      "template": "Usher",
+      "h": "a1b1891249ded2e84a447f24450534d861f86fa753677339bdaf9b91e6fffbda"
+    },
+    {
+      "id": 50001,
+      "group": 50001,
+      "material": "L4T_Usher",
+      "tris": 312,
+      "verts": 321,
+      "center": [
+        -0.0032,
+        5.5184,
+        -0.0552
+      ],
+      "size": [
+        0.8124,
+        0.7688,
+        0.7171
+      ],
+      "name": "Spine02",
+      "template": "Usher",
+      "h": "02c690fedab288477946d9a1704efe5c986e257c2d25ac4058510e300f1bf007"
+    },
+    {
+      "id": 50002,
+      "group": 50002,
+      "material": "L4T_Usher",
+      "tris": 434,
+      "verts": 448,
+      "center": [
+        0.0011,
+        5.928,
+        -0.1014
+      ],
+      "size": [
+        0.8573,
+        0.9168,
+        0.8218
+      ],
+      "name": "Spine01",
+      "template": "Usher",
+      "h": "33363369bc8ae34d856cf81b60a8504abbb0ae6121f6c51e65256032f1084116"
+    },
+    {
+      "id": 50003,
+      "group": 50003,
+      "material": "L4T_Usher",
+      "tris": 1148,
+      "verts": 1289,
+      "center": [
+        -0.0155,
+        7.0065,
+        -0.0125
+      ],
+      "size": [
+        0.7817,
+        1.1869,
+        0.9722
+      ],
+      "name": "Head",
+      "template": "Usher",
+      "h": "2a64bef8e2afd7633603b7a1cee0d1be3f8e13eccf0fa640590992607c78af0e"
+    },
+    {
+      "id": 50004,
+      "group": 50004,
+      "material": "L4T_Usher",
+      "tris": 434,
+      "verts": 492,
+      "center": [
+        0.294,
+        6.3216,
+        -0.1554
+      ],
+      "size": [
+        0.6919,
+        0.749,
+        0.7124
+      ],
+      "name": "LeftShoulder",
+      "template": "Usher",
+      "h": "d641d9ad1060e71d961d5507f47970e28582d74b5f5b0812c8553bea022b37e7"
+    },
+    {
+      "id": 50005,
+      "group": 50005,
+      "material": "L4T_Usher",
+      "tris": 300,
+      "verts": 288,
+      "center": [
+        0.6941,
+        5.8006,
+        -0.1972
+      ],
+      "size": [
+        0.7094,
+        1.3403,
+        0.4752
+      ],
+      "name": "LeftArm",
+      "template": "Usher",
+      "h": "000620be91c5b3c7c1f662e7f19db997279206346d7f0153d47b45b63f76743e"
+    },
+    {
+      "id": 50006,
+      "group": 50006,
+      "material": "L4T_Usher",
+      "tris": 508,
+      "verts": 548,
+      "center": [
+        1.0965,
+        4.8726,
+        -0.1956
+      ],
+      "size": [
+        0.6334,
+        1.0845,
+        0.3747
+      ],
+      "name": "LeftForeArm",
+      "template": "Usher",
+      "h": "37cc3848dce07452d60dafce1f6d969235c6c00d71dd012082dab29706b46452"
+    },
+    {
+      "id": 50007,
+      "group": 50007,
+      "material": "L4T_Usher",
+      "tris": 452,
+      "verts": 492,
+      "center": [
+        1.4336,
+        4.0942,
+        -0.1164
+      ],
+      "size": [
+        0.4275,
+        0.7399,
+        0.3698
+      ],
+      "name": "LeftHand",
+      "template": "Usher",
+      "h": "c0b7029643961061194c8c3f943303f6d7c153fb842ffdc6bc386a1051f52a7b"
+    },
+    {
+      "id": 50008,
+      "group": 50008,
+      "material": "L4T_Usher",
+      "tris": 376,
+      "verts": 388,
+      "center": [
+        -0.251,
+        6.3041,
+        -0.1517
+      ],
+      "size": [
+        0.7898,
+        0.7853,
+        0.7212
+      ],
+      "name": "RightShoulder",
+      "template": "Usher",
+      "h": "15706b38edd2f163eecce8a03652daafb843a5bc6b8eb427387e0f62c402120d"
+    },
+    {
+      "id": 50009,
+      "group": 50009,
+      "material": "L4T_Usher",
+      "tris": 275,
+      "verts": 269,
+      "center": [
+        -0.683,
+        5.8522,
+        -0.1616
+      ],
+      "size": [
+        0.7271,
+        1.2928,
+        0.5682
+      ],
+      "name": "RightArm",
+      "template": "Usher",
+      "h": "560910a31b541fd141f00ae6be204e214178a3d3c17fe3095d99afa8ce006fb2"
+    },
+    {
+      "id": 50010,
+      "group": 50010,
+      "material": "L4T_Usher",
+      "tris": 506,
+      "verts": 547,
+      "center": [
+        -1.0795,
+        4.9015,
+        -0.1938
+      ],
+      "size": [
+        0.6623,
+        1.0855,
+        0.3793
+      ],
+      "name": "RightForeArm",
+      "template": "Usher",
+      "h": "10201250a9af2081c3f67d6d8dcd80c4ad7921c3c8eec5d6324a99a87181d5d0"
+    },
+    {
+      "id": 50011,
+      "group": 50011,
+      "material": "L4T_Usher",
+      "tris": 503,
+      "verts": 585,
+      "center": [
+        -1.4109,
+        4.1569,
+        -0.1149
+      ],
+      "size": [
+        0.478,
+        0.7826,
+        0.3693
+      ],
+      "name": "RightHand",
+      "template": "Usher",
+      "h": "ac6d7c5cbb5198b75a11fb1e0c4b0823e14af3c6c12cd698fae71e826a93f46b"
+    },
+    {
+      "id": 50012,
+      "group": 50012,
+      "material": "L4T_Usher",
+      "tris": 253,
+      "verts": 224,
+      "center": [
+        0.2331,
+        3.6052,
+        -0.0926
+      ],
+      "size": [
+        0.4599,
+        1.985,
+        0.6115
+      ],
+      "name": "LeftUpLeg",
+      "template": "Usher",
+      "h": "81c6a6ca29a351f400ee903d47a3e7039deed37b1fade819cfd77158a55fb2db"
+    },
+    {
+      "id": 50013,
+      "group": 50013,
+      "material": "L4T_Usher",
+      "tris": 288,
+      "verts": 274,
+      "center": [
+        0.3829,
+        1.607,
+        -0.2407
+      ],
+      "size": [
+        0.3669,
+        2.5224,
+        0.5187
+      ],
+      "name": "LeftLeg",
+      "template": "Usher",
+      "h": "4b49a0be0262f17d917fc0014b07ad4c7ee19c5fc60723fc34465f4076e02c06"
+    },
+    {
+      "id": 50014,
+      "group": 50014,
+      "material": "L4T_Usher",
+      "tris": 371,
+      "verts": 395,
+      "center": [
+        0.4587,
+        0.2893,
+        0.0155
+      ],
+      "size": [
+        0.3957,
+        0.5787,
+        0.9859
+      ],
+      "name": "LeftFoot",
+      "template": "Usher",
+      "h": "02b0d891ad3ef289bd5e741f6a1de32b2fc2d48f9320c330323ea425918b0625"
+    },
+    {
+      "id": 50015,
+      "group": 50015,
+      "material": "L4T_Usher",
+      "tris": 294,
+      "verts": 266,
+      "center": [
+        -0.2213,
+        3.5841,
+        -0.0914
+      ],
+      "size": [
+        0.5213,
+        2.127,
+        0.6108
+      ],
+      "name": "RightUpLeg",
+      "template": "Usher",
+      "h": "4022c85002d7ea43db54b4278e4ceb4aa13eab4da4c0f7aadff9e31a3339478d"
+    },
+    {
+      "id": 50016,
+      "group": 50016,
+      "material": "L4T_Usher",
+      "tris": 289,
+      "verts": 272,
+      "center": [
+        -0.4004,
+        1.5352,
+        -0.2347
+      ],
+      "size": [
+        0.3619,
+        2.5742,
+        0.5269
+      ],
+      "name": "RightLeg",
+      "template": "Usher",
+      "h": "77381e9a38a73f25456635d2122e4f05e71a2d190269d209da989308d03f3ede"
+    },
+    {
+      "id": 50017,
+      "group": 50017,
+      "material": "L4T_Usher",
+      "tris": 371,
+      "verts": 379,
+      "center": [
+        -0.4771,
+        0.3055,
+        0.017
+      ],
+      "size": [
+        0.388,
+        0.5981,
+        0.9693
+      ],
+      "name": "RightFoot",
+      "template": "Usher",
+      "h": "03b5a0345511d38a3825864e75f9c1f624e0b765419d101b3a88300abba2bb7a"
+    },
+    {
+      "id": 50018,
+      "group": 50018,
+      "material": "L4T_TorchBlack",
+      "tris": 568,
+      "verts": 296,
+      "center": [
+        -1.4109,
+        4.1248,
+        -0.0435
+      ],
+      "size": [
+        0.1857,
+        0.2071,
+        0.8571
+      ],
+      "name": "Torch",
+      "template": "Usher",
+      "h": "46d409cd11c27f4d4423bc91770c60738c9f89b6e7252c775a70d23ef8e53341"
+    },
+    {
+      "id": 50019,
+      "group": 50019,
+      "material": "L4T_TicketRed",
+      "tris": 92,
+      "verts": 48,
+      "center": [
+        -1.4109,
+        4.114,
+        0.628
+      ],
+      "size": [
+        0.2429,
+        0.2429,
+        0.5357
+      ],
+      "name": "Lens",
+      "template": "Usher",
+      "h": "aa9f4c9252e182e622db8dcd1e5e863ad03e8bd720acded03f9873a792403dec"
+    },
+    {
+      "id": 50020,
+      "group": 50020,
+      "material": "L4T_FilmReel",
+      "tris": 1477,
+      "verts": 1798,
+      "center": [
+        -0.0068,
+        0.3245,
+        0.0074
+      ],
+      "size": [
+        2.0075,
+        0.765,
+        1.3781
+      ],
+      "name": "Canister",
+      "template": "FilmReel",
+      "h": "246ba4bd0ffc697377fd7dd783b52caf57da17af451cda5743eb6a3a08ba2091"
+    },
+    {
+      "id": 50021,
+      "group": 50021,
+      "material": "L4T_FuseGlass",
+      "tris": 60,
+      "verts": 32,
+      "center": [
+        0,
+        0.1786,
+        0
+      ],
+      "size": [
+        0.0571,
+        0.2571,
+        0.0571
+      ],
+      "name": "Glass",
+      "template": "Fuse",
+      "h": "1c73d67872db490cbf69f250b31b35fa4e60655d7228ac089bfa34b58770b7db"
+    },
+    {
+      "id": 50022,
+      "group": 50022,
+      "material": "L4T_Brass",
+      "tris": 60,
+      "verts": 32,
+      "center": [
+        0,
+        0.025,
+        0
+      ],
+      "size": [
+        0.0643,
+        0.05,
+        0.0643
+      ],
+      "name": "CapBottom",
+      "template": "Fuse",
+      "h": "e7697abebd2ef0a850e42ddb1750e9e8b1768a9fa6d1b7b864380d67adbefdd7"
+    },
+    {
+      "id": 50023,
+      "group": 50023,
+      "material": "L4T_Brass",
+      "tris": 60,
+      "verts": 32,
+      "center": [
+        0,
+        0.3321,
+        0
+      ],
+      "size": [
+        0.0643,
+        0.05,
+        0.0643
+      ],
+      "name": "CapTop",
+      "template": "Fuse",
+      "h": "fdeac25d26be6ce3a50aa6dbd1afcbef4c6d910c8d098211c9cf1fb683b82481"
+    },
+    {
+      "id": 50024,
+      "group": 50024,
+      "material": "L4T_FuseWire",
+      "tris": 28,
+      "verts": 16,
+      "center": [
+        0,
+        0.1786,
+        0
+      ],
+      "size": [
+        0.05,
+        0.2786,
+        0.05
+      ],
+      "name": "Filament",
+      "template": "Fuse",
+      "h": "01caf00a81c9962468454fe8d5c55258bbea1d65e631d1ae40583ba03b8e8b30"
+    },
+    {
+      "id": 50025,
+      "group": 50025,
+      "material": "L4T_BatteryBlack",
+      "tris": 108,
+      "verts": 56,
+      "center": [
+        0,
+        0.2107,
+        0
+      ],
+      "size": [
+        0.3214,
+        0.4214,
+        0.1857
+      ],
+      "name": "Case",
+      "template": "BatteryPack",
+      "h": "3e94c31dca1577a569049a20426c628d048d77d392c6035b90787a8eb090397f"
+    },
+    {
+      "id": 50026,
+      "group": 50026,
+      "material": "L4T_BatteryStripe",
+      "tris": 108,
+      "verts": 56,
+      "center": [
+        0,
+        0.2464,
+        0
+      ],
+      "size": [
+        0.3286,
+        0.0643,
+        0.1929
+      ],
+      "name": "RedStripe",
+      "template": "BatteryPack",
+      "h": "590d1aa82ac8f6c8dec269f9180d4e0aa8ffdedc6c6486bce608b870bf09c8eb"
+    },
+    {
+      "id": 50027,
+      "group": 50027,
+      "material": "L4T_BatteryLabel",
+      "tris": 108,
+      "verts": 44,
+      "center": [
+        0,
+        0.125,
+        0.0957
+      ],
+      "size": [
+        0.1964,
+        0.1071,
+        0.05
+      ],
+      "name": "BatteryLabel",
+      "template": "BatteryPack",
+      "h": "91ab588bab935cdd3edc46c56fc5342ecbfdf63973bf7a673983e38ec38d86d5"
+    },
+    {
+      "id": 50028,
+      "group": 50028,
+      "material": "L4T_Brass",
+      "tris": 60,
+      "verts": 32,
+      "center": [
+        -0.075,
+        0.4286,
+        0
+      ],
+      "size": [
+        0.0571,
+        0.05,
+        0.0571
+      ],
+      "name": "ContactPositive",
+      "template": "BatteryPack",
+      "h": "3256c4593a9f15a2eee062a505894625b315f9459a6f0174b6b180fb30e5fa15"
+    },
+    {
+      "id": 50029,
+      "group": 50029,
+      "material": "L4T_Brass",
+      "tris": 60,
+      "verts": 32,
+      "center": [
+        0.075,
+        0.4286,
+        0
+      ],
+      "size": [
+        0.0571,
+        0.05,
+        0.0571
+      ],
+      "name": "ContactNegative",
+      "template": "BatteryPack",
+      "h": "72817aca9bc90a6a2d2a4f8a17489d0a9e3da29ade00a0d024101b083d7dea3e"
+    },
+    {
+      "id": 50030,
+      "group": 50030,
+      "material": "L4T_NotePaper",
+      "tris": 248,
+      "verts": 126,
+      "center": [
+        0,
+        0.0039,
+        0
+      ],
+      "size": [
+        0.7506,
+        0.05,
+        0.5357
+      ],
+      "name": "CrumpledSheet",
+      "template": "Note",
+      "h": "3f334ba4ede8faad9d04353b6d693d0907baf8cebb49c704d83bdb580e0fab0d"
+    },
+    {
+      "id": 50031,
+      "group": 50031,
+      "material": "L4T_NotePaper",
+      "tris": 12,
+      "verts": 8,
+      "center": [
+        0,
+        0.0107,
+        0
+      ],
+      "size": [
+        0.6714,
+        0.05,
+        0.4464
+      ],
+      "name": "Paper",
+      "template": "Note",
+      "h": "8ba77243a2397d4f094cb5975a1e27ae9fd1e1e72344107ed2c2b3a91d28c260"
+    }
+  ],
+  "placements": [],
+  "templateExport": true
+}

@@ -35,6 +35,7 @@ local reels = {}                 -- records { Id, State, Model, Spot, Carrier, P
 local loadedScreens = {}
 local holder, holderAnchor       -- main breaker
 local fuseUntil, fuseCooldownUntil = 0, 0
+local coopFuseAskedAt = nil       -- co-op: first fuse attempt with nobody on the lever (CoopFuseAfterSeconds)
 local threading = {}             -- player -> { Screen, Started, Prompt }
 local escaped = {}
 local arcadeCode, prizeOpen = nil, false
@@ -470,7 +471,27 @@ local function carriedCount(player)
 	return n
 end
 
+-- REEL_ROOMS_20261008 (owner: the reels must be easier to find): the objective panel names the rooms the loose reels
+-- lie in. A reel at its spot uses the spot's room; a dropped one the room of the nearest reel spot.
+local function publishReelRooms()
+	local names = Configuration.Reels.RoomNames or {}
+	local rooms = {}
+	for _, r in ipairs(reels) do
+		local spot = r.State == "WORLD" and r.Spot or nil
+		if r.State == "DROPPED" and r.Model then
+			local at, best = r.Model:GetPivot().Position, math.huge
+			for _, candidate in ipairs(manifest.ReelSpots or {}) do
+				local d = (candidate.Position - at).Magnitude
+				if d < best then spot, best = candidate, d end
+			end
+		end
+		if spot then rooms[#rooms + 1] = names[spot.Name] or spot.Name end
+	end
+	setState("Level4_ReelRooms", table.concat(rooms, "|"))
+end
+
 local function refreshCarry(player)
+	publishReelRooms()
 	if not player or player.Parent ~= Players then return end
 	local n = carriedCount(player)
 	player:SetAttribute("Level4_ReelsCarried", n)
@@ -629,6 +650,7 @@ local function setupReels()
 	end
 	setState("Level4_ReelGoal", #reels)
 	setState("Level4_ReelsCollected", 0)
+	publishReelRooms()
 	setState("Level4_ReelsLoaded", 0)
 end
 
@@ -684,6 +706,7 @@ local function onMainBreaker(player, prompt)
 	local _, _, root = liveCharacter(player)
 	holder = player
 	holderAnchor = root
+	coopFuseAskedAt = nil
 	root.Anchored = true
 	setLever(true)
 	setState("Level4_BreakerHolder", player.UserId)
@@ -695,8 +718,19 @@ end
 local function onFuse(player, prompt)
 	if not canUse(player, prompt) or phase ~= "Reels" then return end
 	if not soloMode() then
-		cue(player, { Type = "Hint", Text = "The fuse only works for the last survivor. Someone must hold the breaker." })
-		return
+		-- co-op (owner 2026-10-05): holding the lever is the way; the fuse also works once a fuse was asked for and
+		-- nobody has held the lever for CoopFuseAfterSeconds, so an AFK or departed teammate cannot stall the round
+		if holder then
+			cue(player, { Type = "Hint", Text = holder.DisplayName .. " is holding the breaker." })
+			return
+		end
+		coopFuseAskedAt = coopFuseAskedAt or now()
+		local left = (Configuration.Breaker.CoopFuseAfterSeconds or math.huge) - (now() - coopFuseAskedAt)
+		if left > 0 then
+			cue(player, { Type = "Hint", Text = ("Someone must hold the breaker. If nobody does, the fuse works in %d s.")
+				:format(math.ceil(left)) })
+			return
+		end
 	end
 	if fuseUntil > now() or now() < fuseCooldownUntil then return end
 	fuseUntil = now() + Configuration.Breaker.FuseSeconds
@@ -858,7 +892,9 @@ local function escapePlayer(player)
 	if holder == player then releaseHolder("escaped") end
 	player:SetAttribute("Escaped", true)
 	local slots = manifest.ExitSafeSpawns
-	local slot = slots[((#Players:GetPlayers()) % math.max(#slots, 1)) + 1]
+	local order = 0
+	for _ in pairs(escaped) do order += 1 end   -- includes this player
+	local slot = slots[((order - 1) % math.max(#slots, 1)) + 1]
 	if slot then
 		root.AssemblyLinearVelocity = Vector3.zero
 		character:PivotTo(slot.CFrame + Vector3.new(0, 3, 0))
@@ -1071,6 +1107,7 @@ local function heartbeat()
 			if (r.State == "WORLD" or r.State == "DROPPED") and not (r.Model and r.Model.Parent) then
 				r.State = "WORLD"
 				placeReelInWorld(r, spotSurface(r.Spot))
+				publishReelRooms()
 			end
 		end
 		-- prompts follow the breaker state for clarity
@@ -1082,7 +1119,8 @@ local function heartbeat()
 			prompt.ActionText = holder and "Let go" or "Hold"
 		end
 		if manifest.FusePrompt then
-			manifest.FusePrompt.Enabled = phase == "Reels" and soloMode() and fuseUntil <= t and t >= fuseCooldownUntil
+			-- not gated on solo: in co-op onFuse answers with the holder / CoopFuseAfterSeconds hint and then works
+			manifest.FusePrompt.Enabled = phase == "Reels" and holder == nil and fuseUntil <= t and t >= fuseCooldownUntil
 		end
 		setState("Level4_BreakerEngaged", breakerEngaged())
 	end
@@ -1101,6 +1139,7 @@ function Objectives.Start(m, generation, lightDirector, usher)
 	wrongLock = false
 	escaped = {}
 	fuseUntil, fuseCooldownUntil = 0, 0
+	coopFuseAskedAt = nil
 	setState("Level4_Phase", phase)
 	setState("Level4_ExitUnlocked", false)
 	setupSwitches()

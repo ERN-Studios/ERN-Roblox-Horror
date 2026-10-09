@@ -1,0 +1,25 @@
+# Resume: hashkontrol og aktuel Play-entry
+
+2026-10-08 efter ejerens genoptagelse omkring 20:44 UTC. Kun offline-læsning; ingen Studio-kald, låseændringer, runtime-mirror-edits eller Git-mutationer.
+
+Alle fem filer i `offline-baseline.json` er fortsat byte-identiske med baseline: FlashlightController (`f0666fe6…`), FlashlightSync (`6a6dedd4…`), FlashlightProfiles (`4c2db65a…`), SpectateController (`4d9b3a3d…`) og Level 4 Round Client (`61a901c1…`). Ingen lyskode eller HUD-diff i disse fem siden første offline-audit. Det beviser ikke Studio-paritet; frisk Source/editor-audit er stadig nødvendig under grant.
+
+## Aktuel kø-entry fra source
+
+- Autoritativ lobby er `Workspace.LobbyReimaginedPreview`, med `LobbyReimaginedOwned=true`, `R3QueueRevision=3`, `Ready=true` (QueueBridge 6–10). Bootstrap monitorerer også `LobbySpawnMigrationReady=true`, `ServerLobby.LobbySpawn` med `LobbySpawnRevision=4` og korrekt `LobbySpawnFloorModelName`; den bygger ikke en ekstra lobby.
+- Find de faktiske BaseParts ved `R3QueueId` og `LevelNumber`, ikke gamle LaunchZone-positioner. QueueBridge 21–24 mapper L1 til **101–104**, L4 til **113–116**. Builder 158–162 laver zone direkte under bay, `QueueDetectorShape="Circle"`, radius 7.41 og render-owner ObjectValue. Bridge kræver ChamberFloor direkte under samme bay (32–37). Bekræft dette live, før karakteren flyttes.
+- Level 4 er almindelig public round, ikke map-preview: QueueBridge 45 bruger `previewOnly = level > 4`, og ingen L4 preview-controller står i EXPECTED_CONTROLLERS (77–80). GameManagers gamle trial/preview-valg er derfor dormant (1245–1253). L1/L4 bruger samme almindelige station-engine og Studio-local `prepareGroupLoading`→`playRound` (3394–3416).
+- GameManager giver første levende spiller i en tom zone host-status og sender `RoundStatus("queuehost", id, 6, "public", modes)` (3823–3839). ConfigureQueue accepterer kun aktuel host, awaitingConfig, ikke busy, og fortsat fysisk inde (1575–1601). Zonekravet er cirkulært XZ plus local Y mellem -6 og 12 (1300–1308). Direkte remote-kald før host-prompt giver intet legitimt launch.
+
+## Opskrift, når låsen faktisk er tildelt
+
+1. Start normal Play, vent på lobbyens live readiness og levende avatar. Enumerér ovenstående aktuelle zones; vælg tom L1=101 (eller anden 101–104) og senere L4=113 (eller anden 113–116). Server-PivotTo må bruge **den live zone.CFrame/ChamberFloor**, ikke hardcoded globale koordinater. Sæt karakteren centralt inden for cirklen og stå på den faktiske floor; bevar normalt living/unanchored state. Ingen manipulation af GameManagers private queue-state.
+2. Vent på rigtig host-UI: `PlayerGui.RoundGui.QueueHostShade.Visible=true`, med `QueueHostPanel` (RoundUI 537–538,567–588,4445–4453). Brug de rigtige GUI-knapper: `DecreasePlayers` fem gange for solo 1/1, fire gange for co-op 2/2; `PlayerCount` viser værdien. Klik `CreateParty`. Find deres faktiske AbsolutePosition/AbsoluteSize live og brug Studio-input-toolens dokumenterede koordinatformat. `PrivacyToggle` starter public. RoundUI-knappernes Activated-handlere står 1009–1047.
+3. Dette sender ConfigureQueue fra den rigtige LocalScript og lukker host-panelet på `queueconfigured`. En fuld 1/1 eller 2/2 party tæller automatisk kun tre sekunder (GameManager 3879–3895); DevFastQueue er derfor ikke nødvendigt. Vent på `InRound=true`, `RoundActive=true`, korrekt `SelectedLevel`, frisk world og loading-cover væk, før flashlight-sweep. Hold hvert MCP-wait under 18 sekunder.
+4. Brug faktisk F-input for torch. Pausér entity med eksisterende P-input og unlimited med U-input **kun hvis den faktiske Player er DevAccess-allowlisted**; disse controls bruger DevCheats (682–687) og serverkontrolleret DevControl. Allowlist er 40920547/9488575949; negative Studio-test-id'er får ikke generelle developerrettigheder (DevAccess 5–20). L1/L4 public kø-entry kræver ikke disse rettigheder. Hvis QA i lokale testclients behøver runtime override, skal det registreres som et testindgreb og ryddes ved Stop, ikke som almindeligt brugerflow.
+
+Projektmemory `mongotv-playtest-recipe.md` har en faktisk tidligere fejl: `execute_luau`→`FireServer` kunne blive afvist af Capabilities/LoadUnownedAsset. Remote-kontrakten er fortsat `ConfigureQueue(id,max,"public",mode)`, men frisk måling skal bruge rigtig UI/input fremfor at antage MCP-pluginets remote-rettigheder. En E-ProximityPrompt kræver også kamera-frustum; det er ikke nødvendigt for den almindelige L1/L4 party-kø.
+
+Gamle `tools/playtest_level1*.py`/`playtest_lobby_avatar_transition.py` bruger id1 og direkte FireServer og er ikke en opdateret revised-lobby-opskrift. **Kør ikke `tools/capture_flashlight_test.py` til denne QA**: det kører Level2Generator.Cleanup og sætter GenerateWorld direkte (18–22), vælger et historisk Studio-navn (117) og omgår rigtig round-entry. Denne rapport har ikke kørt disse værktøjer.
+
+GameManager/QueueBridge er mutable i det fælles checkout, især mens Level2queuegate arbejder. Re-læs den relevante live entry-kode under låsen; denne offline-opskrift er ikke en garanti for source i den næste Play-session.

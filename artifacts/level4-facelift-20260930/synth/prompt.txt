@@ -1,8 +1,0 @@
-The owner picked the attached "Synthwave Grid" direction (hero image, carpet, wall) for an abandoned 1980s-90s multiplex cinema lost in the Backrooms. Make matching TEXTURE SOURCE images. Use your built-in image generation tool. Save each as PNG in the current working directory with EXACTLY the given file name (copy the generated file here). Do NOT run git, do NOT commit, do NOT delete or modify any other file. Final answer: only the list of saved files.
-
-Rules: square, perfectly orthographic and flat, completely even diffuse lighting (no glow, no shadows, no vignette), PERFECTLY SEAMLESS on all four edges, photoreal material detail, subtle dust/wear. Real-world size of one image in brackets.
-
-1. tex_wall_synth_panels.png [2.4 m] - the black acoustic wall panels from the attached wall image but WITHOUT any neon lines: matte black fabric-wrapped acoustic panels, 60 cm wide vertical panels with thin recessed reveals between them, fine fabric weave, faint dust.
-2. tex_carpet_arcade_synth.png [3.0 m] - arcade carpet in the same family as the attached carpet but busier and brighter: black base with neon magenta, cyan and yellow triangles, zigzags and dots (classic 90s arcade carpet), cut-pile texture.
-3. tex_carpet_aud_synth.png [2.2 m] - auditorium carpet: very dark purple-black cut pile with a small, sparse repeating magenta/cyan triangle motif, quieter than the lobby carpet.
-4. tex_carpet_lobby_synth.png [4.0 m] - a clean seamless version of the attached lobby carpet (deep purple with the neon triangle/grid pattern), evenly lit, pile texture visible, slightly worn.

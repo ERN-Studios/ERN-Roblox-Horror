@@ -110,7 +110,7 @@ local function apply()
 		grade.Contrast = .075
 		grade.Saturation = 0
 		grade.TintColor = Color3.fromRGB(238, 255, 240)
-		bloom.Intensity = .11
+		bloom.Intensity = .088
 	else
 		Lighting.Brightness = 1.42
 		Lighting.ExposureCompensation = -.22
@@ -120,15 +120,17 @@ local function apply()
 		grade.Contrast = .085
 		grade.Saturation = -.02
 		grade.TintColor = Color3.fromRGB(247, 242, 222)
-		bloom.Intensity = .085
+		bloom.Intensity = .068
 	end
 	if workspace:GetAttribute("Level2BlenderPreviewActive") == true then
 		-- The Poolrooms preview is lit like its approved Blender review:
 		-- lighter and more neutral cream than the live level.
 		Lighting.Brightness = 2.2
-		Lighting.ExposureCompensation = .2
-		Lighting.Ambient = Color3.fromRGB(126, 124, 112)
-		Lighting.OutdoorAmbient = Color3.fromRGB(118, 120, 110)
+		-- Studio 2026-10-05: with the lowered ambient (hall lamps carry the light now) the halls measured ~40%
+		-- darker than the approved renders at 0 and ~1.8x brighter at .8; .4 lands on them (mean luminance ~80).
+		Lighting.ExposureCompensation = .4
+		Lighting.Ambient = Color3.fromRGB(78, 80, 72)
+		Lighting.OutdoorAmbient = Color3.fromRGB(90, 92, 84)
 		Lighting.EnvironmentDiffuseScale = .8
 		grade.Brightness = .01
 		grade.Contrast = .06

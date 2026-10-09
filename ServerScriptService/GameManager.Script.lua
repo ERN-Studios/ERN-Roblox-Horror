@@ -176,8 +176,33 @@ end
 local function canAccessLevel(requestedLevel, group)
  local level = tonumber(requestedLevel)
  if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end
+ if level == 2 then
+  if type(group) ~= "table" then return false end
+  local any = false
+  for _, player in pairs(group) do
+   if typeof(player) ~= "Instance" or not player:IsA("Player")
+    or not DevAccess.IsLevel2Allowed(player) then return false end
+   any = true
+  end
+  return any
+ end
  if level <= Routing.MaxLevel then return true end
  return level <= devCeiling(group)
+end
+
+local notifyLevel2AccessDenied
+do
+ local lastNotice = setmetatable({}, {__mode = "k"})
+ notifyLevel2AccessDenied = function(group)
+  local now = os.clock()
+  for _, player in pairs(group or {}) do
+   if typeof(player) == "Instance" and player:IsA("Player") and player.Parent == Players
+    and (not lastNotice[player] or now - lastNotice[player] >= 2) then
+    lastNotice[player] = now
+    status:FireClient(player, "queueaccessdenied", 2, DevAccess.Level2ClosedMessage)
+   end
+  end
+ end
 end
 
 -- Always-on server authority for every developer command. Unlike the Level 1
@@ -555,6 +580,11 @@ local function loadGameplayCharacter(player, allowed, loadRecord)
  if not loadToken then return false end
  local previous = player.Character
  local ok, err = pcall(player.LoadCharacterAsync, player)
+ -- Body identity, not RoundActive: the same suit is needed while loading and
+ -- during the elevator brief. Never mark the lobby avatar awaiting this load.
+ if ok and player.Character and player.Character ~= previous then
+  player.Character:SetAttribute("ZyntraGameplayCharacter", true)
+ end
  -- Record this load before releasing the gate, even if its body is incomplete.
  -- A re-entry refusal may discard only this still-current owned Character.
  if loadRecord and player.Character ~= previous then loadRecord.Character = player.Character end
@@ -829,6 +859,19 @@ local function arrivalPointFree(player, position)
 end
 
 local function freeElevatorFrame(player, pad)
+ -- Authored Poolrooms kiosk: six measured, grounded arrival positions.
+ -- The generic seven-row elevator grid crosses its stair opening and walls.
+ if pad:GetAttribute("Level2NewMap") == true then
+  local count = math.clamp(tonumber(pad:GetAttribute("Level2ArrivalSlotCount")) or 0, 0, MAX_PLAYERS_PER_STATION)
+  for index = 1, count do
+   local floor = pad:GetAttribute("Level2ArrivalSlot" .. index)
+   if typeof(floor) == "Vector3" then
+    local at = floor + Vector3.new(0, 4, 0)
+    if arrivalPointFree(player, at) then return CFrame.lookAt(at, at + Vector3.zAxis) end
+   end
+  end
+  return nil
+ end
  local levelOne = pad:GetAttribute("Level2_CompatibilityMarker") ~= true
   and pad:GetAttribute("Level3_CompatibilityMarker") ~= true
   and pad:GetAttribute("Level4_CompatibilityMarker") ~= true
@@ -1114,7 +1157,9 @@ local function placeOnLevelEntry(player, char, useSlideResume)
 end
 
 local function onCharacter(player, char)
- if inRound[player] or player:GetAttribute("Level6PlaygroundPreview") == true then
+ -- The Level 2 new-map dev preview (Level2BlenderPreviewAccess) wears the round body outside a round too.
+ if inRound[player] or player:GetAttribute("Level6PlaygroundPreview") == true
+  or player:GetAttribute("Level2NewMapPreview") == true then
   player.CameraMode = Enum.CameraMode.LockFirstPerson
   player.CameraMinZoomDistance = 0.5
   player.CameraMaxZoomDistance = 0.5
@@ -1149,7 +1194,8 @@ local function onCharacter(player, char)
      if humanoid then humanoid.Health = 0 end
     end
    end
-  elseif player:GetAttribute("Level6PlaygroundPreview") ~= true then -- Level 6 places its own round body
+  elseif player:GetAttribute("Level6PlaygroundPreview") ~= true -- Level 6 places its own round body
+   and player:GetAttribute("Level2NewMapPreview") ~= true then -- and so does the Level 2 new-map preview
    scatterAt(char, lobbySpawn, false)
   end
  end)
@@ -1204,7 +1250,18 @@ local function setupPlayer(player)
   if IS_RESERVED_ROUND_SERVER then
    initialStatus = roundBusy and "spectating" or "loadinggame"
   end
-  status:FireClient(player, initialStatus)
+  -- UI-only bootstrap copy: admission still validates the complete party.
+  -- SelectedLevel is not set until ensureWorld, so an unknown packet must not
+  -- announce Level 1 before the actual destination is known.
+  local initialLevel = nil
+  if initialStatus == "loadinggame" and type(packet) == "table" and packet.BackroomsRound == true then
+   local requestedLevel = tonumber(packet.Level)
+   if requestedLevel and requestedLevel == requestedLevel and math.abs(requestedLevel) < math.huge
+    and requestedLevel % 1 == 0 and requestedLevel >= 1 and requestedLevel <= Routing.DevMaxLevel then
+    initialLevel = requestedLevel
+   end
+  end
+  status:FireClient(player, initialStatus, initialLevel)
  end)
 end
 
@@ -1385,6 +1442,11 @@ local function selectQueuedPlayers(station, raw)
    if permitted and #accepted < station.maxPlayers then admit(player)
    else rejected[#rejected + 1] = {player=player, reason=permitted and "full" or "private"} end
   end
+ end
+ if station.level == 2 and not canAccessLevel(station.level, accepted) then
+  station.admittedCharacters = {}
+  notifyLevel2AccessDenied(accepted)
+  return {}, raw, rejected, true
  end
  station.admittedCharacters = nextMembers
  return accepted, raw, rejected
@@ -1574,6 +1636,10 @@ queueConfig.OnServerEvent:Connect(function(player, stationIndex, requestedMax, r
  stationIndex = math.floor(tonumber(stationIndex) or 0)
  local station = lobbyStations[stationIndex]
  if not station then return end
+ if station.level == 2 and not canAccessLevel(station.level, {player}) then
+  notifyLevel2AccessDenied({player})
+  return
+ end
  local previewCancel = (station.previewQueue == true or station.kitWarming == true)
   and requestedPrivacy == "cancel" and station.host == player
  if station.busy and not previewCancel then return end
@@ -2053,6 +2119,10 @@ end
 -- start the round and turned everybody after them into a spectator, so the
 -- cohort below is the session's, not this batch's.
 local function teleportPlayersToNextLevel(group, plan)
+	if not canAccessLevel(plan.NextLevel, group) then
+		if plan.NextLevel == 2 then notifyLevel2AccessDenied(group) end
+		return false, "LEVEL_ACCESS_DENIED", group
+	end
 	local live = claimForTransfer(group)
 	if #live == 0 then return true, nil, live end
 	if IS_STUDIO then
@@ -2576,7 +2646,16 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 			end
 		end)
 	end
-	fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
+	do
+  local members = {}
+  for _, member in ipairs(participants) do
+   if member.Parent == Players then
+    table.insert(members, {UserId = member.UserId, Name = member.Name})
+   end
+  end
+  fireGroup(participants, "resultroster", {Members = members})
+ end
+ fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
 	publishPostWinChoices(session)
 
 	-- First choices are provisional, including a solo player's. Keep the
@@ -2745,7 +2824,7 @@ playRound = function(participants)
     -- Read and consume the kill site's mark. APPENDED to the payload, never
     -- reordered: every older client still reads name and position where it did.
     lastDeathCause = DeathAdvice.Take(player)
-    fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
+    fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause, aliveCount)
     -- A death in Level 2's exit flume is the transition, not the run.
     local facts = runFacts[player]
     if facts and not facts.EscapedAt and player:GetAttribute("Level2_ExitTransition") ~= true then
@@ -3007,6 +3086,15 @@ playRound = function(participants)
   if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil; lastDeathCause = DeathAdvice.Unknown end
   local index = table.find(participants, player)
   if index then table.remove(participants, index) end
+  do
+  local members = {}
+  for _, member in ipairs(participants) do
+   if member.Parent == Players then
+    table.insert(members, {UserId = member.UserId, Name = member.Name})
+   end
+  end
+  fireGroup(participants, "resultroster", {Members = members})
+ end
   if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
   status:FireClient(player, "leaveack")
   Analytics.Outcome(player, activeLevel, "left")
@@ -3040,7 +3128,16 @@ playRound = function(participants)
   workspace:SetAttribute("RoundActive", false)
   zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
 	closeRoundLifecycle()
-  fireGroup(participants, "lose", 0, 0, #participants)
+  do
+  local members = {}
+  for _, member in ipairs(participants) do
+   if member.Parent == Players then
+    table.insert(members, {UserId = member.UserId, Name = member.Name})
+   end
+  end
+  fireGroup(participants, "resultroster", {Members = members})
+ end
+ fireGroup(participants, "lose", 0, 0, #participants)
   task.wait(5)
   if elevatorApi then elevatorApi.close() end
   returnGroupToLobby(participants)
@@ -3072,7 +3169,8 @@ playRound = function(participants)
 		-- The shared entry barrier verified the tube before this activation.
 		workspace:SetAttribute("PuzzleWon", false)
 		workspace:SetAttribute("PostWinIntermissionActive", false)
-		workspace:SetAttribute("RoundActive", true)
+		workspace:SetAttribute("RoundStartedAt", workspace:GetServerTimeNow())
+  workspace:SetAttribute("RoundActive", true)
 		RunService.Heartbeat:Wait()
 		releaseSlideResume(participants)
 		fireGroup(participants, "level3access")
@@ -3108,11 +3206,21 @@ playRound = function(participants)
  end
   workspace:SetAttribute("PuzzleWon", false)
   workspace:SetAttribute("PostWinIntermissionActive", false)
+  workspace:SetAttribute("RoundStartedAt", workspace:GetServerTimeNow())
   workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
  runStartWall = workspace:GetServerTimeNow()
  for _, member in ipairs(participants) do Analytics.RoundStart(member, activeLevel) end
  fireGroup(participants, "start")
+ do
+  local members = {}
+  for _, member in ipairs(participants) do
+   if member.Parent == Players then
+    table.insert(members, {UserId = member.UserId, Name = member.Name})
+   end
+  end
+  fireGroup(participants, "resultroster", {Members = members})
+ end
 
  local result
  local wipeDeadline
@@ -3283,6 +3391,15 @@ playRound = function(participants)
   return
  end
 
+ do
+  local members = {}
+  for _, member in ipairs(participants) do
+   if member.Parent == Players then
+    table.insert(members, {UserId = member.UserId, Name = member.Name})
+   end
+  end
+  fireGroup(participants, "resultroster", {Members = members})
+ end
  fireGroup(participants, "lose", elapsed, escapedCount, #participants)
  task.wait(5.5)
  if elevatorApi then elevatorApi.close() end
@@ -3448,92 +3565,6 @@ local function launchStation(station, participants)
   task.wait(7)
  end
  station.busy = false
-end
-
--- Developer preview launches (Level 2 Poolrooms) lock per player while a launch is in flight.
-local developerPreviewLaunching = {}
-
--- Level 2 uses the shared round adapter; only its layout/world pair changes.
-local function level2BlenderPreviewReady()
- local kit = ServerStorage:FindFirstChild("Level2BlenderKit")
- local folder = script.Parent:FindFirstChild("Level 2 Systems")
- local generator = folder and folder:FindFirstChild("Level 2 Kit Layout Generator")
- local builder = folder and folder:FindFirstChild("Level 2 Kit World Builder")
- return kit ~= nil and kit:GetAttribute("Ready") == true
-  and generator ~= nil and generator:IsA("ModuleScript")
-  and builder ~= nil and builder:IsA("ModuleScript")
-end
--- Keep the parallel launch locals scoped below GameManager's register limit.
-do
- local function canLaunchLevel2BlenderPreview(player)
-  if not player or player.Parent ~= Players or not DevAccess.IsAllowed(player) then return false, "DEVELOPER_ONLY" end
-  if IS_RESERVED_ROUND_SERVER or roundBusy or (activeEntry and activeEntry:IsOpen())
-   or developerPreviewLaunching[player] then return false, "ROUND_BUSY" end
-  local character = player.Character
-  local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-  if player:GetAttribute("InRound") == true or not humanoid or humanoid.Health <= 0 then return false, "ROUND_BUSY" end
-  for _, station in pairs(lobbyStations) do
-   if station.host == player or (station.admittedCharacters or {})[player]
-    or (station.feedback or {})[player] or (station.entrySeen or {})[player]
-    or (station.barrierMembers or {})[player] or playerInsideZone(player, station, true) then
-    return false, "IN_QUEUE"
-   end
-  end
-  if not level2BlenderPreviewReady() then return false, "PREVIEW_NOT_READY" end
-  return true
- end
- local function launchLevel2BlenderPreview(player)
-  local allowed, reason = canLaunchLevel2BlenderPreview(player)
-  if not allowed then return false, reason end
-  developerPreviewLaunching[player] = true
-  local participants = {player}
-  if IS_STUDIO then
-   roundBusy = true
-   workspace:SetAttribute("Level2BlenderPreviewActive", true)
-   task.spawn(function()
-    local ok, problem = pcall(function()
-     fireGroup(participants, "loadinggame", 2)
-     local attempt = beginGroupLoading(participants)
-     clearGlowsticks()
-     assignGlowstickSlots(participants)
-     roundEntryMode = nil
-     if prepareGroupLoading(attempt, participants, 2, false) then playRound(participants) end
-    end)
-    if not ok then
-     warn("[Level 2 Blender Preview] " .. tostring(problem))
-     workspace:SetAttribute("RoundActive", false)
-     workspace:SetAttribute("PostWinIntermissionActive", false)
-     zyntraReentry.OnInvoke = function(player, free) local l6 = ServerStorage:FindFirstChild("Level6Reentry") if l6 and typeof(player) == "Instance" and player:GetAttribute("Level6PlaygroundPreview") == true then return l6:Invoke(player, free) end return false end
-     local recovered, recoveryError = pcall(returnGroupToLobby, participants)
-     if not recovered then warn("[Level 2 Blender Preview] recovery failed: " .. tostring(recoveryError)) end
-    end
-    workspace:SetAttribute("Level2BlenderPreviewActive", false)
-    developerPreviewLaunching[player] = nil
-    if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
-   end)
-   return true
-  end
-  local ok, problem = pcall(function()
-   local options = Instance.new("TeleportOptions")
-   options.ShouldReserveServer = true
-   local packet = Routing.ArrivalPacket({Ceiling = 2, Level = 2,
-    SessionId = game.JobId .. ":level2blender:" .. tostring(player.UserId) .. ":" .. tostring(os.clock()),
-    Expected = 1, Final = true, GlowstickSlots = {[tostring(player.UserId)] = 1}})
-   packet.Level2BlenderPreview = true
-   options:SetTeleportData(packet)
-   TeleportService:TeleportAsync(game.PlaceId, participants, options)
-  end)
-  developerPreviewLaunching[player] = nil
-  if not ok then warn("[Level 2 Blender Preview] " .. tostring(problem)); return false, "TELEPORT_FAILED" end
-  return true
- end
- local level2BlenderPreviewLaunch = ServerStorage:FindFirstChild("Level2BlenderPreviewLaunch")
- if not level2BlenderPreviewLaunch then
-  level2BlenderPreviewLaunch = Instance.new("BindableFunction")
-  level2BlenderPreviewLaunch.Name = "Level2BlenderPreviewLaunch"
-  level2BlenderPreviewLaunch.Parent = ServerStorage
- end
- if level2BlenderPreviewLaunch:IsA("BindableFunction") then level2BlenderPreviewLaunch.OnInvoke = launchLevel2BlenderPreview end
 end
 
 local function resetStation(station, closeHost)
@@ -3818,6 +3849,11 @@ local function runStation(station)
   end
 
   if not station.host then
+   if station.level == 2 and not canAccessLevel(station.level, raw) then
+    notifyLevel2AccessDenied(raw)
+    task.wait(.25)
+    continue
+   end
    station.host = raw[1]
    station.launchMode = nil
    station.previewQueue = station.previewOnly == true
@@ -3855,10 +3891,11 @@ local function runStation(station)
    continue
   end
 
-  local ready, allInside, rejected = queuedPlayers(station)
+  local ready, allInside, rejected, accessDenied = queuedPlayers(station)
   if station.revisionRetired then return end
   if #ready == 0 then
-   resetStation(station, true)
+   if accessDenied then station.feedback = {} end -- Keep the denial visible through queue cleanup.
+   resetStation(station, not accessDenied)
    task.wait(0.25)
    continue
   end
@@ -3883,7 +3920,7 @@ local function runStation(station)
     cancelled = true
     break
    end
-   ready, allInside, rejected = queuedPlayers(station)
+   ready, allInside, rejected, accessDenied = queuedPlayers(station)
    if station.revisionRetired then return end
    if #ready == 0 then cancelled = true break end
    lastReady = ready
@@ -3902,7 +3939,8 @@ local function runStation(station)
 
   if station.revisionRetired then return end
   if cancelled then
-   fireGroup(lastReady, "lobbycancel")
+   if accessDenied then station.feedback = {}
+   else fireGroup(lastReady, "lobbycancel") end
    resetStation(station, false)
    task.wait(1)
    continue
@@ -4130,25 +4168,6 @@ if IS_RESERVED_ROUND_SERVER then
    return
   end
   local selectedLevel = Routing.ClampLevelTo(group.Level, devCeiling(participants))
-
-  local level2BlenderPreview = false
-  for _, entry in ipairs(arrivalEntries()) do
-   if type(entry.Data) == "table" and entry.Data.RoundSessionId == group.SessionId
-    and entry.Data.Level2BlenderPreview == true then level2BlenderPreview = true end
-  end
-  if level2BlenderPreview then
-   local allowed = selectedLevel == 2 and level2BlenderPreviewReady()
-   for _, player in ipairs(participants) do
-    if not DevAccess.IsAllowed(player) then allowed = false end
-   end
-   if not allowed then
-    attempt:SetMembers(participants)
-    attempt:Fail("LEVEL_ACCESS_DENIED")
-    return
-   end
-   workspace:SetAttribute("Level2BlenderPreviewActive", true)
-  end
-
 
   local glowstickSlots = nil
   for _, entry in ipairs(arrivalEntries()) do

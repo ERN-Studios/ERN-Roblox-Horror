@@ -1,3 +1,9 @@
+# Current repository state — 9 October 2026
+
+Roblox Studio is authoritative. The verified source mirror and its hashes are recorded in studio-sync-manifest.json.
+
+See docs/STUDIO_CODE_SYNC_2026-10-09.md for source verification and docs/GITHUB_CLEANUP_2026-10-09.md for the GitHub delivery and removal of obsolete captures. Runtime descriptions in the dated notes below reflect their recorded releases; read the current Studio sources for current behavior.
+
 # BACKROOMS: STAY QUIET [CO-OP HORROR]
 
 A round-based **Backrooms-inspired multiplayer horror game** for Roblox, by

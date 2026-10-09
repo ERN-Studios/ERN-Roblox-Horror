@@ -1,0 +1,36 @@
+# Root native compass checks
+
+No Studio/native actions were performed to prepare this runbook. The new `native-readonly.luau` only reads the actual client's PuzzleGui, properties, target and camera, returning JSON. It does not require a module, fire a remote, create an Instance or alter UI state.
+
+## Install one existing source
+
+Use the existing manifest entry `StarterPlayer.StarterPlayerScripts.PuzzleUI` / `LocalScript` / `StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua`. Current reviewed baseline is `667f61b1…921026`; proposal is `cc1c8fdf…1ce3680`. Recheck actual current bytes and Studio parity before applying this one proposal through `record_pending_push.py` and the normal `push_repo_to_studio.py`/UpdateSourceAsync flow. Inspect the dry-run list so another pending feature is not accidentally included. No new manifest entry is needed. Never use an old whole source if this baseline has advanced.
+
+## Minimal actual UI acceptance
+
+1. Start a normal one-player Level1 queue. Confirm ready, alive and unanchored. In the actual `begin` phase the receiver is hidden by `setReceiver(false)`, so **do not require the ordinary signal card to be visible**. The compass must be hidden. The dormant ordinary-signal helper is covered offline; it is not a native phase falsely claimed here.
+2. The normal production NAV trigger occurs after the final lever's power-down: PuzzleManager sets `ExitPos = Workspace.PuzzleItems.Exit.Sign.Position`, changes `LightMode` to `ESCAPE`, then fires `PuzzleStatus("exit")`. The actual client's `enterNavMode` displays the circle and arrow. Do not use `PuzzleWon` as a shortcut: that ends gameplay and can hide this HUD.
+3. Take a settled desktop snapshot with `native-readonly.luau` in **Play Client**, plus a real screenshot. Require the Frame compass, one ring and all three arrow segments, circular square bounds within the actual receiver, readable header/readout and no overlap. Compare the new appearance against the requested circle-and-arrow shape, not only numerical property checks.
+4. Turn the actual camera toward four different horizontal directions while stationary. Wait at least0.3s after each turn (the existing direction update is0.22s), then capture the read-only result. A settled angular error within1 degree is sufficient; movement or camera input during the snapshot invalidates that comparison. Check the arrow visibly turns correctly and the circle stays circular. No character teleport or fabricated target is necessary.
+5. Use Studio's real device emulator for one compact landscape view; if keyboard/mouse input keeps the emulator in desktop mode, the existing Studio-only `ForceTouchUI=true` may select its touch branch. Save/restore the previous value and label this as emulated UI, not physical-phone QA. If `UIRegressionViewport` is used instead, label it a synthetic viewport fixture. Record actual viewport and actual compass dimensions; do not assume a64px diameter in compact tiers.
+6. Open/close the existing DEV/Store modal if available; confirm effective PuzzleGui visibility follows the unchanged suppression. On normal round cleanup/lobby return, confirm the receiver and compass are hidden. One representative modal and normal cleanup suffice for this decorative change; do not rerun excluded Testing cards.
+
+### Optional isolated NAV display fixture
+
+If a full puzzle is unnecessary for this visual change, a **clearly labelled Play-only setup** may drive the real existing client event after a normal Level1 queue. Root must own execution. Save the previous `ExitPos`; verify a single actual participant, RoundActive, SelectedLevel1 and a real `Workspace.PuzzleItems.Exit.Sign`. Set `ExitPos` to that existing sign's position and call the existing server `ReplicatedStorage.Remotes.PuzzleStatus:FireClient(player, "exit")`. This exercises the actual installed event/layout/direction code without opening the exit or completing objectives. It is **not a natural NAV-phase or full-gameplay pass**. Do not modify PuzzleWon, LightMode, source or private puzzle state. Stop Play after the fixture (and restore ExitPos before any further same-round work).
+
+Stop Play, remove only recorded fixture overrides, run complete compile/source audit, then get the independent final review before root's separate mouse publish. Keep any emulation/display-fixture limitations in the evidence.
+
+## Minimal owner-only setup files (prepared after later releases)
+
+The current repo PuzzleUI is already the reviewed compass source `cc1c8fdf497130c82be1f7174df1a035f9936790974316d76435357651ce3680`; this is a disk read, not a new Studio parity claim. Current GameManager is `efcd566dd529c1aa61540859fa73d79cc0f7563440b534a9910207f919e16aa0`, including its actual circular queue detector. The older install instructions above describe the original preparation checkpoint.
+
+- In fresh ordinary owner-only Play, root may run `native-stage-owner-queue.server.luau` in the actual server context. It requires real UserId40920547 and places the actual complete avatar at the real `Workspace.ServerLobby.LevelQueueRooms.Level1QueueRoom.LaunchZone1` center, after ray verification of `ChamberFloor` and full root-relative avatar-box clearance. It sends no queue signal and changes no party setting. Original position is returned in the labelled JSON.
+- The normal server queue scanner then chooses the actual host and emits its ordinary `queuehost` event. On the actual client use `PlayerGui.RoundGui.QueueHostPanel.DecreasePlayers` until `PlayerCount` reads1, then click `CreateParty`. The fixture does not submit or imitate that input. The center satisfies both current circular X/Z containment and the server's local Y interval(-6,12).
+- After actual L1 ready/alive/unanchored and before any NAV fixture, use the existing `native-readonly.luau` to document the hidden compass. The server must use `RoundLoadingState="ready"`; `RoundEntryControlsReady` is a client observation, not a server assertion.
+- For the optional isolated visual path, run `native-nav-display.server.luau` in the actual server context. It requires the real existing `PuzzleItems.Exit.Sign`, assigns only its real position to ExitPos and sends the existing installed `PuzzleStatus("exit")` event to the one actual owner. It does not set LightMode, PuzzleWon, Escaped, source or private objective state. Capture actual client/screenshot after at least.3s. The EXIT ONLINE copy is an intentional display fixture and does not mean the exit has been opened.
+- `_G.TrelloCompassNAVFixture.Restore()` restores only this fixture's ExitPos when the original world/token/assigned target/LightMode still match. It deliberately preserves a changed context or later authoritative target. It does not replay fabricated objective events to reset the UI: finish with normal cleanup or Stop Play, as in the original runbook. No repeating timer, new remote, new instance or harness is installed by either setup file.
+
+`native-minimal-setup-validation.json` records both complete-file compiles and frozen hashes. Independent setup review is recorded separately from the final visual score.
+
+Both minimal setup files have independent **9/10** diagnostic review; no blocker. This does not replace root's actual compass screenshots, rotation comparisons, compact viewport and final visual score.

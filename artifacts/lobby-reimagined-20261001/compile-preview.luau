@@ -1,7 +1,0 @@
-local fs=require("@lune/fs")
-local luau=require("@lune/luau")
-luau.compile(fs.readFile("/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/lobby_reimagined/queue_controller.LocalScript.luau"))
-luau.compile(fs.readFile("/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/lobby_reimagined/runtime_bake.ModuleScript.luau"))
-luau.compile(fs.readFile("/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/lobby_reimagined/preview_bootstrap.Script.luau"))
-luau.compile(fs.readFile("/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/lobby_reimagined/preview_builder.ModuleScript.luau"))
-print("Preview Sources compile")

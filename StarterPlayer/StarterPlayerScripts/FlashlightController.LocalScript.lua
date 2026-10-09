@@ -199,8 +199,8 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 end)
 
 -- ── battery ───────────────────────────────────────────────
--- No HUD at all. The player is warned the battery is low by the beam itself
--- flickering: one blink at 50%, a few blinks at 25%.
+-- The beam itself warns too: one blink at 50%, a few blinks at 25%. The level is on the PC widget
+-- below (07 B; owner, 2026-10-08) and, on touch, in the LIGHT cell's segments (14 A; owner, 2026-10-08).
 local BATTERY_BASE     = 100
 local DRAIN_PER_SEC    = 1.111 -- ~90s of continuous light on a full charge
 local RECHARGE_PER_SEC = 3.0  -- full recharge in roughly 33s while switched OFF
@@ -210,185 +210,223 @@ local function batteryMax()
 end
 local battery = batteryMax()
 local warned50, warned25 = false, false
+-- The round body carries the torch: a round, or the Level 2 new-map dev preview, which wears it outside a
+-- round (Level2NewMapPreview, set and cleared by Level2BlenderPreviewAccess; FlashlightSync agrees).
+local function roundBody()
+	return player:GetAttribute("InRound") == true or player:GetAttribute("Level2NewMapPreview") == true
+end
 
--- bottom-of-screen pop-up (shown when the battery dies)
+-- The flashlight gui. Its name stays FlashlightPopup (UIRegression's REQUIRED_GUIS and BORROWED_GUIS
+-- read it), but since HUD batch B1 (owner, 2026-10-08) it holds the PC widget below and, since B2, the
+-- touch LIGHT cell. The dead-battery strip it was named for is gone: the widget reads EMPTY.
 local popupGui = Instance.new("ScreenGui")
 popupGui.Name = "FlashlightPopup"
 popupGui.ResetOnSpawn = false
-popupGui.DisplayOrder = 60
-popupGui.Enabled = player:GetAttribute("InRound") == true
+popupGui.DisplayOrder = 61 -- BUILD-PLAN 1.4: 60 tied with StaminaGui (owner, 2026-10-08)
+popupGui.Enabled = roundBody()
 popupGui.Parent = player:WaitForChild("PlayerGui")
-local popup = Instance.new("TextLabel")
-popup.AnchorPoint = Vector2.new(0.5, 1)
-popup.Position = UDim2.new(0.5, 0, 1, -26)
-popup.Size = UDim2.new(0, 360, 0, 34)
--- 360px overflows a 375-wide portrait screen once margins are counted, and the
--- bottom edge lands on the movement controls. Both are fixed from the layout.
-local function applyPopupLayout()
-	local layout = UIDevice.Layout()
-	popup.Size = UDim2.new(0, math.min(360, layout.SafeRight - layout.SafeLeft), 0, 34)
-	if layout.IsTouch then
-		-- SafeBottom is ABSOLUTE. Handing it over as a gui offset put the popup
-		-- one topbar below where it was computed to sit.
-		local x, y = UIDevice.LocalOffset(popupGui,
-			(layout.Safe.Left + layout.Safe.Right) * .5, layout.SafeBottom - 8)
-		popup.Position = UDim2.fromOffset(x, y)
-	else
-		popup.Position = UDim2.new(0.5, 0, 1, -26)
+
+-- == B flashlight widget (07 B; owner, 2026-10-08) ==
+-- artifacts/hud-final-20261008/BUILD-PLAN.md 07 and FRAMEWISP-PIPELINE.md 2.2. PC and gamepad mount
+-- HUD_PC/FlashlightWidget bottom-left (Safe.Left + 24, bottom - 24): an F / R1 keycap, five battery
+-- segments and one line. It replaces the torch silhouette, the [RB] caption and the focus hint on PC.
+-- The touch layout never shows it (owner P1: on a phone the battery lives only in the LIGHT button,
+-- which is the torch button below until batch B2 mounts the LIGHT cell).
+-- RoundHud is looked up, never waited for: without it the beam still works and no widget draws.
+local REFUSED_SECONDS = 2 -- a press below MIN_TO_TURN_ON reads "LIGHT . TOO LOW" this long
+local refusedUntil = -math.huge
+local widget, widgetParts = nil, nil
+
+local function placeWidget()
+	if not widget then return end
+	local safe = UIDevice.Layout().Safe
+	widget.AnchorPoint = Vector2.new(0, 1)
+	widget.Position = UIDevice.LocalPosition(popupGui, safe.Left + 24, safe.Bottom - 24)
+end
+UIDevice.Changed:Connect(placeWidget)
+
+local function mountWidget()
+	if widget then return end
+	local hudModule = RS:FindFirstChild("RoundHud")
+	local shopUI = RS:FindFirstChild("ZyntraShopUI")
+	local binderModule = shopUI and shopUI:FindFirstChild("ShopBinder")
+	if not (hudModule and binderModule) then return end
+	local Hud, Binder = require(hudModule), require(binderModule)
+	local root = Hud.Mount("HUD_PC", "FlashlightWidget", popupGui)
+	if not root then return end -- RoundHud warned by path; the next round entry tries again
+	-- Hidden until the next heartbeat paints it: the clone carries the template's sample line, which
+	-- must not show for a frame (on touch least of all, owner P1). `widget` is set last, so a
+	-- half-built mount is never painted (owner, 2026-10-08).
+	root.Visible = false
+	Hud.Keycap(Binder.find(root, "KeyChip"), Enum.KeyCode.F, Enum.KeyCode.ButtonR1)
+	local shell = Binder.at(root, "Battery/Shell")
+	widgetParts = {Palette = Binder.Palette, Line = Binder.text(Binder.find(root, "Line")),
+		Hud = Hud, KeyChip = Binder.find(root, "KeyChip"),
+		Shell = shell and shell:FindFirstChildOfClass("UIStroke"), Nub = Binder.at(root, "Battery/Nub"), Segs = {}}
+	for index = 1, 5 do widgetParts.Segs[index] = Binder.at(root, "Battery/Seg" .. index) end
+	widget = root
+	placeWidget()
+end
+
+-- s = {Fraction, Empty, On, Charging, Refused, Advanced, Focused, Spectating}. Empty: the light is
+-- off and cannot be switched on (battery <= MIN_TO_TURN_ON). Returns the line, its tone, lit segments
+-- and whether the outline (shell and nub) is Coral. The B tiles (owner, 2026-10-08): EMPTY is a Coral
+-- outline round no segments; TOO LOW keeps the Cream outline round one Coral segment.
+local function widgetState(s)
+	local lit = s.Empty and 0 or math.clamp(math.ceil(s.Fraction * 5), 0, 5)
+	if s.Spectating then return "THEIR LIGHT", "Cream", lit, s.Empty == true end
+	if s.Refused then return "LIGHT \u{B7} TOO LOW", "Coral", 1, false end
+	if s.Empty then return "LIGHT \u{B7} EMPTY", "Coral", 0, true end
+	if lit <= 2 then return "LIGHT \u{B7} LOW", "Amber", lit, false end
+	if not s.On then return s.Charging and "LIGHT OFF \u{B7} CHARGING" or "LIGHT OFF", "Cream", lit, false end
+	if s.Advanced then return s.Focused and "LIGHT \u{B7} FOCUSED" or "LIGHT \u{B7} WIDE", "Cream", lit, false end
+	return "LIGHT", "Cream", lit, false
+end
+
+-- shown: the caller's gate (spectate target, modal). The touch layout always hides the widget.
+local function paintWidget(s, shown)
+	if not widget then return end
+	widget.Visible = shown and not UIDevice.IsTouch()
+	local line, tone, lit, coral = widgetState(s)
+	local P = widgetParts.Palette
+	if widgetParts.Spectating ~= s.Spectating then
+		-- No keycap while spectating: F / R1 act on your own light, which is out (owner, 2026-10-08).
+		widgetParts.Spectating = s.Spectating
+		if s.Spectating then
+			widgetParts.Hud.Keycap(widgetParts.KeyChip)
+		else
+			widgetParts.Hud.Keycap(widgetParts.KeyChip, Enum.KeyCode.F, Enum.KeyCode.ButtonR1)
+		end
+	end
+	if widgetParts.Line then
+		widgetParts.Line.Text = line
+		widgetParts.Line.TextColor3 = P[tone]
+	end
+	local outline = coral and P.Coral or P.Cream
+	if widgetParts.Shell then widgetParts.Shell.Color = outline end
+	if widgetParts.Nub then widgetParts.Nub.BackgroundColor3 = outline end
+	local fill = tone == "Coral" and P.Coral or lit <= 2 and P.Amber or P.Cream
+	for index, segment in pairs(widgetParts.Segs) do
+		segment.BackgroundColor3 = index > lit and P.Line or fill
+		-- the template draws a lit segment at 0.1 and an unlit one opaque (the HUD_PC dump)
+		segment.BackgroundTransparency = index > lit and 0 or 0.1
 	end
 end
-popup.BackgroundColor3 = Color3.new(0, 0, 0)
-popup.BackgroundTransparency = 0.35
-popup.BorderSizePixel = 0
-popup.Font = Enum.Font.Gotham
-popup.TextScaled = true
-popup.TextColor3 = Color3.fromRGB(235, 95, 75)
-popup.Text = ""
-popup.Visible = false
-popup.Parent = popupGui
-local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 6); pc.Parent = popup
-applyPopupLayout()
-UIDevice.Changed:Connect(applyPopupLayout)
+-- == end B flashlight widget ==
 
-local popupToken = 0
-local function showPopup(text, seconds)
-	popup.Text = text
-	popup.Visible = true
-	popupToken += 1
-	local mine = popupToken
-	task.delay(seconds or 2.5, function()
-		if popupToken == mine then popup.Visible = false end
-	end)
+-- == B2 LIGHT cell (mount) ==
+-- 14 A, owner P1 (owner, 2026-10-08; artifacts/hud-final-20261008/b2/B2-DESIGN.md 6): on touch the
+-- battery lives only in this cell, HUD_Touch's TouchCluster/FlashlightPower: five segments over a
+-- LIGHT label. It replaces the torch silhouette, its transparent tap target and the HOLD / WIDE hint
+-- (D12: the beam itself shows WIDE / FOCUSED). Mounted once, at load, on every client (PC too, hidden),
+-- so the registered root never changes; it is never re-mounted or destroyed.
+-- C3: nothing here waits on a child. After game.Loaded the templates are place data; a missing bundle,
+-- RoundHud or ShopBinder mounts nothing (RoundHud warns by path), registers nothing and leaves the beam,
+-- the keys and the heartbeat as they are.
+if not game:IsLoaded() then game.Loaded:Wait() end
+local lightCell, lightParts = nil, nil
+
+-- s is the widget's input; the cell paints your own light only (it is hidden while spectating, D11).
+-- lit 3+: Cream segments. lit 1-2: Amber segments, LOW in Amber. EMPTY: no segments in a Coral outline,
+-- LIGHT. A refused press: one Coral segment, LOW in Coral, for REFUSED_SECONDS. On / off (D10) and
+-- WIDE / FOCUSED (D12) are not drawn. C8: only colours, alphas and the label are written; the stroke's
+-- Thickness is the template's (ScaledSize) and scaleText's, so the resize a layout pass does cannot
+-- undo a paint.
+local function paintLight(s)
+	local parts = lightParts
+	if not parts then return end
+	local _, tone, lit, coral = widgetState(s)
+	local P = parts.Palette
+	for index, segment in pairs(parts.Segs) do
+		local filled = index <= lit
+		segment.BackgroundColor3 = filled and P[tone] or P.Cream
+		segment.BackgroundTransparency = filled and parts.LitAlpha or parts.UnlitAlpha
+	end
+	if parts.Stroke then parts.Stroke.Color = coral and P.Coral or parts.StrokeColor end
+	if parts.Label then
+		local low = tone == "Amber" or (tone == "Coral" and not coral)
+		parts.Label.Text = low and "LOW" or parts.LabelText
+		parts.Label.TextColor3 = low and P[tone] or parts.LabelColor
+	end
 end
 
--- Complete flashlight silhouette: black body, battery window in the middle and
--- three yellow rays at the front. The art is centred inside one fixed hit box so
--- rotation cannot make the touch target or visible torch drift off-centre.
-local batBody = Instance.new("Frame")
-batBody.Name = "FlashlightPower"
-batBody.AnchorPoint = Vector2.new(0, 1)
-batBody.Position = UDim2.new(0, 12, 1, -10)
-batBody.Size = UDim2.new(0, 72, 0, 136)
-batBody.BackgroundTransparency = 1
-batBody.BorderSizePixel = 0
-batBody.Parent = popupGui
+do
+	local hudModule = RS:FindFirstChild("RoundHud")
+	local shopUI = RS:FindFirstChild("ZyntraShopUI")
+	local binderModule = shopUI and shopUI:FindFirstChild("ShopBinder")
+	local Hud = hudModule and binderModule and require(hudModule)
+	local cell = Hud and Hud.Mount("HUD_Touch", "TouchCluster/FlashlightPower", popupGui, {Name = "FlashlightPower"})
+	if cell then
+		local Binder = require(binderModule)
+		-- Before the first SetInteractive: UIDevice latches the first Selectable it sees, and the
+		-- template ships it true (B2-DESIGN 2.2 rule 2).
+		cell.AutoButtonColor, cell.Selectable, cell.Visible, cell.Active = false, false, false, false
+		local segs = {}
+		for index = 1, 5 do segs[index] = Binder.find(cell, "Seg" .. index) end
+		local label = Binder.text(Binder.find(cell, "Label"))
+		local stroke = cell:FindFirstChildOfClass("UIStroke")
+		-- The template's own look: a lit Seg1 at 0.1, an unlit Seg5 at 0.85, a Line outline, a Cream LIGHT.
+		lightParts = {Palette = Binder.Palette, Segs = segs, Label = label, Stroke = stroke,
+			LitAlpha = segs[1] and segs[1].BackgroundTransparency or 0.1,
+			UnlitAlpha = segs[5] and segs[5].BackgroundTransparency or 0.85,
+			StrokeColor = stroke and stroke.Color, LabelColor = label and label.TextColor3,
+			LabelText = label and label.Text}
+		lightCell = cell
+		-- Painted before anything can show it: the template's sample (four of five lit) never draws.
+		paintLight({Fraction = math.clamp(battery / batteryMax(), 0, 1)})
+	end
+end
+-- == end B2 LIGHT cell (mount) ==
 
--- Built up here and parented to the torch art further down, because the layout
--- pass below sizes that drawing to whatever slot the cluster hands it and runs
--- before the art itself exists.
-local torchScale = Instance.new("UIScale")
-torchScale.Scale = 0.72
-
--- Whether this frame is currently tagged as part of the movement cluster.
+-- Whether the cell is currently tagged as part of the movement cluster.
 -- C_CONTROL_ZONE_INVALIDATION_20260831: the registration follows the FORM
--- FACTOR rather than being done once at load. On a pointer device this frame is
--- not a movement control at all -- it is a bottom-LEFT battery readout with no
--- touch target over it -- and leaving it tagged put the corner of the screen
--- furthest from the cluster inside the rectangle every HUD dodges. Latched, so a
--- relayout that changes nothing does not churn the zone; and reversible, because
--- a tablet leaving its keyboard case flips the form factor without a restart.
+-- FACTOR rather than being done once at load. On a pointer device the cell is
+-- hidden and is no movement control at all, and leaving it tagged put a
+-- rectangle every HUD dodges where nothing is drawn. Latched, so a relayout that
+-- changes nothing does not churn the zone; and reversible, because a tablet
+-- leaving its keyboard case flips the form factor without a restart.
 local flashlightRegistered = false
 
--- The torch used to sit in the bottom-LEFT corner, which on a touch device is
--- entirely inside the dynamic thumbstick's activation region: a fully
--- transparent, Active 72x136 button laid over the movement stick. It only
--- failed to steal the finger because its ScreenGui happened to sit below
--- TouchGui in DisplayOrder -- an accident, and one this rework removes by
--- raising that DisplayOrder. So on touch it takes a slot in the movement
--- cluster. On desktop, where there is no thumbstick and no touch target, it
--- stays exactly where it was.
+-- On touch the LIGHT cell takes its slot in the movement cluster. (The old torch
+-- sat bottom-LEFT, inside the dynamic thumbstick's activation region.) On desktop
+-- it is not drawn at all: the PC widget is the readout there (owner, 2026-10-08).
 --
 -- C_SHORT_SCREEN_CLUSTER_20260831: the slot is READ from UIDevice's control
--- plan, not re-derived here. This file used to keep its own copy of the edge,
--- button-size and second-column constants and repeat NoiseReporter's arithmetic
--- to arrive at the same corner -- one layout written out three times, in three
--- files, which is exactly the arrangement that cannot survive the cluster
--- reflowing into a row on a short landscape screen.
+-- plan, not re-derived here, so the cluster can reflow (the 4 + 4 grid, or the
+-- short-screen row) without this file knowing. D6 (owner, 2026-10-08): Size
+-- follows the slot every pass, 52 px on a phone and 64 on a tablet, and
+-- ShopBinder.scaleText re-fits the label on the resize. Never re-mounted.
 local function applyFlashlightLayout()
+	if not lightCell then return end -- D14: no template, nothing drawn and nothing registered
 	local layout = UIDevice.Layout()
 	if layout.IsTouch ~= flashlightRegistered then
 		flashlightRegistered = layout.IsTouch
 		if flashlightRegistered then
-			UIDevice.RegisterControlRect("FlashlightPower", batBody)
+			UIDevice.RegisterControlRect("FlashlightPower", lightCell)
 		else
-			UIDevice.UnregisterControlRect(batBody)
+			UIDevice.UnregisterControlRect(lightCell)
 		end
 	end
 	if layout.IsTouch then
 		local slot = layout.ControlPlan.Slots.FlashlightPower
-		batBody.AnchorPoint = Vector2.new(1, 1)
-		batBody.Size = UDim2.fromOffset(slot.Width, slot.Height)
-		batBody.Position = UDim2.new(1, -slot.Right, 1, -slot.Bottom)
-		-- The torch ART is a fixed 160x48 drawing rotated upright, so it is the
-		-- SLOT that changes size under it. 0.72 was chosen against the 58px slot
-		-- the column gives it: 160 * 0.72 is 115, very nearly twice the slot, and
-		-- the overhang is deliberate -- the torch reads as a torch rather than as
-		-- a 58px icon. Held to that same proportion, the row's smaller cell keeps
-		-- the look instead of hanging a 115px drawing over a 45px button and up
-		-- into the readout's headroom. The column is untouched by this:
-		-- min(0.72, 58 * 2 / 160) is 0.72, and the tablet's 72px slot likewise.
-		torchScale.Scale = math.min(0.72, slot.Height * 2 / 160)
-	else
-		batBody.AnchorPoint = Vector2.new(0, 1)
-		batBody.Size = UDim2.fromOffset(72, 136)
-		batBody.Position = UDim2.new(0, 12, 1, -10)
-		torchScale.Scale = 0.72
+		lightCell.AnchorPoint = Vector2.new(1, 1)
+		lightCell.Size = UDim2.fromOffset(slot.Width, slot.Height)
+		lightCell.Position = UDim2.new(1, -slot.Right, 1, -slot.Bottom)
 	end
 end
 
--- Touch-only hit target over the existing flashlight symbol. It remains absent
--- from mouse/keyboard devices, so the PC F-key control is unchanged.
-local touchFlashButton = Instance.new("TextButton")
-touchFlashButton.Name = "TouchFlashlightToggle"
-touchFlashButton.Size = UDim2.fromScale(1, 1)
-touchFlashButton.BackgroundTransparency = 1
-touchFlashButton.Text = ""
-touchFlashButton.AutoButtonColor = false
-touchFlashButton.Active = true
-touchFlashButton.Selectable = false
-touchFlashButton.ZIndex = 20
-touchFlashButton.Parent = batBody
--- Visible AND Active move together: an invisible-but-Active button keeps
--- swallowing taps, which is exactly how this one competed with the thumbstick.
--- The hit target is fully transparent, so leaving it Active while every other
--- on-screen control has stood down makes it an invisible tap sink over the
--- HUD -- and at the raised DisplayOrder 60 it now wins those taps. It stands
--- down on exactly the states the movement cluster does.
--- C_LIVE_CONTROL_RECTS_20260831: the flashlight's hit target is part of the
--- movement cluster, so it registers its rectangle like the rest of them. It is
--- the BODY that is measured, not the transparent hit box, because the body is
--- what the player sees and reaches for. The registration itself lives in
--- applyFlashlightLayout, which is where the form factor is already known.
+-- Visible AND Active move together (UIDevice.SetInteractive): a hidden but
+-- Active button keeps swallowing taps, which is how the old transparent torch
+-- target once competed with the thumbstick. The cell stands down on exactly the
+-- states the movement cluster does.
+-- C_LIVE_CONTROL_RECTS_20260831: the cell registers its rectangle like the rest
+-- of the cluster. The registration lives in applyFlashlightLayout, which is
+-- where the form factor is already known.
 
 -- C_GAMEPAD_FLASHLIGHT_20260904: a controller had no way to switch the light on
--- at all. The hit target above is gated on UIDevice.IsTouch and the only other
--- control was the F key, so a gamepad-only player walked the whole level in the
--- dark. ButtonR1 toggles it (see the InputBegan handler), and this is the
--- caption that says so. The binding text comes from UIDevice, which prints the
--- gamepad glyph only on a pointer device where a gamepad is the LIVE input and
--- nothing at all on a touchscreen -- so desktop and phone are unchanged.
-local bindingCaption = Instance.new("TextLabel")
-bindingCaption.Name = "FlashlightBinding"
-bindingCaption.AnchorPoint = Vector2.new(0.5, 1)
-bindingCaption.Position = UDim2.new(0.5, 0, 0, -2)
-bindingCaption.Size = UDim2.fromOffset(72, 16)
-bindingCaption.BackgroundTransparency = 1
-bindingCaption.Font = Enum.Font.Code
-bindingCaption.TextSize = 14
-bindingCaption.TextColor3 = Color3.fromRGB(235, 236, 240)
-bindingCaption.TextStrokeColor3 = Color3.new(0, 0, 0)
-bindingCaption.TextStrokeTransparency = 0.4
-bindingCaption.Text = ""
-bindingCaption.Visible = false
-bindingCaption.ZIndex = 21
-bindingCaption.Parent = batBody
-
-local function applyFlashlightBinding()
-	local text = UIDevice.Binding(nil, "[RB]")
-	bindingCaption.Text = text
-	bindingCaption.Visible = text ~= ""
-end
-applyFlashlightBinding()
+-- at all. ButtonR1 toggles it (see the InputBegan handler). The "[RB]" caption
+-- that said so is gone (owner, 2026-10-08): the widget's keycap shows the R1
+-- glyph through RoundHud.Keycap whenever a gamepad is the live input.
 
 -- Keep the production shade itself in the availability predicate. The shared
 -- QueueModalOpen attribute remains the fallback contract, but its listener and
@@ -398,24 +436,23 @@ local queueShadeVisible = player:GetAttribute("QueueModalOpen") == true
 
 local function flashlightTargetAvailable()
 	if not UIDevice.IsTouch() then return false end
-	if player:GetAttribute("InRound") ~= true then return false end
+	if not roundBody() then return false end
 	if player:GetAttribute("Escaped") == true then return false end
 	if player:GetAttribute("Spectating") == true then return false end
-	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
-	if player:GetAttribute("DevPhoneOpen") == true then return false end
-	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
-	-- The party dialog owns the screen too; this list had three of the four.
-	if queueShadeVisible or player:GetAttribute("QueueModalOpen") == true then return false end
+	-- D13 (owner, 2026-10-08): the eight screen-owning modals through UIDevice's one predicate, the one
+	-- its zones use, instead of a private list of four. The shade can lead QueueModalOpen by two frames.
+	if queueShadeVisible or UIDevice.ScreenOwningModalOpen() then return false end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	return humanoid ~= nil and humanoid.Health > 0
 end
 
+-- The only writer of the LIGHT cell's Visible (and Active).
 local function applyFlashlightTouchTarget()
-	UIDevice.SetInteractive(touchFlashButton, flashlightTargetAvailable())
+	if lightCell then UIDevice.SetInteractive(lightCell, flashlightTargetAvailable()) end
 end
-for _, attribute in ipairs({"InRound", "Escaped", "Level3_Hiding", "Spectating",
-	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen"}) do
+-- No modal attribute is listed: UIDevice.Changed (below) fires, forced, on every screen-owning modal (D13).
+for _, attribute in ipairs({"InRound", "Level2NewMapPreview", "Escaped", "Level3_Hiding", "Spectating"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(function()
 		applyFlashlightTouchTarget()
 	end)
@@ -448,134 +485,13 @@ applyFlashlightLayout()
 UIDevice.Changed:Connect(function()
 	applyFlashlightTouchTarget()
 	applyFlashlightLayout()
-	-- UIDevice fires this on LastInputTypeChanged too, which is exactly when a
-	-- player picks up or puts down the controller.
-	applyFlashlightBinding()
 end)
-
-local torch = Instance.new("Frame")
-torch.Name = "Silhouette"
-torch.AnchorPoint = Vector2.new(0.5, 0.5)
-torch.Position = UDim2.fromScale(0.5, 0.5)
-torch.Size = UDim2.new(0, 160, 0, 48)
-torch.BackgroundTransparency = 1
-torch.Rotation = -90 -- upright, with the lens/rays at the top
-torch.Parent = batBody
-torchScale.Parent = torch
-
-local function outline(frame, radius)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, radius)
-	corner.Parent = frame
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(235, 236, 240)
-	stroke.Thickness = 2
-	stroke.Parent = frame
-end
-
-local tail = Instance.new("Frame")
-tail.Position = UDim2.new(0, 3, 0, 13)
-tail.Size = UDim2.new(0, 17, 0, 24)
-tail.BackgroundColor3 = Color3.fromRGB(8, 9, 11)
-tail.BorderSizePixel = 0
-tail.Parent = torch
-outline(tail, 5)
-
-local handle = Instance.new("Frame")
-handle.Position = UDim2.new(0, 14, 0, 10)
-handle.Size = UDim2.new(0, 100, 0, 30)
-handle.BackgroundColor3 = Color3.fromRGB(10, 11, 14)
-handle.BorderSizePixel = 0
-handle.Parent = torch
-outline(handle, 7)
-
-local batteryWindow = Instance.new("Frame")
-batteryWindow.Position = UDim2.new(0, 26, 0, 6)
-batteryWindow.Size = UDim2.new(0, 53, 0, 18)
-batteryWindow.BackgroundColor3 = Color3.fromRGB(26, 28, 33)
-batteryWindow.BorderSizePixel = 0
-batteryWindow.Parent = handle
-outline(batteryWindow, 4)
-
-local barHolder = Instance.new("Frame")
-barHolder.Position = UDim2.new(0, 4, 0, 4)
-barHolder.Size = UDim2.new(1, -8, 1, -8)
-barHolder.BackgroundTransparency = 1
-barHolder.Parent = batteryWindow
-local barList = Instance.new("UIListLayout")
-barList.FillDirection = Enum.FillDirection.Horizontal
-barList.Padding = UDim.new(0, 3)
-barList.HorizontalAlignment = Enum.HorizontalAlignment.Center
-barList.VerticalAlignment = Enum.VerticalAlignment.Center
-barList.Parent = barHolder
-local batBars = {}
-for i = 1, 5 do
-	local bar = Instance.new("Frame")
-	bar.Size = UDim2.new(0, 7, 1, 0)
-	bar.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
-	bar.BorderSizePixel = 0
-	bar.LayoutOrder = i
-	bar.Parent = barHolder
-	local bc = Instance.new("UICorner")
-	bc.CornerRadius = UDim.new(0, 2)
-	bc.Parent = bar
-	batBars[i] = bar
-end
-
-local neck = Instance.new("Frame")
-neck.Position = UDim2.new(0, 109, 0, 8)
-neck.Size = UDim2.new(0, 11, 0, 34)
-neck.BackgroundColor3 = Color3.fromRGB(9, 10, 12)
-neck.BorderSizePixel = 0
-neck.Parent = torch
-outline(neck, 4)
-
-local flashHead = Instance.new("Frame")
-flashHead.Position = UDim2.new(0, 116, 0, 4)
-flashHead.Size = UDim2.new(0, 27, 0, 42)
-flashHead.BackgroundColor3 = Color3.fromRGB(8, 9, 11)
-flashHead.BorderSizePixel = 0
-flashHead.Parent = torch
-outline(flashHead, 6)
-
-local lens = Instance.new("Frame")
-lens.Position = UDim2.new(1, -7, 0, 5)
-lens.Size = UDim2.new(0, 8, 1, -10)
-lens.BackgroundColor3 = Color3.fromRGB(255, 218, 82)
-lens.BackgroundTransparency = on and 0 or 0.7
-lens.BorderSizePixel = 0
-lens.Parent = flashHead
-local lensCorner = Instance.new("UICorner")
-lensCorner.CornerRadius = UDim.new(0, 4)
-lensCorner.Parent = lens
-
-local lightRays = {}
-for index, spec in ipairs({ { 146, 8, -10 }, { 149, 22, 0 }, { 146, 36, 10 } }) do
-	local ray = Instance.new("Frame")
-	ray.Name = "PowerRay" .. index
-	ray.Position = UDim2.new(0, spec[1], 0, spec[2])
-	ray.Size = UDim2.new(0, index == 2 and 18 or 14, 0, 4)
-	ray.BackgroundColor3 = Color3.fromRGB(255, 215, 72)
-	ray.BorderSizePixel = 0
-	ray.Rotation = spec[3]
-	ray.Visible = on
-	ray.Parent = torch
-	local rc = Instance.new("UICorner")
-	rc.CornerRadius = UDim.new(1, 0)
-	rc.Parent = ray
-	lightRays[#lightRays + 1] = ray
-end
-
-local BAT_FULL  = Color3.fromRGB(245, 245, 245)
-local BAT_EMPTY = Color3.fromRGB(235, 60, 50)
 
 local function setLights(state)
  on = state
 	if coreLight then coreLight.Enabled = state end
 	if spillLight then spillLight.Enabled = state end
 	if fillLight then fillLight.Enabled = state end
- lens.BackgroundTransparency = state and 0 or 0.72
- for _, ray in ipairs(lightRays) do ray.Visible = state end
  remote:FireServer(state)
 end
 
@@ -606,7 +522,7 @@ local function alive()
 end
 
 local function toggle()
-	if player:GetAttribute("InRound") ~= true then return end
+	if not roundBody() then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
 		setLights(false)
@@ -614,50 +530,42 @@ local function toggle()
 	elseif battery > MIN_TO_TURN_ON then
 		setLights(true)
 		clickSound:Play()
+		refusedUntil = -math.huge -- the refusal is answered
+	else
+		refusedUntil = time() + REFUSED_SECONDS -- no longer silent: "LIGHT . TOO LOW" (owner, 2026-10-08)
 	end
 end
 
 local function toggleFocus()
-	if player:GetAttribute("InRound") ~= true or not alive() then return end
+	if not roundBody() or not alive() then return end
 	if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then return end
 	remote:FireServer("focus", not isFocused())
 end
-local focusCaption = Instance.new("TextLabel")
-focusCaption.Name = "FocusModeHint"
-focusCaption.BackgroundColor3 = Color3.fromRGB(10, 18, 17)
-focusCaption.BackgroundTransparency = .2
-focusCaption.BorderSizePixel = 0
-focusCaption.ZIndex = 21
-focusCaption.Size = UDim2.new(1, 0, 0, 26)      -- two lines of 11 px ("HOLD / WIDE" on touch); 10 px was under the
-focusCaption.Position = UDim2.new(0, 0, 1, -26) -- smallest size the phone audit accepts (MOBILE_QA_20261008)
-focusCaption.TextWrapped = true
-focusCaption.Font = Enum.Font.GothamBold
-focusCaption.TextSize = 11
-focusCaption.TextColor3 = Color3.fromRGB(73, 245, 204)
-focusCaption.TextStrokeTransparency = .3
-focusCaption.Parent = batBody
-local function refreshFocusCaption()
-	focusCaption.Visible = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true and alive()
-	focusCaption.Text = (UIDevice.IsTouch() and "HOLD\n" or (UIDevice.Binding("Y", "R3") .. ": ")) .. (isFocused() and "FOCUSED" or "WIDE")
-end
-player:GetAttributeChangedSignal("ZyntraOwnsAdvancedEquipment"):Connect(refreshFocusCaption)
-UIDevice.Changed:Connect(refreshFocusCaption)
+-- == B2 LIGHT cell (input/paint) ==
+-- The torch button's handler, moved onto the cell verbatim (owner, 2026-10-08): a touch, or the Studio
+-- ForceTouchUI mouse; a second press inside 0.2 s is ignored; holding 0.45 s with Advanced Equipment
+-- focuses instead (UIS.InputEnded below toggles a short press). Here, after toggle and toggleFocus, so
+-- both are in scope (critic C2). The paint is paintLight in the mount block, so the first one lands
+-- before the first SetInteractive; the heartbeat repaints it.
 local press, lastTouchToggle = nil, 0
-touchFlashButton.InputBegan:Connect(function(input)
-	local touch = input.UserInputType == Enum.UserInputType.Touch
-	local studioMouse = RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true
-		and input.UserInputType == Enum.UserInputType.MouseButton1
-	if not (touch or studioMouse) or os.clock() - lastTouchToggle < .2 then return end
-	lastTouchToggle = os.clock()
-	local current = {Input = input, Held = false}
-	press = current
-	task.delay(.45, function()
-		if press == current and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true then
-			current.Held = true
-			toggleFocus()
-		end
+if lightCell then
+	lightCell.InputBegan:Connect(function(input)
+		local touch = input.UserInputType == Enum.UserInputType.Touch
+		local studioMouse = RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true
+			and input.UserInputType == Enum.UserInputType.MouseButton1
+		if not (touch or studioMouse) or os.clock() - lastTouchToggle < .2 then return end
+		lastTouchToggle = os.clock()
+		local current = {Input = input, Held = false}
+		press = current
+		task.delay(.45, function()
+			if press == current and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true then
+				current.Held = true
+				toggleFocus()
+			end
+		end)
 	end)
-end)
+end
+-- == end B2 LIGHT cell (input/paint) ==
 UIS.InputEnded:Connect(function(input)
 	if press and press.Input == input then
 		local current = press
@@ -665,7 +573,6 @@ UIS.InputEnded:Connect(function(input)
 		if not current.Held then toggle() end
 	end
 end)
-refreshFocusCaption()
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
@@ -684,25 +591,22 @@ local boundCharacter
 local function bindCharacter(char)
 	if boundCharacter == char then return end
 	boundCharacter = char
-	char:GetAttributeChangedSignal("FlashlightFocused"):Connect(refreshFocusCaption)
-	refreshFocusCaption()
 	setLights(false)
 	battery = batteryMax()
 	local hum = char:WaitForChild("Humanoid")
-	hum.Died:Connect(function() setLights(false); refreshFocusCaption() end)
+	hum.Died:Connect(function() setLights(false); applyFlashlightTouchTarget() end)
 end
 player.CharacterAdded:Connect(bindCharacter)
 if player.Character then task.spawn(bindCharacter, player.Character) end
 
 local function updateRoundVisibility()
-	local inRound = player:GetAttribute("InRound") == true
+	local inRound = roundBody()
 	popupGui.Enabled = inRound
 	if not inRound and on then setLights(false) end
-	if not inRound then
-		popup.Visible = false
-	end
+	if inRound then mountWidget() end
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundVisibility)
+player:GetAttributeChangedSignal("Level2NewMapPreview"):Connect(updateRoundVisibility)
 updateRoundVisibility()
 
 -- ── teammates' flashlights (visible to YOU) ───────────────
@@ -854,6 +758,9 @@ player:GetAttributeChangedSignal("Level4_BatteryRefill"):Connect(function()
 	lastRefill = type(count) == "number" and count or 0
 end)
 
+-- The widget's input, refilled each frame so the heartbeat allocates no table (owner, 2026-10-08).
+local widgetInput = {}
+
 -- drain while on, recharge while off; die at empty
 RunService.Heartbeat:Connect(function(dt)
 	if player:GetAttribute("DevUnlimited") == true then
@@ -864,7 +771,7 @@ RunService.Heartbeat:Connect(function(dt)
 		if battery <= 0 then
 			battery = 0
 			setLights(false) -- (sets `on` false, so this fires once at the drain-out)
-			showPopup("Flashlight dead — let it recharge", 3)
+			-- the widget reads "LIGHT . EMPTY" until it can be switched on again (owner, 2026-10-08)
 		end
 	else
 		battery = math.min(batteryMax(), battery + RECHARGE_PER_SEC * dt)
@@ -887,8 +794,9 @@ RunService.Heartbeat:Connect(function(dt)
 		warnBlink(1)
 	end
 
-	-- battery bars: fill count + colour (white full → red near empty)
+	-- the readouts: the PC widget (07 B; THEIR LIGHT while spectating) and the touch LIGHT cell (14 A)
 	local spectating = player:GetAttribute("Spectating") == true
+	local shown, shining, empty = true, on, not on and battery <= MIN_TO_TURN_ON
 	if spectating then
 		local id = player:GetAttribute("SpectateTargetUserId")
 		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
@@ -898,30 +806,20 @@ RunService.Heartbeat:Connect(function(dt)
 		local valid = watched and watched:GetAttribute("InRound") == true
 			and watched:GetAttribute("Escaped") ~= true and hum and hum.Health > 0
 			and type(value) == "number"
-		batBody.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
-		bindingCaption.Visible = false
-		focusCaption.Visible = false
+		shown = valid == true and not UIDevice.ScreenOwningModalOpen()
 		if valid then
 			batteryFraction = math.clamp(value, 0, 1)
 			local flag = char:FindFirstChild("FlashlightOn")
-			local shining = flag and flag.Value == true
-			lens.BackgroundTransparency = shining and 0 or .72
-			for _, ray in ipairs(lightRays) do ray.Visible = shining == true end
-		end
-	else
-		batBody.Visible = true
-		applyFlashlightBinding()
-		refreshFocusCaption()
-	end
-	local filled = math.clamp(math.ceil(batteryFraction * 5), 0, 5)
-	local col = BAT_FULL:Lerp(BAT_EMPTY, 1 - batteryFraction)
-	for i, bar in ipairs(batBars) do
-		if i <= filled then
-			bar.BackgroundTransparency = 0
-			bar.BackgroundColor3 = col
-		else
-			bar.BackgroundTransparency = 0.7
-			bar.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+			shining = flag and flag.Value == true
+			empty = not shining and batteryFraction * BATTERY_BASE <= MIN_TO_TURN_ON
 		end
 	end
+	local s = widgetInput
+	s.Fraction, s.Empty, s.On, s.Spectating = batteryFraction, empty, shining == true, spectating
+	s.Charging, s.Refused = not on and battery < batteryMax(), time() < refusedUntil
+	s.Advanced, s.Focused = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true, isFocused()
+	paintWidget(s, shown)
+	-- The LIGHT cell paints your own light; applyFlashlightTouchTarget owns its Visible, and hides it
+	-- while spectating (D11), so the watched battery is never painted into it (owner, 2026-10-08).
+	if not spectating then paintLight(s) end
 end)

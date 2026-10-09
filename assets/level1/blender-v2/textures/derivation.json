@@ -1,0 +1,21 @@
+{
+  "wallpaperSourceAsset": 87947439437597,
+  "wallpaperSourceSha256": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980",
+  "albedoPixelsUntouched": true,
+  "wallpaperTint": [
+    255,
+    235,
+    150
+  ],
+  "normalStrength": 2.2,
+  "roughBase": 0.88,
+  "unchangedCarpetCeiling": [
+    "carpet_albedo.png",
+    "carpet_normal.png",
+    "carpet_rough.png",
+    "ceiling_albedo.png",
+    "ceiling_normal.png",
+    "ceiling_rough.png"
+  ],
+  "propFinish": "Deterministic Blender mechanical-kit grain; shared normal/rough maps"
+}

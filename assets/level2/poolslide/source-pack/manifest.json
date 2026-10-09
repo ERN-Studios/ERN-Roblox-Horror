@@ -1,0 +1,330 @@
+{
+  "schema": "poolslide-source-pack-v1",
+  "snapshotDate": "2026-08-31",
+  "format": "split tar.gz",
+  "partSizeBytes": 655360,
+  "partCount": 21,
+  "archiveBytes": 13281813,
+  "archiveSha256": "5cb130d0bfd4656d6d5f83e9b95ba11d8669b2250e21da13f787a56e953653a3",
+  "verifiedSourceFileCount": 41,
+  "files": [
+    {
+      "path": "SHA256SUMS",
+      "bytes": 4443,
+      "sha256": "f88809dcb83600708f0376fce3b3bf9b5388c475eb43ff814c9984e39de86b87"
+    },
+    {
+      "path": "animation/ANIMATION_INTEGRATION.md",
+      "bytes": 6773,
+      "sha256": "f2209decf67e7c1fadc7e3649601c607eae0a08be4b9207f64a2dc75fefd2ebc"
+    },
+    {
+      "path": "animation/actual-studio-poolslide-rest.json",
+      "bytes": 17059,
+      "sha256": "c3f91815c2e688f0c9a822c3d0c7ee67d14c04086a14ee6cdb9ef5a1a3984519"
+    },
+    {
+      "path": "animation/animation_source_samples.json",
+      "bytes": 1208778,
+      "sha256": "cfb3e34af89c9d69634e7bc6410f0a3de3ceaaa25503380e32ea84e55fb47951"
+    },
+    {
+      "path": "animation/keyframes/actual-target-validation.json",
+      "bytes": 3512,
+      "sha256": "746c2ab8ac3e6e5986896b74fa6bb82928932f5379e95a2a44c22b7164c71101"
+    },
+    {
+      "path": "animation/keyframes/idle.json",
+      "bytes": 207130,
+      "sha256": "8ab19b0bf482806ea59d9d7b0c3ea7aaafdfc5403843dd438e6c17b61c5dadcf"
+    },
+    {
+      "path": "animation/keyframes/retarget-diagnostics.json",
+      "bytes": 4619,
+      "sha256": "ad5252367ad0a4c39896a77f6f30ab9db747e58ae97974da2e93b7c9f9e8d0ba"
+    },
+    {
+      "path": "animation/keyframes/run.json",
+      "bytes": 34683,
+      "sha256": "0df5be515164308b593cb003bdbb651da3d00ea4f6705e4d0becb5b9ac34565a"
+    },
+    {
+      "path": "animation/keyframes/walk.json",
+      "bytes": 55170,
+      "sha256": "713c00a0339755ee98e39e2fd481bb2da9b782bc6225e47e53c0246d8377c0fb"
+    },
+    {
+      "path": "animation/retarget_poolslide_keyframes.py",
+      "bytes": 18602,
+      "sha256": "d8d8d7f39cb77c3d546ac8c75c22bfb6040dfbe213c82da25c2b05191098327b"
+    },
+    {
+      "path": "animation/sample_poolslide_animations.py",
+      "bytes": 8070,
+      "sha256": "9947ede0bf37bdda1fd85508d9ff9e99e623d864f85abb521eadd2ffe0d251e6"
+    },
+    {
+      "path": "animation/test_poolslide_retarget.py",
+      "bytes": 7654,
+      "sha256": "81346ef6a8051ec9d7a962aaf2b5dadd5dff52d2965ddc0b883f79b16e4bd368"
+    },
+    {
+      "path": "animation/validate_actual_poolslide_keyframes.py",
+      "bytes": 5831,
+      "sha256": "4b36cb93bb597692acc76d4fa0beda5c61baadfd5be70bfe045f96f11ee51330"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_BaseColor_Level2.png",
+      "bytes": 159221,
+      "sha256": "78c61af908bd1f29ea3f7f293b40965b43eb295436f3e7b727345a13620667c9"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Foot_Blue.png",
+      "bytes": 83,
+      "sha256": "19877a336c6504152fb1961800df464b65ec63dcfb58abcde6a33933219b950a"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Foot_Yellow.png",
+      "bytes": 83,
+      "sha256": "cd38201bded6697f1518b22fea7f56a95f6f36d944df5c43b56b51be7c6bad27"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Idle.fbx",
+      "bytes": 2477804,
+      "sha256": "c1bb8d031f0ad4dde9e0a43f37b5a96e4d1d22f0eb4449f19b8cd9a3787d0af4"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Rigged.fbx",
+      "bytes": 2268540,
+      "sha256": "cac9f9005bb96262578be0fb101be882cc1b3fcc979d974e2bc4002155f762e0"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Rigged.glb",
+      "bytes": 2492428,
+      "sha256": "69f410178714c70ddf72009582a03ee9e19674821bc6ccb42ef8683c121fad32"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Run.fbx",
+      "bytes": 2313692,
+      "sha256": "e325a8fecac4c19665d1bda48a07db5d5b641f32845a7eb2a342907a7fe95c42"
+    },
+    {
+      "path": "authoring/Final_Roblox/PoolSlideEntity_Walk.fbx",
+      "bytes": 2341180,
+      "sha256": "035edcf49b7fcda051d83560a46dbbc77ecfcf503070e7a78d3a017a5f434d35"
+    },
+    {
+      "path": "authoring/README.md",
+      "bytes": 3674,
+      "sha256": "8803854b7c6c0808ffffc1ecdcd4fb054085bf273dc8f8c75359ad09a71f826a"
+    },
+    {
+      "path": "import/Studio_Import/PoolSlideEntity_BaseColor_Level2.png",
+      "bytes": 159221,
+      "sha256": "78c61af908bd1f29ea3f7f293b40965b43eb295436f3e7b727345a13620667c9"
+    },
+    {
+      "path": "import/Studio_Import/PoolSlideEntity_Foot_Blue.png",
+      "bytes": 83,
+      "sha256": "19877a336c6504152fb1961800df464b65ec63dcfb58abcde6a33933219b950a"
+    },
+    {
+      "path": "import/Studio_Import/PoolSlideEntity_Foot_Yellow.png",
+      "bytes": 83,
+      "sha256": "cd38201bded6697f1518b22fea7f56a95f6f36d944df5c43b56b51be7c6bad27"
+    },
+    {
+      "path": "import/Studio_Import/PoolSlideEntity_Studio.fbx",
+      "bytes": 2313836,
+      "sha256": "e71719ea32e89097fdb129a2688c552af8b3e91a4bf928f9a45e2e8d0459191b"
+    },
+    {
+      "path": "import/Studio_Import/PoolSlideEntity_Studio.glb",
+      "bytes": 2497424,
+      "sha256": "935f74482f9913cd8cd1c5a57bf9153bdf5c40c7124fde983a9495e1f10320f2"
+    },
+    {
+      "path": "import/Studio_Import/README.md",
+      "bytes": 2767,
+      "sha256": "1cd3837960250f4155a78d9a627b9b0f7e0d225e419114526f9ed6c6f61edfbc"
+    },
+    {
+      "path": "import/Studio_Import/audit_skinning_limit.py",
+      "bytes": 4346,
+      "sha256": "8db93c60f2f80160fab5bdbef1f11a81759fe1a05ee23961e4525f477f2de811"
+    },
+    {
+      "path": "import/Studio_Import/prepare_studio_import.py",
+      "bytes": 11927,
+      "sha256": "722382ecab00382d8d51090a9d74f542e67dc3056a1099b14eba3bdaf1bb3802"
+    },
+    {
+      "path": "import/Studio_Import/roundtrip-validation.json",
+      "bytes": 32357,
+      "sha256": "6e2522c5daee7d35104cfa7793dc2db6061c9613e5f4f6c5d8494c5438f1665a"
+    },
+    {
+      "path": "import/Studio_Import/skinning-deformation-audit.json",
+      "bytes": 7353,
+      "sha256": "da36716029bed318316cdba9f39043a723193eaf0f86dcc83cb1c3f303a3995b"
+    },
+    {
+      "path": "import/Studio_Import/studio-import-validation.json",
+      "bytes": 64152,
+      "sha256": "d7289d49feafdd6a57ea03e3aebb66ff59e74b900cc14cf3937480ffe3af3023"
+    },
+    {
+      "path": "import/Studio_Import/validate_roundtrip.py",
+      "bytes": 3577,
+      "sha256": "1cd5d3398a1320962bcac9d432345768392b31ef4e918f751c19d1c3fded5a64"
+    },
+    {
+      "path": "recovery/README.md",
+      "bytes": 4862,
+      "sha256": "23ff114a8e7a7d0f9ade70ca76ec1db54c54d6368bfbc92656491a4f97b87b68"
+    },
+    {
+      "path": "recovery/build_source_pack.py",
+      "bytes": 9619,
+      "sha256": "188c85e7aa0918b52f1a5d6396cf813fbc1c152ede400a62be2a84b347d3563b"
+    },
+    {
+      "path": "recovery/reconstruct_poolslide.luau",
+      "bytes": 12789,
+      "sha256": "6654d3bbca097a01c27090809e4eee64514ee6bd2fe2a5994926030e1f926803"
+    },
+    {
+      "path": "recovery/restore-poolslide-assets.py",
+      "bytes": 4721,
+      "sha256": "6186177da484b00cfd0ae19bcaba9b60b1e17e8014e5a6d6355f347c91a62353"
+    },
+    {
+      "path": "recovery/test_recovery_archive.py",
+      "bytes": 4881,
+      "sha256": "824b8fea6275e3a988626d9caeeb5ccc82aa2473f32e544f5bff63ef6925b195"
+    },
+    {
+      "path": "studio/install_poolslide_template.luau",
+      "bytes": 2778,
+      "sha256": "85c1ee975ff60eba524f76ff82607c6ba81a56068ce3713472fdda9f206ff2aa"
+    },
+    {
+      "path": "studio/recovery-bundle.json",
+      "bytes": 347824,
+      "sha256": "c4d382a9902932c6b5fb1bc561af25d3307d711c5a64cfc7c61b82a754cb91e0"
+    },
+    {
+      "path": "studio/template-reconstruction.json",
+      "bytes": 50826,
+      "sha256": "77fd9ed7509b7c2f44d56d97c4022919b96a8d6724932c451dcdc78f4099365b"
+    }
+  ],
+  "parts": [
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaaa",
+      "bytes": 655360,
+      "sha256": "74f117471ba9b57c9d8523c56e0081e25d5b07a67cf77c7ac44ea62edeb8db74"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaab",
+      "bytes": 655360,
+      "sha256": "a9d422cd5571c80a575f16e001073835fa213aa5a115b9b8385afd63f237e9c9"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaac",
+      "bytes": 655360,
+      "sha256": "459e9066d0479718f4493307f5cacec2eeb84d7b285641d12a48f6eace25d2b9"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaad",
+      "bytes": 655360,
+      "sha256": "89fec5ee91e97d19d2d573d50f1175043dcf8d00a654402e8f831b3ef56b1bf8"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaae",
+      "bytes": 655360,
+      "sha256": "c981bdf45b5840f7d520f9b689aa3bc4282e6bb7bdda6524a1c904158ed85ec4"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaaf",
+      "bytes": 655360,
+      "sha256": "ad5e98b4cc90c7b454d3421bf93a39d26a2c596f59c65fc51bca8102b41a162f"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaag",
+      "bytes": 655360,
+      "sha256": "77b6bd86dbd3ad03d2a3dd01fe23b007892c51386ef341180d46184355f5135e"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaah",
+      "bytes": 655360,
+      "sha256": "678e9e78e613c412c81e9eaf934164d52cee6b1782dc6c2677dafb523e9810c8"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaai",
+      "bytes": 655360,
+      "sha256": "8b8a3fb4d0982aaf9ff28f220cbe4ad99c3e25b112047b20110637036ee86a46"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaaj",
+      "bytes": 655360,
+      "sha256": "83889a8d6bbe5d63a2c3729d00dca3ac8e0bf0e1367c2e0f8b5ba8c6f4120498"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaak",
+      "bytes": 655360,
+      "sha256": "f0fd67f4e12afb2068ae3c496f87073910cecdb14f97602c73be76414687cc20"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaal",
+      "bytes": 655360,
+      "sha256": "ca12b71f4853b43f066a4772ac782eba6a0d1639651fbd7b56f040903b4f6cb2"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaam",
+      "bytes": 655360,
+      "sha256": "7ef59b41164250f6183cb385767888ac4832e39ac10a429e7afe0b6fc72a4040"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaan",
+      "bytes": 655360,
+      "sha256": "9047d9785de190d8a42955ae86d1c0ac288d08ae24d519a00f8411e7108b6d49"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaao",
+      "bytes": 655360,
+      "sha256": "8d839dbf6160e9a4e7a51705080092169cb9c23f97107b19c58961195c763312"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaap",
+      "bytes": 655360,
+      "sha256": "a93164879af350d60676509df15dc52c8d02bb5e669183d5c1a63d5c7b031559"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaaq",
+      "bytes": 655360,
+      "sha256": "0bcd51507ee48b969dabb743c046a11991ecc3f0da15232cda7399e53ff15f02"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaar",
+      "bytes": 655360,
+      "sha256": "93f57fe708d5637116cb2fa552e459c17de865c263b87d15399694ca96ba3c06"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaas",
+      "bytes": 655360,
+      "sha256": "acfeaa0b0843ec1be72c5bda2645175f005ba1da22ac07b319fd691ddb1786d1"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaat",
+      "bytes": 655360,
+      "sha256": "559e509331c39cbf1ebff242992c6e676537726805fa591363286a16b5eea1aa"
+    },
+    {
+      "path": "parts/poolslide-2026-08-31.tar.gz.part-aaau",
+      "bytes": 174613,
+      "sha256": "4534409f7bd8cec501514ce44beedb9243b6f84f290a4c2b35969bba118e0cca"
+    }
+  ],
+  "restoreCommand": "python3 tools/restore-poolslide-assets.py"
+}

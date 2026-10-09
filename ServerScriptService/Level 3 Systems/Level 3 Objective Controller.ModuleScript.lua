@@ -692,7 +692,7 @@ local function collectRecord(session: AnyTable, record: AnyTable, player: Player
 		RecoveredDrop = previousState == "DROPPED",
 	})
 	TeamObjectives.Announce(player.Name, string.format("%s CD %02d",
-		previousState == "DROPPED" and "RECOVERED" or "FOUND", record.Index), 3)
+		previousState == "DROPPED" and "recovered" or "found", record.Index), 3, "level3:cd")
 	playCDCollectedSound(session, pickupPosition)
 end
 
@@ -1052,8 +1052,8 @@ local function insertHeldCDs(session: AnyTable, player: Player)
 		CollectedProgress = session.CollectedCount,
 		Goal = session.ModuleGoal,
 	})
-	TeamObjectives.Announce(player.Name, string.format("INSERTED %d CD%s  //  %d/%d",
-		#insertedNow, #insertedNow == 1 and "" or "S", session.InsertedCount, session.ModuleGoal), 3)
+	TeamObjectives.Announce(player.Name, string.format("put %d CD%s in the player \u{B7} %d/%d",
+		#insertedNow, #insertedNow == 1 and "" or "s", session.InsertedCount, session.ModuleGoal), 3, "level3:insert")
 	playCDCollectedSound(session, discPlayer.Position)
 	if session.InsertedCount >= session.ModuleGoal then
 		unlockExit(session, discPlayer.RoomId or "SignalHall")

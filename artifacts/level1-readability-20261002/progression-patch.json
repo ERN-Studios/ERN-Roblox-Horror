@@ -1,0 +1,70 @@
+[
+  {
+    "repoFile": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+    "studioPath": "ServerScriptService.Level 1 Systems.MazeGenerator",
+    "baselineSha256": "5edccd07abf8e670f6459d50abac9324d74fd474a8f1e1c9cf2b38bf5c586a34",
+    "candidateSha256": "7d3c900dba8940a187c4dc18459c5eab9b042571c660f247725006dd642b0c7d",
+    "candidateFile": "artifacts/level1-readability-20261002/candidates/ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+    "changes": [
+      {
+        "old": "end\n\n-- ── ceiling lights ────────────────────────────────────────\nlocal fixtureBrightness = blender and .85 or .7\nlocal flicker = {}\nlocal allLights = {} -- every WORKING light, for the entity-presence effect\nfor x = 2, GRID, LIGHT_EVERY do\n",
+        "new": "end\n\n-- ── ceiling lights ────────────────────────────────────────\nlocal fixtureBrightness = blender and 1.05 or .7\nlocal flicker = {}\nlocal allLights = {} -- every WORKING light, for the entity-presence effect\nfor x = 2, GRID, LIGHT_EVERY do\n"
+      },
+      {
+        "old": "\n\t\t\tlocal light = Instance.new(\"SurfaceLight\")\n\t\t\tlight.Face = Enum.NormalId.Bottom\n\t\t\tlight.Brightness = fixtureBrightness -- dim enough that darkness pools between lights\n\t\t\tlight.Range = 28\n\t\t\tlight.Angle = 140\n\t\t\tlight.Color = LIGHT_COLOR\n\t\t\tlight.Shadows = false -- shadows on hundreds of lights kills performance\n\t\t\tlight.Enabled = not isDead\n",
+        "new": "\n\t\t\tlocal light = Instance.new(\"SurfaceLight\")\n\t\t\tlight.Face = Enum.NormalId.Bottom\n\t\t\tlight.Brightness = fixtureBrightness -- normal coverage; relay clusters retain their own boost\n\t\t\tlight.Range = blender and 44 or 28\n\t\t\tlight.Angle = blender and 160 or 140\n\t\t\tlight.Color = LIGHT_COLOR\n\t\t\tlight.Shadows = false -- shadows on hundreds of lights kills performance\n\t\t\tlight.Enabled = not isDead\n"
+      }
+    ]
+  },
+  {
+    "repoFile": "ServerScriptService/Level 1 Systems/BlenderRoomRenderer.ModuleScript.lua",
+    "studioPath": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+    "baselineSha256": "dabdd59272720c7db6c7cd52c706c2c083c2b0cd9cd06f8689c004098a355a3b",
+    "candidateSha256": "5a071ee012f805d3ea17223f40be8705882555178f24544c7e94ec6e7fec389f",
+    "candidateFile": "artifacts/level1-readability-20261002/candidates-renderer/BlenderRoomRenderer.ModuleScript.lua",
+    "changes": [
+      {
+        "old": "\t\tlocal box, size = visual:GetBoundingBox()\n\t\tlocal ratio, attachmentOffset, fixture = Renderer.SkinLayout(componentName, part.Size, size)\n\t\tlocal styled = fixture or componentName ~= \"MetalPanel\" and table.find(HARDWARE_NAMES, componentName) ~= nil\n\t\tlocal pieces = {}\n\t\tfor _, mesh in ipairs(visual:GetDescendants()) do\n\t\t\tif mesh:IsA(\"BasePart\") then\n",
+        "new": "\t\tlocal box, size = visual:GetBoundingBox()\n\t\tlocal ratio, attachmentOffset, fixture = Renderer.SkinLayout(componentName, part.Size, size)\n\t\tlocal styled = fixture or componentName ~= \"MetalPanel\" and table.find(HARDWARE_NAMES, componentName) ~= nil\n\t\tlocal elevator = part:FindFirstAncestor(\"Elevator\")\n\t\tlocal elevatorSteel = componentName == \"MetalPanel\" and elevator and elevator.Parent == workspace\n\t\tlocal pieces = {}\n\t\tfor _, mesh in ipairs(visual:GetDescendants()) do\n\t\t\tif mesh:IsA(\"BasePart\") then\n"
+      },
+      {
+        "old": "\t\t\t\t\tmesh.Color, mesh.Material = part.Color, part.Material\n\t\t\t\t\tif fixture and materialName == \"Lamp\" and part.Material == Enum.Material.Neon then mesh.Color = Color3.new(part.Color.R * .65, part.Color.G * .65, part.Color.B * .65) end\n\t\t\t\telse mesh.Color, mesh.Material = piece[3], piece[4] end\n\t\t\t\tif part.Name == \"ObjectiveCable\" then mesh.Color = Color3.new(part.Color.R * .5, part.Color.G * .5, part.Color.B * .5) end\n\t\t\t\tlocal appearance = mesh:FindFirstChildOfClass(\"SurfaceAppearance\")\n\t\t\t\tif appearance and tint then\n\t\t\t\t\tappearance.Color = Color3.new(piece[6].R * math.clamp(part.Color.R / (197 / 255), 0, 1),\n\t\t\t\t\t\tpiece[6].G * math.clamp(part.Color.G / (180 / 255), 0, 1), piece[6].B * math.clamp(part.Color.B / (116 / 255), 0, 1))\n\t\t\t\telseif appearance and (not styled or emitter) and (dynamic or componentName == \"MetalPanel\") then appearance.Color = part.Color end\n",
+        "new": "\t\t\t\t\tmesh.Color, mesh.Material = part.Color, part.Material\n\t\t\t\t\tif fixture and materialName == \"Lamp\" and part.Material == Enum.Material.Neon then mesh.Color = Color3.new(part.Color.R * .65, part.Color.G * .65, part.Color.B * .65) end\n\t\t\t\telse mesh.Color, mesh.Material = piece[3], piece[4] end\n\t\t\t\tif elevatorSteel then mesh.Color, mesh.Material = Color3.fromRGB(184, 187, 190), Enum.Material.Metal end\n\t\t\t\tif part.Name == \"ObjectiveCable\" then mesh.Color = Color3.new(part.Color.R * .5, part.Color.G * .5, part.Color.B * .5) end\n\t\t\t\tlocal appearance = mesh:FindFirstChildOfClass(\"SurfaceAppearance\")\n\t\t\t\tif appearance and elevatorSteel then appearance.Color = Color3.fromRGB(231, 226, 255)\n\t\t\t\telseif appearance and tint then\n\t\t\t\t\tappearance.Color = Color3.new(piece[6].R * math.clamp(part.Color.R / (197 / 255), 0, 1),\n\t\t\t\t\t\tpiece[6].G * math.clamp(part.Color.G / (180 / 255), 0, 1), piece[6].B * math.clamp(part.Color.B / (116 / 255), 0, 1))\n\t\t\t\telseif appearance and (not styled or emitter) and (dynamic or componentName == \"MetalPanel\") then appearance.Color = part.Color end\n"
+      }
+    ]
+  },
+  {
+    "repoFile": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+    "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+    "baselineSha256": "88f38d3b2e4d62b85a3082ab313ce3289654d2fde43aa4b8431c659fb02e8d8f",
+    "candidateSha256": "85bdd5ee2bf594e4ba929c5d2ad8f7db379081699f581c62ddd36d8ae78b0449",
+    "candidateFile": "artifacts/level1-readability-20261002/candidates-puzzle/PuzzleManager.Script.lua",
+    "changes": [
+      {
+        "old": "\n-- ── round lifecycle ───────────────────────────────────────\nlocal function clearPuzzle()\n\tsurfaceLightCache = nil -- the maze (and its lights) is rebuilt every round\n\tif not session then\n\t\tworkspace:SetAttribute(\"Level1ActiveCircuitCount\", nil)\n",
+        "new": "\n-- ── round lifecycle ───────────────────────────────────────\nlocal function clearPuzzle()\n\tworkspace:SetAttribute(\"Level1RelaysExtracted\", nil)\n\tsurfaceLightCache = nil -- the maze (and its lights) is rebuilt every round\n\tif not session then\n\t\tworkspace:SetAttribute(\"Level1ActiveCircuitCount\", nil)\n"
+      },
+      {
+        "old": "\t-- deliberately tied to the frozen puzzle session, not total server players,\n\t-- so spectators and players who join later cannot advertise nonexistent cables.\n\tworkspace:SetAttribute(\"Level1ActiveCircuitCount\", boxCount)\n\tlocal fusesNeeded = boxCount * FUSES_PER_BOX\n\tlocal fuseCount = fusesNeeded * SPAWN_MULT\n\t-- SMALL_PARTY_RELAYS_20260922 (Trello JYiwjBxw): a party of 1-3 gets half\n",
+        "new": "\t-- deliberately tied to the frozen puzzle session, not total server players,\n\t-- so spectators and players who join later cannot advertise nonexistent cables.\n\tworkspace:SetAttribute(\"Level1ActiveCircuitCount\", boxCount)\n\tworkspace:SetAttribute(\"Level1RelaysExtracted\", 0)\n\tlocal fusesNeeded = boxCount * FUSES_PER_BOX\n\tlocal fuseCount = fusesNeeded * SPAWN_MULT\n\t-- SMALL_PARTY_RELAYS_20260922 (Trello JYiwjBxw): a party of 1-3 gets half\n"
+      },
+      {
+        "old": "\t\t\t\tend\n\t\t\t\trelay.extracted = true\n\t\t\t\trelay.model:SetAttribute(\"ContainsFuse\", false)\n\t\t\t\tfor _, fusePart in ipairs(relay.fuseParts) do\n\t\t\t\t\tif fusePart.Parent then fusePart:Destroy() end\n\t\t\t\tend\n",
+        "new": "\t\t\t\tend\n\t\t\t\trelay.extracted = true\n\t\t\t\trelay.model:SetAttribute(\"ContainsFuse\", false)\n\t\t\t\tworkspace:SetAttribute(\"Level1RelaysExtracted\", (workspace:GetAttribute(\"Level1RelaysExtracted\") or 0) + 1)\n\t\t\t\tfor _, fusePart in ipairs(relay.fuseParts) do\n\t\t\t\t\tif fusePart.Parent then fusePart:Destroy() end\n\t\t\t\tend\n"
+      }
+    ]
+  },
+  {
+    "repoFile": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+    "baselineSha256": "49136bbaf21bfa333be72000c7a167ffb144d53d438a9891b359deee32d1e4e9",
+    "candidateSha256": "f133395ad254dd78b459b796437cf3a265f23993786f252d0d8438d80e7dcd00",
+    "candidateFile": "artifacts/level1-readability-20261002/candidates/StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "changes": [
+      {
+        "old": "  Lighting.FogColor = Color3.fromRGB(16, 14, 9)\n  Lighting.FogStart = 30\n  Lighting.FogEnd = 220\n  lobbyGrade.Enabled = false\n  if mazeGrade then mazeGrade.Enabled = true end\n else\n",
+        "new": "  Lighting.FogColor = Color3.fromRGB(16, 14, 9)\n  Lighting.FogStart = 30\n  Lighting.FogEnd = 220\n  if selectedLevel == 1 and workspace:GetAttribute(\"Level1BlenderPreviewActive\") == true\n   and (workspace:GetAttribute(\"LightMode\") or \"NORMAL\") == \"NORMAL\" then\n   -- Successful relay extractions are permanent for the round, including deaths/drops.\n   local taken = workspace:GetAttribute(\"Level1RelaysExtracted\") or 0\n   local total = math.max(workspace:GetAttribute(\"Level1RelaysPlaced\") or 3, 1)\n   local stage = taken * 3 >= total * 2 and 3 or taken * 3 >= total and 2 or 1\n   local presets = {\n    {Color3.fromRGB(100,94,70), Color3.fromRGB(35,32,23), 1.3, Color3.fromRGB(120,110,79), 200, 900}, -- C\n    {Color3.fromRGB(65,61,45), Color3.fromRGB(20,18,12), 1, Color3.fromRGB(85,77,55), 140, 650}, -- B\n    {Color3.fromRGB(36,34,26), Color3.fromRGB(10,9,6), .65, Color3.fromRGB(55,49,34), 85, 450}, -- A\n   }\n   local preset = presets[stage]\n   Lighting.Ambient, Lighting.OutdoorAmbient, Lighting.Brightness = preset[1], preset[2], preset[3]\n   Lighting.FogColor, Lighting.FogStart, Lighting.FogEnd = preset[4], preset[5], preset[6]\n  end\n  lobbyGrade.Enabled = false\n  if mazeGrade then mazeGrade.Enabled = true end\n else\n"
+      }
+    ]
+  }
+]

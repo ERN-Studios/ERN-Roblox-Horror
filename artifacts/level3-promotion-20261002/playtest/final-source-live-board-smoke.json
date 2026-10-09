@@ -1,9 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"BoardPath\":\"Workspace.LobbyReimaginedPreview.ZyntraDonationLeaderboardBoard\",\"Scope\":\"Runtime renderer subscription smoke only; no DataStore/visibility claim\",\"RowPath\":\"ReplicatedStorage.ZyntraDonationLeaderboard.Row01\",\"Passed\":true,\"Observed\":{\"Rank\":\"01\",\"Name\":\"R4 LIVE SMOKE\",\"Robux\":\"12,345 R$\"},\"BeforeAttributes\":[],\"ProviderValueUnchanged\":true,\"AfterAttributes\":[],\"RestoredOriginalAttributes\":true,\"ConcurrentProviderChangePreserved\":false}"
-    }
-  ],
-  "isError": false
-}

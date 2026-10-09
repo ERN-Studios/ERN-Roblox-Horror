@@ -1,0 +1,17 @@
+# Independent correction review — 9/10 for the prepared code
+
+Reviewed proposal SHA-256 `00e8da12537d57de12c347a89fd7838c1532015bc9cbe526f9fe982f9f322ba0`. All seven new hunks and their relevant caller/state paths were read. Independently inverted those hunks to the byte-exact accepted compass baseline `cc1c8fdf497130c82be1f7174df1a035f9936790974316d76435357651ce3680` and compiled the whole proposed PuzzleUI with Luau 0.737. No concrete code blocker found. No production or Studio changes were made by the reviewer.
+
+The correction addresses the observed compact touch failure directly. It measures the existing MISSION BRIEF button, converts its local rectangle into UIDevice's common layout coordinates, and subtracts that rectangle plus an 8px gutter from the existing detector candidates. The coordinate conversion was checked against actual UIDevice.guiOrigin/LocalOffset, including synthetic fixture origins. Remaining candidates stay within their previous safe rectangles; the existing movement-zone check still runs afterwards. Compass construction/rotation, objective column, desktop geometry and the guide button's size/input handlers are unchanged.
+
+The guide may be created or laid out after PuzzleUI. The added existing/late descendant binding observes its actual absolute position and size and reapplies layout. Reserving the button while its panel is open avoids a needless layout jump. The no-space state retains logical receiver activation; subsequent valid touch placement or desktop resize restores receiver visibility. It does not claim that an entirely occupied, degenerate safe region can still display readable navigation.
+
+This is a bounded prepared-code score and permission to proceed with native verification, not a final compass release score. At this checkpoint Maxwell's focused layout/lifecycle checks are still being completed and have not been claimed as passing by this reviewer. Verify the actual 844×390 touch case with both the compass and MISSION BRIEF visible, open/close the real brief control, and confirm normal touch/desktop restoration. Previously accepted camera-direction, modal and normal-round cleanup evidence need not be repeated without a new failure.
+
+## Focused checks and first actual phone simulator result
+
+Subsequently independently ran `test_layout.py`: all 23 actual layout/helper/setter/watcher checks, the specific previous-source compact-overlap negative control and two whole compiles pass. The host controls UIDevice and text measurements; it does not establish native font fit.
+
+Viewed `../exit-compass-prepared/native-iphone13-corrected.jpg` and parsed its matching JSON. This is the actual iPhone 13 simulator (device 844×390, reported native camera viewport 749×368), with no synthetic viewport override. MISSION BRIEF is now separated; the 164×116 detector has a clear 59px circle and legible direction/readout. However, the actual developer's ZYNTRA // DEV chip overlaps the detector header. ZyntraStore's in-round condition confines this chip to whitelisted touch developers, so the finding does not imply that ordinary players see an in-round Shop button.
+
+The header collision is retained as a concrete next correction. Extend the same measured obstacle handling to the currently visible ZyntraOpenButton rather than changing the Store layout and its pending compositions. No new broad test matrix is requested. This does not retroactively change the 00e8 prepared-code review into final native release approval.

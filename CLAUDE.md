@@ -2304,3 +2304,111 @@ weight and button size on phones, no noise meter.
   supporter-board fix went in. I had told the owner those two were not live on the strength of the log alone.
 - **Rows v2839 to v2841 (16:00, 16:09, 16:25) were saved while Studio on this Mac was closed**: somebody else was
   editing the place. They were not published when this was written.
+
+## Windows Studio updates retained — 2026-10-09
+
+### Changed 2026-10-05 - Level 4 is a normal public round, the campaign's last level; previews deleted (supersedes the Level 4 notes below)
+
+- **Level 4 is an ordinary level.** Anyone can host it from the new lobby's Level 4 bays. QueueBridge marks only levels > 4
+  `previewOnly`, so those bays are plain pads with CREATE PARTY: no TRIAL ROUND / MAP PREVIEW choice, even for developers.
+  The `LEVEL4_QUEUE_CHOICE` code in GameManager is dormant. **A Level 3 clear offers CONTINUE into Level 4**
+  (`Routing.MaxLevel = 4`, Version `2026-10-05.1`; NO_LEVEL3_CONTINUE_20260923 lifted), and Level 4 offers BACK TO
+  LOBBY only. The old tunnel lobby (the fallback) opens its Level 4 door: "bays open: 1, 2, 3, 4".
+- **The old cinema versions and the preview are deleted** (owner, per item):
+  - Workspace "Level 4 Cinema Preview" and "Level 4 Cinema V9 QA".
+  - ServerStorage Level4CinemaV3Archived, Level4V4Archived_20260927, Level4V7Templates, Level4V10Templates.
+  - The scripts Level4PreviewAccess, Level4V4PreviewAccess, Level4Generator, Level4CinemaV4-V7, Level4Expansion, Level4Renovation.
+  - The preview attributes and Level4V4Exit on "Level 4 Cinema Blender".
+
+  .rbxm backups with sha256 are in `G:\Roblox\_local\l4public\backup\`. `Level4PreviewPrompt` stays: it also hides the
+  Level 5/6 preview prompts.
+- **The Blender importer still needs the original layout**: `tools/level4_blender/place.luau` `OLD_NAME = "Level 4 Cinema
+  Preview"`, which supplies the signage carriers. Insert `backup/Workspace__Level_4_Cinema_Preview.rbxm` into Workspace
+  before the next place_driver run, and delete it again afterwards.
+- **Progression:**
+  - `CampaignComplete` ("Four Doors Down") needs clears of Levels 1-4, both on a clear and in the achievements backfill
+    at profile load.
+  - `Challenges.HiddenUntilPlayed = {}`: the Level 4 RECORDS card always shows.
+  - `FirstClearLevel4` has a real badge id (another session's ACHIEVEMENTS_20261004 work).
+- **Reel findability (2026-10-08, owner's pick):**
+  - The server publishes `Level4_ReelRooms`, from `Reels.RoomNames`, and the objective panel shows "Reels: Cafe, Arcade".
+  - TORCH_GLINT_20261008: a client-only sparkle and warm flash when this player's flashlight beam hits a loose reel.
+    Range 55, cone 16 degrees. Walls (`Collision`) and door leaves (`Doors`) block it.
+- **Co-op breaker fallback** (`Breaker.CoopFuseAfterSeconds = 45`): with 2+ living players the lever hold is the way.
+  The first fuse attempt with nobody on the lever starts a 45 s wait, and after it the fuse works, so an AFK teammate
+  cannot stall the round. The fuse prompt is no longer gated on solo. Escapees spread over the `L4ExitSafeSpawn`s in
+  escape order.
+- **Tooling (2026-10-08):**
+  - The place is named "(UPDATE) BACKROOMS: STAY QUIET", so `push_repo_to_studio.py` needs `--studio-name`.
+  - The Studio lock is `_local/studio-lock.json`.
+  - `apply_scoped_patch.py` must run through `artifacts/level4-reels-20261008/apply_with_current_studio.py`, because
+    `export_readonly.py` hardcodes an old studio id.
+
+### Added 2026-10-02 - Level 4 round "Den Sidste Forestilling" (developer-only)
+
+- **Level 4 is a round now, for DevAccess parties only** (`GameManager` `LEVEL4_PUBLIC = false`, `devCeiling` /
+  `canAccessLevel` check every member; `Routing.DevMaxLevel = 4` lets the explicit ceiling through, `NextLevel` still
+  stops at 3). `LEVEL_GENERATORS[4] = "Level4RoundGenerator"`; the old `Level4Generator` module is the unrelated
+  preview builder. The old lobby's Level 4 stations (LaunchZone13-16) launch it. **The new lobby's Level 4 bays
+  (revised ids 113-116) offer the host TWO launches** (owner decision 2026-10-02, `LEVEL4_QUEUE_CHOICE_20261002`):
+  TRIAL ROUND (the real round) and MAP PREVIEW (the dev map preview, no entity). `queuehost` carries the offered modes
+  ("trial,preview"), `ConfigureQueue` takes the mode as a 4th argument, the choice flips `station.previewQueue` for
+  one session (`resetStation` restores it); an unavailable explicit choice is refused and re-offered, never swapped.
+  RoundUI shows the split row through the shade attribute `QueueLaunchModes`. QueueBridge is unchanged.
+- Systems, contracts and the QA harness: `tools/level4_blender/README.md` "Level 4 round". Round Entry Client accepts
+  Level 4 and grounds it on the cinema.
+- **`Workspace."Level 4 Cinema Blender".Collision` must stay a Persistent Model** - a streamed client drops the
+  755 x 480 stud floor part and players fall through it.
+- **A Level 4 clear is a tracked clear** (owner decision 2026-10-02): `LevelsCleared["4"]`, the daily Clear goal,
+  records/challenges (`Challenges.Levels` has 4, goal 12:00) and `Badges.FirstClearLevel4` (0 until the badge exists).
+  CampaignComplete still names 1-3. Literal 4 at both Monetization sites: offline harnesses copy only parts of the
+  file. RECORDS hides the Level 4 card until the profile has Level 4 progress (`Challenges.HiddenUntilPlayed`).
+  Publish with "Migrate To Latest Update": an old-build server would strip Level 4 entries on its next profile write.
+- **ProximityPrompt's default Exclusivity (OnePerButton) only shows the CLOSEST prompt for a key**: prompts stacked
+  close together (the three switches in a POWER cabinet) are unreachable except the nearest. The switch prompts sit at
+  eye height in front of the cabinet, 3.5 studs apart (`placeSwitchAnchor`).
+- The POWER cabinets are 10-stud wall boxes mounted 7 studs up (handles 8-15 studs above the floor): a visual/asset
+  question for the owner (moving props needs a decision); gameplay works through the eye-height prompts.
+
+
+### Added 2026-10-08 - the new Level 2 map after the owner's feedback (published v2838)
+
+- `Workspace."Level 2 Poolrooms New (preview)"` was rebuilt from the Blender feedback build (F1..F22 in
+  `G:\Blender\Level2_Poolrooms_New_20261006\docs\OWNER_FEEDBACK_2026-10-07_ROBLOX.md`; log `docs/ROBLOX_IMPORT.md`).
+- **It writes Roblox Terrain water** for its 9 pools in recorded regions (model attribute `L2NTerrainRegions`) at x~70000.
+  The Terrain water LOOK stays place-wide on the server; the preview client sets its own look while inside the map.
+- **Preview body:** EXPLORE NEW MAP sets the server-owned player attribute `Level2NewMapPreview` and loads the round body
+  through `ServerStorage.LoadGameplayCharacter`. GameManager, DevCheats, HazmatSkinVisuals/Driver and FlashlightSync/
+  Controller treat the flag like a round: first person, hazmat skin, round torch. It is cleared on RETURN TO LOBBY, the exit
+  slide, death and leaving.
+- **Death holes:** `Collision` parts named `Hazard` with `KillZone=true` (the 5 A3a pits and the A3b drain); the server loop
+  in `Level2BlenderPreviewAccess` kills on entry. Owner 2026-10-08: the Level 2 round will have no entity; death = falling into
+  a hole (the HUD session's `DeathAdvice` "L2Hole" key is meant for that round).
+- **Colliders are all invisible.** Guards and fall barriers sit in `Collision.Guards`: exclude it from gameplay raycasts.
+- **Owner tweak, published v2850 (2026-10-08 evening):** the preview arrives at marker `SPAWN` (the kiosk, in front of
+  Level 1's door, top of the stairs, facing +Z down the stair core); RETURN TO LOBBY sits on SPAWN, P0_00 and EXIT. The
+  client grade is a touch lighter (Brightness 0.9, Ambient 20,24,25, Exposure -0.05). Record:
+  `G:\Blender\Level2_Poolrooms_New_20261006\docs\ROBLOX_IMPORT.md` "Owner tweak".
+- **Roblox draws Terrain water low where a column borders Air.** A Terrain water column next to an Air column, sideways
+  or at the end of a pool, is drawn 0.5-1.2 studs below its voxel surface. A column with water on every side sits on its
+  occupancy height. So a narrow channel (P2's is 10 studs on the 4-stud grid) needs its water body to reach one voxel
+  into hidden space (under the walkway, behind a wall). Judge water by Play raycasts of the drawn surface (`IgnoreWater =
+  false`, Terrain only), never by `ReadVoxels` or occupancy maths: the occupancy model passed a version that failed in Play.
+- **Owner asks, installed 2026-10-09 (not yet published):** the A2 lion rotunda has a skylight (server-built `A2 Skylight`
+  Beams + the moved spot A2_BeamCone on the gold disc; the developer client's grade puts the sun over the oculus only
+  inside the rotunda: ClockTime 12 at GeographicLatitude 23.5, the place's own 0 elsewhere). The exit slide is a whole ride
+  (World Builder builders at EXIT_SLIDE) and its finish fires RoundUI's own `"win"` (LEVEL 2 CLEARED, no buttons) then the
+  lobby. **`Level 2 Slide Controller` rides any body with `Level2NewMapPreview`** (its Level 3 continuation branch needs
+  InRound), and **RoundUI's win title says LEVEL 2 for that flag** (one operand, no new local). Record: the Blender
+  project's `docs/ROBLOX_IMPORT.md` "Owner asks".
+
+
+### Changed 2026-10-09 - approved Poolrooms is the normal public Level 2
+
+- The owner's "live Level 2" request promotes the six-area authored Poolrooms into the ordinary queue/campaign path. `DevAccess.Level2Public = true`; the Level 2 maintenance builder block, physical queue barrier and both developer preview entry controls are removed. Existing R3 queue ids 105-108 remain normal party queues.
+- `ServerStorage.Level2PoolroomsMap` is adopted as `Workspace."Level 2 Generated World"` by the replacement `Level 2 Round Adapter`; Cleanup stores the same model again. Its 30,869 descendants, nine Terrain-water regions (74,987 occupied water voxels), six measured arrival slots, fitted A2 reflector and reflected lion light remain intact. Old kit/map versions are archived. The old preview access/client names and kit/layout generator modules are retired; `Level 2 World Builder` remains for its exported slide helpers, while its old Build entry point refuses procedural generation.
+- `Level 2 Poolrooms Runtime` owns hole deaths (`L2Hole`) and the native finite exit slide. There is no enemy or pump objective. Completion keeps `Level2_ExitTransition` for GameManager's normal rewards, post-win Continue and Level 3 tube arrival, while finite runout motion/ragdoll stops and transition respawns recover to its safe floor.
+- `Level2PoolroomsPresentation` applies the approved client lighting/water/flicker/camera behavior to ordinary Level 2 players; no developer allowlist or preview body flag is needed. `Level2NewMapLightingOwned` continues to make RoundUI yield the grade and releases on lobby/Level 3 arrival.
+- Native Studio QA passed two actual queue starts, hazard death and native reentry, physical exit rides, transition death/recovery, Return Lobby, and Continue into a healthy active Level 3. Fresh Edit source/editor/mirror/candidate/manifest parity passed for eleven installed sources and five retired names. Shared regression checks: queue 283; loading host 98; Level 4 bays 469; routing 15 module + three source assertions. Single-player Studio QA does not claim production TeleportService transport or real multi-client replication coverage.
+- `Level 2 Pool Foam Client` now rejects the authored no-entity map before its legacy report loop sends anything. Actual handler coverage passed 2,078 assertions (2,048 authored-map ticks, zero reports; old handler fails). A third actual queue run counted zero `ClientReport` events over 30.0155 seconds with Level 2 active and the player in the round, without Foam queue warnings or engine errors. Scoped receipt, original source and exact installed readback are under `clientreport-fix/`.
+- Record: `artifacts/level2-live-20261009/README.md`, `final-verification.json`, `verified-installation.json`, `scene-verification.json` and `qa/`. **Published v2883 on 2026-10-09 at 13:56:34.612 UTC / 15:56:34.612 Copenhagen**, following the owner's live promotion request. Studio Output explicitly confirms publication and names v2883; evidence is `publication-output.txt`, `qa/published-v2883.jpg` and `public-receipt.json`. The pre-publish backup is `backup/BACKROOMS-Level2-public-20261009T1553.rbxl` (45,411,778 bytes; SHA-256 `a4ee0f0bd51016f6e672db0ced72fc7b8706ce449b55afb264c9eaf7b84690cd`). Historical preview notes above describe their earlier versions and are superseded by this promotion.

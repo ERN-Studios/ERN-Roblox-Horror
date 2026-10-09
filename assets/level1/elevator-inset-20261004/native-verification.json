@@ -1,0 +1,308 @@
+{
+  "passed": true,
+  "blenderVersion": "5.2.0 LTS",
+  "manifestSha256": "93f2f78611c4dd6c3c656f5062da127ecaa63095764392772f8a3b9a1b16ed96",
+  "components": 16,
+  "assemblies": 4,
+  "chunks": 28,
+  "triangles": 2980,
+  "fbxMeshMaterialsUVMatch": true,
+  "nativeFiles": {
+    "Level1_ElevatorInset.blend": "b2402cb689c1e10a785224f61af4c1c89b70239d9334f42f9a5bb6343060710f",
+    "Level1_ElevatorInset.fbx": "23681f4c9e74178303dc5cc63abc3ecdfdba216e5bb78c19d207a0b43d2591f6"
+  },
+  "textures": {
+    "steel_albedo.png": {
+      "relativePath": "//textures/steel_albedo.png",
+      "packedBytes": 880749,
+      "sha256": "4ada3a88d6e1a6456b761153c97c19e7f3e226ef6d6a629fcba9989a8d39dc0b"
+    },
+    "steel_metal.png": {
+      "relativePath": "//textures/steel_metal.png",
+      "packedBytes": 5335,
+      "sha256": "702a09b9549b64b7c7d5c660d974201a9123d33bc63fb817fdfd5ec9d9e464ea"
+    },
+    "steel_normal.png": {
+      "relativePath": "//textures/steel_normal.png",
+      "packedBytes": 283966,
+      "sha256": "78ffdf725bd3decf898cf8c0f35c7471cf731901c6b934aa02818f20aaf0a66d"
+    },
+    "steel_rough.png": {
+      "relativePath": "//textures/steel_rough.png",
+      "packedBytes": 208926,
+      "sha256": "6ab3d4cd503bc40879ac4690de48782822eb4eec43ed44df3b785ea5c81e961e"
+    },
+    "wallpaper_albedo.png": {
+      "relativePath": "//textures/wallpaper_albedo.png",
+      "packedBytes": 1748847,
+      "sha256": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980"
+    },
+    "wallpaper_normal.png": {
+      "relativePath": "//textures/wallpaper_normal.png",
+      "packedBytes": 670004,
+      "sha256": "e6870bf029a5bd8323e15a2a58e0e24ed6ad2a0760d99a265898fe6d407d2203"
+    },
+    "wallpaper_rough.png": {
+      "relativePath": "//textures/wallpaper_rough.png",
+      "packedBytes": 608621,
+      "sha256": "d1d35a86fcbeea6e63ce58db28ef92931e7b6dd22bd73a3f0b861fadd0b89221"
+    }
+  },
+  "revealSamples": [
+    {
+      "surface": "side",
+      "z": 0.2,
+      "side": -1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 0.2,
+      "side": 1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "header",
+      "z": 0.2,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 0.65,
+      "side": -1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 0.65,
+      "side": 1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "header",
+      "z": 0.65,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 1.4,
+      "side": -1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 1.4,
+      "side": 1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "header",
+      "z": 1.4,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 1.9,
+      "side": -1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "side",
+      "z": 1.9,
+      "side": 1,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "header",
+      "z": 1.9,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "open cabin sightline",
+      "x": -3,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "open cabin sightline",
+      "x": 0,
+      "material": "L1_InsetSteel"
+    },
+    {
+      "surface": "open cabin sightline",
+      "x": 3,
+      "material": "L1_InsetSteel"
+    }
+  ],
+  "wireChecks": [
+    {
+      "file": "chunks/c00000.b64",
+      "wireSha256": "6e3c7904ff66218092ef0a92e24d82e90ec6e0f06362c38b3b183bc4528a7cf9",
+      "meshSha256": "cea0203bd6f15db6ef0c9533de7d509a1c24a4769ef0870f22eee85b06800535",
+      "triangles": 36
+    },
+    {
+      "file": "chunks/c00001.b64",
+      "wireSha256": "2a57b1fe4e9a84d8d9d594b24a3a3099d19dd7c58db853aafdb966e6ae6bd16c",
+      "meshSha256": "deba59e693b0c162af43089d83765b81c9fc38ffb08f8845f443cc3b952f66ce",
+      "triangles": 520
+    },
+    {
+      "file": "chunks/c00002.b64",
+      "wireSha256": "96b95e48183c3ea88a4f7842b764fa837f6e3c36b9db64ecdd7d467fbe5b2991",
+      "meshSha256": "cffbeb9355b0564cdbf3a73923357848cbb7815a271a2f11483025edbde05a01",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00003.b64",
+      "wireSha256": "56bbff8b82082099989fdf6c4d1ea47b312fb75009bd6c2341f7aed25744fb7b",
+      "meshSha256": "2adccdb28ccfda0c54ba33646a3790734d670fa392114f0037d1e8f6e69c53bf",
+      "triangles": 120
+    },
+    {
+      "file": "chunks/c00004.b64",
+      "wireSha256": "9562368db686007a61b500a6cc0c5cf1edd4903e17f9c262537e5ae9d2d3b787",
+      "meshSha256": "63f79248b810089aedcfa6c620bb318af5495cf447e351ca110be04a2a3194ee",
+      "triangles": 184
+    },
+    {
+      "file": "chunks/c00005.b64",
+      "wireSha256": "214ee71cf95d9a047e0ee27352da18d3e07030988578ca6bd768047e6cacb3eb",
+      "meshSha256": "1b213808eda6af0c903f19703b95f14ed455f0a19f17fea84ccc8a9f2d5b561d",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00006.b64",
+      "wireSha256": "8c7cfb99693e7f7d592baa2618cab1883736b16a9728e89047ea8f872a2ccdf1",
+      "meshSha256": "d265af016b69c35c25b73df0d1e1109740bbcbcaaccf9eaa4c365c5bf08c08c1",
+      "triangles": 48
+    },
+    {
+      "file": "chunks/c00007.b64",
+      "wireSha256": "b56094b705b6a8a32ba7a6641138767cb981822609941ba391254fcd9759d6ed",
+      "meshSha256": "558b1805c8fe4758bca71dd3e5e5d631169b6eb53b0755bf48d18d49f1b44a8a",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00008.b64",
+      "wireSha256": "89db268e5b78bb263b959b693807059ea57dd344cc6e2d255f47bb43e4cfe560",
+      "meshSha256": "1fe98ea20482ae3df3c7985614e5bc89b944647af0df81ef5a32be19957404fd",
+      "triangles": 24
+    },
+    {
+      "file": "chunks/c00009.b64",
+      "wireSha256": "3ab802a98bf5b71499b221f9a88adcd6ca4ccf4d3a6694e70cf37991b9890b1a",
+      "meshSha256": "d799208c4a22dd82340a9964449bf98c87a8a9803a5f8e08f85862752d758d9c",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00010.b64",
+      "wireSha256": "15ae9b52202d616845a03a1c2362bd5aaf42a29b46d457a86c5b22b64984625b",
+      "meshSha256": "7c3c0cc980eea23764a6b2c36bb019f36d71157285fb49ccacce30974805e8a5",
+      "triangles": 24
+    },
+    {
+      "file": "chunks/c00011.b64",
+      "wireSha256": "b5b0108ce6b12f4b18a884c22d1f39a204d88b880d7afd2e2dce176ea83b5b9d",
+      "meshSha256": "8605245a2517d9ebf0399745c6b12da0d67858b6b1ba5514c4351b202f348b8a",
+      "triangles": 180
+    },
+    {
+      "file": "chunks/c00012.b64",
+      "wireSha256": "ddf7de8aa2a0eab7e50c40c2fb834f90b16f65af24002c9f4445bcf1e327e25c",
+      "meshSha256": "913b5963de22bccbef6d677370bee97473ee10e18edd97ec38bca87b0668951c",
+      "triangles": 24
+    },
+    {
+      "file": "chunks/c00013.b64",
+      "wireSha256": "2d92fd852947d1b4164c60bf4b27a110c45cf21750666e03c6bc0a3bfe2d2f5e",
+      "meshSha256": "82c55ed94aae2bef8c525dcf37452ee0c0ec906e38bae7e7d5de2d4b4ac4be07",
+      "triangles": 300
+    },
+    {
+      "file": "chunks/c00014.b64",
+      "wireSha256": "ce3598b1fd2b9e92b51a3718495f4ac62b164c09826a15568d056125eb8e0f6d",
+      "meshSha256": "7ec25c186f16f51085ea1589f6e4b279eef54a68d89870cf405d7b0407e80f23",
+      "triangles": 244
+    },
+    {
+      "file": "chunks/c00015.b64",
+      "wireSha256": "db6f030b94b352ad96a9f05ca62800805d2221e84c557e18d8715a4e80cd1369",
+      "meshSha256": "b27fc6b7b8742c86ee44044c9bdc8d8929a3a6cc3d1cf380da4ef99b3f768d19",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00016.b64",
+      "wireSha256": "f05466a9d16bc1009caefc879b21d440c411b28427924ac38fbf93f1a6e6d2ba",
+      "meshSha256": "209c4f188fe351574f3af237b987f37947b6f162510900b04dcdeb1374744a8f",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00017.b64",
+      "wireSha256": "9924e0663451f08c4634f425a1705eae783fa4ce24e5e8396df0f7163c0b4923",
+      "meshSha256": "8c0407924af8eca1d2a6a3fc8038ff48eab3433ed897a6d6c697216ecb675dbb",
+      "triangles": 184
+    },
+    {
+      "file": "chunks/c00018.b64",
+      "wireSha256": "9c65883ec62697aea57c6b152d6b1073738fea4af398d5a02023c5d5d10e2a83",
+      "meshSha256": "bca6a98853641d6defe2bda85c94285dc17ded1a00342b18408ee8514426e4b1",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00019.b64",
+      "wireSha256": "fcfb991288200b818303ccfa442dde69df903f038e8d06df2435c80cdeb7d0c4",
+      "meshSha256": "49aa4ab73b735d232387ce147cb5edf0377de328b9804cbc6d8225bbf2c21621",
+      "triangles": 48
+    },
+    {
+      "file": "chunks/c00020.b64",
+      "wireSha256": "4af58ed8afba1e684b5e1d0145637540b3b959fa14dcc9a9f3ada0c2607b9f7b",
+      "meshSha256": "fb0eb208faaac4668f80d79a07d0e193a5c5efc2ec1932aff876bfc8792034a8",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00021.b64",
+      "wireSha256": "36237e0111ff97d8cc296a0c8d935f0fe339f57589bda7022c6c09d183d9a8f3",
+      "meshSha256": "af8de96934ad15b5eea049d150fb28c55763b513034e6e48b2c8056ebd8d4ca6",
+      "triangles": 48
+    },
+    {
+      "file": "chunks/c00022.b64",
+      "wireSha256": "19fce8aa7e32dc0737f3b15de4d423723b5653404d8e3a5542f1af2581dad8f2",
+      "meshSha256": "53dfe8ef9bc39ad36b9ebb8fdd2c92426556d9c7884aa420aee8d74f4c287107",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00023.b64",
+      "wireSha256": "5d0c1fcd3c161f50b2ee3b29cdf8071dfb84a5cf812b4e8021f94371b4a323f0",
+      "meshSha256": "4e5e69c7ff4fffa8bd6f1eb3374d963d5c3bcb5b41853ece6d2fb06c2ab2a102",
+      "triangles": 48
+    },
+    {
+      "file": "chunks/c00024.b64",
+      "wireSha256": "c6e390e122c0f2d0f3849bf59bc73ef5d4432e70f434b1e7df856cb669ca3a23",
+      "meshSha256": "deb2f679b58a9cbc488dd098c7af7101da8075f5c57989903ad4079d5f1eaf4e",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00025.b64",
+      "wireSha256": "bb0cf22dbec2dd8af73ab9cb1ff55538e73a1789abe2cd03f17fb996fa84fbdc",
+      "meshSha256": "f50553364d2a46d150a9074faf72e52923ceb93fe13b118dbd1ca24ecc383a96",
+      "triangles": 48
+    },
+    {
+      "file": "chunks/c00026.b64",
+      "wireSha256": "f42e467ed9d527f74d229aec637b96fd1568d1fcdbd9b40cb9b868ae5fea6237",
+      "meshSha256": "2c12468f253c42929d262f0a95d59a15ff0192905136874f1aa1e2593a3f565c",
+      "triangles": 60
+    },
+    {
+      "file": "chunks/c00027.b64",
+      "wireSha256": "f732a99224cc2f74bfce23385b14f8eaf79e68ff419f6e440463e326480859a9",
+      "meshSha256": "0787e9dcbfa51681991043519d04e5e8b3740904e2e097525dead307c8c17157",
+      "triangles": 240
+    }
+  ],
+  "studioGameplayVerified": false,
+  "ownerReferenceVisualReview": "Parent/root review required"
+}

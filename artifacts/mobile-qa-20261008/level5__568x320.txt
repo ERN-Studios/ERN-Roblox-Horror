@@ -1,2 +1,0 @@
-phone 568x320, 24 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, PuzzleGui, Achievements, LobbyDJ, Level2ObjectiveGui, Level3ReaderGui, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, SpectateGui, FriendBoostGui, StaminaGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, Level2AlertGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 21 pieces measured, 1 findings
-THUMB   RoundExitGui.LeaveChip (24,78)-(188,122) is 164x15 px inside the Thumbstick zone

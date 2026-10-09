@@ -1,2 +1,0 @@
-phone 1024x768, 17 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraShopL4, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, HelpPanel, LuckyWheelGui, ZyntraLobbyPillL4, ZyntraStore, FriendBoostGui), 68 pieces measured, 1 findings
-CUT     ZyntraLobbyPillL4.TokenPill '+' (993,21)-(1002,37)

@@ -1,0 +1,2672 @@
+{
+  "readOnly": true,
+  "nativeFilesUnchanged": true,
+  "blenderVersion": "5.2.0 LTS",
+  "files": [
+    {
+      "file": "world/Cinema_Final4.blend",
+      "sha256": "3e08d297da4cceb7f784d0524ef285d67bc8b382ffcb99254c33807897cab41a",
+      "meshes": 2472,
+      "uvMeshes": 1005,
+      "images": [
+        {
+          "name": "act_2x4_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\act_2x4_albedo.png",
+          "packed": false,
+          "originalFileSha256": "f40d0eb605cd8799de269a3b44ccaf5fa1f4a771ff8c4ff0aaaabd78c31f9afb",
+          "bundledMatches": [
+            "world/textures/act_2x4_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "act_2x4_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\act_2x4_normal.png",
+          "packed": false,
+          "originalFileSha256": "4e622f4347bf9e0acea0cd6d6a57783ecd8fe6152b30885ed780e5750482fd9f",
+          "bundledMatches": [
+            "world/textures/act_2x4_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "act_2x4_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\act_2x4_rough.png",
+          "packed": false,
+          "originalFileSha256": "7d144bf4889eed44d048cd8ef4fd80c4522e075ed94966f8a54fe2c28f9da79d",
+          "bundledMatches": [
+            "world/textures/act_2x4_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "alu_nosing_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\alu_nosing_albedo.png",
+          "packed": false,
+          "originalFileSha256": "34d9da98d8a2b0403a37471b80fcbb4b47477f4ed6ac54fe1c223646e171fe16",
+          "bundledMatches": [
+            "world/textures/alu_nosing_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "alu_nosing_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\alu_nosing_metal.png",
+          "packed": false,
+          "originalFileSha256": "c252143706ff8b483d2d519b0a51154351d9e94234fd60cffb5b25b546d063cd",
+          "bundledMatches": [
+            "world/textures/alu_nosing_metal.png"
+          ],
+          "size": [
+            64,
+            64
+          ]
+        },
+        {
+          "name": "alu_nosing_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\alu_nosing_normal.png",
+          "packed": false,
+          "originalFileSha256": "9354b2edaeb5d025835b7d1254ac86b90b11a7a1f02425d4595ae4c23cc7f86f",
+          "bundledMatches": [
+            "world/textures/alu_nosing_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "alu_nosing_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\alu_nosing_rough.png",
+          "packed": false,
+          "originalFileSha256": "911c8d6272303a8cdd1edba27e424c28f99d91ea333afed96d673b53aca4205c",
+          "bundledMatches": [
+            "world/textures/alu_nosing_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "board_weathered_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\board_weathered_albedo.png",
+          "packed": false,
+          "originalFileSha256": "c34f747b99eabbb63740fef2eca1a0d4a7a11b7aa952525ed84724f84de423a3",
+          "bundledMatches": [
+            "world/textures/board_weathered_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "board_weathered_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\board_weathered_normal.png",
+          "packed": false,
+          "originalFileSha256": "07c896c4c46d73a58608ae4d9cd0b6c6e47b993729fd185d4ca9cf7acd8ba0ad",
+          "bundledMatches": [
+            "world/textures/board_weathered_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "board_weathered_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\board_weathered_rough.png",
+          "packed": false,
+          "originalFileSha256": "e6f66e8736c26ee96b089268b949f2f89b0ac55f1734714f869733ca48196ae2",
+          "bundledMatches": [
+            "world/textures/board_weathered_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "brass_aged_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\brass_aged_albedo.png",
+          "packed": false,
+          "originalFileSha256": "e12eb17b73582a928298b64ba76bd5409649c6783167da407a5f8b1effe491c4",
+          "bundledMatches": [
+            "world/textures/brass_aged_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "brass_aged_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\brass_aged_metal.png",
+          "packed": false,
+          "originalFileSha256": "c252143706ff8b483d2d519b0a51154351d9e94234fd60cffb5b25b546d063cd",
+          "bundledMatches": [
+            "world/textures/brass_aged_metal.png"
+          ],
+          "size": [
+            64,
+            64
+          ]
+        },
+        {
+          "name": "brass_aged_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\brass_aged_normal.png",
+          "packed": false,
+          "originalFileSha256": "adf43a33176fdfad7ead929939bfe24061942ef0b649315f8c1976a8476ba905",
+          "bundledMatches": [
+            "world/textures/brass_aged_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "brass_aged_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\brass_aged_rough.png",
+          "packed": false,
+          "originalFileSha256": "a01f8b09ba761b316bf32c41cef984cd4a76063aff7a70b6bb8f93bd06b28509",
+          "bundledMatches": [
+            "world/textures/brass_aged_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_arcade_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_arcade_albedo.png",
+          "packed": false,
+          "originalFileSha256": "91cfc7565923445a3ec14254de650f7793cba3b553fa98375baa175f3ced56d5",
+          "bundledMatches": [
+            "world/textures/carpet_arcade_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_arcade_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_arcade_normal.png",
+          "packed": false,
+          "originalFileSha256": "71d9e0285645a94aa12e3dffd0a5d3d2c6737ae3c9c117f349bbc95dad22443a",
+          "bundledMatches": [
+            "world/textures/carpet_arcade_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_arcade_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_arcade_rough.png",
+          "packed": false,
+          "originalFileSha256": "42a09c3167d29dd240eeec5942ae8daa7ed3c7e4d578c9d568c641e18828ab6f",
+          "bundledMatches": [
+            "world/textures/carpet_arcade_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_aud_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_aud_albedo.png",
+          "packed": false,
+          "originalFileSha256": "12985a356c7e836664fc0d62a0f74d9391c9ad4407fa25f1eefc78b083ddd017",
+          "bundledMatches": [
+            "world/textures/carpet_aud_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_aud_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_aud_normal.png",
+          "packed": false,
+          "originalFileSha256": "503f0e71b9bae754d9053e1eee8faa8a4bd8010c56374171c5787a1b77edf4cb",
+          "bundledMatches": [
+            "world/textures/carpet_aud_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_aud_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_aud_rough.png",
+          "packed": false,
+          "originalFileSha256": "468651c4b2dcf95c3898a3c0bd4a1c3ce6ba119950ad58ebffba5342688c9f38",
+          "bundledMatches": [
+            "world/textures/carpet_aud_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_lobby_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_lobby_albedo.png",
+          "packed": false,
+          "originalFileSha256": "3bbcf92ea28a9286af5a06ce0082461487d7a51c9830d18a4e11521393df88c5",
+          "bundledMatches": [
+            "world/textures/carpet_lobby_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_lobby_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_lobby_normal.png",
+          "packed": false,
+          "originalFileSha256": "b0ab158c8627adcc3c03eed69c6f0f0f4574bc56696dca6aa67e712ba092f314",
+          "bundledMatches": [
+            "world/textures/carpet_lobby_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_lobby_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_lobby_rough.png",
+          "packed": false,
+          "originalFileSha256": "0a5c9935ebffcbe82f980a1023f51ef596a9833c50b1b2ad8baba28f3ddc3c7b",
+          "bundledMatches": [
+            "world/textures/carpet_lobby_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_staff_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_staff_albedo.png",
+          "packed": false,
+          "originalFileSha256": "f5258d70c5caf52be685ac8c1cda8ae32b7fb9d6084c5dc94b4b73cae0c02e80",
+          "bundledMatches": [
+            "world/textures/carpet_staff_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_staff_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_staff_normal.png",
+          "packed": false,
+          "originalFileSha256": "8b2cbb733f05bbccb4c7f8212a3a3a2ee6d7682093c6af368f6e56086d4ce737",
+          "bundledMatches": [
+            "world/textures/carpet_staff_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "carpet_staff_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\carpet_staff_rough.png",
+          "packed": false,
+          "originalFileSha256": "8a1d3bb98c6153babb646b360ad6eab03b9646862138eefcca1583a2f156723a",
+          "bundledMatches": [
+            "world/textures/carpet_staff_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "chrome_pitted_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\chrome_pitted_albedo.png",
+          "packed": false,
+          "originalFileSha256": "19435e2e2babd5548eac5c2ac5701b7de7fad299bc6f4cd1164ae4fc94a76de7",
+          "bundledMatches": [
+            "world/textures/chrome_pitted_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "chrome_pitted_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\chrome_pitted_metal.png",
+          "packed": false,
+          "originalFileSha256": "c252143706ff8b483d2d519b0a51154351d9e94234fd60cffb5b25b546d063cd",
+          "bundledMatches": [
+            "world/textures/chrome_pitted_metal.png"
+          ],
+          "size": [
+            64,
+            64
+          ]
+        },
+        {
+          "name": "chrome_pitted_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\chrome_pitted_normal.png",
+          "packed": false,
+          "originalFileSha256": "04c6dc3b5d76856ff31e8f3f7e76cd3d41430412adc09ef4bc87d1bd6b32d4f1",
+          "bundledMatches": [
+            "world/textures/chrome_pitted_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "chrome_pitted_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\chrome_pitted_rough.png",
+          "packed": false,
+          "originalFileSha256": "46fb394f529ae71d9ef245aa0a0928d921dab059566771c0e3201331abe3434d",
+          "bundledMatches": [
+            "world/textures/chrome_pitted_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "cmu_paint_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\cmu_paint_albedo.png",
+          "packed": false,
+          "originalFileSha256": "8ae83b6493a24d3a6a08a6e5bf5d39e801926576b0139f0ed0d7ef143a320529",
+          "bundledMatches": [
+            "world/textures/cmu_paint_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "cmu_paint_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\cmu_paint_normal.png",
+          "packed": false,
+          "originalFileSha256": "a380c24ff169d5ebbe1e1f799e367ea6684f78f24a160df0666f038c185f94d2",
+          "bundledMatches": [
+            "world/textures/cmu_paint_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "cmu_paint_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\cmu_paint_rough.png",
+          "packed": false,
+          "originalFileSha256": "7c415a90f677e470db85a49db07e091985f621b4a8f51dd85c70ef0c5cb30334",
+          "bundledMatches": [
+            "world/textures/cmu_paint_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "concrete_sealed_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\concrete_sealed_albedo.png",
+          "packed": false,
+          "originalFileSha256": "2ce0995f1d358063c924448fba91a49fb14c2e5790260e0b387a807be87a5227",
+          "bundledMatches": [
+            "world/textures/concrete_sealed_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "concrete_sealed_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\concrete_sealed_normal.png",
+          "packed": false,
+          "originalFileSha256": "da42111c4ade050416c611730692e934019f9f76bbb9d5d2ca0d0f614d450c7f",
+          "bundledMatches": [
+            "world/textures/concrete_sealed_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "concrete_sealed_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\concrete_sealed_rough.png",
+          "packed": false,
+          "originalFileSha256": "981e965186d6f9d5f829aa98f5642ad7b484699ff1b7ada3b4ba9a5acd268881",
+          "bundledMatches": [
+            "world/textures/concrete_sealed_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_stains_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_stains_albedo.png",
+          "packed": false,
+          "originalFileSha256": "973630fd15fe712e70f0c4061a6bfbc814965476fd14c59fb4206ce63818f905",
+          "bundledMatches": [
+            "world/textures/decal_carpet_stains_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_stains_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_stains_normal.png",
+          "packed": false,
+          "originalFileSha256": "502a650b09d70cf83d6e72853ff9ae8462a085c8d0821aac940f8e37e9cf2837",
+          "bundledMatches": [
+            "world/textures/decal_carpet_stains_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_stains_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_stains_rough.png",
+          "packed": false,
+          "originalFileSha256": "ad3f19b0aea8a96df940f7185a9ec0eb4cc91f577c9bb7ab484fa2c92297c86c",
+          "bundledMatches": [
+            "world/textures/decal_carpet_stains_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_wear_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_wear_albedo.png",
+          "packed": false,
+          "originalFileSha256": "16ef5c7b04d0e6a60c1c19f40f2239c89b2f49b575288df236852a489c42542b",
+          "bundledMatches": [
+            "world/textures/decal_carpet_wear_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_wear_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_wear_normal.png",
+          "packed": false,
+          "originalFileSha256": "95a114590228db0469828cdba1e0f57cd77a2f441f408be35ce9b197f7ce204b",
+          "bundledMatches": [
+            "world/textures/decal_carpet_wear_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_carpet_wear_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_carpet_wear_rough.png",
+          "packed": false,
+          "originalFileSha256": "c9ccc98f6dc0922158486037568f58d91422834901dfe1ed4d851e12eada2765",
+          "bundledMatches": [
+            "world/textures/decal_carpet_wear_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_ceiling_rings_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_ceiling_rings_albedo.png",
+          "packed": false,
+          "originalFileSha256": "9e13e7461f2ea60bf8ec180918009ba4650877c3cc7c2bf0c6430732394685c9",
+          "bundledMatches": [
+            "world/textures/decal_ceiling_rings_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_ceiling_rings_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_ceiling_rings_normal.png",
+          "packed": false,
+          "originalFileSha256": "be90143b1a9ecac6dd13eabe1f4e153c4343485b121b07b902d14c3cd8578198",
+          "bundledMatches": [
+            "world/textures/decal_ceiling_rings_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_ceiling_rings_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_ceiling_rings_rough.png",
+          "packed": false,
+          "originalFileSha256": "3ef19493eff47e1f0f1c34932d9aa2d24ea7d67ea78db2f642d7b381b84bbe0f",
+          "bundledMatches": [
+            "world/textures/decal_ceiling_rings_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_cobweb_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_cobweb_albedo.png",
+          "packed": false,
+          "originalFileSha256": "bec8958bc9f8ff93596d8f0ec7e3cb9b874fb4b9919f7349e245ebd7f6bbbdc6",
+          "bundledMatches": [
+            "world/textures/decal_cobweb_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_cobweb_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_cobweb_normal.png",
+          "packed": false,
+          "originalFileSha256": "95467c083d377274101ac0b32f28749d5dc4ed1acbdb489c07bea69ef14d211b",
+          "bundledMatches": [
+            "world/textures/decal_cobweb_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_cobweb_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_cobweb_rough.png",
+          "packed": false,
+          "originalFileSha256": "8393ed4284d5c3a5410af29b0a0a3882bfffd61f83d6601e0788022e6e1546ac",
+          "bundledMatches": [
+            "world/textures/decal_cobweb_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_albedo.png",
+          "packed": false,
+          "originalFileSha256": "ee6915a6bc4d389f179e1c42a72c2edb46e813be698223173e853ed494e4a24f",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_back_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_back_albedo.png",
+          "packed": false,
+          "originalFileSha256": "c127a09bfd6b87087590c417f3cc5e3718eb80d8c6878533d646806eb074b3ca",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_back_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_back_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_back_normal.png",
+          "packed": false,
+          "originalFileSha256": "143d4d2332acd9e188667fcfa1762296626f110701a971e0a3f41e6754d1d196",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_back_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_back_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_back_rough.png",
+          "packed": false,
+          "originalFileSha256": "ec576da76a1992c0150aa50ec0bf4fd8a512c1d0c27fb5821b0cde63add7744a",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_back_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_normal.png",
+          "packed": false,
+          "originalFileSha256": "143d4d2332acd9e188667fcfa1762296626f110701a971e0a3f41e6754d1d196",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_peeling_wallpaper_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_peeling_wallpaper_rough.png",
+          "packed": false,
+          "originalFileSha256": "ec576da76a1992c0150aa50ec0bf4fd8a512c1d0c27fb5821b0cde63add7744a",
+          "bundledMatches": [
+            "world/textures/decal_peeling_wallpaper_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_puddle_outline_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_puddle_outline_albedo.png",
+          "packed": false,
+          "originalFileSha256": "27a21da1658188cb1df097f6bc422162f0032fad0ae4bf82e7d13638b6232472",
+          "bundledMatches": [
+            "world/textures/decal_puddle_outline_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_puddle_outline_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_puddle_outline_normal.png",
+          "packed": false,
+          "originalFileSha256": "62f01ffed91be67ea065f5527a926037695bd09cc497f15151682ec3fd8f784f",
+          "bundledMatches": [
+            "world/textures/decal_puddle_outline_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_puddle_outline_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_puddle_outline_rough.png",
+          "packed": false,
+          "originalFileSha256": "48319f2637cd56d985d87ee9958a12655572c2cc3dba82f9f9ec7d729484095d",
+          "bundledMatches": [
+            "world/textures/decal_puddle_outline_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_rising_damp_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_rising_damp_albedo.png",
+          "packed": false,
+          "originalFileSha256": "e6a4c8601ee0a11422f30a51cf985740dd9723042ce95d28a1d0780678f02665",
+          "bundledMatches": [
+            "world/textures/decal_rising_damp_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_rising_damp_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_rising_damp_normal.png",
+          "packed": false,
+          "originalFileSha256": "79698dbc383deeb42fd1e2533bf6d7ab3e1e069ca1885aaffc7944d1d95dd2b1",
+          "bundledMatches": [
+            "world/textures/decal_rising_damp_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_rising_damp_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_rising_damp_rough.png",
+          "packed": false,
+          "originalFileSha256": "35d1cf8e3325c17862822a51a175316acca059b919d13567cf7256d50774ef7d",
+          "bundledMatches": [
+            "world/textures/decal_rising_damp_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_soot_plume_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_soot_plume_albedo.png",
+          "packed": false,
+          "originalFileSha256": "013adf4230a777ec19ebc1a555241932334c01d535a27cd784890583fc94a384",
+          "bundledMatches": [
+            "world/textures/decal_soot_plume_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_soot_plume_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_soot_plume_normal.png",
+          "packed": false,
+          "originalFileSha256": "0d0a19d0434e11f75cafbcd00691c1e475b62774414a10f1fb10a75d0ed07ca6",
+          "bundledMatches": [
+            "world/textures/decal_soot_plume_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_soot_plume_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_soot_plume_rough.png",
+          "packed": false,
+          "originalFileSha256": "812977d22aaed73ae3b1aa61b46e59c138949b294cfa0b705558ebc47b827f6e",
+          "bundledMatches": [
+            "world/textures/decal_soot_plume_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_water_streaks_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_water_streaks_albedo.png",
+          "packed": false,
+          "originalFileSha256": "488e7a5faed929b7d203922b6b26142f5ee301c3582ca4d88fc1d782ef38043b",
+          "bundledMatches": [
+            "world/textures/decal_water_streaks_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_water_streaks_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_water_streaks_normal.png",
+          "packed": false,
+          "originalFileSha256": "6383a4c3ad3c771bfacffd3c7422da3365330fa59d6ed914c7e39d5ed9579781",
+          "bundledMatches": [
+            "world/textures/decal_water_streaks_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "decal_water_streaks_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\decal_water_streaks_rough.png",
+          "packed": false,
+          "originalFileSha256": "b00b9c4f65457b9db600c300fc01f858347f486d950db03fd46a5dbc97752dce",
+          "bundledMatches": [
+            "world/textures/decal_water_streaks_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "deck_black_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\deck_black_albedo.png",
+          "packed": false,
+          "originalFileSha256": "3b146b113b9b0b056950adbb11ff392cb7c0cf1c4ab9ae1212f7c9a5d6a300d7",
+          "bundledMatches": [
+            "world/textures/deck_black_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "deck_black_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\deck_black_normal.png",
+          "packed": false,
+          "originalFileSha256": "c9cffbbd782cdfb465cf1853bc801521c1e17d0587b65e21fd19b6f0708981ac",
+          "bundledMatches": [
+            "world/textures/deck_black_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "deck_black_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\deck_black_rough.png",
+          "packed": false,
+          "originalFileSha256": "99af419e260054953190858f2500eaf998352e5e14bb9e8f34d864aee4854507",
+          "bundledMatches": [
+            "world/textures/deck_black_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "formica_speckle_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\formica_speckle_albedo.png",
+          "packed": false,
+          "originalFileSha256": "e3d341c03dfc2114e36dd32592c96e92a33d593c20782823e54958c36e428cf7",
+          "bundledMatches": [
+            "world/textures/formica_speckle_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "formica_speckle_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\formica_speckle_normal.png",
+          "packed": false,
+          "originalFileSha256": "69047410ad2a3abefc65bdc13c5672698cb27b902865adb0b90f6781b4b4202b",
+          "bundledMatches": [
+            "world/textures/formica_speckle_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "formica_speckle_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\formica_speckle_rough.png",
+          "packed": false,
+          "originalFileSha256": "9b5ac11c585e97d27ef0286bde2f106a723e01401f4c0c61809e64b781d6de9b",
+          "bundledMatches": [
+            "world/textures/formica_speckle_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "headliner_suede_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\headliner_suede_albedo.png",
+          "packed": false,
+          "originalFileSha256": "bb1469dddd9e6a507789ed9770ca35460134a7ac98bc2f69be79fcbf945eae35",
+          "bundledMatches": [
+            "world/textures/headliner_suede_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "headliner_suede_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\headliner_suede_normal.png",
+          "packed": false,
+          "originalFileSha256": "18a7da159be26c375df15e6e7739db1ae3056e156fada1fa33d888bb1abc2edc",
+          "bundledMatches": [
+            "world/textures/headliner_suede_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "headliner_suede_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\headliner_suede_rough.png",
+          "packed": false,
+          "originalFileSha256": "1d9f5f63ecb909ec1320502f2272036b74395594e1680cee213439af1f4466c5",
+          "bundledMatches": [
+            "world/textures/headliner_suede_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeRacing_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeRacing_albedo.png",
+          "packed": false,
+          "originalFileSha256": "2f0fe2fdd41cf6e332e0bee1dc4b16b27458e465eaa783556c81caf67f7aaac1",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeRacing_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeRacing_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeRacing_metal.png",
+          "packed": false,
+          "originalFileSha256": "fabee2d54a5bb06761d09b0ff3c67d356d6738bef7462d75e9c637b39af58ef5",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeRacing_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeRacing_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeRacing_normal.png",
+          "packed": false,
+          "originalFileSha256": "08f5d9025eec48ae06bd6f3636eb674fbbde3b3524219743fa27cabf64977824",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeRacing_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeRacing_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeRacing_rough.png",
+          "packed": false,
+          "originalFileSha256": "e946b141611eaa04d0a1ff2b48fb0ada6140651e71c1a3ab3b0c55a9a03797a1",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeRacing_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightA_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightA_albedo.png",
+          "packed": false,
+          "originalFileSha256": "04912f35a2785883801a59e46b45dca7b86abe98112d9bff634e61cff4a87363",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightA_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightA_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightA_metal.png",
+          "packed": false,
+          "originalFileSha256": "699a314f0d357362d9548df4cd5685dd545f255c38f3c4989a9cce83c948cbcd",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightA_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightA_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightA_normal.png",
+          "packed": false,
+          "originalFileSha256": "c0957701526165f5f84f9161fdefcb78f5037d6ea6e3c5ff9cb581d1edd3f6bd",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightA_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightA_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightA_rough.png",
+          "packed": false,
+          "originalFileSha256": "7daa94ffb298acabec5d086ed515a26a6d3db264d071a484d84b60d8d95008a4",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightA_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightB_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightB_albedo.png",
+          "packed": false,
+          "originalFileSha256": "6e37ed5c907ffe2c201e9842f410f99098db293311ad9600e80f726e9bf0abf1",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightB_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightB_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightB_metal.png",
+          "packed": false,
+          "originalFileSha256": "21ba1bc065c9cadc3c92382ac88eb9e3b28f421c5fd905398ff7d079a4e0e5cf",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightB_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightB_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightB_normal.png",
+          "packed": false,
+          "originalFileSha256": "6dbb236c9a22f620bda8d03fbbd6d8929a84500eec3f0c80b544118e98373c26",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightB_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ArcadeUprightB_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ArcadeUprightB_rough.png",
+          "packed": false,
+          "originalFileSha256": "e74e109307b898a6d3b7b30284cc33f8c35aa0b0f7dbc7e4246b934980398822",
+          "bundledMatches": [
+            "world/textures/L4A_ArcadeUprightB_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_LitterCups_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterCups_albedo.png",
+          "packed": false,
+          "originalFileSha256": "493acc3252a364d6965e70c8075aa9606e4248b58e2a64abcb901ccc264805fb",
+          "bundledMatches": [
+            "world/textures/L4A_LitterCups_albedo.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterCups_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterCups_metal.png",
+          "packed": false,
+          "originalFileSha256": "e5865c73de26efa84eb96b7f154b39684c6d0b21fba7e99c71caf8e1c546742b",
+          "bundledMatches": [
+            "world/textures/L4A_LitterCups_metal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterCups_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterCups_normal.png",
+          "packed": false,
+          "originalFileSha256": "22d761bd71875967687cde39d16350472f669e6e8bfaceafd6877b67bf88b0ba",
+          "bundledMatches": [
+            "world/textures/L4A_LitterCups_normal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterCups_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterCups_rough.png",
+          "packed": false,
+          "originalFileSha256": "19916950f5860a6adf0173d3e2df75ff061d2c45212785e44050e6284047739a",
+          "bundledMatches": [
+            "world/textures/L4A_LitterCups_rough.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPaper_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPaper_albedo.png",
+          "packed": false,
+          "originalFileSha256": "d872c99cf81d26ea319fb06d46fa9974f976794e88872051803b0f359701a5c6",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPaper_albedo.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPaper_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPaper_metal.png",
+          "packed": false,
+          "originalFileSha256": "3f9ebd829bb46cf10f430c4d57d73a29b8826a31420af20f68744cdb9f20f82f",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPaper_metal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPaper_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPaper_normal.png",
+          "packed": false,
+          "originalFileSha256": "d8f16fbf8432b863047d42a516e5d9ad22dfdf62f77099a3cfc893f6270de11a",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPaper_normal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPaper_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPaper_rough.png",
+          "packed": false,
+          "originalFileSha256": "552a87846fa42dcb08229ab5187d0b1dcccb3447cabf980a6ca08370a0055b9e",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPaper_rough.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornPile_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornPile_albedo.png",
+          "packed": false,
+          "originalFileSha256": "c7fd9685a40d2b4d516608a29c15e0476da3fa253ea13863a26d5a50a5ec4623",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornPile_albedo.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornPile_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornPile_metal.png",
+          "packed": false,
+          "originalFileSha256": "dfa388f23660ae88a922c7e65d8066ce27821f42cbad8ed902333f202e4ab354",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornPile_metal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornPile_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornPile_normal.png",
+          "packed": false,
+          "originalFileSha256": "8765524e6c39cba6bd01168937fcafd3bb7511de6c7b1cf90c032d853bb12d96",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornPile_normal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornPile_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornPile_rough.png",
+          "packed": false,
+          "originalFileSha256": "ef2a165b1b21d079285b2f9ba3df6f77ac6babb6f65f4cf7fbf4075964c2c548",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornPile_rough.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornSpill_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornSpill_albedo.png",
+          "packed": false,
+          "originalFileSha256": "4ec45e27f7ad1875cecf04b95d280e121ff0778af4191320017d854f438eaecb",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornSpill_albedo.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornSpill_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornSpill_metal.png",
+          "packed": false,
+          "originalFileSha256": "a9910b3fd65f281e93cc8cbba1124e20f3f9823318e6a8d12814c4ed8fbec0d7",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornSpill_metal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornSpill_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornSpill_normal.png",
+          "packed": false,
+          "originalFileSha256": "f14066185a7402892931e4077dfa736248f27a7e684d7760a717cad93d1cbe4f",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornSpill_normal.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LitterPopcornSpill_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LitterPopcornSpill_rough.png",
+          "packed": false,
+          "originalFileSha256": "f96585718a2daefb78122a5a033f46003db4dbad3cacc0dd99440a29f9ea286a",
+          "bundledMatches": [
+            "world/textures/L4A_LitterPopcornSpill_rough.png"
+          ],
+          "size": [
+            512,
+            512
+          ]
+        },
+        {
+          "name": "L4A_LockerBank_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LockerBank_albedo.png",
+          "packed": false,
+          "originalFileSha256": "6645a23ad7b0ddf3ae8cb2bc08e53577061e81da7f134b0ace3b7829ce0aeac6",
+          "bundledMatches": [
+            "world/textures/L4A_LockerBank_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_LockerBank_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LockerBank_metal.png",
+          "packed": false,
+          "originalFileSha256": "d9c4f09b521304bbbc1ad5f0c53e1d19b2db43a74b5c58468d91932ea3bf0213",
+          "bundledMatches": [
+            "world/textures/L4A_LockerBank_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_LockerBank_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LockerBank_normal.png",
+          "packed": false,
+          "originalFileSha256": "661e00c425ab3c4fe7647b41222a2ff3488c6dc3fb298eca55f2ba10e16e5d05",
+          "bundledMatches": [
+            "world/textures/L4A_LockerBank_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_LockerBank_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_LockerBank_rough.png",
+          "packed": false,
+          "originalFileSha256": "7367062cd4735b8b86457ea12ee34b13c80a083439bfdeb558cd95cf1a052b6e",
+          "bundledMatches": [
+            "world/textures/L4A_LockerBank_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Pinball_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Pinball_albedo.png",
+          "packed": false,
+          "originalFileSha256": "bbe60941af3ea7d621329d3ab00f473686d934b573b186ed0c1b7f9a72bc17cb",
+          "bundledMatches": [
+            "world/textures/L4A_Pinball_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Pinball_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Pinball_metal.png",
+          "packed": false,
+          "originalFileSha256": "d85809cc5f5975235f053e8bb41f91dc52a38479b56e341db4a2846fbb3946b3",
+          "bundledMatches": [
+            "world/textures/L4A_Pinball_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Pinball_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Pinball_normal.png",
+          "packed": false,
+          "originalFileSha256": "67e6e2b11d4459f345940e690182eae5d1dc2ce4378a8d974f3b72a4e8d8505f",
+          "bundledMatches": [
+            "world/textures/L4A_Pinball_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Pinball_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Pinball_rough.png",
+          "packed": false,
+          "originalFileSha256": "4cc156fd626e90a40dfb436ccd44cfd25b835ac2bcdb2b5469308ecf60eb495b",
+          "bundledMatches": [
+            "world/textures/L4A_Pinball_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_PopcornMachine_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_PopcornMachine_albedo.png",
+          "packed": false,
+          "originalFileSha256": "2d3add492d66ef271ce69a62d6b8446d40ee77fbf1bd84345c7eb101cd4fa968",
+          "bundledMatches": [
+            "world/textures/L4A_PopcornMachine_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_PopcornMachine_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_PopcornMachine_metal.png",
+          "packed": false,
+          "originalFileSha256": "5881b2f4894d486d7c6551ca7b6215ea4ab5b85fb46eb82e46c910d4af909c43",
+          "bundledMatches": [
+            "world/textures/L4A_PopcornMachine_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_PopcornMachine_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_PopcornMachine_normal.png",
+          "packed": false,
+          "originalFileSha256": "75aed79350218dc1b724069321efb84973f298ed45ff8de3993ded1f819bfebf",
+          "bundledMatches": [
+            "world/textures/L4A_PopcornMachine_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_PopcornMachine_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_PopcornMachine_rough.png",
+          "packed": false,
+          "originalFileSha256": "96295124759368206ec76e9d1401abfb0cce3dd860d44bbbe41a88aeadceaf07",
+          "bundledMatches": [
+            "world/textures/L4A_PopcornMachine_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Projector35_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Projector35_albedo.png",
+          "packed": false,
+          "originalFileSha256": "7f5296ea10ea2e65226a9f48901925eef4b49fe18762228545fb84e782fd05a6",
+          "bundledMatches": [
+            "world/textures/L4A_Projector35_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Projector35_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Projector35_metal.png",
+          "packed": false,
+          "originalFileSha256": "15f4973b6a47d037d96b9dd00f1d5b4aff4f1202fac533680406fcf2ec22280d",
+          "bundledMatches": [
+            "world/textures/L4A_Projector35_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Projector35_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Projector35_normal.png",
+          "packed": false,
+          "originalFileSha256": "d7f9b26ceadb1868601356a6fd7794d368a2aea18b83d9d8fe7d3be92d7a55c0",
+          "bundledMatches": [
+            "world/textures/L4A_Projector35_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Projector35_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Projector35_rough.png",
+          "packed": false,
+          "originalFileSha256": "f0a8f108831aefe187efd10064e9cd6c4533faad78e5190e1777cadcabba5d41",
+          "bundledMatches": [
+            "world/textures/L4A_Projector35_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SodaFountain_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SodaFountain_albedo.png",
+          "packed": false,
+          "originalFileSha256": "da83a1ed713448c7dd84a55792ddd6c983e57511100615e92612af30e40f6176",
+          "bundledMatches": [
+            "world/textures/L4A_SodaFountain_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SodaFountain_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SodaFountain_metal.png",
+          "packed": false,
+          "originalFileSha256": "b01651680fc9e51f58b71d4f021a97dc8115822d2ed739259ecb2056331256e6",
+          "bundledMatches": [
+            "world/textures/L4A_SodaFountain_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SodaFountain_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SodaFountain_normal.png",
+          "packed": false,
+          "originalFileSha256": "1ff1a114197739115e3df77048f3d802586707a89228eaaa8646c84ad59694dd",
+          "bundledMatches": [
+            "world/textures/L4A_SodaFountain_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SodaFountain_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SodaFountain_rough.png",
+          "packed": false,
+          "originalFileSha256": "0a74727759491e79a3189b0e90790ad0b35b946c0c35e7698796837e987c9ca9",
+          "bundledMatches": [
+            "world/textures/L4A_SodaFountain_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SupplyCabinet_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SupplyCabinet_albedo.png",
+          "packed": false,
+          "originalFileSha256": "7aecb48fa2a89c06fe8b7dfb7fe71748aac638dd8ddcad38378330f717b07c5d",
+          "bundledMatches": [
+            "world/textures/L4A_SupplyCabinet_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SupplyCabinet_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SupplyCabinet_metal.png",
+          "packed": false,
+          "originalFileSha256": "fb829a6a0afbc57fe568f43cf59e2733780eb318f85d11d5b2f2ed1665447ae3",
+          "bundledMatches": [
+            "world/textures/L4A_SupplyCabinet_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SupplyCabinet_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SupplyCabinet_normal.png",
+          "packed": false,
+          "originalFileSha256": "65d251e7bf41b3ab0d77ba573f5f8613b1407808517321da5ec787c114fccbfb",
+          "bundledMatches": [
+            "world/textures/L4A_SupplyCabinet_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_SupplyCabinet_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_SupplyCabinet_rough.png",
+          "packed": false,
+          "originalFileSha256": "09b29b2fcbe89c29d27fd72b885cef986b85f9f53381713dae37a5be4d922e49",
+          "bundledMatches": [
+            "world/textures/L4A_SupplyCabinet_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ToiletFlush_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ToiletFlush_albedo.png",
+          "packed": false,
+          "originalFileSha256": "dae90188ac6f7e2ff8c26ba18e8f4850d021fd9e89f1188423beacfb8e63c247",
+          "bundledMatches": [
+            "world/textures/L4A_ToiletFlush_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ToiletFlush_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ToiletFlush_metal.png",
+          "packed": false,
+          "originalFileSha256": "48d4783d90ec85b3fb1f609fcebee2cd3f311e4fe08068bf60f894e1c5404c8e",
+          "bundledMatches": [
+            "world/textures/L4A_ToiletFlush_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ToiletFlush_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ToiletFlush_normal.png",
+          "packed": false,
+          "originalFileSha256": "cc7ef52b6ebfac038d97e65d9275259bc385f1994e73e83f1a19b68dc8ca5228",
+          "bundledMatches": [
+            "world/textures/L4A_ToiletFlush_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_ToiletFlush_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_ToiletFlush_rough.png",
+          "packed": false,
+          "originalFileSha256": "ce8be7ca8d1fdca77894c430054f39c3daa5872125d7274495e666ae8aa6153d",
+          "bundledMatches": [
+            "world/textures/L4A_ToiletFlush_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Urinal_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Urinal_albedo.png",
+          "packed": false,
+          "originalFileSha256": "84cd8fb9848b7766933eebc5fcc60bb0e35524f89402fcfb1e6c41cec409336a",
+          "bundledMatches": [
+            "world/textures/L4A_Urinal_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Urinal_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Urinal_metal.png",
+          "packed": false,
+          "originalFileSha256": "e5252f04595a2c796db8d043182905e6f1c93a305fbf94173bc3b145f7a4c56e",
+          "bundledMatches": [
+            "world/textures/L4A_Urinal_metal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Urinal_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Urinal_normal.png",
+          "packed": false,
+          "originalFileSha256": "5067935855bfc662e1f40abd495a3dc93583f09846bbcadb56e865bee654b94f",
+          "bundledMatches": [
+            "world/textures/L4A_Urinal_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "L4A_Urinal_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\L4A_Urinal_rough.png",
+          "packed": false,
+          "originalFileSha256": "d703a55d115f0150f6020872e2ee54ab8dce2d24be458c02c2f5bdb8a2c47493",
+          "bundledMatches": [
+            "world/textures/L4A_Urinal_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "laminate_wood_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\laminate_wood_albedo.png",
+          "packed": false,
+          "originalFileSha256": "fce882b11a3d6d6bc2d604559d1e3381010a7ef61c2e6e1220a0bbda160e610d",
+          "bundledMatches": [
+            "world/textures/laminate_wood_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "laminate_wood_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\laminate_wood_normal.png",
+          "packed": false,
+          "originalFileSha256": "b52e49c33e0ac0149634dd9bfb1e57b866c9332b54d33e8276c175986b4f82cd",
+          "bundledMatches": [
+            "world/textures/laminate_wood_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "laminate_wood_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\laminate_wood_rough.png",
+          "packed": false,
+          "originalFileSha256": "c58f051dc13d29085c4d73127d24e232b5f13876d9fb917ec2efe73cf42b68de",
+          "bundledMatches": [
+            "world/textures/laminate_wood_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "marble_black_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\marble_black_albedo.png",
+          "packed": false,
+          "originalFileSha256": "b2bb4cd822e04d7be5138f4e9be737464d864a73fa57492bca2ea0a36ad6e975",
+          "bundledMatches": [
+            "world/textures/marble_black_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "marble_black_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\marble_black_normal.png",
+          "packed": false,
+          "originalFileSha256": "e00d9a3add6682e13f1430799b6cf4d03d8e02c47a06dec5a0aa913a1428f366",
+          "bundledMatches": [
+            "world/textures/marble_black_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "marble_black_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\marble_black_rough.png",
+          "packed": false,
+          "originalFileSha256": "be4cad02cb7b6ca3bc128d47ec1cd73f2255f0a5ee9e9b1176d00e2864a909fc",
+          "bundledMatches": [
+            "world/textures/marble_black_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "plastic_black_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\plastic_black_albedo.png",
+          "packed": false,
+          "originalFileSha256": "acd339a49b1c18d94ce0f69786b67052f18013492d722aeb2700c367cbb28d1b",
+          "bundledMatches": [
+            "world/textures/plastic_black_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "plastic_black_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\plastic_black_normal.png",
+          "packed": false,
+          "originalFileSha256": "43409d1aa2bdda0cade5844fd821132c66514204c3a7b6d56a3b12d3564bc55c",
+          "bundledMatches": [
+            "world/textures/plastic_black_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "plastic_black_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\plastic_black_rough.png",
+          "packed": false,
+          "originalFileSha256": "8e9707005fc20997c45b5eb5d5a85e6bc17910f264fede8a9025187f5c5f535e",
+          "bundledMatches": [
+            "world/textures/plastic_black_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "porcelain_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\porcelain_albedo.png",
+          "packed": false,
+          "originalFileSha256": "124a37204dc63a40916ab2993d91efe6d517d6df979e6d4dd1dc9bbea36fe4bd",
+          "bundledMatches": [
+            "world/textures/porcelain_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "porcelain_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\porcelain_normal.png",
+          "packed": false,
+          "originalFileSha256": "b0ea1ba7e711510652759a4a1e904096275b5c56d9ec123a341eb9ca4ee9bb84",
+          "bundledMatches": [
+            "world/textures/porcelain_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "porcelain_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\porcelain_rough.png",
+          "packed": false,
+          "originalFileSha256": "0a36596eabf3f04c98427f73ba515259cfb23d67feaaff06bd135e9e913b9a0f",
+          "bundledMatches": [
+            "world/textures/porcelain_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "rubber_black_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\rubber_black_albedo.png",
+          "packed": false,
+          "originalFileSha256": "ca64e20fe4890d1b62c262e4d8029cf6157f3a6f295616b4b80a2b371f9f086a",
+          "bundledMatches": [
+            "world/textures/rubber_black_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "rubber_black_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\rubber_black_normal.png",
+          "packed": false,
+          "originalFileSha256": "91a7de38c25d9608ee02bcfafa736a4cb3e1e59d8da1ab782981364ddb6735f2",
+          "bundledMatches": [
+            "world/textures/rubber_black_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "rubber_black_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\rubber_black_rough.png",
+          "packed": false,
+          "originalFileSha256": "f907df5ebaad0c96d4e8f54a146b045b4292cceca4d93f84539d44ecd92a362e",
+          "bundledMatches": [
+            "world/textures/rubber_black_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "screen_perf_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\screen_perf_albedo.png",
+          "packed": false,
+          "originalFileSha256": "04ad81bb2c6363a495b9143d9cde212f4957ff00ef573aecf9c0f324eb667d36",
+          "bundledMatches": [
+            "world/textures/screen_perf_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "screen_perf_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\screen_perf_normal.png",
+          "packed": false,
+          "originalFileSha256": "6053052be034e29c78d7aefb0b0f37096a28b5c947e7cbf490c090547fbc9178",
+          "bundledMatches": [
+            "world/textures/screen_perf_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "screen_perf_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\screen_perf_rough.png",
+          "packed": false,
+          "originalFileSha256": "f767a2e729eba89b201d1b9171acddf6d8de1572921f368dad2596282fda4290",
+          "bundledMatches": [
+            "world/textures/screen_perf_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "steel_painted_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\steel_painted_albedo.png",
+          "packed": false,
+          "originalFileSha256": "005e38fe56af5bd034312ae9246e79c718a9c2222a86ba03894dcb56726c06fd",
+          "bundledMatches": [
+            "world/textures/steel_painted_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "steel_painted_metal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\steel_painted_metal.png",
+          "packed": false,
+          "originalFileSha256": "0c38eccdd466280260cec8ae3ade350a1d00a75f433a5528f6defe202c20eaf6",
+          "bundledMatches": [
+            "world/textures/steel_painted_metal.png"
+          ],
+          "size": [
+            64,
+            64
+          ]
+        },
+        {
+          "name": "steel_painted_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\steel_painted_normal.png",
+          "packed": false,
+          "originalFileSha256": "59cfcbec7701200e93fb0a5d4a6faf0b305e36b3f630e80594f632e1d8b2bb39",
+          "bundledMatches": [
+            "world/textures/steel_painted_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "steel_painted_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\steel_painted_rough.png",
+          "packed": false,
+          "originalFileSha256": "82dc592425245553f9c566c27750c4ae75383614b0c503ad6803380714d2e4e1",
+          "bundledMatches": [
+            "world/textures/steel_painted_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_acoustic_fabric_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_acoustic_fabric_n.png",
+          "packed": false,
+          "originalFileSha256": "914d4d89c865cc611c5a3c1f1872ec1244c6ffae6a99df18eb5ef9ce586a9047",
+          "bundledMatches": [
+            "world/textures/tex_acoustic_fabric_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_concrete_stained_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_concrete_stained_n.png",
+          "packed": false,
+          "originalFileSha256": "8596a8053fa054b4cc20fe713f9c5459cba4a56bf82080771377ffb283b0dc35",
+          "bundledMatches": [
+            "world/textures/tex_concrete_stained_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_marble_black_gold.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_marble_black_gold.png",
+          "packed": false,
+          "originalFileSha256": "d96b4be62bfb130ec48e26db546de9d154a3e9dfb7f56301ee5c1ac8a51feb6a",
+          "bundledMatches": [
+            "world/textures/tex_marble_black_gold.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_steel_scuffed_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_steel_scuffed_n.png",
+          "packed": false,
+          "originalFileSha256": "a4a5e4ec41a7d84cb8ab84a2f6308d3f20e999755b2e0b19b7f936b9ce26b5bb",
+          "bundledMatches": [
+            "world/textures/tex_steel_scuffed_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_tile_restroom_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_tile_restroom_n.png",
+          "packed": false,
+          "originalFileSha256": "2f9e06271c85b15afc9dd19a7a267e8d9815f8f66c83e5e17b7788b770d435da",
+          "bundledMatches": [
+            "world/textures/tex_tile_restroom_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_wall_dark_red_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_wall_dark_red_n.png",
+          "packed": false,
+          "originalFileSha256": "cac9a038a45ca2badbd988d7845a24aa909da52ac0c7d75e0b6e9ef11ca24583",
+          "bundledMatches": [
+            "world/textures/tex_wall_dark_red_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tex_wood_door_n.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\tex_wood_door_n.png",
+          "packed": false,
+          "originalFileSha256": "a9eb9a94c994a634e14be329052f73e85d7f59d6bc90585054585b2771dc670b",
+          "bundledMatches": [
+            "world/textures/tex_wood_door_n.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tile_cream_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\tile_cream_albedo.png",
+          "packed": false,
+          "originalFileSha256": "da900347bba91c5fd0706c3e600d02f9cfaa243f4edf171aef7276a98c77f532",
+          "bundledMatches": [
+            "world/textures/tile_cream_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tile_cream_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\tile_cream_normal.png",
+          "packed": false,
+          "originalFileSha256": "c4814e935996489c7a21a8ac4bb12a636ef84e9906d31a0f5a6d56bb668bf871",
+          "bundledMatches": [
+            "world/textures/tile_cream_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "tile_cream_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\tile_cream_rough.png",
+          "packed": false,
+          "originalFileSha256": "15dfd2c301f5197c29023d761f3cb96bc1418e0ac5e0664a5b4f5e9f48ffec7d",
+          "bundledMatches": [
+            "world/textures/tile_cream_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velour_seat_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velour_seat_albedo.png",
+          "packed": false,
+          "originalFileSha256": "e9f07afe7038123c0a98b0769be6e467c70a2b1d6f826a83af3c8bb687ec8c14",
+          "bundledMatches": [
+            "world/textures/velour_seat_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velour_seat_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velour_seat_normal.png",
+          "packed": false,
+          "originalFileSha256": "282e2ebe94e8a490d1073dce2eeb21a2ca8de1c4df94882108c36140463db52d",
+          "bundledMatches": [
+            "world/textures/velour_seat_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velour_seat_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velour_seat_rough.png",
+          "packed": false,
+          "originalFileSha256": "0b8527102bcaf7bc77eadccf9c1ec1ca9e3cfbf70413ccf3a4b97fd24c091e38",
+          "bundledMatches": [
+            "world/textures/velour_seat_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velvet_flute_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velvet_flute_albedo.png",
+          "packed": false,
+          "originalFileSha256": "2dbb7cc63d9e08768c96fa6700772df9537424f7f44ea95a25cacd8bce913335",
+          "bundledMatches": [
+            "world/textures/velvet_flute_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velvet_flute_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velvet_flute_normal.png",
+          "packed": false,
+          "originalFileSha256": "296afe32f623db0698d5189c1b7ed1cb8e3c92ea926ddb2f36083982ed1231a2",
+          "bundledMatches": [
+            "world/textures/velvet_flute_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "velvet_flute_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\velvet_flute_rough.png",
+          "packed": false,
+          "originalFileSha256": "21de29ca56a48148a8794d00db94fe768a43fb23a250cc3d515537348323d4b8",
+          "bundledMatches": [
+            "world/textures/velvet_flute_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "vinyl_tufted_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\vinyl_tufted_albedo.png",
+          "packed": false,
+          "originalFileSha256": "3cf2ee4c1d1fe6bb86bbaa04e2ca4cba63d541ae5cf8ba322c1abd05d137e4f9",
+          "bundledMatches": [
+            "world/textures/vinyl_tufted_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "vinyl_tufted_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\vinyl_tufted_normal.png",
+          "packed": false,
+          "originalFileSha256": "a9aae4abb142ccea9a2fb2a851ddbdb44c91ccde2789b631b19d0802b821ad70",
+          "bundledMatches": [
+            "world/textures/vinyl_tufted_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "vinyl_tufted_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\vinyl_tufted_rough.png",
+          "packed": false,
+          "originalFileSha256": "817fe4444e6e34922d2c4caac6bafac278752804503bfc1ae3a2aabfead6af89",
+          "bundledMatches": [
+            "world/textures/vinyl_tufted_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wainscot_lacquer_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wainscot_lacquer_albedo.png",
+          "packed": false,
+          "originalFileSha256": "02e0ae9272dc4470c222ae954e5b5eb5183af681cdf1af846a293cc26391548e",
+          "bundledMatches": [
+            "world/textures/wainscot_lacquer_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wainscot_lacquer_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wainscot_lacquer_normal.png",
+          "packed": false,
+          "originalFileSha256": "b95168c36bd1dcb2ba7c25f8061391962dffe036c99d3c2a272ef0a61bffcbd0",
+          "bundledMatches": [
+            "world/textures/wainscot_lacquer_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wainscot_lacquer_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wainscot_lacquer_rough.png",
+          "packed": false,
+          "originalFileSha256": "d69c6f5631c8e47dfc71d0ae622a98effac2837b0d362820b7073098a1c6441b",
+          "bundledMatches": [
+            "world/textures/wainscot_lacquer_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wallpaper_synth_albedo.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wallpaper_synth_albedo.png",
+          "packed": false,
+          "originalFileSha256": "1066f028475b32346b0c86f04b549b64e17b9dc0dfcd169539501bcf3c31e254",
+          "bundledMatches": [
+            "world/textures/wallpaper_synth_albedo.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wallpaper_synth_normal.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wallpaper_synth_normal.png",
+          "packed": false,
+          "originalFileSha256": "7785c57b4d9d021e3fc188877585f54a9300cac7d472eb1c21cf629edd1a6fd2",
+          "bundledMatches": [
+            "world/textures/wallpaper_synth_normal.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wallpaper_synth_rough.png",
+          "originalPath": "G:\\Blender\\Level4_Cinema\\textures\\pbr\\wallpaper_synth_rough.png",
+          "packed": false,
+          "originalFileSha256": "c6847a6374124c30c6ef21bc3f587ee8f59bf81d6b87682db987067d117fb3da",
+          "bundledMatches": [
+            "world/textures/wallpaper_synth_rough.png"
+          ],
+          "size": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "unpackedImagePathsRequireRelink": true
+    },
+    {
+      "file": "templates/Cinema_Templates.blend",
+      "sha256": "270fbd2a62d5287f622ba5758cc554fe6da90f3d4b42e1596114fb0210f89c59",
+      "meshes": 33,
+      "uvMeshes": 32,
+      "images": [
+        {
+          "name": "base_color.png",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\Usher\\Usher_static_textures\\base_color.png",
+          "packed": false,
+          "originalFileSha256": "bf5bf59b4e183bc0858f2eef335815120cc93daecee84e556efb479231a210e4",
+          "bundledMatches": [
+            "templates/export/textures/L4T_Usher_base_color.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "base_color.png.001",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\FilmCanister\\FilmCanister_textures\\base_color.png",
+          "packed": false,
+          "originalFileSha256": "c639f82c3707a86506086b967391cbfab5e4087a3b232f6ad17e79c0e1368c71",
+          "bundledMatches": [
+            "templates/export/textures/L4T_FilmReel_base_color.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "Image_0",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_0.001",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_0.002",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_0.003",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1.001",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1.002",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1.003",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_3",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_3.001",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_3.002",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_3.003",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "metallic.png",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\Usher\\Usher_static_textures\\metallic.png",
+          "packed": false,
+          "originalFileSha256": "b26e9ca15c5bbdb3307e47537dde9caec85029874c9360e447de1cd922c4422b",
+          "bundledMatches": [
+            "templates/export/textures/L4T_Usher_metallic.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "metallic.png.001",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\FilmCanister\\FilmCanister_textures\\metallic.png",
+          "packed": false,
+          "originalFileSha256": "0b25e94822263429ecfb4cb2360f89bd94eec1424c0bf64a60df515ae3fe743d",
+          "bundledMatches": [
+            "templates/export/textures/L4T_FilmReel_metallic.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "normal",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "normal.001",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "normal.002",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "normal.003",
+          "originalPath": "",
+          "packed": true,
+          "originalFileSha256": null,
+          "bundledMatches": [],
+          "size": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "normal.png",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\Usher\\Usher_static_textures\\normal.png",
+          "packed": false,
+          "originalFileSha256": "1db5d38dee399ab1b7a4b6dc8183f510154f56081f7c08263bc3faf0887cdd3d",
+          "bundledMatches": [
+            "templates/export/textures/L4T_Usher_normal.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "normal.png.001",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\FilmCanister\\FilmCanister_textures\\normal.png",
+          "packed": false,
+          "originalFileSha256": "db3eaa619813b8a8159721cc3a87ae408f4cf8edd571625777871c673c4c4035",
+          "bundledMatches": [
+            "templates/export/textures/L4T_FilmReel_normal.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roughness.png",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\Usher\\Usher_static_textures\\roughness.png",
+          "packed": false,
+          "originalFileSha256": "0e53407b77dd932afc6127b2a0d6b7be045240262e348cf4022b0da85c91cfb6",
+          "bundledMatches": [
+            "templates/export/textures/L4T_Usher_roughness.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roughness.png.001",
+          "originalPath": "//..\\..\\..\\..\\l4meshy\\FilmCanister\\FilmCanister_textures\\roughness.png",
+          "packed": false,
+          "originalFileSha256": "8fa85e40952ad1eb3b3bd48f4ee8aa13603a81b4bf6240fe73f4ff97ecec5b0e",
+          "bundledMatches": [
+            "templates/export/textures/L4T_FilmReel_roughness.png"
+          ],
+          "size": [
+            0,
+            0
+          ]
+        }
+      ],
+      "unpackedImagePathsRequireRelink": true
+    }
+  ],
+  "studioGameplayVerified": false
+}

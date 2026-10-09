@@ -1,6 +1,0 @@
-# Exploratory renders/generations are preserved locally; the final audio
-# masters, selected ElevenLabs takes and QC live in assets/level6-worn-party/audio.
-audio-candidates/
-audio-mastered-initial/
-audio-mastered-intermediate/
-remote-import-tools/

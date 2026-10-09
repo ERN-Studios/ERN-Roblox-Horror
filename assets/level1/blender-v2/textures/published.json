@@ -1,0 +1,103 @@
+{
+  "carpet_albedo.png": {
+    "assetId": "rbxassetid://88740987992118",
+    "sha256": "0f849d72344686eff1402b46d8f256c45d5d519c4d5fce01f8239af4d24f7861",
+    "file": "carpet_albedo.png"
+  },
+  "carpet_normal.png": {
+    "assetId": "rbxassetid://112651048790918",
+    "sha256": "0b74c8ec6e6182d8b9b6e62617687838b4c3676b62faa78c4911a5a0fa559c45",
+    "file": "carpet_normal.png"
+  },
+  "carpet_rough.png": {
+    "assetId": "rbxassetid://119613328534087",
+    "sha256": "8638c7ae8d1d54f6aec8b8045b35b494be33b792814f0c72eb73ab0ae67521f7",
+    "file": "carpet_rough.png"
+  },
+  "ceiling_albedo.png": {
+    "assetId": "rbxassetid://83397021691558",
+    "sha256": "1481b26c70d7d5209c9b08e4d24d667dabd7b2bd5a3242983250862ed36feb03",
+    "file": "ceiling_albedo.png"
+  },
+  "ceiling_normal.png": {
+    "assetId": "rbxassetid://95726546265735",
+    "sha256": "039925865f771492e32d89e91bc43abef3d05ab0a4dfa075d3b33a4002aab8d6",
+    "file": "ceiling_normal.png"
+  },
+  "ceiling_rough.png": {
+    "assetId": "rbxassetid://123084910119207",
+    "sha256": "8117439dedc90146a49c1328726f90de5665cd11dedabf514335bc1245cac427",
+    "file": "ceiling_rough.png"
+  },
+  "wallpaper_albedo.png": {
+    "assetId": "rbxassetid://87947439437597",
+    "sourceAssetId": 87947439437597,
+    "sha256": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980",
+    "file": "wallpaper_albedo.png"
+  },
+  "prop_copper_albedo.png": {
+    "assetId": "rbxassetid://76851479522998",
+    "sha256": "6cfa84ae2122af8a0c0968300ba11b19e33c595799c5d3e15cb9a1552da33e59",
+    "file": "prop_copper_albedo.png"
+  },
+  "prop_cream_albedo.png": {
+    "assetId": "rbxassetid://89283656558988",
+    "sha256": "610d0fde3fb19a566399e02ec124a7589c5a8b8b6d091b1ffef75eaa9917e1ee",
+    "file": "prop_cream_albedo.png"
+  },
+  "prop_metal.png": {
+    "assetId": "rbxassetid://82245547625704",
+    "sha256": "d8acccafa1fdcf03f3bb9112f5f2f30ad1558e446d5c12ec5644fc0d53c1e58b",
+    "file": "prop_metal.png"
+  },
+  "prop_normal.png": {
+    "assetId": "rbxassetid://92066611037304",
+    "sha256": "33bd42c703681a631d02c44b9336a6e7aef3019845de3aa58295751084bbd37e",
+    "file": "prop_normal.png"
+  },
+  "prop_ochre_albedo.png": {
+    "assetId": "rbxassetid://109617713097099",
+    "sha256": "f7a816383d4d7d7dcd12e6734995f317d758ad9c03bf787067ff549aacf50068",
+    "file": "prop_ochre_albedo.png"
+  },
+  "prop_olive_albedo.png": {
+    "assetId": "rbxassetid://93178939910662",
+    "sha256": "81c8d453135b904ee50d02315df0796baa36be864db74c617352bc68f552b9c3",
+    "file": "prop_olive_albedo.png"
+  },
+  "prop_paintmetal.png": {
+    "assetId": "rbxassetid://80670229027622",
+    "sha256": "741dd4cee3427c66c523465068f79ab5ce6b8ee7d24f60d3db6c4dba83e6ca97",
+    "file": "prop_paintmetal.png"
+  },
+  "prop_porcelain_albedo.png": {
+    "assetId": "rbxassetid://131101193850757",
+    "sha256": "a4a4b4c247da84aa7435cc5e4b16a99870d99674d6361d939eeab92785494293",
+    "file": "prop_porcelain_albedo.png"
+  },
+  "prop_red_albedo.png": {
+    "assetId": "rbxassetid://124495299888829",
+    "sha256": "3ca24f8cab584e7ee6ee62df4c011a52afd275ef80685ba63bdb7ff653111964",
+    "file": "prop_red_albedo.png"
+  },
+  "prop_rough.png": {
+    "assetId": "rbxassetid://107172740980971",
+    "sha256": "a640eb779f9dd0d4b1d19b7e9a8c8982495919a9f50e49b0f21538284eaf9c6c",
+    "file": "prop_rough.png"
+  },
+  "prop_steel_albedo.png": {
+    "assetId": "rbxassetid://108120944053269",
+    "sha256": "e0eef7b773b297526ccf5c45128f812256f2ac7423a926640636d5bbec64e6ed",
+    "file": "prop_steel_albedo.png"
+  },
+  "wallpaper_normal.png": {
+    "assetId": "rbxassetid://122804131972663",
+    "sha256": "e6870bf029a5bd8323e15a2a58e0e24ed6ad2a0760d99a265898fe6d407d2203",
+    "file": "wallpaper_normal.png"
+  },
+  "wallpaper_rough.png": {
+    "assetId": "rbxassetid://133006943807590",
+    "sha256": "d1d35a86fcbeea6e63ce58db28ef92931e7b6dd22bd73a3f0b861fadd0b89221",
+    "file": "wallpaper_rough.png"
+  }
+}

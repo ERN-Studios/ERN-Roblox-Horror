@@ -1,0 +1,230 @@
+{
+  "status": "complete_offline",
+  "checks": {
+    "views": 926,
+    "legitimate": 678,
+    "legitimate_before_magenta": 0,
+    "legitimate_after_magenta": 0,
+    "legitimate_before_near_magenta": 0,
+    "legitimate_after_near_magenta": 0,
+    "max_diff_percent": 0.09114583333333333,
+    "new_magenta_pixels": 0,
+    "new_near_magenta_pixels": 0,
+    "informative_views": 233,
+    "informative_distinct_eyes": 233,
+    "unique_triangles": 964681,
+    "culled_unique_triangles": 939337,
+    "export_triangles": 956315,
+    "chunks": 570,
+    "placements": 1893,
+    "colliders": 7272,
+    "prop_colliders": 2852,
+    "lights": 260,
+    "shadows": 6,
+    "carriers": 74
+  },
+  "contracts": {
+    "status": "pass",
+    "tag_counts": {
+      "L4ArcadeCode": 1,
+      "L4Breaker": 6,
+      "L4EntrySpawn": 6,
+      "L4ExitSafeSpawn": 6,
+      "L4ExitScreen": 1,
+      "L4FuseSocket": 1,
+      "L4HideZone": 41,
+      "L4LightZone": 38,
+      "L4MainBreaker": 1,
+      "L4NoteSpot": 6,
+      "L4PowerCabinet": 2,
+      "L4PrizeCase": 1,
+      "L4PrizeKeypad": 1,
+      "L4Projector": 3,
+      "L4ReelSpot": 10,
+      "L4Screen": 3,
+      "L4UsherNode": 5607
+    },
+    "markers": 5739,
+    "tagged_models": 14,
+    "zones": 38,
+    "nav_nodes": 5607,
+    "nav_edges": 20563,
+    "lights": 260,
+    "zone_pooled_emissive_chunks": 139,
+    "global_star_chunks": 15,
+    "moving_parts": [
+      {
+        "group": "ArcadeLeft_01",
+        "part": "Screen",
+        "pivot": null
+      },
+      {
+        "group": "PrizeCase",
+        "part": "Door",
+        "pivot": [
+          4.099996,
+          0.0,
+          -0.0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "group": "Breaker_A1",
+        "part": "Handle",
+        "pivot": [
+          1.4e-05,
+          0.625001,
+          -0.0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "group": "Breaker_A2",
+        "part": "Handle",
+        "pivot": [
+          1.4e-05,
+          0.624997,
+          -0.0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "group": "Breaker_A3",
+        "part": "Handle",
+        "pivot": [
+          1.4e-05,
+          0.625001,
+          -0.0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "group": "Breaker_B1",
+        "part": "Handle",
+        "pivot": [
+          0.0,
+          0.625001,
+          -0.0,
+          -1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "group": "Breaker_B2",
+        "part": "Handle",
+        "pivot": [
+          0.0,
+          0.624997,
+          -0.0,
+          -1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "group": "Breaker_B3",
+        "part": "Handle",
+        "pivot": [
+          0.0,
+          0.625001,
+          -0.0,
+          -1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          -1
+        ]
+      },
+      {
+        "group": "MainBreaker",
+        "part": "Lever",
+        "pivot": [
+          -1.4e-05,
+          1.45,
+          -7e-06,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "manifest_sha256": "8cde5114014d34da79e816455a18292d8a674b589b6cded9a8e2a9f4d99b2e40",
+    "packet_sha256": "e53e7817a91a2ebea63cdd70454df4d28bc3c0f066de51461d50e61ade2508c9"
+  },
+  "artifact_sha256": {
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\build.blend": "cf4abd1639421740264713c1660fd479386e6492eac2c549df2f4cbaf911ee6d",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\final.blend": "3e08d297da4cceb7f784d0524ef285d67bc8b382ffcb99254c33807897cab41a",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\export\\manifest.json": "8cde5114014d34da79e816455a18292d8a674b589b6cded9a8e2a9f4d99b2e40",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\export\\chunks\\c99999.b64": "e53e7817a91a2ebea63cdd70454df4d28bc3c0f066de51461d50e61ade2508c9",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\manifest.json": "08860ca7455ce19fdb9fec43176822b1ae27f1ea61db312297c2d11047ac8d83",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\completion_checks.json": "c2d5fd2c40434296d92ebc6c1e925706418b010ab80e0c58e43008a093afd905",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\contract_checks.json": "4fb7e5fe2d610d2923ca090da976c961b3d43e11985f4fde565c002c519e3382",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\HOLES.md": "52cacfa53c0a3bfb7ec38371f5d66cf8d560f1ccf69252dded35a498e885e650",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\assets\\usher_export\\manifest.json": "aec145ebc16c3cd756ea36892945571dd902dc9a11f80c9801a81281753c00f0",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\assets\\usher_export\\rig.json": "801f7c8272c7db2add07e038c5ffc0ff10ebc703e81aafeafe5e39715b5931bd",
+    "G:\\Roblox\\_local\\l4facelift\\v5\\assets\\build_templates.py": "7e58a035bd87df2a8021356cc55e429b90883b911de0d4dbcd8339eac4d2d997",
+    "G:\\Roblox\\MongoTV\\ReplicatedStorage\\Level 4 Usher Animations.ModuleScript.lua": "567fba9ea1ee24068883779382917bfb7c64c130a18ae062e3f31d188a649f61",
+    "G:\\Roblox\\MongoTV\\ServerScriptService\\Level 4 Systems\\Level 4 Usher Nav.ModuleScript.lua": "63699bee74dd3c2bd172ad31e0ba1c0d645761067dad3c2d6571cb1cca26f684"
+  },
+  "git_used": false,
+  "studio_used": false,
+  "master_unchanged": true,
+  "uploaded": false,
+  "published": false,
+  "pipeline": "Copied final3 run.sh reached ALL_DONE; each explicit gate exit 0. Tool shell wrapper reported exit1 while captured stderr was redirected; completed artifacts independently verified."
+}

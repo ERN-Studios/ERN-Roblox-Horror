@@ -802,8 +802,30 @@ task.spawn(function()
 end)
 
 local function updateVisibility()
+	local layout = UIDevice.Layout()
 	local inRound = player:GetAttribute("InRound") == true
-	local touchDevInLevel = inRound and devAllowed and UserInputService.TouchEnabled
+	-- Admission and placement use the same form factor, including Studio overrides.
+	local touchDevInLevel = inRound and devAllowed and layout.IsTouch
+	local function objectiveDevReady()
+		if workspace:GetAttribute("RoundActive") ~= true then return false end
+		local playerGui = player:FindFirstChild("PlayerGui")
+		local hud = playerGui and playerGui:FindFirstChild("RoundHud")
+		local objective = hud and hud:FindFirstChild("ObjectiveCard")
+		if not hud or not hud:IsA("ScreenGui") or hud.Enabled ~= true
+			or not objective or objective.Parent ~= hud or not objective:IsA("GuiObject")
+			or not objective.Visible then return false end
+		local bar = objective:FindFirstChild("Bar", true)
+		local hit = bar and bar:FindFirstChild("Hit")
+		local ancestor = bar
+		while ancestor ~= objective do
+			if not ancestor or not ancestor:IsA("GuiObject") or not ancestor.Visible then return false end
+			ancestor = ancestor.Parent
+		end
+		return hit ~= nil and hit.Parent == bar and hit:IsA("GuiButton") and hit.Visible and hit.Active
+	end
+	-- The objective is the phone dev opener while its real tap target is present.
+	-- Levels without an objective, hiding and death keep the existing fallback chip.
+	local objectiveDev = touchDevInLevel and objectiveDevReady()
 	local blockedByModal = modalBlocksStore()
 	-- Visible = false alone was never enough: an Active TextButton keeps taking
 	-- taps through its own transparent background, which is how this control was
@@ -815,16 +837,17 @@ local function updateVisibility()
 	-- RAIL_OVER_WINDOWS_20261007 (owner, 2026-10-07): the rail stays up
 	-- over its OWN windows -- the L4 shop, the L4 dev menu, Daily Rewards and the
 	-- Lucky Wheel -- so a rail press switches window instead of needing a Close
-	-- first. In the lobby only re-entry hides it here; the queue still does
+	-- first. Results and re-entry hide it in the lobby; the queue still does
 	-- through blockedByModal. In a round the old rule stands unchanged (every
 	-- screen-owning modal hides it), so the touch DEV chip still hides under
 	-- DevPhoneOpen. Before this, the 2026-09-16 lead fix hid the rail under every
 	-- modal because SHOPS stayed Active beside an open Daily Rewards, one tap
 	-- from a second modal; switchFrom (below) is what makes that tap safe now.
-	local otherModal = if inRound then UIDevice.ScreenOwningModalOpen()
-		else player:GetAttribute("ZyntraReentryOpen") == true
+	local otherModal = player:GetAttribute("RoundEndingOpen") == true
+		or (if inRound then UIDevice.ScreenOwningModalOpen()
+			else player:GetAttribute("ZyntraReentryOpen") == true)
 	UIDevice.SetInteractive(openButton,
-		(not inRound or touchDevInLevel)
+		(not inRound or (touchDevInLevel and not objectiveDev))
 			and not blockedByModal
 			and not otherModal)
 	UIDevice.SetInteractive(shopButton, not inRound and not blockedByModal
@@ -844,7 +867,6 @@ local function updateVisibility()
 		musicButton.Active = false
 		musicButton.Selectable = false
 	end
-	local layout = UIDevice.Layout()
 	if layout.IsTouch then
 		-- The right edge is owned by the game's RUN/JUMP/GLOW/FLASHLIGHT
 		-- cluster on handhelds. Keep this lobby entry point in the small strip
@@ -888,8 +910,7 @@ local function updateVisibility()
 			-- control cluster, and the space below it is clear of the thumbstick
 			-- precisely because the column is far enough right to be.
 			--
-			-- The widest request of the three levels is used (Level 1's), so the
-			-- chip clears whichever readout is actually on screen.
+			-- Reserve the current imported objective's complete expansion.
 			-- C_ZYNTRA_DEV_CHIP_CLEARS_THE_CLUSTER_20260831.
 			--
 			-- "Under the column" was a single hard-coded spot, and it stopped
@@ -900,7 +921,49 @@ local function updateVisibility()
 			-- assumed -- ordered candidates, first one clear of every movement
 			-- zone and of the readout itself wins, and the same test is what the
 			-- touch-target matrix applies afterwards.
-			local column = UIDevice.TopRightPanel(300, 190)
+			local playerGui = player:FindFirstChild("PlayerGui")
+			local hud = playerGui and playerGui:FindFirstChild("RoundHud")
+			local objective = hud and hud:FindFirstChild("ObjectiveCard")
+			local column = UIDevice.TopRightPanel(objective and objective.Size.X.Offset or 260,
+				objective and objective.Size.Y.Offset or 190)
+			local exclusions = {column}
+			local marker = hud and hud:FindFirstChild("NoiseMarker")
+			-- Visible becomes true before Attention's fade-in advances from alpha 1.
+			-- Reserve that incoming marker now; its fade does not move its bounds.
+			if hud and hud.Enabled and marker and marker.Visible then
+				local offsetX, offsetY = UIDevice.LocalOffset(hud, 0, 0)
+				local width, height = marker.Size.X.Offset, marker.Size.Y.Offset
+				local left = marker.Position.X.Offset - offsetX - marker.AnchorPoint.X * width
+				local top = marker.Position.Y.Offset - offsetY - marker.AnchorPoint.Y * height
+				table.insert(exclusions, {Left = left, Top = top, Right = left + width, Bottom = top + height})
+			end
+			local hiding = playerGui and playerGui:FindFirstChild("Level3TableHideUI")
+			local hidingBottom = layout.Safe.Top
+			if hiding and hiding.Enabled then
+				-- Imported HUD roots use offset sizes/positions. Convert their GUI origin
+				-- through UIDevice so native and forced viewport measurements agree.
+				local offsetX, offsetY = UIDevice.LocalOffset(hiding, 0, 0)
+				for _, name in ipairs({"HiddenStatus", "LeaveHiding", "TableCheck"}) do
+					local root = hiding:FindFirstChild(name)
+					if root and root.Visible then
+						local width, height = root.Size.X.Offset, root.Size.Y.Offset
+						local left = root.Position.X.Offset - offsetX - root.AnchorPoint.X * width
+						local top = root.Position.Y.Offset - offsetY - root.AnchorPoint.Y * height
+						local rect = {Left = left, Top = top, Right = left + width, Bottom = top + height}
+						table.insert(exclusions, rect)
+						hidingBottom = math.max(hidingBottom, rect.Bottom)
+					end
+				end
+			end
+			local exitGui = playerGui and playerGui:FindFirstChild("RoundExitGui")
+			local exitChip = exitGui and exitGui:FindFirstChild("LeaveChipTouch")
+			if exitGui and exitGui.Enabled and exitChip and exitChip.Visible then
+				local offsetX, offsetY = UIDevice.LocalOffset(exitGui, 0, 0)
+				local width, height = exitChip.Size.X.Offset, exitChip.Size.Y.Offset
+				local left = exitChip.Position.X.Offset - offsetX - exitChip.AnchorPoint.X * width
+				local top = exitChip.Position.Y.Offset - offsetY - exitChip.AnchorPoint.Y * height
+				table.insert(exclusions, {Left = left, Top = top, Right = left + width, Bottom = top + height})
+			end
 			local zones = layout.Zones
 			local function hits(rect, other)
 				return rect.Left < other.Right - 1 and rect.Right > other.Left + 1
@@ -916,7 +979,8 @@ local function updateVisibility()
 				for _, key in ipairs({"Thumbstick", "Controls", "Jump"}) do
 					if zones[key] and hits(rect, zones[key]) then return false end
 				end
-				return not hits(rect, column)
+				for _, other in ipairs(exclusions) do if hits(rect, other) then return false end end
+				return true
 			end
 			local placements = {
 				-- 1. under the readout, right-aligned to it: the authored spot,
@@ -926,8 +990,25 @@ local function updateVisibility()
 				{math.floor(column.Left) - 10 - buttonWidth, math.floor(column.Top)},
 				-- 3. the far end of the same row, which no readout reaches.
 				{layout.Safe.Left + 8, math.floor(column.Top)},
+				-- Hiding owns the upper middle band; retain a reachable chip below it.
+				{layout.Safe.Left + 8, math.floor(hidingBottom) + 10},
 			}
-			local chosen = placements[#placements]
+			-- An exit chip may occupy the left fallback. Search obstacle edges after
+			-- the authored candidates, keeping DEV reachable wherever a 44px slot fits.
+			local xs = {layout.Safe.Left, layout.Safe.Right - buttonWidth}
+			local ys = {layout.Safe.Top, layout.Safe.Bottom - buttonHeight}
+			local obstacles = {table.unpack(exclusions)}
+			for _, key in ipairs({"Thumbstick", "Controls", "Jump"}) do
+				if zones[key] then table.insert(obstacles, zones[key]) end
+			end
+			for _, rect in ipairs(obstacles) do
+				table.insert(xs, math.ceil(rect.Right) + 8)
+				table.insert(xs, math.floor(rect.Left) - buttonWidth - 8)
+				table.insert(ys, math.ceil(rect.Bottom) + 8)
+				table.insert(ys, math.floor(rect.Top) - buttonHeight - 8)
+			end
+			for _, top in ipairs(ys) do for _, left in ipairs(xs) do table.insert(placements, {left, top}) end end
+			local chosen = placements[4]
 			for _, spot in ipairs(placements) do
 				if clear(spot[1], spot[2]) then chosen = spot break end
 			end
@@ -1013,6 +1094,41 @@ player:GetAttributeChangedSignal(BRIEFING_ATTRIBUTE):Connect(updateVisibility)
 -- briefing re-ran updateVisibility, so MUSIC was once left drawn and Active
 -- underneath a re-entry modal. The L4 shop's ZyntraStoreOpen lands here too.
 UIDevice.OnScreenOwningModalChanged(updateVisibility)
+-- Objective expansion and table warnings can change the reserved footprint
+-- without changing the device or round. Defer until imported roots finish layout.
+do
+	local pending = false
+	local watched = setmetatable({}, {__mode = "k"})
+	local function refreshPlacement()
+		if pending then return end
+		pending = true
+		task.defer(function() pending = false; updateVisibility() end)
+	end
+	local function watch(node)
+		local owner = node.Parent
+		local relevant = owner and ((owner.Name == "RoundHud" and (node.Name == "ObjectiveCard" or node.Name == "NoiseMarker"))
+			or (owner.Name == "ObjectiveCard" and (node.Name == "Bar" or node.Name == "ObjectiveCard"))
+			or (owner.Name == "Bar" and node.Name == "Hit" and owner.Parent and owner.Parent.Name == "ObjectiveCard")
+			or (owner.Name == "Level3TableHideUI" and (node.Name == "HiddenStatus"
+					or node.Name == "LeaveHiding" or node.Name == "TableCheck"))
+				or (owner.Name == "RoundExitGui" and node.Name == "LeaveChipTouch"))
+		if not relevant or watched[node] or not node:IsA("GuiObject") then return end
+		watched[node] = true
+		for _, property in ipairs({"Size", "Position", "AnchorPoint", "Visible", "Parent"}) do
+			node:GetPropertyChangedSignal(property):Connect(refreshPlacement)
+		end
+		if node:IsA("GuiButton") then node:GetPropertyChangedSignal("Active"):Connect(refreshPlacement) end
+		if owner:IsA("ScreenGui") and not watched[owner] then
+			watched[owner] = true
+			owner:GetPropertyChangedSignal("Enabled"):Connect(refreshPlacement)
+			owner:GetPropertyChangedSignal("Parent"):Connect(refreshPlacement)
+		end
+		refreshPlacement()
+	end
+	local playerGui = player:WaitForChild("PlayerGui")
+	playerGui.DescendantAdded:Connect(watch)
+	for _, node in ipairs(playerGui:GetDescendants()) do watch(node) end
+end
 -- The L4 graft can land after a round has already made UPGRADES the DEV chip.
 for _, entry in ipairs(railButtons) do
 	entry.ChildAdded:Connect(function(child)
@@ -1021,6 +1137,7 @@ for _, entry in ipairs(railButtons) do
 end
 player:GetAttributeChangedSignal("ZyntraReentryUsed"):Connect(updateReentry)
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(updateReentry)
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(updateVisibility)
 updateVisibility()
 
 -- J, PlayerScripts.DevPhoneCommand and the in-round ZYNTRA // DEV chip, for

@@ -1,0 +1,15 @@
+# Uafhængigt review — iuP2GkZL
+
+**9/10 for det forberedte kode- og geometriforslag. Ingen nødvendig rettelse fundet. Installation, native accept og publicering er fortsat udestående.**
+
+Gennemgået præcis GameManager `241d8ad4c2ccb70a7d3f62c7ef3a05b7909500723725019a52ac44a067df0219` og World Builder `a3a41d76f6dc6d13d782cb5dab5595757a5cd9b1d1b440f6605f310c56bf983d`. Sidste Builder-ændringer efter den første frysning er kun forklarende kommentarer. De to produktionskilder er fortsat uændrede af denne preparation/review.
+
+Røret bliver 400 studs langt med rise 115 og uændret radius 8. Første ankomst er ved alpha .80, og de følgende fem placeres opad med 12 studs ekstra vandret afstand. De seks aktuelle root-positioner får stigende højde, korrekt individuel downhill-tangent og uændret hastighed 62; sidste plads har 20 studs vandret reserve til bagkappen. De målte root-afstande er mindst 13,2523 studs. En optaget plads genbruges ikke, og manglende plads giver den eksisterende sikre fallback frem for en placering udenfor røret.
+
+Jeg genkørte `python artifacts/trello-20260909/level3-longer-slide-prepared/test_slide.py`: 433 actual-source GameManager-checks, 7.787 kontroller af faktisk emitteret geometri og 61.269 eksisterende aperture-checks bestod. Begge konkrete negative kontroller afviser den gamle nedadgående rækkefølge og den gamle Builders utilstrækkelige reserve til den nye opadgående placering. Begge hele produktionsforslag kompilerer.
+
+Geometrikontrollen dækker alle 640 shell-colliders, 32 runouts og bagkappen, tidligere native målte root-relative avatarbounds ved de seks pladser, samt 3.720 radiale rays ved og på begge sider af de 31 længdesamlinger. Den uændrede 32×20-opdeling giver paneler op til 14,50344 studs inklusive overlap. Mundens 40 seals og front-/skrå rays består fortsat. Nærmeste faktisk taggede collider er højst 8,10531 studs fra et ankomstpunkt, indenfor den eksisterende klient-readinessradius på 28.
+
+Diffen bevarer root-aware PivotTo, anchoring under streaming, per-spiller streammål, current-character/entry-fences, momentum/release, streamfailure-fallback, shared slide-controller og cleanup. Ingen ændring af Continue-, objektiv-, exit- eller entity-politik. Serverens eksisterende 30-sekunders ragdollgrænse giver ingen åbenlys tidskonflikt med denne rørlængde.
+
+Afgrænsning: geometry-hostens bokse/rays og de tidligere målte avatarbounds erstatter ikke native fysik, streaming eller andre avatarers kollisioner. Før release bør root kontrollere alle seks native ankomstpositioner og deres rækkefølge, en faktisk tur fra den øverste plads til mall-gulvet med kontrolrestaurering samt normal cleanup. En rigtig flerpersoners tur er nyttig direkte evidens for kortets successive-spawn-problem. Den gamle nominelle geometri er ikke bevist at have placeret spillere udenfor banen; testen dokumenterer den nye reserve og rækkefølge, ikke en opfundet native reproduktion. Generatorens plan-aspect er heller ikke et nyt mål af hele det renderede verdens-boundingbox.

@@ -444,6 +444,22 @@ local outcome, total = "error", 0
 local ok, problem = pcall(function() outcome, total = run() end)
 if not ok then warn("[LobbyLoading] " .. tostring(problem)) end
 
+-- GameManager entry is drawn by the imported RoundUI card. Keep only the
+-- first-frame bootstrap cover until that card exists, without fading over it.
+local function roundCover()
+	local playerGui = player:FindFirstChild("PlayerGui")
+	local round = playerGui and playerGui:FindFirstChild("RoundGui")
+	local frame = round and round:FindFirstChild("LevelLoading")
+	return frame ~= nil and frame:IsA("GuiObject") and frame.Visible and round.Enabled
+end
+if outcome == "round" then
+	local began = os.clock()
+	while os.clock() - began < 60 and not roundCover()
+		and not (player:GetAttribute("InRound") == true and workspace:GetAttribute("RoundActive") == true) do
+		task.wait(0.1)
+	end
+end
+
 if outcome == "lobby" and not enterAnyway then
 	-- TEXTURE_SETTLE_20261004 (owner: "all objects load in but some textures still need a couple of seconds").
 	-- PreloadAsync returns when the files are fetched; the renderer then still decodes and uploads them, and
@@ -484,128 +500,83 @@ else
 	cover.Active = false
 	player:SetAttribute("LobbyLoadingOpen", false)
 	player:SetAttribute("LobbyLoadingDone", true)
-	local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-	TweenService:Create(cover, fade, { BackgroundTransparency = 1 }):Play()
-	for _, child in ipairs(cover:GetDescendants()) do
-		if child:IsA("TextLabel") then
-			TweenService:Create(child, fade, { TextTransparency = 1 }):Play()
-		elseif child:IsA("Frame") then
-			TweenService:Create(child, fade, { BackgroundTransparency = 1 }):Play()
+	if outcome == "round" then
+		gui:Destroy() -- the new cover is already visible; no legacy fade on top
+	else
+		local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+		TweenService:Create(cover, fade, { BackgroundTransparency = 1 }):Play()
+		for _, child in ipairs(cover:GetDescendants()) do
+			if child:IsA("TextLabel") then
+				TweenService:Create(child, fade, { TextTransparency = 1 }):Play()
+			elseif child:IsA("Frame") then
+				TweenService:Create(child, fade, { BackgroundTransparency = 1 }):Play()
+			end
 		end
+		task.wait(0.65)
+		gui:Destroy()
 	end
-	task.wait(0.65)
-	gui:Destroy()
 end
 
 ---------------------------------------------------------------------------
 -- LEVEL_LOADING_20261004 (owner: "make sure a similar loading screen happens for every level, timed with the
 -- load speed", "and change its colour scheme a little with the level you are in").
 --
--- The same cover as the lobby's - kicker, title, bar, status, detail, tip - in each level's own colours, raised
--- for every way into a level and dropped by what has really loaded, not by a timer:
---   ROUNDS (Levels 1-4, GameManager): it stands over RoundUI's own cover (`RoundGui.LevelLoading`) for exactly
---     as long as that is up - the server drops it when the world is built and the party is released - and
---     preloads whatever of the level has reached this client meanwhile. On a reserved round server it is up
---     from the first frame, before RoundUI exists. RoundUI publishes the level as the attribute `LoadingLevel`.
+-- Every actual level entry uses the imported LoadingCardView layout. Loading state and release still
+-- follow what has really loaded; the first-join lobby above keeps its existing boot cover:
+--   ROUNDS (Levels 1-4, GameManager): RoundUI's imported `RoundGui.LevelLoading` is the only round cover.
+--     This script prefetches arriving world assets in the background; it neither draws a duplicate cover
+--     nor delays the tokenized entry release. Reserved-server bootstrap hands over to RoundUI above.
 --   LIVE LEVELS (5 and 6, on the lobby server): raised when the level marks the player, held until the body is
 --     in the level, the model has stopped arriving, there is ground under the feet, the level's meshes and
 --     textures are fetched and the request queue has gone quiet.
--- Every wait has a cap, so nobody is ever held behind it. Client attribute `LevelLoadingOpen` while it is up.
+-- Live-level cover waits have caps. Client attribute `LevelLoadingOpen` belongs only to those covers.
 ---------------------------------------------------------------------------
 do
-	local LEVELS = {
-		[0] = {name = "ENTERING ANOMALOUS SPACE", kicker = "ZYNTRA  //  DESCENT", accent = Color3.fromRGB(111, 255, 214), ink = Color3.fromRGB(6, 11, 12),
-			tip = "Noise attracts it. Walk. Crouch. Stay quiet."},
-		[1] = {name = "LEVEL 1  ·  THE OFFICE", kicker = "ZYNTRA  //  DESCENT 01", accent = Color3.fromRGB(236, 198, 84), ink = Color3.fromRGB(13, 11, 4),
-			tip = "Noise attracts it. Walk. Crouch. Stay quiet."},
-		[2] = {name = "LEVEL 2  ·  THE POOLROOMS", kicker = "ZYNTRA  //  DESCENT 02", accent = Color3.fromRGB(105, 222, 238), ink = Color3.fromRGB(3, 9, 12),
-			tip = "Start the pumps. Watch the water."},
-		[3] = {name = "LEVEL 3  ·  THE MALL", kicker = "ZYNTRA  //  DESCENT 03", accent = Color3.fromRGB(255, 150, 72), ink = Color3.fromRGB(13, 7, 3),
-			tip = "Under a table is safe, until it checks."},
-		[4] = {name = "LEVEL 4  ·  THE CINEMA", kicker = "ZYNTRA  //  DESCENT 04", accent = Color3.fromRGB(255, 84, 212), ink = Color3.fromRGB(10, 4, 14),
-			tip = "The power is out. Your flashlight is all you have."},
-		[5] = {name = "LEVEL 5  ·  THE VOID ROOMS", kicker = "ZYNTRA  //  DESCENT 05", accent = Color3.fromRGB(244, 160, 198), ink = Color3.fromRGB(11, 5, 9),
-			tip = "Everyone on the plate. Do not fall."},
-		[6] = {name = "LEVEL 6  ·  THE PLAYGROUND", kicker = "ZYNTRA  //  DESCENT 06", accent = Color3.fromRGB(255, 212, 64), ink = Color3.fromRGB(13, 5, 4),
-			tip = "It is counting. Find a place to hide."},
-	}
 	local LIVE_MODELS = {[5] = "Level 5 Void", [6] = "Level 6 Indoor Playground"}
 	local playerGui = player:WaitForChild("PlayerGui")
 	local up = nil                                  -- the cover on screen, or nil
 
 	local function raise(level)
-		local style = LEVELS[level] or LEVELS[0]
 		local screen = Instance.new("ScreenGui")
 		screen.Name, screen.IgnoreGuiInset, screen.ResetOnSpawn, screen.DisplayOrder = "LevelLoadingGui", true, false, 99990
 		screen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-		local sheet = Instance.new("Frame")
-		sheet.Name, sheet.Size, sheet.BackgroundColor3, sheet.BorderSizePixel, sheet.Active = "Cover", UDim2.fromScale(1, 1), style.ink, 0, true
+		-- A stable group fades every imported/remounted child together.
+		local sheet = Instance.new("CanvasGroup")
+		sheet.Name, sheet.Size, sheet.BackgroundColor3, sheet.BorderSizePixel, sheet.Active = "Cover", UDim2.fromScale(1, 1), Color3.new(0, 0, 0), 0, true
+		sheet.BackgroundTransparency, sheet.GroupTransparency = 0, 0
 		sheet.Parent = screen
-		local function line(name, text, font, size, colour, position)
-			local l = Instance.new("TextLabel")
-			l.Name, l.BackgroundTransparency, l.Font, l.Text, l.TextSize, l.TextColor3 = name, 1, font, text, size, colour
-			l.AnchorPoint, l.Position, l.Size, l.TextWrapped = Vector2.new(0.5, 0.5), position, UDim2.new(0.9, 0, 0, size + 10), true
-			l.Parent = sheet
-			return l
-		end
-		local kick = line("Kicker", style.kicker, Enum.Font.RobotoMono, 14, style.accent, UDim2.fromScale(0.5, 0.36))
-		local name = line("Title", style.name, Enum.Font.GothamBlack, 40, Color3.fromRGB(236, 244, 240), UDim2.fromScale(0.5, 0.44))
-		name.Size, name.TextScaled = UDim2.new(0.9, 0, 0, 96), true
-		local limit = Instance.new("UITextSizeConstraint")
-		limit.MaxTextSize, limit.MinTextSize = 40, 20
-		limit.Parent = name
-		local rail = Instance.new("Frame")
-		rail.Name, rail.AnchorPoint, rail.Position, rail.Size = "Track", Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.56), UDim2.new(0.5, 0, 0, 6)
-		rail.BackgroundColor3, rail.BorderSizePixel = style.accent:Lerp(style.ink, 0.82), 0
-		rail.Parent = sheet
-		local railLimit = Instance.new("UISizeConstraint")
-		railLimit.MinSize, railLimit.MaxSize = Vector2.new(220, 6), Vector2.new(560, 6)
-		railLimit.Parent = rail
-		local bar = Instance.new("Frame")
-		bar.Name, bar.Size, bar.BackgroundColor3, bar.BorderSizePixel = "Fill", UDim2.fromScale(0, 1), style.accent, 0
-		bar.Parent = rail
-		local state = line("Status", "CONNECTING", Enum.Font.RobotoMono, 15, style.accent:Lerp(Color3.new(1, 1, 1), 0.55), UDim2.new(0.5, 0, 0.56, 28))
-		local note = line("Detail", "", Enum.Font.RobotoMono, 13, style.accent:Lerp(style.ink, 0.45), UDim2.new(0.5, 0, 0.56, 52))
-		local hint = line("Tip", style.tip, Enum.Font.Gotham, 14, style.accent:Lerp(style.ink, 0.4), UDim2.new(0.5, 0, 1, -40))
 		screen.Parent = playerGui
 		player:SetAttribute("LevelLoadingOpen", true)
-		local self = {level = level, shown = 0, target = 0, open = true, startedAt = os.clock()}
-		task.spawn(function()                          -- the bar eases toward the measured value and never runs ahead of it
-			while self.open do
-				local dt = RunService.RenderStepped:Wait()
-				self.shown += (self.target - self.shown) * math.min(1, dt * 8)
-				bar.Size = UDim2.fromScale(self.shown, 1)
-			end
-		end)
+		up = {loading = true} -- module replication may yield; do not start another live cover
+		local View = require(game:GetService("ReplicatedStorage"):WaitForChild("LoadingCardView"))
+		local view = View.new(sheet, level)
+		local self = {level = level, target = 0, open = true, startedAt = os.clock()}
 		function self.stage(text, fraction, detailText)
-			state.Text, note.Text = text, detailText or ""
+			-- Keep measured progress monotone; the imported layout has no legacy detail row.
 			if fraction and fraction > self.target then self.target = fraction end
+			view:SetStatus(text, self.target)
 		end
 		function self.restyle(toLevel)
-			local to = LEVELS[toLevel]
-			if not to or toLevel == self.level then return end
-			self.level = toLevel
-			local swap = TweenInfo.new(0.35)
-			TweenService:Create(sheet, swap, {BackgroundColor3 = to.ink}):Play()
-			TweenService:Create(bar, swap, {BackgroundColor3 = to.accent}):Play()
-			TweenService:Create(rail, swap, {BackgroundColor3 = to.accent:Lerp(to.ink, 0.82)}):Play()
-			kick.Text, kick.TextColor3, name.Text, hint.Text = to.kicker, to.accent, to.name, to.tip
-			state.TextColor3, note.TextColor3, hint.TextColor3 = to.accent:Lerp(Color3.new(1, 1, 1), 0.55), to.accent:Lerp(to.ink, 0.45), to.accent:Lerp(to.ink, 0.4)
+			local nextLevel = tonumber(toLevel)
+			if not nextLevel or nextLevel % 1 ~= 0 or nextLevel < 1 or nextLevel > 6 or nextLevel == self.level then return end
+			self.level = nextLevel
+			view:SetLevel(nextLevel)
+			view:SetStatus(nil, self.target)
 		end
 		function self.drop()
 			if not self.open then return end
 			self.target = 1
+			view:SetStatus(nil, 1)
 			task.wait(0.2)
 			self.open = false
 			sheet.Active = false
 			player:SetAttribute("LevelLoadingOpen", false)
 			local fade = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-			TweenService:Create(sheet, fade, {BackgroundTransparency = 1}):Play()
-			for _, child in ipairs(sheet:GetDescendants()) do
-				if child:IsA("TextLabel") then TweenService:Create(child, fade, {TextTransparency = 1}):Play()
-				elseif child:IsA("Frame") then TweenService:Create(child, fade, {BackgroundTransparency = 1}):Play() end
-			end
-			task.delay(0.65, function() screen:Destroy() end)
+			TweenService:Create(sheet, fade, {BackgroundTransparency = 1, GroupTransparency = 1}):Play()
+			task.delay(0.65, function()
+				view:Destroy() -- disconnect the device-remount watch before removing its parent
+				screen:Destroy()
+			end)
 			print(string.format("[LevelLoading] level %s covered for %.1f s", tostring(self.level), os.clock() - self.startedAt))
 		end
 		return self
@@ -664,11 +635,6 @@ do
 			task.wait(0.1)
 		end
 	end
-	local function roundCover()
-		local round = playerGui:FindFirstChild("RoundGui")
-		local frame = round and round:FindFirstChild("LevelLoading")
-		return frame ~= nil and frame:IsA("GuiObject") and frame.Visible and round.Enabled
-	end
 	local function announced()
 		return tonumber(player:GetAttribute("LoadingLevel")) or tonumber(workspace:GetAttribute("SelectedLevel")) or 0
 	end
@@ -683,36 +649,22 @@ do
 		return list
 	end
 
-	-- A GameManager round. `joined` = this is a reserved round server and RoundUI's cover has not come up yet.
+	-- GameManager owns release. This sentinel prevents concurrent/repeated workers
+	-- while the imported card is visible; bounded prefetch never owns presentation.
 	local function coverRound(joined)
-		local cover = raise(joined and 0 or announced())
-		up = cover
-		cover.stage("PREPARING YOUR PARTY", 0.08, "The server is building the level.")
+		up = {round = true}
 		local began = os.clock()
-		if joined then                                -- wait for the round's own cover (or for the round itself)
+		if joined then
 			while os.clock() - began < 60 and not roundCover() and player:GetAttribute("InRound") ~= true do task.wait(0.1) end
 		end
 		local lastFetch = 0
-		while roundCover() and os.clock() - began < 150 do
-			cover.restyle(announced())
-			local waited = os.clock() - began
-			cover.stage("BUILDING THE LEVEL", 0.1 + 0.55 * (1 - math.exp(-waited / 9)), "The server is building the level.")
-			if os.clock() - lastFetch > 1.5 then        -- whatever of it is here already
+		while roundCover() do
+			if os.clock() - began < 150 and os.clock() - lastFetch > 1.5 then
 				lastFetch = os.clock()
 				task.spawn(fetch, levelWorlds(), 6, nil)
 			end
 			task.wait(0.15)
 		end
-		cover.restyle(announced())
-		-- the round has let us in: one bounded pass over what arrived, then out
-		cover.stage("LOADING THE LEVEL", 0.7, "Meshes, textures, decals and materials.")
-		fetch(levelWorlds(), 2.5, function(done, total)
-			cover.stage(string.format("LOADING THE LEVEL  %d / %d", done, total), 0.7 + 0.25 * done / math.max(1, total), "Meshes, textures, decals and materials.")
-		end)
-		cover.stage("FINISHING TEXTURES", 0.97)
-		quiet(1.5, 0.4)
-		cover.stage("LEVEL READY", 1)
-		cover.drop()
 		up = nil
 	end
 

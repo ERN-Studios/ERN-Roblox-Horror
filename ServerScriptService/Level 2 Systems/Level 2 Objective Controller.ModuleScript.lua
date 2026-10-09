@@ -568,7 +568,7 @@ function ObjectiveController.Start(manifest, generation)
 			end
 			pump.Model:SetAttribute("Level2_PumpRunning", true)
 			TeamObjectives.Announce(player.Name,
-				string.format("STARTED PUMP %02d  //  %d/%d", pump.Index, session.StartedCount, goal), 2)
+				string.format("started pump %d \u{B7} %d/%d", pump.Index, session.StartedCount, goal), 2, "level2:pump")
 
 			workspace:SetAttribute("Level2Pumps", session.StartedCount)
 			local level2State = state()

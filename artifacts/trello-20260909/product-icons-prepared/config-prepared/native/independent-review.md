@@ -1,0 +1,9 @@
+# Final independent icon review — 9/10
+
+I viewed the actual Shop top, token-row and bottom screenshots. All six intended subjects remain recognizable at the native 76px circular crop: Supporter medal without hazmat imagery, equipment respirator, four distinct tokens, a larger token cache, inward re-entry doorway and three glowsticks. The artwork is consistent with the surrounding teal interface. None of the main symbols is visibly cut off or confused with its neighbour. Twenty Tokens is read as a larger cache, not a claim that twenty individual visible pieces can be counted.
+
+The native probe has exactly one card for each of the six identities. Every expected image ID matches the actual ImageLabel, IsLoaded is true, the size is 76×76, the corner radius is 38 and ScaleType is Crop. There are no fallback monograms. The earlier pre-scroll load=false state is not the final result; individual revealing/scrolling was needed for the final load evidence. The probe's clip flags describe one scroll position, while the three separately viewed screenshots establish the visible crop of each row.
+
+I matched installed Config SHA `d5f8ce54d4fbbf008a8d48bd958478b704c6d9cc1e26883c73439b0a88398f98` exactly to the reviewed after-Shield proposal. Reversing only the six numeric IconId values reconstructs the previous Shield Config byte-for-byte. All pricing, purchase identities, grant amounts, Shield copy and other settings are consequently preserved. The complete installed Config compiles.
+
+Final score: **9/10**, no remaining correction for this bounded six-icon Shop integration. This combines the previously reviewed platform/master delivery with actual native image identity, loading and crop evidence. No purchases, physical phone rendering or simultaneous visibility of all six scrolling cards are claimed. Root owns the final whole-place compile/audit and separate mouse publication; none was performed by this reviewer.

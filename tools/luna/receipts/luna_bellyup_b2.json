@@ -1,0 +1,21 @@
+{
+  "source": "luna_bellyup_b2.rbxmx",
+  "sha256": "a87e713d29c9badddc3c551fce33069160599074e3f7562548151ed9f4cb2d80",
+  "assetType": "Animation",
+  "displayName": "Luna bellyup b2",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-05T00:24:01.769462+00:00",
+  "operationPath": "operations/8b01de9d-93eb-4ad0-8a04-154b75cf9166",
+  "assetId": "75958294393479",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna bellyup b2",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

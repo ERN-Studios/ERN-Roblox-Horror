@@ -1032,7 +1032,7 @@ applyLevelGrade = function(unlocked: boolean)
 		TintColor = tint,
 	})
 	tween(bloom, 0.48, {
-		Intensity = if unlocked then 0.11 else 0.08,
+		Intensity = if unlocked then 0.088 else 0.064,
 		Size = 18,
 		Threshold = 1.45,
 	})

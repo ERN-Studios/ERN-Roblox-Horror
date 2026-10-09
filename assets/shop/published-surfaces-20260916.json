@@ -1,0 +1,50 @@
+[
+  {
+    "key": "shop-canopy-fascia",
+    "file": "shop-canopy-fascia.png",
+    "assetId": "104212668736693",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGB",
+    "alphaRange": [
+      255,
+      255
+    ],
+    "creatorType": "User",
+    "creatorId": 40920547
+  },
+  {
+    "key": "shop-nameplate",
+    "file": "shop-nameplate.png",
+    "assetId": "87848253712756",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "creatorType": "User",
+    "creatorId": 40920547
+  },
+  {
+    "key": "shop-rewards-plaque",
+    "file": "shop-rewards-plaque.png",
+    "assetId": "79807587818348",
+    "size": [
+      1122,
+      1402
+    ],
+    "mode": "RGB",
+    "alphaRange": [
+      255,
+      255
+    ],
+    "creatorType": "User",
+    "creatorId": 40920547
+  }
+]

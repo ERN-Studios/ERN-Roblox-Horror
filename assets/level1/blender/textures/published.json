@@ -1,0 +1,47 @@
+{
+  "carpet_albedo.png": {
+    "assetId": "rbxassetid://88740987992118",
+    "sha256": "0f849d72344686eff1402b46d8f256c45d5d519c4d5fce01f8239af4d24f7861",
+    "file": "carpet_albedo.png"
+  },
+  "carpet_normal.png": {
+    "assetId": "rbxassetid://112651048790918",
+    "sha256": "0b74c8ec6e6182d8b9b6e62617687838b4c3676b62faa78c4911a5a0fa559c45",
+    "file": "carpet_normal.png"
+  },
+  "carpet_rough.png": {
+    "assetId": "rbxassetid://119613328534087",
+    "sha256": "8638c7ae8d1d54f6aec8b8045b35b494be33b792814f0c72eb73ab0ae67521f7",
+    "file": "carpet_rough.png"
+  },
+  "wallpaper_albedo.png": {
+    "assetId": "rbxassetid://73926493570331",
+    "sha256": "4b8d7a429894278b93da0c6eaadf3f5c80ff6b9ee57026925db94c0543364a19",
+    "file": "wallpaper_albedo.png"
+  },
+  "wallpaper_normal.png": {
+    "assetId": "rbxassetid://85462985577099",
+    "sha256": "210401c64db3a6935265ea7a1d85480801fa37ac266d69461291fbd92734ccd8",
+    "file": "wallpaper_normal.png"
+  },
+  "wallpaper_rough.png": {
+    "assetId": "rbxassetid://82647239498889",
+    "sha256": "a9f72c17d547a9c893b53b55907078fd304667977813ee7bd82a8fdd0222b156",
+    "file": "wallpaper_rough.png"
+  },
+  "ceiling_albedo.png": {
+    "assetId": "rbxassetid://83397021691558",
+    "sha256": "1481b26c70d7d5209c9b08e4d24d667dabd7b2bd5a3242983250862ed36feb03",
+    "file": "ceiling_albedo.png"
+  },
+  "ceiling_normal.png": {
+    "assetId": "rbxassetid://95726546265735",
+    "sha256": "039925865f771492e32d89e91bc43abef3d05ab0a4dfa075d3b33a4002aab8d6",
+    "file": "ceiling_normal.png"
+  },
+  "ceiling_rough.png": {
+    "assetId": "rbxassetid://123084910119207",
+    "sha256": "8117439dedc90146a49c1328726f90de5665cd11dedabf514335bc1245cac427",
+    "file": "ceiling_rough.png"
+  }
+}

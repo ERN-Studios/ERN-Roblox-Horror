@@ -1,0 +1,21 @@
+# Upgrades / Shop logo rework — PkEUQQ74
+
+Prepared visual/code proposal only. Production Store, Studio, Entity Shield, and product IDs are unchanged. The Trello card and its dedicated checklist endpoint were read on 2026-09-10: it rejects the current Upgrades/Shop designs and requires an independent **10/10** before release. It contains no additional checklist, comment or reference image. The author supplies no score.
+
+The existing native screenshot shows an upload-like arrow beside a backpack for Upgrades, and a very similar small bag for Shop. The rework uses one **32px symbol per button**, with a consistent **3.5px** stroke: two ascending rank chevrons for Upgrades, and a cart silhouette with two solid wheels for Shop. Distinct outlines and larger marks replace the small similar silhouettes. These are authored GUI primitives, so there is no external image lookup, new asset upload or text-glyph/font dependency for the symbols.
+
+The two buttons retain their names, text, native GothamBold18, teal accent, dimensions, position, actions, modal/DEV guards, the fixed caption gutter and the narrow text fallback. Only `sectionButtonContent` and the Upgrades symbol list change. The current Contextual UIStroke correction is byte-identical. There is one existing click target per button; decorative children remain inactive. The 32px cell has 8px vertical room inside the 48px Shop button and a 14px gap before its caption starts. All painted primitives remain inside that cell.
+
+See `section-logos-preview.png` for the revised design, including current/revised desktop, 220px phone width, native-sized symbols, magnified details and 132px fallback. This image is a new schematic drawn from the actual helper's emitted geometry, not an edited Studio screenshot. The preview uses bundled Montserrat Bold; production keeps GothamBold. Native type metrics and rendering are still pending. The standalone SVGs use the same exported primitives.
+
+`python artifacts/trello-20260909/section-logo-rework-prepared/test_proposal.py` checks the actual helper, including the existing 19 placement checks, modal/narrow/DEV visibility and ghost-caption stroke states. It compiles the complete current Store proposal and both prepared future merge variants (after Entity Shield; after Entity Shield+ESP), confirms the actual visibility function is unchanged, and verifies the current production SHA. Eleven simple shape primitives produce the two symbols; current counts are in `validation.json`.
+
+`prepare.py` refuses baseline drift and preserves the before snapshot. Apply only its two seams to a fresh Store checkpoint after earlier features are published, then regenerate/read back the merged artifact. Do not overwrite later Store work with any old full-file preview. No new UIRegression framework or application input was created here.
+
+Independent review must judge semantic clarity, distinctness, visual weight, alignment, native-size legibility and fit with the existing lobby. If the actual result does not merit 10/10, record the lower score and concrete improvements; the numerical requirement is not permission to inflate a score. Root native acceptance should show desktop and touch width, actual icon/caption clicks, unchanged narrow/DEV fallback and no ghost strokes, before the final release review. This artifact is not a release approval.
+
+## Iteration 1 feedback and revision
+
+The independent reviewer rated the first design **9/10**, identifying that the cart's extra lower rail left only 0.5px below the basket and 0.75px above its wheels. `iteration-1/` preserves that proposal, preview and feedback. The current revision removes that redundant rail and terminates the handle at the basket bottom. The wheels now have 4.75px of clear vertical separation from the basket's painted lower edge, improving native-size separation without changing the symbol footprint, caption gutter or other button.
+
+The same independent reviewer inspected the revised preview and reran all **88 checks and three complete compiles**, awarding **10/10 for the prepared design and code**; see `independent-review.md`. The original 9/10 remains historical evidence. Final release approval still requires root's native rendering, actual clicks and fallback/guard readbacks. The author does not supply an independent score.

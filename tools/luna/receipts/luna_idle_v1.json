@@ -1,0 +1,21 @@
+{
+  "source": "luna_idle_v1.rbxmx",
+  "sha256": "2f63ca5cf705a0f7a7288da25d307a26b98e1c279f42d77013281dff39c3ef78",
+  "assetType": "Animation",
+  "displayName": "Luna idle v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:03:24.734346+00:00",
+  "operationPath": "operations/d8d723bc-0b71-4943-a657-323160a8b4cb",
+  "assetId": "126786816607054",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna idle v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

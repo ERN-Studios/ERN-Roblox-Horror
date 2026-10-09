@@ -823,7 +823,7 @@ local function applyLighting(on)
 		grade.Parent = Lighting
 		bloom = Instance.new("BloomEffect")       -- the tubes glow into the haze
 		bloom.Name = "Level6PlaygroundBloom"
-		bloom.Intensity, bloom.Size, bloom.Threshold = 0.3, 24, 2.0
+		bloom.Intensity, bloom.Size, bloom.Threshold = 0.24, 24, 2.0
 		bloom.Parent = Lighting
 		player:SetAttribute(LIGHTING_OWNED, true)
 	elseif not on and saved then

@@ -59,7 +59,7 @@ end
 -- a kind and a short detail -- never a finished line of copy.
 local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
 local function announceTeam(actorName, kind, detail)
-	TeamObjectives.Announce(actorName, detail, 1)
+	TeamObjectives.Announce(actorName, detail, 1, "level1:" .. kind)
 end
 
 -- ── tuning ────────────────────────────────────────────────
@@ -654,7 +654,7 @@ local function makeDroppedFuses(owningSession, count, position)
 		-- Replaces the private "Fuse picked up": the party learns who has it, and
 		-- the picker still sees the count on their own carry row.
 		announceTeam(player.Name, "fuse",
-			count == 1 and "TOOK A FUSE" or ("TOOK " .. count .. " FUSES"))
+			count == 1 and "took a fuse" or ("took " .. count .. " fuses"))
 		if owningSession.updateEntityObjectiveTarget then owningSession.updateEntityObjectiveTarget() end
 	end))
 	table.insert(owningSession.fuses, core)
@@ -714,7 +714,7 @@ local function finishFuseExtraction(owningSession, player, record, position)
 		owningSession.carried[player] = (owningSession.carried[player] or 0) + 1
 		updateCarriedFuse(player, owningSession.carried[player])
 		status:FireClient(player, "carry", owningSession.carried[player])
-		announceTeam(player.Name, "fuse", "TOOK A FUSE")
+		announceTeam(player.Name, "fuse", "took a fuse")
 	else
 		-- The relay's .55 s release may finish after death/re-entry. It still owns
 		-- exactly one fuse, which belongs on the floor rather than on the new body.
@@ -1626,7 +1626,7 @@ local function startPuzzle()
 				local circuit = session.circuits[boxIndex]
 				if circuit then circuit:SetAttribute("Powered", true) end
 				announceTeam(player.Name, "box",
-					("POWERED A BOX %d/%d"):format(session.boxesDone, session.boxCount))
+					("powered a box \u{B7} %d/%d"):format(session.boxesDone, session.boxCount))
 				if session.boxesDone >= session.boxCount then
 					session.onAllBoxes()
 				end
@@ -1634,7 +1634,7 @@ local function startPuzzle()
 				-- Unreachable while FUSES_PER_BOX is 1, and the one line that keeps
 				-- a partial deposit from being the only silent action in the level.
 				announceTeam(player.Name, "box",
-					("FED A BOX %d/%d"):format(box.count, FUSES_PER_BOX))
+					("fed a box \u{B7} %d/%d"):format(box.count, FUSES_PER_BOX))
 			end
 		end))
 	end
@@ -1690,7 +1690,7 @@ local function startPuzzle()
 				if lv.latched then on += 1 end
 			end
 			announceTeam(player.Name, "lever",
-				("PULLED LEVER %d/%d"):format(on, #session.levers))
+				("pulled lever \u{B7} %d/%d"):format(on, #session.levers))
 			if on == #session.levers then session.onLevers(lever.cf.Position) end
 		end))
 	end

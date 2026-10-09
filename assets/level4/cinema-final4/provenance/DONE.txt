@@ -1,0 +1,17 @@
+ASSETS round v5 A-D COMPLETE (offline Blender/export delivery)
+A: Usher7.6studs;18bodysegments/24Motors;8171body+660torch=8831tris;Walk23frames/Run22frames@30fps;32standalonechunks total.
+B: FilmReel1477,Fuse208,BatteryPack444,Note260tris;Paper separate. build_templates.py consumes uploaded results+texture ids. Fabricated ids were limited to offline generator self-check.
+C: 5607connected navnodes/20563edges;38zones;260lights/6shadows;14interactiveModels;139zonedemissivechunks;15globalstar chunks.
+C tag counts: L4ArcadeCode=1, L4Breaker=6, L4EntrySpawn=6, L4ExitSafeSpawn=6, L4ExitScreen=1, L4FuseSocket=1, L4HideZone=41, L4LightZone=38, L4MainBreaker=1, L4NoteSpot=6, L4PowerCabinet=2, L4PrizeCase=1, L4PrizeKeypad=1, L4Projector=3, L4ReelSpot=10, L4Screen=3, L4UsherNode=5607
+5720 requested L4 marker volumes;5739 total Marker records including19existing legacy markers.
+D: fresh build from unchanged master;copied whole final3 pipeline reaches ALL_DONE,all explicit gate exits0.
+Proof:926paired cameras;233informative distinct eyes;678legitimate interiors;all before/after exact+near magenta0;new exact+near0;maxdiff0.0911458333% <=0.1%.
+LOOK:58canonicalcontacts(all926pairs),52individualfinalEEVEEimages;template rest+3walk+4magenta/pickups;nav graph and focused props/recovery previews all reviewed.
+Native triangles964681before/939337after;export956315triangles/570chunks/1893placements/7272colliders(805opaque)/2852propColliders/74carriers/0legacyLights.
+Evidence:completion_checks.json,contract_checks.json,visual_review.json,HOLES.md,delivery_record.json;logs/source snapshots/native scenes/export under final4.
+Usher/pickups:../assets/usher_export/;builder:../assets/build_templates.py;source animation/nav modules at exact requested repo paths.
+No Git/Studio/GUI/upload/publication. Protected PushDoors and current FLICKER logic preserved. Gameplay, multiplayer, performance and Roblox lighting were not executed.
+Lighting caveat:PowerA/MainBreaker/codecabinet local Blender faces dark;labels/control outlines visible. No geometry blocker remains.
+Master SHA256646c6b3928659a379c6e6305f455fc403885c8a108449d423fd9811c217a2ffb.
+Attempt1 coverage failure and all exact inputs/reviews preserved under attempt1;resolved with150fresh informativeinterioreyes,unchanged proof thresholds/tools.
+Copied final3 run.sh reached ALL_DONE; each explicit gate exit 0. Tool shell wrapper reported exit1 while captured stderr was redirected; completed artifacts independently verified.

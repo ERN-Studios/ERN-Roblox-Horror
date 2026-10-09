@@ -1,0 +1,13 @@
+# Restore intro above the gate — hhRhOMX5
+
+Exact card title: **Lobby: Move the floating intro back on top of the gate**. Description: “The intro in the lobby is floating in the air. Restore its previous position on top of the gate.” Direct card read returned no comments, no comment truncation and no checklists; the dedicated checklist read independently returned empty. Full responses are in `card-readback.json`.
+
+The isolated proposal restores exactly the previous authored position of the existing `ZyntraWelcomeBoard`: relative to lobby center, **(8,11.6,-78) → (0,18.1,-92.2)**. That old coordinate was verified in `studio-introduction-prepared/before.lua`. It is also aligned with the actual current `ArrivalGantryBeam`, centered at (0,13.8,-92.2), size37.2×0.85×0.85, and the paired existing posts at x±18.2. The board stays size32×7.2×0.55 with Front/Back text and noncolliding state unchanged.
+
+Geometry: the restored board spans y14.5–21.7, with its x/z center aligned to the gantry. The beam's top is y14.225, leaving the same prior authored0.275-stud vertical gap; this is an exact restoration, not an invented physical attachment. At the previously recorded lobby origin(0,30,-760), its world center becomes(0,48.1,-852.2). The former relocated board was(8,41.6,-838), farther into the open road.
+
+Only one CFrame expression changes. Both-face two-developer/feedback introduction, title, subtitle, size, material, collisions, gate geometry, lobby spawn and gameplay UI remain byte-identical. The user's new explicit placement feedback supersedes the previous agent's desire to put the whole board into the untouched spawn viewport. Do not lower or move it forward again to satisfy that old preference.
+
+Preparation validates the exact original coordinate, reverses the one replacement to recover the current baseline byte-for-byte, compiles the whole module and checks runtime bytes stayed unchanged. No new test suite is appropriate for this one reversible placement correction. Independent review is pending.
+
+Root native acceptance: after the normal lobby rebuild, confirm exactly one welcome board is centered over the existing gantry at center+(0,18.1,-92.2), its size32×7.2×0.55 and CanCollide=false, with both original introduction labels intact. Inspect one ordinary approach/front view showing board and gate together, plus the back face for preserved text. The full board need not be visible from the exact untouched spawn camera; the requested gate placement is the acceptance. Run the existing compile/source audit and use the mouse for publish after independent approval. No native/Studio/UI/source-sync/publish action was performed by this preparation.

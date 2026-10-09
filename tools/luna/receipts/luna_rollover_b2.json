@@ -1,0 +1,21 @@
+{
+  "source": "luna_rollover_b2.rbxmx",
+  "sha256": "5f4307582891abb069a81010723ddae5ae5d5c31b1271d572ea927f672ca911f",
+  "assetType": "Animation",
+  "displayName": "Luna rollover b2",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-05T00:23:58.577206+00:00",
+  "operationPath": "operations/14c106de-00b9-4dae-987f-2e7078d5b0b4",
+  "assetId": "93018084533678",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna rollover b2",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

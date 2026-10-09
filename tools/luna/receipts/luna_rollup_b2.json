@@ -1,0 +1,21 @@
+{
+  "source": "luna_rollup_b2.rbxmx",
+  "sha256": "f6cd423772bde9089a81c999179d3174afcd1def4b07edfd37edd9bd48b7dad6",
+  "assetType": "Animation",
+  "displayName": "Luna rollup b2",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-05T00:24:08.527599+00:00",
+  "operationPath": "operations/58be5486-6ef0-48de-ae42-edec077b5777",
+  "assetId": "136860767375927",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna rollup b2",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

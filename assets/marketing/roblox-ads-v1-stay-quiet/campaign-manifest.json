@@ -1,0 +1,83 @@
+{
+  "set": "roblox-ads-v1-stay-quiet",
+  "created": "2026-09-01",
+  "universeId": "10559217407",
+  "placeId": "131311258779917",
+  "experience": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
+  "campaignName": "Stay Quiet - Creative Test v1",
+  "creativeLimit": 25,
+  "creativeCount": 15,
+  "campaignStatus": "assets-approved-form-prepared-awaiting-spend-settings",
+  "adsManagerPublished": false,
+  "generatedWith": "built-in ImageGen",
+  "validated": "2026-09-01",
+  "sourceFormat": "PNG",
+  "sourceDimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "upload": {
+    "width": 1920,
+    "height": 1080,
+    "format": "JPEG",
+    "quality": 92,
+    "maxBytes": 3145728
+  },
+  "searchThumbnail": {
+    "path": "../../banners/content-stay-quiet.png",
+    "width": 1254,
+    "height": 1254,
+    "note": "Default 1:1 experience thumbnail used by Search; not one of the 15 Home creatives."
+  },
+  "assetLibrary": {
+    "owner": "ERN Roblox Studios",
+    "experienceAssigned": true,
+    "uploaded": "2026-09-01",
+    "approvedCount": 15,
+    "status": "approved"
+  },
+  "adsManagerForm": {
+    "status": "prepared-not-published",
+    "campaignName": "Stay Quiet - Creative Test v1",
+    "goal": "Plays",
+    "audience": "All players",
+    "creativesAttached": 15,
+    "autoReloadAdCredit": false,
+    "browserTabStatus": "handoff-open"
+  },
+  "pendingAdsManagerSettings": {
+    "goal": "Plays",
+    "audience": "All players",
+    "budgetType": null,
+    "budgetAmount": null,
+    "paymentMethod": null,
+    "startTime": null,
+    "durationDays": null
+  },
+  "qa": {
+    "sourceFilesPresent": 15,
+    "uploadFilesPresent": 15,
+    "allSourcesMatchDimensions": true,
+    "allUploadsMatchDimensions": true,
+    "allUploadsBelowMaxBytes": true,
+    "largestUploadBytes": 400009,
+    "visualReview": "passed"
+  },
+  "images": [
+    {"order": 1, "slug": "level1-can-decoy", "pillar": "silence-mechanic", "source": "01-level1-can-decoy.png", "upload": "01-level1-can-decoy.jpg", "hook": "Noise creates danger"},
+    {"order": 2, "slug": "level1-broken-glass", "pillar": "silence-mechanic", "source": "02-level1-broken-glass.png", "upload": "02-level1-broken-glass.jpg", "hook": "One careful step"},
+    {"order": 3, "slug": "level3-static-tv", "pillar": "silence-mechanic", "source": "03-level3-static-tv.png", "upload": "03-level3-static-tv.jpg", "hook": "Silence the trap"},
+    {"order": 4, "slug": "level1-under-desk", "pillar": "close-encounters", "source": "04-level1-under-desk.png", "upload": "04-level1-under-desk.jpg", "hook": "Hide within arm's reach"},
+    {"order": 5, "slug": "level1-doorway-hand", "pillar": "close-encounters", "source": "05-level1-doorway-hand.png", "upload": "05-level1-doorway-hand.jpg", "hook": "Almost discovered"},
+    {"order": 6, "slug": "level1-corner-chase", "pillar": "close-encounters", "source": "06-level1-corner-chase.png", "upload": "06-level1-corner-chase.jpg", "hook": "Immediate chase urgency"},
+    {"order": 7, "slug": "level3-party-room-stalker", "pillar": "iconic-worlds", "source": "07-level3-party-room-stalker.png", "upload": "07-level3-party-room-stalker.jpg", "hook": "Uncanny party-room horror"},
+    {"order": 8, "slug": "level2-flooded-splash", "pillar": "iconic-worlds", "source": "08-level2-flooded-splash.png", "upload": "08-level2-flooded-splash.jpg", "hook": "Water betrays movement"},
+    {"order": 9, "slug": "level2-pipe-cathedral", "pillar": "iconic-worlds", "source": "09-level2-pipe-cathedral.png", "upload": "09-level2-pipe-cathedral.jpg", "hook": "Monster scale and spectacle"},
+    {"order": 10, "slug": "coop-shush", "pillar": "coop-tension", "source": "10-coop-shush.png", "upload": "10-coop-shush.jpg", "hook": "Shared silence"},
+    {"order": 11, "slug": "coop-team-decoy", "pillar": "coop-tension", "source": "11-coop-team-decoy.png", "upload": "11-coop-team-decoy.jpg", "hook": "Coordinate the distraction"},
+    {"order": 12, "slug": "coop-closing-gate", "pillar": "coop-tension", "source": "12-coop-closing-gate.png", "upload": "12-coop-closing-gate.jpg", "hook": "Team separated under pressure"},
+    {"order": 13, "slug": "exit-elevator-reflection", "pillar": "escape-mystery", "source": "13-exit-elevator-reflection.png", "upload": "13-exit-elevator-reflection.jpg", "hook": "Almost escaped"},
+    {"order": 14, "slug": "level3-security-feed", "pillar": "escape-mystery", "source": "14-level3-security-feed.png", "upload": "14-level3-security-feed.jpg", "hook": "Threat visible only on camera"},
+    {"order": 15, "slug": "level1-wrong-door", "pillar": "escape-mystery", "source": "15-level1-wrong-door.png", "upload": "15-level1-wrong-door.jpg", "hook": "Choose the right exit"}
+  ]
+}

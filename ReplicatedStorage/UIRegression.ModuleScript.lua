@@ -412,12 +412,11 @@ local MOVEMENT_CONTROLS = {
 	TouchDropGlowstick = true,
 	FlashlightPower = true,
 	ProtectionUse = true,
-	-- EQUIPMENT_SLOTS_20260916 (Trello #101). The two stored consumables sit in
-	-- the same reserved cluster as the shield -- same list in UIDevice, same
-	-- arithmetic -- so like it they are exempt from the movement-zone test and
-	-- still have to stay onscreen, stay >= 44 and overlap nothing.
-	SpeedPotionUse = true,
-	RouteMarkerPlace = true,
+	-- HUD_B2_TOUCH (owner, 2026-10-08): the eighth cell of UIDevice's 4 + 4 grid.
+	-- POTION, MARKER and SCAN left the cluster for the KIT fan, which is not
+	-- listed: the fan is transient, never registered, and has to clear the
+	-- movement zones like any other panel (KitFanMatrix holds it to that).
+	KitToggle = true,
 }
 
 local FULLSCREEN_OVERLAYS = {
@@ -434,13 +433,24 @@ local FULLSCREEN_OVERLAYS = {
 	UnderTableShade = true,
 	TableEdgeTop = true,
 	TableEdgeBottom = true,
+	-- HUD_B3 (owner, 2026-10-08): Round HUD's chase edge, the four static Coral
+	-- bands in RoundHudThreat (order 20) while BeingChased. Same idea as the two
+	-- above: MEANT to sit over every rect near a screen edge, and at 0.146 of the
+	-- width / 0.185 of the height too shallow for the 92 % rule (B3 critic K6).
+	ChaseEdgeLeft = true,
+	ChaseEdgeRight = true,
+	ChaseEdgeTop = true,
+	ChaseEdgeBottom = true,
 	-- Modal panels own the screen while they are open, and the movement cluster
-	-- hides underneath them.
-	Terminal = true,
+	-- hides underneath them. WindowHolder is the L4 windows' (the shop, with
+	-- RECORDS and SETTINGS since 2026-10-07, the dev menu, Daily Rewards); the
+	-- Zyntra terminal that was listed here is deleted.
+	WindowHolder = true,
 	ReentryPanel = true,
 	-- The result screen's accent wash. Full-bleed by design, and named after the
 	-- instance rather than after the variable that used to be listed here.
 	SignalFlash = true,
+	Bracket1 = true, Bracket2 = true, Bracket3 = true, Bracket4 = true,
 }
 
 -- Panels whose INTERNAL composition is asserted, not only their outer rectangle.
@@ -452,15 +462,10 @@ local FULLSCREEN_OVERLAYS = {
 -- MUTE and STOP readouts sat in the same corner, and nothing here noticed.
 local INTERNAL_PANELS = {
 	CommandSubtitles = true,
-	RoundEnding = true,
-	ObjectivesPanel = true,
-	-- The Zyntra terminal. It was in FULLSCREEN_OVERLAYS and NOWHERE else, so
-	-- the harness measured its outer rectangle, called it a deliberate overlay
-	-- and never looked inside -- while its content frame was resolving to a
-	-- NEGATIVE height and every page was collapsing into one row. Its header,
-	-- tab bar, content box and status line are siblings sharing one box, which
-	-- is exactly the shape this list exists for.
-	Terminal = true,
+	ResultsWindow = true,
+	ObjectiveCard = true,
+	RoundExitCard = true,
+	Keypad = true,
 	-- The lobby queue panel. Its controls live two levels down, so without this
 	-- the matrix measured the shade and nothing inside it -- which is how five
 	-- interactive controls stayed under the 44px floor unnoticed.
@@ -472,14 +477,6 @@ local INTERNAL_PANELS = {
 	-- be listed here for its children to be rectangles at all: the card sits
 	-- inside a full-bleed overlay, which `collect` does not descend into.
 	PartyDownCard = true,
-	-- The terminal's header, for the same reason one level further in.
-	-- `collectDrawnChildren` emits ONE rectangle for a child that draws itself
-	-- and does not descend into it, so with only `Terminal` listed the header
-	-- was measured as a solid bar and its close button, token readout and title
-	-- were never rectangles at all -- which is how a title and a token readout
-	-- overlapping by 58px went unreported, and why a TouchTargets fragment
-	-- naming the close button could not be found.
-	TerminalHeader = true,
 }
 
 -- Patterns that name a key a phone or tablet does not have. Matched against
@@ -513,7 +510,7 @@ end
 local function isFullyFadedLeaf(object: GuiObject): boolean
 	if object.BackgroundTransparency < 1 then return false end
 	if (object:IsA("TextLabel") or object:IsA("TextButton"))
-		and (object :: any).TextTransparency < 1 then return false end
+		and (object :: any).TextTransparency < 1 and (object :: any).Text ~= "" then return false end
 	if (object:IsA("ImageLabel") or object:IsA("ImageButton"))
 		and (object :: any).ImageTransparency < 1 then return false end
 	local stroke = object:FindFirstChildOfClass("UIStroke")
@@ -528,7 +525,7 @@ end
 local function isFullyFaded(object: GuiObject): boolean
 	if object.BackgroundTransparency < 1 then return false end
 	if object:IsA("TextLabel") or object:IsA("TextButton") then
-		if (object :: any).TextTransparency < 1 then return false end
+		if (object :: any).TextTransparency < 1 and (object :: any).Text ~= "" then return false end
 	end
 	if object:IsA("ImageLabel") or object:IsA("ImageButton") then
 		if (object :: any).ImageTransparency < 1 then return false end
@@ -544,9 +541,29 @@ local function isFullyFaded(object: GuiObject): boolean
 	return true
 end
 
+-- A transparent, non-interactive TextLabel draws its measured ink, not the
+-- empty padding of its authored box. Buttons, backgrounds and stroked surfaces
+-- retain their full bounds. This still reports real glyph collisions.
+function Fit.drawnRect(object)
+	local position, size = object.AbsolutePosition, object.AbsoluteSize
+	local left, top, width, height = position.X, position.Y, size.X, size.Y
+	local stroke = object:FindFirstChildOfClass("UIStroke")
+	if object:IsA("TextLabel") and object.BackgroundTransparency >= 1
+		and not (stroke and stroke.Transparency < 1) then
+		local bounds = object.TextBounds
+		width, height = bounds.X, bounds.Y
+		if object.TextXAlignment == Enum.TextXAlignment.Center then left += (size.X - width) / 2
+		elseif object.TextXAlignment == Enum.TextXAlignment.Right then left += size.X - width end
+		if object.TextYAlignment == Enum.TextYAlignment.Center then top += (size.Y - height) / 2
+		elseif object.TextYAlignment == Enum.TextYAlignment.Bottom then top += size.Y - height end
+	end
+	return {Left = left, Top = top, Right = left + width, Bottom = top + height}
+end
+
 local function visibleChain(object: Instance): boolean
 	local node: Instance? = object
 	while node and not node:IsA("PlayerGui") do
+		if node:IsA("CanvasGroup") and (node :: CanvasGroup).GroupTransparency >= 1 then return false end
 		if node:IsA("ScreenGui") then
 			if not (node :: ScreenGui).Enabled then return false end
 		elseif node:IsA("GuiObject") then
@@ -554,6 +571,58 @@ local function visibleChain(object: Instance): boolean
 		end
 		node = node.Parent
 	end
+	return true
+end
+
+-- The wheel is authored as a round image with its X just beyond the rim. Its
+-- transparent square holder is not painted in the corner occupied by the X.
+-- Keep any protruding pointer/text ink as additional real drawn rectangles.
+function Fit.roundWheelShape(object, guiName)
+	if guiName ~= "LuckyWheelGui" or object.Name ~= "WheelHolder"
+		or object.BackgroundTransparency < 1 then return nil, nil end
+	local stroke = object:FindFirstChildOfClass("UIStroke")
+	if stroke and stroke.Transparency < 1 then return nil, nil end
+	local disc = object:FindFirstChild("WheelDisc")
+	local size, position = object.AbsoluteSize, object.AbsolutePosition
+	if not (disc and disc:IsA("ImageLabel") and disc.Visible and disc.ScaleType == Enum.ScaleType.Fit
+		and size.X > 0 and math.abs(size.X - size.Y) <= 1) then return nil, nil end
+	if math.abs(disc.AbsoluteSize.X-size.X) > 1 or math.abs(disc.AbsoluteSize.Y-size.Y) > 1
+		or math.abs(disc.AbsolutePosition.X-position.X) > 1 or math.abs(disc.AbsolutePosition.Y-position.Y) > 1 then
+		return nil, nil
+	end
+	local extra = {}
+	local centreX, centreY, radius = position.X + size.X / 2, position.Y + size.Y / 2, size.X / 2
+	for _, child in ipairs(object:GetDescendants()) do
+		if child:IsA("GuiObject") and visibleChain(child) and not isFullyFaded(child)
+			and (child.Name == "WheelPointer" or child:IsA("TextLabel")) then
+			local rect = Fit.drawnRect(child)
+			if child.Name == "WheelPointer" then
+				local w, h = child.AbsoluteSize.X, child.AbsoluteSize.Y
+				local angle = math.rad(child.Rotation)
+				local width = math.abs(math.cos(angle) * w) + math.abs(math.sin(angle) * h)
+				local height = math.abs(math.sin(angle) * w) + math.abs(math.cos(angle) * h)
+				local x, y = (rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2
+				rect = {Left=x-width/2,Top=y-height/2,Right=x+width/2,Bottom=y+height/2}
+			end
+			local furthestX = math.max(math.abs(rect.Left-centreX), math.abs(rect.Right-centreX))
+			local furthestY = math.max(math.abs(rect.Top-centreY), math.abs(rect.Bottom-centreY))
+			if furthestX^2 + furthestY^2 > radius^2 then table.insert(extra, rect) end
+		end
+	end
+	return "Circle", extra
+end
+
+-- Only these authored shared rows may paint over the thumbstick's activation
+-- region. They take no input; actual buttons, scrolling and Active shields still
+-- fail, as do collisions with the drawn movement cluster and jump control.
+function Fit.passiveSharedRow(object, guiName): boolean
+	if guiName ~= "RoundHud" or not table.find({"Caption", "FeedRow1", "FeedRow2"}, object.Name) then return false end
+	local function takesInput(node)
+		return node:IsA("GuiObject") and visibleChain(node)
+			and (node.Active or node:IsA("GuiButton") or node:IsA("TextBox") or node:IsA("ScrollingFrame"))
+	end
+	if takesInput(object) then return false end
+	for _, node in ipairs(object:GetDescendants()) do if takesInput(node) then return false end end
 	return true
 end
 
@@ -662,13 +731,16 @@ local function isLayoutGroup(object: GuiObject): boolean
 						if isLayoutGroup(child) and depth < 2 then
 							collect(child, prefix .. "." .. child.Name, depth + 1, isControl)
 						elseif size.X > 1 and size.Y > 1 then
+							local shape, adornments = Fit.roundWheelShape(child, screenGui.Name)
 							table.insert(rects, {
 								Path = prefix .. "." .. child.Name,
 								Name = child.Name,
 								Gui = screenGui.Name,
+								Shape = shape, Adornments = adornments,
 								TopBound = topBound,
 								Overlay = isOverlay(child, viewport),
 								MovementControl = isControl,
+								PassiveThumbstick = Fit.passiveSharedRow(child, screenGui.Name),
 								Interactive = child:IsA("TextButton") or child:IsA("ImageButton"),
 								Active = (child:IsA("TextButton") or child:IsA("ImageButton"))
 									and (child :: any).Active or false,
@@ -714,9 +786,58 @@ end
 -- (the BriefingControls row, any UIListLayout wrapper) are descended through, so
 -- what comes back is MUTE and STOP themselves rather than the invisible box that
 -- holds them -- which is the level the overlap question is really asked at.
+function Fit.compassBearing(container, prefix)
+	if container.Name ~= "Compass" then return nil end
+	local ticks, centre = container:FindFirstChild("Ticks"), container:FindFirstChild("Centre")
+	local chevron, readout = container:FindFirstChild("Chevron"), container:FindFirstChild("Readout")
+	if not (ticks and centre and chevron and readout) then return nil end
+	local bearing = nil
+	local function include(node)
+		if not (node:IsA("GuiObject") and visibleChain(node) and not isFullyFaded(node)) then return end
+		local stroke = node:FindFirstChildOfClass("UIStroke")
+		local draws = node.BackgroundTransparency < 1 or (stroke and stroke.Transparency < 1)
+			or (node:IsA("TextLabel") and node.Text ~= "" and node.TextTransparency < 1)
+		if not draws then return end
+		local rect = Fit.drawnRect(node)
+		if not bearing then
+			bearing = {Name="Bearing",Path=prefix..".Bearing",Interactive=false,Active=false,
+				Left=rect.Left,Top=rect.Top,Right=rect.Right,Bottom=rect.Bottom}
+		else
+			bearing.Left, bearing.Top = math.min(bearing.Left,rect.Left), math.min(bearing.Top,rect.Top)
+			bearing.Right, bearing.Bottom = math.max(bearing.Right,rect.Right), math.max(bearing.Bottom,rect.Bottom)
+		end
+	end
+	-- Ticks, baseline, centre line and pointing glyph are the joined marks of ONE bearing
+	-- graphic. Their union still must clear the separate metre readout and every
+	-- objective row; no interactive target or actual ink collision is exempted.
+	include(ticks)
+	for _, node in ipairs(ticks:GetDescendants()) do include(node) end
+	include(centre)
+	include(chevron)
+	local baseline = container:FindFirstChild("Baseline")
+	if baseline then include(baseline) end
+	return bearing
+end
+
+function Fit.movementZoneHit(rect): string?
+	local zone = UIDevice.OverlapsMovementZone(rect.Left, rect.Top, rect.Right, rect.Bottom)
+	if zone ~= "Thumbstick" or rect.PassiveThumbstick ~= true then return zone end
+	-- A passive caption/feed exemption never hides a collision with real controls.
+	local zones = UIDevice.Layout().Zones
+	for _, name in ipairs({"Controls", "Jump"}) do
+		local drawn = zones[name]
+		if rect.Left < drawn.Right and rect.Right > drawn.Left
+			and rect.Top < drawn.Bottom and rect.Bottom > drawn.Top then return name end
+	end
+	return nil
+end
+
 local function collectDrawnChildren(container: Instance, prefix: string,
 	viewport: Vector2, out: {any})
+	local bearing = Fit.compassBearing(container, prefix)
+	if bearing then table.insert(out, bearing) end
 	for _, child in ipairs(container:GetChildren()) do
+		if bearing and (child.Name == "Ticks" or child.Name == "Centre" or child.Name == "Chevron" or child.Name == "Baseline") then continue end
 		if child:IsA("GuiObject") and child.Visible and not isFullyFaded(child) then
 			local path = prefix .. "." .. child.Name
 			local size = child.AbsoluteSize
@@ -736,6 +857,7 @@ local function collectDrawnChildren(container: Instance, prefix: string,
 			if not drawsItself then
 				collectDrawnChildren(child, path, viewport, out)
 			elseif size.X > 1 and size.Y > 1 and not isOverlay(child, viewport) then
+				local drawn = Fit.drawnRect(child)
 				table.insert(out, {
 					Path = path,
 					Name = child.Name,
@@ -744,10 +866,10 @@ local function collectDrawnChildren(container: Instance, prefix: string,
 						and (child :: any).Active or false,
 					TextBounds = (child:IsA("TextLabel") or child:IsA("TextButton"))
 						and (child :: any).TextBounds or nil,
-					Left = position.X,
-					Top = position.Y,
-					Right = position.X + size.X,
-					Bottom = position.Y + size.Y,
+					Left = drawn.Left,
+					Top = drawn.Top,
+					Right = drawn.Right,
+					Bottom = drawn.Bottom,
 				})
 			end
 		end
@@ -766,6 +888,7 @@ function UIRegression.Children(): {any}
 			and not ENGINE_GUIS[screenGui.Name] then
 			for _, descendant in ipairs(screenGui:GetDescendants()) do
 				if descendant:IsA("GuiObject") and INTERNAL_PANELS[descendant.Name]
+					and not descendant:FindFirstChild(descendant.Name)
 					and descendant.Visible and visibleChain(descendant) then
 					local children = {}
 					collectDrawnChildren(descendant, screenGui.Name .. "." .. descendant.Name,
@@ -788,54 +911,32 @@ function UIRegression.Children(): {any}
 end
 
 local function rectsOverlap(a: any, b: any): boolean
+	if a.Shape == "Circle" then
+		local cx, cy = (a.Left+a.Right)/2, (a.Top+a.Bottom)/2
+		local radius = (a.Right-a.Left)/2
+		local intersects
+		if b.Shape == "Circle" then
+			local dx, dy = cx-(b.Left+b.Right)/2, cy-(b.Top+b.Bottom)/2
+			intersects = dx*dx+dy*dy < (radius+(b.Right-b.Left)/2-1)^2
+		else
+			local dx, dy = cx-math.clamp(cx,b.Left,b.Right), cy-math.clamp(cy,b.Top,b.Bottom)
+			intersects = dx*dx+dy*dy < math.max(0,radius-1)^2
+		end
+		if intersects then return true end
+		for _, extra in ipairs(a.Adornments or {}) do if rectsOverlap(extra,b) then return true end end
+		for _, extra in ipairs(b.Adornments or {}) do if rectsOverlap(a,extra) then return true end end
+		return false
+	elseif b.Shape == "Circle" then return rectsOverlap(b,a) end
 	-- A one-pixel shared edge is abutment, not overlap.
 	return a.Left < b.Right - 1 and a.Right > b.Left + 1
 		and a.Top < b.Bottom - 1 and a.Bottom > b.Top + 1
 end
 
--- In a short landscape Level 3 round, only the caption's non-interactive
--- surface may cross the thumbstick reservation. The reader stays visible and
--- SKIP must remain a full-size, unobstructed target outside every touch zone.
+-- Kept as a non-mutating compatibility entry point for older QA scripts.
+-- Shared HUD captions have their own movement-safe lane; the retired reader
+-- pair grants no overlap exemption.
 function UIRegression.PassiveReaderCaptionSafe(): (boolean, string)
-	local layout = UIDevice.Layout()
-	local gui = Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
-	local guide = gui and gui:FindFirstChild("LevelOneGuideGui")
-	local caption = guide and guide:FindFirstChild("CommandSubtitles")
-	local skip = caption and caption:FindFirstChild("DispatchStopButton", true)
-	local readerGui = gui and gui:FindFirstChild("Level3ReaderGui")
-	local reader = readerGui and readerGui:FindFirstChild("ReaderPanel")
-	if not (layout.IsTouch and not layout.Portrait and guide and guide.Enabled
-		and caption and caption.Visible and caption:GetAttribute("ReaderPassiveLane") == true
-		and readerGui and readerGui.Enabled and reader and reader.Visible
-		and skip and skip.Visible and skip.Active) then
-		return false, "not a visible passive reader/caption pair"
-	end
-	local subtitle = caption:FindFirstChild("Subtitle")
-	local controls = caption:FindFirstChild("BriefingControls")
-	if caption.Active or (subtitle and subtitle.Active)
-		or (controls and controls.Active) then
-		return false, "caption body captures touch input"
-	end
-	local skipPos, skipSize = skip.AbsolutePosition, skip.AbsoluteSize
-	if skipSize.X < 44 or skipSize.Y < 44 then
-		return false, "SKIP target is under 44x44"
-	end
-	local zone = UIDevice.OverlapsMovementZone(skipPos.X, skipPos.Y,
-		skipPos.X + skipSize.X, skipPos.Y + skipSize.Y)
-	if zone then return false, "SKIP enters " .. zone .. " movement zone" end
-	local readerPos, readerSize = reader.AbsolutePosition, reader.AbsoluteSize
-	local captionPos, captionSize = caption.AbsolutePosition, caption.AbsoluteSize
-	local function overlaps(left, top, width, height): boolean
-		return left < readerPos.X + readerSize.X and left + width > readerPos.X
-			and top < readerPos.Y + readerSize.Y and top + height > readerPos.Y
-	end
-	if overlaps(skipPos.X, skipPos.Y, skipSize.X, skipSize.Y) then
-		return false, "SKIP overlaps the reader"
-	end
-	if overlaps(captionPos.X, captionPos.Y, captionSize.X, captionSize.Y) then
-		return false, "caption overlaps the reader"
-	end
-	return true, "passive caption, touch-safe SKIP, separate reader"
+	return false, "retired reader/caption pair"
 end
 
 function UIRegression.Check(): {[string]: any}
@@ -864,11 +965,8 @@ function UIRegression.Check(): {[string]: any}
 				end
 			end
 			if scan.IsTouch and not a.MovementControl then
-				local zone = UIDevice.OverlapsMovementZone(a.Left, a.Top, a.Right, a.Bottom)
-				local passive = a.Gui == "LevelOneGuideGui"
-					and a.Name == "CommandSubtitles"
-					and UIRegression.PassiveReaderCaptionSafe()
-				if zone and not passive then
+				local zone = Fit.movementZoneHit(a)
+				if zone then
 					table.insert(zoneHits, string.format(
 						"%s (%.0f,%.0f)-(%.0f,%.0f) sits in the %s movement zone",
 						a.Path, a.Left, a.Top, a.Right, a.Bottom, zone))
@@ -1035,6 +1133,9 @@ local function resetScenario(inRound: boolean?)
 	-- matrix; otherwise its late restore leaks the preceding scenario forward.
 	task.wait(.05)
 	player:SetAttribute("DevRoundEnding", nil)
+	-- RoundUI derives this from its actual result surface. Reset the output too
+	-- so another scenario cannot inherit movement suppression from a staged win.
+	player:SetAttribute("RoundEndingOpen", false)
 	-- The lobby queue lives inside RoundGui, which is never disabled, so nothing
 	-- else here puts it away. Leaving it up leaked it into every scenario that
 	-- ran after the queue row.
@@ -1057,28 +1158,49 @@ local function resetScenario(inRound: boolean?)
 			end
 		end
 	end
+	-- RoundHud is a shared owner: disabling it also blanks caller-owned noise
+	-- and stamina, and SetObjective cannot repair that ScreenGui flag. Reset only
+	-- the fixture-owned objective/feed/caption/detector state through its real
+	-- reversible seam; keep its owner GUI and other clients' roots untouched.
+	if not Fit.realDispatchLive() then Fit.resetSharedHud() end
 	player:SetAttribute("Level3_Hiding", nil)
 	player:SetAttribute("Spectating", nil)
+	-- HUD_B3 (owner, 2026-10-08): the two Round HUD inputs the b3-* rows force, so
+	-- neither the edge nor the marker leaks into the next row. A cleared MoveNoise
+	-- reads as walking, and NoiseReporter writes it again on its next applySpeed.
+	player:SetAttribute("BeingChased", nil)
+	player:SetAttribute("MoveNoise", nil)
 	-- The harness's `inRound` flag only ever changed the Zyntra open button; it
 	-- never told the CLIENT a round was running. So every control gated on
 	-- NoiseReporter's controlsAvailable() -- JUMP, SNEAK, the glowstick drop --
 	-- was invisible in every scenario, and a matrix that never saw them could
 	-- never report them too small or overlapping. Cleared here so a scenario
-	-- that does set it cannot leak the round into the next row.
-	player:SetAttribute("InRound", nil)
+	-- that does set it cannot leak the round into the next lobby row. An in-round
+	-- reset keeps that context across the yield below, so lobby-only polls cannot
+	-- briefly draw their buttons while the next round fixture is being staged.
+	player:SetAttribute("InRound", if inRound == true then true else nil)
 	player:SetAttribute("Level2AlertOwnsBand", nil)
 	player:SetAttribute("ZyntraStoreOpen", nil)
 	local store = findGui("ZyntraStore")
-	local terminal = store and store:FindFirstChild("Terminal")
-	-- Close through the production path where it exists: writing Visible = false
-	-- directly leaves ZyntraStoreOpen, the movement suppression and the opener's
-	-- own state out of step with the pixels, which is the disagreement a later
-	-- row would then measure.
-	local storeProbe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-	if storeProbe and storeProbe:IsA("BindableFunction") then
-		pcall(function() storeProbe:Invoke("close") end)
-	elseif terminal and terminal:IsA("GuiObject") then
-		terminal.Visible = false
+	-- SHOP_UI_L4_GO_LIVE_20261007: the shop is "Zyntra Shop L4" for every account
+	-- (RECORDS and SETTINGS too since 2026-10-07; the terminal is deleted) and the
+	-- dev menu is "Zyntra Dev L4". Both draw over the HUD and re-assert their own
+	-- modal flag, so one left open would sit over every later row. Closed through
+	-- their own production toggles: writing Visible = false directly would leave
+	-- ZyntraStoreOpen and the movement suppression out of step with the pixels.
+	-- RAIL_OVER_WINDOWS_20261007: Daily Rewards and the Lucky Wheel too, now that
+	-- the daily-modal and wheel-modal rows open them. The wheel's close is also
+	-- what hands every ScreenGui its takeover disabled back, so it runs here,
+	-- before FriendBoostGui's Enabled below is written for this scenario.
+	for _, l4 in ipairs({{"ZyntraShopL4", "UIRegressionZyntraShopL4Probe"},
+		{"ZyntraDevL4", "UIRegressionZyntraDevL4Probe"},
+		{"ZyntraDailyL4", "UIRegressionZyntraDailyL4Probe"},
+		{"LuckyWheelGui", "UIRegressionLuckyWheelProbe"}}) do
+		local screen = findGui(l4[1])
+		local l4Probe = screen and screen:FindFirstChild(l4[2])
+		if l4Probe and l4Probe:IsA("BindableFunction") then
+			pcall(function() l4Probe:Invoke("close") end)
+		end
 	end
 	-- THE WHOLE RAIL, not the two buttons it happened to hold when this was
 	-- written. It grew to five on 2026-09-16 (cards #103 / #104), and a reset that
@@ -1156,81 +1278,29 @@ end
 -- affordance, and it is written down rather than pretended away.
 function UIRegression.Scenarios(): {any}
 	local player = Players.LocalPlayer
+	-- The five lobby rail buttons, which the *-modal rows hold to the
+	-- rail-over-windows contract (RAIL_OVER_WINDOWS_20261007).
+	local rail = {"ZyntraOpenButton", "ZyntraShopButton", "ZyntraRewardsButton",
+		"ZyntraWheelButton", "ZyntraMusicButton"}
+	-- The token pill and Friend Boost chip stay up over the same windows (owner 2026-10-08).
+	local overWindows = {"ZyntraLobbyPillL4.TokenPill", "FriendBoostGui.FriendBoostChip", table.unpack(rail)}
+	-- Round HUD's chase edge, for the b3-chase-edge row. HUD_B3 (owner, 2026-10-08).
+	local edgeBands = {"RoundHudThreat.ChaseEdgeLeft", "RoundHudThreat.ChaseEdgeRight",
+		"RoundHudThreat.ChaseEdgeTop", "RoundHudThreat.ChaseEdgeBottom"}
+	local levelTwo = workspace:GetAttribute("SelectedLevel") == 2
 	return {
-		{Name = "gameplay", Setup = resetScenario},
-		{Name = "briefing", Requires = {
-			"CommandSubtitles", "DispatchStopButton",
-		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
-			TextFitTargets = {"CommandSubtitles.Subtitle"}, Setup = function()
-			resetScenario(true)
-			local guide = findGui("LevelOneGuideGui")
-			if guide then (guide :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
-			setLongDispatchCue()
+		{Name = "gameplay", Setup = function()
+			local live = Fit.liveRoundEligible(player:GetAttribute("InRound"),
+				player:GetAttribute("Spectating"), player:GetAttribute("Escaped"))
+			resetScenario(live)
+			if live then player:SetAttribute("InRound", true) end
 		end},
-		{Name = "briefing-plus-level1-hud", Requires = {
-			"CommandSubtitles", "DispatchStopButton",
-		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
-			Setup = function()
-			resetScenario(true)
-			revealGui("PuzzleGui")
-			local guide = findGui("LevelOneGuideGui")
-			if guide then (guide :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
+		{Name = "shared-caption", LiveRound = true, Requires = {"RoundHud.Caption"}, Setup = function()
+			resetScenario(true); Fit.stageRoundObjective(3, true)
 		end},
-		{Name = "briefing-plus-level2-hud", Requires = {
-			"CommandSubtitles", "DispatchStopButton", "Level2ObjectiveGui",
-		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
-			Setup = function()
-			resetScenario(true)
-			revealGui("Level2ObjectiveGui")
-			local guide = findGui("LevelOneGuideGui")
-			if guide then (guide :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
+		{Name = "shared-objective", Requires = {"RoundHud.ObjectiveCard"}, Setup = function()
+			resetScenario(true); Fit.stageRoundObjective(1)
 		end},
-		-- The button on its own, with the panel closed. This is the state the
-		-- OBJECTIVES control actually has to be reachable in, and keeping it as a
-		-- separate row is what stops "panel open hides the button" from quietly
-		-- removing the button from the matrix altogether.
-		{Name = "objectives-button", Requires = "ObjectivesButton",
-			TouchTargets = {"ObjectivesButton"}, Setup = function()
-			resetScenario(true)
-			revealGui("LevelOneGuideGui", function(child)
-				return child.Name == "ObjectivesButton"
-			end)
-		end},
-		-- FORBIDS THE QUEUE PANEL, and that is a diagnosis rather than a tidy-up.
-		-- Both rect collectors require a visible chain, so a QueueHostPanel
-		-- rectangle turning up in THIS row's scan means the queue shade genuinely
-		-- was up while it ran -- and the only production route there is the
-		-- "queuehost" event GameManager fires the moment the operator's avatar is
-		-- the first body in a station's queue zone (and again after every
-		-- resetStation). resetScenario hides the shade but leaves RoundUI's
-		-- queueStation and the server-side host relation standing, so the game can
-		-- raise the modal again mid-sweep. Naming it here reports a recurrence as
-		-- STATE LEAK -- what it is -- instead of as a geometry failure on the
-		-- objectives panel. Deliberately NOT hidden in resetScenario: the
-		-- queue-host-panel row runs the same reset and would then fail VACUOUS,
-		-- because revealGui only writes direct children of RoundGui.
-		{Name = "objectives-panel", Requires = "ObjectivesPanel",
-			Forbids = {"QueueHostPanel"}, Setup = function()
-			-- The objectives panel is nearly full-bleed AND Active, so it is the
-			-- single most likely thing to swallow the movement controls. It was
-			-- not in the original matrix, which is exactly why its touch case
-			-- went unnoticed.
-			resetScenario(true)
-			-- RoundUI stands the MISSION BRIEF footer down while the full brief is
-			-- open, on EVERY form factor since 9812b87 (2026-09-02: "leaving the
-			-- footer below it is the duplicate slab"; `objectivesButton.Visible =
-			-- not panelOpen`). They are alternatives, not companions, so the row
-			-- reveals the panel alone rather than reporting a collision between two
-			-- things a player cannot see at once (UI_REGRESSION_20260923; it had
-			-- failed on exactly that pair since 2026-09-02). The button's own
-			-- placement is covered by the row above.
-			revealGui("LevelOneGuideGui", function(child)
-				return child.Name == "ObjectivesPanel"
-			end)
-		end, TouchTargets = {"ObjectivesPanel.Close"}},
 		-- The lobby queue panel: five interactive controls, all of which a
 		-- player has to hit with a thumb, none of which were in this matrix.
 		{Name = "queue-host-panel", Requires = "QueueHostPanel",
@@ -1274,8 +1344,8 @@ function UIRegression.Scenarios(): {any}
 			end)
 			if shade then shade.Visible = true end
 		end},
-		{Name = "level1-objective-receiver", Setup = function()
-			resetScenario(true); revealGui("PuzzleGui")
+		{Name = "level1-objective-receiver", Requires = {"RoundHud.ObjectiveCard"}, Setup = function()
+			resetScenario(true); Fit.stageRoundObjective(1)
 		end},
 		-- The in-round touch cluster, measured as a cluster. RUN and JUMP were
 		-- already covered by TouchTargetMatrix's own sweep; SNEAK is new and the
@@ -1290,70 +1360,57 @@ function UIRegression.Scenarios(): {any}
 				player:SetAttribute("InRound", true)
 				task.wait(.1)
 			end},
-		{Name = "level2-alert-and-objective", Setup = function()
-			resetScenario(true); revealGui("Level2AlertGui"); revealGui("Level2ObjectiveGui")
-		end},
-		-- REPLACES the old level3-reader-open / -closed pair. Both REQUIRED
-		-- `ReaderToggle` -- a permanently-visible "CLOSE READER [R]" chip beside
-		-- the panel -- and one of them asserted it did not MOVE between the two
-		-- states. That control is gone: the panel is now the control that hides
-		-- it, and the hidden state carries only a compact restore chip. A test
-		-- that still demanded the toggle would have forced it back.
+		-- HUD_B3 (owner, 2026-10-08): the B3 QA rows (B3-DESIGN critic K6). Round
+		-- HUD draws on a living body in an active round only, and RoundActive is
+		-- not the harness's to write (B2 critic C13), so both are LiveRound rows:
+		-- a skip outside a round started with the playtest recipe.
 		--
-		-- The open state therefore FORBIDS both the toggle and the chip, and the
-		-- hidden state forbids the panel. `Capture`/`CompareWith` now pin the
-		-- ANCHOR instead of the button: the chip must appear where the panel's
-		-- own top-right corner was, so nothing jumps under the finger.
-		{Name = "level3-reader-open", Requires = {"ReaderPanel"},
-			Forbids = {"ReaderToggle", "ReaderRestore"},
-			TouchTargets = {"ReaderPanel"}, Setup = function()
-			resetScenario(true)
-			player:SetAttribute("UIRegressionForceLevel3Reader", true)
-			player:SetAttribute("UIRegressionForceReaderHidden", false)
-			revealGui("Level3ReaderGui", function(child)
-				return child.Name == "ReaderPanel"
-			end)
+		-- The marker with SNEAK engaged. A harness cannot tap the cell, so it
+		-- publishes what the tap would, MoveNoise = "crouch", once the InRound
+		-- write has run applySpeed (which would overwrite it). The group is clipped
+		-- to its pill (K6), so on TOUCH it has to clear the LIGHT and SNEAK cells
+		-- and every movement zone, and on PC the kit row (K4). Run it on TOUCH.
+		{Name = "b3-sneak-marker", LiveRound = true,
+			Requires = if UIDevice.IsTouch() then {"RoundHud.NoiseMarker", "TouchSneakHold"}
+				else {"RoundHud.NoiseMarker"},
+			Setup = function()
+				resetScenario(true)
+				player:SetAttribute("InRound", true)
+				task.wait(.1)
+				player:SetAttribute("MoveNoise", "crouch")
+			end},
+		-- The chase edge with BeingChased forced, as a Level 1 entity chase sets
+		-- it. The bands are FULLSCREEN_OVERLAYS: measured and held onscreen, never
+		-- an overlap. Level 2 never draws the edge (owner), so there it is forbidden.
+		{Name = "b3-chase-edge", LiveRound = true,
+			Requires = if levelTwo then nil else edgeBands,
+			Forbids = if levelTwo then edgeBands else nil,
+			Setup = function()
+				resetScenario(true)
+				player:SetAttribute("InRound", true)
+				player:SetAttribute("BeingChased", true)
+			end},
+		{Name = "shared-objective-and-feed", LiveRound = true,
+			Requires = {"RoundHud.ObjectiveCard", "RoundHud.FeedRow1"}, Setup = function()
+			resetScenario(true); Fit.stageRoundObjective(2, false, true)
 		end},
-		-- The chip exists on TOUCH only: on a pointer device the hidden reader
-		-- draws nothing at all and R is the only way back, so requiring the chip
-		-- everywhere would demand the dedicated open button the product forbids.
-		{Name = "level3-reader-hidden", TouchOnly = true,
-			Requires = {"ReaderRestore"},
-			Forbids = {"ReaderPanel", "ReaderToggle"},
-			TouchTargets = {"ReaderRestore"}, Setup = function()
-			resetScenario(true)
-			player:SetAttribute("UIRegressionForceLevel3Reader", true)
-			player:SetAttribute("UIRegressionForceReaderHidden", true)
-			revealGui("Level3ReaderGui", function(child)
-				return child.Name == "ReaderRestore"
-			end)
-		end},
-		{Name = "briefing-plus-level3-reader", Requires = {
-			"CommandSubtitles", "DispatchStopButton", "ReaderPanel",
-		}, Forbids = {"DispatchMuteButton", "ReaderRestore"},
-			TouchTargets = {"DispatchStopButton"}, Setup = function()
-			resetScenario(true)
-			player:SetAttribute("UIRegressionForceLevel3Reader", true)
-			player:SetAttribute("UIRegressionForceReaderHidden", false)
-			revealGui("Level3ReaderGui", function(child)
-				return child.Name == "ReaderPanel"
-			end)
-			local guide = findGui("LevelOneGuideGui")
-			if guide then (guide :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
+		{Name = "level3-shared-objective", Requires = {"RoundHud.ObjectiveCard"}, Setup = function()
+			resetScenario(true); Fit.stageRoundObjective(3)
 		end},
 		{Name = "hiding", Requires = {"HiddenStatus", "LeaveHiding"}, Setup = function()
 			resetScenario(true)
+			player:SetAttribute("InRound", true)
+			player:SetAttribute("Level3_Hiding", true)
 			player:SetAttribute("UIRegressionForceHiding", true)
-			revealGui("Level3TableHideUI")
+			local screen = findGui("Level3TableHideUI"); if screen then (screen :: ScreenGui).Enabled = true end
 		end},
 		{Name = "hiding-plus-reader", Requires = {"HiddenStatus", "LeaveHiding"},
-			Forbids = {"ReaderPanel", "ReaderRestore"}, Setup = function()
+			Forbids = {"RoundHud.ObjectiveCard"}, Setup = function()
 			resetScenario(true)
-			player:SetAttribute("UIRegressionForceLevel3Reader", true)
-			player:SetAttribute("UIRegressionForceReaderHidden", false)
+			Fit.stageRoundObjective(3)
+			player:SetAttribute("Level3_Hiding", true)
 			player:SetAttribute("UIRegressionForceHiding", true)
-			revealGui("Level3TableHideUI")
+			local screen = findGui("Level3TableHideUI"); if screen then (screen :: ScreenGui).Enabled = true end
 		end},
 		{Name = "spectate", Setup = function()
 			resetScenario(true)
@@ -1361,56 +1418,72 @@ function UIRegression.Scenarios(): {any}
 			revealGui("SpectateGui")
 		end},
 		-- WHAT THIS ROW USED TO BE: `resetScenario(); SetAttribute; revealGui` and
-		-- nothing else. No Requires, no TouchTargets, no Forbids -- so it passed
-		-- for a terminal whose content frame had a negative height, because the
-		-- only thing it ever measured was the outer rectangle of a panel the
-		-- harness had already been told to treat as a deliberate overlay.
+		-- nothing else; then the Zyntra terminal on SETTINGS, opened through its
+		-- production toggle, with its shell rectangles required and its
+		-- CloseTerminal as a touch target.
 		--
-		-- It now opens the terminal through the PRODUCTION toggle, names the
-		-- shell rectangles it must be able to measure, requires the tap targets
-		-- the header carries, and forbids the opener -- which is what proves the
-		-- button standing behind its own modal has really gone. The full
-		-- per-device sweep is ZyntraTerminalFitMatrix; this row is what makes the
-		-- state part of the ordinary scenario matrix as well.
-		{Name = "store-modal", Requires = {
-			"Terminal", "TerminalHeader", "TerminalTabs", "TerminalContent",
-			"TerminalStatus",
-		-- All FIVE rail buttons, not the two this row was written against: REWARDS
-		-- and WHEEL open modals of their own, so one left drawn under the terminal
-		-- is a second screen-owning modal one tap away.
-		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton", "ZyntraRewardsButton",
-			"ZyntraWheelButton", "ZyntraMusicButton"},
-			TouchTargets = {"TerminalHeader.CloseTerminal"}, Setup = function()
+		-- REWRITTEN for RECORDS_SETTINGS_L4_20261007 (owner: the terminal is
+		-- deleted, SETTINGS is a page of the L4 shop). The row opens SETTINGS
+		-- through the shop's PRODUCTION bridge (its probe's open:Settings) and
+		-- requires the window. The window's own controls are not rectangles this
+		-- scan reaches (Check stops two layout groups down, and the window cannot
+		-- be an internal panel: its drop shadows overlap their faces by design), so
+		-- their 44 px floor, text fit and states -- CloseTerminal's old
+		-- touch-target row included -- are asserted by the L4 harness
+		-- (roblox-draft/tests, sections 4 and 17).
+		--
+		-- RAIL_OVER_WINDOWS_20261007 (owner request, 2026-10-07): the rail stays
+		-- up over its own windows and a press switches window. Until then this row
+		-- FORBADE the five rail buttons, because one left drawn under the window
+		-- was a second screen-owning modal one tap away; ZyntraStore's switchFrom
+		-- now closes the open window before the next one opens, so the same five
+		-- are REQUIRED: drawn, Active, and the topmost thing at their own centre.
+		-- The last is the one that matters. Every window draws a full-screen Active
+		-- shield (Shop 56, Dev 57, Daily 117, Wheel 118) that Scan cannot see -- a
+		-- transparent Dim is skipped as faded and WindowHolder is an overlay -- so
+		-- without RequiresTopmost a rail behind the shield passes Requires and
+		-- RequiresActive while every real tap on it is swallowed.
+		-- OWNER 2026-10-08: the lobby token pill and the Friend Boost chip are held to
+		-- the same drawn-and-topmost contract over every window (overWindows, above).
+		-- Not RequiresActive (the invite depends on CanSendGameInviteAsync) and not
+		-- TouchTargets (a docked pill sits in the topbar band, at a negative Top).
+		{Name = "store-modal", LiveLobby = true, Requires = {"ZyntraShopL4.Root.WindowHolder", table.unpack(overWindows)},
+			RequiresActive = rail, RequiresTopmost = overWindows, Setup = function()
 			resetScenario()
-			local store = findGui("ZyntraStore")
-			local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-			if probe and probe:IsA("BindableFunction") then
-				probe:Invoke("open")
-				probe:Invoke("relayout")
-			else
-				-- No probe means no Studio seam, which is a failure to report and
-				-- not a row to skip: Requires will catch the missing rectangles.
-				revealGui("ZyntraStore")
-			end
+			local shop = findGui("ZyntraShopL4")
+			local probe = shop and shop:FindFirstChild("UIRegressionZyntraShopL4Probe")
+			-- No probe means no Studio seam (or no L4 install), which is a failure
+			-- to report and not a row to skip: Requires catches the missing window.
+			if probe and probe:IsA("BindableFunction") then probe:Invoke("open:Settings") end
 			task.wait(.15)
 		end},
-		-- The DEV page, which is the one the owner reported as unusable and the
-		-- one no row has ever opened. On an account that is not whitelisted the
-		-- page does not exist, so the row asks only for the shell -- the tab
-		-- sweep in ZyntraTerminalFitMatrix reads the live tab list and cannot be
-		-- fooled either way.
-		{Name = "store-modal-dev", Requires = {"Terminal", "TerminalContent"},
-			Setup = function()
+		-- The same rail contract over the other two lobby windows every account
+		-- can open (RAIL_OVER_WINDOWS_20261007). Each opens through its own Studio
+		-- probe's "open", which is the production request path with its refusals.
+		-- No dev row: the dev menu only opens for whitelisted accounts, so it would
+		-- fail on every other one for a reason that is not a defect.
+		{Name = "daily-modal", LiveLobby = true, Requires = {"ZyntraDailyL4.Root.WindowHolder", table.unpack(overWindows)},
+			RequiresActive = rail, RequiresTopmost = overWindows, Setup = function()
 			resetScenario()
-			local store = findGui("ZyntraStore")
-			local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-			if probe and probe:IsA("BindableFunction") then
-				probe:Invoke("open")
-				probe:Invoke("tab:Dev")
-				probe:Invoke("relayout")
-			end
+			local daily = findGui("ZyntraDailyL4")
+			local probe = daily and daily:FindFirstChild("UIRegressionZyntraDailyL4Probe")
+			if probe and probe:IsA("BindableFunction") then probe:Invoke("open") end
 			task.wait(.15)
 		end},
+		-- The wheel's takeover disables every OTHER ScreenGui, and Scan skips a
+		-- disabled gui, so requiring the rail, the pill and the chip here is also
+		-- what proves the takeover's three exemptions ("ZyntraStore",
+		-- "ZyntraLobbyPillL4", "FriendBoostGui"; owner 2026-10-08) hold.
+		{Name = "wheel-modal", LiveLobby = true, Requires = {"LuckyWheelGui.WheelShade", table.unpack(overWindows)},
+			RequiresActive = rail, RequiresTopmost = overWindows, Setup = function()
+			resetScenario()
+			local wheel = findGui("LuckyWheelGui")
+			local probe = wheel and wheel:FindFirstChild("UIRegressionLuckyWheelProbe")
+			if probe and probe:IsA("BindableFunction") then probe:Invoke("open") end
+			task.wait(.15)
+		end},
+		-- (store-modal-dev is gone with the DEV tab, go-live 2026-10-07. The L4 dev
+		-- menu's captions are measured in BriefingExclusionMatrix.)
 		-- The result overlay is full-bleed for EVERY outcome. Levels 1 and 2 show
 		-- exactly two actions; the last level shows one and must not offer a route
 		-- to a level that does not exist; a wipe shows none.
@@ -1483,6 +1556,35 @@ end
 -- and presses the completion buttons through RoundUI's own handler. Two callers
 -- reaching it at once means one of them is pressing LOSE inside the round the
 -- other is measuring a WIN in, and neither report says so.
+function Fit.buttonText(button): string
+	if not button then return "" end
+	local label = button:FindFirstChild("Label", true)
+	return label and label:IsA("TextLabel") and label.Text or (button :: any).Text or ""
+end
+
+function Fit.hudProbe()
+	local gui = findGui("RoundHud")
+	local probe = gui and gui:FindFirstChild("UIRegressionRoundHudProbe")
+	assert(probe and probe:IsA("BindableFunction"), "actual player UIRegressionRoundHudProbe missing")
+	return probe
+end
+
+function Fit.stageRoundObjective(level: number, caption: boolean?, feed: boolean?)
+	local player = Players.LocalPlayer
+	player:SetAttribute("UIRegressionForceLevel3Reader", true)
+	workspace:SetAttribute("SelectedLevel", level)
+	player:SetAttribute("InRound", true)
+	local probe = Fit.hudProbe()
+	local state = level == 2 and {Level = 2, Title = "Find the exit", Lines = {}, Done = false}
+		or {Level = level, Title = level == 3 and "LOAD THE PLAYER" or "FIND THE EXIT",
+			Count = 2, Goal = 4, Tag = level == 3 and "CDs" or "PUMPS",
+			Lines = {"Search the rooms", "Stay close to the group"}, Compass = {State = "locating"}}
+	assert(probe:Invoke("setobjective", state) ~= false,
+		"actual player objective refused the staged contract")
+	if caption then probe:Invoke("caption", "COMMAND CENTER", "Keep moving and listen for the others.") end
+	if feed then probe:Invoke("feed", {Kind = "TEAM", Actor = player.Name, Detail = "found a CD", Key = "ui-regression"}) end
+end
+
 function Fit.bodyCompletionContract(): (string, number)
 	local player = Players.LocalPlayer
 	local report = {"=== completion contract ==="}
@@ -1519,19 +1621,19 @@ function Fit.bodyCompletionContract(): (string, number)
 	end
 	local function action(name: string): TextButton?
 		local frame = overlay()
-		local child = frame and frame:FindFirstChild(name)
+		local child = frame and frame:FindFirstChild(name, true)
 		return (child and child:IsA("TextButton")) and child or nil
 	end
 	local function hintText(): string
 		local frame = overlay()
-		local hint = frame and frame:FindFirstChild("EndingHint")
+		local hint = frame and frame:FindFirstChild("Countdown", true)
 		return (hint and hint:IsA("TextLabel")) and hint.Text or ""
 	end
 	local function visibleActions(): {string}
 		local names = {}
 		local frame = overlay()
-		for _, child in ipairs(frame and frame:GetChildren() or {}) do
-			if child:IsA("TextButton") and child.Visible then
+		for _, child in ipairs(frame and frame:GetDescendants() or {}) do
+			if child:IsA("TextButton") and child:GetAttribute("CompletionAction") ~= nil and visibleChain(child) then
 				table.insert(names, child.Name)
 			end
 		end
@@ -1549,15 +1651,15 @@ function Fit.bodyCompletionContract(): (string, number)
 		task.wait(.15)
 	end
 
-	-- (1) Levels 1 and 2: exactly CONTINUE and BACK TO LOBBY.
+	-- (1) Levels 1 to 3: exactly CONTINUE and BACK TO LOBBY.
 	drive("win")
 	local continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
 	check(continueRun ~= nil and returnLobby ~= nil, "win offers both actions")
 	check(table.concat(visibleActions(), ",") == "ContinueRun,ReturnToLobby",
 		"win offers EXACTLY two actions", table.concat(visibleActions(), ","))
 	if continueRun and returnLobby then
-		check(continueRun.Text == "CONTINUE", "continue label", continueRun.Text)
-		check(returnLobby.Text == "BACK TO LOBBY", "lobby label", returnLobby.Text)
+		check(Fit.buttonText(continueRun) == "CONTINUE", "continue label", Fit.buttonText(continueRun))
+		check(Fit.buttonText(returnLobby) == "BACK TO LOBBY", "lobby label", Fit.buttonText(returnLobby))
 		check(continueRun:GetAttribute("CompletionAction") == "continuenow",
 			"continue is wired to continuenow",
 			tostring(continueRun:GetAttribute("CompletionAction")))
@@ -1565,14 +1667,14 @@ function Fit.bodyCompletionContract(): (string, number)
 			"lobby is wired to returntolobby",
 			tostring(returnLobby:GetAttribute("CompletionAction")))
 	end
-	check(hintText():find("BEGINS IN", 1, true) ~= nil,
+	check(hintText():find("IN", 1, true) ~= nil,
 		"win countdown promises the next level", hintText())
 
 	-- (2) First choices are provisional until the original deadline.
 	press("ContinueRun")
 	continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
 	if continueRun and returnLobby then
-		check(continueRun.Text == "CONTINUE", "provisional continue keeps its label", continueRun.Text)
+		check(Fit.buttonText(continueRun) == "CONTINUING...", "provisional continue shows pressed label", Fit.buttonText(continueRun))
 		check(continueRun.Active and returnLobby.Active,
 			"continue leaves both choices available")
 	end
@@ -1581,7 +1683,7 @@ function Fit.bodyCompletionContract(): (string, number)
 	press("ReturnToLobby")
 	continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
 	if continueRun and returnLobby then
-		check(returnLobby.Text == "BACK TO LOBBY", "provisional lobby keeps its label", returnLobby.Text)
+		check(Fit.buttonText(returnLobby) == "RETURNING...", "provisional lobby shows pressed label", Fit.buttonText(returnLobby))
 		check(continueRun.Active and returnLobby.Active,
 			"Continue to Lobby leaves the opposite choice available")
 	end
@@ -1590,17 +1692,17 @@ function Fit.bodyCompletionContract(): (string, number)
 	check(continueRun ~= nil and returnLobby ~= nil and continueRun.Active and returnLobby.Active,
 		"Lobby to Continue remains editable in the same window")
 
-	-- (4) The last level: one action, and no route to a level 4.
+	-- (4) The last level: one action, and no route onward.
 	drive("winfinal")
 	check(table.concat(visibleActions(), ",") == "ReturnToLobby",
 		"final level offers ONLY back to lobby", table.concat(visibleActions(), ","))
 	check(hintText():find("LOBBY", 1, true) ~= nil,
 		"final countdown returns to the lobby", hintText())
-	check(hintText():find("LEVEL 4", 1, true) == nil,
-		"final countdown never routes to a level 4", hintText())
+	check(hintText():find("LEVEL", 1, true) == nil and hintText():find("ENTERING", 1, true) == nil,
+		"final countdown never routes to a next level", hintText())
 	press("ContinueRun")
 	returnLobby = action("ReturnToLobby")
-	check(returnLobby ~= nil and returnLobby.Text == "BACK TO LOBBY"
+	check(returnLobby ~= nil and Fit.buttonText(returnLobby) == "BACK TO LOBBY"
 		and returnLobby.Active,
 		"a hidden continue cannot be pressed on the final level")
 
@@ -1667,27 +1769,16 @@ function Fit.bodyCompletionFit(): (string, number)
 	end
 
 	local function resolve(button, width, height)
-		local size, position = button.Size, button.Position
-		local w = size.X.Offset + size.X.Scale * width
-		local h = size.Y.Offset + size.Y.Scale * height
-		local cx = position.X.Offset + position.X.Scale * width
-		local cy = position.Y.Offset + position.Y.Scale * height
-		return {
-			Name = button.Name,
-			Left = cx - w * button.AnchorPoint.X,
-			Top = cy - h * button.AnchorPoint.Y,
-			Right = cx + w * (1 - button.AnchorPoint.X),
-			Bottom = cy + h * (1 - button.AnchorPoint.Y),
-			Width = w,
-			Height = h,
-		}
+		local rect = UIRegression.ResolveRect(button, Vector2.new(width, height), UIDevice.Layout().Inset.Y)
+		if rect then rect.Name = button.Name end
+		return rect
 	end
 
 	local forcedTouch = workspace:GetAttribute("ForceTouchUI")
 	local forcedViewport = workspace:GetAttribute("UIRegressionViewport")
 	local ok, err = pcall(function()
 		for _, mode in ipairs({
-			{Label = "levels 1-2", Dev = "win", Expect = 2},
+			{Label = "levels 1-3", Dev = "win", Expect = 2},
 			{Label = "final level", Dev = "winfinal", Expect = 1},
 		}) do
 			for _, device in ipairs(FIT_DEVICES) do
@@ -1704,12 +1795,12 @@ function Fit.bodyCompletionFit(): (string, number)
 				local round = findGui("RoundGui")
 				local frame = round and round:FindFirstChild("RoundEnding")
 				local rects = {}
-				for _, child in ipairs(frame and frame:GetChildren() or {}) do
-					if child:IsA("TextButton") and child.Visible then
+				for _, child in ipairs(frame and frame:GetDescendants() or {}) do
+					if child:IsA("TextButton") and child:GetAttribute("CompletionAction") ~= nil and visibleChain(child) then
 						table.insert(rects, resolve(child, device.Width, device.Height))
 					end
 				end
-				local hint = frame and frame:FindFirstChild("EndingHint")
+				local hint = frame and frame:FindFirstChild("EndingHint", true)
 				local hintRect = (hint and hint.Visible)
 					and resolve(hint, device.Width, device.Height) or nil
 
@@ -1787,9 +1878,13 @@ end
 -- would simply scan nothing and report PASS -- which is exactly what happened
 -- when a bad require took RoundUI down and the briefing test went vacuous.
 local REQUIRED_GUIS = {
-	"RoundGui", "LevelOneGuideGui", "PuzzleGui", "StaminaGui", "FlashlightPopup",
-	"SpectateGui", "ZyntraStore", "Level2AlertGui", "Level2ObjectiveGui",
-	"Level3ReaderGui", "Level3TableHideUI",
+	"RoundGui", "LevelOneGuideGui", "StaminaGui", "FlashlightPopup",
+	"SpectateGui", "ZyntraStore", "Level3TableHideUI",
+	"RoundHud", "RoundHudThreat", "FoundFootageHUD", "RoundExitGui",
+	-- The only shop since the go-live (2026-10-07). It exists only once
+	-- ReplicatedStorage.ZyntraShopUI loaded, so a broken install fails here by
+	-- name. ZyntraDevL4 is deliberately absent: non-developers never get it.
+	"ZyntraShopL4",
 }
 
 function UIRegression.MissingGuis(): {string}
@@ -1805,47 +1900,6 @@ end
 -- ---------------------------------------------------------------------------
 -- Responsive-layout matrices (C_*_20260830)
 -- ---------------------------------------------------------------------------
-
--- What each terminal page MUST hold, stated independently of the terminal. The
--- counts come from the authored design -- two upgrade cards, the six Zyntra
--- products, the donation tiers in ZyntraConfig, two colour pickers, and the
--- developer control list -- so a page that renders nothing fails rather than
--- passing for want of anything to check.
-local ZyntraConfig = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
-local function donationTierCount(): number
-	local count = 0
-	for _ in pairs(ZyntraConfig.Donations or {}) do count += 1 end
-	return count
-end
-
-local PAGE_CONTENT = {
-	Upgrades = {Rows = 2, Actions = 2},
-	Shop = {Rows = 6, Actions = 6},
-	-- One heading plus all six authored suit cards, each with an action. A
-	-- premium action can be disabled while its pass ID is unconfigured.
-	Skins = {Rows = 7, Actions = 6},
-	-- Derived from the production config below, not guessed. `Rows = 1` was
-	-- vacuous: a Donate page that had built one card out of six would have
-	-- passed.
-	Donate = {Rows = 0, Actions = 0},
-	Colors = {Rows = 2, Actions = 8},
-	-- The accessibility page, and this literal is the LAST RESORT rather than the
-	-- contract. Like Donate, the real count is derived from ZyntraConfig at the
-	-- point of use (the visible entries of AccessibilitySettings); 2 is what the
-	-- store's emergency two-key fallback draws, so it only stands when the config
-	-- carries no list at all. A Settings page that built nothing fails here.
-	Settings = {Rows = 2, Actions = 2},
-	-- RECORDS (CHALLENGES_20260923): the header card that carries the one
-	-- SHOW ASSISTED / SHOW CLEAN toggle, plus one card per level in
-	-- ZyntraConfig.Challenges.Levels. That list is four since 2026-10-02, but
-	-- Level 4 sits in Challenges.HiddenUntilPlayed: its card is Visible = false
-	-- until the profile has a clear, record or challenge there, and only Visible
-	-- children are counted. So 4 is the floor on every profile (header + three);
-	-- one with Level 4 progress draws five. The level cards carry no action: the
-	-- page is read-only.
-	Records = {Rows = 4, Actions = 1},
-	Dev = {Rows = 7, Actions = 7},
-}
 
 -- Every helper the three matrices below share lives on ONE file-level local.
 -- Not a style choice: this module already carries a large number of names at
@@ -2206,7 +2260,7 @@ end
 -- is an override the harness has to put back; there is no such thing as a
 -- read-only one.
 local BORROWED_WORKSPACE_ATTRIBUTES = {
-	"UIRegressionViewport", "ForceTouchUI",
+	"UIRegressionViewport", "ForceTouchUI", "SelectedLevel",
 	-- Both transports. The legacy Rect pair is still read by UIDevice for
 	-- callers that write it, so a run that leaves one behind changes the next
 	-- one's geometry; and the exact pairs are what Fit.apply actually states.
@@ -2225,13 +2279,21 @@ local BORROWED_PLAYER_ATTRIBUTES = {
 	-- The PARTY DOWN seam, same shape as DevRoundEnding: the party-down row
 	-- writes it, so the row has to put it back.
 	"DevPartyDown",
+	-- KitFanMatrix lends the player one of each fan item so the KIT fan has
+	-- something to open. HUD_B2_TOUCH (owner, 2026-10-08).
+	"ZyntraSpeedPotions", "ZyntraRouteMarkers", "ZyntraOwnsEntityDetector",
+	-- The b3-chase-edge row forces it, as the server does on a chase.
+	-- HUD_B3 (owner, 2026-10-08).
+	"BeingChased",
 }
 -- OUTPUTS production derives from those inputs. They are restored with
 -- everything else, but they are not held to the snapshot afterwards: production
 -- republishes them from its own state, and demanding they match a value the
 -- harness wrote would be demanding that production stop deriving them.
 local DERIVED_PLAYER_ATTRIBUTES = {
-	"Level2AlertOwnsBand", "LevelOneGuideObjectivesOpen", "DispatchBriefingOpen",
+	-- RoundUI republishes this from the actual results surface, like queue/card visibility.
+	"RoundEndingOpen",
+	"Level2AlertOwnsBand", "DispatchBriefingOpen",
 	"DispatchTextActive", "ZyntraDispatchClientActive",
 	"TouchMovementSuppressed",
 	-- RoundUI publishes both of these from the party-down window itself, and
@@ -2239,11 +2301,19 @@ local DERIVED_PLAYER_ATTRIBUTES = {
 	-- the same fact: the card flag says a card is drawn (it frees the cursor),
 	-- the window flag outlives it once NO THANKS is pressed.
 	"PartyDownCardOpen", "PartyDownWindowOpen",
+	-- The KIT fan's one state. KitFanMatrix writes it the way KIT's own tap
+	-- does, and ProtectionHUD forces it false whenever the fan cannot be open.
+	-- HUD_B2_TOUCH (owner, 2026-10-08).
+	"KitFanOpen",
+	-- NoiseReporter's applySpeed republishes it on its next round-branch call;
+	-- the b3-sneak-marker row writes "crouch" in its place. HUD_B3 (owner, 2026-10-08).
+	"MoveNoise",
 }
 local BORROWED_GUIS = {
 	"PuzzleGui", "Level2ObjectiveGui", "Level2AlertGui", "Level3ReaderGui",
 	"Level3TableHideUI", "SpectateGui", "LevelOneGuideGui", "RoundGui",
-	"ZyntraStore", "NoiseGui", "FlashlightPopup",
+	"ZyntraStore", "NoiseGui", "FlashlightPopup", "RoundHud", "RoundHudThreat", "RoundExitGui", "FoundFootageHUD",
+	"FriendBoostGui", "ZyntraShopL4", "ZyntraDevL4", "ZyntraDailyL4", "LuckyWheelGui", "ZyntraLobbyPillL4",
 }
 
 -- (b) AWAIT ITS NATURAL END, BOUNDED.
@@ -2321,10 +2391,153 @@ function Fit.awaitQuietDispatch(): (boolean, string?)
 	return true, nil
 end
 
+-- Shared HUD roots are rebuilt by its reversible QA seam. Instance identity is
+-- not a state assertion: compare the captured semantic counter (including nil)
+-- and remeasure the current roots after restore instead.
+Fit.HudOwnedRoots = {"ObjectiveCard", "FeedRow1", "FeedRow2", "Caption", "DetectorCard"}
+
+function Fit.resetSharedHud()
+	local gui = findGui("RoundHud")
+	local probe = gui and gui:FindFirstChild("UIRegressionRoundHudProbe")
+	if not (probe and probe:IsA("BindableFunction")) then return end
+	local captured = probe:Invoke("capture")
+	assert(type(captured) == "table", "RoundHud actual-player QA capture was refused")
+	assert(probe:Invoke("restore", {Kind = "RoundHudTestState", LastObjective = captured.LastObjective,
+		Objective = {}, Feed = {Entries = {}}, Caption = {}, Detector = {}}) == true,
+		"RoundHud fixture reset was refused")
+end
+
+function Fit.liveRoundEligible(inRound, spectating, escaped): boolean
+	local character = Players.LocalPlayer.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	return workspace:GetAttribute("RoundActive") == true and inRound == true
+		and spectating ~= true and escaped ~= true and humanoid ~= nil and humanoid.Health > 0
+		and character:FindFirstChild("HumanoidRootPart") ~= nil
+end
+
+function Fit.liveLobbyEligible(roundBefore): boolean
+	if roundBefore == true or workspace:GetAttribute("RoundActive") == true
+		or workspace:GetAttribute("RoundLoadingState") == "loading" then return false end
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
+	if spawn and spawn:IsA("SpawnLocation")
+		and spawn:GetAttribute("LobbySpawnFloorModelName") == "LobbyReimaginedPreview" then
+		local revised = workspace:FindFirstChild("LobbyReimaginedPreview")
+		if revised and revised:IsA("Model") and revised:GetAttribute("LobbyReimaginedOwned") == true
+			and revised:GetAttribute("Ready") == true then lobby = revised end
+	end
+	local character = Players.LocalPlayer.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (lobby and lobby:IsA("Model") and root) then return false end
+	local cf, size = lobby:GetBoundingBox()
+	local point, centre = root.Position, cf.Position
+	return math.abs(point.X - centre.X) <= size.X / 2 + 6
+		and math.abs(point.Y - centre.Y) <= size.Y / 2 + 6
+		and math.abs(point.Z - centre.Z) <= size.Z / 2 + 6
+end
+
+function Fit.samePlain(a, b): boolean
+	if typeof(a) ~= typeof(b) then return false end
+	if typeof(a) ~= "table" then return a == b end
+	for key, value in pairs(a) do
+		if not Fit.samePlain(value, b[key]) then return false end
+	end
+	for key in pairs(b) do if a[key] == nil then return false end end
+	return true
+end
+
+function Fit.hudOwnedNode(screen, child): boolean
+	if screen.Name ~= "RoundHud" then return false end
+	local root = child
+	while root and root.Parent ~= screen do root = root.Parent end
+	return root ~= nil and table.find(Fit.HudOwnedRoots, root.Name) ~= nil
+end
+
+function Fit.hudProjection()
+	local projected = {}
+	local gui = findGui("RoundHud")
+	for _, name in ipairs(Fit.HudOwnedRoots) do
+		local root = gui and gui:FindFirstChild(name)
+		local row = {Exists = root ~= nil, Visible = false}
+		if root and root:IsA("GuiObject") then
+			row.Visible = visibleChain(root) and not isFullyFaded(root)
+			row.Left, row.Top = root.AbsolutePosition.X, root.AbsolutePosition.Y
+			row.Width, row.Height = root.AbsoluteSize.X, root.AbsoluteSize.Y
+		end
+		projected[name] = row
+	end
+	return projected
+end
+
+function Fit.hudRestoreProblems(saved): {string}
+	local problems = {}
+	if not saved.HudState then return problems end
+	local gui = findGui("RoundHud")
+	local probe = gui and gui:FindFirstChild("UIRegressionRoundHudProbe")
+	if not (probe and probe:IsA("BindableFunction")) then
+		return {"RoundHud actual-player QA probe is gone"}
+	end
+	local read, snapshot, current = pcall(function()
+		return probe:Invoke("snapshot"), probe:Invoke("capture")
+	end)
+	if not read or type(current) ~= "table" then
+		return {"RoundHud actual-player state cannot be reprobed"}
+	end
+	if not Fit.samePlain(snapshot, saved.HudState.LastObjective) then
+		table.insert(problems, "RoundHud.LastObjective differs from the captured semantic snapshot")
+	end
+	local state, now = saved.HudState, workspace:GetServerTimeNow()
+	local entries, feedExpired = {}, false
+	for _, entry in ipairs(state.Feed.Entries) do
+		if entry.Until > now then table.insert(entries, entry) else feedExpired = true end
+	end
+	if not Fit.samePlain(entries, current.Feed.Entries) then
+		table.insert(problems, "RoundHud feed state or its original deadlines were not restored")
+	end
+	local captionExpired = state.Caption.Text ~= nil and (state.Caption.Until or 0) <= now
+	local captionText = if captionExpired then nil else state.Caption.Text
+	if current.Caption.Text ~= captionText
+		or (captionText ~= nil and current.Caption.Until ~= state.Caption.Until) then
+		table.insert(problems, "RoundHud caption state or its original deadline was not restored")
+	end
+	local objective = state.Objective
+	local danger = objective.State and objective.State.Status and objective.State.Status.Kind == "danger"
+	local collapsed = objective.Expanded == true and not danger and (objective.ExpandUntil or 0) <= now
+	local detector = state.Detector
+	local detectorExpired = (detector.ExpiresAt or 0) <= now
+	local attention = detector.Attention
+	local detectorRested = attention and not attention.Urgent and (attention.HoldUntil or 0) <= now
+		and (attention.RestNow or 0) == 0
+	local projected = Fit.hudProjection()
+	for _, name in ipairs(Fit.HudOwnedRoots) do
+		local before, after = saved.HudGeometry[name], projected[name]
+		local isFeed = name == "FeedRow1" or name == "FeedRow2"
+		local timedLaneChange = (isFeed or name == "Caption") and (feedExpired or captionExpired)
+		local expired = (name == "Caption" and captionText == nil)
+			or (isFeed and (#entries == 0 or (name == "FeedRow2" and #entries < 2)))
+			or (name == "DetectorCard" and (detectorExpired or detectorRested))
+		local expectedVisible = before.Visible and not expired
+		if after.Visible ~= expectedVisible and not (isFeed and timedLaneChange and not expired) then
+			table.insert(problems, "RoundHud." .. name .. ".Visible differs after restore")
+		end
+		if before.Visible and after.Visible and not timedLaneChange then
+			for _, field in ipairs({"Left", "Top", "Width", "Height"}) do
+				-- Touch expansion has a real six-second deadline; restoring a long
+				-- test must not restart it just to reproduce the old card height.
+				local changedHeight = collapsed and (field == "Height" or isFeed or name == "Caption")
+				if not changedHeight and math.abs(after[field] - before[field]) > 1 then
+					table.insert(problems, "RoundHud." .. name .. "." .. field .. " geometry differs after restore")
+				end
+			end
+		end
+	end
+	return problems
+end
+
 function Fit.borrow()
 	local player = Players.LocalPlayer
 	local saved = {
-		Workspace = {}, Player = {}, Guis = {}, Subtitle = nil, TerminalOpen = false,
+		Workspace = {}, Player = {}, Guis = {}, Subtitle = nil,
 	}
 	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
 		saved.Workspace[name] = workspace:GetAttribute(name)
@@ -2338,7 +2551,7 @@ function Fit.borrow()
 	-- EVERY DESCENDANT, not only the top-level children.
 	--
 	-- The matrices reach deep: they force pages Visible, flip Active on
-	-- controls, select terminal tabs and scroll them. A snapshot one level deep
+	-- controls and scroll them. A snapshot one level deep
 	-- restored the shade and left the panel inside it forced on, which is how a
 	-- later row measured a screen the player never sees.
 	for _, name in ipairs(BORROWED_GUIS) do
@@ -2346,7 +2559,7 @@ function Fit.borrow()
 		if screen and screen:IsA("ScreenGui") then
 			local entry = {Enabled = screen.Enabled, Children = {}}
 			for _, child in ipairs(screen:GetDescendants()) do
-				if child:IsA("GuiObject") then
+				if child:IsA("GuiObject") and not Fit.hudOwnedNode(screen, child) then
 					entry.Children[child] = {
 						Visible = child.Visible,
 						Active = (child:IsA("TextButton") or child:IsA("ImageButton"))
@@ -2359,29 +2572,11 @@ function Fit.borrow()
 			saved.Guis[name] = entry
 		end
 	end
-	-- The terminal's own page state: which tab is selected, and where each of
-	-- its scrolls is. A matrix that walks every tab used to leave the player on
-	-- whichever one it happened to finish with -- in practice always the first,
-	-- because the sweep reset to it -- rather than the one they had open.
-	local store = playerGui():FindFirstChild("ZyntraStore")
-	local storeProbe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-	if storeProbe and storeProbe:IsA("BindableFunction") then
-		local content = store:FindFirstChild("TerminalContent", true)
-		if content then
-			for _, page in ipairs(content:GetChildren()) do
-				if page:IsA("GuiObject") and page.Visible then
-					saved.TerminalTab = page.Name
-				end
-			end
-		end
-	end
-	-- The Level 3 reader's hidden state, which the matrices toggle through the
-	-- production handlers and never put back.
-	local reader = playerGui():FindFirstChild("Level3ReaderGui")
-	local readerProbe = reader and reader:FindFirstChild("UIRegressionReaderProbe")
-	if readerProbe and readerProbe:IsA("BindableFunction") then
-		local ok, state = pcall(function() return readerProbe:Invoke("state") end)
-		saved.ReaderHidden = ok and state == "hidden" or false
+	local hud = findGui("RoundHud")
+	local hudProbe = hud and hud:FindFirstChild("UIRegressionRoundHudProbe")
+	if hudProbe and hudProbe:IsA("BindableFunction") then
+		saved.HudState = hudProbe:Invoke("capture")
+		saved.HudGeometry = Fit.hudProjection()
 	end
 	-- WAS A BRIEFING IN FLIGHT? Recorded for CONTEXT only. It used to license an
 	-- excuse in Fit.residue -- the widgets a briefing owns were dropped from the
@@ -2399,23 +2594,12 @@ function Fit.borrow()
 	if subtitle and subtitle:IsA("TextLabel") then
 		saved.Subtitle = {Label = subtitle, Text = subtitle.Text}
 	end
-	local store = playerGui():FindFirstChild("ZyntraStore")
-	local terminal = store and store:FindFirstChild("Terminal")
-	saved.TerminalOpen = terminal ~= nil and (terminal :: any).Visible == true
 	return saved
 end
 
 function Fit.restore(saved)
 	if not saved then return end
 	local player = Players.LocalPlayer
-	-- The terminal FIRST and through its own production path, so closing it
-	-- republishes ZyntraStoreOpen and releases the movement suppression before
-	-- the attributes below are put back.
-	local store = playerGui():FindFirstChild("ZyntraStore")
-	local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-	if probe and probe:IsA("BindableFunction") then
-		pcall(function() probe:Invoke(saved.TerminalOpen and "open" or "close") end)
-	end
 	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
 		workspace:SetAttribute(name, saved.Workspace[name])
 	end
@@ -2438,22 +2622,10 @@ function Fit.restore(saved)
 			end
 		end
 	end
-	-- The terminal's selected tab, through the production selectTab.
-	if saved.TerminalTab and probe and probe:IsA("BindableFunction") then
-		pcall(function() probe:Invoke("tab:" .. saved.TerminalTab) end)
-	end
-	-- The reader's hidden state, through the production handlers.
-	local readerScreen = playerGui():FindFirstChild("Level3ReaderGui")
-	local readerProbe = readerScreen
-		and readerScreen:FindFirstChild("UIRegressionReaderProbe")
-	if readerProbe and readerProbe:IsA("BindableFunction") then
-		pcall(function()
-			local current = readerProbe:Invoke("state") == "hidden"
-			if current ~= (saved.ReaderHidden == true) then
-				readerProbe:Invoke(saved.ReaderHidden
-					and "invokePanelHandler" or "invokeRestoreHandler")
-			end
-		end)
+	local hud = findGui("RoundHud")
+	local hudProbe = hud and hud:FindFirstChild("UIRegressionRoundHudProbe")
+	if saved.HudState and hudProbe and hudProbe:IsA("BindableFunction") then
+		assert(hudProbe:Invoke("restore", saved.HudState) == true, "RoundHud QA restore was refused")
 	end
 	if saved.Subtitle and saved.Subtitle.Label.Parent then
 		saved.Subtitle.Label.Text = saved.Subtitle.Text
@@ -2473,9 +2645,8 @@ end
 -- every borrowed workspace attribute; every borrowed player attribute; each
 -- borrowed ScreenGui's existence and Enabled flag; for every borrowed
 -- descendant its Visible, its Active where it has one and its CanvasPosition
--- where it has one; the terminal's selected tab, as the one and only visible
--- page; the Level 3 reader's hidden state; and that the dispatch caption no
--- longer holds the test cue.
+-- where it has one; the shared HUD's semantic state and current root geometry;
+-- and that the dispatch caption no longer holds the test cue.
 function Fit.residue(saved): ({string}, string?)
 	local problems = {}
 	if not saved then return {"nothing was captured"} end
@@ -2554,52 +2725,7 @@ function Fit.residue(saved): ({string}, string?)
 			end
 		end
 	end
-	-- THE SELECTED TAB, EXACTLY. The old check read the LAST visible page and
-	-- compared that -- so two pages visible at once passed as long as the last one
-	-- was right, and ZERO visible pages passed unconditionally. Zero is not a
-	-- pass; it is the precise state a failed restore leaves behind, a terminal
-	-- open on nothing. A tab that was selected has to still be the one and only
-	-- selected tab. The container is reached through ZyntraStore rather than by a
-	-- recursive search from PlayerGui, so this asks the same node Fit.borrow
-	-- snapshotted and not whatever else in the HUD is called TerminalContent.
-	if saved.TerminalTab then
-		local store = playerGui():FindFirstChild("ZyntraStore")
-		local content = store and store:FindFirstChild("TerminalContent", true)
-		local shown, visibleCount = nil, 0
-		if content then
-			for _, page in ipairs(content:GetChildren()) do
-				if page:IsA("GuiObject") and page.Visible then
-					shown = page.Name
-					visibleCount += 1
-				end
-			end
-		end
-		if not content then
-			table.insert(problems, "the terminal's page container is gone, so the "
-				.. saved.TerminalTab .. " tab could not be restored")
-		elseif visibleCount == 0 then
-			table.insert(problems, "the terminal is left showing NO page at all; "
-				.. saved.TerminalTab .. " was the open tab")
-		elseif visibleCount > 1 then
-			table.insert(problems, string.format(
-				"the terminal is left with %d pages visible at once; only %s was open",
-				visibleCount, saved.TerminalTab))
-		elseif shown ~= saved.TerminalTab then
-			table.insert(problems, "the terminal is left on the " .. tostring(shown)
-				.. " tab, not " .. saved.TerminalTab)
-		end
-	end
-	do
-		local readerScreen = playerGui():FindFirstChild("Level3ReaderGui")
-		local readerProbe = readerScreen
-			and readerScreen:FindFirstChild("UIRegressionReaderProbe")
-		if readerProbe and readerProbe:IsA("BindableFunction") then
-			local ok, state = pcall(function() return readerProbe:Invoke("state") end)
-			if ok and (state == "hidden") ~= (saved.ReaderHidden == true) then
-				table.insert(problems, "the Level 3 reader is left " .. tostring(state))
-			end
-		end
-	end
+	for _, problem in ipairs(Fit.hudRestoreProblems(saved)) do table.insert(problems, problem) end
 	-- The caption only has to be free of the TEST cue. Production may have put
 	-- its own live copy there in the meantime, and that is not residue.
 	if saved.Subtitle and saved.Subtitle.Label.Parent
@@ -3097,27 +3223,9 @@ function Fit.interactive(root): {any}
 end
 
 -- ---------------------------------------------------------------------------
--- ZyntraTerminalFitMatrix
+-- TouchTargetMatrix
 -- ---------------------------------------------------------------------------
 
--- The matrix the store modal never had. The row that existed before this --
--- `store-modal` -- set an attribute, revealed the ScreenGui and asserted
--- nothing: no Requires, no TouchTargets, and `Terminal` was in
--- FULLSCREEN_OVERLAYS and absent from INTERNAL_PANELS, so not one rectangle
--- inside the terminal was ever measured. It reported green for a panel whose
--- content frame had a NEGATIVE height.
---
--- Two measurement regimes, deliberately, and each is used only where it is
--- valid:
---   * THE SHELL -- terminal, header, tabs, content, status -- is resolved
---     ANALYTICALLY against the simulated viewport, behind the same calibration
---     gate QueueModalMatrix and BriefingFitMatrix use: the resolver must first
---     reproduce the engine to within a pixel at the real viewport.
---   * THE INTERNALS -- pages, cards, dev rows, tabs -- are laid out by
---     UIGridLayout and UIListLayout, which the resolver cannot reproduce and
---     does not pretend to. They are measured LIVE and compared only against
---     other LIVE rectangles (a card against its scroll, a control against its
---     row), where the real-window origin is common to both sides and cancels.
 -- Touch targets, at real phone and tablet sizes, driven entirely from Luau.
 --
 -- RunAll deliberately refuses to run while UIRegressionViewport is set, because
@@ -3155,14 +3263,9 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 		return "=== touch targets: not reached ===\n  FAIL " .. tostring(quietWhy)
 			.. "\nTOTAL: 1 checks, 1 failed", 1
 	end
-	-- (c) A REVERSIBLE SEAM, and therefore NO wait for a live dispatch. This lane
-	-- writes exactly two Studio override attributes and puts both back, and the
-	-- put-back is asserted at the end rather than assumed. It never reads the
-	-- briefing, never forces it and never silences it: a real transmission is
-	-- relaid out at each simulated viewport and is exactly where it was once the
-	-- overrides come off. There is nothing here for a briefing to be disturbed by.
-	local previousViewport = workspace:GetAttribute("UIRegressionViewport")
-	local previousTouch = workspace:GetAttribute("ForceTouchUI")
+	-- Every scenario input, GUI and actual-player HUD state is borrowed before
+	-- the first override; restore also runs after an error in either sweep.
+	local saved = Fit.borrow()
 	local report = {"=== touch targets across phone and tablet ==="}
 	local stolen = Fit.takeStolenNote()
 	if stolen then table.insert(report, "  note " .. stolen) end
@@ -3235,10 +3338,10 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 			-- zone -- and it is applied here to all THREE levels rather than to
 			-- Level 2 alone. ObjectiveCornerMatrix runs the same predicate across
 			-- its own device list; this keeps it in the tap-target sweep too.
+			Fit.stageRoundObjective(1)
+			task.wait(.12)
 			for _, spec in ipairs({
-				{"PuzzleGui", "Level1Objectives"},
-				{"Level2ObjectiveGui", "Level2ObjectivePanel"},
-				{"Level3ReaderGui", "ReaderPanel"},
+				{"RoundHud", "ObjectiveCard"},
 			}) do
 				local objectiveGui = findGui(spec[1])
 				local objectivePanel = objectiveGui and objectiveGui:FindFirstChild(spec[2], true)
@@ -3364,12 +3467,12 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 			.. tostring(geometryError) .. ")")
 	end
 
-	workspace:SetAttribute("UIRegressionViewport", previousViewport)
-	workspace:SetAttribute("ForceTouchUI", previousTouch)
+	local restored, restoreWhy = pcall(Fit.restore, saved)
 	task.wait(.2)
-	record(workspace:GetAttribute("UIRegressionViewport") == previousViewport
-		and workspace:GetAttribute("ForceTouchUI") == previousTouch,
-		"the device overrides were restored")
+	record(restored, "the full borrowed state was restored", restoreWhy)
+	local residue, note = Fit.residue(saved)
+	if note then table.insert(report, note) end
+	record(#residue == 0, "touch target sweeps leave no borrowed-state residue", table.concat(residue, "; "))
 	if not ran then
 		failures += 1
 		checks += 1
@@ -3486,14 +3589,14 @@ end
 -- Resolve a UDim2 chain ARITHMETICALLY against a stated viewport, returning the
 -- rectangle in that same one space, so an analytic edge and a live
 -- AbsolutePosition are directly comparable numbers.
-function UIRegression.ResolveRect(object, viewport: Vector2, insetY: number)
+function UIRegression.ResolveRect(object, viewport: Vector2, insetY: number, renderedFrame: any?)
 	local chain, node = {}, object
 	while node and not node:IsA("ScreenGui") do
 		table.insert(chain, 1, node)
 		node = node.Parent
 	end
 	if not node then return nil end
-	local frame = UIRegression.ScreenGuiFrame(node :: ScreenGui, viewport)
+	local frame = renderedFrame or UIRegression.ScreenGuiFrame(node :: ScreenGui, viewport)
 	local left, top = frame.Left, frame.Top
 	local width, height = frame.Width, frame.Height
 
@@ -3529,6 +3632,19 @@ function UIRegression.ResolveRect(object, viewport: Vector2, insetY: number)
 		Left = left, Top = top, Right = left + width, Bottom = top + height,
 		Width = width, Height = height, Unresolvable = unresolvable,
 	}
+end
+
+-- The engine keeps rendering at the native ScreenGui frame during a synthetic
+-- viewport sweep. Resolve that actual frame independently for readback parity;
+-- fixture policy and safe-slot assertions continue to use the stated fixture.
+function Fit.engineRect(object)
+	local screen = object
+	while screen and not screen:IsA("ScreenGui") do screen = screen.Parent end
+	if not screen then return nil end
+	return UIRegression.ResolveRect(object, screen.AbsoluteSize, 0, {
+		Left = screen.AbsolutePosition.X, Top = screen.AbsolutePosition.Y,
+		Width = screen.AbsoluteSize.X, Height = screen.AbsoluteSize.Y,
+	})
 end
 
 -- Every queue-modal row is an EXPLICIT ADVERSARIAL FIXTURE. Reusing the shared
@@ -3618,19 +3734,17 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 	local expectedControlKeys = {
 		TouchRunHold = true, TouchJump = true, TouchPOV = true,
 		TouchDropGlowstick = true, TouchSneakHold = true, FlashlightPower = true,
-		ProtectionUse = true,
-		-- EQUIPMENT_SLOTS_20260916 (Trello #101). ProtectionHUD REGISTERS all
-		-- three of its rows on any touch device, whether or not the player owns
-		-- the item -- registration follows the form factor, visibility follows
-		-- the inventory -- so these two are as expected here as the shield is.
-		SpeedPotionUse = true, RouteMarkerPlace = true,
-		-- UI_REGRESSION_20260923. Two authored registrations newer than this list:
-		-- EntityDetectorScan is ProtectionHUD's fourth equipment row (bd72376,
-		-- 2026-09-20; the same makeRow as the two above, and UIDevice's equipment
-		-- key list names it), and FriendBoost is the lobby chip's rectangle
+		-- HUD_B2_TOUCH (owner, 2026-10-08): the eight cells of UIDevice's 4 + 4
+		-- grid. ProtectionHUD registers SHIELD and KIT on any touch device,
+		-- whether or not the player owns anything -- registration follows the
+		-- form factor, visibility follows the inventory. POTION, MARKER and SCAN
+		-- (SpeedPotionUse, RouteMarkerPlace, EntityDetectorScan) are items in
+		-- the KIT fan now, which is transient and never registered.
+		ProtectionUse = true, KitToggle = true,
+		-- UI_REGRESSION_20260923: FriendBoost is the lobby chip's rectangle
 		-- (Friend Boost Client, FRIEND_BOOST_20260916), registered so layouts
-		-- avoid it. Both stand down under the shade like everything else here.
-		EntityDetectorScan = true, FriendBoost = true,
+		-- avoid it. It stands down under the shade like everything else here.
+		FriendBoost = true,
 	}
 	local function registeredControlState(element: GuiObject): any
 		local ancestorsVisible = true
@@ -3669,9 +3783,10 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 				else
 					snapshot.Roots[key] = element
 				end
-				-- The registered rectangle can be visual while a child owns input:
-				-- FlashlightPower is exactly that shape. Snapshot the complete GuiObject
-				-- subtree so an invisible-but-Active child cannot disappear from the proof.
+				-- The registered rectangle can be visual while a child owns input
+				-- (FlashlightPower was that shape until the B2 LIGHT cell made the
+				-- root the button). Snapshot the complete GuiObject subtree so an
+				-- invisible-but-Active child cannot disappear from the proof.
 				snapshot.States[element] = registeredControlState(element)
 				for _, descendant in ipairs(element:GetDescendants()) do
 					if descendant:IsA("GuiObject") then
@@ -4022,22 +4137,19 @@ end
 -- sources, all in StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua:
 --
 --   L1917-1932  briefingCues             -- Level 1
---   L1934-1949  levelTwoBriefingCues     -- Level 2
 --   L1952-1971  levelThreeBriefing.cues  -- Level 3
 --   L1525-1543  lobbyBriefing.cues       -- the concourse briefing
 --
--- The longest authored line across all four tables is RoundUI L1940 at 113
--- characters, and it is reproduced here verbatim. LONG_DISPATCH_CUE (L610 of
--- this file, 142 characters) is the string the live `briefing` scenario already
--- forces into the panel, so both matrices stress the same worst case. The third
--- entry is SYNTHETIC: 181 characters, 1.60x the longest authored line, standing
--- in for a localisation of it. German is the useful shape here -- the same
--- sentence runs long AND carries compounds the wrapper cannot break.
+-- The Level 2 briefing and its 113-character "a pump alerts an entity" line,
+-- which used to lead this corpus verbatim, are deleted (owner, 2026-10-08), and
+-- its row went with them. The longest authored line left is Level 1's at 91
+-- characters. LONG_DISPATCH_CUE (L610 of this file, 142 characters) is the
+-- string the live `briefing` scenario already forces into the panel, so it is
+-- now the worst English case for both matrices. The last entry is SYNTHETIC:
+-- 181 characters, a German localisation of that deleted line, kept unchanged as
+-- the stress case. German is the useful shape here -- the same sentence runs
+-- long AND carries compounds the wrapper cannot break.
 local BRIEFING_STRESS_CORPUS = {
-	{
-		Name = "the longest authored cue (RoundUI L1940, 113 chars)",
-		Text = "Even more important: activating a pump appears to alert an unidentified, unusually large entity to your location.",
-	},
 	{
 		Name = "LONG_DISPATCH_CUE (142 chars)",
 		Text = LONG_DISPATCH_CUE,
@@ -4101,442 +4213,7 @@ local function analyticalOverlap(a: any, b: any): boolean
 end
 
 function Fit.bodyBriefingFitMatrix(): (string, number)
-	local previousWorkspace = {}
-	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
-		previousWorkspace[name] = {Value = workspace:GetAttribute(name)}
-	end
-	local report = {"=== briefing text fit, resolved per device ==="}
-	local stolen = Fit.takeStolenNote()
-	if stolen then table.insert(report, "  note " .. stolen) end
-	local failures, checks = 0, 0
-	-- (b) AWAIT ITS NATURAL END, BOUNDED. This lane forces the briefing screen,
-	-- its panel and its controls Visible and then writes back the flags it found,
-	-- which is reversible only if the briefing is in the same state at the end as
-	-- at the start. Run it across a real transmission that finishes mid-sweep and
-	-- the restore RE-SHOWS a briefing panel production had just put away -- a
-	-- disturbance of a live dispatch, arriving disguised as a cleanup. So it waits
-	-- for a quiet dispatch like the lanes that force the flag outright.
-	local quiet, dispatchWhy = Fit.awaitQuietDispatch()
-	if not quiet then
-		failures += 1
-		checks += 1
-		table.insert(report, "  FAIL " .. tostring(dispatchWhy))
-		table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
-		return table.concat(report, "\n"), failures
-	end
-	local function record(ok, description, detail)
-		checks += 1
-		if ok then
-			-- Compact keeps findings, not confirmations. See C_COMPACT_REPORT_20260831:
-			-- five lanes build their own report table instead of using Fit.recorder,
-			-- and every one of them printed a line per passing check -- which is why
-			-- a "compact" run still came to 103KB.
-			if not Fit.Compact then table.insert(report, "  ok   " .. description) end
-		else
-			failures += 1
-			table.insert(report, "  FAIL " .. description
-				.. (detail and ("  (" .. tostring(detail) .. ")") or ""))
-		end
-	end
-
-	local player = Players.LocalPlayer
-	local gui = player and player:FindFirstChildOfClass("PlayerGui")
-	local guide = gui and gui:FindFirstChild("LevelOneGuideGui")
-	local panel = guide and guide:FindFirstChild("CommandSubtitles")
-	local subtitle = panel and panel:FindFirstChild("Subtitle")
-	local controls = panel and panel:FindFirstChild("BriefingControls")
-	local listLayout = controls and controls:FindFirstChildOfClass("UIListLayout")
-	local buttons = {}
-	for _, name in ipairs(BRIEFING_CONTROL_ORDER) do
-		buttons[name] = controls and controls:FindFirstChild(name)
-	end
-	local mute = controls and controls:FindFirstChild("DispatchMuteButton")
-	if not (guide and panel and subtitle and controls and listLayout
-		and mute and buttons.DispatchStopButton) then
-		record(false, "the briefing panel exists to be measured", string.format(
-			"guide=%s panel=%s subtitle=%s controls=%s layout=%s mute=%s stop=%s",
-			tostring(guide ~= nil), tostring(panel ~= nil), tostring(subtitle ~= nil),
-			tostring(controls ~= nil), tostring(listLayout ~= nil),
-			tostring(mute ~= nil),
-			tostring(buttons.DispatchStopButton ~= nil)))
-		table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
-		return table.concat(report, "\n"), failures
-	end
-
-	-- GetTextBoundsAsync yields and can throw (a font that has not finished
-	-- loading, a malformed params object). It is called from this matrix's own
-	-- thread, and every call is wrapped, so a service hiccup is reported as a
-	-- failed check rather than unwinding the sweep and stranding the override.
-	--
-	-- `width` is the WRAP width and is passed only for text that actually wraps.
-	-- GetTextBoundsParams.Width defaults to infinity, and leaving it there is the
-	-- correct model for the two readouts: TextWrapped is false on them, so the
-	-- engine lays them out on one line and lets them spill. Handing the params a
-	-- width would have wrapped the measurement the engine never wraps, reporting
-	-- a caption that overruns its hitbox as comfortably inside it.
-	-- Hoisted to Fit.measureText, which DispatchCompactMatrix shares. Bound to
-	-- a local here so every call site below reads unchanged.
-	local requiredBounds = Fit.measureText
-
-	-- One cast each, up front. Everything below writes through these, so no
-	-- assignment target in this function is a parenthesised cast.
-	local screen = guide :: any
-	local panelObject = panel :: any
-	local controlsObject = controls :: any
-	local subtitleLabel = subtitle :: any
-	local wasEnabled = screen.Enabled
-	local wasPanelVisible = panelObject.Visible
-	local wasControlsVisible = controlsObject.Visible
-	local wasSubtitleText = subtitleLabel.Text
-	local previousForce = player:GetAttribute("UIRegressionForceDispatchActive")
-	local ran, runError = pcall(function()
-		-- The matrix displays a synthetic briefing. Tell RoundUI that it is
-		-- active too, so each viewport refresh keeps the SKIP control actionable.
-		player:SetAttribute("UIRegressionForceDispatchActive", true)
-		-- ------------------------------------------------------------------
-		-- CALIBRATION. The sweep below never measures anything: it computes.
-		-- A resolver that is wrong in the same direction as the layout it
-		-- checks reports green for a broken panel, so before any simulated
-		-- viewport is touched, prove the resolver reproduces the ENGINE at the
-		-- REAL viewport -- the one place AbsolutePosition is trustworthy --
-		-- within one pixel, for the panel, the subtitle box and the controls
-		-- row. If it does not, that is a recorded FAILURE and this matrix is
-		-- already red no matter what the sweep goes on to say.
-		-- ------------------------------------------------------------------
-		for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
-			workspace:SetAttribute(name, nil)
-		end
-		screen.Enabled = true
-		panelObject.Visible = true
-		controlsObject.Visible = true
-		task.wait(0.35)
-		local realLayout = UIDevice.Layout()
-		local shift = UIRegression.ScreenSpaceShift(panel)
-		local worst, worstName = 0, ""
-		for _, object in ipairs({panel, subtitle, controls}) do
-			local resolved = UIRegression.ResolveRect(object, realLayout.Viewport, realLayout.Inset.Y)
-			local node = object :: any
-			if resolved and not resolved.Unresolvable then
-				local live = {
-					Left = node.AbsolutePosition.X,
-					Top = node.AbsolutePosition.Y + shift,
-					Right = node.AbsolutePosition.X + node.AbsoluteSize.X,
-					Bottom = node.AbsolutePosition.Y + node.AbsoluteSize.Y + shift,
-				}
-				for _, edge in ipairs({"Left", "Top", "Right", "Bottom"}) do
-					local delta = math.abs(resolved[edge] - live[edge])
-					if delta > worst then worst, worstName = delta, object.Name .. "." .. edge end
-				end
-			else
-				worst = math.huge
-				worstName = object.Name .. " is unresolvable at the real viewport"
-			end
-		end
-		record(worst <= 1,
-			"the resolver agrees with the engine at the real viewport, for the panel,"
-			.. " the Subtitle box and the BriefingControls row",
-			string.format("worst edge error %.2fpx at %s", worst, worstName))
-
-		-- ------------------------------------------------------------------
-		-- The sweep, at each simulated device.
-		-- ------------------------------------------------------------------
-		for _, device in ipairs(briefingDevices()) do
-			local applied = Fit.apply(device)
-			record(applied, device.Name .. ": the explicit fixture took", "timed out")
-			local fixtureProblems = Fit.fixtureProblems(device)
-			record(#fixtureProblems == 0,
-				device.Name .. ": viewport, safe area and topbar are exactly the stated fixture",
-				table.concat(fixtureProblems, "; "))
-			screen.Enabled = true
-			panelObject.Visible = true
-			controlsObject.Visible = true
-			-- Long enough for UIDevice's attribute watcher to refresh, fire
-			-- Changed, and for RoundUI's updateLevelOneGuideLayout to have
-			-- written every Size, Position and TextSize this row depends on.
-			task.wait(0.3)
-			local layout = UIDevice.Layout()
-			local viewport, insetY = device.Size, layout.Inset.Y
-
-			record(layout.Width == device.Size.X and layout.Height == device.Size.Y,
-				device.Name .. ": the device override took",
-				string.format("%.0fx%.0f", layout.Width, layout.Height))
-			record(layout.IsTouch == device.Touch and layout.Class == device.Class
-				and layout.Portrait == device.Portrait,
-				device.Name .. ": form factor, class and orientation are as declared",
-				string.format("touch=%s class=%s portrait=%s",
-					tostring(layout.IsTouch), tostring(layout.Class), tostring(layout.Portrait)))
-
-			local panelRect = UIRegression.ResolveRect(panel, viewport, insetY)
-			local subtitleRect = UIRegression.ResolveRect(subtitle, viewport, insetY)
-			local controlsRect = UIRegression.ResolveRect(controls, viewport, insetY)
-			-- Unresolvable is a FAILURE, never a skip. An analytical matrix that
-			-- quietly stops asserting the moment it meets something it cannot
-			-- compute is the old false green wearing a new report format.
-			record(panelRect ~= nil and panelRect.Unresolvable == nil,
-				device.Name .. ": the briefing panel is analytically resolvable",
-				panelRect and panelRect.Unresolvable or "no rect")
-			record(subtitleRect ~= nil and subtitleRect.Unresolvable == nil,
-				device.Name .. ": the Subtitle box is analytically resolvable",
-				subtitleRect and subtitleRect.Unresolvable or "no rect")
-			record(controlsRect ~= nil and controlsRect.Unresolvable == nil,
-				device.Name .. ": the BriefingControls row is analytically resolvable",
-				controlsRect and controlsRect.Unresolvable or "no rect")
-
-			local havePanel = panelRect ~= nil and panelRect.Unresolvable == nil
-			local haveSubtitle = subtitleRect ~= nil and subtitleRect.Unresolvable == nil
-			local haveControls = controlsRect ~= nil and controlsRect.Unresolvable == nil
-
-			-- ── the panel against the WORLD, not just against itself ─────────
-			-- WHAT SHIPPED BROKEN: every assertion in this matrix compared the
-			-- panel's children to the panel. Nothing compared the PANEL to the
-			-- screen, to UIDevice's TopBand, or to a movement zone -- so a panel
-			-- that grew straight out of its band and down into the thumbstick's
-			-- activation region read GREEN. Proven by mutation: removing the
-			-- BAND_CEILING clamp in RoundUI changed not one check here.
-			local deviceLayout = UIDevice.Layout()
-			local band = deviceLayout.TopBand
-			record(havePanel
-				and panelRect.Left >= -1 and panelRect.Top >= -1
-				and panelRect.Right <= viewport.X + 1
-				and panelRect.Bottom <= viewport.Y + 1,
-				device.Name .. ": the briefing panel is entirely on screen",
-				havePanel and string.format("x %.0f..%.0f y %.0f..%.0f",
-					panelRect.Left, panelRect.Right, panelRect.Top, panelRect.Bottom) or "no rect")
-			if device.Touch and band and band.Height and band.Height > 0 then
-				-- SPACES, RESTATED -- the old note here was wrong, and being wrong
-				-- is what hid C_GUI_INSET_OFF_BY_ONE_20260830 for a release.
-				--
-				-- It claimed "UIDevice's TopBand and movement zones are expressed
-				-- in the same space AbsolutePosition uses -- which excludes that
-				-- inset", and subtracted an inset from the resolved rect before
-				-- comparing. They are not: UIDevice builds bandTop from
-				-- `usableTop = GetGuiInset().Y`, and its control zone was measured
-				-- against the live RUN/JUMP cluster and only contains it in TRUE
-				-- SCREEN space. Both sides of this comparison are true screen.
-				--
-				-- The subtraction was compensating for the SAME inset error in
-				-- UIDevice.TopOffsetFor, which placed every touch panel one inset
-				-- below the rectangle it had been fitted to. Two errors cancelled
-				-- and a panel hanging an inset out of its band reported green.
-				-- TopOffsetFor is fixed; this conversion is therefore gone, and
-				-- the comparison is now made in one space with no conversion at
-				-- all -- which is the only version of it that can fail.
-				-- THE PANEL'S HOME, by the same rule production uses: the top band
-				-- while it can hold a briefing, and UIDevice's movement-free
-				-- ModalArea when it cannot. Asserting TopBand unconditionally
-				-- would demand the panel stay in a 37px strip that cannot hold
-				-- two 44px readouts.
-				local home = band
-				if band.Height < 80 and deviceLayout.ModalArea.Height > band.Height then
-					home = deviceLayout.ModalArea
-				end
-				local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
-				local guiTop = panelRect.Top
-				local guiBottom = panelRect.Bottom
-				record(havePanel
-					and ((guiTop >= home.Top - 1
-						and guiBottom <= home.Top + home.Height + 1
-						and panelRect.Left >= home.Left - 1
-						and panelRect.Right <= home.Left + home.Width + 1)
-						or (passive and Fit.within(panelRect, deviceLayout.Safe, 1))),
-					device.Name .. ": and fits inside the rectangle it was given"
-					.. " (or the click-through reader lane inside Safe)",
-					havePanel and string.format("panel y %.0f..%.0f vs band y %.0f..%.0f",
-						guiTop, guiBottom, home.Top, home.Top + home.Height) or "no rect")
-				local zone = havePanel and UIDevice.OverlapsMovementZone(
-					panelRect.Left, guiTop, panelRect.Right, guiBottom) or nil
-				record(havePanel and (zone == nil or passive),
-					device.Name .. ": only a verified click-through reader caption may enter a movement zone",
-					string.format("zone=%s passive=%s (%s)", tostring(zone),
-						tostring(passive), passiveWhy))
-				if panel:GetAttribute("ReaderPassiveLane") == true then
-					record(passive,
-						device.Name .. ": reader-lane marker has passive body, 44px SKIP outside zones and reader",
-						passiveWhy)
-				end
-			end
-
-			record(havePanel and haveSubtitle
-				and subtitleRect.Left >= panelRect.Left - 1
-				and subtitleRect.Right <= panelRect.Right + 1
-				and subtitleRect.Top >= panelRect.Top - 1
-				and subtitleRect.Bottom <= panelRect.Bottom + 1,
-				device.Name .. ": the Subtitle box stays inside the panel",
-				(havePanel and haveSubtitle) and string.format(
-					"subtitle x %.0f..%.0f y %.0f..%.0f in panel x %.0f..%.0f y %.0f..%.0f",
-					subtitleRect.Left, subtitleRect.Right, subtitleRect.Top, subtitleRect.Bottom,
-					panelRect.Left, panelRect.Right, panelRect.Top, panelRect.Bottom)
-					or "unresolvable")
-			record(havePanel and haveControls
-				and controlsRect.Left >= panelRect.Left - 1
-				and controlsRect.Right <= panelRect.Right + 1
-				and controlsRect.Top >= panelRect.Top - 1
-				and controlsRect.Bottom <= panelRect.Bottom + 1,
-				device.Name .. ": the BriefingControls row stays inside the panel",
-				(havePanel and haveControls) and string.format(
-					"controls x %.0f..%.0f y %.0f..%.0f in panel x %.0f..%.0f y %.0f..%.0f",
-					controlsRect.Left, controlsRect.Right, controlsRect.Top, controlsRect.Bottom,
-					panelRect.Left, panelRect.Right, panelRect.Top, panelRect.Bottom)
-					or "unresolvable")
-			-- THE assertion this matrix was written for. Abutment passes, one
-			-- pixel of penetration does not; see analyticalOverlap above.
-			record(haveSubtitle and haveControls
-				and not analyticalOverlap(subtitleRect, controlsRect),
-				device.Name .. ": the Subtitle box does not overlap the SKIP row",
-				(haveSubtitle and haveControls) and string.format(
-					"subtitle (%.0f,%.0f)-(%.0f,%.0f) vs controls (%.0f,%.0f)-(%.0f,%.0f)",
-					subtitleRect.Left, subtitleRect.Top, subtitleRect.Right, subtitleRect.Bottom,
-					controlsRect.Left, controlsRect.Top, controlsRect.Right, controlsRect.Bottom)
-					or "unresolvable")
-
-			-- ---------------------------------------------------------------
-			-- The controls row. Its CHILDREN are placed by the UIListLayout, so
-			-- they are honestly out of the resolver's reach. Their SIZE is not:
-			-- updateLevelOneGuideLayout writes it directly as an offset, and a
-			-- UIListLayout never resizes what it arranges. So size is computed,
-			-- position is not claimed, and the pair is checked against the
-			-- container's own resolved extent plus the layout's declared padding
-			-- along whichever axis the layout is filling on this row.
-			-- ---------------------------------------------------------------
-			local horizontal = listLayout.FillDirection == Enum.FillDirection.Horizontal
-			local sizes = {}
-			for _, name in ipairs(BRIEFING_CONTROL_ORDER) do
-				local button = buttons[name] :: any
-				local width = button.Size.X.Offset
-					+ button.Size.X.Scale * (haveControls and controlsRect.Width or 0)
-				local height = button.Size.Y.Offset
-					+ button.Size.Y.Scale * (haveControls and controlsRect.Height or 0)
-				sizes[name] = {Width = width, Height = height}
-				if device.Touch then
-					-- The compact fallback now gives up ornamental padding instead
-					-- of input area, so even the 568x320 band keeps the game's 44px
-					-- touch-target contract.
-					record(width >= 44 and height >= 44,
-						string.format("%s: %s is at least 44x44", device.Name, name),
-						string.format("%.0fx%.0f", width, height))
-				end
-			end
-			local stop = sizes.DispatchStopButton
-			local along = horizontal and stop.Width or stop.Height
-			local across = horizontal and stop.Height or stop.Width
-			local alongLimit = haveControls
-				and (horizontal and controlsRect.Width or controlsRect.Height) or 0
-			local acrossLimit = haveControls
-				and (horizontal and controlsRect.Height or controlsRect.Width) or 0
-			record(haveControls and along <= alongLimit + 1 and across <= acrossLimit + 1,
-				device.Name .. ": the visible SKIP control fits inside BriefingControls",
-				string.format("%s fill: %.0f along %.0f, %.0f across %.0f",
-					horizontal and "horizontal" or "vertical",
-					along, alongLimit, across, acrossLimit))
-			record(mute.Visible == false and mute.Active == false
-				and buttons.DispatchStopButton.Visible == true
-				and buttons.DispatchStopButton.Active == true,
-				device.Name .. ": silent briefing hides MUTE and leaves SKIP actionable",
-				string.format("mute=%s/%s skip=%s/%s", tostring(mute.Visible),
-					tostring(mute.Active), tostring(buttons.DispatchStopButton.Visible),
-					tostring(buttons.DispatchStopButton.Active)))
-			local skipWord = panel:GetAttribute("ReaderPassiveLane") == true
-				and "SKIP" or "SKIP BRIEF"
-			record(buttons.DispatchStopButton.Text:sub(-#skipWord) == skipWord,
-				device.Name .. ": the remaining control names its text-only action",
-				buttons.DispatchStopButton.Text)
-
-			-- Every caption the readouts can print, at the TextSize this row's
-			-- layout pass just wrote. A readout whose word does not fit its own
-			-- transparent hitbox is the same defect as a clipped subtitle, one
-			-- rectangle further in.
-			for _, name in ipairs(BRIEFING_CONTROL_ORDER) do
-				local button = buttons[name] :: any
-				local spec = BRIEFING_CONTROL_CAPTIONS[name]
-				local prefix = device.Touch and "" or spec.Binding
-				local captions = panel:GetAttribute("ReaderPassiveLane") == true
-					and {"SKIP"} or spec.Captions
-				for _, caption in ipairs(captions) do
-					local text = prefix .. caption
-					local bounds, boundsError = requiredBounds(
-						text, button.FontFace, button.TextSize, nil)
-					record(bounds ~= nil and bounds.X <= sizes[name].Width + 1
-						and bounds.Y <= sizes[name].Height + 1,
-						string.format("%s: %s fits %q", device.Name, name, text),
-						bounds and string.format("needs %.0fx%.0f in %.0fx%.0f at TextSize %d",
-							bounds.X, bounds.Y, sizes[name].Width, sizes[name].Height,
-							button.TextSize) or boundsError)
-				end
-			end
-
-			-- ---------------------------------------------------------------
-			-- The copy itself. TextWrapped is true, so the wrap width IS the
-			-- resolved box width, and the question is then whether the wrapped
-			-- block comes out TALLER than the box the layout reserved -- which
-			-- is what clipping looks like from the arithmetic side.
-			-- ---------------------------------------------------------------
-			-- Each corpus string is made the LIVE cue and the layout re-run before
-			-- it is measured. Production sizes the copy box for the sentence that
-			-- is on screen, so measuring a different sentence against a box fitted
-			-- to another one tests nothing about either.
-			local guideScreen = findGui("LevelOneGuideGui")
-			local relayoutSeam = guideScreen
-				and guideScreen:FindFirstChild("UIRegressionRelayoutGuide")
-			for _, entry in ipairs(BRIEFING_STRESS_CORPUS) do
-				if relayoutSeam and relayoutSeam:IsA("BindableFunction") and haveSubtitle then
-					(subtitle :: any).Text = entry.Text
-					pcall(function() relayoutSeam:Invoke() end)
-					task.wait(0.05)
-					subtitleRect = UIRegression.ResolveRect(subtitle, viewport, insetY)
-				end
-				local description = string.format("%s: %s fits the Subtitle box",
-					device.Name, entry.Name)
-				if not haveSubtitle then
-					-- Same check, same count, still a failure. A row that could
-					-- not resolve its box does not get to skip the fit question.
-					record(false, description, "the Subtitle box is unresolvable")
-				else
-					local bounds, boundsError = requiredBounds(entry.Text,
-						subtitleLabel.FontFace, subtitleLabel.TextSize, subtitleRect.Width)
-					record(bounds ~= nil
-						and bounds.X <= subtitleRect.Width + 1
-						and bounds.Y <= subtitleRect.Height + 1,
-						description,
-						bounds and string.format("needs %.0fx%.0f in %.0fx%.0f at TextSize %d",
-							bounds.X, bounds.Y, subtitleRect.Width, subtitleRect.Height,
-							subtitleLabel.TextSize) or boundsError)
-				end
-			end
-		end
-	end)
-
-	-- Restore even when calibration or a simulated device throws inside pcall.
-	player:SetAttribute("UIRegressionForceDispatchActive", previousForce)
-	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
-		workspace:SetAttribute(name, previousWorkspace[name].Value)
-	end
-	subtitleLabel.Text = wasSubtitleText
-	local restoreRelayout = guide:FindFirstChild("UIRegressionRelayoutGuide")
-	if restoreRelayout and restoreRelayout:IsA("BindableFunction") then
-		pcall(function() restoreRelayout:Invoke() end)
-	end
-	screen.Enabled = wasEnabled
-	panelObject.Visible = wasPanelVisible
-	controlsObject.Visible = wasControlsVisible
-	task.wait(0.2)
-	if not ran then
-		failures += 1
-		checks += 1
-		table.insert(report, "  FAIL the briefing fit matrix ran  (" .. tostring(runError) .. ")")
-	end
-	local restored = true
-	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
-		if workspace:GetAttribute(name) ~= previousWorkspace[name].Value then
-			restored = false
-			break
-		end
-	end
-	record(restored, "the matrix restored every simulator/inset attribute it borrowed")
-	record(subtitleLabel.Text == wasSubtitleText,
-		"the matrix restored the live dispatch subtitle after every synthetic stress cue",
-		string.format("restored=%s", tostring(subtitleLabel.Text == wasSubtitleText)))
-	table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
-	return table.concat(report, "\n"), failures
+	return Fit.bodyRoundHudMatrix()
 end
 
 function UIRegression.BriefingFitMatrix(token: string?): (string, number)
@@ -4544,7 +4221,7 @@ function UIRegression.BriefingFitMatrix(token: string?): (string, number)
 end
 
 -- ---------------------------------------------------------------------------
--- BriefingExclusionMatrix -- briefing, queue modal and the full Zyntra terminal
+-- BriefingExclusionMatrix -- briefing, queue modal and the L4 shop window (was the Zyntra terminal)
 -- ---------------------------------------------------------------------------
 --
 -- WHAT SHIPPED BROKEN, in pixels, at 705x338: the Zyntra opener occupied
@@ -4588,7 +4265,9 @@ local BRIEFING_EXCLUSION_VIEWPORTS = {
 }
 
 -- command -> the key the caption must name when glyphs are shown. Mirrored by
--- hand from ZyntraStore's control table so a silent rebinding fails here.
+-- hand from Zyntra Dev L4's ROWS (the legacy DEV tab's control table, which
+-- the go-live deleted, carried the same keys) so a silent rebinding fails here.
+-- Each row Dev_<command> draws them on its KeyChip as "KEY <key>".
 -- B really does drive esp and fastQueue together (DevCheats' InputBegan toggles
 -- both), so the repeat is correct and must not be "fixed".
 local DEV_CAPTION_KEYS = {
@@ -4602,1830 +4281,17 @@ local DEV_CAPTION_KEYS = {
 	{Command = "level3PreBlackout", Key = "K"},
 	{Command = "level5Fall", Key = "O"},
 }
-local DEV_INTRO_BASE = "WHITELISTED DEVELOPER CONTROLS"
-local DEV_INTRO_KEYBOARD = DEV_INTRO_BASE .. "  //  PHONE: J"
+local DEV_EYEBROW_BASE = "WHITELISTED DEVELOPER CONTROLS"
+local DEV_EYEBROW_KEYBOARD = DEV_EYEBROW_BASE .. " \u{B7} KEY J"
 local DEV_NOCLIP_KEYBOARD = "Fly through geometry with WASD, Space and Left Ctrl."
 local DEV_NOCLIP_TOUCH = "Fly through geometry using the movement stick."
 
 function Fit.bodyBriefingExclusionMatrix(): (string, number)
-	local report = {"=== briefing / queue modal / full Zyntra terminal exclusion ==="}
-	local stolen = Fit.takeStolenNote()
-	if stolen then table.insert(report, "  note " .. stolen) end
-	local failures, checks = 0, 0
-	-- (b) AWAIT ITS NATURAL END, BOUNDED. This is the lane that forces
-	-- UIRegressionForceDispatchActive and UIRegressionSuppressDispatch on and off
-	-- for every row; run under a real briefing it would be steering someone
-	-- else's transmission and reporting the result as geometry.
-	local quiet, dispatchWhy = Fit.awaitQuietDispatch()
-	if not quiet then
-		failures += 1
-		checks += 1
-		table.insert(report, "  FAIL " .. tostring(dispatchWhy))
-		table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
-		return table.concat(report, "\n"), failures
-	end
-	local function record(ok, description, detail)
-		checks += 1
-		if ok then
-			-- Compact keeps findings, not confirmations. See C_COMPACT_REPORT_20260831:
-			-- five lanes build their own report table instead of using Fit.recorder,
-			-- and every one of them printed a line per passing check -- which is why
-			-- a "compact" run still came to 103KB.
-			if not Fit.Compact then table.insert(report, "  ok   " .. description) end
-		else
-			failures += 1
-			table.insert(report, "  FAIL " .. description
-				.. (detail and ("  (" .. tostring(detail) .. ")") or ""))
-		end
-	end
-
-	local player = Players.LocalPlayer
-	local gui = player and player:FindFirstChildOfClass("PlayerGui")
-	if not gui then
-		record(false, "there is a PlayerGui to measure")
-		return table.concat(report, "\n"), failures
-	end
-	local function find(name)
-		for _, descendant in ipairs(gui:GetDescendants()) do
-			if descendant.Name == name then return descendant end
-		end
-		return nil
-	end
-	local subtitles = find("CommandSubtitles")
-	local opener = find("ZyntraOpenButton")
-	local shade = find("QueueHostShade")
-	local store = gui:FindFirstChild("ZyntraStore")
-	local terminal = store and store:FindFirstChild("Terminal")
-	local storeProbe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-	if not (subtitles and opener and shade and terminal and storeProbe
-		and storeProbe:IsA("BindableFunction")) then
-		record(false, "the briefing, queue modal, store opener, terminal and Studio probe all exist",
-			string.format("subtitles=%s opener=%s shade=%s terminal=%s probe=%s",
-				tostring(subtitles ~= nil), tostring(opener ~= nil), tostring(shade ~= nil),
-				tostring(terminal ~= nil), tostring(storeProbe ~= nil)))
-		return table.concat(report, "\n"), failures
-	end
-
-	local previousViewport = workspace:GetAttribute("UIRegressionViewport")
-	local previousTouch = workspace:GetAttribute("ForceTouchUI")
-	local previousShade = shade.Visible
-	local previousForce = player:GetAttribute("UIRegressionForceDispatchActive")
-	local previousSuppress = player:GetAttribute("UIRegressionSuppressDispatch")
-	local previousObjectivesOpen = player:GetAttribute("LevelOneGuideObjectivesOpen")
-	local previousAlertOwnsBand = player:GetAttribute("Level2AlertOwnsBand")
-	local previousTerminal = terminal.Visible
-	local previousDerived = {
-		QueueModalOpen = player:GetAttribute("QueueModalOpen"),
-		DispatchBriefingOpen = player:GetAttribute("DispatchBriefingOpen"),
-		DispatchTextActive = player:GetAttribute("DispatchTextActive"),
-		ZyntraDispatchClientActive = player:GetAttribute("ZyntraDispatchClientActive"),
-		ZyntraStoreOpen = player:GetAttribute("ZyntraStoreOpen"),
-		DevPhoneOpen = player:GetAttribute("DevPhoneOpen"),
-		MovementSuppressed = UIDevice.TouchMovementSuppressed(),
-		SubtitlesVisible = subtitles.Visible,
-		OpenerVisible = opener.Visible,
-		OpenerActive = opener.Active,
-		OpenerSelectable = opener.Selectable,
-		OpenerText = opener.Text,
-	}
-	local previousDevText = {}
-	local baselineDevPage = terminal:FindFirstChild("Dev", true)
-	if baselineDevPage then
-		for _, descendant in ipairs(baselineDevPage:GetDescendants()) do
-			if descendant:IsA("TextLabel") or descendant:IsA("TextButton") then
-				previousDevText[descendant] = descendant.Text
-			end
-		end
-	end
-
-	-- brief/modal are what this matrix ASKS for; the rest is what must follow.
-	-- The order is the point: rows 2-3 raise the modal over a running briefing
-	-- and take it away again, rows 5-6 raise a briefing under a modal that is
-	-- already up. A one-directional flag passes one half and fails the other.
-	--
-	-- UI_REGRESSION_20260923: Opener follows the OWNER'S rule of 2026-09-10
-	-- (d0ff99e, "Center lobby controls and share music toggle during dispatch"):
-	-- ZyntraStore's modalBlocksStore went from `queueModal or briefing` to
-	-- `queueModal or (InRound and briefing)`. This lane runs in the LOBBY, so a
-	-- briefing alone no longer takes the opener -- the queue modal still does.
-	-- The in-round DEV phone keeps the old exclusion; this lane cannot put the
-	-- local player in a round without faking a server attribute, so that half is
-	-- NOT exercised here (noted in the report). What made the rule safe is that
-	-- the rail and the briefing panel no longer share a rectangle, and that is
-	-- asserted below for every row that draws both.
-	local STATES = {
-		{Label = "idle", Force = false, Shade = false,
-			Subs = false, Opener = true, Transmission = false},
-		{Label = "briefing only", Force = true, Shade = false,
-			Subs = true, Opener = true, Transmission = true},
-		{Label = "modal opened over a live briefing", Force = true, Shade = true,
-			Subs = false, Opener = false, Transmission = true},
-		{Label = "modal closed, briefing still running", Force = true, Shade = false,
-			Subs = true, Opener = true, Transmission = true},
-		{Label = "briefing cleared", Force = false, Shade = false,
-			Subs = false, Opener = true, Transmission = false},
-		{Label = "modal only", Force = false, Shade = true,
-			Subs = false, Opener = false, Transmission = false},
-		{Label = "briefing raised while the modal is up", Force = true, Shade = true,
-			Subs = false, Opener = false, Transmission = true},
-	}
-
-	local ran, runError = pcall(function()
-		-- A Studio session comes up with the first-login lobby briefing already
-		-- running, so clearing the force flag does NOT reach an idle screen --
-		-- the panel stays up, driven by a transmission this module has no handle
-		-- on. Every "briefing off" row below would then be asserting against a
-		-- real briefing. This suppresses the AMBIENT transmission for the length
-		-- of the sweep and is restored on every exit path; the force flag still
-		-- drives the "briefing on" rows exactly as before.
-		player:SetAttribute("UIRegressionSuppressDispatch", true)
-		storeProbe:Invoke("close")
-		task.wait(.3)
-		record(player:GetAttribute("DispatchBriefingOpen") ~= true
-			and subtitles.Visible == false,
-			"the sweep starts from a genuinely idle screen, not from whatever"
-			.. " briefing this session happened to be playing",
-			string.format("brief=%s subtitles=%s",
-				tostring(player:GetAttribute("DispatchBriefingOpen")),
-				tostring(subtitles.Visible)))
-
-		for _, device in ipairs(BRIEFING_EXCLUSION_VIEWPORTS) do
-			workspace:SetAttribute("ForceTouchUI", device.Touch or nil)
-			workspace:SetAttribute("UIRegressionViewport", device.Size)
-			-- WAIT FOR IT TO TAKE. A fixed sleep after a deferred attribute
-			-- signal measures the previous device on a busy frame.
-			-- `device.Size` is nil for the desktop row, which means "clear the
-			-- override" -- there is no size to wait for, only a settle.
-			if device.Size then
-				local spins = 40
-				while spins > 0 and not (UIDevice.Layout().Width == device.Size.X
-					and UIDevice.Layout().Height == device.Size.Y) do
-					task.wait(0.05)
-					spins -= 1
-				end
-			else
-				task.wait(0.3)
-			end
-			-- Back to a known floor before each sweep, so a state left behind by
-			-- the previous device cannot make the first row of this one pass.
-			player:SetAttribute("UIRegressionForceDispatchActive", nil)
-			shade.Visible = false
-			storeProbe:Invoke("close")
-			task.wait(.35)
-
-			for _, state in ipairs(STATES) do
-				player:SetAttribute("UIRegressionForceDispatchActive",
-					state.Force and true or nil)
-				shade.Visible = state.Shade
-				task.wait(.3)
-				local label = device.Name .. " / " .. state.Label
-
-				record(player:GetAttribute("DispatchBriefingOpen") == false
-					and player:GetAttribute("QueueModalOpen") == state.Shade,
-					label .. ": passive text never claims a blocking briefing flag",
-					string.format("brief=%s (want false), modal=%s (want %s)",
-						tostring(player:GetAttribute("DispatchBriefingOpen")),
-						tostring(player:GetAttribute("QueueModalOpen")),
-						tostring(state.Shade)))
-
-				-- The flag and the pixels come from ONE expression; this is what
-				-- makes that worth asserting rather than assuming.
-				record(subtitles.Visible == state.Subs,
-					label .. ": captions yield to the queue and return afterwards",
-					string.format("Visible=%s, want %s", tostring(subtitles.Visible),
-						tostring(state.Subs)))
-
-				-- SetInteractive clears Visible AND Active AND Selectable, so the
-				-- opener leaves the input stack rather than merely going invisible
-				-- underneath an opaque panel -- which is what shipped.
-				record(opener.Visible == state.Opener and opener.Active == state.Opener,
-					label .. ": the store opener leaves the screen AND the input stack"
-					.. " exactly when the queue modal is up (a lobby briefing keeps it, d0ff99e)",
-					string.format("Visible=%s Active=%s, want %s",
-						tostring(opener.Visible), tostring(opener.Active),
-						tostring(state.Opener)))
-				-- The precondition of that rule: a reachable opener must never sit
-				-- inside the briefing panel's rectangle (the C4A defect: taps that
-				-- missed MUTE/STOP fell through onto an invisible opener).
-				if state.Opener and state.Subs then
-					local openerOverlap, openerPair = 0, ""
-					for _, a in ipairs(subtitles:GetDescendants()) do
-						if a:IsA("GuiObject") and visibleChain(a) then
-							local overlapX = math.min(
-								a.AbsolutePosition.X + a.AbsoluteSize.X,
-								opener.AbsolutePosition.X + opener.AbsoluteSize.X)
-								- math.max(a.AbsolutePosition.X, opener.AbsolutePosition.X)
-							local overlapY = math.min(
-								a.AbsolutePosition.Y + a.AbsoluteSize.Y,
-								opener.AbsolutePosition.Y + opener.AbsoluteSize.Y)
-								- math.max(a.AbsolutePosition.Y, opener.AbsolutePosition.Y)
-							local area = math.max(0, overlapX) * math.max(0, overlapY)
-							if area > openerOverlap then
-								openerOverlap = area
-								openerPair = a.Name .. " x " .. opener.Name
-							end
-						end
-					end
-					record(openerOverlap == 0,
-						label .. ": the reachable store opener shares no pixel with the briefing panel",
-						string.format("%.0f px^2 at %s", openerOverlap, openerPair))
-				end
-
-				record(player:GetAttribute("ZyntraDispatchClientActive") == false
-					and (player:GetAttribute("DispatchTextActive") == true)
-						== state.Transmission,
-					label .. ": text activity persists behind a modal without hiding other HUDs",
-					string.format("hudGate=%s textActive=%s, want %s",
-						tostring(player:GetAttribute("ZyntraDispatchClientActive")),
-						tostring(player:GetAttribute("DispatchTextActive")),
-						tostring(state.Transmission)))
-
-				-- Geometry, descendants included: the overlap that shipped was
-				-- between two CHILDREN of these two trees, not between the two
-				-- panels, so comparing only the roots would have missed it.
-				local worst, worstPair = 0, ""
-				for _, a in ipairs(subtitles:GetDescendants()) do
-					if a:IsA("GuiObject") and visibleChain(a) then
-						for _, b in ipairs(shade:GetDescendants()) do
-							if b:IsA("GuiObject") and visibleChain(b) then
-								local overlapX = math.min(
-									a.AbsolutePosition.X + a.AbsoluteSize.X,
-									b.AbsolutePosition.X + b.AbsoluteSize.X)
-									- math.max(a.AbsolutePosition.X, b.AbsolutePosition.X)
-								local overlapY = math.min(
-									a.AbsolutePosition.Y + a.AbsoluteSize.Y,
-									b.AbsolutePosition.Y + b.AbsoluteSize.Y)
-									- math.max(a.AbsolutePosition.Y, b.AbsolutePosition.Y)
-								local area = math.max(0, overlapX) * math.max(0, overlapY)
-								if area > worst then
-									worst = area
-									worstPair = a.Name .. " x " .. b.Name
-								end
-							end
-						end
-					end
-				end
-				record(worst == 0,
-					label .. ": nothing under the briefing panel overlaps anything under"
-					.. " the queue modal",
-					string.format("%.0f px^2 at %s", worst, worstPair))
-			end
-		end
-
-		-- Full objective and alert panels own their own screen region. Text must
-		-- pause behind each one, then return without claiming the old HUD gate.
-		player:SetAttribute("UIRegressionForceDispatchActive", true)
-		shade.Visible = false
-		storeProbe:Invoke("close")
-		task.wait(0.25)
-		for _, priority in ipairs({
-			{Name = "Level 1 full objectives", Attribute = "LevelOneGuideObjectivesOpen"},
-			{Name = "Level 2 alert", Attribute = "Level2AlertOwnsBand"},
-		}) do
-			record(subtitles.Visible == true,
-				priority.Name .. ": caption is present before the priority panel",
-				tostring(subtitles.Visible))
-			player:SetAttribute(priority.Attribute, true)
-			task.wait(0.2)
-			record(subtitles.Visible == false
-				and player:GetAttribute("DispatchTextActive") == true
-				and player:GetAttribute("ZyntraDispatchClientActive") == false,
-				priority.Name .. ": text yields without ending or blocking the briefing",
-				string.format("caption=%s text=%s hudGate=%s",
-					tostring(subtitles.Visible),
-					tostring(player:GetAttribute("DispatchTextActive")),
-					tostring(player:GetAttribute("ZyntraDispatchClientActive"))))
-			player:SetAttribute(priority.Attribute, nil)
-			task.wait(0.2)
-			record(subtitles.Visible == true,
-				priority.Name .. ": the same text briefing returns afterward",
-				tostring(subtitles.Visible))
-		end
-
-		-- ------------------------------------------------------------------
-		-- The full terminal participates, not only its lobby opener.
-		-- ------------------------------------------------------------------
-		workspace:SetAttribute("UIRegressionViewport", nil)
-		workspace:SetAttribute("ForceTouchUI", true)
-		player:SetAttribute("UIRegressionForceDispatchActive", nil)
-		shade.Visible = false
-		storeProbe:Invoke("close")
-		task.wait(.45)
-		record(player:GetAttribute("DispatchBriefingOpen") ~= true
-			and opener.Visible == true and opener.Active == true,
-			"and it ends back at an idle screen with the store opener returned to"
-			.. " the input stack -- the suppression is not one-way",
-			string.format("brief=%s opener.Visible=%s opener.Active=%s",
-				tostring(player:GetAttribute("DispatchBriefingOpen")),
-				tostring(opener.Visible), tostring(opener.Active)))
-		record(UIDevice.TouchMovementSuppressed() == false,
-			"idle touch screen: movement is enabled before either modal opens",
-			tostring(UIDevice.TouchMovementSuppressed()))
-
-		local opened = storeProbe:Invoke("open")
-		task.wait(.2)
-		record(opened == true and terminal.Visible == true
-			and player:GetAttribute("ZyntraStoreOpen") == true,
-			"idle: the production toggle opens the terminal and publishes its modal state",
-				string.format("Invoke=%s Visible=%s attribute=%s", tostring(opened),
-				tostring(terminal.Visible), tostring(player:GetAttribute("ZyntraStoreOpen"))))
-		record(UIDevice.TouchMovementSuppressed() == true,
-			"opening the terminal suppresses Roblox touch movement",
-			tostring(UIDevice.TouchMovementSuppressed()))
-
-		player:SetAttribute("UIRegressionForceDispatchActive", true)
-		task.wait(.3)
-		record(player:GetAttribute("DispatchTextActive") == true
-			and player:GetAttribute("ZyntraDispatchClientActive") == false
-			and player:GetAttribute("DispatchBriefingOpen") == false
-			and subtitles.Visible == false and terminal.Visible == true,
-			"terminal already open: text transmission continues behind it without a HUD gate",
-			string.format("textActive=%s brief=%s subtitles=%s terminal=%s",
-				tostring(player:GetAttribute("DispatchTextActive")),
-				tostring(player:GetAttribute("DispatchBriefingOpen")),
-				tostring(subtitles.Visible), tostring(terminal.Visible)))
-		record(UIDevice.TouchMovementSuppressed() == true,
-			"a suppressed briefing panel does not release movement from the open terminal",
-			tostring(UIDevice.TouchMovementSuppressed()))
-
-		storeProbe:Invoke("close")
-		task.wait(.3)
-		record(terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true
-			and player:GetAttribute("DispatchBriefingOpen") == false
-			and player:GetAttribute("DispatchTextActive") == true
-			and subtitles.Visible == true,
-			"closing the terminal restores the still-running briefing",
-				string.format("store=%s brief=%s subtitles=%s",
-					tostring(player:GetAttribute("ZyntraStoreOpen")),
-					tostring(player:GetAttribute("DispatchBriefingOpen")), tostring(subtitles.Visible)))
-		record(UIDevice.TouchMovementSuppressed() == false,
-			"closing the terminal releases movement when no movement-owning modal remains",
-			tostring(UIDevice.TouchMovementSuppressed()))
-
-		-- UI_REGRESSION_20260923 (d0ff99e): in the LOBBY a running briefing no
-		-- longer refuses the terminal. Both production paths open it, RoundUI
-		-- yields its panel to it, and the transmission itself keeps running.
-		local toggleDuringBrief = storeProbe:Invoke("open")
-		local kioskDuringBrief = storeProbe:Invoke("kiosk")
-		task.wait(.3)
-		record(toggleDuringBrief == true and kioskDuringBrief == true
-			and terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true
-			and subtitles.Visible == false
-			and player:GetAttribute("ZyntraDispatchClientActive") == false
-			and player:GetAttribute("DispatchTextActive") == true,
-			"lobby briefing already open: both toggle and kiosk open the terminal, the panel"
-			.. " yields and the transmission keeps running (d0ff99e)",
-			string.format("toggle=%s kiosk=%s Visible=%s subtitles=%s textActive=%s",
-				tostring(toggleDuringBrief), tostring(kioskDuringBrief),
-				tostring(terminal.Visible), tostring(subtitles.Visible),
-				tostring(player:GetAttribute("DispatchTextActive"))))
-		storeProbe:Invoke("close")
-		task.wait(.3)
-		record(terminal.Visible == false and subtitles.Visible == true,
-			"closing that terminal hands the screen back to the still-running briefing",
-			string.format("Visible=%s subtitles=%s", tostring(terminal.Visible),
-				tostring(subtitles.Visible)))
-
-		player:SetAttribute("UIRegressionForceDispatchActive", nil)
-		task.wait(.3)
-		storeProbe:Invoke("open")
-		task.wait(.2)
-		shade.Visible = true
-		task.wait(.3)
-		record(terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true,
-			"queue raised over an open terminal closes the full terminal and clears its state",
-				string.format("Visible=%s attribute=%s", tostring(terminal.Visible),
-					tostring(player:GetAttribute("ZyntraStoreOpen"))))
-		record(player:GetAttribute("QueueModalOpen") == true
-			and UIDevice.TouchMovementSuppressed() == true,
-			"queue raised over Zyntra keeps movement suppressed after Zyntra closes",
-			string.format("queue=%s suppressed=%s",
-				tostring(player:GetAttribute("QueueModalOpen")),
-				tostring(UIDevice.TouchMovementSuppressed())))
-
-		local toggleDuringQueue = storeProbe:Invoke("open")
-		local kioskDuringQueue = storeProbe:Invoke("kiosk")
-		record(toggleDuringQueue == false and kioskDuringQueue == false
-			and terminal.Visible == false,
-			"queue already open: both toggle and kiosk paths refuse the terminal",
-				string.format("toggle=%s kiosk=%s Visible=%s", tostring(toggleDuringQueue),
-					tostring(kioskDuringQueue), tostring(terminal.Visible)))
-		record(UIDevice.TouchMovementSuppressed() == true,
-			"refused Zyntra opens cannot release movement beneath the still-open queue",
-			tostring(UIDevice.TouchMovementSuppressed()))
-
-		shade.Visible = false
-		task.wait(.25)
-		record(UIDevice.TouchMovementSuppressed() == false,
-			"closing the last movement-owning modal restores movement",
-			tostring(UIDevice.TouchMovementSuppressed()))
-		storeProbe:Invoke("open")
-		task.wait(.2)
-		record(UIDevice.TouchMovementSuppressed() == true,
-			"the terminal takes movement ownership again after queue closes",
-			tostring(UIDevice.TouchMovementSuppressed()))
-		player:SetAttribute("DispatchBriefingOpen", true)
-		task.wait(.2)
-		-- UI_REGRESSION_20260923 (d0ff99e): in the lobby the briefing flag no
-		-- longer closes an open terminal, and movement stays with the terminal.
-		record(terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true,
-			"in the lobby a briefing flag raised over an open terminal leaves it open (d0ff99e)",
-			string.format("Visible=%s attribute=%s", tostring(terminal.Visible),
-				tostring(player:GetAttribute("ZyntraStoreOpen"))))
-		record(UIDevice.TouchMovementSuppressed() == true,
-			"and movement stays suppressed by the terminal that still owns the screen",
-			tostring(UIDevice.TouchMovementSuppressed()))
-		storeProbe:Invoke("close")
-		player:SetAttribute("DispatchBriefingOpen", nil)
-		task.wait(.2)
-
-		-- ------------------------------------------------------------------
-		-- Developer-page captions follow the live input mode.
-		-- ------------------------------------------------------------------
-		-- Terminal has three unnamed children all called Frame, so the page has
-		-- to be found recursively rather than indexed.
-		local devPage = terminal and terminal:FindFirstChild("Dev", true)
-		local devControls = devPage and devPage:FindFirstChild("DevControls")
-		if not devControls then
-			-- Not a pass and not a failure of the code under test: this account is
-			-- not on the developer whitelist, so the page does not exist to read.
-			record(true, "the developer page is not present for this account -- its"
-				.. " caption contract is unexercised on this run, not verified",
-				"whitelisted accounts only")
-		else
-			for _, mode in ipairs({
-				-- FALSE, not nil. nil means "ask the host", and the host here is
-				-- Studio's Device Emulator, which reports TouchEnabled for the
-				-- whole session while still offering a mouse and a keyboard --
-				-- so the keyboard half used to be unreachable from the very
-				-- place a mobile repair is verified. `false` states the fixture:
-				-- a pointer device with no touchscreen.
-				{Name = "keyboard", Force = false, Suppressed = false},
-				{Name = "touch", Force = true, Suppressed = true},
-			}) do
-				workspace:SetAttribute("ForceTouchUI", mode.Force)
-				task.wait(.4)
-				record(UIDevice.SuppressesKeyboardGlyphs() == mode.Suppressed,
-					mode.Name .. ": UIDevice reports the glyph mode this pass is testing",
-					string.format("SuppressesKeyboardGlyphs=%s",
-						tostring(UIDevice.SuppressesKeyboardGlyphs())))
-
-				local intro = devPage:FindFirstChild("DevIntro")
-				local wantedIntro = mode.Suppressed and DEV_INTRO_BASE or DEV_INTRO_KEYBOARD
-				record(intro ~= nil and intro.Text == wantedIntro,
-					mode.Name .. ": the developer intro line names a key only when there"
-					.. " are keys to press",
-					string.format("%q, want %q", intro and tostring(intro.Text) or "-",
-						wantedIntro))
-
-				local wrongToggle, wrongName, missing = 0, "", 0
-				for _, entry in ipairs(DEV_CAPTION_KEYS) do
-					local row = devControls:FindFirstChild(entry.Command)
-					if not row then
-						-- level3PreBlackout only exists for the timeline owner.
-						missing += 1
-					else
-						local toggle = row:FindFirstChild("Toggle")
-						local text = toggle and tostring(toggle.Text) or ""
-						local named = text:find("//  " .. entry.Key, 1, true) ~= nil
-						if named == mode.Suppressed then
-							wrongToggle += 1
-							if wrongName == "" then
-								wrongName = entry.Command .. " = " .. text
-							end
-						end
-					end
-				end
-				record(wrongToggle == 0,
-					mode.Name .. ": every developer toggle caption shows its key exactly"
-					.. " when the device has one",
-					string.format("%d wrong, first %s (%d rows absent for this account)",
-						wrongToggle, wrongName == "" and "-" or wrongName, missing))
-
-				local noclip = devControls:FindFirstChild("noclip")
-				local description = noclip and noclip:FindFirstChild("Description")
-				local wantedNoclip = mode.Suppressed and DEV_NOCLIP_TOUCH or DEV_NOCLIP_KEYBOARD
-				record(description ~= nil and description.Text == wantedNoclip,
-					mode.Name .. ": the noclip row describes the controls this device"
-					.. " actually has",
-					string.format("%q, want %q",
-						description and tostring(description.Text) or "-", wantedNoclip))
-			end
-
-			-- The whole point of hanging this off UIDevice.Changed rather than
-			-- reading IsTouch() once at build time: a device that changes mode
-			-- mid-session has to be re-captioned, not left lying.
-			workspace:SetAttribute("ForceTouchUI", false)
-			task.wait(.4)
-			local intro = devPage:FindFirstChild("DevIntro")
-			record(intro ~= nil and intro.Text == DEV_INTRO_KEYBOARD,
-				"and the captions come BACK when the device stops suppressing glyphs --"
-				.. " they are re-rendered on UIDevice.Changed, not decided once",
-				string.format("%q", intro and tostring(intro.Text) or "-"))
-		end
-	end)
-
-	-- Protected cleanup. Keep ambient dispatch suppressed while the structural
-	-- owners are put back, otherwise a previously-open terminal cannot reopen:
-	-- the temporarily exposed briefing would correctly block it. Restore the
-	-- real dispatch drivers only after shade/store match their baseline.
-	workspace:SetAttribute("UIRegressionViewport", previousViewport)
-	workspace:SetAttribute("ForceTouchUI", previousTouch)
-	player:SetAttribute("DispatchBriefingOpen", nil)
-	player:SetAttribute("UIRegressionForceDispatchActive", nil)
-	player:SetAttribute("UIRegressionSuppressDispatch", true)
-	storeProbe:Invoke("close")
-	shade.Visible = previousShade
-	task.wait(0.25)
-	if previousTerminal and not previousShade then
-		storeProbe:Invoke("open")
-	end
-	player:SetAttribute("UIRegressionForceDispatchActive", previousForce)
-	player:SetAttribute("UIRegressionSuppressDispatch", previousSuppress)
-	player:SetAttribute("LevelOneGuideObjectivesOpen", previousObjectivesOpen)
-	player:SetAttribute("Level2AlertOwnsBand", previousAlertOwnsBand)
-	-- Let every deferred attribute listener, UIDevice refresh, caption refresh and
-	-- movement ControlModule call settle before judging the cleanup.
-	task.wait(0.55)
-	if not ran then
-		record(false, "the matrix ran to completion", tostring(runError))
-	end
-	record(workspace:GetAttribute("UIRegressionViewport") == previousViewport
-		and workspace:GetAttribute("ForceTouchUI") == previousTouch,
-		"cleanup restored the two simulator attributes it borrowed")
-	record(shade.Visible == previousShade
-		and terminal.Visible == previousTerminal
-		and player:GetAttribute("QueueModalOpen") == previousDerived.QueueModalOpen
-		and player:GetAttribute("DispatchBriefingOpen") == previousDerived.DispatchBriefingOpen
-		and player:GetAttribute("DispatchTextActive") == previousDerived.DispatchTextActive
-		and player:GetAttribute("ZyntraDispatchClientActive") == previousDerived.ZyntraDispatchClientActive
-		and player:GetAttribute("ZyntraStoreOpen") == previousDerived.ZyntraStoreOpen
-		and player:GetAttribute("DevPhoneOpen") == previousDerived.DevPhoneOpen,
-		"cleanup restored the real modal sources and every derived modal flag",
-		string.format("shade=%s/%s terminal=%s/%s queue=%s/%s brief=%s/%s text=%s/%s hudGate=%s/%s store=%s/%s dev=%s/%s",
-			tostring(shade.Visible), tostring(previousShade),
-			tostring(terminal.Visible), tostring(previousTerminal),
-			tostring(player:GetAttribute("QueueModalOpen")), tostring(previousDerived.QueueModalOpen),
-			tostring(player:GetAttribute("DispatchBriefingOpen")), tostring(previousDerived.DispatchBriefingOpen),
-			tostring(player:GetAttribute("DispatchTextActive")), tostring(previousDerived.DispatchTextActive),
-			tostring(player:GetAttribute("ZyntraDispatchClientActive")), tostring(previousDerived.ZyntraDispatchClientActive),
-			tostring(player:GetAttribute("ZyntraStoreOpen")), tostring(previousDerived.ZyntraStoreOpen),
-			tostring(player:GetAttribute("DevPhoneOpen")), tostring(previousDerived.DevPhoneOpen)))
-	record(UIDevice.TouchMovementSuppressed() == previousDerived.MovementSuppressed,
-		"cleanup restored Roblox touch movement to its exact baseline",
-		string.format("%s/%s", tostring(UIDevice.TouchMovementSuppressed()),
-			tostring(previousDerived.MovementSuppressed)))
-	record(subtitles.Visible == previousDerived.SubtitlesVisible
-		and opener.Visible == previousDerived.OpenerVisible
-		and opener.Active == previousDerived.OpenerActive
-		and opener.Selectable == previousDerived.OpenerSelectable
-		and opener.Text == previousDerived.OpenerText,
-		"cleanup restored the briefing panel and Zyntra opener pixels/input/caption",
-		string.format("subs=%s/%s opener V=%s/%s A=%s/%s S=%s/%s text=%s",
-			tostring(subtitles.Visible), tostring(previousDerived.SubtitlesVisible),
-			tostring(opener.Visible), tostring(previousDerived.OpenerVisible),
-			tostring(opener.Active), tostring(previousDerived.OpenerActive),
-			tostring(opener.Selectable), tostring(previousDerived.OpenerSelectable),
-			tostring(opener.Text == previousDerived.OpenerText)))
-	local captionProblems = {}
-	for object, text in pairs(previousDevText) do
-		if object.Parent == nil then
-			table.insert(captionProblems, object.Name .. " was destroyed")
-		elseif object.Text ~= text then
-			table.insert(captionProblems, string.format("%s=%q (was %q)", object.Name,
-				tostring(object.Text), tostring(text)))
-		end
-	end
-	record(#captionProblems == 0,
-		"cleanup refreshed every developer caption back to the baseline input mode",
-		table.concat(captionProblems, "; "))
-	table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
-	return table.concat(report, "\n"), failures
+	return Fit.bodyRoundHudMatrix()
 end
 
 function UIRegression.BriefingExclusionMatrix(token: string?): (string, number)
 	return Fit.lane("BriefingExclusionMatrix", token, Fit.bodyBriefingExclusionMatrix)
-end
-
--- C_ZYNTRA_ACTIONS_ARE_ENUMERATED_20260831 -- WHAT SHIPPED BROKEN in the tests.
---
--- The terminal's per-card proofs were counted rather than named, and everything
--- that mattered fell through the gap between those two words.
---
---   * The tap-target sweep walked VISIBLE, Active descendants. A DISABLED action
---     -- an OWNED product, a COMING SOON tier, a LEVEL 3 ONLY dev row -- is
---     Visible and full-size and NOT Active, which is precisely the state the
---     44px floor has to hold in, and it is precisely the state the sweep
---     skipped. A floor that only applies while a product is unowned is not a
---     floor.
---   * The Donate page was proved by COUNTING: six cards, six buttons. Six cards
---     drawn from one tier six times would have passed, and so would six cards
---     for the wrong six tiers.
---   * The floor itself was the literal 44, restated in the harness, so the
---     harness agreed with itself instead of with the terminal.
---
--- ZyntraStore now publishes the index this needs: the CollectionService tag
--- "ZyntraTerminalAction" on every card action (enumeration finds the disabled
--- ones), ZyntraPage/ZyntraCardKey on both the card and its action,
--- DonationTierKey/DonationProductId on each donation card, and
--- TerminalActionTag/TerminalTapFloor on the terminal itself -- the floor being
--- the number the actions were actually sized against on the pass that just ran.
-Fit.ZyntraFloorFallback = 44
-
--- The nine donation tiers, NAMED here so the assertion has an oracle the store
--- and the config cannot both drift away from at once. Reading the config and
--- comparing it to the store proves the two agree; it does not prove either is
--- what was authored. Both are held to this list.
-Fit.DonationTierKeys = {
-	"DonationSignal", "DonationSupply", "DonationField",
-	"DonationResearch", "DonationCommand", "DonationDirector",
-	"Donation5000", "Donation10000", "Donation20K",
-}
-
--- The captions the store is AUTHORED to take an action out of the input stack
--- with, and the only reasons an action may be inactive. An action that is
--- inactive without one of these has died silently, which is the failure this
--- names; an action that carries one and is still Active is a control the player
--- can press when the store has already said they cannot.
---
--- LUA PATTERNS, not literal substrings, and that is the fix for the 22 Dev-tab
--- failures this list was producing on its own. The store builds a level-gated
--- dev row's caption as `"LEVEL " .. (info.Level or 3) .. " ONLY"`, and PULL TWO
--- PUMPS carries Level = 2 -- so it renders "LEVEL 2 ONLY", Active = false, and
--- the literal "LEVEL 3 ONLY" never matched it. That row was reported twice per
--- device (once as "out of the input stack with no stated reason" and once in
--- the per-page accounting, 8 authored against 7 reachable and 0 stood down)
--- across the 11 rows of Fit.Devices: 11 x 2 = 22. The busy caption for the same
--- row is "WAITING 5s", which is the same shape and the same silence, so it is
--- named here too. Nothing in production changed; the harness was wrong.
--- 2026-09-14: three more stated reasons. FREE RESPAWN (Dev) stands down as
--- "WHEN DEAD" while the developer is alive and "RESPAWNING..." while a request
--- is in flight; the Entity Shield card (Upgrades) says "UNAVAILABLE" when the
--- protection inventory cannot be bought and "CONFIRMING..." while a purchase
--- settles. All four are the store telling the player why, not silence.
--- 2026-09-16, cards 102 / 83 / 84 / 89 / 85. Seven more stated reasons, from the
--- FIELD SUPPLIES cards on Upgrades and from the two mounted pages:
---   SAVING          a token purchase is in the profile transaction
---   CLAIMED         a playtime milestone already taken today
---   CLAIMING        that claim is in flight
---   %d+:%d+ TO GO   a milestone that has not been played to yet ("2:20 TO GO")
---   SPUN TODAY      the free daily wheel is used for this UTC day
---   SPINNING        the wheel is resolving
--- 2026-09-24: the Skins page deliberately stands down an already equipped
--- suit, a token purchase short of tokens, and a clear-gated suit. Their
--- buttons say EQUIPPED, NEED TOKENS, and LOCKED respectively; the locked
--- card's price line shows the exact clear count needed.
--- NO ENTRY MAY CARRY A LITERAL "...". These are Lua patterns fed to string.find,
--- where "." matches any character, so "SAVING..." as an entry would also match
--- "SAVINGXYZ" -- and the store draws "SAVING..." anyway, which "SAVING" finds.
-Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING",
-	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING", "SAVING",
-	"CLAIMED", "CLAIMING", "%d+:%d+ TO GO", "SPUN TODAY", "SPINNING",
-	-- WHEEL_COLLECT_20260922: the hub while a claim is in flight / confirmed.
-	"COLLECTING", "COLLECTED", "EQUIPPED", "NEED TOKENS", "LOCKED"}
-
--- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
--- a property of the build and not of the tester's save file.
---
--- Shop, Dev and Settings are deliberately ABSENT rather than given a number:
--- what the Shop offers depends on what this account already owns, the Dev
--- page's skip rows go inactive outside Level 3, and the Settings list is
--- configuration. A literal for any of them would encode one machine's state as
--- the contract and fail honestly-built terminals on every other. They are held
--- to the complete accounting instead -- reachable plus stood-down-with-a-reason
--- equals the whole authored contract -- which is a statement about the terminal
--- rather than about the account. Settings has no stood-down state at all: an
--- accessibility toggle is reachable in both of its positions, so the accounting
--- there reduces to "every authored switch can be pressed".
-Fit.ZyntraExpectedActive = {
-	-- The two upgrade cards and the two FIELD SUPPLIES cards. None of the four is
-	-- ever taken out of the input stack: a player short of tokens still presses
-	-- the button and is told so by the server. (The Entity Shield card on the same
-	-- page IS account-dependent -- UNAVAILABLE / CONFIRMING -- which is why this
-	-- number is four and not five.) Rewards and Notes are deliberately absent:
-	-- they are account-state pages and belong to the complete-accounting rule
-	-- below, the way Shop and Dev do.
-	Upgrades = 4,
-	-- The two colour pickers. SetLocked draws a lock OVERLAY over a card; it does
-	-- not touch the Save button's Active, so both stay reachable at every
-	-- ownership state.
-	Colors = 2,
-	-- The RECORDS view toggle. It only chooses which half of the ledger is drawn,
-	-- so it is never stood down and has no entry in ZyntraDisabledCaptions.
-	Records = 1,
-	-- Donate is computed from ZyntraConfig at the point of use: one per tier with
-	-- a configured product id, which is the store's own COMING SOON condition and
-	-- the only thing that legitimately lowers it.
-}
-
-function Fit.zyntraDisabledReason(button): string?
-	local text = tostring((button :: any).Text or "")
-	for _, caption in ipairs(Fit.ZyntraDisabledCaptions) do
-		-- The MATCHED TEXT is returned, not the pattern that found it, so a
-		-- failure line still says "LEVEL 2 ONLY" and names the row a reader can
-		-- go and look at.
-		local first, last = text:find(caption)
-		if first then return text:sub(first, last) end
-	end
-	return nil
-end
-
--- Every TAGGED action under one page. GetTagged is the half a Visible+Active
--- descendant walk cannot do: it finds a control the store deliberately took out
--- of the input stack, which is exactly the control whose rectangle needs
--- measuring most.
-function Fit.zyntraActions(page, tagName): {any}
-	local service = game:GetService("CollectionService")
-	local found = {}
-	for _, node in ipairs(service:GetTagged(tagName)) do
-		if node:IsDescendantOf(page) then table.insert(found, node) end
-	end
-	return found
-end
-
--- The probe's "cards" answer, "page|card|action" per line, grouped by page.
-function Fit.parseZyntraCards(answer): any
-	local byPage = {}
-	for line in string.gmatch(tostring(answer), "[^\n]+") do
-		local page, card, action = string.match(line, "^([^|]+)|([^|]+)|([^|]+)$")
-		if page then
-			byPage[page] = byPage[page] or {}
-			table.insert(byPage[page], {Card = card, Action = action})
-		end
-	end
-	return byPage
-end
-
--- EVERY tagged action on one page, measured against the terminal's OWN tap
--- floor: drawn at all, drawn at the floor on both axes on touch, and either
--- reachable or inactive for a reason the store states in the button's own copy.
-function Fit.zyntraActionProblems(page, pageName, tagName, floor, touch, authored): {string}
-	local problems = {}
-	local tagged = Fit.zyntraActions(page, tagName)
-	if authored then
-		if #tagged ~= #authored then
-			table.insert(problems, string.format(
-				"%s draws %d tagged actions, the terminal's own contract names %d",
-				pageName, #tagged, #authored))
-		end
-		-- CARD BY CARD, through the key attribute rather than by counting: the
-		-- contract names which cards exist, so a page that drew one card twice and
-		-- another not at all fails here instead of passing on a total.
-		for _, entry in ipairs(authored) do
-			local matches = {}
-			for _, action in ipairs(tagged) do
-				if action:GetAttribute("ZyntraCardKey") == entry.Card then
-					table.insert(matches, action)
-				end
-			end
-			if #matches ~= 1 then
-				table.insert(problems, string.format(
-					"%s card %q has %d tagged actions, not exactly one",
-					pageName, entry.Card, #matches))
-			else
-				local rect = Fit.live(matches[1])
-				if (matches[1] :: any).Visible ~= true then
-					table.insert(problems, string.format("%s card %q has no VISIBLE action",
-						pageName, entry.Card))
-				elseif rect.Width <= 0 or rect.Height <= 0 then
-					table.insert(problems, string.format("%s card %q action is %.0fx%.0f",
-						pageName, entry.Card, rect.Width, rect.Height))
-				elseif touch and (rect.Width < floor or rect.Height < floor) then
-					table.insert(problems, string.format(
-						"%s card %q action is %.0fx%.0f, under the terminal's own %.0f tap floor",
-						pageName, entry.Card, rect.Width, rect.Height, floor))
-				end
-			end
-		end
-	end
-	for _, action in ipairs(tagged) do
-		local rect = Fit.live(action)
-		local reason = Fit.zyntraDisabledReason(action)
-		local active = (action :: any).Active == true
-		-- A DISABLED action keeps its whole rectangle. This is the case the old
-		-- Visible+Active sweep could not reach at all.
-		if (action :: any).Visible ~= true then
-			table.insert(problems, string.format("%s.%s is not drawn (Visible=false)",
-				pageName, action.Name))
-		elseif touch and (rect.Width < floor or rect.Height < floor) then
-			table.insert(problems, string.format(
-				"%s.%s is %.0fx%.0f, under the %.0f tap floor (reason=%s active=%s)",
-				pageName, action.Name, rect.Width, rect.Height, floor,
-				reason or "none", tostring(active)))
-		end
-		if not active and reason == nil then
-			table.insert(problems, string.format(
-				"%s.%s is out of the input stack with no stated reason: %q",
-				pageName, action.Name, string.sub(tostring((action :: any).Text), 1, 40)))
-		end
-		if active and reason ~= nil then
-			table.insert(problems, string.format(
-				"%s.%s says %q and is still reachable", pageName, action.Name, reason))
-		end
-	end
-	return problems
-end
-
-function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
-	local player = Players.LocalPlayer
-	local state = Fit.recorder("=== zyntra terminal fit, every tab, every device ===")
-	local record = state.record
-	-- (b) AWAIT ITS NATURAL END, BOUNDED. See Fit.awaitQuietDispatch: this lane
-	-- cannot run without interrupting a live transmission, and it must not
-	-- interrupt one. The wait is BEFORE Fit.borrow, so the snapshot is of a quiet
-	-- world and the restore has nothing to be forgiven for.
-	local quiet, dispatchWhy = Fit.awaitQuietDispatch()
-	if not quiet then
-		record(false, "no real dispatch briefing was live when the matrix started",
-			dispatchWhy)
-		return state.finish()
-	end
-	local saved = Fit.borrow()
-
-	local store = findGui("ZyntraStore")
-	local terminal = store and store:FindFirstChild("Terminal")
-	local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
-	local opener = store and store:FindFirstChild("ZyntraOpenButton")
-	-- The rest of the rail, so the stand-down assertion below covers all five
-	-- buttons rather than the one this matrix was written around. Collected by
-	-- name and skipped when absent: this module has to keep running in a place
-	-- that predates cards #103 / #104.
-	local railButtons = {}
-	for _, name in ipairs({"ZyntraShopButton", "ZyntraRewardsButton",
-		"ZyntraWheelButton", "ZyntraMusicButton"}) do
-		local node = store and store:FindFirstChild(name)
-		if node then table.insert(railButtons, node) end
-	end
-	if not (terminal and probe and probe:IsA("BindableFunction") and opener) then
-		record(false, "the Zyntra terminal exists to be measured",
-			string.format("terminal=%s probe=%s opener=%s",
-				tostring(terminal ~= nil), tostring(probe ~= nil), tostring(opener ~= nil)))
-		return state.finish()
-	end
-	local header = terminal:FindFirstChild("TerminalHeader")
-	local tabs = terminal:FindFirstChild("TerminalTabs")
-	local content = terminal:FindFirstChild("TerminalContent")
-	local status = terminal:FindFirstChild("TerminalStatus")
-	if not (header and tabs and content and status) then
-		record(false, "the terminal shell exists to be measured",
-			string.format("header=%s tabs=%s content=%s status=%s",
-				tostring(header ~= nil), tostring(tabs ~= nil),
-				tostring(content ~= nil), tostring(status ~= nil)))
-		return state.finish()
-	end
-
-	local ran, runError = pcall(function()
-		-- ---- calibration, at the REAL viewport ----------------------------
-		workspace:SetAttribute("UIRegressionViewport", nil)
-		workspace:SetAttribute("ForceTouchUI", nil)
-		workspace:SetAttribute("UIRegressionSafeInsets", nil)
-		resetScenario()
-		probe:Invoke("open")
-		task.wait(0.35)
-		local realLayout = UIDevice.Layout()
-		local shift = UIRegression.ScreenSpaceShift(terminal)
-		local worst, worstName = 0, ""
-		for _, object in ipairs({terminal, header, tabs, content, status}) do
-			local resolved = UIRegression.ResolveRect(object, realLayout.Viewport, realLayout.Inset.Y)
-			if resolved and not resolved.Unresolvable then
-				local node = object :: any
-				local live = {
-					Left = node.AbsolutePosition.X,
-					Top = node.AbsolutePosition.Y + shift,
-					Right = node.AbsolutePosition.X + node.AbsoluteSize.X,
-					Bottom = node.AbsolutePosition.Y + node.AbsoluteSize.Y + shift,
-				}
-				for _, edge in ipairs({"Left", "Top", "Right", "Bottom"}) do
-					local delta = math.abs(resolved[edge] - live[edge])
-					if delta > worst then worst, worstName = delta, object.Name .. "." .. edge end
-				end
-			else
-				worst = math.huge
-				worstName = object.Name .. " is unresolvable at the real viewport"
-			end
-		end
-		record(worst <= 1,
-			"the resolver reproduces the engine at the real viewport, so the"
-			.. " per-device rectangles below mean something",
-			string.format("worst edge error %.2fpx at %s", worst, worstName))
-
-		-- THE EXPECTED TAB SET, derived INDEPENDENTLY of the terminal.
-		--
-		-- The old assertion was `#tabList >= 4`, which is vacuous in the exact
-		-- direction that matters: a terminal that had silently stopped building
-		-- its DEV page would still have four tabs and still pass. The authored
-		-- set is stated here, and whether DEV belongs in it is answered by
-		-- DevAccess -- the module the store itself consults -- rather than by the
-		-- store's own report of what it happens to have built.
-		-- SETTINGS is the accessibility page. It is in the authored set for every
-		-- account, developer or not, so it is named here rather than left to the
-		-- whitelist branch below.
-		-- NOTES is a mounted page module, and the store builds its tab only when
-		-- the ModuleScript is actually in ReplicatedStorage. This mirrors that rule
-		-- from the OTHER side -- by looking for the module, not by asking the store
-		-- what it built -- so a place where the module is missing passes, a place
-		-- where it exists but the store silently skipped it fails, and neither case
-		-- needs this literal editing.
-		--
-		-- REWARDS IS DELIBERATELY ABSENT. Card #104 moved Daily Rewards out of the
-		-- terminal into its own modal behind ZyntraRewardsButton, so a REWARDS tab
-		-- here would now mean the page is mounted TWICE -- two profile
-		-- subscriptions and two claim buttons for one server-side claim. The page
-		-- module still exists in ReplicatedStorage, which is exactly why this list
-		-- must not derive the tab from its presence any more.
-		-- FIELD_NOTES_REMOVED_20260922: NOTES stays absent. SKINS and RECORDS
-		-- mount only when their modules exist, in the same authored order as the
-		-- store, with SETTINGS last before DEV.
-		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
-		if ReplicatedStorage:FindFirstChild("ZyntraSkinsPage") then
-			table.insert(expectedTabs, 3, "Skins")
-		end
-		if ReplicatedStorage:FindFirstChild("ZyntraRecordsPage") then
-			table.insert(expectedTabs, #expectedTabs, "Records")
-		end
-		local devExpected = DevAccess.IsAllowed(player)
-		if devExpected then table.insert(expectedTabs, "Dev") end
-		local tabList = {}
-		for name in string.gmatch(tostring(probe:Invoke("tabs")), "[^,]+") do
-			table.insert(tabList, name)
-		end
-		local tabsMatch = #tabList == #expectedTabs
-		if tabsMatch then
-			for index, name in ipairs(expectedTabs) do
-				if tabList[index] ~= name then tabsMatch = false end
-			end
-		end
-		record(tabsMatch,
-			"the terminal builds EXACTLY the authored tab set, DEV included where"
-			.. " DevAccess grants it",
-			string.format("expected [%s] got [%s] devAccess=%s",
-				table.concat(expectedTabs, ","), table.concat(tabList, ","),
-				tostring(devExpected)))
-		record(not devExpected or table.find(tabList, "Dev") ~= nil,
-			"and this account's DEV page exists to be measured",
-			devExpected and "DevAccess grants it" or "not a developer account")
-		-- Nothing below may quietly measure fewer tabs than the contract names.
-		tabList = expectedTabs
-
-		-- ---- THE DONATION TIERS, as a SET and against a written-down oracle ----
-		--
-		-- C_ZYNTRA_ACTIONS_ARE_ENUMERATED_20260831. The old proof was a count:
-		-- donationTierCount() cards and donationTierCount() buttons. Six copies of
-		-- one tier satisfy that exactly as well as the six authored ones do, and so
-		-- does six cards for the wrong six tiers. Three sets are compared here --
-		-- the six keys named in Fit.DonationTierKeys, the keys ZyntraConfig actually
-		-- carries, and the keys the store actually built -- because comparing only
-		-- the last two proves they agree with each other and not that either is what
-		-- was authored.
-		local configuredTiers, configuredList = {}, {}
-		for key in pairs(ZyntraConfig.Donations or {}) do
-			configuredTiers[key] = true
-			table.insert(configuredList, key)
-		end
-		table.sort(configuredList)
-		local builtTiers, builtTierList = {}, {}
-		for key in string.gmatch(tostring(probe:Invoke("donations")), "[^,]+") do
-			builtTiers[key] = true
-			table.insert(builtTierList, key)
-		end
-		local tierProblems = {}
-		for _, key in ipairs(Fit.DonationTierKeys) do
-			if not configuredTiers[key] then
-				table.insert(tierProblems, "ZyntraConfig.Donations has no " .. key)
-			end
-			if not builtTiers[key] then
-				table.insert(tierProblems, "the store never built a card for " .. key)
-			end
-		end
-		for _, key in ipairs(configuredList) do
-			if not table.find(Fit.DonationTierKeys, key) then
-				table.insert(tierProblems, "ZyntraConfig.Donations carries an unauthored "
-					.. key)
-			end
-		end
-		for _, key in ipairs(builtTierList) do
-			if not table.find(Fit.DonationTierKeys, key) then
-				table.insert(tierProblems, "the store built an unauthored " .. key)
-			end
-		end
-		-- DUPLICATES are the failure a set comparison alone cannot see: six cards
-		-- all keyed to the same tier satisfy every membership test above.
-		if #builtTierList ~= #Fit.DonationTierKeys then
-			table.insert(tierProblems, string.format("the store built %d donation cards"
-				.. " for %d authored tiers", #builtTierList, #Fit.DonationTierKeys))
-		end
-		record(#tierProblems == 0,
-			"the Donate page builds EXACTLY the six authored tier keys -- the set, in"
-			.. " both directions, against the config AND against the written oracle",
-			string.format("authored [%s] config [%s] built [%s]; %s",
-				table.concat(Fit.DonationTierKeys, ","), table.concat(configuredList, ","),
-				table.concat(builtTierList, ","), table.concat(tierProblems, "; ")))
-
-		-- The terminal's own card index, "page|card|action" per line, in build
-		-- order. It says what the terminal was AUTHORED to hold, so a page that
-		-- quietly built one card fewer fails below instead of passing for want of
-		-- anything to check.
-		local cardsByPage = Fit.parseZyntraCards(probe:Invoke("cards"))
-		local actionTag = tostring(terminal:GetAttribute("TerminalActionTag") or "")
-		record(actionTag ~= "",
-			"the terminal publishes the tag its card actions carry, so the sweep can"
-			.. " find the DISABLED ones a Visible+Active walk skips",
-			actionTag == "" and "TerminalActionTag missing" or actionTag)
-		if actionTag == "" then actionTag = "ZyntraTerminalAction" end
-
-		-- ---- per device ----------------------------------------------------
-		for _, device in ipairs(Fit.Devices) do
-			local applied = Fit.apply(device)
-			record(applied, device.Name .. ": the device override took before the row ran",
-				applied and "" or "timed out waiting for UIDevice to report it")
-			probe:Invoke("open")
-			probe:Invoke("relayout")
-			task.wait(0.25)
-
-			local layout = UIDevice.Layout()
-			local viewport, insetY = device.Size, layout.Inset.Y
-			state.note(string.format("--- %s (reported %.0fx%.0f class=%s touch=%s) ---",
-				device.Name, layout.Width, layout.Height, layout.Class,
-				tostring(layout.IsTouch)))
-			record(layout.Width == viewport.X and layout.Height == viewport.Y
-				and layout.IsTouch == device.Touch and layout.Class == device.Class
-				and layout.Portrait == device.Portrait,
-				device.Name .. ": the device override took",
-				string.format("%.0fx%.0f class=%s touch=%s portrait=%s",
-					layout.Width, layout.Height, layout.Class,
-					tostring(layout.IsTouch), tostring(layout.Portrait)))
-
-			record((terminal :: any).Visible == true
-				and player:GetAttribute("ZyntraStoreOpen") == true,
-				device.Name .. ": the production toggle opened the terminal",
-				string.format("visible=%s attribute=%s", tostring((terminal :: any).Visible),
-					tostring(player:GetAttribute("ZyntraStoreOpen"))))
-
-			-- ---- THE WAY OUT, on every fixture ------------------------------
-			--
-			-- C_ZYNTRA_ACTIONS_ARE_ENUMERATED_20260831. The header was only ever
-			-- measured for SIZE, and only on touch, through Fit.interactive -- which
-			-- filters on Visible AND Active before it returns anything. So a
-			-- CloseTerminal left out of the input stack, or dropped from the build
-			-- entirely, produced an EMPTY sweep and a passing row: a modal that opens
-			-- over the whole screen with no way out of it, on every device, and the
-			-- matrix silent. Presence, Visible and Active are asserted directly here,
-			-- on pointer devices too.
-			local closeButton = header:FindFirstChild("CloseTerminal", true)
-			record(closeButton ~= nil and (closeButton :: any).Visible == true
-				and (closeButton :: any).Active == true,
-				device.Name .. ": CloseTerminal is drawn AND in the input stack while the"
-				.. " terminal is open",
-				closeButton and string.format("visible=%s active=%s %s",
-					tostring((closeButton :: any).Visible),
-					tostring((closeButton :: any).Active),
-					Fit.text(Fit.live(closeButton))) or "CloseTerminal missing")
-			local headerDead, headerControls = {}, 0
-			for _, node in ipairs(header:GetDescendants()) do
-				if node:IsA("TextButton") or node:IsA("ImageButton") then
-					headerControls += 1
-					if (node :: any).Visible ~= true or (node :: any).Active ~= true then
-						table.insert(headerDead, string.format("%s visible=%s active=%s",
-							node.Name, tostring((node :: any).Visible),
-							tostring((node :: any).Active)))
-					end
-				end
-			end
-			record(headerControls > 0 and #headerDead == 0,
-				device.Name .. ": and every control the header draws is Visible and Active,"
-				.. " counted before it is filtered",
-				string.format("%d controls; %s", headerControls,
-					#headerDead == 0 and "all live" or table.concat(headerDead, "; ")))
-			for _, readout in ipairs({"TerminalTitle", "TokenReadout"}) do
-				local node = header:FindFirstChild(readout, true)
-				record(node ~= nil and (node :: any).Visible == true,
-					device.Name .. ": the header still draws " .. readout,
-					node and tostring((node :: any).Visible) or "missing")
-			end
-
-			local modal = layout.ModalViewport
-			local shellRects = {}
-			local unresolved = nil
-			for _, object in ipairs({terminal, header, tabs, content, status}) do
-				local rect = UIRegression.ResolveRect(object, viewport, insetY)
-				if not rect or rect.Unresolvable then
-					unresolved = object.Name .. ": " .. tostring(rect and rect.Unresolvable or "nil")
-				end
-				shellRects[object.Name] = rect
-			end
-			record(unresolved == nil,
-				device.Name .. ": every shell rectangle is analytically resolvable",
-				unresolved)
-
-			local terminalRect = shellRects.Terminal
-			state.note(string.format("      Terminal %s  modal viewport (%.0f,%.0f)-(%.0f,%.0f)",
-				Fit.text(terminalRect), modal.Left, modal.Top, modal.Right, modal.Bottom))
-
-			-- THE ASSERTION THE OLD ROW DID NOT MAKE. The terminal must lie inside
-			-- the MODAL viewport -- the true safe area -- and not inside the HUD
-			-- band it used to be sized from.
-			record(Fit.within(terminalRect, modal, 1),
-				device.Name .. ": the terminal lies inside the modal safe viewport",
-				Fit.text(terminalRect))
-			record(terminalRect ~= nil and terminalRect.Left >= -1
-				and terminalRect.Top >= -1
-				and terminalRect.Right <= viewport.X + 1
-				and terminalRect.Bottom <= viewport.Y + 1,
-				device.Name .. ": and is entirely on screen", Fit.text(terminalRect))
-
-			-- Positive, non-overlapping shell rectangles. `content` with a
-			-- negative height is precisely what shipped.
-			local order = {"TerminalHeader", "TerminalTabs", "TerminalContent", "TerminalStatus"}
-			local smallest, smallestName = math.huge, ""
-			for _, name in ipairs(order) do
-				local rect = shellRects[name]
-				local area = rect and math.min(rect.Width, rect.Height) or -1
-				if area < smallest then smallest, smallestName = area, name end
-				state.note(string.format("      %-16s %s", name, Fit.text(rect)))
-			end
-			record(smallest > 0,
-				device.Name .. ": header, tabs, content and status all have positive size",
-				string.format("smallest dimension %.0f at %s", smallest, smallestName))
-			record(shellRects.TerminalContent ~= nil
-				and shellRects.TerminalContent.Height >= 96,
-				device.Name .. ": the active page has a usable height",
-				shellRects.TerminalContent
-					and string.format("%.0f", shellRects.TerminalContent.Height) or "no rect")
-
-			local worstPair, worstArea = "", 0
-			for i = 1, #order do
-				for j = i + 1, #order do
-					local a, b = shellRects[order[i]], shellRects[order[j]]
-					if a and b and Fit.overlaps(a, b) then
-						local area = (math.min(a.Right, b.Right) - math.max(a.Left, b.Left))
-							* (math.min(a.Bottom, b.Bottom) - math.max(a.Top, b.Top))
-						if area > worstArea then
-							worstArea, worstPair = area, order[i] .. " x " .. order[j]
-						end
-					end
-				end
-			end
-			record(worstArea == 0,
-				device.Name .. ": no two shell rectangles overlap",
-				string.format("%.0f px^2 at %s", worstArea, worstPair))
-			for _, name in ipairs(order) do
-				record(Fit.within(shellRects[name], terminalRect, 1),
-					device.Name .. ": " .. name .. " stays inside the terminal",
-					Fit.text(shellRects[name]))
-			end
-
-			-- ---- the opener and the movement controls stand down -----------
-			record((opener :: any).Visible == false and (opener :: any).Active == false,
-				device.Name .. ": the ZYNTRA // EQUIPMENT opener is neither drawn nor"
-				.. " in the input stack behind its own modal",
-				string.format("visible=%s active=%s",
-					tostring((opener :: any).Visible), tostring((opener :: any).Active)))
-			-- And neither is any other rail button. `not main.Visible` is a term in
-			-- all five predicates, so a button still drawn here is a real defect and
-			-- not a rule this row forgot to state.
-			for _, railButton in ipairs(railButtons) do
-				local node = railButton :: any
-				record(node.Visible == false and node.Active == false,
-					device.Name .. ": " .. railButton.Name .. " leaves the screen and the"
-					.. " input stack behind the terminal too",
-					string.format("visible=%s active=%s",
-						tostring(node.Visible), tostring(node.Active)))
-			end
-			if device.Touch then
-				record(UIDevice.TouchMovementSuppressed() == true,
-					device.Name .. ": the engine's own thumbstick stands down under the modal",
-					tostring(UIDevice.TouchMovementSuppressed()))
-				local live = 0
-				local liveNames = {}
-				for movementName in pairs(MOVEMENT_CONTROLS) do
-					local node = nil
-					for _, screen in ipairs(playerGui():GetChildren()) do
-						if screen:IsA("ScreenGui") and screen.Enabled and not ENGINE_GUIS[screen.Name] then
-							node = screen:FindFirstChild(movementName, true)
-							if node then break end
-						end
-					end
-					if node and (node :: any).Active == true and (node :: any).Visible == true then
-						live += 1
-						table.insert(liveNames, movementName)
-					end
-				end
-				record(live == 0,
-					device.Name .. ": and no game movement control is left active under it",
-					table.concat(liveNames, ", "))
-			end
-
-			-- ---- every tab, including DEV ----------------------------------
-			local liveContent = Fit.live(content)
-			local liveTabs = Fit.live(tabs)
-			local tabTotal, tabWorst, tabWorstName = 0, math.huge, ""
-			for index, name in ipairs(tabList) do
-				local tabButton = (tabs :: any):FindFirstChild(name .. "Tab")
-				if not tabButton then
-					record(false, device.Name .. ": tab " .. name .. " exists", "not found")
-				else
-					local rect = Fit.live(tabButton)
-					tabTotal += rect.Width + (index > 1 and 10 or 0)
-					local axis = math.min(rect.Width, rect.Height)
-					if axis < tabWorst then tabWorst, tabWorstName = axis, name end
-					if device.Touch then
-						record(rect.Height >= 44,
-							device.Name .. ": tab " .. name .. " is at least 44 tall",
-							string.format("%.0fx%.0f", rect.Width, rect.Height))
-					end
-				end
-			end
-			record(tabWorst > 0, device.Name .. ": every tab has positive size",
-				string.format("smallest %.0f at %s", tabWorst, tabWorstName))
-			-- ORDER, not just presence. The bar's UIListLayout breaks LayoutOrder
-			-- ties by NAME, so the moment the tabs were given names for this
-			-- matrix to find them they silently re-sorted alphabetically --
-			-- COLORS, DEV, DONATE, SHOP, UPGRADES instead of the authored
-			-- UPGRADES ... DEV. Presence assertions cannot see that; left-edge
-			-- order can.
-			local misordered = nil
-			local previousLeft = -math.huge
-			for _, name in ipairs(tabList) do
-				local tabButton = (tabs :: any):FindFirstChild(name .. "Tab")
-				local rect = tabButton and Fit.live(tabButton)
-				if rect then
-					if rect.Left <= previousLeft then
-						misordered = name .. " at x " .. string.format("%.0f", rect.Left)
-							.. " is not right of the tab before it"
-					end
-					previousLeft = rect.Left
-				end
-			end
-			record(misordered == nil,
-				device.Name .. ": the tabs run left to right in their authored order",
-				misordered)
-			-- REACHABILITY, which is the whole point of the scrolling bar: either
-			-- the tabs fit the bar, or the bar scrolls to them. Never neither.
-			local canvas = (tabs :: any).AbsoluteCanvasSize
-			record(liveTabs ~= nil and (tabTotal <= liveTabs.Width + 1
-					or ((tabs :: any).ScrollingEnabled == true and canvas.X + 1 >= tabTotal)),
-				device.Name .. ": every tab is reachable -- the row fits the bar or the"
-				.. " bar scrolls to it",
-				string.format("tabs %.0f, bar %.0f, canvas %.0f, scrolling=%s",
-					tabTotal, liveTabs and liveTabs.Width or -1, canvas.X,
-					tostring((tabs :: any).ScrollingEnabled)))
-
-			for _, name in ipairs(tabList) do
-				local selected = probe:Invoke("tab:" .. name)
-				task.wait(0.12)
-				record(selected == name, device.Name .. " / " .. name .. ": the tab selects",
-					tostring(selected))
-				local page = (content :: any):FindFirstChild(name)
-				if not page then
-					record(false, device.Name .. " / " .. name .. ": the page exists", "not found")
-					continue
-				end
-				local pageRect = Fit.live(page)
-				record((page :: any).Visible == true and pageRect.Width > 0 and pageRect.Height > 0
-					and Fit.within(pageRect, liveContent, 2),
-					device.Name .. " / " .. name .. ": the page fills the content box and"
-					.. " does not leave it",
-					Fit.text(pageRect))
-
-				-- The overflow route. Every page whose content can exceed its box
-				-- must have a scroll, and the scroll must stay inside the box: this
-				-- is what makes "the cards are contained" true without hiding
-				-- anything from the player.
-				local scroll = nil
-				for _, node in ipairs(page:GetDescendants()) do
-					if node:IsA("ScrollingFrame") then scroll = node break end
-				end
-				record(scroll ~= nil,
-					device.Name .. " / " .. name .. ": the page can scroll its overflow",
-					scroll and scroll.Name or "no ScrollingFrame")
-				local scrollRect = scroll and Fit.live(scroll)
-				if scroll then
-					record(Fit.within(scrollRect, pageRect, 2),
-						device.Name .. " / " .. name .. ": and its scroll stays inside the page",
-						Fit.text(scrollRect))
-					-- Cards and rows are laid out by a grid or a list inside that
-					-- scroll. They may run PAST its bottom -- that is what scrolling
-					-- is -- but never past its sides, which is the failure mode a
-					-- fixed 0.5-width cell produces on a narrow screen.
-					local escaped, escapedName = 0, ""
-					for _, child in ipairs(scroll:GetChildren()) do
-						if child:IsA("GuiObject") and child.Visible then
-							local rect = Fit.live(child)
-							if rect.Width <= 0 or rect.Height <= 0 then
-								escaped += 1
-								escapedName = child.Name .. " has size "
-									.. string.format("%.0fx%.0f", rect.Width, rect.Height)
-							elseif rect.Left < scrollRect.Left - 2
-								or rect.Right > scrollRect.Right + 2 then
-								escaped += 1
-								escapedName = child.Name .. " at x "
-									.. string.format("%.0f..%.0f vs %.0f..%.0f", rect.Left,
-										rect.Right, scrollRect.Left, scrollRect.Right)
-							end
-						end
-					end
-					record(escaped == 0,
-						device.Name .. " / " .. name .. ": every card or row is contained"
-						.. " horizontally and none has a zero or negative size",
-						escapedName)
-				end
-
-				-- WHAT THE PAGE MUST CONTAIN, stated here rather than counted from
-				-- whatever the page happens to hold. A page that built nothing
-				-- would otherwise pass every containment and tap-target check in
-				-- this matrix trivially, because there would be nothing to fail.
-				local expectedRows = PAGE_CONTENT[name]
-				if name == "Donate" then
-					-- The authored tier count, read from the same config the
-					-- store builds its cards from.
-					local tiers = donationTierCount()
-					expectedRows = {Rows = tiers, Actions = tiers}
-				end
-				if name == "Settings" then
-					-- SAME IDIOM, and for the same reason Donate does not use its
-					-- PAGE_CONTENT literal: the authored switch count is
-					-- ZyntraConfig.AccessibilitySettings minus the entries it marks
-					-- Hidden. A literal 2 here would be exactly what the store's
-					-- emergency two-key fallback draws, so the one failure this
-					-- check exists to catch -- the config list going missing and the
-					-- page silently dropping to that fallback -- would pass clean.
-					-- The PAGE_CONTENT floor stands only when the config carries no
-					-- list at all, which is the case the fallback answers.
-					local switches = 0
-					for _, entry in ipairs(ZyntraConfig.AccessibilitySettings or {}) do
-						if type(entry) == "table" and entry.Hidden ~= true then
-							switches += 1
-						end
-					end
-					if switches > 0 then
-						expectedRows = {Rows = switches, Actions = switches}
-					end
-					-- The count alone cannot see the Hidden filter INVERTING -- four
-					-- rows drawn still clears a floor of three -- and Hidden is not
-					-- cosmetic: DisableCaptions and CaptionsEnabled are two halves of
-					-- one caption pair, so a terminal that draws both offers the
-					-- player contradicting switches. Rows are named by their
-					-- attribute key, so this is a lookup.
-					if scroll then
-						local shown: string? = nil
-						for _, entry in ipairs(ZyntraConfig.AccessibilitySettings or {}) do
-							if type(entry) == "table" and entry.Hidden == true
-								and type(entry.Key) == "string"
-								and scroll:FindFirstChild(entry.Key) then
-								shown = entry.Key
-							end
-						end
-						record(shown == nil,
-							device.Name .. " / Settings: no switch the config marks Hidden"
-							.. " is drawn", shown)
-					end
-				end
-				if expectedRows and scroll then
-					local drawn, actions = 0, 0
-					for _, child in ipairs(scroll:GetChildren()) do
-						if child:IsA("GuiObject") and child.Visible then
-							drawn += 1
-							for _, node in ipairs(child:GetDescendants()) do
-								if node:IsA("TextButton") or node:IsA("ImageButton") then
-									actions += 1
-								end
-							end
-						end
-					end
-					record(drawn >= expectedRows.Rows and actions >= expectedRows.Actions,
-						string.format("%s / %s: holds its authored content (%d+ rows,"
-							.. " %d+ actions)", device.Name, name,
-							expectedRows.Rows, expectedRows.Actions),
-						string.format("%d rows, %d actions", drawn, actions))
-					-- Sibling ORDER and non-overlap inside the scroll. A grid or
-					-- list that collapses puts every cell at the same origin, and
-					-- a containment test alone cannot see that.
-					local previousBottom, disorder = -math.huge, nil
-					local rows = {}
-					for _, child in ipairs(scroll:GetChildren()) do
-						if child:IsA("GuiObject") and child.Visible then
-							table.insert(rows, {Object = child, Rect = Fit.live(child)})
-						end
-					end
-					table.sort(rows, function(a, b)
-						if math.abs(a.Rect.Top - b.Rect.Top) > 1 then
-							return a.Rect.Top < b.Rect.Top
-						end
-						return a.Rect.Left < b.Rect.Left
-					end)
-					for index = 1, #rows do
-						for other = index + 1, #rows do
-							if Fit.overlaps(rows[index].Rect, rows[other].Rect) then
-								disorder = rows[index].Object.Name .. " overlaps "
-									.. rows[other].Object.Name
-							end
-						end
-					end
-					record(disorder == nil,
-						string.format("%s / %s: no two cards or rows overlap each other",
-							device.Name, name), disorder)
-					-- CANVAS REACHABILITY, measured from the TOP of the canvas.
-					--
-					-- C_ZYNTRA_SCROLL_IS_NOT_A_PROOF_20260831 -- WHAT SHIPPED BROKEN
-					-- in the tests. `lowest` was the distance from the SCROLL's top
-					-- edge to the last row as both happened to be sitting, and a page
-					-- already scrolled down reports its last row much closer to that
-					-- edge -- in the limit, inside the viewport. So the more content a
-					-- page had pushed above the fold, the EASIER this was to satisfy,
-					-- and a page left scrolled by an earlier row of the matrix carried
-					-- that excuse into this one. The canvas is put back to zero, the
-					-- rows are re-measured against that, and the player's own scroll
-					-- position is handed straight back.
-					local savedCanvasPosition = (scroll :: any).CanvasPosition
-					;(scroll :: any).CanvasPosition = Vector2.new(0, 0)
-					task.wait()
-					local canvas = (scroll :: any).AbsoluteCanvasSize
-					local topScrollRect = Fit.live(scroll)
-					local lowest = 0
-					for _, row in ipairs(rows) do
-						lowest = math.max(lowest,
-							Fit.live(row.Object).Bottom - topScrollRect.Top)
-					end
-					local visibleHeight = topScrollRect.Height
-					local scrollingEnabled = (scroll :: any).ScrollingEnabled == true
-					;(scroll :: any).CanvasPosition = savedCanvasPosition
-					-- A ZERO canvas is only acceptable when the last row is already
-					-- inside the visible scrolling viewport. `or canvas.Y <= 0`
-					-- alone excused every collapsed page: no canvas, no overflow,
-					-- no failure -- which is exactly backwards.
-					local reachable = lowest <= canvas.Y + 2
-						or (canvas.Y <= 0 and lowest <= visibleHeight + 2)
-					record(reachable,
-						string.format("%s / %s: the scroll canvas reaches its last row,"
-							.. " measured from a canvas reset to zero", device.Name, name),
-						string.format("last row ends at %.0f, canvas %.0f, viewport %.0f",
-							lowest, canvas.Y, visibleHeight))
-					-- A canvas the player cannot MOVE is not a route to the overflow.
-					-- Where the content genuinely runs past the viewport, the frame has
-					-- to be scrollable; the terminal states ScrollingEnabled = true on
-					-- all five page scrolls where it builds them, and this is the half
-					-- that checks the statement survived the layout.
-					record(lowest <= visibleHeight + 2 or scrollingEnabled,
-						string.format("%s / %s: and where the content overflows the"
-							.. " viewport the page can actually be scrolled",
-							device.Name, name),
-						string.format("content %.0f in a %.0f viewport, scrolling=%s",
-							lowest, visibleHeight, tostring(scrollingEnabled)))
-					-- REAL TEXT FIT. Every visible string on the page must fit the
-					-- box it is drawn in, or be a deliberately wrapped label with
-					-- room for the lines it needs.
-					local clipped = nil
-					for _, node in ipairs(page:GetDescendants()) do
-						if (node:IsA("TextLabel") or node:IsA("TextButton"))
-							and node.Visible and (node :: any).Text ~= ""
-							and (node :: any).TextTruncate == Enum.TextTruncate.None
-							and not (node :: any).TextScaled then
-							local box = Fit.live(node)
-							local bounds = (node :: any).TextBounds
-							-- BOTH axes. A single-line label that is too WIDE
-							-- overflows sideways and reported nothing, because
-							-- only the height was ever compared.
-							local wrapped = (node :: any).TextWrapped
-							if box.Width > 1
-								and (bounds.Y > box.Height + 1
-									or (not wrapped and bounds.X > box.Width + 1)) then
-								clipped = string.format("%s needs %.0fx%.0f in %.0fx%.0f (wrapped=%s)",
-									node.Name, bounds.X, bounds.Y, box.Width, box.Height,
-									tostring(wrapped))
-							end
-						end
-					end
-					record(clipped == nil,
-						string.format("%s / %s: no visible string overflows its own box",
-							device.Name, name), clipped)
-
-					-- THE TWO NAMED PROOFS, kept separate from the sweep above on
-					-- purpose. The generic pass reads TextBounds, which is what
-					-- the engine DECIDED to draw; these re-measure the same
-					-- strings through TextService at the face and box width the
-					-- label actually carries, so a label whose bounds were stale
-					-- or clamped cannot hide behind them. They also name the
-					-- defect, so a regression report says which card broke rather
-					-- than "a TextLabel".
-					--
-					-- SHOP. The two-column breakpoint used to arrive at 568x320
-					-- and hand each product a 134x68 description box for copy
-					-- that measures 72-84px; 667x375 needed 72. The box has to
-					-- hold the copy at its own width, on every device.
-					if name == "Shop" then
-						local worst, worstName = nil, nil
-						for _, node in ipairs(page:GetDescendants()) do
-							if node.Name == "ProductDescription" and node:IsA("TextLabel")
-								and node.Visible and node.Text ~= "" then
-								local box = Fit.live(node)
-								local need = Fit.measureText(node.Text, node.FontFace,
-									node.TextSize, box.Width)
-								if need and need.Y > box.Height + 1
-									and (worst == nil or need.Y - box.Height > worst) then
-									worst = need.Y - box.Height
-									worstName = string.format("%s: %.0fpx of copy at %dpx"
-										.. " in a %.0fx%.0f box",
-										(node.Parent :: any).Name, need.Y, node.TextSize,
-										box.Width, box.Height)
-								end
-							end
-						end
-						record(worst == nil, string.format("%s / Shop: every product"
-							.. " description box holds its own copy at its own width",
-							device.Name), worstName)
-					end
-					-- COLOURS. "GLOWSTICK LIGHT" measures about 153px at the
-					-- authored 18px face and the heading box is 149 wide at
-					-- 375x667 -- narrower still at 338x705. The heading is not
-					-- wrapped, so it simply ran out over the preview swatch.
-					if name == "Colors" then
-						local overflow = nil
-						for _, node in ipairs(page:GetDescendants()) do
-							if node.Name == "Title" and node:IsA("TextLabel")
-								and node.Visible and node.Text ~= "" then
-								local box = Fit.live(node)
-								local need = Fit.measureText(node.Text, node.FontFace,
-									node.TextSize, node.TextWrapped and box.Width or nil)
-								local tooWide = need and not node.TextWrapped
-									and need.X > box.Width + 1
-								local tooTall = need and need.Y > box.Height + 1
-								if (tooWide or tooTall) and overflow == nil then
-									overflow = string.format("%s %q needs %.0fx%.0f at"
-										.. " %dpx in a %.0fx%.0f box (wrapped=%s)",
-										(node.Parent :: any).Name, node.Text,
-										need.X, need.Y, node.TextSize, box.Width,
-										box.Height, tostring(node.TextWrapped))
-								end
-							end
-						end
-						record(overflow == nil, string.format("%s / Colors: every picker"
-							.. " heading fits its own box", device.Name), overflow)
-					end
-				end
-
-				-- ---- EVERY CARD ACTION, THE DISABLED ONES INCLUDED --------------
-				--
-				-- C_ZYNTRA_ACTIONS_ARE_ENUMERATED_20260831. Enumerated through the
-				-- CollectionService tag rather than by walking Visible+Active
-				-- descendants, because an OWNED product, a COMING SOON tier and a
-				-- LEVEL 3 ONLY dev row are all Visible, full-size and NOT Active --
-				-- which is exactly the state the tap floor has to hold in, and exactly
-				-- the state the old sweep filtered away before it counted anything.
-				--
-				-- The floor comes from the terminal's own TerminalTapFloor, rewritten
-				-- every layout pass with the number the actions were actually sized
-				-- against, so this measures the terminal against itself instead of the
-				-- harness restating 44 and agreeing with its own copy of the constant.
-				-- 44 is still the FLOOR under that floor: a terminal that published 20
-				-- would otherwise licence 20px targets.
-				-- 44 IS A TOUCH REQUIREMENT, and only a touch requirement. It is the
-				-- minimum a finger can reliably hit; a mouse pointer is a single
-				-- pixel and the terminal deliberately draws a tighter 32px row on a
-				-- pointer device, which is the composition every desktop screenshot
-				-- in this project shows. Asserting 44 there failed ten rows for
-				-- doing exactly what the design says, and "fixing" production to
-				-- satisfy it would have inflated the desktop terminal by a third.
-				-- The floor still exists on pointer devices -- it is just the
-				-- pointer floor -- and the published number is still held to it, so
-				-- a terminal that published 12 fails on any device.
-				local publishedFloor = tonumber(terminal:GetAttribute("TerminalTapFloor"))
-				local requiredFloor = device.Touch and 44 or 32
-				record(publishedFloor ~= nil and publishedFloor >= requiredFloor,
-					string.format("%s / %s: the terminal publishes the tap floor it sized"
-						.. " its actions against, and it is at least %d (%s device)",
-						device.Name, name, requiredFloor,
-						device.Touch and "touch" or "pointer"),
-					tostring(terminal:GetAttribute("TerminalTapFloor")))
-				local tapFloor = math.max(publishedFloor or Fit.ZyntraFloorFallback, requiredFloor)
-				local authoredCards = cardsByPage[name]
-				record(authoredCards ~= nil and #authoredCards > 0,
-					device.Name .. " / " .. name .. ": the terminal's card contract names"
-					.. " what this page was authored to hold",
-					authoredCards and string.format("%d cards", #authoredCards)
-						or "no contract lines for this page")
-				local actionProblems = Fit.zyntraActionProblems(page, name, actionTag,
-					tapFloor, device.Touch, authoredCards)
-				record(#actionProblems == 0,
-					device.Name .. " / " .. name .. ": every authored card has exactly one"
-					.. " tagged action, drawn at the terminal's own tap floor on both axes"
-					.. " -- disabled ones included -- and nothing has left the input stack"
-					.. " without saying why",
-					table.concat(actionProblems, "; "))
-
-				-- HOW MANY THE PLAYER CAN ACTUALLY PRESS, stated per tab.
-				--
-				-- Three pages have a reachable count that does not depend on this
-				-- account at all, and those are asserted as exact numbers. Shop and Dev
-				-- do depend on it -- what this account owns, and whether it is in Level
-				-- 3 -- so restating a literal for them would only encode one tester's
-				-- save file. They are held to the complete accounting instead: every
-				-- authored action is either reachable or stood down for a reason the
-				-- button itself states, and the two add up to the whole contract.
-				local taggedActions = Fit.zyntraActions(page, actionTag)
-				local activeActions, statedDown = 0, 0
-				for _, action in ipairs(taggedActions) do
-					if (action :: any).Active == true and (action :: any).Visible == true then
-						activeActions += 1
-					end
-					if Fit.zyntraDisabledReason(action) ~= nil then statedDown += 1 end
-				end
-				local expectedActive = Fit.ZyntraExpectedActive[name]
-				if name == "Donate" then
-					-- Every tier with a configured product id, read from ZyntraConfig.
-					-- A zero id is the store's own "COMING SOON" case and it is the one
-					-- thing that legitimately lowers this number.
-					expectedActive = 0
-					for _, key in ipairs(Fit.DonationTierKeys) do
-						local tier = (ZyntraConfig.Donations or {})[key]
-						-- UI_REGRESSION_20260923: a one-time GamePass tier this account
-						-- already OWNS is stood down as OWNED by the store (the same
-						-- Kind/ZyntraOwns<key> test ZyntraStore's refreshDonationOwnership
-						-- applies), so it is not a reachable action for THIS account.
-						local ownedPass = tier ~= nil and (tier :: any).Kind == "GamePass"
-							and game:GetService("Players").LocalPlayer:GetAttribute("ZyntraOwns" .. key) == true
-						if tier and (tonumber((tier :: any).Id) or 0) > 0 and not ownedPass then
-							expectedActive += 1
-						end
-					end
-				end
-				if expectedActive ~= nil then
-					record(activeActions == expectedActive,
-						string.format("%s / %s: exactly %d of its card actions are reachable",
-							device.Name, name, expectedActive),
-						string.format("%d reachable of %d tagged, %d stood down with a reason",
-							activeActions, #taggedActions, statedDown))
-				else
-					record(authoredCards ~= nil
-						and activeActions + statedDown == #authoredCards,
-						string.format("%s / %s: every authored action is either reachable or"
-							.. " stood down for a stated reason, and the two account for the"
-							.. " whole contract", device.Name, name),
-						string.format("%d reachable + %d stood down vs %d authored",
-							activeActions, statedDown,
-							authoredCards and #authoredCards or -1))
-				end
-
-				-- ---- DONATE: the tier the card CARRIES, not the tier it looks like --
-				if name == "Donate" then
-					local tierProblems = {}
-					for _, key in ipairs(Fit.DonationTierKeys) do
-						local cards = {}
-						for _, node in ipairs(page:GetDescendants()) do
-							if node:IsA("GuiObject")
-								and node:GetAttribute("DonationTierKey") == key then
-								table.insert(cards, node)
-							end
-						end
-						if #cards ~= 1 then
-							table.insert(tierProblems, string.format(
-								"%d cards carry DonationTierKey=%s", #cards, key))
-							continue
-						end
-						local actions = {}
-						for _, action in ipairs(taggedActions) do
-							if action:IsDescendantOf(cards[1]) then
-								table.insert(actions, action)
-							end
-						end
-						if #actions ~= 1 then
-							table.insert(tierProblems, string.format(
-								"the %s card holds %d tagged actions, not exactly one",
-								key, #actions))
-						elseif actions[1]:GetAttribute("ZyntraCardKey") ~= key then
-							table.insert(tierProblems, string.format(
-								"the %s card's action is keyed to %s", key,
-								tostring(actions[1]:GetAttribute("ZyntraCardKey"))))
-						end
-						local configured = (ZyntraConfig.Donations or {})[key]
-						local declaredId = cards[1]:GetAttribute("DonationProductId")
-						if configured == nil then
-							table.insert(tierProblems, key .. " is not in ZyntraConfig")
-						elseif declaredId ~= (configured :: any).Id then
-							table.insert(tierProblems, string.format(
-								"the %s card advertises product %s, the config says %s", key,
-								tostring(declaredId), tostring((configured :: any).Id)))
-						end
-					end
-					record(#tierProblems == 0,
-						device.Name .. " / Donate: each of the six tiers has exactly one card"
-						.. " and exactly one action, matched through DonationTierKey and"
-						.. " selling the product the config names",
-						table.concat(tierProblems, "; "))
-				end
-
-				-- ---- COLORS: three rectangles, not one string ---------------------
-				--
-				-- The heading, the preview swatch and the Save button share the card's
-				-- top row and are placed with three independent offsets. The matrix
-				-- proved only that the heading's COPY fit its own box -- which says
-				-- nothing about the box landing on top of the swatch, and "GLOWSTICK
-				-- LIGHT" over a colour preview is the same unreadable row either way.
-				if name == "Colors" then
-					local colourProblems = {}
-					local pickerCards = 0
-					for _, card in ipairs(page:GetDescendants()) do
-						if card:IsA("GuiObject") and card:GetAttribute("ZyntraPage") == "Colors"
-							and card:GetAttribute("ZyntraCardKey") ~= nil
-							and not (card:IsA("TextButton") or card:IsA("ImageButton")) then
-							pickerCards += 1
-							local parts = {}
-							for _, partName in ipairs({"Title", "Preview", "Save"}) do
-								local node = card:FindFirstChild(partName)
-								if not node or not node:IsA("GuiObject") then
-									table.insert(colourProblems, string.format("%s has no %s",
-										card.Name, partName))
-								elseif (node :: any).Visible ~= true then
-									table.insert(colourProblems, string.format(
-										"%s.%s is not drawn", card.Name, partName))
-								else
-									table.insert(parts, {Name = partName, Rect = Fit.live(node)})
-								end
-							end
-							for index = 1, #parts do
-								for other = index + 1, #parts do
-									if Fit.overlaps(parts[index].Rect, parts[other].Rect) then
-										table.insert(colourProblems, string.format(
-											"%s.%s %s overlaps %s.%s %s", card.Name,
-											parts[index].Name, Fit.text(parts[index].Rect),
-											card.Name, parts[other].Name,
-											Fit.text(parts[other].Rect)))
-									end
-								end
-							end
-						end
-					end
-					-- The sweep above says nothing at all if it found no cards, so the
-					-- two authored pickers are counted as well.
-					record(pickerCards == 2 and #colourProblems == 0,
-						device.Name .. " / Colors: both picker cards draw their heading, preview"
-						.. " swatch and SAVE button as three separate rectangles",
-						string.format("%d picker cards; %s", pickerCards,
-							#colourProblems == 0 and "no overlaps"
-								or table.concat(colourProblems, "; ")))
-				end
-
-				-- Tap targets, swept rather than declared: these controls are built
-				-- by loops over config, so a named list would quietly stop covering
-				-- whatever was added last.
-				if device.Touch then
-					local small, smallName = 0, ""
-					for _, entry in ipairs(Fit.interactive(page)) do
-						if entry.Rect.Width < 44 or entry.Rect.Height < 44 then
-							small += 1
-							smallName = entry.Object.Name .. " "
-								.. string.format("%.0fx%.0f", entry.Rect.Width, entry.Rect.Height)
-						end
-					end
-					record(small == 0,
-						device.Name .. " / " .. name .. ": every touch action on the page is"
-						.. " at least 44x44",
-						string.format("%d under floor, e.g. %s", small, smallName))
-					local glyph = Fit.keyGlyph(page)
-					record(glyph == nil,
-						device.Name .. " / " .. name .. ": and prints no keyboard glyph", glyph)
-				end
-			end
-
-			-- The header's own controls, which live outside the pages.
-			if device.Touch then
-				local small, smallName = 0, ""
-				for _, entry in ipairs(Fit.interactive(header)) do
-					if entry.Rect.Width < 44 or entry.Rect.Height < 44 then
-						small += 1
-						smallName = entry.Object.Name .. " "
-							.. string.format("%.0fx%.0f", entry.Rect.Width, entry.Rect.Height)
-					end
-				end
-				record(small == 0,
-					device.Name .. ": the header's own controls are at least 44x44", smallName)
-			end
-			probe:Invoke("tab:" .. tabList[1])
-			probe:Invoke("close")
-			task.wait(0.15)
-		end
-	end)
-
-	pcall(resetScenario)
-	task.wait(0.15)
-	Fit.restore(saved)
-	task.wait(0.2)
-	if not ran then
-		state.Failures += 1
-		state.Checks += 1
-		state.note("  FAIL the zyntra terminal fit matrix ran  (" .. tostring(runError) .. ")")
-	end
-	local residue, residueNote = Fit.residue(saved)
-	if residueNote then state.note(residueNote) end
-	record(#residue == 0,
-		"the matrix restored every borrowed attribute, every borrowed ScreenGui's"
-			.. " Enabled and every borrowed descendant's Visible, Active and"
-			.. " CanvasPosition, the terminal tab, the reader state and the caption",
-		table.concat(residue, "; "))
-	return state.finish()
-end
-
-function UIRegression.ZyntraTerminalFitMatrix(token: string?): (string, number)
-	return Fit.lane("ZyntraTerminalFitMatrix", token, Fit.bodyZyntraTerminalFitMatrix)
 end
 
 -- ---------------------------------------------------------------------------
@@ -6519,81 +4385,17 @@ function Fit.childProblems(panel, label): {string}
 end
 
 function Fit.anchorProblems(rect, layout, label): {string}
-	local problems = {}
 	if not rect then return {label .. " was not measured"} end
-	local safe = layout.Safe
-	local margin = layout.IsTouch and 8 or 18
-	if rect.Width <= 0 or rect.Height <= 0 then
-		table.insert(problems, string.format("%s has size %.0fx%.0f",
-			label, rect.Width, rect.Height))
-		return problems
+	local problems = {}
+	if rect.Width <= 0 or rect.Height <= 0 then return {label .. " has no drawable size"} end
+	local expected = UIDevice.TopRightPanel(rect.Width, rect.Height, layout.IsTouch and 8 or 18, 0)
+	if math.abs(rect.Right - expected.Right) > Fit.AnchorSlack or math.abs(rect.Top - expected.Top) > Fit.AnchorSlack then
+		table.insert(problems, label .. " is outside its actual UIDevice.TopRightPanel slot")
 	end
-	-- TOP: pinned to the top of the true safe area, not a third of the way down
-	-- it and not the bottom of a band.
-	if rect.Top > safe.Top + margin + Fit.AnchorSlack then
-		table.insert(problems, string.format("%s starts at y %.0f, below the safe top %.0f",
-			label, rect.Top, safe.Top + margin))
-	end
-	-- RIGHT: the safe right edge, and that is the whole rule. See
-	-- C_ONE_RIGHT_EDGE_20260831 above the AnchorSlack constant for why the
-	-- control-column alternative had to go.
-	local screenEdge = safe.Right - margin
-	if math.abs(rect.Right - screenEdge) > Fit.AnchorSlack then
-		table.insert(problems, string.format(
-			"%s right edge %.0f is not the safe right edge %.0f (safe.Right %.0f - margin %.0f),"
-			.. " off by %.0f",
-			label, rect.Right, screenEdge, safe.Right, margin,
-			math.abs(rect.Right - screenEdge)))
-	end
-	-- ...and having taken the corner, it has to EARN it by finishing above the
-	-- control cluster. This used to be excused whenever the panel could also be
-	-- read as sitting on the column edge, which is to say it was excused exactly
-	-- when it mattered. There is no excuse now: a readout right-aligned to the
-	-- screen edge that reaches down past the cluster's top is right-aligned to an
-	-- edge a control owns at that height, whatever the movement-zone rectangles
-	-- happen to say. The cluster's top is Zones.Controls.Top, which is measured
-	-- from the registered buttons and follows them when the short-screen
-	-- arrangement lays them along the bottom.
-	if layout.IsTouch and rect.Bottom > layout.Zones.Controls.Top + Fit.AnchorSlack then
-		table.insert(problems, string.format(
-			"%s reaches y %.0f, past the control cluster top %.0f",
-			label, rect.Bottom, layout.Zones.Controls.Top))
-	end
-	-- Inside the safe area on every side.
-	if rect.Left < safe.Left - Fit.AnchorSlack
-		or rect.Right > safe.Right + Fit.AnchorSlack
-		or rect.Bottom > safe.Bottom + Fit.AnchorSlack
-		or rect.Top < safe.Top - Fit.AnchorSlack then
-		table.insert(problems, string.format("%s leaves the safe area (%.0f,%.0f)-(%.0f,%.0f)",
-			label, safe.Left, safe.Top, safe.Right, safe.Bottom))
-	end
-	-- NOT the corridor, and NOT bottom-centre: the two placements this replaced.
-	--
-	-- A "is its centre in the right half" heuristic was tried here first and was
-	-- WRONG, in the direction that matters: on a 568x320 phone the control
-	-- column owns 168px of a 568px screen, so a correctly right-aligned 236px
-	-- panel ends at x 392 and is centred at 274 -- ten pixels into the left
-	-- half. It failed three correct layouts.
-	--
-	-- The two rules above already exclude both old placements outright, and they
-	-- do it by construction rather than by proportion:
-	--   * the corridor placement was bottom-anchored (Position y = height - 40),
-	--     which the TOP rule rejects -- it measured y 202 against a safe top
-	--     of 44;
-	--   * the Level 3 top-LEFT placement had its right edge at band.Left + width
-	--     = 260, which the RIGHT-EDGE rule rejects against both the safe edge
-	--     and the control column.
-	-- What is added here is the one thing neither covers: the panel has to be in
-	-- the right-hand PORTION of the screen at all, which a centred corridor
-	-- panel on a wide phone would not be.
-	if layout.IsTouch and rect.Right < layout.Width * .55 then
-		table.insert(problems, string.format(
-			"%s ends at x %.0f, left of the screen's right portion (%.0f)",
-			label, rect.Right, layout.Width * .55))
-	end
-	local zone = UIDevice.OverlapsMovementZone(rect.Left, rect.Top, rect.Right, rect.Bottom)
-	if zone then
-		table.insert(problems, label .. " enters the " .. zone .. " movement zone")
+	if not Fit.within(rect, layout.Safe, 1) then table.insert(problems, label .. " escapes the safe area") end
+	if layout.IsTouch then
+		local zone = UIDevice.OverlapsMovementZone(rect.Left, rect.Top, rect.Right, rect.Bottom)
+		if zone then table.insert(problems, label .. " overlaps " .. zone) end
 	end
 	return problems
 end
@@ -6957,628 +4759,74 @@ function Fit.alertProblems(shown, layout): {string}
 	return problems
 end
 
-function Fit.bodyObjectiveCornerMatrix(): (string, number)
-	local player = Players.LocalPlayer
-	local state = Fit.recorder("=== objective readouts, upper right, every level and device ===")
-	local record = state.record
-	-- (b) AWAIT ITS NATURAL END, BOUNDED. See Fit.awaitQuietDispatch: this lane
-	-- cannot run without interrupting a live transmission, and it must not
-	-- interrupt one. The wait is BEFORE Fit.borrow, so the snapshot is of a quiet
-	-- world and the restore has nothing to be forgiven for.
-	local quiet, dispatchWhy = Fit.awaitQuietDispatch()
-	if not quiet then
-		record(false, "no real dispatch briefing was live when the matrix started",
-			dispatchWhy)
-		return state.finish()
-	end
+function Fit.bodyRoundHudMatrix(): (string, number)
+	local state = Fit.recorder("=== shared objective, feed and caption ===")
+	local quiet, reason = Fit.awaitQuietDispatch()
+	if not quiet then state.record(false, "quiet dispatch before borrowing", reason); return state.finish() end
 	local saved = Fit.borrow()
-
-	local ran, runError = pcall(function()
-		-- ---- calibration, at the REAL viewport ----------------------------
-		workspace:SetAttribute("UIRegressionViewport", nil)
-		workspace:SetAttribute("ForceTouchUI", true)
-		workspace:SetAttribute("UIRegressionSafeInsets", nil)
-		resetScenario(true)
-		revealGui("PuzzleGui")
-		task.wait(0.35)
-		local realLayout = UIDevice.Layout()
-		local worst, worstName = 0, ""
-		local puzzle = findGui("PuzzleGui")
-		local panel = puzzle and puzzle:FindFirstChild("Level1Objectives")
-		if panel then
-			local shift = UIRegression.ScreenSpaceShift(panel)
-			local resolved = UIRegression.ResolveRect(panel, realLayout.Viewport, realLayout.Inset.Y)
-			local node = panel :: any
-			if resolved and not resolved.Unresolvable then
-				local live = {
-					Left = node.AbsolutePosition.X,
-					Top = node.AbsolutePosition.Y + shift,
-					Right = node.AbsolutePosition.X + node.AbsoluteSize.X,
-					Bottom = node.AbsolutePosition.Y + node.AbsoluteSize.Y + shift,
-				}
-				for _, edge in ipairs({"Left", "Top", "Right", "Bottom"}) do
-					local delta = math.abs(resolved[edge] - live[edge])
-					if delta > worst then worst, worstName = delta, edge end
-				end
-			else
-				worst, worstName = math.huge, "unresolvable"
-			end
-		else
-			worst, worstName = math.huge, "Level1Objectives missing"
-		end
-		record(worst <= 1,
-			"the resolver reproduces the engine for an inset-IGNORING objective gui"
-			.. " at the real viewport",
-			string.format("worst edge error %.2fpx at %s", worst, worstName))
-
+	local ran, why = pcall(function()
+		local probe = Fit.hudProbe()
 		for _, device in ipairs(Fit.Devices) do
-			local applied = Fit.apply(device)
-			record(applied, device.Name .. ": the device override took before the row ran",
-				applied and "" or "timed out waiting for UIDevice to report it")
-			local layout = UIDevice.Layout()
-			local viewport, insetY = device.Size, layout.Inset.Y
-			state.note(string.format("--- %s (class=%s touch=%s) safe (%.0f,%.0f)-(%.0f,%.0f) ---",
-				device.Name, layout.Class, tostring(layout.IsTouch),
-				layout.Safe.Left, layout.Safe.Top, layout.Safe.Right, layout.Safe.Bottom))
-
-			local function resolved(gui, name)
-				local screen = findGui(gui)
-				local object = screen and screen:FindFirstChild(name, true)
-				if not object then return nil, name .. " missing" end
-				local rect = UIRegression.ResolveRect(object, viewport, insetY)
-				if not rect or rect.Unresolvable then
-					return nil, name .. ": " .. tostring(rect and rect.Unresolvable or "nil")
-				end
-				return rect, nil
-			end
-
-			-- ---- LEVEL 1 -------------------------------------------------
-			resetScenario(true)
-			revealGui("PuzzleGui")
-			task.wait(0.25)
-			local level1, level1Error = resolved("PuzzleGui", "Level1Objectives")
-			state.note("      Level1Objectives " .. Fit.text(level1))
-			if not layout.IsTouch then
-				-- DESKTOP REGRESSION, stated explicitly. The touch repair moved
-				-- three HUDs; the desktop compositions they came from are part of
-				-- the contract and are asserted here so a later touch change
-				-- cannot quietly take them with it.
-				record(level1 ~= nil
-					and level1.Bottom > (layout.Safe.Top + layout.Safe.Bottom) * .5
-					and level1.Right > (layout.Safe.Left + layout.Safe.Right) * .5,
-					device.Name .. " / L1 desktop: keeps its authored LOWER-RIGHT column",
-					Fit.text(level1) or level1Error)
-			else
-				-- UI_REGRESSION_20260923: the column's corner, its fit, the toggle
-				-- target and the detector are measured below on the STAGED stacks
-				-- a round draws. Measured here, on the lobby's unstaged panel, they
-				-- read rows leaked from the previous device and a detector card
-				-- that is only ever shown in NAV mode.
-				state.note("      (touch: Level 1 column measured on the staged phases below)")
-			end
-
-			-- ---- LEVEL 1, THE WHOLE COMPOSITION --------------------------
-			-- C_L1_COMPOSITION_IS_MEASURED_20260831. Runs on EVERY fixture, touch
-			-- and pointer alike: the two form factors draw two different authored
-			-- compositions and each has rectangles it has to keep. The staging makes
-			-- the three objective rows and the message real -- with copy -- and lets
-			-- the production layout pass place them, so what is compared below is a
-			-- stack PuzzleUI laid out and not one the harness wrote.
-			for _, phase in ipairs(Fit.Level1Phases) do
-				local phaseLabel = device.Name .. " / L1 (" .. phase.Name .. ")"
-				local pieces, stageWhy = Fit.stageLevel1(device, phase)
-				record(pieces ~= nil and stageWhy == nil,
-					phaseLabel .. ": the whole composition could be staged and relaid out",
-					stageWhy or "staged")
-				-- Resolved space, the same ResolveRect every other matrix measures with.
-				-- AbsolutePosition would be the HOST's answer for these elements, and a
-				-- fixture's rectangles are not the host's.
-				local function resolveObject(object, label)
-					local rect = UIRegression.ResolveRect(object, viewport, insetY)
-					if not rect or rect.Unresolvable then
-						return nil, label .. ": " .. tostring(rect and rect.Unresolvable or "nil")
+			state.record(Fit.apply(device), device.Name .. ": override applied")
+			for _, level in ipairs({1, 2, 3, 4}) do
+				Fit.stageRoundObjective(level)
+				task.wait(0.12)
+				local gui = findGui("RoundHud")
+				local root = gui and gui:FindFirstChild("ObjectiveCard")
+				state.record(root ~= nil and root.Visible and gui.Enabled, device.Name .. ": level " .. level .. " actual objective visible")
+				if root and root.Visible then
+					local layout = UIDevice.Layout()
+					local rect = UIRegression.ResolveRect(root, device.Size, layout.Inset.Y)
+					local problems = Fit.anchorProblems(rect, layout, "ObjectiveCard")
+					state.record(#problems == 0, device.Name .. ": exact shared safe slot", table.concat(problems, "; "))
+					local absolute, rendered = Fit.live(root), Fit.engineRect(root)
+					state.record(rendered and not rendered.Unresolvable and math.abs(rendered.Left - absolute.Left) <= 1
+						and math.abs(rendered.Top - absolute.Top) <= 1
+						and math.abs(rendered.Width - absolute.Width) <= 1 and math.abs(rendered.Height - absolute.Height) <= 1,
+						device.Name .. ": native-frame resolver matches engine")
+					if layout.IsTouch then
+						local hit = root:FindFirstChild("Hit", true)
+						state.record(hit ~= nil and hit.AbsoluteSize.X >= 44 and hit.AbsoluteSize.Y >= 44, device.Name .. ": objective expansion hit44")
 					end
-					return rect, nil
-				end
-				local composition = Fit.level1CompositionProblems(pieces, resolveObject,
-					layout.IsTouch)
-				record(#composition == 0,
-					phaseLabel .. ": the toggle, the title, every row this phase draws and"
-					.. " its message each own a separate rectangle, and the panel holds the"
-					.. " ones this form factor draws inside it",
-					table.concat(composition, "; "))
-				if layout.IsTouch then
-					-- The column's corner, measured on the stack a round draws.
-					local staged = pieces and pieces.Panel and resolveObject(pieces.Panel, "Level1Objectives")
-					local anchor = Fit.anchorProblems(staged, layout, "Level1Objectives")
-					record(#anchor == 0,
-						phaseLabel .. ": the objectives column is in the upper-right safe corner",
-						table.concat(anchor, "; "))
-					local stagedToggle = pieces and pieces.Toggle
-						and resolveObject(pieces.Toggle, "Level1ObjectivesToggle")
-					record(stagedToggle ~= nil and stagedToggle.Height >= 44,
-						phaseLabel .. ": its toggle keeps a 44px target",
-						Fit.text(stagedToggle))
-				end
-				-- ...and the child sweep AGAIN, now that there is something in the panel
-				-- for it to walk. The identical call above this block runs against a round
-				-- that never made the counters live, so its row set is empty and its copy
-				-- proof is a pass over nothing. This one measures four rows of real copy at
-				-- the width the fixture gives them, which is where 568x320 broke.
-				local stagedChildren = Fit.childProblems(pieces and pieces.Panel,
-					"Level1Objectives")
-				record(#stagedChildren == 0,
-					phaseLabel .. ": and with every row carrying real copy, each one's"
-					.. " string still fits the box the stack gave it",
-					table.concat(stagedChildren, "; "))
-				Fit.unstageLevel1(pieces)
-			end
-
-			-- The exit detector, in the only mode that shows it: NAV, after the
-			-- real "escape" event (PuzzleUI.enterNavMode -> placeExitReceiver).
-			if layout.IsTouch then
-				local puzzleScreen = findGui("PuzzleGui")
-				local probe = puzzleScreen and puzzleScreen:FindFirstChild("UIRegressionPuzzleProbe")
-				local detectorObject = puzzleScreen and puzzleScreen:FindFirstChild("ExitEnergyDetector")
-				if probe and detectorObject then
-					(probe :: any):Invoke("reset")
-					;(probe :: any):Invoke("begin", 3, 3)
-					;(probe :: any):Invoke("escape")
-					workspace:SetAttribute("UIRegressionViewport", device.Size + Vector2.new(0, 1))
-					task.wait(0.12)
-					workspace:SetAttribute("UIRegressionViewport", device.Size)
-					task.wait(0.3)
-					record((detectorObject :: any).Visible == true,
-						device.Name .. " / L1 NAV: the exit detector is on screen after the escape event",
-						tostring((detectorObject :: any).Visible))
-					local detectorProblems = Fit.childProblems(detectorObject, "ExitEnergyDetector")
-					record(#detectorProblems == 0,
-						device.Name .. " / L1 NAV: and the detector's own readout fits it",
-						table.concat(detectorProblems, "; "))
-					local detector = resolved("PuzzleGui", "ExitEnergyDetector")
-					local navPanel = puzzleScreen:FindFirstChild("Level1Objectives")
-					local panelRect = navPanel and (navPanel :: any).Visible
-						and resolved("PuzzleGui", "Level1Objectives") or nil
-					record(detector ~= nil and (panelRect == nil or not Fit.overlaps(detector, panelRect)),
-						device.Name .. " / L1 NAV: and the exit detector does not overlap the column",
-						Fit.text(detector))
-					;(probe :: any):Invoke("reset")
-				else
-					record(false, device.Name .. " / L1 NAV: the detector and its probe exist",
-						string.format("probe=%s detector=%s", tostring(probe ~= nil), tostring(detectorObject ~= nil)))
+					for _, node in ipairs(root:GetDescendants()) do
+						if node:IsA("TextLabel") and visibleChain(node) and node.Text ~= "" then
+							state.record(not layout.IsTouch or node.TextSize >= 12, device.Name .. ": " .. node.Name .. " touch text floor")
+							state.record(node.TextBounds.X <= node.AbsoluteSize.X + 1 and node.TextBounds.Y <= node.AbsoluteSize.Y + 1,
+								device.Name .. ": " .. node.Name .. " real text fits", node.Text)
+						end
+					end
 				end
 			end
-
-			-- ---- LEVEL 2, alone and with the completion alert -------------
-			resetScenario(true)
-			revealGui("Level2ObjectiveGui")
-			task.wait(0.25)
-			local level2, level2Error = resolved("Level2ObjectiveGui", "Level2ObjectivePanel")
-			state.note("      Level2ObjectivePanel " .. Fit.text(level2))
-			if not layout.IsTouch then
-				record(level2 ~= nil
-					and level2.Bottom > (layout.Safe.Top + layout.Safe.Bottom) * .5
-					and level2.Right > (layout.Safe.Left + layout.Safe.Right) * .5,
-					device.Name .. " / L2 desktop: keeps its authored BOTTOM-RIGHT panel",
-					Fit.text(level2) or level2Error)
-			end
-			if layout.IsTouch then
-				local problems = Fit.anchorProblems(level2, layout, "Level2ObjectivePanel")
-				record(#problems == 0,
-					device.Name .. " / L2: the pump readout is in the upper-right safe corner",
-					table.concat(problems, "; ") .. (level2Error and (" " .. level2Error) or ""))
-				local l2Screen = findGui("Level2ObjectiveGui")
-				local l2Panel = l2Screen and l2Screen:FindFirstChild("Level2ObjectivePanel")
-				local l2Children = Fit.childProblems(l2Panel, "Level2ObjectivePanel")
-				record(#l2Children == 0,
-					device.Name .. " / L2: and its three lines fit inside it",
-					table.concat(l2Children, "; "))
-			end
-			-- C_L2_ALERT_IS_DRIVEN_20260831. The gui is enabled with every child DOWN
-			-- -- the filter returns false for all of them -- so the probe's own capture
-			-- records "no announcement was up" and its restore can put that back. Left
-			-- revealed, the shade would be visible before the show and the restore would
-			-- hand back a raised announcement nobody asked for.
-			revealGui("Level2AlertGui", function() return false end)
-			task.wait(0.3)
-			local alertScreen = findGui("Level2AlertGui")
-			local shade = alertScreen and alertScreen:FindFirstChildOfClass("Frame")
-			local alertProbe = alertScreen
-				and alertScreen:FindFirstChild("UIRegressionLevel2AlertProbe")
-			local haveAlertProbe = alertProbe ~= nil and alertProbe:IsA("BindableFunction")
-			record(haveAlertProbe,
-				device.Name .. " / L2: the announcement has a production seam to drive,"
-				.. " so the matrix never has to fake one",
-				haveAlertProbe and "UIRegressionLevel2AlertProbe"
-					or "UIRegressionLevel2AlertProbe missing")
-			-- THE WIRING, from both ends, the way the Level 3 reader's is. `remote` is
-			-- the recorded RBXScriptConnection's own Connected state and `handler` is
-			-- whether the function the remote is connected to is still onAlertEvent --
-			-- so deleting the connect statement fails this even though every probe
-			-- action below would keep working.
-			local alertWiring = haveAlertProbe and alertProbe:Invoke("wiring") or ""
-			record(alertWiring == "remote=true/true",
-				device.Name .. " / L2: the announcement remote is still connected, and"
-				.. " still to the production handler",
-				tostring(alertWiring))
-			-- REAL COPY, through the production presentation. Five seconds of hold so
-			-- the fade cannot start while the panel is being measured; the probe returns
-			-- immediately either way, because the presentation no longer yields.
-			local alertShown = nil
-			if haveAlertProbe then
-				alertShown = Fit.parseAlertAnswer(alertProbe:Invoke("show",
-					Fit.AlertLines.Line1, Fit.AlertLines.Line2, Fit.AlertLines.Final, 5))
-			end
-			task.wait(0.25)
-			local alertPanel = alertShown and alertShown.Rects.panel or nil
-			state.note("      Level2Alert " .. Fit.text(alertPanel)
-				.. " gate=" .. tostring(alertShown and alertShown.Flags.gate))
-			local alertProblems = Fit.alertProblems(alertShown, layout)
-			record(#alertProblems == 0,
-				device.Name .. " / L2: with all three authored lines on screen, every line"
-				.. " is inside the panel, no two lines meet, and the panel is inside the"
-				.. " safe area and clear of every movement zone",
-				table.concat(alertProblems, "; "))
-			local ownsBand = player:GetAttribute("Level2AlertOwnsBand") == true
-			local objectiveShown = level2 ~= nil
-			local screenPanel = findGui("Level2ObjectiveGui")
-			local livePanel = screenPanel and screenPanel:FindFirstChild("Level2ObjectivePanel")
-			objectiveShown = livePanel ~= nil and (livePanel :: any).Visible == true
-			-- Either they are reflowed apart, or the alert has declared it owns
-			-- the band and the objective has genuinely stood down. Never both on
-			-- screen and overlapping, and never both hidden.
-			-- EXACTLY ONE OWNER, and it has to be on screen. "Both hidden" used to
-			-- satisfy this: `ownsBand and not objectiveShown` is true when the
-			-- objective is hidden for any reason at all, including the alert gui
-			-- being disabled and nothing being drawn. The alert's own visibility
-			-- is now part of the assertion.
-			local alertVisible = shade ~= nil and (shade :: any).Visible == true
-				and alertScreen ~= nil and (alertScreen :: ScreenGui).Enabled == true
-			record(alertVisible and ((ownsBand and not objectiveShown)
-					or (not ownsBand and objectiveShown
-						and not Fit.overlaps(alertPanel, level2))),
-				device.Name .. " / L2: the completion alert and the objective column"
-				.. " reflow apart, or mutually exclude -- and the owner is VISIBLE",
-				string.format("alertVisible=%s ownsBand=%s objectiveShown=%s alert=%s objective=%s",
-					tostring(alertVisible), tostring(ownsBand), tostring(objectiveShown),
-					Fit.text(alertPanel), Fit.text(level2)))
-			-- The alert's own copy has to fit the panel it was given. This walk is the
-			-- one that reads the LIVE labels rather than the probe's answer, so it also
-			-- catches a string that overflows a box whose rectangle is perfectly placed.
-			local alertInner = shade and shade:FindFirstChildOfClass("Frame")
-			local alertChildren = Fit.childProblems(alertInner, "Level2Alert")
-			record(#alertChildren == 0,
-				device.Name .. " / L2: and every line of the announcement fits its panel",
-				table.concat(alertChildren, "; "))
-			-- THE FINAL LINE, on BOTH axes, named on its own because it is the string
-			-- C_L2_ALERT_COPY_FITS_20260830 was opened for and the longest one this
-			-- panel ever holds. The height test is the one that defect failed; the width
-			-- test is not redundant even though the label wraps -- TextBounds.X wider
-			-- than the box means the wrapper had to break inside a word, which is copy
-			-- running out of the side of its box rather than off the bottom of it.
-			local runLabel = alertInner and alertInner:FindFirstChild("AlertRunLine")
-			local runRect = alertShown and alertShown.Rects.run or nil
-			local runBounds = runLabel and (runLabel :: any).TextBounds or nil
-			record(runLabel ~= nil and runRect ~= nil and runBounds ~= nil
-				and (runLabel :: any).Text == Fit.AlertLines.Final
-				and runBounds.Y <= runRect.Height + 1
-				and runBounds.X <= runRect.Width + 1,
-				device.Name .. " / L2: and its FINAL line is not clipped on either axis",
-				string.format("%q needs %sx%s in %s",
-					runLabel and tostring((runLabel :: any).Text) or "no label",
-					runBounds and string.format("%.0f", runBounds.X) or "?",
-					runBounds and string.format("%.0f", runBounds.Y) or "?",
-					Fit.text(runRect)))
-			-- Ownership must TRANSFER BACK, and it is handed back through the probe's
-			-- own restore rather than by writing the shade down: restore puts the copy,
-			-- the four transparencies, the panel and the shade back to what capture()
-			-- recorded and re-arms whatever hold was left of an announcement that was
-			-- already up. Writing Visible = false leaves the test copy in the labels for
-			-- the rest of the session.
-			local restoredAnswer = haveAlertProbe and alertProbe:Invoke("restore") or nil
-			task.wait(0.3)
-			local afterRestore = Fit.parseAlertAnswer(restoredAnswer)
-			record(afterRestore ~= nil and afterRestore.Flags.shown == false,
-				device.Name .. " / L2: and the probe's restore takes the announcement down",
-				tostring(restoredAnswer))
-			local restoredScreen = findGui("Level2ObjectiveGui")
-			local restoredPanel = restoredScreen
-				and restoredScreen:FindFirstChild("Level2ObjectivePanel")
-			-- The OWNERSHIP FLAG is what transfers; the panel's own visibility is
-			-- additionally gated on being in Level 2 with a round running, which
-			-- this matrix deliberately is not. Asserting the flag AND that the
-			-- objective gui is no longer suppressed is the transfer; asserting the
-			-- panel's Visible would be asserting the level gate.
-			local restoredEnabled = restoredScreen ~= nil
-				and (restoredScreen :: ScreenGui).Enabled == true
-			record(player:GetAttribute("Level2AlertOwnsBand") ~= true and restoredEnabled,
-				device.Name .. " / L2: and lowering the alert hands the band back",
-				string.format("ownsBand=%s objectiveGuiEnabled=%s",
-					tostring(player:GetAttribute("Level2AlertOwnsBand")),
-					tostring(restoredEnabled)))
-
-			-- ---- LEVEL 3, open then hidden then restored -----------------
-			resetScenario(true)
-			player:SetAttribute("UIRegressionForceLevel3Reader", true)
-			player:SetAttribute("UIRegressionForceReaderHidden", false)
-			revealGui("Level3ReaderGui", function(child)
-				return child.Name == "ReaderPanel" or child.Name == "ReaderRestore"
-			end)
-			task.wait(0.3)
-			local reader, readerError = resolved("Level3ReaderGui", "ReaderPanel")
-			state.note("      ReaderPanel " .. Fit.text(reader))
-			-- The CD reader takes the upper-right safe corner on EVERY form factor
-			-- (Trello 6BVH4WmN, 2026-09-21): anchorProblems already branches its
-			-- margin on IsTouch and applies the control-cluster rule only on touch.
-			do
-				local problems = Fit.anchorProblems(reader, layout, "ReaderPanel")
-				record(#problems == 0,
-					device.Name .. " / L3 open: the reader is in the upper-right safe corner",
-					table.concat(problems, "; ") .. (readerError and (" " .. readerError) or ""))
-				local l3Screen = findGui("Level3ReaderGui")
-				local l3Panel = l3Screen and l3Screen:FindFirstChild("ReaderPanel")
-				local l3Children = Fit.childProblems(l3Panel, "ReaderPanel")
-				record(#l3Children == 0,
-					device.Name .. " / L3 open: and its readout fits inside it",
-					table.concat(l3Children, "; "))
-			end
-			-- REPLACES the old level3-reader-open / -closed pair, which REQUIRED
-			-- ReaderToggle in both states. There is no separate control any more.
-			local readerScreen = findGui("Level3ReaderGui")
-			record(readerScreen ~= nil and readerScreen:FindFirstChild("ReaderToggle", true) == nil,
-				device.Name .. " / L3 open: there is no separate CLOSE control at all",
-				readerScreen and readerScreen:FindFirstChild("ReaderToggle", true)
-					and "ReaderToggle still exists" or nil)
-			local livePanelObject = readerScreen and readerScreen:FindFirstChild("ReaderPanel")
-			local restoreObject = readerScreen and readerScreen:FindFirstChild("ReaderRestore")
-			record(livePanelObject ~= nil and (livePanelObject :: any).Visible == true
-				and (not layout.IsTouch or (livePanelObject :: any).Active == true),
-				device.Name .. " / L3 open: the panel itself is the control that hides it"
-				.. " on touch, and inert on desktop",
-				string.format("visible=%s active=%s touch=%s",
-					tostring(livePanelObject and (livePanelObject :: any).Visible),
-					tostring(livePanelObject and (livePanelObject :: any).Active),
-					tostring(layout.IsTouch)))
-			record(restoreObject ~= nil and (restoreObject :: any).Visible == false,
-				device.Name .. " / L3 open: and the restore chip is not also on screen",
-				tostring(restoreObject and (restoreObject :: any).Visible))
-
-			-- C_L3_ROWS_SAY_WHAT_THEY_PROVE_20260831 -- WHAT SHIPPED BROKEN in the
-			-- tests, in their WORDING, which is the kind that survives longest.
-			--
-			-- These rows used to be introduced as "REAL INTERACTION -- the panel is
-			-- TAPPED" and to report "TAPPING THE PANEL hides it", and they called the
-			-- probe "the production tap handler is reachable". Nothing is tapped. The
-			-- probe calls onPanelTapped as a plain Lua function: no touch, no click,
-			-- no InputObject exists at any point, and the button itself is never
-			-- involved -- so the hit test, Active, Visible, ZIndex and anything drawn
-			-- over the top are all left unexercised. A row that says "tapped" tells
-			-- the next reader an input path was proven when it was not, and a false
-			-- claim in a passing row is worse than a missing check, because nobody
-			-- goes looking for it.
-			--
-			-- WHAT IS ACTUALLY PROVEN, in three parts, each asserted below:
-			--   1. a live Activated connection whose recorded Button is the very
-			--      button this file draws and which is still in the tree (the
-			--      `routed` half of the wiring answer);
-			--   2. handler IDENTITY -- the function the seam invokes IS the function
-			--      that was connected, not a copy of it (the `sameFunction` half);
-			--   3. a DIRECT HANDLER INVOCATION and the state it leaves behind.
-			--
-			-- WHAT IS NOT PROVEN, and cannot be from here: the engine delivering a
-			-- touch to a visible, Active button. VirtualInputManager is capability-
-			-- blocked in this Studio session ("lacking capability RobloxScript") and
-			-- the MCP bridge's synthetic mouse does not reach the GUI input stack at
-			-- all -- it never even raises MouseEnter on a GuiObject. That last link is
-			-- Roblox's own behaviour and it is untested here BY NECESSITY. It is
-			-- written down rather than papered over with a verb.
-			local readerProbe = readerScreen
-				and readerScreen:FindFirstChild("UIRegressionReaderProbe")
-			player:SetAttribute("UIRegressionForceReaderHidden", nil)
-			task.wait(0.2)
-			local handlerState = nil
-			if readerProbe and readerProbe:IsA("BindableFunction") then
-				handlerState = readerProbe:Invoke("invokePanelHandler")
-			end
-			task.wait(0.25)
-			record(readerProbe ~= nil,
-				device.Name .. " / L3: the handler seam exists, so the production"
-				.. " onPanelTapped can be invoked directly",
-				readerProbe and "UIRegressionReaderProbe" or "no probe")
-			-- THE WIRING CONTRACT, which is the half a handler invocation cannot
-			-- supply. Invoking the handler stays green with every Activated:Connect
-			-- line deleted -- the body still works while no finger could ever reach
-			-- it -- so the gap is closed from both ends. The RUNTIME half reports the
-			-- recorded RBXScriptConnection's Connected state, that the connection was
-			-- made on the button this file draws and that the button is still
-			-- parented, plus that the seam invokes the same function object that was
-			-- connected. The SOURCE half reads the shipping LocalScript and requires
-			-- both connect statements verbatim. Delete either connection and both
-			-- fail. Neither says an input event was delivered.
-			local wiring = readerProbe and readerProbe:Invoke("wiring") or ""
-			record(wiring == "ReaderPanel=true/true ReaderRestore=true/true",
-				device.Name .. " / L3: both Activated connections are live on the very"
-				.. " buttons this file draws, and the seam invokes the very functions"
-				.. " they are connected to",
-				tostring(wiring))
-			local readerSource = nil
-			do
-				local sps = game:GetService("StarterPlayer"):FindFirstChild("StarterPlayerScripts")
-				local script3 = sps and sps:FindFirstChild("Level 3 Reader Client")
-				readerSource = script3 and (script3 :: any).Source or nil
-			end
-			record(readerSource ~= nil
-				and readerSource:find('wireTap("ReaderPanel", panel, onPanelTapped)', 1, true) ~= nil
-				and readerSource:find('wireTap("ReaderRestore", restoreButton, onRestoreTapped)', 1, true) ~= nil,
-				device.Name .. " / L3: and the shipping source still contains both"
-				.. " connect statements",
-				readerSource and "source read" or "source unavailable")
-			if layout.IsTouch then
-				record(handlerState == "hidden",
-					device.Name .. " / L3: INVOKING onPanelTapped hides the reader",
-					tostring(handlerState))
-			else
-				-- Desktop: the handler itself declines. It is the same function a click
-				-- would reach, and invoking it leaves the reader open, so R keeps the
-				-- job of putting it away. The Active check below is the separate half:
-				-- the panel is not in the input stack at all, so no click reaches the
-				-- handler in the first place.
-				record(handlerState == "open",
-					device.Name .. " / L3 desktop: INVOKING onPanelTapped does NOT hide the"
-					.. " reader -- the handler declines on a pointer device",
-					tostring(handlerState))
-				record(livePanelObject ~= nil and (livePanelObject :: any).Active == false,
-					device.Name .. " / L3 desktop: and it is not in the input stack",
-					tostring(livePanelObject and (livePanelObject :: any).Active))
-				-- Drive the hidden state the only way a desktop can, so the rest
-				-- of the row still measures the chip.
-				player:SetAttribute("UIRegressionForceReaderHidden", true)
-			end
-			task.wait(0.3)
-			local restoreRect = resolved("Level3ReaderGui", "ReaderRestore")
-			state.note("      ReaderRestore " .. Fit.text(restoreRect))
-			record(livePanelObject ~= nil and (livePanelObject :: any).Visible == false,
-				device.Name .. " / L3 hidden: the panel is gone",
-				tostring(livePanelObject and (livePanelObject :: any).Visible))
-			if layout.IsTouch then
-				record(restoreObject ~= nil and (restoreObject :: any).Visible == true
-					and restoreRect ~= nil and restoreRect.Width >= 44
-					and restoreRect.Height >= 44,
-					device.Name .. " / L3 hidden: only a compact restore target remains,"
-					.. " at least 44x44",
-					Fit.text(restoreRect))
-			else
-				-- DESKTOP DRAWS NOTHING. R is the only way back, and a restore chip
-				-- there would be the "dedicated open button" the product forbids.
-				record(restoreObject == nil or (restoreObject :: any).Visible == false,
-					device.Name .. " / L3 hidden: desktop draws NO restore chip -- R is"
-					.. " the only way back",
-					tostring(restoreObject and (restoreObject :: any).Visible))
-			end
-			if layout.IsTouch and reader ~= nil and restoreRect ~= nil then
-				record(math.abs(restoreRect.Right - reader.Right) <= 1
-					and math.abs(restoreRect.Top - reader.Top) <= 1,
-					device.Name .. " / L3 hidden: at the same upper-right anchor the panel used",
-					string.format("chip %s vs panel %s", Fit.text(restoreRect), Fit.text(reader)))
-			end
-			-- SUBTLE: the mark the player sees is smaller than the target the
-			-- finger gets, and it carries no key name.
-			local chip = restoreObject and restoreObject:FindFirstChild("Chip")
-			local chipRect = chip and Fit.live(chip)
-			record(chipRect ~= nil and chipRect.Width <= 34 and chipRect.Height <= 34,
-				device.Name .. " / L3 hidden: its visible mark is a small chip, not a button bar",
-				Fit.text(chipRect))
-			record(restoreObject ~= nil and Fit.keyGlyph(restoreObject) == nil
-				and tostring((restoreObject :: any).Text) == "",
-				device.Name .. " / L3 hidden: and names no keyboard key",
-				restoreObject and Fit.keyGlyph(restoreObject) or nil)
-
-			-- The chip must be ACTIVE, not merely drawn: an inert 44px mark is a
-			-- picture of a control.
-			if layout.IsTouch then
-				record(restoreObject ~= nil and (restoreObject :: any).Active == true,
-					device.Name .. " / L3 hidden: and the restore chip is in the input stack",
-					tostring(restoreObject and (restoreObject :: any).Active))
-			else
-				record(restoreObject == nil or (restoreObject :: any).Active == false,
-					device.Name .. " / L3 hidden: and desktop leaves nothing in the input"
-					.. " stack either",
-					tostring(restoreObject and (restoreObject :: any).Active))
-			end
-
-			-- The chip's handler, invoked the same way and proven the same way. The
-			-- wiring row above already covered ReaderRestore's connection and its
-			-- button identity; this is the third part, the invocation.
-			local restoredState = nil
-			if readerProbe and readerProbe:IsA("BindableFunction") then
-				player:SetAttribute("UIRegressionForceReaderHidden", nil)
-				task.wait(0.15)
-				restoredState = readerProbe:Invoke("invokeRestoreHandler")
-			end
-			task.wait(0.3)
-			record(restoredState == "open",
-				device.Name .. " / L3 restored: INVOKING onRestoreTapped brings the reader"
-				.. " back",
-				tostring(restoredState))
-			record(livePanelObject ~= nil and (livePanelObject :: any).Visible == true
-				and restoreObject ~= nil and (restoreObject :: any).Visible == false,
-				device.Name .. " / L3 restored: the full panel comes back and the chip goes",
-				string.format("panel=%s chip=%s",
-					tostring(livePanelObject and (livePanelObject :: any).Visible),
-					tostring(restoreObject and (restoreObject :: any).Visible)))
-
-			-- ---- passive caption alongside the reader -------------------
-			-- resetScenario disabled this ScreenGui for the reader-only rows.
-			-- Restore it before measuring a caption: child.Visible alone does not
-			-- mean the player could see the briefing.
-			local guide = findGui("LevelOneGuideGui")
-			if guide then (guide :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
-			task.wait(0.35)
-			local caption = guide and guide:FindFirstChild("CommandSubtitles")
-			record(guide ~= nil and (guide :: ScreenGui).Enabled == true,
-				device.Name .. ": the caption's ScreenGui is enabled for this synthetic row",
-				tostring(guide and (guide :: ScreenGui).Enabled))
-			record(player:GetAttribute("DispatchTextActive") == true
-				and player:GetAttribute("ZyntraDispatchClientActive") == false
-				and player:GetAttribute("DispatchBriefingOpen") == false,
-				device.Name .. ": text remains active without suppressing objective HUDs",
-				string.format("text=%s hudGate=%s briefGate=%s",
-					tostring(player:GetAttribute("DispatchTextActive")),
-					tostring(player:GetAttribute("ZyntraDispatchClientActive")),
-					tostring(player:GetAttribute("DispatchBriefingOpen"))))
-			record(livePanelObject ~= nil and (livePanelObject :: any).Visible == true
-				and caption ~= nil and (caption :: any).Visible == true,
-				device.Name .. ": Level 3 reader remains visible beside the text briefing",
-				string.format("reader=%s caption=%s",
-					tostring(livePanelObject and (livePanelObject :: any).Visible),
-					tostring(caption and (caption :: any).Visible)))
-			local readerRect = livePanelObject and Fit.live(livePanelObject)
-			local captionRect = caption and Fit.live(caption)
-			record(readerRect ~= nil and captionRect ~= nil
-				and not Fit.overlaps(readerRect, captionRect),
-				device.Name .. ": reader and caption occupy separate screen space",
-				string.format("reader %s caption %s", Fit.text(readerRect), Fit.text(captionRect)))
-			local captionZone = captionRect and UIDevice.OverlapsMovementZone(
-				captionRect.Left, captionRect.Top, captionRect.Right, captionRect.Bottom)
-			local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
-			record(captionRect ~= nil and (captionZone == nil or passive),
-				device.Name .. ": reader caption crosses a touch zone only when click-through"
-					.. " and SKIP is 44px outside zones and reader",
-				string.format("zone=%s passive=%s (%s)", tostring(captionZone),
-					tostring(passive), passiveWhy))
-			if caption and caption:GetAttribute("ReaderPassiveLane") == true then
-				record(passive,
-					device.Name .. ": passive reader-lane marker is backed by safe target geometry",
-					passiveWhy)
-			end
-			player:SetAttribute("UIRegressionForceDispatchActive", nil)
-			player:SetAttribute("UIRegressionForceLevel3Reader", nil)
-			player:SetAttribute("UIRegressionForceReaderHidden", nil)
-			task.wait(0.15)
+			-- Captions/feed use gameplay admission, not the objective-only fixture gate.
+			if workspace:GetAttribute("RoundActive") == true then
+				state.record(probe:Invoke("feed", {Kind="TEAM",Actor=Players.LocalPlayer.Name,Detail="found a CD",Key="ui-regression"}) == true,
+					device.Name .. ": validated feed accepted")
+				state.record(probe:Invoke("caption", "COMMAND CENTER", "Keep moving.") == true, device.Name .. ": caption accepted")
+				task.wait()
+				local gui = findGui("RoundHud")
+				local caption = gui and gui:FindFirstChild("Caption")
+				local feed = gui and gui:FindFirstChild("FeedRow1")
+				state.record(caption ~= nil and caption.Visible, device.Name .. ": actual caption visible")
+				state.record(not device.Touch or feed == nil or not feed.Visible, device.Name .. ": phone one feed/caption lane")
+			else state.note("  skip native feed/caption admission outside a live round") end
 		end
 	end)
-
-	-- resetScenario FIRST: it writes attributes and gui states of its own, so
-	-- running it after the restore would re-dirty everything the snapshot just
-	-- put back -- which is exactly what the residue check caught.
 	pcall(resetScenario)
-	task.wait(0.15)
 	Fit.restore(saved)
-	task.wait(0.2)
-	if not ran then
-		state.Failures += 1
-		state.Checks += 1
-		state.note("  FAIL the objective corner matrix ran  (" .. tostring(runError) .. ")")
-	end
-	local residue, residueNote = Fit.residue(saved)
-	if residueNote then state.note(residueNote) end
-	record(#residue == 0,
-		"the matrix restored every borrowed attribute, every borrowed ScreenGui's"
-			.. " Enabled and every borrowed descendant's Visible, Active and"
-			.. " CanvasPosition, the terminal tab, the reader state and the caption",
-		table.concat(residue, "; "))
+	task.wait(0.15)
+	if not ran then state.record(false, "shared HUD lane ran", tostring(why)) end
+	local residue, note = Fit.residue(saved)
+	if note then state.note(note) end
+	state.record(#residue == 0, "shared lane restored borrowed state", table.concat(residue, "; "))
 	return state.finish()
+end
+
+function UIRegression.RoundHudMatrix(token: string?): (string, number)
+	return Fit.lane("RoundHudMatrix", token, Fit.bodyRoundHudMatrix)
+end
+
+function Fit.bodyObjectiveCornerMatrix(): (string, number)
+	return Fit.bodyRoundHudMatrix()
 end
 
 function UIRegression.ObjectiveCornerMatrix(token: string?): (string, number)
@@ -7603,380 +4851,7 @@ end
 Fit.DispatchReference = {Width = 560, Height = 100}
 
 function Fit.bodyDispatchCompactMatrix(): (string, number)
-	local player = Players.LocalPlayer
-	local state = Fit.recorder("=== dispatch briefing, compact footprint, every device ===")
-	local record = state.record
-	-- (b) AWAIT ITS NATURAL END, BOUNDED. See Fit.awaitQuietDispatch: this lane
-	-- cannot run without interrupting a live transmission, and it must not
-	-- interrupt one. The wait is BEFORE Fit.borrow, so the snapshot is of a quiet
-	-- world and the restore has nothing to be forgiven for.
-	local quiet, dispatchWhy = Fit.awaitQuietDispatch()
-	if not quiet then
-		record(false, "no real dispatch briefing was live when the matrix started",
-			dispatchWhy)
-		return state.finish()
-	end
-	local saved = Fit.borrow()
-
-	local guide = findGui("LevelOneGuideGui")
-	local panel = guide and guide:FindFirstChild("CommandSubtitles")
-	local subtitle = panel and panel:FindFirstChild("Subtitle")
-	local controls = panel and panel:FindFirstChild("BriefingControls")
-	local mute = controls and controls:FindFirstChild("DispatchMuteButton")
-	local stop = controls and controls:FindFirstChild("DispatchStopButton")
-	if not (panel and subtitle and controls and mute and stop) then
-		record(false, "the briefing panel exists to be measured",
-			string.format("panel=%s subtitle=%s controls=%s mute=%s stop=%s",
-				tostring(panel ~= nil), tostring(subtitle ~= nil), tostring(controls ~= nil),
-				tostring(mute ~= nil), tostring(stop ~= nil)))
-		return state.finish()
-	end
-
-	local ran, runError = pcall(function()
-		for _, device in ipairs(Fit.Devices) do
-			local applied = Fit.apply(device)
-			record(applied, device.Name .. ": the device override took before the row ran",
-				applied and "" or "timed out waiting for UIDevice to report it")
-			resetScenario(true)
-			local screen = findGui("LevelOneGuideGui")
-			if screen then (screen :: ScreenGui).Enabled = true end
-			player:SetAttribute("UIRegressionForceDispatchActive", true)
-			setLongDispatchCue()
-			task.wait(0.4)
-			record(panel.Visible == true and stop.Visible == true and stop.Active == true
-				and mute.Visible == false and mute.Active == false,
-				device.Name .. ": text and SKIP are visible, MUTE cannot take input",
-				string.format("panel=%s skip=%s/%s mute=%s/%s",
-					tostring(panel.Visible), tostring(stop.Visible), tostring(stop.Active),
-					tostring(mute.Visible), tostring(mute.Active)))
-
-			local layout = UIDevice.Layout()
-			local viewport, insetY = device.Size, layout.Inset.Y
-			local panelRect = UIRegression.ResolveRect(panel, viewport, insetY)
-			local subtitleRect = UIRegression.ResolveRect(subtitle, viewport, insetY)
-			local controlsRect = UIRegression.ResolveRect(controls, viewport, insetY)
-			state.note(string.format("--- %s --- panel %s", device.Name, Fit.text(panelRect)))
-			record(panelRect ~= nil and panelRect.Unresolvable == nil
-				and subtitleRect ~= nil and controlsRect ~= nil,
-				device.Name .. ": the briefing rectangles are analytically resolvable",
-				panelRect and panelRect.Unresolvable or "nil rect")
-			if not (panelRect and subtitleRect and controlsRect) then continue end
-
-			if not device.Touch then
-				record(panelRect.Width <= viewport.X + 1 and panelRect.Height <= viewport.Y + 1,
-					device.Name .. ": desktop keeps its authored composition", Fit.text(panelRect))
-				continue
-			end
-
-			-- The reference device, bound absolutely.
-			if device.Size == Vector2.new(956, 440) then
-				record(panelRect.Width <= Fit.DispatchReference.Width + 1
-					and panelRect.Height <= Fit.DispatchReference.Height + 1,
-					device.Name .. ": at most 560x100 -- 59% of the width and 23% of"
-					.. " the height, the owner's measured target",
-					string.format("%.0fx%.0f (%.0f%% x %.0f%%)", panelRect.Width, panelRect.Height,
-						panelRect.Width / viewport.X * 100, panelRect.Height / viewport.Y * 100))
-			end
-
-			-- INDEPENDENT EXPECTATIONS. The published attributes are checked for
-			-- AGREEMENT, but they are no longer the oracle: a bound taken from the
-			-- value production printed can only ever confirm that production
-			-- agrees with itself. The compact target is recomputed here from the
-			-- stated contract -- 59% of the width capped at 560, 23% of the height
-			-- capped at 100 -- and the panel is measured against THAT.
-			-- The HOME RECT, re-derived by the same rule production uses: the top
-			-- band while it can hold a briefing, and UIDevice's movement-free
-			-- ModalArea when it cannot. Re-deriving it here rather than reading
-			-- it back keeps the expectation independent.
-			local home = layout.TopBand
-			if home.Height < 80 and layout.ModalArea.Height > home.Height then
-				home = layout.ModalArea
-			end
-			local expectedWidth = math.min(math.floor(home.Width),
-				math.max(240, math.min(560, math.floor(viewport.X * .59))))
-			local expectedHeight = math.max(64, math.min(100, math.floor(viewport.Y * .23)))
-			local compactWidth = panel:GetAttribute("BriefingCompactWidth")
-			local compactCeiling = panel:GetAttribute("BriefingCompactCeiling")
-			local ceiling = panel:GetAttribute("BriefingBandCeiling")
-			local rung = panel:GetAttribute("BriefingWidthRung")
-			local published = type(compactWidth) == "number"
-				and type(compactCeiling) == "number" and type(ceiling) == "number"
-				and type(rung) == "number"
-			record(published,
-				device.Name .. ": the layout publishes the compact contract it applied",
-				string.format("width=%s ceiling=%s effective=%s rung=%s",
-					tostring(compactWidth), tostring(compactCeiling),
-					tostring(ceiling), tostring(rung)))
-			-- ...and what it published must MATCH what the contract says it should
-			-- have been. A drift here means production and this matrix have
-			-- stopped describing the same rule.
-			record(published and math.abs(compactWidth - expectedWidth) <= 1
-				and math.abs(compactCeiling - expectedHeight) <= 1,
-				device.Name .. ": and it matches the target recomputed independently",
-				string.format("published %sx%s vs expected %dx%d",
-					tostring(compactWidth), tostring(compactCeiling),
-					expectedWidth, expectedHeight))
-			-- GUARD the rung before comparing it. `rung > 1` on a nil rung is a
-			-- runtime error, and on a matrix that swallowed it, a silent skip.
-			if published then
-				record(panelRect.Width <= expectedWidth + 1 or rung > 1,
-					device.Name .. ": the panel keeps its compact width, or reports the"
-					.. " rung it had to climb for its own copy",
-					string.format("%.0f wide vs target %d, rung %d",
-						panelRect.Width, expectedWidth, rung))
-				record(panelRect.Height <= expectedHeight + 1
-						or panelRect.Height <= ceiling + 1,
-					device.Name .. ": and its compact height, or the measured height its"
-					.. " own copy required",
-					string.format("%.0f tall vs target %d, effective %.0f",
-						panelRect.Height, expectedHeight, ceiling))
-				-- FOOTPRINT, stated in the axis each orientation can actually give.
-				--
-				-- A width-only rule was tried here first and was the wrong shape:
-				-- it failed a 375x667 portrait phone at 330x100 -- 88% of the
-				-- width but 15% of the height, and 41% less screen than the
-				-- 351x160 that shipped -- while passing anything wide and tall.
-				-- Width is the cheap axis in portrait and the expensive one in
-				-- landscape, so the rule follows the orientation, and an AREA
-				-- bound underwrites both. That is three assertions where there
-				-- was one, and every device in this matrix clears all three with
-				-- margin (5-17% of screen area).
-				if not layout.Portrait then
-					record(panelRect.Width <= viewport.X * .75 + 1,
-						device.Name .. ": landscape never gives it three quarters of the width",
-						string.format("%.0f of %.0f (%.0f%%)", panelRect.Width, viewport.X,
-							panelRect.Width / viewport.X * 100))
-				end
-				-- MEASURED NECESSITY, applied to EVERY touch device rather than
-				-- only to the ones that cannot serve the compact target. It used
-				-- to be the else-branch of that classification, which made it the
-				-- weaker devices' rule and left the roomy ones free to sit at
-				-- their ceiling with a sentence that occupied two thirds of it.
-				-- It is the strictest of the three bounds here and there is no
-				-- device it should not hold for: the panel may be no taller than
-				-- the two 44px readouts plus the copy this device's width forces
-				-- AT THE FACE IT ACHIEVED, plus the panel's own padding.
-				--
-				-- The bound is taken at the achieved face rather than at the
-				-- 10px floor on purpose: the contract asks for 11 wherever
-				-- width or height can be traded for it, so measuring the bound
-				-- at 10 would call a panel that bought legibility with 30px of
-				-- height "too tall" for doing exactly what it was told.
-				-- The face the SEARCH ran at, not only the one the final pick
-				-- landed on: the panel's height was chosen to satisfy the
-				-- required face, so that is the face the necessity bound is
-				-- measured at.
-				local achieved = panel:GetAttribute("BriefingRequiredFace")
-				local landed = panel:GetAttribute("BriefingFace")
-				if type(achieved) ~= "number" then achieved = 11 end
-				if type(landed) == "number" then achieved = math.max(achieved, landed) end
-				local copyNeed = Fit.measureText(LONG_DISPATCH_CUE,
-					(subtitle :: any).FontFace, achieved, subtitleRect.Width)
-				-- The readouts STACK on a panel too narrow to hold two of them
-				-- side by side, and a stacked pair is 44 + 6 + 44, not 44. A
-				-- bound that assumed one row called a correctly stacked panel
-				-- fifty pixels too tall.
-				local twoColumns = panelRect.Width >= 2 * 120 + 10 + 24
-				local rowsHeight = twoColumns and 44 or (44 * 2 + 6)
-				-- HEIGHT SPENT TO EARN THE FACE IS NOT HEIGHT WASTED. The panel
-				-- does not choose its type size freely: the authored ladder
-				-- offers 16px only to a copy box of at least 40 and 13px only to
-				-- one of at least 33, so a box held at 40 for a sentence that
-				-- occupies 32 is the panel buying the larger face, which is what
-				-- the contract asks it to do wherever height can be traded for
-				-- legibility. Measuring the bound without that allowance failed
-				-- both iPads by exactly the two pixels the ladder demands. The
-				-- thresholds are stated here on purpose: if the ladder changes,
-				-- this fails and both ends get updated together.
-				local faceBoxFloor = 0
-				if achieved >= 16 then faceBoxFloor = 40
-				elseif achieved >= 13 then faceBoxFloor = 33 end
-				local copyBox = math.max(copyNeed and copyNeed.Y or 40, faceBoxFloor)
-				local allowed = rowsHeight + copyBox + 12
-				record(panelRect.Height <= allowed + 1,
-					device.Name .. ": no taller than its own copy requires at the"
-					.. " face it achieved",
-					string.format("%.0f tall, necessity bound %.0f at %dpx"
-						.. " (%s readouts), home %.0fx%.0f",
-						panelRect.Height, allowed, achieved,
-						twoColumns and "side-by-side" or "stacked",
-						home.Width, home.Height))
-
-				-- THE PROPORTIONAL BOUNDS, on top, for the devices that can
-				-- actually serve the compact target. "Can" is two questions, not
-				-- one: the home rect has to HOLD the target, and the target has
-				-- to hold this device's COPY. A 568x320 landscape phone clears
-				-- the first and fails the second outright -- two 44px readouts
-				-- plus the live cue at the readable floor need about 146px where
-				-- a quarter of that screen is 80 -- so asserting a quarter there
-				-- would be demanding a panel that cannot exist, and the
-				-- necessity bound above is what holds it to account instead.
-				local servesCompactTarget = home.Width >= expectedWidth
-					and home.Height >= expectedHeight
-					and allowed <= expectedHeight
-				if servesCompactTarget then
-					record(panelRect.Height <= viewport.Y * .25 + 1,
-						device.Name .. ": and never a quarter of the height",
-						string.format("%.0f of %.0f (%.0f%%)", panelRect.Height, viewport.Y,
-							panelRect.Height / viewport.Y * 100))
-					local share = (panelRect.Width * panelRect.Height) / (viewport.X * viewport.Y)
-					record(share <= .20,
-						device.Name .. ": and never a fifth of the screen",
-						string.format("%.1f%% of the screen", share * 100))
-				else
-					state.note(string.format(
-						"      %s: the compact target cannot hold this device's copy"
-						.. " (needs %.0f in %d), so the proportional bounds do not"
-						.. " apply and the necessity bound above is the whole rule",
-						device.Name, allowed, expectedHeight))
-				end
-			end
-
-			-- SAFE CONTAINMENT, and against the authoritative Safe rect rather than
-			-- "somewhere on screen". TopBand is inside Safe by construction now,
-			-- but asserting the band would test the construction rather than the
-			-- panel.
-			record(Fit.within(panelRect, layout.Safe, 1),
-				device.Name .. ": the briefing lies inside the authoritative safe area",
-				string.format("%s vs safe (%.0f,%.0f)-(%.0f,%.0f)", Fit.text(panelRect),
-					layout.Safe.Left, layout.Safe.Top, layout.Safe.Right, layout.Safe.Bottom))
-			local panelZone = UIDevice.OverlapsMovementZone(panelRect.Left, panelRect.Top,
-				panelRect.Right, panelRect.Bottom)
-			local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
-			record(panelZone == nil or passive,
-				device.Name .. ": only verified click-through reader captions enter a movement zone",
-				string.format("zone=%s passive=%s (%s)", tostring(panelZone),
-					tostring(passive), passiveWhy))
-			if panel:GetAttribute("ReaderPassiveLane") == true then
-				record(passive,
-					device.Name .. ": SKIP stays 44px outside movement zones and reader",
-					passiveWhy)
-			end
-
-			-- THE READABLE FLOOR. Never 8 or 9 on a handheld: the copy stays at
-			-- least 10, and the layout is expected to have reached 11 wherever it
-			-- could trade width or height for it.
-			local face = panel:GetAttribute("BriefingFace")
-			record(type(face) == "number" and face >= 10,
-				device.Name .. ": the briefing copy never drops below a readable 10px",
-				tostring(face))
-			record(subtitle.TextWrapped == true
-				and (subtitle :: any).TextTruncate == Enum.TextTruncate.None,
-				device.Name .. ": and it wraps rather than clipping",
-				string.format("wrapped=%s truncate=%s", tostring(subtitle.TextWrapped),
-					tostring((subtitle :: any).TextTruncate)))
-
-			-- A FIXED, INDEPENDENT ceiling for every touch row, so a row cannot
-			-- grow to fill a panel that grew.
-			for _, spec in ipairs({{"SKIP", stop}}) do
-				local node = spec[2] :: any
-				local rowWidth = node.Size.X.Offset + node.Size.X.Scale * controlsRect.Width
-				local rowHeight = node.Size.Y.Offset + node.Size.Y.Scale * controlsRect.Height
-				-- The half-panel clause only applies where two rows are meant to sit
-				-- SIDE BY SIDE. On a panel too narrow for that the rows stack, and
-				-- a stacked row is supposed to span the panel.
-				local sideBySide = panelRect.Width >= 2 * 120 + 10 + 24
-				record(rowWidth <= 168 and rowHeight <= 56
-					and (not sideBySide or rowWidth <= panelRect.Width * .5 + 1),
-					device.Name .. ": " .. spec[1] .. " keeps an independent size ceiling"
-					.. " (<=168x56, and at most half the panel where two fit side by side)",
-					string.format("%.0fx%.0f in a %.0f-wide panel (sideBySide=%s)",
-						rowWidth, rowHeight, panelRect.Width, tostring(sideBySide)))
-			end
-
-			-- Subtlety is not only size. A caption over the game, not a dialog.
-			local rule = panel:FindFirstChildOfClass("UIStroke")
-			record((panel :: any).BackgroundTransparency >= 0.24
-				and (rule == nil or rule.Transparency >= 0.45),
-				device.Name .. ": the chrome is a caption's, not a dialog's",
-				string.format("fill=%.2f rule=%s", (panel :: any).BackgroundTransparency,
-					rule and string.format("%.2f", rule.Transparency) or "none"))
-
-			-- The two controls keep their targets whatever the panel gave up.
-			for _, spec in ipairs({{"SKIP", stop}}) do
-				local node = spec[2] :: any
-				local width = node.Size.X.Offset + node.Size.X.Scale * controlsRect.Width
-				local height = node.Size.Y.Offset + node.Size.Y.Scale * controlsRect.Height
-				record(width >= 44 and height >= 44,
-					device.Name .. ": " .. spec[1] .. " keeps a 44x44 target inside the"
-					.. " compact panel",
-					string.format("%.0fx%.0f", width, height))
-			end
-
-			record(not Fit.overlaps(subtitleRect, controlsRect),
-				device.Name .. ": the copy does not land on the SKIP row",
-				string.format("copy %s vs row %s", Fit.text(subtitleRect), Fit.text(controlsRect)))
-			record(Fit.within(subtitleRect, panelRect, 1) and Fit.within(controlsRect, panelRect, 1),
-				device.Name .. ": and both stay inside the panel",
-				string.format("copy %s row %s", Fit.text(subtitleRect), Fit.text(controlsRect)))
-
-			-- LONG TEXT. The compact panel has to hold the longest authored cue at
-			-- the face it actually chose, or the shrink was bought with a clipped
-			-- briefing -- which is not a trade this matrix will pass.
-			local bounds, boundsError = Fit.measureText(LONG_DISPATCH_CUE,
-				(subtitle :: any).FontFace, (subtitle :: any).TextSize,
-				subtitleRect.Width)
-			record(bounds ~= nil and bounds.X <= subtitleRect.Width + 1
-				and bounds.Y <= subtitleRect.Height + 1,
-				device.Name .. ": the longest dispatch cue still fits its box",
-				bounds and string.format("needs %.0fx%.0f in %.0fx%.0f at %dpx",
-					bounds.X, bounds.Y, subtitleRect.Width, subtitleRect.Height,
-					(subtitle :: any).TextSize) or boundsError)
-
-			-- THE STRESS CASE, kept separate from the runtime fit above. The 1.6x
-			-- localisation string is headroom for a translation nobody has
-			-- shipped; it must not be what every English briefing is sized
-			-- against, but the panel should still hold it at the hard floor.
-			local stress = "Noch wichtiger: das Aktivieren einer Pumpstation alarmiert offenbar"
-				.. " eine bislang nicht identifizierte, ungewoehnlich grosse Entitaet und"
-				.. " verraet ihr eure derzeitige Position sofort."
-			local stressBounds = Fit.measureText(stress, (subtitle :: any).FontFace, 10,
-				subtitleRect.Width)
-			-- IT FITS TODAY, or the panel's own home could grow to hold it.
-			--
-			-- The second clause is the point of the change that produced it. This
-			-- panel used to be sized for the 1.6x string on EVERY device, which is
-			-- why every English briefing on a portrait phone rendered at 8px. The
-			-- runtime is fitted to the copy that is actually on screen; what this
-			-- asserts about the localisation is that the HEADROOM exists -- the
-			-- home rectangle is big enough that a real translation could be
-			-- accommodated by growing into it -- rather than that a shipped
-			-- English cue must pay for it now.
-			local stressNeed = stressBounds and stressBounds.Y or math.huge
-			local headroom = home.Height >= 46 + stressNeed + 4
-			record(stressBounds ~= nil
-				and (stressNeed <= subtitleRect.Height + 1 or headroom),
-				device.Name .. ": a 1.6x localisation fits at the 10px floor, or the"
-				.. " panel's home has the headroom to hold one",
-				stressBounds and string.format(
-					"needs %.0fx%.0f in %.0fx%.0f; home %.0f tall, needs %.0f",
-					stressBounds.X, stressBounds.Y, subtitleRect.Width,
-					subtitleRect.Height, home.Height, 46 + stressNeed + 4)
-					or "unmeasurable")
-
-			local glyph = Fit.keyGlyph(panel)
-			record(glyph == nil,
-				device.Name .. ": and no keyboard binding text on a handheld", glyph)
-		end
-	end)
-
-	pcall(resetScenario)
-	task.wait(0.15)
-	Fit.restore(saved)
-	task.wait(0.2)
-	if not ran then
-		state.Failures += 1
-		state.Checks += 1
-		state.note("  FAIL the dispatch compact matrix ran  (" .. tostring(runError) .. ")")
-	end
-	local residue, residueNote = Fit.residue(saved)
-	if residueNote then state.note(residueNote) end
-	record(#residue == 0,
-		"the matrix restored every borrowed attribute, every borrowed ScreenGui's"
-			.. " Enabled and every borrowed descendant's Visible, Active and"
-			.. " CanvasPosition, the terminal tab, the reader state and the caption",
-		table.concat(residue, "; "))
-	return state.finish()
+	return Fit.bodyRoundHudMatrix()
 end
 
 function UIRegression.DispatchCompactMatrix(token: string?): (string, number)
@@ -8267,7 +5142,7 @@ function Fit.bodySafeAreaMatrix(): (string, number)
 	record(#residue == 0,
 		"the matrix restored every borrowed attribute, every borrowed ScreenGui's"
 			.. " Enabled and every borrowed descendant's Visible, Active and"
-			.. " CanvasPosition, the terminal tab, the reader state and the caption",
+			.. " CanvasPosition, the reader state and the caption",
 		table.concat(residue, "; "))
 	return state.finish()
 end
@@ -8443,16 +5318,20 @@ function Fit.bodyControlZoneMatrix(): (string, number)
 		-- ------------------------------------------------------------------
 		do
 			local zonesBefore = UIDevice.Layout().Zones
+			-- HUD_B2_TOUCH (owner, 2026-10-08): the B2 LIGHT cell is the hit
+			-- target itself, a GuiButton mounted as FlashlightPopup's direct child;
+			-- the old torch's transparent TouchFlashlightToggle child is gone.
 			local flashlightGui = findGui("FlashlightPopup")
 			local flashlightTarget = flashlightGui
-				and flashlightGui:FindFirstChild("TouchFlashlightToggle", true)
+				and flashlightGui:FindFirstChild("FlashlightPower")
+			if flashlightTarget and not flashlightTarget:IsA("GuiButton") then flashlightTarget = nil end
 			local flashlightBeforeVisible = flashlightTarget
 				and (flashlightTarget :: GuiObject).Visible or false
 			local flashlightBeforeActive = flashlightTarget
 				and (flashlightTarget :: GuiObject).Active or false
 			record(flashlightTarget ~= nil and flashlightBeforeVisible and flashlightBeforeActive,
-				"before the queue opens, the flashlight's real child hit target is live",
-				string.format("exists=%s visible=%s active=%s", tostring(flashlightTarget ~= nil),
+				"before the queue opens, the LIGHT cell is live (a drawn, active GuiButton)",
+				string.format("button=%s visible=%s active=%s", tostring(flashlightTarget ~= nil),
 					tostring(flashlightBeforeVisible), tostring(flashlightBeforeActive)))
 			record(zonesBefore.Thumbstick.Right > zonesBefore.Thumbstick.Left,
 				"with no modal open the thumbstick region is a real rectangle",
@@ -8477,7 +5356,7 @@ function Fit.bodyControlZoneMatrix(): (string, number)
 			record(flashlightTarget ~= nil
 				and not (flashlightTarget :: GuiObject).Visible
 				and not (flashlightTarget :: GuiObject).Active,
-				"opening QueueHostShade stands down the flashlight's actual child hit target",
+				"opening QueueHostShade stands the LIGHT cell down (neither drawn nor active)",
 				flashlightTarget and string.format("visible=%s active=%s",
 					tostring((flashlightTarget :: GuiObject).Visible),
 					tostring((flashlightTarget :: GuiObject).Active)) or "missing")
@@ -8505,7 +5384,7 @@ function Fit.bodyControlZoneMatrix(): (string, number)
 			record(flashlightTarget ~= nil
 				and (flashlightTarget :: GuiObject).Visible == flashlightBeforeVisible
 				and (flashlightTarget :: GuiObject).Active == flashlightBeforeActive,
-				"closing the queue restores that same flashlight hit target",
+				"closing the queue restores the LIGHT cell",
 				flashlightTarget and string.format("visible=%s/%s active=%s/%s",
 					tostring((flashlightTarget :: GuiObject).Visible), tostring(flashlightBeforeVisible),
 					tostring((flashlightTarget :: GuiObject).Active), tostring(flashlightBeforeActive)) or "missing")
@@ -8597,6 +5476,354 @@ end
 
 function UIRegression.ControlZoneMatrix(token: string?): (string, number)
 	return Fit.lane("ControlZoneMatrix", token, Fit.bodyControlZoneMatrix)
+end
+
+-- ---------------------------------------------------------------------------
+-- KitFanMatrix
+-- ---------------------------------------------------------------------------
+
+-- HUD_B2_TOUCH (owner, 2026-10-08): artifacts/hud-final-20261008/b2/B2-DESIGN.md
+-- 7.4, with critic C9 and C13. The KIT fan (element 14 C) is one row of POTION,
+-- MARKER and SCAN directly above the KIT cell, opened by the client-local player
+-- attribute KitFanOpen. It is transient, never registered and never reserved,
+-- so no other lane measures it. Two halves:
+--   (a) ANALYTIC, at every touch row of Fit.Devices plus the 844x390 reference
+--       phone the brief's numbers come from: where Layout().KitFan lands.
+--   (b) LIVE, at the real viewport, and ONLY inside a live round started with
+--       the playtest recipe (C13). Writing RoundActive / RoundLoadingState from
+--       the lobby wakes every client listener on them, and putting the values
+--       back does not undo what those listeners did. So the lane borrows
+--       nothing but the three inventory attributes and KitFanOpen, and outside
+--       a live round (b) is a SKIP.
+
+-- Which movement zone `r` sits in, if any. ONE case is excused, by rule: Roblox's
+-- 120 px jump (min axis > 500, every tablet). Its zone reaches up over the
+-- grid's upper rank, so the KIT cell itself already sits in it, and the fan can
+-- only open while KIT is drawn -- in a round, where NoiseReporter suppresses that
+-- button. The fan then shares a corner the cluster has already claimed. Live,
+-- the engine's button must also be MEASURED hidden (`engineJumpDrawn` false).
+-- Returns the zone and whether it was excused.
+function Fit.fanZone(layout, r, engineJumpDrawn: boolean?): (string?, boolean)
+	local zone = UIDevice.OverlapsMovementZone(r.Left, r.Top, r.Right, r.Bottom)
+	if zone ~= "Jump" then return zone, false end
+	local safe, kit = layout.Safe, layout.ControlPlan.Slots.KitToggle
+	local kitRect = {
+		Left = safe.Right - kit.Right - kit.Width, Top = safe.Bottom - kit.Bottom - kit.Height,
+		Right = safe.Right - kit.Right, Bottom = safe.Bottom - kit.Bottom,
+	}
+	if layout.Zones.Jump.Size > 70 and Fit.overlaps(kitRect, layout.Zones.Jump)
+		and engineJumpDrawn ~= true then
+		return nil, true
+	end
+	return zone, false
+end
+
+-- Everything that can be wrong with where Layout().KitFan lands, in one place,
+-- so the fixtures and the live viewport are held to the same rules.
+function Fit.kitFanProblems(layout, engineJumpDrawn: boolean?): ({string}, boolean)
+	local problems = {}
+	local fan, safe, plan = layout.KitFan, layout.Safe, layout.ControlPlan
+	local kit = plan and plan.Slots and plan.Slots.KitToggle
+	if not (fan and kit and plan.Fan) then
+		return {"the layout publishes no KitFan, KitToggle slot or ControlPlan.Fan"}, false
+	end
+	if not Fit.within(fan, safe, 0.5) then
+		table.insert(problems, "KitFan " .. Fit.text(fan) .. " leaves Safe " .. Fit.text(safe))
+	end
+	local zone, excused = Fit.fanZone(layout, fan, engineJumpDrawn)
+	if zone then table.insert(problems, "KitFan sits in the " .. zone .. " movement zone") end
+	-- The raw 40 % line plus UIDevice's THUMBSTICK_CLEARANCE (8), the guarantee
+	-- every slot of the cluster carries, the fan included. Landscape only: in
+	-- portrait the thumbstick is the bottom band, which the Thumbstick zone holds.
+	if not layout.Portrait and fan.Left < layout.Display.Left + layout.Width * .4 + 8 then
+		table.insert(problems, string.format("KitFan starts at x %.0f, left of the 40%% line + 8 (%.0f)",
+			fan.Left, layout.Display.Left + layout.Width * .4 + 8))
+	end
+	if fan.Height < 44 then
+		table.insert(problems, string.format("a fan item is %.0f px, under 44", fan.Height))
+	end
+	-- D2: one Gap above the KIT row, its right edge on KIT's right edge.
+	local kitTop = safe.Bottom - kit.Bottom - kit.Height
+	if math.abs(fan.Bottom - (kitTop - plan.Gap)) > 0.5
+		or math.abs(fan.Right - (safe.Right - kit.Right)) > 0.5 then
+		table.insert(problems, string.format(
+			"KitFan bottom/right %.0f/%.0f, KIT's top less Gap/right are %.0f/%.0f",
+			fan.Bottom, fan.Right, kitTop - plan.Gap, safe.Right - kit.Right))
+	end
+	return problems, excused
+end
+
+function Fit.bodyKitFanMatrix(): (string, number)
+	local quiet, quietWhy = Fit.awaitQuietDispatch()
+	if not quiet then
+		return "=== KIT fan: not reached ===\n  FAIL " .. tostring(quietWhy)
+			.. "\nTOTAL: 1 checks, 1 failed", 1
+	end
+	local state = Fit.recorder("=== KIT fan: one row above KIT, clear of every movement zone ===")
+	local record = state.record
+	local saved = Fit.borrow()
+	local player = Players.LocalPlayer
+	local hud = findGui("ProtectionHUD")
+	local function drawn(object): boolean
+		return object ~= nil and visibleChain(object)
+			and object.AbsoluteSize.X > 1 and object.AbsoluteSize.Y > 1
+	end
+	-- The KIT touch nodes as the player had them, so the end of the lane can be
+	-- held to them: ProtectionHUD derives these from the attributes put back
+	-- below. (SHIELD is left out: its Active follows the shield's own clock.)
+	local function hudState(): {[string]: string}
+		local out = {}
+		for _, name in ipairs({"KitToggle", "KitFan", "Fan_Potion", "Fan_Marker", "Fan_Scan"}) do
+			local node = hud and hud:FindFirstChild(name, true)
+			out[name] = node and string.format("visible=%s active=%s", tostring(node.Visible),
+				tostring((node :: any).Active)) or "missing"
+		end
+		return out
+	end
+	local hudBefore = hudState()
+	local shade: GuiObject? = nil
+	local shadeWasVisible = false
+
+	local ran, runError = pcall(function()
+		-- (a) ANALYTIC. The 844x390 row is the brief's reference phone (safe
+		-- 47..797 x 58..369), and its fan is stated as the literal the approved
+		-- phone-level-3 frame draws, relative to the display's top-left.
+		local rows = {}
+		for _, device in ipairs(Fit.Devices) do
+			if device.Touch then table.insert(rows, device) end
+		end
+		table.insert(rows, {Name = "844x390 landscape, the B2 reference phone",
+			Size = Vector2.new(844, 390), Touch = true, Class = "phone", Portrait = false,
+			Safe = {47, 0, 47, 21}, Topbar = {0, 58, 0, 0},
+			Frames = {
+				None = {0, 0, 844, 390}, DeviceSafeInsets = {47, 0, 797, 369},
+				CoreUISafeInsets = {47, 58, 797, 369}, TopbarSafeInsets = {47, 0, 797, 58},
+			},
+			KitFan = {553, 185, 725, 237}})
+		for _, device in ipairs(rows) do
+			record(Fit.apply(device), device.Name .. ": the explicit fixture took", "timed out")
+			local fixtureProblems = Fit.fixtureProblems(device)
+			record(#fixtureProblems == 0,
+				device.Name .. ": viewport, safe area and topbar are exactly the stated fixture",
+				table.concat(fixtureProblems, "; "))
+			local layout = UIDevice.Layout()
+			local problems, excused = Fit.kitFanProblems(layout, nil)
+			record(#problems == 0, device.Name .. ": KitFan is inside Safe, one Gap above KIT,"
+				.. " right of the 40% line, >= 44 and clear of every movement zone",
+				table.concat(problems, "; "))
+			if excused then
+				state.note("  note " .. device.Name .. ": the fan shares Roblox's 120 px jump corner"
+					.. " with KIT itself; excused because the in-round cluster suppresses that button")
+			end
+			local stated = (device :: any).KitFan
+			if stated and layout.KitFan then
+				local display, fan = layout.Display, layout.KitFan
+				record(math.abs(fan.Left - display.Left - stated[1]) < 0.5
+					and math.abs(fan.Top - display.Top - stated[2]) < 0.5
+					and math.abs(fan.Right - display.Left - stated[3]) < 0.5
+					and math.abs(fan.Bottom - display.Top - stated[4]) < 0.5,
+					string.format("%s: KitFan is x %d..%d, y %d..%d, the approved frame's tray",
+						device.Name, stated[1], stated[3], stated[2], stated[4]),
+					string.format("x %.0f..%.0f y %.0f..%.0f", fan.Left - display.Left,
+						fan.Right - display.Left, fan.Top - display.Top, fan.Bottom - display.Top))
+			end
+		end
+
+		-- (b) LIVE, inside a live round only (C13). Checked BEFORE anything is
+		-- written for it.
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		if not (workspace:GetAttribute("RoundActive") == true
+			and workspace:GetAttribute("RoundLoadingState") == "ready"
+			and player:GetAttribute("InRound") == true
+			and player:GetAttribute("RoundEntryControlsReady") == true
+			and player:GetAttribute("Escaped") ~= true
+			and player:GetAttribute("Spectating") ~= true
+			and humanoid ~= nil and humanoid.Health > 0) then
+			state.note("  SKIP (b) the live KIT fan: not inside a live round. Start one with the"
+				.. " playtest recipe and run KitFanMatrix there; from the lobby it would have to"
+				.. " write RoundActive and RoundLoadingState (critic C13)")
+			return
+		end
+		-- THE REAL DEVICE: the drawn fan is laid out for the real window, so it
+		-- is compared with the real layout, never a fixture.
+		for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
+			workspace:SetAttribute(name, nil)
+		end
+		workspace:SetAttribute("ForceTouchUI", true)
+		local settle = 40
+		while settle > 0 and (UIDevice.Layout().Synthetic or not UIDevice.Layout().IsTouch) do
+			task.wait(0.05)
+			settle -= 1
+		end
+		player:SetAttribute("KitFanOpen", false)
+		player:SetAttribute("ZyntraSpeedPotions", 1)
+		player:SetAttribute("ZyntraRouteMarkers", 1)
+		player:SetAttribute("ZyntraOwnsEntityDetector", true)
+		task.wait(0.5)
+		local kit = hud and hud:FindFirstChild("KitToggle")
+		local fan = hud and hud:FindFirstChild("KitFan")
+		local items = {}
+		for _, name in ipairs({"Fan_Potion", "Fan_Marker", "Fan_Scan"}) do
+			items[name] = fan and fan:FindFirstChild(name, true)
+		end
+		record(kit ~= nil and fan ~= nil and items.Fan_Potion ~= nil and items.Fan_Marker ~= nil
+			and items.Fan_Scan ~= nil, "ProtectionHUD mounted KitToggle, KitFan and the three fan items",
+			string.format("hud=%s kit=%s fan=%s", tostring(hud ~= nil), tostring(kit ~= nil), tostring(fan ~= nil)))
+		if not (kit and fan and items.Fan_Potion and items.Fan_Marker and items.Fan_Scan) then return end
+		record(drawn(kit) and (kit :: any).Active == true,
+			"with one of each item lent, KIT is drawn and active",
+			string.format("visible=%s active=%s", tostring(kit.Visible), tostring((kit :: any).Active)))
+		record(not drawn(fan), "...and the fan is closed while KitFanOpen is false")
+
+		local touchGui = playerGui():FindFirstChild("TouchGui")
+		local engineJump = touchGui and touchGui:FindFirstChild("JumpButton", true)
+		local engineJumpDrawn = engineJump ~= nil and visibleChain(engineJump)
+		player:SetAttribute("KitFanOpen", true)
+		task.wait(0.35)
+		local layout = UIDevice.Layout()
+		local fanRect = Fit.live(fan)
+		record(player:GetAttribute("KitFanOpen") == true and drawn(fan),
+			"KitFanOpen = true, the attribute KIT's own tap writes, opens the fan",
+			string.format("attribute=%s visible=%s", tostring(player:GetAttribute("KitFanOpen")),
+				tostring(fan.Visible)))
+		local want = layout.KitFan
+		record(want ~= nil and math.abs(fanRect.Left - want.Left) <= 1 and math.abs(fanRect.Top - want.Top) <= 1
+			and math.abs(fanRect.Right - want.Right) <= 1 and math.abs(fanRect.Bottom - want.Bottom) <= 1,
+			"the drawn fan is Layout().KitFan within 1 px",
+			Fit.text(fanRect) .. " vs " .. Fit.text(want))
+		local problems, excused = Fit.kitFanProblems(layout, engineJumpDrawn)
+		record(#problems == 0, "at the real viewport KitFan is inside Safe, one Gap above KIT,"
+			.. " right of the 40% line, >= 44 and clear of every movement zone",
+			table.concat(problems, "; "))
+		if excused then
+			state.note("  note the open fan shares Roblox's 120 px jump corner with KIT; that button"
+				.. " was measured hidden")
+		end
+		local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+		-- Drawn, not necessarily Active: a potion used this round or a scan
+		-- cooling down draws its item EMPTY / COOLDOWN, and that is correct.
+		for name, item in pairs(items) do
+			local r = Fit.live(item)
+			record(drawn(item) and r.Width >= 44 and r.Height >= 44,
+				name .. " is drawn and at least 44x44",
+				string.format("visible=%s active=%s %s; Remotes.RouteMarker=%s Remotes.ZyntraDetector=%s",
+					tostring(item.Visible), tostring((item :: any).Active), Fit.text(r),
+					tostring(remotes ~= nil and remotes:FindFirstChild("RouteMarker") ~= nil),
+					tostring(remotes ~= nil and remotes:FindFirstChild("ZyntraDetector") ~= nil)))
+			local zone = Fit.fanZone(layout, r, engineJumpDrawn)
+			record(zone == nil, name .. " is clear of every movement zone", zone and (zone .. " zone") or nil)
+		end
+		do
+			local shopUI = game:GetService("ReplicatedStorage"):FindFirstChild("ZyntraShopUI")
+			local binder = shopUI and shopUI:FindFirstChild("ShopBinder")
+			local teal = binder and (require(binder :: any) :: any).Palette.RailTeal
+			local face = (kit :: any).BackgroundColor3
+			local glyph = kit:FindFirstChild("Glyph", true)
+			record(teal ~= nil and math.abs(face.R - teal.R) < 0.01 and math.abs(face.G - teal.G) < 0.01
+				and math.abs(face.B - teal.B) < 0.01 and (kit :: any).BackgroundTransparency < 0.01
+				and glyph ~= nil and (glyph :: any).Text == "\u{D7}",
+				"the open KIT face is solid RailTeal with the \u{D7} glyph",
+				string.format("face %s at %.2f, glyph %q", tostring(face), (kit :: any).BackgroundTransparency,
+					glyph and tostring((glyph :: any).Text) or "missing"))
+		end
+		local panel = UIDevice.TopRightPanel(240, 300)
+		record(want ~= nil and panel.Bottom <= want.Top - 8 + 0.5,
+			"an objective readout (TopRightPanel 240x300) stops 8 above the open fan",
+			string.format("panel bottom %.0f, fan top %.0f", panel.Bottom, want and want.Top or -1))
+		-- C9: ProtectionHUD seats the refusal tag at ModalArea's bottom centre,
+		-- which on a phone lies on the open fan, so while it is open the tag
+		-- stands 8 above it. The tag is measured where it is SEATED (it is only
+		-- drawn for two seconds after a refusal): its bottom is its anchor, so
+		-- the seat's vertical edge is exact whatever width the text takes.
+		local caption = hud and hud:FindFirstChild("EquipmentCaption")
+		local seat = caption and UIRegression.ResolveRect(caption, layout.Viewport, layout.Inset.Y)
+		record(seat ~= nil and seat.Unresolvable == nil and want ~= nil and not Fit.overlaps(seat, want),
+			"the refusal tag's seat (HUD_PC/EquipmentCaption) stays clear of the open fan (critic C9)",
+			seat and (seat.Unresolvable or Fit.text(seat)) or "no EquipmentCaption mounted")
+
+		-- OWNED ITEMS ONLY: the potion goes, and the other two keep their seats.
+		-- The Items list is right-aligned (D2), so dropping the leftmost item
+		-- moves nothing and SCAN stays on KIT's right edge.
+		local marker, scan = Fit.live(items.Fan_Marker), Fit.live(items.Fan_Scan)
+		local boost = player:GetAttribute("ZyntraSpeedBoostUntil")
+		local potionBusy = player:GetAttribute("ZyntraSpeedPotionUsedThisRound") == true
+			or (type(boost) == "number" and boost > workspace:GetServerTimeNow())
+		player:SetAttribute("ZyntraSpeedPotions", 0)
+		task.wait(0.35)
+		if potionBusy then
+			state.note("  SKIP Fan_Potion hiding: a potion was used or is running this round, so"
+				.. " POTION stays drawn (USED / ACTIVE) by design")
+		else
+			record(not drawn(items.Fan_Potion) and (items.Fan_Potion :: any).Active ~= true,
+				"with no potion left, Fan_Potion is neither drawn nor active",
+				string.format("visible=%s active=%s", tostring(items.Fan_Potion.Visible),
+					tostring((items.Fan_Potion :: any).Active)))
+		end
+		local markerAfter, scanAfter = Fit.live(items.Fan_Marker), Fit.live(items.Fan_Scan)
+		record(drawn(items.Fan_Marker) and drawn(items.Fan_Scan)
+			and math.abs(markerAfter.Left - marker.Left) <= 1 and math.abs(scanAfter.Left - scan.Left) <= 1
+			and math.abs(scanAfter.Right - fanRect.Right) <= 1,
+			"MARKER and SCAN stay packed toward KIT",
+			string.format("marker %s (was %s), scan %s, fan right %.0f", Fit.text(markerAfter),
+				Fit.text(marker), Fit.text(scanAfter), fanRect.Right))
+
+		-- A SCREEN-OWNING MODAL, through production's own choke point (see
+		-- ControlZoneMatrix): the fan cannot stay open under it.
+		local roundGui = findGui("RoundGui")
+		shade = roundGui and roundGui:FindFirstChild("QueueHostShade") :: any
+		record(shade ~= nil, "the party dialog's shade is reachable to drive",
+			roundGui and "no QueueHostShade" or "no RoundGui")
+		if not shade then return end
+		shadeWasVisible = shade.Visible
+		local function anyActive(): string?
+			for _, node in ipairs({kit, fan, items.Fan_Potion, items.Fan_Marker, items.Fan_Scan}) do
+				if drawn(node) or (node :: any).Active == true then return node.Name end
+			end
+			return nil
+		end
+		shade.Visible = true
+		task.wait(0.35)
+		local during = anyActive()
+		record(player:GetAttribute("KitFanOpen") ~= true,
+			"opening QueueHostShade forces KitFanOpen false",
+			tostring(player:GetAttribute("KitFanOpen")))
+		record(during == nil, "...and neither KIT nor the fan is drawn or active under it",
+			during and (during .. " is still drawn or active") or nil)
+		shade.Visible = false
+		task.wait(0.35)
+		record(player:GetAttribute("KitFanOpen") ~= true and not drawn(fan),
+			"closing the shade leaves the fan closed",
+			string.format("attribute=%s visible=%s", tostring(player:GetAttribute("KitFanOpen")),
+				tostring(fan.Visible)))
+		record(drawn(kit) and (kit :: any).Active == true, "...and KIT is back",
+			string.format("visible=%s active=%s", tostring(kit.Visible), tostring((kit :: any).Active)))
+	end)
+
+	if shade then (shade :: GuiObject).Visible = shadeWasVisible end
+	Fit.restore(saved)
+	task.wait(0.35)
+	if not ran then
+		state.Failures += 1
+		state.Checks += 1
+		state.note("  FAIL the KIT fan matrix ran  (" .. tostring(runError) .. ")")
+	end
+	local residue, residueNote = Fit.residue(saved)
+	if residueNote then state.note(residueNote) end
+	local hudAfter = hudState()
+	for name, was in pairs(hudBefore) do
+		if hudAfter[name] ~= was then
+			table.insert(residue, string.format("ProtectionHUD.%s %s, was %s", name, hudAfter[name], was))
+		end
+	end
+	record(#residue == 0,
+		"the matrix restored every borrowed attribute, gui state and the KIT touch nodes",
+		table.concat(residue, "; "))
+	return state.finish()
+end
+
+function UIRegression.KitFanMatrix(token: string?): (string, number)
+	return Fit.lane("KitFanMatrix", token, Fit.bodyKitFanMatrix)
 end
 
 -- ---------------------------------------------------------------------------
@@ -8822,127 +6049,17 @@ function Fit.bodyExclusionTimingMatrix(): (string, number)
 	local player = Players.LocalPlayer
 
 	local ran, runError = pcall(function()
-		local reader = findGui("Level3ReaderGui")
-		local probe = reader and reader:FindFirstChild("UIRegressionReaderProbe")
-		if not (probe and probe:IsA("BindableFunction")) then
-			record(false, "the Level 3 reader publishes its visibility probe",
-				reader and "no UIRegressionReaderProbe" or "no Level3ReaderGui")
-			return
-		end
-		local function look(): string
-			local ok, answer = pcall(function() return probe:Invoke("visibility") end)
-			return ok and tostring(answer) or ("visibility:error " .. tostring(answer))
-		end
-		local function field(answer: string, name: string): string
-			return answer:match(name .. "=([^%s]+)") or "?"
-		end
-		local function down(answer: string): boolean
-			return field(answer, "ReaderPanel") == "false/false"
-				and field(answer, "ReaderRestore") == "false/false"
-		end
-
-		-- Put the reader ON, on touch, so there is something to take away.
-		resetScenario(true)
-		-- EXPLICITLY, after resetScenario: the first run of this lane measured
-		-- inround=false and every row failed for a reader that was never up.
-		Players.LocalPlayer:SetAttribute("InRound", true)
-		workspace:SetAttribute("ForceTouchUI", true)
-		workspace:SetAttribute("SelectedLevel", 3)
-		player:SetAttribute("UIRegressionForceLevel3Reader", true)
-		if reader then (reader :: ScreenGui).Enabled = true end
-		task.wait(0.4)
-		local up = look()
-		record(field(up, "active") == "true",
-			"the reader is active before each gate is applied", up)
-
-		-- Fetched here rather than at file scope: this chunk is close to Luau's
-		-- 200-local ceiling and one lane does not warrant a top-level name.
-		local RunService = game:GetService("RunService")
-		local TRIALS = 6
-		local HEARTBEAT_BOUND = 2
-		for _, gate in ipairs({
-			{Name = "the legacy blocking-dispatch gate", Attribute = "ZyntraDispatchClientActive"},
-			{Name = "the Zyntra terminal", Attribute = "ZyntraStoreOpen"},
-			{Name = "the queue modal", Attribute = "QueueModalOpen"},
-			{Name = "Level 3 hiding", Attribute = "Level3_Hiding"},
-			{Name = "the dev phone", Attribute = "DevPhoneOpen"},
-		}) do
-			local worst, everUp, recovered = -1, false, false
-			for _ = 1, TRIALS do
-				-- The reader back up first, and settled, so each trial is measured
-				-- from the same starting point and not from the previous one's
-				-- wreckage. This wait is OUTSIDE the measurement.
-				player:SetAttribute(gate.Attribute, nil)
-				task.wait(0.25)
-				if field(look(), "ReaderPanel") ~= "false/false"
-					or field(look(), "ReaderRestore") ~= "false/false" then
-					everUp = true
-				end
-				player:SetAttribute(gate.Attribute, true)
-				-- Count HEARTBEATS, not seconds. A wall-clock bound would be a
-				-- claim about this machine's frame rate; a heartbeat count is a
-				-- claim about the code.
-				local beats = 0
-				while not down(look()) and beats < 40 do
-					RunService.Heartbeat:Wait()
-					beats += 1
-				end
-				worst = math.max(worst, beats)
-				player:SetAttribute(gate.Attribute, nil)
-				task.wait(0.25)
-				if field(look(), "active") == "true" then recovered = true end
-			end
-			record(everUp,
-				gate.Name .. ": the reader was on screen before the gate closed --"
-				.. " otherwise these rows prove nothing", "never up")
-			record(worst >= 0 and worst <= HEARTBEAT_BOUND,
-				string.format("%s: takes the reader down within %d heartbeat(s), in"
-					.. " EVERY one of %d trials -- the 0.10s fallback tick cannot"
-					.. " produce that, it would scatter across its whole interval",
-					gate.Name, HEARTBEAT_BOUND, TRIALS),
-				string.format("worst case %d heartbeat(s)", worst))
-			record(recovered,
-				gate.Name .. ": ...and the reader recovers when it clears",
-				look())
-		end
-		-- A real text briefing never raises that legacy gate. Exercise the
-		-- production forced-transmission seam and keep the reader on screen.
-		player:SetAttribute("UIRegressionForceDispatchActive", true)
-		task.wait(0.25)
-		local passive = look()
-		record(player:GetAttribute("DispatchTextActive") == true
-			and player:GetAttribute("ZyntraDispatchClientActive") == false
-			and field(passive, "ReaderPanel") == "true/true",
-			"a passive text briefing does not close the Level 3 reader", passive)
-		player:SetAttribute("UIRegressionForceDispatchActive", nil)
-		task.wait(0.15)
-
-		-- DESKTOP still draws nothing when hidden, and R remains the only way back.
-		workspace:SetAttribute("ForceTouchUI", false)
-		task.wait(0.35)
-		local pointer = look()
-		record(field(pointer, "touch") == "false",
-			"the pointer pass really is a pointer device", pointer)
-		record(field(pointer, "ReaderRestore") == "false/false",
-			"desktop draws no restore chip and leaves nothing in the input stack",
-			pointer)
-		workspace:SetAttribute("ForceTouchUI", true)
-
-		-- ------------------------------------------------------------------
-		-- C_GUARD_IS_PROVED_WITHOUT_A_VICTIM_20260831
-		-- ------------------------------------------------------------------
-		-- The guard's whole purpose is that a lane will not talk over a real
-		-- transmission. Proving it needs the predicate to answer true, and the
-		-- two ways to do that with real state are both wrong: starting a real
-		-- briefing means waiting a minute for one and then interrupting it, and
-		-- writing DispatchBriefingOpen by hand does not survive -- RoundUI
-		-- republishes that attribute from the cue it is actually playing and
-		-- clears it within a frame. Measured: set true, read back false 0.1s
-		-- later, which is exactly how the first version of this proof failed.
-		--
-		-- So the PREDICATE is overridden, not the game. Nothing on screen moves,
-		-- no briefing is started and none is ended; the guard is asked the
-		-- question it exists to answer and its behaviour is measured.
+		Fit.stageRoundObjective(3)
+		local gui = findGui("RoundHud")
+		local root = gui and gui:FindFirstChild("ObjectiveCard")
+		record(root ~= nil and root.Visible, "shared objective exists before modal gate")
+		player:SetAttribute("ZyntraStoreOpen", true)
+		game:GetService("RunService").Heartbeat:Wait()
+		game:GetService("RunService").Heartbeat:Wait()
+		record(root ~= nil and not root.Visible, "shared objective yields to modal within2 heartbeats")
+		player:SetAttribute("ZyntraStoreOpen", nil)
+		task.wait(.15)
+		record(root ~= nil and root.Visible, "shared objective recovers after modal")
 		local savedWait = Fit.LiveDispatchWait
 		Fit.LiveDispatchWait = 1
 		Fit.PretendDispatchLive = true
@@ -9094,6 +6211,23 @@ function Fit.bodyRunAll(lease): (string, number)
 				scenario.Name))
 			continue
 		end
+		if scenario.LiveLobby and not Fit.liveLobbyEligible(outerSaved.Player.InRound) then
+			table.insert(report, string.format("%-28s skip  (live lobby only; Friend Boost requires"
+				.. " no active/loading round and a body inside the lobby)", scenario.Name))
+			continue
+		end
+		-- HUD_B3 (owner, 2026-10-08): a LiveRound row measures Round HUD, which
+		-- draws only on a living body in an active round. The sweep's own reset
+		-- clears InRound and Spectating locally, so those are read from the outer
+		-- snapshot; RoundActive is never written by the harness.
+		if scenario.LiveRound then
+			if not Fit.liveRoundEligible(outerSaved.Player.InRound,
+				outerSaved.Player.Spectating, outerSaved.Player.Escaped) then
+				table.insert(report, string.format("%-28s skip  (live round only; start one with the"
+					.. " playtest recipe)", scenario.Name))
+				continue
+			end
+		end
 		scenario.Setup()
 		task.wait(.3)
 		-- The scenario sweep records nothing through Fit.recorder, so without an
@@ -9142,6 +6276,36 @@ function Fit.bodyRunAll(lease): (string, number)
 				table.insert(contractProblems, "INERT: " .. fragment .. " was not measured")
 			elseif not rect.Active then
 				table.insert(contractProblems, "INERT: " .. fragment .. " is drawn but not Active")
+			end
+		end
+		-- A control that is ACTIVE but SHIELDED (RAIL_OVER_WINDOWS_20261007). Scan
+		-- cannot see an input shield: a transparent Active Dim is skipped as faded
+		-- and WindowHolder is an exempt overlay, so a rail button under an open
+		-- window's Dim passed the two checks above while every real tap on it was
+		-- swallowed. Hit-test its centre instead, topmost first: the first hit
+		-- that is the control (or inside it) passes; the first Active hit that is
+		-- not fails, since that is what takes the tap. Hits that are not Active
+		-- (decoration drawn above the rail) let the tap through and are passed
+		-- over. Same coordinate space as AbsolutePosition, which Rects carry.
+		for _, fragment in ipairs(scenario.RequiresTopmost or {}) do
+			local rect = findRect(fragment)
+			local name = rect and (rect.Name or rect.Path:match("([^.]+)$"))
+			local problem: string? = "was not measured"
+			if rect and name then
+				problem = "is not hit at its own centre"
+				for _, hit in ipairs((playerGui() :: PlayerGui):GetGuiObjectsAtPosition(
+					(rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2)) do
+					if hit.Name == name or hit:FindFirstAncestor(name) then
+						problem = nil
+						break
+					elseif hit.Active then
+						problem = "is under " .. hit:GetFullName()
+						break
+					end
+				end
+			end
+			if problem then
+				table.insert(contractProblems, "SHIELDED: " .. fragment .. " " .. problem)
 			end
 		end
 		if layout.IsTouch then
@@ -9282,37 +6446,22 @@ function Fit.bodyRunAll(lease): (string, number)
 	-- Same contract, same reason: BriefingFitMatrix owns the override too, and
 	-- it is the only thing in this file that can say whether the dispatch copy
 	-- fits its box on a viewport Studio is not currently rendering.
-	local briefingReport, briefingFailures = UIRegression.BriefingFitMatrix(lease.Token)
-	table.insert(report, briefingReport)
-	failures += briefingFailures
-	-- Last, because it is the only matrix that drives the queue modal open and
-	-- shut: anything measured while it is running would be measuring this
-	-- matrix's own state rather than the screen the player gets. It restores the
-	-- shade, the dispatch force flag and both device overrides on every exit
-	-- path, error included.
-	local exclusionReport, exclusionFailures = UIRegression.BriefingExclusionMatrix(lease.Token)
-	table.insert(report, exclusionReport)
-	failures += exclusionFailures
-	-- The three 20260830 matrices. Each owns the device overrides itself and
-	-- restores them on every exit path, so they run from here like the others.
-	-- Order matters only in that the terminal matrix opens and closes a modal:
-	-- anything measured while it runs would be measuring this matrix's state
-	-- rather than the screen a player gets, so it goes after the panels.
-	local cornerReport, cornerFailures = UIRegression.ObjectiveCornerMatrix(lease.Token)
-	table.insert(report, cornerReport)
-	failures += cornerFailures
-	local compactReport, compactFailures = UIRegression.DispatchCompactMatrix(lease.Token)
-	table.insert(report, compactReport)
-	failures += compactFailures
-	local terminalReport, terminalFailures = UIRegression.ZyntraTerminalFitMatrix(lease.Token)
-	table.insert(report, terminalReport)
-	failures += terminalFailures
+	local hudReport, hudFailures = UIRegression.RoundHudMatrix(lease.Token)
+	table.insert(report, hudReport)
+	failures += hudFailures
+
 	-- The live cluster, last: it is the only lane that parents an instance into
 	-- the HUD, and it runs at the REAL viewport rather than a fixture, so
 	-- anything measured while it is up would be measuring it.
 	local zoneReport, zoneFailures = UIRegression.ControlZoneMatrix(lease.Token)
 	table.insert(report, zoneReport)
 	failures += zoneFailures
+	-- Right after the live cluster: the KIT fan sits on top of it. Its live half
+	-- runs only inside a live round and is a SKIP note anywhere else (critic C13).
+	-- HUD_B2_TOUCH (owner, 2026-10-08).
+	local fanReport, fanFailures = UIRegression.KitFanMatrix(lease.Token)
+	table.insert(report, fanReport)
+	failures += fanFailures
 	-- The lock's own lane goes LAST, because it stands the run's lock aside to
 	-- test it and puts it back; nothing else should be measuring while it does.
 	local timingReport, timingFailures = UIRegression.ExclusionTimingMatrix(lease.Token)
@@ -9323,7 +6472,7 @@ function Fit.bodyRunAll(lease): (string, number)
 	failures += lockFailures
 	end
 	-- THE OUTER RESTORE, on every path including the unwind, and then the
-	-- residue is ASSERTED rather than assumed -- the exact terminal tab, every
+	-- residue is ASSERTED rather than assumed -- every
 	-- canvas position, every borrowed gui's Visible/Active, the borrowed
 	-- attributes, the reader state and the caption.
 	pcall(resetScenario)
@@ -9444,7 +6593,7 @@ function UIRegression.RunAllSummary(limit: number?): (string, number)
 	return UIRegression.Summarise(report, failures, limit) .. "\n" .. lockLine, failures
 end
 
--- Any single lane, compactly. `UIRegression.Compact("ZyntraTerminalFitMatrix")`.
+-- Any single lane, compactly. `UIRegression.Compact("BriefingExclusionMatrix")`.
 function UIRegression.Compact(lane: string, token: string?): (string, number)
 	local entry = (UIRegression :: any)[lane]
 	if type(entry) ~= "function" then

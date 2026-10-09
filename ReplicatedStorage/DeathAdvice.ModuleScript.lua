@@ -82,6 +82,16 @@ DeathAdvice.Causes = {
 		Cause = "The pool slide landed its swing.",
 		Tip = "Step behind it during the windup; its swing is locked forward.",
 	},
+	-- The Level 2 floor hole (owner, 2026-10-08: Level 2 becomes a level you
+	-- fall in, with no entity). NO KILL SITE YET: the session that builds the
+	-- no-entity Level 2 adds DeathAdvice.Mark(player, "L2Hole") on the line
+	-- before that kill, and test_death_advice.py's KILL_SITES gains it with that
+	-- file. Until then nothing marks it and a hole fall reads SIGNAL LOST.
+	L2Hole = {
+		Title = "YOU FELL",
+		Cause = "You fell through a hole in the floor.",
+		Tip = "Watch your step: some of the floor gives way.",
+	},
 	-- Level 3 Mall Manager AI Controller.ModuleScript.lua:2424.
 	-- WHY THIS TIP: a hidden player is reached through a table check --
 	-- beginTableCheck (:2266) publishes a reaction window of
@@ -117,7 +127,7 @@ DeathAdvice.Causes = {
 	L5Fall = {
 		Title = "YOU FELL",
 		Cause = "You went over the edge into the drop.",
-		Tip = "Every gap can be made at a walk. Jump from the very edge of the ledge, not before it.",
+		Tip = "Every gap can be crossed at a walk. Jump at the very edge of the ledge.",
 	},
 	-- Everything nothing marked: a void fall, a failed arrival placement
 	-- (GameManager.Script.lua:913), or a kill site added without a mark. It says

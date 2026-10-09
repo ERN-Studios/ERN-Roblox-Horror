@@ -36,17 +36,17 @@ local function warnOnce(key, message)
 	warn("[HazmatSkinVisuals] " .. message)
 end
 
-local function keepsAdvancedColor(player, skinId)
+local function advancedHazmatColor(player, skinId)
 	if skinId ~= Skins.DefaultId
 		or player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then
-		return false
+		return nil
 	end
 	local chosen = player:GetAttribute("ZyntraHazmatColor")
 	local default = Config.Colors.HazmatDefault
-	return typeof(chosen) == "Color3" and (
+	return if typeof(chosen) == "Color3" and (
 		math.abs(chosen.R - default.R) > 0.01
 		or math.abs(chosen.G - default.G) > 0.01
-		or math.abs(chosen.B - default.B) > 0.01)
+		or math.abs(chosen.B - default.B) > 0.01) then chosen else nil
 end
 
 local function destroyVisual(player)
@@ -230,6 +230,18 @@ local function buildVisual(player, character, skinId)
 		visual:Destroy()
 		return nil
 	end
+	-- Advanced Equipment uses the same SurfaceAppearance tint on the new suit.
+	-- Keep the player's chosen colour without reverting to the retired suit.
+	local tintColor = advancedHazmatColor(player, skinId)
+	if tintColor then
+		local surface = mesh:FindFirstChildOfClass("SurfaceAppearance")
+		if not surface then
+			warnOnce(templateName .. "Tint", "new baseline suit has no tintable surface")
+			visual:Destroy()
+			return nil
+		end
+		surface.Color = tintColor
+	end
 	local parts = 0
 	for _, descendant in ipairs(visual:GetDescendants()) do
 		if descendant:IsA("BasePart") then
@@ -311,6 +323,15 @@ local function buildVisual(player, character, skinId)
 		topperWeld.Part1 = topperPart
 		topperWeld.Parent = topperPart
 	end
+	-- These three balls filled seams in the old suit. The fitted mesh replaces
+	-- them; remove only this legacy decoration after every visual check succeeds.
+	-- Keep the R15 parts/joints as the movement, camera and animation source.
+	for _, liner in ipairs(character:GetDescendants()) do
+		if liner:IsA("BasePart") and (liner.Name == "LeftShoulderSeamLiner"
+			or liner.Name == "RightShoulderSeamLiner" or liner.Name == "NeckSeamLiner") then
+			liner:Destroy()
+		end
+	end
 	-- The Level 1 mimic clones player Characters. It should use the native
 	-- outfit and animations; copied cosmetic Bones would freeze in that clone.
 	visual.Archivable = false
@@ -319,8 +340,11 @@ end
 
 local function refresh(player)
 	local character = player.Character
-	if player.Parent ~= Players or player:GetAttribute("InRound") ~= true
-		or (workspace:GetAttribute("RoundActive") ~= true and player:GetAttribute("Level6PlaygroundPreview") ~= true)
+	-- GameManager marks each successful gameplay load before releasing its gate.
+	-- InRound is already true on the outgoing lobby avatar while the map builds;
+	-- RoundActive is still false throughout the new body's elevator brief.
+	local roundBody = character and character:GetAttribute("ZyntraGameplayCharacter") == true
+	if player.Parent ~= Players or not roundBody
 		or not character or not character.Parent then
 		destroyVisual(player)
 		return
@@ -328,39 +352,42 @@ local function refresh(player)
 	-- A nil ID means the persistent profile has not loaded yet. Wait for its
 	-- server-authored attribute instead of guessing a cosmetic on a lobby body.
 	local skinId = player:GetAttribute("ZyntraSkinId")
-	if type(skinId) ~= "string" or not Skins.Get(skinId)
-		or keepsAdvancedColor(player, skinId) then
+	if type(skinId) ~= "string" or not Skins.Get(skinId) then
 		destroyVisual(player)
 		return
 	end
+	local tintColor = advancedHazmatColor(player, skinId)
 	local state = active[player]
 	if state and state.Character == character and state.SkinId == skinId
-		and state.Visual.Parent == character then return end
+		and state.TintColor == tintColor and state.Visual.Parent == character then return end
 	destroyVisual(player)
 	local visual = buildVisual(player, character, skinId)
 	if not visual then return end
 	if player.Parent ~= Players or player.Character ~= character
-		or player:GetAttribute("InRound") ~= true
+		or character:GetAttribute("ZyntraGameplayCharacter") ~= true
 		or player:GetAttribute("ZyntraSkinId") ~= skinId then
 		visual:Destroy()
 		return
 	end
-	active[player] = {Character = character, SkinId = skinId, Visual = visual}
+	active[player] = {Character = character, SkinId = skinId, TintColor = tintColor, Visual = visual}
 end
 
 local function addPlayer(player)
 	local connections = {}
 	playerConnections[player] = connections
 	local characterChildConnection
+	local characterMarkerConnection
 	local function queueRefresh()
 		task.defer(refresh, player)
 	end
-	for _, attribute in ipairs({"InRound", "ZyntraSkinId", "ZyntraHazmatColor",
+	for _, attribute in ipairs({"InRound", "Level2NewMapPreview", "ZyntraSkinId", "ZyntraHazmatColor",
 		"ZyntraOwnsAdvancedEquipment"}) do
 		table.insert(connections, player:GetAttributeChangedSignal(attribute):Connect(queueRefresh))
 	end
 	local function watchCharacter(character)
 		if characterChildConnection then characterChildConnection:Disconnect() end
+		if characterMarkerConnection then characterMarkerConnection:Disconnect() end
+		characterMarkerConnection = character:GetAttributeChangedSignal("ZyntraGameplayCharacter"):Connect(queueRefresh)
 		characterChildConnection = character.ChildAdded:Connect(function(child)
 			if child.Name == "HumanoidRootPart" or child:IsA("Humanoid") then
 				queueRefresh()
@@ -374,17 +401,19 @@ local function addPlayer(player)
 			characterChildConnection:Disconnect()
 			characterChildConnection = nil
 		end
+		if characterMarkerConnection then
+			characterMarkerConnection:Disconnect()
+			characterMarkerConnection = nil
+		end
 		destroyVisual(player)
 	end))
 	if player.Character then watchCharacter(player.Character) else queueRefresh() end
 	table.insert(connections, {Disconnect = function()
 		if characterChildConnection then characterChildConnection:Disconnect() end
+		if characterMarkerConnection then characterMarkerConnection:Disconnect() end
 	end})
 end
 
-workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
-	for _, player in ipairs(Players:GetPlayers()) do task.defer(refresh, player) end
-end)
 Players.PlayerAdded:Connect(addPlayer)
 Players.PlayerRemoving:Connect(function(player)
 	destroyVisual(player)

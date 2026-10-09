@@ -1,0 +1,21 @@
+{
+  "source": "luna_run_v1.rbxmx",
+  "sha256": "888c3b4edd60fce8598cd79e720aa424698feb349a0a2115958983e71eedd86c",
+  "assetType": "Animation",
+  "displayName": "Luna run v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:03:32.469890+00:00",
+  "operationPath": "operations/2232afa6-b056-4af8-bc19-007ac44fec0b",
+  "assetId": "102273883403776",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna run v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

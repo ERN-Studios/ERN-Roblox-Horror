@@ -1,0 +1,13 @@
+# Native open control — independent observations, not final acceptance
+
+Source: `native-seed272080896-open.json`, SHA-256 `9df8605faceed3b042d77e6add3ae8a04a738e0b1d5e48c1b45c7814bd6b3c58`. The accompanying `native-seed272080896-open-independent-analysis.json` contains the extracted metrics. Reviewed 10 September 2026.
+
+The 437 snapshots span 29.945335 seconds. Generation remains 3 and the one observed entity keeps model ID 1. The controller reports one spawn probe, one Navigator build and no failed spawn pass. From first spawn to first observed ATTACK, its recorded XZ path is **205.192 studs**, net displacement **155.747 studs**, over **20.514 seconds**. The first movement exceeding 0.1 stud occurs after 4.569 seconds; the largest adjacent sampled XZ movement is 1.390 studs. The route initially has a wall blocking direct LOS and subsequently reaches clear attack space, so this is not a claim of a straight unobstructed approach throughout.
+
+The first observed ATTACK changes serial 0→1 at `1789043134.543489`, targets the actual tester and measures horizontal distance **10.4920**, vertical **5.1747**, facing dot **1**, LOS clear. The last HP100 snapshot is at `1789043134.976855`; the first HP0 snapshot is at `1789043135.045910`. Those samples bracket the health loss at **+0.433366 to +0.502421 seconds after first observed ATTACK**, consistent with the unchanged 0.5-second windup. At the zero-health sample the serial is still 1, the target remains the tester, horizontal distance is **10.46047**, vertical **5.28850**, facing dot **0.999736**, and LOS is clear.
+
+No ForceField is reported. The nearest of the five Foam entities is **886.334 studs** in the preceding sample and **885.067 studs** at HP0, far outside their short-range kill gate. This supports the observed Slide attack control. These are successive state observations, not an instrumented atomic damage callback or a read of the private Attack/Shield record. First observed ATTACK is not claimed to be the exact private start timestamp.
+
+The tester is repositioned during setup; no claim is made that the player remained untouched throughout the whole report. The recorded movement metrics track the NPC after its first observed spawn. Earlier partial attempts are not promoted to passes. This report ends with the dead tester and an idle entity in the still-active round; it does not establish normal cleanup.
+
+**Result: positive native open-range control evidence.** Wall/corner approach, relevant counterplay, visual reach/contact judgment and final cleanup remain separate pending acceptance. No final feature score is assigned by this note, and no UI/runtime action was performed by the reviewer.

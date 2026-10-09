@@ -143,6 +143,13 @@ local function currentGeneration(): number?
 end
 
 local function activeCharacter(): (Model?, Humanoid?, BasePart?, Camera?)
+	-- The authored Poolrooms has no Pool Foam runtime or telemetry listener.
+	-- Its replicated flag also covers the moment before the distant model streams in.
+	local world = workspace:FindFirstChild("Level 2 Generated World")
+	if workspace:GetAttribute("Level2NewMapActive") == true
+		or (world and world:IsA("Model") and world:GetAttribute("Level2NewMap") == true) then
+		return nil, nil, nil, nil
+	end
 	if workspace:GetAttribute("SelectedLevel") ~= 2
 		or workspace:GetAttribute("RoundActive") ~= true
 		or player:GetAttribute("InRound") ~= true

@@ -143,7 +143,7 @@ task.spawn(function()
 	end
 
 	local ambience, wind, fall = clip("l5_ambience", true), clip("l5_depth_wind", true), clip("l5_player_fall")
-	local devFall = nil                                          -- set by the falling block further down
+	local devFall, underCeiling = nil, nil                       -- set by the falling block further down
 	-- DEV_FALL_20261005 (owner: "dev button that triggers a fall and scream"): a button and the O key, for the
 	-- developers and the owner's own account (the Level 6 dev ESP's list). It only asks; the server checks who
 	-- is asking and tells every player in the level, so they all see and hear the same body.
@@ -366,7 +366,12 @@ task.spawn(function()
 			oneShot("l5_finish", 0.5)
 			flash(Color3.new(1, 1, 1), 0.7)             -- short: the LEVEL 5 CLEARED screen comes up behind it
 		elseif what == "devfall" then
-			if devFall then devFall(a, b) end
+			-- refused under a ceiling (NO_FALL_UNDER_CEILING_20261008): the developer who asked is told why
+			local mine = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if devFall and devFall(a, b) == false and gui:FindFirstChild("DevFall")
+				and mine and typeof(a) == "Vector3" and (mine.Position - a).Magnitude < 15 then
+				say("DEV   ·   NOTHING FALLS UNDER A CEILING", 2.4)
+			end
 		elseif what == "crusher" then
 			crusher(a, b, c)
 		elseif what == "crushed" then
@@ -429,7 +434,9 @@ task.spawn(function()
 	local nextAmbient, lastAmbient = os.clock() + 10 + math.random() * 10, nil
 	local function ambientAt(position)
 		local name
-		repeat name = AMBIENT[math.random(#AMBIENT)] until name ~= lastAmbient
+		-- under a ceiling nothing falls, so nothing is heard falling away either (NO_FALL_UNDER_CEILING_20261008)
+		local roofedHere = underCeiling == nil or underCeiling(position.X)
+		repeat name = AMBIENT[math.random(#AMBIENT)] until name ~= lastAmbient and not (roofedHere and name == "l5_amb_fallaway")
 		lastAmbient = name
 		local angle, distance = math.random() * math.pi * 2, 45 + math.random() * 70
 		local holder = Instance.new("Part")
@@ -469,7 +476,58 @@ task.spawn(function()
 		local HttpService = game:GetService("HttpService")
 		local holder = Instance.new("Folder")
 		holder.Name = "Level5Falling"
-		local route, routeOf = nil, nil
+		local route, routeOf = {}, nil
+		-- NO_FALL_UNDER_CEILING_20261008 (owner: in the sections that HAVE a ceiling nothing may fall, no debris and no
+		-- bodies; only where the room is open into the black). ROOFED is build_level5.py's ROOFED. `roofs` holds one span
+		-- of model x for each: the room with its end walls and the dark round the corridor after it (the route's points
+		-- carry the room's name through that corridor). The closing corridor at the end has a ceiling too.
+		local ROOFED = {rose = true, blue = true, amber = true}
+		local roofs, finaleOf = {}, nil
+		local function readRoute(model)
+			if routeOf ~= model then
+				local value = model:FindFirstChild("Route")
+				local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
+				local points, spans = {}, {}
+				for _, point in ipairs(ok and type(decoded) == "table" and decoded or {}) do
+					if type(point) == "table" and type(point.x) == "number" and type(point.z) == "number" then
+						table.insert(points, point)
+						if ROOFED[point.sec] then
+							local span = spans[point.sec] or {point.x - 10, point.x + 10}
+							spans[point.sec] = span
+							span[1], span[2] = math.min(span[1], point.x - 10), math.max(span[2], point.x + 10)
+						end
+					end
+				end
+				-- the level begins under a ceiling: a body that is not in the map yet (still at the lobby's coordinates for
+				-- the frames between the join and the move) counts as under it too
+				if points[1] and spans[points[1].sec] then spans[points[1].sec][1] = -math.huge end
+				-- committed together and last; an empty or broken route is asked for again
+				route, roofs, routeOf, finaleOf = points, spans, #points > 0 and model or nil, nil
+			end
+			if finaleOf ~= model then
+				local last = model:FindFirstChild("FinaleData")
+				local fine, data = pcall(function() return HttpService:JSONDecode(last.Value) end)
+				if fine and type(data) == "table" and type(data.entry_x) == "number" then
+					roofs.finale, finaleOf = {data.entry_x, math.huge}, model
+				end
+			end
+		end
+		-- Is this x under a ceiling? Also yes while the route is not known: no fall is the safe answer.
+		local function roofed(model, origin, x)
+			readRoute(model)
+			if #route == 0 then return true end
+			local px = x - origin.X
+			for _, span in pairs(roofs) do
+				if px >= span[1] and px <= span[2] then return true end
+			end
+			return false
+		end
+		-- for the random far-off sounds: the cry that falls away belongs to the open dark as well
+		underCeiling = function(x)
+			local model = workspace:FindFirstChild(MODEL_NAME)
+			local origin = model and model:GetAttribute("Origin")
+			return typeof(origin) ~= "Vector3" or roofed(model, origin, x)
+		end
 		-- {parts = {{part, offset, swing, phase, dir}}, at, velocity, turn, spin, sound, loud, fadeAt, born, person,
 		--  floor, strikeY, away, bounceOut, spinAfter, thudSpeed, hit, holdUntil}
 		local things = {}
@@ -487,11 +545,7 @@ task.spawn(function()
 		-- How far (x, z) is from the path in plan, and the direction that leads away from it. The path is the line
 		-- through the route's points: measuring to the points alone missed the middle of a long ledge.
 		local function pathGap(model, origin, x, z)
-			if routeOf ~= model then
-				local value = model:FindFirstChild("Route")
-				local ok, decoded = pcall(function() return HttpService:JSONDecode(value.Value) end)
-				route, routeOf = ok and decoded or {}, model
-			end
+			readRoute(model)
 			local best, awayX, awayZ = math.huge, 1, 0
 			local px, pz = x - origin.X, z - origin.Z
 			for index = 1, #route - 1 do
@@ -522,7 +576,8 @@ task.spawn(function()
 					local top = part.Position.Y + part.Size.Y / 2
 					local flat = Vector3.new(part.Position.X - near.X, 0, part.Position.Z - near.Z).Magnitude
 					if flat > 14 and flat < 74 and top > floorY - 64 and top < floorY + 36
-						and clearOfPath(model, origin, part.Position.X, part.Position.Z) then
+						and clearOfPath(model, origin, part.Position.X, part.Position.Z)
+						and not roofed(model, origin, part.Position.X) then
 						table.insert(found, part)
 					end
 				end
@@ -567,17 +622,24 @@ task.spawn(function()
 					else
 						x, z = near.X + rng:NextNumber(-90, 90), origin.Z + rng:NextNumber(-52, 52)
 					end
-					if math.abs(z - origin.Z) < 58 and clearOfPath(model, origin, x, z) then break end
+					if math.abs(z - origin.Z) < 58 and clearOfPath(model, origin, x, z) and not roofed(model, origin, x) then break end
 					x = nil
 				end
 			end
-			if not x then return end
-			-- from the ceiling where the room has one, from the dark where it has not
+			if not x or roofed(model, origin, x) then return end
+			-- only ever out of the dark, 190 studs up. The look upward is the second lock: with anything called a
+			-- ceiling over the spot (a roofed room the table does not know, a corridor) nothing falls there
 			local params = RaycastParams.new()
 			params.FilterType, params.FilterDescendantsInstances = Enum.RaycastFilterType.Include, {model}
 			local from = math.max(floorY + 8, (strikeY or floorY) + 6)
-			local roof = workspace:Raycast(Vector3.new(x, from, z), Vector3.new(0, 420, 0), params)
-			local top = (roof and roof.Instance.Name == "Ceiling") and roof.Position.Y - 3 or floorY + 190
+			local at = Vector3.new(x, from, z)
+			for _ = 1, 8 do                                       -- past a lamp, a step or a monolith that is in the way
+				local roof = workspace:Raycast(at, Vector3.new(0, 420, 0), params)
+				if not roof then break end
+				if string.find(roof.Instance.Name, "Ceiling", 1, true) then return end
+				at = roof.Position + Vector3.new(0, 0.05, 0)
+			end
+			local top = floorY + 190
 			local thing = {parts = {}, at = Vector3.new(x, top, z), velocity = Vector3.new(0, -18, 0), born = os.clock(), person = person,
 				turn = CFrame.Angles(rng:NextNumber(0, 6), rng:NextNumber(0, 6), rng:NextNumber(0, 6)),
 				spin = Vector3.new(rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4), rng:NextNumber(-2.4, 2.4)), floor = floorY}
@@ -675,6 +737,12 @@ task.spawn(function()
 			local model = workspace:FindFirstChild(MODEL_NAME)
 			local origin = model and model:GetAttribute("Origin")
 			if not inLevel() or typeof(origin) ~= "Vector3" or typeof(position) ~= "Vector3" or #things >= 8 then return end
+			if roofed(model, origin, position.X) then
+				if #route > 0 then return false end                 -- the one who asked stands under a ceiling
+				return                                              -- (or the route is not known yet: say nothing)
+			end
+			local mine = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if mine and roofed(model, origin, mine.Position.X) then return end   -- nor for a listener who stands under one
 			holder.Parent = workspace
 			serial = tonumber(serial) or 1
 			drop(model, origin, Random.new(serial * 7919 + 13), true, position.Y - 3, position, serial % 2 == 0)
@@ -741,7 +809,8 @@ task.spawn(function()
 				local cell = math.floor((root.Position.X - origin.X) / 60 + 0.5)   -- players near each other share a stretch
 				local rng = Random.new(slot * 977 + cell * 31)
 				local dice = rng:NextNumber()
-				if dice < 0.17 and #things < 6 then
+				-- nothing at all for a listener with a ceiling over them (NO_FALL_UNDER_CEILING_20261008)
+				if dice < 0.17 and #things < 6 and not roofed(model, origin, root.Position.X) then
 					-- about the stretch the listener is in: a body falls 16 to 42 studs from its middle, close enough to watch
 					local anchor = Vector3.new(origin.X + cell * 60, 0, origin.Z + math.floor((root.Position.Z - origin.Z) / 60 + 0.5) * 60)
 					drop(model, origin, rng, dice < 0.03, root.Position.Y - 3, anchor)

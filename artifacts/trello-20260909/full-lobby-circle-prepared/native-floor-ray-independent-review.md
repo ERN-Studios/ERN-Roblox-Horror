@@ -1,0 +1,7 @@
+# Independent initial floor staging correction — 9/10
+
+Reviewed the new prepend against the actual two-client server context and independently compiled the whole14KB file. SHA-256 `7419617ee979b41e915641564865f631a5f327f4a08e6eb41608bd9d1366b4b3`. The entire original reviewed `feced6b8…7075c6` fixture is an exact byte-for-byte suffix; its exclusion, incumbent, reset/re-entry and cancellation checks are unchanged.
+
+The new setup stops and waits for the prior fixture before beginning. It checks the two actual local clients, living unanchored A and lobby state, uses a downward ray restricted to the actual ChamberFloor with an upward surface normal, and derives HRP height from current HipHeight/root size. It no longer treats the rotated floor's local Size.Y as world height. Peer distance and the existing measured body box must pass before the single yield-free root-offset-preserving PivotTo. Initial horizontal velocity clearing and the controlled stage are logged. No health, membership, timer or queue callback is changed.
+
+No necessary correction for this known running session. The enclosing original fixture then retains its full place/universe/current-character guards. The earlier63.3-height attempt is a failed setup and must remain recorded as such; it is not a tested gameplay failure or a passing queue attempt. Four controlled positions now exist in the combined setup, including this added initial A placement. Native exclusion/UI/Cancel acceptance remains separate.

@@ -1,0 +1,11 @@
+# Independent prepared-code review — 9/10
+
+2026-09-10. Reviewed proposal SoundController SHA `6db6f07b8bab35a70086740e1ba855bdecdb754c5b88b07339d35b644a6416d2` against baseline `0675083878fde8e6f0a8b9220e1c5abeda417e81b14a40c652a5e4045f46f5e5`. No production or Studio changes by the critic.
+
+I read the complete exact delta, the actual emitter creation/cleanup and existing chase binding/state block, and independently ran `test_audio.py`: **30 actual-source checks, the specific original-range negative control, unchanged-loop/asset comparisons and one whole SoundController compile passed**.
+
+No code blocker found. This targets a concrete source discrepancy: the initial detection cue had a 60–2200 stud range, while the existing chase loop already uses 10–200. The cue now also uses the existing Level1/RoundActive/InRound/not-Escaped eligibility, without a target-player restriction, preserving nearby teammates' cue. Moving the helper earlier does not change the chase loop. Authored clips, peak volume, fades, source position, deduplication and cleanup remain intact.
+
+The Sound is parented to the existing small BasePart emitter (or the existing root fallback), so this is positional rather than a SoundService-wide cue. Roblox documents Linear attenuation between the minimum and maximum distances and silence at the maximum. Part-parented sound distance is measured from the part surface, so native boundary checks should place the listener comfortably beyond 200 studs rather than equating a root-centre measurement of exactly 200 with the audibility edge. [Roblox sound objects](https://create.roblox.com/docs/sound/objects#rolloffmindistance-and-rolloffmaxdistance)
+
+The reported chase sound has not been acoustically reproduced in this review. Identifying the initial scream as the map-wide warning is a well-supported code inference, not proof of the reporter's exact audible event. The nearby loop's structure is already correct; do not claim this proposal newly spatializes it. Root should listen to the first cue and following loop from left/right, near, middle distance and comfortably outside range, including as a nearby non-target player. A camera/listener fixture must be labelled as such. Mock tweens and property checks establish neither perceived stereo direction nor actual loudness, so native audible acceptance remains pending.

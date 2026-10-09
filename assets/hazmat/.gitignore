@@ -1,0 +1,15 @@
+# Meshy task snapshots contain expiring signed URLs and are local-only.
+meshy_output/
+
+# Keep only the canonical rig, shared animation clips, and final premium props.
+*.glb
+*.fbx
+!baseline-rigged.glb
+!baseline-rigged.fbx
+!walking-armature.glb
+!running-armature.glb
+!static-wraith-topper.glb
+!false-sun-topper.glb
+
+# Earlier wheel study: its Director icon would misrepresent the skin prize.
+wheel/lucky-wheel-six-sector-skin.png

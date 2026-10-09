@@ -1,0 +1,21 @@
+{
+  "source": "luna_bellyrub_b2.rbxmx",
+  "sha256": "9db72bfb9cdb1f2ab19f20a7fb078d895bae39239dc5881c17a1d922207a0f31",
+  "assetType": "Animation",
+  "displayName": "Luna bellyrub b2",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-05T00:24:05.261991+00:00",
+  "operationPath": "operations/c7848558-939d-47c9-aa11-e3fe47c9b65c",
+  "assetId": "121013549859435",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna bellyrub b2",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

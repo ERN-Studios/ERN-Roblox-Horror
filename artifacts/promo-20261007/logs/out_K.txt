@@ -1,6 +1,0 @@
-Saved three square icons using built-in image generation, unchanged at 1254 × 1254, plus the prompt record:
-
-- `artifacts/promo-20261007/raw/I08_icon_squad_looking_up_raw.png`
-- `artifacts/promo-20261007/raw/I09_icon_void_jump_raw.png`
-- `artifacts/promo-20261007/raw/I10_icon_poolrooms_alone_raw.png`
-- `artifacts/promo-20261007/prompts_K.json`

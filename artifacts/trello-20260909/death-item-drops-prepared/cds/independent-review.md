@@ -1,0 +1,13 @@
+# Independent CD preparation review — 9/10
+
+Reviewed the complete scoped diff, actual ownership/pickup/lifecycle functions, source transform and controlled host. I reran **387 actual-source checks, three targeted negative controls and both complete compiles**. The frozen proposal is `f4cedcac2c6ac687c8e84bb9885ce9fab924da65df92ad43e8fc57fd2c0b9453`; the actual runtime remains baseline `94508b5a6889d729405b8573817326941f6c83465cbb01f407b06c4722382c02`.
+
+The existing five CD identities and authoritative state transitions are preserved. Recovery consumes a DROPPED record once and does not increment original collected progress again. Existing living-participant, distance, prompt and session checks remain the entry point; this is not a new unvalidated pickup route. The existing disconnect redistribution is retained separately from death recovery.
+
+My first read found a concrete deferred lifecycle flaw: CharacterAdded could replace the watched character before the old Died/Removing callbacks, leaving the old carried CDs on the new body. The author reproduced it and added settlement of the previous dead character before switching. The new negative control proves that removing this settlement reintroduces the defect; later old callbacks cannot duplicate drops or consume freshly recovered inventory.
+
+Ground selection now requires a current playable mall floor and a clear small volume, including each spread point. The bounded nearby search handles a blocked original source pivot; the last confirmed carried floor handles a void death. Safe-room floors, decoration and corpses are excluded. Five corner drops remain five separate records and are recoverable in the actual-source host even when tight-space fallback positions coincide. An entirely removed/invalid floor deliberately yields no invented airborne recovery point and retains ownership; it is not advertised as a successful drop.
+
+The steady light and occluded marker are appropriately limited and preserve the original prompt and disc. Stop cleanup destroys the actual drop/prompt/marker instances in the host. Root's shared read-only native probe uses real existing attributes and explicitly avoids inferring private fuse counts, visibility or pickup from mere instance presence.
+
+**9/10 for the CD code/artifact preparation; no remaining required code correction found.** This is only one half of the combined fuse/CD feature. Controlled planar/AABB rays and stubbed presentation internals do not prove native floor placement, marker readability, overlapping prompt selection or another real player's pickup. Combined feature review and root's native acceptance/publication remain pending. No Studio, runtime, UI or Trello mutation was performed by this reviewer.

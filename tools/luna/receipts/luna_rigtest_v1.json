@@ -1,0 +1,21 @@
+{
+  "source": "luna_rigtest_v1.glb",
+  "sha256": "8dceb063eb1082a0eb9054eeb9cc6e9825ce9b771c9b84907f56ed0ff4bcd3fb",
+  "assetType": "Model",
+  "displayName": "Luna rig test v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T15:11:41.952591+00:00",
+  "operationPath": "operations/a88801c3-435a-418d-8117-76515774914d",
+  "assetId": "123942446229463",
+  "status": "created",
+  "result": {
+    "assetType": "Model",
+    "displayName": "Luna rig test v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

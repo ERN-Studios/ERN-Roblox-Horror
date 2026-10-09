@@ -1,0 +1,21 @@
+{
+  "source": "luna_sitdown_v1.rbxmx",
+  "sha256": "771ba421f70d2609abbb9f0a67f403686d53c48cdacd8a80fe304e0dbc834da8",
+  "assetType": "Animation",
+  "displayName": "Luna sitdown v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:03:45.606987+00:00",
+  "operationPath": "operations/cb328bc7-9a42-4d23-99d3-805f74527c35",
+  "assetId": "117349775636197",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna sitdown v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

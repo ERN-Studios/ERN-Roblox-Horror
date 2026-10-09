@@ -1,0 +1,21 @@
+{
+  "source": "luna_bed_v1.glb",
+  "sha256": "303a2c942e3385a2b308d9b416e6683e432171c00bc72dc90e6bad24d04978a9",
+  "assetType": "Model",
+  "displayName": "Luna bed v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T15:19:21.708247+00:00",
+  "operationPath": "operations/a00e933e-b2f6-45a7-b4b9-7dd3adcdb255",
+  "assetId": "130867070552114",
+  "status": "created",
+  "result": {
+    "assetType": "Model",
+    "displayName": "Luna bed v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

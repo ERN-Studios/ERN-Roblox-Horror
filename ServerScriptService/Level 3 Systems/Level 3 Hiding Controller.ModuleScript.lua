@@ -449,7 +449,7 @@ function Controller.Start(manifest: any, generation: number)
 		Anchors={}, AnchorSet={}, Occupants={}, HiddenPlayers={}, LastAction={}, Connections={},
 		-- Set by FlushAnchor. A flushed player is refused by the Mall Manager's
 		-- attack checks until this clock, so being found is a head start.
-		FlushImmuneUntil={},
+		FlushImmuneUntil={}, FlushImmuneCharacters={},
 	}
 	activeSession = session
 	for _, anchor in ipairs(manifest.HideTables) do
@@ -517,6 +517,7 @@ function Controller.Start(manifest: any, generation: number)
 		releasePlayer(session, player, false)
 		session.LastAction[player] = nil
 		session.FlushImmuneUntil[player] = nil
+		session.FlushImmuneCharacters[player] = nil
 	end))
 	for _, player in ipairs(Players:GetPlayers()) do bindPlayer(session, player) end
 	refreshPrompts(session)
@@ -560,17 +561,49 @@ function Controller.GetOccupiedAnchors(generation: number?, excludeProtected: bo
 	return result
 end
 
--- Compatibility for older callers: a Manager inspection never moves hidden
--- players. Only their EXIT request, death/leave, or world teardown releases them.
-function Controller.FlushAnchor(_anchor: BasePart, _awayFrom: Vector3?): {Player}
-	return {}
+-- A successful Manager skill check releases eligible occupants through the
+-- normal restore path, using their separate authored exit lanes away from it.
+function Controller.FlushAnchor(anchor: BasePart, awayFrom: Vector3?): {Player}
+	local flushed: {Player} = {}
+	local session = activeSession
+	if not session or not roundAllowsHiding(session) then return flushed end
+	if not session.AnchorSet[anchor] or not anchor.Parent
+		or not anchor:IsDescendantOf(session.World) then return flushed end
+	local occupants = session.Occupants[anchor]
+	if not occupants or #occupants == 0 then return flushed end
+	local now = workspace:GetServerTimeNow()
+	-- releasePlayer removes from occupancy; a copy keeps both lanes reachable.
+	for _, player in ipairs(table.clone(occupants)) do
+		local record = session.HiddenPlayers[player]
+		local character, humanoid, root = eligible(player, session)
+		if record and aiOccupant(session, player, anchor)
+			and character == record.Character and humanoid == record.Humanoid
+			and root == record.Root then
+			if awayFrom then
+				local localPosition = anchor.CFrame:PointToObjectSpace(awayFrom)
+				local exitSide = if localPosition.Z >= 0 then -1 else 1
+				local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
+				record.ExitCFrame = anchor.CFrame
+					* CFrame.new(slotLateral(record.Slot), Tuning.ExitVerticalOffset,
+						exitSide * Tuning.ExitOffsetZ)
+					* sideRotation
+			end
+			-- Use the same server clock as the visible reaction window, and bind
+			-- the head start to this life so a new avatar cannot inherit it.
+			session.FlushImmuneUntil[player] = now + TableCheckTuning.FlushImmunitySeconds
+			session.FlushImmuneCharacters[player] = character
+			if releasePlayer(session, player, true) then table.insert(flushed, player) end
+		end
+	end
+	return flushed
 end
 
 function Controller.IsFlushImmune(player: Player): boolean
 	local session = activeSession
 	if not session or not liveSession(session) then return false end
 	local expiry = session.FlushImmuneUntil[player]
-	return expiry ~= nil and workspace:GetServerTimeNow() < expiry
+	return expiry ~= nil and session.FlushImmuneCharacters[player] == player.Character
+		and workspace:GetServerTimeNow() < expiry
 end
 
 function Controller.GetSnapshot()

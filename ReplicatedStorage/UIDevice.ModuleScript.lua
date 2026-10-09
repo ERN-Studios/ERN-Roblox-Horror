@@ -517,11 +517,14 @@ end
 -- the CLUSTER is what gives way.
 --
 -- So the cluster has two arrangements and this module chooses between them:
---   * COLUMN -- what has always shipped, unchanged to the pixel, whenever the
---     safe area can hold it and still leave a usable readout above it;
+--   * GRID -- two ranks of four in the bottom-right corner (the approved 14 A
+--     touch cluster), whenever the safe area can hold it and still leave a
+--     usable readout above it. GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08):
+--     it replaced the hand-written COLUMN, which no screen uses any more;
 --   * ROW -- the same controls laid along the bottom edge instead, sized to the
 --     daylight between the dynamic thumbstick's activation edge and the safe
---     right edge, which turns 242px of reserved height into 67.
+--     right edge. A short-screen fallback only: the grid leaves the readout
+--     its 56px on every screen whose safe area is at least ~204px tall.
 --
 -- Both are described as SLOTS: an inset from the ScreenGui's right and bottom
 -- edges plus a size, which is exactly the idiom the buttons are positioned with.
@@ -543,76 +546,65 @@ local THUMBSTICK_CLEARANCE = 8
 -- offered at all.
 local MINIMUM_TOUCH_TARGET = 44
 
--- Rightmost first, which is the order the row fills from: the thumb-nearest slot
+-- Rightmost first, which is the order the slots fill from: the thumb-nearest slot
 -- goes to JUMP, because in the lobby -- where ours is hidden -- that is the slot
 -- Roblox's own jump button occupies, and one arrangement should not have to
 -- dodge the other.
+--
+-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08; HUD B2, element 14 A). EIGHT
+-- keys, in the HUD_Touch template's own order: the lower rank right to left is
+-- JUMP, RUN, SNEAK, LIGHT; the upper rank right to left is SHIELD, KIT, GLOW,
+-- then the developer-only POV in the slot the template leaves empty. Every key
+-- is a cell that is mounted once and registered on its root, so planZone
+-- reserves exactly what can be drawn.
+--
+-- The three stored consumables (SpeedPotionUse, RouteMarkerPlace,
+-- EntityDetectorScan) are NOT keys any more. They live in the KIT fan, which is
+-- transient, never registered and never reserved: its rectangle is
+-- ControlPlan.Fan / Layout().KitFan, one row directly above the KIT row, and
+-- TopRightPanel stops above it only while the player attribute KitFanOpen is
+-- true.
 local CONTROL_KEYS_RIGHT_FIRST = {
-	"TouchJump", "TouchRunHold", "TouchSneakHold",
-	"TouchDropGlowstick", "TouchPOV", "FlashlightPower", "ProtectionUse",
-	-- EQUIPMENT_SLOTS_20260916 (Trello #101). The two stored consumables are
-	-- seated by THIS list, with the same arithmetic as the other seven, rather
-	-- than pinned above ProtectionUse in a table of their own. That is what
-	-- keeps them honest: planZone reserves the union of every key listed here,
-	-- rowControlPlan shrinks the cell until ALL of them clear
-	-- MINIMUM_TOUCH_TARGET, and the objective readout's headroom is measured
-	-- against the result -- so nine controls cannot quietly eat the top band.
-	-- Two slots bolted on above ProtectionUse do exactly that: measured, a
-	-- 568x320 phone put the second of them at y 50 inside a top band running to
-	-- y 97, and on a 812x375 phone the column needs 432px of a 375px screen.
-	-- Last in the list means furthest from the thumb, so JUMP / RUN / SNEAK keep
-	-- their place in the rank.
-	--
-	-- They are DRAWN only when the player owns the item (ProtectionHUD hides the
-	-- button), and an undrawn control is excluded from the measured union, so on
-	-- a real device Zones.Controls still describes what is actually on screen.
-	"SpeedPotionUse", "RouteMarkerPlace", "EntityDetectorScan",
+	"TouchJump", "TouchRunHold", "TouchSneakHold", "FlashlightPower",
+	"ProtectionUse", "KitToggle", "TouchDropGlowstick", "TouchPOV",
 }
 
-local function columnControlPlan(tablet: boolean): any
-	local edge = tablet and 26 or 22
-	local button = tablet and 76 or 64
-	local gap = tablet and 18 or 14
-	-- The second column and the flashlight slot beneath it, verbatim from what
-	-- NoiseReporter and FlashlightController each used to compute for themselves.
-	local second = edge + button + (tablet and 18 or 16)
-	local secondWidth = tablet and 72 or 58
-	local flashlightSlot = 58
-	local run = edge + button + gap
-	-- The second column's equipment stack, DERIVED from the shield's own bottom
-	-- rather than restated, so the three inventory slots cannot drift apart.
-	local protection = edge + flashlightSlot + button + gap + (tablet and 72 or 58) + gap
-	local equipmentStep = secondWidth + gap
+-- The one slot arithmetic both arrangements use: `perRank` cells to a rank,
+-- rank 0 on the bottom, column 0 on the right, every slot an inset from the
+-- gui's bottom-right corner. GRID_CONTROL_PLAN_20261008.
+local function rankedSlots(perRank: number, cell: number, gap: number, edge: number,
+	textSize: number): any
+	local slots = {}
+	for index, key in ipairs(CONTROL_KEYS_RIGHT_FIRST) do
+		local column = (index - 1) % perRank
+		local rank = math.floor((index - 1) / perRank)
+		slots[key] = {
+			Right = edge + column * (cell + gap),
+			Bottom = edge + rank * (cell + gap),
+			Width = cell,
+			Height = cell,
+			TextSize = textSize,
+		}
+	end
+	return slots
+end
+
+-- The approved touch cluster: 4 + 4 at cell 52, gap 8, edge 12 on a phone and
+-- 64 / 10 / 15 on a tablet, portrait included. At 844x390 (safe 47..797 x
+-- 58..369) this puts JUMP at x 733..785, y 305..357 and the cluster at
+-- x 553..785, y 245..357, the dump's own rectangle to the pixel.
+-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08).
+local function gridControlPlan(tablet: boolean): any
+	local cell = tablet and 64 or 52
+	local gap = tablet and 10 or 8
+	local edge = tablet and 15 or 12
 	return {
-		Mode = "column",
+		Mode = "grid",
 		Edge = edge,
 		Gap = gap,
-		Cell = button,
+		Cell = cell,
 		Order = CONTROL_KEYS_RIGHT_FIRST,
-		Slots = {
-			TouchJump = {Right = edge, Bottom = edge,
-				Width = button, Height = button, TextSize = tablet and 17 or 15},
-			TouchRunHold = {Right = edge, Bottom = run,
-				Width = button, Height = button, TextSize = tablet and 18 or 16},
-			TouchSneakHold = {Right = edge, Bottom = run + button + gap,
-				Width = button, Height = button, TextSize = tablet and 17 or 15},
-			TouchDropGlowstick = {Right = second,
-				Bottom = edge + flashlightSlot + button + gap,
-				Width = secondWidth, Height = tablet and 72 or 58, TextSize = 12},
-			TouchPOV = {Right = second,
-				Bottom = edge + flashlightSlot + (tablet and 14 or 12),
-				Width = secondWidth, Height = tablet and 54 or 48, TextSize = 13},
-			FlashlightPower = {Right = second, Bottom = edge,
-				Width = secondWidth, Height = secondWidth},
-			ProtectionUse = {Right = second, Bottom = protection,
-				Width = secondWidth, Height = secondWidth, TextSize = 12},
-			SpeedPotionUse = {Right = second, Bottom = protection + equipmentStep,
-				Width = secondWidth, Height = secondWidth, TextSize = 12},
-			RouteMarkerPlace = {Right = second, Bottom = protection + equipmentStep * 2,
-				Width = secondWidth, Height = secondWidth, TextSize = 12},
-			EntityDetectorScan = {Right = second, Bottom = protection + equipmentStep * 3,
-				Width = secondWidth, Height = secondWidth, TextSize = 12},
-		},
+		Slots = rankedSlots(4, cell, gap, edge, 12),
 	}
 end
 
@@ -621,9 +613,9 @@ end
 -- it rather than clamped into it afterwards, so no control can land in the
 -- region a finger uses to walk. One 44px target per control plus the gaps does
 -- not fit every short screen, so a second attempt seats them in two ranks of
--- ceil(n/2); returns nil when even that will not fit, and the column stands.
--- `n` is however many keys CONTROL_KEYS_RIGHT_FIRST holds -- nine since the
--- equipment slots joined it -- and nothing here is written for a fixed count.
+-- ceil(n/2); returns nil when even that will not fit, and the grid stands.
+-- `n` is however many keys CONTROL_KEYS_RIGHT_FIRST holds -- eight since
+-- GRID_CONTROL_PLAN_20261008 -- and nothing here is written for a fixed count.
 local function rowControlPlan(tablet: boolean, usableWidth: number, usableHeight: number): any?
 	local edge = tablet and 26 or 22
 	local gap = tablet and 12 or 8
@@ -637,28 +629,16 @@ local function rowControlPlan(tablet: boolean, usableWidth: number, usableHeight
 		local heightCell = math.floor((usableHeight - edge - gap * (ranks - 1)) / ranks)
 		cell = math.min(cell, largest, heightCell)
 		if cell >= MINIMUM_TOUCH_TARGET then
-			local slots = {}
-			for index, key in ipairs(CONTROL_KEYS_RIGHT_FIRST) do
-				-- Index 1 is the rightmost slot of the bottom rank, so the primary
-				-- controls stay under the thumb and the second rank -- when there
-				-- is one -- carries the remaining equipment actions.
-				local column = (index - 1) % perRank
-				local rank = math.floor((index - 1) / perRank)
-				slots[key] = {
-					Right = edge + column * (cell + gap),
-					Bottom = edge + rank * (cell + gap),
-					Width = cell,
-					Height = cell,
-					TextSize = tablet and 13 or 12,
-				}
-			end
+			-- Index 1 is the rightmost slot of the bottom rank, so the primary
+			-- controls stay under the thumb and the second rank -- when there
+			-- is one -- carries the rest.
 			return {
 				Mode = "row",
 				Edge = edge,
 				Gap = gap,
 				Cell = cell,
 				Order = CONTROL_KEYS_RIGHT_FIRST,
-				Slots = slots,
+				Slots = rankedSlots(perRank, cell, gap, edge, tablet and 13 or 12),
 			}
 		end
 	end
@@ -981,7 +961,7 @@ local function computeLayout(): any
 	-- still REACHES the physical corner, matching what the measured branch does
 	-- with its own union, so nothing that dodges it can slip down the outside.
 	local tabletControls = class == "tablet"
-	local plan = columnControlPlan(tabletControls)
+	local plan = gridControlPlan(tabletControls)
 
 	local function planZone(source): any
 		local left, top = math.huge, math.huge
@@ -1043,7 +1023,7 @@ local function computeLayout(): any
 		-- the party dialog's collision from the Controls zone to the Jump zone.
 		jumpLeft, jumpTop, jumpSize = display.Right, display.Bottom, 0
 	end
-	-- SHORT SCREEN: the vertical stack and a legible readout cannot both fit, so
+	-- SHORT SCREEN: the grid and a legible readout cannot both fit, so
 	-- the cluster gives way and lies along the bottom edge. LANDSCAPE ONLY -- in
 	-- portrait the thumbstick's activation region is the full width of the bottom
 	-- 40%, so there is no bottom edge to lay a row along; portrait screens are
@@ -1058,12 +1038,25 @@ local function computeLayout(): any
 		if rowed then
 			local rowZone = planZone(rowed)
 			-- Only if it actually buys the readout its height. A row that does not
-			-- is churn, and the column is the arrangement players know.
+			-- is churn, and the grid is the arrangement players know.
 			if objectiveHeadroom(rowZone) >= MINIMUM_USABLE_HEIGHT then
 				plan, controls = rowed, rowZone
 			end
 		end
 	end
+	-- THE KIT FAN's slot, one row directly above the KIT cell with its right edge
+	-- on KIT's, in whichever arrangement was chosen. It is a slot like the others
+	-- (an inset from the bottom-right corner) but it is NOT in Order: the fan is
+	-- transient, so neither planZone nor the measured union reserves it.
+	-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08): 172x52 at cell 52.
+	local kit = plan.Slots.KitToggle
+	plan.Fan = {Right = kit.Right, Bottom = kit.Bottom + kit.Height + plan.Gap,
+		Width = math.round(172 * kit.Width / 52), Height = kit.Height}
+	local kitFan = edgeRect(
+		safe.Right - plan.Fan.Right - plan.Fan.Width,
+		safe.Bottom - plan.Fan.Bottom - plan.Fan.Height,
+		safe.Right - plan.Fan.Right,
+		safe.Bottom - plan.Fan.Bottom)
 
 	-- MEASURED wherever the controls have registered themselves. A synthetic
 	-- fixture keeps the proxy on purpose: the live buttons are laid out for the
@@ -1352,6 +1345,15 @@ local function computeLayout(): any
 		-- on every layout, touch or not; the pointer branch of each caller ignores
 		-- it and keeps its own desktop composition.
 		ControlPlan = plan,
+		-- The KIT fan's rectangle in the one space, always computed (touch or not,
+		-- open or not), and whether the fan is open right now. KitFanOpen is the
+		-- client-local player attribute ProtectionHUD owns; it is a layout input,
+		-- so a change forces a refresh. KitFan is NOT a zone: Zones are movement
+		-- zones, and the fan is one transient row above the cluster.
+		-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08).
+		KitFan = kitFan,
+		KitFanOpen = Players.LocalPlayer ~= nil
+			and Players.LocalPlayer:GetAttribute("KitFanOpen") == true,
 		Zones = {
 			Thumbstick = thumbstick,
 			Controls = controls,
@@ -1505,6 +1507,12 @@ function UIDevice.TopRightPanel(desiredWidth: number, desiredHeight: number): an
 		if right > zones.Jump.Left and left < zones.Jump.Right then
 			limit = math.min(limit, zones.Jump.Top - gutterBelow)
 		end
+		-- The open KIT fan sits one row above the cluster; a readout that reaches
+		-- over its columns stops above it while it is open.
+		-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08).
+		if info.KitFanOpen and left < info.KitFan.Right and right > info.KitFan.Left then
+			limit = math.min(limit, info.KitFan.Top - gutterBelow)
+		end
 		local height = math.min(desiredHeight, math.max(0, limit - top))
 		return {
 			Left = left, Top = top, Right = right, Bottom = top + height,
@@ -1648,6 +1656,7 @@ end
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
 	"LuckyWheelOpen", "DailyRewardsOpen", "AchievementsOpen", "HelpPanelOpen",
+	"RoundEndingOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean
@@ -1935,6 +1944,14 @@ do
 		-- modal cannot release movement while another remains open.
 		UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 	end)
+	-- The KIT fan opening or closing moves TopRightPanel's limit, so it is a
+	-- layout input like the modal flags, with the same forced refresh.
+	-- GRID_CONTROL_PLAN_20261008 (owner, 2026-10-08).
+	if Players.LocalPlayer then
+		Players.LocalPlayer:GetAttributeChangedSignal("KitFanOpen"):Connect(function()
+			if refresh then refresh(true) end
+		end)
+	end
 
 	local camera = workspace.CurrentCamera
 	local viewportConnection: RBXScriptConnection? = nil

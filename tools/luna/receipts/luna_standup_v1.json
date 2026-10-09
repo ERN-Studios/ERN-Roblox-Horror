@@ -1,0 +1,21 @@
+{
+  "source": "luna_standup_v1.rbxmx",
+  "sha256": "67105e88e18ce00ff6a368ed925bd0c87cabbceeaaf518015e0ffb76681b5b96",
+  "assetType": "Animation",
+  "displayName": "Luna standup v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:03:56.325661+00:00",
+  "operationPath": "operations/48455360-10d2-4426-85b2-9b3618d6b958",
+  "assetId": "112870979215682",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna standup v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

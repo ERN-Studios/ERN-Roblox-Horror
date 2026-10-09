@@ -1,0 +1,14 @@
+# Compact left lobby controls — native verification
+
+Tested the installed Store `5638699125280c0980128946efb1c20018da219c3c263d9e9c21bc402843ee6b` and RoundUI `59c29543b0e4d24eb733be2a096c36a684d8d6d285234984ed24ce9df44a519f` in Roblox Studio Play, using the Windows mouse.
+
+- Native desktop: 64px squares at x8, Shop y8 and Upgrades y80. Mute copy at x8/y152, 64×44. Both icon assets loaded; 12px captions fit their 58×16 areas. Complete outlines visually inspected. Actual Upgrades icon click and Shops caption click open the existing terminal.
+- Native iPhone 13 Studio simulator: engine viewport749×368, safe area749×310, actual touch input enabled. 56px squares at x8, Shop y8 and Upgrades y70. Mute at x8/y134, 56×44. Both icons loaded; 11px captions fit their 50×16 areas (Upgrades49×11, Shops30×11). Mute/unmute dispatch fits56×44 (48×22).
+- The narrow sidebar intentionally occupies part of the broad invisible dynamic joystick activation region. The visible joystick starts at y217, leaving39px after the sidebar. Observed UI taps on mute, Shop icon and Upgrades caption have processed=true and leave MoveDirection at0 and position unchanged. A subsequent real joystick drag has processed=false, MoveDirection reaches1 and the character moves0.261 studs.
+- Phone side mute during the actual lobby briefing sets the saved attribute true and dispatch SoundGroup volume0; both original and copy read UNMUTE. Idle side unmute restores false and volume1. Desktop original mute during an actual briefing sets true/volume0; side unmute restores false/volume1 while briefing remains active. LobbyMusicEnabled remains true and the music deck retains its independent ducked volume.
+- Store modal hides/disables the sidebar. Closing it restores the buttons. The original Upgrades opener continues its existing last-tab behavior; the dedicated Shop opener selects Shop.
+- An attempted phone original-button click happened after the briefing expired and is not counted as a successful original-button test. The successful original-button test is the desktop evidence.
+- 52px fallback is covered by the controlled layout host, not a native device screenshot. Native coverage is64px desktop and56px phone; no other physical devices are claimed.
+- Temporary input observers were disconnected and removed before leaving the phone Play session. Mute preference restored to false. Play stopped and simulator closed after testing. Final Studio audit126/126 matched, zero drift. No purchases, DEV additions or Discord send.
+
+Evidence: native-phone-*.json/.jpg and native-desktop-*.json/.jpg in this folder. Host validation is147 checks plus two targeted negatives and two whole-script compiles; mute validation is38 checks plus original active-only negative and whole-script compile. Independent critic scores are recorded separately.

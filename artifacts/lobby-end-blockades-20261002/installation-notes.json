@@ -1,9 +1,0 @@
-{
-  "initialMCPAttempt": "ScopedBuilderCASsucceeded; parentingnewobjectsdeniedbyMCPCapabilities. NoPlaystartedbetweenattempts.",
-  "completion": "NativecommandbarrecheckedfreshBuilder4861+allunchangedpins, exactmanifest17b+newnamesabsentandcreatedownedModule/LocalScript.",
-  "sourceHashes": {
-    "Builder": "4861f4d159287c00ac27fb1a700a75467804b36508dddbfd833f316beadc1494",
-    "EndBlockades": "54ce897716c1c6b41132e0401739faa677a35ad2d02c60af350d1547890d1c69",
-    "R4DevGateController": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9"
-  }
-}

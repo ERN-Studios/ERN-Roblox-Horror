@@ -20,6 +20,13 @@ function DevAccess.IsAllowed(subject)
 	return userId ~= nil and ALLOWED_USER_IDS[userId] == true
 end
 
+-- The approved authored Poolrooms are the public Level 2 queue map.
+DevAccess.Level2Public = true
+DevAccess.Level2ClosedMessage = "LEVEL 2 UNDER MAINTENANCE\nPLEASE PLAY ANOTHER LEVEL"
+function DevAccess.IsLevel2Allowed(subject)
+	return DevAccess.Level2Public == true or DevAccess.IsAllowed(subject)
+end
+
 -- Preview access is narrower than the general developer commands.
 function DevAccess.IsLevel6PreviewAllowed(subject)
 	if DevAccess.IsAllowed(subject) then return true end

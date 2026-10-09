@@ -1,0 +1,10 @@
+{
+  "source": "tools/luna/player_pet_anim.luau (build())",
+  "sourceSha256": "1296c94aaead35d0d74cc977a3988b906c709ddc25c05dbc0d4a2d46a6848f29",
+  "assetType": "Animation",
+  "displayName": "Luna Pet (player R15) v1",
+  "uploadedVia": "Studio Edit execute_luau AssetService:CreateAssetAsync, CreatorType Group 1039373905",
+  "createdAtUtc": "2026-10-04T18:55:00Z",
+  "assetId": 135130382947090,
+  "status": "created"
+}

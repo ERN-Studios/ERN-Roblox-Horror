@@ -370,10 +370,12 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and Configuration.Hiding.HideOccupantLateralOffset * 2 + 2
 			<= Configuration.Hiding.SightOccluderSize.X,
 		"Level 3 shared-table occupancy does not fit two players under one table")
-	-- Direct pursuit checks the selected hiding place deterministically. The
-	-- warning and flush immunity remain; random bias only belongs to patrol.
+	-- Hidden players attract a walking perimeter patrol. A nearby visible
+	-- occupant triggers the warning and one server-owned 25% shove skill check.
 	local tableCheck = Configuration.TableCheck
-	assert(tableCheck.SweepBiasChance > 0 and tableCheck.SweepBiasChance < 1
+	assert(tableCheck.SkillCheckSuccessChance == .25
+		and tableCheck.PatrolRadius > Configuration.MallManager.GoalTolerance
+		and tableCheck.PatrolRadius <= tableCheck.StartRange
 		and tableCheck.GlobalIntervalSeconds > 0
 		and tableCheck.AnchorCooldownSeconds >= 20
 		and tableCheck.ReactionWindowSeconds >= 1
@@ -382,7 +384,7 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and tableCheck.SoundRollOffMaxDistance > tableCheck.SoundRollOffMinDistance
 		and type(Configuration.Audio[tableCheck.SoundName]) == "string"
 		and Configuration.Audio[tableCheck.SoundName] ~= "",
-		"Level 3 table-check tuning has invalid patrol bias, warning, immunity, or cue")
+		"Level 3 table-check tuning has invalid skill chance, patrol radius, warning, immunity, or cue")
 	assert(managerTemplate:FindFirstChildOfClass("AnimationController")
 		and managerTemplate:FindFirstChildOfClass("AnimationController"):FindFirstChildOfClass("Animator"),
 		"Mall Manager template is missing AnimationController.Animator")
@@ -3313,8 +3315,16 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 	local prompt = promptObject :: ProximityPrompt
 
 	local restore = {}
+	local controlBefore = {}
 	for _, record in ipairs(participants) do
 		table.insert(restore, {Character = record.Character, CFrame = record.Character:GetPivot()})
+		local root = record.Character.HumanoidRootPart
+		local humanoid = record.Character:FindFirstChildOfClass("Humanoid")
+		controlBefore[record.Player] = {
+			RootAnchored = root.Anchored, AutoRotate = humanoid.AutoRotate,
+			WalkSpeed = humanoid.WalkSpeed, JumpPower = humanoid.JumpPower,
+			JumpHeight = humanoid.JumpHeight,
+		}
 	end
 	local approach = CFrame.new(hideAnchor.Position + Vector3.new(0, 3, 0))
 	-- OccupiedCount is a whole-session count of non-empty anchors, and the
@@ -3326,7 +3336,7 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 		"the hiding session vanished before the probe began").OccupiedCount
 	-- A live hunt would legitimately find and flush these occupants mid-assertion
 	-- (this probe even asks the Manager for an attack verdict below, so a hunt may
-	-- well be running). Steps 5-7 call FlushAnchor directly rather than going
+	-- well be running). Steps 5-6 call FlushAnchor directly rather than going
 	-- through the Manager, so suspending checks costs the probe nothing. Restored
 	-- in the cleanup below, pass or fail, exactly as ProbeFurniturePermanence does.
 	local suspendChecks = type(Manager) == "table"
@@ -3420,29 +3430,49 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 		assert(rejoined and HidingController.OccupantCount(hideAnchor) == cap,
 			"the freed lane was not reusable: " .. tostring(rejoinReason))
 
-		-- 5. Finishing an inspection never ejects either occupant.
-		local before = {}
-		for i = 1, cap do before[i] = participants[i].Character.HumanoidRootPart.CFrame end
-		local flushed = HidingController.FlushAnchor(hideAnchor, hideAnchor.Position + Vector3.new(0, 0, 12))
-		assert(#flushed == 0, "Manager inspection ejected a hidden player")
-		for i = 1, cap do
-			local record = participants[i]
-			local root = record.Character.HumanoidRootPart
-			assert(HidingController.IsHidden(record.Player, generation) and root.Anchored
-				and (root.Position - before[i].Position).Magnitude < .01, "Inspection moved an occupant")
-		end
-		assert(HidingController.OccupantCount(hideAnchor) == cap, "Inspection changed occupancy")
+		-- 5. A successful entity check shoves both occupied lanes away from its
+		--    approach and restores the normal character controls.
 		local attackProbe = nil
 		if type(Manager) == "table" and Manager.GetSnapshot and Manager.DebugAttackProbe
 			and Manager.GetSnapshot() ~= nil then
 			attackProbe = Manager.DebugAttackProbe(first)
 			assert(not attackProbe.LineClearAtConfirmRange and not attackProbe.WouldInitiate,
-				"Manager can attack an occupant who stayed hidden")
+				"Manager can attack an occupant while still hidden")
 		end
-		-- 6. Voluntary exit still restores controls and frees the player's slot.
-		assert(HidingController.DebugExit(first), "Voluntary exit failed")
-		assert(not HidingController.IsHidden(first, generation)
-			and HidingController.OccupantCount(hideAnchor) == cap - 1, "Exit did not free the slot")
+		local awayFrom = hideAnchor.CFrame:PointToWorldSpace(Vector3.new(0, 0, 12))
+		local flushed = HidingController.FlushAnchor(hideAnchor, awayFrom)
+		assert(#flushed == cap and table.find(flushed, first) and table.find(flushed, second),
+			"Successful entity check did not release both table occupants")
+		for i = 1, cap do
+			local record = participants[i]
+			local root = record.Character.HumanoidRootPart
+			local humanoid = record.Character:FindFirstChildOfClass("Humanoid")
+			local before = controlBefore[record.Player]
+			local exitLocal = hideAnchor.CFrame:PointToObjectSpace(root.Position)
+			assert(not HidingController.IsHidden(record.Player, generation)
+				and root.Anchored == before.RootAnchored
+				and humanoid.AutoRotate == before.AutoRotate
+				and humanoid.WalkSpeed == before.WalkSpeed
+				and humanoid.JumpPower == before.JumpPower
+				and humanoid.JumpHeight == before.JumpHeight,
+				"Shove did not restore the occupant's movement controls")
+			assert(exitLocal.Z <= -Configuration.Hiding.ExitOffsetZ + .02
+				and math.abs(math.abs(exitLocal.X)
+					- Configuration.Hiding.HideOccupantLateralOffset) <= .02,
+				"Shove ignored the separate authored exit lanes away from the entity")
+			assert(HidingController.IsFlushImmune(record.Player),
+				"A shoved occupant did not receive their protected head start")
+		end
+		assert(HidingController.OccupantCount(hideAnchor) == 0 and prompt.Enabled,
+			"Shove did not free both lanes and reopen the table prompt")
+		if attackProbe then
+			local immuneProbe = Manager.DebugAttackProbe(first)
+			assert(not immuneProbe.LineClearAtConfirmRange and not immuneProbe.WouldInitiate,
+				"Manager can attack during shove immunity")
+		end
+		-- 6. A repeated shove on the now-empty table changes nothing.
+		assert(#HidingController.FlushAnchor(hideAnchor, awayFrom) == 0,
+			"Empty-table shove reported duplicate occupants")
 
 		return {
 			Anchor = hideAnchor:GetFullName(),
@@ -3450,7 +3480,8 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 			OccupantCap = cap,
 			Participants = #participants,
 			Flushed = #flushed,
-			InspectionPreservedOccupants = true,
+			ShoveRestoredControlsAndExitLanes = true,
+			FlushImmune = true,
 			AttackRefusedWhileHidden = attackProbe ~= nil,
 		}
 	end)
@@ -3474,7 +3505,7 @@ end
 -- leave every furniture part byte-identical in parent, transparency,
 -- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden while
 -- checks are deliberately suspended, and must keep every furniture group
--- guarding navigation while the Manager pursues the hidden player.
+-- guarding navigation while the Manager patrols around the hidden player.
 --
 -- Seeking across the blackout edge fires one-way scream and chair events, so
 -- this probe is restricted to a disposable Play session. The required cleanup
@@ -3772,14 +3803,17 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 				TargetUserId = snapshot.TargetUserId,
 				GenuineProgressSerial = snapshot.GenuineProgressSerial,
 			})
-			local targetPlayer = Players:GetPlayerByUserId(snapshot.TargetUserId or 0)
-			assert(targetPlayer and HidingController.IsHidden(targetPlayer, generation),
-				"Mall Manager lost its target while every living player was hidden")
-			assert(snapshot.TargetMode == "NEAREST_PLAYER" and snapshot.State == "CHASE",
-				"Mall Manager stopped pursuing the nearest hidden player")
-			assert(snapshot.TargetDistance >= 0 and typeof(snapshot.TargetPosition) == "Vector3"
-				and targetPlayer:GetAttribute("BeingChased") == true,
-				"Hidden-target chase telemetry was cleared")
+			assert(snapshot.TargetUserId == 0 and snapshot.TargetMode == "HIDDEN_PATROL"
+				and snapshot.State == "PATROL",
+				"Mall Manager did not patrol while every living player was hidden")
+			assert(snapshot.TargetDistance == -1 and typeof(snapshot.TargetPosition) == "Vector3",
+				"Hidden-player patrol telemetry lost its vicinity goal")
+			for _, candidate in ipairs(Players:GetPlayers()) do
+				if HidingController.IsHidden(candidate, generation) then
+					assert(candidate:GetAttribute("BeingChased") ~= true,
+						"Hidden-player patrol retained a direct chase flag")
+				end
+			end
 			assert(not snapshot.Attacking,
 				"Mall Manager bypassed the disabled table check to attack a hidden player")
 			assert(HidingController.IsHidden(player, generation),
@@ -3790,7 +3824,7 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		assert(#hiddenMotion >= 5, string.format(
 			"All-hidden patrol probe collected only %d samples", #hiddenMotion))
 		local hiddenEnd = assert(Manager.GetSnapshot(),
-			"Mall Manager vanished during the hidden-player pursuit probe")
+			"Mall Manager vanished during the hidden-player patrol probe")
 		local resolvedGoal = hiddenEnd.ResolvedFinalGoal
 		local reachedTable = typeof(resolvedGoal) == "Vector3"
 			and Vector3.new(hiddenEnd.Position.X-resolvedGoal.X, 0,

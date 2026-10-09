@@ -1,0 +1,58 @@
+{
+  "status": "passed_offline_source_and_existing_smoke_review",
+  "scope": "Current final4 build_src read only; no edits, Studio, upload, Git or Blender run. Final4 export/placement packet had not yet been produced at review time.",
+  "reviewed_source_sha256": {
+    "export_l4.py": "399ca83bbd214ecfb1c4849b28837a2c0b3be83a4ecb4d2edd88822ca1b46368",
+    "make_place.py": "f5afe92f44d4b2c6204a720a13e657e78172fef17ef5999bfa1d580f787ca4d1",
+    "place_phases.luau": "2ee996389f9cedaff9d223aaaf6a40dd5a07a506049e2f03c198eb52d3d16f35",
+    "place.luau": "44d9d758e518cd2f46ff74b70249dce3eb998dd97b56642bf58e2caeed208436",
+    "place_driver.py": "ec97ac518ab97fdbc543bc230ca499817ef2315f7ea2ee84cb2c0315406572bb",
+    "round_assets.py": "03dc0f5c00870140aae8b67e1062fcebc25fcdffd8210fc46fdaeb38ca2186bb",
+    "usher_nav.py": "47d0845f7642b2e955dfabae2b29618c14198f6f22243d72b9efc26d411ad1a1"
+  },
+  "findings": [],
+  "pipeline": {
+    "grouping": "modelGroup cache makes each contract prop a Model, modelParent reparents breaker children under the cabinet; L4PIs preserves collider/light hosting after grouping in the phased importer.",
+    "moving_parts": "partName passes through export and compact placement fields into roundPart. Six Handle, one Lever, one Door and one Screen independently exported in the existing marker smoke; hinged parts are single-material and each has one chunk.",
+    "pivot": "Local 12-number pivot passes unmodified to packet; roundPart scales its translation and preserves rotation in BasePart.PivotOffset. Author uses local X for switches/lever and local Y for glass door; south-cabinet reversal uses Y180 basis.",
+    "tags_attributes": "modelTags/attrs reach Model; partAttrs reach MeshPart; Marker collider tag/attribute/name fields survive export and importer. Markers remain invisible/noncolliding/nonquerying.",
+    "zones": "Chunk zone field reaches L4Zone on pooled MeshParts; light zone field reaches holder L4Zone. Emissive world triangles are pooled by material,tags,zone with room-restricted zone lookup. Stars are explicitly global. Instanced Neon uses placement zone.",
+    "transforms": "Helpers SHIFT=(6000,0,0), ORIGIN=(29000,0,0), consistent with nav world-coordinate module.",
+    "packet_check": "final4/build_src/make_place.py --selftest PASS; covers grouped prop, marker attributes, pivot and both light/chunk zone fields.",
+    "existing_smoke": {
+      "tagged_models": 14,
+      "named_parts": {
+        "Handle": 6,
+        "Lever": 1,
+        "Door": 1,
+        "Screen": 1
+      },
+      "packet_parity": true,
+      "hinge_chunk_centres_zero": true
+    },
+    "remaining_final_artifact_check": "Verify final exported legacyLights is empty, or add a zone to any retained legacy holder: cloneLight intentionally lacks zone plumbing. Existing smoke legacyLights is empty. Final export should independently confirm 260-or-fewer actual lights and all zone IDs."
+  },
+  "templates": {
+    "frozen_files_verified": 60,
+    "changed_files": [],
+    "model_names": [
+      "Usher",
+      "FilmReel",
+      "Fuse",
+      "BatteryPack",
+      "Note"
+    ],
+    "usher": "HumanoidRootPart PrimaryPart anchored only; all bone/anchor/torch MeshParts unanchored, noncolliding, nonquerying, nontouching, Massless. UsherHeight=7.6. All24 native Motor names and Part1 bone references present.",
+    "torch": "Torch welded to RightHand and Lens welded to Torch; Lens has red disabled TicketBeam SpotLight with Front face along torch.",
+    "paper": "Separate flat Paper primary MeshPart; SurfaceGui NoteText with Text label on Top; paper top aligned to NoteSpot by compensated primary pivot.",
+    "joint_axes": "Each joint rest frame aligned to actor/root Y180: actor Y up and local -Z forward. NegativeX spine lean points toward actor forward and +Y neck is yaw. Source rotations and Hips bob conjugated.",
+    "animation": {
+      "fps": 30,
+      "walk_frames": 23,
+      "run_frames": 22,
+      "max_aligned_part_matrix_error": 7.438494264988549e-15,
+      "max_serialized_part_position_error_studs": 0.0009832190833615145
+    },
+    "runtime_scope": "No CreateMeshPartAsync import, live Motor simulation, asset permission or publication check claimed."
+  }
+}

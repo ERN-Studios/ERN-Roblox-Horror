@@ -1,0 +1,14 @@
+{
+  "uploadedAt": "2026-09-16T06:43:00Z",
+  "method": "Roblox Studio MCP upload_image",
+  "items": {
+    "SpeedPotion": {
+      "assetId": "rbxassetid://73457681182843",
+      "file": "box-speed-potion.png"
+    },
+    "RouteMarkerPack": {
+      "assetId": "rbxassetid://100856675462356",
+      "file": "box-route-marker-pack.png"
+    }
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-24",
+  "generationMode": "built-in imagegen",
+  "uploadStatus": "Four active assets verified in actual fresh Studio Play: upholstery v2, CRT, house mural and stair mural all ContentProvider Success and visually correct. Original upholstery v1 is retained only as superseded provenance. Publication remains pending.",
+  "assets": [
+    {
+      "key": "upholstery",
+      "file": "level5-woven-upholstery.png",
+      "robloxAssetId": "83212354768208",
+      "contentId": "rbxassetid://83212354768208",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 3237593,
+      "sha256": "7df9d762bb4aaab6b10be097d5b5eddbb0c8f7ae2f7b6a9c08548ae28424dc8a",
+      "usage": "Repeat on physical sofa/chair cushions; warm oatmeal/sage small-scale weave.",
+      "alpha": {
+        "required": false,
+        "statsMeasured": false
+      },
+      "promptRecord": "IMAGEGEN_PROMPTS.md#Woven-upholstery",
+      "promptFidelity": "exact",
+      "qa": {
+        "generatedImageInspected": true,
+        "exactPixelPeriodicityVerified": false,
+        "inGameTileScaleVerified": false,
+        "contentProviderStatus": "Failure",
+        "statusSource": "Parent actual Studio Play check, 24 September 2026",
+        "failureEvidence": "Parent log: content representation being generated, then CDN timeouts. No moderation rejection established."
+      },
+      "status": "superseded_runtime_load_failed",
+      "runtimeUseApproved": false,
+      "supersededBy": "upholsteryV2"
+    },
+    {
+      "key": "crtFrontPanel",
+      "file": "level5-crt-front-panel.png",
+      "robloxAssetId": "129933596500815",
+      "contentId": "rbxassetid://129933596500815",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 1884434,
+      "sha256": "218c65dbea3cf92d13330f4c45658e5611d14c3752ec05080563475007a06c1b",
+      "usage": "Non-emissive 4:3 front-panel texture on a separate 3D CRT cabinet; switched-off dark screen, two right knobs and vent.",
+      "alpha": {
+        "required": false,
+        "statsMeasured": false
+      },
+      "promptRecord": "IMAGEGEN_PROMPTS.md#CRT-front-panel",
+      "promptFidelity": "exact",
+      "qa": {
+        "generatedImageInspected": true,
+        "inGameProjectionVerified": true,
+        "contentProviderStatus": "Success",
+        "statusSource": "Parent actual fresh Studio Play and final screenshots, 24 September 2026",
+        "visualEvidence": "Parent actual Play screenshots looked correct, 24 September 2026."
+      },
+      "status": "runtime_load_and_visual_verified",
+      "runtimeUseApproved": true
+    },
+    {
+      "key": "houseMural",
+      "file": "level5-house-mural-alpha.png",
+      "robloxAssetId": "114474831346440",
+      "contentId": "rbxassetid://114474831346440",
+      "width": 724,
+      "height": 2172,
+      "bytes": 1581270,
+      "sha256": "ebffb5bed96033a622d5a38b3af15a3ed6cc03a7090994dd597bc8971ef60aed",
+      "usage": "Tall 1:3 aged house-tower drawing with outlined houses, stairs, ladders and arrows; transparent background on a large existing wall.",
+      "alpha": {
+        "required": true,
+        "min": 0,
+        "max": 250,
+        "fullyTransparentPercent": 57.261,
+        "statsMeasured": true,
+        "method": "Read-only decoding of current local PNG RGBA pixels."
+      },
+      "promptRecord": "IMAGEGEN_PROMPTS.md#House-tower-mural-summary-not-exact-prompt",
+      "promptFidelity": "summary_only",
+      "qa": {
+        "localImageInspected": true,
+        "actualWallVisualQAPending": false,
+        "contentProviderStatus": "Success",
+        "statusSource": "Parent actual fresh Studio Play and final screenshots, 24 September 2026",
+        "actualWallVisualQAPassed": true,
+        "visualEvidence": "Parent actual Play screenshots showed both transparent murals looking correct, 24 September 2026."
+      },
+      "status": "runtime_load_and_visual_verified",
+      "runtimeUseApproved": true
+    },
+    {
+      "key": "stairMural",
+      "file": "level5-stair-mural-alpha.png",
+      "robloxAssetId": "108980796139348",
+      "contentId": "rbxassetid://108980796139348",
+      "width": 724,
+      "height": 2172,
+      "bytes": 359107,
+      "sha256": "98144ee3757ffd43a09e3745ffcfa0e8d718a1a3960302c19c7da2a192f03fba",
+      "usage": "Tall 1:3 sparse impossible-stair line drawing; black RGB with semitransparent strokes on a light existing wall, no backing rectangle.",
+      "alpha": {
+        "required": true,
+        "min": 0,
+        "max": 130,
+        "fullyTransparentPercent": 77.65,
+        "statsMeasured": true,
+        "method": "Read-only decoding of current local PNG RGBA pixels.",
+        "rgbMin": [
+          0,
+          0,
+          0
+        ],
+        "rgbMax": [
+          0,
+          0,
+          0
+        ]
+      },
+      "promptRecord": "IMAGEGEN_PROMPTS.md#Impossible-stair-mural-summary-not-exact-prompt",
+      "promptFidelity": "summary_only",
+      "qa": {
+        "localImageInspected": true,
+        "darkPreviewLimitation": "Black transparent artwork is not readable against the viewer's black background.",
+        "actualWallVisualQAPending": false,
+        "contentProviderStatus": "Success",
+        "statusSource": "Parent actual fresh Studio Play and final screenshots, 24 September 2026",
+        "actualWallVisualQAPassed": true,
+        "visualEvidence": "Parent actual Play screenshots showed both transparent murals looking correct, 24 September 2026."
+      },
+      "status": "runtime_load_and_visual_verified",
+      "runtimeUseApproved": true
+    },
+    {
+      "key": "upholsteryV2",
+      "file": "level5-woven-upholstery-v2.png",
+      "robloxAssetId": "132119936960491",
+      "contentId": "rbxassetid://132119936960491",
+      "status": "runtime_load_and_visual_verified",
+      "runtimeUseApproved": true,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 3276830,
+      "sha256": "cb946ce20fa8e663b2c53a60702f1e8c88c3f7bea033aa53f75e5cbeea1634e8",
+      "usage": "Verified active oatmeal/sage broken-twill weave on physical 3D sofa/chair cushions.",
+      "alpha": {
+        "required": false,
+        "statsMeasured": false
+      },
+      "promptRecord": "IMAGEGEN_PROMPTS.md#replacement-woven-upholstery-v2-exact-prompt",
+      "promptFidelity": "exact",
+      "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-440b-79e2-acb9-8e509ddf6a64/exec-8fdca27a-fc26-4141-b073-8b47ec8ba185.png",
+      "qa": {
+        "generatedImageInspected": true,
+        "exactPixelPeriodicityVerified": false,
+        "inGameTileScaleVerified": true,
+        "contentProviderStatus": "Success",
+        "statusSource": "Parent actual fresh Studio Play and final screenshots, 24 September 2026",
+        "visualEvidence": "Final actual Play screenshot visibly shows the woven fabric on cushions; ContentProvider Success confirmed by parent."
+      }
+    }
+  ],
+  "publicDeliveryInvestigation": {
+    "date": "2026-09-24",
+    "authenticated": false,
+    "originalUpholstery": "assetdelivery v1/assetId/83212354768208: HTTP200 with embedded401 Authentication required; v1/asset/?id=83212354768208: HTTP401.",
+    "controlCRT": "assetdelivery v1/assetId/129933596500815: same HTTP200 with embedded401 despite actual Play Success.",
+    "thumbnails": "Both original upholstery and working CRT return Pending; this does not diagnose the different runtime status.",
+    "conclusion": "No publicly verified cause or definite transient fix. No conclusion of moderation rejection. Generate a fresh independent variant for parent upload and runtime check."
+  },
+  "runtimeVerification": {
+    "date": "2026-09-24",
+    "reportedBy": "Parent agent operating actual Studio Play",
+    "activeAssetsPassed": 4,
+    "structuralHomes": 20,
+    "furnitureParts": 891,
+    "cornerChecks": 7128,
+    "structuralFailures": 0,
+    "representativeRoomsWalked": 6,
+    "walkTargetsPassed": 17,
+    "walkTargetsTotal": 17,
+    "houseLights": 0,
+    "houseNeonParts": 0,
+    "tintedGlassWindows": 356,
+    "placedMurals": 4,
+    "worldParts": 11900,
+    "scope": "Structural QA covers all 20 furnished homes; actual traversal covers six representative rooms. This is not every interior visited by a human or physical mobile/multiplayer QA.",
+    "publicationVerified": false
+  }
+}

@@ -117,6 +117,34 @@ UIStyle.Pad = {
 	Row = 21, RowGap = 3, Accent = 12, AccentWidth = 3,
 }
 
+-- The in-round HUD (owner, 2026-10-08; artifacts/hud-final-20261008/BUILD-PLAN.md
+-- 1.2 and its Framewisp adaptation). Its fixed colours are drawn in the Framewisp
+-- templates and come from ShopBinder.Palette; only what the code paints lives
+-- here. Accent/Dim are the owner's level colours (OWNER-PICKS.md, "Farve for
+-- level 1: gul, 2: blaa, 3: roed, 4: neon pink, 5: graa/hvid, 6: violet") and
+-- must equal RoundUI's LOADING_PALETTES[n].Title / .Status: they are copies,
+-- held together by test_ui_style.py, not a dependency of RoundUI. Soft is the
+-- soft-Ink UIGradient transparency ramp RoundHud writes on every `Soft` node.
+UIStyle.Hud = {
+	Accent = {
+		[1] = Color3.fromRGB(255, 230, 0),   -- #FFE600 yellow
+		[2] = Color3.fromRGB(77, 163, 255),  -- #4DA3FF blue
+		[3] = Color3.fromRGB(255, 0, 0),     -- #FF0000 red
+		[4] = Color3.fromRGB(255, 70, 200),  -- #FF46C8 neon pink
+		[5] = Color3.fromRGB(212, 220, 232), -- #D4DCE8 silver white
+		[6] = Color3.fromRGB(156, 134, 255), -- #9C86FF violet
+	},
+	Dim = {
+		[1] = Color3.fromRGB(158, 143, 0),
+		[2] = Color3.fromRGB(48, 101, 158),
+		[3] = Color3.fromRGB(184, 0, 0),
+		[4] = Color3.fromRGB(158, 43, 124),
+		[5] = Color3.fromRGB(131, 136, 144),
+		[6] = Color3.fromRGB(97, 83, 158),
+	},
+	Soft = {From = 0.35, To = 1},
+}
+
 local EMPTY: {[string]: any} = {}
 
 -- `or` is wrong for a 0 or a false: BackgroundTransparency = 0 is a real

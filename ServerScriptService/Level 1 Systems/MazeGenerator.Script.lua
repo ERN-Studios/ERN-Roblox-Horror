@@ -79,11 +79,15 @@ local WALL_COLOR    = Color3.fromRGB(197, 180, 116)
 local FLOOR_COLOR   = Color3.fromRGB(158, 144, 96)
 local CEILING_COLOR = Color3.fromRGB(222, 214, 170)
 local LIGHT_COLOR   = Color3.fromRGB(255, 244, 200)
-local PIT_COLOR     = Color3.fromRGB(35, 32, 26)
+local PIT_COLOR     = Color3.new(0, 0, 0) -- the shaft floor is never seen: the walls fade to black above it
 
 -- Toolbox textures — DECAL or image IDs both fine, they resolve automatically.
 local WALL_TEXTURE    = "rbxassetid://87947439437597"  -- our own wall decal
 local FLOOR_TEXTURE   = "rbxassetid://100093931957721" -- our own floor decal
+-- The Blender world's own carpet and wallpaper tint (Level1BlenderKitV2: carpet albedo, Wallpaper
+-- SurfaceAppearance.Color); both tile at 6 studs in the kit, like WALL_TILE / FLOOR_TILE here.
+local BLENDER_CARPET = "rbxassetid://88740987992118"
+local BLENDER_WALLPAPER_TINT = Color3.fromRGB(255, 235, 150)
 local CEILING_TEXTURE = "rbxassetid://91804597609254"  -- our own ceiling tile (one tile per image)
 -- studs per texture repeat, per surface (smaller = denser pattern)
 local WALL_TILE    = 6
@@ -595,10 +599,11 @@ end
 
 local function floorTile(size, px, pz)
 	local p = part(size, CFrame.new(px, -0.5, pz), FLOOR_COLOR, Enum.Material.Fabric)
-	applyTexture(p, FLOOR_TEXTURE, { Enum.NormalId.Top }, FLOOR_TILE)
-	if blender then
-		if size.X == CELL and size.Z == CELL then blender:Hide(p) else blender:Skin(p, "FloorPanel", false) end
-	end
+	local cellTile = size.X == CELL and size.Z == CELL
+	-- Blender rooms carry their own floor. A pit walkway tiles the kit's carpet instead: the 24-stud
+	-- FloorPanel stretched over a 1 x 144 beam smeared it into tight streaks.
+	applyTexture(p, (blender and not cellTile) and BLENDER_CARPET or FLOOR_TEXTURE, { Enum.NormalId.Top }, FLOOR_TILE)
+	if blender and cellTile then blender:Hide(p) end
 	return p
 end
 
@@ -733,68 +738,49 @@ local pitZoneFolder = Instance.new("Folder")
 pitZoneFolder.Name = "PitZones"
 pitZoneFolder.Parent = workspace
 
--- matches the first depth band's shade, so the wallpaper runs seamlessly
--- from the floor's top edge all the way down — no bare strip anywhere
-local SIDE_TINT = Color3.new(0.5, 0.5, 0.5)
+-- the level's wallpaper on every hole wall, at full strength under the carpet's edge
+local PIT_WALL_TINT = blender and BLENDER_WALLPAPER_TINT or nil
 
--- walkway strip: floor texture on top, wall texture on the sides at the same
--- tile scale as the depth bands below (continuous wallpaper)
-local function walkway(size, px, pz)
-	local p = floorTile(size, px, pz)
-	applyTexture(p, WALL_TEXTURE, WALL_FACES, WALL_TILE, SIDE_TINT)
-	if blender then blender:Hide(p) end
-	return p
-end
+-- A shadow that thickens with depth: clear at the floor's edge, black two thirds of the way down,
+-- so the shaft floor is never seen and a hole reads as bottomless.
+local PIT_FADE = NumberSequence.new({
+	NumberSequenceKeypoint.new(0, 1),
+	NumberSequenceKeypoint.new(0.1, 0.75),
+	NumberSequenceKeypoint.new(0.25, 0.4),
+	NumberSequenceKeypoint.new(0.45, 0.12),
+	NumberSequenceKeypoint.new(0.65, 0),
+	NumberSequenceKeypoint.new(1, 0),
+})
 
--- depth bands: exponential fade — light being swallowed, not stripes of tint.
--- Each band is roughly half as bright as the one above; band heights grow so
--- no seam sits at an obvious even interval.
-local BEAM_BANDS = {}
-do
-	local shades  = { 0.50, 0.28, 0.15, 0.07, 0.03 }
-	local heights = { 4, 5, 7, 9 }
-	heights[5] = math.max(PIT_DEPTH - 1 - (4 + 5 + 7 + 9), 2)
-	for i = 1, 5 do BEAM_BANDS[i] = { shades[i], heights[i] } end
-end
-
--- full-depth beam, clean square edges: every hole gets real walls with
--- wallpaper running from the floor's top edge all the way down
+-- full-depth beam: the walkway plate carries the carpet; one wallpapered slab sits under it, LIP studs
+-- proud of the plate's sides, so each hole wall is a single face (one texture tiling) from the carpet's
+-- edge to the bottom: no seam, ledge or gap anywhere
+local LIP = 0.05
 local function deepBeam(alongX, px, pz, length)
 	local W = PIT_GAP
+	floorTile(alongX and Vector3.new(length, 1, W) or Vector3.new(W, 1, length), px, pz)
 
-	-- full-width top plate (floor texture top, wallpapered sides)
-	if alongX then
-		walkway(Vector3.new(length, 1, W), px, pz)
-	else
-		walkway(Vector3.new(W, 1, length), px, pz)
-	end
-
-	-- full-width depth bands (these faces ARE the hole walls)
-	local yTop = -1
-	for _, band in ipairs(BEAM_BANDS) do
-		local shade, h = band[1], band[2]
-		local col = Color3.new(WALL_COLOR.R * shade, WALL_COLOR.G * shade, WALL_COLOR.B * shade)
-		local size = alongX and Vector3.new(length, h, W) or Vector3.new(W, h, length)
-		local p = part(size, CFrame.new(px, yTop - h / 2, pz), col)
-		if shade > 0.05 then -- texture contributes nothing in the near-black bands
-			applyTexture(p, WALL_TEXTURE, WALL_FACES, WALL_TILE, Color3.new(shade, shade, shade))
-		end
-		-- mold wraps the top band of every hole wall in the pit zones
-		local pitMold = (yTop == -1) and pickMold() or nil
-		if pitMold then
-			for _, face in ipairs(WALL_FACES) do
-				local t = Instance.new("Texture")
-				t.Texture = pitMold
-				t.Face = face
-				t.StudsPerTileU = 8
-				t.StudsPerTileV = h
-				t.OffsetStudsU = math.random(0, 7)
-				t.ZIndex = 2
-				t.Parent = p
-			end
-		end
-		yTop -= h
-		if blender then blender:Skin(p, "WallHalf", false, true) end
+	local h = PIT_DEPTH - LIP
+	local wall = part(alongX and Vector3.new(length, h, W + 2 * LIP) or Vector3.new(W + 2 * LIP, h, length),
+		CFrame.new(px, -LIP - h / 2, pz), WALL_COLOR)
+	-- only the two long faces are ever seen; the ends sit in the zone's edge
+	local faces = alongX and { Enum.NormalId.Front, Enum.NormalId.Back }
+		or { Enum.NormalId.Left, Enum.NormalId.Right }
+	applyTexture(wall, WALL_TEXTURE, faces, WALL_TILE, PIT_WALL_TINT)
+	for _, face in ipairs(faces) do
+		local gui = Instance.new("SurfaceGui")
+		gui.Name = "PitFade"
+		gui.Face = face
+		local shade = Instance.new("Frame")
+		shade.Size = UDim2.fromScale(1, 1)
+		shade.BackgroundColor3 = Color3.new(0, 0, 0)
+		shade.BorderSizePixel = 0
+		shade.Parent = gui
+		local fade = Instance.new("UIGradient")
+		fade.Rotation = 90 -- top of the face to the bottom
+		fade.Transparency = PIT_FADE
+		fade.Parent = shade
+		gui.Parent = wall
 	end
 end
 
@@ -822,10 +808,10 @@ for _, zn in ipairs(zones) do
 
 	-- solid edge pads
 	if pad > 0.05 then
-		walkway(Vector3.new(pad, 1, span), x0 + pad / 2, cz)
-		walkway(Vector3.new(pad, 1, span), x0 + span - pad / 2, cz)
-		walkway(Vector3.new(span, 1, pad), cx, z0 + pad / 2)
-		walkway(Vector3.new(span, 1, pad), cx, z0 + span - pad / 2)
+		floorTile(Vector3.new(pad, 1, span), x0 + pad / 2, cz)
+		floorTile(Vector3.new(pad, 1, span), x0 + span - pad / 2, cz)
+		floorTile(Vector3.new(span, 1, pad), cx, z0 + pad / 2)
+		floorTile(Vector3.new(span, 1, pad), cx, z0 + span - pad / 2)
 	end
 
 	-- walkable beams criss-crossing the whole zone — full-depth slabs, so

@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Level 1 Blender elevator kit installed: 16 components, 4 fixed cabin prefabs"
+      }
+    ],
+    "isError": false
+  }
+}

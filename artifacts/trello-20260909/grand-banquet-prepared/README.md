@@ -1,0 +1,1 @@
+Superseded before runtime application by ../room-furniture-prepared after additional native/source-confirmed port barriers in SparseWelcome, KidsCluster and BanquetRows. This GrandBanquet-only proposal was never applied.

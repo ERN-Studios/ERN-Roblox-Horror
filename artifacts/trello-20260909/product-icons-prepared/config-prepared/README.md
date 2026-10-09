@@ -1,0 +1,13 @@
+# Six Shop image IDs — artifact only
+
+`current.diff` changes precisely six **numeric** IconId values against current Config SHA `a1100e3697c0c27b65016d3e9c0452a92614e9e3350816c502e3bf225c438ed0`. The complete current proposal SHA is `3c7b8af15c84c03a7bc1db04cb5110c051ef1f04695dc399e0a396df2c21a2a3`.
+
+If Entity Shield copy has already landed, use the separate `after-entity-shield.diff` or its matching complete file: Shield baseline `59713d4633bd05147c1b96ef308282f822890da0d9d62b6836ec842d23f25e53` → merged `d5f8ce54d4fbbf008a8d48bd958478b704c6d9cc1e26883c73439b0a88398f98`. Never overwrite a newer baseline wholesale; apply only the six values to a fresh checkpoint if another Config change lands.
+
+All bytes outside those six numbers are preserved, including prices, IDs, protection settings/copy, completion reward2, music settings, fallback IconText and comments. The old Supporter fallback comment is intentionally left untouched to keep this change to the requested exact six fields. `prepare.py` validates each purchase identity against the full verified Marketplace readback, reverses the six replacements to recover each baseline byte-for-byte, compiles both complete variants and verifies it did not change the runtime file.
+
+**Store calls `tonumber(item.IconId)`, so keep Config values numeric.** The earlier UI destination mapping used `rbxassetid://` strings to describe final ImageLabel destinations; those strings must not be pasted into numeric Config fields.
+
+After root applies the matching Config and starts the normal client, open Shop with the mouse and run `inspect-native-shop.luau` once in that existing Client. It identifies each actual card through the Store's published `ZyntraPage`/`ZyntraCardKey` attributes and reads the named ProductIcon, exact Image value, IsLoaded, product name, size, circular corner, crop mode, fallback and inherited visibility. It makes no UI/state/source writes and does not preload or purchase. The purchase ID in the report is explicitly the verified expected identity; Store does not publish the numeric purchase ID onto this ImageLabel, so the helper does not pretend to read one there.
+
+`AllSixLoadedAndMatched` requires six unique expected cards, matching images, successful existing engine loads and no monogram fallback. Some cards may be offscreen until the user scrolls; their individual clipping/visibility fields are separate. Root still needs actual screenshots while scrolling Shop to inspect circular rendering and legibility. No native execution, loading result, runtime modification or publish is claimed by this preparation.

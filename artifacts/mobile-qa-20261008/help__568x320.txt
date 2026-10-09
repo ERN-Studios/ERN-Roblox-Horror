@@ -1,9 +1,0 @@
-phone 568x320, 20 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, Level3ReaderGui, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, HelpPanel, ZyntraDailyL4, LuckyWheelGui, ZyntraLobbyPillL4, FriendBoostGui, ZyntraStore), 69 pieces measured, 8 findings
-CUT     HelpPanel.Frame '  PLAYING TOGETHER' (146,346)-(278,360)
-CUT     HelpPanel.Frame '  REWARDS & BADGES' (146,502)-(286,516)
-CUT     HelpPanel.Frame '  SETTINGS & SUPPORT' (146,190)-(289,204)
-CUT     ZyntraLobbyPillL4.TokenPill '+' (537,21)-(546,37)
-OFF     HelpPanel.Frame '  THE LEVELS' (146,308)-(228,322)
-OFF     HelpPanel.Frame 'Every level has something hunt' (295,297)-(516,342)
-OVERLAP StaminaGui.TouchRunHold 'RUN  »' (490,180)-(538,196)  x  HelpPanel.Frame > Panel (126,58)-(556,320)  (47x16 px)
-OVERLAP StaminaGui.TouchRunHold (482,156)-(546,220)  x  HelpPanel.Frame 'Pick a level, go in with your ' (295,214)-(510,259)  (28x6 px)

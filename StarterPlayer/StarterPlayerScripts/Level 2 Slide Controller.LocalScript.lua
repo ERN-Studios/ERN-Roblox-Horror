@@ -92,8 +92,22 @@ end
 -- must not: after crossing the completion sensor the rider is Escaped but still
 -- physically sliding down the tube for the whole 15-second decision window, so
 -- the slide stays live until the server clears Level2_ExitTransition.
+local function finitePoolroomsFinish()
+	local world = Workspace:FindFirstChild("Level 2 Generated World")
+	local token = player:GetAttribute("Level2PoolroomsExitGeneration")
+	return Workspace:GetAttribute("SelectedLevel") == 2
+		and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") == true
+		and world and world:IsA("Model") and world:GetAttribute("Level2NewMap") == true
+		and type(token) == "number" and token == world:GetAttribute("Level2PoolroomsExitGeneration")
+end
+
 local function levelIsActive()
 	local selectedLevel = Workspace:GetAttribute("SelectedLevel")
+	-- The approved map has a finite runout. Its server-owned finish token ends
+	-- our physical ride while the transition flag still selects Level 3's tube.
+	if finitePoolroomsFinish() then return false end
+	-- The Level 2 new-map preview's exit slide (owner 2026-10-08): a preview body rides it outside a round.
+	if player:GetAttribute("Level2NewMapPreview") == true then return true end
 	if player:GetAttribute("InRound") ~= true then return false end
 	if selectedLevel == 2 then
 		return player:GetAttribute("Escaped") ~= true
@@ -334,6 +348,7 @@ local function exitTransitionOwnsSlide(slide)
 		and Workspace:GetAttribute("SelectedLevel") == 2
 		and player:GetAttribute("InRound") == true
 		and player:GetAttribute("Level2_ExitTransition") == true
+		and not finitePoolroomsFinish()
 end
 
 local function installDriveForce(slide)
@@ -619,10 +634,13 @@ RunService.PreSimulation:Connect(function(deltaTime)
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not levelIsActive() or not character or not humanoid or not root
 		or humanoid.Health <= 0 then
-		finishSliding(humanoid ~= nil and humanoid.Health > 0, false)
+		local supported = finitePoolroomsFinish() and character and humanoid and root
+			and supportedUnder(character, humanoid, root) or false
+		finishSliding(humanoid ~= nil and humanoid.Health > 0, supported)
 		return
 	end
-	if Workspace:GetAttribute("SelectedLevel") == 3 then
+	-- (InRound: a Level 2 new-map preview body on a Studio server running Level 3 is not on its arrival bore)
+	if Workspace:GetAttribute("SelectedLevel") == 3 and player:GetAttribute("InRound") == true then
 		if continuationCharacter ~= character then
 			continuationCharacter, continuationTube, continuationEngaged = character, nil, false
 		end

@@ -1,0 +1,2466 @@
+{
+  "passed": true,
+  "proof_contact_sheets": 58,
+  "before_after_pairs_at_contact_scale": 926,
+  "eevee_individual_fullsize_images": 52,
+  "all_review_hashes_current": true,
+  "method": "All canonical pairs viewed through contact sheets; all final EEVEE PNGs viewed individually. Full-resolution exact/near-magenta decoded independently.",
+  "lighting_caveat": "Power A, Main Breaker and code cabinet faces are dark in local Blender lighting; labels/control outlines remain visible. Runtime lighting was not tested.",
+  "proof_reviews": [
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_01.jpg",
+      "sha256": "9a23f6ef168f01a7c489a00bcba9215806403d767c65774f2d97a7d9c3e05b9b",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Lobby, concession, arcade, restroom, service comparisons unchanged at contact scale. Existing magenta band below entrance_out remains identical; no new opening.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "000_000_000_q01_litter",
+        "001_001_001_q02_entrance_out",
+        "002_002_002_q02_entrance_in",
+        "003_003_003_q03_lobby_ceiling",
+        "004_004_004_q03_lobby_wide",
+        "005_005_005_q04_concession_wall",
+        "006_006_006_q05_counter_top",
+        "007_007_007_q06_concession_floor",
+        "008_008_008_q07_behind_counter",
+        "009_009_009_q08_arcade_from_back",
+        "010_010_010_q08_arcade_door_lobby",
+        "011_011_011_q09_restroom",
+        "012_012_012_q09_restroom_women",
+        "013_013_013_q10_booth",
+        "014_014_014_q11_service_door",
+        "015_015_015_q11_service_inside"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "001_001_001_q02_entrance_out",
+            "before": 161280,
+            "after": 161280
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.007595486111111111
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_02.jpg",
+      "sha256": "168fc72631fc4d94248d2ed889560ac0d98fc507adee82ecd46ac57a2aeae912",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Auditorium seating/screen, core stair, gallery, signs and concession preserve geometry. Existing c1_plan magenta is unchanged.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "016_016_016_q12_c1_block",
+        "017_017_017_q13_a1_west_wall",
+        "018_018_018_q14_gallery",
+        "019_019_019_q14_gallery_east_lockers",
+        "020_020_020_q14_core_stair",
+        "021_021_021_q15_cinema2_sign",
+        "022_022_022_q_auditorium",
+        "023_023_023_q_lobby_east",
+        "024_024_024_c1_plan",
+        "025_025_025_c1_concourse",
+        "026_026_026_booth_a1",
+        "027_027_027_gallery",
+        "028_028_028_fork_sign",
+        "029_029_029_conc_top5",
+        "030_030_030_conc_eye",
+        "031_031_031_conc_west"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "024_024_024_c1_plan",
+            "before": 291689,
+            "after": 291689
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0020616319444444445
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_03.jpg",
+      "sha256": "0b9d10f87c8c93e17f97b7fc9fe6575e084e65d6708a7f710ed0ceb8063ef55f",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Arcade machines, restroom stall walls/fixtures, service shelves and gallery lockers remain. arc_top is near-black in both and has limited visual information.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "032_032_032_conc_staff7",
+        "033_033_033_conc_staffeye",
+        "034_034_034_arc_north8",
+        "035_035_035_arc_south",
+        "036_036_036_arc_left",
+        "037_037_037_arc_top",
+        "038_038_038_rest_m9",
+        "039_039_039_rest_uri",
+        "040_040_040_rest_m",
+        "041_041_041_rest_w",
+        "042_042_042_serv11",
+        "043_043_043_serv",
+        "044_044_044_gal_east",
+        "045_045_045_gal_lockers",
+        "046_046_046_gal_cabinets",
+        "047_047_047_rest_stall_m"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.09114583333333333
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_04.jpg",
+      "sha256": "e9ae91d1f86b20db6a0b61c3e4444498f0b1a5103222b08a3f10210906c4ba15",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "A2 auditorium, corridorC2, arcade, service and gallery preserve geometry. Existing stairs_C1 magenta matches. restroom_men is a surface closeup with limited information.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "048_048_048_rest_stall_w",
+        "049_049_049_concourse_east",
+        "050_050_050_concourse_south",
+        "051_051_051_concourse_north",
+        "052_052_052_aud_A2",
+        "053_053_053_aud_A2_front",
+        "054_054_054_arcade",
+        "055_055_055_concession",
+        "056_056_056_corridor_C2",
+        "057_057_057_restroom_men",
+        "058_058_058_service",
+        "059_059_059_gallery",
+        "060_060_060_stairs_C1",
+        "061_061_061_n_facade_eye",
+        "062_062_062_pilaster_close",
+        "063_063_063_portal_conc"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "060_060_060_stairs_C1",
+            "before": 112478,
+            "after": 112478
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0030381944444444445
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_05.jpg",
+      "sha256": "82c03cb491463d890dc0035a0418ff6c882e7a6dd1bcb2aff7a929c7e10cc5c6",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Doors, columns, auditorium seats and ceiling cornice preserve silhouettes. Existing corr_c1 and stair_c magenta regions unchanged.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "064_064_064_portal_rest",
+        "065_065_065_col_eye",
+        "066_066_066_col_collar",
+        "067_067_067_corr_c1",
+        "068_068_068_aud_rear",
+        "069_069_069_aud_front",
+        "070_070_070_rest_door",
+        "071_071_071_wide_w",
+        "072_072_072_south_eye",
+        "073_073_073_fork_tip",
+        "074_074_074_arcade",
+        "075_075_075_n_cornice",
+        "076_076_076_stair_c",
+        "077_077_077_core_wall",
+        "078_078_078_hidden_stair",
+        "079_079_079_n_door_corr"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "067_067_067_corr_c1",
+            "before": 129919,
+            "after": 129919
+          },
+          {
+            "name": "076_076_076_stair_c",
+            "before": 57306,
+            "after": 57306
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0029296875
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_06.jpg",
+      "sha256": "11828876ae2a07e8a8f4d61c376d070f36df4f96824305946e1bee19da9fc0fe",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Door/frame surfaces, service and main-entrance surfaces, gallery stair door unchanged. booth_in1/gstair_in1 are solid surface views; limited visual information.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "080_080_080_gallery_sheet",
+        "081_081_081_secret_core",
+        "082_082_082_baseboard",
+        "083_083_083_arcade_conc",
+        "084_084_084_arcade_in",
+        "085_085_085_fe_corr",
+        "086_086_086_fe_aud",
+        "087_087_087_rest_vest",
+        "088_088_088_rest_in",
+        "089_089_089_service",
+        "090_090_090_main_lobby",
+        "091_091_091_main_street",
+        "092_092_092_booth_gal",
+        "093_093_093_booth_in",
+        "094_094_094_gstair",
+        "095_095_095_gstair_in"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.00043402777777777775
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_07.jpg",
+      "sha256": "79490e624933dcc779c5034d7f81a5bdf8c06c29b11c386a1d0609fe52f282e8",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Stair/door, lobby coffer, concession, service and restroom/vestibule comparisons preserve geometry. Several hinge/meeting/cabinet closeups are near-solid surfaces; unchanged.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "096_096_096_poster",
+        "097_097_097_hinge_close",
+        "098_098_098_meet_close",
+        "099_099_099_c_nave_eye",
+        "100_100_100_c_sw_wide",
+        "101_101_101_c_coffer_up",
+        "102_102_102_c_burnt",
+        "103_103_103_c_aisle_s",
+        "104_104_104_c_aisle_n",
+        "105_105_105_arcade",
+        "106_106_106_concession",
+        "107_107_107_conc_side",
+        "108_108_108_service",
+        "109_109_109_restroom",
+        "110_110_110_vestibule",
+        "111_111_111_fork"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0010850694444444445
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_08.jpg",
+      "sha256": "cf5deb71e172192641381d78cb4089a33dfa56a32ba6519d467a6f2557d7ab1b",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Arcade, lobby/ceiling and gallery comparisons preserve geometry. Lower wall-reveal diagnostics mostly show uniform close surfaces; unchanged with limited information.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "112_112_112_fork_c2",
+        "113_113_113_arcade2",
+        "114_114_114_arcade_frame2",
+        "115_115_115_nave2",
+        "116_116_116_conc_marq",
+        "117_117_117_gallery_curve",
+        "118_118_118_core_up",
+        "119_119_119_core_mid",
+        "120_120_bias_wall_reveal_000",
+        "121_121_bias_wall_reveal_001",
+        "122_122_bias_wall_reveal_002",
+        "123_123_bias_wall_reveal_003",
+        "124_124_bias_wall_reveal_004",
+        "125_125_bias_wall_reveal_005",
+        "126_126_bias_wall_reveal_006",
+        "127_127_bias_wall_reveal_007"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0009765625
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_09.jpg",
+      "sha256": "9db070369c724d54ce4fe27b7ed269bbe1adedd92415011471304dbbe7d47b11",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Wall-reveal diagnostics 008..023 show identical uniform wall/ceiling closeups, occasional tiny fixture and angular floor/wall silhouettes. No visible new hole; limited broad interior information.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "128_128_bias_wall_reveal_008",
+        "129_129_bias_wall_reveal_009",
+        "130_130_bias_wall_reveal_010",
+        "131_131_bias_wall_reveal_011",
+        "132_132_bias_wall_reveal_012",
+        "133_133_bias_wall_reveal_013",
+        "134_134_bias_wall_reveal_014",
+        "135_135_bias_wall_reveal_015",
+        "136_136_bias_wall_reveal_016",
+        "137_137_bias_wall_reveal_017",
+        "138_138_bias_wall_reveal_018",
+        "139_139_bias_wall_reveal_019",
+        "140_140_bias_wall_reveal_020",
+        "141_141_bias_wall_reveal_021",
+        "142_142_bias_wall_reveal_022",
+        "143_143_bias_wall_reveal_023"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_10.jpg",
+      "sha256": "2bac4bed47df7e607cfbc676601ddefa14da5d39c7852067ef9a7cf85f3d359e",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Wall-reveal and ceiling diagnostics preserve their close surface colours, isolated fixtures and floor/wall edges. No visible new gap; many panels are near-uniform.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "144_144_bias_wall_reveal_024",
+        "145_145_bias_wall_reveal_025",
+        "146_146_bias_wall_reveal_026",
+        "147_147_bias_wall_reveal_027",
+        "148_148_bias_wall_reveal_028",
+        "149_149_bias_wall_reveal_029",
+        "150_150_bias_wall_reveal_030",
+        "151_151_bias_wall_reveal_031",
+        "152_152_bias_wall_reveal_032",
+        "153_153_bias_wall_reveal_033",
+        "154_154_bias_wall_reveal_034",
+        "155_155_bias_ceiling_035",
+        "156_156_bias_ceiling_036",
+        "157_157_bias_ceiling_037",
+        "158_158_bias_ceiling_038",
+        "159_159_bias_ceiling_039"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_11.jpg",
+      "sha256": "634490f829daae65d7f761e09416a65297f0b8c5cfeb6f4375ddd128c0f0b904",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Ceiling diagnostics preserve fixtures, floor/wall closeups and visible lobby/sign geometry. No visible new gap; many panels are near-uniform.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "160_160_bias_ceiling_040",
+        "161_161_bias_ceiling_041",
+        "162_162_bias_ceiling_042",
+        "163_163_bias_ceiling_043",
+        "164_164_bias_ceiling_044",
+        "165_165_bias_ceiling_045",
+        "166_166_bias_ceiling_046",
+        "167_167_bias_ceiling_047",
+        "168_168_bias_ceiling_048",
+        "169_169_bias_ceiling_049",
+        "170_170_bias_ceiling_050",
+        "171_171_bias_ceiling_051",
+        "172_172_bias_ceiling_052",
+        "173_173_bias_ceiling_053",
+        "174_174_bias_ceiling_054",
+        "175_175_bias_ceiling_055"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.00010850694444444444
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_12.jpg",
+      "sha256": "a96902a78bd13458756b4ac0a6bd3c2f5b95bdd4536a551562b09cfa5776048d",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Door-opening diagnostics preserve doors, restroom partitions, star ceilings, wall/trim surfaces and fixture edges. Existing thin magenta line in door_opening_069 matches before/after.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "176_176_bias_ceiling_056",
+        "177_177_bias_door_opening_057",
+        "178_178_bias_door_opening_058",
+        "179_179_bias_door_opening_059",
+        "180_180_bias_door_opening_060",
+        "181_181_bias_door_opening_061",
+        "182_182_bias_door_opening_062",
+        "183_183_bias_door_opening_063",
+        "184_184_bias_door_opening_064",
+        "185_185_bias_door_opening_065",
+        "186_186_bias_door_opening_066",
+        "187_187_bias_door_opening_067",
+        "188_188_bias_door_opening_068",
+        "189_189_bias_door_opening_069",
+        "190_190_bias_door_opening_070",
+        "191_191_bias_door_opening_071"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "189_189_bias_door_opening_069",
+            "before": 13366,
+            "after": 13366
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_13.jpg",
+      "sha256": "74dff77163f877e3c22c09e1550eb91a0d77a83a876cc717450e8e53545ab1dc",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Door-opening diagnostics preserve door frames, restroom partitions, projector and close trim. Existing magenta in door_opening_080 and082 unchanged. Stair-gap086/087 are near-uniform.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "192_192_bias_door_opening_072",
+        "193_193_bias_door_opening_073",
+        "194_194_bias_door_opening_074",
+        "195_195_bias_door_opening_075",
+        "196_196_bias_door_opening_076",
+        "197_197_bias_door_opening_077",
+        "198_198_bias_door_opening_078",
+        "199_199_bias_door_opening_079",
+        "200_200_bias_door_opening_080",
+        "201_201_bias_door_opening_081",
+        "202_202_bias_door_opening_082",
+        "203_203_bias_door_opening_083",
+        "204_204_bias_door_opening_084",
+        "205_205_bias_door_opening_085",
+        "206_206_bias_stair_gap_086",
+        "207_207_bias_stair_gap_087"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "200_200_bias_door_opening_080",
+            "before": 92737,
+            "after": 92737
+          },
+          {
+            "name": "202_202_bias_door_opening_082",
+            "before": 36836,
+            "after": 36836
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0013020833333333335
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_14.jpg",
+      "sha256": "054371c7989cf526f2d3808817304080c93c082eb65fa8ec6a1cf6f9771bf1a5",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Stair-gap diagnostics preserve auditorium seats, star ceilings, cornice and service shelves. Close wall/floor diagnostic panels unchanged; no visible new gap.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "208_208_bias_stair_gap_088",
+        "209_209_bias_stair_gap_089",
+        "210_210_bias_stair_gap_090",
+        "211_211_bias_stair_gap_091",
+        "212_212_bias_stair_gap_092",
+        "213_213_bias_stair_gap_093",
+        "214_214_bias_stair_gap_094",
+        "215_215_bias_stair_gap_095",
+        "216_216_bias_stair_gap_096",
+        "217_217_bias_stair_gap_097",
+        "218_218_bias_stair_gap_098",
+        "219_219_bias_stair_gap_099",
+        "220_220_bias_stair_gap_100",
+        "221_221_bias_stair_gap_101",
+        "222_222_bias_stair_gap_102",
+        "223_223_bias_stair_gap_103"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0037977430555555555
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_15.jpg",
+      "sha256": "20fa014c62dfa062928763ca0a6f224d85bfb414259ed16486d350d024ac9d8f",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Outer-shell diagnostics contain extensive bright-magenta before regions which match after, interleaved with intact auditorium coffer and seating views. No new silhouette loss; exterior diagnostics do not demonstrate sealed player interior views.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "224_224_bias_stair_gap_104",
+        "225_225_bias_outer_shell_105",
+        "226_226_bias_outer_shell_106",
+        "227_227_bias_outer_shell_107",
+        "228_228_bias_outer_shell_108",
+        "229_229_bias_outer_shell_109",
+        "230_230_bias_outer_shell_110",
+        "231_231_bias_outer_shell_111",
+        "232_232_bias_outer_shell_112",
+        "233_233_bias_outer_shell_113",
+        "234_234_bias_outer_shell_114",
+        "235_235_bias_outer_shell_115",
+        "236_236_bias_outer_shell_116",
+        "237_237_bias_outer_shell_117",
+        "238_238_bias_outer_shell_118",
+        "239_239_bias_outer_shell_119"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "225_225_bias_outer_shell_105",
+            "before": 173507,
+            "after": 173507
+          },
+          {
+            "name": "226_226_bias_outer_shell_106",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "228_228_bias_outer_shell_108",
+            "before": 56666,
+            "after": 56666
+          },
+          {
+            "name": "230_230_bias_outer_shell_110",
+            "before": 70108,
+            "after": 70108
+          },
+          {
+            "name": "231_231_bias_outer_shell_111",
+            "before": 695824,
+            "after": 695824
+          },
+          {
+            "name": "232_232_bias_outer_shell_112",
+            "before": 459054,
+            "after": 459054
+          },
+          {
+            "name": "233_233_bias_outer_shell_113",
+            "before": 858971,
+            "after": 858971
+          },
+          {
+            "name": "234_234_bias_outer_shell_114",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "237_237_bias_outer_shell_117",
+            "before": 759891,
+            "after": 759891
+          },
+          {
+            "name": "238_238_bias_outer_shell_118",
+            "before": 315649,
+            "after": 315649
+          },
+          {
+            "name": "239_239_bias_outer_shell_119",
+            "before": 411496,
+            "after": 411496
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0016276041666666667
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_16.jpg",
+      "sha256": "26373d99890fc1e2aa84444b2273723f749e6bf17d2c84ecd486d53d1a7271fb",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Outer-shell diagnostics show unchanged magenta boundaries plus preserved roof/stair, auditorium screen, seat rows and aisles. No new silhouette loss; exterior diagnostics do not demonstrate sealed player interior views.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "240_240_bias_outer_shell_120",
+        "241_241_bias_outer_shell_121",
+        "242_242_bias_outer_shell_122",
+        "243_243_bias_outer_shell_123",
+        "244_244_bias_outer_shell_124",
+        "245_245_bias_outer_shell_125",
+        "246_246_bias_outer_shell_126",
+        "247_247_bias_outer_shell_127",
+        "248_248_bias_outer_shell_128",
+        "249_249_bias_outer_shell_129",
+        "250_250_bias_outer_shell_130",
+        "251_251_bias_outer_shell_131",
+        "252_252_bias_outer_shell_132",
+        "253_253_bias_outer_shell_133",
+        "254_254_bias_outer_shell_134",
+        "255_255_bias_outer_shell_135"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "241_241_bias_outer_shell_121",
+            "before": 320596,
+            "after": 320596
+          },
+          {
+            "name": "242_242_bias_outer_shell_122",
+            "before": 654734,
+            "after": 654734
+          },
+          {
+            "name": "243_243_bias_outer_shell_123",
+            "before": 521111,
+            "after": 521111
+          },
+          {
+            "name": "245_245_bias_outer_shell_125",
+            "before": 190082,
+            "after": 190082
+          },
+          {
+            "name": "248_248_bias_outer_shell_128",
+            "before": 524120,
+            "after": 524120
+          },
+          {
+            "name": "251_251_bias_outer_shell_131",
+            "before": 399195,
+            "after": 399195
+          },
+          {
+            "name": "252_252_bias_outer_shell_132",
+            "before": 263514,
+            "after": 263514
+          },
+          {
+            "name": "254_254_bias_outer_shell_134",
+            "before": 3947,
+            "after": 3947
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0018446180555555555
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_17.jpg",
+      "sha256": "6eeaf9628266353548faf13dd7cf81733dcce71fa993d17dddc029e7ed84decf",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Outer-shell/general exterior diagnostics show extensive identical magenta with matching wall/roof silhouettes. No new silhouette loss; these exterior diagnostics do not establish sealed player-interior evidence.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "256_256_bias_outer_shell_136",
+        "257_257_bias_general_137",
+        "258_258_bias_general_138",
+        "259_259_bias_general_139",
+        "260_260_bias_general_140",
+        "261_261_bias_general_141",
+        "262_262_bias_general_142",
+        "263_263_bias_general_143",
+        "264_264_bias_general_144",
+        "265_265_bias_general_145",
+        "266_266_bias_general_146",
+        "267_267_bias_general_147",
+        "268_268_bias_general_148",
+        "269_269_bias_general_149",
+        "270_270_bias_general_150",
+        "271_271_bias_general_151"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "256_256_bias_outer_shell_136",
+            "before": 316307,
+            "after": 316307
+          },
+          {
+            "name": "257_257_bias_general_137",
+            "before": 481708,
+            "after": 481708
+          },
+          {
+            "name": "258_258_bias_general_138",
+            "before": 631849,
+            "after": 631849
+          },
+          {
+            "name": "259_259_bias_general_139",
+            "before": 534665,
+            "after": 534665
+          },
+          {
+            "name": "260_260_bias_general_140",
+            "before": 48733,
+            "after": 48733
+          },
+          {
+            "name": "261_261_bias_general_141",
+            "before": 238774,
+            "after": 238774
+          },
+          {
+            "name": "262_262_bias_general_142",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "263_263_bias_general_143",
+            "before": 505824,
+            "after": 505824
+          },
+          {
+            "name": "264_264_bias_general_144",
+            "before": 560788,
+            "after": 560788
+          },
+          {
+            "name": "265_265_bias_general_145",
+            "before": 278815,
+            "after": 278815
+          },
+          {
+            "name": "266_266_bias_general_146",
+            "before": 152906,
+            "after": 152906
+          },
+          {
+            "name": "267_267_bias_general_147",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "268_268_bias_general_148",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "269_269_bias_general_149",
+            "before": 418292,
+            "after": 418292
+          },
+          {
+            "name": "270_270_bias_general_150",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "271_271_bias_general_151",
+            "before": 22544,
+            "after": 22544
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_18.jpg",
+      "sha256": "d48f7dd9b10261330de2b03e0c92db378b441699f791a64fc120250b014986fd",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "General exterior diagnostic magenta remains identical; intact service shelves/ceilings and auditorium rows, wall panels, screen and aisles in lower strong-interior pairs preserve geometry. No new opening.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "272_272_bias_general_152",
+        "273_273_bias_general_153",
+        "274_274_bias_general_154",
+        "275_275_bias_general_155",
+        "276_276_bias_general_156",
+        "277_277_bias_general_157",
+        "278_278_bias_general_158",
+        "279_279_bias_general_159",
+        "280_strong_interior_0149",
+        "281_strong_interior_0064",
+        "282_strong_interior_0122",
+        "283_strong_interior_0015",
+        "284_strong_interior_0095",
+        "285_strong_interior_0144",
+        "286_strong_interior_0139",
+        "287_strong_interior_0066"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [
+          {
+            "name": "273_273_bias_general_153",
+            "before": 806400,
+            "after": 806400
+          },
+          {
+            "name": "274_274_bias_general_154",
+            "before": 688236,
+            "after": 688236
+          },
+          {
+            "name": "276_276_bias_general_156",
+            "before": 921600,
+            "after": 921600
+          },
+          {
+            "name": "277_277_bias_general_157",
+            "before": 673954,
+            "after": 673954
+          },
+          {
+            "name": "278_278_bias_general_158",
+            "before": 324306,
+            "after": 324306
+          },
+          {
+            "name": "279_279_bias_general_159",
+            "before": 487045,
+            "after": 487045
+          }
+        ],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.0035807291666666665
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_19.jpg",
+      "sha256": "599b810d71aab018624e12117c33dca1c1f00a0f193a4197c7ab31ec9aabac75",
+      "status": "viewed_no_visible_new_geometry_gap",
+      "tool": "view_image",
+      "detail": "original",
+      "review_scope": "All before/after panels inspected in the original contact sheet; no individual full-resolution render inspection claimed.",
+      "notes": "Strong-interior auditorium, arcade, service and lobby comparisons preserve seat rows, floors, wall panels, coffers, columns, ceiling and prop silhouettes. No visible new geometry gap or magenta background.",
+      "pair_count": 16,
+      "new_gap_or_visible_removed_geometry": false,
+      "pair_names": [
+        "288_strong_interior_0023",
+        "289_strong_interior_0037",
+        "290_strong_interior_0018",
+        "291_strong_interior_0034",
+        "292_strong_interior_0131",
+        "293_strong_interior_0083",
+        "294_strong_interior_0097",
+        "295_strong_interior_0100",
+        "296_strong_interior_0020",
+        "297_strong_interior_0147",
+        "298_strong_interior_0080",
+        "299_strong_interior_0006",
+        "300_strong_interior_0008",
+        "301_strong_interior_0117",
+        "302_strong_interior_0134",
+        "303_strong_interior_0111"
+      ],
+      "numeric_acceptance_context": {
+        "existing_magenta_views": [],
+        "new_magenta_pixels": 0,
+        "new_near_magenta_pixels": 0,
+        "max_changed_percent": 0.005533854166666666
+      }
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_20.jpg",
+      "sha256": "80217e7bd737b1bbd12a8b25079c0c5f6e08983de1e4c94ba5f890cd19f1d588",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Lobby, auditorium, restroom and arcade pairs304..319 retain all visible structures. Seat tiers, floors and ceiling beams unchanged. The restroom dark puddle and damaged mirror are present before and after.",
+      "pair_count": 16,
+      "view_index_range": [
+        304,
+        319
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_21.jpg",
+      "sha256": "3dff6e84091f1054d2b37fc722ce5fca3218baf1eeaa661b6d8c8e2dd2f59cb3",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Lobby, arcade and restroom pairs320..335 retain columns, stair, framed signage, machines, glass and stalls. No new gap or missing surface visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        320,
+        335
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_22.jpg",
+      "sha256": "03f4143142eb0cce75c912d98f7aad59d53f5dc733a6b9d6c7f0c87a203c117b",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Booth, restroom, arcade and auditorium pairs336..351 retain projector, window, stall frames, seat tiers, glass and arcade machines. No new opening visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        336,
+        351
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_23.jpg",
+      "sha256": "0e3e25f06fee738bcee28bce2e788e847ecb4282694c73d381f3862dad5fecbb",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Restroom, arcade, service and auditorium pairs352..367 retain shelf grids, seats, walls and star ceilings. Small numeric changes show no visually missing structure at contact resolution.",
+      "pair_count": 16,
+      "view_index_range": [
+        352,
+        367
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_24.jpg",
+      "sha256": "cd298c700da310821e57efe6488032d9e329ea5747eec611fe49095248fde13a",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Auditorium, lobby and passage pairs368..383 retain seating, floor steps, trim and all visible structural surfaces. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        368,
+        383
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_25.jpg",
+      "sha256": "7e1dac73123eac3e10abf3a21c42dc5c156f6287193a537646501cb1d6fc928f",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Auditorium and lobby pairs384..397 visually unchanged. Legacy398_strong_interior_0525 and399_strong_interior_0520 have broad magenta already present before; documented camera poses above closed roofs, not newly exposed cull holes.",
+      "pair_count": 16,
+      "view_index_range": [
+        384,
+        399
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_26.jpg",
+      "sha256": "5b02d8f03716902e6dc8b90685486664f252d2df9003bfe660aaab1af8babb7d",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Legacy400_strong_interior_0546 retains broad preexisting magenta above closed ConcessionRoof. Remaining auditorium and lobby pairs401..415 retain seats, screens, trims and ceilings with no new gap.",
+      "pair_count": 16,
+      "view_index_range": [
+        400,
+        415
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_27.jpg",
+      "sha256": "fa6b5cc7d8981ebd53fd6cc3b8a436ae396360ff9ea23effefef1a1ac8e4a15d",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Auditorium, lobby, restroom and stair access pairs416..431 retain geometry, including close chair undersides and stair doors. No newly missing surface visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        416,
+        431
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_28.jpg",
+      "sha256": "77b1d17fd7c3b8db45146f9bdaf41ba141e9740f6e1e1e2fa221e73c6f9bd4eb",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Focused maintenance stair and gallery pairs432..447 retain doors, walls, floors, vents, star ceilings and amber trims. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        432,
+        447
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_29.jpg",
+      "sha256": "565d3f19334e184d04274ae1bd111cce0d4c26f3f0aa9e7999704b006e503187",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Gallery and booth pairs448..463 retain locker endpoint, projectors, windows, booth doors and auditorium-facing surrounds. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        448,
+        463
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_30.jpg",
+      "sha256": "1b5ed572e82fb09c9727195996d690933c3ab020567d89141a8295ac177bdd7a",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Booth3, both POWER cabinets and fresh interior pairs464..479 retain red controls, labels, service shelves, arcade machines and seats. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        464,
+        479
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_31.jpg",
+      "sha256": "9a67c75b2599f9aa844fa2f611597d4adb2cac55c0712abe9219e372ff3661d0",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh auditorium and lobby pairs480..495 retain seats, screens, ceiling beams, columns, concession bodies and doors. No new opening visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        480,
+        495
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_32.jpg",
+      "sha256": "a3fd7b39efe3281f592a302d98d33497c7757ef80d87acec3db41acf6da27f64",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh lobby, passage, service, gallery, auditorium, concession and arcade pairs496..511 retain all visible surfaces. Close service-ceiling view500 retains its ceiling structure on both sides.",
+      "pair_count": 16,
+      "view_index_range": [
+        496,
+        511
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_33.jpg",
+      "sha256": "42ed5f991a77062735994bec34d62bd080e92992cfcb0299b98ecc828cc04746",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh lobby, arcade, service, auditorium and restroom pairs512..527 retain columns, counter, gumball glass, machines, racks, seats, mirrors and stalls. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        512,
+        527
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_34.jpg",
+      "sha256": "86e13e3ba8f0ab78531e9080ec21747b4ecf11c204505109bf8ab09f81174c3a",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh restroom, gallery, passage and arcade pairs528..543 retain walls, doors, stalls, counter glass and gumball structure. No new opening visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        528,
+        543
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_35.jpg",
+      "sha256": "7cc8066050ec8019072f1c6a4017055f6fd264c5cecb4af070ad5167184f8cb3",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh gallery, restroom, auditorium, arcade and lobby pairs544..559 retain seat arrays, screens, beams, walls, stairs and machines. No visually missing structure.",
+      "pair_count": 16,
+      "view_index_range": [
+        544,
+        559
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_36.jpg",
+      "sha256": "df82790f317f948f3965b609c97ab553729e6e078f2bd0c73cc3916f3bce0123",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh lobby, auditorium, gallery and passage pairs560..575 retain floors, stair trim, walls, seat arrays, columns and ceilings. Foreground obstructions identical before and after; no new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        560,
+        575
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_37.jpg",
+      "sha256": "b20f27e42b71e7dbe7ae31a55898c0e2a037ee1b2950388c584e370ccf49b20b",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh auditorium and lobby pairs576..591 retain wall panels, screen frames, dense seating and star ceilings. No new opening visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        576,
+        591
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_38.jpg",
+      "sha256": "829524d089bf42bb1a1c6ffabf20c111075b68a513e66ab0caa1684adb4969f4",
+      "status": "LOOKED_ACCEPTED",
+      "notes": "Fresh auditorium, lobby, gallery and passage pairs592..607 retain ceiling beams, columns, framed signs, gallery walls and stairs. No new gap visible.",
+      "pair_count": 16,
+      "view_index_range": [
+        592,
+        607
+      ]
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_39.jpg",
+      "sha256": "742becdbc65726e83b1315f2662812df71b09f4de3199fe3097b23f4b81d2ef1",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Restroom partitions/ceiling, corridor wall/stairs match. POWER A/B handles, main lever and prize door/keypad retained; no visible new gap.",
+      "pair_count": 16,
+      "pair_first": 608,
+      "pair_last": 623,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_40.jpg",
+      "sha256": "952f6fc1695560e2c66320a455a40268180a929848a73d20dd12ff10f5345d8d",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Code Screen and spawn floor retained. Fresh service shelving, auditorium rows/aisles/screens/ceilings and lobby columns/screens match.",
+      "pair_count": 16,
+      "pair_first": 624,
+      "pair_last": 639,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_41.jpg",
+      "sha256": "b644cfa747ebcd73032e1d50357a8b801e6644fa3540697ad8b94415810d23ce",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Fresh auditorium ceilings/rows and lobby floor/columns/screens match; no visible missing surface.",
+      "pair_count": 16,
+      "pair_first": 640,
+      "pair_last": 655,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_42.jpg",
+      "sha256": "0656c34c270191e8c2ab8f5a4ab8e89389c73c21330d5368dccaf69485be6c36",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Service ceiling0106 remains bounded and varied. Auditorium seats/screens, lobby/concession and arcade cabinets/ceiling match.",
+      "pair_count": 16,
+      "pair_first": 656,
+      "pair_last": 671,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_43.jpg",
+      "sha256": "3c71d843c17d3aaa104904d21cb890c83101087034e66f0aab081e0a2e777d99",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Restroom partitions/fixtures and existing floor damage, arcade rows and projector remain unchanged. No visible new opening.",
+      "pair_count": 16,
+      "pair_first": 672,
+      "pair_last": 687,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_44.jpg",
+      "sha256": "486df72b762d6ee33cd278c1604d3ccfc7cd4c9070676a5cc5c925b086eb8535",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Restroom partitions0299 remain bounded. Stair gray doors, service shelving and auditorium rows/aisles/screens match.",
+      "pair_count": 16,
+      "pair_first": 688,
+      "pair_last": 703,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_45.jpg",
+      "sha256": "8e7c90471178584456a2eb9de9d84863e821233901f606fef9ecbb5aed22e53c",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Fresh auditorium rows, aisle risers, acoustic wall panels and ceiling beams remain intact. Panel717 has largest displayed change but no visible new hole at contact scale.",
+      "pair_count": 16,
+      "pair_first": 704,
+      "pair_last": 719,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_46.jpg",
+      "sha256": "3c38fd1689a1bb42b910b906847c8c37c417c06af2f70f38f53983eed9627020",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Corridor steps/walls, auditorium rows/ceilings/screens and lobby columns/screens match.",
+      "pair_count": 16,
+      "pair_first": 720,
+      "pair_last": 735,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_47.jpg",
+      "sha256": "0e7eacbb3cf7c76f3cf26f63244c10664a70f2c80c73a340912885579860afc4",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Auditorium row/aisle/screen and ceiling comparisons remain intact; lobby/corridor views show no removed surface.",
+      "pair_count": 16,
+      "pair_first": 736,
+      "pair_last": 751,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_48.jpg",
+      "sha256": "736917876d062bccb7cf33ce648d04f88f0b000ec591b01989a03701114422e4",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Remaining fresh auditorium beams/rows and corridor/stair views match; maintenance stair763 retains continuous steps.",
+      "pair_count": 16,
+      "pair_first": 752,
+      "pair_last": 767,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 0,
+      "after_magenta_pixels": 0,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_49.jpg",
+      "sha256": "9e1f6e15b803e328831cc37f144717e91dec7853bfd63a8af0b5835292fa88d4",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Final eight fresh interior views match. Region000..007 includes existing world-magenta in BOTH panels; those diagnostic views are not sealed-interior evidence.",
+      "pair_count": 16,
+      "pair_first": 768,
+      "pair_last": 783,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 5490786,
+      "after_magenta_pixels": 5490786,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_50.jpg",
+      "sha256": "47a7594abc745cc51458ba94f1de7bd85a97caead535b3ea8196a7f1c24e6405",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region008..023 has existing magenta/occluded shell diagnostics in both panels, with matching visible lobby and ceiling details.",
+      "pair_count": 16,
+      "pair_first": 784,
+      "pair_last": 799,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 8190921,
+      "after_magenta_pixels": 8190921,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_51.jpg",
+      "sha256": "f2982399c414d37275d8ecc4202146924ed124667e48530f333e5deff0f307d0",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region024..039 existing magenta diagnostics and weak wall/roof views remain unchanged; visible seat/wall details match.",
+      "pair_count": 16,
+      "pair_first": 800,
+      "pair_last": 815,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 9178086,
+      "after_magenta_pixels": 9178086,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_52.jpg",
+      "sha256": "628e5437addaac653051cbd64003599f81713f6e09ae3bea7ade20de2544bca5",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region040..055 existing magenta diagnostics remain unchanged. Visible auditorium seating/wall and aisle surfaces match.",
+      "pair_count": 16,
+      "pair_first": 816,
+      "pair_last": 831,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 6897592,
+      "after_magenta_pixels": 6897592,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_53.jpg",
+      "sha256": "2be3a3ee6cc02cb8259bfaadd8b2e065eadedc81bdca50f6c17ee24b88e928d1",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region056..071 existing world-magenta is present before and after; visible screens/seats, lobby and ceiling geometry match.",
+      "pair_count": 16,
+      "pair_first": 832,
+      "pair_last": 847,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 5724908,
+      "after_magenta_pixels": 5724908,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_54.jpg",
+      "sha256": "c9563c796a8fb283ea0abc5ac37a87a19f96d6be52de0da8eb7144aec1cb2842",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region072..087 diagnostic magenta/occluded shell silhouettes match. Visible lobby column/star ceiling remains present.",
+      "pair_count": 16,
+      "pair_first": 848,
+      "pair_last": 863,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 6996614,
+      "after_magenta_pixels": 6996614,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_55.jpg",
+      "sha256": "78e49d4ed2aa98d8cb927d12db23b2a836cc2043bd657fa90437e59eaa64da37",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region088..103 diagnostic magenta is present in BOTH panels. Visible corridor door and auditorium ceiling/seat geometry match.",
+      "pair_count": 16,
+      "pair_first": 864,
+      "pair_last": 879,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 6314156,
+      "after_magenta_pixels": 6314156,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_56.jpg",
+      "sha256": "3c8ff1f3971b9e1c9d2cf96fdbe9535bf31442f486c0c7f7a4ec90d3dd2bc80b",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region104..119 diagnostic magenta unchanged; visible auditorium beams/seats/screens and lobby wall details match.",
+      "pair_count": 16,
+      "pair_first": 880,
+      "pair_last": 895,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 4594040,
+      "after_magenta_pixels": 4594040,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_57.jpg",
+      "sha256": "1f576db381a85e996b6fd3aaf323a80d68afa72f5c2bf30be012d96dc7af5c03",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region120..135 diagnostic magenta/roof silhouettes remain unchanged; visible screen surface and rear row/aisle details match.",
+      "pair_count": 16,
+      "pair_first": 896,
+      "pair_last": 911,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 5415412,
+      "after_magenta_pixels": 5415412,
+      "new_magenta_pixels": 0
+    },
+    {
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\proof\\contact_58.jpg",
+      "sha256": "e3005d0fed32f03921b9f378945dc5643155cdf36b0287dc9f10de39220a94cc",
+      "status": "PASS_NO_VISIBLE_CULL_CREATED_GAP",
+      "notes": "Region136..149 is mostly magenta/occluded shell diagnostic context, unchanged before/after; no new opening visible.",
+      "pair_count": 14,
+      "pair_first": 912,
+      "pair_last": 925,
+      "looked": true,
+      "detail": "original",
+      "before_magenta_pixels": 9365353,
+      "after_magenta_pixels": 9365353,
+      "new_magenta_pixels": 0
+    }
+  ],
+  "eevee_reviews": [
+    {
+      "index": 38,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_power_north.png",
+      "sha256": "f8f75311c1e08d4f098a68585cac8958f900def548028bead70a460bd425a378",
+      "status": "viewed_geometry_accepted_lighting_caveat",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "POWER A body label, conduits and all three handles visible; A3/A2 labels readable, lowerA1 partly cropped by this upward camera. Interior surfaces appear continuous. Cabinet faces are dark under this local Blender lighting."
+    },
+    {
+      "index": 39,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_power_south.png",
+      "sha256": "e1f55b89579e82e5fff55a969dac491dde5999daf04b449f61040e11bb189df3",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "POWER B label and B1/B2/B3 readable; three red handles, body shell, open door/conduits and service ceiling intact. No visible gap."
+    },
+    {
+      "index": 40,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_power_a.png",
+      "sha256": "dba2071ea7dc1d7713fe2d46c3c2713c2d018b75025766c3b7df9c4bb509c83b",
+      "status": "viewed_geometry_accepted_lighting_caveat",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Complete POWER A/A1/A2/A3 labels visible with three separate red-edged handles and open cabinet door. Main control faces are dark in this lighting, silhouettes/red rims remain visible. No geometry missing."
+    },
+    {
+      "index": 41,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_power_b.png",
+      "sha256": "bf543858642e168e154eb6d3ad5c44086746b9f4e1c7838b5d15fff7971d2db6",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Complete POWER B/B1/B2/B3 labels, three red handles, open cabinet door and body shell clearly visible. No geometry gap."
+    },
+    {
+      "index": 42,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_main_breaker.png",
+      "sha256": "63ec784a9f20695466e7deaf7490ff4e36e80e4a5759d57a320ff6bf536e5505",
+      "status": "viewed_geometry_accepted_lighting_caveat",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "MAIN BREAKER label legible; large lever silhouette/red rim and rectangular cabinet shell visible. Lever/socket surroundings are very dark in this EEVEE lighting, so fine detail is hard to assess. No open background region or stretched mesh."
+    },
+    {
+      "index": 43,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_prize_closed.png",
+      "sha256": "32a55b872ef18abbba92329cdd88fc2af338a30debffeb0bdf72c3216cffeb5e",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Prize counter/frame, transparent front door, keypad and hanging/shelved prizes visible. Glass outline subtle as expected; no missing floor/wall or case frame."
+    },
+    {
+      "index": 44,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_code_screen.png",
+      "sha256": "e2f551e01dd9086fe6bc26ca9031e43790b22518a83af0c0d00aff86f0e26909",
+      "status": "viewed_geometry_accepted_lighting_caveat",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Code cabinet front display and neighbour arcade machine visible under magenta neon; separate screen face present. Cabinet is dark in this lighting. Fine GUI readability requires later gameplay/Roblox check."
+    },
+    {
+      "index": 45,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_spawn.png",
+      "sha256": "f4b0db0769991a21385d9d6dc4b29fac222bc0317133bff43907a54ce340742e",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Broad continuous unobstructed patterned floor at spawn with lobby edges/columns, lit screen frame and stair access intact. Sparse peripheral litter visible; no visible hole."
+    },
+    {
+      "index": 46,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v5_exit_access.png",
+      "sha256": "a0cb222934c6a02745328a8b4b8fefa1f8aaa0a4fd8b109f64314c8ee615d800",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Patterned exit-access steps/vertical risers visible directly below screen-side region. Surfaces continuous; tight camera limits whole approach context. Nav/step traversal remains numeric evidence from other checks."
+    },
+    {
+      "index": 47,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_below_open.png",
+      "sha256": "86fed553e7814d42f3d498370753d3e5c85af74802d29d3a68edbcbe1bf60181",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Opened landing doors/frame seen from stair below; stair treads/rails and continuous upper floor/ceiling behind opening intact. No exposed exterior gap."
+    },
+    {
+      "index": 48,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_top_door_open.png",
+      "sha256": "9c75731aab7f16dfed6ee838913bc0d0e89851a08e6d21cd7c992aad1c7cbaf3",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Continuous patterned gallery floor/opposite wall and star ceiling viewed through open landing access; no apparent gap. Framing is tight and does not include doorway edges."
+    },
+    {
+      "index": 49,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A1_access_open.png",
+      "sha256": "5a384297506bfb4ee31387b2bc0c9bad67e0cbd4f59af0f839fbdb2c935a8d4e",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Both opened booth doors/frame visible, continuous threshold/floor, projector centred with window/trim and ceiling lights intact. No gap."
+    },
+    {
+      "index": 50,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A2_access_open.png",
+      "sha256": "06c3f374277022d89b3e8868a154810cfbf23e55b9f520455ac951d594bb81ab",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Both opened booth doors/frame visible, continuous threshold/floor, projector centred with window/trim and ceiling lights intact. No gap."
+    },
+    {
+      "index": 51,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A3_access_open.png",
+      "sha256": "7866b69e016efb60e12454aa10536f86464d067625a5cca60cb0a6ea829c322a",
+      "status": "viewed_geometry_accepted",
+      "tool": "view_image",
+      "detail": "original",
+      "full_image_viewed": true,
+      "opaque_boxes": true,
+      "visible_geometry_gap": false,
+      "notes": "Both opened booth doors/frame visible, continuous threshold/floor, projector centred with window/trim and ceiling lights intact. Booth darker thanA1/A2 but geometry readable; no gap."
+    },
+    {
+      "record_index": 20,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_5_west.png",
+      "sha256": "15d9b775d4c8880c10a800e05eae46758b0c7c95111207f0282b06440956936b",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23200.0,
+        91.0,
+        -1.0951843345111385
+      ],
+      "look": [
+        23115.0,
+        91.0,
+        -4.727721289752659
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "West-facing gallery: carpet, continuous patterned walls, amber wall strips and dense ceiling stars all present; no visible gap."
+    },
+    {
+      "record_index": 21,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_5_ceiling.png",
+      "sha256": "cf4ce94e9cdacf6336950e061185aa2beb8da45d61138b02da75c546a961e746",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23200.0,
+        91.0,
+        -1.0951843345111385
+      ],
+      "look": [
+        23225.0,
+        99.0,
+        -1.0951843345111385
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Upward gallery: star ceiling continuous, booth door frame present, carpet and both wall trims retained; no visible gap."
+    },
+    {
+      "record_index": 22,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_5_south.png",
+      "sha256": "15a62e0975eb3be5d3c69336c848c26321b28cac410e62dfc6dce86ae7d2ae45",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23200.0,
+        91.0,
+        -1.0951843345111385
+      ],
+      "look": [
+        23220.0,
+        92.0,
+        11.904815665488861
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "South gallery wall: uninterrupted patterned wall, wainscot, amber ceiling strip and carpet; no visible gap."
+    },
+    {
+      "record_index": 23,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_6_east.png",
+      "sha256": "7f3d8b3928c37ea25ca941bc5e4903168134b0b70b4293ed98482458745941ca",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23348.0,
+        91.0,
+        -4.703
+      ],
+      "look": [
+        23370.0,
+        91.0,
+        -4.703
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Eastern endpoint: lockers and clutter visible in deliberately low light; carpet and surrounding wall/ceiling boundaries continuous."
+    },
+    {
+      "record_index": 24,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_6_west.png",
+      "sha256": "968b72d74fd904fae5bf18d7e58b5a190a49b62381a0a2f7af60f5d7acbeab88",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23348.0,
+        91.0,
+        -4.703
+      ],
+      "look": [
+        23263.0,
+        91.0,
+        -0.9029328621907827
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Long west gallery view: carpet spans whole walkable width, continuous walls/trim and stars; no visible gap."
+    },
+    {
+      "record_index": 25,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_lockers.png",
+      "sha256": "6cb052811b387edfe803544cecf30fb38390b08e26790bfa962defee5126dfc9",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23342.0,
+        91.0,
+        -3.0
+      ],
+      "look": [
+        23372.0,
+        91.0,
+        -0.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Locker alcove: low-light locker bodies and floor clutter present; continuous surrounding walls, carpet and star ceiling."
+    },
+    {
+      "record_index": 26,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A1_interior.png",
+      "sha256": "022ff9d036a502659185e9f4dfccabb7fcbbbb20df027ae8f9f423a25b0f19d0",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        22777.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        22766.0,
+        90.0,
+        -27.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth1 interior: intact projector with reel rims/stand, patterned walls, floor and wainscot; lens points toward bright reflective booth window."
+    },
+    {
+      "record_index": 27,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A1_window.png",
+      "sha256": "54e9d4af391902521d3899e320a722494017a2fa9c47c4269c7d2dc46ab6bca8",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        22755.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        22766.0,
+        91.0,
+        -33.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth1 reverse window view: projector/stand intact, framed pale glass surface and wall/ceiling boundaries continuous. Strong authored lighting/reflection glare on window."
+    },
+    {
+      "record_index": 28,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A1_access.png",
+      "sha256": "e0ecd7984be52bfe6cd6c924d59bcd2a79d18ac583f91c2d5236c4515dc16d40",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        22766.0,
+        91.0,
+        -8.0
+      ],
+      "look": [
+        22766.0,
+        91.0,
+        -25.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth1 gallery access: both door leaves, wired windows, closers, handles, label BOOTH1, frame and threshold visible. Narrow bright centre/bottom seams reflect booth illumination; no structural hole visible."
+    },
+    {
+      "record_index": 29,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A1_seats.png",
+      "sha256": "0c5e6d60b96f0b14183ab1c13bbfba5adb84f9d959176f0e442aed7845b9ace1",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        22766.0,
+        79.0,
+        -62.00000000000001
+      ],
+      "look": [
+        22766.0,
+        92.0,
+        -26.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Auditorium view of Booth1: glass window, sill and surrounding dark wall continuous; booth stars/trim visible through/reflected in window, foreground seats retained."
+    },
+    {
+      "record_index": 30,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A2_interior.png",
+      "sha256": "ad3dfc5930a2ec54290c4c0bd7e18320ffc8f00c6274b8393ad53585a4f8c7a6",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23011.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        23000.0,
+        90.0,
+        -27.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth2 interior: intact projector/reels/stand, walls, floor, wainscot and bright window. Projector proportion and orientation consistent with Booth1."
+    },
+    {
+      "record_index": 31,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A2_window.png",
+      "sha256": "eac7ffa9b22273e1e8168d2a7feee5c541a06dc8b87e89c3aa724802076a118b",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        22989.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        23000.0,
+        91.0,
+        -33.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth2 reverse window view: intact projector, framed glass surface and continuous wall/ceiling boundaries. Strong authored glare similar to Booth1."
+    },
+    {
+      "record_index": 32,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A2_access.png",
+      "sha256": "a46c0780f42fc388117f49fa34762415dde23013eaedcb7080625dd6d31c4dc3",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23000.0,
+        91.0,
+        -8.0
+      ],
+      "look": [
+        23000.0,
+        91.0,
+        -25.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth2 gallery access: both leaves, closers, wired windows, label BOOTH2, frame and threshold retained. Pink reflected illumination visible on surfaces; no world-magenta void."
+    },
+    {
+      "record_index": 33,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A2_seats.png",
+      "sha256": "4f204f0d20eeaa7ce99d31579acf521c6c5b6d24a6df0cb56efac4fd1a5eae65",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23000.0,
+        79.0,
+        -62.00000000000001
+      ],
+      "look": [
+        23000.0,
+        92.0,
+        -26.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Auditorium view of Booth2: framed window and sill continuous; authored pink reflections, ceiling stars and foreground seats retained."
+    },
+    {
+      "record_index": 34,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A3_interior.png",
+      "sha256": "6e6d3dec70f3283f84bbe57c78704f3f197329bb3e1e0097b6f3f811a166f520",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23245.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        23234.0,
+        90.0,
+        -27.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth3 interior: darker coherent lighting; intact projector/reels/stand, patterned walls, floor and framed blue-grey glass. No missing surfaces."
+    },
+    {
+      "record_index": 35,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A3_window.png",
+      "sha256": "cec6ac121679771d360fbc91cd3818e9d2e8f1e672f75712dfc46e8ab3214c59",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23223.0,
+        91.0,
+        -20.0
+      ],
+      "look": [
+        23234.0,
+        91.0,
+        -33.0
+      ],
+      "lens": 20,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth3 reverse window view: intact projector, glass frame/wainscot, continuous patterned walls and ceiling; neon reflections visible on glass."
+    },
+    {
+      "record_index": 36,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A3_access.png",
+      "sha256": "d5560b52b1ca975089bd752b3e55cd1989ccd316d258bf57b3bf8628d88ce440",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23234.0,
+        91.0,
+        -8.0
+      ],
+      "look": [
+        23234.0,
+        91.0,
+        -25.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Booth3 gallery access: both leaves, wired windows, closers, handles, BOOTH3 label, frame and threshold retained; no visible hole."
+    },
+    {
+      "record_index": 37,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_booth_A3_seats.png",
+      "sha256": "6739b96becfb74ad0f549e1f035a0088353cb8d4dae331285e240f672d1dd87a",
+      "status": "LOOKED_ACCEPTED",
+      "review": "Individual full-size PNG via view_image detail original.",
+      "opaque_export_proxy_rendered": true,
+      "eye": [
+        23234.0,
+        79.0,
+        -62.00000000000001
+      ],
+      "look": [
+        23234.0,
+        92.0,
+        -26.0
+      ],
+      "lens": 18,
+      "visible_geometry_gap": false,
+      "visible_world_magenta": false,
+      "notes": "Auditorium view of Booth3: booth window/sill and surrounding wall continuous; dark foreground seating and star ceiling retained."
+    },
+    {
+      "index": 0,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_below.png",
+      "sha256": "bf0fa69091a0b4e0f7458e303161aa65cafa890b4ccc3ed47d048b595f8476b0",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22658.0,
+        82.0,
+        20.0
+      ],
+      "look": [
+        22658.0,
+        91.0,
+        1.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Maintenance stair treads/risers and nosings, side walls/rails and upper doorway remain present; no visible gap at top landing."
+    },
+    {
+      "index": 1,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_top_door.png",
+      "sha256": "b98d40d1ee79dd46e96d8c2a94e5d484e5714e9c76ed28c4c13a978b4611fb60",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22658.0,
+        91.0,
+        5.0
+      ],
+      "look": [
+        22658.0,
+        91.0,
+        -12.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Closed upper door leaves and handles retain correct proportions. Narrow centre seam shows the room behind, not a missing floor surface. Threshold below this close crop."
+    },
+    {
+      "index": 2,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_top_pocket.png",
+      "sha256": "cfa46738e5b5c8179280a7b29cfa3190084d2f4eebb6f0078cc765c65029ce83",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22658.0,
+        91.0,
+        5.0
+      ],
+      "look": [
+        22670.0,
+        90.0,
+        4.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Side landing pocket has continuous carpet and wall; door frame and handrail meet the bounded landing."
+    },
+    {
+      "index": 3,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_stair_gallery_return.png",
+      "sha256": "cd954b347aac12cdd982370f3028910997ae78f013b75c8f5ed3d432e509e646",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22658.0,
+        91.0,
+        -8.0
+      ],
+      "look": [
+        22658.0,
+        91.0,
+        12.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Gallery-side staff door and lower threshold strip meet continuous carpet; no exposed floor void."
+    },
+    {
+      "index": 4,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_neck_east.png",
+      "sha256": "e95d8c2649507df087363fbf6df1a5f47de46df9e777f53c96d23dcab9f17e4d",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22658.0,
+        91.0,
+        -8.0
+      ],
+      "look": [
+        22698.0,
+        91.0,
+        -4.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Gallery neck floor continues east from stair door; walls/trim/ceiling fully bound the hall."
+    },
+    {
+      "index": 5,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_0_east.png",
+      "sha256": "a335e5860bdb429731d8061b1c81f2873f62e8cbe49745db9c81a210c1a18040",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22696.0,
+        91.0,
+        -2.119999999999999
+      ],
+      "look": [
+        22781.0,
+        91.0,
+        -0.4921141048292093
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "East gallery carpet, walls, trim and star ceiling continue to the distant end; no visible cull-created opening."
+    },
+    {
+      "index": 6,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_0_west.png",
+      "sha256": "9b657a7bc4cf5571097070c7f72de4932cd4608be8fbaff4f292b4359c7e8745",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22696.0,
+        91.0,
+        -2.119999999999999
+      ],
+      "look": [
+        22648.0,
+        91.0,
+        -8.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "West gallery view retains continuous carpet around stair enclosure and solid wall corner."
+    },
+    {
+      "index": 7,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_1_east.png",
+      "sha256": "e5451de00eb19bd6ddb20bde89409a15c2cb2517bc6c4e53f265a957096d5ff4",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22735.0,
+        91.0,
+        -0.9855810940145647
+      ],
+      "look": [
+        22820.0,
+        91.0,
+        -2.233272988294196
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Gallery booth frontage and door frame remain attached to surrounding wall; shadowed carpet still has visible texture."
+    },
+    {
+      "index": 8,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_1_west.png",
+      "sha256": "36c186ba966d92b3538e5906c95131418b1396548bd32a2fb8284aa654806036",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22735.0,
+        91.0,
+        -0.9855810940145647
+      ],
+      "look": [
+        22650.0,
+        91.0,
+        -8.0
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "West gallery walls and ceiling remain enclosed; carpet connects continuously around enclosure."
+    },
+    {
+      "index": 9,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_1_ceiling.png",
+      "sha256": "ed4a9ee3f89d5c474ad63f513932b0a4b8103e8279bcb358131035904a1f56fb",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22735.0,
+        91.0,
+        -0.9855810940145647
+      ],
+      "look": [
+        22760.0,
+        99.0,
+        -0.9855810940145647
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Gallery ceiling remains a continuous dark surface behind global stars; booth wall/door and carpet remain intact."
+    },
+    {
+      "index": 10,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_1_south.png",
+      "sha256": "954d57fd99e68d10a64d608806b9adad861ebf9a2b7e0abe21c3ec619d422245",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22735.0,
+        91.0,
+        -0.9855810940145647
+      ],
+      "look": [
+        22755.0,
+        92.0,
+        12.014418905985435
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "South gallery wall/vent panel and lower trim remain solid; no visible proxy edge or wall aperture."
+    },
+    {
+      "index": 11,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_2_east.png",
+      "sha256": "db809470872056bb14258a1fb3ae38f9d6c6c3e155ae8f89ff8deee9f304bdac",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22845.0,
+        91.0,
+        -3.69053574320837
+      ],
+      "look": [
+        22930.0,
+        91.0,
+        -3.1997446072296754
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "East mid-gallery long floor and both wall/trim runs remain continuous, including shadowed carpet."
+    },
+    {
+      "index": 12,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_2_west.png",
+      "sha256": "7e7d48f57d765f98cab74a53d79e9efd90fb389028ed0b77f1fcdf29fdf571a4",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22845.0,
+        91.0,
+        -3.69053574320837
+      ],
+      "look": [
+        22760.0,
+        91.0,
+        -0.31748494441582764
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "West mid-gallery floor/wall/ceiling remain intact; end enclosure is bounded."
+    },
+    {
+      "index": 13,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_3_east.png",
+      "sha256": "5e34bf25f7abfc66f639e9f56f7de6fd973ea94091a08da1dab35e3f8ac77def",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22965.0,
+        91.0,
+        -1.2014842082013946
+      ],
+      "look": [
+        23050.0,
+        91.0,
+        -1.9962603254067999
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "East gallery booth door/frame and adjacent projection in wall remain proportionate; carpet continuous."
+    },
+    {
+      "index": 14,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_3_west.png",
+      "sha256": "dbdac4a999f1f16a966daf4d1a64c9fdd29bf1db177d46c4d0c15b90cbf9346c",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22965.0,
+        91.0,
+        -1.2014842082013946
+      ],
+      "look": [
+        22880.0,
+        91.0,
+        -4.760887211956111
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "West gallery view retains floor, side walls and ceiling across dim pools; no visible gap."
+    },
+    {
+      "index": 15,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_3_ceiling.png",
+      "sha256": "62e70c700ab78a5f39198dde7019ac447e6b63063e948381647095a68e23b832",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22965.0,
+        91.0,
+        -1.2014842082013946
+      ],
+      "look": [
+        22990.0,
+        99.0,
+        -1.2014842082013946
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Star ceiling/wall junctions remain continuous above booth frontage; no visible ceiling cut or proxy intrusion."
+    },
+    {
+      "index": 16,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_3_south.png",
+      "sha256": "5650484d6b684ce5fc37cfd96def9c14a917e32d6da0ab0830bbf98e49247b55",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        22965.0,
+        91.0,
+        -1.2014842082013946
+      ],
+      "look": [
+        22985.0,
+        92.0,
+        11.798515791798605
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "South gallery wall and continuous carpet remain intact; vent/trim and ceiling meet cleanly."
+    },
+    {
+      "index": 17,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_4_east.png",
+      "sha256": "0f6ecc4b2b4f08559e5cb825b99813ea2a94b1eb4a581ad6ab198779011e5565",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        23085.0,
+        91.0,
+        -3.9454523301184943
+      ],
+      "look": [
+        23170.0,
+        91.0,
+        -2.815015460502149
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "East gallery south door, wall and carpet remain enclosed; no visible floor opening."
+    },
+    {
+      "index": 18,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_4_west.png",
+      "sha256": "220cc6673281fd87e3d1ac635658429d7ffb5088e192a79d170bef69da52ecf8",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        23085.0,
+        91.0,
+        -3.9454523301184943
+      ],
+      "look": [
+        23000.0,
+        91.0,
+        -0.3167661783111253
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "West gallery contains litter/shadows on continuous textured carpet; wall and ceiling surfaces retained."
+    },
+    {
+      "index": 19,
+      "path": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\renders\\v4_gallery_5_east.png",
+      "sha256": "8991bac97c6bd0d8c968af610f4278b1ab33931ff3965bee89ebbcee6fe24367",
+      "looked": true,
+      "detail": "original",
+      "size": [
+        1000,
+        625
+      ],
+      "eye": [
+        23200.0,
+        91.0,
+        -1.0951843345111385
+      ],
+      "look": [
+        23285.0,
+        91.0,
+        -2.0326357211220536
+      ],
+      "opaque_boxes": true,
+      "status": "PASS_NO_VISIBLE_GEOMETRY_GAP",
+      "review": "Far east gallery booth door/frame and end-wall approach retain proportions; floor continues under all shadowed areas."
+    }
+  ]
+}

@@ -3,7 +3,9 @@
 -- parts and every Light inside it) or a BasePart with the attribute outside such a Model (a light holder). Every few
 -- seconds a unit stutters and usually stays OFF for 0.3-4 s (12 %: a 6-15 s outage), so its area goes dark. With
 -- ReduceFlashing (anything but an explicit false: a profile that has not loaded yet never strobes) it fades out,
--- holds and fades back instead. Written by tools/level4_blender/place.luau.
+-- holds and fades back instead. During a Level 4 round (workspace Level4RoundActive) it stands down completely: the
+-- server's Light Director owns every light then and the Level 4 Round Client renders it.
+-- Written by tools/level4_blender/place.luau.
 local TweenService = game:GetService("TweenService")
 local player = game:GetService("Players").LocalPlayer
 local model = script.Parent
@@ -12,6 +14,10 @@ local FADE = 1.5
 
 local function reduced()
 	return player == nil or player:GetAttribute("ReduceFlashing") ~= false
+end
+
+local function roundLive()
+	return workspace:GetAttribute("Level4RoundActive") == true
 end
 
 local function members(unit)
@@ -29,6 +35,7 @@ local function members(unit)
 end
 
 local function set(lights, lenses, on)
+	if roundLive() then return end            -- the round owns every light now
 	for _, e in lights do e[1].Brightness = if on then e[2] else 0 end
 	for _, e in lenses do
 		e[1].Material = if on then Enum.Material.Neon else Enum.Material.SmoothPlastic
@@ -37,6 +44,7 @@ local function set(lights, lenses, on)
 end
 
 local function fade(state, lights, lenses, on)
+	if roundLive() then return end
 	local info = TweenInfo.new(FADE, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 	local function tween(part, goals)
 		local t = TweenService:Create(part, info, goals)
@@ -57,6 +65,7 @@ local function offTime(rng)
 end
 
 local function event(unit, rng, state)
+	if roundLive() then return end
 	local lights, lenses = members(unit)
 	state.lights, state.lenses = lights, lenses
 	if #lights + #lenses == 0 then return end
@@ -129,8 +138,17 @@ end
 for _, d in model:GetDescendants() do watch(d) end
 local added = model.DescendantAdded:Connect(watch)
 local removing = model.DescendantRemoving:Connect(stop)
+-- a round starting mid-blink: hand the brightness back at once (neon is re-rendered by the round client)
+local roundSignal = workspace:GetAttributeChangedSignal("Level4RoundActive"):Connect(function()
+	if not roundLive() then return end
+	for unit, state in running do
+		for _, t in state.tweens do t:Cancel() end
+		for _, e in state.lights or {} do e[1].Brightness = e[2] end
+	end
+end)
 script.Destroying:Connect(function()
 	added:Disconnect()
 	removing:Disconnect()
+	roundSignal:Disconnect()
 	for unit in running do stop(unit) end
 end)

@@ -1,0 +1,82 @@
+{
+  "time_utc": "2026-10-02T09:00:31.925231+00:00",
+  "read_only": true,
+  "build": "G:\\Roblox\\_local\\l4facelift\\v5\\final4\\build.blend",
+  "focus": "G:\\Roblox\\_local\\l4facelift\\v5\\assets\\nav\\nav_focus.blend",
+  "checks": {
+    "focused_audit_exact": true,
+    "module_equals_graph": true,
+    "node_count": true,
+    "edge_count": true,
+    "edges_valid": true,
+    "native_nodes_exact": true,
+    "native_zones_exact": true,
+    "native_lights_exact": true,
+    "native_threshold_exact": true,
+    "native_exit_exact": true,
+    "native_scenezones_exact": true,
+    "native_counts_exact": true,
+    "native_scenezones_equals_audit": true,
+    "nodes_match_world_transform": true,
+    "zones_contiguous": true,
+    "all_lights_zoned": true,
+    "source_hashes_equal": true,
+    "expected_frozen_hash": true,
+    "seat_row_coverage": true,
+    "exit_access_coverage": true,
+    "single_component": true
+  },
+  "passed": true,
+  "counts": {
+    "nodes": 5607,
+    "zones": 38,
+    "lights": 260,
+    "edges": 20563,
+    "seat_rows": 54,
+    "minimum_row_nodes": 19
+  },
+  "node_coordinate_max_error_studs": 1.0000000003174137e-05,
+  "source_sha256": {
+    "repo": "47D0845F7642B2E955DFABAE2B29618C14198F6F22243D72B9EFC26D411AD1A1",
+    "frozen": "47D0845F7642B2E955DFABAE2B29618C14198F6F22243D72B9EFC26D411AD1A1",
+    "full_snapshot": "47D0845F7642B2E955DFABAE2B29618C14198F6F22243D72B9EFC26D411AD1A1"
+  },
+  "module_sha256": "63699BEE74DD3C2BD172AD31E0BA1C0D645761067DAD3C2D6571CB1CCA26F684",
+  "graph_sha256": "F9F51E0527963AE339578BBF67380F1C7BD6451BA204453B217C2DA6E9D8F5DE",
+  "audit_sha256": "1B62CD939B50FE8F4A11EEA5FCFE8233F224B2E8779FC6CA3BF375368808DDF1",
+  "focus_audit_sha256": "1B62CD939B50FE8F4A11EEA5FCFE8233F224B2E8779FC6CA3BF375368808DDF1",
+  "exit_access": {
+    "L4ExitAccess_Tread01": 2,
+    "L4ExitAccess_Tread02": 2,
+    "L4ExitAccess_Tread03": 1,
+    "L4ExitAccess_Tread04": 2,
+    "L4ExitAccess_Tread05": 2,
+    "L4ExitAccess_Tread06": 1,
+    "L4ExitAccess_Platform": 2
+  },
+  "threshold": {
+    "bounds": [
+      [
+        22649.0,
+        85.4,
+        -0.0
+      ],
+      [
+        22667.0,
+        86.0,
+        2.0
+      ]
+    ],
+    "door_leaf_bottom": 86.11999920436314,
+    "yaw_sweep_floor_clearance": 0.11999947684152801,
+    "material": "L4S_CARPET_LOBBY"
+  },
+  "evidence": [
+    "full_native_review.json",
+    "focus_native_review.json",
+    "focus_audit.json",
+    "graph.json",
+    "usher_nav_frozen.py"
+  ],
+  "limitations": "Offline geometry and metadata review. No Studio, gameplay, multiplayer, or publication verification."
+}

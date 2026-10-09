@@ -325,9 +325,19 @@ end
 -- The one exception is the exit transition: after crossing the completion
 -- sensor the rider is Escaped but still physically sliding down the tube into
 -- Level 3, and cutting the ragdoll there would stand them upright mid-flume.
+local function finitePoolroomsFinish(player)
+	local world = Workspace:FindFirstChild("Level 2 Generated World")
+	local token = player:GetAttribute("Level2PoolroomsExitGeneration")
+	return Workspace:GetAttribute("SelectedLevel") == 2
+		and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") == true
+		and world and world:IsA("Model") and world:GetAttribute("Level2NewMap") == true
+		and type(token) == "number" and token == world:GetAttribute("Level2PoolroomsExitGeneration")
+end
+
 local function roundExcludesPlayer(player)
-	return player:GetAttribute("Escaped") == true
-		and player:GetAttribute("Level2_ExitTransition") ~= true
+	return (player:GetAttribute("Escaped") == true
+		and player:GetAttribute("Level2_ExitTransition") ~= true)
+		or finitePoolroomsFinish(player)
 end
 
 local function beginSession(player)
@@ -445,6 +455,7 @@ remote.OnServerEvent:Connect(function(player, action)
 		local transitionActive = Workspace:GetAttribute("SelectedLevel") == 2
 			and player:GetAttribute("InRound") == true
 			and player:GetAttribute("Level2_ExitTransition") == true
+			and not finitePoolroomsFinish(player)
 		if session and not transitionActive then restoreAliveSession(player, session) end
 	end
 end)

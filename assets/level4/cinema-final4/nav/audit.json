@@ -1,0 +1,1163 @@
+{
+  "nodes": 5607,
+  "edges": 20563,
+  "connected_components": 1,
+  "node_rooms": {
+    "Service": 421,
+    "Gallery": 245,
+    "Core": 102,
+    "A1": 854,
+    "LobbyWest": 481,
+    "Booth1": 4,
+    "C2": 188,
+    "Concession": 447,
+    "A2": 880,
+    "LobbyCenter": 114,
+    "Booth2": 3,
+    "LobbyEast": 549,
+    "C3": 188,
+    "A3": 872,
+    "Arcade": 45,
+    "Booth3": 4,
+    "RestroomVestibule": 27,
+    "RestroomMen": 12,
+    "RestroomWomen": 11,
+    "C4": 160
+  },
+  "seat_rows": {
+    "A1/A1_FrontTier5": 25,
+    "A1/A1_FrontTier2": 25,
+    "A1/A1_FrontTier6": 23,
+    "A1/A1_FrontTier7": 24,
+    "A1/A1_FrontTier3": 23,
+    "A1/A1_FrontTier4": 23,
+    "A1/A1_RearTier2": 19,
+    "A1/A1_RearTier3": 21,
+    "A1/A1_RearTier1": 20,
+    "A1/A1_FrontTier8": 23,
+    "A1/A1_RearTier6": 21,
+    "A1/A1_RearTier4": 21,
+    "A1/A1_RearTier7": 19,
+    "A1/A1_RearTier10": 35,
+    "A1/A1_RearTier8": 20,
+    "A1/A1_RearTier5": 21,
+    "A1/A1_RearTier9": 20,
+    "A1/A1_FrontTier1": 40,
+    "A2/A2_FrontTier5": 24,
+    "A2/A2_FrontTier3": 25,
+    "A2/A2_FrontTier4": 25,
+    "A2/A2_RearTier10": 34,
+    "A2/A2_RearTier9": 20,
+    "A2/A2_RearTier4": 21,
+    "A2/A2_RearTier5": 21,
+    "A2/A2_RearTier3": 20,
+    "A2/A2_RearTier8": 20,
+    "A2/A2_RearTier6": 20,
+    "A2/A2_RearTier7": 20,
+    "A2/A2_FrontTier8": 26,
+    "A2/A2_FrontTier6": 24,
+    "A2/A2_FrontTier7": 25,
+    "A2/A2_RearTier1": 20,
+    "A2/A2_RearTier2": 20,
+    "A2/A2_FrontTier1": 41,
+    "A2/A2_FrontTier2": 25,
+    "A3/A3_FrontTier7": 23,
+    "A3/A3_FrontTier8": 24,
+    "A3/A3_FrontTier6": 23,
+    "A3/A3_FrontTier4": 24,
+    "A3/A3_FrontTier5": 24,
+    "A3/A3_FrontTier3": 23,
+    "A3/A3_FrontTier2": 23,
+    "A3/A3_FrontTier1": 40,
+    "A3/A3_RearTier2": 20,
+    "A3/A3_RearTier3": 21,
+    "A3/A3_RearTier7": 20,
+    "A3/A3_RearTier5": 21,
+    "A3/A3_RearTier6": 21,
+    "A3/A3_RearTier10": 35,
+    "A3/A3_RearTier8": 20,
+    "A3/A3_RearTier9": 20,
+    "A3/A3_RearTier1": 20,
+    "A3/A3_RearTier4": 21
+  },
+  "exit_access_floors": {
+    "L4ExitAccess_Tread01": 2,
+    "L4ExitAccess_Tread02": 2,
+    "L4ExitAccess_Tread03": 1,
+    "L4ExitAccess_Tread04": 2,
+    "L4ExitAccess_Tread05": 2,
+    "L4ExitAccess_Tread06": 1,
+    "L4ExitAccess_Platform": 2
+  },
+  "zones": [
+    {
+      "id": 1,
+      "room": "A1",
+      "centre": [
+        22688.07301294236,
+        71.34333338056291,
+        -201.54761813935775
+      ],
+      "position": [
+        22688.0,
+        26.0,
+        -200.0
+      ],
+      "radius": 90.92643875731514,
+      "lights": [
+        "L4D_fl_acove_1453_1",
+        "L4D1_Sconce_1774",
+        "L4C_L_A1_star1"
+      ]
+    },
+    {
+      "id": 2,
+      "room": "A1",
+      "centre": [
+        22768.044619507848,
+        94.49461528233118,
+        -100.131867482112
+      ],
+      "position": [
+        22769.5,
+        51.0,
+        -100.6
+      ],
+      "radius": 123.80411707576268,
+      "lights": [
+        "L4D_fl_acove_1430_11",
+        "L4D1_Sconce_1759",
+        "L4D1_Sconce_1766",
+        "L4C_L_A1_f0",
+        "L4C_L_A1_f1",
+        "L4C_L_A1_4",
+        "L4C_L_A1_5",
+        "L4C_L_A1_6",
+        "L4C_L_A1_7",
+        "L4C_L_A1_star0",
+        "L4C_L_A1_star2",
+        "L4C_L_A1_star4",
+        "L4C_L_A1_star5"
+      ]
+    },
+    {
+      "id": 3,
+      "room": "A1",
+      "centre": [
+        22805.88525703975,
+        73.96625067506517,
+        -205.39999859673637
+      ],
+      "position": [
+        22807.5,
+        26.0,
+        -203.9
+      ],
+      "radius": 92.26389743108064,
+      "lights": [
+        "L4D_fl_acove_1430_22",
+        "L4D1_Sconce_1776",
+        "L4D1_Exit_1765",
+        "L4D1_Screen_A1",
+        "L4C_L_A1_2",
+        "L4C_L_A1_3",
+        "L4C_L_A1_star3",
+        "L4C_L_A1_star6"
+      ]
+    },
+    {
+      "id": 4,
+      "room": "A2",
+      "centre": [
+        22965.410728380088,
+        90.94818164775896,
+        -101.9012996128627
+      ],
+      "position": [
+        22963.5,
+        51.0,
+        -100.6
+      ],
+      "radius": 108.95630140987001,
+      "lights": [
+        "L4D_fl_acove_3432_21",
+        "L4D1_Sconce_4032",
+        "L4D1_Sconce_4080",
+        "L4C_L_A2_f0",
+        "L4C_L_A2_f1",
+        "L4C_L_A2_6",
+        "L4C_L_A2_7",
+        "L4C_L_A2_star0",
+        "L4C_L_A2_star2",
+        "L4C_L_A2_star5"
+      ]
+    },
+    {
+      "id": 5,
+      "room": "A2",
+      "centre": [
+        23019.111332575245,
+        75.03333432333808,
+        -199.22222258552674
+      ],
+      "position": [
+        23017.5,
+        26.0,
+        -196.1
+      ],
+      "radius": 110.52870419171951,
+      "lights": [
+        "L4D1_Sconce_4043",
+        "L4D1_Exit_4160",
+        "L4D1_Screen_A2",
+        "L4C_L_A2_2",
+        "L4C_L_A2_3",
+        "L4C_L_A2_4",
+        "L4C_L_A2_5",
+        "L4C_L_A2_star1",
+        "L4C_L_A2_star3",
+        "L4C_L_A2_star6"
+      ]
+    },
+    {
+      "id": 6,
+      "room": "A2",
+      "centre": [
+        23080.090250287736,
+        89.61499929428099,
+        -77.48214261872427
+      ],
+      "position": [
+        23079.5,
+        57.0,
+        -76.5
+      ],
+      "radius": 88.32229345687594,
+      "lights": [
+        "L4D_fl_acove_3589_2",
+        "L4D_fl_acove_3589_13",
+        "L4D1_Sconce_3452",
+        "L4C_L_A2_star4"
+      ]
+    },
+    {
+      "id": 7,
+      "room": "A3",
+      "centre": [
+        23216.928563799174,
+        95.20000049046106,
+        -165.64285706500618
+      ],
+      "position": [
+        23219.5,
+        34.0,
+        -164.1
+      ],
+      "radius": 101.74267596009629,
+      "lights": [
+        "L4C_L_A3_f0",
+        "L4C_L_A3_f1",
+        "L4C_L_A3_2",
+        "L4C_L_A3_star0",
+        "L4C_L_A3_star1",
+        "L4C_L_A3_star5"
+      ]
+    },
+    {
+      "id": 8,
+      "room": "A3",
+      "centre": [
+        23233.833326612203,
+        102.1999994913737,
+        -76.83333328792027
+      ],
+      "position": [
+        23234.0,
+        57.0,
+        -76.4
+      ],
+      "radius": 106.70630566156223,
+      "lights": [
+        "L4C_L_A3_4",
+        "L4C_L_A3_5",
+        "L4C_L_A3_6",
+        "L4C_L_A3_7",
+        "L4C_L_A3_star2",
+        "L4C_L_A3_star4"
+      ]
+    },
+    {
+      "id": 9,
+      "room": "A3",
+      "centre": [
+        23270.200245721004,
+        62.62500200952802,
+        -216.5500027792794
+      ],
+      "position": [
+        23272.0,
+        24.0,
+        -216.0
+      ],
+      "radius": 103.06183596038146,
+      "lights": [
+        "L4D1_Exit_5280",
+        "L4D1_Screen_A3",
+        "L4C_L_A3_3",
+        "L4C_L_A3_star3",
+        "L4C_L_A3_star6"
+      ]
+    },
+    {
+      "id": 10,
+      "room": "C2",
+      "centre": [
+        22876.42474685396,
+        41.974999223436626,
+        -210.62500476837155
+      ],
+      "position": [
+        22880.0,
+        24.0,
+        -208.0
+      ],
+      "radius": 59.665631459994955,
+      "lights": [
+        "L4D1_Sconce_2256",
+        "L4D1_Sconce_2261",
+        "L4D1_Exit_1725",
+        "L4C_L_C2_star1"
+      ]
+    },
+    {
+      "id": 11,
+      "room": "C2",
+      "centre": [
+        22882.833328701196,
+        43.79999864669073,
+        -96.99999945504322
+      ],
+      "position": [
+        22880.0,
+        24.0,
+        -96.0
+      ],
+      "radius": 81.8946638440411,
+      "lights": [
+        "L4D1_Sconce_2260",
+        "L4D1_Sconce_2262",
+        "L4D1_Sconce_2365",
+        "L4D1_Sconce_2375",
+        "L4C_L_C2_star0",
+        "L4C_L_C2_star2"
+      ]
+    },
+    {
+      "id": 12,
+      "room": "C3",
+      "centre": [
+        23108.06633177258,
+        49.10000051770891,
+        -185.33333369663782
+      ],
+      "position": [
+        23112.0,
+        24.0,
+        -184.0
+      ],
+      "radius": 71.96969000988257,
+      "lights": [
+        "L4D1_Exit_4139",
+        "L4C_L_C3_star0",
+        "L4C_L_C3_star1"
+      ]
+    },
+    {
+      "id": 13,
+      "room": "C3",
+      "centre": [
+        23116.499996185303,
+        55.40000029972621,
+        -56.49999891008649
+      ],
+      "position": [
+        23120.0,
+        24.0,
+        -56.0
+      ],
+      "radius": 71.96969000988257,
+      "lights": [
+        "L4C_L_C3_star2"
+      ]
+    },
+    {
+      "id": 14,
+      "room": "C4",
+      "centre": [
+        23345.039798191614,
+        44.65999943869454,
+        -194.4000026157924
+      ],
+      "position": [
+        23344.0,
+        24.0,
+        -192.0
+      ],
+      "radius": 74.35202996254024,
+      "lights": [
+        "L4D1_Sconce_5871",
+        "L4D1_Sconce_5889",
+        "L4D1_Exit_5058",
+        "L4C_L_C4_star0",
+        "L4C_L_C4_star1"
+      ]
+    },
+    {
+      "id": 15,
+      "room": "C4",
+      "centre": [
+        23350.499997820174,
+        55.40000029972621,
+        -56.49999891008649
+      ],
+      "position": [
+        23352.0,
+        24.0,
+        -56.0
+      ],
+      "radius": 74.35202996254024,
+      "lights": [
+        "L4C_L_C4_star2"
+      ]
+    },
+    {
+      "id": 16,
+      "room": "Gallery",
+      "centre": [
+        22693.324965522406,
+        96.6827494757516,
+        -8.620564710526239
+      ],
+      "position": [
+        22696.0,
+        86.0,
+        -8.0
+      ],
+      "radius": 79.7563556583431,
+      "lights": [
+        "L4D_GalleryNorthOrange0",
+        "L4C_L_neon_2",
+        "L4C_L_neon_16",
+        "L4C_L_neon_24",
+        "L4C_L_Gallery_star1",
+        "L4C_L_Gallery_star11"
+      ]
+    },
+    {
+      "id": 17,
+      "room": "Gallery",
+      "centre": [
+        22855.710129304367,
+        96.51749908150015,
+        -2.8287401060005277
+      ],
+      "position": [
+        22856.0,
+        86.0,
+        0.0
+      ],
+      "radius": 102.33275663033837,
+      "lights": [
+        "L4D_GalleryNorthOrange1",
+        "L4D_GalleryNorthOrange2",
+        "L4C_L_neon_3",
+        "L4C_L_neon_6",
+        "L4C_L_neon_8",
+        "L4C_L_neon_18",
+        "L4C_L_neon_21",
+        "L4C_L_neon_23",
+        "L4C_L_Gallery_star3",
+        "L4C_L_Gallery_star5",
+        "L4C_L_Gallery_star9"
+      ]
+    },
+    {
+      "id": 18,
+      "room": "Gallery",
+      "centre": [
+        23057.21497033932,
+        96.55549964126273,
+        -3.3043628748582337
+      ],
+      "position": [
+        23056.0,
+        86.0,
+        0.0
+      ],
+      "radius": 110.30723848324239,
+      "lights": [
+        "L4D_GalleryNorthOrange3",
+        "L4C_L_neon_4",
+        "L4C_L_neon_5",
+        "L4C_L_neon_10",
+        "L4C_L_neon_11",
+        "L4C_L_neon_14",
+        "L4C_L_neon_17",
+        "L4C_L_neon_22",
+        "L4C_L_neon_28",
+        "L4C_L_neon_30",
+        "L4C_L_Gallery_star0",
+        "L4C_L_Gallery_star6",
+        "L4C_L_Gallery_star7",
+        "L4C_L_Gallery_star10"
+      ]
+    },
+    {
+      "id": 19,
+      "room": "Gallery",
+      "centre": [
+        23276.271884781974,
+        96.4569296155657,
+        -1.866836987790607
+      ],
+      "position": [
+        23280.0,
+        86.0,
+        0.0
+      ],
+      "radius": 118.28535078094559,
+      "lights": [
+        "L4D_GalleryNorthOrange4",
+        "L4D_GalleryNorthOrange5",
+        "L4C_L_neon_9",
+        "L4C_L_neon_12",
+        "L4C_L_neon_13",
+        "L4C_L_neon_15",
+        "L4C_L_neon_19",
+        "L4C_L_neon_20",
+        "L4C_L_neon_25",
+        "L4C_L_Gallery_star2",
+        "L4C_L_Gallery_star4",
+        "L4C_L_Gallery_star8"
+      ]
+    },
+    {
+      "id": 20,
+      "room": "Core",
+      "centre": [
+        22657.147058823528,
+        72.17647058823529,
+        26.476470588235298
+      ],
+      "position": [
+        22657.5,
+        72.0,
+        27.177
+      ],
+      "radius": 31.086764020096336,
+      "lights": [
+        "L4C_L_Core_sconce0",
+        "L4C_L_Core_sconce2",
+        "L4C_L_Core_sconce4",
+        "L4C_L_Core_sconce5",
+        "L4C_L_Core_star0"
+      ]
+    },
+    {
+      "id": 21,
+      "room": "Core",
+      "centre": [
+        22658.196078431374,
+        38.450980392156865,
+        71.48798039215686
+      ],
+      "position": [
+        22657.5,
+        36.0,
+        74.79
+      ],
+      "radius": 32.371701518862984,
+      "lights": [
+        "L4C_L_Core_sconce1",
+        "L4C_L_Core_sconce3"
+      ]
+    },
+    {
+      "id": 22,
+      "room": "LobbyWest",
+      "centre": [
+        22739.047395081074,
+        50.798302337902925,
+        37.086972068337836
+      ],
+      "position": [
+        22736.0,
+        24.0,
+        40.0
+      ],
+      "radius": 110.30723848324239,
+      "lights": [
+        "L4D_fl_n22680_mag_22680_4",
+        "L4D_fl_s22676_mag_22676_3",
+        "L4D_fl_s22709_mag_22710_3",
+        "L4D_fl_colring1",
+        "L4D_C1ClosureNeonWash",
+        "L4D1_Marquee_A1_-18",
+        "L4D1_Marquee_A1_18",
+        "L4D1_Sconce_2405",
+        "L4C_L_Concourse_1",
+        "L4C_L_Concourse_2",
+        "L4C_L_neon_27",
+        "L4C_L_neon_31",
+        "L4C_L_neon_34",
+        "L4C_L_Concourse_star2",
+        "L4C_L_Concourse_star6",
+        "L4C_L_Concourse_star12",
+        "L4C_L_Concourse_star13"
+      ]
+    },
+    {
+      "id": 23,
+      "room": "LobbyWest",
+      "centre": [
+        22915.33029147557,
+        52.72900104522705,
+        50.21619285855975
+      ],
+      "position": [
+        22912.0,
+        24.0,
+        48.0
+      ],
+      "radius": 108.44998779892558,
+      "lights": [
+        "L4D_fl_scove_22676_26",
+        "L4D_fl_scove_22676_28",
+        "L4D_fl_fork_4378_2",
+        "L4D_fl_fork_4378_5",
+        "L4D1_Marquee_A2_West",
+        "L4D1_Sconce_4410",
+        "C_ServiceSignGlow",
+        "L4C_L_Concourse_f0",
+        "L4C_L_Concourse_star4",
+        "L4C_L_Concourse_star9"
+      ]
+    },
+    {
+      "id": 24,
+      "room": "LobbyCenter",
+      "centre": [
+        22994.410714507103,
+        53.024999584470464,
+        84.27624872752597
+      ],
+      "position": [
+        22992.0,
+        24.0,
+        88.0
+      ],
+      "radius": 88.365041127896,
+      "lights": [
+        "L4D_fl_s22959_mag_22960_3",
+        "L4D1_Sconce_2827",
+        "L4C_L_Concourse_star0",
+        "L4C_L_Concourse_star7"
+      ]
+    },
+    {
+      "id": 25,
+      "room": "LobbyEast",
+      "centre": [
+        23101.40547653039,
+        51.53489112854004,
+        23.19324030762627
+      ],
+      "position": [
+        23104.0,
+        24.0,
+        24.0
+      ],
+      "radius": 117.42710621747295,
+      "lights": [
+        "L4D_fl_n23148_mag_23148_3",
+        "L4D_fl_s23015_mag_23016_9",
+        "L4D1_Marquee_A2_East",
+        "L4D1_Sconce_4393",
+        "L4C_L_Concourse_3",
+        "L4C_L_Concourse_4",
+        "L4C_L_neon_32",
+        "L4C_L_neon_33",
+        "L4C_L_Concourse_star3",
+        "L4C_L_Concourse_star8",
+        "L4C_L_Concourse_star10",
+        "L4C_L_Concourse_star14"
+      ]
+    },
+    {
+      "id": 26,
+      "room": "LobbyEast",
+      "centre": [
+        23288.145789929797,
+        51.56566394226891,
+        69.19217439634458
+      ],
+      "position": [
+        23288.0,
+        24.0,
+        72.0
+      ],
+      "radius": 124.92854997854805,
+      "lights": [
+        "L4D_fl_ncove_A3_0",
+        "L4D_fl_s23325_mag_23326_4",
+        "L4D_fl_scove_22676_67",
+        "L4D_fl_scove_22676_71",
+        "L4D_fl_scove_22676_78",
+        "L4D1_Marquee_A3_0",
+        "L4D1_Sconce_2656",
+        "L4D1_Sconce_2701",
+        "C_ArcadeMarqueeGlow",
+        "L4C_L_Concourse_5",
+        "L4C_L_Concourse_6",
+        "L4C_L_neon_26",
+        "L4C_L_neon_29",
+        "L4C_L_Concourse_star1",
+        "L4C_L_Concourse_star5",
+        "L4C_L_Concourse_star11"
+      ]
+    },
+    {
+      "id": 27,
+      "room": "Service",
+      "centre": [
+        22666.600000290648,
+        41.66666723432994,
+        173.4966652733939
+      ],
+      "position": [
+        22664.0,
+        24.0,
+        176.0
+      ],
+      "radius": 107.82337649086284,
+      "lights": [
+        "L4D2_Bulkhead1",
+        "L4D2_Bulkhead2",
+        "L4D2_Bulkhead_Flicker",
+        "L4C_L_Service_f0",
+        "L4C_L_Service_f1",
+        "L4C_L_Service_9"
+      ]
+    },
+    {
+      "id": 28,
+      "room": "Service",
+      "centre": [
+        22811.85000010899,
+        42.593999930790496,
+        179.0279994692121
+      ],
+      "position": [
+        22808.0,
+        24.0,
+        176.0
+      ],
+      "radius": 102.33275663033837,
+      "lights": [
+        "L4D2_WorkbenchLamp",
+        "L4D2_Bulkhead0",
+        "L4D2_Bulkhead3",
+        "L4C_L_Service_f2",
+        "L4C_L_Service_f3",
+        "L4C_L_Service_f4",
+        "L4C_L_Service_f5",
+        "L4C_L_Service_f6",
+        "L4C_L_Service_7",
+        "L4C_L_Service_8"
+      ]
+    },
+    {
+      "id": 29,
+      "room": "Concession",
+      "centre": [
+        22960.16000003332,
+        42.052164758954724,
+        160.24321646917434
+      ],
+      "position": [
+        22960.0,
+        24.0,
+        160.0
+      ],
+      "radius": 107.82337649086284,
+      "lights": [
+        "L4D_MainEntryBoardNeonWash",
+        "L4D2_ArcNeon0",
+        "L4D2_ArcNeon1",
+        "L4D2_TicketsK_Flicker",
+        "L4D2_TicketsSign",
+        "L4D2_MenuBoxA",
+        "L4D2_PopcornKettle",
+        "L4D2_CounterKick0",
+        "L4D2_CounterKick1",
+        "L4C_L_neon_0",
+        "L4C_L_neon_1",
+        "L4C_L_Concession_star0",
+        "L4C_L_Concession_star2",
+        "L4C_L_Concession_star3",
+        "L4C_L_Concession_star4"
+      ]
+    },
+    {
+      "id": 30,
+      "room": "Concession",
+      "centre": [
+        23066.200000899178,
+        46.919999803815564,
+        160.71624755859372
+      ],
+      "position": [
+        23064.0,
+        24.0,
+        160.0
+      ],
+      "radius": 92.53323061113575,
+      "lights": [
+        "L4D2_ArcNeon2",
+        "L4D2_ArcNeon3",
+        "L4D2_CandyCase",
+        "L4C_L_Concession_star1",
+        "L4C_L_Concession_star5"
+      ]
+    },
+    {
+      "id": 31,
+      "room": "Arcade",
+      "centre": [
+        23191.993522644043,
+        31.982541084289544,
+        120.09385313306535
+      ],
+      "position": [
+        23192.0,
+        24.0,
+        120.0
+      ],
+      "radius": 31.298221281347036,
+      "lights": [
+        "L4D2_ArcadeCRT4",
+        "L4D2_ArcadeCRT25",
+        "L4D2_ArcadeWallL125",
+        "L4D2_ArcadeWallR125"
+      ]
+    },
+    {
+      "id": 32,
+      "room": "Arcade",
+      "centre": [
+        23192.523099505706,
+        37.77915381249927,
+        179.0974215855674
+      ],
+      "position": [
+        23192.0,
+        24.0,
+        176.0
+      ],
+      "radius": 46.792156108742276,
+      "lights": [
+        "L4D2_ArcadeCRT11",
+        "L4D2_ArcadeMarquee11",
+        "L4D2_ArcadeCRT20",
+        "L4D2_ArcadeCRT35",
+        "L4D2_ArcadeMarquee35",
+        "L4D2_ArcadeCRT42",
+        "L4D2_ArcadeWallL165",
+        "L4D2_ArcadeWallL205",
+        "L4D2_ArcadeWallR165",
+        "L4D2_ArcadeWallR205",
+        "L4D2_ArcadeWallNeon_Flicker",
+        "L4D2_PrizeLamp",
+        "L4C_L_Arcade_f0",
+        "L4C_L_Arcade_1",
+        "L4C_L_Arcade_2",
+        "L4C_L_neon_7",
+        "L4C_L_Arcade_star0",
+        "L4C_L_Arcade_star1"
+      ]
+    },
+    {
+      "id": 33,
+      "room": "RestroomVestibule",
+      "centre": [
+        23306.499998910087,
+        40.40000098092215,
+        112.49999999999999
+      ],
+      "position": [
+        23304.0,
+        24.0,
+        112.0
+      ],
+      "radius": 38.984845004941285,
+      "lights": [
+        "L4C_L_RestroomVestibule_star0"
+      ]
+    },
+    {
+      "id": 34,
+      "room": "RestroomMen",
+      "centre": [
+        23285.500008719308,
+        39.89999975476946,
+        145.50000599452426
+      ],
+      "position": [
+        23288.0,
+        24.05,
+        144.0
+      ],
+      "radius": 28.627416997969522,
+      "lights": [
+        "L4C_L_RestroomMen_star0"
+      ]
+    },
+    {
+      "id": 35,
+      "room": "RestroomWomen",
+      "centre": [
+        23326.49999346052,
+        39.89999975476946,
+        145.50000599452426
+      ],
+      "position": [
+        23328.0,
+        24.05,
+        144.0
+      ],
+      "radius": 23.88854381999832,
+      "lights": [
+        "L4C_L_RestroomWomen_star0"
+      ]
+    },
+    {
+      "id": 36,
+      "room": "Booth1",
+      "centre": [
+        22765.749999455045,
+        94.44999694824217,
+        -26.849999598094392
+      ],
+      "position": [
+        22760.0,
+        86.0,
+        -24.0
+      ],
+      "radius": 22.0,
+      "lights": [
+        "L4D1_Projector_A1",
+        "L4C_L_Booth1_star0"
+      ]
+    },
+    {
+      "id": 37,
+      "room": "Booth2",
+      "centre": [
+        22999.75000013881,
+        94.44999694824217,
+        -26.849999598094392
+      ],
+      "position": [
+        22992.0,
+        86.0,
+        -24.0
+      ],
+      "radius": 22.0,
+      "lights": [
+        "L4D1_Projector_A2",
+        "L4C_L_Booth2_star0"
+      ]
+    },
+    {
+      "id": 38,
+      "room": "Booth3",
+      "centre": [
+        23233.49999019078,
+        97.39999771118163,
+        -25.49999952316284
+      ],
+      "position": [
+        23240.0,
+        86.0,
+        -24.0
+      ],
+      "radius": 22.0,
+      "lights": [
+        "L4C_L_Booth3_star0"
+      ]
+    }
+  ],
+  "light_count": 260,
+  "emissive_objects": 295,
+  "collision_boxes": 4389,
+  "threshold": {
+    "bounds": [
+      [
+        22649.0,
+        85.4,
+        -0.0
+      ],
+      [
+        22667.0,
+        86.0,
+        2.0
+      ]
+    ],
+    "door_leaf_bottom": 86.11999920436314,
+    "yaw_sweep_floor_clearance": 0.11999947684152801,
+    "material": "L4S_CARPET_LOBBY"
+  },
+  "clearance": {
+    "height": 7.6,
+    "width": 2.5,
+    "max_step": 2.5,
+    "edge_sample_spacing": 0.6
+  },
+  "rejected_components": [
+    {
+      "count": 2,
+      "rooms": {
+        "Gallery": 2
+      },
+      "centre": [
+        22740.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 2,
+      "rooms": {
+        "Gallery": 2
+      },
+      "centre": [
+        22796.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 81,
+      "rooms": {
+        "LobbyWest": 37,
+        "LobbyEast": 44
+      },
+      "centre": [
+        23000.0,
+        24.0,
+        0.691
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "Gallery": 1
+      },
+      "centre": [
+        22976.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "Gallery": 1
+      },
+      "centre": [
+        23024.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 3,
+      "rooms": {
+        "Gallery": 3
+      },
+      "centre": [
+        23200.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 2,
+      "rooms": {
+        "Gallery": 2
+      },
+      "centre": [
+        23260.0,
+        86.0,
+        -16.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "RestroomMen": 1
+      },
+      "centre": [
+        23280.0,
+        24.05,
+        160.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "RestroomMen": 1
+      },
+      "centre": [
+        23296.0,
+        24.05,
+        160.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "RestroomWomen": 1
+      },
+      "centre": [
+        23320.0,
+        24.05,
+        160.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "RestroomWomen": 1
+      },
+      "centre": [
+        23336.0,
+        24.05,
+        160.0
+      ]
+    },
+    {
+      "count": 1,
+      "rooms": {
+        "LobbyEast": 1
+      },
+      "centre": [
+        23352.0,
+        24.0,
+        -8.0
+      ]
+    }
+  ],
+  "coordinate_transform": "Blender (x,y,z) / .28 -> (x+29000,z,-y)",
+  "module": "G:\\Roblox\\MongoTV\\ServerScriptService\\Level 4 Systems\\Level 4 Usher Nav.ModuleScript.lua"
+}

@@ -106,7 +106,7 @@ local function starsAllowed()
 end
 
 local GRADE_EFFECT = { Brightness = -0.03, Contrast = 0.2, Saturation = 0.14, TintColor = Color3.fromRGB(244, 234, 255) }
-local BLOOM = { Intensity = 0.85, Size = 30, Threshold = 0.92 }
+local BLOOM = { Intensity = 0.68, Size = 30, Threshold = 0.92 }
 local DEPTH = { FarIntensity = 0.08, FocusDistance = 14, InFocusRadius = 45, NearIntensity = 0 }
 
 local function effect(className, name, props, parent)
@@ -289,7 +289,7 @@ local function follow(dt, snap)
 	current.Bloom += (target.Bloom - current.Bloom) * a
 	GRADE.Ambient = current.Ambient
 	GRADE.ExposureCompensation = current.Exposure
-	bloom.Intensity = current.Bloom
+	bloom.Intensity = current.Bloom * .8
 	if saved then
 		applying = true
 		Lighting.Ambient = current.Ambient

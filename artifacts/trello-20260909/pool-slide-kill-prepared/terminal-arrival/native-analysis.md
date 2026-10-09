@@ -1,0 +1,17 @@
+# Native corner retest and scripted dodge
+
+The reproduced corner failure is resolved in this normal-queue retest with explicitly pinned seed **188232071**. Installed source provenance: Navigator `24507756…e26bd8`, Controller `a9c53bf7…1debd0`. This report is validation evidence, not publication evidence.
+
+The full immutable server export is `native-seed188232071-corner-retest.json`: **49 chunks, 1,932,348 bytes, 433 samples, Completed=true, 30.043464 seconds**, SHA256 `6468d9683d40db9b86f25328e24c13927420e11314a14a04d30bdee122089a7e`. All five separate scripted-player events are retained in `native-dodge-events.json`, SHA256 `acd251ba76eec3d3308dbdc686fe1c78dfca3ec747550a3d0ce5c5231b6c5e4c`. The compact JSON records the exact sampled timestamps and positions.
+
+The final recorded waypoint before the first attack was 9.999988 XZ studs from the living player. The follower continued past the former early-stop region and began ATTACK serial 1 at **10.311867** studs. This attack foot was **1.013598 studs beyond the previous failed foot**, still .366647 from the new terminal waypoint. Thus the attack began during the safe final advance; the trace does not claim that `.2` arrival or `ARRIVED` was reached before attacking.
+
+After the first attack began, the fixture moved only the real player by `(-18, 0, -18)`, a **25.455930-stud** horizontal displacement. The resulting distance from the unchanged entity foot was **15.144416**, with frozen-facing dot **−.999942**. HP remained **100** after **1.079141 seconds**, beyond the original impact window. Both range and facing were invalidated together, so this demonstrates a valid combined dodge; it does not isolate one of those two rejection gates or test human reaction time.
+
+The same player was returned to the corner. ATTACK serial 2 was first sampled at `1789044443.419727`, again at **10.311867** studs. HP changed from 100 to 0 between `1789044443.876119` and `1789044443.943934`, **.524207 seconds** after the first observed second ATTACK. All eight living second-windup samples had unchanged foot/facing, clear LOS, facing dot 1, and passing geometric gates. The nearest Pool Foam was **782.148973 studs** away at the first dead sample; no ForceField was present in any sample. The private Shield state was not read because the exported authority check can clear expired state. Observer pairs remain sampled observations, not atomic damage events or exact private windup timestamps.
+
+One route rejection was recorded after the scripted dodge/return; it did not prevent the second attack. No universal pathfinding or all-corner guarantee is inferred. The captured maximum inter-sample gap is .297997 seconds, while the final living-to-dead interval is .067815 seconds. Maximum old/new observer-pair skew is .001454 seconds.
+
+Both native images were inspected. `native-corner-retest-view.jpg` shows the actual large entity and the real avatar at the corner during the second windup; the temporary client camera and local avatar visibility make that comparison visible. It is not an exact impact/contact frame. `native-corner-retest-after.jpg` shows the actual loss state. The previous 105-stud sidewall approach image is not used as contact evidence.
+
+`native-cleanup.json` independently reports normal return to the lobby: the old generated world is unparented, zero old entity models remain, Controller and Foam are stopped, manifest/tags are cleared, RoundActive=false, and the new lobby character has HP 100 and InRound=false. No observer read changed gameplay or runtime source.

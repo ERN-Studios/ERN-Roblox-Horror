@@ -1,0 +1,183 @@
+{
+  "status": "pass",
+  "tag_counts": {
+    "L4ArcadeCode": 1,
+    "L4Breaker": 6,
+    "L4EntrySpawn": 6,
+    "L4ExitSafeSpawn": 6,
+    "L4ExitScreen": 1,
+    "L4FuseSocket": 1,
+    "L4HideZone": 41,
+    "L4LightZone": 38,
+    "L4MainBreaker": 1,
+    "L4NoteSpot": 6,
+    "L4PowerCabinet": 2,
+    "L4PrizeCase": 1,
+    "L4PrizeKeypad": 1,
+    "L4Projector": 3,
+    "L4ReelSpot": 10,
+    "L4Screen": 3,
+    "L4UsherNode": 5607
+  },
+  "markers": 5739,
+  "tagged_models": 14,
+  "zones": 38,
+  "nav_nodes": 5607,
+  "nav_edges": 20563,
+  "lights": 260,
+  "zone_pooled_emissive_chunks": 139,
+  "global_star_chunks": 15,
+  "moving_parts": [
+    {
+      "group": "ArcadeLeft_01",
+      "part": "Screen",
+      "pivot": null
+    },
+    {
+      "group": "PrizeCase",
+      "part": "Door",
+      "pivot": [
+        4.099996,
+        0.0,
+        -0.0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "group": "Breaker_A1",
+      "part": "Handle",
+      "pivot": [
+        1.4e-05,
+        0.625001,
+        -0.0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "group": "Breaker_A2",
+      "part": "Handle",
+      "pivot": [
+        1.4e-05,
+        0.624997,
+        -0.0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "group": "Breaker_A3",
+      "part": "Handle",
+      "pivot": [
+        1.4e-05,
+        0.625001,
+        -0.0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "group": "Breaker_B1",
+      "part": "Handle",
+      "pivot": [
+        0.0,
+        0.625001,
+        -0.0,
+        -1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "group": "Breaker_B2",
+      "part": "Handle",
+      "pivot": [
+        0.0,
+        0.624997,
+        -0.0,
+        -1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "group": "Breaker_B3",
+      "part": "Handle",
+      "pivot": [
+        0.0,
+        0.625001,
+        -0.0,
+        -1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "group": "MainBreaker",
+      "part": "Lever",
+      "pivot": [
+        -1.4e-05,
+        1.45,
+        -7e-06,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "manifest_sha256": "8cde5114014d34da79e816455a18292d8a674b589b6cded9a8e2a9f4d99b2e40",
+  "packet_sha256": "e53e7817a91a2ebea63cdd70454df4d28bc3c0f066de51461d50e61ade2508c9"
+}

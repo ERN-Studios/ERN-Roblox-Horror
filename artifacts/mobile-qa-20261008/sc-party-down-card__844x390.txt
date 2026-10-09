@@ -1,2 +1,0 @@
-phone 844x390, 17 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, StaminaGui, FlashlightPopup, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui), 15 pieces measured, 1 findings
-SMALL   FlashlightPopup.FlashlightPower 'HOLD WIDE' (700,347)-(726,367)

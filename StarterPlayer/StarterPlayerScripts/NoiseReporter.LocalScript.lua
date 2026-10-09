@@ -36,6 +36,8 @@ local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
 local state = "walk"
 local sprinting, crouching = false, false
 local shiftSprintHeld, touchSprintHeld, gamepadSprintHeld = false, false, false
+-- The touch RUN toggle, declared up here because the B2 RUN cell's paintRun reads it (HUD_B2_TOUCH, owner, 2026-10-08).
+local touchSprintToggled = false
 local windowFocused = true
 local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
 local lastPublishedCrouch: boolean? = nil
@@ -188,6 +190,9 @@ local function applySpeed()
 		state = "walk"
 		desiredSpeed = WALK_SPEED
 	end
+	-- HUD_B3 (D6; owner, 2026-10-08): the raw movement state for Round HUD's marker, client-local,
+	-- compare-first. Written here, before the hiding / slide early return, and never in the lobby.
+	if player:GetAttribute("MoveNoise") ~= state then player:SetAttribute("MoveNoise", state) end
 	-- ONE multiplier, applied after the movement state has chosen its speed, so
 	-- crouch/walk/sprint all scale (8/16/26 -> 8.8/17.6/28.6) from the single
 	-- existing writer instead of a competing WalkSpeed loop. `state` and the
@@ -416,16 +421,6 @@ task.spawn(function()
 	end
 end)
 
--- ── stamina bar ───────────────────────────────────────────
--- Matches the rest of the HUD: near-black translucent backdrop, rounded corners,
--- white fill that blushes red as it empties (same white→red as the battery).
--- Bottom-centre, slim; fades IN when you spend stamina, fades OUT when full.
-local BAR_W, BAR_H  = 300, 14
-local STA_FULL      = Color3.fromRGB(235, 235, 235) -- fill at full stamina
-local STA_EMPTY     = Color3.fromRGB(230, 80, 60)   -- fill near empty / exhausted
-local BAR_BG_ALPHA  = 0.6   -- backdrop transparency when shown
-local BAR_FADE      = 5     -- how fast the bar fades in / out
-
 local gui = Instance.new("ScreenGui")
 gui.Name = "StaminaGui"
 gui.ResetOnSpawn = false
@@ -441,8 +436,9 @@ gui.Enabled = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
 -- Compact touch control cluster. Keyboard/controller paths remain unchanged.
--- RUN and JUMP form the right column; POV sits above the upright flashlight
--- immediately to their left, keeping the camera-dragging area clear.
+-- UIDevice's 4 + 4 grid (GRID_CONTROL_PLAN_20261008): JUMP, RUN, SNEAK, LIGHT
+-- along the bottom, GLOW, KIT, SHIELD above them and the developer-only POV in
+-- the slot the template leaves empty. This file owns JUMP, RUN, SNEAK, GLOW, POV.
 -- Form factor, not last input, and re-read on every UIDevice.Changed rather
 -- than captured once at load.
 local function touchControls() return UIDevice.IsTouch() end
@@ -453,48 +449,101 @@ local function touchControls() return UIDevice.IsTouch() end
 -- The guess was 290px tall; the real stack on a landscape phone starts far
 -- lower, and every objective readout was being pushed toward screen centre to
 -- dodge a rectangle that was mostly empty.
-local function makeTouchButton(name, text)
-	local button = Instance.new("TextButton")
-	button.Name = name
-	button.AnchorPoint = Vector2.new(1, 1)
-	button.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
-	button.BackgroundTransparency = 0.04
-	button.BorderSizePixel = 0
-	button.AutoButtonColor = false
-	button.Font = Enum.Font.GothamBold
-	button.Text = text
-	button.TextColor3 = Color3.fromRGB(235, 238, 232)
-	button.TextSize = 17
-	button.TextWrapped = true
-	button.Visible = touchControls()
-	button.ZIndex = 20
-	button.Parent = gui
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(1, 0)
-	corner.Parent = button
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(75, 94, 83)
-	stroke.Transparency = 0.28
-	stroke.Thickness = 1
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Parent = button
-	return button, stroke
+-- == B2 touch cells (14 A; owner, 2026-10-08) ==
+-- HUD_B2_TOUCH. artifacts/hud-final-20261008/b2/B2-DESIGN.md 2.1-2.3 and 4. The five cells are clones
+-- of ReplicatedStorage.ZyntraHUD.Templates.HUD_Touch, mounted once on every client, PC included, so
+-- the registered roots never change. Looked up after game.Loaded and never waited for (critic C3):
+-- RoundEntryControlsReady is this script's last line, and a place without the bundle must not stall
+-- round entry. A missing template is RoundHud's warning by path and a nil cell (D14), which is not
+-- drawn, not registered and, for JUMP, leaves Roblox's own jump unsuppressed. Code writes only
+-- colours, Glyph / Label text and SneakEngaged; geometry is applyTouchControlLayout's and TextSize
+-- is ShopBinder.scaleText's.
+local touchRunButton, touchJumpButton, touchSneakButton, touchGlowButton, touchPOVButton
+local touchLook = {} -- cell -> its stroke, Glyph and Label, with the template's own colours
+local touchPalette -- ShopBinder.Palette, set once the cells exist
+do
+	if not game:IsLoaded() then game.Loaded:Wait() end
+	local hudModule = RS:FindFirstChild("RoundHud")
+	local shopUI = RS:FindFirstChild("ZyntraShopUI")
+	local binderModule = shopUI and shopUI:FindFirstChild("ShopBinder")
+	if hudModule and binderModule then
+		local Hud, Binder = require(hudModule), require(binderModule)
+		touchPalette = Binder.Palette
+		local function mount(path, key, glyphText)
+			local cell = Hud.Mount("HUD_Touch", "TouchCluster/" .. path, gui, {Name = key})
+			if not cell then return nil end
+			-- Selectable before the first SetInteractive: UIDevice remembers the first value it
+			-- sees, and the template ships true (B2-DESIGN 2.2 rule 2).
+			cell.AutoButtonColor, cell.Selectable, cell.Visible, cell.Active = false, false, false, false
+			local stroke = cell:FindFirstChildOfClass("UIStroke")
+			local glyph, label = Binder.text(Binder.find(cell, "Glyph")), Binder.text(Binder.find(cell, "Label"))
+			if glyph and glyphText then glyph.Text = glyphText end
+			touchLook[cell] = {Stroke = stroke, StrokeColor = stroke and stroke.Color, Glyph = glyph,
+				GlyphColor = glyph and glyph.TextColor3, Label = label, LabelColor = label and label.TextColor3}
+			return cell
+		end
+		-- RUN's glyph and GLOW's * are template copy and are never written.
+		touchJumpButton = mount("Cell_Jump", "TouchJump", "\u{2191}")
+		touchRunButton = mount("Cell_Run", "TouchRunHold")
+		touchSneakButton = mount("Cell_Sneak", "TouchSneakHold", "\u{2193}")
+		touchGlowButton = mount("Cell_Glow", "TouchDropGlowstick")
+		touchPOVButton = mount("Cell_Jump", "TouchPOV") -- JUMP relabelled by refreshPOVButton
+		if touchSneakButton then touchSneakButton:SetAttribute("SneakEngaged", false) end
+	else
+		warn("[NoiseReporter] ReplicatedStorage.RoundHud or ZyntraShopUI.ShopBinder is missing: no touch cells")
+	end
 end
 
-local touchRunButton, runStroke = makeTouchButton("TouchRunHold", "RUN  »")
-local touchJumpButton = makeTouchButton("TouchJump", "JUMP  ↑")
-local touchPOVButton, povStroke = makeTouchButton("TouchPOV", "POV\n1ST")
-local touchGlowButton = makeTouchButton("TouchDropGlowstick", "DROP\nGLOW")
-touchPOVButton.TextSize = 13
-touchPOVButton.Visible = touchControls() and devAllowed
-touchGlowButton.TextSize = 12
--- Touch crouch. Same helper, same column, same layout pass as the rest of the
--- cluster. The label is constant: the engaged state is carried by the stroke
--- and tint below, the way POV carries its own, and NO key glyph is shown --
--- LeftControl stays a keyboard-only affordance.
-local touchSneakButton, sneakStroke = makeTouchButton("TouchSneakHold", "SNEAK")
-touchSneakButton:SetAttribute("SneakEngaged", false)
+-- RUN's one look, recomputed from state every frame, so it is the same after a respawn by
+-- construction. The stroke is the stamina ring (critic C6, sampled off the approved phone frames):
+-- Coral while winded, else Amber while the toggle is on or stamina is at or under 25 %, else the
+-- template's Line. Glyph and label never change colour. It writes the stroke's Color only, never
+-- its Thickness (scaleText owns that); keyed on the cell's width as well (critic C8). Its own
+-- Heartbeat connection: the main one returns early in the lobby and while spectating.
+local function paintRun()
+	local look = touchRunButton and touchLook[touchRunButton]
+	if not (look and look.Stroke) then return end
+	local tone = if exhausted then "Coral"
+		elseif touchSprintToggled or stamina / staminaMax() <= 0.25 then "Amber" else "Line"
+	local width = touchRunButton.AbsoluteSize.X
+	if look.Tone == tone and look.Width == width then return end
+	look.Tone, look.Width = tone, width
+	look.Stroke.Color = if tone == "Line" then look.StrokeColor else touchPalette[tone]
+end
+RunService.Heartbeat:Connect(paintRun)
+
+-- SNEAK is a TOGGLE, not a hold like RUN, and deliberately so: crouch-silent is
+-- a SUSTAINED stealth state -- you hold it for a whole corridor while the
+-- Entity sweeps past -- so a hold-to-crouch button would pin the very thumb the
+-- player needs on the thumbstick to steer, leaving a touch player able to be
+-- silent OR moving but never both. RUN can be hold-shaped because a sprint is a
+-- burst; sneaking is not. Tap to enter crouch, tap again to leave it.
+-- Engaged: stroke, glyph and label in RailTeal; off is the template, at creation and on reset alike.
+showSneakEngaged = function(engaged)
+	touchSneakToggled = engaged
+	local look = touchSneakButton and touchLook[touchSneakButton]
+	if not look then return end
+	local tone = engaged and touchPalette.RailTeal
+	if look.Stroke then look.Stroke.Color = tone or look.StrokeColor end
+	if look.Glyph then look.Glyph.TextColor3 = tone or look.GlyphColor end
+	if look.Label then look.Label.TextColor3 = tone or look.LabelColor end
+	-- The supported way to observe the toggle from outside this script (the UI
+	-- regression suite reads it instead of reaching for a local).
+	touchSneakButton:SetAttribute("SneakEngaged", engaged)
+end
+
+local function firstPersonEnabled()
+	return player:GetAttribute("DevCheatThirdPerson") ~= true
+end
+
+-- POV over the view a tap switches to; no colour state.
+local function refreshPOVButton()
+	local look = touchPOVButton and touchLook[touchPOVButton]
+	if not look then return end
+	if look.Label then look.Label.Text = "POV" end
+	if look.Glyph then look.Glyph.Text = if firstPersonEnabled() then "3RD" else "1ST" end
+end
+-- == end B2 touch cells ==
 
 -- Registered AFTER all five exist, so the union is never partial.
 for _, entry in ipairs({
@@ -521,14 +570,17 @@ end
 --
 -- The arrangement is now UIDevice's decision, because UIDevice is the only place
 -- that knows what has to fit above it, and this file positions whatever it is
--- handed. On a screen with room the plan is the column, unchanged to the pixel.
--- On a short landscape screen it is a row along the bottom edge, sized to the
--- daylight between the thumbstick's activation region and the safe right edge,
--- which reserves 67px instead of 242.
+-- handed. On a screen with room the plan is the 4 + 4 grid (52 px cells on a
+-- phone, 64 on a tablet). On a short landscape screen it is a row along the
+-- bottom edge, sized to the daylight between the thumbstick's activation region
+-- and the safe right edge.
+-- HUD_B2_TOUCH: a cell is placed and sized from its slot on every pass (a mounted cell may be
+-- resized, never re-mounted); a nil cell (missing template) is skipped; TextSize is scaleText's.
 local function placeTouchControl(button, slot, bottomOverride)
+	if not button then return end
+	button.AnchorPoint = Vector2.new(1, 1)
 	button.Position = UDim2.new(1, -slot.Right, 1, -(bottomOverride or slot.Bottom))
 	button.Size = UDim2.fromOffset(slot.Width, slot.Height)
-	if slot.TextSize then button.TextSize = slot.TextSize end
 end
 
 local function applyTouchControlLayout()
@@ -544,22 +596,22 @@ local function applyTouchControlLayout()
 	-- Measured through BottomOffsetFor, because the lift converts an ABSOLUTE
 	-- edge into this gui's own bottom-relative offsets and the gui is inset to
 	-- the safe area, not to the display.
-	local runBottom = slots.TouchRunHold.Bottom
-	if not inRound() then
+	-- HUD_B2_TOUCH (critic C14): only when RUN's columns actually meet the engine's
+	-- button. At 844x390 RUN (x 673..725) is clear of it (749..819) and stays down;
+	-- at 667x375 with no housing the two share 572..595 and RUN lifts. Measured
+	-- through RightOffsetFor for the same reason as above.
+	local run, jump = slots.TouchRunHold, layout.Zones.Jump
+	local runBottom = run.Bottom
+	if not inRound() and run.Right < UIDevice.RightOffsetFor(gui, jump.Left)
+		and run.Right + run.Width > UIDevice.RightOffsetFor(gui, jump.Right) then
 		runBottom = math.max(runBottom,
-			UIDevice.BottomOffsetFor(gui, layout.Zones.Jump.Top) + plan.Gap)
+			UIDevice.BottomOffsetFor(gui, jump.Top) + plan.Gap)
 	end
-	local lift = runBottom - slots.TouchRunHold.Bottom
 
 	placeTouchControl(touchJumpButton, slots.TouchJump)
 	placeTouchControl(touchRunButton, slots.TouchRunHold, runBottom)
-	-- SNEAK stacks directly above RUN in the COLUMN, so it inherits the lobby
-	-- lift and can never land on it. In the ROW it sits beside RUN instead and
-	-- takes no lift: it is hidden in the lobby, and lifting it there would push a
-	-- hidden button into the readout's headroom for no one's benefit.
-	local sneakBottom = slots.TouchSneakHold.Bottom
-	if plan.Mode == "column" then sneakBottom += lift end
-	placeTouchControl(touchSneakButton, slots.TouchSneakHold, sneakBottom)
+	-- SNEAK sits beside RUN and takes no lift: it is hidden in the lobby.
+	placeTouchControl(touchSneakButton, slots.TouchSneakHold)
 	placeTouchControl(touchPOVButton, slots.TouchPOV)
 	placeTouchControl(touchGlowButton, slots.TouchDropGlowstick)
 end
@@ -574,55 +626,33 @@ UIDevice.Changed:Connect(applyTouchControlLayout)
 -- would leave a touch player in the tunnel hub with no way to jump at all.
 -- updateRoundState below re-evaluates this on every state change.
 
-local touchSprintToggled = false
-local function showRunEnabled(enabled)
-	touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
-	touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
-	runStroke.Color = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(220, 228, 218)
-	touchRunButton.Text = enabled and "RUN  ON" or "RUN  »"
-end
-
--- SNEAK is a TOGGLE, not a hold like RUN, and deliberately so: crouch-silent is
--- a SUSTAINED stealth state -- you hold it for a whole corridor while the
--- Entity sweeps past -- so a hold-to-crouch button would pin the very thumb the
--- player needs on the thumbstick to steer, leaving a touch player able to be
--- silent OR moving but never both. RUN can be hold-shaped because a sprint is a
--- burst; sneaking is not. Tap to enter crouch, tap again to leave it.
-showSneakEngaged = function(engaged)
-	touchSneakToggled = engaged
-	touchSneakButton.BackgroundTransparency = engaged and 0.25 or 0.52
-	touchSneakButton.TextColor3 = engaged and Color3.fromRGB(150, 205, 255)
-		or Color3.fromRGB(235, 238, 232)
-	sneakStroke.Color = engaged and Color3.fromRGB(150, 205, 255)
-		or Color3.fromRGB(220, 228, 218)
-	-- The supported way to observe the toggle from outside this script (the UI
-	-- regression suite reads it instead of reaching for a local).
-	touchSneakButton:SetAttribute("SneakEngaged", engaged)
-end
-
 -- Tap once to sprint, tap again to stop. A held GUI touch no longer steals
 -- the phone/tablet camera finger, so players can steer and look around freely.
-touchRunButton.Activated:Connect(function()
-	touchSprintToggled = not touchSprintToggled
-	touchSprintHeld = touchSprintToggled
-	showRunEnabled(touchSprintToggled)
-	refreshSprint()
-end)
+-- The cell's look is paintRun's (the B2 section above), read from this toggle.
+if touchRunButton then
+	touchRunButton.Activated:Connect(function()
+		touchSprintToggled = not touchSprintToggled
+		touchSprintHeld = touchSprintToggled
+		refreshSprint()
+	end)
+end
 
 -- Drives the SAME `crouching` upvalue the LeftControl path drives, through the
 -- SAME applySpeed(), so speed and LOUDNESS.crouch stay in exactly one place.
-touchSneakButton.Activated:Connect(function()
-	if not crouchAllowed() and not touchSneakToggled then return end
-	showSneakEngaged(not touchSneakToggled)
-	refreshCrouch()
-end)
+if touchSneakButton then
+	touchSneakButton.Activated:Connect(function()
+		if not crouchAllowed() and not touchSneakToggled then return end
+		showSneakEngaged(not touchSneakToggled)
+		refreshCrouch()
+	end)
+end
 
 -- TOUCH_JUMP_GROUNDED_20261008 (owner: "people can double jump and some infinity hop"). This button has to force
 -- the Jumping state (the control module writes Humanoid.Jump every frame, so setting it alone is lost), and a
 -- forced state does not ask whether there is ground under the feet: every tap in the air was another jump, and
 -- tapping on was flying. It jumps from the ground, a ladder or water only, and not twice within a jump's first
 -- moments (the floor is still read for a frame or two after the feet have left it).
-do
+if touchJumpButton then -- HUD_B2_TOUCH: nil when its template is missing (D14)
 	local lastJump = 0
 	local FROM = {
 		[Enum.HumanoidStateType.Running] = true, [Enum.HumanoidStateType.RunningNoPhysics] = true,
@@ -646,123 +676,126 @@ do
 	end)
 end
 
-touchGlowButton.Activated:Connect(dropGlowstick)
+if touchGlowButton then touchGlowButton.Activated:Connect(dropGlowstick) end
 
-local function firstPersonEnabled()
-	return player:GetAttribute("DevCheatThirdPerson") ~= true
+if touchPOVButton then
+	touchPOVButton.Activated:Connect(function()
+		if not (devAllowed and inRound()) then return end
+		local command = player:WaitForChild("PlayerScripts"):FindFirstChild("DevCheatCommand")
+		if command and command:IsA("BindableEvent") then
+			command:Fire("thirdPerson")
+		end
+	end)
 end
-
-local function refreshPOVButton()
-	local firstPerson = firstPersonEnabled()
-	touchPOVButton.Text = firstPerson and "POV\n3RD" or "POV\n1ST"
-	touchPOVButton.TextColor3 = firstPerson and Color3.fromRGB(130, 220, 255)
-		or Color3.fromRGB(235, 238, 232)
-	povStroke.Color = firstPerson and Color3.fromRGB(130, 220, 255)
-		or Color3.fromRGB(220, 228, 218)
-end
-
-touchPOVButton.Activated:Connect(function()
-	if not (devAllowed and inRound()) then return end
-	local command = player:WaitForChild("PlayerScripts"):FindFirstChild("DevCheatCommand")
-	if command and command:IsA("BindableEvent") then
-		command:Fire("thirdPerson")
-	end
-end)
 player:GetAttributeChangedSignal("DevCheatThirdPerson"):Connect(refreshPOVButton)
 refreshPOVButton()
 
 player.CharacterAdded:Connect(function()
 	touchSprintToggled = false
 	touchSprintHeld = false
-	showRunEnabled(false)
 	task.delay(0.75, refreshPOVButton)
 end)
 
-local staBg = Instance.new("Frame")
-staBg.AnchorPoint = Vector2.new(0.5, 1)
-staBg.Position = UDim2.new(0.5, 0, 1, -22)
-staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
--- The rectangle the objective readout will occupy on this device, asked for at
--- the WIDEST footprint any level declares. Read from UIDevice.ObjectivePanelSize
--- rather than copied out of it, so a level that grows its panel moves the bar out
--- of the way instead of quietly ending up underneath it.
-local function objectiveReserve()
-	local width, height = 0, 0
-	for _, size in pairs(UIDevice.ObjectivePanelSize) do
-		width = math.max(width, size.X)
-		height = math.max(height, size.Y)
-	end
-	return UIDevice.TopRightPanel(width, height)
-end
+-- == B3 stamina bar (10 C; owner, 2026-10-08) ==
+-- HUD_B3: artifacts/hud-final-20261008/b3/B3-DESIGN.md 4 and its critic findings K1, K4, K5 and K10.
+-- The bar is a clone of ReplicatedStorage.ZyntraHUD.Templates.HUD_PC/StaminaBar, mounted through
+-- RoundHud into StaminaGui: bottom-centre on PC and pad; on touch at half size in the corridor, and
+-- hidden when the corridor cannot hold it, so the RUN ring is all there is (D9). Attention owns the
+-- CanvasGroup's Visible: 100 % while draining or WINDED, 55 % recovering, hidden when full (D14).
+-- Code writes only the Fill's width and colour, Winded.Visible and the root's placement. The numbers
+-- below are pinned against Round HUD's marker by test_round_hud_local (B3-DESIGN 2.2): the bar root's
+-- bottom above Safe.Bottom on PC and on touch, the touch scale, the lift over SpectateGui's caption,
+-- and B1's PC kit row (24 + 232 + 8 + 280). When the right-hand slot cannot fit, a fixed upper band
+-- clears the entire kit, refusal caption and detector; no obstacle-following jitter is introduced.
+local BAR_BOTTOM, BAR_BOTTOM_TOUCH, BAR_TOUCH_SCALE, SPECTATE_LIFT = 24, 4, 0.5, 92
+local BAR_BOTTOM_NARROW = 228 -- above the maximum kit, refusal caption and active detector band
+local KIT_RIGHT, BAR_HALF = 544, 160
+local barHud -- RoundHud, only when the B2 lookup above found it and ShopBinder (touchPalette ~= nil)
+if touchPalette then barHud = require(RS:FindFirstChild("RoundHud")) end
+-- Root, Attention, Fill, Winded, Scale, Room, Frac, Tone, Mode, Watched, WatchedDrain, WatchedId
+local bar: any = {} -- typed any: the analyzer gives up inferring this table's shape otherwise
+local lastDrainAt = -math.huge
 
--- The fixed 300px bar overflowed a 375-wide portrait screen and sat on top of
--- the movement zone. It is now capped to the safe width and lifted into the
--- content band on touch.
-local function applyStaminaLayout()
+-- (Re)mounts the bar when its scale changes (PC and pad 1, touch BAR_TOUCH_SCALE), then places it.
+-- A device flip leaves exactly one StaminaBar. Runs from updateRoundState.
+local function placeBar()
 	local layout = UIDevice.Layout()
-	staBg.AnchorPoint = Vector2.new(0.5, 1)
-	if not layout.IsTouch then
-		staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
-		staBg.Position = UDim2.new(0.5, 0, 1, -22)
-		return
-	end
-	-- On touch the bar lives in the lane BETWEEN the two movement zones. A
-	-- landscape phone leaves only about 65 vertical pixels clear above the
-	-- controls -- not enough to share with the alert banner -- but the corridor
-	-- down the middle is free at any height.
-	local corridor = layout.Corridor
-	-- Both branches place an ABSOLUTE centre and an ABSOLUTE bottom, and both are
-	-- converted. The X used to be written straight in as a gui offset (and in
-	-- portrait as a 0.5 scale of the GUI, which is the housing's centre rather
-	-- than the safe area's whenever a device has a horizontal inset).
-	local centre, bottom
-	if corridor.Width >= 120 then
-		staBg.Size = UDim2.new(0, math.min(BAR_W, corridor.Width), 0, BAR_H)
-		centre = (corridor.Left + corridor.Right) * .5
-		bottom = layout.Display.Bottom - 18
-	else
-		-- Portrait, or a SHORT landscape screen where the cluster now spans the
-		-- bottom edge and closes the corridor entirely. Fall back to the safe
-		-- band -- but keep out of the objective readout, which since
-		-- C_OBJECTIVE_ALWAYS_THE_SAFE_EDGE_20260831 genuinely owns the upper-right
-		-- corner and is a full 101px tall there. A 300px bar centred on a 568px
-		-- screen reaches x 434 and the readout starts at 312, so the two crossed:
-		-- the stamina bar was drawn straight through the objective text.
-		--
-		-- Capped only when the two actually share a band. In portrait the bar sits
-		-- hundreds of pixels below the readout and keeps its full width.
-		bottom = layout.SafeBottom - 10
-		local right = layout.Safe.Right
-		local reserve = objectiveReserve()
-		if reserve.Height > 0 and bottom > reserve.Top and bottom - BAR_H < reserve.Bottom then
-			right = math.min(right, reserve.Left - 8)
+	local touch = layout.IsTouch == true
+	local scale = if touch then BAR_TOUCH_SCALE else 1
+	if scale ~= bar.Scale then
+		if bar.Root then bar.Root:Destroy() end
+		table.clear(bar)
+		bar.Scale = scale
+		if barHud then -- a plain if: `barHud and barHud.Mount(...)` would drop the second return
+			bar.Root, bar.Attention = barHud.Mount("HUD_PC", "StaminaBar", gui, {Name = "StaminaBar",
+				Scale = scale, Touch = touch, Attention = {Hold = 0, Rest = 0.55}})
 		end
-		local lane = math.max(0, right - layout.Safe.Left)
-		staBg.Size = UDim2.new(0, math.min(BAR_W, lane), 0, BAR_H)
-		centre = (layout.Safe.Left + right) * .5
+		if bar.Root then
+			bar.Fill, bar.Winded = bar.Root:FindFirstChild("Fill", true), bar.Root:FindFirstChild("Winded", true)
+			if bar.Fill and bar.Winded then
+				bar.Winded.Visible = false -- the template ships its WINDED sample visible
+				bar.Root.AnchorPoint = Vector2.new(0.5, 1)
+			else
+				warn("[NoiseReporter] HUD_PC/StaminaBar has no Fill or Winded: no stamina bar")
+				bar.Root:Destroy()
+				bar.Root = nil
+			end
+		end
 	end
-	staBg.Position = UDim2.new(0, select(1, UIDevice.LocalOffset(gui, centre, 0)),
-		1, -UIDevice.BottomOffsetFor(gui, bottom))
+	local spectating = player:GetAttribute("Spectating") == true
+	-- K1: out of spectating, forget the watched target, so watching the same player again later
+	-- starts from a first sample, not from that player's value of the last spectate.
+	if not spectating then bar.WatchedId = nil end
+	if not bar.Root then return end
+	local safe, corridor = layout.Safe, layout.Corridor
+	local narrow = not touch and safe.Right - safe.Left < KIT_RIGHT + 8 + 2 * BAR_HALF
+	local centre = if touch then (corridor.Left + corridor.Right) / 2
+		elseif narrow then (safe.Left + safe.Right) / 2
+		else math.max((safe.Left + safe.Right) / 2, safe.Left + KIT_RIGHT + 8 + BAR_HALF)
+	local bottom = safe.Bottom - (if touch then BAR_BOTTOM_TOUCH elseif narrow then BAR_BOTTOM_NARROW else BAR_BOTTOM)
+		- (if spectating then SPECTATE_LIFT else 0)
+	bar.Room = if touch then corridor.Width >= 2 * BAR_HALF * BAR_TOUCH_SCALE + 8
+		else safe.Right - safe.Left >= 2 * BAR_HALF and bottom - 26 >= safe.Top
+	bar.Root.Position = UIDevice.LocalPosition(gui, centre, bottom)
 end
-staBg.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
-staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
-staBg.BorderSizePixel = 0
-staBg.Parent = gui
-local bgc = Instance.new("UICorner"); bgc.CornerRadius = UDim.new(1, 0); bgc.Parent = staBg
 
-local staFill = Instance.new("Frame")
-staFill.AnchorPoint = Vector2.new(0, 0.5)
-staFill.Position = UDim2.new(0, 2, 0.5, 0)
-staFill.Size = UDim2.new(1, -4, 1, -4)
-staFill.BackgroundColor3 = STA_FULL
-staFill.BackgroundTransparency = 1
-staFill.BorderSizePixel = 0
-staFill.Parent = staBg
-local fc = Instance.new("UICorner"); fc.CornerRadius = UDim.new(0, 4); fc.Parent = staFill
-applyStaminaLayout()
-UIDevice.Changed:Connect(applyStaminaLayout)
+-- frac nil = off. Writes the Fill and Winded on a change, and calls Attention only when the mode
+-- changes: WINDED and DRAIN never dim, RECOVER rests at 55 %, FULL and OFF hide (B3-DESIGN 2.4).
+local function paintBar(frac, winded, draining)
+	if not bar.Root then return end
+	if frac ~= nil then
+		local tone = if winded then "Coral" elseif frac <= 0.25 then "Amber" else "Cream"
+		if tone ~= bar.Tone or math.abs(frac - (bar.Frac or -1)) > 0.001 then
+			bar.Frac, bar.Tone = frac, tone
+			bar.Fill.Size = UDim2.fromScale(frac, 1)
+			bar.Fill.BackgroundColor3 = touchPalette[tone]
+			bar.Winded.Visible = winded == true
+		end
+	end
+	local mode = if frac == nil or not bar.Room then "OFF" elseif winded then "WINDED"
+		elseif draining then "DRAIN" elseif frac < 0.999 then "RECOVER" else "OFF"
+	if mode == bar.Mode then return end
+	bar.Mode = mode
+	if mode == "OFF" then
+		bar.Attention:Hide()
+	elseif mode == "RECOVER" then
+		bar.Attention:Show("bar")
+	else
+		bar.Attention:Show("bar", true)
+	end
+end
 
-local barShown = 0 -- eased 0–1 visibility
+-- Spectating (D15, K1): the watched player's fraction, never WINDED (only the fraction replicates).
+-- The remote reports at 4 Hz, so the trend comes from value changes; the first sample of a target,
+-- and the first after an invalid frame, has none and reads RECOVER.
+local function paintWatched(frac, id) -- id = SpectateTargetUserId
+	if frac == nil or id ~= bar.WatchedId then bar.Watched, bar.WatchedDrain, bar.WatchedId = nil, nil, id end
+	if frac == nil then paintBar(nil); return end
+	if bar.Watched ~= nil and frac ~= bar.Watched then bar.WatchedDrain = frac < bar.Watched end
+	bar.Watched = frac
+	paintBar(frac, false, bar.WatchedDrain == true)
+end
+-- == end B3 stamina bar ==
 local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the first frame to write
 
 -- The boost STARTS as an attribute change, but it ENDS when a server timestamp
@@ -788,26 +821,8 @@ RunService.Heartbeat:Connect(function(dt)
 		local valid = watched and watched:GetAttribute("InRound") == true
 			and watched:GetAttribute("Escaped") ~= true and hum and hum.Health > 0
 			and type(value) == "number"
-		staBg.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
-		if valid then
-			local frac = math.clamp(value, 0, 1)
-			local layout = UIDevice.Layout()
-			local corridor = layout.Corridor
-			local useCorridor = layout.IsTouch and corridor.Width >= 240
-			local centre = useCorridor and (corridor.Left + corridor.Right) * .5
-				or (layout.SafeLeft + layout.SafeRight) * .5
-			local bottom = layout.IsTouch and (useCorridor and layout.Display.Bottom - 18 or layout.SafeBottom)
-				or layout.Display.Bottom - 20
-			local width = useCorridor and corridor.Width or layout.SafeRight - layout.SafeLeft
-			staBg.Size = UDim2.fromOffset(math.min(BAR_W, width), BAR_H)
-			staBg.Position = UDim2.fromOffset(UIDevice.LocalOffset(gui, centre, bottom - 92))
-			staFill.Size = UDim2.new(frac, -4, 1, -4)
-			staFill.BackgroundColor3 = STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * .85)
-			local want = frac < .999 and 1 or 0
-			barShown += (want - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
-			staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
-			staFill.BackgroundTransparency = 1 - barShown
-		end
+		-- HUD_B3 (D15, K1): the watched player's stamina, lifted over the spectate caption by placeBar.
+		paintWatched(valid and not UIDevice.ScreenOwningModalOpen() and math.clamp(value, 0, 1) or nil, id)
 		-- Force the own-body display to refresh when spectating ends.
 		lastFrac = -1
 		return
@@ -836,18 +851,12 @@ RunService.Heartbeat:Connect(function(dt)
 			if hum.WalkSpeed ~= desiredSpeed then hum.WalkSpeed = desiredSpeed end
 		end
 
-		-- Lobby stamina never moves, so these three used to be written on every
-		-- single lobby frame. Compare before writing instead. Deliberately NOT
-		-- through lastFrac/lastExhausted: those are the in-round bar's dirty
-		-- cache, and priming them to 1/false here would make the first in-round
-		-- frame (frac is exactly 1, stamina is reset just above) skip the block
-		-- that repairs staFill's Size and BackgroundColor3 -- leaving last
-		-- round's stale narrow red bar behind the moment anything shows the bar
-		-- at full stamina.
+		-- Lobby stamina never moves, so the attribute is compared before it is
+		-- written. Deliberately NOT through lastFrac/lastExhausted: those are the
+		-- in-round report's dirty cache. HUD_B3: the bar keeps its own (paintBar),
+		-- and the lobby never shows it.
 		if player:GetAttribute("Stamina") ~= 1 then player:SetAttribute("Stamina", 1) end
-		barShown = 0
-		if staBg.BackgroundTransparency ~= 1 then staBg.BackgroundTransparency = 1 end
-		if staFill.BackgroundTransparency ~= 1 then staFill.BackgroundTransparency = 1 end
+		paintBar(nil)
 		return
 	end
 	local char = player.Character
@@ -862,6 +871,7 @@ RunService.Heartbeat:Connect(function(dt)
 	elseif state == "sprint" and moving
 		and not (char and char:GetAttribute("Level2_ForcedSliding") == true) then
 		-- adrenaline: the Entity is (or was just) on you → stamina lasts 3x longer
+		lastDrainAt = os.clock() -- HUD_B3: the bar reads "draining" for 0.5 s after this (D14)
 		stamina = stamina - (SPRINT_DRAIN / (adrenalized() and ADRENALINE_MUL or 1)) * dt
 		if stamina <= 0 then
 			stamina = 0
@@ -885,29 +895,24 @@ RunService.Heartbeat:Connect(function(dt)
 		lastFrac, lastExhausted = frac, exhausted
 		-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
 		player:SetAttribute("Stamina", frac)
-
-		-- bar: width + white→red colour (solid red while exhausted), fade with use
-		staFill.Size = UDim2.new(frac, -4, 1, -4)
-		staFill.BackgroundColor3 = exhausted and STA_EMPTY
-			or STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * 0.85)
 	end
-	local wantShown = (frac < 0.999) and 1 or 0
-	barShown = barShown + (wantShown - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
-	if math.abs(wantShown - barShown) < 0.002 then
-		barShown = wantShown -- settled; stop re-dirtying the GUI every frame
-	else
-		staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
-		staFill.BackgroundTransparency = 1 - barShown
-	end
+	-- HUD_B3: dead or escaped, the bar stands down; so does it under the touch Level 4 keypad (K5,
+	-- until B7). The Level 6 playground keeps it, as before (K10).
+	local _, hum = currentChar()
+	paintBar(hum and hum.Health > 0 and not isEscaped() and player:GetAttribute("Level4CardOpen") ~= true
+		and frac or nil, exhausted, os.clock() - lastDrainAt < 0.5)
 end)
 
 -- Every state in which the movement cluster must not be usable. Hiding alone is
 -- not enough: a TextButton left Active keeps swallowing taps through a
--- transparent background, so all four go through UIDevice.SetInteractive, which
+-- transparent background, so all five go through UIDevice.SetInteractive, which
 -- clears Active/Selectable/Modal as well as Visible.
+-- HUD_B2_TOUCH (D13): the cells stand down under all eight screen-owning modals, UIDevice's one
+-- predicate (UIDevice.Changed fires, forced, on each of them). movementAvailable(), which drives
+-- gameplay, keeps its own four.
 local function controlsAvailable()
 	if not touchControls() then return false end
-	return movementAvailable()
+	return movementAvailable() and not UIDevice.ScreenOwningModalOpen()
 end
 
 -- A modal owns the screen whether or not a round is running. `controlsAvailable`
@@ -915,17 +920,14 @@ end
 -- and the RUN exception below rides on that, so the lobby's RUN button stayed
 -- live and Active underneath the Zyntra terminal, competing with a modal that
 -- now uses the whole safe area. Stated separately so the exception cannot
--- swallow it.
+-- swallow it. HUD_B2_TOUCH (D13): the same eight modals as controlsAvailable.
 local function modalOwnsScreen()
-	return player:GetAttribute("ZyntraStoreOpen") == true
-		or player:GetAttribute("DevPhoneOpen") == true
-		or player:GetAttribute("ZyntraReentryOpen") == true
-		or player:GetAttribute("QueueModalOpen") == true
+	return UIDevice.ScreenOwningModalOpen()
 end
 
 local wasRoundActive = inRound()
 local function updateRoundState()
-	applyStaminaLayout()
+	placeBar() -- HUD_B3: remount on a device flip, re-place on Spectating
 	local active = inRound()
 	local usable = controlsAvailable()
 	if not movementAvailable() and (crouching or keyboardCrouchHeld
@@ -936,27 +938,27 @@ local function updateRoundState()
 	-- RUN stays available in the lobby (it is how a player sprints to a station)
 	-- but is gated on every other unavailable state once a round starts -- and,
 	-- in or out of a round, on no modal owning the screen.
-	UIDevice.SetInteractive(touchRunButton,
-		touchControls() and (usable or not active) and not modalOwnsScreen())
-	UIDevice.SetInteractive(touchJumpButton, usable)
+	-- HUD_B2_TOUCH: each cell is nil when its template is missing (D14), and a nil cell is not drawn.
+	if touchRunButton then
+		UIDevice.SetInteractive(touchRunButton,
+			touchControls() and (usable or not active) and not modalOwnsScreen())
+	end
+	if touchJumpButton then UIDevice.SetInteractive(touchJumpButton, usable) end
 	-- SNEAK is a level-only control: there is nothing to crouch away from in the
 	-- lobby, and applySpeed() ignores crouch out of a round anyway.
-	UIDevice.SetInteractive(touchSneakButton, usable)
-	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
+	if touchSneakButton then UIDevice.SetInteractive(touchSneakButton, usable) end
+	if touchPOVButton then UIDevice.SetInteractive(touchPOVButton, usable and devAllowed) end
 	-- MOBILE_QA_20261008: not in the live levels either (5 and 6, which carry Level6PlaygroundPreview): GameManager's
 	-- drop handler only serves its own rounds, so the button was there and did nothing.
-	UIDevice.SetInteractive(touchGlowButton, usable and not inPreview() and player:GetAttribute("Level6PlaygroundPreview") ~= true)
+	if touchGlowButton then
+		UIDevice.SetInteractive(touchGlowButton, usable and not inPreview() and player:GetAttribute("Level6PlaygroundPreview") ~= true)
+	end
 	-- Own the jump control only while in a round. In the lobby the default
 	-- touch jump comes back, because that is the only jump there is there.
-	UIDevice.SuppressDefaultJump(touchControls() and active)
+	-- Without our JUMP cell (D14) the default is never suppressed: a phone must always have a jump.
+	UIDevice.SuppressDefaultJump(touchControls() and active and touchJumpButton ~= nil)
 	-- The RUN slot depends on whether the engine's jump button is showing.
 	applyTouchControlLayout()
-	-- Stamina is only meaningful while the player is the one running. Dead,
-	-- escaped or spectating, the bar is stale information sitting in the same
-	-- band as the spectate caption, so it stands down with the controls.
-	staBg.Visible = active
-		and not isEscaped()
-		and player:GetAttribute("Spectating") ~= true
 	if not active then
 		lastGlowstickDrop = -math.huge
 		-- Reset level-only latches once on the round→lobby transition. Ordinary
@@ -970,7 +972,6 @@ local function updateRoundState()
 			sprinting = sprintRequested()
 			cancelCrouch()
 			touchSprintToggled = false
-			showRunEnabled(false)
 		end
 		applySpeed()
 	elseif not isHiding() then

@@ -1,2 +1,0 @@
-phone 568x320, 21 ScreenGuis copied (Freecam, FoundFootageHUD, HelpButton, Level5VoidHud, Achievements, LobbyDJ, Level3ReaderGui, ZyntraStore, ZyntraLobbyPillL4, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, FriendBoostGui, FlashlightPopup, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, LuckyWheelGui), 14 pieces measured, 1 findings
-OVERLAP SpectateGui.TextLabel 'Spectating — no survivors le' (94,280)-(474,310)  x  RoundGui.PartyDownOverlay > PartyDownCard (54,26)-(514,294)  (379x14 px)

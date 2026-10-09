@@ -1,0 +1,4916 @@
+{
+  "formatVersion": 1,
+  "source": "Roblox Studio execute_luau; Source/editor verified",
+  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
+  "studio": {
+    "id": "1b603e69-7ae1-4572-b210-d5bf05c684ff",
+    "name": "[UPDATE] BACKROOMS: STAY QUIET (placeId: 131311258779917)"
+  },
+  "capturedAtUtc": "2026-10-09T17:14:40.588140+00:00",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "datamodel": "Edit",
+  "counts": {
+    "scripts": 230,
+    "remoteEvents": 15,
+    "total": 245,
+    "created": 12,
+    "updated": 18,
+    "unchanged": 215,
+    "studioTrailingNewline": 0
+  },
+  "extraMirroredFilesNotInStudio": [],
+  "items": [
+    {
+      "studioPath": "ReplicatedFirst.Lobby Loading Screen",
+      "segments": [
+        "ReplicatedFirst",
+        "Lobby Loading Screen"
+      ],
+      "className": "LocalScript",
+      "file": "ReplicatedFirst/Lobby Loading Screen.LocalScript.lua",
+      "bytes": 32406,
+      "sha256": "9483a3df397217b8d11b6b891859e95c9271fff7751188b671610be3ed257fb0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.DeathAdvice",
+      "segments": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
+      "bytes": 8952,
+      "sha256": "62976a1da7582053ce67bff170e0c950969d2ac914a0a50502845390bf0cbdc2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.DevAccess",
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
+      "bytes": 2835,
+      "sha256": "19c3df737e2e90924fb3fb1350d55dcd05595dd59c2fafda8d06e407848841d5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.FlashlightProfiles",
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/FlashlightProfiles.ModuleScript.lua",
+      "bytes": 3110,
+      "sha256": "4c2db65af38dd00092ab2af74d670b22fd5af9a1d3cf1e80af95fd5ffba4a230",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+      "bytes": 5063,
+      "sha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 4 Usher Animations",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 4 Usher Animations"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/Level 4 Usher Animations.ModuleScript.lua",
+      "bytes": 36273,
+      "sha256": "7cae5a9d4208e6e03605b27360c63be020f9f70bcabdfad0818051fb1008201d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.LoadingCardView",
+      "segments": [
+        "ReplicatedStorage",
+        "LoadingCardView"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/LoadingCardView.ModuleScript.lua",
+      "bytes": 8831,
+      "sha256": "9e8e46048ed89e632b67b6d49d075f96013adff2437a991e398fd04aa465a0dd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.MasterConfiguration",
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "bytes": 21208,
+      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ProtectionClient",
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ProtectionClient.ModuleScript.lua",
+      "bytes": 6906,
+      "sha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.RoundHud",
+      "segments": [
+        "ReplicatedStorage",
+        "RoundHud"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "bytes": 63919,
+      "sha256": "f12fe404cf4ae6adee5901989d3a5d4388db13a9a5850f7390d3ca1c6e7ebd20",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.SlideContinuationSafety",
+      "segments": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/SlideContinuationSafety.ModuleScript.lua",
+      "bytes": 3945,
+      "sha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIDevice",
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+      "bytes": 100997,
+      "sha256": "7ae29fe3cf956fb0112b77688369b4b7745cbd656abfd1a33ec2f86995ec2ede",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIRegression",
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "bytes": 323180,
+      "sha256": "f387e68e871a51436c5dcbe91c24986af23bf1121bb907ed8282bdcccebfceb8",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIStyle",
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "bytes": 11842,
+      "sha256": "28ac2bf612994737da4e0e5c307401f5c4508b8561491670528c73889e01a1d5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraChallenges",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraChallenges"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua",
+      "bytes": 6018,
+      "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraConfig",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
+      "bytes": 21638,
+      "sha256": "b52815530258702531d3365eee447c0361abdb2c2d62aac98001b830437e0202",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDailyResearch",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua",
+      "bytes": 1496,
+      "sha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDetectorVisual",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+      "bytes": 16287,
+      "sha256": "9c5cefbe50c5dd637f751d83b6c374eedce35ad6a7032beca397c6b96e9a3d09",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraShopUI.ShopBinder",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopBinder"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraShopUI/ShopBinder.ModuleScript.lua",
+      "bytes": 35972,
+      "sha256": "5e2a0151609bea62fa2592610fe2292f79124dc4428e22defffdf2aa6d5c4467",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraShopUI.ShopData",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraShopUI",
+        "ShopData"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraShopUI/ShopData.ModuleScript.lua",
+      "bytes": 23228,
+      "sha256": "665da0c8a0f0b7a45cc7bfa6181ffbafff5a6322e3f1113891804a044ff8a365",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraSkins",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraSkins"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
+      "bytes": 5823,
+      "sha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.AvatarNormalize",
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/AvatarNormalize.Script.lua",
+      "bytes": 2567,
+      "sha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Crouch State Server",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Crouch State Server.Script.lua",
+      "bytes": 7325,
+      "sha256": "2d9ded3b5b786cccf1f54a4e8e94d28781d0869f57141353946ad8634499d512",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.FlashlightSync",
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/FlashlightSync.Script.lua",
+      "bytes": 6494,
+      "sha256": "6a6dedd4b3de72d8ad729b29c7eb56a1e82b00700913f1ec0d62568b8978d06b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.FriendBoost",
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/FriendBoost.ModuleScript.lua",
+      "bytes": 7763,
+      "sha256": "3ecdd96e368146fdfad94aaced595ec96ad26b89de2172f521aabdaa42e6cd0a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.GameManager",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "bytes": 190167,
+      "sha256": "0969202a4cbb3898b32608608905e19179eb7f8b645d1613c2f5a91980984ebe",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.HazmatSkinVisuals",
+      "segments": [
+        "ServerScriptService",
+        "HazmatSkinVisuals"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/HazmatSkinVisuals.Script.lua",
+      "bytes": 16903,
+      "sha256": "f279e4816d991f37b336c381a25feccc0b6dfc829d683a9a97841f70d615e156",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.BlenderRoomRenderer",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "BlenderRoomRenderer"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 1 Systems/BlenderRoomRenderer.ModuleScript.lua",
+      "bytes": 31698,
+      "sha256": "85c62d3ecdbeaad9f8da7e51bb891255e80c3cb4d383d81fb61b7c0562fff99b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAI",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "bytes": 58731,
+      "sha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "bytes": 10588,
+      "sha256": "3c15ac60553c52c133bbbdd8e6d70efd52022c9e722065153b76e73986417508",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityKill",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
+      "bytes": 11569,
+      "sha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "bytes": 89825,
+      "sha256": "f3bf0447db60f17eb6c83f005fbde4df9bb2d10232427c6494c0352d3851f106",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "bytes": 105526,
+      "sha256": "605fb1c22a2d6a3f3128c4404f671c868570bdc02789239ce908ce66e3e3a645",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 12107,
+      "sha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Exit Transition Test Suite.ModuleScript.lua",
+      "bytes": 47083,
+      "sha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
+      "bytes": 50980,
+      "sha256": "e1ad3a0a111a9c0053b321b7ba82e20a85f348a9a6ff73fdf765f1860573f758",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Animation Adapter.ModuleScript.lua",
+      "bytes": 16481,
+      "sha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "bytes": 16193,
+      "sha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
+      "bytes": 99086,
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
+      "bytes": 124369,
+      "sha256": "3af9563be049c290b3ac9877cca94e8679bf8a9094eebd999a84b7d932a604e8",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
+      "bytes": 17971,
+      "sha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
+      "bytes": 11278,
+      "sha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Configuration.ModuleScript.lua",
+      "bytes": 691,
+      "sha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
+      "bytes": 41664,
+      "sha256": "69275a49cf43bb2174cda313fdb3ad41f13f8efb5ee6bb04acbc1811c211e44c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
+      "bytes": 138829,
+      "sha256": "ab318044f367b69dc643c065f81f549c0c22e7c903bdd01cb398f4a07ad95549",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Rig Adapter.ModuleScript.lua",
+      "bytes": 7632,
+      "sha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Poolrooms Runtime",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Poolrooms Runtime"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Poolrooms Runtime.ModuleScript.lua",
+      "bytes": 22302,
+      "sha256": "8608150767d697f3f6fda087748bc2b31ddb2a67c552d14922cd46b75c556cfa",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
+      "bytes": 9496,
+      "sha256": "6f77656fb77fb4ee10053b5e6ea0eb5d3313e4ed5fda08b8694eea3ff06c7dd9",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
+      "bytes": 22185,
+      "sha256": "8b7a60f37ea7c4687be0063d15e4e8d3852b56421e94219fa33890c89c09c689",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "WaterTextureCount": 5,
+        "WaterTextureSet": "ImageGen 2026-08-21"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
+      "bytes": 263658,
+      "sha256": "d74c6a33207209df2c7e546b3d4f1527918c04019639f37283f2ad8cd3d43537",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
+      "bytes": 8054,
+      "sha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 TWEAKS.ModuleScript.lua",
+      "bytes": 5828,
+      "sha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Kit Warmup",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Kit Warmup"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Kit Warmup.ModuleScript.lua",
+      "bytes": 2965,
+      "sha256": "870130d1282ed11df29998e286221a6597cc8d9e40e62baad5f957d020dfc72c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3PromotionOwned": "20261002"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Balloon Dressing",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Balloon Dressing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Balloon Dressing.ModuleScript.lua",
+      "bytes": 12479,
+      "sha256": "81118f18a222559da860961d23727b876a46298d12609d91c3fbd460425e2ce6",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3PromotionOwned": "20261002"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+      "bytes": 19831,
+      "sha256": "76752edb0cb176b14f98c41478f4858efbfaed31c2f1d90db82fdad901d08500",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "72e163fc4c5bf0dea7d986f284823d6ce6c2bd1c9a67ef6d9f80fe91b212a2b3"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Crayon Wall Art",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Crayon Wall Art"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Crayon Wall Art.ModuleScript.lua",
+      "bytes": 8896,
+      "sha256": "19a59fc800920a881463159c0f724179671355936e4cfca2e8b2fd588e1a6911",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3PromotionOwned": "20261002"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
+      "bytes": 27072,
+      "sha256": "5b7f7df412af8d7292687a25064f04fcdd10bf93e52ee72ea33efa95477b90f7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+      "bytes": 47577,
+      "sha256": "0369a1f11fa20c90bee2fda67191bf58a6a543f1ce66ee554a4fd3c0dfcab594",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "173d232859b60c11abaa9d7d5f18c14ae3022512d2e2353dc37da10e938a3bad"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "bytes": 194657,
+      "sha256": "3b8e0734183af35e2aba7b258cd0e3c87c377cb9d323f4a5586bcb06f6663b3e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
+      "bytes": 20901,
+      "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "bytes": 75471,
+      "sha256": "195c1bb7bfb87aad6172dfedeb66fb146938462cb31f65eb4cbe43c9b9ba1cf7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "49915b41b0494e1b6c44606708f0cc6082b3c15710bce6ca0d70674fd17ce7a2"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+      "bytes": 32558,
+      "sha256": "bfb6470711f716e4ea94c25fd3d3ac45bf6e6cc85eb50418c7e1aac61e566ef1",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "6ec58ab0254062005f6b0a5b2de2f544b5e3e03b90a2037ebb769c7b97850549"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
+      "bytes": 204479,
+      "sha256": "6c67aace5c22ab1eb62381d864cd2c328e8762756390f43a0aadf2f9d96eab75",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "1b07d250575bb8aaee9a187e861bdc7dadbd31641e6728c87eac4aaed3a23bc8"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "bytes": 114103,
+      "sha256": "41b4e318bfaf693d95cdba96f4378524496884a236e74fbdb66ef03904afb1c8",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Room Dressing",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Room Dressing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Room Dressing.ModuleScript.lua",
+      "bytes": 18304,
+      "sha256": "4424920501f4fafa63788f1fb70a3263e23d75e31741d68a37bd6f55b48f511a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "766976d349759f0320e2e80ed355b9309b818d42d2a0dce34ecb15054715849d"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Worn Party Visual Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Worn Party Visual Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Worn Party Visual Adapter.ModuleScript.lua",
+      "bytes": 30523,
+      "sha256": "cfefe031d09f0b5c1ae6c40cc03265fbd2b03c5d756cc38af9c9a11288544a8c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "badbf728d6c219f24c7beff2e7b9234633dac51fc0d3d4f3b1338edd94cb2613"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
+      "bytes": 7425,
+      "sha256": "af6225d22fb998db4cd2417cd552f934c75ff2c82cb223c4dd9e27daefd98aa6",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Light Director",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Light Director"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Light Director.ModuleScript.lua",
+      "bytes": 16188,
+      "sha256": "df1941137581616dbd1b916fc53ebdefed7bec82bf0b6732cbf0b63ab97afd88",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
+      "bytes": 50254,
+      "sha256": "a01afa1615437ecec70f7b77acef4b1ad3feb30ba11c2d040f01bc1ace9bb9c2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Test Suite.ModuleScript.lua",
+      "bytes": 6821,
+      "sha256": "59f1cd5e87c72c89a60e0f1c4119a5d931b9084ba9689df1e1b94f06a3869335",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Controller.ModuleScript.lua",
+      "bytes": 34745,
+      "sha256": "9af1a745968b95928355707aeaf81bf36b2e9495bdc589918b72bca10d6ba7e3",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Usher Nav",
+      "segments": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Usher Nav"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Usher Nav.ModuleScript.lua",
+      "bytes": 370812,
+      "sha256": "a0ebc21544cf40e7a8d8280dc431ce65b396473b8c9b3cb5ae43fe4cbd3d60e5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Balloon Dressing",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Balloon Dressing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Balloon Dressing.ModuleScript.lua",
+      "bytes": 12529,
+      "sha256": "884dbd28fea79343f03ff8c41827e76b049334fabc612e17bd7bcb9e518dade8",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Configuration.ModuleScript.lua",
+      "bytes": 19430,
+      "sha256": "b4501e2e9a0f7110d2c23ef28f602be198f0ff5288d3ff1a35133a4352795d38",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "91ea0307b47fa4fefffeda72133991ce7c3a578f2adf0aa17e9771acc1f669cb"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Crayon Wall Art",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Crayon Wall Art"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Crayon Wall Art.ModuleScript.lua",
+      "bytes": 8896,
+      "sha256": "3df3174cde7c5d2cabff90f2425bd0034a769ed3705545c2a5f0f1ebac133fb2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Hiding Controller.ModuleScript.lua",
+      "bytes": 25600,
+      "sha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Kit Metadata"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Kit Metadata.ModuleScript.lua",
+      "bytes": 31504,
+      "sha256": "468845e712b1cfdb5604f5df2a33fb1f0512aab635ce7733ec1dfb529edc822d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "c141f4c5246ece81288d1cefdedd8243057149d4844f8fea7c14ee428ff66f4b"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Layout Generator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Layout Generator.ModuleScript.lua",
+      "bytes": 47446,
+      "sha256": "cfb3b3106fc12125651ed9a3d85841838857021ea72e92307f36aec752781d01",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "1277fbc0777d8c22c37c61f1eec2a4cd236320b473905147d04fe68c6c8a1a78"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Mall Manager AI Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Mall Manager AI Controller.ModuleScript.lua",
+      "bytes": 188782,
+      "sha256": "c26ccd488f2875d7316b8c1fa5cbaba901b67c54f17a8e24a915cd522c00f914",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "635b3c5d3ab2ac5230e746a70f430492336aeffde6493fa011c1c87f49a514df"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Music Sequence Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Music Sequence Controller.ModuleScript.lua",
+      "bytes": 21426,
+      "sha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Objective Controller.ModuleScript.lua",
+      "bytes": 72634,
+      "sha256": "34bb18d65b31395271dde6a8d09e60283bfcf05092b1842917462474e4fd8e28",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "436cfc10cb9e17f3ad6c22c1facf08254aab98c7724ff0a05f697d0118bc8c57"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Playground Game",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Playground Game"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Playground Game.ModuleScript.lua",
+      "bytes": 98696,
+      "sha256": "c863e11fba99a6557a783e1fbd1d755af7fc245b386f4f5ba7ce06a36bd95de4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Room Dressing",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Room Dressing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Room Dressing.ModuleScript.lua",
+      "bytes": 18364,
+      "sha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 Visual Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 Visual Adapter.ModuleScript.lua",
+      "bytes": 23744,
+      "sha256": "18551739c7a6b25b71ce1f5a9f3514c924b25b799e8b724552af4f9859c16ecc",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "26425f91b20ccc85334088d9ba6d7c2a1ef1a8784ba9fa5a783a70cc47e85732"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level 6 World Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level 6 World Builder.ModuleScript.lua",
+      "bytes": 102901,
+      "sha256": "a5bad2b19ce4d4d8915b58f50c100f6d31e94f71cd53acabdfee9bb014ae1917",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "36870a6791fef044d2fea376f65d6dbd0145e23d30e7da2a424dba96bef5a1fc"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level 6 Systems.Level6BlenderRuntimeBake",
+      "segments": [
+        "ServerScriptService",
+        "Level 6 Systems",
+        "Level6BlenderRuntimeBake"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 6 Systems/Level6BlenderRuntimeBake.ModuleScript.lua",
+      "bytes": 10474,
+      "sha256": "a027c4bbe3965368c67921b814d1f1c2e8ce96e088393b7d224b6b837219c1bc",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "Level3WornPartyInstallSnapshot": "eeaa5d1eb197802bb65b31c9a7aaf5da58bbec8da77e121d611245152fd271d4",
+        "Level3WornPartySourceSHA256": "eeeac9797cd1a10656ceaba9b7896b8d177d8705c93839008a7d99a641004af5",
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "eeeac9797cd1a10656ceaba9b7896b8d177d8705c93839008a7d99a641004af5"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Level Leaderboards",
+      "segments": [
+        "ServerScriptService",
+        "Level Leaderboards"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level Leaderboards.Script.lua",
+      "bytes": 15171,
+      "sha256": "710ed195de3f6c24ba59682597857514cf34053e9018afee60a373a67011d159",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level2Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level2Generator.ModuleScript.lua",
+      "bytes": 427,
+      "sha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level3Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level3Generator.ModuleScript.lua",
+      "bytes": 437,
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level4RoundGenerator",
+      "segments": [
+        "ServerScriptService",
+        "Level4RoundGenerator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level4RoundGenerator.ModuleScript.lua",
+      "bytes": 11276,
+      "sha256": "38fa87bf05b1ae5b3bf79cd7053e6601cf1fa87732ce2f2dd5232cb499525321",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level5PreviewAccess",
+      "segments": [
+        "ServerScriptService",
+        "Level5PreviewAccess"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level5PreviewAccess.Script.lua",
+      "bytes": 64927,
+      "sha256": "ae61bb7bed1d379cb2e0f27498d583eeed6c4aad521ad8188ea83dfea64bdd00",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Level6PreviewAccess",
+      "segments": [
+        "ServerScriptService",
+        "Level6PreviewAccess"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level6PreviewAccess.Script.lua",
+      "bytes": 31298,
+      "sha256": "44fcbebf64a7680222af00d304494ee8d03d05d5e0606622fae36677686fe368",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "8377f1b0d366e0571e6c99fceb164cb42c032743200c4722e824a4573ef2fead"
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.Live Level Server",
+      "segments": [
+        "ServerScriptService",
+        "Live Level Server"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Live Level Server.Script.lua",
+      "bytes": 10029,
+      "sha256": "dc28fc4665b08dc221aea5bba8bec49e844cf6a10953d37e5e0490b31ed9d316",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Lobby DJ",
+      "segments": [
+        "ServerScriptService",
+        "Lobby DJ"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Lobby DJ.Script.lua",
+      "bytes": 8235,
+      "sha256": "34844a50d05b1840e591863f77f5861f982dcd48b4b1344d33632bef93eb294c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Lobby Tunnel Reach",
+      "segments": [
+        "ServerScriptService",
+        "Lobby Tunnel Reach"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Lobby Tunnel Reach.Script.lua",
+      "bytes": 18870,
+      "sha256": "db9b3b4c8b8180a476b1ce5e8a6ddb061049109e4bc6585e4acf999a30d39bce",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyPartyModeController",
+      "segments": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/LobbyPartyModeController.Script.lua",
+      "bytes": 7124,
+      "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Bootstrap",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "Bootstrap"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/LobbyReimaginedPreview/Bootstrap.Script.lua",
+      "bytes": 2072,
+      "sha256": "997e0052ad6e0f5418be32493f7b16ad833f7cdc9e6ae0ee54b5a48fca05901a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "f2f1ce2c0eca8eda358ed22902ef2072acaa4fdfbe893db0623422c2aca09eee",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.Builder",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/Builder.ModuleScript.lua",
+      "bytes": 54562,
+      "sha256": "efd4d294e896e6a319211a791267470cf3378854447f56fbdf9c5044d5938e4b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "37e9885eb0922da4126de82b3a82066cb435baf1aede3386d7e6ef5f241b3b8b",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.DevBayAccessGuard",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "DevBayAccessGuard"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/DevBayAccessGuard.ModuleScript.lua",
+      "bytes": 5885,
+      "sha256": "398525b604d917c7c47ddcc20ae886e140fd0e21a5f534ccb80ae720ceb47957",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "LobbyAccessSpawnTask": "20261002",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.EndBlockades",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "EndBlockades"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/EndBlockades.ModuleScript.lua",
+      "bytes": 67522,
+      "sha256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "5c120357fad94d1274a7eb6e39c6ce0cbf996505246b3b6b5c68d3dfa5cff98a",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishBays",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "LobbyPolishBays"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/LobbyPolishBays.ModuleScript.lua",
+      "bytes": 10428,
+      "sha256": "534482ac3380b2d3070fd7e4aec9ae9197e2d3b2e06a32a5e692888047aa770e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "1ab19711a303b058d033de6652da3d94c15e73f7e40b4e983036fa99c805bc2c",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.LobbyPolishScene",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "LobbyPolishScene"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/LobbyPolishScene.ModuleScript.lua",
+      "bytes": 15812,
+      "sha256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "9dd927b5927249b42655c297d96a24a06c581c6fa9f01adac0ce7cde4e40746d",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.MaterialPolish",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "MaterialPolish"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/MaterialPolish.ModuleScript.lua",
+      "bytes": 22848,
+      "sha256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "6b4ef80ea746c39c900c59f6311ad1f7ea862cb20b24aa1aaab85816ec71c54e",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.QueueBridge",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "QueueBridge"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/QueueBridge.ModuleScript.lua",
+      "bytes": 22645,
+      "sha256": "6c7135608842a9a2ca5b7588d7c1327dddd768f6b71e31900f7f757b44a092c5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "ad7752eefc2561ccda5fb92828dc71d1a2ff805a0fadca6d740c0e1b3e82d674",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyReimaginedPreview.RuntimeBake",
+      "segments": [
+        "ServerScriptService",
+        "LobbyReimaginedPreview",
+        "RuntimeBake"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyReimaginedPreview/RuntimeBake.ModuleScript.lua",
+      "bytes": 12341,
+      "sha256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "1f564fdde835ad89b529d9069ddf87b0ed4991636f363eacbd098cc0b342ff28",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyShopDisplay",
+      "segments": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
+      "bytes": 24220,
+      "sha256": "bd78855f31e75194e6a52bb3accc796aa26b739945904c9ee05cb91b5c7888f7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.LunaTribute",
+      "segments": [
+        "ServerScriptService",
+        "LunaTribute"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/LunaTribute.Script.lua",
+      "bytes": 24422,
+      "sha256": "d04548421adab66453a12a5cc829d0810a96e096a55bac0d2bfbd4d1b59f245d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.NoiseRegistry",
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/NoiseRegistry.ModuleScript.lua",
+      "bytes": 2197,
+      "sha256": "0576d8028780dbaa9af52a04729a12d4083b71223a5c2225d0bc462604b2c6d7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.PlayerProtection",
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/PlayerProtection.ModuleScript.lua",
+      "bytes": 7408,
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.PurchaseAlerts",
+      "segments": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/PurchaseAlerts.ModuleScript.lua",
+      "bytes": 6278,
+      "sha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ReentryPlacement",
+      "segments": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ReentryPlacement.ModuleScript.lua",
+      "bytes": 4473,
+      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Round Completion Routing",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
+      "bytes": 76041,
+      "sha256": "cba82006005ee3b0ff64dffca769839ba863048ecc973dd461ab3bc89aff5960",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Round Completion Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
+      "bytes": 135637,
+      "sha256": "7a79483f659df16b76837a01e20d06f895c1f3e142aa96b4138f5072be4018a0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Round Loading Runtime",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Round Loading Runtime.ModuleScript.lua",
+      "bytes": 8712,
+      "sha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.Round Loading Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Round Loading Test Suite.ModuleScript.lua",
+      "bytes": 15550,
+      "sha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.RouteMarkerService",
+      "segments": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/RouteMarkerService.Script.lua",
+      "bytes": 12066,
+      "sha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ServerKind",
+      "segments": [
+        "ServerScriptService",
+        "ServerKind"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ServerKind.ModuleScript.lua",
+      "bytes": 8031,
+      "sha256": "f402876ad679c6f324368342239db8d850d2a8e18faf378051556e1ec3dcc31c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.TeamObjectives",
+      "segments": [
+        "ServerScriptService",
+        "TeamObjectives"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/TeamObjectives.ModuleScript.lua",
+      "bytes": 1279,
+      "sha256": "4e5f91990b1d2cddcca1310ef877f709cf308ef450d43ff48b4399b0d1cd40b2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.TunnelLobbyBuilder",
+      "segments": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+      "bytes": 118461,
+      "sha256": "ee5ef0360a0e2e45ed0af25ade662e8ac6fd6fb8c1b5e6bd7f9b8c266bc83e1a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraAnalytics",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraAnalytics"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ZyntraAnalytics.ModuleScript.lua",
+      "bytes": 19089,
+      "sha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraDetectorSensing",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorSensing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ZyntraDetectorSensing.ModuleScript.lua",
+      "bytes": 1819,
+      "sha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraDetectorService",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorService"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/ZyntraDetectorService.Script.lua",
+      "bytes": 4366,
+      "sha256": "ff79be5f3812aa0c2c932c87edf50ca8d31e89a3d780530722e8fea82b74eb8e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraMonetization",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/ZyntraMonetization.Script.lua",
+      "bytes": 215340,
+      "sha256": "2b9194ab62391f61b2ec7292d8d3c10bfe798adf1922c5959b44a62e749b18af",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "Field Notes Client"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/Field Notes Client.LocalScript.lua",
+      "bytes": 9288,
+      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "FieldNotesService"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/FieldNotesService.Script.lua",
+      "bytes": 21612,
+      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotes"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotes.ModuleScript.lua",
+      "bytes": 7373,
+      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotesPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotesPage.ModuleScript.lua",
+      "bytes": 16492,
+      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Kids Skylight Backup 20260806/Level 2 World Builder Before Kids Skylights.ModuleScript.lua",
+      "bytes": 84738,
+      "sha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Kids Texture Backup 20260806/Level 2 World Builder Before Kids Textures.ModuleScript.lua",
+      "bytes": 69618,
+      "sha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 5803,
+      "sha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 World Builder.ModuleScript.lua",
+      "bytes": 97093,
+      "sha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 5926,
+      "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Objective Controller.ModuleScript.lua",
+      "bytes": 7391,
+      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 World Builder.ModuleScript.lua",
+      "bytes": 58002,
+      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level 2 Pump Scale Backup 20260806/Level 2 World Builder Before 40 Percent Reduction.ModuleScript.lua",
+      "bytes": 68535,
+      "sha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 9801,
+      "sha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Sound Controller.LocalScript.lua",
+      "bytes": 26598,
+      "sha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Client.LocalScript.lua",
+      "bytes": 9372,
+      "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "RetiredOriginalPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slidemouth Client",
+        "RetiredOriginalEnabled": true
+      }
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Controller.ModuleScript.lua",
+      "bytes": 167166,
+      "sha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "RetiredOriginalPath": "ServerScriptService.Level 2 Systems.Level 2 Slidemouth Controller"
+      }
+    },
+    {
+      "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Test Suite.ModuleScript.lua",
+      "bytes": 295599,
+      "sha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "RetiredOriginalPath": "ServerScriptService.Level 2 Systems.Level 2 Slidemouth Test Suite"
+      }
+    },
+    {
+      "studioPath": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/Archive/RetiredLobbyAssets/Miso/MisoPatrol.Script.lua",
+      "bytes": 2250,
+      "sha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
+      "bytes": 96252,
+      "sha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": {
+        "OriginalPath": "ServerScriptService.TunnelLobbyBuilder",
+        "BackupReason": "Before Levels 4-6 COMING SOON gate redesign"
+      }
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua",
+      "bytes": 6740,
+      "sha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "bytes": 5736,
+      "sha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua",
+      "bytes": 42420,
+      "sha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
+      "bytes": 16436,
+      "sha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua",
+      "bytes": 95466,
+      "sha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua",
+      "bytes": 8095,
+      "sha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua",
+      "bytes": 28932,
+      "sha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
+      "bytes": 6350,
+      "sha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua",
+      "bytes": 27514,
+      "sha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Controller.ModuleScript.lua",
+      "bytes": 35774,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Navigator.ModuleScript.lua",
+      "bytes": 126820,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Controller.ModuleScript.lua",
+      "bytes": 35774,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Navigator.ModuleScript.lua",
+      "bytes": 126820,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Controller.ModuleScript.lua",
+      "bytes": 35774,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Navigator.ModuleScript.lua",
+      "bytes": 126820,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Controller.ModuleScript.lua",
+      "bytes": 35774,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Navigator.ModuleScript.lua",
+      "bytes": 126975,
+      "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "NavigatorBeforeBudgetFix"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/NavigatorBeforeBudgetFix.ModuleScript.lua",
+      "bytes": 126820,
+      "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Controller.ModuleScript.lua",
+      "bytes": 35774,
+      "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Navigator.ModuleScript.lua",
+      "bytes": 126975,
+      "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Project Mirror.IMPORTANT",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/Project Mirror/IMPORTANT.LocalScript.lua",
+      "bytes": 167,
+      "sha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.Project Mirror.Script",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/Project Mirror/Script.Script.lua",
+      "bytes": 235,
+      "sha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls",
+      "segments": [
+        "ServerStorage",
+        "TEMP_PipeEntityAnimations_20260909",
+        "PreviewControls"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/TEMP_PipeEntityAnimations_20260909/PreviewControls.ModuleScript.lua",
+      "bytes": 4670,
+      "sha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacter.Animate",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "bytes": 28802,
+      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
+      "bytes": 1539,
+      "sha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+      "bytes": 300,
+      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
+      "bytes": 654,
+      "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Achievements Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Achievements Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Achievements Client.LocalScript.lua",
+      "bytes": 16078,
+      "sha256": "cf4d7e6356197d4609ab105e41b039aed668d96a064684e3874445fd7754e771",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "1e63d06df7a647f8e4c157da0dadc29b7ffd84ce9bdef53b4521086c77249c10"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "bytes": 26547,
+      "sha256": "fdcec2e0a2790cd880094a65a26b0212f11bddc0b94ad7dce63524a8b8e23245",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "bytes": 10450,
+      "sha256": "8084b8ec48f09fa62889d22257d76dd8946cda5a11a7977b8f800bb5674bd0b4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+      "bytes": 31986,
+      "sha256": "19b514e404b69ac05aa1d635b8d779922f721a3ee055671e1cbfb016a514e788",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+      "bytes": 37276,
+      "sha256": "b1b1322a39a3a9a493b265f9317f7ba530f8726d5a2b2dfb294d7b3826dcc3aa",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Found Footage HUD",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Found Footage HUD"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Found Footage HUD.LocalScript.lua",
+      "bytes": 9745,
+      "sha256": "c21f23d514a20a6be3ba48f2c03ff0f788e372d73b80b1ea733657b64698b24b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
+      "bytes": 14668,
+      "sha256": "156a290c6ee54e73ba271438681e70ac2de76f9d1b75d693c684445350aa6562",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "HazmatSkinDriver"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/HazmatSkinDriver.LocalScript.lua",
+      "bytes": 22483,
+      "sha256": "f5d078e43ea5054252c621c86450867782f5fd504a1bb07c2e0205cfca89df84",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
+      "bytes": 7549,
+      "sha256": "07baa4a3ae035615dacb67da55ec197cfd4a09f6bf7071280f3685b653f97f88",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "bytes": 10507,
+      "sha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Hardware Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Hardware Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Hardware Client.LocalScript.lua",
+      "bytes": 11762,
+      "sha256": "252c7b86be07131d4f13d6f74c3a20178b60085ec98e3898adc02b72a3831e4a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Sound Controller.LocalScript.lua",
+      "bytes": 3567,
+      "sha256": "0246c4f92a20dcb448c4e4d6784bf9c96edd43758cff72d30f588e5703777f03",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+      "bytes": 20263,
+      "sha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
+      "bytes": 6313,
+      "sha256": "26ea6117a24bbed904ff0f22fb486148eb34332bd466b84fa19d47d3d6d72b39",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
+      "bytes": 2475,
+      "sha256": "26d18cbc58573adca1d32b0d5004667ea22be0ff90141880177609a79031a733",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
+      "bytes": 19192,
+      "sha256": "8240023062cb4c0502d187bbddab7fa3dcbeda4b92144ae3a31478d074b4a2de",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
+      "bytes": 32214,
+      "sha256": "60489c6dc4f7383fc606b00fda0cea104258c232407b8625bff30c7bdde51181",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "bytes": 40174,
+      "sha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
+      "bytes": 47023,
+      "sha256": "a549b23d2d8b201b3d293c889c9efd5fccd4ee13f160b6c0459dd6352ccf49f0",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Mall Manager Visual Smoother.LocalScript.lua",
+      "bytes": 6548,
+      "sha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "bytes": 35699,
+      "sha256": "560ec623fdc33504d71cf68e62803878748b5ede3053019c189f3b8376be02a5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
+      "bytes": 46833,
+      "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+      "bytes": 21498,
+      "sha256": "2fe086d3537da9d720e13b2c5b9c8e89d80117951ccfcbc4e83a5854608df612",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
+      "bytes": 14048,
+      "sha256": "57ade12fbaee0f8507316b79987b26105f530823ff6eebd427c7330734a3d29a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Round Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Round Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Round Client.LocalScript.lua",
+      "bytes": 48561,
+      "sha256": "05aa2da7877fb30fa4f3d43792d2ebb05a6987f143b09e0814dbd75fa3c38f03",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 5 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
+      "bytes": 46203,
+      "sha256": "7be4083ac513eac0e89d512be2e0caffccee9a0f558f578d184ffec15d077c64",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Dev ESP",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Dev ESP"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Dev ESP.LocalScript.lua",
+      "bytes": 5003,
+      "sha256": "4195aac0219e5abaca0324a03c2005603bb695cb87b4cb2659e36e419b27db30",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Playground Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Playground Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Playground Client.LocalScript.lua",
+      "bytes": 63894,
+      "sha256": "4753898b930d00dcd3e0e0cae8745a94f9beeb5077c32162382bd298e30aa067",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Reader Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Reader Client.LocalScript.lua",
+      "bytes": 59188,
+      "sha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 6 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 6 Sound Controller.LocalScript.lua",
+      "bytes": 46887,
+      "sha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": true,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+      "bytes": 2219,
+      "sha256": "61db652abcb787fb31454fdeea4f906396fd82c99c4818164afedfa3c28f20f4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level2PoolroomsPresentation",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2PoolroomsPresentation"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level2PoolroomsPresentation.LocalScript.lua",
+      "bytes": 14552,
+      "sha256": "fc5662efc96f5de57ba2d83ae094af3adbe6742a0819b48c4763e7a5aa7fdf93",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level4PreviewPrompt"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level4PreviewPrompt.LocalScript.lua",
+      "bytes": 1622,
+      "sha256": "161206ea81938d5a10408bc85f6c2b027c37015cc51378b3d721cbb8323c4436",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level6PreviewTransport",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level6PreviewTransport"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level6PreviewTransport.LocalScript.lua",
+      "bytes": 2561,
+      "sha256": "3b660cc8958f45e34413662285d25af841abab53f001daa6da21e1de883daf41",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "7c29bea1bbdeb2cd2aeca53da8d0ce9a6b4dccbf57ce74e902abb848a62c2457"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lobby DJ Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby DJ Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Lobby DJ Client.LocalScript.lua",
+      "bytes": 18153,
+      "sha256": "aa1eee7ad6b6424994c0acf83501ef1da48033419a2648f446966a2c567667ee",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "Level6InstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+        "Level6SourceSha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lobby Tunnel Reach Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lobby Tunnel Reach Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Lobby Tunnel Reach Client.LocalScript.lua",
+      "bytes": 31937,
+      "sha256": "11a493d5423d1234eaa20f2ff6248a3807fa7baf0455b7f6f9814d7e190b22c9",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/LobbyCeilingSweeps.LocalScript.lua",
+      "bytes": 7021,
+      "sha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/LobbyLevel3GateFlicker.LocalScript.lua",
+      "bytes": 5033,
+      "sha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/LobbyMusicController.LocalScript.lua",
+      "bytes": 10226,
+      "sha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "MusicControllerVersion": "20260902_3",
+        "TrackTitle": "Signal Beneath Platform Six",
+        "TrackAssetId": 89997163439780
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyReimaginedQueueController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyReimaginedQueueController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/LobbyReimaginedQueueController.LocalScript.lua",
+      "bytes": 4848,
+      "sha256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "ecb544ac31e9cc343858a399cab93da1a0a71f861ee519643c7834d7848ae0ac",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
+      "bytes": 40738,
+      "sha256": "b6405e22690cc004eb2e4d088f4ea541618125dbcdc51a11c99655778ffa9576",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
+      "bytes": 10614,
+      "sha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "bytes": 49115,
+      "sha256": "6fbda00100ba7c0f5f810706cc537c09dad3050ba4577f3e1927ed728c509cc5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
+      "bytes": 44987,
+      "sha256": "795901a09d859556d2efeaf433c6d3fb592030dfa71f5ab171c32f3b110fc12c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "bytes": 5602,
+      "sha256": "a35eba8da9854126d7522d2efe569ba0cf61af5ff0b0b3fb06d2f61ff5fb1fa5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "ObjectiveUIVersion": "20260902_1"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.R4DevGateController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "R4DevGateController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/R4DevGateController.LocalScript.lua",
+      "bytes": 15632,
+      "sha256": "431e40732f1c568993cfaae749dd12893a3a8c7abc03fbef3fb9acd81ea11868",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "InstalledSourceSHA256": "ec360457988149a3bfde59cbad68987992d65274e74c35998fef8ce9f88a36c9",
+        "LobbyReimaginedOwned": true
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+      "bytes": 6494,
+      "sha256": "67136c6bf99641ee7a899ad861b296da5e3e725fb6dcdb655a8213631c874d02",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "bytes": 17956,
+      "sha256": "13b6fdf722449d063204c7e4ee5275d06b7056c78be860a829abc4cee905bae3",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Round HUD",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round HUD"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Round HUD.LocalScript.lua",
+      "bytes": 15589,
+      "sha256": "310c422c1e7ec3b853ae8afcab071c0fa8fb8fdcebbfbcc30c948a91fe2bf7ae",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "bytes": 238896,
+      "sha256": "98d2c871dd5cbd33e3a0d633e6afcc3a7a0012c777418bd57cc272c5f35eb5dc",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": {
+        "ObjectiveUIVersion": "20260902_1"
+      }
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+      "bytes": 32796,
+      "sha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "bytes": 67762,
+      "sha256": "b382f0a7a0dbf70b368534440c72bb274e64229e3ba8074e871a6913411f14dc",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "bytes": 18253,
+      "sha256": "e6c3cbf75efd01ca5363e68baafc2b6aad9beae23bec415a399f23d49240ddc9",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Team Objective Feed"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Team Objective Feed.LocalScript.lua",
+      "bytes": 177,
+      "sha256": "3a6b69f7cd382bb9584775b173dc6b20289ebb07725952e0429bb5df59246dfa",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Daily L4",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Daily L4"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Zyntra Daily L4.LocalScript.lua",
+      "bytes": 35698,
+      "sha256": "9b9772bdd2cb6f3bff76b779a7d05971b08c7a9b9512340e09ac4b637252e8f7",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Dev L4",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Dev L4"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Zyntra Dev L4.LocalScript.lua",
+      "bytes": 47822,
+      "sha256": "4a0c96c62010ba65d3a6953f4888e3714754f0a17e6d0df72deb62adb58fe476",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Zyntra Shop L4",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Zyntra Shop L4"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Zyntra Shop L4.LocalScript.lua",
+      "bytes": 84795,
+      "sha256": "36840bc50c391816388d98ace74548610e90ca386380fd43ee0e41fa9f8da364",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraDetectorClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/ZyntraDetectorClient.LocalScript.lua",
+      "bytes": 3722,
+      "sha256": "10a6bda3853afdf1c9fe4dbf46ef45ef6ee3f3bb15030cfa0e0f8b5cda092bdd",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+      "bytes": 64900,
+      "sha256": "1436e08e705a4b7f7a1457b4cd7769210ea49aada4ba386291fedcf05c944cf5",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "Workspace.Level 4 Cinema Blender.Doors.PushDoors",
+      "segments": [
+        "Workspace",
+        "Level 4 Cinema Blender",
+        "Doors",
+        "PushDoors"
+      ],
+      "className": "Script",
+      "file": "Workspace/Level 4 Cinema Blender/Doors/PushDoors.Script.lua",
+      "bytes": 7028,
+      "sha256": "58a68c6b32aa9e7aa03f5cf2649e7ccbaf70b88db991e2061b6558ac66add55c",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Legacy"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "Workspace.Level 4 Cinema Blender.OccasionalFixtureFlicker",
+      "segments": [
+        "Workspace",
+        "Level 4 Cinema Blender",
+        "OccasionalFixtureFlicker"
+      ],
+      "className": "Script",
+      "file": "Workspace/Level 4 Cinema Blender/OccasionalFixtureFlicker.Script.lua",
+      "bytes": 5853,
+      "sha256": "c371d3aea59028f7230b1fcf4a7bb101db608e5f727b8d1c2a10d4a4d2a5c472",
+      "status": "synced",
+      "sourceEditorMatches": true,
+      "properties": {
+        "Disabled": false,
+        "LinkedSource": "",
+        "Archivable": true,
+        "RunContext": "Enum.RunContext.Client"
+      },
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Pool Foam Remotes",
+        "ClientEvent"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientEvent.RemoteEvent.txt",
+      "bytes": 170,
+      "sha256": "f8c6ce631bbf6ab6e69966618e76d4359465010bbe69b86b454646f3cbac48a3",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Pool Foam Remotes",
+        "ClientReport"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientReport.RemoteEvent.txt",
+      "bytes": 171,
+      "sha256": "0c43f7f0767d158e450b0d5bab2add9650a26dcf1bbe4e9a810a0bb4010a65ee",
+      "status": "synced",
+      "attributes": {
+        "Protocol": 1,
+        "Generation": 0
+      }
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Remotes.Level 2 Alert Event",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Remotes",
+        "Level 2 Alert Event"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Remotes/Level 2 Alert Event.RemoteEvent.txt",
+      "bytes": 167,
+      "sha256": "26bf154da9416e7c5f98ba918e084848db7292756f66e645f5a7c67e1eea8a74",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Remotes.Level 2 Sound Event",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Remotes",
+        "Level 2 Sound Event"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Remotes/Level 2 Sound Event.RemoteEvent.txt",
+      "bytes": 167,
+      "sha256": "c23ba42f37f52788f595b7decf891889c7f694c8bb5e0cd9b3fce37bac6b9b1a",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 3 Remotes",
+        "ClientEvent"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 3 Remotes/ClientEvent.RemoteEvent.txt",
+      "bytes": 160,
+      "sha256": "58c0db0a2621b63c09704a8d2d1e3bbe31ee80929c9ce9dd06cc7b2a96d293fc",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 3 Remotes.Level3HideRequest",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 3 Remotes",
+        "Level3HideRequest"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 3 Remotes/Level3HideRequest.RemoteEvent.txt",
+      "bytes": 165,
+      "sha256": "19deb874115fb53555fb3fc4e9e66733fe278dad0fc84c5758882c25d0b38529",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.DevControl",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DevControl"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/DevControl.RemoteEvent.txt",
+      "bytes": 840,
+      "sha256": "dbd7924fe5a7e22f42f21b8b78844f8ab8074feb0115362824f76e3741ab8aae",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.DevTuning",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DevTuning"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/DevTuning.RemoteEvent.txt",
+      "bytes": 917,
+      "sha256": "cf0ed6289143bbf873ebfc26307e6e62d7db82c7df12ece9b39d240a6b9d6efd",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.DropGlowstick",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "DropGlowstick"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/DropGlowstick.RemoteEvent.txt",
+      "bytes": 245,
+      "sha256": "86458c8756ae1a2f91c93a642d3da93fd077d24ac6ad6698873b92ae84cb0194",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.Jumpscare",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "Jumpscare"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/Jumpscare.RemoteEvent.txt",
+      "bytes": 287,
+      "sha256": "068d83d9ce039cf5463c14220281cd81551d798a2e904b0032e02497c15582c8",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.PuzzleStatus",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "PuzzleStatus"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/PuzzleStatus.RemoteEvent.txt",
+      "bytes": 293,
+      "sha256": "fb3fef07cca8935942f386596e3a31179b31adf436e897e65ba973e233e42523",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.ReportNoise",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "ReportNoise"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/ReportNoise.RemoteEvent.txt",
+      "bytes": 433,
+      "sha256": "d401c12504541bcd6429628945f25c6640a18ef14800e4baac30dc6028e61f82",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.RoundStatus",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "RoundStatus"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/RoundStatus.RemoteEvent.txt",
+      "bytes": 288,
+      "sha256": "c04870c6bd6b7fac25e394f12b69c13cb705155f5d9d495b430214c0debb6f46",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.SetCrouching",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "SetCrouching"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/SetCrouching.RemoteEvent.txt",
+      "bytes": 151,
+      "sha256": "2422f7966311e4bc878e551342a570271b4eb60799c829bbc7c647c28d22ba54",
+      "status": "synced",
+      "attributes": []
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.ToggleFlashlight",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "ToggleFlashlight"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/ToggleFlashlight.RemoteEvent.txt",
+      "bytes": 456,
+      "sha256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
+      "status": "synced",
+      "attributes": []
+    }
+  ]
+}

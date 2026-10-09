@@ -1,9 +1,0 @@
-phone 568x320, 19 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, LobbyDJ, Level3ReaderGui, ZyntraShopL4, SpectateGui, TeamObjectiveFeed, StaminaGui, RoundExitGui, Level2PoolFoamGui, RoundGui, LevelOneGuideGui, ZyntraDailyL4, Achievements, LuckyWheelGui, ZyntraStore, FriendBoostGui, ZyntraLobbyPillL4), 103 pieces measured, 8 findings
-CUT     ZyntraLobbyPillL4.TokenPill '+' (537,21)-(546,37)
-OFF     Achievements.Panel 'Over the Void' (434,310)-(500,322)
-OFF     Achievements.Panel 'Party's Over' (177,310)-(237,322)
-OFF     Achievements.Panel 'The Last Show' (301,310)-(373,322)
-OVERLAP StaminaGui.TouchRunHold 'RUN  »' (490,180)-(538,196)  x  Achievements.Panel (126,58)-(556,320)  (47x16 px)
-OVERLAP StaminaGui.TouchRunHold 'RUN  »' (490,180)-(538,196)  x  Achievements.Panel > FirstClearLevel2 (406,120)-(528,224)  (38x16 px)
-OVERLAP StaminaGui.TouchRunHold 'RUN  »' (490,180)-(538,196)  x  Achievements.Panel > Icon (436,126)-(498,188)  (8x8 px)
-OVERLAP StaminaGui.TouchRunHold (482,156)-(546,220)  x  Achievements.Panel 'Out of the Deep End' (417,200)-(517,212)  (35x11 px)

@@ -1,7 +1,0 @@
-{
-  "requestedModel": "claude-opus-5-5",
-  "effort": "max",
-  "tools": [],
-  "status": "timeout",
-  "elapsedSeconds": 150.01
-}

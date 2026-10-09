@@ -1,0 +1,9 @@
+# Independent composition review — prepared 10/10 retained
+
+Reviewed the exact card Nn65pxPk/#63 in the complete saved Trello snapshot `trello-recheck-20260910-1751-boards.json`: square buttons; imagegen artwork; the existing two design colors; centered logos above exactly `shops` and `upgrades`; independent 10/10 before release. The text is unchanged from the original full-card snapshot, and comments/checklists are empty with no additional pages.
+
+Final copy-only proposal: `fa63e760427012ec3fdb08712b4edc5482629b242254503504a861869f4268d2`. Published v1872 input: `083c53b7639a578c64398f1da077745c07f1d99d03fd8421c660ef9619d87c71`. Independently reapplied the original square transform and reversed its nine unique edits: every byte returns to that copy-only input. The accepted artwork, layout and returned image IDs remain unchanged (Shop 132462891522145; Upgrades 119432640057145). No pending ESP or DEV-respawn feature is added.
+
+Independently ran `test_composition.py`: 319 actual-source checks across nine layouts, the specific old-rectangle negative control and two whole compiles pass. The original reviewed host is reused unchanged, SHA-256 `5395c17887fd209089e97fbc98861bf1835528a87b628ca6a08a91432ac79d0c`. The adapter changes the input composition and output checkpoint only; the actual image strings are checked against the retained upload response. No additional gameplay tests were introduced.
+
+No composition blocker found. The earlier honest prepared-art/code 10/10 remains valid for this exact composition. This is GO for native installation and review, not final release approval. Actual texture loading, native captions/spacing/hover and parent click/guard behavior still need the bounded native checkpoint before the card's final 10/10 release score. No Studio, UI, production-source or Git write was made by this review.

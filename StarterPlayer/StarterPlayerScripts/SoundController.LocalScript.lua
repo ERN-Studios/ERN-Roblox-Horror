@@ -84,7 +84,7 @@ local FOOT_FADE     = 6      -- how fast the loop fades in as you move / out as 
 local FLASHLIGHT_VOLUME = 0.6 -- the flashlight toggle click (2D)
 
 local ENTITY_VOLUME    = 1.0  -- the Entity's growl (positional)
-local DEATH_VOLUME     = 1.15  -- loud positional scream heard across the complete map
+local DEATH_VOLUME     = .5    -- the scream ALIVE players hear when someone dies (Level 1 only, positional)
 local JUMPSCARE_VOLUME = 0.82  -- the dying player's own impact sound (2D, intentionally restrained)
 local YELL_VOLUME      = 1     -- the Entity's roar (positional)
 local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
@@ -351,19 +351,22 @@ jumpscareRemote.OnClientEvent:Connect(function(eventName)
 end)
 
 -- death audio: GameManager fires RoundStatus "death" with the victim + kill spot.
--- When someone ELSE dies → the death scream, POSITIONAL at the kill, and only if
--- you're still ALIVE (dead spectators don't hear it). Your own death is handled
--- by the Jumpscare remote above.
+-- When someone ELSE dies in a LEVEL 1 round → the death scream, POSITIONAL at the
+-- kill, and only if you're still ALIVE (dead spectators don't hear it). Every
+-- other level stays silent (owner, 2026-10-05). The lobby server's SelectedLevel
+-- stays 1, so the Level 5/6 marker is checked too. Your own death is handled by
+-- the Jumpscare remote above.
 local roundStatus = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	if ev ~= "death" then return end
 	if name == player.Name then return end -- your own scare is on the Jumpscare remote
+	if workspace:GetAttribute("SelectedLevel") ~= 1
+		or player:GetAttribute("Level6PlaygroundPreview") == true then return end
 
 	if DEATH_SOUND == "" or typeof(pos) ~= "Vector3" then return end
 	-- Only the living hear the scream -- and a spectator hears whatever the
 	-- LIVING player they are watching hears, from that player's ears.
 	if not audioSubject() then return end
-	local levelOne = workspace:GetAttribute("SelectedLevel") == 1
 	local holder = Instance.new("Part")
 	holder.Anchored = true
 	holder.CanCollide = false
@@ -374,12 +377,12 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	holder.Parent = workspace
 	local s = Instance.new("Sound")
 	s.SoundId = DEATH_SOUND
-	s.Volume = levelOne and .5 or DEATH_VOLUME
+	s.Volume = DEATH_VOLUME
 	s.PlaybackSpeed = 0.98 + math.random() * 0.04
-	-- Level 1 deaths are local to the actual kill spot; other levels keep their mix.
-	s.RollOffMode = levelOne and Enum.RollOffMode.InverseTapered or Enum.RollOffMode.Linear
-	s.RollOffMinDistance = levelOne and 8 or 60
-	s.RollOffMaxDistance = levelOne and 96 or 2200
+	-- Local to the actual kill spot.
+	s.RollOffMode = Enum.RollOffMode.InverseTapered
+	s.RollOffMinDistance = 8
+	s.RollOffMaxDistance = 96
 	local eq = Instance.new("EqualizerSoundEffect")
 	eq.HighGain = -3
 	eq.MidGain = -1

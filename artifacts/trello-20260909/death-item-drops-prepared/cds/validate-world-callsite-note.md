@@ -1,0 +1,9 @@
+# ValidateWorld callsites and timing
+
+Read-only inventory on 2026-09-10 covered **all 125 current scripts from `studio-sync-manifest.json`**, plus the non-archived runtime directories and `tools`. There is **no active production caller or require of `Level 3 Test Suite`**. The only manifest-source `ValidateWorld` hits are the suite's introductory comment at line 3 and its function definition at line 463. Its own `RunNavigationRegression` entry point does not call `ValidateWorld` either.
+
+The actual normal build path is `Level 3 Round Adapter.ModuleScript.lua`: `WorldBuilder.Build(layout, generation)` at line 635, the adapter's **own local** `validateManifest(manifest)` at 636, then `ObjectiveController.Start(manifest, generation)` at 653. The local validator is defined at line 307 and checks layout, world identity/generation and required manifest references. It is not `TestSuite.ValidateWorld`, and it does not run the suite's generated-text restriction.
+
+Consequently, the proposed CD Billboard cannot trigger this suite assertion automatically during a normal death, pickup or round. An explicit developer/Studio call to `TestSuite.ValidateWorld` can still be made on a live manifest after a death; the current generic text assertion at lines 802–806 would reject the new runtime marker. That is a manual diagnostic compatibility limit, not a demonstrated gameplay regression. No new native call was performed to reach this conclusion.
+
+For this feature's acceptance, run structural `ValidateWorld` before dynamic death drops, then inspect those drops with the shared read-only probe and the actual objective/pickup/lifecycle checks. Do not change the generated-world validation rules without a concrete additional requirement. The existing `ValidateRuntime` is a separate objective-state diagnostic; it is not evidence of floor position or rendered-marker quality by itself.

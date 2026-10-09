@@ -1,8 +1,0 @@
-# Full local recovery files can contain live script secrets. Keep them on disk,
-# out of Git, while committing their verification metadata and hashes.
-*.rbxl
-*.rbxm
-scripts.json
-# Transfer fragments were assembled into the two verified native backups.
-native-part-*.bin
-script-part-*.jsonpart

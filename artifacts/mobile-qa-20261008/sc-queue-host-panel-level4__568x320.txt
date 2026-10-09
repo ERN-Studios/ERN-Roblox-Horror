@@ -1,2 +1,0 @@
-phone 568x320, 16 ScreenGuis copied (Freecam, HelpButton, Level5VoidHud, Achievements, LobbyDJ, ZyntraLobbyPillL4, ZyntraStore, ZyntraShopL4, StaminaGui, FriendBoostGui, TeamObjectiveFeed, RoundExitGui, Level2PoolFoamGui, RoundGui, ZyntraDailyL4, LuckyWheelGui), 21 pieces measured, 0 findings
-

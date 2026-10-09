@@ -1,0 +1,75 @@
+{
+  "set": "roblox-thumbnails-v4-dark-horror",
+  "created": "2026-08-27",
+  "universeId": "10559217407",
+  "placeId": "131311258779917",
+  "experience": "Backrooms: No Way Out",
+  "sourceOfTruth": "live Roblox Studio inspection and approved Studio-accurate v3 compositions",
+  "derivedFrom": "assets/marketing/roblox-thumbnails-v3-studio-accurate",
+  "liveCarouselChanged": false,
+  "uploadStatus": "prepared-not-submitted",
+  "sourceDimensions": {
+    "width": 1672,
+    "height": 941,
+    "format": "PNG"
+  },
+  "uploadDimensions": {
+    "width": 1920,
+    "height": 1080,
+    "format": "JPEG",
+    "quality": 92
+  },
+  "images": [
+    {
+      "order": 1,
+      "level": 1,
+      "slug": "level1-entity-corner-chase",
+      "source": "01-level1-entity-corner-chase.png",
+      "upload": "01-level1-entity-corner-chase.jpg",
+      "entities": ["Level 1 Entity"],
+      "avatar": "StarterPlayer.StarterCharacter",
+      "horrorTreatment": "partial power failure and isolated sickly overhead light"
+    },
+    {
+      "order": 2,
+      "level": 1,
+      "slug": "level1-entity-flashlight-ambush",
+      "source": "02-level1-entity-flashlight-ambush.png",
+      "upload": "02-level1-entity-flashlight-ambush.jpg",
+      "entities": ["Level 1 Entity"],
+      "avatar": "StarterPlayer.StarterCharacter",
+      "horrorTreatment": "near-total blackout with flashlight-only reveal"
+    },
+    {
+      "order": 3,
+      "level": 2,
+      "slug": "level2-pool-foam-kids-room",
+      "source": "03-level2-pool-foam-kids-room.png",
+      "upload": "03-level2-pool-foam-kids-room.jpg",
+      "entities": ["Pool Foam"],
+      "avatar": "StarterPlayer.StarterCharacter",
+      "horrorTreatment": "midnight pool blackout and cyan underwater rim light"
+    },
+    {
+      "order": 4,
+      "level": 2,
+      "slug": "level2-slidemouth-grand-slide-hall",
+      "source": "04-level2-slidemouth-grand-slide-hall.png",
+      "upload": "04-level2-slidemouth-grand-slide-hall.jpg",
+      "entities": ["Slidemouth"],
+      "avatar": "StarterPlayer.StarterCharacter",
+      "horrorTreatment": "facility blackout with cold reflections and mouth highlights"
+    },
+    {
+      "order": 5,
+      "level": 3,
+      "slug": "level3-mall-manager-disc-relay",
+      "source": "05-level3-mall-manager-disc-relay.png",
+      "upload": "05-level3-mall-manager-disc-relay.jpg",
+      "entities": ["Mall Manager"],
+      "avatar": "StarterPlayer.StarterCharacter",
+      "horrorTreatment": "post-CD blackout, flickering ceiling panel, and CRT static"
+    }
+  ]
+}
+

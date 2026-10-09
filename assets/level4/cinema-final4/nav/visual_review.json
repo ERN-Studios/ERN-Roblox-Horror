@@ -1,0 +1,30 @@
+{
+  "threshold_closed.png": {
+    "sha256": "b922ff9a9453e24fb850b3a47ff5f6f5f7d21af2b2ca11195ddaaf79e3ef53fb",
+    "review": "LOOKED: accepted"
+  },
+  "threshold_open.png": {
+    "sha256": "a04c1dab6b38f7447203d771b8d6d676478221c703bcab31626df348b60d9289",
+    "review": "LOOKED: accepted"
+  },
+  "plan_ground.png": {
+    "sha256": "0f33774c9701a0428fd544188533df233e8073cd32f4a2c8a3cb65d8a7682dc2",
+    "review": "LOOKED: accepted"
+  },
+  "plan_upper.png": {
+    "sha256": "bd6474291b4262ed5ddc1e5ad9ec7e408cbc39eeb7682f501c0af9fb9ece091f",
+    "review": "LOOKED: accepted"
+  },
+  "nav_zones_ground.png": {
+    "sha256": "88954f9967e5e9a6a3716aff83ac86c07ea257d0435550efdd66c007c661f404",
+    "review": "LOOKED: accepted"
+  },
+  "nav_zones_upper.png": {
+    "sha256": "6d593fc29d682d16d76ba63ee444145959f3f6ece77247bc5ec2169aafeff690",
+    "review": "LOOKED: accepted"
+  },
+  "nav_zones_debug.png": {
+    "sha256": "7c91a9d017c03af6905a35557db78ffef6ff2cc573294b3ffe8d09e83702f582",
+    "review": "LOOKED: accepted"
+  }
+}

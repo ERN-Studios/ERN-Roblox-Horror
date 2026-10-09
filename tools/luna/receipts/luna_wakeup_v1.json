@@ -1,0 +1,21 @@
+{
+  "source": "luna_wakeup_v1.rbxmx",
+  "sha256": "922753291729f6dd79a059a29117d8b672ab266f1bea018a9d4ae1ad3319d0bd",
+  "assetType": "Animation",
+  "displayName": "Luna wakeup v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:04:13.789484+00:00",
+  "operationPath": "operations/e3af63ae-2824-4f45-bf40-406c61a58e46",
+  "assetId": "94046810034417",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna wakeup v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

@@ -11,6 +11,7 @@ local VISUAL_NAME = "ZyntraHazmatSkinVisual"
 local ORIGINAL_ATTRIBUTE = "ZyntraHazmatOriginalTransparency"
 local CAMERA_CLEARANCE = 3
 local RESCAN_INTERVAL = 0.2
+local PENDING_TIMEOUT = 5
 
 -- The 22 Bones retained by Studio in the canonical Meshy import and the R15
 -- segment each should follow. Rest offsets come from the *actual authored R15*
@@ -36,11 +37,14 @@ local BODY_PARTS = {
 	RightUpperArm = true, RightLowerArm = true, RightHand = true,
 	LeftUpperLeg = true, LeftLowerLeg = true, LeftFoot = true,
 	RightUpperLeg = true, RightLowerLeg = true, RightFoot = true,
+	-- Also suppress a late replicated seam filler from the retired suit.
+	LeftShoulderSeamLiner = true, RightShoulderSeamLiner = true, NeckSeamLiner = true,
 	Mask = true, Torso = true, LeftArm = true, RightArm = true,
 	LeftLeg = true, RightLeg = true,
 }
 
 local states = {}
+local pendingStates = {}
 local blockedVisuals = setmetatable({}, {__mode = "k"})
 local warned = {}
 
@@ -220,8 +224,10 @@ local function orderedBones(mesh)
 end
 
 local function captureBody(character, originals)
-	for _, child in ipairs(character:GetChildren()) do
-		if child:IsA("BasePart") and BODY_PARTS[child.Name] then
+	for _, child in ipairs(character:GetDescendants()) do
+		local seamLiner = child.Name == "LeftShoulderSeamLiner"
+			or child.Name == "RightShoulderSeamLiner" or child.Name == "NeckSeamLiner"
+		if child:IsA("BasePart") and ((child.Parent == character and BODY_PARTS[child.Name]) or seamLiner) then
 			if originals[child] == nil then originals[child] = child.Transparency end
 			for _, descendant in ipairs(child:GetDescendants()) do
 				if (descendant:IsA("Decal") or descendant:IsA("Texture"))
@@ -247,7 +253,46 @@ local function setVisible(state, visible)
 	end
 end
 
+local function hidePending(state)
+	if state.TimedOut then return end
+	captureBody(state.Character, state.Originals)
+	for object, original in pairs(state.Originals) do
+		if object.Parent then
+			object:SetAttribute(ORIGINAL_ATTRIBUTE, original)
+			object.Transparency = 1
+		end
+	end
+end
+
+local function restorePending(state)
+	for object, original in pairs(state.Originals) do
+		if object.Parent then
+			object:SetAttribute(ORIGINAL_ATTRIBUTE, nil)
+			object.Transparency = original
+		end
+	end
+end
+
+local function clearPending(player, restore)
+	local state = pendingStates[player]
+	if not state then return end
+	pendingStates[player] = nil
+	if state.Connection then state.Connection:Disconnect() end
+	if restore ~= false then restorePending(state) end
+end
+
+local function beginPending(player, character, visual)
+	local state = {Character = character, Visual = visual, Originals = {}, Started = os.clock()}
+	pendingStates[player] = state
+	hidePending(state)
+	state.Connection = character.DescendantAdded:Connect(function()
+		if pendingStates[player] == state then hidePending(state) end
+	end)
+	return state
+end
+
 local function clearState(player)
+	clearPending(player)
 	local state = states[player]
 	if not state then return end
 	states[player] = nil
@@ -418,9 +463,14 @@ local function reconcile()
 		seen[player] = true
 		local character = player.Character
 		local visual = character and character:FindFirstChild(VISUAL_NAME)
-		if player:GetAttribute("InRound") ~= true
-			or (workspace:GetAttribute("RoundActive") ~= true and player:GetAttribute("Level6PlaygroundPreview") ~= true) then
+		-- Identity belongs to the loaded body, including its loading brief and
+		-- outgoing corpse. A queued lobby avatar never receives this marker.
+		if not character or character:GetAttribute("ZyntraGameplayCharacter") ~= true then
 			visual = nil
+		end
+		local pending = pendingStates[player]
+		if pending and (pending.Character ~= character or pending.Visual ~= visual or blockedVisuals[visual]) then
+			clearPending(player)
 		end
 		local state = states[player]
 		if state and (state.Character ~= character or state.Visual ~= visual
@@ -429,12 +479,26 @@ local function reconcile()
 			state = nil
 		end
 		if visual and not state and not blockedVisuals[visual] then
+			-- A server-built suit can arrive before the rest of its R15 source rig.
+			-- Suppress the retired body during that short wait, keeping its originals.
+			local pending = pendingStates[player] or beginPending(player, character, visual)
+			hidePending(pending)
 			local ok, candidate = pcall(buildState, character, visual)
 			if not ok then
 				blockedVisuals[visual] = true
+				clearPending(player)
 				warnOnce("build", "R15 bind calibration failed: " .. tostring(candidate))
 			elseif candidate then
+				-- buildState saw hidden parts; retain their genuine pre-hide values.
+				for object, original in pairs(pending.Originals) do candidate.Originals[object] = original end
+				clearPending(player, false)
 				states[player] = candidate
+			elseif not pending.TimedOut and os.clock() - pending.Started >= PENDING_TIMEOUT then
+				-- A malformed asset/rig must still fall back safely. Do not repeatedly
+				-- hide it on retries; a later complete rig can still build normally.
+				pending.TimedOut = true
+				if pending.Connection then pending.Connection:Disconnect(); pending.Connection = nil end
+				restorePending(pending)
 			end
 		end
 		state = states[player]
@@ -459,6 +523,9 @@ local function reconcile()
 	end
 	for player in pairs(states) do
 		if not seen[player] then clearState(player) end
+	end
+	for player in pairs(pendingStates) do
+		if not seen[player] then clearPending(player) end
 	end
 end
 
@@ -486,7 +553,11 @@ RunService:BindToRenderStep("ZyntraHazmatR15Retarget",
 					state.PoseFrames += 1
 					if state.PoseFrames >= 2 then setVisible(state, true) end
 					local head = state.Character:FindFirstChild("Head")
-					local nearHead = camera and head and head:IsA("BasePart")
+					-- Face clearance belongs only to our own POV (or the teammate
+					-- whose POV SpectateController owns), never a nearby player.
+					local viewpointPlayer = player == Players.LocalPlayer
+						or player.UserId == Players.LocalPlayer:GetAttribute("SpectateTargetUserId")
+					local nearHead = viewpointPlayer and camera and head and head:IsA("BasePart")
 						and (camera.CFrame.Position - head.Position).Magnitude < CAMERA_CLEARANCE
 					for _, part in ipairs(state.VisualParts) do
 						if part.Parent then

@@ -1,0 +1,21 @@
+{
+  "source": "luna_walk_v1.rbxmx",
+  "sha256": "b943cc8e7fadad23df471f935e2dca03be548fe12d058e530168ee0733f2f2cd",
+  "assetType": "Animation",
+  "displayName": "Luna walk v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:03:28.996965+00:00",
+  "operationPath": "operations/ecf0513b-0b11-41d3-a92a-2e47a62ecfe3",
+  "assetId": "103802473375899",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna walk v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

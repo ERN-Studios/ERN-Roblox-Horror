@@ -1,0 +1,69 @@
+{
+ "_comment": "Level 2 kit PBR sets. src = seam-fixed 1024 px Codex textures (fix_tiles.py). Output: G:/Blender/Level2_Pool/textures/pbr. tile_m = real-world metres one texture repeat covers. metal: constant metalness. saturation: HSV saturation multiplier applied to the source before make_pbr (owner 2026-10-03: more vivid).",
+ "tile_white": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_tile10_white.png",
+  "tile_m": 1.0,
+  "strength": 6.0,
+  "rough_base": 0.12,
+  "rough_var": 0.38
+ },
+ "mosaic_aqua": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_mosaic5_aqua.png",
+  "tile_m": 1.1,
+  "strength": 5.0,
+  "rough_base": 0.14,
+  "rough_var": 0.3,
+  "saturation": 1.45
+ },
+ "mosaic_cobalt": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_mosaic5_cobalt.png",
+  "tile_m": 1.1,
+  "strength": 5.0,
+  "rough_base": 0.14,
+  "rough_var": 0.3,
+  "saturation": 1.2
+ },
+ "terrazzo": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_terrazzo_cream.png",
+  "tile_m": 1.2,
+  "strength": 1.5,
+  "rough_base": 0.28,
+  "rough_var": 0.1,
+  "saturation": 1.35
+ },
+ "glassblock": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_glassblock.png",
+  "tile_m": 0.8,
+  "strength": 6.0,
+  "rough_base": 0.1,
+  "rough_var": 0.1,
+  "saturation": 1.25
+ },
+ "concrete_paint": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_concrete_paint.png",
+  "tile_m": 2.4,
+  "strength": 3.0,
+  "rough_base": 0.85,
+  "rough_var": 0.1
+ },
+ "rubber_kids": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_rubber_kids.png",
+  "tile_m": 1.2,
+  "strength": 3.0,
+  "rough_base": 0.9,
+  "rough_var": 0.05,
+  "saturation": 1.3
+ },
+ "steel": {
+  "src": "G:/Roblox/_local/l2blender/textures/fixed/tex_steel_brushed.png",
+  "tile_m": 0.5,
+  "strength": 1.0,
+  "rough_base": 0.35,
+  "rough_var": 0.1,
+  "metal": 1.0
+ },
+ "bands": {
+  "derived": "make_bands.py from tile_white (rows W C C W Y Y W B B W)",
+  "tile_m": 1.0
+ }
+}

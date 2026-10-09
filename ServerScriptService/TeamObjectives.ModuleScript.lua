@@ -7,13 +7,14 @@ local remote = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local Analytics = require(script.Parent:WaitForChild("ZyntraAnalytics"))
 local TeamObjectives = {}
 local serial = 0
-function TeamObjectives.Announce(actorName, detail, level)
+function TeamObjectives.Announce(actorName, detail, level, key)
 	if type(actorName) ~= "string" or type(detail) ~= "string" then return end
 	-- Attributed to the ACTOR only, never the party: every caller passes a
 	-- player's own name and names are unique within a server. Measurement only.
 	Analytics.Objective(Players:FindFirstChild(actorName), level)
 	serial += 1
-	local payload = {Actor = actorName, Detail = detail, Level = level, Serial = serial}
+	local payload = {Actor = actorName, Detail = detail, Level = level, Serial = serial,
+		Key = type(key) == "string" and key or nil}
 	for _, recipient in ipairs(Players:GetPlayers()) do
 		-- Dead/escaped teammates retain InRound until their round closes.
 		if recipient:GetAttribute("InRound") == true then

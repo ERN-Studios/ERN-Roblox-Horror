@@ -12,10 +12,6 @@ local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
--- UI_STYLE_20260915 (Trello #98). The spectate band was the one HUD still
--- drawing pure black at .4 with no border; it now wears the same card chrome as
--- the Objectives panel. Placement, sizes and every behaviour are untouched.
-local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
 local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local playerScripts = player:WaitForChild("PlayerScripts")
@@ -35,66 +31,64 @@ gui.ResetOnSpawn = false
 gui.DisplayOrder = 58
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local label = Instance.new("TextLabel")
-label.AnchorPoint = Vector2.new(0.5, 1)
-label.Position = UDim2.new(0.5, 0, 1, -20)
-label.Size = UDim2.new(0, 420, 0, 30)
-label.TextScaled = true
-label.Visible = false
-label.Text = ""
-label.Parent = gui
--- The subtitle band's surface, the objectives panel's stroke: a caption sitting
--- over the world, in the family the rest of the HUD now shares.
-UIStyle.panel(label, {
-	Background = UIStyle.Color.Caption,
-	Transparency = UIStyle.Transparency.Caption,
-	Radius = UIStyle.Radius.Chip,
-})
-UIStyle.body(label)
-
--- Touch has no Q/E, and until now had no way to change who it was watching at
--- all: the label simply named bindings that do not exist on a phone. Two arrows
--- sit either side of the caption, inside the same safe band, and are the only
--- spectate affordance a touch player ever sees.
-local ARROW_LEFT = utf8.char(0x2039)
-local ARROW_RIGHT = utf8.char(0x203A)
-local function makeCycleButton(name, glyph)
-	local button = Instance.new("TextButton")
-	button.Name = name
-	button.AnchorPoint = Vector2.new(0.5, 1)
-	button.AutoButtonColor = true
-	button.Text = glyph
-	button.Visible = false
-	button.Active = false
-	button.Parent = gui
-	-- 22px keeps the chevron the size the touch layout was measured against.
-	-- These are the TOUCH affordance, so AutoButtonColor stays the press
-	-- feedback and no hover handler is added to fight it for the background.
-	UIStyle.button(button, {TextSize = 22})
-	return button
-end
+-- HUD_B8_SPECTATE: only the presentation changes; this file still owns the POV.
+local label, prevButton, nextButton, exitButton = nil, nil, nil, nil
 local applySpectateLayout
-local prevButton = makeCycleButton("SpectatePrevious", ARROW_LEFT)
-local nextButton = makeCycleButton("SpectateNext", ARROW_RIGHT)
-
--- BACK_TO_LOBBY_20260914 (card 74): a dead or escaped player can leave the
--- round from the spectate band. The button only asks; Round Exit Client owns
--- the confirm card and the request, so the two entry points cannot drift.
-local exitButton = Instance.new("TextButton")
-exitButton.Name = "SpectateBackToLobby"
-exitButton.AnchorPoint = Vector2.new(0.5, 1)
-exitButton.AutoButtonColor = true
-exitButton.Text = "BACK TO LOBBY"
-exitButton.Visible = false
-exitButton.Active = false
-exitButton.Parent = gui
--- Same face as the chip Round Exit Client draws for a LIVING player: one
--- action, one look. (Card 74's behaviour is untouched -- this only asks.)
-UIStyle.button(exitButton)
-exitButton.Activated:Connect(function()
-	local prompt = playerScripts:FindFirstChild("RoundExitPrompt")
-	if prompt and prompt:IsA("BindableEvent") then prompt:Fire() end
-end)
+local band = {who = nil, empty = true, escaped = false}
+do
+	local Hud = require(ReplicatedStorage:WaitForChild("RoundHud"))
+	local Binder = require(ReplicatedStorage:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
+	function band.mount()
+		local layout = UIDevice.Layout()
+		local touch = layout.IsTouch
+		local width = touch and 420 or 520
+		local scale = math.min(1, (layout.Safe.Width - 24) / width)
+		if band.root then band.root:Destroy() end
+		if exitButton then exitButton:Destroy() end
+		band.root, band.attention = Hud.Mount("HUD_Screens", touch and "SpectateBandTouch" or "SpectateBand", gui,
+			{Name = "SpectateBand", Scale = scale, Touch = touch, Attention = {Hold = 6, Rest = 0.45}})
+		exitButton = Hud.Mount("HUD_Screens", "SpectateBackToLobby", gui,
+			{Name = "SpectateBackToLobby", Scale = scale, Touch = touch})
+		if not band.root or not exitButton then return end
+		for _, node in ipairs(band.root:GetDescendants()) do
+			if node:IsA("Frame") then node.BackgroundTransparency = 1 end
+			if node:IsA("TextLabel") then
+				local stroke = node:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke")
+				stroke.Name = "ContextualTextStroke"
+				stroke.Color = Color3.fromRGB(5,9,11)
+				stroke.Transparency = 0.35
+				stroke.Thickness = 1.5
+				stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual
+				stroke.Parent = node
+			end
+		end
+		prevButton, nextButton = Binder.find(band.root, "Prev"), Binder.find(band.root, "Next")
+		prevButton.Name, nextButton.Name = "SpectatePrevious", "SpectateNext"
+		if touch then prevButton.Size, nextButton.Size = UDim2.fromOffset(44,44), UDim2.fromOffset(44,44) end
+		prevButton.Activated:Connect(function() if band.Cycle then band.Cycle(-1) end end)
+		nextButton.Activated:Connect(function() if band.Cycle then band.Cycle(1) end end)
+		local prevKey, nextKey = Binder.find(prevButton, "KeyChip"), Binder.find(nextButton, "KeyChip")
+		if prevKey then Hud.Keycap(prevKey, Enum.KeyCode.Q, Enum.KeyCode.DPadLeft) end
+		if nextKey then Hud.Keycap(nextKey, Enum.KeyCode.E, Enum.KeyCode.DPadRight) end
+		label = Binder.find(band.root, "Who")
+		band.watching = Binder.find(band.root, "Watching")
+		band.initial = Binder.at(band.root, "Initial/Letter")
+		Binder.find(exitButton, "Label").Text = "BACK TO LOBBY"
+		exitButton.Activated:Connect(function()
+			if not exitButton.Active then return end
+			local prompt = playerScripts:FindFirstChild("RoundExitPrompt")
+			if prompt and prompt:IsA("BindableEvent") then prompt:Fire() end
+		end)
+	end
+	function band.copy(who, escaped)
+		band.who, band.escaped = who, escaped
+		band.watching.Text = escaped and "YOU GOT OUT \u{B7} WATCHING" or who and "WATCHING" or "SPECTATING"
+		label.Text = who and who.DisplayName or "NO ONE LEFT TO WATCH"
+		band.initial.Text = who and string.upper(utf8.char(utf8.codepoint(who.DisplayName, 1))) or "?"
+		band.attention:Show(who and tostring(who.UserId) or "empty", false)
+	end
+	band.mount()
+end
 
 local SMOOTH = 11     -- how fast the POV eases toward their head — high enough to
 -- follow, low enough to filter out the walk/idle head-bob jitter
@@ -114,6 +108,7 @@ local function cycleAvailable()
 		and UIS:GetFocusedTextBox() == nil
 		and not UIDevice.ScreenOwningModalOpen()
 		and player:GetAttribute("PartyDownCardOpen") ~= true
+		and player:GetAttribute("RoundExitPromptOpen") ~= true
 end
 
 local function livingOthers()
@@ -176,9 +171,7 @@ local function watch(i)
 		player:SetAttribute("SpectateTargetUserId", nil)
 		reportTarget(nil)
 		unhide()
-		label.Text = player:GetAttribute("Escaped") == true
-			and "You escaped — waiting for the round to end"
-			or "Spectating — no survivors left"
+		band.copy(nil, player:GetAttribute("Escaped") == true)
 		return
 	end
 	idx = ((i - 1) % #targets) + 1
@@ -186,9 +179,7 @@ local function watch(i)
 	spectated = targets[idx]
 	player:SetAttribute("SpectateTargetUserId", spectated.UserId)
 	reportTarget(spectated.UserId)
-	-- The binding half of this caption comes from UIDevice, so a phone sees
-	-- only the name and uses the arrows beside it.
-	label.Text = UIDevice.Caption("POV: " .. spectated.Name, "(Q / E to switch)", "(D-pad ← / →)")
+	band.copy(spectated, player:GetAttribute("Escaped") == true)
 end
 
 -- drive the POV camera + borrowed flashlight every frame while spectating
@@ -247,101 +238,63 @@ RunService.RenderStepped:Connect(function(dt)
 	end
 end)
 
--- The label was a fixed 420px box anchored 20px off the bottom. On a 375-wide
--- portrait screen that ran 45px off both edges, and on any touch device it sat
--- squarely on the movement controls. It now sizes to the safe width and lives
--- in the safe content band, with the arrows flanking it on touch.
-local ARROW_WIDTH = 44
 applySpectateLayout = function()
+	if not band.root then return end
 	local layout = UIDevice.Layout()
 	local touch = layout.IsTouch
-	-- Spectating hides the stamina bar, so on touch the caption takes the lane
-	-- between the two movement zones -- the only place on a landscape phone with
-	-- room for a label plus two arrows. Portrait's corridor is too narrow for
-	-- that, so it falls back to the safe band.
-	local corridor = layout.Corridor
-	local useCorridor = touch and corridor.Width >= 240
-	local available = useCorridor and corridor.Width or (layout.SafeRight - layout.SafeLeft)
-	local arrowRoom = touch and (ARROW_WIDTH + 8) * 2 or 0
-	local width = math.min(420, available - arrowRoom)
-	local absoluteBottom = touch
-		and (useCorridor and (layout.Display.Bottom - 18) or layout.SafeBottom)
-		or (layout.Display.Bottom - 20)
-	-- Centre on the SAFE RECT, not on the screen. The safe rect is off-centre
-	-- whenever the control column eats the right edge (landscape), and centring
-	-- a 420px label on 0.5 pushed it straight back under the controls.
-	local absoluteCentre = useCorridor and (corridor.Left + corridor.Right) * .5
-		or (touch and (layout.SafeLeft + layout.SafeRight) * .5 or nil)
-	-- Both figures are ABSOLUTE and both need converting; the old code passed
-	-- them straight in as gui offsets, so X was wrong on any device with a
-	-- horizontal safe inset and Y was wrong by the topbar on every device.
-	local centre, bottom = nil, select(2, UIDevice.LocalOffset(gui, 0, absoluteBottom))
-	if absoluteCentre then
-		centre = select(1, UIDevice.LocalOffset(gui, absoluteCentre, 0))
+	local visible = spectating and not UIDevice.ScreenOwningModalOpen()
+		and player:GetAttribute("PartyDownCardOpen") ~= true and player:GetAttribute("RoundExitPromptOpen") ~= true
+	band.root.AnchorPoint = Vector2.new(0.5, 1)
+	band.root.Position = UIDevice.LocalPosition(gui, (layout.Safe.Left + layout.Safe.Right) / 2, layout.Safe.Bottom - 12)
+	band.root.Visible = visible
+	prevButton.Visible, nextButton.Visible = visible, visible
+	prevButton.Active, nextButton.Active = visible and cycleAvailable(), visible and cycleAvailable()
+	prevButton.Selectable, nextButton.Selectable = prevButton.Active, nextButton.Active
+	exitButton.AnchorPoint = Vector2.new(0.5, 1)
+	local exitX = (layout.Safe.Left + layout.Safe.Right) / 2
+	local exitBottom = layout.Safe.Bottom - 12 - band.root.Size.Y.Offset - 8
+	if touch then
+		exitButton.Size = UDim2.fromOffset(math.min(240, layout.Safe.Width - 24), 44)
+		local width, height = exitButton.Size.X.Offset, exitButton.Size.Y.Offset
+		local zones = layout.Zones or {}
+		local function intersects(left, bottom, zone)
+			return zone and zone.Right > zone.Left and zone.Bottom > zone.Top
+				and left < zone.Right and left + width > zone.Left
+				and bottom - height < zone.Bottom and bottom > zone.Top
+		end
+		local left = exitX - width / 2
+		local shifted = left
+		for _, name in ipairs({"Thumbstick", "Controls", "Jump"}) do
+			local zone = zones[name]
+			if intersects(shifted, exitBottom, zone) then shifted = zone.Right + 8 end
+		end
+		local fits = shifted + width <= layout.Safe.Right - 12
+		for _, name in ipairs({"Thumbstick", "Controls", "Jump"}) do
+			if intersects(shifted, exitBottom, zones[name]) then fits = false end
+		end
+		if fits then
+			exitX = shifted + width / 2
+		else
+			for _, name in ipairs({"Thumbstick", "Controls", "Jump"}) do
+				local zone = zones[name]
+				if intersects(left, exitBottom, zone) then exitBottom = zone.Top - 8 end
+			end
+		end
 	end
-	label.Size = UDim2.new(0, width, 0, 30)
-	label.Position = centre and UDim2.fromOffset(centre, bottom)
-		or UDim2.new(0.5, 0, 0, bottom)
-	for _, entry in ipairs({{prevButton, -1}, {nextButton, 1}}) do
-		local button, side = entry[1], entry[2]
-		local offset = side * (width * .5 + 8 + ARROW_WIDTH * .5)
-		button.Size = UDim2.fromOffset(ARROW_WIDTH, 44)
-		button.Position = centre and UDim2.fromOffset(centre + offset, bottom)
-			or UDim2.new(0.5, offset, 0, bottom)
-	end
-	local showArrows = touch and cycleAvailable()
-	UIDevice.SetInteractive(prevButton, showArrows)
-	UIDevice.SetInteractive(nextButton, showArrows)
-	-- The exit action sits directly above the caption, in the same lane, and
-	-- stands down whenever the caption's own controls do.
-	exitButton.Size = UDim2.fromOffset(width, touch and 44 or 32)
-	exitButton.Position = centre and UDim2.fromOffset(centre, bottom - 30 - 8)
-		or UDim2.new(0.5, 0, 0, bottom - 30 - 8)
-	UIDevice.SetInteractive(exitButton, cycleAvailable()
-		and player:GetAttribute("RoundExitPromptOpen") ~= true)
+	exitButton.Position = UIDevice.LocalPosition(gui, exitX, exitBottom)
+	UIDevice.SetInteractive(exitButton, visible and cycleAvailable())
 end
-
-prevButton.Activated:Connect(function() if cycleAvailable() then watch(idx - 1) end end)
-nextButton.Activated:Connect(function() if cycleAvailable() then watch(idx + 1) end end)
+band.Cycle = function(delta)
+	if cycleAvailable() then watch(idx + delta); applySpectateLayout() end
+end
 UIDevice.OnScreenOwningModalChanged(function() applySpectateLayout() end)
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function() applySpectateLayout() end)
 player:GetAttributeChangedSignal("RoundExitPromptOpen"):Connect(function() applySpectateLayout() end)
-
--- SPECTATOR_COUNT_20260914 (card 73): the WATCHED player sees only a number.
--- GameManager publishes SpectatorCount on the Player from what spectators
--- report; nothing here names anyone.
-local counter = Instance.new("TextLabel")
-counter.Name = "SpectatorCounter"
-counter.AnchorPoint = Vector2.new(0.5, 0)
-counter.Position = UDim2.new(0.5, 0, 0, 0)
-counter.Size = UDim2.fromOffset(170, 22)
-counter.Text = ""
-counter.Visible = false
-counter.Parent = gui
-UIStyle.panel(counter, {
-	Background = UIStyle.Color.Caption,
-	Transparency = UIStyle.Transparency.Caption,
-	Radius = UIStyle.Radius.Chip,
-})
-UIStyle.title(counter, {TextSize = 12, TextColor = UIStyle.Color.AccentText})
-local function refreshSpectatorCounter()
-	local count = tonumber(player:GetAttribute("SpectatorCount")) or 0
-	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-	local show = count > 0 and not spectating and player:GetAttribute("InRound") == true
-		and humanoid ~= nil and humanoid.Health > 0
-	counter.Visible = show
-	if show then
-		counter.Text = count == 1 and "1 SPECTATOR WATCHING" or (count .. " SPECTATORS WATCHING")
-	end
-end
-player:GetAttributeChangedSignal("SpectatorCount"):Connect(refreshSpectatorCounter)
-player:GetAttributeChangedSignal("InRound"):Connect(refreshSpectatorCounter)
 GuiService:GetPropertyChangedSignal("MenuIsOpen"):Connect(function() applySpectateLayout() end)
 UIDevice.Changed:Connect(function()
+	band.mount()
+	if spectating then band.copy(spectated, player:GetAttribute("Escaped") == true) end
 	applySpectateLayout()
-	-- The POV caption carries the Q/E binding on desktop and not on touch,
-	-- so a form-factor change has to rebuild it, not just move it.
-	if spectating and spectated then watch(idx) end
 end)
 
 local function startSpectate()
@@ -351,10 +304,9 @@ local function startSpectate()
 	-- Slidemouth client and (now) by the movement cluster, but nothing had ever
 	-- written it, so both checks were dead.
 	player:SetAttribute("Spectating", true)
-	label.Visible = true
-	refreshSpectatorCounter()
 	applySpectateLayout()
 	watch(1)
+	applySpectateLayout()
 end
 
 local function stopSpectate()
@@ -363,11 +315,10 @@ local function stopSpectate()
 	player:SetAttribute("SpectateTargetUserId", nil)
 	reportTarget(nil)
 	spectated = nil
-	label.Visible = false
+	if band.root then band.attention:Hide(); band.root.Visible = false end
 	UIDevice.SetInteractive(prevButton, false)
 	UIDevice.SetInteractive(nextButton, false)
 	UIDevice.SetInteractive(exitButton, false)
-	refreshSpectatorCounter()
 	unhide()
 	core.Enabled = false; spill.Enabled = false
 	lastBeamProfile, lastOn = nil, nil -- force a fresh write next time spectate resumes
@@ -384,7 +335,6 @@ local function onChar(char)
 	stopSpectate() -- fresh body → back to your own view
 	local hum = char:WaitForChild("Humanoid")
 	hum.Died:Connect(startSpectate)
-	refreshSpectatorCounter()
 end
 
 -- C_ONE_SPECTATE_CAMERA_20260904: this file is now the ONLY writer of the

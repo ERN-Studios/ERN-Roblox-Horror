@@ -13,6 +13,12 @@ local lastAim = {}
 local lastToggle = {}
 local lastFocus = {}
 
+-- The round body: a round, or the Level 2 new-map dev preview, which wears it outside a round
+-- (Level2NewMapPreview, set and cleared by Level2BlenderPreviewAccess).
+local function roundBody(player)
+	return player:GetAttribute("InRound") == true or player:GetAttribute("Level2NewMapPreview") == true
+end
+
 local function finiteVector(vector)
 	return vector.X == vector.X and vector.Y == vector.Y and vector.Z == vector.Z
 		and math.abs(vector.X) < 1e6 and math.abs(vector.Y) < 1e6 and math.abs(vector.Z) < 1e6
@@ -92,7 +98,7 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 	if value == "focus" then
 		if type(payload) ~= "boolean" or now - (lastFocus[player] or -math.huge) < .15 then return end
 		lastFocus[player] = now
-		if not humanoid or humanoid.Health <= 0 or player:GetAttribute("InRound") ~= true then return end
+		if not humanoid or humanoid.Health <= 0 or not roundBody(player) then return end
 		if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then return end
 		char:SetAttribute("FlashlightFocused", payload)
 		if mounts[player] then applyMountProfile(mounts[player]) end
@@ -112,7 +118,7 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 		end
 		lastToggle[player] = now
 		if value and (not humanoid or humanoid.Health <= 0) then return end
-		if player:GetAttribute("InRound") ~= true then value = false end
+		if not roundBody(player) then value = false end
 		ensureFlag(char).Value = value
 		local mount = value and ensureMount(player, char) or mounts[player]
 		if mount then setMountEnabled(mount, value) end
@@ -147,9 +153,11 @@ local function forceLightOff(p)
 end
 
 local function hookPlayer(p)
-	p:GetAttributeChangedSignal("InRound"):Connect(function()
-		if p:GetAttribute("InRound") ~= true then forceLightOff(p) end
-	end)
+	for _, attribute in ipairs({"InRound", "Level2NewMapPreview"}) do
+		p:GetAttributeChangedSignal(attribute):Connect(function()
+			if not roundBody(p) then forceLightOff(p) end
+		end)
+	end
 	p.CharacterAdded:Connect(function(char)
 		removeMount(p)
 		ensureFlag(char)

@@ -1,0 +1,21 @@
+{
+  "source": "luna_givepaw_v2.rbxmx",
+  "sha256": "f216e080c15b736258692d8c2e34956835fa68c9ede43a336c20af211a15416d",
+  "assetType": "Animation",
+  "displayName": "Luna GivePaw v2",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T18:24:48.542661+00:00",
+  "operationPath": "operations/e4e70401-d8b8-4212-ac5c-73ce1a6d93be",
+  "assetId": "109042539941659",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna GivePaw v2",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

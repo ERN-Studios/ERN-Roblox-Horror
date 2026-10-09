@@ -1,0 +1,142 @@
+{
+  "0": {
+    "assetId": 130361790990972,
+    "wireSha256": "6e3c7904ff66218092ef0a92e24d82e90ec6e0f06362c38b3b183bc4528a7cf9",
+    "group": 1039373905
+  },
+  "1": {
+    "assetId": 71748885399317,
+    "wireSha256": "2a57b1fe4e9a84d8d9d594b24a3a3099d19dd7c58db853aafdb966e6ae6bd16c",
+    "group": 1039373905
+  },
+  "2": {
+    "assetId": 112852893895711,
+    "wireSha256": "96b95e48183c3ea88a4f7842b764fa837f6e3c36b9db64ecdd7d467fbe5b2991",
+    "group": 1039373905
+  },
+  "3": {
+    "assetId": 95375966854097,
+    "wireSha256": "56bbff8b82082099989fdf6c4d1ea47b312fb75009bd6c2341f7aed25744fb7b",
+    "group": 1039373905
+  },
+  "4": {
+    "assetId": 122704769915079,
+    "wireSha256": "9562368db686007a61b500a6cc0c5cf1edd4903e17f9c262537e5ae9d2d3b787",
+    "group": 1039373905
+  },
+  "5": {
+    "assetId": 132256902121121,
+    "wireSha256": "214ee71cf95d9a047e0ee27352da18d3e07030988578ca6bd768047e6cacb3eb",
+    "group": 1039373905
+  },
+  "6": {
+    "assetId": 87078216067416,
+    "wireSha256": "8c7cfb99693e7f7d592baa2618cab1883736b16a9728e89047ea8f872a2ccdf1",
+    "group": 1039373905
+  },
+  "7": {
+    "assetId": 79656593047876,
+    "wireSha256": "b56094b705b6a8a32ba7a6641138767cb981822609941ba391254fcd9759d6ed",
+    "group": 1039373905
+  },
+  "8": {
+    "assetId": 92274565406833,
+    "wireSha256": "89db268e5b78bb263b959b693807059ea57dd344cc6e2d255f47bb43e4cfe560",
+    "group": 1039373905
+  },
+  "9": {
+    "assetId": 86022051571555,
+    "wireSha256": "3ab802a98bf5b71499b221f9a88adcd6ca4ccf4d3a6694e70cf37991b9890b1a",
+    "group": 1039373905
+  },
+  "10": {
+    "assetId": 98605811403694,
+    "wireSha256": "15ae9b52202d616845a03a1c2362bd5aaf42a29b46d457a86c5b22b64984625b",
+    "group": 1039373905
+  },
+  "11": {
+    "assetId": 117653487012158,
+    "wireSha256": "b5b0108ce6b12f4b18a884c22d1f39a204d88b880d7afd2e2dce176ea83b5b9d",
+    "group": 1039373905
+  },
+  "12": {
+    "assetId": 103495645845516,
+    "wireSha256": "ddf7de8aa2a0eab7e50c40c2fb834f90b16f65af24002c9f4445bcf1e327e25c",
+    "group": 1039373905
+  },
+  "13": {
+    "assetId": 114242983692935,
+    "wireSha256": "2d92fd852947d1b4164c60bf4b27a110c45cf21750666e03c6bc0a3bfe2d2f5e",
+    "group": 1039373905
+  },
+  "14": {
+    "assetId": 117493003144746,
+    "wireSha256": "ce3598b1fd2b9e92b51a3718495f4ac62b164c09826a15568d056125eb8e0f6d",
+    "group": 1039373905
+  },
+  "15": {
+    "assetId": 73143920327945,
+    "wireSha256": "db6f030b94b352ad96a9f05ca62800805d2221e84c557e18d8715a4e80cd1369",
+    "group": 1039373905
+  },
+  "16": {
+    "assetId": 75187278317010,
+    "wireSha256": "f05466a9d16bc1009caefc879b21d440c411b28427924ac38fbf93f1a6e6d2ba",
+    "group": 1039373905
+  },
+  "17": {
+    "assetId": 117711209583297,
+    "wireSha256": "9924e0663451f08c4634f425a1705eae783fa4ce24e5e8396df0f7163c0b4923",
+    "group": 1039373905
+  },
+  "18": {
+    "assetId": 111332507420740,
+    "wireSha256": "9c65883ec62697aea57c6b152d6b1073738fea4af398d5a02023c5d5d10e2a83",
+    "group": 1039373905
+  },
+  "19": {
+    "assetId": 140182496120560,
+    "wireSha256": "fcfb991288200b818303ccfa442dde69df903f038e8d06df2435c80cdeb7d0c4",
+    "group": 1039373905
+  },
+  "20": {
+    "assetId": 76486706491399,
+    "wireSha256": "4af58ed8afba1e684b5e1d0145637540b3b959fa14dcc9a9f3ada0c2607b9f7b",
+    "group": 1039373905
+  },
+  "21": {
+    "assetId": 96770842264533,
+    "wireSha256": "36237e0111ff97d8cc296a0c8d935f0fe339f57589bda7022c6c09d183d9a8f3",
+    "group": 1039373905
+  },
+  "22": {
+    "assetId": 100080858566719,
+    "wireSha256": "19fce8aa7e32dc0737f3b15de4d423723b5653404d8e3a5542f1af2581dad8f2",
+    "group": 1039373905
+  },
+  "23": {
+    "assetId": 73435357499698,
+    "wireSha256": "5d0c1fcd3c161f50b2ee3b29cdf8071dfb84a5cf812b4e8021f94371b4a323f0",
+    "group": 1039373905
+  },
+  "24": {
+    "assetId": 100861695977620,
+    "wireSha256": "c6e390e122c0f2d0f3849bf59bc73ef5d4432e70f434b1e7df856cb669ca3a23",
+    "group": 1039373905
+  },
+  "25": {
+    "assetId": 91528651227885,
+    "wireSha256": "bb0cf22dbec2dd8af73ab9cb1ff55538e73a1789abe2cd03f17fb996fa84fbdc",
+    "group": 1039373905
+  },
+  "26": {
+    "assetId": 84184817527737,
+    "wireSha256": "f42e467ed9d527f74d229aec637b96fd1568d1fcdbd9b40cb9b868ae5fea6237",
+    "group": 1039373905
+  },
+  "27": {
+    "assetId": 117226170325521,
+    "wireSha256": "f732a99224cc2f74bfce23385b14f8eaf79e68ff419f6e440463e326480859a9",
+    "group": 1039373905
+  }
+}

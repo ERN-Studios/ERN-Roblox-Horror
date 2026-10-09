@@ -1,0 +1,15 @@
+# Level 2 tunnel height and optional encounter failure isolation
+
+The tunnel cross-section now uses a shared vertical ellipse factor 1.9, including the Ring Corridor hall branch. Corridor/door/kids-wall heights are 32/30/33. Vault, ribs, portal face and cap agree; portal tessellation is 32 pieces to avoid the stretched endpoint intrusion. Floors, water, corridor widths and ledges retain their previous dimensions.
+
+The adapter isolates an unavailable optional Pool Slide encounter only after its cleanup succeeds. Required world, objective and Pool Foam failures still abort the build. Cleanup attempts independent world/lobby restoration even if Pool Slide Stop throws, and records the error.
+
+Independent critic: geometry **9/10**, adapter **9/10**. Repeated geometry suite: 33,822 checks / 32 fixtures, old geometry fails 360 candidate-body samples. Adapter suite: 360 checks, including actual Build/Cleanup and Stop failure regression. Full native source compilation 122/122; no failures or unstaged files. Audit: 122 matched, zero drift; one known permitted trailing newline.
+
+Native normal lobby queue/Create Party started an unpinned Level 2 round: requested seed38030520, resolved38135249, attempt2, READY, InRound=true and HP100. Actual Navigator ground/body/sweep queries at 0.6-stud steps examined 63 whole corridors, both axes, centre and two-stud lateral offsets, from one stud before each entrance to one stud beyond the exit. Closed state: 180/189 pass; the nine rejections are exactly three intentionally closed pressure doors, three offsets each. Existing ObjectiveController.DebugOpenExit then opened the production doors; the identical 189 routes all passed. All 1,323 upward crown rays hit, measured range24.584217–26.901300. Disposable model removed. Both native mouth views show continuous high arches; images and complete query reports are adjacent.
+
+Evidence boundary: these native checks execute the real Navigator's read-only spatial predicates, not physical NPC travel. An additional SERVER Humanoid:MoveTo probe did not move the player: requested55stud, remaining55.020stud after6s, HP100. Its cause is unresolved, so it is not counted as a physical walking pass. Rig scaling, animation contact, moving encounter and activation remain separate unfinished work. Shipping PoolSlide Enabled=false, StudioValidationMode=false; template scale4 and both verification flagsfalse.
+
+Temporary Mesh/Image API access used for earlier rig measurement was restored OFF using native Experience Settings Security and Save before this publication. No test clones or bridge scripts survive Stop Play.
+
+Publish: root confirmed native mouse publication through File → Publish to Roblox as **v1825 on 10 September 2026 at 00:52:16.707 Europe/Copenhagen**. The Trello description preserves the original request and records this bounded delivery; the card was moved to **In Progress**, re-read and verified **complete=false**. The larger rig and its animation/movement/activation acceptance remain unfinished. The release is also recorded in row16 of the Trello priority ledger.

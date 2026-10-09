@@ -1,0 +1,18 @@
+{
+  "wall": {
+    "assetId": "rbxassetid://125879540003063",
+    "file": "elevator_wall_90s_v2.png"
+  },
+  "ceiling": {
+    "assetId": "rbxassetid://119278377564096",
+    "file": "elevator_ceiling_90s_v2.png"
+  },
+  "floor": {
+    "assetId": "rbxassetid://114910161826427",
+    "file": "elevator_floor_90s_v2.png"
+  },
+  "door": {
+    "assetId": "rbxassetid://93847962634230",
+    "file": "elevator_door_90s_v2.png"
+  }
+}

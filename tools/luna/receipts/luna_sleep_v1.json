@@ -1,0 +1,21 @@
+{
+  "source": "luna_sleep_v1.rbxmx",
+  "sha256": "ee1701628ec98ec4ff2567bfd0fcd58c42be842b0d7731c523523791b97f70be",
+  "assetType": "Animation",
+  "displayName": "Luna sleep v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:04:09.744207+00:00",
+  "operationPath": "operations/d9e1cea3-bb95-49fb-9091-e18ca24c774d",
+  "assetId": "74699347617141",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna sleep v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

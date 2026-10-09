@@ -1,0 +1,11 @@
+# Native Level 1 audio acceptance
+
+Current exact reviewed SoundController installed. A normal single-client Level 1 queue/entry reached RoundActive, InRound, 100 health and unanchored player. EntityPaused was temporarily enabled only in Play to keep the controlled cue test stable.
+
+The listener was not BeingChased. Driving the existing EntitySpotPosition/EntitySpotScream signal created the actual Part-parented SpotScream with original asset82272419363488, IsLoaded=true, IsPlaying=true, Linear rolloff10â€“200, at the requested world position. The SoundService listener was placed on both sides at5studs, at100 and250studs, then restored. These are emitter/listener/property measurements, not audible loudness measurements. IsPlaying remains true outside the audible radius by design; no claim of hearing silence or stereo is made. The available tools do not provide listening to the native output.
+
+The unchanged chase loop was natively loaded/playing on Workspace.Entity.HumanoidRootPart with asset79246919959914 and InverseTapered10â€“200. CHASE reached Volume0.85 after0.8s. TRACK native samples declined0.6801â†’0.3404â†’0 over5.3s, and subsequent ROAM stopped playback. No asset IDs or chase-loop code changed.
+
+Fresh-Play synthetic client-state tests exercised the actual existing attribute handlers: escaped, other-level, nonparticipant and inactive-round signals created no emitter; eligible signal created exactly one, duplicate cue remained one, and the emitter cleaned up. All seven assertions passed (native-results.json). An earlier probe used FindFirstChild on a potentially overlapping same-named emitter and failed its load-state assertion; the exact cause was not isolated. That ambiguous probe was discarded and rerun tracking the exact newly created instance. Asset loading is independently proven by the normal-round observation above.
+
+EntityPaused and client test overrides were restored. Play stopped; complete native compile125/125 and source audit125matched/zero drift passed. No fixture sources, listener changes or attributes are in Edit. The actual perceived mix remains a human listening acceptance limitation; the native spatial objects, engine rolloff properties, eligibility and fade lifecycle are verified.

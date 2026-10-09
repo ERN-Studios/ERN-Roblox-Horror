@@ -36,6 +36,7 @@ local ROOM_BLINK_RATE = 5.0
 -- faces and the chrome now come from the shared tokens taken off Level 1's
 -- Objectives panel and the Mission Brief card. ENERGON stays local: it is the
 -- reader's own instrument colour and it carries signal strength.
+local RoundHud = require(ReplicatedStorage:WaitForChild("RoundHud"))
 local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local ENERGON = Color3.fromRGB(66, 244, 218)
 local PANEL = UIStyle.Color.Panel
@@ -54,120 +55,7 @@ gui.DisplayOrder = 42
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- C_READER_PANEL_IS_THE_CONTROL_20260830.
--- The panel is a TextButton rather than a Frame so that on a handheld THE
--- PANEL ITSELF is the control that puts it away -- the whole 248x101 readout
--- is the tap target, which is 5x the 44px floor and needs no second control
--- beside it. `Active` is written from the form factor in applyLayout: a
--- desktop keeps a plain, non-clickable readout and its R binding, exactly as
--- before, so nothing there gains an input sink it did not have.
-local panel = Instance.new("TextButton")
-panel.Name = "ReaderPanel"
-panel.AnchorPoint = Vector2.new(1, 0)
-panel.AutoButtonColor = false
-panel.Text = ""
-panel.Active = false
-panel.Selectable = false
-panel.Visible = false
-panel.Parent = gui
-
--- Reference chrome. The stroke COLOUR is still the instrument's own -- it is
--- the calibration gauge, written every tick by updateReader -- but the panel's
--- surface, radius and stroke weight are the shared ones, so the reader reads as
--- the same family of card as the objectives panel instead of a 2px teal box.
-UIStyle.panel(panel)
-local panelStroke = panel:FindFirstChildOfClass("UIStroke") :: UIStroke
-panelStroke.Color = ENERGON
-
-local title = Instance.new("TextLabel")
-title.Name = "Title"
-title.BackgroundTransparency = 1
-title.Position = UDim2.fromOffset(10, 5)
-title.Size = UDim2.new(1, -20, 0, 18)
-UIStyle.readout(title, {TextColor = ENERGON, TextSize = 16})
-title.Text = "> EXIT DOOR READER"
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = panel
-
-local progressLabel = Instance.new("TextLabel")
-progressLabel.Name = "Calibration"
-progressLabel.BackgroundTransparency = 1
-progressLabel.Position = UDim2.fromOffset(10, 26)
-progressLabel.Size = UDim2.new(1, -20, 0, 18)
-UIStyle.readout(progressLabel, {TextColor = TEXT, TextSize = 15})
-progressLabel.Text = "[□□□□□]  0/5"
-progressLabel.TextXAlignment = Enum.TextXAlignment.Left
-progressLabel.Parent = panel
-
-local track = Instance.new("Frame")
-track.Name = "DirectionTrack"
-track.Position = UDim2.fromOffset(12, 51)
-track.Size = UDim2.new(1, -24, 0, 19)
-track.BackgroundColor3 = Color3.fromRGB(18, 29, 29)
-track.BackgroundTransparency = 0.08
-track.BorderSizePixel = 0
-track.Parent = panel
-
-local trackCorner = Instance.new("UICorner")
--- Pill, like the reference panel's ProgressTrack and its Fill.
-trackCorner.CornerRadius = UDim.new(1, 0)
-trackCorner.Parent = track
-
-local centerLine = Instance.new("Frame")
-centerLine.Name = "Center"
-centerLine.AnchorPoint = Vector2.new(0.5, 0.5)
-centerLine.Position = UDim2.fromScale(0.5, 0.5)
-centerLine.Size = UDim2.fromOffset(2, 13)
-centerLine.BackgroundColor3 = Color3.fromRGB(74, 112, 105)
-centerLine.BorderSizePixel = 0
-centerLine.Parent = track
-
-local needle = Instance.new("Frame")
-needle.Name = "Needle"
-needle.AnchorPoint = Vector2.new(0.5, 0.5)
-needle.Position = UDim2.fromScale(0.5, 0.5)
-needle.Size = UDim2.fromOffset(5, 17)
-needle.BackgroundColor3 = ENERGON
-needle.BorderSizePixel = 0
-needle.Parent = track
-
-local needleCorner = Instance.new("UICorner")
-needleCorner.CornerRadius = UDim.new(1, 0)
-needleCorner.Parent = needle
-
-local signalLabel = Instance.new("TextLabel")
-signalLabel.Name = "Signal"
-signalLabel.BackgroundTransparency = 1
-signalLabel.Position = UDim2.fromOffset(10, 75)
-signalLabel.Size = UDim2.new(1, -20, 0, 19)
-UIStyle.readout(signalLabel, {TextColor = AMBER})
-signalLabel.Text = "SIGNAL // NO TRACE"
-signalLabel.TextTruncate = Enum.TextTruncate.AtEnd
-signalLabel.TextXAlignment = Enum.TextXAlignment.Left
-signalLabel.Parent = panel
-
--- A precise full-circle compass and a scene pin share the reader's existing
--- visibility/input gates. They are presentation only, never insert controls.
-local playerCompassArrow = Instance.new("TextLabel")
-playerCompassArrow.Name = "CDPlayerCompassArrow"
-playerCompassArrow.BackgroundTransparency = 1
-playerCompassArrow.AnchorPoint = Vector2.new(.5, .5)
-playerCompassArrow.Position = UDim2.fromScale(.10, .5)
-playerCompassArrow.Size = UDim2.fromOffset(18, 18)
-UIStyle.readout(playerCompassArrow, {TextColor=ENERGON, TextSize=18})
-playerCompassArrow.Text = "▲"
-playerCompassArrow.Visible = false
-playerCompassArrow.Parent = track
-local playerCompassLabel = Instance.new("TextLabel")
-playerCompassLabel.Name = "CDPlayerBearing"
-playerCompassLabel.BackgroundTransparency = 1
-playerCompassLabel.Position = UDim2.fromScale(.22, 0)
-playerCompassLabel.Size = UDim2.fromScale(.75, 1)
-UIStyle.readout(playerCompassLabel, {TextColor=ENERGON, TextSize=12})
-playerCompassLabel.TextXAlignment = Enum.TextXAlignment.Left
-playerCompassLabel.TextTruncate = Enum.TextTruncate.AtEnd
-playerCompassLabel.Visible = false
-playerCompassLabel.Parent = track
+ContextActionService:UnbindAction("Level3ToggleExitReader")
 
 local playerGuide = Instance.new("Frame")
 playerGuide.Name = "CDPlayerGuide"
@@ -185,7 +73,7 @@ guideArrow.Size = UDim2.fromOffset(22, 22)
 guideArrow.BackgroundTransparency = 1
 UIStyle.readout(guideArrow, {TextColor=ENERGON, TextSize=20})
 guideArrow.TextStrokeTransparency = .3
-guideArrow.Text = "◆"
+guideArrow.Text = "\u{25C6}"
 guideArrow.Parent = playerGuide
 local guideLabel = Instance.new("TextLabel")
 guideLabel.Name = "Label"
@@ -194,7 +82,7 @@ guideLabel.Size = UDim2.new(1, 0, 0, 32)
 guideLabel.BackgroundColor3 = PANEL
 guideLabel.BackgroundTransparency = .12
 guideLabel.BorderSizePixel = 0
-UIStyle.readout(guideLabel, {TextColor=ENERGON, TextSize=11})
+UIStyle.readout(guideLabel, {TextColor=ENERGON, TextSize=12})
 guideLabel.Text = "CD PLAYER"
 guideLabel.Parent = playerGuide
 local guideCorner = Instance.new("UICorner")
@@ -216,530 +104,6 @@ local function guideMovementCeiling(maxY: number, minY: number, controlsTop: num
 	return ceiling, ceiling >= minY
 end
 -- L3_GUIDE_MOVEMENT_BOUNDS_END
-
--- C_READER_TOGGLE_REMOVED_20260830 -- WHAT SHIPPED BROKEN.
--- `ReaderToggle` was a permanently-visible 150x44 chip reading "CLOSE READER
--- [R]" that sat beside the panel in EVERY state. Three faults at once: it
--- printed a keyboard binding for a key a phone has not got (only masked by
--- UIDevice.Caption, which then left the chip captioned "CLOSE READER" -- a
--- redundant second control for a panel the player can simply tap); it consumed
--- 150px of the widest thing on a landscape phone's band; and it doubled the
--- persistent HUD footprint of a readout that is glanceable by design.
---
--- What replaces it:
---   * VISIBLE state -- no control at all. The panel is the control (above).
---   * HIDDEN state -- this, and only this: a 44x44 tap target whose VISIBLE
---     mark is a 30x30 chip, drawn in the reader's own Energon on its own panel
---     colour. It carries a single expand chevron and NO text, so there is no
---     string here for a keyboard glyph to hide in.
--- The two states are mutually exclusive, so the HUD never carries both, and
--- the persistent footprint while hidden is 44x44 instead of 398x101.
---
--- C_READER_DESKTOP_CHIP_20260830 -- WHAT SHIPPED BROKEN.
--- The chip was drawn on DESKTOP as well, where it is wrong three times over: a
--- mouse device already has R bound (below) so the chip is a second control for
--- a job the key does; it is wordless by design, which is right for a finger and
--- leaves a keyboard player a bare 30px chevron with nothing naming the key; and
--- once the panel is away it is the ONLY thing on screen, so "hidden" was never
--- actually hidden. Desktop's hidden state now draws nothing at all -- the chip
--- is gated on UIDevice.IsTouch() in both applyLayout and updateReader.
-local RESTORE_TARGET = 44
-local RESTORE_CHIP = 30
-
-local restoreButton = Instance.new("TextButton")
-restoreButton.Name = "ReaderRestore"
-restoreButton.AutoButtonColor = false
-restoreButton.AnchorPoint = Vector2.new(1, 0)
-restoreButton.BackgroundTransparency = 1
-restoreButton.BorderSizePixel = 0
-restoreButton.Text = ""
-restoreButton.Size = UDim2.fromOffset(RESTORE_TARGET, RESTORE_TARGET)
-restoreButton.Visible = false
-restoreButton.Parent = gui
-
--- The mark. Smaller than the target on purpose: the control reads as a quiet
--- 30px chip while the finger is given the full 44.
-local restoreChip = Instance.new("Frame")
-restoreChip.Name = "Chip"
-restoreChip.AnchorPoint = Vector2.new(0.5, 0.5)
-restoreChip.Position = UDim2.fromScale(0.5, 0.5)
-restoreChip.Size = UDim2.fromOffset(RESTORE_CHIP, RESTORE_CHIP)
-restoreChip.Parent = restoreButton
-UIStyle.panel(restoreChip, {
-	Background = UIStyle.Color.Control,
-	Transparency = UIStyle.Transparency.Control,
-	Radius = UIStyle.Radius.Control,
-})
-
-local restoreGlyph = Instance.new("TextLabel")
-restoreGlyph.Name = "Glyph"
-restoreGlyph.BackgroundTransparency = 1
-restoreGlyph.Size = UDim2.fromScale(1, 1)
--- U+25BE. A geometric-shapes glyph from the same block as the progress boxes
--- this file already draws, so it is known to render here, and it is the
--- conventional "expand this" mark rather than a key name.
-UIStyle.readout(restoreGlyph, {TextColor = ENERGON, TextSize = 15})
-restoreGlyph.Text = "\u{25BE}"
-restoreGlyph.Parent = restoreChip
-
-local readerHidden = false
-
-local toast = Instance.new("Frame")
-toast.Name = "AlertToast"
-toast.AnchorPoint = Vector2.new(0.5, 0)
-toast.Visible = false
-toast.ZIndex = 20
-toast.Parent = gui
-
--- Stated ONCE: showToast fades the toast out and has to put these back, and two
--- copies of the same numbers is how a restyle leaves a stale value behind.
-local TOAST_STYLE = {Stroke = ENERGON, Transparency = UIStyle.Transparency.Panel}
-UIStyle.panel(toast, TOAST_STYLE)
-local toastStroke = toast:FindFirstChildOfClass("UIStroke") :: UIStroke
-
-local toastTitle = Instance.new("TextLabel")
-toastTitle.BackgroundTransparency = 1
-toastTitle.Position = UDim2.fromOffset(12, 6)
-toastTitle.Size = UDim2.new(1, -24, 0, 20)
-UIStyle.title(toastTitle, {TextColor = ENERGON, TextSize = 17})
-toastTitle.TextXAlignment = Enum.TextXAlignment.Left
-toastTitle.TextTruncate = Enum.TextTruncate.AtEnd
-toastTitle.ZIndex = 21
-toastTitle.Parent = toast
-
-local toastBody = Instance.new("TextLabel")
-toastBody.BackgroundTransparency = 1
-toastBody.Position = UDim2.fromOffset(12, 28)
-toastBody.Size = UDim2.new(1, -24, 1, -34)
--- The toast is prose, not a readout: GothamMedium, the reference body face.
--- It is also NARROWER than the Code it replaces, so the wrapped-copy bound
--- Fit.childProblems measures only gets slack.
-UIStyle.body(toastBody, {TextColor = TEXT})
-toastBody.TextWrapped = true
-toastBody.TextXAlignment = Enum.TextXAlignment.Left
-toastBody.TextYAlignment = Enum.TextYAlignment.Top
-toastBody.ZIndex = 21
-toastBody.Parent = toast
-
--- C4_READER_TOUCH_CONTROLS_20260829 is now HISTORY rather than a live
--- contract: the separate touch toggle it constrained no longer exists (see
--- C_READER_TOGGLE_REMOVED_20260830 above). What survives from it, and
--- is still enforced below, is the part that was never about the button:
---   * nothing is ever placed outside the rectangle the anchor handed back;
---   * the panel narrows rather than overflowing, never below READER_MIN_WIDTH;
---   * the panel's footprint is derived from the LAYOUT alone and never from
---     readerHidden, so it cannot move or resize under the finger on it.
--- Read from UIDevice.ObjectivePanelSize[3], not copied, so this can't drift.
-local READER_PANEL_HEIGHT = UIDevice.ObjectivePanelSize[3].Y
-local READER_PANEL_MIN_HEIGHT = 58
-local READER_MIN_WIDTH = 150
-
--- C_OBJECTIVES_UPPER_RIGHT_20260830 -- WHAT SHIPPED BROKEN.
--- The reader was pinned to the TOP LEFT of the safe band on touch, which is
--- the third different answer the three levels gave to the same question
--- (Level 1 and Level 2 both used the bottom-centre corridor). It now shares
--- UIDevice.TopRightPanel with them, so all three objective readouts sit in the
--- same corner of the same true safe area, and the compact landscape variant is
--- selected from the height the anchor could actually give rather than from a
--- band that no longer decides the placement.
---
--- C_READER_DESKTOP_LOWER_RIGHT_20260830 -- WHAT SHIPPED BROKEN.
--- Desktop is a different composition and has its own convention, which this
--- file did not follow either. Level 1 (PuzzleUI, `objectivePanel`) and Level 2
--- (Level 2 Objective UI, `panel`) both anchor (1,1) one margin off the LOWER
--- right; Level 3 alone sat at UDim2.new(1, -10, 0, 70) -- the upper right of
--- the GUI, with 70 a guess at the topbar rather than a measurement of it, and
--- 10 not the 18 the other two use. That is the third answer again, on the
--- other form factor. It is now the lower-right corner of the true safe rect at
--- the shared 18px margin. Nothing else occupies that corner on a mouse device:
--- the stamina bar is bottom-centre and the flashlight cell is bottom-left, and
--- NoiseReporter's touch buttons are not drawn there at all.
-local function applyLayout()
-	local layoutInfo = UIDevice.Layout()
-	local viewport = layoutInfo.Viewport
-	local narrow = viewport.X < 620
-	local mobileControls = layoutInfo.IsTouch
-	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, UIDevice.ObjectivePanelSize[3].X))
-	local panelHeight = READER_PANEL_HEIGHT
-	local compactLandscape = false
-
-	-- C_L3_READER_UPPER_RIGHT_EVERYWHERE_20260921.
-	-- The panel is now a CD reader and it is the first thing a player looks for,
-	-- so it takes ONE anchor on every form factor: UIDevice.TopRightPanel, the
-	-- same helper Level 1's objective column and Level 2's panel use on touch,
-	-- which answers for a mouse device too (top right of the TRUE safe rect, one
-	-- 18px margin in). The desktop branch that lived here pinned it to the LOWER
-	-- right instead -- a second answer to the same question, and the corner a
-	-- player is least likely to be watching while looking for a disc. Nothing
-	-- else draws in this corner in a Level 3 round: the Round Exit chip is top
-	-- LEFT, stamina is bottom centre, the flashlight cell bottom left, and the
-	-- alert toast owns the top CENTRE and already takes the panel down while it
-	-- is up (updateReader gates both controls on toast.Visible).
-	local column = UIDevice.TopRightPanel(width, READER_PANEL_HEIGHT)
-	width = math.max(READER_MIN_WIDTH, math.floor(column.Width))
-	-- Floored: the safe-area edges UIDevice derives are fractional (they come
-	-- from thirds and fifths of a viewport) and a HUD a regression asserts to
-	-- the pixel must not inherit that.
-	panelHeight = math.floor(column.Height)
-	if panelHeight < READER_PANEL_HEIGHT then
-		-- The anchor could not give the authored height. Take what there is,
-		-- never less than the readable minimum, and switch the internals to
-		-- the compact arrangement so nothing renders outside the box.
-		compactLandscape = true
-		panelHeight = math.max(READER_PANEL_MIN_HEIGHT, panelHeight)
-	end
-	panel.AnchorPoint = Vector2.new(1, 0)
-	-- Anchored (1,0): the X handed over is the panel's RIGHT edge, and it is
-	-- converted like every other absolute coordinate.
-	panel.Position = UIDevice.LocalPosition(gui,
-		math.floor(column.Right), math.floor(column.Top))
-	-- The restore chip lands on the panel's own top-right corner, so the
-	-- control the player taps to bring the reader back is exactly where the
-	-- reader was. Same anchor, both states.
-	restoreButton.AnchorPoint = Vector2.new(1, 0)
-	restoreButton.Position = UIDevice.LocalPosition(gui,
-		math.floor(column.Right), math.floor(column.Top))
-	if not mobileControls then
-		-- No restore chip and no open button, ever, on a mouse device: R is the
-		-- entire interface and the hidden state is genuinely empty
-		-- (C_READER_DESKTOP_CHIP_20260830). Put away HERE and not only in
-		-- updateReader, because updateReader runs on a 0.1s accumulator -- a
-		-- desktop client that flipped form factor while hidden would otherwise
-		-- draw the chip for up to one interval before the next tick cleared it.
-		UIDevice.SetInteractive(restoreButton, false)
-	end
-	panel.Size = UDim2.fromOffset(width, panelHeight)
-	-- Only a handheld gets a tappable panel. A desktop keeps the readout inert
-	-- and its R binding, so no mouse click is swallowed in the lower-right
-	-- corner the panel now occupies.
-	-- Never Active while invisible: a transparent TextButton left Active keeps
-	-- taking taps. updateReader re-derives this every tick from the live state.
-	UIDevice.SetEnabled(panel, mobileControls and panel.Visible)
-
-	if compactLandscape then
-		title.Position = UDim2.fromOffset(8, 2)
-		title.Size = UDim2.new(1, -16, 0, 12)
-		progressLabel.Position = UDim2.fromOffset(8, 15)
-		progressLabel.Size = UDim2.new(1, -16, 0, 12)
-		track.Position = UDim2.fromOffset(9, 29)
-		track.Size = UDim2.new(1, -18, 0, 11)
-		centerLine.Size = UDim2.fromOffset(2, 7)
-		needle.Size = UDim2.fromOffset(4, 10)
-		signalLabel.Position = UDim2.fromOffset(8, 43)
-		signalLabel.Size = UDim2.new(1, -16, 1, -45)
-		title.TextSize = 11
-		progressLabel.TextSize = 10
-		signalLabel.TextSize = 9
-	else
-		title.Position = UDim2.fromOffset(10, 5)
-		title.Size = UDim2.new(1, -20, 0, 18)
-		progressLabel.Position = UDim2.fromOffset(10, 26)
-		progressLabel.Size = UDim2.new(1, -20, 0, 18)
-		track.Position = UDim2.fromOffset(12, 51)
-		track.Size = UDim2.new(1, -24, 0, 19)
-		centerLine.Size = UDim2.fromOffset(2, 13)
-		needle.Size = UDim2.fromOffset(5, 17)
-		signalLabel.Position = UDim2.fromOffset(10, 75)
-		signalLabel.Size = UDim2.new(1, -20, 0, 19)
-		title.TextSize = narrow and 14 or 16
-		progressLabel.TextSize = narrow and 13 or 15
-		signalLabel.TextSize = narrow and 11 or 13
-	end
-
-
-	-- Cache viewport/safe-area conversion here, not in the RenderStepped path.
-	guideOffsetX, guideOffsetY = UIDevice.LocalOffset(gui, 0, 0)
-	local guideWidth = math.clamp(layoutInfo.Safe.Width - 32, 100, 136)
-	playerGuide.Size = UDim2.fromOffset(guideWidth, 50)
-	guideMinX = layoutInfo.Safe.Left + guideWidth * .5 + 8
-	guideMaxX = layoutInfo.Safe.Right - guideWidth * .5 - 8
-	guideMinY = layoutInfo.Safe.Top + panelHeight + 24
-	guideMaxY = layoutInfo.Safe.Bottom - 90
-	guideProjectionFits = guideMaxX >= guideMinX and guideMaxY >= guideMinY
-	if UIDevice.IsTouch() then
-		local zones = layoutInfo.Zones
-		local controlsTop = if zones and zones.Controls then zones.Controls.Top else math.huge
-		local thumbstickTop = if zones and zones.Thumbstick then zones.Thumbstick.Top else math.huge
-		local jumpTop = if zones and zones.Jump then zones.Jump.Top else math.huge
-		local ceiling, clearHeight = guideMovementCeiling(guideMaxY, guideMinY,
-			controlsTop, thumbstickTop, jumpTop)
-		guideMaxY = ceiling
-		guideProjectionFits = guideProjectionFits and clearHeight
-	end
-	guideMaxX = math.max(guideMinX + 1, guideMaxX)
-	guideMaxY = math.max(guideMinY + 1, guideMaxY)
-	-- Short screens retain the exact in-panel compass and distance when a scene
-	-- card cannot fit without covering movement controls or the reader itself.
-	if not guideProjectionFits then playerGuide.Visible = false end
-	playerCompassArrow.Size = UDim2.fromOffset(compactLandscape and 10 or 18, compactLandscape and 10 or 18)
-	playerCompassArrow.TextSize = compactLandscape and 10 or 18
-	playerCompassLabel.TextSize = compactLandscape and 9 or (narrow and 10 or 12)
-	guideLabel.TextSize = narrow and 10 or 11
-
-	-- The toast carries two lines of authored copy in a box that was a fixed
-	-- 52px -- 20 for the title and 18 for a body that regularly needs two
-	-- lines. Its height is measured now, and it is centred on the SAFE rect
-	-- rather than on the gui, which differ the moment a device has a
-	-- horizontal inset.
-	local toastWidth = math.floor(math.clamp(layoutInfo.Safe.Width - 40, 260, 410))
-	local bodySample = toastBody.Text ~= "" and toastBody.Text
-		or "Two full lines of authored alert copy, which is what these carry."
-	local bodyNeed = TextService:GetTextSize(bodySample, toastBody.TextSize,
-		toastBody.Font, Vector2.new(math.max(1, toastWidth - 24), 100000)).Y
-	local toastHeight = math.clamp(30 + bodyNeed + 8, 52, 140)
-	toast.AnchorPoint = Vector2.new(0.5, 0)
-	toast.Position = UIDevice.LocalPosition(gui,
-		(layoutInfo.Safe.Left + layoutInfo.Safe.Right) * .5, layoutInfo.Safe.Top + 8)
-	toast.Size = UDim2.fromOffset(toastWidth, toastHeight)
-	toastBody.Size = UDim2.new(1, -24, 0, math.max(18, bodyNeed))
-end
-
--- There is no caption to maintain any more: on touch the visible state is the
--- panel itself and the hidden state is a wordless chip, and on desktop the
--- hidden state is empty. What remains is the state write, kept as one function
--- so the key binding, the panel's own Activated handler and the Studio seam
--- all go through the same door.
-
-local function setReaderHidden(hidden: boolean)
-	readerHidden = hidden
-end
-
--- Tapping the readout puts it away. This is `panel.Activated`'s handler, and on
--- a handheld a finger raising that signal is what runs it; `panel.Active` is
--- false on desktop, so a mouse click in the lower-right corner cannot raise it
--- there.
--- Both production handlers are named locals so the Studio seam below can call
--- the SAME function object the connection carries instead of re-implementing
--- it. Calling a function is not an input event, and no name, comment or
--- published string here may read as though it were -- see
--- C_HANDLER_SEAM_IS_NOT_INPUT_20260831.
-local function onPanelTapped()
-	-- Restated for the Studio seam. `panel.Active` is false on desktop so
-	-- Activated cannot fire there at all, but the seam calls this function
-	-- directly, with no button involved, and it has to obey the same rule: on
-	-- desktop R is the only thing that may put the reader away.
-	if not UIDevice.IsTouch() then return end
-	setReaderHidden(true)
-end
--- Deliberately NOT gated on IsTouch. The chip it belongs to is never drawn on
--- desktop, so no click can reach this; and R restores through exactly this same
--- state write, so a form-factor guard here would forbid nothing and would only
--- give the two ways back different behaviour.
-local function onRestoreTapped()
-	setReaderHidden(false)
-end
--- C_ACTIVATED_WIRING_CONTRACT_20260831.
---
--- The connections are RECORDED as they are made, so a regression can prove the
--- routing exists rather than only that the handler body works.
---
--- WHAT THIS CLOSES: the Studio seam below calls onPanelTapped/onRestoreTapped
--- as plain functions, and C_HANDLER_SEAM_IS_NOT_INPUT_20260831 says why it can
--- do nothing else. A check built on that alone stays green when someone
--- deletes an `Activated:Connect` line: the control would be dead in the
--- player's hands and every row would still pass. The recorded
--- RBXScriptConnection is the half that cannot exist without the connection --
--- Connect had to run to produce it, `Connected` says whether it still holds,
--- and `Button` pins WHICH instance it was made on, because a connection that
--- is live on some other TextButton, or on one no longer in the tree, routes a
--- finger nowhere either.
---
--- The two call statements below are also matched VERBATIM by UIRegression's
--- source half, which reads this LocalScript's `.Source` and requires both to
--- be present -- that is what catches a deleted connection even when the
--- runtime probe is bypassed entirely. Renaming `wireTap` or either handler
--- means changing those two literals in the same edit.
-local tapWiring = {}
-local function wireTap(name: string, button: TextButton, handler: () -> ())
-	local connection = button.Activated:Connect(handler)
-	tapWiring[name] = {Button = button, Handler = handler, Connection = connection}
-	return connection
-end
-
-wireTap("ReaderPanel", panel, onPanelTapped)
-wireTap("ReaderRestore", restoreButton, onRestoreTapped)
-
--- Studio-only HANDLER seam for UIRegression. It calls the PRODUCTION handlers
--- rather than a copy of them, so a matrix that drives it runs the code a
--- player's tap reaches -- and nothing else.
---
--- C_HANDLER_SEAM_IS_NOT_INPUT_20260831 -- WHAT SHIPPED BROKEN.
---
--- This seam was written as though the test had TAPPED something. Its two
--- actions were "tapPanel" and "tapRestore", the note above them called it an
--- "input seam", and the regression rows it feeds read "TAPPING THE PANEL
--- hides it". None of that is what happens. The probe calls onPanelTapped and
--- onRestoreTapped as plain Lua functions: no touch, no click and no
--- InputObject exists at any point, and the button itself is never involved --
--- so everything between a finger and the handler (the hit test, `Active`,
--- `Visible`, ZIndex, a modal drawn over the top) is left unexercised by
--- invoking it. A name that says "tap" invites the next reader to believe an
--- input path was proven when it was not.
---
--- WHY IT CANNOT BE MORE THAN THIS: VirtualInputManager refuses in this Studio
--- session ("lacking capability RobloxScript"), and the MCP bridge's synthetic
--- mouse does not reach the GUI input stack at all -- it never even raises
--- MouseEnter on a GuiObject. Nothing in this project can deliver a real input
--- event to this GUI, so the actions are named for what they actually do: they
--- invoke a handler.
---
--- WHAT THE PAIR DOES PROVE -- this seam plus the wiring contract above -- is
--- that the handler body does the right thing when it runs, AND that the
--- handler is the live endpoint of an Activated connection on the button this
--- file draws. The one link neither half covers is the engine delivering a
--- touch to a visible, Active button; that is Roblox's own behaviour, and it is
--- untested here by necessity rather than by choice.
---
--- WHAT THE TESTS DID BEFORE EVEN THAT: they set
--- UIRegressionForceReaderHidden, which is the OUTPUT of these handlers. That
--- proved the renderer honours a flag and said nothing about whether the
--- handlers ever set it.
---
--- C_READER_VISIBILITY_FORWARD_20260831.
---
--- The probe object has to be created HERE, beside the two handlers it invokes,
--- but the "visibility" action has to read isActive(), the toast and the
--- renderer's own gates -- none of which this file declares until two hundred
--- lines further down. A forward local is the seam between those two facts: the
--- probe closes over the variable, the bottom of the file fills it in. It is nil
--- only for the microseconds this script spends between the two points, and the
--- action says so plainly rather than inventing a plausible answer for a caller
--- that arrived too early.
-local readerVisibilityReport: (() -> string)? = nil
-if RunService:IsStudio() then
-	local probe = Instance.new("BindableFunction")
-	probe.Name = "UIRegressionReaderProbe"
-	probe.OnInvoke = function(action)
-		-- "invokePanelHandler" and "invokeRestoreHandler" are the names of the
-		-- two actions that run a handler. "tapPanel" and "tapRestore" are kept
-		-- as ALIASES, and for one reason only: so UIRegression can be corrected
-		-- in its own change without any run in between calling a name that no
-		-- longer answers. They are the same call; do not use them in new code.
-		if action == nil or action == "state" then
-			return readerHidden and "hidden" or "open"
-		elseif action == "invokePanelHandler" or action == "tapPanel" then
-			onPanelTapped()
-			return readerHidden and "hidden" or "open"
-		elseif action == "invokeRestoreHandler" or action == "tapRestore" then
-			onRestoreTapped()
-			return readerHidden and "hidden" or "open"
-		elseif action == "visibility" then
-			-- Reports what the reader IS, at the instant of the call, with no tick
-			-- in between. It deliberately does NOT run updateReader first: the
-			-- claim under test is that flipping a gating attribute takes the reader
-			-- down in the SAME frame
-			-- (C_READER_IMMEDIATE_EXCLUSION_20260831), and a probe that rendered on
-			-- demand would satisfy that claim by doing the very work whose absence
-			-- is the bug. Every row would go green and the 100ms window would still
-			-- be there.
-			--
-			-- The string carries BOTH halves so a caller can assert they agree:
-			-- `active` is recomputed from the live attributes on this very line, so
-			-- it is never stale; the ReaderPanel/ReaderRestore fields are whatever
-			-- the renderer last wrote. A reader that is still up after its gate
-			-- closed reads active=false with ReaderPanel=true/true, which is exactly
-			-- the defect, stated in one line.
-			--
-			-- Grammar: one line, single spaces, fixed field order, every value the
-			-- literal "true" or "false" except forcehidden.
-			--   ReaderPanel=<Visible>/<Active>
-			--   ReaderRestore=<Visible>/<Active>
-			--   active=        isActive(), the gate the renderer applies
-			--   hidden=        readerHidden, the player's own hide toggle
-			--   forcehidden=   none | true | false -- the Studio-only override of
-			--                  `hidden` that updateReader honours
-			--   toast=         toast.Visible; an alert owns the same band and both
-			--                  controls stand down under it
-			--   touch=         UIDevice.IsTouch(); the restore chip is touch-only
-			-- then the raw inputs isActive() reads, each true when SET:
-			--   level=         workspace SelectedLevel == 3
-			--   inround=       player InRound == true
-			--   escaped=       player Escaped == true          (blocking)
-			--   forcelevel=    UIRegressionForceLevel3Reader   (Studio override)
-			--   dispatch=      ZyntraDispatchClientActive      (blocking)
-			--   hiding=        Level3_Hiding                   (blocking)
-			--   modal=         UIDevice.ScreenOwningModalOpen() (blocking)
-			-- So a reader that should be on screen reads
-			-- "active=true ... escaped=false ... dispatch=false hiding=false
-			-- modal=false".
-			-- Copied to a local before the nil check so --!strict actually
-			-- narrows it: an upvalue that is assigned from another scope is not
-			-- refined by a test on the upvalue itself.
-			local report = readerVisibilityReport
-			if report == nil then return "visibility:notready" end
-			return report()
-		elseif action == "wiring" then
-			-- One field per control, "<name>=<routed>/<sameFunction>". The shape
-			-- is fixed: UIRegression matches the whole string against
-			-- "ReaderPanel=true/true ReaderRestore=true/true".
-			--   routed        the Activated connection was made, is still
-			--                 Connected, and was made on the very button this
-			--                 file draws and hides, which is still in the tree.
-			--                 A connection that is live on some other instance,
-			--                 or on a detached one, routes a finger nowhere.
-			--   sameFunction  the function this seam invokes IS the function that
-			--                 was connected, not a copy of it.
-			-- Neither field says an input event was delivered; nothing in this
-			-- file can (C_HANDLER_SEAM_IS_NOT_INPUT_20260831).
-			local parts = {}
-			for _, entry in ipairs({
-				{Name = "ReaderPanel", Handler = onPanelTapped, Button = panel},
-				{Name = "ReaderRestore", Handler = onRestoreTapped,
-					Button = restoreButton},
-			}) do
-				local wiring = tapWiring[entry.Name]
-				local routed = wiring ~= nil
-					and wiring.Connection.Connected == true
-					and wiring.Button == entry.Button
-					and wiring.Button.Parent ~= nil
-				table.insert(parts, string.format("%s=%s/%s", entry.Name,
-					tostring(routed),
-					tostring(wiring ~= nil and wiring.Handler == entry.Handler)))
-			end
-			return table.concat(parts, " ")
-		end
-		-- An action this seam does not implement is not a state query. Answering
-		-- one with the state would hand a mistyped action a plausible "open" and
-		-- a passing row; the caller gets back something that cannot be mistaken
-		-- for a result instead.
-		return "unknownaction:" .. tostring(action)
-	end
-	probe.Parent = gui
-end
-ContextActionService:BindAction("Level3ToggleExitReader", function(_, inputState)
-	if inputState == Enum.UserInputState.Begin
-		and UserInputService:GetFocusedTextBox() == nil
-		and workspace:GetAttribute("SelectedLevel") == LEVEL
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true then
-		setReaderHidden(not readerHidden)
-		return Enum.ContextActionResult.Sink
-	end
-	return Enum.ContextActionResult.Pass
-end, false, Enum.KeyCode.R, Enum.KeyCode.ButtonY)
--- C_READER_CONNECTION_TRACKING_20260831 -- WHAT SHIPPED BROKEN.
---
--- Every signal this file subscribed to was connected and then forgotten. There
--- was no teardown path at all -- not for the script being destroyed, not for
--- the ScreenGui leaving PlayerGui. That was survivable while the list was four
--- entries long and the gui was built with ResetOnSpawn = false so it outlived
--- respawns; it stops being survivable now that the reader also subscribes to
--- every attribute that gates it (C_READER_IMMEDIATE_EXCLUSION_20260831). A
--- destroyed LocalScript would leave a dozen callbacks alive, each still writing
--- Active and Visible onto orphaned instances once per state change for the rest
--- of the session, and each still holding this whole closure set in memory.
---
--- So: connections go through trackReaderConnection, teardownReader at the
--- bottom of the file disconnects the lot exactly once, and a connection handed
--- to the tracker AFTER teardown is disconnected on the spot instead of being
--- added. That last rule is what makes a second setup pass harmless rather than
--- a second leak.
---
--- The two REBINDING connections -- the camera viewport and the Level 3
--- ClientEvent -- are deliberately not in the list. Each replaces itself
--- whenever its subject changes, so the list would fill with dead entries and
--- grow without bound over a session. teardownReader disconnects whichever one
--- is live, by name, instead.
 local readerConnections: {RBXScriptConnection} = {}
 local readerAlive = true
 
@@ -752,6 +116,34 @@ local function trackReaderConnection(connection: RBXScriptConnection): RBXScript
 	return connection
 end
 
+
+local function objectiveCard(): GuiObject?
+    local hud = player.PlayerGui:FindFirstChild("RoundHud")
+    local card = hud and hud:FindFirstChild("ObjectiveCard")
+    return if card and card:IsA("GuiObject") then card else nil
+end
+local function applyLayout()
+    local info = UIDevice.Layout()
+    guideOffsetX, guideOffsetY = UIDevice.LocalOffset(gui, 0, 0)
+    local width = math.clamp(info.Safe.Width - 32, 100, 136)
+    local card = objectiveCard()
+    local bottom = if card and card.Visible then card.AbsolutePosition.Y + card.AbsoluteSize.Y else info.Safe.Top + 40
+    playerGuide.Size = UDim2.fromOffset(width, 50)
+    guideMinX, guideMaxX = info.Safe.Left + width * .5 + 8, info.Safe.Right - width * .5 - 8
+    guideMinY, guideMaxY = bottom + 24, info.Safe.Bottom - 90
+    guideProjectionFits = guideMaxX >= guideMinX and guideMaxY >= guideMinY
+    if info.IsTouch then
+        local zones = info.Zones
+        local ceiling, fits = guideMovementCeiling(guideMaxY, guideMinY,
+            zones.Controls and zones.Controls.Top or math.huge,
+            zones.Thumbstick and zones.Thumbstick.Top or math.huge,
+            zones.Jump and zones.Jump.Top or math.huge)
+        guideMaxY, guideProjectionFits = ceiling, guideProjectionFits and fits
+    end
+    guideMaxX, guideMaxY = math.max(guideMinX + 1, guideMaxX), math.max(guideMinY + 1, guideMaxY)
+    guideLabel.TextSize = 12
+    if not guideProjectionFits then playerGuide.Visible = false end
+end
 -- Rebuild on UIDevice.Changed, which fires for viewport, inset, form factor,
 -- and (on desktop only) last-input changes. On a phone this can never fire for
 -- an input flip, which is the whole point.
@@ -773,7 +165,6 @@ local function bindCamera()
 end
 trackReaderConnection(workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(bindCamera))
 bindCamera()
-
 local function stateFolder(): Folder?
 	local folder = ReplicatedStorage:FindFirstChild(STATE_FOLDER_NAME)
 	return if folder and folder:IsA("Folder") then folder else nil
@@ -827,12 +218,12 @@ end
 -- subject is now its own way in; the world condition (level) still applies.
 local function isActive(): boolean
 	local levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
-		and ((player:GetAttribute("InRound") == true
+		and ((player:GetAttribute("Spectating") ~= true and player:GetAttribute("InRound") == true
 				and player:GetAttribute("Escaped") ~= true)
 			or spectateSubject() ~= nil)
 	if RunService:IsStudio()
 		and player:GetAttribute("UIRegressionForceLevel3Reader") == true then
-		levelActive = true
+		levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
 	end
 	return levelActive
 		and player:GetAttribute("ZyntraDispatchClientActive") ~= true
@@ -889,88 +280,54 @@ local function generationMatches(payload: {[any]: any}): boolean
 	return type(liveGeneration) ~= "number" or liveGeneration == payloadGeneration
 end
 
-local toastSerial = 0
+
+local toastUntil = 0
 local function cleanText(value: any, fallback: string, maximum: number): string
-	local text = (if type(value) == "string" then value else fallback) :: string
-	text = text:gsub("[%c]", " ")
-	return text:sub(1, maximum)
+    local text = (if type(value) == "string" then value else fallback) :: string
+    return text:gsub("[%c]", " "):sub(1, maximum)
 end
-
+local function feedAllowed(): boolean
+    return workspace:GetAttribute("SelectedLevel") == LEVEL
+        and (player:GetAttribute("InRound") == true or spectateSubject() ~= nil)
+end
 local function showToast(titleText: any, subtitle: any, instruction: any, duration: any)
-	if not isActive() then return end
-	toastSerial += 1
-	local serial = toastSerial
-	toastTitle.Text = cleanText(titleText, "LEVEL 3", 72)
-	local first = cleanText(subtitle, "", 110)
-	local second = cleanText(instruction, "", 110)
-	toastBody.Text = if first ~= "" and second ~= "" then first .. "\n" .. second else first .. second
-	UIStyle.panel(toast, TOAST_STYLE)
-	toastTitle.TextTransparency = 0
-	toastBody.TextTransparency = 0
-	toast.Visible = true
-	-- The alert owns the same safe top band for its brief lifetime. Do not draw
-	-- the reader underneath it; updateReader restores both controls afterwards.
-	-- SetInteractive, not a bare Visible write. Both are TextButtons, and a
-	-- TextButton left Active keeps taking taps through a transparent
-	-- background -- so `Visible = false` alone left an invisible 248x101
-	-- hitbox over the toast until the next update tick (up to 0.1s). Active
-	-- and Visible move together, synchronously, in one statement.
-	UIDevice.SetInteractive(panel, false)
-	UIDevice.SetInteractive(restoreButton, false)
-	playerGuide.Visible = false
-	local hold = math.clamp(if type(duration) == "number" then duration else 2.4, 0.8, 6)
-	task.delay(hold, function()
-		if serial ~= toastSerial or not toast.Parent then return end
-		local info = TweenInfo.new(0.28, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		TweenService:Create(toast, info, {BackgroundTransparency = 1}):Play()
-		TweenService:Create(toastTitle, info, {TextTransparency = 1}):Play()
-		TweenService:Create(toastBody, info, {TextTransparency = 1}):Play()
-		TweenService:Create(toastStroke, info, {Transparency = 1}):Play()
-		task.delay(0.30, function()
-			if serial == toastSerial and toast.Parent then toast.Visible = false end
-		end)
-	end)
+    if not feedAllowed() then return end
+    local first, second = cleanText(subtitle, "", 110), cleanText(instruction, "", 110)
+    local detail = cleanText(titleText, "Level 3", 72)
+    if first ~= "" then detail ..= ". " .. first end
+    if second ~= "" then detail ..= ". " .. second end
+    toastUntil = os.clock() + math.clamp(if type(duration) == "number" then duration else 2.4, .8, 6)
+    RoundHud.Feed({Kind = "LEVEL", Detail = detail, Key = "level3:alert"})
 end
-
 local function handleClientEvent(payload: any)
-	if type(payload) ~= "table" or not generationMatches(payload) then return end
-	local kind = payload.Type
-	if kind == "Alert" then
-		showToast(payload.Title, payload.Subtitle, payload.Instruction, payload.Duration)
-	elseif kind == "ModuleCollected" then
-		local progress = math.max(0, math.floor(tonumber(payload.CollectedProgress or payload.Progress) or 0))
-		local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
-		local collector = cleanText(payload.CollectorName, "A TEAM MEMBER", 36)
-		showToast(
-			string.format("CD %02d SECURED", math.max(1, math.floor(tonumber(payload.CDIndex or payload.ModuleIndex) or progress))),
-			string.format("%s  //  FOUND %d/%d", collector, math.min(progress, goal), goal),
-			if payload.RecoveredDrop == true then "RECOVERED  //  CARRY IT TO THE DISC PLAYER"
-				else "CARRY IT TO THE DISC PLAYER",
-			2.2
-		)
-	elseif kind == "CDInserted" then
-		local progress = math.max(0, math.floor(tonumber(payload.InsertedCount or payload.Progress) or 0))
-		local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
-		if progress >= goal then return end
-		local depositor = cleanText(payload.DepositorName, "A TEAM MEMBER", 36)
-		showToast(
-			string.format("DISC RELAY %d/%d", math.min(progress, goal), goal),
-			string.format("%s INSERTED %d CD%s", depositor,
-				math.max(1, math.floor(tonumber(payload.Count) or 1)),
-				(if math.floor(tonumber(payload.Count) or 1) == 1 then "" else "S")),
-			"OTHER HOLDERS MUST INSERT THEIRS",
-			2.3
-		)
-	elseif kind == "CDDropped" then
-		showToast("A CARRIED CD WAS DROPPED", "RECOVER IT AT THE PLAYER'S LAST POSITION", "", 2.4)
-	elseif kind == "CDTransferred" and payload.RecipientUserId == player.UserId then
-		showToast("TEAM CD TRANSFERRED", "A DEPARTING PLAYER'S CD IS NOW ON YOUR BACK",
-			"TAKE IT TO THE DISC PLAYER", 2.8)
-	elseif kind == "ExitUnlocked" then
-		showToast("ALL CDS INSERTED", "WALL FRAME REVEALED  //  FOLLOW EXIT SIGNAL", "", 3.0)
-	end
+    if type(payload) ~= "table" or not generationMatches(payload) or not feedAllowed() then return end
+    local kind = payload.Type
+    if kind == "Alert" then
+        showToast(payload.Title, payload.Subtitle, payload.Instruction, payload.Duration)
+    elseif kind == "ModuleCollected" then
+        local progress = math.max(0, math.floor(tonumber(payload.CollectedProgress or payload.Progress) or 0))
+        local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
+        RoundHud.Feed({Kind = "TEAM", Actor = cleanText(payload.CollectorName, "Someone", 36),
+            Detail = (payload.RecoveredDrop == true and "recovered a CD" or "found a CD")
+                .. string.format(" \u{B7} %d/%d", math.min(progress, goal), goal), Key = "level3:cd"})
+        toastUntil = os.clock() + 2.2
+    elseif kind == "CDInserted" then
+        local progress = math.max(0, math.floor(tonumber(payload.InsertedCount or payload.Progress) or 0))
+        local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
+        RoundHud.Feed({Kind = "TEAM", Actor = cleanText(payload.DepositorName, "Someone", 36),
+            Detail = string.format("put %d CD%s in the player \u{B7} %d/%d",
+                math.max(1, math.floor(tonumber(payload.Count) or 1)),
+                math.floor(tonumber(payload.Count) or 1) == 1 and "" or "s",
+                math.min(progress, goal), goal), Key = "level3:insert"})
+        toastUntil = os.clock() + 2.3
+    elseif kind == "CDDropped" then
+        showToast("A carried CD was dropped", "Recover it at the player's last position", "", 2.4)
+    elseif kind == "CDTransferred" and payload.RecipientUserId == player.UserId then
+        showToast("A team CD is now on your back", "Take it to the CD player", "", 2.8)
+    elseif kind == "ExitUnlocked" then
+        showToast("All CDs are in the player", "Follow the compass to the revealed wall frame", "", 3)
+    end
 end
-
 local clientEventConnection: RBXScriptConnection? = nil
 local boundClientEvent: RemoteEvent? = nil
 local function bindClientEvent()
@@ -984,14 +341,9 @@ local function bindClientEvent()
 	if event then clientEventConnection = event.OnClientEvent:Connect(handleClientEvent) end
 end
 
-ReplicatedStorage.ChildAdded:Connect(bindClientEvent)
-ReplicatedStorage.ChildRemoved:Connect(bindClientEvent)
+trackReaderConnection(ReplicatedStorage.ChildAdded:Connect(bindClientEvent))
+trackReaderConnection(ReplicatedStorage.ChildRemoved:Connect(bindClientEvent))
 bindClientEvent()
-
-local smoothedNeedle = 0
-local smoothedSignal = 0
-local accumulated = 0
-
 -- L3_CD_READER_TARGET_20260921.
 --
 -- The reader points at the nearest disc a player can still PICK UP and says
@@ -1027,7 +379,7 @@ local cdBeaconPool: {any} = {}
 local cdStateBuffer: {any} = {}
 local cdStateKeys: {string}, cdPositionKeys: {string}, cdRoomKeys: {string} = {}, {}, {}
 for index = 1, 12 do
-	cdBeaconPool[index] = {Index=index, X=0, Z=0, Room=""}
+	cdBeaconPool[index] = {Index=index, X=0, Y=0, Z=0, Room=""}
 	cdStateKeys[index] = string.format("Level3_CD%dState", index)
 	cdPositionKeys[index] = string.format("Level3_CD%dPosition", index)
 	cdRoomKeys[index] = string.format("Level3_CD%dRoom", index)
@@ -1041,7 +393,7 @@ local function pickableCDs(goal: number): {any}
 		if (state == "WORLD" or state == "DROPPED") and typeof(position) == "Vector3" then
 			local room = stateAttribute(cdRoomKeys[index], nil)
 			local beacon = cdBeaconPool[index]
-			beacon.X, beacon.Z = position.X, position.Z
+			beacon.X, beacon.Y, beacon.Z = position.X, position.Y, position.Z
 			beacon.Room = if type(room) == "string" then room else ""
 			table.insert(cdBeaconBuffer, beacon)
 		end
@@ -1049,16 +401,6 @@ local function pickableCDs(goal: number): {any}
 	return cdBeaconBuffer
 end
 -- L3_CD_READER_TARGET_END_20260921
-
-local function signedPlanarAngle(forward: Vector3, target: Vector3): number
-	local a = Vector3.new(forward.X, 0, forward.Z)
-	local b = Vector3.new(target.X, 0, target.Z)
-	if a.Magnitude < 0.001 or b.Magnitude < 0.001 then return 0 end
-	a = a.Unit
-	b = b.Unit
-	return math.atan2(a.X * b.Z - a.Z * b.X, math.clamp(a:Dot(b), -1, 1))
-end
-
 
 -- L3_CD_PLAYER_GUIDANCE_PURE_BEGIN
 local function readerTargetMode(states: {any}, goal: number, inserted: number, unlocked: boolean): string
@@ -1102,16 +444,13 @@ end
 -- L3_CD_PLAYER_GUIDANCE_PURE_END
 
 local function setPlayerGuide(enabled: boolean, target: Vector3?, root: BasePart?)
-	guidePlayerMode, guideTarget, guideRoot = enabled, target, root
-	needle.Visible, centerLine.Visible = not enabled, not enabled
-	playerCompassArrow.Visible = enabled and target ~= nil
-	playerCompassLabel.Visible = enabled and target ~= nil
-	if not enabled or not target or not root then playerGuide.Visible = false end
+    guidePlayerMode, guideTarget, guideRoot = enabled, target, root
+    if not enabled or not target or not root then playerGuide.Visible = false end
 end
 local function updatePlayerGuideGeometry()
 	local root, target = guideRoot, guideTarget
 	if not guidePlayerMode or not root or not root.Parent or not target
-		or not panel.Visible or not isActive() then
+		or not isActive() then
 		playerGuide.Visible = false
 		return
 	end
@@ -1127,7 +466,6 @@ local function updatePlayerGuideGeometry()
 	local dx, dy, dz = target.X-position.X, target.Y-position.Y, target.Z-position.Z
 	guideBearing = precisePlanarBearing(fx, fz, dx, dz)
 	guideDistance = math.sqrt(dx*dx + dy*dy + dz*dz)
-	playerCompassArrow.Rotation = math.deg(guideBearing)
 	if not camera or not guideProjectionFits then playerGuide.Visible = false; return end
 	-- UIDevice safe rectangles and GuiObject.AbsolutePosition share screen-GUI
 	-- coordinates. Viewport projection omits the topbar conversion (58px in the
@@ -1138,226 +476,49 @@ local function updatePlayerGuideGeometry()
 	playerGuide.Position = UDim2.fromOffset(math.floor(x+guideOffsetX), math.floor(y+guideOffsetY))
 	guideArrow.Rotation = rotation
 	-- These two interned literals do not build strings/tables each frame.
-	guideArrow.Text = if onPoint then "◆" else "▲"
+	guideArrow.Text = if onPoint then "\u{25C6}" else "\u{25B2}"
 	playerGuide.Visible = true
 end
+
 local function updatePlayerGuideReadout()
-	local degrees = math.floor(math.abs(math.deg(guideBearing))+.5)
-	playerCompassLabel.Text = if degrees <= 8 then "AHEAD"
-		elseif degrees >= 150 then string.format("BEHIND  %d°", degrees)
-		else string.format("%s  %d°", guideBearing < 0 and "LEFT" or "RIGHT", degrees)
-	local metres = guideDistance / 3.571
-	local distanceText = if metres < 10 then string.format("%.1fm", metres)
-		else string.format("%dm", math.floor(metres+.5))
-	signalLabel.Text = "CD PLAYER  " .. distanceText
-	guideLabel.Text = "CD PLAYER\n" .. distanceText
+    local metres = guideDistance / 3.571
+    guideLabel.Text = "CD PLAYER\n" .. (if metres < 10 then string.format("%.1fm", metres) else string.format("%dm", math.floor(metres+.5)))
 end
-
-local function updateReader(dt: number)
-	local active = isActive()
-	local hidden = readerHidden
-	if RunService:IsStudio() then
-		local forced = player:GetAttribute("UIRegressionForceReaderHidden")
-		if type(forced) == "boolean" then hidden = forced end
-	end
-	-- The two states are mutually exclusive and neither draws under a toast.
-	-- SetInteractive rather than a bare Visible write: a TextButton left Active
-	-- keeps taking taps through a transparent background, and BOTH of these are
-	-- buttons now -- the restore chip is transparent apart from its 30px mark,
-	-- and the panel is the control that hides itself.
-	local touch = UIDevice.IsTouch()
-	UIDevice.SetInteractive(panel, active and not hidden and not toast.Visible)
-	-- SetEnabled AFTER SetInteractive, which writes Active = Visible: this is the
-	-- correction that keeps the desktop readout inert, so a click at the panel's
-	-- corner still reaches the world behind it.
-	UIDevice.SetEnabled(panel, panel.Visible and touch)
-	-- `and touch` is the whole desktop fix here: on a mouse device the hidden
-	-- state draws nothing (C_READER_DESKTOP_CHIP_20260830). Touch is unchanged --
-	-- panel and chip remain mutually exclusive and neither draws under a toast.
-	UIDevice.SetInteractive(restoreButton,
-		touch and active and hidden and not toast.Visible)
-	if not active then
-		setPlayerGuide(false, nil, nil)
-		toastSerial += 1
-		toast.Visible = false
-		return
-	end
-
-	local goal = math.clamp(math.floor(numberAttribute("Level3_ModuleGoal", "Level3ModuleGoal", 5)), 1, 12)
-	local progress = math.clamp(math.floor(numberAttribute("Level3_ModuleProgress", "Level3Modules", 0)), 0, goal)
-	local index = math.clamp(progress + 1, 1, #ACCURACY_DEGREES)
-	local cells: {string} = {}
-	for cell = 1, goal do cells[cell] = if cell <= progress then "■" else "□" end
-	progressLabel.Text = string.format("DISC RELAY [%s]  %d/%d", table.concat(cells), progress, goal)
-
-	local character = readerSubject().Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not (root and root:IsA("BasePart")) then
-		setPlayerGuide(false, nil, nil)
-		signalLabel.Text = "SIGNAL // NO TRACE"
-		signalLabel.TextColor3 = MUTED
-		signalLabel.TextTransparency = 0
-		return
-	end
-
-	-- Current states are authoritative: collected-ever progress does not fall
-	-- on a drop, and a missing streamed beacon is not proof that a CD is held.
-	local beacons = pickableCDs(goal)
-	local mode = readerTargetMode(cdStateBuffer, goal, progress,
-		stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true)
-	if mode == "PLAYER" then
-		title.Text = "> CD PLAYER"
-		progressLabel.Text = string.format("INSERT CDS  %d/%d", progress, goal)
-		local target = cdPlayerPosition()
-		setPlayerGuide(true, target, root)
-		signalLabel.TextColor3, signalLabel.TextTransparency = ENERGON, 0
-		panelStroke.Color = ENERGON
-		if target then
-			updatePlayerGuideGeometry()
-			updatePlayerGuideReadout()
-		else signalLabel.Text = "CD PLAYER // LOCATING" end
-		return
-	end
-	setPlayerGuide(false, nil, nil)
-	local subjectRoom = readerSubject():GetAttribute("Level3_Room")
-	local cd, cdDistance, sameRoom = chooseCDTarget(beacons, root.Position.X, root.Position.Z,
-		if type(subjectRoom) == "string" then subjectRoom else "")
-	if mode == "SCAN" and not cd then
-		title.Text = "> CD READER"
-		signalLabel.Text = "CD // LOCATING"
-		signalLabel.TextColor3, signalLabel.TextTransparency = MUTED, 0
-		needle.Position = UDim2.fromScale(.5, .5)
-		return
-	end
-	-- Inserted/unlocked authority can replicate before the individual CD states.
-	if mode == "EXIT" then cd = nil end
-	local exit = exitPosition()
-	if not cd and not exit then
-		title.Text = "> EXIT DOOR READER"
-		signalLabel.Text = "SIGNAL // NO TRACE"
-		signalLabel.TextColor3 = MUTED
-		signalLabel.TextTransparency = 0
-		return
-	end
-	title.Text = if cd then "> CD READER" else "> EXIT DOOR READER"
-
-	local targetX = if cd then cd.X else (exit :: Vector3).X
-	local targetZ = if cd then cd.Z else (exit :: Vector3).Z
-	local offset = Vector3.new(targetX - root.Position.X, 0, targetZ - root.Position.Z)
-	local distance = if cd then cdDistance else offset.Magnitude
-	local camera = workspace.CurrentCamera
-	local forward = camera and camera.CFrame.LookVector or root.CFrame.LookVector
-	local trueAngle = signedPlanarAngle(forward, offset)
-	local time = os.clock()
-	local needleTarget, signalTarget
-	if cd then
-		-- No fog on a CD bearing. The exit needle below lies by design -- up to
-		-- ACCURACY_DEGREES[1] = 155 degrees while nothing is inserted -- and that
-		-- is the whole reason the opening minutes were a blind search. A disc is
-		-- a findable object, so this needle is the true bearing and the bar is
-		-- plain proximity.
-		needleTarget = math.clamp(trueAngle / math.rad(90), -1, 1)
-		signalTarget = 1 - math.clamp(distance / CD_SIGNAL_RANGE, 0, 1)
-	else
-		local angularNoise = math.noise(time * 0.43, progress * 2.71) * math.rad(ACCURACY_DEGREES[index])
-		local noisyAngle = trueAngle + angularNoise
-		needleTarget = math.clamp(noisyAngle / math.rad(90), -1, 1)
-		local facing = math.clamp((math.cos(noisyAngle) + 1) * 0.5, 0, 1)
-		local rangeSignal = 1 - math.clamp(distance / MAXIMUM_RANGE, 0, 1)
-		local distanceJitter = math.noise(time * 0.61, 19 + progress) * DISTANCE_NOISE[index]
-		signalTarget = math.clamp(facing * 0.72 + rangeSignal * 0.28 + distanceJitter, 0, 1)
-	end
-	local response = if cd then 6 else 1.3 + progress * 0.72
-	local alpha = 1 - math.exp(-dt * response)
-	smoothedNeedle += (needleTarget - smoothedNeedle) * alpha
-	smoothedSignal += (signalTarget - smoothedSignal) * alpha
-	needle.Position = UDim2.new(0.5 + smoothedNeedle * 0.43, 0, 0.5, 0)
-
-	local signalBars = math.clamp(math.floor(smoothedSignal * 5 + 0.5), 0, 5)
-	local bars = string.rep("▮", signalBars) .. string.rep("□", 5 - signalBars)
-	local unlocked = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
-	signalLabel.TextTransparency = 0
-	if cd then
-		if sameRoom then
-			-- EXACTLY this string, and nothing else in the row: it is the one
-			-- signal that says "stop walking and look up". ReduceFlashing takes
-			-- the pulse away and leaves the red at full strength instead of
-			-- dimming it (C_L3_ROOM_BLINK_20260921).
-			signalLabel.Text = "IN THIS ROOM"
-			signalLabel.TextColor3 = DANGER
-			if player:GetAttribute("ReduceFlashing") ~= true then
-				signalLabel.TextTransparency = (math.sin(time * ROOM_BLINK_RATE) + 1) * .5 * .40
-			end
-			panelStroke.Color = DANGER
-		else
-			signalLabel.Text = string.format("CD // %s  %dm", bars, math.floor(distance / 3.571 + 0.5))
-			signalLabel.TextColor3 = ENERGON
-			panelStroke.Color = ENERGON
-		end
-		needle.BackgroundColor3 = if sameRoom then DANGER else ENERGON
-		return
-	end
-	needle.BackgroundColor3 = if unlocked then Color3.fromRGB(128, 255, 222) else ENERGON
-	if unlocked then
-		signalLabel.Text = string.format("SIGNAL // %s  %dm", bars, math.floor(distance / 3.571 + 0.5))
-		signalLabel.TextColor3 = ENERGON
-		panelStroke.Color = ENERGON
-	elseif progress == 0 then
-		signalLabel.Text = "SIGNAL // UNSTABLE"
-		signalLabel.TextColor3 = MUTED
-		panelStroke.Color = Color3.fromRGB(75, 122, 116)
-	elseif progress < math.ceil(goal * 0.6) then
-		signalLabel.Text = "SIGNAL // " .. bars .. "  WEAK"
-		signalLabel.TextColor3 = AMBER
-		panelStroke.Color = Color3.fromRGB(89, 170, 159)
-	else
-		signalLabel.Text = "SIGNAL // " .. bars .. "  CALIBRATING"
-		signalLabel.TextColor3 = TEXT
-		panelStroke.Color = ENERGON
-	end
+local function updateReader(_dt: number)
+    if not isActive() then setPlayerGuide(false, nil, nil); return end
+    local goal = math.clamp(math.floor(numberAttribute("Level3_ModuleGoal", "Level3ModuleGoal", 5)), 1, 12)
+    local progress = math.clamp(math.floor(numberAttribute("Level3_ModuleProgress", "Level3Modules", 0)), 0, goal)
+    local subject = readerSubject()
+    local root = subject.Character and subject.Character:FindFirstChild("HumanoidRootPart")
+    local beacons = pickableCDs(goal)
+    local unlocked = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
+    local mode = readerTargetMode(cdStateBuffer, goal, progress, unlocked)
+    local state: any = {Level = LEVEL, Title = "FIND THE CDS", Count = progress, Goal = goal,
+        Tag = "CDS IN THE PLAYER", Lines = {"Follow the compass to the next CD."},
+        Compass = {State = "locating"}, Done = progress >= goal}
+    if mode == "PLAYER" then
+        local target = cdPlayerPosition()
+        state.Title, state.Lines = "INSERT THE CDS", {"Take the carried CDs to the CD player."}
+        state.Compass = {State = target and "locked" or "locating", Target = target}
+        setPlayerGuide(true, target, if root and root:IsA("BasePart") then root else nil)
+        applyLayout()
+        updatePlayerGuideGeometry()
+        updatePlayerGuideReadout()
+    elseif mode == "EXIT" then
+        setPlayerGuide(false, nil, nil)
+        state.Title, state.Lines = "GET OUT", {"Reach the revealed wall frame."}
+        state.Compass = {State = unlocked and "locked" or "calibrating", Target = exitPosition()}
+    else
+        setPlayerGuide(false, nil, nil)
+        local room = subject:GetAttribute("Level3_Room")
+        if root and root:IsA("BasePart") then
+            local cd, _distance, sameRoom = chooseCDTarget(beacons, root.Position.X, root.Position.Z,
+                if type(room) == "string" then room else "")
+            if cd then state.Compass = {State = sameRoom and "inRoom" or "locked", Target = Vector3.new(cd.X, cd.Y, cd.Z)} end
+        end
+    end
+    RoundHud.SetObjective(state)
 end
-
--- C_READER_IMMEDIATE_EXCLUSION_20260831 -- WHAT SHIPPED BROKEN.
---
--- The reader consumed isActive() from ONE place: the accumulator below, which
--- lets dt pile up to UPDATE_INTERVAL (0.10s) before updateReader runs at all.
--- So every state that is meant to take the reader off the screen -- a dispatch
--- briefing, the Zyntra terminal or the queue modal through
--- UIDevice.ScreenOwningModalOpen(), Level3_Hiding, the round ending, the player
--- escaping -- turned on and the reader stayed up for as much as 100ms
--- afterwards.
---
--- Not merely drawn. ReaderPanel and ReaderRestore are both TextButtons, and it
--- is updateReader that clears their Active, so for those 100ms there was a live
--- >= 44x44 touch target sitting on top of somebody else's screen -- in the
--- upper-right corner, which is where a modal's own dismiss control lives. A
--- player who reached for the terminal's close in that window hid the reader
--- instead, and the tap never reached the modal at all. 100ms is not a
--- theoretical window: it is longer than a deliberate tap.
---
--- The fix is to drive updateReader from the state changes themselves, so the
--- panel goes Active = false and Visible = false in the same frame the gating
--- attribute is written. Every attribute isActive() reads gets a
--- GetAttributeChangedSignal, and the screen-owning-modal group is subscribed
--- through UIDevice's own helper so this file never keeps a second copy of which
--- modals count -- if that list grows, this reader follows it for free.
---
--- THE TICK BELOW STAYS, AND STAYS AS A FALLBACK -- it is no longer the path
--- mutual exclusion depends on, and it is still the only thing that covers what
--- no signal reports: the needle, the signal bars and the distance readout,
--- which are recomputed from the camera and the character and change with
--- neither; toast.Visible, which is cleared by a task.delay inside showToast and
--- has no changed signal of its own; the Level 3 state folder's attributes,
--- which are read through stateAttribute() from a folder that may not exist yet;
--- and any gate a later change adds to isActive() without adding it to the list
--- here. The tick is what keeps a missed subscription a 100ms latency bug
--- instead of a permanent one.
---
--- dt = 0 on the signal-driven calls, deliberately. updateReader integrates the
--- needle and signal smoothing with alpha = 1 - math.exp(-dt * response); dt = 0
--- gives alpha = 0, so a state change advances no animation and the needle
--- cannot jump because a modal opened. All the smoothing stays with the tick,
--- which is the only caller that holds a real elapsed time.
 local READER_STATE_ATTRIBUTES = {
 	"InRound", "Escaped", "ZyntraDispatchClientActive", "Level3_Hiding",
 	-- A spectate target change swaps whose reader this is, so it takes the panel
@@ -1368,7 +529,7 @@ local READER_STATE_ATTRIBUTES = {
 -- are only subscribed there. In a live game these attributes are never written
 -- and a subscription to them would be a connection that can never fire.
 local READER_STUDIO_ATTRIBUTES = {
-	"UIRegressionForceLevel3Reader", "UIRegressionForceReaderHidden",
+	"UIRegressionForceLevel3Reader",
 }
 
 local readerSignalsBound = false
@@ -1407,47 +568,17 @@ end
 
 bindReaderStateSignals()
 
--- Fills the forward local declared beside the probe
--- (C_READER_VISIBILITY_FORWARD_20260831). Everything it reports is live: the
--- two controls' own properties as the renderer last left them, and the gating
--- inputs recomputed on the spot. The field order and spelling ARE the probe's
--- documented grammar -- the regression rows match this string, so change the
--- format and the comment above the action in the same edit.
-readerVisibilityReport = function(): string
-	local forced = player:GetAttribute("UIRegressionForceReaderHidden")
-	return string.format(
-		"ReaderPanel=%s/%s ReaderRestore=%s/%s active=%s hidden=%s forcehidden=%s"
-			.. " toast=%s touch=%s level=%s inround=%s escaped=%s forcelevel=%s"
-			.. " dispatch=%s hiding=%s modal=%s",
-		tostring(panel.Visible), tostring(panel.Active),
-		tostring(restoreButton.Visible), tostring(restoreButton.Active),
-		tostring(isActive()),
-		tostring(readerHidden),
-		(if type(forced) == "boolean" then tostring(forced) else "none"),
-		tostring(toast.Visible),
-		tostring(UIDevice.IsTouch()),
-		tostring(workspace:GetAttribute("SelectedLevel") == LEVEL),
-		tostring(player:GetAttribute("InRound") == true),
-		tostring(player:GetAttribute("Escaped") == true),
-		tostring(player:GetAttribute("UIRegressionForceLevel3Reader") == true),
-		tostring(player:GetAttribute("ZyntraDispatchClientActive") == true),
-		tostring(player:GetAttribute("Level3_Hiding") == true),
-		tostring(UIDevice.ScreenOwningModalOpen()))
-end
-
+local accumulated = 0
 trackReaderConnection(RunService.RenderStepped:Connect(function(dt)
-	if not readerAlive then return end
-	-- Smooth exact camera geometry every frame; target/state/text refresh remains
-	-- on the existing 10Hz tick. No tables, scans, subscriptions or formatting here.
-	updatePlayerGuideGeometry()
-	accumulated += dt
-	if accumulated < UPDATE_INTERVAL then return end
-	local elapsed = accumulated
-	accumulated = 0
-	bindClientEvent()
-	updateReader(elapsed)
+    if not readerAlive then return end
+    updatePlayerGuideGeometry()
+    accumulated += dt
+    if accumulated < UPDATE_INTERVAL then return end
+    local elapsed = accumulated
+    accumulated = 0
+    bindClientEvent()
+    updateReader(elapsed)
 end))
-
 -- CD_HINT_20261008 (owner: "a message and an arrow that points at the reader, with how to find the CDs; shown for
 -- a short while"). Once per round, when the reader is first up and nothing has been collected yet: a small card
 -- beside the panel (under it where there is no room beside it) whose arrows run toward the panel. It goes after
@@ -1471,14 +602,14 @@ do
 	heading.Name = "Heading"
 	heading.BackgroundTransparency = 1
 	UIStyle.readout(heading, {TextColor = ENERGON, TextSize = 15})
-	heading.Text = "FIND THE 5 CDs"
+	heading.Text = "FIND THE CDS"
 	heading.TextXAlignment = Enum.TextXAlignment.Left
 	heading.Parent = hint
 	local body = Instance.new("TextLabel")
 	body.Name = "Body"
 	body.BackgroundTransparency = 1
 	UIStyle.body(body, {TextColor = TEXT, TextSize = 13})
-	body.Text = "This reader points to the nearest CD. Turn until the mark is in the middle, then walk."
+	body.Text = "The compass points to the nearest CD. Turn until the mark is in the middle, then walk."
 	body.TextWrapped = true
 	body.TextXAlignment = Enum.TextXAlignment.Left
 	body.TextYAlignment = Enum.TextYAlignment.Top
@@ -1492,8 +623,11 @@ do
 		local world = currentWorld()
 		if world ~= hintWorld then hintWorld, hintSeconds = world, 0 end
 		if not world or hintSeconds >= HINT_SECONDS then return nil end
-		if not panel.Visible or toast.Visible or not isActive() or spectateSubject() ~= nil then return nil end
+		if not (objectiveCard() and objectiveCard().Visible) or os.clock() < toastUntil or not isActive() or spectateSubject() ~= nil then return nil end
 		if player:GetAttribute("LevelLoadingOpen") == true then return nil end
+		local hud = player.PlayerGui:FindFirstChild("RoundHud")
+		local feed = hud and hud:FindFirstChild("FeedRow1")
+		if feed and feed:IsA("GuiObject") and feed.Visible then return nil end
 		-- not under UIRegression's viewport fixture (its matrices measure the reader alone); `DevReaderHintInFixture`
 		-- on the workspace lets a phone audit see the card anyway
 		if workspace:GetAttribute("UIRegressionViewport") ~= nil and workspace:GetAttribute("DevReaderHintInFixture") ~= true then return nil end
@@ -1505,7 +639,11 @@ do
 		return world
 	end
 	local function place(seconds: number)
-		local size, right, top = panel.AbsoluteSize, panel.Position.X.Offset, panel.Position.Y.Offset
+		local panel = objectiveCard()
+		if not panel then return end
+		local origin = gui.AbsolutePosition
+		local size = panel.AbsoluteSize
+		local right, top = panel.AbsolutePosition.X + size.X - origin.X, panel.AbsolutePosition.Y - origin.Y
 		local drift = math.floor(3 + 3 * math.sin(seconds * 3.2))
 		-- MOBILE_QA_20261008: the room beside the reader is measured to the LOBBY chip's real right edge (it is at
 		-- 188, not the 150 this assumed), and a phone that has less than the card's 300 gets a narrower, taller card
@@ -1513,12 +651,12 @@ do
 		-- beside either (568x320) it stands under the chip, on the thumbstick's side; the card takes no input.
 		local chip = player.PlayerGui:FindFirstChild("RoundExitGui")
 		chip = chip and chip.Enabled and chip:FindFirstChild("LeaveChip")
-		local chipRight = (chip and chip.Visible) and (chip.AbsolutePosition.X + chip.AbsoluteSize.X - panel.Parent.AbsolutePosition.X) or 0
+		local chipRight = (chip and chip.Visible) and (chip.AbsolutePosition.X + chip.AbsoluteSize.X - gui.AbsolutePosition.X) or 0
 		local room = right - size.X - 12 - (chipRight + 12)
 		local touch = UIDevice.IsTouch()
 		local beside = room >= 300 or (touch and room >= 170)
 		if not beside and touch and chip and chip.Visible then
-			local origin = panel.Parent.AbsolutePosition
+			local origin = gui.AbsolutePosition
 			hint.AnchorPoint = Vector2.new(0, 0)
 			hint.Position = UDim2.fromOffset(chip.AbsolutePosition.X - origin.X, chip.AbsolutePosition.Y + chip.AbsoluteSize.Y + 8 - origin.Y)
 			hint.Size = UDim2.fromOffset(220, 122)
@@ -1565,7 +703,6 @@ do
 		script:SetAttribute("Level3_ReaderHintSeconds", math.floor(seconds * 10) / 10)
 	end))
 end
-
 -- C_READER_TEARDOWN_20260831.
 --
 -- One teardown, idempotent, that every exit path funnels into. The triggers are

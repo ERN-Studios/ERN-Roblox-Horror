@@ -1,8 +1,0 @@
-Saved using the built-in image tool, unchanged at 1254 × 1254:
-
-- `artifacts/promo-20261007/raw/I01_icon_shh_eyes_in_the_lenses_raw.png`
-- `artifacts/promo-20261007/raw/I02_icon_it_is_behind_you_raw.png`
-- `artifacts/promo-20261007/raw/I03_icon_entity_round_the_corner_raw.png`
-- `artifacts/promo-20261007/raw/I04_icon_split_face_raw.png`
-- `artifacts/promo-20261007/raw/I04_icon_split_face_try1_raw.png` (rejected attempt)
-- `artifacts/promo-20261007/prompts_H.json`

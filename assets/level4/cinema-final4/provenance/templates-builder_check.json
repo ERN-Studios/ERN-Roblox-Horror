@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "chunks": 32,
+  "UsherTotalTris": 8831,
+  "FilmReelTris": 1477,
+  "joints": 24,
+  "textureFiles": 8,
+  "walkFrames": 23,
+  "runFrames": 22,
+  "generatedLuauBytes": 27335,
+  "restMotorMaxError": 8.881784197001252e-16,
+  "feetMinimumY": 5.292892457653409e-09,
+  "headMaximumY": 7.600000018119812,
+  "assetIds": "fabricated only for offline generator self-check; no upload or Studio execution",
+  "jointAxes": "actor Y up, -Z forward",
+  "retarget": {
+    "Walk": {
+      "nativeVsAlignedPartFrameMaxError": 6.217248937900877e-15,
+      "nativeVsSerializedPartPositionMaxErrorStuds": 0.0009310806507750395,
+      "authoredSpeedStudsPerSecond": 8.86603114432292
+    },
+    "Run": {
+      "nativeVsAlignedPartFrameMaxError": 7.438494264988549e-15,
+      "nativeVsSerializedPartPositionMaxErrorStuds": 0.0009832190833615145,
+      "authoredSpeedStudsPerSecond": 17.321839844225963
+    }
+  }
+}

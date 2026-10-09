@@ -1,0 +1,9 @@
+# Caption correction code review — 9/10, GO to native verification
+
+Reviewed both hunks in final Store `b031c3ab5b27edb484b5a62c40fcb380434df1c664d6cb51811e27c7b688a3cb`. Independently reversed all four literal edits, reinserting the removed text-size constraint at its unique caption anchor, and reconstructed the exact fa63 copy-only square baseline. Independently compiled the whole proposed Store with Luau 0.737. No source or Studio changes were made by this reviewer.
+
+The observed 84px native buttons had TextFits false. The earlier scaled caption only reserved 15.12px of height, while native readback reported unscaled size 16. The cause of that native property state is unconfirmed; no global typography-writer claim is made. The correction explicitly uses unscaled text, reserves 18px height and 4px side padding, and sets font 16 for 84/104/112px squares or 12 for the constrained 64px square. The top clamp leaves the entire text box inside the square on every supported size. Asset IDs, image geometry, lowercase text, handlers and other source are unchanged.
+
+No concrete code blocker found. At this checkpoint the author's focused host extension is still pending; no new passing test count is asserted. Native verification must confirm both caption TextFits and visual clearance from the logos at 84px and constrained 64px. Scaling the earlier measured 70px text width to an estimated 52.5px is useful preparation, not native typography evidence. The card's final honest 10/10 remains pending those actual corrected visuals and interactions.
+
+Subsequent final checkpoint: independently reran 389 actual-source checks, the specific unscaled-height negative and two complete compiles. Actual 84px and explicitly synthetic 64px native screenshots/readbacks now confirm fitting text and logo clearance. The full feature receives 10/10 in `../native-final-independent-review.md`; the earlier pending checkpoint above is retained as history.

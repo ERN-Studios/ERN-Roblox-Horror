@@ -62,6 +62,12 @@ Configuration.Reels = {
 	-- level, behind a seat back, at the far end of the gallery, or locked in the prize case)
 	HardSpots = { "Reel_Cinema1", "Reel_Gallery", "Reel_Popcorn", "Reel_ServiceShelf", "Reel_Prize" },
 	MaxHard = 1,
+	-- REEL_ROOMS_20261008: the room each reel spot is shown as in the objective panel ("Reels: Cafe, Arcade")
+	RoomNames = {
+		Reel_BackCounter = "Concessions", Reel_Popcorn = "Concessions", Reel_TicketBooth = "Ticket booth",
+		Reel_Cafe = "Cafe", Reel_Cinema1 = "Cinema 1", Reel_Gallery = "Gallery", Reel_Prize = "Arcade",
+		Reel_ServiceShelf = "Service room", Reel_Men = "Men's room", Reel_Women = "Women's room",
+	},
 }
 
 Configuration.Projectors = {
@@ -75,6 +81,8 @@ Configuration.Breaker = {
 	HoldDistance = 7,            -- the holder must stay this close to the lever
 	FuseSeconds = 60,
 	FuseCooldownSeconds = 4,
+	-- co-op: the fuse also works once nobody has held the lever this long after someone asked for the fuse
+	CoopFuseAfterSeconds = 45,
 	PromptDistance = 8,
 }
 

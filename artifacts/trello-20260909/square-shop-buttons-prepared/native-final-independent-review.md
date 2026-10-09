@@ -1,0 +1,22 @@
+# Final independent square-button review — 10/10
+
+The revised Shop/Upgrades design meets card Nn65pxPk/#63 in the reviewed scope. Final score is **10/10**, with no remaining design, code or observed native blocker. This is an independent judgment after the actual caption failure was fixed, not an automatic carry-forward of the prepared score. Root owns the separate mouse publication; this note does not claim it has already happened.
+
+Final installed Store SHA-256: `b031c3ab5b27edb484b5a62c40fcb380434df1c664d6cb51811e27c7b688a3cb`. Independently matched the runtime mirror to that exact source. The copy-only composition retains published v1872 text `083c53b7…87c71`; pending ESP and DEV free-respawn are excluded. The accepted imagegen masters and actual image IDs remain unchanged: Upgrades `119432640057145`, Shop `132462891522145`.
+
+The native design has two complete dark/mint squares, distinct centered cart and upgrade symbols, and only the requested lowercase labels `shops` and `upgrades` below them. Cart wheels and chevrons remain recognizable; optical balance and logo/caption separation hold at the observed desktop, phone and constrained sizes. No ghost caption, visible tile seam, clipping or movement-control overlap is apparent in the final inspected views. This is a two-color visual family, not a claim that antialiased PNGs contain only two literal RGB values.
+
+Evidence reviewed:
+
+- `after-copy-only/native-desktop.json/.jpg`: actual 1388×675 desktop, two 112×112 buttons with loaded correct images and fitting labels. Actual Upgrades-icon and Shop-caption clicks select their respective terminal pages and suppress both lobby buttons.
+- `caption-fit-correction/native-phone-final.json/.jpg`: actual iPhone 13 Studio simulator, reported viewport 749×368. Both normal lobby buttons are 84×84, loaded, active and visible, with inactive decoration. Native caption bounds 70×16 and 43×16 fit inside 76×18 boxes; both TextFits are true. The earlier false-fit phone checkpoint remains failed historical evidence.
+- `caption-fit-correction/native-synthetic64.json/.jpg`: actual cloned button children render at 64×64 with 12px captions. Native bounds 52×12 and 33×12 fit the 56×18 boxes, with visible logo clearance. I read `native-64-fixture.luau` and independently matched its layout function to final production exactly apart from surrounding whitespace. This is a synthetic 320×150 constraint fixture rendered by Studio, not a physical device profile or input test on the clones.
+- Actual phone Shop-icon and Upgrades-caption routing is retained in the pre-correction readback. Post-correction `native-caption-click.json` again confirms the normal Upgrades caption opens Upgrades and hides both openers. Only caption box/font changed between checkpoints, not activation handlers. No purchase/spend was performed or claimed.
+
+Independently reran `test_caption.py`: 389 actual-source checks across nine layout/state fixtures, the specific prior-source unscaled-caption negative control and two whole compiles pass. The observed native TextScaled=false state is represented; its original writer/cause remains unconfirmed. Independently verified the literal inverse, including the removed constraint, back to fa63; the earlier nine-edit inverse preserves the entire published copy-only input. These 389 checks extend the existing host and are not added to 319 as separate coverage. Hover/restoration, modal/queue/round guards, safe bounds and the unchanged touch DEV exception have actual-source coverage; no new physical native test of every state is asserted.
+
+Root reports removal of the temporary sizing GUI, stopped Play and 126/126 source matches with zero drift. The blocked initial client loadstring attempt created no UI and caused no security-setting change; the successful inline fixture is saved separately. No Studio, UI, production-source or Git operation was made by this reviewer.
+
+Limits: emulation is not physical-phone input; the constrained 64px fixture is synthetic; this is not certification of every viewport or unrelated terminal content. These limits do not conceal the observed font failure: actual 84px and native 64px typography now both pass. The user's scope ends with squares and lobby lights; ESP/DEV remains deferred.
+
+Final phone JSON SHA-256: `7ec0d6b83df93ca3e87fae8a971255a10dcd625824e62a4b66a815d38ec54952`. Native 64px JSON SHA-256: `606075f602abaa7db2c083343b64e64d1c97234904134ff9fc4266d1004e3bca`.

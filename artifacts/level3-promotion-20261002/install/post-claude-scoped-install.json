@@ -1,9 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"sources\":{\"1\":{\"editorHash\":\"16d1981727d1364e1da67c43d0647cc64d07d88fd3d9ada5a1599412c7ac0690\",\"class\":\"ModuleScript\",\"sourceHash\":\"16d1981727d1364e1da67c43d0647cc64d07d88fd3d9ada5a1599412c7ac0690\",\"path\":\"ServerScriptService.LobbyReimaginedPreview.Builder\"},\"2\":{\"editorHash\":\"ac252224a6f7ed82ccfdbea950a063e4e3e8c70da53322bc912f89b8cab5ad88\",\"class\":\"Script\",\"sourceHash\":\"ac252224a6f7ed82ccfdbea950a063e4e3e8c70da53322bc912f89b8cab5ad88\",\"path\":\"ServerScriptService.GameManager\"}},\"sceneChanged\":false,\"time\":\"2026-10-02T20:23:00Z\"}"
-    }
-  ],
-  "isError": false
-}

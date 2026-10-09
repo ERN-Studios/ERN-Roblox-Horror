@@ -1,0 +1,1 @@
+Opfølgende QA afsluttet; egen køpost fjernet, Studio Edit, prober fjernet og simulator stoppet. Se REPORT.md og qa-slot2-summary.json for beståede prøver og eksplicit uverificerede checks. Ingen ny QA-køpost og ingen udgivelse.

@@ -3,9 +3,12 @@
 -- The daily wheel as a FULL-SCREEN TAKEOVER. There is no panel, no legend, no
 -- banner and no footer: the undimmed world, the textured disc, a fixed pointer
 -- at 12 o'clock, SPIN living inside the hub, and one X beside the disc. While it is open every
--- OTHER ScreenGui in PlayerGui is disabled and restored on close -- see "the
--- takeover" below, which is the only part of this file that touches anything
--- it does not own.
+-- OTHER ScreenGui in PlayerGui is disabled and restored on close, except three:
+-- the lobby rail ("ZyntraStore", owner 2026-10-07), the lobby token pill
+-- ("ZyntraLobbyPillL4") and the Friend Boost chip ("FriendBoostGui"), which stay
+-- up over the rail's windows (owner, 2026-10-08) -- see "the takeover" below,
+-- which is the only part of this file that touches anything it does not own. PlayerScripts.CloseLuckyWheel is the
+-- rail's synchronous way to shut the wheel before it opens another window.
 --
 -- WHAT THIS FILE IS ALLOWED TO DECIDE: nothing about the prize. The server
 -- picks it inside its own transaction, writes it, and only then answers; by the
@@ -180,8 +183,8 @@ end
 -- Deterministic from the Serial, and deliberately NOT Random.new: the same
 -- recorded result must land on the same degree every time it is drawn, on every
 -- client, whether it is being animated or parked by a rejoin. Range
--- [JITTER_MARGIN, FIELD - JITTER_MARGIN) -- with the shipped five prizes that
--- is [6, 66) inside a 72-degree field.
+-- [JITTER_MARGIN, FIELD - JITTER_MARGIN) -- with the shipped six prizes that
+-- is [6, 54) inside a 60-degree field.
 local function jitterFor(serial: number): number
 	local span = FIELD - JITTER_MARGIN * 2
 	if span <= 0 then return FIELD / 2 end
@@ -710,13 +713,20 @@ end
 -- they have not re-enabled themselves in the meantime. CoreGui (topbar, chat)
 -- is not ours to touch; the touch movement cluster is CoreGui too and stands
 -- down through UIDevice.SuppressTouchMovement instead.
+-- THREE exemptions, by ScreenGui name. The lobby rail, "ZyntraStore", stays up
+-- over its own windows so WHEEL, SHOP, REWARDS and the rest can switch straight
+-- from here (owner, 2026-10-07). The lobby token pill, "ZyntraLobbyPillL4", and
+-- the Friend Boost chip, "FriendBoostGui", stay up over them too (owner,
+-- 2026-10-08). None is ever disabled or watched; each owner lifts its own gui
+-- above this one (DisplayOrder 119) while a rail window is open.
 local hidden = {}
 local watchers = {}       -- gui -> its Enabled watcher, live only while taken over
 local childAddedConn = nil
 local takenOver = false
 
 local function hideOther(other: Instance)
-	if other == gui or not other:IsA("ScreenGui") then return end
+	if other == gui or not other:IsA("ScreenGui") or other.Name == "ZyntraStore"
+		or other.Name == "ZyntraLobbyPillL4" or other.Name == "FriendBoostGui" then return end
 	-- `~= nil`, not truthiness: a gui that was ALREADY off is remembered as
 	-- false so close leaves it off.
 	if hidden[other] ~= nil then return end
@@ -818,8 +828,8 @@ function closeModal()
 	handBack()
 	player:SetAttribute("LuckyWheelOpen", nil)
 	-- Suppression is SHARED. Derive the request from the complete published
-	-- modal set rather than letting the last caller win -- exactly as
-	-- ZyntraStore.setMainVisible does.
+	-- modal set rather than letting the last caller win -- exactly as every
+	-- other rail window does on close.
 	UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 	blurModal()
 end
@@ -844,6 +854,20 @@ end
 -- ── wiring ────────────────────────────────────────────────────────────────
 openEvent.Event:Connect(openModal)
 closeButton.Activated:Connect(closeModal)
+
+-- The rail's close bridge (owner, 2026-10-07: switch windows from the rail).
+-- A BindableFunction, never an Event: Invoke returns only after closeModal has
+-- cleared LuckyWheelOpen, so the window the rail opens next does not refuse
+-- over a wheel that is still published. A do-block, so no new top-level local.
+do
+	local bridge = Instance.new("BindableFunction")
+	bridge.Name = "CloseLuckyWheel"
+	bridge.OnInvoke = function()
+		closeModal()
+		return false
+	end
+	bridge.Parent = playerScripts
+end
 
 hub.Activated:Connect(function()
 	-- A tap while the disc is turning SKIPS. This is the whole reason the hub

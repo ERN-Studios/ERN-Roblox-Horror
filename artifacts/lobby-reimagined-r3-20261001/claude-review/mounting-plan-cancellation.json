@@ -1,9 +1,0 @@
-{
-  "status": "cancelled",
-  "requestedBy": "Parent instructed no further Claude request needed after genuine67-second review returned",
-  "observedAtUTC": "2026-10-01T14:18:28.667456+00:00",
-  "ownedRequestGroupTerminated": 80477,
-  "receipt": "mounting-plan.receipt.json",
-  "noFinalAdviceReturned": true,
-  "noOtherProcessesInterrupted": true
-}

@@ -96,18 +96,18 @@ function Suite.Module()
 		tostring(Routing.NextLevel(1)))
 	check(report, Routing.NextLevel(2) == 3, "Level 2 continues to Level 3",
 		tostring(Routing.NextLevel(2)))
-	check(report, Routing.NextLevel(3) == nil, "Level 3 has no next level",
+	check(report, Routing.NextLevel(3) == 4, "Level 3 continues to Level 4 (the cinema, since 2026-10-05)",
 		tostring(Routing.NextLevel(3)))
-	check(report, Routing.NextLevel(4) == nil, "there is no route beyond Level 3",
+	check(report, Routing.NextLevel(4) == nil, "there is no route beyond Level 4",
 		tostring(Routing.NextLevel(4)))
-	check(report, Routing.OffersContinue(1) and Routing.OffersContinue(2),
-		"Levels 1 and 2 offer Continue")
-	check(report, not Routing.OffersContinue(3),
-		"Level 3 offers no Continue -- Back to Lobby only")
-	check(report, Routing.MaxLevel == 3 and Routing.PostWinSeconds == 15,
-		"the campaign ends at 3 and the window is 15 seconds",
+	check(report, Routing.OffersContinue(1) and Routing.OffersContinue(2) and Routing.OffersContinue(3),
+		"Levels 1 to 3 offer Continue")
+	check(report, not Routing.OffersContinue(4),
+		"Level 4 offers no Continue -- Back to Lobby only")
+	check(report, Routing.MaxLevel == 4 and Routing.PostWinSeconds == 15,
+		"the campaign ends at 4 and the window is 15 seconds",
 		string.format("%s / %s", tostring(Routing.MaxLevel), tostring(Routing.PostWinSeconds)))
-	check(report, Routing.ClampLevel(0) == 1 and Routing.ClampLevel(9) == 3
+	check(report, Routing.ClampLevel(0) == 1 and Routing.ClampLevel(9) == 4
 		and Routing.ClampLevel("2") == 2 and Routing.ClampLevel(nil) == 1,
 		"level clamping is the module's, and holds for junk input")
 
@@ -889,11 +889,14 @@ function Suite.Admission()
 			"and the local cap admits them even with no deadline at all")
 	end
 
-	-- (9) Level 3 is the end of the campaign.
+	-- (9) Level 4 is the end of the campaign; Level 3 now continues into it.
 	do
-		local source = newSource({Party = {"ana"}, Level = 3, Now = opened})
+		local source = newSource({Party = {"ana"}, Level = 4, Now = opened})
 		check(report, source.NextLevel == nil,
-			"a finished Level 3 has nowhere to continue to", tostring(source.NextLevel))
+			"a finished Level 4 has nowhere to continue to", tostring(source.NextLevel))
+		local three = newSource({Party = {"ana"}, Level = 3, Now = opened})
+		check(report, three.NextLevel == 4,
+			"a finished Level 3 continues to Level 4", tostring(three.NextLevel))
 	end
 
 	return report

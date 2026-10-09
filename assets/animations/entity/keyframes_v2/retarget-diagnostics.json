@@ -1,0 +1,37 @@
+{
+  "scale": 0.06471034603970868,
+  "actions": {
+    "Walk": {
+      "frames": 40,
+      "first_frame_translation_max": 0.7350571667664979
+    },
+    "Run_Chase": {
+      "frames": 48,
+      "first_frame_translation_max": 0.9586630818052377
+    },
+    "Watch": {
+      "frames": 180,
+      "first_frame_translation_max": 0.6595288023165641
+    },
+    "Yell_Howl": {
+      "frames": 66,
+      "first_frame_translation_max": 0.659525484872065
+    },
+    "Yell_FromRun": {
+      "frames": 87,
+      "first_frame_translation_max": 1.25
+    },
+    "Lunge": {
+      "frames": 72,
+      "first_frame_translation_max": 0.6595254848728094
+    },
+    "Lunge_FromRun": {
+      "frames": 52,
+      "first_frame_translation_max": 0.9465661695927315
+    },
+    "Kill_VisorCrush": {
+      "frames": 120,
+      "first_frame_translation_max": 0.6595288023165641
+    }
+  }
+}

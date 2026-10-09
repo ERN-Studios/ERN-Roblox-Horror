@@ -1,0 +1,21 @@
+{
+  "source": "luna_liedown_v1.rbxmx",
+  "sha256": "34bb90c6a5f1cd888d18ec457642b767bc5319f12772203d20700d36e03f6e17",
+  "assetType": "Animation",
+  "displayName": "Luna liedown v1",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-10-04T17:04:04.021641+00:00",
+  "operationPath": "operations/3272456d-4203-4b13-bb0f-192ecdc93be8",
+  "assetId": "102191286557976",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Luna liedown v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

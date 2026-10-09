@@ -305,94 +305,73 @@ bottomBar.AnchorPoint = Vector2.new(0, 1)
 bottomBar.Position = UDim2.fromScale(0, 1)
 bottomBar.Parent = gui
 
-local message = Instance.new("TextLabel")
-message.Name = "HiddenStatus"
-message.AnchorPoint = Vector2.new(.5, 0)
-message.Position = UDim2.new(.5, 0, 0, 45)
-message.Size = UDim2.new(0, 360, 0, 42)
-message.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
-message.BackgroundTransparency = .18
-message.BorderSizePixel = 0
-message.Font = Enum.Font.GothamBold
-message.Text = "HIDDEN UNDER TABLE"
-message.TextColor3 = Color3.fromRGB(186, 245, 225)
-message.TextScaled = true
-message.Parent = gui
-local messageCorner = Instance.new("UICorner")
-messageCorner.CornerRadius = UDim.new(0, 8)
-messageCorner.Parent = message
-local messageStroke = Instance.new("UIStroke")
-messageStroke.Color = Color3.fromRGB(75, 94, 83)
-messageStroke.Transparency = .28
-messageStroke.Thickness = 1
-messageStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-messageStroke.Parent = message
-
-local leave = Instance.new("TextButton")
-leave.Name = "LeaveHiding"
-leave.AnchorPoint = Vector2.new(.5, 1)
-leave.Position = UDim2.new(.5, 0, 1, -54)
-leave.Size = UDim2.new(0, 330, 0, 58)
-leave.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
-leave.BackgroundTransparency = .04
-leave.BorderSizePixel = 0
-leave.AutoButtonColor = true
-leave.Font = Enum.Font.GothamBold
-leave.TextColor3 = Color3.fromRGB(231, 238, 233)
-leave.TextScaled = true
--- Captioned once at load in the old build, so a tablet that gained a keyboard
--- kept reading "TAP" forever. It is now rebuilt on every UIDevice.Changed.
-leave.Text = "LEAVE HIDING"
-leave.Parent = gui
-local leaveCorner = Instance.new("UICorner")
-leaveCorner.CornerRadius = UDim.new(0, 9)
-leaveCorner.Parent = leave
-local leaveStroke = Instance.new("UIStroke")
-leaveStroke.Color = Color3.fromRGB(75, 94, 83)
-leaveStroke.Transparency = .28
-leaveStroke.Thickness = 1
-leaveStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-leaveStroke.Parent = leave
-
--- Both panels were fixed-size (360 and 330 wide). At 375x667 the leave button
--- ran under the JUMP control and the message ran to within 7px of both edges.
--- They now size to the safe width and sit inside the safe content band.
+-- B7: the server/camera/pose owners above stay unchanged.
+local Hud = require(ReplicatedStorage:WaitForChild("RoundHud"))
+local Binder = require(ReplicatedStorage:WaitForChild("ZyntraShopUI"):WaitForChild("ShopBinder"))
+local bannerRoot, leaveRoot, checkRoot
+local bannerAttention, leaveAttention
+local message, leave, secondsLabel, checkFill
+local checkFillWidth = 1
+local warningDeadline, warningStart = 0, 0
+local leaveConnection
+local requestExit
+local function mountHiding()
+	if leaveConnection then leaveConnection:Disconnect() end
+	for _, root in ipairs({bannerRoot, leaveRoot, checkRoot}) do if root then root:Destroy() end end
+	local touch = UIDevice.Layout().IsTouch
+	local suffix = touch and "Touch" or ""
+	bannerRoot, bannerAttention = Hud.Mount("HUD_Screens", "HidingBanner" .. suffix, gui,
+		{Name = "HiddenStatus", Attention = {Hold = 6, Rest = 0.45}})
+	leaveRoot, leaveAttention = Hud.Mount("HUD_Screens", "LeaveHiding" .. suffix, gui,
+		{Name = "LeaveHiding", Attention = {Hold = 6, Rest = 0.55}})
+	checkRoot = Hud.Mount("HUD_Screens", "TableCheck" .. suffix, gui, {Name = "TableCheck"})
+	if not (bannerRoot and leaveRoot and checkRoot) then
+		warn("Level 3 hiding: missing imported HUD templates")
+		return
+	end
+	message = Binder.text(Binder.at(bannerRoot, "Banner"))
+	leave = Binder.button(leaveRoot, "LeaveHit")
+	leaveConnection = leave.Activated:Connect(function() if requestExit then requestExit() end end)
+	secondsLabel = Binder.text(Binder.at(checkRoot, "Seconds"))
+	checkFill = Binder.at(checkRoot, "Track/Fill")
+	checkFillWidth = checkFill.Size.X.Scale
+	Hud.Keycap(Binder.at(leaveRoot, "KeyChip"), Enum.KeyCode.E, Enum.KeyCode.ButtonB)
+	checkRoot.Visible = false
+end
 local function applyHidingLayout()
+	if not bannerRoot or not leaveRoot or not checkRoot then return end
 	local layout = UIDevice.Layout()
+	local safe = layout.Safe
+	local centre = (safe.Left + safe.Right) / 2
+	local top = safe.Top + (layout.IsTouch and 6 or 16)
 	if layout.IsTouch then
 		local band = layout.TopBand
-		local centre = (band.Left + band.Right) * .5
-		local landscape = not layout.Portrait
-		local leaveHeight = landscape and 44 or 52
-		local gap = 6
-		local messageHeight = landscape and 30 or 42
-		if messageHeight + gap + leaveHeight > band.Height then
-			messageHeight = math.max(22, band.Height - gap - leaveHeight)
-		end
-		-- Absolute -> gui offsets, both axes.
-		message.AnchorPoint = Vector2.new(.5, 0)
-		message.Position = UIDevice.LocalPosition(gui, centre, band.Top)
-		message.Size = UDim2.fromOffset(math.min(360, band.Width), messageHeight)
-		leave.AnchorPoint = Vector2.new(.5, 0)
-		leave.Position = UIDevice.LocalPosition(gui, centre, band.Top + messageHeight + gap)
-		leave.Size = UDim2.fromOffset(math.min(330, band.Width), leaveHeight)
-	else
-		local available = layout.SafeRight - layout.SafeLeft
-		message.AnchorPoint = Vector2.new(.5, 0)
-		message.Size = UDim2.new(0, math.min(360, available), 0, 42)
-		message.Position = UIDevice.LocalPosition(gui,
-			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 8)
-		leave.AnchorPoint = Vector2.new(.5, 1)
-		leave.Size = UDim2.new(0, math.min(330, available), 0, 58)
-		-- Keep the exit with the hidden status, clear of bottom radio captions.
-		leave.AnchorPoint = Vector2.new(.5, 0)
-		leave.Position = UIDevice.LocalPosition(gui,
-			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 58)
+		if band then centre = (band.Left + band.Right) / 2 end
 	end
-	leave.Text = UIDevice.Caption("LEAVE HIDING", "//  E", "//  B")
+	for _, root in ipairs({bannerRoot, checkRoot, leaveRoot}) do root.AnchorPoint = Vector2.new(0.5, 0) end
+	bannerRoot.Position = UIDevice.LocalPosition(gui, centre, top)
+	checkRoot.Position = UIDevice.LocalPosition(gui, centre, top + 30)
+	local leaveTop = top + 30 + (checkRoot.Visible and checkRoot.Size.Y.Offset + 6 or 0)
+	local leaveCentre = centre
+	if layout.IsTouch then
+		local width, height = leaveRoot.Size.X.Offset, leaveRoot.Size.Y.Offset
+		local zone = layout.Zones.Thumbstick
+		if centre - width / 2 < zone.Right and centre + width / 2 > zone.Left
+			and leaveTop < zone.Bottom and leaveTop + height > zone.Top then
+			-- The short landscape screen's movement region reaches this row.
+			-- Keep the authored hit target in the clear column to its right.
+			local candidate = zone.Right + 8 + width / 2
+			if candidate + width / 2 <= safe.Right
+				and UIDevice.OverlapsMovementZone(candidate - width / 2, leaveTop,
+					candidate + width / 2, leaveTop + height) == nil then
+				leaveCentre = candidate
+			end
+		end
+	end
+	leaveRoot.Position = UIDevice.LocalPosition(gui, leaveCentre, leaveTop)
 end
+mountHiding()
 applyHidingLayout()
-UIDevice.Changed:Connect(applyHidingLayout)
 
 -- LEVEL3_MANAGER_TABLE_CHECK_20260904
 -- The Mall Manager kneels at one hiding table and gives whoever is under it a
@@ -401,11 +380,6 @@ UIDevice.Changed:Connect(applyHidingLayout)
 -- that table's occupants are warned. This reuses the existing hidden banner
 -- rather than adding a second panel over an already tight mobile layout.
 local HIDDEN_TEXT = "HIDDEN UNDER TABLE"
-local HIDDEN_COLOR = Color3.fromRGB(186, 245, 225)
-local HIDDEN_STROKE = Color3.fromRGB(79, 183, 157)
-local WARNING_TEXT = "SOMETHING IS LOOKING UNDER THE TABLE"
-local WARNING_COLOR = Color3.fromRGB(255, 226, 226)
-local WARNING_STROKE = Color3.fromRGB(226, 74, 74)
 local level3State: Instance? = nil
 
 local function tableCheckWarned(): boolean
@@ -420,26 +394,42 @@ local function tableCheckWarned(): boolean
 end
 
 local function refreshWarning()
+	if not bannerRoot or not leaveRoot or not checkRoot then return end
 	local warned = tableCheckWarned()
-	message.Text = if warned then WARNING_TEXT else HIDDEN_TEXT
-	message.TextColor3 = if warned then WARNING_COLOR else HIDDEN_COLOR
-	messageStroke.Color = if warned then WARNING_STROKE else HIDDEN_STROKE
-	shade.BackgroundTransparency = if warned then .5 else .76
+	if not hiding then
+		bannerAttention:Hide()
+		leaveAttention:Hide()
+		checkRoot.Visible = false
+		warningDeadline, warningStart = 0, 0
+		return
+	end
+	bannerAttention:Show("HIDDEN", warned)
+	leaveAttention:Show("HIDDEN", warned)
+	local changed = checkRoot.Visible ~= warned
+	checkRoot.Visible = warned
+	shade.BackgroundTransparency = warned and .5 or .76
+	if warned then
+		local deadline = tonumber(level3State:GetAttribute("Level3_MallManagerTableCheckEndsAt")) or 0
+		local now = workspace:GetServerTimeNow()
+		if deadline ~= warningDeadline then warningDeadline, warningStart = deadline, now end
+		local remaining = math.max(0, deadline - now)
+		secondsLabel.Text = string.format("%.1f s", remaining)
+		checkFill.Size = UDim2.new(checkFillWidth * math.clamp(remaining / math.max(.01, deadline - warningStart), 0, 1), 0, 1, 0)
+	end
+	if changed then applyHidingLayout() end
 end
-
--- The window closes on a timestamp, not an attribute edge, so this has to tick.
--- It costs two attribute reads a frame while hidden and returns immediately the
--- rest of the time.
-RunService.Heartbeat:Connect(function()
-	if not hiding and message.Text == HIDDEN_TEXT then return end
+RunService.Heartbeat:Connect(function() if hiding then refreshWarning() end end)
+UIDevice.Changed:Connect(function()
+	mountHiding()
 	refreshWarning()
+	applyHidingLayout()
 end)
 
 task.spawn(function()
 	level3State = ReplicatedStorage:WaitForChild("Level 3 State")
 end)
 
-local function requestExit()
+requestExit = function()
 	if not hiding or not requestRemote then return end
 	requestRemote:FireServer("EXIT")
 end
@@ -474,7 +464,6 @@ local function apply()
 	refreshWarning()
 end
 
-leave.Activated:Connect(requestExit)
 UserInputService.InputBegan:Connect(function(input, processed)
 	if not hiding then return end
 	-- UI owns processed input. RoundUI passes B through while hiding, so an

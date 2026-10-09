@@ -1,0 +1,23 @@
+{
+  "views": 926,
+  "legitimate": 678,
+  "legitimate_before_magenta": 0,
+  "legitimate_after_magenta": 0,
+  "legitimate_before_near_magenta": 0,
+  "legitimate_after_near_magenta": 0,
+  "max_diff_percent": 0.09114583333333333,
+  "new_magenta_pixels": 0,
+  "new_near_magenta_pixels": 0,
+  "informative_views": 233,
+  "informative_distinct_eyes": 233,
+  "unique_triangles": 964681,
+  "culled_unique_triangles": 939337,
+  "export_triangles": 956315,
+  "chunks": 570,
+  "placements": 1893,
+  "colliders": 7272,
+  "prop_colliders": 2852,
+  "lights": 260,
+  "shadows": 6,
+  "carriers": 74
+}

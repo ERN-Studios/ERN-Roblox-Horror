@@ -227,3 +227,14 @@ graphify-out/
 
 # macOS Finder metadata, never game content
 .DS_Store
+
+# Temporary agent work, generated captures and authoring autosaves.
+.codex/
+/MEMORY.md
+/artifacts/
+*.blend1
+*.server.log
+*.server.pid
+/*.log
+/*.png
+/*.jpg

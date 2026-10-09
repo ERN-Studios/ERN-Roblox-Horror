@@ -1,0 +1,38 @@
+{
+  "type": "generated game wall-weathering decal",
+  "variant": "C - high-right seam origin",
+  "tool": "built-in image_gen.imagegen",
+  "generatedOriginal": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-f04b2036-47d0-4ead-875f-8b5e11063e21.png",
+  "savedFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-mold/assets/level5-mold-seam-alpha.png",
+  "promptFile": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-mold/assets/level5-mold-seam-alpha.prompt.txt",
+  "timeUTC": "2026-09-23T22:56:03.439069+00:00",
+  "sha256": "9d70f001b130ca4c3c897c056e66ad706e0ecb6c92c21c5b37469bd54e3ddb64",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "mode": "RGBA",
+  "alpha": {
+    "min": 0,
+    "max": 255,
+    "transparentPixels": 674890,
+    "partialAlphaPixels": 897620,
+    "opaquePixels": 6,
+    "transparentFraction": 0.4291784630490246,
+    "partialAlphaFraction": 0.5708177214095119,
+    "nontransparentBounds": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "borderMaximums": {
+      "top": 3,
+      "bottom": 4,
+      "left": 1,
+      "right": 1
+    }
+  },
+  "pixelEdits": "None. Original generated PNG copied byte-for-byte. PIL used for read-only inspection only.",
+  "visualReview": "Broad irregular black/charcoal fungal staining, strongest upper-right, spreading left/down with organic holes and soft edges; no text, frames or glow. Finer translucent gray mycelial mat surrounds dense black colonies."
+}

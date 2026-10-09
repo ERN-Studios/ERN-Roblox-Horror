@@ -1,0 +1,259 @@
+{
+  "files": [
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\arch_detail.py",
+      "baseline_sha256": "eb30fcc171c62dcc14b80fa0d3b046c15c5c8e90c9ad083617ec441e09f31543",
+      "current_sha256": "eb30fcc171c62dcc14b80fa0d3b046c15c5c8e90c9ad083617ec441e09f31543",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\build_all.py",
+      "baseline_sha256": "b64a65ce5e623da4256b0531caf2e3432eb6b50d07338718836fd860832a2b5b",
+      "current_sha256": "53d464563a8580fdd5bdb3d6a76c20cb09001e4368240afe16bd938b75dcf09e",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\build_base.py",
+      "baseline_sha256": "8aacc7867ebf11363350751df400af5b6822a1ab63bcbb6582e7aab89ac00d30",
+      "current_sha256": "8aacc7867ebf11363350751df400af5b6822a1ab63bcbb6582e7aab89ac00d30",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\ceilings.py",
+      "baseline_sha256": "b3a43154f2f3fa95d6a9b381499c5ccf0ebb4fd9672193b8a8ef533f51a05f25",
+      "current_sha256": "b3a43154f2f3fa95d6a9b381499c5ccf0ebb4fd9672193b8a8ef533f51a05f25",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\cull_hidden.py",
+      "baseline_sha256": "5fe7ca839af189d74726e15df46804043d32560e6029caa48b359fede57b838a",
+      "current_sha256": "9eb767173b5fcebc1c7c3874910600c55deb87f34e03ba05856358e505e349c0",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\doors.py",
+      "baseline_sha256": "473d8a8ca4480b8d7acfbdad9b4b42753e40a8e8cc55fd66ad3b76750db31c6c",
+      "current_sha256": "473d8a8ca4480b8d7acfbdad9b4b42753e40a8e8cc55fd66ad3b76750db31c6c",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\doors_v2.py",
+      "baseline_sha256": "6aa83be6133d844811ff250519f9653dd96649d43896025ce2d45b97369efe91",
+      "current_sha256": "6aa83be6133d844811ff250519f9653dd96649d43896025ce2d45b97369efe91",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\export_l4.py",
+      "baseline_sha256": "28b0a638334bcf52dd2ca0f92d4d933f5a134ca071fd902a36f3eb1a7c5f8a1b",
+      "current_sha256": "399ca83bbd214ecfb1c4849b28837a2c0b3be83a4ecb4d2edd88822ca1b46368",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\import_meshy.py",
+      "baseline_sha256": "826799abfd5c4d68a3a9828b971082991b8e377bab5fa807d020efdf0b1a3271",
+      "current_sha256": "826799abfd5c4d68a3a9828b971082991b8e377bab5fa807d020efdf0b1a3271",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\l4_dump.json",
+      "baseline_sha256": "dd0e239c7e9d6d9eb63af6df4ac6e7167f3aeffe4b4167d4eee3a3d8d3efb473",
+      "current_sha256": "dd0e239c7e9d6d9eb63af6df4ac6e7167f3aeffe4b4167d4eee3a3d8d3efb473",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\l4_layout.json",
+      "baseline_sha256": "1876bd852274c935a2bf5bc0b2ec5f8183859d99a512edef41aca40db9a5aae6",
+      "current_sha256": "1876bd852274c935a2bf5bc0b2ec5f8183859d99a512edef41aca40db9a5aae6",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\layout_edits.py",
+      "baseline_sha256": "abe13dcb188a095189e45284c16838770e928d7dde5d0b71a65cb27d8065467a",
+      "current_sha256": "abe13dcb188a095189e45284c16838770e928d7dde5d0b71a65cb27d8065467a",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\Level4LightingController.client.lua",
+      "baseline_sha256": "dd3f8f0e787125d4827d191a0aeddfe0dfc56e060904be8c78537016de2c2ebd",
+      "current_sha256": "dd3f8f0e787125d4827d191a0aeddfe0dfc56e060904be8c78537016de2c2ebd",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\lights_and_camera.py",
+      "baseline_sha256": "a3aca37ec9af719ec9d9a89aca580caf4e954498e9fe07094a1e431c3dc01ffd",
+      "current_sha256": "a3aca37ec9af719ec9d9a89aca580caf4e954498e9fe07094a1e431c3dc01ffd",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\make_pbr.py",
+      "baseline_sha256": "9d30f08bbdb6448aaa0c11577465c105069bb8bbbd5b46b75dfb42ea835d6b33",
+      "current_sha256": "9d30f08bbdb6448aaa0c11577465c105069bb8bbbd5b46b75dfb42ea835d6b33",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\make_pbr_all.py",
+      "baseline_sha256": "c83d492bbc05cb575549dde9f956fd5613238bb566acf2dd928c970273c8ea4b",
+      "current_sha256": "c83d492bbc05cb575549dde9f956fd5613238bb566acf2dd928c970273c8ea4b",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\make_place.py",
+      "baseline_sha256": "a806157688c06fb7de077f4c6cffe69ba27b7b376283690783bac76081ee6745",
+      "current_sha256": "f5afe92f44d4b2c6204a720a13e657e78172fef17ef5999bfa1d580f787ca4d1",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\make_textures.py",
+      "baseline_sha256": "83abe1f991db4ae50ac929b2e18b6efcc7b99d7edfd12847df31e5d4af51da27",
+      "current_sha256": "83abe1f991db4ae50ac929b2e18b6efcc7b99d7edfd12847df31e5d4af51da27",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\meshy_specs.json",
+      "baseline_sha256": "73fc00d4d21a95da22176b5564e12d3bfa3f4b862394aca9184770694a472c04",
+      "current_sha256": "73fc00d4d21a95da22176b5564e12d3bfa3f4b862394aca9184770694a472c04",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\pbr_spec.json",
+      "baseline_sha256": "a782a6390516320f8cd56e222d5f4065bc482c6f22de2fe9e5f488045fedb595",
+      "current_sha256": "a782a6390516320f8cd56e222d5f4065bc482c6f22de2fe9e5f488045fedb595",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\place.luau",
+      "baseline_sha256": "58013c332ef4417340f8397a3df6ef8050636ef73b0b0fe2658291485c1ef35c",
+      "current_sha256": "44d9d758e518cd2f46ff74b70249dce3eb998dd97b56642bf58e2caeed208436",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\place_driver.py",
+      "baseline_sha256": "ec97ac518ab97fdbc543bc230ca499817ef2315f7ea2ee84cb2c0315406572bb",
+      "current_sha256": "ec97ac518ab97fdbc543bc230ca499817ef2315f7ea2ee84cb2c0315406572bb",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\place_phases.luau",
+      "baseline_sha256": "fc5b8c2adfd22d55287761e82924e94ba7978d4354429eb520a5fe21ef2935a3",
+      "current_sha256": "2ee996389f9cedaff9d223aaaf6a40dd5a07a506049e2f03c198eb52d3d16f35",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\props.py",
+      "baseline_sha256": "661587d5e241bb534426210540be217038ccbd19485c634f486d1336c66106af",
+      "current_sha256": "661587d5e241bb534426210540be217038ccbd19485c634f486d1336c66106af",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\props_decay.py",
+      "baseline_sha256": "e03fe3ad78696c85021fd7b700e8de48a813f7cec6b52df702f309e507c0de72",
+      "current_sha256": "e03fe3ad78696c85021fd7b700e8de48a813f7cec6b52df702f309e507c0de72",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\props_lobby.py",
+      "baseline_sha256": "6c12f6bd5388be5bf745fda0f43e414efc87fe6770229314093ea24e9467403b",
+      "current_sha256": "6c12f6bd5388be5bf745fda0f43e414efc87fe6770229314093ea24e9467403b",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\props_rooms.py",
+      "baseline_sha256": "ce8967ce9ef83c3deeea276496c21280d14e4165257293123a8462f7e876f762",
+      "current_sha256": "ce8967ce9ef83c3deeea276496c21280d14e4165257293123a8462f7e876f762",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\PushDoors.server.lua",
+      "baseline_sha256": "bf41238f68af5e2b6632093b92a15ea9285c207ef4647c7355a758c39bfb7ca5",
+      "current_sha256": "bf41238f68af5e2b6632093b92a15ea9285c207ef4647c7355a758c39bfb7ca5",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\serve.py",
+      "baseline_sha256": "3faaaea1fab70ad7696da7b33b71a44da3a99dff322593be6f215d7497371021",
+      "current_sha256": "3faaaea1fab70ad7696da7b33b71a44da3a99dff322593be6f215d7497371021",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\slots.py",
+      "baseline_sha256": "9f52a176ac8083a33109326cad1368ebb4f7a370ebfae15ee4803e5ec818d184",
+      "current_sha256": "a25a9f4c74da47bf8174913de8dfe6b3dfdee8d0b88e6aca84d5da4e31d1cd19",
+      "changed": true,
+      "task_owned": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\studio_upload.py",
+      "baseline_sha256": "2cfe7288d6250475cd7c6285d69d330939b335382516a5bb607ca00a9134a81e",
+      "current_sha256": "2cfe7288d6250475cd7c6285d69d330939b335382516a5bb607ca00a9134a81e",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\textures.json",
+      "baseline_sha256": "79f8aaed55dee73e5e94982b6402afc331271b626d766bdf627c79218ba49484",
+      "current_sha256": "79f8aaed55dee73e5e94982b6402afc331271b626d766bdf627c79218ba49484",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\upload.luau",
+      "baseline_sha256": "5111a736d8cc4ad5477f0b043eead34bd96bc7b0a65224c5307ff70b95b03b75",
+      "current_sha256": "5111a736d8cc4ad5477f0b043eead34bd96bc7b0a65224c5307ff70b95b03b75",
+      "changed": false,
+      "task_owned": false
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\round_assets.py",
+      "current_sha256": "03dc0f5c00870140aae8b67e1062fcebc25fcdffd8210fc46fdaeb38ca2186bb",
+      "task_generated": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\tools\\level4_blender\\usher_nav.py",
+      "current_sha256": "47d0845f7642b2e955dfabae2b29618c14198f6f22243d72b9efc26d411ad1a1",
+      "task_generated": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\ReplicatedStorage\\Level 4 Usher Animations.ModuleScript.lua",
+      "current_sha256": "567fba9ea1ee24068883779382917bfb7c64c130a18ae062e3f31d188a649f61",
+      "task_generated": true
+    },
+    {
+      "path": "G:\\Roblox\\MongoTV\\ServerScriptService\\Level 4 Systems\\Level 4 Usher Nav.ModuleScript.lua",
+      "current_sha256": "63699bee74dd3c2bd172ad31e0ba1c0d645761067dad3c2d6571cb1cca26f684",
+      "task_generated": true
+    }
+  ],
+  "external_runtime_drift": "external_flicker_drift.diff; current_flicker_source.txt",
+  "git_used": false,
+  "studio_used": false,
+  "master_overwritten": false
+}

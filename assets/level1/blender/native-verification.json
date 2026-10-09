@@ -1,0 +1,23 @@
+{
+  "blenderVersion": "5.2.0 LTS",
+  "nativeRoomCollections": 34,
+  "fbxComponentMeshes": 30,
+  "fbxUVMeshes": 30,
+  "fbxMaterialsMatchNative": true,
+  "nativeFiles": {
+    "Level1_ModularKit.blend": "c56d1f431a369216abc2a6697824e75671bfa498b84e6ca5d508d0f52f01b52b",
+    "Level1_ModularKit.fbx": "f33e2f365550786beecdc12fbbeac760bb229f9eaa0db48323e6f915e8a084fe"
+  },
+  "relativeTextureReferences": {
+    "carpet_albedo.png": "//textures/carpet_albedo.png",
+    "carpet_normal.png": "//textures/carpet_normal.png",
+    "carpet_rough.png": "//textures/carpet_rough.png",
+    "ceiling_albedo.png": "//textures/ceiling_albedo.png",
+    "ceiling_normal.png": "//textures/ceiling_normal.png",
+    "ceiling_rough.png": "//textures/ceiling_rough.png",
+    "wallpaper_albedo.png": "//textures/wallpaper_albedo.png",
+    "wallpaper_normal.png": "//textures/wallpaper_normal.png",
+    "wallpaper_rough.png": "//textures/wallpaper_rough.png"
+  },
+  "studioGameplayVerified": false
+}

@@ -1,0 +1,209 @@
+{
+  "intent": "Elevator-only light cool gray clean brushed stainless steel",
+  "source": {
+    "path": "assets/level1/elevator-inset-20261004/textures/source/steel-imagegen.png",
+    "sha256": "68867cf7b8b712a0104f94f121153d6b50e2bf3da3c72a8f731262e470ff47b0",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "mean_channels": [
+      177.65548,
+      180.80102,
+      183.41936
+    ],
+    "min_channels": [
+      141.0,
+      144.0,
+      147.0
+    ],
+    "max_channels": [
+      214.0,
+      217.0,
+      219.0
+    ],
+    "border_mean_absolute_delta_xy": [
+      5.16427,
+      6.48086
+    ]
+  },
+  "generated_source_preserved_unchanged": true,
+  "normalized_intermediate": {
+    "path": "assets/level1/elevator-inset-20261004/textures/source/steel-neutral-tiled.png",
+    "sha256": "6cc5f928300eabfd93eeea6708fad341fad9f22fdca05dec212ecf7f0038741a",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "mean_channels": [
+      186.99525,
+      189.06672,
+      191.04228
+    ],
+    "min_channels": [
+      165.0,
+      167.0,
+      169.0
+    ],
+    "max_channels": [
+      209.0,
+      211.0,
+      212.0
+    ],
+    "border_mean_absolute_delta_xy": [
+      0.0,
+      0.0
+    ]
+  },
+  "derivation": {
+    "script": "assets/level1/elevator-inset-20261004/textures/source/steel-derive.py",
+    "pbr_tool": "tools/level4_blender/make_pbr.py",
+    "target_rgb": [
+      187.0,
+      189.0,
+      191.0
+    ],
+    "grain_contrast_scale": 0.6,
+    "edge_matching": "symmetric cosine feather 64 source pixels on both axes",
+    "normal_convention": "OpenGL +Y (Roblox/Blender)",
+    "normal_strength": 0.6,
+    "roughness_base": 0.38,
+    "roughness_variation": 0.012,
+    "metalness": 0.8,
+    "notes": "Micrograin normal is deliberately weak; generated high-contrast height is diagnostic only and must not be connected as displacement."
+  },
+  "maps": {
+    "albedo": {
+      "path": "assets/level1/elevator-inset-20261004/textures/steel_albedo.png",
+      "sha256": "4ada3a88d6e1a6456b761153c97c19e7f3e226ef6d6a629fcba9989a8d39dc0b",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "mean_channels": [
+        186.97404,
+        189.05246,
+        191.03581
+      ],
+      "min_channels": [
+        168.0,
+        170.0,
+        172.0
+      ],
+      "max_channels": [
+        207.0,
+        208.0,
+        210.0
+      ],
+      "border_mean_absolute_delta_xy": [
+        0.0026,
+        0.00358
+      ]
+    },
+    "height": {
+      "path": "assets/level1/elevator-inset-20261004/textures/steel_height.png",
+      "sha256": "26b0f0c8035adea430dc0ebfcdf90e883c1dbf0053f23a0c610c00c48397415a",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "L",
+      "mean_channels": [
+        125.54562
+      ],
+      "min_channels": [
+        0.0
+      ],
+      "max_channels": [
+        255.0
+      ],
+      "border_mean_absolute_delta_xy": [
+        0.11719,
+        0.12793
+      ]
+    },
+    "normal": {
+      "path": "assets/level1/elevator-inset-20261004/textures/steel_normal.png",
+      "sha256": "78ffdf725bd3decf898cf8c0f35c7471cf731901c6b934aa02818f20aaf0a66d",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "mean_channels": [
+        127.49826,
+        127.50049,
+        255.0
+      ],
+      "min_channels": [
+        127.0,
+        125.0,
+        255.0
+      ],
+      "max_channels": [
+        128.0,
+        130.0,
+        255.0
+      ],
+      "border_mean_absolute_delta_xy": [
+        0.31641,
+        0.33333
+      ]
+    },
+    "rough": {
+      "path": "assets/level1/elevator-inset-20261004/textures/steel_rough.png",
+      "sha256": "6ab3d4cd503bc40879ac4690de48782822eb4eec43ed44df3b785ea5c81e961e",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "L",
+      "mean_channels": [
+        96.91104
+      ],
+      "min_channels": [
+        94.0
+      ],
+      "max_channels": [
+        100.0
+      ],
+      "border_mean_absolute_delta_xy": [
+        0.00098,
+        0.00391
+      ]
+    },
+    "metal": {
+      "path": "assets/level1/elevator-inset-20261004/textures/steel_metal.png",
+      "sha256": "702a09b9549b64b7c7d5c660d974201a9123d33bc63fb817fdfd5ec9d9e464ea",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "mean_channels": [
+        204.0,
+        204.0,
+        204.0
+      ],
+      "min_channels": [
+        204.0,
+        204.0,
+        204.0
+      ],
+      "max_channels": [
+        204.0,
+        204.0,
+        204.0
+      ],
+      "border_mean_absolute_delta_xy": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "uploads": [],
+  "studio_changes": []
+}

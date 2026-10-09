@@ -568,7 +568,8 @@ end)
 -- Third-person only changes Roblox's player camera constraints. It deliberately
 -- leaves CameraType/CameraSubject alone so kill and spectate cameras keep control.
 local function applyPerspective()
-	local inRound = player:GetAttribute("InRound") == true
+	-- The Level 2 new-map dev preview wears the round body outside a round: the round camera (and C).
+	local inRound = player:GetAttribute("InRound") == true or player:GetAttribute("Level2NewMapPreview") == true
 	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 	if inRound and humanoid and humanoid.Health <= 0 then return end
 
@@ -610,6 +611,7 @@ player.CharacterAdded:Connect(function()
 	reapplyPerspectiveSoon()
 end)
 player:GetAttributeChangedSignal("InRound"):Connect(reapplyPerspectiveSoon)
+player:GetAttributeChangedSignal("Level2NewMapPreview"):Connect(reapplyPerspectiveSoon)
 
 -- Server-backed state can also change during round cleanup or when another
 -- whitelisted developer uses the global pause toggle. Mirror those acknowledgements

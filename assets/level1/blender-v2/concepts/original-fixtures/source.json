@@ -1,0 +1,26 @@
+{
+  "live": {
+    "assetId": 135786374638992,
+    "size": [
+      659,
+      655
+    ],
+    "sha256": "e4619448ad479381258c5a5807f36702fa68297a4b72be892c42d23b1de019fe"
+  },
+  "dead": {
+    "assetId": 107766152992499,
+    "size": [
+      654,
+      654
+    ],
+    "sha256": "76964994339d4ef0da36d8249fb0a3250f88bfe497f2d30aef2b33db77fee165"
+  },
+  "original-wallpaper": {
+    "assetId": 87947439437597,
+    "size": [
+      1024,
+      1024
+    ],
+    "sha256": "342e97e0f53df9e1cf50dae255c8e8f867cbe3d33a07ce29988827054ba46980"
+  }
+}
