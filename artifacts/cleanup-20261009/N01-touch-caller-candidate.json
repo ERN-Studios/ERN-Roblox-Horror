@@ -1,0 +1,25 @@
+{
+  "candidate": "N01-touch-caller",
+  "productionApplied": true,
+  "currentBeforeSha256": "300f40f88ef1861c85e0dacbe00ce58c293531c65a292d1e9e768344724a7710",
+  "candidateSha256": "35a68661a2f2fb2068905eb8ea9ef7fcd0c46827ee5ab34ae5b793f9ac8ce5a2",
+  "testBeforeSha256": "1945808fb91a146c0339edff1e2445888f0f015c9be2cac28de2c3caf02de011",
+  "testCandidateSha256": "dfdc3022026d830b7d82b827ea0da8124be533958eab51249a8ed09f2a7c12b7",
+  "sourcePath": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\UIRegression.N01.touch-candidate.lua",
+  "testPath": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\test_ui_regression_shared.N01.touch.py",
+  "results": [
+    {
+      "phase": "before-current-N01",
+      "exitCode": 1,
+      "stdout": "\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-fxqkyy3z/checks.luau:5258: CHECK FAILED: actual TouchTargetMatrix shared consumer uses authored margin: actual touch-target consumer: ObjectiveCard holds the upper-right safe corner: ObjectiveCard is outside its actual UIDevice.TopRightPanel slot\nstacktrace:\n[C] function error\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-fxqkyy3z/checks.luau:4602 function check\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-fxqkyy3z/checks.luau:5258\n\n"
+    },
+    {
+      "phase": "after-touch-caller",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 103 checks passed (production seam + real imported fixtures)\n"
+    }
+  ],
+  "compileO0ExitCode": 0,
+  "nativeApplied": true,
+  "nativeInstallReceipt": "B06-TouchTarget-native-install.json"
+}

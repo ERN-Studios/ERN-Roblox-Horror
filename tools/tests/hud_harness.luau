@@ -144,7 +144,7 @@ local SIGNALS = {
 -- characters x FakeAdvance (0.55 unless a test sets it). TextScaled uses the current box and a
 -- UITextSizeConstraint; injected advance/em-height model unusually wide/tall fallback glyphs.
 local TEXT_CLASSES = {TextLabel = true, TextButton = true, TextBox = true}
-local MEASURED = {Text = true, TextSize = true, TextScaled = true, FontFace = true, FakeAdvance = true, FakeEmHeight = true}
+local MEASURED = {Text = true, TextSize = true, TextScaled = true, TextWrapped = true, FontFace = true, FakeAdvance = true, FakeEmHeight = true}
 local function measureText(fields, node)
 	local text = tostring(fields.Text or "")
 	local count = utf8.len(text) or #text
@@ -249,6 +249,16 @@ local function newInstance(class, name)
 			local bounds = MEASURED[key] and fields.Watchers["@TextBounds"]
 			local before = bounds and measureText(fields, proxy)
 			fields[key] = value
+			-- Native TextLabel probe, 2026-10-09: scaling enables wrapping; disabling
+			-- wrapping disables scaling. Model this coupling before text-fit assertions.
+			local coupled
+			if key == "TextScaled" and value == true and fields.TextWrapped == false then
+				fields.TextWrapped, coupled = true, "TextWrapped"
+			elseif key == "TextWrapped" and value == false and fields.TextScaled == true then
+				fields.TextScaled, coupled = false, "TextScaled"
+			end
+			local coupledWatcher = coupled and fields.Watchers["@" .. coupled]
+			if coupledWatcher then coupledWatcher:Fire() end
 			local watcher = fields.Watchers["@" .. key]
 			if watcher then watcher:Fire() end
 			if before then

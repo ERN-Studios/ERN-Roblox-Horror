@@ -24,6 +24,10 @@ manifest=json.loads(manifest_before)
 entry=next(i for i in manifest["items"] if i.get("file")==rel)
 native=next(i for i in snapshot["items"] if i["studioPath"]==entry["studioPath"])
 before=native["source"]
+if len(sys.argv)>3:
+ # A later scoped amendment must compare against its newly reviewed checkpoint,
+ # never the task's older initial Source. Class/properties remain guarded below.
+ before=normalize(Path(sys.argv[3]).read_text(encoding="utf-8"))
 after=normalize((ROOT/rel).read_text(encoding="utf-8"))
 assert before!=after,"no source change"
 assert native["sourceEditorMatches"],"baseline editor conflict"

@@ -1,0 +1,38 @@
+{
+  "candidate": "N01-touch-lifecycle",
+  "productionApplied": true,
+  "beforeSha256": "35a68661a2f2fb2068905eb8ea9ef7fcd0c46827ee5ab34ae5b793f9ac8ce5a2",
+  "candidateSha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+  "testBeforeSha256": "dfdc3022026d830b7d82b827ea0da8124be533958eab51249a8ed09f2a7c12b7",
+  "testCandidateSha256": "5f0f99572dc51ebbd55e557c2c13c0cdd886554ccbc5049aa60b5fbd33047718",
+  "testPath": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\test_ui_regression_shared.N01.reset.py",
+  "sourcePath": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\UIRegression.N01.touch-reset-candidate.lua",
+  "results": [
+    {
+      "phase": "before",
+      "exitCode": 1,
+      "stdout": "\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-2t50va3_/checks.luau:5293: CHECK FAILED: actual next-device fixture reentry resets previous owned modal: next device after party-down: ObjectiveCard is measurable: missing\nstacktrace:\n[C] function error\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-2t50va3_/checks.luau:4617 function check\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-2t50va3_/checks.luau:5293\n\n"
+    },
+    {
+      "phase": "reset",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 105 checks passed (production seam + real imported fixtures)\n"
+    }
+  ],
+  "nativeGate": "Root original/current/reset TouchTarget probes samecontext; all assertions unchanged and owned state/lock/source-editor restored",
+  "nativeApplied": true,
+  "nativeInstallReceipt": "B06-TouchReset-native-install.json",
+  "nativePair": {
+    "beforeReceipt": "B06-touch-before.json",
+    "beforeChecks": 261,
+    "beforeFailures": 9,
+    "oldAnchorFailures": 1,
+    "resetReceipt": "B06-touch-reset.json",
+    "resetChecks": 261,
+    "resetFailures": 0,
+    "originalSourcesUnchanged": true,
+    "temporaryDestroyed": true,
+    "contextRestored": true,
+    "lockClear": true
+  }
+}

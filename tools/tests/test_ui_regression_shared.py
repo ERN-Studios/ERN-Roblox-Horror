@@ -21,6 +21,24 @@ def section(text, start, end):
     return text[begin:text.index(end, begin)]
 
 
+def touch_anchor_consumer(source):
+    # Execute the real consumer block, including its real anchor call. The
+    # unrelated borrow/error matrix retains its original stub in this fixture.
+    start = source.index("function Fit.bodyTouchTargetMatrix()")
+    start = source.index("\t\t\t-- OBSOLETE CONTRACT, REPLACED.", start)
+    end = source.index("\t\t\tfor _, scenario in ipairs(UIRegression.Scenarios()) do", start)
+    return r'''
+function Fit.sharedTouchAnchorConsumerProbe(device, layout)
+    local failures, report = 0, {}
+    local function record(ok, description, detail)
+        if not ok then failures += 1; table.insert(report,description..": "..tostring(detail)) end
+    end
+''' + source[start:end] + r'''
+    return failures,table.concat(report,"; ")
+end
+'''
+
+
 def extracted():
     source = REGRESSION.read_text(encoding="utf-8")
     return r'''
@@ -49,7 +67,12 @@ local function touchTargetProblems() return {} end
         source, "local REQUIRED_GUIS =", "-- Responsive-layout matrices") + section(
         source, "local BORROWED_WORKSPACE_ATTRIBUTES", "-- Apply a device AND WAIT") + section(
         source, "function UIRegression.ScreenGuiFrame", "-- Every queue-modal row") + section(
-        source, "local TOUCH_DEVICES =", "function UIRegression.TouchTargetMatrix") + r'''
+        source, "local TOUCH_DEVICES =", "function UIRegression.TouchTargetMatrix") + section(
+        source, "function Fit.within", "function Fit.overlaps") + section(
+        source, "Fit.AnchorSlack = 2", "-- EVERY CHILD") + section(
+        source, "function Fit.anchorProblems", "-- C_L1_COMPOSITION_IS_MEASURED_20260831") + touch_anchor_consumer(source) + r'''
+-- Keep unrelated borrow/error sweeps' original anchor stub; exercise the real contract separately.
+Fit.contractAnchorProblems = Fit.anchorProblems
 function Fit.anchorProblems() return {} end
 function UIRegression.Check()
     return {Rects={},Groups={},KeyboardBindings={},Passed=true,Offscreen={},Overlaps={},MovementZoneHits={},InternalOverlaps={}}
@@ -104,6 +127,66 @@ local function bad(Fit,saved,fragment,label)
     local found=false
     for _,problem in ipairs(problems) do if problem:find(fragment,1,true) then found=true end end
     check(found,label..": "..table.concat(problems,"; "))
+end
+
+do -- Shared objective preserves its authored margin; drift and independent safety still fail.
+    for _,touch in ipairs({false,true}) do
+        local ctx,Hud,Fit=start({touch=touch})
+        ctx.Workspace:SetAttribute("ForceTouchUI",touch)
+        ctx.UIDevice.OverlapsMovementZone=function() return nil end
+        Hud.SetObjective(state()); ctx:Flush()
+        local root=Hud.Gui():FindFirstChild("ObjectiveCard")
+        -- This harness stores AbsolutePosition explicitly. Read production's origin-relative
+        -- position/size writes here; native QA still verifies the engine's resolved rectangle.
+        local p,s=root.Position,root.Size
+        local rect={Left=p.X.Offset,Top=p.Y.Offset,Right=p.X.Offset+s.X.Offset,
+            Bottom=p.Y.Offset+s.Y.Offset,Width=s.X.Offset,Height=s.Y.Offset}
+        local layout=ctx.UIDevice.Layout()
+        local inset=touch and 16 or 24
+        local problems=Fit.contractAnchorProblems(rect,layout,"ObjectiveCard",inset)
+        check(#problems==0,"actual shared objective keeps authored right margin (touch="..tostring(touch).."): "..table.concat(problems,"; "))
+        check(#Fit.contractAnchorProblems(rect,layout,"LegacyObjective")>0,"shared margin cannot silently redefine legacy anchor")
+        local drift=table.clone(rect); drift.Left+=5; drift.Right+=5
+        check(#Fit.contractAnchorProblems(drift,layout,"ObjectiveCard",inset)>0,"shared horizontal drift remains a failure")
+        local unsafe=table.clone(rect); unsafe.Left=layout.Safe.Left-10
+        check(#Fit.contractAnchorProblems(unsafe,layout,"ObjectiveCard",inset)>0,"shared safe containment remains enforced")
+        if touch then
+            ctx.UIDevice.OverlapsMovementZone=function() return "Thumbstick" end
+            local problems=Fit.contractAnchorProblems(rect,layout,"ObjectiveCard",inset)
+            check(table.concat(problems,"; "):find("Thumbstick",1,true)~=nil,"shared movement-zone collision remains a failure")
+            ctx.UIDevice.OverlapsMovementZone=function() return nil end
+        end
+        local legacy=ctx.UIDevice.TopRightPanel(100,40)
+        check(#Fit.contractAnchorProblems(legacy,layout,"LegacyObjective")==0,"legacy exact anchor remains accepted")
+        local stub=Fit.anchorProblems
+        Fit.anchorProblems=Fit.contractAnchorProblems
+        ctx.Task.wait=function() ctx:Flush() end
+        local failed,report=Fit.sharedTouchAnchorConsumerProbe({Name="actual touch-target consumer",Size=ctx.Viewport},layout)
+        Fit.anchorProblems=stub
+        check(failed==0,"actual TouchTargetMatrix shared consumer uses authored margin: "..report)
+    end
+end
+
+do -- A preceding owned party-down scenario must not suppress the next device's objective.
+    local ctx,Hud,Fit=start({touch=true})
+    ctx.Workspace:SetAttribute("ForceTouchUI",true)
+    ctx.UIDevice.OverlapsMovementZone=function() return nil end
+    ctx.Task.wait=function() ctx:Flush() end
+    ctx.Player:SetAttribute("DevPartyDown",15)
+    ctx.Player:SetAttribute("PartyDownCardOpen",true)
+    -- The real RoundUI hide seam is native-tested. This actor models its contract
+    -- so the real QA consumer must reset it rather than measure a suppressed root.
+    ctx.Player:GetAttributeChangedSignal("DevPartyDown"):Connect(function()
+        if ctx.Player:GetAttribute("DevPartyDown")==nil then ctx.Player:SetAttribute("PartyDownCardOpen",false) end
+    end)
+    local stub=Fit.anchorProblems
+    Fit.anchorProblems=Fit.contractAnchorProblems
+    local failed,report=Fit.sharedTouchAnchorConsumerProbe({Name="next device after party-down",Size=ctx.Viewport},ctx.UIDevice.Layout())
+    Fit.anchorProblems=stub
+    check(failed==0,"actual next-device fixture reentry resets previous owned modal: "..report)
+    check(ctx.Player:GetAttribute("DevPartyDown")==nil and ctx.Player:GetAttribute("PartyDownCardOpen")==false
+        and ctx.Player:GetAttribute("InRound")==true and ctx.Workspace:GetAttribute("ForceTouchUI")==true,
+        "owned reset clears modal seam and retains touch/in-round context")
 end
 
 do -- nil is a captured semantic state, not permission to leave a test counter.

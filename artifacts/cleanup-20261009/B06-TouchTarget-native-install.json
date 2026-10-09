@@ -1,0 +1,11 @@
+{
+  "bytes": 323439,
+  "path": "ReplicatedStorage.UIRegression",
+  "editorMatches": true,
+  "class": "ModuleScript",
+  "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+  "beforeSha256": "300f40f88ef1861c85e0dacbe00ce58c293531c65a292d1e9e768344724a7710",
+  "afterSha256": "35a68661a2f2fb2068905eb8ea9ef7fcd0c46827ee5ab34ae5b793f9ac8ce5a2",
+  "capturedAtUtc": "2026-10-09T18:39:13.688230+00:00",
+  "published": false
+}

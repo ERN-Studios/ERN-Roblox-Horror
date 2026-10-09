@@ -58,6 +58,22 @@ end
 local function row(ctx, index) return ctx.Hud.Gui():FindFirstChild("FeedRow" .. (index or 1)) end
 local function text(root, path) local node = find(root, path); return node and node.Text end
 
+do -- Independent native TextLabel property probe: setter order controls glyph scaling.
+	local ctx = context()
+	local label = newInstance("TextLabel", "PropertyProbe")
+	check(not label.TextScaled and not label.TextWrapped, "native text defaults")
+	label.TextScaled = true
+	check(label.TextScaled and label.TextWrapped, "native scaling enables wrapping")
+	label.TextWrapped = false
+	check(not label.TextScaled and not label.TextWrapped, "native disabling wrap disables scaling")
+	label.TextWrapped, label.TextScaled = false, true
+	check(label.TextScaled and label.TextWrapped, "native reverse setter order retains scaling")
+	label.TextScaled, label.TextWrapped = true, false
+	ctx:Flush()
+	check(not label.TextScaled and not label.TextWrapped, "native original multiple assignment disables scaling")
+	label:Destroy()
+end
+
 do -- Stack clones current fixture geometry and changes height without scaling any part's text.
 	local ctx, Hud = start()
 	ctx.Hud = Hud

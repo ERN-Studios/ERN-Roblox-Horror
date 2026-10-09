@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "[{\"afterWait\":{\"scaled\":false,\"wrapped\":false},\"defaults\":{\"scaled\":false,\"wrapped\":false},\"immediate\":{\"scaled\":false,\"wrapped\":false},\"case\":\"scaled then unwrapped\"},{\"afterWait\":{\"scaled\":true,\"wrapped\":true},\"defaults\":{\"scaled\":false,\"wrapped\":false},\"immediate\":{\"scaled\":true,\"wrapped\":true},\"case\":\"unwrapped then scaled\"},{\"afterWait\":{\"scaled\":false,\"wrapped\":false},\"defaults\":{\"scaled\":false,\"wrapped\":false},\"immediate\":{\"scaled\":false,\"wrapped\":false},\"case\":\"production multiple assignment\"},{\"afterWait\":{\"scaled\":true,\"wrapped\":true},\"defaults\":{\"scaled\":false,\"wrapped\":false},\"immediate\":{\"scaled\":true,\"wrapped\":true},\"case\":\"scaled only\"}]"
+    }
+  ],
+  "isError": false
+}

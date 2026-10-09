@@ -1,0 +1,244 @@
+{
+  "candidate": "N01",
+  "status": "gennemført",
+  "files": [
+    {
+      "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
+      "rawSha256": "f12fe404cf4ae6adee5901989d3a5d4388db13a9a5850f7390d3ca1c6e7ebd20",
+      "lfSha256": "f12fe404cf4ae6adee5901989d3a5d4388db13a9a5850f7390d3ca1c6e7ebd20",
+      "bytes": 63919,
+      "backup": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\ReplicatedStorage\\RoundHud.ModuleScript.lua",
+      "afterSha256Lf": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "afterBytes": 64014,
+      "currentSha256Lf": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
+      "currentBytes": 64014
+    },
+    {
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "rawSha256": "f387e68e871a51436c5dcbe91c24986af23bf1121bb907ed8282bdcccebfceb8",
+      "lfSha256": "f387e68e871a51436c5dcbe91c24986af23bf1121bb907ed8282bdcccebfceb8",
+      "bytes": 323180,
+      "backup": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\ReplicatedStorage\\UIRegression.ModuleScript.lua",
+      "afterSha256Lf": "300f40f88ef1861c85e0dacbe00ce58c293531c65a292d1e9e768344724a7710",
+      "afterBytes": 323410,
+      "currentSha256Lf": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+      "currentBytes": 323553
+    },
+    {
+      "file": "tools/tests/hud_harness.luau",
+      "rawSha256": "a6762136c1c65bb5728f5cd3cce9a20e8ebb5d3b3b71a016f2ca7b8a36abd557",
+      "lfSha256": "a6762136c1c65bb5728f5cd3cce9a20e8ebb5d3b3b71a016f2ca7b8a36abd557",
+      "bytes": 24353,
+      "backup": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\tools\\tests\\hud_harness.luau",
+      "afterSha256Lf": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef",
+      "afterBytes": 24951,
+      "currentSha256Lf": "8c43e49fa7350bbda1ab311fff0c0f83dbe4caf882d3c44c135734f5491fe7ef",
+      "currentBytes": 24951
+    },
+    {
+      "file": "tools/tests/test_round_hud_shared.py",
+      "rawSha256": "96cdfcb8344e41d643b474e53147f902c7f3641571cdadd02f5f85b043173ef8",
+      "lfSha256": "96cdfcb8344e41d643b474e53147f902c7f3641571cdadd02f5f85b043173ef8",
+      "bytes": 46818,
+      "backup": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\tools\\tests\\test_round_hud_shared.py",
+      "afterSha256Lf": "f742223ba96ee2fe4126f8d1146d533dcf3a84e899c95f23eaff06faf152e12b",
+      "afterBytes": 47638,
+      "currentSha256Lf": "f742223ba96ee2fe4126f8d1146d533dcf3a84e899c95f23eaff06faf152e12b",
+      "currentBytes": 47638
+    },
+    {
+      "file": "tools/tests/test_ui_regression_shared.py",
+      "rawSha256": "64c20cab862659b51700631ec4f0dc2a80af607aa886fd44f5f022cab59d4a99",
+      "lfSha256": "64c20cab862659b51700631ec4f0dc2a80af607aa886fd44f5f022cab59d4a99",
+      "bytes": 29459,
+      "backup": ".git\\mongotv-cleanup-20261009\\client-before\\N01\\tools\\tests\\test_ui_regression_shared.py",
+      "afterSha256Lf": "1945808fb91a146c0339edff1e2445888f0f015c9be2cac28de2c3caf02de011",
+      "afterBytes": 32083,
+      "currentSha256Lf": "5f0f99572dc51ebbd55e557c2c13c0cdd886554ccbc5049aa60b5fbd33047718",
+      "currentBytes": 34699
+    }
+  ],
+  "beforeNative": {
+    "receipt": "baseline-native-ui.json",
+    "checks": 935,
+    "failures": 51,
+    "scenarios": 21
+  },
+  "nativeCouplingReceipt": "N01-textlabel-property-probe.json",
+  "glyphBaselineWithFaithfulFixture": {
+    "name": "before-source-with-native-coupling-fixture",
+    "exitCode": 1,
+    "stdout": "\nC:/Users/mikke/AppData/Local/Temp/round-hud-shared-rd_9uqji/shared.luau:3641: CHECK FAILED: wide/tall fallback bearing glyph fits: locating\nstacktrace:\n[C] function error\nC:/Users/mikke/AppData/Local/Temp/round-hud-shared-rd_9uqji/shared.luau:2837 function check\nC:/Users/mikke/AppData/Local/Temp/round-hud-shared-rd_9uqji/shared.luau:3641\n\n",
+    "stderr": "",
+    "expected": "fail"
+  },
+  "anchorBaselineWithContractFixture": {
+    "name": "before-source-with-authored-shared-anchor-contract",
+    "exitCode": 1,
+    "stdout": "\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-imim74hl/checks.luau:5209: CHECK FAILED: actual shared objective keeps authored right margin (touch=false): ObjectiveCard is outside its actual UIDevice.TopRightPanel slot\nstacktrace:\n[C] function error\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-imim74hl/checks.luau:4572 function check\nC:/Users/mikke/AppData/Local/Temp/ui-regression-shared-imim74hl/checks.luau:5209\n\n",
+    "stderr": "",
+    "expected": "fail"
+  },
+  "afterOffline": [
+    {
+      "name": "UIRegression shared",
+      "exitCode": 0,
+      "stdout": "UIRegression shared restore: 101 checks passed (production seam + real imported fixtures)\n",
+      "stderr": "",
+      "expected": "pass"
+    },
+    {
+      "name": "RoundHud shared + stamina",
+      "exitCode": 0,
+      "stdout": "RoundHud shared APIs: 387 checks passed (real3 Framewisp imports)\nNoiseReporter B3 stamina bar: 74 checks passed (real RoundHud, ShopBinder and HUD_PC import)\n",
+      "stderr": "",
+      "expected": "pass"
+    },
+    {
+      "name": "round exit hold",
+      "exitCode": 0,
+      "stdout": "B6/B7: 92 checks passed (production sources, real imported templates)\n",
+      "stderr": "",
+      "expected": "pass"
+    },
+    {
+      "name": "controller + touch + stamina + POV",
+      "exitCode": 0,
+      "stdout": "Controller input: 91 checks passed (offline Luau; engine routing and hardware not exercised)\nNoiseReporter B2 touch cells: 86 checks passed (real RoundHud, ShopBinder and HUD_Touch import)\nNoiseReporter B3 stamina bar: 74 checks passed (real RoundHud, ShopBinder and HUD_PC import)\nDeveloper POV gates: 63 checks passed (actual source; no native camera/input)\n",
+      "stderr": "",
+      "expected": "pass"
+    },
+    {
+      "name": "RoundHud basic",
+      "exitCode": 0,
+      "stdout": "RoundHud: 185 checks passed (offline Luau; real HUD_PC and HUD_Touch imports)\n",
+      "stderr": "",
+      "expected": "pass"
+    }
+  ],
+  "nativeApplied": true,
+  "manifestUpdated": true,
+  "noFeatureRemoval": true,
+  "noPerformanceBenefitClaimed": true,
+  "remainingGate": null,
+  "environment": {
+    "LUAU_BIN": "C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau.exe",
+    "LUAU_COMPILE_BIN": "C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau-compile.exe",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "afterNative": {
+    "receipt": "B06-native-ui-after.json",
+    "checks": 935,
+    "failures": 2,
+    "scenarios": 21,
+    "sharedMatrixChecks": 730,
+    "sharedMatrixFailures": 0,
+    "lockClear": true,
+    "health": 100,
+    "loadingDone": true,
+    "newScenarioFailures": [
+      "hiding-plus-reader",
+      "round-win-fullscreen"
+    ],
+    "classification": "Initial two scenario failures preserved; both isolated same-context probes and later fresh full suite passed, see freshFullAfterMargin"
+  },
+  "pairedProbeWrapper": "run_N01_pair_probe.py",
+  "pairedNative": {
+    "beforeReceipt": "B06-pair-before.json",
+    "currentReceipt": "B06-pair-current.json",
+    "bothFailures": 0,
+    "viewport": [
+      1413,
+      577
+    ],
+    "inset": [
+      0,
+      58
+    ],
+    "rectanglesIdentical": true,
+    "precontextIdentical": true,
+    "residue": [],
+    "temporaryDestroyed": true,
+    "originalSourcesUnchanged": true,
+    "scope": "Original/current QA source against same current authoritative runtime owner, not a runtime-before test"
+  },
+  "callerClosureFollowup": {
+    "receipt": "N01-touch-caller-candidate.json",
+    "sourceCurrentBefore": "300f40f88ef1861c85e0dacbe00ce58c293531c65a292d1e9e768344724a7710",
+    "sourceTempCandidate": "35a68661a2f2fb2068905eb8ea9ef7fcd0c46827ee5ab34ae5b793f9ac8ce5a2",
+    "productionApplied": true,
+    "reason": "Actual shared TouchTargetMatrix caller must pass same16/24 inset; first candidate missed it; real consumer block fixture reproduces and verifies fix",
+    "nativeInstallReceipt": "B06-TouchTarget-native-install.json"
+  },
+  "failedWrapperReceipt": {
+    "receipt": "B06-full-ui-recheck.json",
+    "reason": "Root called nonexistent UI.LockState after completed run; no full run result captured and no gameplay conclusion"
+  },
+  "freshFullAfterMargin": {
+    "receipt": "B06-fresh-native-ui.json",
+    "failures": 0,
+    "scenarios": 21,
+    "sharedMatrixChecks": 730,
+    "sharedMatrixFailures": 0,
+    "queueChecks": 719,
+    "queueFailures": 0,
+    "namedLaneChecks": 935,
+    "namedLaneFailures": 0,
+    "contextRestored": true,
+    "lockClear": true
+  },
+  "touchLifecycle": {
+    "receipt": "N01-touch-lifecycle-candidate.json",
+    "currentNativeBefore": "B06-native-touch-target.json",
+    "currentNativeChecks": 261,
+    "currentNativeFailures": 8,
+    "isolatedBeforeReceipt": "B06-touch-before.json",
+    "isolatedBeforeChecks": 261,
+    "isolatedBeforeFailures": 9,
+    "isolatedBeforeOldAnchorFailures": 1,
+    "isolatedResetReceipt": "B06-touch-reset.json",
+    "isolatedResetChecks": 261,
+    "isolatedResetFailures": 0,
+    "originalSourcesUnchanged": true,
+    "temporaryDestroyed": true,
+    "contextRestored": true,
+    "lockClear": true,
+    "sourceBefore": "35a68661a2f2fb2068905eb8ea9ef7fcd0c46827ee5ab34ae5b793f9ac8ce5a2",
+    "sourceAfter": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+    "nativeInstallReceipt": "B06-TouchReset-native-install.json",
+    "productionApplied": true,
+    "reason": "Previous device final owned PartyDownCard fixture suppresses next objective; reuse existing resetScenario(true) before each stage, preserving all assertions and borrowed context",
+    "offlineChecks": 105
+  },
+  "finalNative": {
+    "full": {
+      "receipt": "B06-final-full.json",
+      "failures": 0,
+      "currentAuthoritativeModule": true,
+      "probeCreated": false,
+      "originalSourcesUnchanged": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "beforeSha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+      "publicExports": 30,
+      "scenarios": 21,
+      "sharedMatrixChecks": 730,
+      "sharedMatrixFailures": 0
+    },
+    "touch": {
+      "receipt": "B06-final-touch.json",
+      "failures": 0,
+      "currentAuthoritativeModule": true,
+      "probeCreated": false,
+      "originalSourcesUnchanged": true,
+      "workspaceDrift": [],
+      "playerDrift": [],
+      "lockDrift": [],
+      "beforeSha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
+      "publicExports": 30,
+      "checks": 261
+    }
+  },
+  "noPublishing": true
+}

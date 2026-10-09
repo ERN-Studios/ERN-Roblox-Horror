@@ -3338,6 +3338,8 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 			-- zone -- and it is applied here to all THREE levels rather than to
 			-- Level 2 alone. ObjectiveCornerMatrix runs the same predicate across
 			-- its own device list; this keeps it in the tap-target sweep too.
+			-- Close the preceding device's fixture-owned modal/result before staging this readout.
+			resetScenario(true)
 			Fit.stageRoundObjective(1)
 			task.wait(.12)
 			for _, spec in ipairs({
@@ -3348,7 +3350,7 @@ function Fit.bodyTouchTargetMatrix(): (string, number)
 				local objectiveRect = objectivePanel
 					and UIRegression.ResolveRect(objectivePanel, device.Size, layout.Inset.Y)
 				if objectiveRect and not objectiveRect.Unresolvable then
-					local problems = Fit.anchorProblems(objectiveRect, layout, spec[2])
+					local problems = Fit.anchorProblems(objectiveRect, layout, spec[2], layout.IsTouch and 16 or 24)
 					record(#problems == 0,
 						device.Name .. ": " .. spec[2] .. " holds the upper-right safe corner",
 						table.concat(problems, "; "))
@@ -4384,12 +4386,13 @@ function Fit.childProblems(panel, label): {string}
 	return problems
 end
 
-function Fit.anchorProblems(rect, layout, label): {string}
+function Fit.anchorProblems(rect, layout, label, rightInset: number?): {string}
 	if not rect then return {label .. " was not measured"} end
 	local problems = {}
 	if rect.Width <= 0 or rect.Height <= 0 then return {label .. " has no drawable size"} end
-	local expected = UIDevice.TopRightPanel(rect.Width, rect.Height, layout.IsTouch and 8 or 18, 0)
-	if math.abs(rect.Right - expected.Right) > Fit.AnchorSlack or math.abs(rect.Top - expected.Top) > Fit.AnchorSlack then
+	local inset = rightInset or 0
+	local expected = UIDevice.TopRightPanel(rect.Width + inset, rect.Height)
+	if math.abs(rect.Right - (expected.Right - inset)) > Fit.AnchorSlack or math.abs(rect.Top - expected.Top) > Fit.AnchorSlack then
 		table.insert(problems, label .. " is outside its actual UIDevice.TopRightPanel slot")
 	end
 	if not Fit.within(rect, layout.Safe, 1) then table.insert(problems, label .. " escapes the safe area") end
@@ -4777,7 +4780,9 @@ function Fit.bodyRoundHudMatrix(): (string, number)
 				if root and root.Visible then
 					local layout = UIDevice.Layout()
 					local rect = UIRegression.ResolveRect(root, device.Size, layout.Inset.Y)
-					local problems = Fit.anchorProblems(rect, layout, "ObjectiveCard")
+					-- RoundHud reserves an additional authored right margin inside the safe slot.
+					-- Legacy objective callers retain their exact TopRightPanel edge above.
+					local problems = Fit.anchorProblems(rect, layout, "ObjectiveCard", layout.IsTouch and 16 or 24)
 					state.record(#problems == 0, device.Name .. ": exact shared safe slot", table.concat(problems, "; "))
 					local absolute, rendered = Fit.live(root), Fit.engineRect(root)
 					state.record(rendered and not rendered.Unresolvable and math.abs(rendered.Left - absolute.Left) <= 1

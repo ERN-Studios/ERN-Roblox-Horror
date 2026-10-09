@@ -193,8 +193,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/RoundHud.ModuleScript.lua",
-      "bytes": 63919,
-      "sha256": "f12fe404cf4ae6adee5901989d3a5d4388db13a9a5850f7390d3ca1c6e7ebd20",
+      "bytes": 64014,
+      "sha256": "005d5fa94c2f0aefe6ec735b7c597dd924927cf29573dacbeb587217c36acae4",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
@@ -247,8 +247,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 323180,
-      "sha256": "f387e68e871a51436c5dcbe91c24986af23bf1121bb907ed8282bdcccebfceb8",
+      "bytes": 323553,
+      "sha256": "419a7e3e003ba6d67746716f188f5c3e7359f5e4db4d8e097e3d8fcad0e73dad",
       "status": "synced",
       "sourceEditorMatches": true,
       "properties": {
